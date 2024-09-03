@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.51.0";
+  version = "4.53.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fonttools";
+    repo = "fonttools";
     rev = "refs/tags/${version}";
-    hash = "sha256-JUAFGLjyq/2OXlhTB6dIcO3Mq7Rx1HII+sg2TaQfPYU=";
+    hash = "sha256-9fxC6OKXZkhih3BFyBqO4t6sKXyarYfFIqBk+WOSiRY=";
   };
 
   build-system = [

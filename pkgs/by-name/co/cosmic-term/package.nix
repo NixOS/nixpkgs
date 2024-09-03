@@ -8,7 +8,6 @@
 , libinput
 , libxkbcommon
 , makeBinaryWrapper
-, mesa
 , pkg-config
 , rustPlatform
 , stdenv
@@ -19,27 +18,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-  version = "unstable-2024-04-14";
+  version = "1.0.0-alpha.1";
+
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "3e41d261a9d5d2284cd6ae85acde2562b8a5ccd6";
-    hash = "sha256-IVLwWG4WUGXK9jY/d0Vr8RX/Klj1mUe4Q7Huv0BkjDo=";
+    repo = "cosmic-term";
+    rev = "epoch-${version}";
+    hash = "sha256-dY4QGQXJFL+yjCYRGCg3NfMLMjlEBSEmxHn68PvhCAQ=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
+      "accesskit-0.12.2" = "sha256-1UwgRyUe0PQrZrpS7574oNLi13fg5HpgILtZGW6JNtQ=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "clipboard_macos-0.1.0" = "sha256-PEH+aCpjDCEIj8s39nIeWxb7qu3u9IfriGqf0pYObMk=";
-      "cosmic-config-0.1.0" = "sha256-x/xWMR5w2oEbghTSa8iCi24DA2s99+tcnga8K6jS6HQ=";
-      "cosmic-files-0.1.0" = "sha256-KzWlmeZP3F5Kavi9FFXo3o8nB/h79TtOhqWUyI1ZRB0=";
-      "cosmic-text-0.11.2" = "sha256-K9cZeClr1zz4LanJS0WPEpxAplQrXfCjFKrSn5n4rDA=";
+      "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
+      "cosmic-config-0.1.0" = "sha256-DgMh0gqWUmXjBhBySR0CMnv/8O3XbS2BwomU9eNt+4o=";
+      "cosmic-files-0.1.0" = "sha256-QDkHhU0zE0szFwGuVuSYrXd7AUdTU1rYxlAsaHr2YvQ=";
+      "cosmic-text-0.12.1" = "sha256-x0XTxzbmtE2d4XCG/Nuq3DzBpz15BbnjRRlirfNJEiU=";
       "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
       "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
-      "libc-0.2.151" = "sha256-VcNTcLOnVXMlX86yeY0VDfIfKOZyyx/DO1Hbe30BsaI=";
-      "smithay-clipboard-0.8.0" = "sha256-OZOGbdzkgRIeDFrAENXE7g62eQTs60Je6lYVr0WudlE=";
+      "libc-0.2.154" = "sha256-/pkmpCxzRTjBiLFKauqUqGTBTxNUQX4zwPWYpDsjwVQ=";
+      "smithay-clipboard-0.8.0" = "sha256-4InFXm0ahrqFrtNLeqIuE3yeOpxKZJZx+Bc0yQDtv34=";
       "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-04-14";
+  env.VERGEN_GIT_COMMIT_DATE = "2024-08-03";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
@@ -95,11 +95,10 @@ rustPlatform.buildRustPackage rec {
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
-    wrapProgram "$out/bin/${pname}" \
+    wrapProgram "$out/bin/cosmic-term" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         libxkbcommon
-        mesa.drivers
         vulkan-loader
         xorg.libX11
         xorg.libXcursor

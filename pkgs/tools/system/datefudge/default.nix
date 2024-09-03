@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://salsa.debian.org/debian/${pname}.git";
     rev = "debian/${version}";
-    sha256 = "sha256-CVy5mOX3jNM1cNIn8HhVs8Mhh70pkz9pG08muFuPNfk=";
+    hash = "sha256-CVy5mOX3jNM1cNIn8HhVs8Mhh70pkz9pG08muFuPNfk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

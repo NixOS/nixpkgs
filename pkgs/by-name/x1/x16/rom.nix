@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs findsymbols scripts/
     substituteInPlace Makefile \
-    --replace '/bin/echo' 'echo'
+    --replace-fail '/bin/echo' 'echo'
   '';
 
   dontConfigure = true;

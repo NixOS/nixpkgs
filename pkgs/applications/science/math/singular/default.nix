@@ -7,6 +7,7 @@
 , getconf
 , flint3
 , ntl
+, mpfr
 , cddlib
 , gfan
 , lrcalc
@@ -15,8 +16,7 @@
 , latex2html
 , texinfo
 , texliveSmall
-, enableDocs ? !stdenv.isDarwin
-, enableGfanlib ? true
+, enableDocs ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
     rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-5JZgI5lnfX4JlBSEAL7Wv6uao/57GBaMqwgslJt9Bjk=";
+    hash = "sha256-5JZgI5lnfX4JlBSEAL7Wv6uao/57GBaMqwgslJt9Bjk=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
@@ -40,12 +40,11 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
+    "--enable-gfanlib"
     "--with-ntl=${ntl}"
-    "--disable-pyobject-module"
+    "--with-flint=${flint3}"
   ] ++ lib.optionals enableDocs [
     "--enable-doc-build"
-  ] ++ lib.optionals enableGfanlib [
-    "--enable-gfanlib"
   ];
 
   prePatch = ''
@@ -61,14 +60,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # necessary
     gmp
+    flint3
     # by upstream recommended but optional
     ncurses
     readline
     ntl
-    flint3
+    mpfr
     lrcalc
+    # for gfanlib
     gfan
-  ] ++ lib.optionals enableGfanlib [
     cddlib
   ];
 
@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
   doCheck = true; # very basic checks, does not test any libraries
 
   installPhase = ''
+    # clean up any artefacts a previous non-sandboxed docbuild may have left behind
+    rm /tmp/conic.log /tmp/conic.tex /tmp/tropicalcurve*.tex || true
     make install
   '' + lib.optionalString enableDocs ''
     # Sage uses singular.info, which is not installed by default
@@ -118,8 +120,8 @@ stdenv.mkDerivation rec {
     "Buch/buch.lst"
     "Plural/short.lst"
     "Old/factor.tst"
-  ] ++ lib.optionals enableGfanlib [
     # tests that require gfanlib
+    # requires "DivRemIdU", a syzextra (undocumented) command
     "Short/ok_s.lst"
   ];
 

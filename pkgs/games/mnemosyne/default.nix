@@ -1,6 +1,4 @@
-{ lib
-, stdenv
-, python
+{ python
 , fetchurl
 , anki
 }:

@@ -78,7 +78,7 @@ perlPackages.buildPerlPackage rec {
       ExporterLite
       FileBOM
       FileCopyRecursive
-      FileNext
+      # FileNext # https://github.com/LMS-Community/slimserver/pull/1140
       FileReadBackwards
       FileSlurp
       FileWhich
@@ -125,10 +125,11 @@ perlPackages.buildPerlPackage rec {
     rm -rf Bin
 
     # remove most vendored modules, keeping necessary ones
-    mkdir -p CPAN_used/Class/C3/ CPAN_used/SQL
+    mkdir -p CPAN_used/Class/C3/ CPAN_used/SQL/ CPAN_used/File/
     rm -r CPAN/SQL/Abstract/Limit.pm
     cp -rv CPAN/Class/C3/Componentised.pm CPAN_used/Class/C3/
     cp -rv CPAN/DBIx CPAN_used/
+    cp -rv CPAN/File/Next.pm CPAN_used/File/
     cp -rv CPAN/Log CPAN_used/
     cp -rv CPAN/SQL/* CPAN_used/SQL/
     rm -r CPAN

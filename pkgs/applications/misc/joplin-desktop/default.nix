@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, makeWrapper, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, makeWrapper, _7zz }:
 
 let
   pname = "joplin-desktop";
-  version = "2.14.17";
+  version = "3.0.15";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-u4wEchyljurmwVZsRnmUBITZUR6SxDxyGczZjXNsJkg=";
-      x86_64-darwin = "sha256-KjNwAnJZGX/DvHDPw15vGlSbJ47s6YT59EalARt1mx4=";
-      aarch64-darwin = "sha256-OYpsHPI+7riMVNAp2JpBlmdFdJUSNqNvBmeYHDw6yzY=";
+      x86_64-linux = "sha256-rNKYihIbdfGZEIGURyty+hS82ftHsqV1YjqM8VYB6RU=";
+      x86_64-darwin = "sha256-s7gZSr/5VOg8bqxGPckK7UxDpvmsNgdhjDg+lxnO/lU=";
+      aarch64-darwin = "sha256-UzAGYIKd5swtl6XNFVTPeg0nqwKKtu0e36+LA0Qiusw=";
     }.${system} or throwSystem;
   };
 
@@ -39,7 +39,7 @@ let
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves qjoly ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 
   linux = appimageTools.wrapType2 rec {
@@ -64,7 +64,7 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ _7zz ];
 
     sourceRoot = "Joplin.app";
 

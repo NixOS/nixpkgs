@@ -2,8 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
-  pythonRelaxDepsHook,
+  fetchFromGitHub,
   setuptools,
   click,
   urllib3,
@@ -14,33 +13,37 @@
   jinja2,
   marshmallow,
   authlib,
-  jwt,
   rich,
   typer,
   pydantic,
   safety-schemas,
   typing-extensions,
+  filelock,
+  psutil,
+  git,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.3";
+  version = "3.2.7";
 
   disabled = pythonOlder "3.7";
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-QUFUk08XJ9r4pkc0k5RP7LOAVAw/AIddwa43c4L32D8=";
+  src = fetchFromGitHub {
+    owner = "pyupio";
+    repo = "safety";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JWbiw9qgfDo0UMAcqIhk1Y5tW0aSaZtbVdpdaY2z+3w=";
   };
 
   postPatch = ''
     substituteInPlace safety/safety.py \
-      --replace-fail "telemetry=True" "telemetry=False"
+      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/util.py \
-      --replace-fail "telemetry = True" "telemetry = False"
+      --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/cli.py \
       --replace-fail "disable-optional-telemetry', default=False" \
                      "disable-optional-telemetry', default=True"
@@ -48,19 +51,14 @@ buildPythonPackage rec {
       --replace-fail "telemetry=True" "telemetry=False"
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
-    "packaging"
     "dparse"
-    "authlib"
-    "pydantic"
+    "filelock"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     setuptools
     click
     urllib3
@@ -71,23 +69,26 @@ buildPythonPackage rec {
     jinja2
     marshmallow
     authlib
-    jwt
     rich
     typer
     pydantic
     safety-schemas
     typing-extensions
+    filelock
+    psutil
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    git
+    pytestCheckHook
+  ];
 
   # Disable tests depending on online services
   disabledTests = [
     "test_announcements_if_is_not_tty"
     "test_check_live"
-    "test_check_live_cached"
+    "test_debug_flag"
     "test_get_packages_licenses_without_api_key"
-    "test_validate_with_policy_file_using_invalid_keyword"
     "test_validate_with_basic_policy_file"
   ];
 

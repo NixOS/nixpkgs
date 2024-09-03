@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   # python dependencies
   click,
   python-dateutil,
@@ -35,7 +34,6 @@
   which,
   bash,
   glibcLocales,
-  callPackage,
   # causes Python packaging conflict with any package requiring rdflib,
   # so use the unpatched rdflib by default (disables Nipype provenance tracking);
   # see https://github.com/nipy/nipype/issues/2888:
@@ -58,7 +56,6 @@ buildPythonPackage rec {
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "traits" ];
 

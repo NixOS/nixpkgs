@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     mainProgram = "objconv";
     homepage = "https://www.agner.org/optimize/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
   };
 }

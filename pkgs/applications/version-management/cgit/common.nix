@@ -1,5 +1,6 @@
 { pname, version, src, gitSrc, buildInputs ? []
 , homepage, description, maintainers
+, passthru ? {}
 }:
 
 { lib, stdenv, openssl, zlib, asciidoc, libxml2, libxslt
@@ -10,7 +11,7 @@
 }:
 
 stdenv.mkDerivation {
-  inherit pname version src gitSrc;
+  inherit pname version src gitSrc passthru;
 
   separateDebugInfo = true;
 

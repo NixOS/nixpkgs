@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -8,34 +7,41 @@
   oslo-utils,
   openstacksdk,
   pbr,
+  pythonOlder,
   requests-mock,
-  simplejson,
+  setuptools,
+  requests,
   stestr,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "3.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
     rev = version;
-    hash = "sha256-ijL/m9BTAgDUjqy77nkl3rDppeUPBycmEqlL6uMruIA=";
+    hash = "sha256-DDjWM4hjHPXYDeAJ6FDZZPzi65DG1rJ3efs8MouX1WY=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...
   PBR_VERSION = version;
 
-  nativeBuildInputs = [ pbr ];
+  build-system = [
+    pbr
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cliff
     openstacksdk
     oslo-i18n
     oslo-utils
-    simplejson
+    requests
   ];
 
   nativeCheckInputs = [

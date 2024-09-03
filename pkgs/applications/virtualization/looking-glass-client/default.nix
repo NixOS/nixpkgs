@@ -26,6 +26,7 @@
 
 , wayland
 , wayland-protocols
+, wayland-scanner
 
 , pipewire
 , pulseaudio
@@ -47,15 +48,15 @@ let
     icon = "lg-logo";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "looking-glass-client";
   version = "B7-rc1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
-    rev = version;
-    sha256 = "sha256-ne1Q+67+P8RHcTsqdiSSwkFf0g3pSNT91WN/lsSzssU=";
+    rev = finalAttrs.version;
+    hash = "sha256-ne1Q+67+P8RHcTsqdiSSwkFf0g3pSNT91WN/lsSzssU=";
     fetchSubmodules = true;
   };
 
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     ./0001-client-cmake-move-X11-config-directives-to-displayse.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wayland-scanner ];
 
   buildInputs = [ libX11 libGL freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
     ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr libXdmcp ]
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!pipewireSupport) [ "-DENABLE_PIPEWIRE=no" ];
 
   postUnpack = ''
-    echo ${src.rev} > source/VERSION
+    echo ${finalAttrs.src.rev} > source/VERSION
     export sourceRoot="source/client"
   '';
 
@@ -105,4 +106,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ alexbakker babbaj j-brn ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -37,12 +37,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "28.1";
-  slang   = "Nickel";
+  version = "29.0";
+  slang   = "Copper";
 
   src = fetchurl {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-AiC8dDt9okaM65JvMx7cfd+qfGA7pHli3j4zyOHj9ZM=";
+    hash = "sha256-0vuzuND/g5RYcunm+iWOk0pwY2DmmNrjtNX5ca3fdJM=";
   };
 
   preConfigure = ''

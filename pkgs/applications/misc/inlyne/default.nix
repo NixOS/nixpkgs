@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
-    owner = "trimental";
+    owner = "Inlyne-Project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Kae8WnahA/6k6QT5htYU2+diAFkmxVsbVaxRUlhf39o=";
+    hash = "sha256-j4DEau7LZxIoVIIYwCUgqmkSgdRxWzF5/vOS0lvjgUk=";
   };
 
-  cargoHash = "sha256-M6daK2y9HBRDV2wQjw87g1QYOqiJBfRf9uW1Eg6z6C8=";
+  cargoHash = "sha256-fMovzaP+R0CUwJy1HKATH2tPrIPwzGtubF1WHUoQDRY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=watcher::tests::the_gauntlet"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd inlyne \
-      --bash <($out/bin/inlyne --gen-completions bash) \
-      --fish <($out/bin/inlyne --gen-completions fish) \
-      --zsh <($out/bin/inlyne --gen-completions zsh)
+      --bash completions/inlyne.bash \
+      --fish completions/inlyne.fish \
+      --zsh completions/_inlyne
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
@@ -65,8 +65,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "GPU powered browserless markdown viewer";
-    homepage = "https://github.com/trimental/inlyne";
-    changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
+    homepage = "https://github.com/Inlyne-Project/inlyne";
+    changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "inlyne";

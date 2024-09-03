@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "lafriks";
     repo = "woodpecker-pipeline-transform";
     rev = "v${version}";
-    sha256 = "sha256-ngtpWjbL/ccmKTNQdL3osduELYSxcOu5z5UtqclNNSY=";
+    hash = "sha256-ngtpWjbL/ccmKTNQdL3osduELYSxcOu5z5UtqclNNSY=";
   };
 
   vendorHash = "sha256-SZxFsn187UWZqaxwMDdzAmfpRLZSCIpbsAI1mAu7Z6w=";

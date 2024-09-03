@@ -1,5 +1,4 @@
 {
-  backoff,
   sparqlwrapper,
   boto3,
   buildPythonPackage,
@@ -20,14 +19,13 @@
   pyparsing,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   redshift-connector,
   requests-aws4auth,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.7.3";
+  version = "3.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,14 +34,13 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-gm6ieteW+NcY+AOLcMZLUPcSi2Z/Mo27rzd1i9imp5I=";
+    hash = "sha256-k+jQj/EajjjvvXZJd8c/3vtaGrQJedbYSDIzel0Sp44=";
   };
 
   pythonRelaxDeps = [ "packaging" ];
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     boto3

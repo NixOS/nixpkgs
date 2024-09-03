@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       Silmaril from Morgoth’s iron crown.
     '';
     homepage = "http://www.amirrorclear.net/flowers/game/sil/index.html";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ michaelpj kenran ];
     platforms = lib.platforms.linux;
     mainProgram = "sil";

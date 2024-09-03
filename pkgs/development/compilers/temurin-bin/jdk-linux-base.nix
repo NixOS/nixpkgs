@@ -1,7 +1,7 @@
 { name-prefix ? "temurin"
 , brand-name ? "Eclipse Temurin"
 , sourcePerArch
-, knownVulnerabilities ? []
+, knownVulnerabilities ? [ ]
 }:
 
 { stdenv
@@ -10,18 +10,18 @@
 , autoPatchelfHook
 , makeWrapper
 , setJavaClassPath
-# minimum dependencies
+  # minimum dependencies
 , alsa-lib
 , fontconfig
 , freetype
 , libffi
 , xorg
 , zlib
-# runtime dependencies
+  # runtime dependencies
 , cups
-# runtime dependencies for GTK+ Look and Feel
-# TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
-# which should be fixable, this is a no-rebuild workaround for GHC.
+  # runtime dependencies for GTK+ Look and Feel
+  # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
+  # which should be fixable, this is a no-rebuild workaround for GHC.
 , gtkSupport ? !stdenv.targetPlatform.isGhcjs
 , cairo
 , glib
@@ -33,7 +33,9 @@ let
   runtimeDependencies = [
     cups
   ] ++ lib.optionals gtkSupport [
-    cairo glib gtk3
+    cairo
+    glib
+    gtk3
   ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
   validCpuTypes = builtins.attrNames lib.systems.parse.cpuTypes;
@@ -41,7 +43,8 @@ let
     (arch: builtins.elem arch validCpuTypes)
     (builtins.attrNames sourcePerArch);
   result = stdenv.mkDerivation {
-    pname = if sourcePerArch.packageType == "jdk"
+    pname =
+      if sourcePerArch.packageType == "jdk"
       then "${name-prefix}-bin"
       else "${name-prefix}-${sourcePerArch.packageType}-bin";
 
@@ -123,10 +126,11 @@ let
       license = licenses.gpl2Classpath;
       sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes;  # some inherit jre.meta.platforms
+      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
       maintainers = with maintainers; [ taku0 ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };
   };
-in result
+in
+result

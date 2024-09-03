@@ -17,7 +17,7 @@
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, tzdata
+, dbus, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
@@ -61,28 +61,24 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.2";
+  version = "2.80.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uc+296W9WzEjj9XVbfImst2l6jdhFHW/ifag+UAP6L0=";
+    hash = "sha256-JOApxd/JtE5Fc2l63zMHipgnxIk4VVAEs7kJb6TqA08=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
     ./darwin-compilation.patch
+    # FIXME: remove when https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4088 is merged and is in the tagged release
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/9d0988ca62ee96e09aa76abbd65ff192cfce6858.patch";
+      hash = "sha256-JrR3Ba6L+3M0Nt8DgHmPG8uKtx7hOgUp7np08ATIzjA=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
-    # Fix double-free & segfault issues on menu and dbus connection action group export failures
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4073
-    # Remove when version > 2.80.2
-    (fetchpatch {
-      name = "GLib-Fix-memory-problems-on-gmenuexporter-and-gactiongroupexporter-error-paths.patch";
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/b9490a499a004618c883f180b1081a166ff1a86b.patch";
-      hash = "sha256-c6uZ9NEhg26/2RdgjQ4s5ErCDm5HH6T/tfJXTwh/H6o=";
-    })
-
     # This patch lets GLib's GDesktopAppInfo API watch and notice changes
     # to the Nix user and system profiles.  That way, the list of available
     # applications shown by the desktop environment is immediately updated
@@ -124,6 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
+
+    # Tell Meson to install gdb scripts next to the lib
+    # GDB only looks there and in ${gdb}/share/gdb/auto-load,
+    # and by default meson installs in to $out/share/gdb/auto-load
+    # which does not help
+    ./gdb_script.patch
+
+    # glib assumes that `RTLD_LOCAL` is defined to `0`, which is true on Linux and FreeBSD but not on Darwin.
+    ./gmodule-rtld_local.patch
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -221,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
+    moveToOutput "share/glib-2.0/gdb" "$out"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 

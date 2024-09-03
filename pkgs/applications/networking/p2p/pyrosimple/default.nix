@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyrosimple";
-  version = "2.13.0";
+  version = "2.14.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kannibalox";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-e69e1Aa10/pew1UZBCIPIH3BK7I8C3HiW59fRuSZlkc=";
+    hash = "sha256-lEtyt7i8MyL2VffxNFQkL9RkmGeo6Nof0AOQwf6BUSE=";
   };
 
   pythonRelaxDeps = [
@@ -27,7 +27,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

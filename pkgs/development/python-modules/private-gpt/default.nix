@@ -17,6 +17,7 @@
   gradio,
   fetchurl,
   fetchpatch,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,8 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "fastapi" ];
 
   dependencies = [
     fastapi
@@ -85,12 +88,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "private_gpt" ];
 
+  passthru.tests = {
+    inherit (nixosTests) private-gpt;
+  };
+
   meta = {
     changelog = "https://github.com/zylon-ai/private-gpt/blob/${src.rev}/CHANGELOG.md";
     description = "Interact with your documents using the power of GPT, 100% privately, no data leaks";
     homepage = "https://github.com/zylon-ai/private-gpt";
     license = lib.licenses.asl20;
     mainProgram = "private-gpt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

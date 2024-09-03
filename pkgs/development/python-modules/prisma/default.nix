@@ -7,7 +7,6 @@
   jinja2,
   nodeenv,
   pydantic,
-  pytestCheckHook,
   python-dotenv,
   pythonOlder,
   setuptools,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "prisma";
-  version = "0.13.1";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "RobertCraigie";
     repo = "prisma-client-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7pibexiFsyrwC6rVv0CGHRbQU4G3rOXVhQW/7c/vKJA=";
+    hash = "sha256-F+Up1HHslralt3NvZZ/wT+CKvzKOjhEEuMEeT0L6NZM=";
   };
 
   build-system = [ setuptools ];

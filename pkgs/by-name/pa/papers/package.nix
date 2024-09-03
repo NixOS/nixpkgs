@@ -27,7 +27,6 @@
 , dbus
 , gi-docgen
 , libgxps
-, supportXPS ? true # Open XML Paper Specification via libgxps
 , withLibsecret ? true
 , supportNautilus ? (!stdenv.isDarwin)
 , libadwaita
@@ -87,14 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     libadwaita
     libarchive
+    libgxps
     librsvg
     libspectre
     pango
     poppler
   ] ++ lib.optionals withLibsecret [
     libsecret
-  ] ++ lib.optionals supportXPS [
-    libgxps
   ] ++ lib.optionals supportNautilus [
     nautilus
   ] ++ lib.optionals stdenv.isDarwin [

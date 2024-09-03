@@ -2,19 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rgbds";
-  version = "0.7.0";
+  version = "0.8.0";
   src = fetchFromGitHub {
     owner = "gbdev";
     repo = "rgbds";
     rev = "v${version}";
-    hash = "sha256-aktKJlwXpHpjSFxoz5wZJPGWZIcn4ax5iBP0GQEux78=";
+    hash = "sha256-rSPYnbZjCoAKJBNCJCKsLBenolOzS78Zm850BJ8mKhA=";
   };
   nativeBuildInputs = [ bison flex pkg-config ];
   buildInputs = [ libpng ];
   postPatch = ''
     patchShebangs --host src/bison.sh
   '';
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {

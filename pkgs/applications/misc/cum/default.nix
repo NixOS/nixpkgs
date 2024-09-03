@@ -31,7 +31,7 @@ buildPythonApplication rec {
     mainProgram = "cum";
     homepage = "https://github.com/Hamuko/cum";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

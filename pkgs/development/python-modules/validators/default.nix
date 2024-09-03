@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  eth-hash,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.28.0";
+  version = "0.33.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,12 +19,16 @@ buildPythonPackage rec {
     owner = "python-validators";
     repo = "validators";
     rev = "refs/tags/${version}";
-    hash = "sha256-r3SQvt96y8e9odWxz0GjVKH3+Pa0Lqs+tbhryeGaZUU=";
+    hash = "sha256-eLujcm2MD1mPjROrBTg9TfU9wts16Jgb+ouNXFHsFZ0=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    crypto-eth-addresses = [ eth-hash ] ++ eth-hash.optional-dependencies.pycryptodome;
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "validators" ];
 

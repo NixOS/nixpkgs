@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.5";
+  version = "0.11.6";
 
   disabled = pythonOlder "3.8";
 
@@ -25,21 +25,24 @@ buildPythonPackage rec {
     owner = "igraph";
     repo = "python-igraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-nfXCAjTKxtslVk17h60+v/JQusQTmaTRCPvvFG4/OPk=";
+    postFetch = ''
+      # export-subst prevents reproducability
+      rm $out/.git_archival.json
+    '';
+    hash = "sha256-DXYNFSvmKiulMnWL8w5l9lWGtS9Sff/Hn4x538nrvzo=";
   };
 
   postPatch = ''
     rm -r vendor
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    setuptools
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  build-system = [ setuptools ];
 
   buildInputs = [ igraph ];
 
-  propagatedBuildInputs = [ texttable ];
+  dependencies = [ texttable ];
 
   passthru.optional-dependencies = {
     cairo = [ cairocffi ];

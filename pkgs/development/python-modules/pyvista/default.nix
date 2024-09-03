@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  imageio,
   matplotlib,
   numpy,
   pillow,
@@ -10,32 +9,33 @@
   pythonOlder,
   scooby,
   setuptools,
+  typing-extensions,
   vtk,
 }:
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.43.10";
+  version = "0.44.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pyvista";
+    repo = "pyvista";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WSxr6HA86zSbgwWn3KRIjcbNCe9SUjaOjBHywIdMbjw=";
+    hash = "sha256-P4kmsaeZqwEUdLJmfTRHkh8zdlOGLw+YLp9fa05xLXU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    imageio
+  dependencies = [
     matplotlib
     numpy
     pillow
     pooch
     scooby
+    typing-extensions
     vtk
   ];
 

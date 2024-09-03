@@ -9,6 +9,7 @@
   hatch-fancy-pypi-readme,
   hatchling,
   httpx,
+  jiter,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.26.0";
+  version = "0.34.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xoYhRRanqZ93UlSoqeeH83JmsoiijDTUDtnY3VDLQAg=";
+    hash = "sha256-UjwBxuhXuwJfWewg9si/oIuXgiqbNAYm4lK2f+C6VJU=";
   };
 
   build-system = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     anyio
     distro
     httpx
+    jiter
     sniffio
     pydantic
     tokenizers
@@ -69,6 +71,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Test require network access
     "tests/api_resources"
+    "tests/lib/test_bedrock.py"
   ];
 
   pytestFlagsArray = [

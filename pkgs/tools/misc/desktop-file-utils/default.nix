@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.27";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-${version}.tar.xz";
     hash = "sha256-oIF985zjhbZiGIBAfFbx8pgWjAQMIDLO34jVt2r/6DY=";
   };
 

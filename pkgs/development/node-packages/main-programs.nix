@@ -8,13 +8,11 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
   "@prisma/language-server" = "prisma-language-server";
   "@uppy/companion" = "companion";
-  "@vue/cli" = "vue";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
@@ -50,13 +48,6 @@
   purty = "purty";
   pscid = "pscid";
   remod-cli = "remod";
-  teck-programmer = "teck-firmware-upgrade";
-  typescript-language-server = "typescript-language-server";
-  uglify-js = "uglifyjs";
-  undollar = "$";
-  vscode-css-languageserver-bin = "css-languageserver";
-  vscode-html-languageserver-bin = "html-languageserver";
-  vscode-json-languageserver-bin = "json-languageserver";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }

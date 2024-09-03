@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchgit, fetchpatch
+{ lib, rustPlatform, fetchgit
 , pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 , pkgsCross
@@ -6,27 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "125.0";
+  version = "127.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "6a7ff1ecb7fad6820d3bbfe8b11e65854059aba5";
-    hash = "sha256-y/vHU8i9YNbzSHla853z/2w914mVMFOryyaHE1uxlvM=";
+    rev = "8fdfed12c960850e9d5e809cfd2a40ce3bdd98d6";
+    hash = "sha256-W0zLYM91xoq9vURgYs2noc9F9RtvoXztIIHMx0HVK5g=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/128e591037c0be0362ed814d0b5583aa65ff09e1%5E%21/?format=TEXT";
-      decode = "base64 -d";
-      hash = "sha256-p5VzHRb0l0vCJNe48cRl/uBYHwTQMEykMcBOMzL3yaY=";
-    })
-  ];
-
   separateDebugInfo = true;
 
-  cargoHash = "sha256-1AUfd9dhIZvVVUsVbnGoLKc0lBfccwM4wqWgU4yZWOE=";
+  cargoHash = "sha256-nEJBRlwMqTahaIC9WdtoxGLVfc+U9sJ0ilzLhavcbD0=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner

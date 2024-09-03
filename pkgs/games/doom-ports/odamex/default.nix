@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "Client/server port for playing old-school Doom online";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

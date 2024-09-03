@@ -1,31 +1,32 @@
-{ copyDesktopItems
-, fetchurl
-, jre
-, lib
-, makeDesktopItem
-, makeWrapper
-, stdenvNoCC
+{
+  copyDesktopItems,
+  fetchurl,
+  jre,
+  lib,
+  makeDesktopItem,
+  makeWrapper,
+  stdenvNoCC,
 
-, gamemodeSupport ? stdenvNoCC.isLinux
-, textToSpeechSupport ? stdenvNoCC.isLinux
-, additionalLibs ? [ ]
+  gamemodeSupport ? stdenvNoCC.isLinux,
+  textToSpeechSupport ? stdenvNoCC.isLinux,
+  additionalLibs ? [ ],
 
-, # dependencies
-  flite
-, gamemode
-, libglvnd
-, libpulseaudio
-, udev
-, xorg
+  # dependencies
+  flite,
+  gamemode,
+  libglvnd,
+  libpulseaudio,
+  udev,
+  xorg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.36.9";
+  version = "3.4.36.10";
 
   src = fetchurl {
     url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${finalAttrs.version}/ATLauncher-${finalAttrs.version}.jar";
-    hash = "sha256-2kO7CRkA3RlWcNqv2d5sJIaLPupUU0ox2wc3T16i7e8=";
+    hash = "sha256-JZTiYcea5ik8a4RmNLxZcuea7spGWftUGRiRW2Ive7c=";
   };
 
   env.ICON = fetchurl {
@@ -35,19 +36,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase =
     let
-      runtimeLibraries = [
-        libglvnd
-        libpulseaudio
-        udev
-        xorg.libXxf86vm
-      ]
-      ++ lib.optional gamemodeSupport gamemode.lib
-      ++ lib.optional textToSpeechSupport flite
-      ++ additionalLibs;
+      runtimeLibraries =
+        [
+          libglvnd
+          libpulseaudio
+          udev
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXxf86vm
+        ]
+        ++ lib.optional gamemodeSupport gamemode.lib
+        ++ lib.optional textToSpeechSupport flite
+        ++ additionalLibs;
     in
     ''
       runHook preInstall

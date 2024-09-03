@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs
+, jailbreak-cabal, hscolour, cpphs, runCommandCC
 , ghcWithHoogle, ghcWithPackages
 , nodejs
 }:
@@ -790,8 +790,8 @@ stdenv.mkDerivation ({
           lib.optionals (!isCross) setupHaskellDepends);
 
         ghcCommandCaps = lib.toUpper ghcCommand';
-      in stdenv.mkDerivation {
-        inherit name shellHook;
+      in runCommandCC name {
+        inherit shellHook;
 
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;
         nativeBuildInputs =
@@ -799,8 +799,6 @@ stdenv.mkDerivation ({
           collectedToolDepends;
         buildInputs =
           otherBuildInputsSystem;
-        phases = ["installPhase"];
-        installPhase = "echo $nativeBuildInputs $buildInputs > $out";
         LANG = "en_US.UTF-8";
         LOCALE_ARCHIVE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
@@ -810,7 +808,7 @@ stdenv.mkDerivation ({
         "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
           then "${ghcEnv}/lib/HaLVM-${ghc.version}"
           else "${ghcEnv}/${ghcLibdir}";
-      };
+      } "echo $nativeBuildInputs $buildInputs > $out";
 
     env = envFunc { };
 

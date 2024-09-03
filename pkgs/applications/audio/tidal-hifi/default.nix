@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , makeWrapper
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -37,14 +38,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.14.1";
+  version = "5.16.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-3oVQyFtAFqlh4GOgavN2e2TVhCILg6Rhf5GZcot+aKo=";
+    sha256 = "sha256-gDinm7kILm4SKlWmaJ1grwRuketGs/aWlJfNEF+AIRo=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook3 ];
 
   buildInputs = [
     alsa-lib

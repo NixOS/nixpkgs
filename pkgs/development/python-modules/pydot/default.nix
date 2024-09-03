@@ -4,7 +4,6 @@
   fetchPypi,
   substituteAll,
   graphviz,
-  python,
   pytestCheckHook,
   chardet,
   pythonOlder,
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YCRq8hUSP6Bi8hzXkb5n3aI6bygN8J9okZ5jeh5PMjU=";
+    hash = "sha256-YCRq8hUSP6Bi8hzXkb5n3aI6bygN8J9okZ5jeh5PMjU=";
   };
 
   propagatedBuildInputs = [ pyparsing ];
@@ -60,6 +59,6 @@ buildPythonPackage rec {
     description = "Allows to create both directed and non directed graphs from Python";
     homepage = "https://github.com/erocarrera/pydot";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

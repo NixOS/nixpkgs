@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , installShellFiles
 , testers
+, nixosTests
 , opentelemetry-collector
 }:
 
@@ -41,10 +42,13 @@ buildGoModule rec {
       --zsh <($out/bin/otelcorecol completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = opentelemetry-collector;
-    command = "otelcorecol -v";
+  passthru.tests = {
+    version = testers.testVersion {
+      inherit version;
+      package = opentelemetry-collector;
+      command = "otelcorecol -v";
+    };
+    inherit (nixosTests) opentelemetry-collector;
   };
 
   meta = with lib; {

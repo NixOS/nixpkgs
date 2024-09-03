@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, fetchpatch2
 , pkg-config, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, util-linux, qrencode
@@ -33,6 +33,13 @@ mkDerivation rec {
       name = "gcc-13.patch";
       url = "https://github.com/litecoin-project/litecoin/commit/6d1adb19aa79a8e8e140582759515bbd76816aa0.patch";
       hash = "sha256-1y4Iz2plMw5HMAjl9x50QQpYrYaUd2WKrrAcUnQmlBY=";
+    })
+
+    # net: add compatibility for miniupnpc 2.2.8
+    # https://github.com/litecoin-project/litecoin/pull/971
+    (fetchpatch2 {
+      url = "https://github.com/litecoin-project/litecoin/commit/5dddffa3e1bbcc7a3e6963b4860ba2d675ca847b.patch?full_index=1";
+      hash = "sha256-F5GcL1RM91l04WrS3qYlV5zEcwyXrcRdmLLCqu1Hop0=";
     })
   ];
 

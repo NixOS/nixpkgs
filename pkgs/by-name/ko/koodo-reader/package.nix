@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  mkYarnPackage,
   fetchFromGitHub,
-  applyPatches,
   fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -12,34 +13,28 @@
   electron,
 }:
 
-let
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
-in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.6.6";
+  version = "1.6.7";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "troyeguo";
-      repo = "koodo-reader";
-      rev = "v${version}";
-      hash = "sha256-g2bVm8LFeEIPaWlaxzMI0SrpM+79zQFzJ7Vs5CbWBT4=";
-    };
-    patches = [ ./update-react-i18next.patch ]; # Could be upstreamed
+  src = fetchFromGitHub {
+    owner = "troyeguo";
+    repo = "koodo-reader";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZHRU8dJjKQFLIB1t2VK/COy6a3nShUeWR8iAM9YJdto=";
   };
 
-  # should be copied from `koodo-reader.src`
-  packageJSON = ./package.json;
-
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-VvYkotVb74zR9+/IWiQwOX/6RJf+xukpi7okRovfVzc=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-58mxYt2wD6SGzhvo9c44CPmdX+/tLnbJCMPafo4txbY=";
   };
 
   nativeBuildInputs =
     [
       makeWrapper
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
     ]
     ++ lib.optionals (!stdenv.isDarwin) [
       copyDesktopItems
@@ -53,28 +48,12 @@ mkYarnPackage rec {
   # disable code signing on Darwin
   env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp -r $node_modules node_modules
-    chmod +w node_modules
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    export HOME=$(mktemp -d)
-    yarn --offline build
-
-    cp -r ${electronDist} electron-dist
+  postBuild = ''
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     yarn --offline run electron-builder --dir \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
-
-    runHook postBuild
   '';
 
   installPhase = ''
@@ -107,15 +86,13 @@ mkYarnPackage rec {
       --inherit-argv0
   '';
 
-  doDist = false;
-
   desktopItems = [
     (makeDesktopItem {
       name = "koodo-reader";
       desktopName = "Koodo Reader";
       exec = "koodo-reader %U";
       icon = "koodo-reader";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Office" ];
       mimeTypes = [
         "application/epub+zip"
@@ -136,8 +113,8 @@ mkYarnPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/v${version}";
-    description = "A cross-platform ebook reader";
+    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/v${finalAttrs.version}";
+    description = "Cross-platform ebook reader";
     longDescription = ''
       A modern ebook manager and reader with sync and backup capacities
       for Windows, macOS, Linux and Web
@@ -148,4 +125,4 @@ mkYarnPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = electron.meta.platforms;
   };
-}
+})

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   LDFLAGS = lib.optionals enableCuda [
     # Fake libnvidia-ml.so (the real one is deployed impurely)
-    "-L${cudaPackages.cuda_nvml_dev}/lib/stubs"
+    "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
   ];
 
   configureFlags = [

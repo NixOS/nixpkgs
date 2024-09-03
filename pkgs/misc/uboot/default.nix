@@ -28,10 +28,10 @@
 }:
 
 let
-  defaultVersion = "2024.04";
+  defaultVersion = "2024.07";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-GKhT/jn6160DqQzC1Cda6u1tppc13vrDSSuAUIhD3Uo=";
+    hash = "sha256-9ZHamrkO89az0XN2bQ3f+QxO1zMGgIl0hhF985DYPI8=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -132,7 +132,7 @@ let
     meta = with lib; {
       homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       maintainers = with maintainers; [ bartsch dezgeg lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
@@ -303,7 +303,7 @@ in {
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
     ROCKCHIP_TPL = rkbin.TPL_RK3588;
-    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
   };
 
   ubootNovena = buildUBoot {
@@ -412,6 +412,16 @@ in {
   ubootOrangePiZero2 = buildUBoot {
     defconfig = "orangepi_zero2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePiZero3 = buildUBoot {
+    defconfig = "orangepi_zero3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    # According to https://linux-sunxi.org/H616 the H618 "is a minor update with a larger (1MB) L2 cache" (compared to the H616)
+    # but "does require extra support in U-Boot, TF-A and sunxi-fel. Support for that has been merged in mainline releases."
+    # But no extra support seems to be in TF-A.
     BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };

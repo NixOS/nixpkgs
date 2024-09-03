@@ -4,7 +4,7 @@ buildPythonPackage rec {
   # the frontend version corresponding to a specific home-assistant version can be found here
   # https://github.com/home-assistant/home-assistant/blob/master/homeassistant/components/frontend/manifest.json
   pname = "home-assistant-frontend";
-  version = "20240610.1";
+  version = "20240809.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     pname = "home_assistant_frontend";
     dist = "py3";
     python = "py3";
-    hash = "sha256-6XSDKPL+rbtP/jGYbvzc5cakEZC94sDetmPuM7TQQ64=";
+    hash = "sha256-PVW/W6/a/kbhbGw35/+AHvjAn1Xq3dW5nslMJWsDgv4=";
   };
 
   # there is nothing to strip in this package
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Polymer frontend for Home Assistant";
-    homepage = "https://github.com/home-assistant/home-assistant-polymer";
+    description = "Frontend for Home Assistant";
+    homepage = "https://github.com/home-assistant/frontend";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

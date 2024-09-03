@@ -1,5 +1,4 @@
-{ stdenv
-, fetchFromGitHub
+{ fetchFromGitHub
 , lib
 , pkg-config
 , libX11

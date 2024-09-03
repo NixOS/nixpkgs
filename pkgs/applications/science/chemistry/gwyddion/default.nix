@@ -24,19 +24,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config file ];
 
-  buildInputs = with lib;
-    [ gtk2 fftw ] ++
-    optionals openglSupport [ gnome2.gtkglext libGL ] ++
-    optional openexrSupport openexr ++
-    optional libXmuSupport xorg.libXmu ++
-    optional fitsSupport cfitsio ++
-    optional libpngSupport libpng ++
-    optional libxsltSupport libxslt ++
-    optional libxml2Support libxml2 ++
-    optional libwebpSupport libwebp ++
-    optional zlibSupport zlib ++
-    optional libuniqueSupport libunique ++
-    optional libzipSupport libzip;
+  buildInputs = [ gtk2 fftw ] ++
+    lib.optionals openglSupport [ gnome2.gtkglext libGL ] ++
+    lib.optional openexrSupport openexr ++
+    lib.optional libXmuSupport xorg.libXmu ++
+    lib.optional fitsSupport cfitsio ++
+    lib.optional libpngSupport libpng ++
+    lib.optional libxsltSupport libxslt ++
+    lib.optional libxml2Support libxml2 ++
+    lib.optional libwebpSupport libwebp ++
+    lib.optional zlibSupport zlib ++
+    lib.optional libuniqueSupport libunique ++
+    lib.optional libzipSupport libzip;
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = [ lib.maintainers.cge ];
+    maintainers = [ ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.17";
+  version = "0.4.8.18";
 
   src = fetchFromGitHub {
     owner  = "C0rn3j";
     repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-arBdPrFtdllWMn1KuZ+PlENiJ0oRPVbgVjbef+pv+IE=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-xSxAzvyBXfU7IzTWOXPPDBX4bTvbZ7RHUTtz3zwi7a8=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
@@ -50,7 +50,7 @@ buildPythonApplication rec {
     homepage    = "https://github.com/Ryochan7/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ orivej rnhmjoj ];
   };

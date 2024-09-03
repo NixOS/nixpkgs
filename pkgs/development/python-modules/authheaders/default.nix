@@ -49,7 +49,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ValiMail/authentication-headers";
     changelog = "https://github.com/ValiMail/authentication-headers/blob${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "dmarc-policy-find";
   };
 }

@@ -3,7 +3,6 @@
   cryptography,
   fetchFromGitHub,
   lib,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -22,7 +21,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "cryptography" ];

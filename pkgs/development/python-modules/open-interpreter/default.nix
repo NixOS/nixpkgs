@@ -3,78 +3,88 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   poetry-core,
 
-  appdirs,
+  setuptools,
   astor,
   inquirer,
-  litellm,
   pyyaml,
   rich,
   six,
-  tiktoken,
   tokentrim,
   wget,
   psutil,
   html2image,
+  send2trash,
   ipykernel,
   jupyter-client,
   matplotlib,
   toml,
-  posthog,
-  openai,
-  setuptools,
+  tiktoken,
+  platformdirs,
+  pydantic,
+  google-generativeai,
+  pynput,
+  pyperclip,
+  yaspin,
+  shortuuid,
+  litellm,
+
+  nltk,
 }:
 
 buildPythonPackage rec {
   pname = "open-interpreter";
-  version = "0.2.0";
+  version = "0.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "KillianLucas";
-    repo = pname;
+    repo = "open-interpreter";
     rev = "v${version}";
-    hash = "sha256-XeJ6cADtyXtqoTXwYJu+i9d3NYbJCLpYOeZYmdImtwI=";
+    hash = "sha256-TeBiRylrq5CrAG9XS47Z9GlruAv7V7Nsl4QbSV55isM=";
   };
 
-  # Remove unused dependency
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'git-python = "^1.0.3"' ""
-  '';
+  pythonRemoveDeps = [ "git-python" ];
 
-  pythonRelaxDeps = [ "tiktoken" ];
-
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
+  pythonRelaxDeps = [
+    "psutil"
+    "pynput"
+    "yaspin"
   ];
 
-  propagatedBuildInputs = [
-    appdirs
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    setuptools
     astor
     inquirer
-    litellm
     pyyaml
     rich
     six
-    tiktoken
     tokentrim
     wget
     psutil
     html2image
+    send2trash
     ipykernel
     jupyter-client
     matplotlib
     toml
-    posthog
-    openai
+    tiktoken
+    platformdirs
+    pydantic
+    google-generativeai
+    pynput
+    pyperclip
+    yaspin
+    shortuuid
+    litellm
 
-    # Not explicitly in pyproject.toml but required due to use of `pkgs_resources`
-    setuptools
+    # marked optional in pyproject.toml but still required?
+    nltk
   ];
 
   pythonImportsCheck = [ "interpreter" ];

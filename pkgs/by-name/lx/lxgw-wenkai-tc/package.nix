@@ -7,7 +7,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "lxgw-wenkai-tc";
   version = "1.330";
   src = fetchurl {
-    url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${version}/${pname}-v${version}.tar.gz";
+    url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${version}/lxgw-wenkai-tc-v${version}.tar.gz";
     hash = "sha256-qpX5shH1HbGMa287u/R1rMFgQeAUC0wwKFVD+QSTyho=";
   };
 

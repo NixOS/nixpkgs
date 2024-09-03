@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-R069LuOmjCFj7dHXiMjuK7WUupk5+dVd8IDKY/wBn2o=";
   };
 
-  patches = lib.optionals finalAttrs.doCheck [
+  patches = lib.optionals finalAttrs.finalPackage.doCheck [
     (substituteAll {
       # Do not let cmake's fetchContent download unity
       src = ./remove-fetchcontent-usage.patch;
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     doxygen
     validatePkgConfig
-  ] ++ lib.optionals finalAttrs.doCheck [ ruby ];
+  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [ ruby ];
 
-  cmakeFlags = [ "-DBUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}" ];
+  cmakeFlags = [ "-DBUILD_TESTING=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}" ];
 
   doCheck = false;
 

@@ -28,6 +28,6 @@ buildDunePackage {
     homepage = "https://github.com/Chris00/ocaml-rope";
     description = "Ropes (“heavyweight strings”) in OCaml";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

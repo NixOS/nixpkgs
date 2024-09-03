@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kevin1024/vcrpy";
     changelog = "https://github.com/kevin1024/vcrpy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

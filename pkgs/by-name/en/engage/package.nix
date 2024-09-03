@@ -2,6 +2,7 @@
 , installShellFiles
 , rustPlatform
 , fetchFromGitLab
+, stdenv
 }:
 
 let
@@ -14,7 +15,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitLab {
     domain = "gitlab.computer.surgery";
     owner = "charles";
-    repo = pname;
+    repo = "engage";
     rev = "v${version}";
     hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
   };
@@ -25,17 +26,19 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  postInstall = "installShellCompletion --cmd ${pname} "
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+    "installShellCompletion --cmd engage "
     + builtins.concatStringsSep
       " "
       (builtins.map
-        (shell: "--${shell} <($out/bin/${pname} completions ${shell})")
+        (shell: "--${shell} <($out/bin/engage completions ${shell})")
         [
           "bash"
           "fish"
           "zsh"
         ]
-      );
+      )
+    );
 
   meta = {
     description = "Task runner with DAG-based parallelism";

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
+, cpio, elfutils, hexdump, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
 , rustc, rust-bindgen, rustPlatform
 }:
@@ -157,6 +157,7 @@ let
         zstd
         python3Minimal
         kmod
+        hexdump
       ] ++ optional  needsUbootTools ubootTools
         ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
         ++ optionals withRust [ rustc rust-bindgen ];
@@ -206,6 +207,10 @@ let
         for i in $(find arch -name install.sh); do
             patchShebangs "$i"
         done
+
+        # unset $src because the build system tries to use it and spams a bunch of warnings
+        # see: https://github.com/torvalds/linux/commit/b1992c3772e69a6fd0e3fc81cd4d2820c8b6eca0
+        unset src
       '';
 
       configurePhase = ''
@@ -312,7 +317,7 @@ let
       installTargets = [
         (kernelConf.installTarget or (
           /**/ if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then "uinstall"
-          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" || kernelConf.target == "vmlinuz.efi" then "zinstall"
           else "install"))
       ];
 

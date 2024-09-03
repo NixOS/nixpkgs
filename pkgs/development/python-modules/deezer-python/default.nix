@@ -3,27 +3,27 @@
   buildPythonPackage,
   environs,
   fetchFromGitHub,
+  httpx,
   poetry-core,
   pytest-mock,
   pytest-vcr,
   pytestCheckHook,
   pythonOlder,
-  requests,
   tornado,
 }:
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "6.2.0";
+  version = "7.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Y1y8FBxpGpNIWCZbel9fdGLGC9VM9h1BvHtUxCZxp/A=";
+    hash = "sha256-V4M6qRTa7XKbl962Z3y70+v3YCeW65VjeSIv/1Oxnws=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    requests
+    httpx
     tornado
   ];
 

@@ -3,26 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
+  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pony";
-  version = "0.7.17";
+  version = "0.7.19";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "ponyorm";
     repo = "pony";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wBqw+YHKlxYplgsYL1pbkusHyPfCaVPcH/Yku6WDYbE=";
+    hash = "sha256-fYzwdHRB9QrIJPEk8dqtPggSnJeugDyC9zQSM6u3rN0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -1,5 +1,5 @@
 { lib
-, python3
+, python311
 , fetchPypi
 , wrapGAppsHook3
 , gtk3
@@ -8,7 +8,8 @@
 , argyllcms
 }:
 
-python3.pkgs.buildPythonApplication rec {
+# wxPython-4.2.1 requires python < 3.12
+python311.pkgs.buildPythonApplication rec {
   pname = "displaycal";
   version = "3.9.12";
   format = "setuptools";
@@ -24,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python311.pkgs; [
     build
     certifi
     wxpython

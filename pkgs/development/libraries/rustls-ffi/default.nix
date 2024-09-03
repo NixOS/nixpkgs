@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, apacheHttpd, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  apacheHttpd,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustls-ffi";
@@ -35,7 +42,11 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "C-to-rustls bindings";
     homepage = "https://github.com/rustls/rustls-ffi/";
-    license = with lib.licenses; [ mit asl20 isc ];
+    license = with lib.licenses; [
+      mit
+      asl20
+      isc
+    ];
     maintainers = [ maintainers.lesuisse ];
   };
 }

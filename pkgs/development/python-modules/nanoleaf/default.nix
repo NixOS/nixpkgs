@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/software-2/nanoleaf";
     changelog = "https://github.com/software-2/nanoleaf/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

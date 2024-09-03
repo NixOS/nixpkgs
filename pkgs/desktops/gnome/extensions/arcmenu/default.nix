@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "arcmenu";
     repo = "ArcMenu";
     rev = "v${version}";
-    sha256 = "sha256-xLKvcrZkqcj7aHiv9JumLWSP5LbajITAyopCIwGqpkE=";
+    hash = "sha256-xLKvcrZkqcj7aHiv9JumLWSP5LbajITAyopCIwGqpkE=";
   };
 
   patches = [

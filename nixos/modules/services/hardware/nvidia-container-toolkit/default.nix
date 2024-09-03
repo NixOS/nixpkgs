@@ -32,7 +32,7 @@
         default = false;
         type = lib.types.bool;
         description = ''
-          Enable dynamic CDI configuration for NVidia devices by running
+          Enable dynamic CDI configuration for Nvidia devices by running
           nvidia-container-toolkit on boot.
         '';
       };
@@ -52,6 +52,17 @@
         '';
       };
 
+      device-name-strategy = lib.mkOption {
+        default = "index";
+        type = lib.types.enum [ "index" "uuid" "type-index" ];
+        description = ''
+          Specify the strategy for generating device names,
+          passed to `nvidia-ctk cdi generate`. This will affect how
+          you reference the device using `nvidia.com/gpu=` in
+          the container runtime.
+        '';
+      };
+
       mount-nvidia-docker-1-directories = lib.mkOption {
         default = true;
         type = lib.types.bool;
@@ -60,6 +71,8 @@
           /usr/local/nvidia/lib64.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "nvidia-container-toolkit" { };
     };
 
   };
@@ -118,7 +131,9 @@
           let
             script = pkgs.callPackage ./cdi-generate.nix {
               inherit (config.hardware.nvidia-container-toolkit) mounts;
+              nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
               nvidia-driver = config.hardware.nvidia.package;
+              deviceNameStrategy = config.hardware.nvidia-container-toolkit.device-name-strategy;
             };
           in
           lib.getExe script;

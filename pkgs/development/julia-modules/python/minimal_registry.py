@@ -56,7 +56,8 @@ for (uuid, versions) in uuid_to_versions.items():
       # Write nothing in Compat.toml, because we've already resolved everything
     with open(out_path / path / Path("Deps.toml"), "w") as f:
       f.write('["%s"]\n' % info["version"])
-      toml.dump(project["deps"], f)
+      if "deps" in project:
+        toml.dump(project["deps"], f)
     with open(out_path / path / Path("Versions.toml"), "w") as f:
       f.write('["%s"]\n' % info["version"])
       f.write('git-tree-sha1 = "%s"\n' % info["treehash"])

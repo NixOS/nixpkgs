@@ -4,10 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   hatchling,
   hatch-vcs,
   aiohttp,
+  aiosqlite,
   attrs,
   cattrs,
   circus,
@@ -16,25 +16,38 @@
   cloudpickle,
   deepmerge,
   fs,
+  fs-s3fs,
+  grpcio,
+  grpcio-channelz,
+  grpcio-health-checking,
+  grpcio-reflection,
   httpx,
   httpx-ws,
   inflection,
+  inquirerpy,
   jinja2,
   numpy,
   nvidia-ml-py,
   opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-aiohttp-client,
   opentelemetry-instrumentation-asgi,
+  opentelemetry-instrumentation-grpc,
   opentelemetry-sdk,
   opentelemetry-semantic-conventions,
   opentelemetry-util-http,
   packaging,
+  pandas,
   pathspec,
+  pillow,
   pip-requirements-parser,
-  pip-tools,
   prometheus-client,
+  protobuf,
   psutil,
+  pyarrow,
+  pydantic,
   python-dateutil,
   python-json-logger,
   python-multipart,
@@ -45,25 +58,10 @@
   starlette,
   tomli,
   tomli-w,
+  tritonclient,
+  uv,
   uvicorn,
   watchfiles,
-  fs-s3fs,
-  grpcio,
-  grpcio-health-checking,
-  opentelemetry-instrumentation-grpc,
-  protobuf,
-  grpcio-channelz,
-  grpcio-reflection,
-  pillow,
-  pydantic,
-  pandas,
-  pyarrow,
-  opentelemetry-exporter-otlp-proto-http,
-  # https://pypi.org/project/opentelemetry-exporter-jaeger-proto-grpc/
-  # , opentelemetry-exporter-jaeger # support for this exporter ends in july 2023
-  opentelemetry-exporter-otlp,
-  # , opentelemetry-exporter-zipkin
-  tritonclient,
   # native check inputs
   pytestCheckHook,
   pytest-xdist,
@@ -76,7 +74,7 @@
 }:
 
 let
-  version = "1.2.18";
+  version = "1.3.3";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -91,7 +89,10 @@ let
   ];
   grpc-reflection = grpc ++ [ grpcio-reflection ];
   grpc-channelz = grpc ++ [ grpcio-channelz ];
-  monitor-otlp = [ opentelemetry-exporter-otlp-proto-http ];
+  monitor-otlp = [
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-instrumentation-grpc
+  ];
   # tracing-jaeger = [ opentelemetry-exporter-jaeger ];
   tracing-otlp = [ opentelemetry-exporter-otlp ];
   # tracing-zipkin = [ opentelemetry-exporter-zipkin ];
@@ -127,10 +128,8 @@ buildPythonPackage {
     owner = "bentoml";
     repo = "BentoML";
     rev = "refs/tags/v${version}";
-    hash = "sha256-giZteSikwS9YEcVMPCC9h2khbBgvUPRW1biAyixO13Y=";
+    hash = "sha256-PjmXPSPukLJ+iCpBdUynhcWCfFqplmdsgj0LYpodE/c=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "cattrs"
@@ -151,6 +150,7 @@ buildPythonPackage {
 
   dependencies = [
     aiohttp
+    aiosqlite
     attrs
     cattrs
     circus
@@ -162,6 +162,7 @@ buildPythonPackage {
     httpx
     httpx-ws
     inflection
+    inquirerpy
     jinja2
     numpy
     nvidia-ml-py
@@ -175,7 +176,6 @@ buildPythonPackage {
     packaging
     pathspec
     pip-requirements-parser
-    pip-tools
     prometheus-client
     psutil
     pydantic
@@ -188,6 +188,7 @@ buildPythonPackage {
     simple-di
     starlette
     tomli-w
+    uv
     uvicorn
     watchfiles
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];

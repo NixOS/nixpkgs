@@ -5,7 +5,6 @@ let
   stateDir = "/var/lib/clamav";
   clamavGroup = clamavUser;
   cfg = config.services.clamav;
-  pkg = pkgs.clamav;
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault { } " ";
@@ -27,6 +26,7 @@ in
 
   options = {
     services.clamav = {
+      package = mkPackageOption pkgs "clamav" { };
       daemon = {
         enable = mkEnableOption "ClamAV clamd daemon";
 
@@ -125,7 +125,7 @@ in
   };
 
   config = mkIf (cfg.updater.enable || cfg.daemon.enable) {
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.${clamavUser} = {
       uid = config.ids.uids.clamav;
@@ -164,6 +164,10 @@ in
     environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
     environment.etc."clamav/clamd.conf".source = clamdConfigFile;
 
+    systemd.slices.system-clamav = {
+      description = "ClamAV slice";
+    };
+
     systemd.services.clamav-daemon = mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       after = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
@@ -172,7 +176,7 @@ in
       restartTriggers = [ clamdConfigFile ];
 
       serviceConfig = {
-        ExecStart = "${pkg}/bin/clamd";
+        ExecStart = "${cfg.package}/bin/clamd";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
         User = clamavUser;
         Group = clamavGroup;
@@ -181,6 +185,7 @@ in
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -201,13 +206,14 @@ in
 
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkg}/bin/freshclam";
+        ExecStart = "${cfg.package}/bin/freshclam";
         SuccessExitStatus = "1"; # if databases are up to date
         StateDirectory = "clamav";
         User = clamavUser;
         Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -229,6 +235,7 @@ in
         Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -255,6 +262,7 @@ in
         Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -274,7 +282,8 @@ in
 
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkg}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+        ExecStart = "${cfg.package}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+        Slice = "system-clamav.slice";
       };
     };
   };

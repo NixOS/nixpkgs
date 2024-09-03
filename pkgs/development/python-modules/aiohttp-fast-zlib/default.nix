@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-fast-zlib";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-fast-zlib";
     rev = "v${version}";
-    hash = "sha256-nR/0hVe5zAhLXu+kBOBH+whIjUV44c5yuNOj+Zl+eFo=";
+    hash = "sha256-uPmttfEiWmEtQrBZYwiSjLTMmXhZ0MmaAQJMXTSQj+U=";
   };
 
   postPatch = ''
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bdraco/aiohttp-fast-zlib";
     changelog = "https://github.com/bdraco/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

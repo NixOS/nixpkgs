@@ -40,6 +40,7 @@ let
 
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
+  hasPodman = config.virtualisation.podman.enable && config.virtualisation.podman.dockerSocket.enable;
 
   /* The whole logic of this module is to diff the hashes of the desired vs existing runners
   The hash is recorded in the runner's name because we can't do better yet
@@ -137,8 +138,10 @@ let
             "--builds-dir ${service.buildsDir}"
             ++ optional (service.cloneUrl != null)
             "--clone-url ${service.cloneUrl}"
-            ++ optional (service.preCloneScript != null)
-            "--pre-clone-script ${service.preCloneScript}"
+            ++ optional (service.preGetSourcesScript != null)
+            "--pre-get-sources-script ${service.preGetSourcesScript}"
+            ++ optional (service.postGetSourcesScript != null)
+            "--post-get-sources-script ${service.postGetSourcesScript}"
             ++ optional (service.preBuildScript != null)
             "--pre-build-script ${service.preBuildScript}"
             ++ optional (service.postBuildScript != null)
@@ -495,11 +498,18 @@ in {
               Whitelist allowed services.
             '';
           };
-          preCloneScript = mkOption {
+          preGetSourcesScript = mkOption {
             type = types.nullOr types.path;
             default = null;
             description = ''
               Runner-specific command script executed before code is pulled.
+            '';
+          };
+          postGetSourcesScript = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              Runner-specific command script executed after code is pulled.
             '';
           };
           preBuildScript = mkOption {
@@ -693,8 +703,11 @@ in {
       description = "Gitlab Runner";
       documentation = [ "https://docs.gitlab.com/runner/" ];
       after = [ "network.target" ]
-        ++ optional hasDocker "docker.service";
-      requires = optional hasDocker "docker.service";
+        ++ optional hasDocker "docker.service"
+        ++ optional hasPodman "podman.service";
+
+      requires = optional hasDocker "docker.service"
+        ++ optional hasPodman "podman.service";
       wantedBy = [ "multi-user.target" ];
       environment = config.networking.proxy.envVars // {
         HOME = "/var/lib/gitlab-runner";
@@ -720,7 +733,8 @@ in {
         # Make sure to restart service or changes won't apply.
         DynamicUser = true;
         StateDirectory = "gitlab-runner";
-        SupplementaryGroups = optional hasDocker "docker";
+        SupplementaryGroups = optional hasDocker "docker"
+          ++ optional hasPodman "podman";
         ExecStartPre = "!${configureScript}/bin/gitlab-runner-configure";
         ExecStart = "${startScript}/bin/gitlab-runner-start";
         ExecReload = "!${configureScript}/bin/gitlab-runner-configure";

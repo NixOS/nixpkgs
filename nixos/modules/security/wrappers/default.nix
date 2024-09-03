@@ -255,11 +255,6 @@ in
         umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
       };
 
-    boot.specialFileSystems.${parentWrapperDir} = {
-      fsType = "tmpfs";
-      options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
-    };
-
     # Make sure our wrapperDir exports to the PATH env variable when
     # initializing the shell
     environment.extraInit = ''
@@ -274,6 +269,17 @@ in
       ]}"
       mrpx ${wrap.source},
     '') wrappers;
+
+    systemd.mounts = [{
+      where = parentWrapperDir;
+      what = "tmpfs";
+      type = "tmpfs";
+      options = lib.concatStringsSep "," ([
+        "nodev"
+        "mode=755"
+        "size=${config.security.wrapperDirSize}"
+      ]);
+    }];
 
     systemd.services.suid-sgid-wrappers = {
       description = "Create SUID/SGID Wrappers";

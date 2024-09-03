@@ -40,7 +40,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/spyder-ide/qtawesome";
     changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux; # fails on Darwin
   };
 }

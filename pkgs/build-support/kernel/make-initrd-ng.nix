@@ -72,7 +72,7 @@ in
   ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
   passAsFile = ["contents"];
-  contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${lib.optionalString (symlink != null) symlink}") contents + "\n";
+  contents = builtins.toJSON contents;
 
   nativeBuildInputs = [makeInitrdNGTool libarchive] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 

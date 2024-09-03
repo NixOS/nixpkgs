@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, installShellFiles, pkg-config, libdatrie }:
+{ lib, stdenv, fetchurl, installShellFiles, pkg-config, libdatrie }:
 
 stdenv.mkDerivation rec {
   pname = "libthai";

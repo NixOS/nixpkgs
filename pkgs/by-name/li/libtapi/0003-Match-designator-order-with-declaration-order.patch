@@ -1,0 +1,28 @@
+From b69038edb2e0ace9128407ab3ee7bc1001ffd751 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 7 Apr 2024 19:23:24 -0400
+Subject: [PATCH 3/3] Match designator order with declaration order
+
+---
+ lib/Core/Demangler.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tapi/lib/Core/Demangler.cpp b/tapi/lib/Core/Demangler.cpp
+index d85899a..f5c485a 100644
+--- a/tapi/lib/Core/Demangler.cpp
++++ b/tapi/lib/Core/Demangler.cpp
+@@ -30,9 +30,10 @@ bool Demangler::isItaniumEncoding(StringRef mangledName) {
+   return mangledName.startswith("_Z") || mangledName.startswith("___Z");
+ }
+ 
++
+ DemangledName Demangler::demangle(StringRef mangledName) {
+   DemangledName result{
+-      .str = mangledName.str(), .isSwift = false, .isItanium = false};
++      .str = mangledName.str(), .isItanium = false, .isSwift = false};
+   char *demangled = nullptr;
+ 
+   if (isItaniumEncoding(mangledName)) {
+-- 
+2.42.0
+

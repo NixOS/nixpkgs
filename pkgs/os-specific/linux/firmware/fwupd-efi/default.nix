@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

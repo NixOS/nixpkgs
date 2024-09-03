@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "neomutt";
     homepage    = "https://www.neomutt.org";
     license     = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ erikryb vrthra raitobezarius ];
+    maintainers = with lib.maintainers; [ erikryb raitobezarius ];
     platforms   = lib.platforms.unix;
   };
 })

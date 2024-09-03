@@ -16,13 +16,13 @@
 , makeWrapper}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/lgjzR2KwlIUMHSz3afBQEy+8kdKAI37kqTuq3r3qMk=";
+    hash = "sha256-3WOtf7cgYxAMlNPSBmTzaQF1HN9mU61giLp2woBAidY=";
   };
 
   nativeBuildInputs = [

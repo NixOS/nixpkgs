@@ -4,18 +4,6 @@ shopt -s extglob
 
 export NIXPKGS_DF_ENV="@env@"
 
-if [[ -v DF_DIR ]] && [ -n "$DF_DIR" ] && { [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; }; then
-  # Compatibility for users that were using DF_DIR, since the dfhack script clobbers this variable.
-  export NIXPKGS_DF_HOME="$DF_DIR"
-fi
-
-if [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; then
-  export NIXPKGS_DF_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/df_linux"
-fi
-
-# Compatibility.
-export DF_DIR="$NIXPKGS_DF_HOME"
-
 ### BEGIN: Default DF options
 declare -A _NIXPKGS_DF_OPTS
 _NIXPKGS_DF_OPTS[fmod]=0    # Don't use fmod by default.
@@ -131,6 +119,30 @@ go() {
   exit 1
 }
 
+os_name="$(@uname@)"
+os_rev="$(@uname@ -r)"
+
+if [ "$os_name" == Linux ]; then
+  df_dir="df_linux"
+elif [ "$os_name" == Darwin ]; then
+  df_dir="df_osx"
+else
+  log "Unknown platform: $os_name"
+  exit 1
+fi
+
+if [[ -v DF_DIR ]] && [ -n "$DF_DIR" ] && { [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; }; then
+  # Compatibility for users that were using DF_DIR, since the dfhack script clobbers this variable.
+  export NIXPKGS_DF_HOME="$DF_DIR"
+fi
+
+if [[ ! -v NIXPKGS_DF_HOME ]] || [ -z "$NIXPKGS_DF_HOME" ]; then
+  export NIXPKGS_DF_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/$df_dir"
+fi
+
+# Compatibility.
+export DF_DIR="$NIXPKGS_DF_HOME"
+
 @mkdir@ -p "$NIXPKGS_DF_HOME"
 
 @cat@ <<EOF >&2
@@ -156,7 +168,7 @@ EOF
 cd "$NIXPKGS_DF_ENV"
 
 # All potential important files in DF 50 and below.
-for path in dwarfort *.so libs raw data/init/* data/!(init|index|announcement); do
+for path in dwarfort dwarfort.exe df *.so libs raw data/init/* data/!(init|index|announcement); do
   force_delete=0
   if [[ "$path" == libfmod*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ]; then
     force_delete=1
@@ -175,7 +187,12 @@ for path in index announcement help dipscript; do
 done
 
 # Handle library paths on Darwin.
-if [ "$(@uname@)" == Darwin ]; then
-  export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
-  export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+if [ "$os_name" == Darwin ]; then
+  if [ "${os_rev%%.*}" -ge 11 ]; then
+    export DYLD_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+    export DYLD_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+  else
+    export DYLD_FALLBACK_LIBRARY_PATH="$NIXPKGS_DF_ENV/libs"
+    export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
+  fi
 fi

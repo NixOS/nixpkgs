@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblouis";
-  version = "3.30.0";
+  version = "3.31.0";
 
   outputs = [ "out" "dev" "info" "doc" ]
     # configure: WARNING: cannot generate manual pages while cross compiling
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VeDthGET1PcKXzXkztJCcN6yXgf51bcIyawuyUurwBs=";
+    hash = "sha256-0OnIvRwoL7GsuQPXJixA0DRf/tf8CNqwe9lHSahQbwk=";
   };
 
   strictDeps = true;
@@ -32,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     python3
+    python3.pkgs.build
+    python3.pkgs.installer
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
     # Docs, man, info
     texinfo
     help2man
@@ -58,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     pushd python
-    python setup.py install --prefix="$out" --optimize=1
+    python -m build --no-isolation --outdir dist/ --wheel
+    python -m installer --prefix $out dist/*.whl
     popd
   '';
 

@@ -5,7 +5,7 @@
   alsa-lib,
   fetchurl,
   flac,
-  freeglut,
+  libglut,
   libGL,
   libGLU,
   libX11,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_net
     flac
-    freeglut
+    libglut
     libcdio
     libjack2
     libsamplerate

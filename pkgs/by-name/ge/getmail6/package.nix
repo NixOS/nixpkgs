@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.19.01";
+  version = "6.19.04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q3FQmliWQ8BB/U4RWw1z5I721jw8LGRLPjI9eKELd0g=";
+    hash = "sha256-mKYAk3rXWBMgyxXenVRTGXIUG6ruz5/CxLmh8rpinfI=";
   };
 
   build-system = with python3.pkgs; [

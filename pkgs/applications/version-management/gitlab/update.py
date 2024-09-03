@@ -180,6 +180,21 @@ def update_rubyenv():
         cwd=rubyenv_dir,
     )
 
+    # Un-vendor sidekiq
+    #
+    # The sidekiq dependency was vendored to maintain compatibility with Redis 6.0 (as
+    # stated in this [comment]) but unfortunately, it seems to cause a crash in the
+    # application, as noted in this [upstream issue].
+    #
+    # We can safely swap out the dependency, as our Redis release in nixpkgs is >= 7.0.
+    #
+    # [comment]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435#note_1979750600
+    # [upstream issue]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435
+    subprocess.check_output(
+        ["sed", "-i", "s|gem 'sidekiq', path: 'vendor/gems/sidekiq-7.1.6', require: 'sidekiq'|gem 'sidekiq', '~> 7.1.6'|g", "Gemfile"],
+        cwd=rubyenv_dir,
+    )
+
     # Fetch vendored dependencies temporarily in order to build the gemset.nix
     subprocess.check_output(["mkdir", "-p", "vendor/gems", "gems"], cwd=rubyenv_dir)
     subprocess.check_output(
@@ -194,7 +209,7 @@ def update_rubyenv():
         [
             "sh",
             "-c",
-            f"curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=gems | tar -xj --strip-components=3",
+            f"curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=gems | tar -xj --strip-components=2",
         ],
         cwd=f"{rubyenv_dir}/gems",
     )
@@ -230,8 +245,16 @@ def update_gitaly():
     logger.info("Updating gitaly")
     data = _get_data_json()
     gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
+    repo = GitLabRepo(repo="gitaly")
+    gitaly_dir = pathlib.Path(__file__).parent / 'gitaly'
+
+    makefile = repo.get_file("Makefile", f"v{gitaly_server_version}")
+    makefile += "\nprint-%:;@echo $($*)\n"
+
+    git_version = subprocess.run(["make", "-f", "-", "print-GIT_VERSION"], check=True, input=makefile, text=True, capture_output=True).stdout.strip()
 
     _call_nix_update("gitaly", gitaly_server_version)
+    _call_nix_update("gitaly.git", git_version)
 
 
 @cli.command("update-gitlab-pages")

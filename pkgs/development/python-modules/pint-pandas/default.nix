@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -13,34 +14,36 @@
 
 buildPythonPackage rec {
   pname = "pint-pandas";
-  version = "0.4";
-  format = "pyproject";
+  version = "0.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint-pandas";
-    rev = version;
-    hash = "sha256-FuH6wksSCkkL2AyQN46hwTnfeAZFwkWRl6KEEhsxmUY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5/Qk6HZlfeKkfSqnVA8aADjJ99SUiurYCqSIUBPFIzc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pint
     pandas
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.isDarwin;
     description = "Pandas support for pint";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

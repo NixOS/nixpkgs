@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Generic Transparent Proxies";
     changelog = "https://github.com/zopefoundation/zope.proxy/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

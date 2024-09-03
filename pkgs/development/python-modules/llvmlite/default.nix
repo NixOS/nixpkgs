@@ -11,12 +11,12 @@
   setuptools,
 
   # tests
-  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.42.0";
+  version = "0.43.0";
   pyproject = true;
 
   disabled = isPyPy || pythonAtLeast "3.13";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "numba";
     repo = "llvmlite";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vN2npyAyN6C340l69YSRtRJrAe4EHSqh4SCgWfeSQaQ=";
+    hash = "sha256-5QBSRDb28Bui9IOhGofj+c7Rk7J5fNv5nPksEPY/O5o=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  # Disable static linking
-  # https://github.com/numba/llvmlite/issues/93
   postPatch = ''
-    substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
-
-    substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
+    substituteInPlace llvmlite/tests/test_binding.py \
+      --replace-fail "test_linux" "nope"
   '';
 
   # Set directory containing llvm-config binary
@@ -46,21 +43,23 @@ buildPythonPackage rec {
     export LLVM_CONFIG=${llvm.dev}/bin/llvm-config
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.executable} runtests.py
-    runHook postCheck
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    cd $out
   '';
 
   __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
 
   passthru.llvm = llvm;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/numba/llvmlite/blob/v${version}/CHANGE_LOG";
     description = "Lightweight LLVM python binding for writing JIT compilers";
     downloadPage = "https://github.com/numba/llvmlite";
     homepage = "http://llvmlite.pydata.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

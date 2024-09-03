@@ -4,21 +4,24 @@
   fetchFromGitHub,
   geojson,
   google-api-core,
+  hatchling,
   imagesize,
+  mypy,
   nbconvert,
   nbformat,
   numpy,
   opencv4,
-  packaging,
   pillow,
   pydantic,
   pyproj,
+  pytest-cov-stub,
+  pytest-order,
+  pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
-  setuptools,
   shapely,
   strenum,
   tqdm,
@@ -28,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.67.0";
+  version = "3.77.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,23 +40,16 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-JQTjmYxPBS8JC4HQTtbQ7hb80LPLYE4OEj1lFA6cZ1Y=";
+    hash = "sha256-sp0lgUnFRmQLix530xoR/qibYFjGwG7i7+mvEQX0x4k=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--reruns 2 --reruns-delay 10 --durations=20 -n 10" ""
-
-    # disable pytest_plugins which requires `pygeotile`
-    substituteInPlace tests/conftest.py \
-      --replace-fail "pytest_plugins" "_pytest_plugins"
-  '';
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  sourceRoot = "${src.name}/libs/labelbox";
 
   pythonRelaxDeps = [ "python-dateutil" ];
 
-  build-system = [ setuptools ];
+  pythonRemoveDeps = [ "opencv-python-headless" ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     google-api-core
@@ -62,12 +58,13 @@ buildPythonPackage rec {
     requests
     strenum
     tqdm
+    geojson
+    mypy
   ];
 
   optional-dependencies = {
     data = [
       shapely
-      geojson
       numpy
       pillow
       opencv4
@@ -76,13 +73,16 @@ buildPythonPackage rec {
       pyproj
       # pygeotile
       typing-extensions
-      packaging
     ];
   };
 
   nativeCheckInputs = [
     nbconvert
     nbformat
+    pytest-cov-stub
+    pytest-order
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
   ] ++ optional-dependencies.data;
 
@@ -91,6 +91,7 @@ buildPythonPackage rec {
     "tests/integration"
     # Missing requirements
     "tests/data"
+    "tests/unit/test_label_data_type.py"
   ];
 
   pythonImportsCheck = [ "labelbox" ];

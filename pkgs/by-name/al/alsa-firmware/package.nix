@@ -1,6 +1,13 @@
-{ lib, buildPackages, stdenvNoCC, autoreconfHook, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  autoreconfHook,
+  fetchurl,
+  fetchpatch,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "alsa-firmware";
   version = "1.2.4";
 
@@ -17,12 +24,13 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = [
-    "--with-hotplug-dir=$(out)/lib/firmware"
-  ];
+  configureFlags = [ "--with-hotplug-dir=$(out)/lib/firmware" ];
+
+  depsBuildBuild = lib.optional (
+    stdenv.buildPlatform != stdenv.hostPlatform || stdenv.hostPlatform.isAarch64
+  ) buildPackages.stdenv.cc;
 
   dontStrip = true;
 

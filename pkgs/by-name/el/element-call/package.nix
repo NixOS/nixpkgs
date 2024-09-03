@@ -1,8 +1,12 @@
 { lib
 , stdenv
-, mkYarnPackage
 , fetchFromGitHub
 , fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, npmHooks
+, olm
 }:
 
 let
@@ -15,38 +19,33 @@ let
     aarch64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
   }.${system} or throwSystem;
 in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
   version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GTHM27i716RZk+kDELMg/lYy355/SZoQLXGPQ90M4xg=";
   };
-
-  packageJSON = ./package.json;
 
   patches = [ ./name.patch ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = offlineCacheHash;
   };
 
-  buildPhase = ''
-    runHook preBuild
-    yarn --offline run build
-    runHook postBuild
-  '';
-
-  preInstall = ''
-    mkdir $out
-    cp -R ./deps/element-call/dist $out
-  '';
-
-  doDist = false;
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    nodejs
+    npmHooks.npmInstallHook
+  ];
+  # From some reason causes the build to fail due to dependencies not available
+  # offline
+  dontNpmPrune = true;
 
   meta = with lib; {
     homepage = "https://github.com/element-hq/element-call";
@@ -54,5 +53,6 @@ mkYarnPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ kilimnik ];
     mainProgram = "element-call";
+    inherit (olm.meta) knownVulnerabilities;
   };
-}
+})

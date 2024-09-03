@@ -1,14 +1,11 @@
-{ stdenv
-, aacgain
+{ aacgain
 , ffmpeg
 , flac
 , imagemagick
 , keyfinder-cli
-, lib
 , mp3gain
 , mp3val
 , python3Packages
-, version
 , ...
 }: {
   absubmit = {

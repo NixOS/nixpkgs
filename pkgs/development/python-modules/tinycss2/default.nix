@@ -10,18 +10,20 @@
 
 buildPythonPackage rec {
   pname = "tinycss2";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kozea";
     repo = "tinycss2";
-    rev = "refs/tags/v${version}";
+
+    # Tag v1.3.0 is missing the actual version number bump.
+    rev = "bda62b101530588718d931d61bcc343a628b9af9";
     # for tests
     fetchSubmodules = true;
-    hash = "sha256-rJtxMmW30NK+E+Dhh/fu6FPrEojWWdoEWNt0raYEubs=";
+    hash = "sha256-Exjxdm0VnnjHUKjquXsC/zDmwA7bELHdX1f55IGBjYk=";
   };
 
   postPatch = ''

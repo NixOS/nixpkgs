@@ -19,6 +19,7 @@
   ipython,
   ipywidgets,
   jsonschema,
+  libcst,
   matplotlib,
   numpy,
   opentelemetry-api,
@@ -35,7 +36,6 @@
   websockets,
   wrapt,
   xarray,
-  importlib-metadata,
 
   # optional-dependencies
   jinja2,
@@ -63,16 +63,16 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.45.0";
+  version = "0.47.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-H91CpvxGQW0X+m/jlqXMc1RdI9w62lt5jgYOxZ2iPQg=";
+    hash = "sha256-Gp+HeYJGWyW49jisadnavjIpzu7C2uS2qWn7eC6okqg=";
   };
 
   build-system = [
@@ -107,7 +107,7 @@ buildPythonPackage rec {
     websockets
     wrapt
     xarray
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     docs = [
@@ -132,6 +132,9 @@ buildPythonPackage rec {
       opencensus
       opencensus-ext-azure
     ];
+    refactor = [
+      libcst
+    ];
     zurichinstruments = [
       # zhinst-qcodes
     ];
@@ -140,6 +143,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deepdiff
     hypothesis
+    libcst
     lxml
     pip
     pytest-asyncio

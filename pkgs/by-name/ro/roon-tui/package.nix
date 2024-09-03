@@ -1,18 +1,17 @@
-{ stdenv
-, lib
+{ lib
 , rustPlatform
 , fetchFromGitHub
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "roon-tui";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "TheAppgineer";
     repo = "roon-tui";
     rev = version;
-    hash = "sha256-rwZPUa6NyKs+jz0+JQC0kSrw0T/EL+ms2m+AzHvrI7o=";
+    hash = "sha256-ocPSqj9/xJ2metetn6OY+IEFWysbstPmh2N5Jd8NDPM=";
   };
 
   cargoLock = {

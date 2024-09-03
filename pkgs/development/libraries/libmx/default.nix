@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , libtool, pkg-config, automake, autoconf, intltool
-, glib, gobject-introspection, gtk2, gtk-doc
+, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
 }:
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         feature is the possibility setting style properties from a CSS format
         file.'';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

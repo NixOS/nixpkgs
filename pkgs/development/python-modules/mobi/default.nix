@@ -5,7 +5,6 @@
   loguru,
   poetry-core,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -40,6 +38,6 @@ buildPythonPackage rec {
     mainProgram = "mobiunpack";
     homepage = "https://github.com/iscc/mobi";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

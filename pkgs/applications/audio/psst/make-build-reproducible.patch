@@ -1,9 +1,9 @@
 diff --git a/psst-core/build.rs b/psst-core/build.rs
 deleted file mode 100644
-index 1057827..0000000
+index e05191d..0000000
 --- a/psst-core/build.rs
 +++ /dev/null
-@@ -1,37 +0,0 @@
+@@ -1,39 +0,0 @@
 -use std::{env, fs, io::Write};
 -
 -fn main() {
@@ -36,22 +36,25 @@ index 1057827..0000000
 -        // And construct the http-style url
 -        remote_url = format!("https://{domain}/{path}");
 -    }
--    remote_url = remote_url.trim_end_matches(".git").to_owned();
+-    let trimmed_url = remote_url.trim_end_matches(".git");
+-    remote_url.clone_from(&String::from(trimmed_url));
+-
 -    let outfile = format!("{}/remote-url.txt", outdir);
 -    let mut file = fs::File::create(outfile).unwrap();
 -    write!(file, r#""{}""#, remote_url).ok();
 -}
 diff --git a/psst-core/src/lib.rs b/psst-core/src/lib.rs
-index fcbd491..2d71ee3 100644
+index fcbd491..8f6e6f0 100644
 --- a/psst-core/src/lib.rs
 +++ b/psst-core/src/lib.rs
-@@ -3,8 +3,8 @@
+@@ -2,9 +2,9 @@
+ 
  use git_version::git_version;
  
 -pub const GIT_VERSION: &str = git_version!();
 -pub const BUILD_TIME: &str = include!(concat!(env!("OUT_DIR"), "/build-time.txt"));
 -pub const REMOTE_URL: &str = include!(concat!(env!("OUT_DIR"), "/remote-url.txt"));
-+pub const GIT_VERSION: &str = "6c9cd3f91653764b832ea5136cda04c9e0f8fe50";
++pub const GIT_VERSION: &str = "11bef15e66a3c9b0b991207d09a67c071b3dda02";
 +pub const BUILD_TIME: &str = "1970-01-01 00:00:00";
 +pub const REMOTE_URL: &str = "https://github.com/jpochyla/psst";
  

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.1.19";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/l/${pname}/${pname}_${version}.tar.gz";
+    url = "mirror://debian/pool/main/l/lockfile-progs/lockfile-progs_${version}.tar.gz";
     sha256 = "sha256-LFcEsByPR0+CkheA5Fkqknsr9qbXYWNUpsXXzVZkhX4=";
   };
 

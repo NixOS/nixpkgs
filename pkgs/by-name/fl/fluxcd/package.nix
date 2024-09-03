@@ -60,8 +60,8 @@ buildGoModule rec {
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
-      $out/bin/flux completion $shell > flux.$shell
-      installShellCompletion flux.$shell
+      installShellCompletion --cmd flux \
+        --$shell <($out/bin/flux completion $shell)
     done
   '';
 
@@ -81,7 +81,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       bryanasdev000
       jlesquembre
-      superherointj
     ];
     mainProgram = "flux";
   };

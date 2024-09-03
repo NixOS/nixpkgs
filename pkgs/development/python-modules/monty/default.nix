@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2024.5.24";
+  version = "2024.7.29";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "materialsvirtuallab";
     repo = "monty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-c2RG38lsYWtwdCzrRTH/l9o4k6UPUOFC+wwV9zjoDvk=";
+    hash = "sha256-ydt1T2agKUCBiMZ4uvQ3qshEiAQ0PP9EjPiWDXgH3Wo=";
   };
 
   postPatch = ''
@@ -63,6 +63,8 @@ buildPythonPackage rec {
     "test_Path_objects"
     "test_zopen"
     "test_zpath"
+    # flaky, precision/rounding error
+    "TestJson.test_datetime"
   ];
 
   meta = with lib; {

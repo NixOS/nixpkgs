@@ -71,18 +71,18 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "effc6e95b4ad1c5ac5f9083ec06663ba4a2e005c";
+  commit = "1962f48b7f71772dc2c060dbaa5a6b4c0792a549";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.89.1";
+  version = "4.91.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-exFt7dgy076MJJKDzTRRlTVjucfIXVaXKgurYfJ1Uvo=";
+    hash = "sha256-w0+lg/DcxKLrAz6DQGQ9+yPn42LrQ95Yn16IKNfqPvE=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-BYz7ym+tsdbExUNOL3GV0wSMYuy4Q0GadZterH0ZGM0=";
+    outputHash = "sha256-LCmygPid6VJqR1PCOMk/Hc6bo4nwsLwYr7O1p3FQVvQ=";
   };
 
   nativeBuildInputs = [
@@ -311,6 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/coder/code-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Run VS Code on a remote server";
     longDescription = ''
       code-server is VS Code running on a remote server, accessible through the

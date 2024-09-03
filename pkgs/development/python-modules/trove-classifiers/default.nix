@@ -11,14 +11,15 @@
 let
   self = buildPythonPackage rec {
     pname = "trove-classifiers";
-    version = "2024.4.10";
+    version = "2024.7.2";
     pyproject = true;
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-SfQLtqdGtyocuk+NVe6CUhac2g9wgC4/0k8Et/slpJI=";
+      pname = "trove_classifiers";
+      inherit version;
+      hash = "sha256-gyjyrCzj/Xc8uzfHZaDteoP4ncVkx9RS8Dm2kknQrDU=";
     };
 
     postPatch = ''
@@ -26,7 +27,7 @@ let
         --replace '"calver"' ""
     '';
 
-    nativeBuildInputs = [
+    build-system = [
       calver
       setuptools
     ];

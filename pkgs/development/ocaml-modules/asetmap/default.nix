@@ -1,5 +1,4 @@
-{ lib
-, fetchurl
+{ fetchurl
 , buildDunePackage
 , topkg
 , findlib

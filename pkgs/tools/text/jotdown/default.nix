@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jotdown";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "hellux";
     repo = "jotdown";
     rev = version;
-    hash = "sha256-Q1BjmcA5otOkeEe8KQiqKGKHSeGntj+ktcNMrdbGHZI=";
+    hash = "sha256-lJnHdywxKf3CWgSB91MqQreyUhKArpT2lqQqSIpgnUY=";
   };
 
-  cargoHash = "sha256-bkMJ7ApM+GsshwIFuYsH19CnU6ebq0GfwQvVp9QD46A=";
+  cargoHash = "sha256-ESwo1J5OCJbmlZoTOPaeNIqRCTMAJtgkhrR0bcRqQwk=";
 
   meta = with lib; {
     description = "Minimal Djot CLI";

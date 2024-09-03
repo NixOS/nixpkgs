@@ -247,7 +247,8 @@ in {
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
         ++ lib.optional config.virtualisation.libvirtd.enable config.virtualisation.libvirtd.package
         ++ lib.optional config.virtualisation.docker.enable config.virtualisation.docker.package
-        ++ lib.optionals config.virtualisation.podman.enable [ pkgs.jq config.virtualisation.podman.package ];
+        ++ lib.optionals config.virtualisation.podman.enable [ pkgs.jq config.virtualisation.podman.package ]
+        ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
         NETDATA_PIPENAME = "/run/netdata/ipc";

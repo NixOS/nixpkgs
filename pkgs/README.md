@@ -347,7 +347,7 @@ There are a few naming guidelines:
 
 - The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer"` instead of `"MPlayer"`.
 
-- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"`.
+- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"` or `"0-unstable-1970-01-01"`.
 
 - If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
 
@@ -366,9 +366,7 @@ Example: Given a project that has no tags / released versions at all, or applies
 
 Because every version of a package in Nixpkgs creates a potential maintenance burden, old versions of a package should not be kept unless there is a good reason to do so. For instance, Nixpkgs contains several versions of GCC because other packages don’t build with the latest version of GCC. Other examples are having both the latest stable and latest pre-release version of a package, or to keep several major releases of an application that differ significantly in functionality.
 
-If there is only one version of a package, its Nix expression should be named `e2fsprogs/default.nix`. If there are multiple versions, this should be reflected in the filename, e.g. `e2fsprogs/1.41.8.nix` and `e2fsprogs/1.41.9.nix`. The version in the filename should leave out unnecessary detail. For instance, if we keep the latest Firefox 2.0.x and 3.5.x versions in Nixpkgs, they should be named `firefox/2.0.nix` and `firefox/3.5.nix`, respectively (which, at a given point, might contain versions `2.0.0.20` and `3.5.4`). If a version requires many auxiliary files, you can use a subdirectory for each version, e.g. `firefox/2.0/default.nix` and `firefox/3.5/default.nix`.
-
-All versions of a package _must_ be included in `all-packages.nix` to make sure that they evaluate correctly.
+If there is only one version of a package, its Nix expression should be named (e.g) `pkgs/by-name/xy/xyz/package.nix`. If there are multiple versions, this should be reflected in the attribute name. If you wish to share code between the Nix expressions of each version, you cannot rely upon `pkgs/by-name`'s automatic attribute creation, and must create the attributes yourself in `all-packages.nix`. See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/README.md#recommendation-for-new-packages-with-multiple-versions).
 
 ## Meta attributes
 

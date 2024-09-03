@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [
       binaryFirmware
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

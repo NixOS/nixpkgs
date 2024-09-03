@@ -12,7 +12,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   requests-kerberos,
   toml,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

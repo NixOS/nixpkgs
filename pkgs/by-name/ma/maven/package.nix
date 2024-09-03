@@ -2,18 +2,18 @@
   lib,
   callPackage,
   fetchurl,
-  jdk,
+  jdk_headless,
   makeWrapper,
   stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "apache-maven";
-  version = "3.9.6";
+  pname = "maven";
+  version = "3.9.8";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-bu3SyuNibWrTpcnuMkvSZYU9ZCl/B/AzQwdVvQ4MOks=";
+    hash = "sha256-BnZyYpB1t0Dj0Kko4hAh3WFaUyh6821MzKROh+CB0QI=";
   };
 
   sourceRoot = ".";
@@ -27,9 +27,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r apache-maven-${finalAttrs.version}/* $out/maven
 
     makeWrapper $out/maven/bin/mvn $out/bin/mvn \
-      --set-default JAVA_HOME "${jdk}"
+      --set-default JAVA_HOME "${jdk_headless}"
     makeWrapper $out/maven/bin/mvnDebug $out/bin/mvnDebug \
-      --set-default JAVA_HOME "${jdk}"
+      --set-default JAVA_HOME "${jdk_headless}"
 
     runHook postInstall
   '';
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ cko ];
-    inherit (jdk.meta) platforms;
+    maintainers = [ ];
+    inherit (jdk_headless.meta) platforms;
   };
 })

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mainProgram = "jack_oscrolloscope";
     homepage = "http://das.nasophon.de/jack_oscrolloscope";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

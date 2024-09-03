@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "yor";
-  version = "0.1.194";
+  version = "0.1.199";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-8JkxCkDYalu3IMoGbyNOEJ28CgU87gTq0bX+o+5sV2Q=";
+    hash = "sha256-VQzaSWVf8n7/PHW4d0Vu1LBbPjB7EjvJrDp5w2fbl34=";
   };
 
   vendorHash = "sha256-uT/jGD4hDVes4h+mlSIT2p+C9TjxnUWsmKv9haPjjLc=";

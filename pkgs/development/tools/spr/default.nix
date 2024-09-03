@@ -11,10 +11,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-lsdWInJWcofwU3P4vAWcLQeZuV3Xn1z30B7mhODJ4Vc=";
+    hash = "sha256-lsdWInJWcofwU3P4vAWcLQeZuV3Xn1z30B7mhODJ4Vc=";
   };
 
-  cargoSha256 = "sha256-VQg3HDNw+L1FsFtHXnIw6dMVUxV63ZWHCxiknzsqXW8=";
+  cargoHash = "sha256-VQg3HDNw+L1FsFtHXnIw6dMVUxV63ZWHCxiknzsqXW8=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

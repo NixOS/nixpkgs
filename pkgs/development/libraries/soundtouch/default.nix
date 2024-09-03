@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "soundtouch";
     repo = "soundtouch";
     rev = version;
-    sha256 = "sha256-imeeTj+3gXxoGTuC/13+BAplwcnQ0wRJdSVt7MPlBxc=";
+    hash = "sha256-imeeTj+3gXxoGTuC/13+BAplwcnQ0wRJdSVt7MPlBxc=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];

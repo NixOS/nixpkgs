@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, buildPackages
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -29,17 +28,24 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.31.2";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-e0zXxIdAtJZXJdP/S6lHRnPm5Rsf638Fhox8XcqOWrk=";
+    hash = "sha256-ehXkYOMQz6zEmofK+3ajwxLK9vIRZava/F3Ki5jTzYo=";
     fetchSubmodules = true;
+    # The public hydra server on `hydra.nixos.org` is configured with
+    # `max_output_size` of 3GB. The purpose of this `postFetch` step
+    # is to stay below that limit and save 4.1GiB and 428MiB in output
+    # size respectively. These folders are not referenced in tinygo.
+    postFetch = ''
+      rm -r $out/lib/cmsis-svd/data/{SiliconLabs,Freescale}
+    '';
   };
 
-  vendorHash = "sha256-HZiyAgsTEBQv+Qp0T9RXTV1lkxvIGh7Q45rd45cfvjo=";
+  vendorHash = "sha256-rJ8AfJkIpxDkk+9Tf7ORnn7ueJB1kjJUBiLMDV5tias=";
 
   patches = [
     ./0001-GNUmakefile.patch
@@ -111,7 +117,7 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
-    make build/release
+    make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
       --prefix PATH : ${lib.makeBinPath runtimeDeps }

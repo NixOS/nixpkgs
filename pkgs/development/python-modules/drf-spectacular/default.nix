@@ -98,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tfranzel/drf-spectacular";
     changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

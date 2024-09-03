@@ -121,3 +121,53 @@ c759efa5e7f825913f9a69ef20f025f50f56dc4d
 
 # python3Packages: format with nixfmt
 59b1aef59071cae6e87859dc65de973d2cc595c0
+
+# treewide description changes (#317959)
+bf995e3641950f4183c1dd9010349263dfa0123b
+755b915a158c9d588f08e9b08da9f7f3422070cc
+f8c4a98e8e138e21353a2c33b90db3359f539b37
+
+# vscode-extensions.*: format with nixfmt (RFC 166)
+7bf9febfa6271012b1ef86647a3a06f06875fdcf
+
+# remove uses of mdDoc (#303841)
+1a24330f792c8625746d07d842290e6fd95ae6f9
+acd0e3898feb321cb9a71a0fd376f1157d0f4553
+1b28414d2886c57343864326dbb745a634d3e37d
+6afb255d976f85f3359e4929abd6f5149c323a02
+
+# azure-cli: move to by-name, nixfmt #325950
+96cd538b68bd1d0a0a37979356d669abbba32ebc
+
+# poptracker: format with nixfmt-rfc-style (#326697)
+ff5c8f6cc3d1f2e017e86d50965c14b71f00567b
+
+# mangal: format with nixfmt-rfc-style #328284
+3bb5e993cac3a6e1c3056d2bc9bf43eb2c7a5951
+
+# pico-sdk: switch to finalAttrs (#329438)
+8946018b0391ae594d167f1e58497b18de068968
+
+# ollama: format with nixfmt-rfc-style (#329353)
+bdfde18037f8d9f9b641a4016c8ada4dc4cbf856
+
+# nixos/ollama: format with nixfmt-rfc-style (#329561)
+246d1ee533810ac1946d863bbd9de9b525818d56
+
+# steam: cleanup (#216972)
+ad815aebfbfe1415ff6436521d545029c803c3fb
+
+# nixos/nvidia: apply nixfmt-rfc-style (#313440)
+fbdcdde04a7caa007e825a8b822c75fab9adb2d6
+
+# step-cli: format package.nix with nixfmt (#331629)
+fc7a83f8b62e90de5679e993d4d49ca014ea013d
+
+# darwin.stdenv: format with nixfmt-rfc-style (#333962)
+93c10ac9e561c6594d3baaeaff2341907390d9b8
+
+# nrr: format with nixfmt-rfc-style (#334578)
+cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
+
+# nixos/kanidm: inherit lib, nixfmt
+8f18393d380079904d072007fb19dc64baef0a3a

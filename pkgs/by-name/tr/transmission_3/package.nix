@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -47,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fix build with openssl 3.0
     ./transmission-3.00-openssl-3.patch
+    # fix build with miniupnpc 2.2.8
+    ./transmission-3.00-miniupnpc-2.2.8.patch
   ];
 
   outputs = [ "out" "apparmor" ];

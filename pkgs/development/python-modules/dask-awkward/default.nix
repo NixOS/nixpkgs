@@ -1,27 +1,34 @@
 {
   lib,
-  awkward,
   buildPythonPackage,
-  cachetools,
-  dask,
-  dask-histogram,
-  distributed,
+  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  awkward,
+  cachetools,
+  dask,
+  typing-extensions,
+
+  # optional-dependencies
+  pyarrow,
+
+  # checks
+  dask-histogram,
+  distributed,
   hist,
   pandas,
-  pyarrow,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  typing-extensions,
   uproot,
 }:
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.6.0";
+  version = "2024.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +37,7 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-m/KvPo4IGn19sA5RcA/+OhLMCDBU+9BbMQtK3gHOoEc=";
+    hash = "sha256-xy3rq/gXQUtquvyWSCcBjZ+gUYT3RzxMgXThyT6Fwec=";
   };
 
   pythonRelaxDeps = [ "awkward" ];
@@ -38,7 +45,6 @@ buildPythonPackage rec {
   build-system = [
     hatch-vcs
     hatchling
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -48,7 +54,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     io = [ pyarrow ];
   };
 
@@ -59,7 +65,7 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
     uproot
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dask_awkward" ];
 

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "qbittorrent-api";
-  version = "2024.5.63";
+  version = "2024.8.65";
   pyproject = true;
 
   src = fetchPypi {
     pname = "qbittorrent_api";
     inherit version;
-    hash = "sha256-zTAS8EL7lOnVIcQGttxSJgDv0YFNSy08kAxoEOn8viw=";
+    hash = "sha256-lC31v6WLNk0RZDFz1GOlqrd2kAijTHffZ7NsUsm2vAk=";
   };
 
   propagatedBuildInputs = [

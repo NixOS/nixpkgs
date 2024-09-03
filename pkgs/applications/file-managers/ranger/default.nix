@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, file, less, highlight, ueberzugpp, ranger, imagemagick, testers
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight, ueberzugpp, imagemagick
 , imagePreviewSupport ? true
 , sixelPreviewSupport ? true
 , neoVimSupport ? true

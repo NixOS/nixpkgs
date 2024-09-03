@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     ])}"
   ];
 
+  # https://github.com/mpimd-csc/qrupdate-ng/issues/4
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ./disable-zch1dn-test.patch
+  ];
+
   doCheck = true;
 
   nativeBuildInputs = [

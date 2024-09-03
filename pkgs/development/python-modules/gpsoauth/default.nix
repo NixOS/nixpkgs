@@ -5,7 +5,6 @@
   poetry-core,
   pycryptodomex,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
 }:
 
@@ -22,7 +21,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     poetry-core
   ];
 

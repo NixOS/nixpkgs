@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C language version of lzip";
     mainProgram = "clzip";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

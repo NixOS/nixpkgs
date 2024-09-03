@@ -5,9 +5,10 @@
 , fetchFromGitHub
 , testers
 , balena-cli
-, nodePackages
+, node-gyp
 , python3
 , udev
+, cctools
 , darwin
 }:
 
@@ -18,16 +19,16 @@ let
   };
 in buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "18.2.10";
+  version = "19.0.0";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-HZAQpK7cai4FEBvQSIHGBdDMe4pQRXXF9DSax07rjF0=";
+    hash = "sha256-f5ZTiO0OXia7VbjQCTxMK3YPHoxCNaZraaTDiR9wEEE=";
   };
 
-  npmDepsHash = "sha256-9XVjyqLgi+gkEEp09P4HzmeRNINeXUC4mBmib6M6YyE=";
+  npmDepsHash = "sha256-PG3GDOP9sI67K6SsLvzRlH3b+SQ9XRfGLtvPXTADFPM=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -35,10 +36,10 @@ in buildNpmPackage' rec {
   makeCacheWritable = true;
 
   nativeBuildInputs = [
-    nodePackages.node-gyp
+    node-gyp
     python3
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   buildInputs = lib.optionals stdenv.isLinux [

@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       completely open source.
     '';
     homepage = "https://librumreader.com";
+    changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
     mainProgram = "librum";
     maintainers = with maintainers; [ aleksana oluceps ];

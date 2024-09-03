@@ -8,6 +8,7 @@
 , librttopo
 , libspatialite
 , libxml2
+, libz
 , minizip
 , proj
 , readosm
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     librttopo
     libspatialite
     libxml2
+    libz
     minizip
     proj
     readosm

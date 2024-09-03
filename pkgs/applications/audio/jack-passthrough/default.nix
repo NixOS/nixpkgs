@@ -8,14 +8,14 @@
 , fmt_9
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "jack-passthrough";
   version = "2021-9-25";
 
   # https://github.com/guysherman/jack-passthrough
   src = fetchFromGitHub {
     owner = "guysherman";
-    repo = finalAttrs.pname;
+    repo = "jack-passthrough";
     rev = "aad03b7c5ccc4a4dcb8fa38c49aa64cb9d628660";
     hash = "sha256-9IsNaLW5dYAqiwe+vX0+D3oIKFP2TIfy1q1YaqmS6wE=";
   };
@@ -37,4 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     mainProgram = "jack-passthru";
   };
-})
+}

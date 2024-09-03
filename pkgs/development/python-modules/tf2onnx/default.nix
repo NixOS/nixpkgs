@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytest-runner,
   # runtime dependencies
   numpy,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     pytest-runner
   ];
 

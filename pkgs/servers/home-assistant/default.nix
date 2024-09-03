@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioazuredevops = super.aioazuredevops.overridePythonAttrs (old: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          owner = "timmo001";
+          repo = "aioazuredevops";
+          rev = "refs/tags/${version}";
+          hash = "sha256-rnvWjsTRBoojsuNG3uSdBlyycE4XSrhgjmb77jy7fxY=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -93,18 +103,6 @@ let
         '';
       });
 
-      aiowithings = super.aiowithings.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src)
-            owner
-            repo
-          ;
-          rev = "refs/tags/${version}";
-          hash = "sha256-+pIIVCR+QsW9M3pH9Ss3dMvkeKM1OdhQ1y+s/T6pHtk=";
-        };
-      });
-
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
@@ -125,17 +123,6 @@ let
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
         # tests are deadlocking too often
         # https://github.com/NixOS/nixpkgs/issues/262000
-        doCheck = false;
-      });
-
-      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.1";
-        src = fetchFromGitHub {
-          owner = "ndokter";
-          repo = "dsmr_parser";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-PULrKRHrCuDFZcR+5ha0PjkN438QFgf2CrpYhKIqYTs=";
-        };
         doCheck = false;
       });
 
@@ -162,16 +149,6 @@ let
         ];
       });
 
-      ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
-        pname = "ha-av";
-        version = "10.1.1";
-
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
-        };
-      });
-
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
         version = "2.2.2";
         src = fetchFromGitHub {
@@ -192,62 +169,13 @@ let
         doCheck = false; # requires asynctest, which does not work on python 3.11
       });
 
-      jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
-        version = "3.3.0";
+      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-LnbWzIST+GMtdsHDKg67WWt9GmHUcSuGZ5Spei3nEio=";
+          rev = "refs/tags/${version}";
+          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
-      });
-
-      jaraco-collections = super.jaraco-collections.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.0";
-        src = fetchPypi {
-          pname = "jaraco.collections";
-          inherit version;
-          hash = "sha256-NE0Udp1xbnSWr4eaxxs8br3UarxkvZ7CHRUkg2WqOsk=";
-        };
-      });
-
-      jaraco-functools = super.jaraco-functools.overridePythonAttrs (oldAttrs: rec {
-        version = "3.9.0";
-        src = fetchPypi {
-          pname = "jaraco.functools";
-          inherit version;
-          hash = "sha256-ixN7D+rMF/70us7gTAEcnobyNBCZyHCh0S0743sypjg=";
-        };
-      });
-
-      lmcloud = super.lmcloud.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.35";
-        src = fetchFromGitHub {
-          owner = "zweckj";
-          repo = "lmcloud";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-TUve21yamtEmEceK/V1w7IZjnMgKConMfSY/GlqFpp8=";
-        };
-      });
-
-      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.0";
-        pyprojet = true;
-
-        src = fetchFromGitHub {
-          owner = "lxml";
-          repo = "lxml";
-          rev = "refs/tags/lxml-${version}";
-          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
-        };
-
-        nativeBuildInputs = with self; [
-          cython
-          setuptools
-          libxml2.dev
-          libxslt.dev
-        ];
-
-        patches = [];
       });
 
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
@@ -281,17 +209,6 @@ let
 
         doCheck = false; # no tests
       });
-
-      # Can probably be removed with 2024.6.0
-      plugwise = super.plugwise.overridePythonAttrs rec {
-        version = "0.37.3";
-        src = fetchFromGitHub {
-          owner = "plugwise";
-          repo = "python-plugwise";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-aQz0p+DNi1XVoFwdFjc3RjpHqA2kGf4pU1QS6m271gU=";
-        };
-      };
 
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
@@ -343,6 +260,19 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
         };
+      });
+
+      pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.5";
+        src = fetchFromGitHub {
+          owner = "ChrisMandich";
+          repo = "PyFlume";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
+        };
+        dependencies = oldAttrs.propagatedBuildInputs or [] ++ [
+          self.pytz
+        ];
       });
 
       pytibber = super.pytibber.overridePythonAttrs (oldAttrs: rec {
@@ -434,7 +364,6 @@ let
         };
         nativeBuildInputs = with self; [
           flit-core
-          pythonRelaxDepsHook
         ];
         pythonRelaxDeps = [
           "betterproto"
@@ -473,16 +402,6 @@ let
       versioningit = super.versioningit.overridePythonAttrs {
         doCheck = false;
       };
-
-      voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.1";
-        src = fetchFromGitHub {
-          owner = "alecthomas";
-          repo = "voluptuous";
-          rev = "refs/tags/${version}";
-          hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
-        };
-      });
 
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
@@ -528,10 +447,13 @@ let
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
+      homeassistant = self.toPythonModule home-assistant;
+      pytest-homeassistant-custom-component = self.callPackage ./pytest-homeassistant-custom-component.nix { };
     })
   ];
 
   python = python312.override {
+    self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -549,7 +471,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.6.4";
+  hassVersion = "2024.8.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -567,17 +489,16 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-WIAFTVNHzrKTRONmOc/lq5PvC34PDKF7UfIokLCVzNY=";
+    hash = "sha256-4UQ2+MpcngkAKQxfA9y0JUKQ3/m0Y7t2K80ujLoJUvU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ymv3AlArAD2rSXQwMhEVeynwhAo8ZMrtV1zUK4U8xqQ=";
+    hash = "sha256-iGAH6hxLgqAEovI82W0FREw7nqgX+4J+gm4cCGIS7h4=";
   };
 
   build-system = with python.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -617,7 +538,7 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace tests/test_config.py --replace-fail '"/usr"' '"/build/media"'
+    substituteInPlace tests/test_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     substituteInPlace pyproject.toml --replace-fail "wheel~=0.43.0" wheel
 
@@ -630,7 +551,6 @@ in python.pkgs.buildPythonApplication rec {
     aiodns
     aiohttp
     aiohttp-cors
-    aiohttp-fast-url-dispatcher
     aiohttp-fast-zlib
     aiozoneinfo
     astral
@@ -664,6 +584,7 @@ in python.pkgs.buildPythonApplication rec {
     ulid-transform
     urllib3
     voluptuous
+    voluptuous-openapi
     voluptuous-serialize
     yarl
     # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
@@ -722,6 +643,13 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_translation.py::test_caching"
     # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
     "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
+    # Services were renamed to Actions in language strings, but the tests are lagging behind
+    "--deselect=tests/test_core.py::test_serviceregistry_service_that_not_exists"
+    "--deselect=tests/test_core.py::test_services_call_return_response_requires_blocking"
+    "--deselect=tests/test_core.py::test_serviceregistry_return_response_arguments"
+    "--deselect=tests/helpers/test_script.py::test_parallel_error"
+    "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
+    "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
     # tests are located in tests/
     "tests"
   ];
@@ -739,7 +667,7 @@ in python.pkgs.buildPythonApplication rec {
     export HOME="$TEMPDIR"
 
     # the tests require the existance of a media dir
-    mkdir /build/media
+    mkdir "$NIX_BUILD_TOP"/media
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH

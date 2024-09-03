@@ -6,10 +6,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Xcu91CbIDBLSojWQJjvdFWJiqjMteAxF105lemCAipk=";
+    hash = "sha256-Xcu91CbIDBLSojWQJjvdFWJiqjMteAxF105lemCAipk=";
   };
 
-  cargoSha256 = "sha256-QLtf42Il+XHWeaUdh8jNNWU1sXaVe82sYOKiHLoXw2M=";
+  cargoHash = "sha256-QLtf42Il+XHWeaUdh8jNNWU1sXaVe82sYOKiHLoXw2M=";
 
   buildInputs = [ libbfd libopcodes libunwind ];
 

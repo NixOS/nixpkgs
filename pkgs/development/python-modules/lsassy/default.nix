@@ -7,7 +7,6 @@
   poetry-core,
   pypykatz,
   pythonOlder,
-  pythonRelaxDepsHook,
   rich,
 }:
 
@@ -31,7 +30,6 @@ buildPythonPackage rec {
     "rich"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ poetry-core ];
 

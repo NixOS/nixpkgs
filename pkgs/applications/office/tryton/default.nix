@@ -17,17 +17,15 @@
 , wrapGAppsHook3
 }:
 
-with lib;
-
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.2.2";
+  version = "7.2.4";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XIPzpVIttTgP34rbA705vFoRZE9dj8Of3BR23DbpQPk=";
+    hash = "sha256-LYebXgAvIG3pUF7GpRjeQvP6S83yPjPO/lZg9r0X+Kc=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Client of the Tryton application platform";
     mainProgram = "tryton";
     longDescription = ''

@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     mainProgram = "jcat-tool";
     homepage = "https://github.com/hughsie/libjcat";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -1,12 +1,12 @@
 diff --git a/common/flatpak-run.c b/common/flatpak-run.c
-index 6f54a9d0..102d9b90 100644
+index e3f031d4..ed131c0b 100644
 --- a/common/flatpak-run.c
 +++ b/common/flatpak-run.c
-@@ -1902,6 +1902,7 @@ static const ExportData default_exports[] = {
+@@ -571,6 +571,7 @@ static const ExportData default_exports[] = {
+   {"XKB_CONFIG_ROOT", NULL},
+   {"GIO_EXTRA_MODULES", NULL},
    {"GDK_BACKEND", NULL},
-   {"VK_DRIVER_FILES", NULL},
-   {"VK_ICD_FILENAMES", NULL},
 +  {"GDK_PIXBUF_MODULE_FILE", NULL},
- };
- 
- static const ExportData no_ld_so_cache_exports[] = {
+   {"VK_ADD_DRIVER_FILES", NULL},
+   {"VK_ADD_LAYER_PATH", NULL},
+   {"VK_DRIVER_FILES", NULL},

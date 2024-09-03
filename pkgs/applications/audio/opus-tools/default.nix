@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Tools to work with opus encoded audio streams";
     homepage = "https://www.opus-codec.org/";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

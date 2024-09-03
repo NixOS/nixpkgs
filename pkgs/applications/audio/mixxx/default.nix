@@ -147,7 +147,7 @@ mkDerivation rec {
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu bfortz benley ];
+    maintainers = with maintainers; [ bfortz benley ];
     platforms = platforms.linux;
   };
 }

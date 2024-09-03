@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   cython,
+  setuptools,
   pytestCheckHook,
   hypothesis,
   readme-renderer,
@@ -11,17 +12,21 @@
 
 buildPythonPackage rec {
   pname = "marisa-trie";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-W/Q+0M82r0V4/nsDTPlfUyQ5dmUWaA5L1gNyNhHr1Ws=";
+    pname = "marisa_trie";
+    inherit version;
+    hash = "sha256-/t/GdJf4qidXdWtc9JN1nyRdMh+3iRTOElttddqom18=";
   };
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

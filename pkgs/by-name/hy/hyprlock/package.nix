@@ -7,9 +7,11 @@
   libGL,
   libxkbcommon,
   hyprlang,
+  hyprutils,
   pam,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   cairo,
   file,
   libjpeg,
@@ -22,14 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.3.0-unstable-2024-04-24";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
-    # FIXME: Change to a stable release once available
-    rev = "415262065fff0a04b229cd00165f346a86a0a73a";
-    hash = "sha256-jla5Wo0Qt3NEnD0OjNj85BGw0pR4Zlz5uy8AqHH7tuE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-w+AyYuqlZ/uWEimiptlHjtDFECm/JlUOD2ciCw8/+/8=";
   };
 
   strictDeps = true;
@@ -37,12 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
     cairo
     file
     hyprlang
+    hyprutils
     libdrm
     libGL
     libjpeg
@@ -61,11 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
-    mainProgram = "hyprlock";
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
+    maintainers = with lib.maintainers; [
+      iynaix
+      johnrtitor
     ];
+    mainProgram = "hyprlock";
+    platforms = lib.platforms.linux;
   };
 })

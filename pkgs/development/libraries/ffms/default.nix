@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "FFmpeg based source library for easy frame accurate access";
     mainProgram = "ffmsindex";
     license = licenses.mit;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

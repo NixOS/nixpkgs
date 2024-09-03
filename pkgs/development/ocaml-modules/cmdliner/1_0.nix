@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
+{ lib, stdenv, fetchurl, ocaml }:
 
 assert (lib.versionAtLeast ocaml.version "4.03");
 

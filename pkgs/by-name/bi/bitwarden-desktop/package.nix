@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_29
+, electron_31
 , fetchFromGitHub
 , glib
 , gnome-keyring
@@ -12,7 +12,6 @@
 , libsecret
 , makeDesktopItem
 , makeWrapper
-, moreutils
 , napi-rs-cli
 , nodejs_20
 , patchutils_0_4_2
@@ -26,33 +25,25 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_29;
+  electron = electron_31;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.6.0";
+  version = "2024.8.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-qiUUrs23WHE3+KFsWDknuDSA6M3Zwjz9Jdjq6mn5XkE=";
+    hash = "sha256-FBNqgPjWSY8SCIGyKpoOl7I3pWQxDbWiFtcPZScDE4A=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
   ];
 
-  # The nested package-lock.json from upstream is out-of-date, so copy the
-  # lock metadata from the root package-lock.json.
   postPatch = ''
-    cat {,apps/desktop/src/}package-lock.json \
-      | ${lib.getExe jq} -s '
-        .[1].packages."".dependencies.argon2 = .[0].packages."".dependencies.argon2
-          | .[0].packages."" = .[1].packages.""
-          | .[1].packages = .[0].packages
-          | .[1]
-        ' \
-      | ${moreutils}/bin/sponge apps/desktop/src/package-lock.json
+    # remove code under unfree license
+    rm -r bitwarden_license
   '';
 
   nodejs = nodejs_20;
@@ -60,7 +51,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-Mgd15eFJtWoBqFFCsjmsnlNbcg5NDs1U7DlMkE0hIb8=";
+  npmDepsHash = "sha256-8cxhor90GqgO34AD8Jhd3N7PCnBnbhg8h7agVq0i3jk=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -76,7 +67,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-BL+j2hMwb3QGgS29Y6LjqnKscH+tEXMCOyivilHHwVI=";
+    hash = "sha256-zc5AarCbrJixcin8t+Ws8fH0ULM9rp3sUFsDb0htPuM=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -87,10 +78,9 @@ in buildNpmPackage rec {
     copyDesktopItems
     jq
     makeWrapper
-    moreutils
     napi-rs-cli
     pkg-config
-    python3
+    (python3.withPackages (ps: with ps; [ setuptools ]))
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
@@ -102,22 +92,40 @@ in buildNpmPackage rec {
     libsecret
   ];
 
+  # node-argon2 builds with LTO, but that causes missing symbols. So disable it
+  # and rebuild. Then we need to copy it into the build output for
+  # electron-builder, as `apps/desktop/src/package.json` specifies `argon2` as
+  # a dependency and electron-builder will otherwise install a fresh (and
+  # broken) argon2. See https://github.com/ranisalt/node-argon2/pull/415
+  preConfigure = ''
+    pushd node_modules/argon2
+    substituteInPlace binding.gyp --replace-fail '"-flto", ' ""
+    "$npm_config_node_gyp" rebuild
+    popd
+    mkdir -p apps/desktop/build/node_modules
+    cp -r ./{,apps/desktop/build/}node_modules/argon2
+  '';
+
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
+
+    pushd apps/desktop/desktop_native/napi
+    npm run build
+    popd
   '';
 
   postBuild = ''
     pushd apps/desktop
 
     # desktop_native/index.js loads a file of that name regarldess of the libc being used
-    mv desktop_native/desktop_native.* desktop_native/desktop_native.linux-x64-musl.node
+    mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-x64-musl.node
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
 
     popd
@@ -139,7 +147,7 @@ in buildNpmPackage rec {
 
     pushd ${cargoRoot}
     export HOME=$(mktemp -d)
-    export -f cargoCheckHook runHook _eval _callImplicitHook
+    export -f cargoCheckHook runHook _eval _callImplicitHook _logHook
     export cargoCheckType=release
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \

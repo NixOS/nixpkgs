@@ -8,25 +8,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcdreforged";
-  version = "2.12.3";
+  version = "2.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Fallen-Breath";
+    owner = "MCDReforged";
     repo = "MCDReforged";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-MLub++mkkB/jshpHJXtqgIhs7Gcb4jHUyHqGE65S8A8=";
+    hash = "sha256-Um4XSpkpJupBy5h/hUuHNyXnaDvjL1IIcmSqBHKycEM=";
   };
 
   build-system = [ python3.pkgs.setuptools ];
 
   dependencies = with python3.pkgs; [
-    colorlog
     colorama
+    colorlog
     packaging
     parse
     prompt-toolkit
     psutil
+    requests
+    resolvelib
     ruamel-yaml
     typing-extensions
   ];
@@ -37,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     version = testers.testVersion { package = mcdreforged; };
   };
 
-  meta = with lib; {
-    description = "A rewritten version of MCDaemon, a python tool to control your Minecraft server";
+  meta = {
+    description = "Rewritten version of MCDaemon, a python tool to control your Minecraft server";
     homepage = "https://mcdreforged.com";
     changelog = "https://github.com/MCDReforged/MCDReforged/releases/tag/v${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ moraxyc ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "mcdreforged";
   };
 }

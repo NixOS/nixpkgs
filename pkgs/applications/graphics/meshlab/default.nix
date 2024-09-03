@@ -95,7 +95,7 @@ mkDerivation rec {
     mainProgram = "meshlab";
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

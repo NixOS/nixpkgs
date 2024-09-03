@@ -63,14 +63,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.7.1";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    rev = version;
-    hash = "sha256-MxpG4R6kWozBR5RiSBI/rCSsM2Gv2XJcx8B3IV3LGVk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-TZzu9cR5HrgmsPRkuP1LqEBA7uosbBzLGT63LLj2yyc=";
   };
 
   postPatch = ''
@@ -156,6 +156,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     # depends on git revision
     "test_default_release"
@@ -185,6 +187,9 @@ buildPythonPackage rec {
     # assert count_item_types["sessions"] == 1
     # assert 0 == 1
     "test_auto_session_tracking_with_aggregates"
+    # timing sensitive
+    "test_profile_captured"
+    "test_continuous_profiler_manual_start_and_stop"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];

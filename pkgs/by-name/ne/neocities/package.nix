@@ -2,6 +2,7 @@
 , bundlerApp
 , bundlerUpdateScript
 }:
+
 bundlerApp {
   pname = "neocities";
   gemdir = ./.;
@@ -10,10 +11,12 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "neocities";
 
   meta = with lib; {
-    description = "The Neocities CLI, written in Ruby";
+    description = "CLI and library for interacting with the Neocities API";
     homepage = "https://github.com/neocities/neocities-ruby";
     license = licenses.mit;
-    maintainers = with maintainers; [ infinidoge ];
     mainProgram = "neocities";
+    maintainers = with maintainers; [ dawoox ];
+    platforms = platforms.unix;
   };
 }
+

@@ -17,26 +17,22 @@
   setproctitle,
 
   pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "21.2.0";
+  version = "23.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
-    rev = version;
-    hash = "sha256-xP7NNKtz3KNrhcAc00ovLZRx2h6ZqHbwiFOpCiuwf98=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Dq/mrQwo3II6DBvYfD1FHsKHaIlyHlJCZ+ZyrM4Efe0=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=gunicorn --cov-report=xml" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -52,7 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gunicorn" ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   meta = {
     description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";

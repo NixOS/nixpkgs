@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/make/";
 
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     mainProgram = "make";
     platforms = platforms.all;
   };

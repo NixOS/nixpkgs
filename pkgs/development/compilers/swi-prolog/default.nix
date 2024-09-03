@@ -1,9 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
-, libarchive, db, pcre2, libedit, libossp_uuid, libxcrypt,libXpm
-, libSM, libXt, freetype, pkg-config, fontconfig
-, cmake, libyaml, Security
-, libjpeg, libX11, libXext, libXft, libXinerama
-, extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
+{
+  lib, stdenv, fetchFromGitHub,
+  cmake, ninja,
+
+  libxcrypt, zlib, openssl,
+  gmp, gperftools, readline,
+  libedit, libarchive, Security,
+
+  # optional dependencies
+  withDb ? true,
+  db,
+
+  withJava ? true,
+  jdk,
+
+  withOdbc ? true,
+  unixODBC,
+
+  withPcre ? true,
+  pcre2,
+
+  withPython ? true,
+  python3,
+
+  withYaml ? true,
+  libyaml,
+
+
+  withGui ? false,
+  libX11, libXpm, libXext, libXft, libXinerama, libjpeg, libXt, libSM, freetype, fontconfig,
+
+  # gcc/g++ as runtime dependency
+  withNativeCompiler ? true
+
 # Packs must be installed from a local directory during the build, with dependencies
 # resolved manually, e.g. to install the 'julian' pack, which depends on the 'delay', 'list_util' and 'typedef' packs:
 #   julian = pkgs.fetchzip {
@@ -30,47 +58,80 @@
 #     julian delay list_util typedef
 #   ]; };
 , extraPacks ? []
-, withGui ? false
+, extraLibraries ? [] # removed option - see below
 }:
 
 let
-  version = "9.1.21";
+  # minorVersion is even for stable, odd for unstable
+  version = "9.2.6";
+
+  # This package provides several with* options, which replaces the old extraLibraries option.
+  # This error should help users that still use this option find their way to these flags.
+  # We can probably remove this after one NixOS version.
+  extraLibraries' = if extraLibraries == [] then [] else throw
+    "option 'extraLibraries' removed - use 'with*' options (e.g., 'withJava'), or overrideAttrs to inject extra build dependencies";
+
   packInstall = swiplPath: pack:
-    ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
+    ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/extra-pack\"), silent(true), interactive(false)])." -t "halt."
     '';
+  withGui' = withGui && !stdenv.isDarwin;
+  optionalDependencies = []
+                         ++ (lib.optional withDb db)
+                         ++ (lib.optional withJava jdk)
+                         ++ (lib.optional withOdbc unixODBC)
+                         ++ (lib.optional withPcre pcre2)
+                         ++ (lib.optional withPython python3)
+                         ++ (lib.optional withYaml libyaml)
+                         ++ (lib.optionals withGui' [ libXt libXext libXpm libXft libXinerama
+                                                      libjpeg libSM freetype fontconfig
+                                                    ])
+                         ++ (lib.optional stdenv.isDarwin Security)
+                         ++ extraLibraries';
 in
 stdenv.mkDerivation {
   pname = "swi-prolog";
   inherit version;
 
+  # SWI-Prolog has two repositories: swipl and swipl-devel.
+  # - `swipl`, which tracks stable releases and backports
+  # - `swipl-devel` which tracks continuous development
   src = fetchFromGitHub {
     owner = "SWI-Prolog";
-    repo = "swipl-devel";
+    repo = "swipl";
     rev = "V${version}";
-    hash = "sha256-c4OSntnwIzo6lGhpyNVtNM4el5FGrn8kcz8WkDRfQhU=";
+    hash = "sha256-FgEn+Ht45++GFpfcdaJ5In5x+NyIOopSlSAs+t7sPDE=";
     fetchSubmodules = true;
   };
 
   # Add the packInstall path to the swipl pack search path
   postPatch = ''
-    echo "user:file_search_path(pack, '$out/lib/swipl/pack')." >> boot/init.pl
+    echo "user:file_search_path(pack, '$out/lib/swipl/extra-pack')." >> boot/init.pl
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ gmp readline openssl
-    libarchive libyaml db pcre2 libedit libossp_uuid libxcrypt
-    zlib ]
-  ++ lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
-  ++ extraLibraries
-  ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    libarchive
+    libxcrypt
+    zlib
+    openssl
+    gperftools
+    gmp
+    readline
+    libedit
+  ] ++ optionalDependencies;
 
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = [ "-DSWIPL_INSTALL_IN_LIB=ON" ];
+  cmakeFlags = [ "-DSWIPL_INSTALL_IN_LIB=ON" ]
+               ++ lib.optionals (!withNativeCompiler) [
+                 # without these options, the build will embed full compiler paths
+                 "-DSWIPL_CC=${if stdenv.isDarwin then "clang" else "gcc"}"
+                 "-DSWIPL_CXX=${if stdenv.isDarwin then "clang++" else "g++"}"
+               ];
 
   preInstall = ''
-    mkdir -p $out/lib/swipl/pack
+    mkdir -p $out/lib/swipl/extra-pack
   '';
 
   postInstall = builtins.concatStringsSep "\n"
@@ -83,6 +144,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd2;
     mainProgram = "swipl";
     platforms = lib.platforms.linux ++ lib.optionals (!withGui) lib.platforms.darwin;
-    maintainers = [ lib.maintainers.meditans ];
+    maintainers = [ lib.maintainers.meditans lib.maintainers.matko ];
   };
 }

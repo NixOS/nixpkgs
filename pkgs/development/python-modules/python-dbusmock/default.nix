@@ -2,15 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
+  runCommand,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  dbus-python,
+
+  # checks
   dbus,
   gobject-introspection,
-  dbus-python,
   pygobject3,
   bluez,
   networkmanager,
-  setuptools-scm,
-  runCommand,
+  pytestCheckHook,
 }:
 
 let
@@ -24,7 +31,7 @@ in
 buildPythonPackage rec {
   pname = "python-dbusmock";
   version = "0.31.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
@@ -33,9 +40,12 @@ buildPythonPackage rec {
     hash = "sha256-DdV78o089Jkc7mSsGvlJgVpv8kPpMILo7lC6EbLxkxg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ dbus-python ];
+  dependencies = [ dbus-python ];
 
   nativeCheckInputs = [
     dbus
@@ -44,39 +54,19 @@ buildPythonPackage rec {
     bluez
     pbap-client
     networkmanager
-    nose
+    pytestCheckHook
   ];
 
-  # TODO: Get the rest of these tests running?
-  NOSE_EXCLUDE = lib.concatStringsSep "," [
-    "test_bluez4" # NixOS ships BlueZ5
-    # These appear to fail because they're expecting to run in an Ubuntu chroot?
-    "test_everything" # BlueZ5 OBEX
-    "test_polkitd"
-    "test_consolekit"
-    "test_api"
-    "test_logind"
-    "test_notification_daemon"
-    "test_ofono"
-    "test_gnome_screensaver"
-    "test_cli"
-    "test_timedated"
-    "test_upower"
-    # needs glib
-    "test_accounts_service"
-    # needs dbus-daemon active
-    "test_systemd"
-    # Very slow, consider disabling?
-    # "test_networkmanager"
+  disabledTests = [
+    # wants to call upower, which is a reverse-dependency
+    "test_dbusmock_test_template"
+    # Failed to execute program org.TestSystem: No such file or directory
+    "test_system_service_activation"
+    "test_session_service_activation"
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests -v
-    runHook postCheck
-  '';
 
   meta = with lib; {
+    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${version}";
     description = "Mock D-Bus objects for tests";
     homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;

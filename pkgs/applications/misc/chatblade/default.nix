@@ -2,40 +2,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "chatblade";
-  version = "0.4.0";
+  version = "0.6.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AjE+1MkSkZOtEUPKEPBKQ3n+aOB8cwsorBpL5skNskU=";
+    hash = "sha256-4zLyIrBkilZ2ciBRkU41iK6Q8xDTdFJYOYalNeEMApg=";
   };
 
   doCheck = false; # there are no tests
 
   pythonImportsCheck = [ "chatblade" ];
   propagatedBuildInputs = with python3Packages; [
-    aiohttp
-    aiosignal
-    async-timeout
-    attrs
-    certifi
-    charset-normalizer
-    frozenlist
-    idna
-    markdown-it-py
-    mdurl
-    multidict
     openai
     platformdirs
-    pygments
+    pylatexenc
     pyyaml
-    regex
-    requests
     rich
     tiktoken
-    tqdm
-    urllib3
-    yarl
   ];
 
   meta = with lib; {

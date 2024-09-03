@@ -102,6 +102,6 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ kwohlfahrt ];
+    maintainers = with maintainers; [ bjornfor kwohlfahrt ];
   };
 }

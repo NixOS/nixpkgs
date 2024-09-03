@@ -1,16 +1,17 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   pythonOlder,
+  pytestCheckHook,
   setuptools,
   sqlite,
 }:
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.46.0.0";
+  version = "3.46.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,19 +20,26 @@ buildPythonPackage rec {
     owner = "rogerbinns";
     repo = "apsw";
     rev = "refs/tags/${version}";
-    hash = "sha256-x1nG13RDJ5fZ3Eds7yYKcFQ3B+5YKxvMvXrAbXw4bSc=";
+    hash = "sha256-/MMCwdd2juFbv/lrYwuO2mdWm0+v+YFn6h9CwdQMTpg=";
   };
 
   build-system = [ setuptools ];
 
   buildInputs = [ sqlite ];
 
-  # Project uses custom test setup to exclude some tests by default, so using pytest
-  # requires more maintenance
-  # https://github.com/rogerbinns/apsw/issues/335
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "apsw/tests.py" ];
+
+  disabledTests = [
+    # we don't build the test extension
+    "testLoadExtension"
+    "testShell"
+    "testVFS"
+    "testVFSWithWAL"
+    # no lines in errout.txt
+    "testWriteUnraisable"
+  ] ++ lib.optionals stdenv.isDarwin [ "testzzForkChecker" ];
 
   pythonImportsCheck = [ "apsw" ];
 

@@ -4,25 +4,14 @@ lib.makeScope pkgs.newScope (self:
   let
     gconf = pkgs.gnome2.GConf;
     inherit (self) callPackage;
-    stdenv = if pkgs.stdenv.isDarwin
-             then pkgs.darwin.apple_sdk_11_0.stdenv
-             else pkgs.stdenv;
     inheritedArgs = {
       inherit gconf;
-      inherit stdenv;
 
       inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk_11_0) llvmPackages_14;
-      inherit (pkgs.darwin.apple_sdk_11_0.frameworks)
+      inherit (pkgs.darwin.apple_sdk.frameworks)
         Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit
-        Quartz QuartzCore UniformTypeIdentifiers WebKit;
-      gnutls =
-        if pkgs.stdenv.isDarwin
-        then pkgs.gnutls.override {
-          inherit stdenv;
-          inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
-        }
-        else pkgs.gnutls;
+        Quartz QuartzCore WebKit;
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) UniformTypeIdentifiers;
     };
   in {
     sources = import ./sources.nix {

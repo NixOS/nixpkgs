@@ -7,7 +7,6 @@
 , xz
 , zlib
 , zstd
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {

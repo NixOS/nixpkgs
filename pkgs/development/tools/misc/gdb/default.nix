@@ -30,11 +30,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "14.2";
+  version = "15.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-LU3YBh2N7RK2xj9V5FNEiB6CJhBfTSqbI0BA76XOd3I=";
+    hash = "sha256-OCVOrNRXITS8qcWlqk1MpWTLvTDDadiB9zP7a5AzVPI=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  configureFlags = with lib; [
+  configureFlags = [
     # Set the program prefix to the current targetPrefix.
     # This ensures that the prefix always conforms to
     # nixpkgs' expectations instead of relying on the build
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "gdb";
 
     description = "GNU Project debugger";
@@ -154,8 +154,10 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    # GDB upstream does not support ARM darwin
-    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
-    maintainers = with maintainers; [ pierron globin lsix ];
+    platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ darwin;
+    # upstream does not support targeting aarch64-darwin;
+    # see https://inbox.sourceware.org/gdb/3185c3b8-8a91-4beb-a5d5-9db6afb93713@Spark/
+    badPlatforms = lib.optionals (stdenv.targetPlatform.system == "aarch64-darwin") meta.platforms;
+    maintainers = with lib.maintainers; [ pierron globin lsix ];
   };
 }

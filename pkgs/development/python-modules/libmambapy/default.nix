@@ -22,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "libmambapy";
-  version = "1.5.7";
+  version = "2024.08.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = "${pname}-${version}";
-    hash = "sha256-HfmvLi9IBWlaGAn2Ej4Bnm4b3l19jEXwNl5IUkdVxi0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RRHu0JM1okFprNIrQLLIYN7xZdZ+A6OuCZM5E1oPoFg=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,6 @@ buildPythonPackage rec {
     pypaBuildPhase
   '';
 
-  pythonRemoveDeps = [ "scikit-build" ];
 
   pythonImportsCheck = [
     "libmambapy"

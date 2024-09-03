@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/bitcoin-core/secp256k1";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; all;
   };
 }

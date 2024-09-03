@@ -4,26 +4,34 @@
   fetchPypi,
   docutils,
   lockfile,
+  packaging,
   pytestCheckHook,
   testscenarios,
   testtools,
-  twine,
+  setuptools,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-daemon";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bFdFI3L36v9Ak0ocA60YJr9eeTVY6H/vSRMeZGS02uU=";
+    hash = "sha256-bFdFI3L36v9Ak0ocA60YJr9eeTVY6H/vSRMeZGS02uU=";
   };
 
-  nativeBuildInputs = [ twine ];
+  postPatch = ''
+    sed -i "s/setuptools\.extern\.//g" version.py test_version.py
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    packaging
+  ];
 
   propagatedBuildInputs = [
     docutils
@@ -67,6 +75,6 @@ buildPythonPackage rec {
       gpl3Plus
       asl20
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

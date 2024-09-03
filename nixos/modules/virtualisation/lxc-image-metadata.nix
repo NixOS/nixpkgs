@@ -46,6 +46,10 @@ let
   else { files = []; properties = {}; };
 
 in {
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   options = {
     virtualisation.lxc = {
       templates = lib.mkOption {

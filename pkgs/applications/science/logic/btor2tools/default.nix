@@ -2,22 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "btor2tools";
-  version = "1.0.0-pre_${src.rev}";
+  version = "unstable-2024-08-07";
 
   src = fetchFromGitHub {
     owner  = "boolector";
     repo   = "btor2tools";
-    rev    = "9831f9909fb283752a3d6d60d43613173bd8af42";
-    sha256 = "0mfqmkgvyw8fa2c09kww107dmk180ch1hp98r5kv41vnc04iqb0s";
+    rev    = "44bcadbfede292ff4c4a4a8962cc18130de522fb";
+    sha256 = "0ncl4xwms8d656x95ga8v8zjybx4cmdl5hlcml7dpcgm3p8qj4ks";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/Boolector/btor2tools/commit/037f1fa88fb439dca6f648ad48a3463256d69d8b.patch";
-      hash = "sha256-FX1yy9XdUs1tAReOxhEzNHu48DrISzNNMSYoIrhHoFY=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 

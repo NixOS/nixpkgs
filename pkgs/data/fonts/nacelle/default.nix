@@ -4,12 +4,12 @@ let
   majorVersion = "1";
   minorVersion = "00";
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "nacelle";
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/${finalAttrs.pname}_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/download/fonts/nacelle_${majorVersion}${minorVersion}.zip";
     hash = "sha256-e4QsPiyfWEAYHWdwR3CkGc2UzuA3hZPYYlWtIubY0Oo=";
     stripRoot = false;
   };
@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
+    homepage = "http://dotcolon.net/font/nacelle/";
     description = "Improved version of the Aileron font";
     platforms = platforms.all;
     maintainers = with maintainers; [ minijackson ];
     license = licenses.ofl;
   };
-})
+}

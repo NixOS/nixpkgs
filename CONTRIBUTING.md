@@ -379,10 +379,12 @@ See [this section][branch] to know when to use the release branches.
 [staging]: #staging
 
 The staging workflow exists to batch Hydra builds of many packages together.
+It is coordinated in the [Staging room](https://matrix.to/#/#staging:nixos.org) on Matrix.
 
 It works by directing commits that cause [mass rebuilds][mass-rebuild] to a separate `staging` branch that isn't directly built by Hydra.
 Regularly, the `staging` branch is _manually_ merged into a `staging-next` branch to be built by Hydra using the [`nixpkgs:staging-next` jobset](https://hydra.nixos.org/jobset/nixpkgs/staging-next).
-The `staging-next` branch should then only receive direct commits in order to fix Hydra builds.
+The `staging-next` branch should then only receive changes that fix Hydra builds;
+**for anything else, ask the [Staging room](https://matrix.to/#/#staging:nixos.org) first**.
 Once it is verified that there are no major regressions, it is merged into `master` using [a pull request](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
 This is done manually in order to ensure it's a good use of Hydra's computing resources.
 By keeping the `staging-next` branch separate from `staging`, this batching does not block developers from merging changes into `staging`.
@@ -555,138 +557,11 @@ Names of files and directories should be in lowercase, with dashes between words
 
 ### Syntax
 
-- Use 2 spaces of indentation per indentation level in Nix expressions, 4 spaces in shell scripts.
-
-- Do not use tab characters, i.e. configure your editor to use soft tabs. For instance, use `(setq-default indent-tabs-mode nil)` in Emacs. Everybody has different tab settings so it’s asking for trouble.
+- Set up [editorconfig](https://editorconfig.org/) for your editor, such that [the settings](./.editorconfig) are automatically applied.
 
 - Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [package naming](./pkgs/README.md#package-naming).
 
-- Function calls with attribute set arguments are written as
-
-  ```nix
-  foo {
-    arg = <...>;
-  }
-  ```
-
-  not
-
-  ```nix
-  foo
-  {
-    arg = <...>;
-  }
-  ```
-
-  Also fine is
-
-  ```nix
-  foo { arg = <...>; }
-  ```
-
-  if it's a short call.
-
-- In attribute sets or lists that span multiple lines, the attribute names or list elements should be aligned:
-
-  ```nix
-  {
-    # A long list.
-    list = [
-      elem1
-      elem2
-      elem3
-    ];
-
-    # A long attribute set.
-    attrs = {
-      attr1 = short_expr;
-      attr2 =
-        if true then big_expr else big_expr;
-    };
-
-    # Combined
-    listOfAttrs = [
-      {
-        attr1 = 3;
-        attr2 = "fff";
-      }
-      {
-        attr1 = 5;
-        attr2 = "ggg";
-      }
-    ];
-  }
-  ```
-
-- Short lists or attribute sets can be written on one line:
-
-  ```nix
-  {
-    # A short list.
-    list = [ elem1 elem2 elem3 ];
-
-    # A short set.
-    attrs = { x = 1280; y = 1024; };
-  }
-  ```
-
-- Breaking in the middle of a function argument can give hard-to-read code, like
-
-  ```nix
-  someFunction { x = 1280;
-    y = 1024; } otherArg
-    yetAnotherArg
-  ```
-
-  (especially if the argument is very large, spanning multiple lines).
-
-  Better:
-
-  ```nix
-  someFunction
-    { x = 1280; y = 1024; }
-    otherArg
-    yetAnotherArg
-  ```
-
-  or
-
-  ```nix
-  let res = { x = 1280; y = 1024; };
-  in someFunction res otherArg yetAnotherArg
-  ```
-
-- The bodies of functions, asserts, and withs are not indented to prevent a lot of superfluous indentation levels, i.e.
-
-  ```nix
-  { arg1, arg2 }:
-  assert system == "i686-linux";
-  stdenv.mkDerivation { /* ... */ }
-  ```
-
-  not
-
-  ```nix
-  { arg1, arg2 }:
-    assert system == "i686-linux";
-      stdenv.mkDerivation { /* ... */ }
-  ```
-
-- Function formal arguments are written as:
-
-  ```nix
-  { arg1, arg2, arg3 }: { /* ... */ }
-  ```
-
-  but if they don't fit on one line they're written as:
-
-  ```nix
-  { arg1, arg2, arg3
-  , arg4
-  # Some comment...
-  ,  argN
-  }: { }
-  ```
+- New files must be formatted by entering the `nix-shell` from the repository root and running `nixfmt`.
 
 - Functions should list their expected arguments as precisely as possible. That is, write
 

@@ -5,9 +5,7 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools,
-  orjson,
   pyreqwest-impersonate,
-  curl-cffi,
 
   # Optional dependencies
   lxml,
@@ -15,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "v5.3.1";
+  version = "6.1.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,20 +21,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "duckduckgo_search";
-    rev = version;
-    hash = "sha256-T7rlB3dU7y+HbHr1Ss9KkejlXFORhnv9Va7cFTRtfQU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HidBPd69Fihx6+fGifil0PSZ7lGfW+qStzma8Npfmes=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
-    curl-cffi
-    orjson
     pyreqwest-impersonate
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lxml = [ lxml ];
   };
 

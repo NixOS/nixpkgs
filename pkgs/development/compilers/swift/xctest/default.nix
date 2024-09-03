@@ -50,6 +50,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-xctest";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
   };
 }

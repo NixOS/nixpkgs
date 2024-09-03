@@ -23,6 +23,11 @@ formats commits for you.
 
 */
 
+let
+  # Read ./recipes-archive-melpa.json in an outer let to make sure we only do this once.
+  defaultArchive = builtins.fromJSON (builtins.readFile ./recipes-archive-melpa.json);
+in
+
 { lib, pkgs }: variant: self:
 let
   dontConfigure = pkg:
@@ -57,7 +62,7 @@ let
     if pkg != null then dontConfigure (externalSrc pkg pkgs.rtags)
     else null;
 
-  generateMelpa = lib.makeOverridable ({ archiveJson ? ./recipes-archive-melpa.json
+  generateMelpa = lib.makeOverridable ({ archiveJson ? defaultArchive
                                        }:
     let
       inherit (import ./libgenerated.nix lib self) melpaDerivation;
@@ -66,7 +71,7 @@ let
           (s: s != null)
           (map
             (melpaDerivation variant)
-            (lib.importJSON archiveJson)
+            (if builtins.isList archiveJson then archiveJson else lib.importJSON archiveJson)
           )
         )
       );
@@ -181,30 +186,30 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
-            cd source/sqlite
+            pushd sqlite
             make
-            cd -
+            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            install -m=755 -D source/sqlite/emacsql-sqlite \
+            install -m=755 -D sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-${old.version}/sqlite/emacsql-sqlite
           '';
 
           stripDebugList = [ "share" ];
         });
 
-        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: lib.optionalAttrs (lib.versionOlder old.version "20240808.2016") {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
-            cd source/sqlite
+            pushd sqlite
             make
-            cd -
+            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            install -m=755 -D source/sqlite/emacsql-sqlite \
+            install -m=755 -D sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
           '';
 
@@ -247,7 +252,7 @@ let
           #   - https://github.com/vedang/pdf-tools/issues/109
           CXXFLAGS = "-std=c++17";
 
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -291,7 +296,7 @@ let
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            install source/hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
+            install hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
           '';
         });
 
@@ -299,26 +304,25 @@ let
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
-            cd server
+            pushd server
           '';
           preBuild = ''
             make
             install -D bin/irony-server $out/bin/irony-server
-            cd ..
+            popd
           '';
           checkPhase = ''
-            cd source/server
+            pushd server
             make check
-            cd ../..
+            popd
           '';
           preFixup = ''
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
           doCheck = pkgs.stdenv.isLinux;
-          packageRequires = [ self.emacs ];
-          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
+          buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -338,18 +342,14 @@ let
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
 
           postBuild = ''
-            pushd working/jinx
             NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
             $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
-            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            pushd source
             outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
             install -m444 --target-directory=$outd jinx-mod${libExt}
             rm $outd/jinx-mod.c $outd/emacs-module.h
-            popd
           '';
 
           meta = old.meta // {
@@ -361,42 +361,18 @@ let
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
 
           postBuild = ''
-            pushd working/sqlite3
             make
-            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            pushd source
             outd=$out/share/emacs/site-lisp/elpa/sqlite3-*
             install -m444 -t $outd sqlite3-api.so
             rm $outd/*.c $outd/*.h
-            popd
           '';
 
           meta = old.meta // {
             maintainers = [ lib.maintainers.DamienCassou ];
           };
-        });
-
-        libgit = super.libgit.overrideAttrs(attrs: {
-          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
-          buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
-          dontUseCmakeBuildDir = true;
-          postPatch = ''
-            sed -i s/'add_subdirectory(libgit2)'// CMakeLists.txt
-          '';
-          postBuild = ''
-            pushd working/libgit
-            make
-            popd
-          '';
-          postInstall = (attrs.postInstall or "") + "\n" + ''
-            outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
-            mkdir $outd/build
-            install -m444 -t $outd/build ./source/src/libegit2.so
-            rm -r $outd/src $outd/Makefile $outd/CMakeLists.txt
-          '';
         });
 
         evil-magit = buildWithGit super.evil-magit;
@@ -508,29 +484,12 @@ let
 
         rime = super.rime.overrideAttrs (old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
-          preBuild = (old.preBuild or "") +
-          (if pkgs.stdenv.isDarwin then
-            ''
-              export MODULE_FILE_SUFFIX=".dylib"
-              make lib
-              mkdir -p /tmp/build/rime-lib
-              cp *.dylib /tmp/build/rime-lib
-            ''
-          else
-          ''
-            make lib
-            mkdir -p /build/rime-lib
-            cp *.so /build/rime-lib
-          '');
-          postInstall = (old.postInstall or "") +
-          (if pkgs.stdenv.isDarwin then
-          ''
-            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /tmp/build/rime-lib/*.dylib
-          ''
-          else
-          ''
-            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
-          '');
+          preBuild = (old.preBuild or "") + ''
+            make lib CC=$CC MODULE_FILE_SUFFIX=${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}
+          '';
+          postInstall = (old.postInstall or "") + ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* librime-emacs.*
+          '';
         });
 
         shm = super.shm.overrideAttrs (attrs: {
@@ -540,7 +499,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
-          nativeBuildInputs = [ pkgs.pkg-config ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
           postPatch = ''
             substituteInPlace telega-customize.el \
@@ -554,14 +513,14 @@ let
           '';
 
           postBuild = ''
-            cd source/server
+            pushd server
             make
-            cd -
+            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
             mkdir -p $out/bin
-            install -m755 -Dt $out/bin ./source/server/telega-server
+            install -m755 -Dt $out/bin server/telega-server
           '';
         });
 
@@ -596,7 +555,7 @@ let
             export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
-          nativeBuildInputs = [
+          nativeBuildInputs = old.nativeBuildInputs ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
@@ -682,7 +641,7 @@ let
         };
 
         vterm = super.vterm.overrideAttrs (old: {
-          nativeBuildInputs = [ pkgs.cmake ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake ];
           buildInputs = old.buildInputs ++ [ self.emacs pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"
@@ -691,10 +650,8 @@ let
           # we need the proper out directory to exist, so we do this in the
           # postInstall instead of postBuild
           postInstall = (old.postInstall or "") + "\n" + ''
-            pushd source/build >/dev/null
             make
             install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
-            popd > /dev/null
             rm -rf $out/share/emacs/site-lisp/elpa/vterm-**/{CMake*,build,*.c,*.h}
           '';
         });
@@ -732,9 +689,7 @@ let
             buildInputs =
               old.buildInputs ++
               (with pkgs.darwin.apple_sdk.frameworks; [CoreServices Foundation]);
-            dontUnpack = false;
-            buildPhase = (old.buildPhase or "") + ''
-              cd source
+            postBuild = (old.postBuild or "") + ''
               $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
             '';
             postInstall = (old.postInstall or "") + "\n" + ''
@@ -750,5 +705,4 @@ let
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
-(generateMelpa { })
-// { __attrsFailEvaluation = true; }
+generateMelpa { }

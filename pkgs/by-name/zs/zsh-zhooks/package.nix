@@ -1,11 +1,11 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "zsh-zhooks";
-  version = "0-unstable-10-31-2021";
+  version = "0-unstable-2021-10-31";
 
   src = fetchFromGitHub {
     owner = "agkozak";
@@ -17,7 +17,9 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -m755 -D zhooks.plugin.zsh --target-directory $out/share/zsh/zhooks
+    runHook postInstall
   '';
 
   meta = {
@@ -29,5 +31,6 @@ stdenv.mkDerivation {
       hook arrays (such as precmd_functions).
     '';
     maintainers = [ lib.maintainers.fidgetingbits ];
+    platforms = lib.platforms.all;
   };
 }

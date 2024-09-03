@@ -2,10 +2,11 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   alsa-lib,
   boost,
   curl,
-  ffmpeg_4,
+  ffmpeg_6,
   icoutils,
   libGLU,
   libmad,
@@ -37,15 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
     "icons"
   ];
   pname = "alephone";
-  version = "1.8.1";
+  version = "1.10";
 
   src = fetchurl {
     url =
       let
-        date = "20240513";
+        date = "20240822";
       in
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    sha256 = "sha256-IUvMfG4jtN/QXq4DQIDuI0+Bl3MSSwDGKOyjfcRWgvE=";
+    hash = "sha256-Es2Uo0RIJHYeO/60XiHVLJe9Eoan8DREtAI2KGjuLaM=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     boost
     curl
-    ffmpeg_4
+    ffmpeg_6
     libGLU
     libmad
     libogg

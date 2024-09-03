@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools-scm,
   pygobject3,
   pytestCheckHook,
   gtk3,
@@ -11,20 +12,26 @@
 
 buildPythonPackage rec {
   pname = "gbulb";
-  version = "0.6.4";
-  format = "setuptools";
+  version = "0.6.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beeware";
     repo = "gbulb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AdZSvxix0cpoFQSrslGl+hB/s6Nh0EsWMQmXZAJVJOg=";
+    hash = "sha256-03Ott+V3Y4+Y72Llsug5coqG3C+pjAdLkPYbaY/6Uow=";
   };
 
-  propagatedBuildInputs = [
-    pygobject3
-    gtk3
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "==" ">="
+  '';
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ pygobject3 ];
+
+  buildInputs = [ gtk3 ];
 
   nativeCheckInputs = [
     pytestCheckHook

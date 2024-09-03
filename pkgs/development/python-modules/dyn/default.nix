@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://dyn.readthedocs.org";
     changelog = "https://github.com/dyninc/dyn-python/blob/${version}/HISTORY.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

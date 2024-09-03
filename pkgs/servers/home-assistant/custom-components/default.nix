@@ -4,11 +4,17 @@
 {
   adaptive_lighting = callPackage ./adaptive_lighting {};
 
+  alarmo = callPackage ./alarmo {};
+
   auth-header = callPackage ./auth-header {};
 
   awtrix = callPackage ./awtrix {};
 
   better_thermostat = callPackage ./better_thermostat {};
+
+  dwd = callPackage ./dwd { };
+
+  elevenlabs_tts = callPackage ./elevenlabs_tts {};
 
   emporia_vue = callPackage ./emporia_vue {};
 
@@ -28,6 +34,8 @@
 
   localtuya = callPackage ./localtuya {};
 
+  mass = callPackage ./mass { };
+
   midea_ac_lan = callPackage ./midea_ac_lan {};
 
   midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};
@@ -42,15 +50,25 @@
 
   prometheus_sensor = callPackage ./prometheus_sensor {};
 
+  samsungtv-smart = callPackage ./samsungtv-smart {};
+
   sensi = callPackage ./sensi {};
 
   smartir = callPackage ./smartir {};
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
+  solis-sensor = callPackage ./solis-sensor {};
+
+  somweb = callPackage ./somweb {};
+
   spook = callPackage ./spook {};
 
   tuya_local = callPackage ./tuya_local {};
+
+  volkswagen_we_connect_id = callPackage ./volkswagen_we_connect_id { };
+
+  volkswagencarnet = callPackage ./volkswagencarnet { };
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
 

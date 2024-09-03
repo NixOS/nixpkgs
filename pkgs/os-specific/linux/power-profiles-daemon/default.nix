@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.21";
+  version = "0.22";
 
   outputs = [ "out" "devdoc" ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "upower";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-5JbMbz38SeNEkVKFjJLxeUHiOrx+QCaK/vXgRPbzwzY=";
+    sha256 = "sha256-NzaneS/Za73HSK2abBZNmP+ZPbhIG+JXfBTPHm2vBeU=";
   };
 
   nativeBuildInputs = [
@@ -127,6 +127,6 @@ stdenv.mkDerivation rec {
     mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz picnoir ];
+    maintainers = with maintainers; [ mvnetbiz picnoir lyndeno ];
   };
 }

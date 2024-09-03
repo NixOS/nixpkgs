@@ -1,12 +1,26 @@
-{ pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
-# Documentation is in doc/builders/testers.chapter.md
+{
+  lib,
+  buildPackages,
+  callPackage,
+  pkgs,
+  pkgsLinux,
+
+  diffoscopeMinimal,
+  runCommand,
+  runCommandWith,
+  stdenv,
+  stdenvNoCC,
+  substituteAll,
+  testers,
+}:
+# Documentation is in doc/build-helpers/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   inherit (callPackage ./lychee.nix {}) lycheeLinkCheck;
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testBuildFailure = drv: drv.overrideAttrs (orig: {
     builder = buildPackages.bash;
     args = [
@@ -16,55 +30,44 @@
   });
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testEqualContents = {
     assertion,
     actual,
     expected,
   }: runCommand "equal-contents-${lib.strings.toLower assertion}" {
     inherit assertion actual expected;
+    nativeBuildInputs = [ diffoscopeMinimal ];
   } ''
     echo "Checking:"
-    echo "$assertion"
-    if ! diff -U5 -r "$actual" "$expected" --color=always
+    printf '%s\n' "$assertion"
+    if ! diffoscope --no-progress --text-color=always --exclude-directory-metadata=no -- "$actual" "$expected"
     then
       echo
       echo 'Contents must be equal, but were not!'
       echo
       echo "+: expected,   at $expected"
       echo "-: unexpected, at $actual"
-      exit 1
+      false
     else
-      find "$expected" -type f -executable > expected-executables | sort
-      find "$actual" -type f -executable > actual-executables | sort
-      if ! diff -U0 actual-executables expected-executables --color=always
-      then
-        echo
-        echo "Contents must be equal, but some files' executable bits don't match"
-        echo
-        echo "+: make this file executable in the actual contents"
-        echo "-: make this file non-executable in the actual contents"
-        exit 1
-      else
-        echo "expected $expected and actual $actual match."
-        echo 'OK'
-        touch $out
-      fi
+      echo "expected $expected and actual $actual match."
+      echo OK
+      touch -- "$out"
     fi
   '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
-  # or doc/builders/testers.chapter.md
+  # or doc/build-helpers/testers.chapter.md
   testVersion =
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      if output=$(${command} 2>&1); then
+      if output=$(${command} 2>&1 | sed -e 's|${builtins.storeDir}/[^/ ]*/|{{storeDir}}/|g'); then
         if grep -Fw -- "${version}" - <<< "$output"; then
           touch $out
         else
@@ -81,8 +84,8 @@
       fi
     '';
 
-  # See doc/builders/testers.chapter.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # or doc/build-helpers/testers.chapter.md
   invalidateFetcherByDrvHash = f: args:
     let
       drvPath = (f args).drvPath;
@@ -98,8 +101,33 @@
         else salted;
     in checked;
 
-  # See doc/builders/testers.chapter.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-runCommand
+  runCommand = testers.invalidateFetcherByDrvHash (
+    {
+      hash ? pkgs.emptyFile.outputHash,
+      name,
+      script,
+      stdenv ? stdenvNoCC,
+      ...
+    }@args:
+
+    runCommandWith {
+      inherit name stdenv;
+
+      derivationArgs = {
+        outputHash = hash;
+        outputHashMode = "recursive";
+      } // lib.removeAttrs args [
+        "hash"
+        "name"
+        "script"
+        "stdenv"
+      ];
+    } script
+  );
+
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
+  # or doc/build-helpers/testers.chapter.md
   runNixOSTest =
     let nixos = import ../../../nixos/lib {
       inherit lib;
@@ -114,8 +142,8 @@
           node.pkgs = pkgsLinux;
         };
 
-  # See doc/builders/testers.chapter.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
+  # or doc/build-helpers/testers.chapter.md
   nixosTest =
     let
       /* The nixos/lib/testing-python.nix module, preapplied with arguments that
@@ -151,4 +179,6 @@
   hasPkgConfigModules = callPackage ./hasPkgConfigModules/tester.nix { };
 
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
+
+  shellcheck = callPackage ./shellcheck/tester.nix { };
 }

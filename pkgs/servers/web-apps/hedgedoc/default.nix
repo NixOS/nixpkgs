@@ -6,18 +6,19 @@
 , yarn
 , makeBinaryWrapper
 , nodejs
+, node-gyp
 , python3
 , nixosTests
 }:
 
 let
-  version = "1.9.9";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     rev = version;
-    hash = "sha256-6eKTgEZ+YLoSmPQWBS95fJ+ioIxeTVlT+moqslByPPw=";
+    hash = "sha256-cRIpcoD9WzLYxKYpkvhRxUmeyJR5z2QyqApzWvQND+s=";
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -42,7 +43,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-Ga+tl4oZlum43tdfez1oWGMHZAfyePGl47S+9NRRvW8=";
+    outputHash = "sha256-RV9xzNVE4//tPVWVaET78ML3ah+hkZ8x6mTAxe5/pdE=";
   };
 
 in stdenv.mkDerivation {
@@ -51,12 +52,12 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    (python3.withPackages (ps: with ps; [ setuptools ])) # required to build sqlite3 bindings
     yarn
-    python3 # needed for sqlite node-gyp
   ];
 
   buildInputs = [
-    nodejs
+    nodejs # for shebangs
   ];
 
   dontConfigure = true;
@@ -67,15 +68,8 @@ in stdenv.mkDerivation {
     export HOME=$(mktemp -d)
     yarn config set enableTelemetry 0
     yarn config set cacheFolder ${offlineCache}
+    export npm_config_nodedir=${nodejs} # prevent node-gyp from downloading headers
 
-    # This will fail but create the sqlite3 files we can patch
-    yarn --immutable-cache || :
-
-    # Ensure we don't download any node things
-    sed -i 's:--fallback-to-build:--build-from-source --nodedir=${nodejs}/include/node:g' node_modules/sqlite3/package.json
-    export CPPFLAGS="-I${nodejs}/include/node"
-
-    # Perform the actual install
     yarn --immutable-cache
     yarn run build
 

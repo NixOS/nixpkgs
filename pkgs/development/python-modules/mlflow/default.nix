@@ -2,6 +2,7 @@
   lib,
   alembic,
   buildPythonPackage,
+  cachetools,
   click,
   cloudpickle,
   databricks-cli,
@@ -17,13 +18,14 @@
   markdown,
   matplotlib,
   numpy,
+  opentelemetry-api,
+  opentelemetry-sdk,
   packaging,
   pandas,
   prometheus-flask-exporter,
   protobuf,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyarrow,
   pytz,
   pyyaml,
@@ -39,25 +41,22 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.12.2";
+  version = "2.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1xLxr51E8eueG67oymT3MR4YW3Vy/DweCoOkyM7/aq0=";
+    hash = "sha256-KSyuS4NXSgyyIxF+IkyqZ5iTMHivAjNxnCthK+pkVhc=";
   };
 
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
   pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [
+    "gunicorn"
     "packaging"
     "pytz"
     "pyarrow"
@@ -65,6 +64,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alembic
+    cachetools
     click
     cloudpickle
     databricks-cli
@@ -79,18 +79,21 @@ buildPythonPackage rec {
     markdown
     matplotlib
     numpy
+    opentelemetry-api
+    opentelemetry-sdk
     packaging
     pandas
     prometheus-flask-exporter
     protobuf
-    python-dateutil
     pyarrow
+    python-dateutil
     pytz
     pyyaml
     querystring-parser
     requests
     scikit-learn
     scipy
+    setuptools
     #shap
     simplejson
     sqlalchemy

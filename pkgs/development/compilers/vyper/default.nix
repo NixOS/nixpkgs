@@ -9,7 +9,6 @@
 , pycryptodome
 , pytest-runner
 , pythonOlder
-, pythonRelaxDepsHook
 , recommonmark
 , setuptools-scm
 , sphinx
@@ -21,7 +20,7 @@ let
   sample-contract = writeText "example.vy" ''
     count: int128
 
-    @external
+    @deploy
     def __init__(foo: address):
         self.count = 1
   '';
@@ -29,14 +28,14 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.3.10";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jcH1AcqrQX+wzpxoppRFh/AUfsfMfTiJzzpFwZRm5Ik=";
+    hash = "sha256-locUXGoL9C3lLpIgLOmpE2SNPGV6yOXPubNaEA3EfjQ=";
   };
 
   postPatch = ''
@@ -50,7 +49,6 @@ buildPythonPackage rec {
     # ever since https://github.com/vyperlang/vyper/pull/2816
     git
 
-    pythonRelaxDepsHook
     pytest-runner
     setuptools-scm
   ];

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "spatialaudio";
     repo = "python-rtmixer";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-S8aVfxoG0o5GarDX5ZIDQ3GKOT32NtttQJ449FI9Fy0=";
+    hash = "sha256-S8aVfxoG0o5GarDX5ZIDQ3GKOT32NtttQJ449FI9Fy0=";
     fetchSubmodules = true;
   };
 

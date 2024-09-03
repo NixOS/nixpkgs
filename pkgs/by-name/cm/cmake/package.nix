@@ -48,14 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.29.3";
+  version = "3.29.6";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JSruFEjUnKoElU/V4n0YndUVcFVzE+eygWNnFqI4vMs=";
+    hash = "sha256-E5ExMAO4PUjiqxFai1JaVX942MFURhi0jR2QGEoQ8K8=";
   };
 
   patches = [
+    # Add NIXPKGS_CMAKE_PREFIX_PATH to cmake which is like CMAKE_PREFIX_PATH
+    # except it is not searched for programs
+    ./000-nixpkgs-cmake-prefix-path.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
     # Don't depend on frameworks.
@@ -115,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags $cmakeFlags"
   '';
 
   # The configuration script is not autoconf-based, although being similar;

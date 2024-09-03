@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "arpa2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UpAVyDXCe07ZwjD307t6G9f/Nny4QYXxGxft1KsiYYg=";
+    hash = "sha256-UpAVyDXCe07ZwjD307t6G9f/Nny4QYXxGxft1KsiYYg=";
   };
 
   nativeBuildInputs = [

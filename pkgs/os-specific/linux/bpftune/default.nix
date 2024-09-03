@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [
     "stackprotector"
+    "zerocallusedregs"
   ];
 
   passthru.tests = {

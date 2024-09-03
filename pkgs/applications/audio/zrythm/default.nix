@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.0-rc.1";
 
   src = fetchzip {
-    url = "https://www.zrythm.org/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "https://www.zrythm.org/releases/zrythm-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-Ljbw7bjGI6js4OP9KEXCkhC9AMbInSz0nn+pROm4vXw=";
   };
 

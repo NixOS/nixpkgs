@@ -81,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lilydjwg/nvchecker";
     changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

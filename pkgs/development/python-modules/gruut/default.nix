@@ -3,14 +3,25 @@
   buildPythonPackage,
   callPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   babel,
-  gruut-ipa,
   dateparser,
+  gruut-ipa,
   jsonlines,
-  num2words,
-  python-crfsuite,
-  python,
   networkx,
+  num2words,
+  numpy,
+  python-crfsuite,
+
+  # optional dependencies
+  pydub,
+  rapidfuzz,
+
+  # checks
   glibcLocales,
   pytestCheckHook,
 }:
@@ -18,6 +29,7 @@
 let
   langPkgs = [
     "ar"
+    "ca"
     "cs"
     "de"
     "en"
@@ -35,49 +47,53 @@ let
 in
 buildPythonPackage rec {
   pname = "gruut";
-  version = "2.3.4";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
-    repo = pname;
+    repo = "gruut";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
+    hash = "sha256-iwde6elsAbICZ+Rc7CPgcZTOux1hweVZc/gf4K+hP9M=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
-      --replace "jsonlines~=1.2.0" "jsonlines" \
-      --replace "networkx>=2.5.0,<3.0.0" "networkx"
-  '';
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs =
-    [
-      babel
-      gruut-ipa
-      jsonlines
-      num2words
-      python-crfsuite
-      dateparser
-      networkx
-    ]
-    ++ (map (
-      lang:
-      callPackage ./language-pack.nix {
+  build-system = [ setuptools ];
+
+  dependencies = [
+    babel
+    dateparser
+    gruut-ipa
+    jsonlines
+    networkx
+    num2words
+    numpy
+    python-crfsuite
+  ] ++ optional-dependencies.en;
+
+  optional-dependencies =
+    {
+      train = [
+        pydub
+        rapidfuzz
+      ];
+    }
+    // lib.genAttrs langPkgs (lang: [
+      (callPackage ./language-pack.nix {
         inherit
           lang
           version
-          format
           src
+          build-system
           ;
-      }
-    ) langPkgs);
+      })
+    ]);
 
   nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25
@@ -86,7 +102,6 @@ buildPythonPackage rec {
     # requires mishkal library
     "test_fa"
     "test_ar"
-    "test_lb"
   ];
 
   preCheck = ''

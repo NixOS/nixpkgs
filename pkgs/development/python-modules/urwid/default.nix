@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.6.14";
+  version = "2.6.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "urwid";
     repo = "urwid";
     rev = "refs/tags/${version}";
-    hash = "sha256-UDYIAAAKmdqtTzV8yn1zkEH0PvOUmVXodxF1ZyubgE0=";
+    hash = "sha256-bBgzhNNYxNZKaSo43I3fMoR+j6XDV6UBNrZfQyZ/f7c=";
   };
 
   postPatch = ''
@@ -81,6 +81,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

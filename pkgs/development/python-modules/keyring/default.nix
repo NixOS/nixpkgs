@@ -2,38 +2,47 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   installShellFiles,
   setuptools-scm,
   shtab,
   importlib-metadata,
-  dbus-python,
   jaraco-classes,
+  jaraco-context,
+  jaraco-functools,
   jeepney,
   secretstorage,
+  pyfakefs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "24.3.1";
+  version = "25.3.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wzJ7b/r8DovvvbWXys20ko/+XBIS92RfGG5tmVeomNs=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "keyring";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P7rm5fkNudUEWdzVPMeGsP9sjBXoCBKojbh5oHhw4y4=";
   };
+
+  build-system = [ setuptools-scm ];
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools-scm
     shtab
   ];
 
-  propagatedBuildInputs =
-    [ jaraco-classes ]
+  dependencies =
+    [
+      jaraco-classes
+      jaraco-context
+      jaraco-functools
+    ]
     ++ lib.optionals stdenv.isLinux [
       jeepney
       secretstorage
@@ -51,7 +60,10 @@ buildPythonPackage rec {
     "keyring.backend"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pyfakefs
+    pytestCheckHook
+  ];
 
   disabledTestPaths =
     [ "tests/backends/test_macOS.py" ]

@@ -39,6 +39,15 @@ buildPythonPackage rec {
     respx
   ];
 
+  disabledTests = [
+    # respx.models.AllMockedAssertionError
+    "test_get"
+    "test_get_errors"
+    "test_set_temperature"
+    "test_set_power"
+    "test_turn"
+  ];
+
   pythonImportsCheck = [ "pyecoforest" ];
 
   meta = with lib; {

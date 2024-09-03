@@ -8,7 +8,6 @@
   pyasn1-modules,
   pycparser,
   pyqt5,
-  pythonRelaxDepsHook,
   pyqtwebengine,
   pythonOlder,
   withGui ? false,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 

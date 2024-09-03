@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   linear-operator,
   scikit-learn,
   setuptools,
@@ -13,15 +14,25 @@
 
 buildPythonPackage rec {
   pname = "gpytorch";
-  version = "1.11";
+  version = "1.12";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cpkfjx5G/4duL1Rr4nkHTHi03TDcYbcx3bKP2Ny7Ijo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8W0QSiXl+C86m5yaI9KfGN92uA2VGjGwQt6DI/1NaQE=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/cornellius-gp/gpytorch/pull/2545
+      name = "scipy-1.14-compatibility.patch";
+      url = "https://github.com/cornellius-gp/gpytorch/commit/2562be472521b8aec366de2619e3130a96fab982.patch";
+      excludes = [ "setup.py" ];
+      hash = "sha256-znOFpN6go2iIxP24VjJLKF3Laxcr4xV/IyP2y36g4QY=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools

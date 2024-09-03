@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , git
 , mimic
 , paf

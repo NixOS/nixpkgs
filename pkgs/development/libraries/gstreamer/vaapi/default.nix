@@ -8,6 +8,7 @@
 , libva
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libdrm
 , udev
 , xorg
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     bzip2
-    wayland
+    wayland-scanner
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
@@ -86,6 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

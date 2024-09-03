@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     description = "Runs programs without installing them";
     license = licenses.mit;
     mainProgram = "comma";
-    maintainers = with maintainers; [ Enzime artturin ];
+    maintainers = with maintainers; [ artturin ];
   };
 }

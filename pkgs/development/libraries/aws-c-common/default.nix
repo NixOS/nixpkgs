@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.9.21";
+  version = "0.9.27";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-lJCQPatwZeHpuzQni6SMMGYBH4iESQH8ofFgmRbxtnM=";
+    hash = "sha256-VbF+R2LB5M2luOoQ/HsAOqk/ujHSW4QJC0OTzNnu9PM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/awslabs/aws-c-common";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej eelco r-burns ];
+    maintainers = with maintainers; [ orivej r-burns ];
   };
 }

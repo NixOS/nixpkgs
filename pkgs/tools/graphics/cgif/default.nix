@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/dloebl/cgif";
     description = "CGIF, a GIF encoder written in C";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

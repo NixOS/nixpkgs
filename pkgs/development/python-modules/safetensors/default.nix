@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "safetensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rc+o7epQJ8qEvdgbFnGvXxBr/U4eULZwkKNEaPlJkyU=";
+    hash = "sha256-7tJeWs7kodK4Su8EaCjBuuWoMb93Ty3uiBrHZHdeTJc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-tzNEUvWgolSwX0t/JLgYcTEIv3/FiKxoTJ4VjFQs8AY=";
+    hash = "sha256-Frcru/GGWHDxd027mvjJu3iR30KO2ddpPz54kGD6mjc=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -68,11 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "safetensors" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/huggingface/safetensors";
     description = "Fast (zero-copy) and safe (unlike pickle) format for storing tensors";
     changelog = "https://github.com/huggingface/safetensors/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

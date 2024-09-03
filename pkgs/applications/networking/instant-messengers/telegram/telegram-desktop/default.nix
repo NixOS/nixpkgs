@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , pkg-config
 , cmake
@@ -39,6 +38,7 @@
 , xdg-utils
 , microsoft-gsl
 , rlottie
+, ada
 , stdenv
 , darwin
 , lld
@@ -60,18 +60,17 @@ let
       cxxStandard = "20";
     };
   };
-  mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
-  version = "5.1.8";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YTCvniC8THoz0BUM/gkr97rhbbSVQ+SCE1H3qS68lIM=";
+    hash = "sha256-AWu0LH6DH/omcIsgIBHQIg1uCKN9Ly6EVj4U9QxoSlg=";
   };
 
   patches = [
@@ -79,10 +78,7 @@ stdenv.mkDerivation rec {
     # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
     # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
     # see https://github.com/NixOS/nixpkgs/issues/218370
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
-      hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
-    })
+    ./scheme.patch
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -135,6 +131,7 @@ stdenv.mkDerivation rec {
     tg_owt
     microsoft-gsl
     rlottie
+    ada
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
     gtk3
@@ -179,6 +176,7 @@ stdenv.mkDerivation rec {
     IOSurface
     Metal
     NaturalLanguage
+    LocalAuthentication
     libicns
   ]);
 
@@ -187,13 +185,12 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-Ddisable_autoupdate=ON"
+    (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
     # We're allowed to used the API ID of the Snap package:
-    "-DTDESKTOP_API_ID=611335"
-    "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
+    (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
+    (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
-    "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
-    "-DDESKTOP_APP_DISABLE_SCUDO=ON"
+    (lib.cmakeBool "DESKTOP_APP_USE_PACKAGED_FONTS" false)
   ];
 
   preBuild = ''
@@ -203,19 +200,19 @@ stdenv.mkDerivation rec {
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    cp -r ${mainProgram}.app $out/Applications
-    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
+    cp -r ${finalAttrs.meta.mainProgram}.app $out/Applications
+    ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/${mainProgram} \
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
+    wrapQtApp $out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}
   '';
 
   passthru = {
@@ -223,17 +220,17 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Telegram Desktop messaging app";
     longDescription = ''
       Desktop client for the Telegram messenger, based on the Telegram API and
       the MTProto secure protocol.
     '';
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
     homepage = "https://desktop.telegram.org/";
-    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ nickcao ];
-    inherit mainProgram;
+    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ nickcao ];
+    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
-}
+})

@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
 , python3, ruby, jre8, nettools, bc
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -132,6 +133,8 @@ stdenv.mkDerivation rec {
                 ]}"
     done
   '';
+
+  passthru.tests = { inherit (nixosTests) munin; };
 
   meta = with lib; {
     description = "Networked resource monitoring tool";

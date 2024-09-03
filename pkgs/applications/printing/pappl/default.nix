@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/michaelrsweet/pappl";
     license = licenses.asl20;
     platforms = platforms.linux; # should also work for darwin, but requires additional work
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

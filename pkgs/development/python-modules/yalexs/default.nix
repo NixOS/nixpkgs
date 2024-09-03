@@ -7,20 +7,20 @@
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
-  pubnub,
+  freenub,
+  poetry-core,
   pyjwt,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  requests,
   requests-mock,
-  poetry-core,
+  requests,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "6.4.1";
+  version = "8.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lCRil1SeYXZeXT0SJielJg2Ma8voBXPgij+RK/oT1iU=";
+    hash = "sha256-2n/+3VkKtwNlDgxoraIrx/ZUZ9TydybWIkLDTdbMd1w=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     aiofiles
     aiohttp
     ciso8601
-    pubnub
+    freenub
     pyjwt
     python-dateutil
     requests

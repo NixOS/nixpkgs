@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "stanio";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3uQpMU2WXzkBga+o/3/4FERG7rWMwlR8zBCLpz5nROI=";
+    hash = "sha256-NI1S+UfexDHhGPS2AcTFKWkpuGQB1NTdWqk3Ow1K5Kw=";
   };
 
   nativeBuildInputs = [ setuptools ];

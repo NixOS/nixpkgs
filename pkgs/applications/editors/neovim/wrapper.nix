@@ -13,6 +13,9 @@
 neovim-unwrapped:
 
 let
+  # inherit interpreter from neovim
+  lua = neovim-unwrapped.lua;
+
   wrapper = {
       extraName ? ""
     # should contain all args but the binary. Can be either a string or list
@@ -24,6 +27,8 @@ let
     , withNodeJs ? false
     , withPerl ? false
     , rubyEnv ? null
+
+    # wether to create symlinks in $out/bin/vi(m) -> $out/bin/nvim
     , vimAlias ? false
     , viAlias ? false
 
@@ -45,6 +50,8 @@ let
   stdenv.mkDerivation (finalAttrs:
   let
 
+    finalPackdir = neovimUtils.packDir packpathDirs;
+
     rcContent = ''
       ${luaRcContent}
     '' + lib.optionalString (!isNull neovimRcContent) ''
@@ -57,10 +64,10 @@ let
       # vim accepts a limited number of commands so we join them all
           [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
-            # (lib.intersperse "|" hostProviderViml)
-          ] ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
-            "--add-flags" ''--cmd "set packpath^=${vimUtils.packDir packpathDirs}"''
-            "--add-flags" ''--cmd "set rtp^=${vimUtils.packDir packpathDirs}"''
+          ]
+          ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
+            "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
+            "--add-flags" ''--cmd "set rtp^=${finalPackdir}"''
           ]
           ;
 
@@ -160,7 +167,17 @@ let
       + ''
         rm $out/bin/nvim
         touch $out/rplugin.vim
-        makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${wrapperArgsStr}
+
+        echo "Looking for lua dependencies..."
+        source ${lua}/nix-support/utils.sh
+
+        _addToLuaPath "${finalPackdir}"
+
+        echo "LUA_PATH towards the end of packdir: $LUA_PATH"
+
+        makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${wrapperArgsStr} \
+            --prefix LUA_PATH ';' "$LUA_PATH" \
+            --prefix LUA_CPATH ';' "$LUA_CPATH"
       '';
 
     buildPhase = ''
@@ -184,11 +201,20 @@ let
       };
     };
 
-    meta = neovim-unwrapped.meta // {
+    meta = {
+      inherit (neovim-unwrapped.meta)
+        description
+        longDescription
+        homepage
+        mainProgram
+        license
+        maintainers
+        platforms;
+
       # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package
-      priority = (neovim-unwrapped.meta.priority or 0) - 1;
+      priority = (neovim-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
     };
   });
 in

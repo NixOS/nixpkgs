@@ -5,6 +5,7 @@
   fetchPypi,
   pkgs,
   pillow,
+  mesa,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
         --replace '"GL",' '"${pkgs.libGL}/lib/libGL${ext}",' \
         --replace '"GLU",' '"${pkgs.libGLU}/lib/libGLU${ext}",' \
         --replace '"GLX",' '"${pkgs.libglvnd}/lib/libGLX${ext}",' \
-        --replace '"glut",' '"${pkgs.freeglut}/lib/libglut${ext}",' \
+        --replace '"glut",' '"${pkgs.libglut}/lib/libglut${ext}",' \
         --replace '"GLESv1_CM",' '"${pkgs.libGL}/lib/libGLESv1_CM${ext}",' \
         --replace '"GLESv2",' '"${pkgs.libGL}/lib/libGLESv2${ext}",' \
         --replace '"gle",' '"${pkgs.gle}/lib/libgle${ext}",' \
@@ -40,14 +41,14 @@ buildPythonPackage rec {
       substituteInPlace OpenGL/platform/egl.py \
         --replace "('OpenGL','GL')" "('${pkgs.libGL}/lib/libOpenGL${ext}', '${pkgs.libGL}/lib/libGL${ext}')" \
         --replace "'GLU'," "'${pkgs.libGLU}/lib/libGLU${ext}'," \
-        --replace "'glut'," "'${pkgs.freeglut}/lib/libglut${ext}'," \
+        --replace "'glut'," "'${pkgs.libglut}/lib/libglut${ext}'," \
         --replace "'GLESv1_CM'," "'${pkgs.libGL}/lib/libGLESv1_CM${ext}'," \
         --replace "'GLESv2'," "'${pkgs.libGL}/lib/libGLESv2${ext}'," \
         --replace "'gle'," '"${pkgs.gle}/lib/libgle${ext}",' \
         --replace "'EGL'," "'${pkgs.libGL}/lib/libEGL${ext}',"
       substituteInPlace OpenGL/platform/darwin.py \
         --replace "'OpenGL'," "'${pkgs.libGL}/lib/libGL${ext}'," \
-        --replace "'GLUT'," "'${pkgs.freeglut}/lib/libglut${ext}',"
+        --replace "'GLUT'," "'${pkgs.libglut}/lib/libglut${ext}',"
     ''
     + ''
       # https://github.com/NixOS/nixpkgs/issues/76822
@@ -80,6 +81,6 @@ buildPythonPackage rec {
       liberal BSD-style Open-Source license.
     '';
     license = licenses.bsd3;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
   };
 }

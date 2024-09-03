@@ -5,7 +5,7 @@
   fetchFromGitHub,
   isPyPy,
   ordered-set,
-  python3,
+  python,
   setuptools,
   zstandard,
   wheel,
@@ -23,9 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-nKdCMgA92v9VsSgfktXDbSh3DyKsGlcTjpn0Y7u4rxU=";
   };
 
-  # default lto off for darwin
-  patches = [ ./darwin-lto.patch ];
-
   build-system = [
     setuptools
     wheel
@@ -40,7 +37,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    ${python3.interpreter} tests/basics/run_all.py search
+    ${python.interpreter} tests/basics/run_all.py search
 
     runHook postCheck
   '';

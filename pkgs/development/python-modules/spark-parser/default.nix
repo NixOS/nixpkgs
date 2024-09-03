@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  unittestCheckHook,
   click,
 }:
 
@@ -17,8 +17,14 @@ buildPythonPackage rec {
     sha256 = "0np2y4jcir4a4j18wws7yzkz2zj6nqhdhn41rpq8pyskg6wrgfx7";
   };
 
-  buildInputs = [ nose ];
   propagatedBuildInputs = [ click ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-v"
+  ];
 
   meta = with lib; {
     description = "Early-Algorithm Context-free grammar Parser";

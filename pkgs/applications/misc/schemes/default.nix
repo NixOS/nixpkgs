@@ -7,7 +7,6 @@
 , gtk4
 , gtksourceview5
 , libadwaita
-, libgee
 , libpanel
 , meson
 , ninja

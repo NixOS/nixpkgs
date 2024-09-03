@@ -43,6 +43,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+
     echo ${version} > .tag
 
     # tests are failing with: Unable to exchange encryption keys

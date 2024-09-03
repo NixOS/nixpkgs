@@ -73,6 +73,11 @@ buildPythonPackage rec {
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
+  disabledTests = [
+    # Fails due to changes in Numpy types
+    "mne.stats._adjacency.combine_adjacency"
+  ];
+
   pythonImportsCheck = [ "mne" ];
 
   meta = with lib; {

@@ -1,5 +1,5 @@
 { stdenv, lib, buildDunePackage, fetchurl, ocaml
-, result, alcotest, cohttp-lwt-unix, odoc, curl, cacert
+, result, alcotest, cohttp-lwt-unix, curl, cacert
 }:
 
 buildDunePackage rec {

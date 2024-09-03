@@ -6,7 +6,6 @@
 
   fetchzip,
   substitute,
-  pythonRelaxDepsHook,
   pytestCheckHook,
 
   setuptools,
@@ -20,13 +19,13 @@
   onnxruntime,
 }:
 let
-  version = "1.3.22";
+  version = "1.3.24";
 
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
-    rev = "v${version}";
-    hash = "sha256-8h4DFhnI9imr+bYQZdlrl8UKUdpwnGK+SGxLXSMmcag=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+iY+/IdOgsn+LPZQ4Kdzxuh31csQ7dyh5Zf552ne3N0=";
   };
 
   models = fetchzip {
@@ -72,8 +71,6 @@ buildPythonPackage {
     # Magic patch from upstream - what does this even do??
     echo "from .rapidocr_onnxruntime.main import RapidOCR, VisRes" > __init__.py
   '';
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   # Upstream expects the source files to be under rapidocr_onnxruntime/rapidocr_onnxruntime
   # instead of rapidocr_onnxruntime for the wheel to build correctly.

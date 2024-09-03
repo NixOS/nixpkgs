@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pragtical";
-  version = "3.4.0";
+  version = "3.4.2";
   pluginManagerVersion = "1.2.9";
 
   src = fetchFromGitHub {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
 
-    hash = "sha256-6feS9ougTlunkIr1WRUYieR4O8vHN1++VdfX5DreWFg=";
+    hash = "sha256-mYLYRyyKfjTCD8mi1KrQNLqwd8QX1wgpJtpWASQCLQU=";
   };
 
   nativeBuildInputs = [

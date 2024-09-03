@@ -11,6 +11,7 @@
   importlib-resources,
   iso3166,
   pycountry,
+  rstr,
 
   # optional-dependencies
   pydantic,
@@ -23,34 +24,35 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2024.4.0";
+  version = "2024.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1EV2oi2LBcjw2U7nKqdVUVDlFCzR8RqX5tVIciw1trg=";
+    hash = "sha256-XWdB0yGYKxz2PJVNbXpNnsG/SaF3ysZn8JjrDn/rZ7w=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     iso3166
     pycountry
+    rstr
   ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
     pytest-cov
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "schwifty" ];
 

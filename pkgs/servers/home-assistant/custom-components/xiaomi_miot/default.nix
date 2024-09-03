@@ -12,13 +12,13 @@
 buildHomeAssistantComponent rec {
   owner = "al-one";
   domain = "xiaomi_miot";
-  version = "0.7.18";
+  version = "0.7.20";
 
   src = fetchFromGitHub {
     owner = "al-one";
     repo = "hass-xiaomi-miot";
     rev = "v${version}";
-    hash = "sha256-/Zn2jEjwkCHiz48nVjKEPcCpPVajLaZ81DCTNpx1vbk=";
+    hash = "sha256-wR5N6a+g4TE9cRv1k4zExCWiui7ZHwK54j0oUxnhcR0=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildHomeAssistantComponent rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    changelog = "https://github.com/al-one/hass-xiaomi-miot/releases/tag/${version}";
+    changelog = "https://github.com/al-one/hass-xiaomi-miot/releases/tag/v${version}";
     description = "Automatic integrate all Xiaomi devices to HomeAssistant via miot-spec, support Wi-Fi, BLE, ZigBee devices";
     homepage = "https://github.com/al-one/hass-xiaomi-miot";
     maintainers = with maintainers; [ azuwis ];

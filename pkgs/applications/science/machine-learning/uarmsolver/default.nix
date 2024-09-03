@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uarmsolver";
-  version = "0.2.6";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
    owner = "firefly-cpp";
    repo = "uARMSolver";
    rev = version;
-   sha256 = "sha256-E8hc7qoIDaNERMUhVlh+iBvQX1odzd/szeMSh8TCNFo=";
+   sha256 = "sha256-IMlh6Y5iVouMZatR1uxw0gUNZBdh2qm56s+GEjcr1+M=";
   };
 
   nativeBuildInputs = [ cmake ];

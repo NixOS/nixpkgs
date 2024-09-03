@@ -6,7 +6,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   cairo,
   ffmpeg,
@@ -191,7 +190,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -273,6 +271,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ManimCommunity/manim";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

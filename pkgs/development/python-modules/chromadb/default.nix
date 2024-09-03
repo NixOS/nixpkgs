@@ -33,7 +33,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   rustc,
@@ -47,11 +46,12 @@
   typing-extensions,
   uvicorn,
   zstd,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.3";
+  version = "0.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -60,26 +60,31 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-czDL2b+Jj7mrYZCTfnaZArkOHBaWyTV0BTE2wvykHps=";
+    hash = "sha256-e6ZctUFeq9hHXWaxGdVTiqFpwaU7A+EKn2EdQPI7DHE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-eTVT1yowuDsajjceWojdUdX466FKneUt1i5QipBFdp4=";
+    hash = "sha256-3FmnQEpknYNzI3WlQ3kc8qa4LFcn1zpxKDbkATU7/48=";
   };
 
-  pythonRelaxDeps = [ "orjson" ];
+  pythonRelaxDeps = [
+    "chroma-hnswlib"
+    "orjson"
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     cargo
     pkg-config
     protobuf
-    pythonRelaxDepsHook
     rustc
     rustPlatform.cargoSetupHook
-    setuptools
-    setuptools-scm
   ];
 
   buildInputs = [
@@ -87,7 +92,7 @@ buildPythonPackage rec {
     zstd
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     build
     chroma-hnswlib
@@ -139,8 +144,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # flaky / timing sensitive
+    # Tests are laky / timing sensitive
     "test_fastapi_server_token_authn_allows_when_it_should_allow"
+    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
   ];
 
   disabledTestPaths = [
@@ -155,6 +161,10 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
+  };
 
   meta = with lib; {
     description = "AI-native open-source embedding database";

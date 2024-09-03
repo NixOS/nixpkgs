@@ -18,6 +18,7 @@ assert if type == "sdk" then packages != null else true;
 , libuuid
 , zlib
 , libkrb5
+, openssl
 , curl
 , lttng-ust_2_12
 , testers
@@ -51,6 +52,21 @@ let
   sigtool = callPackage ./sigtool.nix {};
   signAppHost = callPackage ./sign-apphost.nix {};
 
+  hasILCompiler =
+    lib.versionAtLeast version (if targetRid == "osx-arm64" then "8" else "7");
+
+  extraTargets = writeText "extra.targets" (''
+    <Project>
+  '' + lib.optionalString hasILCompiler ''
+      <ItemGroup>
+        <CustomLinkerArg Include="-Wl,-rpath,'${lib.makeLibraryPath [ icu zlib openssl ]}'" />
+      </ItemGroup>
+  '' + lib.optionalString stdenv.isDarwin ''
+      <Import Project="${signAppHost}" />
+  '' + ''
+    </Project>
+  '');
+
 in
 mkCommon type rec {
   inherit pname version;
@@ -70,6 +86,7 @@ mkCommon type rec {
     icu
     libkrb5
     curl
+    xmlstarlet
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
   src = fetchurl (
@@ -79,15 +96,15 @@ mkCommon type rec {
 
   sourceRoot = ".";
 
-  postPatch = if type == "sdk" && stdenv.isDarwin then ''
+  postPatch = if type == "sdk" then (''
     xmlstarlet ed \
       --inplace \
       -s //_:Project -t elem -n Import \
-      -i \$prev -t attr -n Project -v "${signAppHost}" \
+      -i \$prev -t attr -n Project -v "${extraTargets}" \
       sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
-
+  '' + lib.optionalString stdenv.isDarwin ''
     codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
-  '' else null;
+  '') else null;
 
   dontPatchELF = true;
   noDumpEnvVars = true;
@@ -135,7 +152,7 @@ mkCommon type rec {
   '';
 
   passthru = {
-    inherit icu;
+    inherit icu hasILCompiler;
   } // lib.optionalAttrs (type == "sdk") {
     packages = mkNugetDeps {
       name = "${pname}-${version}-deps";
@@ -144,9 +161,7 @@ mkCommon type rec {
 
     updateScript =
       let
-        majorVersion =
-          with lib;
-          concatStringsSep "." (take 2 (splitVersion version));
+        majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
       in
       writeShellScript "update-dotnet-${majorVersion}" ''
         pushd pkgs/development/compilers/dotnet

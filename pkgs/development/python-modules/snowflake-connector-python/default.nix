@@ -19,7 +19,6 @@
   pyjwt,
   pyopenssl,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   requests,
   setuptools,
@@ -31,14 +30,15 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.8.1";
+  version = "3.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-m8zhoNniEs7s9F7c6gLRjiBalfiMwEcK2kqLrLVCR9U=";
+    pname = "snowflake_connector_python";
+    inherit version;
+    hash = "sha256-5Dt9S0SI7Nl7W/YlOcxQLX6E2CFcVH6utN2SjAtyErk=";
   };
 
   build-system = [
@@ -47,7 +47,6 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     asn1crypto
@@ -91,6 +90,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
     changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

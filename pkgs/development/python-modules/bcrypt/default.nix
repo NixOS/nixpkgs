@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.1.2";
+  version = "4.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MzE6EgCjrpC3VYfOrFArBIuED8aef3oJBbX4f6x6Elg=";
+    hash = "sha256-LuFd10n1lS/j8EMND/a3QILhWcUDMqFBPVG1aJzwZiM=";
   };
 
   cargoRoot = "src/_bcrypt";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-fTD1AKvyeni5ukYjK53gueKLey+rcIUjW/0R289xeb0=";
+    hash = "sha256-Uag1pUuis5lpnus2p5UrMLa4HP7VQLhKxR5TEMfpK0s=";
   };
 
   nativeBuildInputs = [

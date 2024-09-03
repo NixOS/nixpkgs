@@ -32,15 +32,15 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [
-      pkgs.gnome.gnome-settings-daemon
+      pkgs.gnome-settings-daemon
     ];
 
     services.udev.packages = [
-      pkgs.gnome.gnome-settings-daemon
+      pkgs.gnome-settings-daemon
     ];
 
     systemd.packages = [
-      pkgs.gnome.gnome-settings-daemon
+      pkgs.gnome-settings-daemon
     ];
 
     systemd.user.targets."gnome-session-x11-services".wants = [

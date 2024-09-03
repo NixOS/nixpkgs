@@ -1,5 +1,4 @@
-{ clang
-, cmake
+{ cmake
 , CoreFoundation
 , fetchFromGitHub
 , fetchurl
@@ -18,12 +17,11 @@
 , stdenv
 , SystemConfiguration
 , testers
-, unzip
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "4.6.0";
+  version = "5.3.0";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -33,12 +31,12 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-uMrVnVvYXcY2Axn3ycsf+Pwur3HYGoOYjjUkGS5c3l4=";
+    hash = "sha256-wIj+YabyUrgLjWCfjCAH/Xb8jUG6ss+5SwnE2M82a+4=";
   };
 
   patches = [
     ./use-system-sqlite.patch
-    ./use-c-kzg-from-crates-io.patch
+    ./fix-dep-lazy_static.patch
   ];
 
   postPatch = ''
@@ -48,12 +46,9 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "amcl-0.3.0" = "sha256-kc8k/ls4W0TwFBsRcyyotyz8ZBEjsZXHeJnJtsnW/LM=";
-      "discv5-0.4.0" = "sha256-GKAk9Du6fy0ldeBEwPueDbVPhyNxdKNROKpMJvR/OTc=";
-      "futures-bounded-0.2.3" = "sha256-/LbD+je9P1lPnXMJVDqRQHJziQPXPvSDmQadTfsQ5I8=";
-      "libmdbx-0.1.4" = "sha256-NMsR/Wl1JIj+YFPyeMMkrJFfoS07iEAKEQawO89a+/Q=";
+      "libmdbx-0.1.4" = "sha256-ONp4uPkVCN84MObjXorCZuSjnM6uFSMXK1vdJiX074o=";
       "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
-      "warp-0.3.6" = "sha256-knDt2aw/PJ0iabhKg+okwwnEzCY+vQVhE7HKCTM6QbE=";
+      "quick-protobuf-0.8.1" = "sha256-dgePLYCeoEZz5DGaLifhf3gEIPaL7XB0QT9wRKY8LJg=";
     };
   };
 

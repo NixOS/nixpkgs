@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: b4a408704631fd0a0a4587f1f1a0017bcec9fb45
-  ref: refs/tags/6.4.15
+  revision: 1d1fe1ccc7a339d4800cf20b8301d1ff1f56cd9b
+  ref: refs/tags/6.4.24
   specs:
-    metasploit-framework (6.4.15)
+    metasploit-framework (6.4.24)
       aarch64
       abbrev
       actionpack (~> 7.0.0)
@@ -31,6 +31,7 @@ GIT
       faraday (= 2.7.11)
       faraday-retry
       faye-websocket
+      ffi (< 1.17.0)
       filesize
       getoptlong
       hrr_rb_ssh-ed25519
@@ -44,13 +45,14 @@ GIT
       metasploit-model
       metasploit-payloads (= 2.0.166)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.28)
+      metasploit_payloads-mettle (= 1.0.31)
       mqtt
       msgpack (~> 1.6.0)
       mutex_m
       nessus_rest
       net-imap
       net-ldap
+      net-sftp
       net-smtp
       net-ssh
       network_interface
@@ -280,7 +282,7 @@ GEM
       railties (~> 7.0)
       recog
       webrick
-    metasploit_payloads-mettle (1.0.28)
+    metasploit_payloads-mettle (1.0.31)
     method_source (1.1.0)
     mini_portile2 (2.8.6)
     minitest (5.23.1)
@@ -297,6 +299,8 @@ GEM
     net-ldap (0.19.0)
     net-protocol (0.2.2)
       timeout
+    net-sftp (4.0.0)
+      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
     net-ssh (7.2.3)
@@ -481,4 +485,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.5.9
+   2.5.16

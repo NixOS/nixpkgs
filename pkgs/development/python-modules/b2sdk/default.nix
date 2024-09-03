@@ -6,6 +6,7 @@
   glibcLocales,
   importlib-metadata,
   logfury,
+  annotated-types,
   packaging,
   pdm-backend,
   pyfakefs,
@@ -13,7 +14,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tqdm,
   typing-extensions,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,17 +30,17 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Duva6rFYtMAfMYb2Ze8k3jIX8Ld8u4zdl7WXDbS0o64=";
+    hash = "sha256-SaoQzP7vtzVWmkUTw0vCeneeSMTmBTIr5kiMXGcgm9g=";
   };
 
   build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [ "setuptools" ];
 
   dependencies =
     [
+      annotated-types
       packaging
       logfury
       requests
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Zope Component Architecture";
     changelog = "https://github.com/zopefoundation/zope.component/blob/${version}/CHANGES.rst";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

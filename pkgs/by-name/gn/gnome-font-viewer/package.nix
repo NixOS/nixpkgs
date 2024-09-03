@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch2
 , meson
 , ninja
 , gettext
@@ -21,9 +22,17 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/gnome-font-viewer-${version}.tar.xz";
     hash = "sha256-WS9AHkhdAswETUh7tcjgTJYdpoViFnaKWfH/mL0tU3w=";
   };
+
+  patches = lib.optionals stdenv.cc.isClang [
+    # Fixes an incompatible function pointer error when building with clang 16
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gnome-font-viewer/-/commit/565d795731471c27542bb9ee60820a2d0d15534e.diff";
+      hash = "sha256-8dgOVTx6ZbvXROlIWTZU2xNWJ11LlJykRs699cgZqow=";
+    })
+  ];
 
   doCheck = true;
 

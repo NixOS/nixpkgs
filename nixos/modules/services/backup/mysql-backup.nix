@@ -20,7 +20,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c ${cfg.gzipOptions} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -76,6 +76,14 @@ in
         type = types.bool;
         description = ''
           Whether to create database dump in a single transaction
+        '';
+      };
+
+      gzipOptions = mkOption {
+        default = "--no-name --rsyncable";
+        type = types.str;
+        description = ''
+          Command line options to use when invoking `gzip`.
         '';
       };
     };

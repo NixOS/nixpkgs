@@ -144,5 +144,9 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     logger.wait_until_succeeds(
       "journalctl -o cat -u alertmanager-webhook-logger.service | grep '\"alertname\":\"InstanceDown\"'"
     )
+
+    logger.log(logger.succeed("systemd-analyze security alertmanager-webhook-logger.service | grep -v '✓'"))
+
+    alertmanager.log(alertmanager.succeed("systemd-analyze security alertmanager.service | grep -v '✓'"))
   '';
 })

@@ -1,5 +1,5 @@
 {
-  addOpenGLRunpath,
+  addDriverRunpath,
   allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; },
   allowedPatterns ? rec {
     # This config is just an example.
@@ -12,7 +12,7 @@
     ];
     # It exposes these paths in the sandbox:
     nvidia-gpu.paths = [
-      addOpenGLRunpath.driverLink
+      addDriverRunpath.driverLink
       "/dev/dri"
       "/dev/nvidia*"
     ];

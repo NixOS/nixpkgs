@@ -7,7 +7,7 @@ let
   cfg = config.services.xserver.desktopManager.cinnamon;
   serviceCfg = config.services.cinnamon;
 
-  nixos-gsettings-overrides = pkgs.cinnamon.cinnamon-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.cinnamon-gsettings-overrides.override {
     extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
@@ -51,7 +51,7 @@ in
 
     environment.cinnamon.excludePackages = mkOption {
       default = [];
-      example = literalExpression "[ pkgs.cinnamon.blueberry ]";
+      example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
     };
@@ -60,23 +60,23 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+        theme = mkIf (notExcluded pkgs.mint-themes) {
           name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-themes;
+          package = mkDefault pkgs.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+        iconTheme = mkIf (notExcluded pkgs.mint-y-icons) {
           name = mkDefault "Mint-Y-Sand";
-          package = mkDefault pkgs.cinnamon.mint-y-icons;
+          package = mkDefault pkgs.mint-y-icons;
         };
-        cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
+        cursorTheme = mkIf (notExcluded pkgs.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
-          package = mkDefault pkgs.cinnamon.mint-cursor-themes;
+          package = mkDefault pkgs.mint-cursor-themes;
         };
       };
 
@@ -101,7 +101,7 @@ in
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-      services.dbus.packages = with pkgs.cinnamon; [
+      services.dbus.packages = with pkgs; [
         cinnamon-common
         cinnamon-screensaver
         nemo-with-extensions
@@ -134,7 +134,7 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
+      environment.systemPackages = with pkgs; ([
         desktop-file-utils
 
         # common-files
@@ -200,7 +200,7 @@ in
         })
       ];
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -224,7 +224,7 @@ in
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
-        ubuntu_font_family # required for default theme
+        ubuntu-classic # required for default theme
       ];
     })
 
@@ -233,7 +233,7 @@ in
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator

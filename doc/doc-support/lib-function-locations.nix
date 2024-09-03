@@ -1,13 +1,14 @@
-{ pkgs, nixpkgs ? { }, libsets }:
+{ nixpkgsPath, revision, libsetsJSON }:
 let
-  revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.rev or "master");
+  lib = import (nixpkgsPath + "/lib");
+  libsets = builtins.fromJSON libsetsJSON;
 
   libDefPos = prefix: set:
     builtins.concatMap
       (name: [{
         name = builtins.concatStringsSep "." (prefix ++ [name]);
         location = builtins.unsafeGetAttrPos name set;
-      }] ++ nixpkgsLib.optionals
+      }] ++ lib.optionals
         (builtins.length prefix == 0 && builtins.isAttrs set.${name})
         (libDefPos (prefix ++ [name]) set.${name})
       ) (builtins.attrNames set);
@@ -19,8 +20,6 @@ let
         functions = libDefPos [] toplib.${subsetname};
       })
       (builtins.map (x: x.name) libsets);
-
-  nixpkgsLib = pkgs.lib;
 
   flattenedLibSubset = { subsetname, functions }:
   builtins.map
@@ -38,13 +37,13 @@ let
       substr = builtins.substring prefixLen filenameLen filename;
       in substr;
 
-  removeNixpkgs = removeFilenamePrefix (builtins.toString pkgs.path);
+  removeNixpkgs = removeFilenamePrefix (builtins.toString nixpkgsPath);
 
   liblocations =
     builtins.filter
       (elem: elem.value != null)
-      (nixpkgsLib.lists.flatten
-        (locatedlibsets nixpkgsLib));
+      (lib.lists.flatten
+        (locatedlibsets lib));
 
   fnLocationRelative = { name, value }:
     {
@@ -72,4 +71,4 @@ let
     relativeLocs);
 
 in
-pkgs.writeText "locations.json" (builtins.toJSON jsonLocs)
+jsonLocs

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mollysocket";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "mollyim";
     repo = "mollysocket";
     rev = version;
-    hash = "sha256-wZIP4mmIrg8D70C8jLjPC/+TlOT+gP7YOkM1Ey44Tvk=";
+    hash = "sha256-vE5J4BKYmVqtowfxDDTOwFKws7phYRm9xKFPiDNuNn4=";
   };
 
-  cargoHash = "sha256-3yTbwbgOIm69Nf8stPMMhgR6g0sfenycx07by8AM01M=";
+  cargoHash = "sha256-s/EhX5o6XuUqcrqhXY274MyWhRukgetfIZKQ4XNlq6Y=";
 
   nativeBuildInputs = [
     pkg-config

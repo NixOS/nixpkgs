@@ -1,26 +1,18 @@
-From 30b5391c3f20180fe7427fe179ba26f846200d96 Mon Sep 17 00:00:00 2001
+From fa705235cafbeb4a016bdcb0067218b29506eb84 Mon Sep 17 00:00:00 2001
 From: OPNA2608 <opna2608@protonmail.com>
-Date: Mon, 3 Jun 2024 20:50:03 +0200
+Date: Fri, 19 Jul 2024 16:22:07 +0200
 Subject: [PATCH] Unset QT_QPA_PLATFORMTHEME
 
 gtk3 value breaks Lomiri startup
 ---
- lomiri-session | 2 ++
- 1 file changed, 2 insertions(+)
+ lomiri-session.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/lomiri-session b/lomiri-session
-index 9d68249..b103840 100755
---- a/lomiri-session
-+++ b/lomiri-session
-@@ -47,6 +47,7 @@ fi
- 
- # Set some envs
- export QT_QPA_PLATFORM=wayland
-+export QT_QPA_PLATFORMTHEME=
- export QT_IM_MODULE=maliit
- export MALIIT_FORCE_DBUS_CONNECTION=1
- export UITK_ICON_THEME=suru
-@@ -55,6 +56,7 @@ dbus-update-activation-environment --systemd MALIIT_FORCE_DBUS_CONNECTION=1
+diff --git a/lomiri-session.in b/lomiri-session.in
+index 50dd4cb..ffc20c4 100755
+--- a/lomiri-session.in
++++ b/lomiri-session.in
+@@ -55,6 +55,7 @@ dbus-update-activation-environment --systemd MALIIT_FORCE_DBUS_CONNECTION=1
  dbus-update-activation-environment --systemd QT_IM_MODULE=maliit
  dbus-update-activation-environment --systemd GTK_IM_MODULE=maliit
  dbus-update-activation-environment --systemd QT_QPA_PLATFORM=wayland

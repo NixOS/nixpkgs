@@ -1,21 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, wrapQtAppsHook
-, wrapGAppsHook3
-, alsa-lib
-, gtk3
-, libcanberra
-, libgudev
-, librsvg
-, poppler
-, pulseaudio
-, gdk-pixbuf-xlib
-, coreutils
-, dbus
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  alsa-lib,
+  gtk3,
+  libcanberra,
+  libgudev,
+  librsvg,
+  poppler,
+  pulseaudio,
+  gdk-pixbuf-xlib,
+  coreutils,
+  dbus,
 }:
 
 buildGoModule rec {

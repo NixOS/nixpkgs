@@ -7,7 +7,6 @@
   libusb1,
   libsoup_3,
   webkitgtk_4_1,
-  writeShellScript,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -26,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-    hash = "sha256-WiazQD40dG72B9tl4DwcMJgoVEl/Dgq55AHgeqK+sq8=";
+    hash = "sha256-9umi9QWWSG0W3w9d7eRwtZHUraqInkqJbE+Lkdn3TU8=";
   };
 
   nativeBuildInputs = [
@@ -50,8 +49,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -m755 -D keymapp "$out/bin/${pname}"
-    install -Dm644 icon.png "$out/share/pixmaps/${pname}.png"
+    install -m755 -D keymapp "$out/bin/keymapp"
+    install -Dm644 icon.png "$out/share/pixmaps/keymapp.png"
 
     runHook postInstall
   '';

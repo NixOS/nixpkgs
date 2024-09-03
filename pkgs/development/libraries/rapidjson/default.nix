@@ -1,65 +1,79 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, pkg-config
 , cmake
+, doxygen
+, graphviz
 , gtest
 , valgrind
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rapidjson";
-  version = "1.1.0";
+  version = "unstable-2024-04-09";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = "rapidjson";
-    rev = "v${version}";
-    sha256 = "1jixgb8w97l9gdh3inihz7avz7i770gy2j2irvvlyrq3wi41f5ab";
+    rev = "ab1842a2dae061284c0a62dca1cc6d5e7e37e346";
+    hash = "sha256-kAGVJfDHEUV2qNR1LpnWq3XKBJy4hD3Swh6LX5shJpM=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/rapidjson/raw/48402da9f19d060ffcd40bf2b2e6987212c58b0c/f/rapidjson-1.1.0-c++20.patch";
-      sha256 = "1qm62iad1xfsixv1li7qy475xc7gc04hmi2q21qdk6l69gk7mf82";
-    })
-    (fetchpatch {
-      name = "do-not-include-gtest-src-dir.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch?id=9e5eefc7a5fcf5938a8dc8a3be8c75e9e6809909";
-      hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
-    })
-    # One of these three tests reports memcpy overlap after update to glibc-2.38
-    ./test-skip-valgrind.diff
+    ./use-nixpkgs-gtest.patch
+    # https://github.com/Tencent/rapidjson/issues/2214
+    ./suppress-valgrind-failures.patch
   ];
 
   postPatch = ''
-    find -name CMakeLists.txt | xargs \
-      sed -i -e "s/-Werror//g" -e "s/-march=native//g"
+    for f in doc/Doxyfile.*; do
+      substituteInPlace $f \
+        --replace-fail "WARN_IF_UNDOCUMENTED   = YES" "WARN_IF_UNDOCUMENTED   = NO"
+    done
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ];
-
-  # for tests, adding gtest to checkInputs does not work
-  # https://github.com/NixOS/nixpkgs/pull/212200
-  buildInputs = [ gtest ];
-  cmakeFlags = [
-    "-DGTEST_SOURCE_DIR=${gtest.dev}/include"
-
-    # Build rapidjson with std=c++17 so gtest 1.13.0+ works
-    # https://github.com/NixOS/nixpkgs/pull/282245#issuecomment-1951796902
-    "-DRAPIDJSON_BUILD_CXX11=OFF"
-    "-DRAPIDJSON_BUILD_CXX17=ON"
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
   ];
 
-  nativeCheckInputs = [ valgrind ];
-  doCheck = !stdenv.hostPlatform.isStatic && !stdenv.isDarwin;
+  buildInputs = [
+    gtest
+  ];
+
+  strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "RAPIDJSON_BUILD_DOC" true)
+    (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" true)
+    (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" true)
+    # gtest 1.13+ requires C++14 or later.
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" false)
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" true)
+    # Prevent -march=native
+    (lib.cmakeBool "RAPIDJSON_ENABLE_INSTRUMENTATION_OPT" false)
+    # Disable -Werror by using build type specific flags, which are
+    # added after general CMAKE_CXX_FLAGS.
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS_RELEASE" "-Wno-error")
+  ];
+
+  doCheck = !(stdenv.hostPlatform.isStatic || stdenv.isDarwin);
+
+  nativeCheckInputs = [
+    valgrind
+  ];
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda Madouura tobim ];
   };
-}
+})

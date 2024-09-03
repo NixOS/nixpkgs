@@ -16,14 +16,14 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    python311 = {
+    python312 = {
       sourceVersion = {
         major = "3";
-        minor = "11";
-        patch = "9";
+        minor = "12";
+        patch = "5";
         suffix = "";
       };
-      hash = "sha256-mx6JZSP8UQaREmyGRAbZNgo9Hphqy9pZzaV7Wr2kW4c=";
+      hash = "sha256-+oouEsXmILCfU+ZbzYdVDS5aHi4Ev4upkdzFUROHY5c=";
     };
   };
 
@@ -68,24 +68,24 @@ in {
     inherit passthruFun;
   };
 
-  python311 = callPackage ./cpython ({
+  python311 = callPackage ./cpython {
     self = __splicedPackages.python311;
-    inherit (darwin) configd;
-    inherit passthruFun;
-  } // sources.python311);
-
-  python312 = callPackage ./cpython {
-    self = __splicedPackages.python312;
     sourceVersion = {
       major = "3";
-      minor = "12";
-      patch = "3";
+      minor = "11";
+      patch = "9";
       suffix = "";
     };
-    hash = "sha256-Vr/vH9/BIhzmcg5DpmHj60F4XdkUzplpjYx4lq9L2qE=";
+    hash = "sha256-mx6JZSP8UQaREmyGRAbZNgo9Hphqy9pZzaV7Wr2kW4c=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
+
+  python312 = callPackage ./cpython ({
+    self = __splicedPackages.python312;
+    inherit (darwin) configd;
+    inherit passthruFun;
+  } // sources.python312);
 
   python313 = callPackage ./cpython {
     self = __splicedPackages.python313;
@@ -93,9 +93,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "b3";
+      suffix = "rc1";
     };
-    hash = "sha256-O+CUrQixHcKgZUY1JCOceNyfKzQrAdzU4eYG27xceKU=";
+    hash = "sha256-Z4uIR3XuwCJNUVn6kAh5AgusoqNs6UL9lf6/oa20pr0=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -123,7 +123,7 @@ in {
     enableOptimizations = false;
     enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python311)).overrideAttrs(old: {
+  } // sources.python312)).overrideAttrs(old: {
     # TODO(@Artturin): Add this to the main cpython expr
     strictDeps = true;
     pname = "python3-minimal";

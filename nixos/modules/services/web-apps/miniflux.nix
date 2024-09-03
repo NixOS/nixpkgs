@@ -49,7 +49,8 @@ in
       };
 
       adminCredentialsFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
         description = ''
           File containing the ADMIN_USERNAME and
           ADMIN_PASSWORD (length >= 6) in the format of
@@ -61,11 +62,16 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
+        message = "services.miniflux.adminCredentialsFile must be set if services.miniflux.config.CREATE_ADMIN is 1";
+      }
+    ];
     services.miniflux.config = {
       LISTEN_ADDR = mkDefault defaultAddress;
       DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
       RUN_MIGRATIONS = 1;
-      CREATE_ADMIN = 1;
+      CREATE_ADMIN = lib.mkDefault 1;
       WATCHDOG = 1;
     };
 
@@ -103,7 +109,7 @@ in
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
         RuntimeDirectoryMode = "0750";
-        EnvironmentFile = cfg.adminCredentialsFile;
+        EnvironmentFile = lib.mkIf (cfg.adminCredentialsFile != null) cfg.adminCredentialsFile;
         WatchdogSec = 60;
         WatchdogSignal = "SIGKILL";
         Restart = "always";

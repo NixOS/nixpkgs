@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   bleach,
   bokeh,
   param,
@@ -31,7 +30,6 @@ buildPythonPackage rec {
     python = "py3";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "bokeh" ];
 
@@ -59,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

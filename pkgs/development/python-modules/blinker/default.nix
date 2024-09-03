@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "blinker";
-  version = "1.7.0";
+  version = "1.8.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5oIP9vpOTR2OJ0fCKDdJw/VH5P7hErmFVc3NrjKZYYI=";
+    hash = "sha256-j3ewnTv3x5XpaelIbznCxenDnU7gdCS+K8WU7OlkLYM=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Fast Python in-process signal/event dispatching system";
     homepage = "https://github.com/pallets-eco/blinker/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

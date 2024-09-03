@@ -8,7 +8,7 @@
 
 let
   pname = "mov-cli";
-  version = "1.5.7";
+  version = "4.4.8";
 in
 python3.pkgs.buildPythonPackage {
   inherit pname version;
@@ -17,26 +17,30 @@ python3.pkgs.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "mov-cli";
     repo = "mov-cli";
-    rev = version;
-    hash = "sha256-OJhZtrSB5rjPY80GkTSU82hkcBgFYpW7Rc24BlBH7CE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MpSwSYsHsrG7ceXXJnFMg1bgadOhe23eNVCNMxlY0pQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     click
     colorama
+    deprecation
     httpx
+    inquirer
     krfzf-py
     lxml
     poetry-core
     pycrypto
+    python-decouple
     setuptools
     six
+    thefuzz
     tldextract
-  ];
-
-  nativeBuildInputs = [
-    python3.pkgs.pythonRelaxDepsHook
+    toml
+    typer
+    unidecode
+    (callPackage ./mov-cli-test.nix {})
   ];
 
   pythonRelaxDeps = [

@@ -1,13 +1,18 @@
 {
   lib,
-  bluepy,
   buildPythonPackage,
-  cryptography,
   fetchPypi,
-  pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  bluepy,
+  cryptography,
+
+  # checks
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +28,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "cryptography" ];
 

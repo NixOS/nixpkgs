@@ -6,7 +6,6 @@
   fetchFromGitHub,
   iterfzf,
   poetry-core,
-  pythonRelaxDepsHook,
   pythonOlder,
   pyyaml,
   rich,
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "typer-shell";
-  version = "0.1.9";
+  version = "0.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "FergusFettes";
     repo = "typer-shell";
     rev = "refs/tags/v${version}";
-    hash = "sha256-y66Je9E0IWDuGrHtd1D8zP7E0EVfvrF3KOlA2dRFU+s=";
+    hash = "sha256-pxi4FGxDRMcW4q6h4lQzqGPLhdcfElMaR6aZV85h2Os=";
   };
 
   pythonRelaxDeps = [
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     click

@@ -1,28 +1,32 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, testers
+, bibtex-tidy
 }:
 
 buildNpmPackage rec {
   pname = "bibtex-tidy";
-  version = "1.11.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "FlamingTempura";
     repo = "bibtex-tidy";
-    rev = "v${version}";
-    hash = "sha256-VjQuMQr3OJgjgX6FdH/C4mehf8H7XjDZ9Rxs92hyQVo=";
+    rev = "9658d907d990fd80d25ab37d9aee120451bf5d19";
+    hash = "sha256-4TrEabxIVB0Vu/E1ClKwk7lXcnPgoVh3RjLYsPwH2yQ=";
   };
 
-  patches = [
-    # downloads Google fonts during `npm run build`
-    ./remove-google-font-loader.patch
-  ];
-
-  npmDepsHash = "sha256-u2lyG95F00S/bvsVwu0hIuUw2UZYQWFakCF31LIijSU=";
+  npmDepsHash = "sha256-VzzHGmW7Rb6dEdBxd84GXKSPasqfTkn+5rNw9C2lt8k=";
 
   env = {
     PUPPETEER_SKIP_DOWNLOAD = true;
+  };
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = bibtex-tidy;
+      version = "v${version}";
+    };
   };
 
   meta = {

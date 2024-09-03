@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "py_slvs";
     inherit version;
-    sha256 = "sha256-U6T/aXy0JTC1ptL5oBmch0ytSPmIkRA8XOi31NpArnI=";
+    hash = "sha256-U6T/aXy0JTC1ptL5oBmch0ytSPmIkRA8XOi31NpArnI=";
   };
 
   pyproject = true;

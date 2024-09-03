@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mainProgram = "ctypes.sh";
     homepage = "https://github.com/taviso/ctypes.sh";
     license = licenses.mit;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

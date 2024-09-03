@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "numworks-epsilon";
-  version = "22.2.0";
+  version = "23.2.3";
 
   src = fetchFromGitHub {
     owner = "numworks";
     repo = "epsilon";
     rev = version;
-    hash = "sha256-E2WaXTn8+Ky9kdZxvQmEt63Ggo6Ns0fZ0Za+rQGIMSg=";
+    hash = "sha256-w9ddcULE1MrGnYcXA0qOg1elQv/eBhcXqhMSjWT3Bkk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

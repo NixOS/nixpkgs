@@ -6,7 +6,6 @@
   backendStdenv,
   fetchurl,
   lib,
-  lndir,
   markForCudatoolkitRootHook,
   flags,
   stdenv,
@@ -290,41 +289,22 @@ backendStdenv.mkDerivation (finalAttrs: {
     "libcuda.so.*"
   ];
 
-  # The out output leverages the same functionality which backs the `symlinkJoin` function in
-  # Nixpkgs:
-  # https://github.com/NixOS/nixpkgs/blob/d8b2a92df48f9b08d68b0132ce7adfbdbc1fbfac/pkgs/build-support/trivial-builders/default.nix#L510
-  #
-  # That should allow us to emulate "fat" default outputs without having to actually create them.
-  #
-  # It is important that this run after the autoPatchelfHook, otherwise the symlinks in out will reference libraries in lib, creating a circular dependency.
-  postPhases = [ "postPatchelf" ];
+  # _multioutPropagateDev() currently expects a space-separated string rather than an array
+  preFixup = ''
+    export propagatedBuildOutputs="''${propagatedBuildOutputs[@]}"
+  '';
 
-  # For each output, create a symlink to it in the out output.
-  # NOTE: We must recreate the out output here, because the setup hook will have deleted it if it was empty.
+  # Propagate all outputs, including `static`
+  propagatedBuildOutputs = builtins.filter (x: x != "dev") finalAttrs.outputs;
+
+  # Kept in case overrides assume postPhases have already been defined
+  postPhases = [ "postPatchelf" ];
   postPatchelf = ''
-    mkdir -p "$out"
-    for output in $(getAllOutputNames); do
-      if [[ "$output" != "out" ]]; then
-        ${meta.getExe lndir} "''${!output}" "$out"
-      fi
-    done
+    true
   '';
 
   # Make the CUDA-patched stdenv available
   passthru.stdenv = backendStdenv;
-
-  # Setting propagatedBuildInputs to false will prevent outputs known to the multiple-outputs
-  # from depending on `out` by default.
-  # https://github.com/NixOS/nixpkgs/blob/2920b6fc16a9ed5d51429e94238b28306ceda79e/pkgs/build-support/setup-hooks/multiple-outputs.sh#L196
-  # Indeed, we want to do the opposite -- fat "out" outputs that contain all the other outputs.
-  propagatedBuildOutputs = false;
-
-  # By default, if the dev output exists it just uses that.
-  # However, because we disabled propagatedBuildOutputs, dev doesn't contain libraries or
-  # anything of the sort. To remedy this, we set outputSpecified to true, and use
-  # outputsToInstall, which tells Nix which outputs to use when the package name is used
-  # unqualified (that is, without an explicit output).
-  outputSpecified = true;
 
   meta = {
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
@@ -343,8 +323,5 @@ backendStdenv.mkDerivation (finalAttrs: {
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
     license = licenses.unfree;
     maintainers = teams.cuda.members;
-    # Force the use of the default, fat output by default (even though `dev` exists, which
-    # causes Nix to prefer that output over the others if outputSpecified isn't set).
-    outputsToInstall = [ "out" ];
   };
 })

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   flit-core,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.38";
+  version = "1.40";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "emborg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dK/6y1cjegomiy3fta2grUm4T0ZrylmstXfkJo4mDCE=";
+    hash = "sha256-1cgTKYt2/HiPxsar/nIr4kk2dRMYCJZQilhr+zs1AEg=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -59,14 +58,6 @@ buildPythonPackage rec {
   postPatch = ''
     patchShebangs .
   '';
-
-  # this patch fixes a whitespace issue in the message that a test is expecting, https://github.com/KenKundert/emborg/pull/67
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/KenKundert/emborg/commit/afac6d1ddcecdb4bddbec87b6c8eed4cfbf4ebf9.diff";
-      sha256 = "3xg2z03FLKH4ckmiBZqE1FDjpgjgdO8OZL1ewrJlQ4o=";
-    })
-  ];
 
   pythonImportsCheck = [ "emborg" ];
 

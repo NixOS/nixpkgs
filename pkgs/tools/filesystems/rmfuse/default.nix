@@ -18,7 +18,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -46,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
       in the reMarkable Cloud using the same tools you use on your local
       system.
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "rmfuse";
   };
 }

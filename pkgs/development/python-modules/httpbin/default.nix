@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
 
   # build-system
   setuptools,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "greenlet" ];
@@ -77,6 +75,6 @@ buildPythonPackage rec {
     description = "HTTP Request and Response Service";
     homepage = "https://github.com/psf/httpbin";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

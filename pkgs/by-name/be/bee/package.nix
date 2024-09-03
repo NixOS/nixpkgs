@@ -51,6 +51,6 @@ buildGoModule rec {
       Bee is a Swarm node implementation, written in Go.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

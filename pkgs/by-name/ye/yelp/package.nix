@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "42.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/yelp/${lib.versions.major version}/yelp-${version}.tar.xz";
     sha256 = "sha256-osX9B4epCJxyLMZr0Phc33CI2HDntsyFeZ+OW/+erEs=";
   };
 

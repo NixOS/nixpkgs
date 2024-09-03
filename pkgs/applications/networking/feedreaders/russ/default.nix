@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, xorg
 , darwin
 }:
 

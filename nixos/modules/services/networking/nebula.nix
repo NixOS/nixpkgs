@@ -51,8 +51,8 @@ in
             };
 
             key = mkOption {
-              type = types.path;
-              description = "Path to the host key.";
+              type = types.oneOf [types.nonEmptyStr types.path];
+              description = "Path or reference to the host key.";
               example = "/etc/nebula/host.key";
             };
 
@@ -241,7 +241,7 @@ in
               ProtectKernelModules = true;
               ProtectKernelTunables = true;
               ProtectProc = "invisible";
-              ProtectSystem = "strict";
+              ProtectSystem = true;
               RestrictNamespaces = true;
               RestrictSUIDSGID = true;
               User = networkId;
@@ -269,4 +269,6 @@ in
       ${nameToId netName} = {};
     }) enabledNetworks);
   };
+
+  meta.maintainers = with maintainers; [ numinit ];
 }

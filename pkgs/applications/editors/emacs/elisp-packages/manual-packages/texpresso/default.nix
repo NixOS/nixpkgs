@@ -1,15 +1,16 @@
-{ lib
-, trivialBuild
-, texpresso
+{
+  lib,
+  melpaBuild,
+  texpresso,
 }:
-trivialBuild {
+melpaBuild {
   pname = "texpresso";
   version = texpresso.version;
   src = texpresso.src;
 
-  preInstall = ''
-    cd emacs
-  '';
+  files = ''("emacs/*.el")'';
+
+  ignoreCompilationError = false;
 
   meta = {
     inherit (texpresso.meta) homepage license;

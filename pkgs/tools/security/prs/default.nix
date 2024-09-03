@@ -10,6 +10,7 @@
 , gtk3
 , libxcb
 , libxkbcommon
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
       installShellCompletion --cmd prs --$shell <($out/bin/prs internal completions $shell --stdout)
     done

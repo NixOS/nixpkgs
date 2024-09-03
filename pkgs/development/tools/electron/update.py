@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nix-prefetch-git nix-universal-prefetch prefetch-yarn-deps prefetch-npm-deps
+#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nix-prefetch-git nurl prefetch-yarn-deps prefetch-npm-deps
 """
 electron updater
 
@@ -58,7 +58,7 @@ subprocess.check_call(
         "--out",
         depot_tools_checkout.name,
         "--rev",
-        "7a69b031d58081d51c9e8e89557b343bba8518b1",
+        "452fe3be37f78fbecefa1b4b0d359531bcd70d0d"
     ]
 )
 sys.path.append(depot_tools_checkout.name)
@@ -73,6 +73,9 @@ SOURCE_INFO_JSON = "info.json"
 # Relatice path to the electron-bin info.json
 BINARY_INFO_JSON = "binary/info.json"
 
+# Relative path the the electron-chromedriver info.json
+CHROMEDRIVER_INFO_JSON = "chromedriver/info.json"
+
 # Number of spaces used for each indentation level
 JSON_INDENT = 4
 
@@ -82,6 +85,8 @@ memory: Memory = Memory("cache", verbose=0)
 
 logger = logging.getLogger(__name__)
 click_log.basic_config(logger)
+
+nixpkgs_path = os.path.dirname(os.path.realpath(__file__)) + "/../../../.."
 
 
 class Repo:
@@ -99,15 +104,15 @@ class Repo:
         )
 
         deps_file = self.get_file("DEPS")
-        evaluated = gclient_eval.Parse(deps_file, filename="DEPS")
+        evaluated = gclient_eval.Parse(deps_file, vars_override=repo_vars, filename="DEPS")
 
-        repo_vars = dict(evaluated["vars"]) | repo_vars
+        repo_vars = dict(evaluated.get("vars", {})) | repo_vars
 
         prefix = f"{path}/" if evaluated.get("use_relative_paths", False) else ""
 
         self.deps = {
             prefix + dep_name: repo_from_dep(dep)
-            for dep_name, dep in evaluated["deps"].items()
+            for dep_name, dep in evaluated.get("deps", {}).items()
             if (
                 gclient_eval.EvaluateCondition(dep["condition"], repo_vars)
                 if "condition" in dep
@@ -276,6 +281,42 @@ class ElectronBinRepo(GitHubRepo):
         return out
 
 
+class ElectronChromedriverRepo(ElectronBinRepo):
+    def __init__(self, rev: str) -> None:
+        super().__init__("electron", "electron", rev)
+        self.systems = {
+            "i686-linux": "linux-ia32",
+            "x86_64-linux": "linux-x64",
+            "armv7l-linux": "linux-armv7l",
+            "aarch64-linux": "linux-arm64",
+            "x86_64-darwin": "darwin-x64",
+            "aarch64-darwin": "darwin-arm64",
+        }
+
+    def get_hashes(self, major_version: str) -> dict:
+        """Returns a dictionary of hashes for a given major version"""
+        m, _ = get_latest_version(major_version)
+        version: str = m["version"]
+
+        out = {}
+        out[major_version] = {
+            "hashes": {},
+            "version": version,
+        }
+
+        hashes: list = self.get_shasums256(version)
+
+        for nix_system, electron_system in self.systems.items():
+            filename = f"*chromedriver-v{version}-{electron_system}.zip"
+            if any([x.endswith(filename) for x in hashes]):
+                out[major_version]["hashes"][nix_system] = [
+                    x.split(" ")[0] for x in hashes if x.endswith(filename)
+                ][0]
+                out[major_version]["hashes"]["headers"] = self.get_headers(version)
+
+        return out
+
+
 # Releases that have reached end-of-life no longer receive any updates
 # and it is rather pointless trying to update those.
 #
@@ -304,11 +345,11 @@ def supported_version_range() -> range:
 
 @memory.cache
 def get_repo_hash(fetcher: str, args: dict) -> str:
-    cmd = ["nix-universal-prefetch", fetcher]
-    for arg_name, arg in args.items():
-        cmd.append(f"--{arg_name}")
-        cmd.append(arg)
-
+    expr = f"with import {nixpkgs_path} {{}};{fetcher}{{"
+    for key, val in args.items():
+        expr += f'{key}="{val}";'
+    expr += "}"
+    cmd = ["nurl", "-H", "--expr", expr]
     print(" ".join(cmd), file=sys.stderr)
     out = subprocess.check_output(cmd)
     return out.decode("utf-8").strip()
@@ -411,14 +452,29 @@ def get_electron_bin_info(major_version: str) -> Tuple[str, str, ElectronBinRepo
     return (major_version, m, electron_repo)
 
 
+def get_electron_chromedriver_info(
+    major_version: str,
+) -> Tuple[str, str, ElectronChromedriverRepo]:
+    m, rev = get_latest_version(major_version)
+
+    electron_repo: ElectronChromedriverRepo = ElectronChromedriverRepo(rev)
+    return (major_version, m, electron_repo)
+
+
 def get_electron_info(major_version: str) -> Tuple[str, str, GitHubRepo]:
     m, rev = get_latest_version(major_version)
 
     electron_repo: GitHubRepo = GitHubRepo("electron", "electron", rev)
     electron_repo.get_deps(
         {
-            f"checkout_{platform}": platform == "linux"
+            **{
+            f"checkout_{platform}": platform == "linux" or platform == "x64" or platform == "arm64" or platform == "arm"
             for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
+            },
+            **{
+            f"checkout_{arch}": True
+            for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64"]
+            },
         },
         "src/electron",
     )
@@ -520,6 +576,36 @@ def update_bin(major_version: str, commit: bool) -> None:
         print(f"{package_name} is up-to-date")
     elif commit:
         commit_result(package_name, old_version, new_version, BINARY_INFO_JSON)
+
+
+def update_chromedriver(major_version: str, commit: bool) -> None:
+    """Update a given electron-chromedriver release
+
+    Args:
+        major_version: The major version number, e.g. '27'
+        commit: Whether the updater should commit the result
+    """
+    package_name = f"electron-chromedriver_{major_version}"
+    print(f"Updating {package_name}")
+
+    electron_chromedriver_info = get_electron_chromedriver_info(major_version)
+    (_major_version, _version, repo) = electron_chromedriver_info
+
+    old_info = load_info_json(CHROMEDRIVER_INFO_JSON)
+    new_info = repo.get_hashes(major_version)
+
+    out = old_info | new_info
+
+    save_info_json(CHROMEDRIVER_INFO_JSON, out)
+
+    old_version = (
+        old_info[major_version]["version"] if major_version in old_info else None
+    )
+    new_version = new_info[major_version]["version"]
+    if old_version == new_version:
+        print(f"{package_name} is up-to-date")
+    elif commit:
+        commit_result(package_name, old_version, new_version, CHROMEDRIVER_INFO_JSON)
 
 
 def update_source(major_version: str, commit: bool) -> None:
@@ -642,7 +728,11 @@ def commit_result(
         )
         init_msg = f"init at {new_version}"
         update_msg = f"{old_version} -> {new_version}"
-        diff = f"- Diff: https://github.com/electron/electron/compare/refs/tags/v{old_version}...v{new_version}\n" if old_version != None else ""
+        diff = (
+            f"- Diff: https://github.com/electron/electron/compare/refs/tags/v{old_version}...v{new_version}\n"
+            if old_version != None
+            else ""
+        )
         commit_message = f"""{package_name}: {update_msg if old_version != None else init_msg}
 
 - Changelog: https://github.com/electron/electron/releases/tag/v{new_version}
@@ -681,6 +771,13 @@ def eval(version):
     print(json.dumps(tree, indent=JSON_INDENT, default=vars, sort_keys=True))
 
 
+@cli.command("update-chromedriver", help="Update a single major release")
+@click.option("-v", "--version", help="The major version, e.g. '23'")
+@click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
+def update_chromedriver_cmd(version: str, commit: bool) -> None:
+    update_chromedriver(version, commit)
+
+
 @cli.command("update", help="Update a single major release")
 @click.option("-v", "--version", help="The major version, e.g. '23'")
 @click.option(
@@ -717,6 +814,8 @@ def update(version: str, bin_only: bool, source_only: bool, commit: bool) -> Non
     else:
         update_bin(version, commit)
         update_source(version, commit)
+
+    update_chromedriver(version, commit)
 
 
 @cli.command("update-all", help="Update all releases at once")
@@ -763,6 +862,9 @@ def update_all(bin_only: bool, source_only: bool, commit: bool) -> None:
             update_bin(major_version, commit)
 
         update_all_source(commit)
+
+    for major_version, _ in filtered_bin_info.items():
+        update_chromedriver(major_version, commit)
 
 
 if __name__ == "__main__":

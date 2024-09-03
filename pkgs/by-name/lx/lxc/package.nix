@@ -48,15 +48,36 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fix docbook2man version detection
     ./docbook-hack.patch
+
+    # Fix hardcoded path of lxc-user-nic
+    # This is needed to use unprivileged containers
+    ./user-nic.diff
   ];
 
   mesonFlags = [
-    "-Dinstall-init-files=false"
+    "-Dinstall-init-files=true"
     "-Dinstall-state-dirs=false"
     "-Dspecfile=false"
     "-Dtools-multicall=true"
     "-Dtools=false"
+    "-Dusernet-config-path=/etc/lxc/lxc-usernet"
+    "-Ddistrosysconfdir=${placeholder "out"}/etc/lxc"
+    "-Dsystemd-unitdir=${placeholder "out"}/lib/systemd/system"
   ];
+
+  # /run/current-system/sw/share
+  postInstall = ''
+    substituteInPlace $out/etc/lxc/lxc --replace-fail "$out/etc/lxc" "/etc/lxc"
+    substituteInPlace $out/libexec/lxc/lxc-net --replace-fail "$out/etc/lxc" "/etc/lxc"
+
+    substituteInPlace $out/share/lxc/templates/lxc-download --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/templates/lxc-local --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/templates/lxc-oci --replace-fail "$out/share" "/run/current-system/sw/share"
+
+    substituteInPlace $out/share/lxc/config/common.conf --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/config/userns.conf --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/config/oci.common.conf --replace-fail "$out/share" "/run/current-system/sw/share"
+  '';
 
   enableParallelBuilding = true;
 
@@ -66,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       incus-legacy-init = nixosTests.incus.container-legacy-init;
       incus-systemd-init = nixosTests.incus.container-systemd-init;
+      lxc = nixosTests.lxc;
       lxd = nixosTests.lxd.container;
     };
 

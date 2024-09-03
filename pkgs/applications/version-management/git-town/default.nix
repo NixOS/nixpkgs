@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "14.2.2";
+  version = "15.1.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-bYCE3Ik0UbbjlZV8EY6pVRZzrTBp2uiZLJjO4UxfGE8=";
+    hash = "sha256-e4lOyYQHsVOmOYKQ+3B2EdneWL8NEzboTlRKtO8Wdjg=";
   };
 
   vendorHash = null;
@@ -32,6 +32,9 @@ buildGoModule rec {
 
   preCheck = ''
     HOME=$(mktemp -d)
+
+    # this runs tests requiring local operations
+    rm main_test.go
   '';
 
   checkFlags =

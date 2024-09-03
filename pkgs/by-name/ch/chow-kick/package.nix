@@ -6,7 +6,7 @@
 , dbus
 , libepoxy
 , fetchFromGitHub
-, freeglut
+, libglut
 , freetype
 , gtk2-x11
 , lib
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Chowdhury-DSP";
     repo = "ChowKick";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
+    hash = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
     fetchSubmodules = true;
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     libepoxy
-    freeglut
+    libglut
     freetype
     gtk2-x11
     libGL

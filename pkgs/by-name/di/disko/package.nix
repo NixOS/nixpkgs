@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , bash
 , nix
+, nixos-install-tools
 , coreutils
 }:
 
@@ -26,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for i in disko disko-install; do
       sed -e "s|libexec_dir=\".*\"|libexec_dir=\"$out/share/disko\"|" "$i" > "$out/bin/$i"
       chmod 755 "$out/bin/$i"
-      wrapProgram "$out/bin/$i" --prefix PATH : ${lib.makeBinPath [ nix coreutils ]}
+      wrapProgram "$out/bin/$i" --prefix PATH : ${lib.makeBinPath [ nix coreutils nixos-install-tools ]}
     done
     runHook postInstall
   '';

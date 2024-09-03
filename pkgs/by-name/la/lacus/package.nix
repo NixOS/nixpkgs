@@ -5,15 +5,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lacus";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "lacus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VFNW13PupJOroIhqnuLOq3mqU9nXEy1hmjHBQfErSN8=";
+    hash = "sha256-5KddApwaN4t+QRaQTqIXuYStuPxKq3v6pRknBusAcbM=";
   };
+
+  pythonRelaxDeps = [
+    "psutil"
+    "redis"
+  ];
 
   build-system = with python3.pkgs; [
     poetry-core

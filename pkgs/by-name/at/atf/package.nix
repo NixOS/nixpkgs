@@ -5,7 +5,6 @@
   fetchpatch,
   autoreconfHook,
   kyua,
-  pkg-config,
   gitUpdater,
 }:
 

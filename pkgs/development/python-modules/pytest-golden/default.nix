@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   testfixtures,
 }:
 
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     # hatchling used for > 0.2.2
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [ pytest ];

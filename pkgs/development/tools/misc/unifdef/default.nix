@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Selectively remove C preprocessor conditionals";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

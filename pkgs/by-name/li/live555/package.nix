@@ -1,6 +1,6 @@
 {
   lib,
-  darwin,
+  cctools,
   fetchpatch,
   fetchurl,
   openssl,
@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.05.15";
+  version = "2024.08.01";
 
   src = fetchurl {
     urls = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-Mgkf5XiFBEEDTTx+YlV12wE4zpmPPqaUPv9KcEK38D0=";
+    hash = "sha256-g5q3Q30B5in4CU6h7Ix6e7UEx97tnt/J4XrDT5oaGT8=";
   };
 
   patches = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   buildInputs = [

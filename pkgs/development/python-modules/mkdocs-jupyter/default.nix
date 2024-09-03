@@ -10,37 +10,28 @@
   nbconvert,
   pygments,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.24.6";
-  format = "pyproject";
+  version = "0.24.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
-    hash = "sha256-ify+ipUjhk1UFt4aYHEWQLa8KXInnSrfRu0ndsLZ/3w=";
+    hash = "sha256-Cadi9ITVQNnA6UTTSyjLU2oyhp4iS0YOL8eRsUP3aUA=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-    substituteInPlace src/mkdocs_jupyter/tests/test_base_usage.py \
-      --replace "[\"mkdocs\"," "[\"${mkdocs.out}/bin/mkdocs\","
-  '';
 
   pythonRelaxDeps = [ "nbconvert" ];
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipykernel
     jupytext
     mkdocs
@@ -49,7 +40,10 @@ buildPythonPackage rec {
     pygments
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "mkdocs_jupyter" ];
 

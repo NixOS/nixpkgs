@@ -2,95 +2,51 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
   gradle_7,
-  perl,
   makeWrapper,
   jre,
 }:
 
+let
+  gradle = gradle_7;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.25.1";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DgQLn4+uBAF8/c3G6ckkq/0gtJEE9GPHd1d/xB6omlA=";
+    hash = "sha256-88UdJPn9AeLtpKEu3efHm+xj4lheQ0EPyvId4vYskIo=";
   };
 
   patches = [
-    # disable spotless because it tries to fetch files not in the FOD
-    # and also because it slows down the build process
-    ./disable-spotless.patch
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
-    # use gradle's built-in method of zeroing out timestamps,
-    # because stripJavaArchivesHook can't patch signed JAR files
-    ./fix-jar-timestamp.patch
-    # set the FOD as the only repository gradle can resolve from
-    (substituteAll {
-      src = ./use-fod-maven-repo.patch;
-      inherit (finalAttrs) deps;
-    })
   ];
 
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-deps";
-    inherit (finalAttrs) src;
-
-    patches = [ ./disable-spotless.patch ];
-
-    nativeBuildInputs = [
-      gradle_7
-      perl
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon --console=plain build
-
-      runHook postBuild
-    '';
-
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      runHook preInstall
-
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-
-      # Mimic existence of okio-3.6.0.jar, originally known as okio-jvm-3.6.0 (and renamed).
-      # Gradle doesn't detect such renames and only fetches the latter.
-      # Whenever this package gets updated, please check if this hack is obsolete.
-      ln -s $out/com/squareup/okio/okio-jvm/3.6.0/okio-jvm-3.6.0.jar $out/com/squareup/okio/okio/3.6.0/okio-3.6.0.jar
-
-      runHook postInstall
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-JaTL6/DyBAqXkIQOkbi8MYoIZrhWqc3MpJ7DDB4h+ok=";
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
   };
 
-  nativeBuildInputs = [
-    gradle_7
-    makeWrapper
+  __darwinAllowLocalNetworking = true;
+
+  # disable spotless because it tries to fetch files not in deps.json
+  # and also because it slows down the build process
+  gradleFlags = [
+    "-x"
+    "spotlessApply"
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  doCheck = true;
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --offline --no-daemon --console=plain build
-
-    runHook postBuild
-  '';
+  nativeBuildInputs = [
+    gradle
+    gradle.jdk # one of the tests also require that the `java` command is available on the command line
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -102,8 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
     description = "Locally hosted web application that allows you to perform various operations on PDF files";
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
     license = lib.licenses.gpl3Only;

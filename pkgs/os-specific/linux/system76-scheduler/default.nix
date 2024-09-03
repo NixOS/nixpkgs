@@ -17,7 +17,7 @@ in rustPlatform.buildRustPackage {
     rev = version;
     hash = "sha256-o4noaLBXHDe7pMBHfQ85uzKJzwbBE5mkWq8h9l6iIZs=";
   };
-  cargoSha256 = "sha256-hpFDAhOzm4v3lBWwAl/10pS5xvKCScdKsp5wpCeQ+FE=";
+  cargoHash = "sha256-hpFDAhOzm4v3lBWwAl/10pS5xvKCScdKsp5wpCeQ+FE=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ dbus pipewire ];

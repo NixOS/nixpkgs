@@ -3,13 +3,14 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
+  setuptools,
   markdown,
 }:
 
 buildPythonPackage rec {
   pname = "markdown-macros";
   version = "0.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -27,10 +28,12 @@ buildPythonPackage rec {
   ];
 
   prePatch = ''
-    substituteInPlace setup.py --replace "distribute" "setuptools"
+    substituteInPlace setup.py --replace-fail "distribute" "setuptools"
   '';
 
-  propagatedBuildInputs = [ markdown ];
+  build-system = [ setuptools ];
+
+  dependencies = [ markdown ];
 
   doCheck = false;
 

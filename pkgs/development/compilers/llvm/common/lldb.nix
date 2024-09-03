@@ -30,11 +30,14 @@
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } ''
+      runCommand "lldb-src-${version}" { } (''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/lldb "$out"
-      '' else src;
+      '' + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+        mkdir -p "$out/llvm"
+        cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+      '') else src;
   vscodeExt = {
     name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
     version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
@@ -50,7 +53,9 @@ stdenv.mkDerivation (rec {
   src = src';
   inherit patches;
 
-  outputs = [ "out" "lib" "dev" ];
+  # LLDB expects to find the path to `bin` relative to `lib` on Darwin. It can’t be patched with the location of
+  # the `lib` output because that would create a cycle between it and the `out` output.
+  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "lib" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
 
@@ -101,7 +106,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional
     (
       stdenv.targetPlatform.isDarwin
-        && !stdenv.targetPlatform.isAarch64
+        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
         && (lib.versionAtLeast release_version "15")
     )
     (

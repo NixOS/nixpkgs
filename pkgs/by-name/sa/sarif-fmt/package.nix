@@ -1,51 +1,42 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
-  clippy,
-  sarif-fmt,
-  testers,
+  nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sarif-fmt";
-  version = "0.4.2";
+  version = "0.6.5";
 
-  src = fetchFromGitHub {
-    owner = "psastras";
-    repo = "sarif-rs";
-    rev = "sarif-fmt-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-Zflwjj5ArNmE/7Im/O09kG07ZekCyz5jU2S3vpnlXT8=";
   };
 
-  cargoHash = "sha256-dHOxVLXtnqSHMX5r1wFxqogDf9QdnOZOjTyYFahru34=";
-  cargoBuildFlags = [
-    "--package"
-    "sarif-fmt"
-  ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoHash = "sha256-hCtVfGutgvncb05zt+lSNdlrDO+UruSUahzrxaERjFE=";
 
   # `test_clippy` (the only test we enable) is broken on Darwin
   # because `--enable-profiler` is not enabled in rustc on Darwin
   # error[E0463]: can't find crate for profiler_builtins
   doCheck = !stdenv.isDarwin;
 
-  nativeCheckInputs = [
-    # `test_clippy`
-    clippy
+  checkFlags = [
+    # these tests use nix so...no go
+    "--skip=test_clang_tidy"
+    "--skip=test_hadolint"
+    "--skip=test_shellcheck"
+
+    # requires files not present in the crates.io tarball
+    "--skip=test_clipp"
   ];
 
-  checkFlags = [
-    # this test uses nix so...no go
-    "--skip=test_clang_tidy"
-    # ditto
-    "--skip=test_hadolint"
-    # ditto
-    "--skip=test_shellcheck"
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = sarif-fmt; };
+    updateScript = nix-update-script { };
   };
 
   meta = {

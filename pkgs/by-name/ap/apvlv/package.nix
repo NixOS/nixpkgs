@@ -15,7 +15,6 @@
   libxml2,
   libxshmfence,
   man,
-  nix-update-script,
   pcre,
   pkg-config,
   poppler,

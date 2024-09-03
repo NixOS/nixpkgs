@@ -22,7 +22,6 @@
   argcomplete,
   hypothesis,
   mock,
-  nose,
   pygments,
   requests,
   xmlschema,
@@ -30,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.1.1";
+  version = "8.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rJeBQadZSJSIF9NgKXt6rg/LnW/2vJ7G1RS4XVplwEQ=";
+    hash = "sha256-wTI0XRLOVRJCyHJp3oEkg/W8yHzbtHIuSEh7oZT5/c4=";
   };
 
   outputs = [
@@ -65,7 +64,6 @@ buildPythonPackage rec {
       attrs
       hypothesis
       mock
-      nose
       pygments
       requests
       setuptools

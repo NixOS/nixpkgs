@@ -4,6 +4,7 @@
   bellows,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   pyserial,
   pyserial-asyncio,
   pyserial-asyncio-fast,
@@ -13,7 +14,6 @@
   pytestCheckHook,
   python-slugify,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   universal-silabs-flasher,
   wheel,
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.15";
+  version = "0.0.31";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,24 +36,18 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     rev = "refs/tags/${version}";
-    hash = "sha256-k4Wqxv7WJGDDGXA80qW+RUICTUcgLsWJNiV+zsOkfuM=";
+    hash = "sha256-H1VmB20ldUyKIiMRT8YMgiFIno41WN2bY8rhqFsGYcA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail '"setuptools-git-versioning<3"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   pythonRelaxDeps = [
-    "bellows"
     "pyserial-asyncio-fast"
-    "universal-silabs-flasher"
-    "zha-quirks"
-    "zigpy"
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     setuptools
@@ -77,6 +71,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytest-timeout
     pytest-xdist
@@ -104,6 +99,12 @@ buildPythonPackage rec {
     "test_sinope_time"
     "test_siren_timed_off"
     "test_zha_group_light_entity"
+    # flaky, either due to race conditions or timeouts
+    "test_zha_group_switch_entity"
+    "test_zha_group_fan_entity"
+    "test_startup_concurrency_limit"
+    "test_fan_ikea"
+    "test_background"
   ];
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
@@ -117,7 +118,7 @@ buildPythonPackage rec {
     description = "Zigbee Home Automation";
     homepage = "https://github.com/zigpy/zha";
     changelog = "https://github.com/zigpy/zha/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -15,25 +15,35 @@ stdenv.mkDerivation rec {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-sfJohmsqq5FumUoVE8x3yWv12DiCJJXae62br0j+190=";
+    hash = "sha256-coUFIepbCRuz+766E7VCTQLm0oWB1CTO20ATriC86dc=";
     fetchSubmodules = true;
+
+    # remove unused libaries from rp2 port's SDK. we leave this and the other
+    # ports around for users who want to override makeFlags flags to build them.
+    # https://github.com/micropython/micropython/blob/a61c446c0b34e82aeb54b9770250d267656f2b7f/ports/rp2/CMakeLists.txt#L17-L22
+    #
+    # shrinks uncompressed NAR by ~2.4G (though it is still large). there
+    # doesn't seem to be a way to avoid fetching them in the first place.
+    postFetch = ''
+      rm -rf $out/lib/pico-sdk/lib/{tinyusb,lwip,btstack}
+    '';
   };
+
 
   nativeBuildInputs = [ pkg-config python3 ];
 
   buildInputs = [ libffi readline ];
 
-  buildPhase = ''
-    runHook preBuild
-    make -C mpy-cross
-    make -C ports/unix
-    runHook postBuild
-  '';
+  makeFlags = [ "-C" "ports/unix" ]; # also builds mpy-cross
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 
+  __darwinAllowLocalNetworking = true; # needed for select_poll_eintr test
+
   skippedTests = " -e select_poll_fd"
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback"
+    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback -e float_parse -e float_parse_doubleproc"
     + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse"
   ;
 

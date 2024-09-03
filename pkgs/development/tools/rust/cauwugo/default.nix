@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles }:
+{ lib, rustPlatform, fetchCrate, installShellFiles, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cauwugo";
@@ -7,14 +7,14 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     pname = "bpaf_cauwugo";
-    sha256 = "sha256-9gWUu2qbscKlbWZlRbOn+rrmizegkHxPnwnAmpaV1Ww=";
+    hash = "sha256-9gWUu2qbscKlbWZlRbOn+rrmizegkHxPnwnAmpaV1Ww=";
   };
 
-  cargoSha256 = "sha256-dXlSBb3ey3dAiifrQ9Bbhscnm1QmcChiQbX1ic069V4=";
+  cargoHash = "sha256-dXlSBb3ey3dAiifrQ9Bbhscnm1QmcChiQbX1ic069V4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cauwugo \
       --bash <($out/bin/cauwugo --bpaf-complete-style-bash) \
       --fish <($out/bin/cauwugo --bpaf-complete-style-fish) \

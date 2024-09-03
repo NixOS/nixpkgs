@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Recover damaged CD DVD and disks with bad sectors";
     mainProgram = "recoverdm";
     homepage = "https://salsa.debian.org/pkg-security-team/recoverdm";
+    changelog = "https://salsa.debian.org/pkg-security-team/recoverdm/-/blob/debian/master/debian/changelog";
     maintainers = with maintainers; [ d3vil0p3r ];
     platforms = platforms.unix;
     license = licenses.gpl1Only;

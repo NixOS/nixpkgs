@@ -1,0 +1,12 @@
+diff --git a/mesonbuild/dependencies/data/CMakePathInfo.txt b/mesonbuild/dependencies/data/CMakePathInfo.txt
+index 662ec58..4d5f4e4 100644
+--- a/mesonbuild/dependencies/data/CMakePathInfo.txt
++++ b/mesonbuild/dependencies/data/CMakePathInfo.txt
+@@ -5,6 +5,7 @@ list(APPEND TMP_PATHS_LIST ${CMAKE_PREFIX_PATH})
+ list(APPEND TMP_PATHS_LIST ${CMAKE_FRAMEWORK_PATH})
+ list(APPEND TMP_PATHS_LIST ${CMAKE_APPBUNDLE_PATH})
+ list(APPEND TMP_PATHS_LIST $ENV{CMAKE_PREFIX_PATH})
++list(APPEND TMP_PATHS_LIST $ENV{NIXPKGS_CMAKE_PREFIX_PATH})
+ list(APPEND TMP_PATHS_LIST $ENV{CMAKE_FRAMEWORK_PATH})
+ list(APPEND TMP_PATHS_LIST $ENV{CMAKE_APPBUNDLE_PATH})
+ list(APPEND TMP_PATHS_LIST ${CMAKE_SYSTEM_PREFIX_PATH})

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sploitscan";
-  version = "0.10.1";
+  version = "0.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xaitax";
     repo = "SploitScan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UsCGmOjrfk5qsSsnWHEbS3boiC2RFb0Za++yBcCfdJY=";
+    hash = "sha256-41NR31x/pJttBxv66t5g3s2PwlSBgsk0ybiH7xFs18k=";
   };
 
   pythonRelaxDeps = [
@@ -23,8 +23,6 @@ python3.pkgs.buildPythonApplication rec {
   build-system = with python3.pkgs; [
     setuptools
   ];
-
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     jinja2

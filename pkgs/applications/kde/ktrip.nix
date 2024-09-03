@@ -43,6 +43,6 @@ mkDerivation rec {
     homepage = "https://apps.kde.org/ktrip/";
     # GPL-2.0-or-later
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

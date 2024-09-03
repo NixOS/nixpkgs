@@ -20,12 +20,12 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
   pythonImportsCheck = [ "dahlia" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dahlia-lib/dahlia/blob/${src.rev}/CHANGELOG.md";
     description = "Simple text formatting package, inspired by the game Minecraft";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/dahlia-lib/dahlia";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "dahlia";
   };
 }

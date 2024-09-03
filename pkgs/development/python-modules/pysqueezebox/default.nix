@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.7.1";
+  version = "0.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "rajlaud";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WnL9Va3uaWlUHVBtit4v+XdYOFmPpxG91mAHEGwI+7c=";
+    hash = "sha256-d+8/YyA6tTBxZpiR9pu/5K1v0FOiSrR7RZ7MMBwOzdA=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

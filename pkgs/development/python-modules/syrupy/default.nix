@@ -5,29 +5,26 @@
   python,
   poetry-core,
   pytest,
-  colored,
   invoke,
 }:
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.6.1";
-  format = "pyproject";
+  version = "4.7.1";
+  pyproject = true;
 
   disabled = lib.versionOlder python.version "3.8.1";
 
   src = fetchFromGitHub {
-    owner = "tophat";
+    owner = "syrupy-project";
     repo = "syrupy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NBJJqQsZqqKHOdqGa/j/2KQvlenLCEJBqlfdjtFK00U=";
+    hash = "sha256-dTUugNqzaMuKV6ZwxRSf9df7tsnmZUBhgqwgGxBhirw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   buildInputs = [ pytest ];
-
-  propagatedBuildInputs = [ colored ];
 
   nativeCheckInputs = [
     invoke
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "syrupy" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/tophat/syrupy/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/syrupy-project/syrupy/blob/${src.rev}/CHANGELOG.md";
     description = "Pytest Snapshot Test Utility";
-    homepage = "https://github.com/tophat/syrupy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/syrupy-project/syrupy";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

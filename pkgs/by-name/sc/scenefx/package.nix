@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
-  wlroots,
+  wlroots_0_17,
   scdoc,
   pkg-config,
   wayland,
@@ -16,6 +16,7 @@
   mesa,
   validatePkgConfig,
   testers,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,12 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     scdoc
     validatePkgConfig
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -47,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_17
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

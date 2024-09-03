@@ -5,6 +5,7 @@
   marshmallow,
   pythonOlder,
   pytestCheckHook,
+  pytest-cov-stub,
   setuptools,
 }:
 
@@ -22,16 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-jbpeyih2Ccw1Rk+QcXRO9AfN5B/DhZmxa/M6FzXHqqs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=marshmallow_polyfield" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
+  dependencies = [ marshmallow ];
 
-  propagatedBuildInputs = [ marshmallow ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "marshmallow" ];
 

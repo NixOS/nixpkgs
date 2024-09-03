@@ -1,53 +1,53 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, gettext
-, python3
-, wrapGAppsHook3
-, ddcutil
-, alsa-lib
-, glib
-, gtk3
-, libgudev
-, libinput
-, libnl
-, librsvg
-, linux-pam
-, libxcrypt
-, networkmanager
-, pulseaudio
-, gdk-pixbuf-xlib
-, tzdata
-, xkeyboard_config
-, runtimeShell
-, xorg
-, xdotool
-, getconf
-, dbus
-, util-linux
-, dde-session-ui
-, coreutils
-, lshw
-, dmidecode
-, systemd
+{
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  gettext,
+  python3,
+  wrapGAppsHook3,
+  ddcutil,
+  alsa-lib,
+  glib,
+  gtk3,
+  libgudev,
+  libinput,
+  libnl,
+  librsvg,
+  linux-pam,
+  libxcrypt,
+  networkmanager,
+  pulseaudio,
+  gdk-pixbuf-xlib,
+  tzdata,
+  xkeyboard_config,
+  runtimeShell,
+  xorg,
+  xdotool,
+  getconf,
+  dbus,
+  util-linux,
+  dde-session-ui,
+  coreutils,
+  lshw,
+  dmidecode,
+  systemd,
 }:
 
 buildGoModule rec {
   pname = "dde-daemon";
-  version = "6.0.34";
+  version = "6.0.43";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-NIFgv6EUSnCqSdPttx6wrr7K1nRV/JIZJy9uS7uu0Sc=";
+    hash = "sha256-3BzFFlcNwNWNcysD3qRYfdyGaX7gW2XJZ4HzdGiK7jU=";
   };
 
-  vendorHash = "sha256-F39QGxY0aD+hHWguHosSrSzcB/ahYbnFW9vVtS5oUnU=";
+  vendorHash = "sha256-3kUAaVXERqNZhBFytzVbWY6/a8M0jIkWrN+QHdWp1HU=";
 
   patches = [
     ./0001-dont-set-PATH.diff
@@ -59,7 +59,6 @@ buildGoModule rec {
       src = ./0003-aviod-use-hardcode-path.diff;
       inherit dbus;
     })
-    ./0004-fix-build-with-ddcutil-2.patch
   ];
 
   postPatch = ''
@@ -135,7 +134,16 @@ buildGoModule rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ util-linux dde-session-ui glib lshw dmidecode systemd ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          util-linux
+          dde-session-ui
+          glib
+          lshw
+          dmidecode
+          systemd
+        ]
+      }"
     )
   '';
 

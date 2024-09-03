@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hatsu";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
     rev = "v${version}";
-    hash = "sha256-4x41Ez2Rq4Bs39LN4qRluDieHx+9bS+GCjvS/cQK84Y=";
+    hash = "sha256-iQrwqv5q002rJMcvUhlsLVN3O7mHyL5zmLGjegZDVG0=";
   };
 
-  cargoHash = "sha256-hOQ8/m4TY18ZFmLFxxnXUX1yr52tKNmebx6H0uIIGUo=";
+  cargoHash = "sha256-LkGkifmHy7cEGrPg0WCf1nCGfcW60AGWQSB0Zb01mk0=";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl ];

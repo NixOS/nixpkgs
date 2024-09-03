@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.2.5";
+  version = "0.2.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain==${version}";
-    hash = "sha256-WaJRXvA/SImTSgAkk06vmOtTbsYYs8nTChFLzmsFz7Q=";
+    hash = "sha256-8F6ntFstCTQjQNbE9oiYbpZ7kZ1grcnV3FHAfhFnAzA=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -54,13 +54,16 @@ buildPythonPackage rec {
     langchain-core
     langchain-text-splitters
     langsmith
-    numpy
     pydantic
     pyyaml
     requests
     sqlalchemy
     tenacity
   ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+
+  optional-dependencies = {
+    numpy = [ numpy ];
+  };
 
   nativeCheckInputs = [
     freezegun

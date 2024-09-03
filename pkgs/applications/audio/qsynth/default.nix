@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mainProgram = "qsynth";
     homepage = "https://sourceforge.net/projects/qsynth";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

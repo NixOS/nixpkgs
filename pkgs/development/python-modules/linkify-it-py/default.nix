@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Links recognition library with full unicode support";
     homepage = "https://github.com/tsutsu3/linkify-it-py";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

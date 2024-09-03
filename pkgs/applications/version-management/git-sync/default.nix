@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -a contrib/git-* $out/bin/
   '';
 
-  wrapperPath = with lib; makeBinPath ([
+  wrapperPath = lib.makeBinPath ([
     coreutils
     git
     gnugrep

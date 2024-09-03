@@ -7,6 +7,7 @@
 
 let
   inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (lib.attrsets) mapAttrs' filterAttrs;
   inherit (builtins) isString match typeOf;
 
 in
@@ -132,12 +133,17 @@ rec {
   mapDerivationAttrset = f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
 
   /**
-    Set the nix-env priority of the package.
+    The default priority of packages in Nix. See `defaultPriority` in [`src/nix/profile.cc`](https://github.com/NixOS/nix/blob/master/src/nix/profile.cc#L47).
+   */
+  defaultPriority = 5;
+
+  /**
+    Set the nix-env priority of the package. Note that higher values are lower priority, and vice versa.
 
     # Inputs
 
     `priority`
-    : 1\. Function argument
+    : 1\. The priority to set.
 
     `drv`
     : 2\. Function argument
@@ -158,8 +164,7 @@ rec {
   lowPrio = setPrio 10;
 
   /**
-    Apply lowPrio to an attrset with derivations
-
+    Apply lowPrio to an attrset with derivations.
 
     # Inputs
 
@@ -183,8 +188,7 @@ rec {
   hiPrio = setPrio (-10);
 
   /**
-    Apply hiPrio to an attrset with derivations
-
+    Apply hiPrio to an attrset with derivations.
 
     # Inputs
 
@@ -287,10 +291,38 @@ rec {
     all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
 
   /**
-    Get the corresponding attribute in lib.licenses
-    from the SPDX ID.
-    For SPDX IDs, see
-    https://spdx.org/licenses
+    Mapping of SPDX ID to the attributes in lib.licenses.
+
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.licensesSpdx` usage example
+
+    ```nix
+    lib.licensesSpdx.MIT == lib.licenses.mit
+    => true
+    lib.licensesSpdx."MY LICENSE"
+    => error: attribute 'MY LICENSE' missing
+    ```
+
+    :::
+  */
+  licensesSpdx =
+    mapAttrs'
+    (_key: license: {
+      name = license.spdxId;
+      value = license;
+    })
+    (filterAttrs (_key: license: license ? spdxId) lib.licenses);
+
+  /**
+    Get the corresponding attribute in lib.licenses from the SPDX ID
+    or warn and fallback to `{ shortName = <license string>; }`.
+
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
 
     # Type
 
@@ -315,14 +347,59 @@ rec {
     :::
   */
   getLicenseFromSpdxId =
-    let
-      spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
-        (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
-    in licstr:
-      spdxLicenses.${ lib.toLower licstr } or (
+    licstr:
+      getLicenseFromSpdxIdOr licstr (
         lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
         { shortName = licstr; }
       );
+
+  /**
+    Get the corresponding attribute in lib.licenses from the SPDX ID
+    or fallback to the given default value.
+
+    For SPDX IDs, see https://spdx.org/licenses.
+    Note that some SPDX licenses might be missing.
+
+    # Inputs
+
+    `licstr`
+    : 1\. SPDX ID string to find a matching license
+
+    `default`
+    : 2\. Fallback value when a match is not found
+
+    # Type
+
+    ```
+    getLicenseFromSpdxIdOr :: str -> Any -> Any
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getLicenseFromSpdxIdOr` usage example
+
+    ```nix
+    lib.getLicenseFromSpdxIdOr "MIT" null == lib.licenses.mit
+    => true
+    lib.getLicenseFromSpdxId "mIt" null == lib.licenses.mit
+    => true
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" lib.licenses.free == lib.licenses.free
+    => true
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" null
+    => null
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" (builtins.throw "No SPDX ID matches MY LICENSE")
+    => error: No SPDX ID matches MY LICENSE
+    ```
+    :::
+  */
+  getLicenseFromSpdxIdOr =
+    let
+      lowercaseLicenses = lib.mapAttrs' (name: value: {
+        name = lib.toLower name;
+        inherit value;
+      }) licensesSpdx;
+    in licstr: default:
+      lowercaseLicenses.${ lib.toLower licstr } or default;
 
   /**
     Get the path to the main program of a package based on meta.mainProgram

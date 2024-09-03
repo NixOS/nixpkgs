@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
@@ -11,18 +10,18 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.11";
+  version = "3.0.16";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hxHVQ8Ssvwq5lk+b7v1kLrYeGSfJEj/FudSd0V3tUnQ=";
+    hash = "sha256-bCL9M4bqdmK7CHF/GDAaVuIaAekkiLAMy1xxwq/nGUE=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-JWpviZqegrIUIOtGG6yvDGxq30TUw+fZcqCJevYqxvY";
+  vendorHash = "sha256-i3KvZt7DpQ7kiWe+g4k2sHqI3ypxKiwrLhOe/sg3FMs=";
 
   subPackages = [ "." ];
 

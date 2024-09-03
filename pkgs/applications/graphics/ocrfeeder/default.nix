@@ -10,7 +10,6 @@
 , goocanvas2
 , gtkspell3
 , isocodes
-, gnome
 , python3
 , tesseract4
 , extraOcrEngines ? [] # other supported engines are: ocrad gocr cuneiform
@@ -21,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.8.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "mirror://gnome/sources/ocrfeeder/${lib.versions.majorMinor finalAttrs.version}/ocrfeeder-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-sD0qWUndguJzTw0uy0FIqupFf4OX6dTFvcd+Mz+8Su0=";
   };
 

@@ -10,7 +10,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-b2AAsiI3n2/v6HC37fMI/d8UcxZxsWM+fnWvdajHrOg=";
+    hash = "sha256-b2AAsiI3n2/v6HC37fMI/d8UcxZxsWM+fnWvdajHrOg=";
   };
 
   propagatedBuildInputs = [ aigpy ];

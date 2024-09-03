@@ -23,6 +23,7 @@ let
     isPath
     isString
     listToAttrs
+    mapAttrs
     nameValuePair
     optionalString
     removePrefix
@@ -140,11 +141,35 @@ utils = rec {
          ];
        } "_secret" -> { ".example[1].relevant.secret" = "/path/to/secret"; }
   */
-  recursiveGetAttrWithJqPrefix = item: attr:
+  recursiveGetAttrWithJqPrefix = item: attr: mapAttrs (_name: set: set.${attr}) (recursiveGetAttrsetWithJqPrefix item attr);
+
+  /* Similar to `recursiveGetAttrWithJqPrefix`, but returns the whole
+     attribute set containing `attr` instead of the value of `attr` in
+     the set.
+
+     Example:
+       recursiveGetAttrsetWithJqPrefix {
+         example = [
+           {
+             irrelevant = "not interesting";
+           }
+           {
+             ignored = "ignored attr";
+             relevant = {
+               secret = {
+                 _secret = "/path/to/secret";
+                 quote = true;
+               };
+             };
+           }
+         ];
+       } "_secret" -> { ".example[1].relevant.secret" = { _secret = "/path/to/secret"; quote = true; }; }
+  */
+  recursiveGetAttrsetWithJqPrefix = item: attr:
     let
       recurse = prefix: item:
         if item ? ${attr} then
-          nameValuePair prefix item.${attr}
+          nameValuePair prefix item
         else if isDerivation item then []
         else if isAttrs item then
           map (name:
@@ -206,6 +231,58 @@ utils = rec {
            }
          ]
        }
+
+     The attribute set { _secret = "/path/to/secret"; } can contain extra
+     options, currently it accepts the `quote = true|false` option.
+
+     If `quote = true` (default behavior), the content of the secret file will
+     be quoted as a string and embedded.  Otherwise, if `quote = false`, the
+     content of the secret file will be parsed to JSON and then embedded.
+
+     Example:
+       If the file "/path/to/secret" contains the JSON document:
+
+       [
+         { "a": "topsecretpassword1234" },
+         { "b": "topsecretpassword5678" }
+       ]
+
+       genJqSecretsReplacementSnippet {
+         example = [
+           {
+             irrelevant = "not interesting";
+           }
+           {
+             ignored = "ignored attr";
+             relevant = {
+               secret = {
+                 _secret = "/path/to/secret";
+                 quote = false;
+               };
+             };
+           }
+         ];
+       } "/path/to/output.json"
+
+       would generate a snippet that, when run, outputs the following
+       JSON file at "/path/to/output.json":
+
+       {
+         "example": [
+           {
+             "irrelevant": "not interesting"
+           },
+           {
+             "ignored": "ignored attr",
+             "relevant": {
+               "secret": [
+                 { "a": "topsecretpassword1234" },
+                 { "b": "topsecretpassword5678" }
+               ]
+             }
+           }
+         ]
+       }
   */
   genJqSecretsReplacementSnippet = genJqSecretsReplacementSnippet' "_secret";
 
@@ -213,7 +290,11 @@ utils = rec {
   # attr which identifies the secret to be changed.
   genJqSecretsReplacementSnippet' = attr: set: output:
     let
-      secrets = recursiveGetAttrWithJqPrefix set attr;
+      secretsRaw = recursiveGetAttrsetWithJqPrefix set attr;
+      # Set default option values
+      secrets = mapAttrs (_name: set: {
+        quote = true;
+      } // set) secretsRaw;
       stringOrDefault = str: def: if str == "" then def else str;
     in ''
       if [[ -h '${output}' ]]; then
@@ -227,7 +308,7 @@ utils = rec {
     + concatStringsSep
         "\n"
         (imap1 (index: name: ''
-                  secret${toString index}=$(<'${secrets.${name}}')
+                  secret${toString index}=$(<'${secrets.${name}.${attr}}')
                   export secret${toString index}
                 '')
                (attrNames secrets))
@@ -236,7 +317,7 @@ utils = rec {
     + escapeShellArg (stringOrDefault
           (concatStringsSep
             " | "
-            (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
+            (imap1 (index: name: ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})'')
                    (attrNames secrets)))
           ".")
     + ''

@@ -62,7 +62,7 @@ in buildFHSEnv {
     fontconfig SDL2_ttf
 
     # Mednafen
-    freeglut mesa_glu
+    libglut mesa_glu
 
     # MESS
     expat

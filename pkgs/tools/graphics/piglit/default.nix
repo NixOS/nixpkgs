@@ -2,7 +2,7 @@
 , fetchFromGitLab
 , lib
 , cmake
-, freeglut
+, libglut
 , libGL
 , libGLU
 , libglvnd
@@ -16,6 +16,7 @@
 , libXrender
 , libxcb
 , libxkbcommon
+, mesa
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    freeglut
+    libglut
     libGL
     libGLU
     libglvnd
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "OpenGL test suite, and test-suite runner";
     homepage = "https://gitlab.freedesktop.org/mesa/piglit";
     license = licenses.free; # custom license. See COPYING in the source repo.
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ Flakebi ];
     mainProgram = "piglit";
   };

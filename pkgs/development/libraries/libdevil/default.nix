@@ -15,6 +15,7 @@
 , runtimeShell
 , withXorg ? true
 , testers
+, mesa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ilur";
     license = licenses.lgpl2;
     pkgConfigModules = [ "IL" ];
-    platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ ];
+    inherit (mesa.meta) platforms;
+    maintainers = [ ];
   };
 })

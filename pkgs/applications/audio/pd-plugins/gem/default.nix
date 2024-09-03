@@ -7,7 +7,7 @@
 , libGL
 , libGLU
 , glew
-, freeglut
+, libglut
 , libv4l
 , libX11
 , file
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     glew
-    freeglut
+    libglut
     libv4l
     libX11
   ];

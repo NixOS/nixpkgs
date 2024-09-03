@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.64.7";
+  version = "0.64.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-MxTCVgV0xDKXiYOx6rh5v55uQqlf9Wd06wHfnhDS4Hk=";
+    hash = "sha256-Nt/e0j1mF5Qkpp/dRa9W7En1WoGD2MsR3iREv9IQu5E=";
   };
 
   postPatch = ''
@@ -79,7 +79,12 @@ buildPythonPackage rec {
   # takes 30-180 mins to run entire test suite, not worth the CPU resources, slows down reviews
   # with pytest-xdist, it still takes around 10 mins with 32 cores
   # just run the csv tests, as this should give some indictation of correctness
-  pytestFlagsArray = [ "tests/test_csv.py" ];
+  pytestFlagsArray = [
+    # datasette/app.py:14: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    "-W"
+    "ignore::DeprecationWarning"
+    "tests/test_csv.py"
+  ];
 
   disabledTests = [
     "facet"
@@ -102,6 +107,6 @@ buildPythonPackage rec {
     homepage = "https://datasette.io/";
     changelog = "https://github.com/simonw/datasette/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,9 +1,7 @@
 { lib
 , stdenv
-, runCommand
 , fetchFromGitHub
 , fetchYarnDeps
-, writeText
 , jq
 , yarn
 , fixup-yarn-lock
@@ -23,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = finalAttrs.pname;
+    repo = "element-web";
     rev = "v${finalAttrs.version}";
     hash = webSrcHash;
   };
@@ -69,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     runHook preInstall
 
     cp -R webapp $out
-    cp ${jitsi-meet}/libs/external_api.min.js $out/jitsi_external_api.min.js
+    tar --extract --to-stdout --file ${jitsi-meet.src} jitsi-meet/libs/external_api.min.js > $out/jitsi_external_api.min.js
     echo "${finalAttrs.version}" > "$out/version"
     jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 

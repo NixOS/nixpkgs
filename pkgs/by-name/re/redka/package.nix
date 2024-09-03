@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = {
     description = "Redis re-implemented with SQLite";
     homepage = "https://github.com/nalgeon/redka";
+    changelog = "https://github.com/nalgeon/redka/releases/tag/${src.rev}";
     maintainers = with lib.maintainers; [ sikmir ];
     license = lib.licenses.bsd3;
   };

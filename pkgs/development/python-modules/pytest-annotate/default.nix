@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Generate PyAnnotate annotations from your pytest tests";
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

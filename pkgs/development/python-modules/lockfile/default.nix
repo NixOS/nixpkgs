@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   pbr,
-  pynose,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [ pynose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck

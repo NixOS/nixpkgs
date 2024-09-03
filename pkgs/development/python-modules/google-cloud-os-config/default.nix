@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.17.3";
+  version = "1.17.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oKOqWVmAP14dKpbVDlcX2KSRceTqVES/UGlLsYtnWHA=";
+    hash = "sha256-ocZ41cEZVjSfFMVoNiPOxwaymn9eylWmw6qlp/R/yMQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-os-config";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-os-config-v${version}/packages/google-cloud-os-config/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

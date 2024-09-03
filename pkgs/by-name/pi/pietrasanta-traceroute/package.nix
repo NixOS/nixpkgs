@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pietrasanta-traceroute";
-  version = "0.0.5-unstable-2023-11-28";
+  version = "0.0.5-unstable-2024-06-11";
 
   src = fetchFromGitHub {
     owner = "catchpoint";
     repo = "Networking.traceroute";
-    rev = "c870c7bd7bafeab815f8564a67a281892c3a6230";
-    hash = "sha256-CKqm8b6qNLEpso25+uTvtiR/hFMKJzuXUZkQ7lWzGd8=";
+    rev = "5b9f9cd2cbd5b8d90442d4ddb71ab788297e2153";
+    hash = "sha256-/WsBh42brVCRP31LnCPS34kRaQKMvP+XEENyD5MjCfw=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     mainProgram = "traceroute";
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

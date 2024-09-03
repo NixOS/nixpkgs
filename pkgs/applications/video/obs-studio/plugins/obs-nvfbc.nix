@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "fzwoch";
     repo = "obs-nvfbc";
     rev = "v${version}";
-    sha256 = "sha256-AJ3K0O1vrixskn+/Tpg7LsgRO8N4sgDo1Y6gg3CwGVo=";
+    hash = "sha256-AJ3K0O1vrixskn+/Tpg7LsgRO8N4sgDo1Y6gg3CwGVo=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

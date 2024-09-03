@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protoc-gen-entgrpc";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "contrib";
     rev = "v${version}";
-    sha256 = "sha256-fXvpPH4b1JG++z0KEm9BNu5pGkneefNVvi9R5R3FqB4=";
+    sha256 = "sha256-8BQXjoVTasCReAc3XWBgeoYmL9zLj+uvf9TRKBYaAr4=";
   };
 
-  vendorHash = "sha256-SdUs2alcc4rA6CGIrnaLO7KCseP4a0v6WE58JcRGr0k=";
+  vendorHash = "sha256-jdjcnDfEAP33oQSn5nqgFqE+uwKBXp3gJWTNiiH/6iw=";
 
   subPackages = [ "entproto/cmd/protoc-gen-entgrpc" ];
 
@@ -23,7 +23,7 @@ buildGoModule rec {
     downloadPage = "https://github.com/ent/contrib/";
     license = licenses.asl20;
     homepage = "https://entgo.io/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
 

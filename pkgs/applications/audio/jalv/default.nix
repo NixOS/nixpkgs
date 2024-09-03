@@ -19,7 +19,7 @@ stdenv.mkDerivation  rec {
     description = "Simple but fully featured LV2 host for Jack";
     homepage = "http://drobilla.net/software/jalv";
     license = licenses.isc;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

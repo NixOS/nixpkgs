@@ -6,7 +6,6 @@
 
   # build-system
   jaxlib,
-  pythonRelaxDepsHook,
   setuptools-scm,
 
   # dependencies
@@ -48,7 +47,6 @@ buildPythonPackage rec {
 
   build-system = [
     jaxlib
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

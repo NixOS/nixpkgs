@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.14.1";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f48Dohyd4sMwFZM6/O9yv45KLV3+w7QAkih95uQbCTo=";
+    hash = "sha256-NncPUZ31vs08v+C+5Ku/v5ufa0604DNh0oK378/E8N8=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "sha256-Vyp7asVqvKFkkEb67LXapMkT1AQSburN3+B2dXIPcEU=";
+    hash = "sha256-Vyp7asVqvKFkkEb67LXapMkT1AQSburN3+B2dXIPcEU=";
     fetchSubmodules = true;
   };
 

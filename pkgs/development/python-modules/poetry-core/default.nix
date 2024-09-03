@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

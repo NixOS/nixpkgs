@@ -6,6 +6,7 @@
   dogpile-cache,
   jsonschema,
   keystoneauth1,
+  openstackdocstheme,
   openstacksdk,
   osc-lib,
   oslo-utils,
@@ -15,21 +16,33 @@
   pyyaml,
   requests,
   requests-mock,
+  setuptools,
+  sphinxcontrib-apidoc,
+  sphinxHook,
   stestr,
   stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.6.0";
-  format = "setuptools";
+  version = "5.8.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zWlfy+Pfu0l7vBQnLOIP9vaXzx+i35k4oQqPUtLg3cE=";
+    hash = "sha256-hv7cI1hIZijKhoJxfrxp7hApcfEX2jUmudPilVLslC4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    openstackdocstheme
+    setuptools
+    sphinxcontrib-apidoc
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
     cliff
     dogpile-cache
     jsonschema
@@ -51,7 +64,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "ironicclient" ];

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "nali";
@@ -19,11 +19,13 @@ buildGoModule rec {
   CGO_ENABLED = 0;
   ldflags = [ "-s" "-w" "-X github.com/zu1k/nali/internal/constant.Version=${version}" ];
 
-  postInstall = ''
-    installShellCompletion --cmd nali \
-      --bash <($out/bin/nali completion bash) \
-      --fish <($out/bin/nali completion fish) \
-      --zsh <($out/bin/nali completion zsh)
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export HOME="$TMPDIR"
+      # write to temp files to avoid race condition in config loading
+      $out/bin/nali completion bash > nali.bash
+      $out/bin/nali completion fish > nali.fish
+      $out/bin/nali completion zsh  > nali.zsh
+      installShellCompletion --cmd nali nali.{bash,fish,zsh}
   '';
 
   meta = with lib; {

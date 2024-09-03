@@ -7,20 +7,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "heh";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ndd7xv";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zkb+HogwioqxZ+BTl7bcDQx9i9uWhT2QdAIXpHqvDl0=";
+    hash = "sha256-eqWBTylvXqGhWdSGHdTM1ZURSD5pkUBoBOvBJ5zmJ7w=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit
   ]);
 
-  cargoHash = "sha256-YcTaLq04NhmnJ1pdbiKMRIBSFvHNWNgoAS8Uz8uGGAw=";
+  cargoHash = "sha256-rLZgKLL28/ZrXzHVI6m4YeV2mk4E9W58HjTzRl2bMOw=";
 
   meta = with lib; {
     description = "Cross-platform terminal UI used for modifying file data in hex or ASCII";

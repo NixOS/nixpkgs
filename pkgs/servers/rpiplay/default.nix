@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FD-/RPiPlay";
     description = "Open-source implementation of an AirPlay mirroring server";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "rpiplay";
   };

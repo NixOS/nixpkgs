@@ -538,25 +538,13 @@ in
         '';
       };
 
-      enableMellon = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the mod_auth_mellon module.";
-      };
+      enableMellon = mkEnableOption "the mod_auth_mellon module";
 
-      enablePHP = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the PHP module.";
-      };
+      enablePHP = mkEnableOption "the PHP module";
 
       phpPackage = mkPackageOption pkgs "php" { };
 
-      enablePerl = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the Perl module (mod_perl).";
-      };
+      enablePerl = mkEnableOption "the Perl module (mod_perl)";
 
       phpOptions = mkOption {
         type = types.lines;

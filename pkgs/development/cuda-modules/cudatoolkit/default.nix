@@ -3,7 +3,7 @@
   runPatches ? [ ],
   autoPatchelfHook,
   autoAddDriverRunpath,
-  addOpenGLRunpath,
+  addDriverRunpath,
   alsa-lib,
   curlMinimal,
   expat,
@@ -35,7 +35,7 @@
   wayland,
   xorg,
   zlib,
-  freeglut,
+  libglut,
   libGLU,
   libsForQt5,
   libtiff,
@@ -74,7 +74,7 @@ backendStdenv.mkDerivation rec {
       perl
       makeWrapper
       rsync
-      addOpenGLRunpath
+      addDriverRunpath
       autoPatchelfHook
       autoAddDriverRunpath
       markForCudatoolkitRootHook
@@ -85,7 +85,7 @@ backendStdenv.mkDerivation rec {
   buildInputs =
     lib.optionals (lib.versionOlder version "11") [
       libsForQt5.qt5.qtwebengine
-      freeglut
+      libglut
       libGLU
     ]
     ++ [

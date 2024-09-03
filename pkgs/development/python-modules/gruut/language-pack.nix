@@ -4,13 +4,14 @@
 
   lang,
   version,
-  format,
   src,
+  build-system,
 }:
 
 buildPythonPackage rec {
   pname = "gruut-lang-${lang}";
-  inherit version format src;
+  pyproject = true;
+  inherit version src build-system;
 
   prePatch = ''
     cd "${pname}"

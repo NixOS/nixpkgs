@@ -33,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "7.0.5";
+  version = "7.0.6";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-H/tWgVjyZcCFVEZL+4VOZWjvaDvwMxKSO1HyjFB5Ck4=";
+    hash = "sha256-IYJPf/Egh8DJud4gcZmnWpwxsDA2aIx8ucF48KO1f40=";
   };
 
   nativeBuildInputs = [
@@ -125,7 +125,8 @@ stdenv.mkDerivation rec {
     sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
-  hardeningDisable = [ "stackprotector" ];
+  # zerocallusedregs interferes during BPF compilation; TODO: perhaps improve
+  hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
 
   installFlags = [
     "e_datadir=\${TMPDIR}"

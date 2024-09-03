@@ -40,14 +40,14 @@
 
 stdenv.mkDerivation (final: {
   pname = "pacman";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
     owner = "pacman";
     repo = "pacman";
     rev = "v${final.version}";
-    hash = "sha256-uHBq1A//YSqFATlyqjC5ZgmvPkNKqp7sVew+nbmLH78=";
+    hash = "sha256-ejOBxN2HjV4dZwFA7zvPz3JUJa0xiJ/jZ+evEQYG1Mc=";
   };
 
   strictDeps = true;
@@ -89,25 +89,23 @@ stdenv.mkDerivation (final: {
   ]; in ''
     echo 'export PATH=${lib.makeBinPath compressionTools}:$PATH' >> scripts/libmakepkg/util/compress.sh.in
     substituteInPlace meson.build \
-      --replace "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
-      --replace "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
-      --replace "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'" \
-      --replace "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
+      --replace-fail "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
+      --replace-fail "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
+      --replace-fail "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
     substituteInPlace doc/meson.build \
-      --replace "/bin/true" "${coreutils}/bin/true"
+      --replace-fail "/bin/true" "${coreutils}/bin/true"
     substituteInPlace scripts/repo-add.sh.in \
-      --replace bsdtar "${libarchive}/bin/bsdtar"
-    substituteInPlace scripts/pacman-key.sh.in \
-      --replace "local KEYRING_IMPORT_DIR='@keyringdir@'" "" \
-      --subst-var-by keyringdir '\$KEYRING_IMPORT_DIR'
+      --replace-fail bsdtar "${libarchive}/bin/bsdtar"
+
+    # Fix https://gitlab.archlinux.org/pacman/pacman/-/issues/171
+    substituteInPlace scripts/libmakepkg/source/git.sh.in \
+      --replace-warn "---mirror" "--mirror"
   '';
 
   mesonFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ];
-
-  hardeningDisable = [ "fortify3" ];
 
   postInstall = ''
     installShellCompletion --bash scripts/pacman --zsh scripts/_pacman

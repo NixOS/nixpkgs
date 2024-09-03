@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "drogonframework";
     repo = "drogon";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-P6blu3EIBzmK1zikFPiV+tvFLfiQhK+cRdClQOhcBSU=";
+    hash = "sha256-P6blu3EIBzmK1zikFPiV+tvFLfiQhK+cRdClQOhcBSU=";
     fetchSubmodules = true;
   };
 

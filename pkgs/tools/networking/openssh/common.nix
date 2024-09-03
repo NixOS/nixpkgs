@@ -24,7 +24,7 @@
 , etcDir ? null
 , withKerberos ? false
 , withLdns ? true
-, libkrb5
+, krb5
 , libfido2
 , libxcrypt
 , hostname
@@ -36,7 +36,7 @@
 , isNixos ? stdenv.hostPlatform.isLinux
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   patches = [
@@ -60,15 +60,15 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ]
-    # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
+    # This is not the same as the krb5 from the inputs! pkgs.krb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
-    ++ lib.optional withKerberos pkgs.libkrb5
+    ++ lib.optional withKerberos pkgs.krb5
     ++ extraNativeBuildInputs;
   buildInputs = [ zlib libedit ]
     ++ [ (if linkOpenssl then openssl else libxcrypt) ]
     ++ lib.optional withFIDO libfido2
-    ++ lib.optional withKerberos libkrb5
+    ++ lib.optional withKerberos krb5
     ++ lib.optional withLdns ldns
     ++ lib.optional withPAM pam;
 
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     (lib.enableFeature dsaKeysSupport "dsa-keys")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
-    ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
+    ++ lib.optional withKerberos (assert krb5 != null; "--with-kerberos5=${lib.getDev krb5}")
     ++ lib.optional stdenv.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
@@ -111,7 +111,7 @@ stdenv.mkDerivation {
 
   hardeningEnable = [ "pie" ];
 
-  doCheck = true;
+  doCheck = false;
   enableParallelChecking = false;
   nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
@@ -181,7 +181,11 @@ stdenv.mkDerivation {
     inherit withKerberos;
     tests = {
       borgbackup-integration = nixosTests.borgbackup;
-      openssh = nixosTests.openssh;
+      nixosTest = nixosTests.openssh;
+      openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        pname = previousAttrs.pname + "-test";
+        doCheck = true;
+      });
     };
   };
 
@@ -191,7 +195,7 @@ stdenv.mkDerivation {
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ eelco aneeshusa ]);
+    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ aneeshusa ]);
     mainProgram = "ssh";
   } // extraMeta;
-}
+})

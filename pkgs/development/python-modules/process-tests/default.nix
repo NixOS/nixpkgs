@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   setuptools,
 }:
 
@@ -14,6 +15,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-5dV96nFhJR6RytuEvz7MhSdfsSH9R45Xn4AHd7HUJL0=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Add optional ignore_case param to wait_for_strings
+      url = "https://github.com/ionelmc/python-process-tests/commit/236c3e83722a36eddb4abb111a2fcceb49cc9ab7.patch";
+      hash = "sha256-LbLaDXHbywvsq++lklNiLw8u0USuiEpuxzpNMhXBWtE=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 

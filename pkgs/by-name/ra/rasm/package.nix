@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rasm";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "EdouardBERGE";
     repo = "rasm";
     rev = "v${version}";
-    hash = "sha256-m2XRi9RF089dBpkwcu/zgmd3XnBF4uJU5B4ec4WJ36I=";
+    hash = "sha256-DX+i9G+HK0Iek6qmsYQFbieHUtRazKkcyv+gYQ748X0=";
   };
 
   # by default the EXEC variable contains `rasm.exe`
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin rasm
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://rasm.wikidot.com/english-index:home";
     description = "Z80 assembler";
     mainProgram = "rasm";
     # use -n option to display all licenses
-    license = licenses.mit; # expat version
+    license = lib.licenses.mit; # expat version
     maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

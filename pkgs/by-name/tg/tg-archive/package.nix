@@ -20,10 +20,6 @@ in python3.pkgs.buildPythonApplication {
   pyproject = true;
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     setuptools
     telethon

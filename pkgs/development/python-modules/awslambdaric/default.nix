@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "2.0.10";
+  version = "2.0.11";
   pyproject = true;
 
   disabled = isPy27;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-tvTN6gV73Qnbe4OBHtfxt4jXV32fMTPE4H79WIkgkxE=";
+    sha256 = "sha256-9DiUpgeL4bY7G3b5R06FjpN0st03F84fj0bhp70moKo=";
   };
 
   patches = [

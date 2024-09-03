@@ -7,15 +7,13 @@
 
 buildGoModule rec {
   pname = "openapi-changes";
-  version = "0.0.61";
+  version = "0.0.67";
 
   src = fetchFromGitHub {
     owner = "pb33f";
     repo = pname;
-    # github reports `the given path has multiple possibilities` for the tagged release
-    # rev = "v${version}";
-    rev = "f0bccc1fcf42ea6a97a81acc3283dbe14a3ebb51";
-    hash = "sha256-D0jUXCxlf1aF0uc/P9Lgu9Va4Es3CQcko9BzGg1pCq8=";
+    rev = "v${version}";
+    hash = "sha256-SNH11z/0DeaYfGwBKW3iIeCVdlpcoZ1elIlgl+quWIY=";
   };
 
   # this test requires the `.git` of the project to be present
@@ -29,7 +27,7 @@ buildGoModule rec {
     wrapProgram $out/bin/openapi-changes --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  vendorHash = "sha256-gaBVwrSaIwe1eh8voq928cxM/d0urVUF0OUwWZb2fR8=";
+  vendorHash = "sha256-VtwIAP2+FZ6Vpexcb9O68WfJdsTMrJn5bDjkxDe69e4=";
 
   meta = with lib; {
     description = "World's sexiest OpenAPI breaking changes detector";

@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "Urban Dictionary CLI - written in Rust";
     homepage = "https://github.com/lsmb/udict";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "udict";
   };
 }

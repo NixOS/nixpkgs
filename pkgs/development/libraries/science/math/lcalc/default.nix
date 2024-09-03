@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "sagemath";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
+    hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,7 @@
   fetchPypi,
   git,
   gitpython,
-  krb5,
+  krb5-c, # C krb5 library, not PyPI krb5
   mock,
   pytestCheckHook,
   pythonOlder,
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-YzKjG43biRbTZKtzSUHHhtzOfcZfzISHDFolqzrBjL8=";
   };
 
-  buildInputs = [ krb5 ];
+  buildInputs = [ krb5-c ];
 
   propagatedBuildInputs = [
     git

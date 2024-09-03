@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  numpy,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +26,6 @@ buildPythonPackage rec {
     description = "Explicitly typed attributes for Python";
     homepage = "https://pypi.python.org/pypi/traits";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

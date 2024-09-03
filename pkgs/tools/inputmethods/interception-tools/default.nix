@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "interception/linux";
     repo = "tools";
     rev = "v${version}";
-    sha256 = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
+    hash = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

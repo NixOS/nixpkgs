@@ -17,7 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "texpresso";
-  version = "0-unstable-2024-05-23";
+  version = "0-unstable-2024-07-02";
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc" \
+      --replace-fail "LDCC=g++" "LDCC=${stdenv.cc.targetPrefix}c++"
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -35,11 +41,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "texpresso";
-    rev = "01cafac1ec6d33d5e169a0202f23a6f565cc55b8";
-    hash = "sha256-uLGanGEUGzxIYFbU3U8LLV3bpn/IN9XltvWCmwSlD7E=";
+    rev = "0e14b1df6269b07c2c985f001e32b48673495a8b";
+    hash = "sha256-av1yadR2giJUxFQuHSXFgTbCNsmccrzKOmLVnAGJt6c=";
   };
 
   buildFlags = [ "texpresso" ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   installPhase = ''
     runHook preInstall
@@ -70,5 +80,6 @@ stdenv.mkDerivation rec {
     description = "Live rendering and error reporting for LaTeX";
     maintainers = with lib.maintainers; [ nickhu ];
     license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

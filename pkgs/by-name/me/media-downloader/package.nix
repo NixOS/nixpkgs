@@ -4,7 +4,6 @@
   # https://github.com/mhogomchungu/media-downloader?tab=readme-ov-file#extensions
   extraPackages ? [
     aria2
-    yt-dlp
     ffmpeg
     python3
   ],
@@ -14,27 +13,18 @@
   libsForQt5,
   python3,
   stdenv,
-  yt-dlp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "4.7.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "media-downloader";
     rev = finalAttrs.version;
-    hash = "sha256-ykPYxRgzKZrA0KwS1FoxZOkSL+7TbLgy0yLfs7Iqpf4=";
+    hash = "sha256-yAG9F9helGM8/TjJiqMDUviHK6uEUvHGny2QklwB2JY=";
   };
-
-  # Disable automatically updating extensions when starting the program because this will
-  # invalidate the dependence on extensions and may cause potential security issues
-  # Can still be enabled in Configure > Actions At Startup
-  postPatch = ''
-    substituteInPlace src/settings.cpp \
-      --replace-fail '"ShowVersionInfoAndAutoDownloadUpdates",true' '"ShowVersionInfoAndAutoDownloadUpdates",false' \
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -52,8 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
       lux, you-get, svtplay-dl, aria2c, wget and safari books.
 
       Read https://github.com/mhogomchungu/media-downloader/wiki/Extensions
-      for further information. We have packaged most of them, and they can
-      be added by overriding `extraPackages`.
+      for further information. Note that adding these packages to extraPackages
+      doesn't work, because the author doesn't intend to support custom
+      installation of them. These packages will be downloaded from original
+      source when executing the application for the first time.
     '';
     homepage = "https://github.com/mhogomchungu/media-downloader";
     license = lib.licenses.gpl2Plus;

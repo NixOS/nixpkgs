@@ -10,7 +10,6 @@
 , mirage-crypto
 , mirage-crypto-ec
 , mirage-crypto-pk
-, mirage-crypto-rng
 , x509
 , yojson
 , ounit

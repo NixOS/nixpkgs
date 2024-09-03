@@ -17,6 +17,10 @@
 , buildGoModule
 , makeWrapper
 , ncurses
+, which
+
+, enable_upx ? true
+, upx
 
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
@@ -97,21 +101,17 @@ let
   llama-cpp-rpc = (llama-cpp-grpc.overrideAttrs (prev: {
     name = "llama-cpp-rpc";
     cmakeFlags = prev.cmakeFlags ++ [
-      (lib.cmakeBool "LLAMA_AVX" false)
-      (lib.cmakeBool "LLAMA_AVX2" false)
-      (lib.cmakeBool "LLAMA_AVX512" false)
-      (lib.cmakeBool "LLAMA_FMA" false)
-      (lib.cmakeBool "LLAMA_F16C" false)
-      (lib.cmakeBool "LLAMA_RPC" true)
+      (lib.cmakeBool "GGML_AVX" false)
+      (lib.cmakeBool "GGML_AVX2" false)
+      (lib.cmakeBool "GGML_AVX512" false)
+      (lib.cmakeBool "GGML_FMA" false)
+      (lib.cmakeBool "GGML_F16C" false)
     ];
-    postPatch = prev.postPatch + ''
-      sed -i examples/rpc/CMakeLists.txt \
-        -e '$a\install(TARGETS rpc-server RUNTIME)'
-    '';
   })).override {
     cudaSupport = false;
     openclSupport = false;
     blasSupport = false;
+    rpcSupport = true;
   };
 
   llama-cpp-grpc = (llama-cpp.overrideAttrs (final: prev: {
@@ -119,8 +119,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "37bef8943312d91183ff06d8f1214082a17344a5";
-      hash = "sha256-E3kCMDK5TXozBsprp4D581WHTVP9aljxB1KZUKug1pM=";
+      rev = "ed9d2854c9de4ae1f448334294e61167b04bec2a";
+      hash = "sha256-Xu2h9Zu+Q9utfFFmDWBOEu/EXth4xWRNoTMvPF5Fo/A=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -137,14 +137,12 @@ let
     '';
     cmakeFlags = prev.cmakeFlags ++ [
       (lib.cmakeBool "BUILD_SHARED_LIBS" false)
-      (lib.cmakeBool "LLAMA_AVX" enable_avx)
-      (lib.cmakeBool "LLAMA_AVX2" enable_avx2)
-      (lib.cmakeBool "LLAMA_AVX512" enable_avx512)
-      (lib.cmakeBool "LLAMA_FMA" enable_fma)
-      (lib.cmakeBool "LLAMA_F16C" enable_f16c)
+      (lib.cmakeBool "GGML_AVX" enable_avx)
+      (lib.cmakeBool "GGML_AVX2" enable_avx2)
+      (lib.cmakeBool "GGML_AVX512" enable_avx512)
+      (lib.cmakeBool "GGML_FMA" enable_fma)
+      (lib.cmakeBool "GGML_F16C" enable_f16c)
     ];
-    postInstall = null;
-
     buildInputs = prev.buildInputs ++ [
       protobuf # provides also abseil_cpp as propagated build input
       grpc
@@ -180,7 +178,7 @@ let
   espeak-ng' = espeak-ng.overrideAttrs (self: {
     name = "espeak-ng'";
     inherit (go-piper) src;
-    sourceRoot = "source/espeak";
+    sourceRoot = "${go-piper.src.name}/espeak";
     patches = [ ];
     nativeBuildInputs = [ cmake ];
     cmakeFlags = (self.cmakeFlags or [ ]) ++ [
@@ -200,7 +198,7 @@ let
   piper-phonemize = stdenv.mkDerivation {
     name = "piper-phonemize";
     inherit (go-piper) src;
-    sourceRoot = "source/piper-phonemize";
+    sourceRoot = "${go-piper.src.name}/piper-phonemize";
     buildInputs = [ espeak-ng' onnxruntime ];
     nativeBuildInputs = [ cmake pkg-config ];
     cmakeFlags = [
@@ -213,7 +211,7 @@ let
   piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
     name = "piper-tts'";
     inherit (go-piper) src;
-    sourceRoot = "source/piper";
+    sourceRoot = "${go-piper.src.name}/piper";
     installPhase = null;
     postInstall = ''
       cp CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
@@ -275,8 +273,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "b29b3b29240aac8b71ce8e5a4360c1f1562ad66f";
-      hash = "sha256-vSd+AP9AexbG4wvdkk6wjxYQBZdKWGK2Ix7c86MUfB8=";
+      rev = "6739eb83c3ca5cf40d24c6fe8442a761a1eb6248";
+      hash = "sha256-1yDdJVjIwYDJKn93zn4xOJXMoDTqaG2TvakjdHIMCxk=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
@@ -345,7 +343,7 @@ let
   go-tiny-dream-ncnn = ncnn.overrideAttrs (self: {
     name = "go-tiny-dream-ncnn";
     inherit (go-tiny-dream) src;
-    sourceRoot = "source/ncnn";
+    sourceRoot = "${go-tiny-dream.src.name}/ncnn";
     cmakeFlags = self.cmakeFlags ++ [
       (lib.cmakeBool "NCNN_SHARED_LIB" false)
       (lib.cmakeBool "NCNN_OPENMP" false)
@@ -394,58 +392,67 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.17.1";
+  version = "2.19.4";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-G9My4t3vJ1sWyD+vxUgON4ezXURVAAgu1nAtTjd3ZR8=";
+    hash = "sha256-aKq6/DI+4+BvIEw6eONqPr3mZXuz7rMFN+FBypVj0Gc=";
   };
+
+  prepare-sources =
+    let
+      cp = "cp -r --no-preserve=mode,ownership";
+    in
+    ''
+      mkdir sources
+      ${cp} ${go-llama} sources/go-llama.cpp
+      ${cp} ${gpt4all} sources/gpt4all
+      ${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper
+      ${cp} ${go-rwkv} sources/go-rwkv.cpp
+      ${cp} ${whisper-cpp.src} sources/whisper.cpp
+      cp ${whisper-cpp}/lib/lib*.a sources/whisper.cpp
+      ${cp} ${go-bert} sources/go-bert.cpp
+      ${cp} ${if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src} sources/go-stable-diffusion
+      ${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream
+    '';
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-Hu7aJFi40CKNWAxYOR47VBZI1A/9SlBIVQVcB8iqcxA=";
+    vendorHash = "sha256-HEKE75+ixuNbM+KEuhbQQ/NYYEzVlGYOttPavftWKhk=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
-    postPatch =
-      let
-        cp = "cp -r --no-preserve=mode,ownership";
-      in
-      ''
-        sed -i Makefile \
-          -e 's;git clone.*go-llama\.cpp$;${cp} ${go-llama} sources/go-llama\.cpp;' \
-          -e 's;git clone.*gpt4all$;${cp} ${gpt4all} sources/gpt4all;' \
-          -e 's;git clone.*go-piper$;${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper;' \
-          -e 's;git clone.*go-rwkv\.cpp$;${cp} ${go-rwkv} sources/go-rwkv\.cpp;' \
-          -e 's;git clone.*whisper\.cpp$;${cp} ${whisper-cpp.src} sources/whisper\.cpp;' \
-          -e 's;git clone.*go-bert\.cpp$;${cp} ${go-bert} sources/go-bert\.cpp;' \
-          -e 's;git clone.*diffusion$;${cp} ${if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src} sources/go-stable-diffusion;' \
-          -e 's;git clone.*go-tiny-dream$;${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream;' \
-          -e 's, && git checkout.*,,g' \
-          -e '/mod download/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-fallback/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
+    postPatch = ''
+      sed -i Makefile \
+        -e '/mod download/ d' \
+        -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-fallback/ d' \
+        -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
+        -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
 
-      '' + lib.optionalString with_cublas ''
-        sed -i Makefile \
-          -e '/^CGO_LDFLAGS_WHISPER?=/ s;$;-L${libcufft}/lib -L${cuda_cudart}/lib;'
-      '';
+    '' + lib.optionalString with_cublas ''
+      sed -i Makefile \
+        -e '/^CGO_LDFLAGS_WHISPER?=/ s;$;-L${libcufft}/lib -L${cuda_cudart}/lib;'
+    '';
 
-    postConfigure = ''
+    postConfigure = prepare-sources + ''
       shopt -s extglob
       mkdir -p backend-assets/grpc
       cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-avx2
       cp ${llama-cpp-rpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
 
+      mkdir -p backend/cpp/llama/llama.cpp
+
       mkdir -p backend-assets/util
-      cp ${llama-cpp-rpc}/bin/rpc-server backend-assets/util/llama-cpp-rpc-server
+      cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
+
+      # avoid rebuild of prebuilt make targets
+      touch backend-assets/grpc/* backend-assets/util/* sources/**/lib*.a
     '';
 
     buildInputs = [ ]
-      ++ lib.optionals with_cublas [ libcublas ]
+      ++ lib.optionals with_cublas [ cuda_cudart libcublas libcufft ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ]
       ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
@@ -457,14 +464,15 @@ let
       protoc-gen-go-grpc
       makeWrapper
       ncurses # tput
+      which
     ]
+    ++ lib.optional enable_upx upx
     ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
-    modBuildPhase = ''
-      mkdir sources
-      make prepare-sources protogen-go
+    modBuildPhase = prepare-sources + ''
+      make protogen-go
       go mod tidy -v
     '';
 
@@ -484,17 +492,11 @@ let
     buildPhase = ''
       runHook preBuild
 
-      mkdir sources
-      make prepare-sources
-      # avoid rebuild of prebuilt libraries
-      touch sources/**/lib*.a
-      cp ${whisper-cpp}/lib/static/lib*.a sources/whisper.cpp
-
       local flagsArray=(
         ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         SHELL=$SHELL
       )
-      _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+      concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
       echoCmd 'build flags' "''${flagsArray[@]}"
       make build "''${flagsArray[@]}"
       unset flagsArray
@@ -515,10 +517,17 @@ let
     postFixup =
       let
         LD_LIBRARY_PATH = [ ]
-          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_cublas [
+          # driverLink has to be first to avoid loading the stub version of libcuda.so
+          # https://github.com/NixOS/nixpkgs/issues/320145#issuecomment-2190319327
+          addDriverRunpath.driverLink
+          (lib.getLib libcublas)
+          cuda_cudart
+        ]
           ++ lib.optionals with_clblas [ clblast ocl-icd ]
           ++ lib.optionals with_openblas [ openblas ]
-          ++ lib.optionals with_tts [ piper-phonemize ];
+          ++ lib.optionals with_tts [ piper-phonemize ]
+          ++ lib.optionals (with_tts && enable_upx) [ fmt spdlog ];
       in
       ''
         wrapProgram $out/bin/${pname} \

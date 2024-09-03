@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, installShellFiles, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  nativeBuildInputs = [ jq makeWrapper ];
+  nativeBuildInputs = [ jq makeWrapper installShellFiles ];
 
   patches = [
     # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
@@ -64,6 +64,7 @@ in stdenv.mkDerivation rec {
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
+            --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
             --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 
@@ -89,6 +90,12 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/zsh/site-functions/_gcloud $out/share/zsh/site-functions/_gsutil
     # zsh doesn't load completions from $FPATH without #compdef as the first line
     sed -i '1 i #compdef gcloud' $out/share/zsh/site-functions/_gcloud
+
+    # setup fish completion
+    installShellCompletion --cmd gcloud \
+      --fish <(echo "complete -c gcloud -f -a '(__fish_argcomplete_complete gcloud)'")
+    installShellCompletion --cmd gsutil \
+      --fish <(echo "complete -c gsutil -f -a '(__fish_argcomplete_complete gsutil)'")
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.

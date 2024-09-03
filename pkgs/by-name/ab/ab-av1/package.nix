@@ -1,21 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ab-av1";
-  version = "0.7.14";
+  version = "0.7.17";
 
   src = fetchFromGitHub {
     owner = "alexheretic";
     repo = "ab-av1";
     rev = "v${version}";
-    hash = "sha256-cDabGXNzusVnp4exINqUitEL1HnzSgpcRtYXU5pSRhY=";
+    hash = "sha256-QPelXqJT3zbVP+lNiczrCR+JD4icimSyCravlIwTAyw=";
   };
 
-  cargoHash = "sha256-sW/673orvK+mIUqTijpNh4YGd9ZrgSveGT6F1O5OYfI=";
+  cargoHash = "sha256-7h1Hbtsk0pnoPXX5sFfzcZoH/sqcb0YTpmJp6yCzTG0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ab-av1 \
       --bash <($out/bin/ab-av1 print-completions bash) \
       --fish <($out/bin/ab-av1 print-completions fish) \

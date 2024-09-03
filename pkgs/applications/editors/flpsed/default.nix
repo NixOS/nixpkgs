@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://flpsed.org/flpsed.html";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "flpsed";
   };
 }

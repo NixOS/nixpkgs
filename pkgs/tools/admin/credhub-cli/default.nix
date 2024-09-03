@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "credhub-cli";
-  version = "2.9.33";
+  version = "2.9.36";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry-incubator";
     repo = "credhub-cli";
     rev = version;
-    sha256 = "sha256-39ag4gc9EEn1wc+QdEDOi9ZOU5ie/+E7yecNtgCxfEk=";
+    sha256 = "sha256-5jrVN0mFRLieKg92pWrBK89SiPr9A2Z8Rtzou4dRdOQ=";
   };
 
   # these tests require network access that we're not going to give them

@@ -398,30 +398,29 @@ in
       before = [ "jicofo.service" "jitsi-videobridge2.service" ] ++ (optional cfg.prosody.enable "prosody.service") ++ (optional cfg.jigasi.enable "jigasi.service");
       serviceConfig = {
         Type = "oneshot";
+        UMask = "027";
+        User = "root";
+        Group = "jitsi-meet";
+        WorkingDirectory = "/var/lib/jitsi-meet";
       };
 
       script = let
         secrets = [ "jicofo-component-secret" "jicofo-user-secret" "jibri-auth-secret" "jibri-recorder-secret" ] ++ (optionals cfg.jigasi.enable [ "jigasi-user-secret" "jigasi-component-secret" ]) ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
       in
       ''
-        cd /var/lib/jitsi-meet
         ${concatMapStringsSep "\n" (s: ''
           if [ ! -f ${s} ]; then
             tr -dc a-zA-Z0-9 </dev/urandom | head -c 64 > ${s}
-            chown root:jitsi-meet ${s}
-            chmod 640 ${s}
           fi
         '') secrets}
 
         # for easy access in prosody
         echo "JICOFO_COMPONENT_SECRET=$(cat jicofo-component-secret)" > secrets-env
         echo "JIGASI_COMPONENT_SECRET=$(cat jigasi-component-secret)" >> secrets-env
-        chown root:jitsi-meet secrets-env
-        chmod 640 secrets-env
       ''
       + optionalString cfg.prosody.enable ''
         # generate self-signed certificates
-        if [ ! -f /var/lib/jitsi-meet.crt ]; then
+        if [ ! -f /var/lib/jitsi-meet/jitsi-meet.crt ]; then
           ${getBin pkgs.openssl}/bin/openssl req \
             -x509 \
             -newkey rsa:4096 \
@@ -430,8 +429,7 @@ in
             -days 36500 \
             -nodes \
             -subj '/CN=${cfg.hostName}/CN=auth.${cfg.hostName}'
-          chmod 640 /var/lib/jitsi-meet/jitsi-meet.{crt,key}
-          chown root:jitsi-meet /var/lib/jitsi-meet/jitsi-meet.{crt,key}
+          chmod 640 /var/lib/jitsi-meet/jitsi-meet.key
         fi
       '';
     };

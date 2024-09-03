@@ -6,7 +6,7 @@
   scipy,
   sympy,
   setuptools,
-  pynose,
+  nose,
   cython,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pynose
+    nose
     cython
   ];
 

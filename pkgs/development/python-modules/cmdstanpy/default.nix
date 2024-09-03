@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   substituteAll,
   cmdstan,
-  pythonRelaxDepsHook,
   setuptools,
   pandas,
   numpy,
@@ -18,25 +16,20 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.3";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PV7W1H4QYIOx1EHrGljrGUhCH1Y8ZPd9gEtCocc7x64=";
+    hash = "sha256-SKDqLvWbzaBcL13E87kcphBJNIZfdkPp2g4SIDEKA0U=";
   };
 
   patches = [
     (substituteAll {
       src = ./use-nix-cmdstan-path.patch;
       cmdstan = "${cmdstan}/opt/cmdstan";
-    })
-    # Fix seed-dependent tests
-    (fetchpatch {
-      url = "https://github.com/stan-dev/cmdstanpy/commit/c72acd0b8123c02b47d5d583bdd7d8408b04562c.patch";
-      hash = "sha256-cliyDDko4spYa62DMwWBavy5pePkofJo4Kf8I0RzueM=";
     })
   ];
 
@@ -47,7 +40,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

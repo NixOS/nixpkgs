@@ -2,33 +2,36 @@
   lib,
   apt,
   buildPythonPackage,
-  fetchgit,
+  fetchFromGitLab,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "apt";
-  version = "2.7.6";
+  version = "2.8.0";
 
   pyproject = true;
 
-  src = fetchgit {
-    url = "https://git.launchpad.net/python-apt";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "apt-team";
+    repo = "python-apt";
     rev = "refs/tags/${version}";
-    hash = "sha256-1jTe8ncMKV78+cfSZ6p6qdjxs0plZLB4VwVtPLtDlAc=";
+    hash = "sha256-7l7rgyJ28iQuL6ShF/KYwL/kAXpLPTqnUIavVxNF+wU=";
   };
 
   buildInputs = [ apt.dev ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Ensure the version is set properly without trying to invoke
   # dpkg-parsechangelog
-  env.DEBVER = "${version}";
+  env.DEBVER = version;
 
   pythonImportsCheck = [ "apt_pkg" ];
 
   meta = {
+    changelog = "https://salsa.debian.org/apt-team/python-apt/-/blob/${version}/debian/changelog";
     description = "Python bindings for APT";
     homepage = "https://launchpad.net/python-apt";
     license = lib.licenses.gpl2;

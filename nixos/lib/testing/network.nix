@@ -32,10 +32,19 @@ let
       # Automatically assign IP addresses to requested interfaces.
       assignIPs = lib.filter (i: i.assignIP) interfaces;
       ipInterfaces = forEach assignIPs (i:
-        nameValuePair i.name { ipv4.addresses =
-          [ { address = "192.168.${toString i.vlan}.${toString config.virtualisation.test.nodeNumber}";
+        nameValuePair i.name {
+          ipv4.addresses = [
+            {
+              address = "192.168.${toString i.vlan}.${toString config.virtualisation.test.nodeNumber}";
               prefixLength = 24;
-            }];
+            }
+          ];
+          ipv6.addresses = [
+            {
+              address = "2001:db8:${toString i.vlan}::${toString config.virtualisation.test.nodeNumber}";
+              prefixLength = 64;
+            }
+          ];
         });
 
       qemuOptions = lib.flatten (forEach interfacesNumbered ({ fst, snd }:
@@ -53,6 +62,9 @@ let
           networking.primaryIPAddress =
             optionalString (ipInterfaces != [ ]) (head (head ipInterfaces).value.ipv4.addresses).address;
 
+          networking.primaryIPv6Address =
+            optionalString (ipInterfaces != [ ]) (head (head ipInterfaces).value.ipv6.addresses).address;
+
           # Put the IP addresses of all VMs in this machine's
           # /etc/hosts file.  If a machine has multiple
           # interfaces, use the IP address corresponding to
@@ -60,12 +72,16 @@ let
           # virtualisation.vlans option).
           networking.extraHosts = flip concatMapStrings (attrNames nodes)
             (m':
-              let config = nodes.${m'}; in
+              let
+                config = nodes.${m'};
+                hostnames =
+                  optionalString (config.networking.domain != null) "${config.networking.hostName}.${config.networking.domain} " +
+                  "${config.networking.hostName}\n";
+              in
               optionalString (config.networking.primaryIPAddress != "")
-                ("${config.networking.primaryIPAddress} " +
-                  optionalString (config.networking.domain != null)
-                    "${config.networking.hostName}.${config.networking.domain} " +
-                  "${config.networking.hostName}\n"));
+                "${config.networking.primaryIPAddress} ${hostnames}" +
+              optionalString (config.networking.primaryIPv6Address != "")
+                ("${config.networking.primaryIPv6Address} ${hostnames}"));
 
           virtualisation.qemu.options = qemuOptions;
           boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;

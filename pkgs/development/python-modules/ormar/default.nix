@@ -21,14 +21,13 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sqlalchemy,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.12.2";
+  version = "0.20.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -37,7 +36,7 @@ buildPythonPackage rec {
     owner = "collerek";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Yd5ex0bcy61zq5Sn2dKeb98s/CMxUWnyGx6jFWQ3RUs=";
+    hash = "sha256-DzvmJpWJANIoc5lvWAD0b2bhbKdDEpNL2l3TqXSZSnc=";
   };
 
   pythonRelaxDeps = [
@@ -48,7 +47,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs =

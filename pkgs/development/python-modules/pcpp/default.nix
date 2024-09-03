@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "ned14";
     repo = "pcpp";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Fs+CMV4eRKcB+KdV93ncgcqaMnO5etnMY/ivmSJh3Wc=";
+    hash = "sha256-Fs+CMV4eRKcB+KdV93ncgcqaMnO5etnMY/ivmSJh3Wc=";
     fetchSubmodules = true;
   };
 

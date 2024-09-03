@@ -37,16 +37,19 @@ stdenvNoCC.mkDerivation {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/colorscript \
-      --replace "/opt/shell-color-scripts/colorscripts" \
-                "$out/share/shell-color-scripts/colorscripts"
+    substituteInPlace \
+      $out/bin/colorscript \
+      $out/share/fish/vendor_completions.d/colorscript.fish \
+      $out/share/zsh/site-functions/_colorscript \
+      --replace-fail "/opt/shell-color-scripts/colorscripts" \
+        "$out/share/shell-color-scripts/colorscripts"
   '';
 
   meta = {
     homepage = "https://gitlab.com/dwt1/shell-color-scripts";
     description = "Collection of shell color scripts collected by dt (Derek Taylor)";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "colorscript";
   };

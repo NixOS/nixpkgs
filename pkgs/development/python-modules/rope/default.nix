@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-rope/rope";
     changelog = "https://github.com/python-rope/rope/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

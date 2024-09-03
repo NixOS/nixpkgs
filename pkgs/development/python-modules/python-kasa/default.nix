@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  anyio,
   async-timeout,
   asyncclick,
   buildPythonPackage,
@@ -10,33 +9,35 @@
   kasa-crypt,
   orjson,
   poetry-core,
+  ptpython,
   pydantic,
   pytest-asyncio,
+  pytest-freezer,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  rich,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.6.2.1";
+  version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-iCqJY3qkA3ZVXTCfxvQoaZsaqGui8PwKGAmLXKZgLJs=";
+    hash = "sha256-JfTFed591z1ZxTKP5FqYyaMBq8uCs4StlnqKp3Tc7Ug=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    anyio
     async-timeout
     asyncclick
     cryptography
@@ -45,12 +46,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-freezer
     pytest-mock
     pytestCheckHook
     voluptuous
   ];
 
   passthru.optional-dependencies = {
+    shell = [
+      ptpython
+      rich
+    ];
     speedups = [
       kasa-crypt
       orjson
@@ -68,10 +74,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for TP-Link Kasa Smarthome products";
-    mainProgram = "kasa";
     homepage = "https://python-kasa.readthedocs.io/";
     changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kasa";
   };
 }

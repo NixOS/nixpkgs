@@ -13,8 +13,9 @@
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm,
+  pnpm_9,
   nodejs,
+  nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
   # Enables the use of vencord from nixpkgs instead of
@@ -23,29 +24,29 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cZOyydwpIW9Xq716KVi1RGtSlgVnOP3w8vXDwouS70E=";
+    hash = "sha256-HlT7ddlrMHG1qOCqdaYjuWhJD+5FF1Nkv2sfXLWd07o=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
-    hash = "sha256-PogE8uf3W5cKSCqFHMz7FOvT7ONUP4FiFWGBgtk3UC8=";
+    hash = "sha256-rizJu6v04wFEpJtakC2tfPg/uylz7gAOzJiXvUwdDI4=";
   };
 
   nativeBuildInputs =
     [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ]
     ++ lib.optionals stdenv.isLinux [
       # vesktop uses venmic, which is a shipped as a prebuilt node module
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # electron builds must be writable on darwin
   preBuild = lib.optionalString stdenv.isDarwin ''
-    cp -r ${electron}/Applications/Electron.app .
+    cp -r ${electron.dist}/Electron.app .
     chmod -R u+w Electron.app
   '';
 
@@ -97,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -164,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
   };
 
   meta = {

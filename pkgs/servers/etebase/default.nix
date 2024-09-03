@@ -1,35 +1,28 @@
 { lib
 , fetchFromGitHub
-, withLdap ? true
 , python3
+, withLdap ? false
 , withPostgres ? true
 , nix-update-script
 , nixosTests
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pydantic = super.pydantic_1;
-    };
-  };
-in
-python.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "etebase-server";
-  version = "0.13.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GEieXue3Kvc4zZjfypKLmTmhNPbn/GR8g0qEqkl+wkw=";
+    hash = "sha256-W2u/d8X8luOzgy1CLNgujnwaoO1pR1QO1Ma7i4CGkdU=";
   };
 
   patches = [ ./secret.patch ];
 
   doCheck = false;
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiofiles
     django_4
     fastapi
@@ -55,9 +48,9 @@ python.pkgs.buildPythonPackage rec {
   '';
 
   passthru.updateScript = nix-update-script {};
-  passthru.python = python;
+  passthru.python = python3;
   # PYTHONPATH of all dependencies used by the package
-  passthru.pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+  passthru.pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
   passthru.tests = {
     nixosTest = nixosTests.etebase-server;
   };

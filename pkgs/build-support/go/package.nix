@@ -289,4 +289,6 @@ lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "`buildFlags`/`buildFlagsArray` are deprecated and will be removed in the 24.11 release. Use the `ldflags` and/or `tags` attributes instead"
 lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
 lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+lib.warn '''buildGoPackage' is deprecated and will be removed for the 25.05 release.
+Please use 'buildGoModule' instead. Tips for migration can be found in the Go section of the nixpkgs manual.''
   package

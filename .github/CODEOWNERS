@@ -14,7 +14,7 @@
 # CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
-/ci @infinisil
+/ci @infinisil @NixOS/Security
 
 # Develompent support
 /.editorconfig @Mic92 @zowoq
@@ -43,9 +43,11 @@
 /pkgs/top-level/stage.nix                        @Ericson2314
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
+/pkgs/stdenv                                     @philiptaron
 /pkgs/stdenv/generic                             @Ericson2314
 /pkgs/stdenv/generic/check-meta.nix              @Ericson2314
 /pkgs/stdenv/cross                               @Ericson2314
+/pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
@@ -73,8 +75,8 @@
 # @raitobezarius is not "code owner", but is listed here to be notified of changes
 # pertaining to the Nix package manager.
 # i.e. no authority over those files.
-pkgs/tools/package-management/nix/                    @raitobezarius
-nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+pkgs/tools/package-management/nix/                    @NixOS/nix-team @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -108,6 +110,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 # NixOS QEMU virtualisation
 /nixos/virtualisation/qemu-vm.nix           @raitobezarius
 
+# ACME
+/nixos/modules/security/acme                @arianvp @flokli @aanderse @emilazy # no merge permission: @m1cr0man
+
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
 /nixos/modules/system/boot/systemd          @NixOS/systemd
@@ -129,17 +134,20 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/doc/languages-frameworks/python.section.md                 @mweinelt
-/pkgs/development/interpreters/python/hooks
+/doc/languages-frameworks/python.section.md   @mweinelt @natsukium
+/maintainers/scripts/update-python-libraries            @natsukium
+/pkgs/development/interpreters/python                   @natsukium
+/pkgs/top-level/python-packages.nix                     @natsukium
+/pkgs/top-level/release-python.nix                      @natsukium
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
-/maintainers/scripts/haskell                  @sternenseemann @maralorn @ncfavier
-/pkgs/development/compilers/ghc               @sternenseemann @maralorn @ncfavier
-/pkgs/development/haskell-modules             @sternenseemann @maralorn @ncfavier
-/pkgs/test/haskell                            @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @sternenseemann @maralorn
+/pkgs/test/haskell                            @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
@@ -246,6 +254,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
+/pkgs/development/compilers/idris2 @mattpolzin
 
 # Bazel
 /pkgs/development/tools/build-managers/bazel @Profpatsch
@@ -260,6 +269,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/emacs/elisp-packages @adisbladis
 /pkgs/applications/editors/emacs                @adisbladis
 /pkgs/top-level/emacs-packages.nix              @adisbladis
+
+# Kakoune
+/pkgs/applications/editors/kakoune     @philiptaron
 
 # Neovim
 /pkgs/applications/editors/neovim      @figsoda @teto
@@ -298,7 +310,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
-/pkgs/desktops/cinnamon @mkg20001
+/pkgs/by-name/ci/cinnamon-*    @mkg20001
+/pkgs/by-name/cj/cjs           @mkg20001
+/pkgs/by-name/mu/muffin        @mkg20001
+/pkgs/by-name/ne/nemo          @mkg20001
+/pkgs/by-name/ne/nemo-*        @mkg20001
 
 # nim
 /pkgs/development/compilers/nim   @ehmry
@@ -310,7 +326,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Forgejo
 nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
-pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @corngood
@@ -354,17 +370,13 @@ nixos/modules/services/web-apps/pretalx.nix @mweinelt
 nixos/tests/web-apps/pretix.nix @mweinelt
 nixos/tests/web-apps/pretalx.nix @mweinelt
 
-# incus/lxc/lxd
-nixos/maintainers/scripts/lxd/          @adamcstephens
+# incus/lxc
+nixos/maintainers/scripts/incus/        @adamcstephens
 nixos/modules/virtualisation/incus.nix  @adamcstephens
 nixos/modules/virtualisation/lxc*       @adamcstephens
-nixos/modules/virtualisation/lxd*       @adamcstephens
 nixos/tests/incus/                      @adamcstephens
-nixos/tests/lxd/                        @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
-pkgs/by-name/lx/lxd*                    @adamcstephens
-pkgs/os-specific/linux/lxc/             @adamcstephens
 
 # ExpidusOS, Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy

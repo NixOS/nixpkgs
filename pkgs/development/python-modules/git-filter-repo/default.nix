@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch,
   installShellFiles,
   pythonOlder,
   setuptools-scm,
@@ -12,33 +11,24 @@
 
 buildPythonPackage rec {
   pname = "git-filter-repo";
-  version = "2.38.0";
-  docs_version = "01ead411966a83dfcfb35f9d2e8a9f7f215eaa65";
+  version = "2.45.0";
+  docs_version = "71d71d4be238628bf9cb9b27be79b8bb824ed1a9";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/hdT4Y8L1tPJtXhoyAEa59BWpuurcGcGOWoV71MScl4=";
+    pname = "git_filter_repo";
+    inherit version;
+    hash = "sha256-L6gP+NpUOCpuGJvBUi3Jhu56UqvL6eKBkvc8D2yLXqk=";
   };
 
   docs = fetchFromGitHub {
     owner = "newren";
     repo = "git-filter-repo";
     rev = docs_version;
-    hash = "sha256-Z/3w3Rguo8sfuc/OQ25eFbMfiOHjxQqPY6S32zuvoY4=";
+    hash = "sha256-m9NI7bLR5F+G7f3Dyi4sP6n4qz2i8cdBRuIn0OcpHAw=";
   };
-
-  patches = [
-    # https://github.com/newren/git-filter-repo/pull/498
-    (fetchpatch {
-      name = "remove-duplicate-script.patch";
-      url = "https://github.com/newren/git-filter-repo/commit/a59e67e7918e577147ca36a70916741be029c878.patch";
-      hash = "sha256-b0QHy9wMWuBWQoptdvLRT+9SRx2u2+11PnzEEB5F0Yo=";
-      stripLen = 1;
-    })
-  ];
 
   postInstall = ''
     installManPage ${docs}/man1/git-filter-repo.1
@@ -56,8 +46,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly rewrite git repository history";
-    mainProgram = "git-filter-repo";
     homepage = "https://github.com/newren/git-filter-repo";
+    changelog = "https://github.com/newren/git-filter-repo/releases/tag/v${version}";
     license = with licenses; [
       mit # or
       gpl2Plus
@@ -66,6 +56,7 @@ buildPythonPackage rec {
       aiotter
       fab
     ];
+    mainProgram = "git-filter-repo";
   };
 
   passthru.updateScript = writeScript "update-${pname}" ''

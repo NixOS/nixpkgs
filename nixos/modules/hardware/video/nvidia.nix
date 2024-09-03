@@ -96,8 +96,15 @@ in
         Enabling this fixes screen tearing when using Optimus via PRIME (see
         {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
-        work with SLI
-      '';
+        work with SLI.
+
+        Enabling this and using version 545 or newer of the proprietary NVIDIA
+        driver causes it to provide its own framebuffer device, which can cause
+        Wayland compositors to work when they otherwise wouldn't.
+      '' // {
+        default = lib.versionAtLeast cfg.package.version "535";
+        defaultText = lib.literalExpression "lib.versionAtLeast cfg.package.version \"535\"";
+      };
 
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;
@@ -247,9 +254,22 @@ in
         '';
       };
 
-      open = lib.mkEnableOption ''
-        the open source NVIDIA kernel module
-      '';
+      open = lib.mkOption {
+        example = true;
+        description = "Whether to enable the open source NVIDIA kernel module.";
+        type = lib.types.bool;
+        defaultText = lib.literalExpression ''
+          lib.mkIf (lib.versionOlder config.hardware.nvidia.package.version "560") false
+        '';
+      };
+
+      gsp.enable = lib.mkEnableOption ''
+        the GPU System Processor (GSP) on the video card
+      '' // {
+        defaultText = lib.literalExpression ''
+          config.hardware.nvidia.open || lib.versionAtLeast config.hardware.nvidia.package.version "555"
+        '';
+      };
     };
   };
 
@@ -298,6 +318,9 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
+
+          hardware.nvidia.open = lib.mkIf (lib.versionOlder nvidia_x11.version "560") (lib.mkDefault false);
+          hardware.nvidia.gsp.enable = lib.mkDefault (cfg.open || lib.versionAtLeast nvidia_x11.version "555");
         })
 
         # X11
@@ -356,8 +379,18 @@ in
             }
 
             {
-              assertion = cfg.open -> (cfg.package ? open && cfg.package ? firmware);
-              message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver";
+              assertion = cfg.gsp.enable -> (cfg.package ? firmware);
+              message = "This version of NVIDIA driver does not provide a GSP firmware.";
+            }
+
+            {
+              assertion = cfg.open -> (cfg.package ? open);
+              message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver.";
+            }
+
+            {
+              assertion = cfg.open -> cfg.gsp.enable;
+              message = "The GSP cannot be disabled when using the opensource kernel driver.";
             }
 
             {
@@ -465,7 +498,6 @@ in
 
           hardware.graphics = {
             extraPackages = [ pkgs.nvidia-vaapi-driver ];
-            extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
           };
 
           environment.systemPackages =
@@ -545,7 +577,7 @@ in
 
           services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
 
-          hardware.firmware = lib.optional (cfg.open || lib.versionAtLeast nvidia_x11.version "555") nvidia_x11.firmware;
+          hardware.firmware = lib.optional cfg.gsp.enable nvidia_x11.firmware;
 
           systemd.tmpfiles.rules =
             [
@@ -562,15 +594,21 @@ in
           boot = {
             extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
             # nvidia-uvm is required by CUDA applications.
-            kernelModules = lib.optionals config.services.xserver.enable [
-              "nvidia"
-              "nvidia_modeset"
-              "nvidia_drm"
-            ];
+            kernelModules =
+              lib.optionals config.services.xserver.enable [
+                "nvidia"
+                "nvidia_modeset"
+                "nvidia_drm"
+              ]
+              # With the open driver, nvidia-uvm does not automatically load as
+              # a softdep of the nvidia module, so we explicitly load it for now.
+              # See https://github.com/NixOS/nixpkgs/issues/334180
+              ++ lib.optionals (config.services.xserver.enable && cfg.open) [ "nvidia_uvm" ];
 
-            # If requested enable modesetting via kernel parameter.
+            # If requested enable modesetting via kernel parameters.
             kernelParams =
               lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
+              ++ lib.optional ((offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545") "nvidia-drm.fbdev=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
               ++ lib.optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";

@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "qogir-kde";
-  version = "0-unstable-2024-06-28";
+  version = "0-unstable-2024-07-29";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "5224dbdeed76c5ed4b7b5ff6d0b48ebe82547228";
-    hash = "sha256-qS0bVfweSXv2Sox3cXQ8PfcPD+WA6kwrEoS0ijxWZE8=";
+    rev = "5a19a4b4006b7486af12a5f051ca5377104cab1b";
+    hash = "sha256-DHV2iVEYxGY9+21TF9YLEH0OoDWVTvcCJytb7k+nS8M=";
   };
 
   # Propagate sddm theme dependencies to user env otherwise sddm does

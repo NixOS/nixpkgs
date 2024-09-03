@@ -9,7 +9,6 @@
 , boost
 , libunwind
 , ninja
-, cacert
 }:
 
 let

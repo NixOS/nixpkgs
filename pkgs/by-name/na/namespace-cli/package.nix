@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "namespace-cli";
-  version = "0.0.380";
+  version = "0.0.389";
 
   src = fetchFromGitHub {
     owner = "namespacelabs";
     repo = "foundation";
     rev = "v${version}";
-    hash = "sha256-DAOSkWT+fe0av0EpjK8HxgIei6urgFJrNeMdZfrDqDM=";
+    hash = "sha256-UtHUqintxcNSHDfrK2vWQxsHBXQ63vZZ5bm/RSA6DSc=";
   };
 
-  vendorHash = "sha256-y+mXUzkY5w2hYECtfcBBUCWsRwhip6IhX617lRX698Q=";
+  vendorHash = "sha256-MQAEvJcu8cXPZbk7HTb7eD1yECvMcQXytvNQwG+4ky0=";
 
   subPackages = ["cmd/nsc" "cmd/ns" "cmd/docker-credential-nsc"];
 

@@ -3,7 +3,6 @@
 , python3Packages
 , fetchFromGitHub
 , fetchurl
-, sd
 , cargo
 , curl
 , pkg-config
@@ -48,7 +47,7 @@ let
     owner = "facebook";
     repo = "sapling";
     rev = version;
-    hash = "sha256-uzev4x9jY6foop35z4dvUMIfjRtRqhNFDVFpagOosAc";
+    hash = "sha256-4pOpJ91esTSH90MvvMu74CnlLULLUawqxcniUeqnLwA=";
   };
 
   addonsSrc = "${src}/addons";
@@ -56,7 +55,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-3JFrVk78EiNVLLXkCFbuRnXwYHNfVv1pBPBS1yCHtPU";
+    sha256 = "sha256-jCtrflwDrwql6rY1ff1eXLKdwmnXhg5bCJPlCczBCIk=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -79,11 +78,11 @@ let
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
       patchShebangs node_modules
+      patchShebangs isl/node_modules
 
-      # TODO: build-tar.py tries to run 'yarn install'. We patched
-      # shebangs node_modules, so we don't want 'yarn install'
-      # changing files. We should disable the 'yarn install' in
-      # build-tar.py to be safe.
+      substituteInPlace build-tar.py \
+        --replace-fail 'run(yarn + ["--cwd", src_join(), "install", "--prefer-offline"])' 'pass'
+
       ${python3Packages.python}/bin/python3 build-tar.py \
         --output isl-dist.tar.xz \
         --yarn 'yarn --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress'
@@ -113,10 +112,10 @@ python3Packages.buildPythonApplication {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-mzAqjM8qovZAd4ZF0GDuD0Ns/UztAO1pAJhukuKc5a0=";
-      "fb303_core-0.0.0" = "sha256-x8I0Lty+sRclpkNMqTMc29J46z/vMsVwOUS3EX7Shes=";
-      "fbthrift-0.0.1+unstable" = "sha256-yTS1wkh8tETZ4K43V0G+TbkN5jgSlXT0endDPBHa1Ps=";
-      "serde_bser-0.3.1" = "sha256-vvMCa6mlcr+xazxZVl2bcF8/r+ufzZmiQ79KofZGWrA=";
+      "cloned-0.1.0" = "sha256-2BaNR/pQmR7pHtRf6VBQLcZgLHbj2JCxeX4auAB0efU=";
+      "fb303_core-0.0.0" = "sha256-PDGdKjR6KPv1uH1JSTeoG5Rs0ZkmNJLqqSXtvV3RWic=";
+      "fbthrift-0.0.1+unstable" = "sha256-J4REXGuLjHyN3SHilSWhMoqpRcn1QnEtsTsZF4Z3feU=";
+      "serde_bser-0.4.0" = "sha256-Su1IP3NzQu/87p/+uQaG8JcICL9hit3OV1O9oFiACsQ=";
     };
   };
   postPatch = ''

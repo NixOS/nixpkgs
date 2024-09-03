@@ -1,17 +1,32 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cpio,
+  xar,
+  undmg,
+  nix-update-script,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "karabiner-elements";
-  version = "14.13.0";
+  version = "15.0.0";
 
   src = fetchurl {
-    url = "https://github.com/pqrs-org/Karabiner-Elements/releases/download/v${version}/Karabiner-Elements-${version}.dmg";
-    sha256 = "sha256-gmJwoht/Tfm5qMecmq1N6PSAIfWOqsvuHU8VDJY8bLw=";
+    url = "https://github.com/pqrs-org/Karabiner-Elements/releases/download/v${finalAttrs.version}/Karabiner-Elements-${finalAttrs.version}.dmg";
+    hash = "sha256-xWCsbkP9cVnDjWFTgWl5KrR7wEpcQYM4Md99pTI/l14=";
   };
 
-  outputs = [ "out" "driver" ];
+  outputs = [
+    "out"
+    "driver"
+  ];
 
-  nativeBuildInputs = [ cpio xar undmg ];
+  nativeBuildInputs = [
+    cpio
+    xar
+    undmg
+  ];
 
   unpackPhase = ''
     undmg $src
@@ -40,13 +55,14 @@ stdenv.mkDerivation rec {
     cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Sierra (10.12) or later";
+  meta = {
+    changelog = "https://github.com/pqrs-org/Karabiner-Elements/releases/tag/v${finalAttrs.version}";
+    description = "Karabiner-Elements is a powerful utility for keyboard customization on macOS Ventura (13) or later";
     homepage = "https://karabiner-elements.pqrs.org/";
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ Enzime ];
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
+    maintainers = [ ];
+    platforms = lib.platforms.darwin;
   };
-}
+})

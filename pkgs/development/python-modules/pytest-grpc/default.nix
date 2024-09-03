@@ -4,7 +4,6 @@
   fetchPypi,
   grpcio,
   pytest,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

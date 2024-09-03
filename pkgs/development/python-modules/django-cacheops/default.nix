@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   django,
   funcy,
   redis,
@@ -31,7 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-d6N8c9f6z8cpk2XtZqEr56SH3XRd2GwdM8ouv9OzKHg=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "funcy" ];
 
   propagatedBuildInputs = [

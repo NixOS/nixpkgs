@@ -3,9 +3,9 @@
 , fetchFromGitHub
 , pnpm_8
 , nodejs
-, npmHooks
 , makeBinaryWrapper
 , shellcheck
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,26 +19,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yJ81oGd9aNsWQMLvDSgMVVH1//Mw/SVFYFIPsJTQYzE=";
   };
 
+  pnpmWorkspace = "bash-language-server";
   pnpmDeps = pnpm_8.fetchDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs) pname version src pnpmWorkspace;
     hash = "sha256-W25xehcxncBs9QgQBt17F5YHK0b+GDEmt27XzTkyYWg=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpm_8.configHook
-    npmHooks.npmBuildHook
     makeBinaryWrapper
+    versionCheckHook
   ];
-  npmBuildScript = "compile";
-  # We are only interested in the bash-language-server executable, which is
-  # part of the `./server` directory. From some reason, the `./vscode-client`
-  # directory is not included in upstream's `pnpm-workspace.yaml`, so perhaps
-  # that's why our ${pnpmDeps} don't include the dependencies required for it.
-  preBuild = ''
-    rm -r vscode-client
-    substituteInPlace tsconfig.json \
-      --replace-fail '{ "path": "./vscode-client" },' ""
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm compile server
+
+    runHook postBuild
   '';
 
   installPhase = ''
@@ -57,12 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create the executable, based upon what happens in npmHooks.npmInstallHook
     makeWrapper ${lib.getExe nodejs} $out/bin/bash-language-server \
-      --prefix PATH : ${lib.makeBinPath [ shellcheck ]} \
+      --suffix PATH : ${lib.makeBinPath [ shellcheck ]} \
       --inherit-argv0 \
       --add-flags $out/lib/bash-language-server/out/cli.js
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "A language server for Bash";

@@ -8,7 +8,6 @@
   astroid,
   pytestCheckHook,
   hypothesis,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail

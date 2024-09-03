@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "annaaurora";
     repo = "kabeljau";
     rev = "v${version}";
-    sha256 = "sha256-RedVItgfr6vgqXHA3bOiHXDpfGuHI+sX4jCHL9G5jYk=";
+    hash = "sha256-RedVItgfr6vgqXHA3bOiHXDpfGuHI+sX4jCHL9G5jYk=";
   };
 
   # Inkscape is needed in a just recipe where it is used to export the SVG icon to several different sized PNGs.

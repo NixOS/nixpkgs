@@ -45,7 +45,7 @@ buildPythonPackage rec {
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/rust";
+    sourceRoot = "${src.name}/rust";
     name = "${pname}-${version}";
     hash = "sha256-6fw0KgnPIMfdseWcunsGjvjVB+lJNoG3pLDqkORPJ0I=";
     postPatch = ''
@@ -92,6 +92,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdispater/pendulum";
     changelog = "https://github.com/sdispater/pendulum/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

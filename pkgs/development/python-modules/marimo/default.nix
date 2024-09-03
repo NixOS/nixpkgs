@@ -4,15 +4,16 @@
   fetchPypi,
   pythonOlder,
   setuptools,
-  black,
   click,
   docutils,
   itsdangerous,
   jedi,
   markdown,
+  packaging,
   psutil,
   pygments,
   pymdown-extensions,
+  ruff,
   starlette,
   tomlkit,
   uvicorn,
@@ -23,28 +24,32 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.6.25";
+  version = "0.8.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zv1mlaR/3nRhZBjjcXaOSR574NE2um48DqHhHirRfSU=";
+    hash = "sha256-gxfb5MYPbl8KnvIL+93CyYLOaJ6UflqaikXLAWCS55g=";
   };
 
   build-system = [ setuptools ];
 
+  # ruff is not packaged as a python module in nixpkgs
+  pythonRemoveDeps = [ "ruff" ];
+
   dependencies = [
-    black
     click
     docutils
     itsdangerous
     jedi
     markdown
+    packaging
     psutil
     pygments
     pymdown-extensions
+    ruff
     starlette
     tomlkit
     uvicorn

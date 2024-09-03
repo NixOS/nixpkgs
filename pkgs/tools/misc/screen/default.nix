@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "4.9.1";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/screen/screen-${version}.tar.gz";
     hash = "sha256-Js7z48QlccDUhK1vrxEMXBUJH7+HKwb6eqR2bHQFrGk=";
   };
 
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

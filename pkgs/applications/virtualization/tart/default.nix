@@ -10,11 +10,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.12.0";
+  version = "2.18.0";
 
   src = fetchurl {
       url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart-arm64.tar.gz";
-      hash = "sha256-+33Z7M9Y8fWFfCBNJrXHljwoAn7p70+yvTmBwx1X68M=";
+      hash = "sha256-no05QZpvaF7Kn9lU26lXjimHJn7xHydmh7Rv50aXPm4=";
   };
   sourceRoot = ".";
 
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "macOS VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
     license = licenses.fairsource09;
-    maintainers = with maintainers; [ emilytrau Enzime aduh95 ];
+    maintainers = with maintainers; [ emilytrau aduh95 ];
     mainProgram = finalAttrs.pname;
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

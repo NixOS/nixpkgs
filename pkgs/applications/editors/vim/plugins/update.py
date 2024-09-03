@@ -40,7 +40,9 @@ ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe
 import pluginupdate
 import importlib
 from pluginupdate import run_nix_expr, PluginDesc
-import treesitter
+
+treesitter = importlib.import_module('nvim-treesitter.update')
+
 
 
 HEADER = (
@@ -54,14 +56,37 @@ class VimEditor(pluginupdate.Editor):
     nvim_treesitter_updated = False
 
     def generate_nix(
-        self, plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]], outfile: str
+        self,
+        plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]],
+        outfile: str
     ):
+        log.info("Generating nix code")
         sorted_plugins = sorted(plugins, key=lambda v: v[0].name.lower())
+        log.debug("Loading nvim-treesitter revision from nix...")
         nvim_treesitter_rev = pluginupdate.run_nix_expr(
-            "(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev", self.nixpkgs
+            "(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev",
+            self.nixpkgs,
+            timeout=10
         )
 
+        GET_PLUGINS_LUA = """
+        with import <localpkgs> {};
+        lib.attrNames lua51Packages"""
+        log.debug("Loading list of lua plugins...")
+        luaPlugins = run_nix_expr(GET_PLUGINS_LUA, self.nixpkgs, timeout=30)
+
+        def _isNeovimPlugin(plug: pluginupdate.Plugin) -> bool:
+            """
+            Whether it's a neovim-only plugin
+            We can check if it's available in lua packages
+            """
+            if plug.normalized_name in luaPlugins:
+                log.debug("%s is a neovim plugin", plug)
+                return True
+            return False
+
         with open(outfile, "w+") as f:
+            log.debug("Writing to %s", outfile)
             f.write(HEADER)
             f.write(
                 textwrap.dedent(
@@ -74,7 +99,7 @@ class VimEditor(pluginupdate.Editor):
                 )
             )
             for pdesc, plugin in sorted_plugins:
-                content = self.plugin2nix(pdesc, plugin)
+                content = self.plugin2nix(pdesc, plugin, _isNeovimPlugin(plugin))
                 f.write(content)
                 if (
                     plugin.name == "nvim-treesitter"
@@ -84,26 +109,9 @@ class VimEditor(pluginupdate.Editor):
             f.write("\n}\n")
         print(f"updated {outfile}")
 
-    def plugin2nix(self, pdesc: PluginDesc, plugin: pluginupdate.Plugin) -> str:
-        GET_PLUGINS_LUA = """
-        with import <localpkgs> {};
-        lib.attrNames lua51Packages"""
-        luaPlugins = run_nix_expr(GET_PLUGINS_LUA, self.nixpkgs)
+    def plugin2nix(self, pdesc: PluginDesc, plugin: pluginupdate.Plugin, isNeovim: bool) -> str:
 
         repo = pdesc.repo
-
-        def _isNeovimPlugin(plug: pluginupdate.Plugin) -> bool:
-            """
-            Whether it's a neovim-only plugin
-            We can check if it's available in lua packages
-            """
-            # global luaPlugins
-            if plug.normalized_name in luaPlugins:
-                log.debug("%s is a neovim plugin", plug)
-                return True
-            return False
-
-        isNeovim = _isNeovimPlugin(plugin)
 
         content = f"  {plugin.normalized_name} = "
         src_nix = repo.as_nix(plugin)
@@ -159,8 +167,8 @@ class VimEditor(pluginupdate.Editor):
 def main():
     global luaPlugins
 
-    log.debug(f"Loading from {ROOT}/../get-plugins.nix")
-    with open(f"{ROOT}/../get-plugins.nix") as f:
+    log.debug(f"Loading from {ROOT}/get-plugins.nix")
+    with open(f"{ROOT}/get-plugins.nix") as f:
         GET_PLUGINS = f.read()
     editor = VimEditor(
         "vim", Path("pkgs/applications/editors/vim/plugins"), GET_PLUGINS

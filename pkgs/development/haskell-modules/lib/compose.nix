@@ -292,7 +292,7 @@ rec {
    */
  justStaticExecutables = overrideCabal (drv: {
     enableSharedExecutables = false;
-    enableLibraryProfiling = false;
+    enableLibraryProfiling = drv.enableExecutableProfiling or false;
     isLibrary = false;
     doHaddock = false;
     postFixup = drv.postFixup or "" + ''
@@ -345,14 +345,14 @@ rec {
     , ignorePackages     ? []
     } : drv :
       overrideCabal (_drv: {
-        postBuild = with lib;
-          let args = concatStringsSep " " (
-                       optional ignoreEmptyImports "--ignore-empty-imports" ++
-                       optional ignoreMainModule   "--ignore-main-module" ++
+        postBuild =
+          let args = lib.concatStringsSep " " (
+                       lib.optional ignoreEmptyImports "--ignore-empty-imports" ++
+                       lib.optional ignoreMainModule   "--ignore-main-module" ++
                        map (pkg: "--ignore-package ${pkg}") ignorePackages
                      );
           in "${pkgs.haskellPackages.packunused}/bin/packunused" +
-             optionalString (args != "") " ${args}";
+             lib.optionalString (args != "") " ${args}";
       }) (appendConfigureFlag "--ghc-option=-ddump-minimal-imports" drv);
 
   buildStackProject = pkgs.callPackage ../generic-stack-builder.nix { };

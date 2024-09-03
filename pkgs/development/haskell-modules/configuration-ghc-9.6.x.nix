@@ -89,25 +89,6 @@ self: super: {
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
 
-  #
-  # Too strict bounds, waiting on Hackage release in nixpkgs
-  #
-
-  #
-  # Compilation failure workarounds
-  #
-
-  # Add support for time 1.10
-  # https://github.com/vincenthz/hs-hourglass/pull/56
-  hourglass = appendPatches [
-      (pkgs.fetchpatch {
-        name = "hourglass-pr-56.patch";
-        url =
-          "https://github.com/vincenthz/hs-hourglass/commit/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a.patch";
-        sha256 = "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
-      })
-    ] (super.hourglass);
-
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
@@ -163,15 +144,6 @@ self: super: {
       })
     super.ascii-numbers;
 
-  # Fix ghc-9.6.x build errors.
-  libmpd = appendPatch
-    # https://github.com/vimus/libmpd-haskell/pull/138
-    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/compare/95d3b3bab5858d6d1f0e079d0ab7c2d182336acb...5737096a339edc265a663f51ad9d29baee262694.patch";
-                       name = "vimus-libmpd-haskell-pull-138.patch";
-                       sha256 = "sha256-CvvylXyRmoCoRJP2MzRwL0SBbrEzDGqAjXS+4LsLutQ=";
-                     })
-    super.libmpd;
-
   # Apply patch from PR with mtl-2.3 fix.
   ConfigFile = overrideCabal (drv: {
     editedCabalFile = null;
@@ -193,6 +165,8 @@ self: super: {
     lambdabot
     lambdabot-haskell-plugins
     ;
+
+  singletons-base = dontCheck super.singletons-base;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
 // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {

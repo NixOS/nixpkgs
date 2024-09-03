@@ -11,7 +11,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   tabulate,
 }:
 
@@ -31,7 +30,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "orjson" ];

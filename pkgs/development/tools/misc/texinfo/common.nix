@@ -1,10 +1,29 @@
-{ version, sha256, patches ? [] }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  perl,
+  libintl,
+  bash,
+  updateAutotoolsGnuConfigScriptsHook,
+  gnulib,
+  gawk,
+  freebsd,
+  libiconv,
+  xz,
 
-{ lib, stdenv, buildPackages, fetchurl, perl, libintl, bash
-, updateAutotoolsGnuConfigScriptsHook, gnulib, gawk, freebsd, libiconv
+  # we are a dependency of gcc, this simplifies bootstraping
+  interactive ? false,
+  ncurses,
+  procps,
+  meta,
+}:
 
-# we are a dependency of gcc, this simplifies bootstraping
-, interactive ? false, ncurses, procps
+{
+  version,
+  hash,
+  patches ? [ ],
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -13,7 +32,15 @@
 # files.
 
 let
-  inherit (lib) getDev getLib optional optionals optionalString;
+  inherit (lib)
+    getBin
+    getDev
+    getLib
+    optional
+    optionals
+    optionalString
+    versionOlder
+    ;
   crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
@@ -23,20 +50,21 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnu/texinfo/texinfo-${version}.tar.xz";
-    inherit sha256;
+    inherit hash;
   };
 
   patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
 
-  postPatch = ''
-    patchShebangs tp/maintain
-  ''
-  # This patch is needed for IEEE-standard long doubles on
-  # powerpc64; it does not apply cleanly to texinfo 5.x or
-  # earlier.  It is merged upstream in texinfo 6.8.
-  + lib.optionalString (version == "6.7") ''
-    patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
-  '';
+  postPatch =
+    ''
+      patchShebangs tp/maintain
+    ''
+    # This patch is needed for IEEE-standard long doubles on
+    # powerpc64; it does not apply cleanly to texinfo 5.x or
+    # earlier.  It is merged upstream in texinfo 6.8.
+    + optionalString (version == "6.7") ''
+      patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
+    '';
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
@@ -47,31 +75,48 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # A native compiler is needed to build tools needed at build time
-  depsBuildBuild = [ buildPackages.stdenv.cc perl ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    perl
+  ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-  buildInputs = [ bash libintl ]
-    ++ optionals stdenv.isSunOS [ libiconv gawk ]
+  buildInputs =
+    [
+      bash
+      libintl
+    ]
+    ++ optionals stdenv.isSunOS [
+      libiconv
+      gawk
+    ]
     ++ optional interactive ncurses;
 
-  configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
+  configureFlags =
+    [ "PERL=${buildPackages.perl}/bin/perl" ]
     # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
     # fallbacks.
     # Also prevent the buildPlatform's awk being used in the texindex script
-    ++ optionals crossBuildTools [ "--enable-perl-xs=no" "TI_AWK=${gawk}/bin/awk" ]
-    ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
+    ++ optionals crossBuildTools [
+      "--enable-perl-xs=no"
+      "TI_AWK=${getBin gawk}/bin/awk"
+    ]
+    ++ optionals (crossBuildTools && lib.versionAtLeast version "7.1") [
+      "texinfo_cv_sys_iconv_converts_euc_cn=yes"
+    ]
+    ++ optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
-  installTargets = [ "install" "install-tex" ];
+  installTargets = [
+    "install"
+    "install-tex"
+  ];
 
-  nativeCheckInputs = [ procps ]
-    ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
+  nativeCheckInputs = [ procps ] ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
 
-  doCheck = interactive
-    && !stdenv.isDarwin
-    && !stdenv.isSunOS; # flaky
+  doCheck = interactive && !stdenv.isDarwin && !stdenv.isSunOS; # flaky
 
-  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl && lib.versionOlder version "7") [
+  checkFlags = optionals (!stdenv.hostPlatform.isMusl && versionOlder version "7") [
     # Test is known to fail on various locales on texinfo-6.8:
     #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
     "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
@@ -84,31 +129,9 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
-    description = "GNU documentation system";
-    homepage = "https://www.gnu.org/software/texinfo/";
-    changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra oxij ];
-    # see comment above in patches section
-    broken = stdenv.hostPlatform.isPower64 && lib.strings.versionOlder version "6.0";
-
-    longDescription = ''
-      Texinfo is the official documentation format of the GNU project.
-      It was invented by Richard Stallman and Bob Chassell many years
-      ago, loosely based on Brian Reid's Scribe and other formatting
-      languages of the time.  It is used by many non-GNU projects as
-      well.
-
-      Texinfo uses a single source file to produce output in a number
-      of formats, both online and printed (dvi, html, info, pdf, xml,
-      etc.).  This means that instead of writing different documents
-      for online information and another for a printed manual, you
-      need write only one document.  And when the work is revised, you
-      need revise only that one document.  The Texinfo system is
-      well-integrated with GNU Emacs.
-    '';
+  meta = meta // {
     branch = version;
+    # see comment above in patches section
+    broken = stdenv.hostPlatform.isPower64 && versionOlder version "6.0";
   };
 }

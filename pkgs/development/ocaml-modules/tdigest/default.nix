@@ -1,6 +1,7 @@
 { lib, fetchFromGitHub, nix-update-script
 , buildDunePackage
-, core
+, base
+, ppx_sexp_conv
 }:
 
 buildDunePackage rec {
@@ -14,10 +15,14 @@ buildDunePackage rec {
     sha256 = "sha256-Z2rOaiNGvVDbRwf5XfoNIcenQdrE3fxHnfzyi6Ki2Ic=";
   };
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.14";
+
+  # base v0.17 compatibility
+  patches = [ ./tdigest.patch ];
 
   propagatedBuildInputs = [
-    core
+    base
+    ppx_sexp_conv
   ];
 
   passthru.updateScript = nix-update-script { };

@@ -1,38 +1,33 @@
 { config, lib, pkgs, ... }:
-
-with pkgs;
-with lib;
-
 let
 
   cfg = config.hardware.pulseaudio;
-  alsaCfg = config.sound;
 
   hasZeroconf = let z = cfg.zeroconf; in z.publish.enable || z.discovery.enable;
 
   overriddenPackage = cfg.package.override
-    (optionalAttrs hasZeroconf { zeroconfSupport = true; });
-  binary = "${getBin overriddenPackage}/bin/pulseaudio";
+    (lib.optionalAttrs hasZeroconf { zeroconfSupport = true; });
+  binary = "${lib.getBin overriddenPackage}/bin/pulseaudio";
   binaryNoDaemon = "${binary} --daemonize=no";
 
   # Forces 32bit pulseaudio and alsa-plugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsa-lib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
+  enable32BitAlsaPlugins = cfg.support32Bit && pkgs.stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsa-lib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
 
 
   myConfigFile =
     let
-      addModuleIf = cond: mod: optionalString cond "load-module ${mod}";
-      allAnon = optional cfg.tcp.anonymousClients.allowAll "auth-anonymous=1";
+      addModuleIf = cond: mod: lib.optionalString cond "load-module ${mod}";
+      allAnon = lib.optional cfg.tcp.anonymousClients.allowAll "auth-anonymous=1";
       ipAnon =  let a = cfg.tcp.anonymousClients.allowedIpRanges;
-                in optional (a != []) ''auth-ip-acl=${concatStringsSep ";" a}'';
-    in writeTextFile {
+                in lib.optional (a != []) ''auth-ip-acl=${lib.concatStringsSep ";" a}'';
+    in pkgs.writeTextFile {
       name = "default.pa";
         text = ''
         .include ${cfg.configFile}
         ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
         ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
-        ${addModuleIf cfg.tcp.enable (concatStringsSep " "
+        ${addModuleIf cfg.tcp.enable (lib.concatStringsSep " "
            ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
         ${addModuleIf config.services.jack.jackd.enable "module-jack-sink"}
         ${addModuleIf config.services.jack.jackd.enable "module-jack-source"}
@@ -50,7 +45,7 @@ let
   # Create pulse/client.conf even if PulseAudio is disabled so
   # that we can disable the autospawn feature in programs that
   # are built with PulseAudio support (like KDE).
-  clientConf = writeText "client.conf" ''
+  clientConf = pkgs.writeText "client.conf" ''
     autospawn=no
     ${cfg.extraClientConf}
   '';
@@ -58,7 +53,7 @@ let
   # Write an /etc/asound.conf that causes all ALSA applications to
   # be re-routed to the PulseAudio server through ALSA's Pulse
   # plugin.
-  alsaConf = writeText "asound.conf" (''
+  alsaConf = ''
     pcm_type.pulse {
       libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
@@ -76,24 +71,23 @@ let
     ctl.!default {
       type pulse
     }
-    ${alsaCfg.extraConfig}
-  '');
+  '';
 
 in {
 
   options = {
 
     hardware.pulseaudio = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the PulseAudio sound server.
         '';
       };
 
-      systemWide = mkOption {
-        type = types.bool;
+      systemWide = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If false, a PulseAudio server is launched automatically for
@@ -107,8 +101,8 @@ in {
         '';
       };
 
-      support32Bit = mkOption {
-        type = types.bool;
+      support32Bit = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to include the 32-bit pulseaudio libraries in the system or not.
@@ -116,8 +110,8 @@ in {
         '';
       };
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         description = ''
           The path to the default configuration options the PulseAudio server
           should use. By default, the "default.pa" configuration
@@ -125,8 +119,8 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Literal string to append to `configFile`
@@ -134,21 +128,21 @@ in {
         '';
       };
 
-      extraClientConf = mkOption {
-        type = types.lines;
+      extraClientConf = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration appended to pulse/client.conf file.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default = if config.services.jack.jackd.enable
                   then pkgs.pulseaudioFull
                   else pkgs.pulseaudio;
-        defaultText = literalExpression "pkgs.pulseaudio";
-        example = literalExpression "pkgs.pulseaudioFull";
+        defaultText = lib.literalExpression "pkgs.pulseaudio";
+        example = lib.literalExpression "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support, Bluetooth) via the
@@ -156,10 +150,10 @@ in {
         '';
       };
 
-      extraModules = mkOption {
-        type = types.listOf types.package;
+      extraModules = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [];
-        example = literalExpression "[ pkgs.pulseaudio-modules-bt ]";
+        example = lib.literalExpression "[ pkgs.pulseaudio-modules-bt ]";
         description = ''
           Extra pulseaudio modules to use. This is intended for out-of-tree
           pulseaudio modules like extra bluetooth codecs.
@@ -169,8 +163,8 @@ in {
       };
 
       daemon = {
-        logLevel = mkOption {
-          type = types.str;
+        logLevel = lib.mkOption {
+          type = lib.types.str;
           default = "notice";
           description = ''
             The log level that the system-wide pulseaudio daemon should use,
@@ -178,31 +172,31 @@ in {
           '';
         };
 
-        config = mkOption {
-          type = types.attrsOf types.unspecified;
+        config = lib.mkOption {
+          type = lib.types.attrsOf lib.types.unspecified;
           default = {};
           description = "Config of the pulse daemon. See `man pulse-daemon.conf`.";
-          example = literalExpression ''{ realtime-scheduling = "yes"; }'';
+          example = lib.literalExpression ''{ realtime-scheduling = "yes"; }'';
         };
       };
 
       zeroconf = {
         discovery.enable =
-          mkEnableOption "discovery of pulseaudio sinks in the local network";
+          lib.mkEnableOption "discovery of pulseaudio sinks in the local network";
         publish.enable =
-          mkEnableOption "publishing the pulseaudio sink in the local network";
+          lib.mkEnableOption "publishing the pulseaudio sink in the local network";
       };
 
       # TODO: enable by default?
       tcp = {
-        enable = mkEnableOption "tcp streaming support";
+        enable = lib.mkEnableOption "tcp streaming support";
 
         anonymousClients = {
-          allowAll = mkEnableOption "all anonymous clients to stream to the server";
-          allowedIpRanges = mkOption {
-            type = types.listOf types.str;
+          allowAll = lib.mkEnableOption "all anonymous clients to stream to the server";
+          allowedIpRanges = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [];
-            example = literalExpression ''[ "127.0.0.1" "192.168.1.0/24" ]'';
+            example = lib.literalExpression ''[ "127.0.0.1" "192.168.1.0/24" ]'';
             description = ''
               A list of IP subnets that are allowed to stream to the server.
             '';
@@ -215,32 +209,30 @@ in {
   };
 
 
-  config = lib.mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       environment.etc."pulse/client.conf".source = clientConf;
 
       environment.systemPackages = [ overriddenPackage ];
 
-      sound.enable = true;
-
       environment.etc = {
-        "asound.conf".source = alsaConf;
+        "alsa/conf.d/99-pulseaudio.conf".text = alsaConf;
 
-        "pulse/daemon.conf".source = writeText "daemon.conf"
+        "pulse/daemon.conf".source = pkgs.writeText "daemon.conf"
           (lib.generators.toKeyValue {} cfg.daemon.config);
 
-        "openal/alsoft.conf".source = writeText "alsoft.conf" "drivers=pulse";
+        "openal/alsoft.conf".source = pkgs.writeText "alsoft.conf" "drivers=pulse";
 
-        "libao.conf".source = writeText "libao.conf" "default_driver=pulse";
+        "libao.conf".source = pkgs.writeText "libao.conf" "default_driver=pulse";
       };
 
-      hardware.pulseaudio.configFile = mkDefault "${getBin overriddenPackage}/etc/pulse/default.pa";
+      hardware.pulseaudio.configFile = lib.mkDefault "${lib.getBin overriddenPackage}/etc/pulse/default.pa";
 
       # Disable flat volumes to enable relative ones
-      hardware.pulseaudio.daemon.config.flat-volumes = mkDefault "no";
+      hardware.pulseaudio.daemon.config.flat-volumes = lib.mkDefault "no";
 
       # Upstream defaults to speex-float-1 which results in audible artifacts
-      hardware.pulseaudio.daemon.config.resample-method = mkDefault "speex-float-5";
+      hardware.pulseaudio.daemon.config.resample-method = lib.mkDefault "speex-float-5";
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
@@ -251,7 +243,7 @@ in {
       services.udev.packages = [ overriddenPackage ];
     }
 
-    (mkIf (cfg.extraModules != []) {
+    (lib.mkIf (cfg.extraModules != []) {
       hardware.pulseaudio.daemon.config.dl-search-path = let
         overriddenModules = builtins.map
           (drv: drv.override { pulseaudio = overriddenPackage; })
@@ -263,15 +255,15 @@ in {
       in lib.concatStringsSep ":" modulePaths;
     })
 
-    (mkIf hasZeroconf {
+    (lib.mkIf hasZeroconf {
       services.avahi.enable = true;
     })
-    (mkIf cfg.zeroconf.publish.enable {
+    (lib.mkIf cfg.zeroconf.publish.enable {
       services.avahi.publish.enable = true;
       services.avahi.publish.userServices = true;
     })
 
-    (mkIf (!cfg.systemWide) {
+    (lib.mkIf (!cfg.systemWide) {
       environment.etc = {
         "pulse/default.pa".source = myConfigFile;
       };
@@ -282,7 +274,7 @@ in {
             RestartSec = "500ms";
             PassEnvironment = "DISPLAY";
           };
-        } // optionalAttrs config.services.jack.jackd.enable {
+        } // lib.optionalAttrs config.services.jack.jackd.enable {
           environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
         };
         sockets.pulseaudio = {
@@ -291,7 +283,7 @@ in {
       };
     })
 
-    (mkIf cfg.systemWide {
+    (lib.mkIf cfg.systemWide {
       users.users.pulse = {
         # For some reason, PulseAudio wants UID == GID.
         uid = assert uid == gid; uid;

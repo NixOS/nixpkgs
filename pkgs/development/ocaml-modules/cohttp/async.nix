@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , ppx_sexp_conv
 , base
 , async

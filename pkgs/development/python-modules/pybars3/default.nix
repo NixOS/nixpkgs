@@ -1,5 +1,5 @@
 {
-  python3,
+  python,
   fetchPypi,
   lib,
   pymeta3,
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    ${python3.interpreter} tests.py
+    ${python.interpreter} tests.py
     runHook postCheck
   '';
 

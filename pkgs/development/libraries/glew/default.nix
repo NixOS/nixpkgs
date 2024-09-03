@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, libXmu, libXi, libXext
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, libGLU
+, libXmu
+, libXi
+, libXext
 , OpenGL
-, enableEGL ? false
+, enableEGL ? (!stdenv.isDarwin)
 , testers
+, mesa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -9,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+    url = "mirror://sourceforge/glew/glew-${finalAttrs.version}.tgz";
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
@@ -19,7 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/nigels-com/glew/pull/342
     (fetchpatch {
       url = "https://github.com/nigels-com/glew/commit/966e53fa153175864e151ec8a8e11f688c3e752d.diff";
-      sha256 = "sha256-xsSwdAbdWZA4KVoQhaLlkYvO711i3QlHGtv6v1Omkhw=";
+      hash = "sha256-xsSwdAbdWZA4KVoQhaLlkYvO711i3QlHGtv6v1Omkhw=";
+    })
+
+    # don't make EGL support disable GLX, use the same patch as ArchLinux
+    # https://gitlab.archlinux.org/archlinux/packaging/packages/glew/-/blob/ca08ff5d4cd3548a593eb1118d0a84b0c3670349/egl+glx.patch
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/glew/-/raw/ca08ff5d4cd3548a593eb1118d0a84b0c3670349/egl+glx.patch?inline=false";
+      hash = "sha256-IG3FPhhaor1kshEH3Kr8yzIHqBhczRwCqH7ZeDwlzGE=";
     })
   ];
 
@@ -59,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "glew" ];
     platforms = with platforms;
       if enableEGL then
-        subtractLists darwin mesaPlatforms
+        subtractLists darwin mesa.meta.platforms
       else
-        mesaPlatforms;
+        mesa.meta.platforms;
   };
 })

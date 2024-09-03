@@ -19,24 +19,24 @@
 , withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
 , lttng-ust # withTracing
 , withQcam ? false
-, qt5 # withQcam
+, qt6 # withQcam
 , libtiff # withQcam
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-x0Im9m9MoACJhQKorMI34YQ+/bd62NdAPc2nWwaJAvM=";
+    hash = "sha256-vB7dxBDG0y8YvG/2vCgrhyBJmumGG66Vl7yZwprxj5c=";
   };
 
   outputs = [ "out" "dev" ];
 
   postPatch = ''
-    patchShebangs utils/
+    patchShebangs src/py/ utils/
   '';
 
   # libcamera signs the IPA module libraries at install time, but they are then
@@ -68,12 +68,15 @@ stdenv.mkDerivation rec {
     # hotplugging
     systemd
 
+    # pycamera
+    python3Packages.pybind11
+
     # yamlparser
     libyaml
 
     gtest
   ] ++ lib.optionals withTracing [ lttng-ust ]
-    ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+    ++ lib.optionals withQcam [ libtiff qt6.qtbase qt6.qttools ];
 
   nativeBuildInputs = [
     meson
@@ -87,7 +90,7 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ] ++ lib.optional withQcam qt5.wrapQtAppsHook;
+  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"
@@ -112,6 +115,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
+    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
     badPlatforms = [

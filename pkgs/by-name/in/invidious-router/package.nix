@@ -1,11 +1,11 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitLab,
 }: let
   version = "1.1";
 in
-  buildGo122Module {
+  buildGoModule {
     pname = "invidious-router";
     inherit version;
 

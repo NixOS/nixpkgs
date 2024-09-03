@@ -20,16 +20,17 @@
   openssl,
   webkitgtk,
   nix-update-script,
+  cacert,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.12.2";
+  version = "0.12.16";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     rev = "release/${version}";
-    hash = "sha256-m2hvcnY2h4DYtM4ME+dxmwnmUh768CHSoAq5VsKl6Sk=";
+    hash = "sha256-L4PVaNb3blpLIcyA7XLc71qwUPUADclxvbOkq1Jc1no=";
   };
 
   # deactivate the upstream updater in tauri configuration
@@ -43,13 +44,13 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "tauri-plugin-context-menu-0.7.1" = "sha256-vKfq20hrFLmfoXO94D8HwAE3UdGcuqVZf3+tOBhLqj0=";
-      "tauri-plugin-log-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
+      "tauri-plugin-log-0.0.0" = "sha256-gde2RS5NFA0Xap/Xb7XOeVQ/5t2Nw+j+HOwfeJmSNMU=";
     };
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-+4SPDvhpvR1bjwTcyLO3HeBuZGL3P03OaEnOvcX9t9c=";
+    hash = "sha256-r2PkNDvOofginL5Y0K+7Qhnsev2zle1q9qraG/ub7Wo=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +62,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     pnpm_9.configHook
     wrapGAppsHook3
+    cacert
   ];
 
   buildInputs =
@@ -84,6 +86,9 @@ rustPlatform.buildRustPackage rec {
     # `pnpm`'s `fetchDeps` and `configHook` uses a specific version of pnpm, not upstream's
     COREPACK_ENABLE_STRICT = 0;
 
+    # disable turbo telemetry
+    TURBO_TELEMETRY_DEBUG = 1;
+
     # we depend on nightly features
     RUSTC_BOOTSTRAP = 1;
 
@@ -105,12 +110,12 @@ rustPlatform.buildRustPackage rec {
           buildGoModule (
             args
             // rec {
-              version = "0.18.20";
+              version = "0.20.2";
               src = fetchFromGitHub {
                 owner = "evanw";
                 repo = "esbuild";
                 rev = "v${version}";
-                hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+                hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
               };
 
               vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
@@ -118,10 +123,17 @@ rustPlatform.buildRustPackage rec {
           );
       }
     );
+
+    # Needed to get openssl-sys to use pkgconfig.
+    OPENSSL_NO_VENDOR = true;
   };
 
   buildPhase = ''
     runHook preBuild
+
+    pushd packages/ui
+    pnpm package
+    popd
 
     cargo tauri build --bundles "$tauriBundle"
 
@@ -171,7 +183,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${version}";
     mainProgram = "git-butler";
     license = lib.licenses.fsl11Mit;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      techknowlogick
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

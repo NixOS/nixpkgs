@@ -132,12 +132,17 @@ let
 
     generatedConfig = luaLib.generateLuarocksConfig {
       externalDeps = lib.unique (self.externalDeps ++ externalDepsGenerated);
+      local_cache = "";
+
+      # To prevent collisions when creating environments, we install the rock
+      # files into per-package subdirectories
+      rocks_subdir = self.rocksSubdir;
+
       # Filter out the lua derivation itself from the Lua module dependency
       # closure, as it doesn't have a rock tree :)
       # luaLib.hasLuaModule
       requiredLuaRocks = lib.filter luaLib.hasLuaModule
         (lua.pkgs.requiredLuaModules (self.nativeBuildInputs ++ self.propagatedBuildInputs));
-      inherit (self) rocksSubdir;
     };
 
     luarocksConfig' = lib.recursiveUpdate luarocksConfig

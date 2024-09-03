@@ -1,5 +1,17 @@
-with import ../../../. { };
-
+{
+  pkgs ? import ../../.. { },
+}:
+let
+  inherit (pkgs) lib stdenv mkShell;
+in
 mkShell {
-  packages = [ rustc cargo clippy rustfmt ] ++ lib.optional stdenv.isDarwin libiconv;
+  packages =
+    with pkgs;
+    [
+      rustc
+      cargo
+      clippy
+      rustfmt
+    ]
+    ++ lib.optional stdenv.isDarwin pkgs.libiconv;
 }

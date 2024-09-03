@@ -92,6 +92,7 @@ lib.makeOverridable (
       installPhase = "includesPhase";
       dontBuild = true;
     }
+    // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }
     // attrs
   )
 )

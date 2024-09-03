@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2024.05";
+  version = "2024.06";
 
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";
     rev = version;
-    hash = "sha256-6bVglWmnohGR0Hrib8X5ZEfy+clxP89NSEMgbljpuQs=";
+    hash = "sha256-y+xtJ4YbzPr1168tu+148Co7Ke/iC68aOQBwTINlp2Y=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
     homepage = "https://moarvm.org";
     license = licenses.artistic2;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    maintainers = with maintainers; [ thoughtpolice sgo ];
     mainProgram = "moar";
     platforms = platforms.unix;
   };

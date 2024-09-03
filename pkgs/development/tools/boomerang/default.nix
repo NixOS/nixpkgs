@@ -33,6 +33,6 @@ mkDerivation rec {
     homepage = "https://github.com/BoomerangDecompiler/boomerang";
     license = licenses.bsd3;
     description = "General, open source, retargetable decompiler";
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "tplgy";
-    repo = finalAttrs.pname;
+    repo = "cppcodec";
     rev = "v${finalAttrs.version}";
     hash = "sha256-k4EACtDOSkTXezTeFtVdM1EVJjvGga/IQSrvDzhyaXw=";
   };

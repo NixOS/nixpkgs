@@ -1,11 +1,18 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, pkgs }:
 
 let
+
+  isSdk10_12 = stdenv.hostPlatform.darwinSdkVersion == "10.12";
+
+
   # This attrset can in theory be computed automatically, but for that to work nicely we need
   # import-from-derivation to work properly. Currently it's rather ugly when we try to bootstrap
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
+    "macos-14.4" = {
+      AvailabilityVersions = "140.1";
+    };
     "macos-14.3" = {
       system_cmds   = "970.0.4";
     };
@@ -31,6 +38,9 @@ let
       dtrace        = "209.50.12";
       libpthread    = "218.60.3";
       hfs           = "366.70.1";
+    };
+    "osx-10.12.4" = {
+      libdispatch = "703.50.37";
     };
     "osx-10.11.6" = {
       PowerManagement = "572.50.1";
@@ -244,6 +254,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
 
     inherit (adv_cmds-boot) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "sha256-cUKeMx6mOAxBSRHIdfzsrR65Qv86m7+20XvpKqVfwVI=" {};
+    AvailabilityVersions = applePackage "AvailabilityVersions" "macos-14.4" "sha256-O9/EOsbK5ZXxh6iDSTwGWWrY5GX/viUwdfG3tdvZwcQ=" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "sha256-CW8zP5QZMhWTGp+rhrm8oHE/vSLsRlv1VRAGe1OUDmI=" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "sha256-UNaHvxzYzEBnYYuoMLqWUVprZa6Wqn/3XleoSCco050=" {};
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "sha256-FLgODBrfv+XsGaAjddncYAm/BIJJYw6LcwX/z7ncKFM=" {};
@@ -267,26 +278,26 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
       };
     };
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "sha256-L5rQ+UBpf3B+W1U+gZKk7fXulslHsc8lxnCsplV+nr0=" {};
-    libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "sha256-jfAEk0OLrJa9AIZVikIoHomd+l+4rCfc320Xh50qK5M=" {};
+    libdispatch     = applePackage "libdispatch"       "osx-10.12.4"     "sha256-xUqoG5JK4P3nXeoVUOBzodVK9fjH/I3xJ6WRtM39bdw=" {};
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "sha256-6F7wiwerv4nz/xXHtp1qCHSaFzZgzcRN+jbmXA5oWOQ=" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es=" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.12.6"     "sha256-6wvMBxAUfiYcQtmlfYCj1d3kFmFM/jdboTd7hRvi3e4=" {};
-    libmalloc       = if stdenv.isx86_64 then
+    libmalloc       = if isSdk10_12 then
       applePackage "libmalloc" "osx-10.12.6" "sha256-brfG4GEF2yZipKdhlPq6DhT2z5hKYSb2MAmffaikdO4=" {}
     else macosPackages_11_0_1.libmalloc;
-    libplatform     = if stdenv.isx86_64 then
+    libplatform     = if isSdk10_12 then
       applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {}
     else macosPackages_11_0_1.libplatform;
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=" {};
-    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" {};
+    Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" { inherit (pkgs.darwin.apple_sdk) sdkRoot; };
     libutil         = applePackage "libutil"           "osx-10.12.6"     "sha256-4PFuk+CTLwvd/Ll9GLBkiIM0Sh/CVaiKwh5m1noheRs=" {};
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "sha256-CC0sndP/mKYe3dZu3v7fjuDASV4V4w7dAcnWMvpoquE=" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "sha256-ddZr6tropkpdMJhq/kUlm3OwO8b0yxtkrMpwec8R4FY=" {};
     objc4           = applePackage "objc4"             "osx-10.12.6"     "sha256-ZsxRpdsfv3Dxs7yBBCkjbKXKR6aXwkEpxc1XYXz7ueM=" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "sha256-M1zoEjjeKIDUEP6ACbpUJk3OXjobw4g/qzUmxGdX1J0=" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=" {};
-    xnu             = if stdenv.isx86_64 then
+    xnu             = if isSdk10_12 then
       applePackage "xnu" "osx-10.12.6" "sha256-C8TPQlUT3RbzAy8YnZPNtr70hpaVG9Llv0h42s3NENI=" {}
     else macosPackages_11_0_1.xnu;
     hfs             = applePackage "hfs"               "osx-10.12.6"     "sha256-eGi18HQFJrU5UHoBOE0LqO5gQ0xOf8+OJuAWQljfKE4=" {};
@@ -297,7 +308,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "sha256-VX+hcZ7JhOA8EhwLloPlM3Yx79RXp9OYHV9Mi10uw3Q=" {
       macosPackages_11_0_1 = macosPackages_11_0_1;
     };
-    network_cmds    = if stdenv.isx86_64 then
+    network_cmds    = if isSdk10_12 then
       applePackage "network_cmds" "osx-10.11.6" "sha256-I89CLIswGheewOjiNZwQTgWvWbhm0qtB5+KUqzxnQ5M=" {}
     else macosPackages_11_0_1.network_cmds;
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=" {};

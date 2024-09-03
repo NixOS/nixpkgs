@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, icu }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "zk";

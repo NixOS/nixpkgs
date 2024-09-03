@@ -10,7 +10,6 @@
 , json-glib
 , gobject-introspection
 , gtk-doc
-, pkgs
 , docbook-xsl-nons
 }:
 

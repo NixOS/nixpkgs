@@ -7,9 +7,9 @@
 , libiconv
 , Cocoa
 , autoSignDarwinBinariesHook
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, mesa
+, libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms
 , openglSupport ? libGLSupported
-, libGL
 , libGLU
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ SDL2 ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]
-    ++ optionals openglSupport [ libGL libGLU ];
+    ++ optionals openglSupport [ libGLU ];
 
   enableParallelBuilding = true;
 

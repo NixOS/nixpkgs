@@ -26,6 +26,7 @@ let
     inherit (self.passthru) generator-out;
   };
   python3 = buildPackages.python3.override {
+    self = python3;
     packageOverrides = _: _: {
       nanopb-proto = self.passthru.python-module;
     };
@@ -119,4 +120,3 @@ in
     '';
   };
 })
-

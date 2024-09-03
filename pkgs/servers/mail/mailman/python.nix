@@ -1,6 +1,7 @@
 { python3, fetchPypi, lib, overlay ? (_: _: {}) }:
 
-python3.override {
+lib.fix (self: python3.override {
+  inherit self;
   packageOverrides = lib.composeExtensions
     (self: super: {
       /*
@@ -28,11 +29,7 @@ python3.override {
           hash = "sha256-WF3FFrnrBCphnvCjnD19Vf6BvbTfCaUsnN3g0Hvxqn0=";
         };
       });
-
-      readme-renderer = super.readme-renderer.overridePythonAttrs (_: {
-        propagatedBuildInputs = [ self.cmarkgfm ];
-      });
     })
 
     overlay;
-}
+})

@@ -202,13 +202,11 @@ assert (lib.assertMsg (lib.all
               == ((attrs.group or null) == null))
         contents) "Contents of the disk image should set none of {user, group} or both at the same time.");
 
-with lib;
-
 let format' = format; in let
 
   format = if format' == "qcow2-compressed" then "qcow2" else format';
 
-  compress = optionalString (format' == "qcow2-compressed") "-c";
+  compress = lib.optionalString (format' == "qcow2-compressed") "-c";
 
   filename = "nixos." + {
     qcow2 = "qcow2";
@@ -240,7 +238,7 @@ let format' = format; in let
         mkpart primary ext4 2MB -1 \
         align-check optimal 2 \
         print
-      ${optionalString deterministic ''
+      ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
@@ -255,7 +253,7 @@ let format' = format; in let
         mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
         mkpart primary ext4 ${bootSize} -1
-      ${optionalString deterministic ''
+      ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
@@ -271,7 +269,7 @@ let format' = format; in let
         mkpart BOOT fat32 100MiB ${bootSize} \
         set 2 bls_boot on \
         mkpart ROOT ext4 ${bootSize} -1
-      ${optionalString deterministic ''
+      ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC  \
@@ -288,7 +286,7 @@ let format' = format; in let
         mkpart no-fs 0 1024KiB \
         set 2 bios_grub on \
         mkpart primary ext4 ${bootSize} -1
-      ${optionalString deterministic ''
+      ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
           --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
@@ -302,7 +300,7 @@ let format' = format; in let
 
   useEFIBoot = touchEFIVars;
 
-  nixpkgs = cleanSource pkgs.path;
+  nixpkgs = lib.cleanSource pkgs.path;
 
   # FIXME: merge with channel.nix / make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" {} ''
@@ -316,8 +314,8 @@ let format' = format; in let
     echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';
 
-  binPath = with pkgs; makeBinPath (
-    [ rsync
+  binPath = lib.makeBinPath (with pkgs; [
+      rsync
       util-linux
       parted
       e2fsprogs
@@ -342,7 +340,7 @@ let format' = format; in let
   basePaths = [ config.system.build.toplevel ]
     ++ lib.optional copyChannel channelSources;
 
-  additionalPaths' = subtractLists basePaths additionalPaths;
+  additionalPaths' = lib.subtractLists basePaths additionalPaths;
 
   closureInfo = pkgs.closureInfo {
     rootPaths = basePaths ++ additionalPaths';
@@ -389,9 +387,9 @@ let format' = format; in let
     # Semi-shamelessly copied from make-etc.sh. I (@copumpkin) shall factor this stuff out as part of
     # https://github.com/NixOS/nixpkgs/issues/23052.
     set -f
-    sources_=(${concatStringsSep " " sources})
-    targets_=(${concatStringsSep " " targets})
-    modes_=(${concatStringsSep " " modes})
+    sources_=(${lib.concatStringsSep " " sources})
+    targets_=(${lib.concatStringsSep " " targets})
+    modes_=(${lib.concatStringsSep " " modes})
     set +f
 
     for ((i = 0; i < ''${#targets_[@]}; i++)); do
@@ -443,8 +441,8 @@ let format' = format; in let
       ${if copyChannel then "--channel ${channelSources}" else "--no-channel-copy"} \
       --substituters ""
 
-    ${optionalString (additionalPaths' != []) ''
-      nix --extra-experimental-features nix-command copy --to $root --no-check-sigs ${concatStringsSep " " additionalPaths'}
+    ${lib.optionalString (additionalPaths' != []) ''
+      nix --extra-experimental-features nix-command copy --to $root --no-check-sigs ${lib.concatStringsSep " " additionalPaths'}
     ''}
 
     diskImage=nixos.raw
@@ -514,10 +512,10 @@ let format' = format; in let
     ''}
 
     echo "copying staging root to image..."
-    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
+    cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
            -t ${fsType} \
            -i $diskImage \
-           $root${optionalString onlyNixStore builtins.storeDir}/* / ||
+           $root${lib.optionalString onlyNixStore builtins.storeDir}/* / ||
       (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
   '';
 
@@ -547,7 +545,7 @@ let format' = format; in let
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
       postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
       QEMU_OPTS =
-        concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+        lib.concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
         ++ lib.optionals touchEFIVars [
           "-drive if=pflash,format=raw,unit=1,file=$efiVars"
         ] ++ lib.optionals (OVMF.systemManagementModeRequired or false) [
@@ -564,8 +562,8 @@ let format' = format; in let
       # It is necessary to set root filesystem unique identifier in advance, otherwise
       # bootloader might get the wrong one and fail to boot.
       # At the end, we reset again because we want deterministic timestamps.
-      ${optionalString (fsType == "ext4" && deterministic) ''
-        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
+      ${lib.optionalString (fsType == "ext4" && deterministic) ''
+        tune2fs -T now ${lib.optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
       ''}
       # make systemd-boot find ESP without udev
       mkdir /dev/block
@@ -577,33 +575,33 @@ let format' = format; in let
 
       # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
       # '-E offset=X' option, so we can't do this outside the VM.
-      ${optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
+      ${lib.optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
         mkdir -p /mnt/boot
         mkfs.vfat -n ESP /dev/vda1
         mount /dev/vda1 /mnt/boot
 
-        ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
+        ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
-      ${optionalString (partitionTableType == "efixbootldr") ''
+      ${lib.optionalString (partitionTableType == "efixbootldr") ''
         mkdir -p /mnt/{boot,efi}
         mkfs.vfat -n ESP /dev/vda1
         mkfs.vfat -n BOOT /dev/vda2
         mount /dev/vda1 /mnt/efi
         mount /dev/vda2 /mnt/boot
 
-        ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
+        ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
 
       # Install a configuration.nix
       mkdir -p /mnt/etc/nixos
-      ${optionalString (configFile != null) ''
+      ${lib.optionalString (configFile != null) ''
         cp ${configFile} /mnt/etc/nixos/configuration.nix
       ''}
 
       ${lib.optionalString installBootLoader ''
         # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
         # Use this option to create a symlink from vda to any arbitrary device you want.
-        ${optionalString (config.boot.loader.grub.enable) (lib.concatMapStringsSep " " (device:
+        ${lib.optionalString (config.boot.loader.grub.enable) (lib.concatMapStringsSep " " (device:
           lib.optionalString (device != "/dev/vda") ''
             mkdir -p "$(dirname ${device})"
             ln -s /dev/vda ${device}
@@ -625,9 +623,9 @@ let format' = format; in let
 
       # Set the ownerships of the contents. The modes are set in preVM.
       # No globbing on targets, so no need to set -f
-      targets_=(${concatStringsSep " " targets})
-      users_=(${concatStringsSep " " users})
-      groups_=(${concatStringsSep " " groups})
+      targets_=(${lib.concatStringsSep " " targets})
+      users_=(${lib.concatStringsSep " " users})
+      groups_=(${lib.concatStringsSep " " groups})
       for ((i = 0; i < ''${#targets_[@]}; i++)); do
         target="''${targets_[$i]}"
         user="''${users_[$i]}"
@@ -646,9 +644,9 @@ let format' = format; in let
       # In deterministic mode, this is fixed to 1970-01-01 (UNIX timestamp 0).
       # This two-step approach is necessary otherwise `tune2fs` will want a fresher filesystem to perform
       # some changes.
-      ${optionalString (fsType == "ext4") ''
-        tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
-        ${optionalString deterministic "tune2fs -f -T 19700101 $rootDisk"}
+      ${lib.optionalString (fsType == "ext4") ''
+        tune2fs -T now ${lib.optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
+        ${lib.optionalString deterministic "tune2fs -f -T 19700101 $rootDisk"}
       ''}
     ''
   );

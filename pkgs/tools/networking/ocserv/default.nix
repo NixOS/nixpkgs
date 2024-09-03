@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "openconnect";
     repo = "ocserv";
     rev = version;
-    sha256 = "sha256-IYiYC9oAw35YjpptUEnhuZQqoDevku25r7qi6SG8xtk=";
+    hash = "sha256-IYiYC9oAw35YjpptUEnhuZQqoDevku25r7qi6SG8xtk=";
   };
 
   nativeBuildInputs = [ autoreconfHook gperf pkg-config ronn ];

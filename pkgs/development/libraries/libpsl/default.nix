@@ -10,7 +10,7 @@
 , libxslt
 , pkg-config
 , python3
-, valgrind
+, buildPackages
 , publicsuffix-list
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   # bin/psl-make-dafsa brings a large runtime closure through python3
-  outputs = [ "bin" "out" "dev" ];
+  outputs = lib.optional (!stdenv.hostPlatform.isStatic) "bin" ++ [ "out" "dev" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     gtk-doc
     lzip
     pkg-config
-    python3
     libxslt
   ];
 
@@ -41,13 +40,13 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-  ];
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) python3;
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     patchShebangs src/psl-make-dafsa
   '';
 
@@ -61,6 +60,7 @@ stdenv.mkDerivation rec {
     "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+    "PYTHON=${lib.getExe buildPackages.python3}"
   ];
 
   enableParallelBuilding = true;

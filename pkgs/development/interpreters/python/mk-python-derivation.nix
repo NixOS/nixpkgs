@@ -17,11 +17,11 @@
 , pythonImportsCheckHook
 , pythonNamespacesHook
 , pythonOutputDistHook
+, pythonRelaxDepsHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , pythonRuntimeDepsCheckHook
 , setuptoolsBuildHook
-, setuptoolsCheckHook
 , wheelUnpackHook
 , eggUnpackHook
 , eggBuildHook
@@ -144,7 +144,7 @@ in
 
 , meta ? {}
 
-, doCheck ? config.doCheckByDefault or false
+, doCheck ? true
 
 , disabledTestPaths ? []
 
@@ -252,6 +252,8 @@ let
       #    because the hook that checks for conflicts uses setuptools.
       #
       pythonCatchConflictsHook
+    ] ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
+      pythonRelaxDepsHook
     ] ++ optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
     ] ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [
@@ -310,13 +312,7 @@ let
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
-    nativeInstallCheckInputs = [
-    ] ++ optionals (format' == "setuptools") [
-      # Longer-term we should get rid of this and require
-      # users of this function to set the `installCheckPhase` or
-      # pass in a hook that sets it.
-      setuptoolsCheckHook
-    ] ++ nativeCheckInputs;
+    nativeInstallCheckInputs = nativeCheckInputs;
     installCheckInputs = checkInputs;
 
     postFixup = optionalString (!dontWrapPythonPrograms) ''

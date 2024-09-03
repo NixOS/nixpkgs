@@ -40,18 +40,18 @@ let
 
   luaPackages = self.pkgs;
 
-  XCFLAGS = with lib;
-    optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
-    ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
-    ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
-    ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
-    ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
-    ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
-    ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
-    ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
-    ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
-    ++ optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
-    ++ optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
+  XCFLAGS =
+    lib.optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
+    ++ lib.optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
+    ++ lib.optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+    ++ lib.optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
+    ++ lib.optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
+    ++ lib.optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
+    ++ lib.optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
+    ++ lib.optional enableAPICheck "-DLUAJIT_USE_APICHECK"
+    ++ lib.optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+    ++ lib.optional enableRegisterAllocationRandomization "-DLUAJIT_RANDOM_RA"
+    ++ lib.optional deterministicStringIds "-DLUAJIT_SECURITY_STRID=0"
   ;
 
   # LuaJIT requires build for 32bit architectures to be build on x86 not x86_64
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = builtins.toFile "lua-setup-hook" ''
       source @out@/nix-support/utils.sh
-      addEnvHooks "$hostOffset" addToLuaPath
+      addEnvHooks "$hostOffset" luaEnvHook
       '';
 
   # copied from python

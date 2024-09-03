@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "PAM auth provider for the Synapse Matrix server";
     homepage = "https://github.com/14mRh4X0r/matrix-synapse-pam";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -5,11 +5,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "atlassian-bamboo";
-  version = "8.2.6";
+  version = "9.6.4";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/bamboo/downloads/atlassian-bamboo-${version}.tar.gz";
-    sha256 = "sha256-9TYTXSdGQ7qSqvF25Bn1l5N8NbKndcO8HiJSc4NUois=";
+    hash = "sha256-Gd4+rH/40s9AvJi/waEVfVwWtT0H3bSlknNV6wxGpNg=";
   };
 
   buildPhase = ''

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    hash = "sha256-EqMDW/JvVfceMQalGl+o17dEVy35imOSCpz/h2p9zOQ=";
+    hash = "sha256-1nqymeXKBdrT2imaXqc9YCCTcqW+zX8TuaM8KQM4pOY=";
   };
 
   patches = [
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  checkInputs = [
+    python3.pkgs.pytest
+  ];
 
   meta = with lib; {
     homepage = "https://www.clamav.net";

@@ -1,21 +1,25 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
+, stdenv
 }:
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.34.0";
+  version = "0.38.3";
 
   src = fetchFromGitHub {
     owner = "defenseunicorns";
     repo = "zarf";
     rev = "v${version}";
-    hash = "sha256-o3sfvzUCCW7hwNDrWH1IiRyZHkVnxffJdLS8BqzD5Ng=";
+    hash = "sha256-tnxLktz8tc8ceWirThPR5eqlk5W3jnliiKka6feeX38=";
   };
 
-  vendorHash = "sha256-Co9xKC7J0WGoaYxa+YukrP+6aOuhweZyXaH5wD97ioA=";
+  vendorHash = "sha256-y4A3A6zTgZaFjy6B31BAIpyRDp+pYdc/dkFpZq2NQ2c=";
   proxyVendor = true;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   preBuild = ''
     mkdir -p build/ui
@@ -25,6 +29,14 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X" "github.com/defenseunicorns/zarf/src/config.CLIVersion=${src.rev}" "-X" "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${src.rev}" "-X" "k8s.io/component-base/version.gitCommit=${src.rev}" "-X" "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z" ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export K9S_LOGS_DIR=$(mktemp -d)
+    installShellCompletion --cmd zarf \
+      --bash <($out/bin/zarf completion --no-log-file bash) \
+      --fish <($out/bin/zarf completion --no-log-file fish) \
+      --zsh  <($out/bin/zarf completion --no-log-file zsh)
+  '';
 
   meta = with lib; {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";

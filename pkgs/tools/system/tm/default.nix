@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Terminal mixer - multiplexer for the i/o of terminal applications";
     homepage = "http://vicerveza.homeunix.net/~viric/soft/tm";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "tm";
   };

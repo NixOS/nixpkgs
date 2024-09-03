@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Zac-HD/hypothesmith";
     changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

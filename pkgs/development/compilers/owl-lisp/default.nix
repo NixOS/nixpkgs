@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "owl-lisp";
     repo   = "owl";
     rev    = "v${version}";
-    sha256 = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
+    hash = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
   };
 
   nativeBuildInputs = [ which ];

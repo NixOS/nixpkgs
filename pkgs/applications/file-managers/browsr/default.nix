@@ -6,19 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "browsr";
-  version = "1.19.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V5B+/zfUlpF0TMTHqzyjapW93/DoJKgbJkTMX2NZyIQ=";
+    hash = "sha256-76OzJOunZRVSGalQiyX+TSukD8rRIFHxA713NqOn3PY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -57,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     "art"
     "pandas"
     "pymupdf"
+    "pyperclip"
     "rich-click"
     "rich-pixels"
     "rich"
@@ -85,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "File explorer in your terminal";
     mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
-    changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
+    changelog = "https://github.com/juftin/browsr/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

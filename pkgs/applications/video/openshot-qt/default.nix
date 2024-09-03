@@ -16,12 +16,12 @@
 
 let
   pname = "openshot-qt";
-  version = "3.1.1";
+  version = "3.2.1";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
-    rev = "v${version}";
-    hash = "sha256-kEz1APBitWLlnIbyloYMsqNrwC9RqU04kyyWzm5klYc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zZZ7C/1+Qh7KS1WJ8YWkhFgw0+UHJhjk+145u9/TBcI=";
   };
 in
 mkDerivationWith python3.pkgs.buildPythonApplication {
@@ -47,7 +47,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     pyqtwebengine
     pyzmq
     requests
-    sip4
+    sip
   ];
 
   strictDeps = true;

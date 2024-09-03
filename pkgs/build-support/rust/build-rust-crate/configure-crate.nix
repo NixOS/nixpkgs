@@ -195,7 +195,7 @@ in ''
          export CARGO_FEATURE_$feature=1
        done
 
-       target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+       target/build/${crateName}/build_script_build | tee target/build/${crateName}.opt
      )
 
      set +e

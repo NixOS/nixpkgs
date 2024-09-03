@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   grandalf,
+  httpx,
   jsonpatch,
   langsmith,
   numpy,
@@ -15,7 +17,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   syrupy,
   tenacity,
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.2.7";
+  version = "0.2.37";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,35 +33,32 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "langchain-core==${version}";
-    hash = "sha256-MmWgnpOO+OWUyRUBqIKuIHG2/p8NfSlVJVbUXfF4spg=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-An2ApN0pgCrQjqu9XPFfPyPvWx0+6JnUkGPrcD0/3kg=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  pythonRelaxDeps = [
-    "langsmith"
-    "packaging"
-  ];
-
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     jsonpatch
     langsmith
     packaging
-    pydantic
     pyyaml
     tenacity
   ];
+
+  optional-dependencies = {
+    pydantic = [ pydantic ];
+  };
 
   pythonImportsCheck = [ "langchain_core" ];
 
   nativeCheckInputs = [
     freezegun
     grandalf
+    httpx
     numpy
     pytest-asyncio
     pytest-mock
@@ -71,25 +69,41 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  disabledTests = [
-    # Fail for an unclear reason with:
-    # AssertionError: assert '6a92363c-4ac...-d344769ab6ac' == '09af124a-2ed...-671c64c72b70'
-    "test_config_traceable_handoff"
-    "test_config_traceable_async_handoff"
-  ];
+  # don't add langchain-standard-tests to nativeCheckInputs
+  # to avoid circular import
+  preCheck = ''
+    export PYTHONPATH=${src}/libs/standard-tests:$PYTHONPATH
+  '';
 
   passthru = {
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
-      set -eu -o pipefail
+      set -u -o pipefail +e
       nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
       nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
       nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
       nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
     '';
   };
+
+  disabledTests =
+    [
+      # flaky, sometimes fail to strip uuid from AIMessageChunk before comparing to test value
+      "test_map_stream"
+      # Compares with machine-specific timings
+      "test_rate_limit_invoke"
+      "test_rate_limit_stream"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Langchain-core the following tests due to the test comparing execution time with magic values.
+      "test_queue_for_streaming_via_sync_call"
+      "test_same_event_loop"
+      # Comparisons with magic numbers
+      "test_rate_limit_ainvoke"
+      "test_rate_limit_astream"
+    ];
 
   meta = {
     description = "Building applications with LLMs through composability";

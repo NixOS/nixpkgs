@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.12.0-unstable-2024-06-27";
+  version = "0.12.0-unstable-2024-08-14";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "4d21ffc1d67d4aa9886cc691441afccc057b975d";
-    sha256 = "sha256-LvYEE3/VYgLK2c/NB4wey87025eoyADPV6w1CV/Uejs=";
+    rev = "d81eb557d7f2aad5e22e3633fbcd53a4d60ac5d1";
+    sha256 = "sha256-O6W2xiG5rZzD/40ytIFo4HovKq0ml0oCV6amcAQhoUs=";
   };
 
   sourceRoot = "${src.name}/klippy";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ (python3.withPackages (p: with p; [ can cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
+  buildInputs = [ (python3.withPackages (p: with p; [ python-can cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
 
   # we need to run this to prebuild the chelper.
   postBuild = ''
@@ -56,6 +56,10 @@ stdenv.mkDerivation rec {
     # under `klipper_path`
     cp -r $src/docs $out/lib/docs
     cp -r $src/config $out/lib/config
+
+    # Add version information. For the normal procedure see https://www.klipper3d.org/Packaging.html#versioning
+    # This is done like this because scripts/make_version.py is not available when sourceRoot is set to "${src.name}/klippy"
+    echo "${version}-NixOS" > $out/lib/klipper/.version
 
     mkdir -p $out/bin
     chmod 755 $out/lib/klipper/klippy.py

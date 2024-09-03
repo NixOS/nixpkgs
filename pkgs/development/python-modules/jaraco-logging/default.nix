@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/jaraco.logging";
     changelog = "https://github.com/jaraco/jaraco.logging/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

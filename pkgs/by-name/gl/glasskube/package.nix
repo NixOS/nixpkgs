@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.11.0";
+  version = "0.17.0";
   gitSrc = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-onpW7YolM05C1BKb7vgH6Y2XFNbigRTueMqjzuFWERo=";
+    hash = "sha256-uo612trSSdbj6XpZHddXELNQideJ/M/qh+LLdzVZL6U=";
   };
   web-bundle = buildNpmPackage rec {
     inherit version;
@@ -20,7 +20,7 @@ let
 
     src = gitSrc;
 
-    npmDepsHash = "sha256-V4lB+lgnurEo4BPVQDIYxdzKczPPDa6QEFaTAm+go88=";
+    npmDepsHash = "sha256-s3ViR6zBUTTu864fiD06N1ouMUYXccj6AMXt5pj+BSc=";
 
     dontNpmInstall = true;
 
@@ -40,7 +40,7 @@ in buildGoModule rec {
 
   src = gitSrc;
 
-  vendorHash = "sha256-besBympQMvdsD25nndyRkcA8v3wMQUb52VCwvtopgPc=";
+  vendorHash = "sha256-KzoFPhySX2w7ndU6nndx/KqoUfE8o6OT/9a2DEz5YuI=";
 
   CGO_ENABLED = 0;
 
@@ -51,7 +51,7 @@ in buildGoModule rec {
     "-X github.com/glasskube/glasskube/internal/config.Commit=${src.rev}"
   ];
 
-  subPackages = [ "cmd/${pname}" "cmd/package-operator" ];
+  subPackages = [ "cmd/glasskube" "cmd/package-operator" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

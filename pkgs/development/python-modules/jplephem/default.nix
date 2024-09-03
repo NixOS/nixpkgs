@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

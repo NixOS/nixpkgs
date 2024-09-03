@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, caqti, mariadb }:
+{ buildDunePackage, caqti, mariadb }:
 
 buildDunePackage {
   pname = "caqti-driver-mariadb";

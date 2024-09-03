@@ -1,9 +1,7 @@
-{ autoreconfHook
-, cmake
+{ cmake
 , fetchFromGitLab
 , mediastreamer
 , openh264
-, pkg-config
 , lib
 , stdenv
 }:

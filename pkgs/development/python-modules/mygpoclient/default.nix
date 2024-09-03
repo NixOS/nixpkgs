@@ -1,33 +1,40 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  nose,
+  setuptools,
   minimock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mypgoclient";
-  version = "1.8";
+  version = "1.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "mygpoclient";
     rev = version;
-    sha256 = "0aa28wc55x3rxa7clwfv5v5500ffyaq0vkxaa3v01y1r93dxkdvp";
+    hash = "sha256-McHllitWiBiCdNuJlUg6K/vgr2l3ychu+KOx3r/UCv0=";
   };
 
-  nativeCheckInputs = [
-    nose
-    minimock
-  ];
-
-  checkPhase = ''
-    nosetests
+  postPatch = ''
+    substituteInPlace mygpoclient/*_test.py \
+      --replace-quiet "assertEquals" "assertEqual" \
+      --replace-quiet "assert_" "assertTrue"
   '';
 
-  doCheck = (!stdenv.isDarwin);
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "mygpoclient" ];
+
+  nativeCheckInputs = [
+    minimock
+    pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Gpodder.net client library";
@@ -37,6 +44,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/gpodder/mygpoclient";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -17,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "1.13.0";
+  version = "stable2407-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
-    rev = "polkadot-v${version}";
-    hash = "sha256-9ZjiKv+05//Kf6q3mL1P5kOCOm1KCGmQIZkrD54pyeI=";
+    rev = "polkadot-${version}";
+    hash = "sha256-IYRkXmFBjRAYSROL37EgEjC7wM1N97HabuSHtcSUxdg=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -47,12 +47,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ark-secret-scalar-0.0.2" = "sha256-91sODxaj0psMw0WqigMCGO5a7+NenAsRj5ZmW6C7lvc=";
-      "common-0.1.0" = "sha256-LHz2dK1p8GwyMimlR7AxHLz1tjTYolPwdjP7pxork1o=";
-      "fflonk-0.1.0" = "sha256-+BvZ03AhYNP0D8Wq9EMsP+lSgPA6BBlnWkoxTffVLwo=";
       "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
-      "sp-ark-bls12-381-0.4.2" = "sha256-nNr0amKhSvvI9BlsoP+8v6Xppx/s7zkf0l9Lm3DW8w8=";
-      "sp-crypto-ec-utils-0.4.1" = "sha256-/Sw1ZM/JcJBokFE4y2mv/P43ciTL5DEm0PDG0jZvMkI=";
     };
   };
 
@@ -92,8 +87,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
     platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86);
-    # See comment about wasm32-unknown-unknown in rustc.nix.
-    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-      !stdenv.hostPlatform.gcc.thumb or true;
   };
 }

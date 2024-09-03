@@ -9,7 +9,6 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
-, fetchpatch
 , gettext
 , glib
 , gnutls
@@ -73,7 +72,7 @@
 , enableIscsi ? false
 , openiscsi
 , libiscsi
-, enableXen ? false
+, enableXen ? stdenv.isLinux && stdenv.isx86_64
 , xen
 , enableZfs ? stdenv.isLinux
 , zfs
@@ -115,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "10.4.0";
+  version = "10.5.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-grQyILVy0IYbbz/Wau8QRfCub7j+5nhnkfs2tprfpO0=";
+    hash = "sha256-Nku4l1f34NOUr23KWDH9uZu72OgMK3KfYjsRRbuTvf8=";
     fetchSubmodules = true;
   };
 
@@ -164,6 +163,11 @@ stdenv.mkDerivation rec {
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
     sed -i '/domaincapstest/d' tests/meson.build
+  '' + lib.optionalString enableXen ''
+    # Has various hardcoded paths that don't exist outside of a Xen dom0.
+    sed -i '/libxlxml2domconfigtest/d' tests/meson.build
+    substituteInPlace src/libxl/libxl_capabilities.h \
+     --replace-fail /usr/lib/xen ${xen}/libexec/xen
   '';
 
   strictDeps = true;

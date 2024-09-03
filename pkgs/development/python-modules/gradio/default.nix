@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   writeShellScriptBin,
   gradio,
 
@@ -16,7 +15,7 @@
   # runtime
   setuptools,
   aiofiles,
-  altair,
+  anyio,
   diffusers,
   fastapi,
   ffmpy,
@@ -48,6 +47,8 @@
 
   # check
   pytestCheckHook,
+  hypothesis,
+  altair,
   boto3,
   gradio-pdf,
   ffmpeg,
@@ -63,7 +64,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.36.1";
+  version = "4.41.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -71,7 +72,7 @@ buildPythonPackage rec {
   # We use the Pypi release, since it provides prebuilt webui assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-crLSEVbTRnEjuubzD0Y/AC7wbicnZidDCPXtPKw3Vjs=";
+    hash = "sha256-d4li7kQFMzlUVGdm2nTSnj25pTOWIqnZuOvTOtwPLpc=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
@@ -91,7 +92,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
@@ -100,7 +100,7 @@ buildPythonPackage rec {
   dependencies = [
     setuptools # needed for 'pkg_resources'
     aiofiles
-    altair
+    anyio
     diffusers
     fastapi
     ffmpy
@@ -125,7 +125,7 @@ buildPythonPackage rec {
     uvicorn
     typer
     tomlkit
-  ] ++ typer.passthru.optional-dependencies.all;
+  ];
 
   passthru.optional-dependencies.oauth = [
     authlib
@@ -134,6 +134,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    hypothesis
+    altair
     boto3
     gradio-pdf
     ffmpeg
@@ -149,7 +151,7 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
-  ] ++ passthru.optional-dependencies.oauth ++ pydantic.passthru.optional-dependencies.email;
+  ] ++ passthru.optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
@@ -184,6 +186,12 @@ buildPythonPackage rec {
 
     # fails without network
     "test_download_if_url_correct_parse"
+
+    # flaky: OSError: Cannot find empty port in range: 7860-7959
+    "test_docs_url"
+    "test_orjson_serialization"
+    "test_dataset_is_updated"
+    "test_multimodal_api"
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
@@ -242,8 +250,8 @@ buildPythonPackage rec {
     "test/test_networking.py"
     # makes pytest freeze 50% of the time
     "test/test_interfaces.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Network-related tests that are flaky on darwin (depend on port availability)
+
+    # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
   ];
   pytestFlagsArray = [

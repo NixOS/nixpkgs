@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, gtk3, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "spotify-tray";
@@ -19,16 +19,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
   buildInputs = [ gtk3 ];
+
+  postFixup = ''
+    wrapProgram $out/bin/spotify-tray --set GDK_BACKEND x11
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tsmetana/spotify-tray";
     description = "Adds a tray icon to the Spotify Linux client application";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ Enzime ];
+    maintainers = [ ];
     mainProgram = "spotify-tray";
   };
 }

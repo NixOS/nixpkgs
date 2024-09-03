@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 , pkg-config
 , libxkbcommon
 , pango
@@ -19,19 +20,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-EdlOGL9RdO77HnZxv2UpPwrJdFH8qPrPSRtkBBV167s=";
+    hash = "sha256-13xynDWoOqogUKZTf6lz267hEQGdCE+BE6acs2G3j8k=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-K1lguY6f1mbrfxkDNeLlNAXSM9JC8Jm61MyBIsIYiNs=";
+      "smithay-0.3.0" = "sha256-4lmCbdW+fOnPWEDAbKk4LFcr9KK+akjUJqiwm0pK8Uw=";
+      "libspa-0.8.0" = "sha256-R68TkFbzDFA/8Btcar+0omUErLyBMm4fsmQlCvfqR9o=";
     };
   };
 
@@ -61,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     libglvnd # For libEGL
   ];
 
-  passthru.providedSessions = ["niri"];
+  passthru.providedSessions = [ "niri" ];
 
   postPatch = ''
     patchShebangs ./resources/niri-session
@@ -75,6 +77,8 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Scrollable-tiling Wayland compositor";

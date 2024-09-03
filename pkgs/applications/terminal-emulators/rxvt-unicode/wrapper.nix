@@ -1,5 +1,4 @@
-{ callPackage
-, symlinkJoin
+{ symlinkJoin
 , makeWrapper
 , lib
 , rxvt-unicode-unwrapped

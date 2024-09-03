@@ -5,6 +5,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       lark = super.lark.overridePythonAttrs (old: rec {
         # gdtoolkit needs exactly this lark version

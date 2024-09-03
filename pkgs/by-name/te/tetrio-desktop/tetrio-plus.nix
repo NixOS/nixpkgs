@@ -9,7 +9,7 @@
 
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, fixup-yarn-lock
 , nodejs
 , asar
 
@@ -78,9 +78,6 @@ let
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ huantian wackbyte ];
       platforms = lib.platforms.linux;
-      # See comment about wasm32-unknown-unknown in rustc.nix.
-      broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-        !stdenv.hostPlatform.gcc.thumb or true;
     };
   };
 
@@ -96,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    fixup-yarn-lock
     nodejs
     asar
   ];
@@ -116,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror ${offlineCache}
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

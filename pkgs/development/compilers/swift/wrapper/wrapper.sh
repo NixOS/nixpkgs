@@ -252,7 +252,7 @@ for ((i=0; i < ${#extraBefore[@]}; i++));do
         # TODO: Assumes macOS.
         extraBefore[i]="${extraBefore[i]/-apple-darwin/-apple-macosx${MACOSX_DEPLOYMENT_TARGET:-11.0}}"
         ;;
-    -march=*)
+    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*)
         [[ i -gt 0 && ${extraBefore[i-1]} == -Xcc ]] && continue
         extraBefore=(
             "${extraBefore[@]:0:i}"

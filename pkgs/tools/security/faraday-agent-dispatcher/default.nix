@@ -28,10 +28,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
   dependencies = with python3.pkgs; [
     aiohttp
     click
@@ -66,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTestPaths = [
     # Tests require a running Docker instance
     "tests/plugins-docker/test_executors.py"
+    "tests/unittests/test_import_official_executors.py"
   ];
 
   pythonImportsCheck = [

@@ -7,6 +7,7 @@
   setuptools-scm,
   django-configurations,
   pytest,
+  pytest-xdist,
   pytestCheckHook,
 }:
 buildPythonPackage rec {
@@ -19,17 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-XQVP4BHFbzsQ+Xj0Go77Llrfx+aA7zb7VxraHyR3nZA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     django-configurations
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -49,7 +51,8 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "py.test plugin for testing of Django applications";
+    changelog = "https://github.com/pytest-dev/pytest-django/blob/v${version}/docs/changelog.rst";
+    description = "Pytest plugin for testing of Django applications";
     homepage = "https://pytest-django.readthedocs.org/en/latest/";
     license = licenses.bsd3;
   };

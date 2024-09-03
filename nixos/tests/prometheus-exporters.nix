@@ -177,6 +177,26 @@ let
       '';
     };
 
+    borgmatic = {
+      exporterConfig = {
+        enable = true;
+        user = "root";
+      };
+      metricProvider = {
+        services.borgmatic.enable = true;
+        services.borgmatic.settings.source_directories = [ "/home" ];
+        services.borgmatic.settings.repositories = [ { label = "local"; path = "/var/backup"; } ];
+        services.borgmatic.settings.keep_daily = 10;
+      };
+      exporterTest = ''
+        succeed("borgmatic rcreate -e none")
+        succeed("borgmatic")
+        wait_for_unit("prometheus-borgmatic-exporter.service")
+        wait_for_open_port(9996)
+        succeed("curl -sSf localhost:9996/metrics | grep 'borg_total_backups{repository=\"/var/backup\"} 1'")
+      '';
+    };
+
     collectd = {
       exporterConfig = {
         enable = true;
@@ -207,6 +227,34 @@ let
               "curl -sSf localhost:9103/metrics | grep 'collectd_testplugin_gauge{instance=\"testhost\"} 23'"
           )
         '';
+    };
+
+    deluge = {
+      exporterConfig = {
+        enable = true;
+        port = 1234;
+        listenAddress = "127.0.0.1";
+
+        delugeUser = "user";
+        delugePort = 2345;
+        delugePasswordFile = pkgs.writeText "password" "weak_password";
+      };
+      metricProvider = {
+        services.deluge.enable = true;
+        services.deluge.declarative = true;
+        services.deluge.config.daemon_port = 2345;
+        services.deluge.authFile = pkgs.writeText "authFile" ''
+        localclient:abcdef:10
+        user:weak_password:10
+        '';
+      };
+      exporterTest = ''
+        wait_for_unit("deluged.service")
+        wait_for_open_port(2345)
+        wait_for_unit("prometheus-deluge-exporter.service")
+        wait_for_open_port(1234)
+        succeed("curl -sSf http://localhost:1234 | grep 'deluge_torrents'")
+      '';
     };
 
     dnsmasq = {
@@ -314,10 +362,9 @@ let
         tokenPath = pkgs.writeText "token" "abc123";
       };
 
-      # noop: fastly's exporter can't start without first talking to fastly
-      # see: https://github.com/peterbourgon/fastly-exporter/issues/87
       exporterTest = ''
-        succeed("true");
+        wait_for_unit("prometheus-fastly-exporter.service")
+        wait_for_open_port(9118)
       '';
     };
 
@@ -483,9 +530,6 @@ let
                 global-module: mod-stats
                 dnssec-signing: off
                 zonefile-sync: -1
-                journal-db: /var/lib/knot/journal
-                kasp-db: /var/lib/knot/kasp
-                timer-db: /var/lib/knot/timer
                 zonefile-load: difference
                 storage: ${pkgs.buildEnv {
                   name = "foo";
@@ -954,13 +998,24 @@ let
       metricProvider = {
         services.postgresql.enable = true;
         services.pgbouncer = {
-          # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
-          ignoreStartupParameters = "extra_float_digits";
           enable = true;
-          listenAddress = "*";
-          databases = { postgres = "host=/run/postgresql/ port=5432 auth_user=postgres dbname=postgres"; };
-          authType = "any";
-          maxClientConn = 99;
+          settings = {
+            pgbouncer = {
+              listen_addr = "*";
+              auth_type = "any";
+              max_client_conn = 99;
+              # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+              ignore_startup_parameters = "extra_float_digits";
+            };
+            databases = {
+              postgres = concatStringsSep " " [
+                "host=/run/postgresql"
+                "port=5432"
+                "auth_user=postgres"
+                "dbname=postgres"
+              ];
+            };
+          };
         };
       };
       exporterTest = ''

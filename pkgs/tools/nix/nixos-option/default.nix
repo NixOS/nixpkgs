@@ -10,7 +10,8 @@
 stdenv.mkDerivation {
   name = "nixos-option";
 
-  src = ./.;
+  src = ./src;
+
   postInstall = ''
     installManPage ${./nixos-option.8}
   '';
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     license = licenses.lgpl2Plus;
     mainProgram = "nixos-option";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (nix.meta) platforms;
   };
 }

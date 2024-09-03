@@ -19,13 +19,13 @@
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "19.24.4";
+  version = "19.24.6";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    rev = "v${version}";
-    sha256 = "sha256-1A/9u+ThtUtmmSwnFSn8S65Yavucl2X+o3bNYgew0Oc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-BpE7ZrtiiaDqwy1G4IHOQBJMr6sAadFbRxsdObs1SIY=";
   };
 
   postPatch = ''
@@ -57,23 +57,13 @@
   ]
   ++ lib.optionals guiSupport [ libX11 ]
   ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart.dev
-    cuda_cudart.lib
-    cuda_cudart.static
-    cuda_nvcc.dev
-    libcublas.dev
-    libcublas.lib
-    libcublas.static
-    libcurand.dev
-    libcurand.lib
-    libcurand.static
-    libcusolver.dev
-    libcusolver.lib
-    libcusolver.static
-    cudnn.dev
-    cudnn.lib
-    cudnn.static
-    cuda_cccl.dev
+    cuda_cudart
+    cuda_nvcc
+    libcublas
+    libcurand
+    libcusolver
+    cudnn
+    cuda_cccl
   ]);
 
   passthru = {

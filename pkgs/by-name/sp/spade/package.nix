@@ -1,21 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, stdenv
-, nix-update
-, writeScript
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  stdenv,
+  nix-update,
+  writeScript,
+  git,
+  python312,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-J3AdXuN1WLKFED9YeBly68umPlx05Wl+mhT2YbBsJVk=";
+    hash = "sha256-DVvdCt/t7aA2IAs+cL6wT129PX8s3P5gHawcLAvAAGw=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
@@ -24,7 +26,6 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-      "tracing-tree-0.2.0" = "sha256-/JNeAKjAXmKPh0et8958yS7joORDbid9dhFB0VUAhZc=";
     };
   };
 
@@ -40,14 +41,20 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ python312 ];
+  env.NIX_CFLAGS_LINK = lib.optionals stdenv.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
+
   meta = with lib; {
     description = "Better hardware description language";
     homepage = "https://gitlab.com/spade-lang/spade";
     changelog = "https://gitlab.com/spade-lang/spade/-/blob/${src.rev}/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
-    license = with licenses; [ eupl12 asl20 mit ];
+    license = with licenses; [
+      eupl12
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "spade";
-    broken = stdenv.isDarwin; # ld: symbol(s) not found for architecture ${system}
   };
 }

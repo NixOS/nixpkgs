@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://events.readthedocs.org";
     changelog = "https://github.com/pyeve/events/blob/v0.5/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

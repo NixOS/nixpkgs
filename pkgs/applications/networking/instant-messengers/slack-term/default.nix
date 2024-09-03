@@ -16,7 +16,7 @@ buildGoModule rec {
     description = "Slack client for your terminal";
     homepage = "https://github.com/erroneousboat/slack-term";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "slack-term";
   };
 }

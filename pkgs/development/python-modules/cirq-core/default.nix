@@ -1,38 +1,38 @@
 {
   lib,
   stdenv,
+  attrs,
+  autoray ? null,
   buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
   duet,
+  fetchFromGitHub,
+  freezegun,
   matplotlib,
   networkx,
   numpy,
+  opt-einsum,
   pandas,
+  ply,
+  pylatex ? null,
+  pyquil ? null,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  quimb ? null,
   requests,
   scipy,
+  setuptools,
   sortedcontainers,
   sympy,
   tqdm,
   typing-extensions,
-  # Contrib requirements
   withContribRequires ? false,
-  autoray ? null,
-  opt-einsum,
-  ply,
-  pylatex ? null,
-  pyquil ? null,
-  quimb ? null,
-  # test inputs
-  pytestCheckHook,
-  freezegun,
-  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JAJJciFg3BuRha1wTKixtKWcYy3NA2mNpniPyPHTTe8=";
+    hash = "sha256-1GcRDVgYF+1igZQFlQbiWZmU1WNIJh4CcOftQe6OP6I=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -50,8 +50,11 @@ buildPythonPackage rec {
       --replace "matplotlib~=3.0" "matplotlib"
   '';
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
+      attrs
       duet
       matplotlib
       networkx

@@ -1,8 +1,6 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
-  django,
   dnspython,
   fetchFromGitHub,
   protobuf,
@@ -68,7 +66,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       neosimsim
-      turion
     ];
   };
 }

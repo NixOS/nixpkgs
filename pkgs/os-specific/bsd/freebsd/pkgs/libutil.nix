@@ -1,8 +1,4 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-}:
+{ mkDerivation }:
 mkDerivation {
   path = "lib/libutil";
   extraPaths = [ "lib/libc/gen" ];

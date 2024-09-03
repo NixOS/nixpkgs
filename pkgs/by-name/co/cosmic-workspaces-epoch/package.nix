@@ -12,26 +12,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-workspaces-epoch";
-  version = "unstable-2023-11-21";
+  version = "1.0.0-alpha.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "f61cdc5759235177521fbb6a39f164b9615adfc0";
-    hash = "sha256-ZPkPqROZXRLLhv6fbjfsov5hIt+D0K7VFajKebHVZaw=";
+    rev = "epoch-${version}";
+    hash = "sha256-z3xQ6Vgqkm8hYLo2550NbFRkTMRQ0F9zn85iobnykH4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
+      "accesskit-0.12.2" = "sha256-1UwgRyUe0PQrZrpS7574oNLi13fg5HpgILtZGW6JNtQ=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "smithay-client-toolkit-0.18.0" = "sha256-2WbDKlSGiyVmi7blNBr2Aih9FfF2dq/bny57hoA4BrE=";
-      "cosmic-comp-config-0.1.0" = "sha256-NKXIKhZLwZ0BZyGVEplAJ75H5YOsLRNeRrzdhczo3FQ=";
-      "cosmic-config-0.1.0" = "sha256-CxeefjDmEqQkXPhWTomF1yb4GCI9vs3OCvMawBGUgaw=";
-      "cosmic-protocols-0.1.0" = "sha256-st46wmOncJvu0kj6qaot6LT/ojmW/BwXbbGf8s0mdZ8=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
-      "taffy-0.3.11" = "sha256-+gXAFZsS1cWxEisEpP0FMz9q1/UV7L2Ri4ToIP5Bt7s=";
+      "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
+      "cosmic-bg-config-0.1.0" = "sha256-imGSOPS/ay3EycyrrQcIePDXNEYRk7NTAV+EtUPtEdg=";
+      "cosmic-client-toolkit-0.1.0" = "sha256-1XtyEvednEMN4MApxTQid4eed19dEN5ZBDt/XRjuda0=";
+      "cosmic-comp-config-0.1.0" = "sha256-Y/U4hYY9Scj+0QdJfW++fUzmVXswguy0PMJoLYDrp4I=";
+      "cosmic-config-0.1.0" = "sha256-DgMh0gqWUmXjBhBySR0CMnv/8O3XbS2BwomU9eNt+4o=";
+      "cosmic-text-0.12.1" = "sha256-x0XTxzbmtE2d4XCG/Nuq3DzBpz15BbnjRRlirfNJEiU=";
+      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
+      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "smithay-clipboard-0.8.0" = "sha256-4InFXm0ahrqFrtNLeqIuE3yeOpxKZJZx+Bc0yQDtv34=";
+      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
+      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
     };
   };
 
@@ -39,6 +44,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxkbcommon libinput libglvnd mesa udev wayland ];
+
+  postInstall = ''
+    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+    cp data/*.desktop $out/share/applications/
+    cp data/*.svg $out/share/icons/hicolor/scalable/apps/
+  '';
 
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client, which is always dlopen()ed except by the

@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs (arch != null) "gcc-arch" arch)
     (lib.withFeature librsvgSupport "rsvg")
     (lib.withFeature liblqr1Support "lqr")
-    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
+    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
     knownVulnerabilities = [
       "CVE-2019-13136"

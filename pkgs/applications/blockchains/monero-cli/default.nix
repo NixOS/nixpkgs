@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch2, cmake, ninja, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
@@ -35,6 +35,28 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # cmake: remove unused/extera cmake/FindMiniupnpc.cmake and only rely on external/miniupnpc
+    # https://github.com/monero-project/monero/pull/9366
+    (fetchpatch2 {
+      url = "https://github.com/monero-project/monero/commit/5074a543a49f7e23fb39b6462fd4c4c9741c3693.patch?full_index=1";
+      hash = "sha256-dS2hhEU6m2of0ULlsf+/tZMHUmq3vGGXJPGHvtnpQnY=";
+    })
+
+    # cmake: add different parameters to add_monero_library.
+    # https://github.com/monero-project/monero/pull/9367
+    (fetchpatch2 {
+      url = "https://github.com/monero-project/monero/commit/b91ead90254ac6d6daf908f689c38e372a44c615.patch?full_index=1";
+      hash = "sha256-DL2YqkvEONbeEDqLOAo2eSF5JF5gOzKcLKeNlUXBY1w=";
+    })
+
+    # external: update miniupnpc to 2.2.8
+    # https://github.com/monero-project/monero/pull/9367
+    (fetchpatch2 {
+      url = "https://github.com/monero-project/monero/commit/d81da086ec5088a04b3f7b34831e72910300e2f7.patch?full_index=1";
+      hash = "sha256-ZJGiDMk5DMmEXwzoUYPC+DIoebluFh54kMQtQU78ckI=";
+      excludes = [ "external/miniupnp" ];
+    })
+
     ./use-system-libraries.patch
   ];
 
@@ -47,7 +69,7 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   buildInputs = [
     boost miniupnpc openssl unbound

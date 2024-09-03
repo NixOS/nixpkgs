@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   jinja2,
+  pythonAtLeast,
   pyyaml,
   setuptools,
 }:
@@ -11,6 +12,7 @@ buildPythonPackage rec {
   pname = "j2cli";
   version = "0.3.10";
   format = "setuptools";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

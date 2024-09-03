@@ -14,13 +14,13 @@ let
             mkHyprlandPlugin,
           }:
           let
-            version = "0.41.2";
+            version = "0.42.0";
 
             hyprland-plugins-src = fetchFromGitHub {
               owner = "hyprwm";
               repo = "hyprland-plugins";
               rev = "refs/tags/v${version}";
-              hash = "sha256-TnlAcO5K2gkab0mpKurP5Co6eWRycP/KbFqWNS2rsMA=";
+              hash = "sha256-aPzAbDgAyxJlUjyaFPDhjcL7WnyDP5uDZKOqlQRD8eM=";
             };
           in
           mkHyprlandPlugin hyprland {
@@ -37,7 +37,7 @@ let
                 fufexan
                 johnrtitor
               ];
-              platforms = lib.platforms.linux;
+              inherit (hyprland.meta) platforms;
             };
           }
         )

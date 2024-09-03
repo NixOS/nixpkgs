@@ -68,6 +68,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/pika/pika";
     homepage = "https://pika.readthedocs.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

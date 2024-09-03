@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd termbook \
       --bash <($out/bin/termbook completions bash) \
       --fish <($out/bin/termbook completions fish) \

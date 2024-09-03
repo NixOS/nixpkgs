@@ -9,7 +9,7 @@ mkDerivation rec {
   version = "3.9.3";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-ROqROQsV8ddrxYT5mMdkf6rCgCoGr1jpxQ1ohcoEaQs=";
+    hash = "sha256-ROqROQsV8ddrxYT5mMdkf6rCgCoGr1jpxQ1ohcoEaQs=";
     rev = version;
     repo = "minitube";
     owner = "flaviotordini";
@@ -38,7 +38,7 @@ mkDerivation rec {
     homepage = "https://flavio.tordini.org/minitube";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "minitube";
   };
 }

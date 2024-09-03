@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://git.linux-nfs.org/projects/steved/rpcbind.git";
     rev = "c0c89b3bf2bdf304a5fe3cab626334e0cdaf1ef2";
-    sha256 = "sha256-aidETIZaQYzC3liDGM915wyBWpMrn4OudxEcFS/Iucw=";
+    hash = "sha256-aidETIZaQYzC3liDGM915wyBWpMrn4OudxEcFS/Iucw=";
   };
 
   patches = [

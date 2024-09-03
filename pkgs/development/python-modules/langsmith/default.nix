@@ -16,14 +16,13 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.77";
+  version = "0.1.99";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +31,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Tkqo0BbBqFMsEDtEo0sVgSQOoa/J+ECw/7T7yALnL84=";
+    hash = "sha256-aN5HiQAXX7ZlVBzkit4DAw+7KQHI3ck1DLvBPDSKVhM=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -40,8 +39,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "orjson" ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     orjson
@@ -81,6 +78,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # due to circular import
     "tests/integration_tests/test_client.py"
+    "tests/integration_tests/test_prompts.py"
     "tests/unit_tests/test_client.py"
     # Tests require a Langsmith API key
     "tests/evaluation/test_evaluation.py"

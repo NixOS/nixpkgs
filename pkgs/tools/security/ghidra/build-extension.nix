@@ -1,78 +1,98 @@
-{ lib
-, stdenv
-, unzip
-, jdk
-, gradle
-, ghidra
+{
+  lib,
+  stdenv,
+  unzip,
+  jdk,
+  gradle,
+  ghidra,
 }:
 
 let
-  metaCommon = oldMeta:
-    oldMeta // (with lib; {
-      maintainers = (oldMeta.maintainers or []) ++ (with maintainers; [ vringar ]);
+  metaCommon =
+    oldMeta:
+    oldMeta
+    // {
+      maintainers = (oldMeta.maintainers or [ ]) ++ (with lib.maintainers; [ vringar ]);
       platforms = oldMeta.platforms or ghidra.meta.platforms;
-    });
+    };
 
-  buildGhidraExtension = {
-    pname, nativeBuildInputs ? [], meta ? { }, ...
-  }@args:
-    stdenv.mkDerivation (args // {
-      nativeBuildInputs = nativeBuildInputs ++ [
-        unzip
-        jdk
-        gradle
-      ];
+  buildGhidraExtension =
+    {
+      pname,
+      nativeBuildInputs ? [ ],
+      meta ? { },
+      ...
+    }@args:
+    stdenv.mkDerivation (
+      args
+      // {
+        nativeBuildInputs = nativeBuildInputs ++ [
+          unzip
+          jdk
+          gradle
+        ];
 
-      buildPhase = args.buildPhase or ''
-        runHook preBuild
+        preBuild = ''
+          # Set project name, otherwise defaults to directory name
+          echo -e '\nrootProject.name = "${pname}"' >> settings.gradle
+          # A config directory needs to exist when ghidra's GHelpBuilder is run
+          export XDG_CONFIG_HOME="''${XDG_CONFIG_HOME:-$(mktemp -d)}"
+          ${args.preBuild or ""}
+        '';
 
-        # Set project name, otherwise defaults to directory name
-        echo -e '\nrootProject.name = "${pname}"' >> settings.gradle
+        # Needed to run gradle on darwin
+        __darwinAllowLocalNetworking = true;
 
-        export GRADLE_USER_HOME=$(mktemp -d)
-        gradle \
-          --offline \
-          --no-daemon \
-          -PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra
+        gradleBuildTask = args.gradleBuildTask or "buildExtension";
+        gradleFlags = args.gradleFlags or [ ] ++ [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
 
-        runHook postBuild
-      '';
+        installPhase =
+          args.installPhase or ''
+            runHook preInstall
 
-      installPhase = args.installPhase or ''
-        runHook preInstall
+            mkdir -p $out/lib/ghidra/Ghidra/Extensions
+            unzip -d $out/lib/ghidra/Ghidra/Extensions dist/*.zip
 
-        mkdir -p $out/lib/ghidra/Ghidra/Extensions
-        unzip -d $out/lib/ghidra/Ghidra/Extensions dist/*.zip
+            runHook postInstall
+          '';
 
-        runHook postInstall
-      '';
+        meta = metaCommon meta;
+      }
+    );
 
-      meta = metaCommon meta;
-    });
+  buildGhidraScripts =
+    {
+      pname,
+      meta ? { },
+      ...
+    }@args:
+    stdenv.mkDerivation (
+      args
+      // {
+        installPhase = ''
+          runHook preInstall
 
-  buildGhidraScripts = { pname, meta ? { }, ... }@args:
-    stdenv.mkDerivation (args // {
-      installPhase = ''
-        runHook preInstall
+          GHIDRA_HOME=$out/lib/ghidra/Ghidra/Extensions/${pname}
+          mkdir -p $GHIDRA_HOME
+          cp -r . $GHIDRA_HOME/ghidra_scripts
 
-        GHIDRA_HOME=$out/lib/ghidra/Ghidra/Extensions/${pname}
-        mkdir -p $GHIDRA_HOME
-        cp -r . $GHIDRA_HOME/ghidra_scripts
+          touch $GHIDRA_HOME/Module.manifest
+          cat <<'EOF' > extension.properties
+          name=${pname}
+          description=${meta.description or ""}
+          author=
+          createdOn=
+          version=${lib.getVersion ghidra}
 
-        touch $GHIDRA_HOME/Module.manifest
-        cat <<'EOF' > extension.properties
-        name=${pname}
-        description=${meta.description or ""}
-        author=
-        createdOn=
-        version=${lib.getVersion ghidra}
+          EOF
 
-        EOF
+          runHook postInstall
+        '';
 
-        runHook postInstall
-      '';
-
-      meta = metaCommon meta;
-    });
+        meta = metaCommon meta;
+      }
+    );
 in
-  { inherit buildGhidraExtension buildGhidraScripts; }
+{
+  inherit buildGhidraExtension buildGhidraScripts;
+}

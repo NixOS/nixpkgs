@@ -6,6 +6,7 @@
   dotnetCorePackages,
   zlib,
   openssl,
+  nixosTests,
 }:
 buildDotnetModule rec {
   pname = "wasabibackend";
@@ -37,6 +38,10 @@ buildDotnetModule rec {
   postFixup = ''
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) wasabibackend;
+  };
 
   meta = with lib; {
     description = "Backend for the Wasabi Wallet";

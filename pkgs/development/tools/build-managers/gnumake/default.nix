@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, updateAutotoolsGnuConfigScriptsHook
+, autoreconfHook
 , guileSupport ? false, guile
 # avoid guile depend on bootstrap to prevent dependency cycles
 , inBootstrap ? false
@@ -22,17 +22,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
-  # to update apply these patches with `git am *.patch` to https://git.savannah.gnu.org/git/make.git
-  patches = [
-    # Replaces /bin/sh with sh, see patch file for reasoning
-    ./0001-No-impure-bin-sh.patch
-    # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
-    # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
-    # included Makefiles, don't look in /usr/include and friends.
-    ./0002-remove-impure-dirs.patch
-  ];
+  # To update patches:
+  #  $ version=4.4.1
+  #  $ git clone https://git.savannah.gnu.org/git/make.git
+  #  $ cd make && git checkout -b nixpkgs $version
+  #  $ git am --directory=../patches
+  #  $ # make changes, resolve conflicts, etc.
+  #  $ git format-patch --output-directory ../patches --diff-algorithm=histogram $version
+  #
+  # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
+  # convenient to keep them in a separate directory but we can defer listing the
+  # directory until derivation realization to avoid unnecessary Nix evaluations.
+  patches = lib.filesystem.listFilesRecursive ./patches;
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals guileEnabled [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
   configureFlags = lib.optional guileEnabled "--with-guile"
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/make/";
 
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     mainProgram = "make";
     platforms = platforms.all;
   };

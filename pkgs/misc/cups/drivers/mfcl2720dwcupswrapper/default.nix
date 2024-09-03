@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother MFC-L2720DW CUPS wrapper driver";
     homepage = "http://www.brother.com/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ lib.maintainers.xeji ];
   };

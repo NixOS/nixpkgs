@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "automx2";
-  version = "2024.1";
+  version = "2024.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "automx2";
-    rev = version;
-    hash = "sha256-s/kd9A/d3SPMZC9+B4DdcXVi77WLH/SBwXIdaKHUj34=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7SbSKSjDHTppdqfPPKvuWbdoksHa6BMIOXOq0jDggTE=";
   };
 
   nativeBuildInputs = [ setuptools ];

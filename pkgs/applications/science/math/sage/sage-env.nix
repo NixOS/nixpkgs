@@ -5,10 +5,12 @@
 , sage-docbuild
 , env-locations
 , gfortran
+, ninja
 , bash
 , coreutils
 , gnused
 , gnugrep
+, gawk
 , binutils
 , pythonEnv
 , python3
@@ -63,11 +65,13 @@ let
     "@sage-local@/build"
     pythonEnv
     gfortran # for inline fortran
+    ninja # for inline fortran via numpy.f2py
     stdenv.cc # for cython
     bash
     coreutils
     gnused
     gnugrep
+    gawk
     binutils.bintools
     pkg-config
     pari
@@ -184,7 +188,7 @@ writeTextFile rec {
     export SAGE_EXTCODE='${sagelib.src}/src/sage/ext_data'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular giac]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular giac gap]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 } // { # equivalent of `passthru`, which `writeTextFile` doesn't support
   lib = sagelib;

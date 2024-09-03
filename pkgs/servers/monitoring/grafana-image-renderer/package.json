@@ -33,7 +33,7 @@
     "dompurify": "^2.4.0",
     "express": "^4.19.2",
     "express-prom-bundle": "^6.5.0",
-    "jimp": "^0.22.10",
+    "jimp": "^0.22.12",
     "jsdom": "20.0.0",
     "lodash": "^4.17.21",
     "minimist": "^1.2.6",

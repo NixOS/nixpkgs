@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    # raise neatvnc version bound to 0.8.0
+    # raise neatvnc version bound to < 0.9.0
     # https://gitlab.freedesktop.org/wayland/weston/-/issues/890
     substituteInPlace libweston/backend-vnc/meson.build \
-      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '<= 0.8.0']"
+      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '< 0.9.0']"
   '';
 
   depsBuildBuild = [ pkg-config ];

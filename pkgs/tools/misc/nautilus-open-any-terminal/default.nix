@@ -15,14 +15,14 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "nautilus-open-any-terminal";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-liyzgbZGl08gHLVpsy8NbTiTytNdiMdymF70ik4cPXs=";
+    hash = "sha256-jKPqgd0sSt/qKPqbYbvdeGuo78R5gp1R5tSTPAzz+IU=";
   };
 
   patches = [ ./hardcode-gsettings.patch ];
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonPackage rec {
     gobject-introspection
     pkg-config
     wrapGAppsHook3
-    python3.pkgs.setuptools
+    python3.pkgs.setuptools-scm
   ];
 
   buildInputs = [

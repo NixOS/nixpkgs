@@ -24,6 +24,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/tidev/alloy";
     license = lib.licenses.asl20;
     mainProgram = "alloy";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

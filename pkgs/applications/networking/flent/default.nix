@@ -12,7 +12,7 @@ buildPythonApplication rec {
   version = "2.1.1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-21gd6sPYCZll3Q2O7kucTRhXvc5byXeQr50+1bZVT3M=";
+    hash = "sha256-21gd6sPYCZll3Q2O7kucTRhXvc5byXeQr50+1bZVT3M=";
   };
 
   buildInputs = [python.pkgs.sphinx];

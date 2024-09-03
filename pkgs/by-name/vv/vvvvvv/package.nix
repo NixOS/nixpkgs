@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
     rev = version;
-    sha256 = "sha256-HosrYBzx1Kh7rQIH7IAoOTPgpm4lgYOVR3MWtWX3usQ=";
+    hash = "sha256-HosrYBzx1Kh7rQIH7IAoOTPgpm4lgYOVR3MWtWX3usQ=";
     fetchSubmodules = true;
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       name = "VVVVVV";
       desktopName = "VVVVVV";
       comment = meta.description;
-      exec = pname;
+      exec = "vvvvvv";
       icon = "VVVVVV";
       terminal = false;
       categories = [ "Game" ];
@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 VVVVVV $out/bin/${pname}
+    install -Dm755 VVVVVV $out/bin/vvvvvv
     install -Dm644 "$src/desktop_version/icon.ico" "$out/share/pixmaps/VVVVVV.png"
     cp -r "$src/desktop_version/fonts/" "$out/share/"
     cp -r "$src/desktop_version/lang/" "$out/share/"
 
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/vvvvvv \
       --add-flags "-assets ${dataZip}" \
       --add-flags "-langdir $out/share/lang" \
       --add-flags "-fontsdir $out/share/fonts"
@@ -91,8 +91,9 @@ stdenv.mkDerivation rec {
       (Redistributable version, doesn't include the original levels.)
     '';
     homepage = "https://thelettervsixtim.es";
+    changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${src.rev}";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

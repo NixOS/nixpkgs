@@ -2,11 +2,11 @@
 
 buildGraalvmNativeImage rec {
   pname = "yamlscript";
-  version = "0.1.63";
+  version = "0.1.73";
 
   src = fetchurl {
     url = "https://github.com/yaml/yamlscript/releases/download/${version}/yamlscript.cli-${version}-standalone.jar";
-    hash = "sha256-BxLFWIbRNYSGWVoPyOH2VaudVQQ/PCloBqQZM9MYg2s=";
+    hash = "sha256-FXw476RXIFnjnK8cz/Kxni4dZ58LJvevcxiotDO7+bQ=";
   };
 
   executable = "ys";

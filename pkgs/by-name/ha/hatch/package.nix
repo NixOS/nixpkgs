@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, fetchPypi
-, python3
-, cargo
-, git
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  replaceVars,
+  git,
+  cargo,
+  stdenv,
+  darwin,
+  nix-update-script,
+  testers,
+  hatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.9.7";
-  format = "pyproject";
+  version = "1.12.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Gae4IXn5Tyrd2612qn5lq5DK1VqxA9U4J2N5NcnmYkw=";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = "hatch";
+    rev = "refs/tags/hatch-v${version}";
+    hash = "sha256-HW2vDVsFrdFRRaPNuGDg9DZpJd8OuYDIqA3KQRa3m9o=";
   };
 
-  postPatch = ''
-    # Loosen hatchling runtime version dependency
-    sed -i 's/hatchling<1.22/hatchling/' pyproject.toml
-  '';
+  patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRemoveDeps = [ "uv" ];
+
+  dependencies = with python3Packages; [
     click
     hatchling
     httpx
@@ -44,61 +51,91 @@ python3.pkgs.buildPythonApplication rec {
     zstandard
   ];
 
-  nativeCheckInputs = [
-    cargo
-  ] ++ (with python3.pkgs; [
-    binary
-    git
-    pytestCheckHook
-    pytest-mock
-    pytest-xdist
-    setuptools
-  ]);
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      binary
+      git
+      pytestCheckHook
+      pytest-mock
+      pytest-xdist
+      setuptools
+    ]
+    ++ [ cargo ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.ps
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  disabledTests = [
-    # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
-    "test_default"
-    "test_explicit_path"
-    "test_default_auto_detection"
-    "test_editable_default"
-    "test_editable_default_extra_dependencies"
-    "test_editable_default_force_include"
-    "test_editable_default_force_include_option"
-    "test_editable_exact"
-    "test_editable_exact_extra_dependencies"
-    "test_editable_exact_force_include"
-    "test_editable_exact_force_include_option"
-    "test_editable_exact_force_include_build_data_precedence"
-    "test_editable_pth"
-    # expects sh, finds bash
-    "test_all"
-    "test_already_installed_update_flag"
-    "test_already_installed_update_prompt"
-    # Loosen hatchling runtime version dependency
-    "test_core"
-    "test_correct"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # https://github.com/NixOS/nixpkgs/issues/209358
-    "test_scripts_no_environment"
+  disabledTests =
+    [
+      # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
+      "test_default"
+      "test_editable_default"
+      "test_editable_default_extra_dependencies"
+      "test_editable_default_force_include"
+      "test_editable_default_force_include_option"
+      "test_editable_default_symlink"
+      "test_editable_exact"
+      "test_editable_exact_extra_dependencies"
+      "test_editable_exact_force_include"
+      "test_editable_exact_force_include_build_data_precedence"
+      "test_editable_exact_force_include_option"
+      "test_editable_pth"
+      "test_explicit_path"
 
-    # This test assumes it is running on macOS with a system shell on the PATH.
-    # It is not possible to run it in a nix build using a /nix/store shell.
-    # See https://github.com/pypa/hatch/pull/709 for the relevant code.
-    "test_populate_default_popen_kwargs_executable"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_resolve"
+      # Loosen hatchling runtime version dependency
+      "test_core"
+      # New failing
+      "test_guess_variant"
+      "test_open"
+      "test_no_open"
+      "test_uv_env"
+      "test_pyenv"
+      "test_pypirc"
+      # Relies on FHS
+      # Could not read ELF interpreter from any of the following paths: /bin/sh, /usr/bin/env, /bin/dash, /bin/ls
+      "test_new_selected_python"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # https://github.com/NixOS/nixpkgs/issues/209358
+      "test_scripts_no_environment"
+
+      # This test assumes it is running on macOS with a system shell on the PATH.
+      # It is not possible to run it in a nix build using a /nix/store shell.
+      # See https://github.com/pypa/hatch/pull/709 for the relevant code.
+      "test_populate_default_popen_kwargs_executable"
+
+      # Those tests fail because the final wheel is named '...2-macosx_11_0_arm64.whl' instead of
+      # '...2-macosx_14_0_arm64.whl'
+      "test_macos_archflags"
+      "test_macos_max_compat"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [ "test_resolve" ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
+    # At index 0 diff:
+    #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
+    # != call('test hatch-test.py3.10', shell=True)
+    "tests/cli/fmt/test_fmt.py"
+    "tests/cli/test/test_test.py"
   ];
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion { package = hatch; };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Modern, extensible Python project manager";
-    mainProgram = "hatch";
     homepage = "https://hatch.pypa.io/latest/";
     changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history/hatch.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
+    mainProgram = "hatch";
   };
 }

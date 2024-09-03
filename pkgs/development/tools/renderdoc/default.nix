@@ -11,13 +11,13 @@
 , vulkan-loader
 , libglvnd
 , xorg
-, python3
-, python3Packages
+, python311
+, python311Packages
 , bison
 , pcre
 , automake
 , autoconf
-, addOpenGLRunpath
+, addDriverRunpath
 , waylandSupport ? false
 , wayland
 }:
@@ -32,23 +32,23 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
-  version = "1.33";
+  version = "1.34";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "sha256-BQR7ENgdblzamO5GgtLJriNiJFICsj0/iWVn1usxBjU=";
+    sha256 = "sha256-obRCILzMR7tCni0YoT3/oesTSADGI2sXqY3G6RS1h1o=";
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
-  ] ++ (with python3Packages; [
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python311
+  ] ++ (with python311Packages; [
     pyside2 pyside2-tools shiboken2
   ])
   ++ lib.optional waylandSupport wayland;
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addDriverRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -79,7 +79,7 @@ mkDerivation rec {
 
   # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
   postFixup = ''
-    addOpenGLRunpath $out/lib/librenderdoc.so
+    addDriverRunpath $out/lib/librenderdoc.so
   '';
 
   passthru.updateScript = nix-update-script { };

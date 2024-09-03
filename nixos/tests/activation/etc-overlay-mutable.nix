@@ -28,9 +28,22 @@
       machine.fail("stat /etc/newgen")
       machine.succeed("echo -n 'mutable' > /etc/mutable")
 
+      # Directory
+      machine.succeed("mkdir /etc/mountpoint")
+      machine.succeed("mount -t tmpfs tmpfs /etc/mountpoint")
+      machine.succeed("touch /etc/mountpoint/extra-file")
+
+      # File
+      machine.succeed("touch /etc/filemount")
+      machine.succeed("mount --bind /dev/null /etc/filemount")
+
       machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
 
       assert machine.succeed("cat /etc/newgen") == "newgen"
       assert machine.succeed("cat /etc/mutable") == "mutable"
+
+      print(machine.succeed("findmnt /etc/mountpoint"))
+      print(machine.succeed("stat /etc/mountpoint/extra-file"))
+      print(machine.succeed("findmnt /etc/filemount"))
   '';
 }

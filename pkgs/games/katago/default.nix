@@ -1,71 +1,40 @@
-{ stdenv
-, boost
-, cmake
-, config
-, cudaPackages
-, eigen
-, fetchFromGitHub
-, gperftools
-, lib
-, libzip
-, makeWrapper
-, mesa
-, ocl-icd
-, opencl-headers
-, openssl
-, writeShellScriptBin
-, enableAVX2 ? stdenv.hostPlatform.avx2Support
+{ stdenv, boost, cmake, config, cudaPackages, eigen, fetchFromGitHub, gperftools
+, lib, libzip, makeWrapper, ocl-icd, opencl-headers, openssl
+, writeShellScriptBin, enableAVX2 ? stdenv.hostPlatform.avx2Support
 , backend ? if config.cudaSupport then "cuda" else "opencl"
-, enableBigBoards ? false
-, enableContrib ? false
-, enableTcmalloc ? true
-, enableTrtPlanCache ? false
-}:
+, enableBigBoards ? false, enableContrib ? false, enableTcmalloc ? true
+, enableTrtPlanCache ? false }:
 
 assert lib.assertOneOf "backend" backend [ "opencl" "cuda" "tensorrt" "eigen" ];
 
 # N.b. older versions of cuda toolkit (e.g. 10) do not support newer versions
 # of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
-stdenv.mkDerivation rec {
+let
+  githash = "cd0ed6c0712088ddb901be68189ba7fa1439a9e7";
+  fakegit = writeShellScriptBin "git" "echo ${githash}";
+in stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.14.1";
-  githash = "f2dc582f98a79fefeb11b2c37de7db0905318f4f";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    hash = "sha256-ZdvHvrtSLwQ5vFMzLdJSJEiGcSent9iskPgpbL1TfhI=";
+    sha256 = "sha256-hZc8LlOxnVqJqyqOSIWKv3550QOaGr79xgqsAQ8B8SM=";
   };
 
-  fakegit = writeShellScriptBin "git" "echo ${githash}";
+  nativeBuildInputs = [ cmake makeWrapper ];
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-  ];
-
-  buildInputs = [
-    libzip
-    boost
-  ] ++ lib.optionals (backend == "eigen") [
-    eigen
-  ] ++ lib.optionals (backend == "cuda") [
-    cudaPackages.cudnn
-    cudaPackages.cudatoolkit
-    mesa.drivers
-  ] ++ lib.optionals (backend == "tensorrt") [
+  buildInputs = [ libzip boost ] ++ lib.optionals (backend == "eigen") [ eigen ]
+    ++ lib.optionals (backend == "cuda") [
+      cudaPackages.cudnn
+      cudaPackages.cudatoolkit
+    ] ++ lib.optionals (backend == "tensorrt") [
       cudaPackages.cudatoolkit
       cudaPackages.tensorrt
-      mesa.drivers
-  ] ++ lib.optionals (backend == "opencl") [
-    opencl-headers
-    ocl-icd
-  ] ++ lib.optionals enableContrib [
-    openssl
-  ] ++ lib.optionals enableTcmalloc [
-    gperftools
-  ];
+    ] ++ lib.optionals (backend == "opencl") [ opencl-headers ocl-icd ]
+    ++ lib.optionals enableContrib [ openssl ]
+    ++ lib.optionals enableTcmalloc [ gperftools ];
 
   cmakeFlags = [
     (lib.cmakeFeature "USE_BACKEND" (lib.toUpper backend))
@@ -99,9 +68,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
     mainProgram = "katago";
-    homepage    = "https://github.com/lightvector/katago";
-    license     = licenses.mit;
+    homepage = "https://github.com/lightvector/katago";
+    license = licenses.mit;
     maintainers = [ maintainers.omnipotententity ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, darwin
 , perl
 , pkg-config
 , libcap
@@ -22,13 +23,13 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.27";
+  version = "9.18.28";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-6j89jPovaueMhyJ1HQCPVLwXo67Svj9zmet79fTNqPE=";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -41,7 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -102,6 +104,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
+      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
       inherit (nixosTests) bind;
       prometheus-exporter = nixosTests.prometheus-exporters.bind;
       kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
@@ -121,10 +124,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
-    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor version}/CHANGES";
+    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/CHANGES";
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
 
     outputsToInstall = [ "out" "dnsutils" "host" ];
   };
-}
+})

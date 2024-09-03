@@ -7,6 +7,8 @@
 , lib
 , makeWrapper
 , man-db
+, nixos
+, nixosTests
 , openssh
 , radicle-node
 , runCommand
@@ -16,15 +18,15 @@
 , xdg-utils
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.0.0-rc.11";
+  version = "1.0.0-rc.14";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-P1Gg2uk87ppco7CAPjEqN0uqgb0K8apOSC7cfdgaT0Y=";
+    hash = "sha256-vqLDutaLeRuqRu8R9+0x2sDKxBrDeJ1RgKAiedkTvAw=";
   };
-  cargoHash = "sha256-M01NjqvMSaa3+YPb4vDtIucBeF5BYx3cpmMoLJOwRsI=";
+  cargoHash = "sha256-Qipt1IstoFGo1qQn/ZSwm3d1jrqj4mwIJep/A+/21WY=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
   nativeCheckInputs = [ git ];
@@ -32,7 +34,8 @@
     darwin.apple_sdk.frameworks.Security
   ];
 
-  doCheck = stdenv.hostPlatform.isLinux;
+  # tests regularly time out on aarch64
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
 
   preCheck = ''
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
@@ -44,6 +47,8 @@
     "--skip=tests::test_announcement_relay"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
     "--skip=tests::e2e::test_connection_crossing"
+    # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
+    "--skip=rad_clone_partial_fail"
   ];
 
   postInstall = ''
@@ -86,6 +91,19 @@
 
         touch $out
       '';
+      nixos-build = lib.recurseIntoAttrs {
+        checkConfig-success = (nixos {
+            services.radicle.settings = {
+              node.alias = "foo";
+            };
+          }).config.services.radicle.configFile;
+        checkConfig-failure = testers.testBuildFailure (nixos {
+            services.radicle.settings = {
+              node.alias = null;
+            };
+          }).config.services.radicle.configFile;
+      };
+      nixos-run = nixosTests.radicle;
     };
 
   meta = {

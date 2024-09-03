@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
@@ -80,22 +79,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.9.0";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xEekgF9GzsPYkwk7Nny9b1DMLTxBqTSdudYxaz4jl/c=";
+    hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
   };
-
-  patches = [
-    # HDF5: add support for libhdf5 >= 1.14.4.2 when built with Float16
-    (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/16ade8253f26200246abb5ab24d17e18216e7a11.patch";
-      sha256 = "sha256-N6YqfcOUWeaJXVE9RUo1dzulxqIY5Q/UygPnZHau3Lc=";
-    })
-  ];
 
   nativeBuildInputs = [
     bison
@@ -177,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       json_c
       lerc
       xz
-      libxml2
+      (libxml2.override { enableHttp = true; })
       lz4
       openjpeg
       openssl

@@ -1,17 +1,20 @@
-{ config
-, lib
-, pkgs
-, options
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
 }:
 
 let
   inherit (lib)
-    escapeShellArgs
+    getExe
     mkOption
     optionals
     types
-  ;
+    ;
+
+  inherit (utils) escapeSystemdExecArgs;
 
   cfg = config.services.prometheus.exporters.fastly;
 in
@@ -39,17 +42,19 @@ in
   serviceOpts = {
     serviceConfig = {
       LoadCredential = "fastly-api-token:${cfg.tokenPath}";
+      Environment = [ "FASTLY_API_TOKEN=%d/fastly-api-token" ];
+      ExecStart = escapeSystemdExecArgs (
+        [
+          (getExe pkgs.prometheus-fastly-exporter)
+          "-listen"
+          "${cfg.listenAddress}:${toString cfg.port}"
+        ]
+        ++ optionals (cfg.configFile != null) [
+          "--config-file"
+          cfg.configFile
+        ]
+        ++ cfg.extraFlags
+      );
     };
-    script = let
-      call = escapeShellArgs ([
-        "${pkgs.prometheus-fastly-exporter}/bin/fastly-exporter"
-        "-listen" "${cfg.listenAddress}:${toString cfg.port}"
-      ] ++ optionals (cfg.configFile != null) [
-        "--config-file" cfg.configFile
-      ] ++ cfg.extraFlags);
-    in ''
-      export FASTLY_API_TOKEN="$(cat $CREDENTIALS_DIRECTORY/fastly-api-token)"
-      ${call}
-    '';
   };
 }

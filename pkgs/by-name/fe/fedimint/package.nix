@@ -1,30 +1,39 @@
 { lib
+, buildPackages
+, clang
 , fetchFromGitHub
+, libclang
+, libiconv
+, llvmPackages_12
 , openssl
 , pkg-config
 , protobuf
 , rustPlatform
-, buildPackages
-, git
 , stdenv
-, libiconv
-, clang
-, libclang
 , Security
 , SystemConfiguration
 }:
-rustPlatform.buildRustPackage rec {
+let
+  # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
+  # Forcing it to clang 12 fixes the issue.
+  buildRustPackage =
+    if stdenv.isDarwin then
+      rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
+    else
+      rustPlatform.buildRustPackage;
+in
+buildRustPackage rec {
   pname = "fedimint";
-  version = "0.3.2-rc.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-eOGmx/freDQLxZ48nP9Y2kA84F6sdig6qfZwnJfOB3g=";
+    hash = "sha256-udQxFfLkAysDtD6P3TsW0xEcENA77l+GaDUSnkIBGXo=";
   };
 
-  cargoHash = "sha256-2ctrZLvovgMpxZPFtmblZ/NGyxievE6FmzC4BBGuw6g=";
+  cargoHash = "sha256-w1yQOEoumyam4JsDarAQffTs8Ype4VUyGJ0vgJfuHaU=";
 
   nativeBuildInputs = [
     protobuf
@@ -53,13 +62,9 @@ rustPlatform.buildRustPackage rec {
     keepPattern=''${keepPattern:1}
     find "$out/bin" -maxdepth 1 -type f | grep -Ev "(''${keepPattern})" | xargs rm -f
 
-    # fix the upstream name
-    mv $out/bin/recoverytool $out/bin/fedimint-recoverytool
-
-
     cp -a $releaseDir/fedimint-cli  $fedimintCli/bin/
     cp -a $releaseDir/fedimint-dbtool  $fedimintCli/bin/
-    cp -a $releaseDir/recoverytool  $fedimintCli/bin/fedimint-recoverytool
+    cp -a $releaseDir/fedimint-recoverytool  $fedimintCli/bin/
 
     cp -a $releaseDir/fedimintd  $fedimint/bin/
 

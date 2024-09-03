@@ -140,7 +140,7 @@ let
       nativeLibs = [ pkgs.libGLU ];
     });
     cl-glut = super.cl-glut.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.freeglut ];
+      nativeLibs = [ pkgs.libglut ];
     });
     cl-glfw = super.cl-glfw.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.glfw ];
@@ -249,9 +249,6 @@ let
     });
     libusb-ffi = super.libusb-ffi.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libusb-compat-0_1 ];
-    });
-    cl-fam = super.cl-fam.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.fam ];
     });
     jpeg-turbo = super.jpeg-turbo.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libjpeg_turbo ];

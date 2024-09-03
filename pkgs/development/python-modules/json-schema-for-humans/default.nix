@@ -12,7 +12,6 @@
   pygments,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   requests,
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,14 +28,13 @@ buildPythonPackage rec {
     owner = "coveooss";
     repo = "json-schema-for-humans";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SSMUHC4IsMIIhmRrG0ZWNO2MNKKvoBSybmEEibAY5q0=";
+    hash = "sha256-QMDbuiHfL8JLYJwceyxGR3Zc8+ZBVlCGHOBeH5x4BmQ=";
   };
 
   pythonRelaxDeps = [ "dataclasses-json" ];
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     click

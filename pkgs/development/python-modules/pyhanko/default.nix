@@ -19,7 +19,6 @@
   python-pae,
   python-pkcs11,
   pythonOlder,
-  pytz,
   pyyaml,
   qrcode,
   requests,
@@ -27,13 +26,12 @@
   setuptools,
   tzlocal,
   uharfbuzz,
-  wheel,
   xsdata,
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.21.0";
+  version = "0.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,25 +40,16 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+RlrXuKMY89mO4iuFw7RLQABy+wLrAeHlEvTDCpBSqU=";
+    hash = "sha256-keWAiqwaMZYh92B0mlR4+jjxBKLOAJ9Kgc0l0GiIQbc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace ' "pytest-runner",' ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     click
     cryptography
     pyhanko-certvalidator
-    pytz
     pyyaml
     qrcode
     requests

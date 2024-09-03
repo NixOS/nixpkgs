@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, path, runtimeShell }:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   pname = "safefile";
   version = "1.0.5";

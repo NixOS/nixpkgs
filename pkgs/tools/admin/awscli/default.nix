@@ -9,23 +9,17 @@
 }:
 
 let
-  botocoreVersion = python3.pkgs.botocore.version;
-  # awscli.version should be pinned to 2 minor versions less than the botocoreVersion
-  versionMinor = toString (lib.toInt (lib.versions.minor botocoreVersion) - 2);
-  versionPatch = lib.versions.patch botocoreVersion;
   self = python3.pkgs.buildPythonApplication rec {
     pname = "awscli";
-    version = "1.${versionMinor}.${versionPatch}"; # N.B: if you change this, change botocore and boto3 to a matching version too
+    # N.B: if you change this, change botocore and boto3 to a matching version too
+    # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
+    version = "1.33.13";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-96hFvXs3Fcvad+PBEpS9RFMJkcD1qHqfQ+8gtVfEbnc=";
+      hash = "sha256-utRALEoP+CWlmkPnbgByFSSX9Nr39iyTdv5uABT6Kps=";
     };
-
-    nativeBuildInputs = [
-      python3.pkgs.pythonRelaxDepsHook
-    ];
 
     pythonRelaxDeps = [
       # botocore must not be relaxed
@@ -64,7 +58,7 @@ let
     installCheckPhase = ''
       runHook preInstallCheck
 
-      $out/bin/aws --version | grep "${botocoreVersion}"
+      $out/bin/aws --version | grep "${python3.pkgs.botocore.version}"
       $out/bin/aws --version | grep "${version}"
 
       runHook postInstallCheck

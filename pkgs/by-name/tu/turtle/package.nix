@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "turtle";
-  version = "0.8";
+  version = "0.9";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
     owner = "philippun1";
     repo = "turtle";
     rev = version;
-    hash = "sha256-YacuT5S6WrhSz031XXCQTo++r+DBozrIIXrn9BwmrR0=";
+    hash = "sha256-jTO0xUh4VKhjCrmzcRSvxfGPw2j8WKD6uF4mg6nG16g=";
   };
 
   postPatch = ''
@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygobject3
     pygit2
+    dbus-python
   ];
 
   postInstall = ''

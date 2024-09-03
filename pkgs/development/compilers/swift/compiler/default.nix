@@ -10,7 +10,7 @@
 , pkg-config
 , clang
 , bintools
-, python3
+, python3Packages
 , git
 , fetchpatch
 , makeWrapper
@@ -42,6 +42,7 @@
 }:
 
 let
+  python3 = python3Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
 
   inherit (stdenv) hostPlatform targetPlatform;
 
@@ -303,7 +304,7 @@ in stdenv.mkDerivation {
 
     patch -p1 -d llvm-project/clang -i ${./patches/clang-toolchain-dir.patch}
     patch -p1 -d llvm-project/clang -i ${./patches/clang-wrap.patch}
-    patch -p1 -d llvm-project/clang -i ${../../llvm/14/clang/purity.patch}
+    patch -p1 -d llvm-project/clang -i ${../../llvm/12/clang/purity.patch}
     patch -p2 -d llvm-project/clang -i ${fetchpatch {
       name = "clang-cmake-fix-interpreter.patch";
       url = "https://github.com/llvm/llvm-project/commit/b5eaf500f2441eff2277ea2973878fb1f171fd0a.patch";
@@ -362,6 +363,9 @@ in stdenv.mkDerivation {
     fixCmakeFiles .
     ''}
   '';
+
+  # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
+  hardeningDisable = lib.optional stdenv.isDarwin "zerocallusedregs";
 
   configurePhase = ''
     export SWIFT_SOURCE_ROOT="$PWD"
@@ -698,7 +702,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "Swift Programming Language";
     homepage = "https://github.com/apple/swift";
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux ++ darwin;
     # Swift doesn't support 32-bit Linux, unknown on other platforms.

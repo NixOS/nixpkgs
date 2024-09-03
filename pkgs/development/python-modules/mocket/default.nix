@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.12.5";
+  version = "3.12.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6yWo7SBlVldK+AxUBnQOXjQBxz9HbIC+Ch977xiZxek=";
+    hash = "sha256-++zGXLtQ01srmF0EqUFqaxh+mnNzW8IzYG1RzNGTXkw=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -91,6 +91,7 @@ buildPythonPackage rec {
   disabledTests = [
     # tests that require network access (like DNS lookups)
     "test_truesendall_with_dump_from_recording"
+    "test_aiohttp"
     "test_asyncio_record_replay"
     "test_gethostbyname"
     # httpx read failure
@@ -106,6 +107,6 @@ buildPythonPackage rec {
     description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

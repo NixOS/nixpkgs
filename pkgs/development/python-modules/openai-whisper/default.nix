@@ -15,7 +15,7 @@
   more-itertools,
   numba,
   numpy,
-  openai-triton,
+  triton,
   tiktoken,
   torch,
   tqdm,
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     tiktoken
     torch
     tqdm
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform openai-triton) [ openai-triton ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
   preCheck = ''
     export HOME=$TMPDIR

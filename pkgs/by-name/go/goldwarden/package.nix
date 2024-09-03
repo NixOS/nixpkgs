@@ -1,7 +1,7 @@
 { lib
+, blueprint-compiler
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , gobject-introspection
 , gtk4
 , libadwaita
@@ -13,46 +13,37 @@
 
 buildGoModule rec {
   pname = "goldwarden";
-  version = "0.2.13-unstable-2024-03-14";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "quexten";
     repo = "goldwarden";
-    rev = "d6e1cd263365611e520a2ef6c7847c9da19362f1";
-    hash = "sha256-IItKOmE0xHKO2u5jp7R20/T2eSvQ3QCxlzp6R4oiqf8=";
+    rev = "v${version}";
+    hash = "sha256-s00ZgRmp+0UTp4gpoQgZZqSJMRGsGuUxoX2DEryG+XM=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/quexten/goldwarden/pull/140/commits/c134a0e61d51079c44865f68ab65cfb3aea6f8f2.patch";
-      hash = "sha256-nClC/FYq3muXMeYXln+VVGUhanqElEgJRosWeSTNlmM=";
-    })
-    (fetchpatch {
-      url = "https://github.com/quexten/goldwarden/pull/140/commits/86d4f907fba241fd66d0fb3c109c0281a9766bb4.patch";
-      hash = "sha256-A8PBzfyd2blFIjCeO4xOVJMQjnEPwtK4wTcRcfsjyDk=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace browserbiometrics/chrome-com.8bit.bitwarden.json browserbiometrics/mozilla-com.8bit.bitwarden.json \
-      --replace-fail "@PATH@" "$out/bin/goldwarden"
+    substituteInPlace gui/src/{linux/main.py,linux/monitors/dbus_monitor.py,gui/settings.py} \
+      --replace-fail "python3" "${(python3.buildEnv.override { extraLibs = pythonPath; }).interpreter}"
 
     substituteInPlace gui/com.quexten.Goldwarden.desktop \
       --replace-fail "Exec=goldwarden_ui_main.py" "Exec=$out/bin/goldwarden-gui"
-    substituteInPlace gui/src/gui/browserbiometrics.py \
-      --replace-fail "flatpak run --filesystem=home --command=goldwarden com.quexten.Goldwarden" "goldwarden"
-    substituteInPlace gui/src/gui/ssh.py \
+
+    substituteInPlace gui/src/gui/resources/commands.json \
+      --replace-fail "flatpak run --filesystem=home --command=goldwarden com.quexten.Goldwarden" "goldwarden" \
       --replace-fail "flatpak run --command=goldwarden com.quexten.Goldwarden" "goldwarden" \
       --replace-fail 'SSH_AUTH_SOCK=/home/$USER/.var/app/com.quexten.Goldwarden/data/ssh-auth-sock' 'SSH_AUTH_SOCK=/home/$USER/.goldwarden-ssh-agent.sock'
-    substituteInPlace gui/src/{linux/main.py,linux/monitors/dbus_monitor.py,gui/settings.py} \
-      --replace-fail "python3" "${(python3.buildEnv.override { extraLibs = pythonPath; }).interpreter}"
+
+    substituteInPlace cli/browserbiometrics/chrome-com.8bit.bitwarden.json cli/browserbiometrics/mozilla-com.8bit.bitwarden.json \
+      --replace-fail "@PATH@" "$out/bin/goldwarden"
   '';
 
-  vendorHash = "sha256-IH0p7t1qInA9rNYv6ekxDN/BT5Kguhh4cZfmL+iqwVU=";
+  vendorHash = "sha256-TSmYqLMeS/G1rYNxVfh3uIK9bQJhsd7mos50yIXQoT4=";
 
   ldflags = [ "-s" "-w" ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     gobject-introspection
     python3.pkgs.wrapPython
     wrapGAppsHook4
@@ -72,21 +63,23 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    blueprint-compiler batch-compile gui/src/gui/.templates/ gui/src/gui/ gui/src/gui/*.blp
     chmod +x gui/goldwarden_ui_main.py
-    ln -s $out/share/goldwarden/goldwarden_ui_main.py $out/bin/goldwarden-gui
+
     mkdir -p $out/share/goldwarden
     cp -r gui/* $out/share/goldwarden/
+    ln -s $out/share/goldwarden/goldwarden_ui_main.py $out/bin/goldwarden-gui
     rm $out/share/goldwarden/{com.quexten.Goldwarden.desktop,com.quexten.Goldwarden.metainfo.xml,goldwarden.svg,python3-requirements.json,requirements.txt}
 
     install -D gui/com.quexten.Goldwarden.desktop -t $out/share/applications
     install -D gui/goldwarden.svg -t $out/share/icons/hicolor/scalable/apps
     install -Dm644 gui/com.quexten.Goldwarden.metainfo.xml -t $out/share/metainfo
-    install -Dm644 resources/com.quexten.goldwarden.policy -t $out/share/polkit-1/actions
+    install -Dm644 cli/resources/com.quexten.goldwarden.policy -t $out/share/polkit-1/actions
 
-    install -D browserbiometrics/chrome-com.8bit.bitwarden.json $out/etc/chrome/native-messaging-hosts/com.8bit.bitwarden.json
-    install -D browserbiometrics/chrome-com.8bit.bitwarden.json $out/etc/chromium/native-messaging-hosts/com.8bit.bitwarden.json
-    install -D browserbiometrics/chrome-com.8bit.bitwarden.json $out/etc/edge/native-messaging-hosts/com.8bit.bitwarden.json
-    install -D browserbiometrics/mozilla-com.8bit.bitwarden.json $out/lib/mozilla/native-messaging-hosts/com.8bit.bitwarden.json
+    install -D cli/browserbiometrics/chrome-com.8bit.bitwarden.json $out/etc/chrome/native-messaging-hosts/com.8bit.bitwarden.json
+    install -D cli/browserbiometrics/chrome-com.8bit.bitwarden.json $out/etc/chromium/native-messaging-hosts/com.8bit.bitwarden.json
+    install -D cli/browserbiometrics/chrome-com.8bit.bitwarden.json $out/etc/edge/native-messaging-hosts/com.8bit.bitwarden.json
+    install -D cli/browserbiometrics/mozilla-com.8bit.bitwarden.json $out/lib/mozilla/native-messaging-hosts/com.8bit.bitwarden.json
   '';
 
   dontWrapGApps = true;

@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "24.3.0";
+  version = "24.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-azi27Ocpa14SLJ6xfaLuqz2YoZj1DKnv0A+wPltP1K4=";
+    hash = "sha256-WmAUfwRBh6En7H2pbRcNSbzOUMb9NvWU5g9Fh+/005Q=";
   };
 
   patches = [
@@ -129,6 +129,10 @@ buildPythonPackage rec {
       # fail on Python 3.12
       echo 'WorkerReporterTests.test_addSkipPyunit.skip = "'WorkerReporter' object has no attribute '_testStarted'"' >> src/twisted/trial/_dist/test/test_workerreporter.py
       echo 'LocalWorkerAMPTests.test_runSkip.skip = "twisted.protocols.amp.UnknownRemoteError: Code<UNKNOWN>: Unknown Error"' >> src/twisted/trial/_dist/test/test_worker.py
+
+      # https://github.com/twisted/twisted/issues/12194
+      echo 'FlattenerErrorTests.test_asynchronousFlattenError.skip = "builtins.KeyError: 'root'"' >> src/twisted/web/test/test_flatten.py
+      echo 'FlattenerErrorTests.test_cancel.skip = "builtins.KeyError: 'root'"' >> src/twisted/web/test/test_flatten.py
 
       # not packaged
       substituteInPlace src/twisted/test/test_failure.py \
@@ -222,6 +226,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

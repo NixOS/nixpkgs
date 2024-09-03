@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.mirbsd.org/mksh.htm";
+    changelog = "https://www.mirbsd.org/mksh.htm#clog";
     description = "MirBSD Korn Shell";
     mainProgram = "mksh";
     longDescription = ''

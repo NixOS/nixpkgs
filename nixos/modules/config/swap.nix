@@ -1,9 +1,7 @@
 { config, lib, pkgs, utils, ... }:
 
-with utils;
-with lib;
-
 let
+  inherit (lib) mkIf mkOption types;
 
   randomEncryptionCoerce = enable: { inherit enable; };
 
@@ -188,7 +186,7 @@ let
     config = {
       device = mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
-      deviceName = lib.replaceStrings ["\\"] [""] (escapeSystemdPath config.device);
+      deviceName = lib.replaceStrings ["\\"] [""] (utils.escapeSystemdPath config.device);
       realDevice = if config.randomEncryption.enable then "/dev/mapper/${config.deviceName}" else config.device;
     };
 
@@ -224,8 +222,8 @@ in
 
   };
 
-  config = mkIf ((length config.swapDevices) != 0) {
-    assertions = map (sw: {
+  config = mkIf ((lib.length config.swapDevices) != 0) {
+    assertions = lib.map (sw: {
       assertion = sw.randomEncryption.enable -> builtins.match "/dev/disk/by-(uuid|label)/.*" sw.device == null;
       message = ''
         You cannot use swap device "${sw.device}" with randomEncryption enabled.
@@ -235,22 +233,22 @@ in
     }) config.swapDevices;
 
     warnings =
-      concatMap (sw:
-        if sw.size != null && hasPrefix "/dev/" sw.device
+      lib.concatMap (sw:
+        if sw.size != null && lib.hasPrefix "/dev/" sw.device
         then [ "Setting the swap size of block device ${sw.device} has no effect" ]
         else [ ])
       config.swapDevices;
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "SWAP")
+    system.requiredKernelConfig = [
+      (config.lib.kernelConfig.isYes "SWAP")
     ];
 
     # Create missing swapfiles.
     systemd.services =
       let
         createSwapDevice = sw:
-          let realDevice' = escapeSystemdPath sw.realDevice;
-          in nameValuePair "mkswap-${sw.deviceName}"
+          let realDevice' = utils.escapeSystemdPath sw.realDevice;
+          in lib.nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
             # The mkswap service fails for file-backed swap devices if the
             # loop module has not been loaded before the service runs.
@@ -261,29 +259,30 @@ in
             before = [ "${realDevice'}.swap" "shutdown.target"];
             conflicts = [ "shutdown.target" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
-              ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
+              ++ lib.optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             environment.DEVICE = sw.device;
 
             script =
               ''
-                ${optionalString (sw.size != null) ''
+                ${lib.optionalString (sw.size != null) ''
                   currentSize=$(( $(stat -c "%s" "$DEVICE" 2>/dev/null || echo 0) / 1024 / 1024 ))
                   if [[ ! -b "$DEVICE" && "${toString sw.size}" != "$currentSize" ]]; then
                     # Disable CoW for CoW based filesystems like BTRFS.
                     truncate --size 0 "$DEVICE"
                     chattr +C "$DEVICE" 2>/dev/null || true
 
-                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size}
-                    ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
+                    echo "Creating swap file using dd and mkswap."
+                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size} status=progress
+                    ${lib.optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
                 ''}
-                ${optionalString sw.randomEncryption.enable ''
+                ${lib.optionalString sw.randomEncryption.enable ''
                   cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
-                  ${concatStringsSep " \\\n" (flatten [
-                    (optional (sw.randomEncryption.sectorSize != null) "--sector-size=${toString sw.randomEncryption.sectorSize}")
-                    (optional (sw.randomEncryption.keySize != null) "--key-size=${toString sw.randomEncryption.keySize}")
-                    (optional sw.randomEncryption.allowDiscards "--allow-discards")
+                  ${lib.concatStringsSep " \\\n" (lib.flatten [
+                    (lib.optional (sw.randomEncryption.sectorSize != null) "--sector-size=${toString sw.randomEncryption.sectorSize}")
+                    (lib.optional (sw.randomEncryption.keySize != null) "--key-size=${toString sw.randomEncryption.keySize}")
+                    (lib.optional sw.randomEncryption.allowDiscards "--allow-discards")
                   ])} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
@@ -295,12 +294,12 @@ in
               Type = "oneshot";
               RemainAfterExit = sw.randomEncryption.enable;
               UMask = "0177";
-              ExecStop = optionalString sw.randomEncryption.enable "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
+              ExecStop = lib.optionalString sw.randomEncryption.enable "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
             };
             restartIfChanged = false;
           };
 
-      in listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption.enable) config.swapDevices));
+      in lib.listToAttrs (lib.map createSwapDevice (lib.filter (sw: sw.size != null || sw.randomEncryption.enable) config.swapDevices));
 
   };
 

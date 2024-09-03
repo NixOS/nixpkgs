@@ -6,12 +6,9 @@
 , gluten-lwt-unix
 , lib
 , logs
-, lwt_ssl
 , magic-mime
 , mrmime
-, pecu
 , psq
-, ssl
 , uri
 }:
 

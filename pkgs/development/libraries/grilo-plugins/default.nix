@@ -14,7 +14,6 @@
 , libxml2
 , lua5_4
 , liboauth
-, libgdata
 , libmediaart
 , grilo
 , gst_all_1

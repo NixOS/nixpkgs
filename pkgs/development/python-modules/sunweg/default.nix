@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
   python-dateutil,
   requests,
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sunweg";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "rokam";
     repo = "sunweg";
     rev = "refs/tags/${version}";
-    hash = "sha256-9VzDOl393+jm6Nf40X4ZPMBbRc6KOwOQkpTNoqBsw1M=";
+    hash = "sha256-/pniECgavRiQdKzNtPINNhOijUW/uhPEOQJtjfr46ps=";
   };
 
   nativeBuildInputs = [ setuptools ];

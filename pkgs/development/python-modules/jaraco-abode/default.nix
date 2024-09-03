@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "5.1.1";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TUxljF1k/fvQoNcHx6jMRJrYgzxjXefvMl+mBD0DL8o=";
+    hash = "sha256-1omRBbUNS2/U2laK7E1M0uZfejZVMdGezG5oIGILj70=";
   };
 
   nativeBuildInputs = [

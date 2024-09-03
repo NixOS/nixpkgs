@@ -7,7 +7,7 @@
   fetchpatch,
   nodejs,
   yarn,
-  fixup_yarn_lock,
+  fixup-yarn-lock,
   google-fonts,
   api_url ? "http://127.0.0.1:3000",
   frontend_url ? "crab.fit",
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jy8BrJSHukRenPbZHw4nPx3cSi7E2GSg//WOXDh90mY=";
   };
 
-  sourceRoot = "source/frontend";
+  sourceRoot = "${finalAttrs.src.name}/frontend";
 
   patches = [
     ./01-localfont.patch
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     yarn
-    fixup_yarn_lock
+    fixup-yarn-lock
   ];
 
   postPatch = ''
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo 'NEXT_PUBLIC_API_URL="${api_url}"' > .env.local
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror ${finalAttrs.offlineCache}
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules
@@ -113,6 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Enter your availability to find a time that works for everyone";
     homepage = "https://github.com/GRA0007/crab.fit";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

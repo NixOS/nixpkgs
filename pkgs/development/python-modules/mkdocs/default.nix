@@ -17,6 +17,7 @@
   markdown,
   markupsafe,
   mergedeep,
+  mkdocs-get-deps,
   packaging,
   pathspec,
   platformdirs,
@@ -35,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.5.3";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -44,18 +45,19 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-axH4AeL+osxoUIVJbW6YjiTfUr6TAXMB4raZ3oO0fyw=";
+    hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     ghp-import
     jinja2
     markdown
     markupsafe
     mergedeep
+    mkdocs-get-deps
     packaging
     pathspec
     platformdirs

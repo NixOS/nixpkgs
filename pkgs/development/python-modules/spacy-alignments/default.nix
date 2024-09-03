@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

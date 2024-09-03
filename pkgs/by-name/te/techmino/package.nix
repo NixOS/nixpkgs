@@ -31,11 +31,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "0.17.16";
+  version = "0.17.17";
 
   src = fetchurl {
     url = "https://github.com/26F-Studio/Techmino/releases/download/v${version}/Techmino_Bare.love";
-    hash = "sha256-IgeVsVS5FLBgoZkJiyMFC1t24HZ/fukE5R0p2YbETTA=";
+    hash = "sha256-ExVdS2QXSRVMlRhrjD/Plo7fhQ3uUBHlwv6y91/S3uA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

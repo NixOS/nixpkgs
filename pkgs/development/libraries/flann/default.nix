@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flann-lib/flann";
     license = lib.licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

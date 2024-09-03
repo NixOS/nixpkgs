@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.44.4";
+  version = "1.46.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DQrN5x+UiY6lLY1h96sTWBhD0jrvNyCdTwHsyFo95VE=";
+    hash = "sha256-6rmAgGX7BnhbyDk0Pmp1uLBDywlK4cptTOfuvNhm0KE=";
   };
 
-  cargoHash = "sha256-QGBFDFZpOqPj/U1PhMaTZ3mI+d2jG6vYAkW6aNG4wyQ=";
+  cargoHash = "sha256-B+O2QYQDH+mqbnJhLumFWnv1b7dvnbpR7JG/3IS5tnI=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \

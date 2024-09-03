@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.11.2";
+  version = "0.12.0";
 in
 stdenv.mkDerivation {
   pname = "taler-exchange";
@@ -31,8 +31,10 @@ stdenv.mkDerivation {
     url = "https://git.taler.net/exchange.git";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-DflUfXAe310LRhZmaHgF1ZpCi+hHF30lpzAIpI1HZvM=";
+    hash = "sha256-yHRRMlqFA2OiFg0rBVzn7130wyVaxKn2dChFTPnVtbs=";
   };
+
+  patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -90,6 +92,7 @@ stdenv.mkDerivation {
       payment system.
     '';
     homepage = "https://taler.net/";
+    changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ astro ];
     platforms = platforms.linux;

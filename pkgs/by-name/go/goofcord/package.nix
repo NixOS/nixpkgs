@@ -1,148 +1,121 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  makeShellWrapper,
-  wrapGAppsHook3,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  ffmpeg,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libappindicator-gtk3,
-  libdrm,
-  libnotify,
-  libpulseaudio,
-  libsecret,
-  libuuid,
-  libxkbcommon,
-  mesa,
-  nss,
-  pango,
-  systemd,
-  xdg-utils,
-  xorg,
-  wayland,
+  fetchFromGitHub,
+  pnpm,
+  nodejs_22,
+  nix-update-script,
+  electron,
   pipewire,
+  libpulseaudio,
+  makeShellWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
+let
+  pnpm' = pnpm.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "1.4.3";
+  version = "1.6.0";
 
-  src =
-    let
-      base = "https://github.com/Milkshiift/GoofCord/releases/download";
-    in
-    {
-      x86_64-linux = fetchurl {
-        url = "${base}/v${finalAttrs.version}/GoofCord-${finalAttrs.version}-linux-amd64.deb";
-        hash = "sha256-XO/T5O6+hJ6QT8MCVorrdXPZZlrywa6u0UKPk9WIQBE=";
-      };
-      aarch64-linux = fetchurl {
-        url = "${base}/v${finalAttrs.version}/GoofCord-${finalAttrs.version}-linux-arm64.deb";
-        hash = "sha256-4mJ3kDQ+eh9LnyzxyNYvd2hMmgiJtBMXKup7ILlHk0Y=";
-      };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src = fetchFromGitHub {
+    owner = "Milkshiift";
+    repo = "GoofCord";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hG8nHAuEHw/tjFnGKhSXwO+2l91OOnQUIAK05SvEquU=";
+  };
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
+    pnpm'.configHook
+    nodejs_22
     makeShellWrapper
-    wrapGAppsHook3
+    copyDesktopItems
   ];
 
-  dontWrapGApps = true;
-
-  buildInputs = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    ffmpeg
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gtk3
-    pango
-    systemd
-    mesa # for libgbm
-    nss
-    libuuid
-    libdrm
-    libnotify
-    libsecret
+  buildInputs = lib.optionals stdenv.isLinux [
     libpulseaudio
-    libxkbcommon
-    libappindicator-gtk3
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libxshmfence
-    xorg.libXtst
-    wayland
     pipewire
+    stdenv.cc.cc.lib
   ];
 
-  sourceRoot = ".";
-  unpackCmd = "dpkg-deb -x $src .";
+  pnpmDeps = pnpm'.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-wF7G8rs1Fg7whEftQ554s4C2CixP5/1oFudR5yY07Rk=";
+  };
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  };
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm build
+
+    npm exec electron-builder -- \
+      --dir \
+      -c.electronDist="${electron.dist}" \
+      -c.electronVersion="${electron.version}"
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin"
-    cp -R "opt" "$out"
-    cp -R "usr/share" "$out/share"
-    chmod -R g-w "$out"
+    mkdir -p "$out/share/lib/goofcord"
+    cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/goofcord"
+
+    install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/goofcord.png"
 
     # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
     # see https://github.com/NixOS/nixpkgs/issues/172583
-    makeShellWrapper $out/opt/GoofCord/goofcord $out/bin/goofcord \
+    makeShellWrapper "${lib.getExe electron}" "$out/bin/goofcord" \
+      --add-flags "$out/share/lib/goofcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
-
-    # Fix desktop link
-    substituteInPlace $out/share/applications/goofcord.desktop \
-      --replace /opt/GoofCord/ ""
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  desktopItems = [
+    (makeDesktopItem {
+      name = "goofcord";
+      genericName = "Internet Messenger";
+      desktopName = "GoofCord";
+      exec = "goofcord %U";
+      icon = "goofcord";
+      comment = finalAttrs.meta.description;
+      keywords = [
+        "discord"
+        "vencord"
+        "electron"
+        "chat"
+      ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+        "Chat"
+      ];
+      startupWMClass = "GoofCord";
+      terminal = false;
+    })
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Highly configurable and privacy-focused Discord client";
     homepage = "https://github.com/Milkshiift/GoofCord";
     downloadPage = "https://github.com/Milkshiift/GoofCord";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.osl3;
-    maintainers = with maintainers; [ nyanbinary ];
+    license = lib.licenses.osl3;
+    maintainers = with lib.maintainers; [ nyanbinary ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

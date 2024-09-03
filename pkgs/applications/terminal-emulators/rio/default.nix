@@ -26,12 +26,16 @@
 
 , withWayland ? !stdenv.isDarwin
 , wayland
+
+, testers
+, rio
 }:
 let
   rlinkLibs = if stdenv.isDarwin then [
     darwin.libobjc
     darwin.apple_sdk_11_0.frameworks.AppKit
     darwin.apple_sdk_11_0.frameworks.AVFoundation
+    darwin.apple_sdk_11_0.frameworks.MetalKit
     darwin.apple_sdk_11_0.frameworks.Vision
   ] else [
     (lib.getLib gcc-unwrapped)
@@ -51,16 +55,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.39";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "v${version}";
-    hash = "sha256-pnU2wxgopHMWgJ7JGdO2P/MCfxqCY7MTEE39qtD0XKw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-S42is3wqjBvYgysQ6yDUAn7ZEy9xJBmQD/emYAQfCkw=";
   };
 
-  cargoHash = "sha256-GwI2zHX1YcR4pC+qtkDoxx2U+zipbqqxsCI8/XNg2BU=";
+  cargoHash = "sha256-ILX3xrcz3tMnl7mUrwUAXv9ffaZKjSoSf8cZVQB10zk=";
 
   nativeBuildInputs = [
     ncurses
@@ -107,7 +111,10 @@ rustPlatform.buildRustPackage rec {
       extraArgs = [ "--version-regex" "v([0-9.]+)" ];
     };
 
-    tests.test = nixosTests.terminal-emulators.rio;
+    tests = {
+      test = nixosTests.terminal-emulators.rio;
+      version = testers.testVersion { package = rio; };
+    };
   };
 
   meta = {
@@ -118,5 +125,11 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
     mainProgram = "rio";
+    # ---- corcovado/src/sys/unix/eventedfd.rs - sys::unix::eventedfd::EventedFd (line 31) stdout ----
+    # Test executable failed (exit status: 101).
+    # stderr:
+    # thread 'main' panicked at corcovado/src/sys/unix/eventedfd.rs:24:16:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+    broken = stdenv.isDarwin;
   };
 }

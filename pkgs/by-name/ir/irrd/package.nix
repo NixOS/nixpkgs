@@ -11,15 +11,19 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = final: prev: {
       # sqlalchemy 1.4.x or 2.x are not supported
-      sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+      sqlalchemy = prev.sqlalchemy_1_4.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
+        postPatch = ''
+          sed -i '/tag_build = dev/d' setup.cfg
+        '';
         doCheck = false;
       });
       alembic = prev.alembic.overridePythonAttrs (lib.const {
@@ -76,7 +80,6 @@ py.pkgs.buildPythonPackage rec {
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
@@ -175,4 +178,3 @@ py.pkgs.buildPythonPackage rec {
     maintainers = teams.wdz.members;
   };
 }
-

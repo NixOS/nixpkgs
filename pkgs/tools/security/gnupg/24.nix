@@ -9,7 +9,7 @@
 , nixosTests
 }:
 
-assert guiSupport -> enableMinimal == false;
+assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ fpletz vrthra ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
     mainProgram = "gpg";
   };

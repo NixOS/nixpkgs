@@ -3,9 +3,12 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   deprecation,
   poetry-core,
-  pythonRelaxDepsHook,
+
+  # dependencies
   async-timeout,
   cloudevents,
   fastapi,
@@ -18,12 +21,16 @@
   prometheus-client,
   protobuf,
   psutil,
+  pydantic,
   python-dateutil,
+  pyyaml,
   ray,
   six,
   tabulate,
   timing-asgi,
   uvicorn,
+
+  # checks
   avro,
   azure-storage-blob,
   azure-storage-file-share,
@@ -31,13 +38,14 @@
   botocore,
   google-cloud-storage,
   grpcio-testing,
+  pytest-asyncio,
   pytestCheckHook,
   tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +54,7 @@ buildPythonPackage rec {
     owner = "kserve";
     repo = "kserve";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Fu+1AR7FU4EQ+PhMneHFr3at3N9cN7V24wm/VOfY8GA=";
+    hash = "sha256-wGS001PK+k21oCOaQCiAtytTDjfe0aiTVJ9spyOucYA=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -55,8 +63,6 @@ buildPythonPackage rec {
     deprecation
     poetry-core
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     async-timeout
@@ -71,13 +77,15 @@ buildPythonPackage rec {
     prometheus-client
     protobuf
     psutil
+    pydantic
     python-dateutil
+    pyyaml
     ray
     six
     tabulate
     timing-asgi
     uvicorn
-  ] ++ ray.passthru.optional-dependencies.serve-deps;
+  ] ++ ray.optional-dependencies.serve-deps;
 
   pythonRelaxDeps = [
     "fastapi"
@@ -86,6 +94,7 @@ buildPythonPackage rec {
     "protobuf"
     "ray"
     "uvicorn"
+    "psutil"
   ];
 
   pythonImportsCheck = [ "kserve" ];
@@ -98,6 +107,7 @@ buildPythonPackage rec {
     botocore
     google-cloud-storage
     grpcio-testing
+    pytest-asyncio
     pytestCheckHook
     tomlkit
   ];

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "astropy-iers-data";
-  version = "0.2024.04.01.00.33.14";
+  version = "0.2024.06.17.00.31.35";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "astropy-iers-data";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6FHAntN+m0cLDEhWPrcgyD0PgVDOfC8nf4kVl1z8x0g=";
+    hash = "sha256-hFlDXnxhKuhlCFrF+Uip3Xjc9Jt8UFJcDCST90BmAlg=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "IERS data maintained by @astrofrog and astropy.utils.iers maintainers";
     homepage = "https://github.com/astropy/astropy-iers-data";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

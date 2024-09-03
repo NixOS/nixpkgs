@@ -4,12 +4,12 @@ let
 
   variants = {
     "8" = {
-      version = "8.15.8";
-      hash = "sha256-aR/hdu6pqKgN8g5JdvPftEoEhBzriFY4/iomF0+B5l4=";
+      version = "8.15.9";
+      hash = "sha256-2qJ6C1QbxjUyP/lsLe2ZVGf/n+bWn/ZwIVWKqa2dzDY=";
     };
     "9" = {
-      version = "9.3.0";
-      hash = "sha256-4fno0aFmB6Rt08FYtfen3HlFUB0cYiLUVNY9Az0dkY8=";
+      version = "9.7.0";
+      hash = "sha256-s1AY+/qPWDZosmSeQHkipyE1XNgfYb7rSsHUJY5YVVk=";
     };
   };
 

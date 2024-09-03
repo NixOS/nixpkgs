@@ -1,5 +1,4 @@
 {
-  stdenv,
   fetchPypi,
   fetchpatch,
   buildPythonPackage,
@@ -7,8 +6,6 @@
   packbits,
   pillow,
   pyusb,
-  pytest,
-  mock,
   click,
   attrs,
   lib,

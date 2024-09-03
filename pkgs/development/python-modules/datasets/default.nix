@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.19.1";
+  version = "2.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GicQopfQ6Ih9VEcLPAPlkvYAo2+aRqiFP1iGRM8/9m0=";
+    hash = "sha256-9mB4RXJVkmaK+fLEmyZAdf64YKGoAhE3RzMoj4/8K98=";
   };
 
   # remove pyarrow<14.0.1 vulnerability fix
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

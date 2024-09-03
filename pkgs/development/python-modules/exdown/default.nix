@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Extract code blocks from markdown";
     homepage = "https://github.com/nschloe/exdown";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

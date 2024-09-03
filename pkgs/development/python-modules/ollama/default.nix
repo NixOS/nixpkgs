@@ -9,12 +9,11 @@
   pytest-httpserver,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.2.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "ollama";
     repo = "ollama-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+1qhmz5WehbtjE+Dh/WTsqpiAmTjJg+tBjvYRQYkYy0=";
+    hash = "sha256-PFujhac1Y1q4sy/bhaPYw6cHuoiholaNoDNhtQW8IW4=";
   };
 
   postPatch = ''
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [ httpx ];
 

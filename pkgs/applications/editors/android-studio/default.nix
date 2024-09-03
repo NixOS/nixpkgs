@@ -9,16 +9,16 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2024.1.1.11"; # "Android Studio Koala | 2024.1.1"
-    sha256Hash = "sha256-2PqOz+QVtEUTNQkBUB4qD0KcoDPPGAUFSxyBbEpwRWU=";
+    version = "2024.1.2.12"; # "Android Studio Koala Feature Drop | 2024.1.2"
+    sha256Hash = "sha256-dFFogg6YmpCF/4QtR85UFAfbCd97irIHcPbqieQabpI=";
   };
   betaVersion = {
-    version = "2024.1.1.10"; # "Android Studio Koala | 2024.1.1 RC 2"
-    sha256Hash = "sha256-84CpZfoAvJHUCO3ZBJqDbuz9xuGE/5xJfXoetJDXju8=";
+    version = "2024.1.2.11"; # "Android Studio Koala Feature Drop | 2024.1.2 RC 1"
+    sha256Hash = "sha256-Qn5NNW2Rt6f9QiEUamIumme45uUVeTiMJ/9niAC6ilM=";
   };
   latestVersion = {
-    version = "2024.1.2.7"; # "Android Studio Koala Feature Drop | 2024.1.2 Canary 7"
-    sha256Hash = "sha256-opoAKslh8DqS/iS5gw8AxX6x89t2BNX7yaU88XNd2kM=";
+    version = "2024.2.1.4"; # "Android Studio Ladybug | 2024.2.1 Canary 8"
+    sha256Hash = "sha256-H2NN6/ywQCMunX1mk0gbgEoY75gHV+fpru+mZNe9fpk=";
   };
 in {
   # Attributes are named by their corresponding release channels

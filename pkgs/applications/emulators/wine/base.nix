@@ -106,7 +106,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
     libX11 libXcomposite libXcursor libXext libXfixes libXi libXrandr libXrender libXxf86vm
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
-     wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
+     wayland wayland-scanner libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
      mesa # for libgbm
   ])));
 
@@ -176,7 +176,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
 
   # https://bugs.winehq.org/show_bug.cgi?id=43530
   # https://github.com/NixOS/nixpkgs/issues/31989
-  hardeningDisable = [ "bindnow" ]
+  hardeningDisable = [ "bindnow" "stackclashprotection" ]
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
     ++ lib.optional (supportFlags.mingwSupport) "format";
 

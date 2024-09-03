@@ -1,8 +1,9 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
-, fetchurl, file, python3
+, runCommandLocal, fetchurl, file, python3
 , darwin, cargo, cmake, rustc, rustfmt
-, pkg-config, openssl, xz
+, pkg-config, openssl, xz, zlib
+, bintools
 , libiconv
 , which, libffi
 , withBundledLLVM ? false
@@ -24,6 +25,7 @@
 let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
+  useLLVM = stdenv.targetPlatform.useLLVM or false;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
@@ -34,6 +36,12 @@ in stdenv.mkDerivation (finalAttrs: {
     # See https://nixos.org/manual/nixpkgs/stable/#using-git-bisect-on-the-rust-compiler
     passthru.isReleaseTarball = true;
   };
+
+  hardeningDisable = optionals stdenv.cc.isClang [
+    # remove once https://github.com/NixOS/nixpkgs/issues/318674 is
+    # addressed properly
+    "zerocallusedregs"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -58,13 +66,18 @@ in stdenv.mkDerivation (finalAttrs: {
 
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-       optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+       # This doesn't apply to cross-building for FreeBSD because the host
+       # uses libstdc++, but the target (used for building std) uses libc++
+      optional (stdenv.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM)
+        "--push-state --as-needed -lstdc++ --pop-state"
+    ++ optional (stdenv.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
+        "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
-    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
+    ++ optional stdenv.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
+    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost.lib}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
-
   RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -103,9 +116,7 @@ in stdenv.mkDerivation (finalAttrs: {
       stdenv.targetPlatform.rust.rustcTargetSpec
 
     # Other targets that don't need any extra dependencies to build.
-    # Temporarily broken if some global compiler flags are set:
-    # https://github.com/NixOS/nixpkgs/pull/317273
-    ] ++ optionals (!fastCross && !lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] && stdenv.hostPlatform.gcc.thumb or true) [
+    ] ++ optionals (!fastCross) [
       "wasm32-unknown-unknown"
 
     # (build!=target): When cross-building a compiler we need to add
@@ -145,7 +156,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # Since fastCross only builds std, it doesn't make sense (and
     # doesn't work) to build a linker.
     "--disable-llvm-bitcode-linker"
-  ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
+  ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox && !(stdenv.targetPlatform.useLLVM or false)) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
     "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
@@ -158,6 +169,10 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
+  ] ++ optionals useLLVM [
+    # https://github.com/NixOS/nixpkgs/issues/311930
+    "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
+    "--enable-use-libcxx"
   ];
 
   # if we already have a rust compiler for build just compile the target std
@@ -182,6 +197,7 @@ in stdenv.mkDerivation (finalAttrs: {
     python ./x.py --keep-stage=0 --stage=1 install library/std
     mkdir -v $out/bin $doc $man
     ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
+    rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
     ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
     echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
@@ -220,6 +236,11 @@ in stdenv.mkDerivation (finalAttrs: {
     [source.vendored-sources]
     directory = "vendor"
     EOF
+  '' + lib.optionalString (stdenv.isFreeBSD) ''
+    # lzma-sys bundles an old version of xz that doesn't build
+    # on modern FreeBSD, use the system one instead
+    substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
+        --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -227,6 +248,7 @@ in stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   depsBuildBuild = [ pkgsBuildHost.stdenv.cc pkg-config ];
+  depsBuildTarget = lib.optionals stdenv.targetPlatform.isMinGW [ bintools ];
 
   nativeBuildInputs = [
     file python3 rustc cmake
@@ -235,8 +257,17 @@ in stdenv.mkDerivation (finalAttrs: {
     ++ optionals fastCross [ lndir makeWrapper ];
 
   buildInputs = [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security ]
-    ++ optional (!withBundledLLVM) llvmShared;
+    ++ optionals stdenv.isDarwin [ libiconv Security zlib ]
+    ++ optional (!withBundledLLVM) llvmShared.lib
+    ++ optional (useLLVM && !withBundledLLVM) [
+      llvmPackages.libunwind
+      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
+      (runCommandLocal "libunwind-libgcc" {} ''
+        mkdir -p $out/lib
+        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
+        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
+      '')
+    ];
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;

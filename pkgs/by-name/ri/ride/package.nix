@@ -12,7 +12,7 @@
   copyDesktopItems,
   makeDesktopItem,
   electron,
-  darwin,
+  cctools,
 }:
 
 let
@@ -32,8 +32,6 @@ let
   };
 
   platformInfo = platformInfos.${stdenv.system};
-
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
 in
 buildNpmPackage rec {
   pname = "ride";
@@ -92,7 +90,7 @@ buildNpmPackage rec {
       makeWrapper
     ]
     ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    ++ lib.optionals stdenv.isDarwin [ cctools ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -109,7 +107,7 @@ buildNpmPackage rec {
     mkdir local-cache
 
     # electron files need to be writable on Darwin
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     pushd electron-dist

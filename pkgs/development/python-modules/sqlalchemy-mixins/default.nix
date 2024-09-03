@@ -2,17 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
-  pytestCheckHook,
+  setuptools,
   pythonOlder,
   six,
   sqlalchemy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-mixins";
   version = "2.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,15 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-iJrRlV/M0Z1IOdrwWSblefm6wjvdk4/v0am+It8VeWI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     six
     sqlalchemy
   ];
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sqlalchemy_mixins" ];
 

@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/elasticsearch/logstash-contrib";
     license     = lib.licenses.asl20;
     platforms   = lib.platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

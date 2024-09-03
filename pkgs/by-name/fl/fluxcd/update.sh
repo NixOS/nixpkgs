@@ -17,7 +17,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     SPEC_SHA256=$(nix hash to-sri --type sha256 $SPEC_SHA256)
 
     setKV () {
-        sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${FLUXCD_PATH}/default.nix"
+        sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${FLUXCD_PATH}/package.nix"
     }
 
     setKV version ${LATEST_VERSION}
@@ -40,7 +40,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     # `git` flag here is to be used by local maintainers to speed up the bump process
     if [ $# -eq 1 ] && [ "$1" = "git" ]; then
         git switch -c "package-fluxcd-${LATEST_VERSION}"
-        git add "$FLUXCD_PATH"/default.nix
+        git add "$FLUXCD_PATH"/package.nix
         git commit -m "fluxcd: ${OLD_VERSION} -> ${LATEST_VERSION}
 
 Release: https://github.com/fluxcd/flux2/releases/tag/v${LATEST_VERSION}"

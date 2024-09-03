@@ -1,5 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
+, fetchpatch
+, fetchpatch2
 
 , bison, flex, git, gperf, ninja, pkg-config, python, which
 , nodejs, perl
@@ -23,12 +25,12 @@
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, xcbuild, writeScriptBin
-, ffmpeg_4 ? null
+, ffmpeg_7 ? null
 , lib, stdenv
 , version ? null
 , qtCompatVersion
 , pipewireSupport ? stdenv.isLinux
-, pipewire_0_2
+, pipewire
 , postPatch ? ""
 , nspr
 , lndir
@@ -76,10 +78,51 @@ qtModule ({
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
+  patches = [
+    # Support FFmpeg 5
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/14074e4d789167bd776939037fe6df8d4d7dc0b3/qt5-webengine-ffmpeg5.patch";
+      hash = "sha256-jTbJFXBPwRMzr8IeTxrv9dtS+/xDS/zR4dysV/bRg3I=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+
+    # Support FFmpeg 7
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/e8fb4f86104243b90966b69cdfaa967273d834b6/qt5-webengine-ffmpeg7.patch";
+      hash = "sha256-YNeHmOVp0M5HB+b91AOxxJxl+ktBtLYVdHlq13F7xtY=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+    })
+
+    # Support PipeWire ≥ 0.3
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/c9db2cd9e144bd7a5e9246f5f7a01fe52fd089ba/qt5-webengine-pipewire-0.3.patch";
+      hash = "sha256-mGexRfVDF3yjNzSi9BjavhzPtsXI0BooSr/rZ1z/BDo=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+  ];
+
   postPatch = ''
     # Patch Chromium build tools
     (
       cd src/3rdparty/chromium;
+
+      patch -p2 < ${
+        (fetchpatch { # support for building with python 3.12
+          name = "python312-imp.patch";
+          url = "https://codereview.qt-project.org/gitweb?p=qt/qtwebengine-chromium.git;a=patch;h=3664134f749f4851a14ab1953a9ee460a1fe0b68";
+          hash = "sha256-XY0dEdeuOTRMR7onmuNg1Axld8+pquKAzOfDAGSIzI4=";
+        })
+      }
+      patch -p1 < ${
+        (fetchpatch { # support for building with python 3.12
+          name = "python312-six.patch";
+          url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
+          hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
+        })
+      }
 
       # Manually fix unsupported shebangs
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
@@ -130,6 +173,10 @@ qtModule ({
     # ld: fatal warning(s) induced error (-fatal_warnings)
     substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
       --replace "-Wl,-fatal_warnings" ""
+
+    # Use system ffmpeg
+    echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
+    echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
   '') + postPatch;
 
   env = {
@@ -185,7 +232,7 @@ qtModule ({
     harfbuzz icu
 
     libevent
-    ffmpeg_4
+    ffmpeg_7
   ] ++ lib.optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -205,7 +252,7 @@ qtModule ({
 
   ] ++ lib.optionals pipewireSupport [
     # Pipewire
-    pipewire_0_2
+    pipewire
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way

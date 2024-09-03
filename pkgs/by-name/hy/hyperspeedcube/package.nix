@@ -26,7 +26,6 @@
 , python3
 , rustPlatform
 , shaderc
-, stdenv
 , vulkan-extension-layer
 , vulkan-headers
 , vulkan-loader

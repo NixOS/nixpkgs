@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license     = licenses.asl20;
     # libldac code detects & #error's out on non-LE byte order
     platforms   = platforms.littleEndian;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

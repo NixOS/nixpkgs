@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   poetry-dynamic-versioning,
-  pythonRelaxDepsHook,
   iso4217,
   pythonOlder,
   pytz,
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   build-system = [
     poetry-core
     poetry-dynamic-versioning
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [

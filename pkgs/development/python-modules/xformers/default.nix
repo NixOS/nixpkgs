@@ -18,7 +18,8 @@
   fairscale,
   scipy,
   cmake,
-  openai-triton,
+  ninja,
+  triton,
   networkx,
   #, apex
   einops,
@@ -47,13 +48,14 @@ buildPythonPackage {
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
 
-  preBuild =
-    ''
-      cat << EOF > ./xformers/version.py
-      # noqa: C801
-      __version__ = "${version}"
-      EOF
-    '';
+  preBuild = ''
+    cat << EOF > ./xformers/version.py
+    # noqa: C801
+    __version__ = "${version}"
+    EOF
+
+    export MAX_JOBS=$NIX_BUILD_CORES
+  '';
 
   env = lib.attrsets.optionalAttrs cudaSupport {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
@@ -66,17 +68,18 @@ buildPythonPackage {
     [
       # flash-attn build
       cuda_cudart # cuda_runtime_api.h
-      libcusparse.dev # cusparse.h
-      cuda_cccl.dev # nv/target
-      libcublas.dev # cublas_v2.h
-      libcusolver.dev # cusolverDn.h
-      libcurand.dev # curand_kernel.h
+      libcusparse # cusparse.h
+      cuda_cccl # nv/target
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcurand # curand_kernel.h
     ]
   );
 
-  nativeBuildInputs = [ which ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  nativeBuildInputs = [
+    ninja
+    which
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
 
   propagatedBuildInputs = [
     numpy
@@ -103,7 +106,7 @@ buildPythonPackage {
     scipy
     cmake
     networkx
-    openai-triton
+    triton
     # apex
     einops
     transformers

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pdm-backend,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   pythonOlder,
   pytz,
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   build-system = [
     pdm-backend
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

@@ -13,7 +13,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   urllib3,
 }:
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -71,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/auth0/auth0-python";
     changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
