@@ -444,21 +444,20 @@ rec {
 
     `toExtension` is the `toFunction` for extending functions (a.k.a. extensions or overlays).
     It converts a non-function or a single-argument function to an extending function,
-    while returning a double-argument function as-is.
+    while returning a two-argument function as-is.
 
-    That is, it takes one of `x`, `prev: x`, or `final: prev: x`,
-    and returns `final: prev: x`, where `x` is not a function.
+    That is, it takes a value of the shape `x`, `prev: x`, or `final: prev: x`,
+    and returns `final: prev: x`, assuming `x` is not a function.
 
-    This function is extracted from the implementation of
-    the fixed-point arguments support of `stdenv.mkDerivation`.
+    This function takes care of the input to `stdenv.mkDerivation`'s
+    `overrideAttrs` function.
     It bridges the gap between `<pkg>.overrideAttrs`
-    before and after the overlay-style support,
-    as well as `config.packageOverrides` and `config.overlays` in `pkgs`.
+    before and after the overlay-style support.
 
     # Inputs
 
     `f`
-    : The function or non-function to convert to an extending function.
+    : The function or value to convert to an extending function.
 
     # Type
 
@@ -509,6 +508,6 @@ rec {
         # f is (prev: { ... })
         fPrev
     else
-      # f is { ... }
+      # f is not a function; probably { ... }
       final: prev: f;
 }
