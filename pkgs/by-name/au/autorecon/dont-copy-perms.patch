@@ -1,0 +1,50 @@
+diff --git a/autorecon/main.py b/autorecon/main.py
+index 655739d..e2d9414 100644
+--- a/autorecon/main.py
++++ b/autorecon/main.py
+@@ -23,28 +23,37 @@ if not os.path.exists(config['config_dir']):
+ 	shutil.rmtree(config['config_dir'], ignore_errors=True, onerror=None)
+ 	os.makedirs(config['config_dir'], exist_ok=True)
+ 	open(os.path.join(config['config_dir'], 'VERSION-' + VERSION), 'a').close()
+-	shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.toml'), os.path.join(config['config_dir'], 'config.toml'))
+-	shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'global.toml'), os.path.join(config['config_dir'], 'global.toml'))
++	shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.toml'), os.path.join(config['config_dir'], 'config.toml'))
++	shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'global.toml'), os.path.join(config['config_dir'], 'global.toml'))
+ else:
+ 	if not os.path.exists(os.path.join(config['config_dir'], 'config.toml')):
+-		shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.toml'), os.path.join(config['config_dir'], 'config.toml'))
++		shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.toml'), os.path.join(config['config_dir'], 'config.toml'))
+ 	if not os.path.exists(os.path.join(config['config_dir'], 'global.toml')):
+-		shutil.copy(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'global.toml'), os.path.join(config['config_dir'], 'global.toml'))
++		shutil.copyfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'global.toml'), os.path.join(config['config_dir'], 'global.toml'))
+ 	if not os.path.exists(os.path.join(config['config_dir'], 'VERSION-' + VERSION)):
+ 		warn('It looks like the config in ' + config['config_dir'] + ' is outdated. Please remove the ' + config['config_dir'] + ' directory and re-run AutoRecon to rebuild it.')
+ 
++def copy_contents(src, dst):
++	os.makedirs(dst, exist_ok=True)
++	with os.scandir(src) as itr:
++		entries = list(itr)
++	for srcentry in entries:
++		srcname = os.path.join(src, srcentry.name)
++		dstname = os.path.join(dst, srcentry.name)
++		if os.path.isfile(srcname):
++			shutil.copyfile(srcname, dstname)
+ 
+ if not os.path.exists(config['data_dir']):
+ 	shutil.rmtree(config['data_dir'], ignore_errors=True, onerror=None)
+ 	os.makedirs(config['data_dir'], exist_ok=True)
+ 	open(os.path.join(config['data_dir'], 'VERSION-' + VERSION), 'a').close()
+-	shutil.copytree(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-plugins'), os.path.join(config['data_dir'], 'plugins'))
+-	shutil.copytree(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'wordlists'), os.path.join(config['data_dir'], 'wordlists'))
++	copy_contents(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-plugins'), os.path.join(config['data_dir'], 'plugins'))
++	copy_contents(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'wordlists'), os.path.join(config['data_dir'], 'wordlists'))
+ else:
+ 	if not os.path.exists(os.path.join(config['data_dir'], 'plugins')):
+-		shutil.copytree(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-plugins'), os.path.join(config['data_dir'], 'plugins'))
++		copy_contents(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-plugins'), os.path.join(config['data_dir'], 'plugins'))
+ 	if not os.path.exists(os.path.join(config['data_dir'], 'wordlists')):
+-		shutil.copytree(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'wordlists'), os.path.join(config['data_dir'], 'wordlists'))
++		copy_contents(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'wordlists'), os.path.join(config['data_dir'], 'wordlists'))
+ 	if not os.path.exists(os.path.join(config['data_dir'], 'VERSION-' + VERSION)):
+ 		warn('It looks like the plugins in ' + config['data_dir'] + ' are outdated. Please remove the ' + config['data_dir'] + ' directory and re-run AutoRecon to rebuild them.')
+ 

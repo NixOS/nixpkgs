@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
 , file, openssl, perl, nettools
+, CoreFoundation, CoreServices, DiskArbitration, IOKit, ApplicationServices
 , withPerlTools ? false }: let
 
   perlWithPkgs = perl.withPackages (ps: with ps; [
@@ -26,6 +27,13 @@ in stdenv.mkDerivation rec {
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
     (fetchAlpinePatch "fix-fd_mask.patch" "/i9ve61HjDzqZt+u1wajNtSQoizl+KePvhcAt24HKd0=")
+    # Fix -flat_namespace being used on x86_64 Big Sur and later.
+    # https://github.com/Homebrew/homebrew-core/blob/cd3f1f2362ec45d0123def97411bda8ae6414347/Formula/n/net-snmp.rb#L36
+    (fetchurl {
+      name = "configure-big_sur.diff";
+      url = "https://raw.githubusercontent.com/Homebrew/formula-patches/03cf8088210822aa2c1ab544ed58ea04c897d9c4/libtool/configure-big_sur.diff";
+      hash = "sha256-NazWrrwZhD8aKzpj6IC6zrD1J4qxrOZh5XpQLZ14yTw=";
+    })
   ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
@@ -54,6 +62,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ nettools file ];
   buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation CoreServices DiskArbitration IOKit ApplicationServices ]
     ++ lib.optional withPerlTools perlWithPkgs;
 
   enableParallelBuilding = true;
@@ -74,6 +83,6 @@ in stdenv.mkDerivation rec {
     description = "Clients and server for the SNMP network monitoring protocol";
     homepage = "http://www.net-snmp.org/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
