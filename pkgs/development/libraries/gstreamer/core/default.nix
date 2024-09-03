@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.24.3";
+  version = "1.24.7";
 
   outputs = [
     "bin"
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-EiXvSjKfrhytxexyfaskmtVn6AcoeUk1Yc65HtNKpBQ=";
+    hash = "sha256-wOdbEkxSu3oMPc23NLKtJg6nKGqHRc8upinUyEnmqVg=";
   };
 
   depsBuildBuild = [

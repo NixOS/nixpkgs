@@ -114,13 +114,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.24.3";
+  version = "1.24.7";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-6Q8mx9ycdvSqWZt1jP1tjBDWoLnLJluiw8m984iFWPg=";
+    hash = "sha256-ddUT/AumNfsfOXhtiQtz+6xfS8iP858qn/YvS49CjyI=";
   };
 
   patches = [
@@ -129,6 +129,11 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit (addDriverRunpath) driverLink;
     })
+
+    # vtdec: Use kVTVideoDecoderReferenceMissingErr only when defined
+    # <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7157>
+    # TODO: Remove this when the build with the newer SDK works.
+    ./darwin-old-sdk-fix.patch
   ];
 
   nativeBuildInputs = [
