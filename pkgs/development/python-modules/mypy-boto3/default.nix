@@ -391,8 +391,8 @@ rec {
       "sha256-lUzOmIoPNgEbJC54tre1m5ddhca05GyTSPOG4uIfumk=";
 
   mypy-boto3-dax =
-    buildMypyBoto3Package "dax" "1.34.0"
-      "sha256-DH5kqV+C4vbZ8fbvAtR93jd5YB22hkYe/xgOF4oru1Y=";
+    buildMypyBoto3Package "dax" "1.35.0"
+      "sha256-kAOvmRLOPBKhHiipN17YTgKSkZU4fjdJtay16uV/10Y=";
 
   mypy-boto3-detective =
     buildMypyBoto3Package "detective" "1.34.43"
