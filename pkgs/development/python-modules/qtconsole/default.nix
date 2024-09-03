@@ -57,5 +57,6 @@ buildPythonPackage rec {
     changelog = "https://qtconsole.readthedocs.io/en/stable/changelog.html#changes-in-jupyter-qt-console";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
