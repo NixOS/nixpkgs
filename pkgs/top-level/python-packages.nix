@@ -10611,6 +10611,8 @@ self: super: with self; {
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 
+  python-troveclient = callPackage ../development/python-modules/python-troveclient { };
+
   python-idzip = callPackage ../development/python-modules/python-idzip { };
 
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
