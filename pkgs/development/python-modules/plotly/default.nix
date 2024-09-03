@@ -43,6 +43,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/plotly/plotly.py";
     homepage = "https://plot.ly/python/";
     license = with licenses; [ mit ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }
