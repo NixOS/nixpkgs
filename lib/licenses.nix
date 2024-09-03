@@ -1116,6 +1116,12 @@ lib.mapAttrs mkLicense ({
     url = "https://github.com/LBNL-ETA/Radiance/blob/master/License.txt";
   };
 
+  rsalv2 = {
+    spdxId = "RSALv2";
+    fullName = "Redis Source Available License 2.0";
+    free = false;
+  };
+
   ruby = {
     spdxId = "Ruby";
     fullName = "Ruby License";
