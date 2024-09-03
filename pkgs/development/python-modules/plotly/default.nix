@@ -6,6 +6,7 @@
   requests,
   six,
   tenacity,
+  kaleido,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,7 @@ buildPythonPackage rec {
     requests
     six
     tenacity
+    kaleido
   ];
 
   # No tests in archive
