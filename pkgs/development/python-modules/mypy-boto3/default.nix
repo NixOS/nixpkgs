@@ -175,8 +175,8 @@ rec {
       "sha256-LVwSfDll7H0xxvF6b2wlqr/gQ5nR4oqtev4ZT4hgJX0=";
 
   mypy-boto3-billingconductor =
-    buildMypyBoto3Package "billingconductor" "1.34.1"
-      "sha256-uXxQkoe2u3idcYta9YFbjxoK8HsvUiRQSyYrYhVi1kU=";
+    buildMypyBoto3Package "billingconductor" "1.35.0"
+      "sha256-PlOL9fmTgWo8jF17Um+aDDNShQWpCxkkp5dFBHl/494=";
 
   mypy-boto3-braket =
     buildMypyBoto3Package "braket" "1.34.39"
