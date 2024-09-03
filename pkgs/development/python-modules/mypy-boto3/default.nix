@@ -1023,8 +1023,8 @@ rec {
       "sha256-CFULIBMCKb4mUQ7ogh5hvfewDMpsP1jnQEJmtuArCck=";
 
   mypy-boto3-panorama =
-    buildMypyBoto3Package "panorama" "1.34.0"
-      "sha256-Pw0yRgawY5TC0OIgcYmzK3KEQusyRf3coThpeHL4X30=";
+    buildMypyBoto3Package "panorama" "1.35.0"
+      "sha256-HFjrSRkc3cEqImMkqC4V/lfk/ArD9/2swrK7xo9Hut4=";
 
   mypy-boto3-payment-cryptography =
     buildMypyBoto3Package "payment-cryptography" "1.34.20"
