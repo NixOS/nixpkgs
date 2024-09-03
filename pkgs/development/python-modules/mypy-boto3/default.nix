@@ -1291,8 +1291,8 @@ rec {
       "sha256-BmU7vCuS8Ow5DSYi4qbLrYoZGsdYwh4IA9EVHNGMgjI=";
 
   mypy-boto3-simspaceweaver =
-    buildMypyBoto3Package "simspaceweaver" "1.34.0"
-      "sha256-3J7s6FMRBcI7XaVoXjB3gSNI/Eh7TrE5ij8wRmagK/M=";
+    buildMypyBoto3Package "simspaceweaver" "1.35.0"
+      "sha256-CT7Xv0u/xY36/SnJuC3f0396G3TwNdtY0w/cL+w/N2Q=";
 
   mypy-boto3-sms =
     buildMypyBoto3Package "sms" "1.34.0"
