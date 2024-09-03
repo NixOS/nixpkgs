@@ -78,12 +78,18 @@ stdenv.mkDerivation (finalAttrs: {
     perl -pi -e 'undef $_ if /^C\s/..1' src/usb
     perl ./convert_hd src/pci
     perl ./convert_hd src/usb
-
-    make check_hd CC=$CC_FOR_BUILD
     popd
+
+    # build tools for build arch
+    make -C src/ids CC=$CC_FOR_BUILD -j $NIX_BUILD_CORES check_hd
+    make -C src/isdn/cdb CC=$CC_FOR_BUILD -j $NIX_BUILD_CORES isdn_cdb mk_isdnhwdb
   '';
 
-  makeFlags = [ "LIBDIR=/lib" ];
+  makeFlags = [
+    "LIBDIR=/lib"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "ARCH=${stdenv.hostPlatform.uname.processor}"
+  ];
   installFlags = [ "DESTDIR=$(out)" ];
 
   passthru = {
