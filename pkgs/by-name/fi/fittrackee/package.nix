@@ -25,7 +25,7 @@ let
 
 in
 python.pkgs.buildPythonApplication rec {
-  pname = "fit-trackee";
+  pname = "fittrackee";
   version = "0.8.6";
   pyproject = true;
 
