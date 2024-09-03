@@ -203,6 +203,7 @@ in
             };
           }
         ];
+        apply = dbs: map (db: if isString db then { name = db; withOptions = {}; } else db) dbs;
       };
 
       ensureUsers = mkOption {
@@ -498,12 +499,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = map ({ name, ensureDBOwnership, ... }: {
-      assertion = ensureDBOwnership -> any (db:
-        if builtins.isString db then
-          db == name
-        else
-          db.name == name
-      ) cfg.ensureDatabases;
+      assertion = ensureDBOwnership -> any (db: db.name == name) cfg.ensureDatabases;
       message = ''
         For each database user defined with `services.postgresql.ensureUsers` and
         `ensureDBOwnership = true;`, a database with the same name must be defined
@@ -616,23 +612,18 @@ in
             fi
           '' + optionalString (cfg.ensureDatabases != []) ''
             ${concatMapStrings (database:
-              if builtins.isString database then
-                ''
-                  $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-                ''
-              else
-                let
-                  name = database.name;
-                  options = lib.mapAttrsToList (k: v: "${k} = ${
-                    if toLower k == "owner" then "\\\"${v}\\\""
-                    else if toLower k == "template" then "${v}"
-                    else "'${v}'"
-                  }") database.withOptions;
-                  optionsStr = if builtins.length options > 0 then "WITH " + lib.concatStringsSep " " options else "";
-                in
-                ''
-                  $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${name}'" | grep -q 1 || $PSQL -tAc "CREATE DATABASE \"${name}\" ${optionsStr}"
-                ''
+              let
+                name = database.name;
+                options = lib.mapAttrsToList (k: v: "${k} = ${
+                  if toLower k == "owner" then "\\\"${v}\\\""
+                  else if toLower k == "template" then "${v}"
+                  else "'${v}'"
+                }") database.withOptions;
+                optionsStr = if builtins.length options > 0 then "WITH " + lib.concatStringsSep " " options else "";
+              in
+              ''
+                $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${name}'" | grep -q 1 || $PSQL -tAc "CREATE DATABASE \"${name}\" ${optionsStr}"
+              ''
             ) cfg.ensureDatabases}
           '' + ''
             ${
