@@ -4,13 +4,13 @@
 # https://github.com/abathur/resholve/issues/107
 resholve.mkDerivation rec {
   pname = "nix-direnv";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    hash = "sha256-imUlc5v/Ow7dgjCjTyEeet+4lNHLeEwfqGQcB4dKcao=";
+    hash = "sha256-oNqhPqgQT92yxbKmcgX4F3e2yTUPyXYG7b2xQm3TvQw=";
   };
 
   # skip min version checks which are redundant when built with nix
