@@ -9,20 +9,23 @@
 , knownVulnerabilities ? [ ]
 , CoreServices ? null
 , Security ? null
+, static ? stdenv.hostPlatform.isStatic # generates static libraries *only*
 , ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "botan";
   version = "${baseVersion}.${revision}";
+
+  __structuredAttrs = true;
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    name = "Botan-${version}.${sourceExtension}";
+    name = "Botan-${finalAttrs.version}.${sourceExtension}";
     urls = [
-       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
-       "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
+       "http://files.randombit.net/botan/v${baseVersion}/Botan-${finalAttrs.version}.${sourceExtension}"
+       "http://botan.randombit.net/releases/Botan-${finalAttrs.version}.${sourceExtension}"
     ];
     inherit hash;
   };
@@ -33,9 +36,22 @@ stdenv.mkDerivation rec {
   buildInputs = [ bzip2 zlib gmp boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
+  botanConfigureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--with-bzip2"
+    "--with-zlib"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "--cc=clang"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "--cpu=aarch64"
+  ] ++ lib.optionals static [
+    "--enable-static-library"
+    "--disable-shared-library"
+  ];
+
   configurePhase = ''
     runHook preConfigure
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"} ${lib.optionalString stdenv.hostPlatform.isAarch64 " --cpu=aarch64"}
+    python configure.py ''${botanConfigureFlags[@]} ${extraConfigureFlags}
     runHook postConfigure
   '';
 
@@ -64,4 +80,4 @@ stdenv.mkDerivation rec {
     inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
-}
+})
