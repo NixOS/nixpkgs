@@ -11613,8 +11613,6 @@ with pkgs;
     stdenv = gcc12Stdenv;
   };
 
-  power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
-
   ppl = callPackage ../development/libraries/ppl { };
 
   pplite = callPackage ../development/libraries/pplite { };

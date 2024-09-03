@@ -1,67 +1,76 @@
-{ stdenv
-, lib
-, bash-completion
-, pkg-config
-, meson
-, mesonEmulatorHook
-, ninja
-, fetchFromGitLab
-, libgudev
-, glib
-, polkit
-, dbus
-, gobject-introspection
-, wrapGAppsNoGuiHook
-, gettext
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, libxml2
-, libxslt
-, upower
-, umockdev
-, systemd
-, python3
-, nixosTests
+{
+  stdenv,
+  lib,
+  bash-completion,
+  pkg-config,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  fetchFromGitLab,
+  libgudev,
+  glib,
+  polkit,
+  dbus,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
+  gettext,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  libxml2,
+  libxslt,
+  upower,
+  umockdev,
+  systemd,
+  python3,
+  nixosTests,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "power-profiles-daemon";
   version = "0.22";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "upower";
     repo = "power-profiles-daemon";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-NzaneS/Za73HSK2abBZNmP+ZPbhIG+JXfBTPHm2vBeU=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    gettext
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_412
-    libxml2 # for xmllint for stripping GResources
-    libxslt # for xsltproc for building docs
-    gobject-introspection
-    wrapGAppsNoGuiHook
-    # checkInput but cheked for during the configuring
-    (python3.pythonOnBuildForHost.withPackages (ps: with ps; [
-      pygobject3
-      dbus-python
-      python-dbusmock
-      argparse-manpage
-      shtab
-    ]))
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      meson
+      ninja
+      gettext
+      gtk-doc
+      docbook-xsl-nons
+      docbook_xml_dtd_412
+      libxml2 # for xmllint for stripping GResources
+      libxslt # for xsltproc for building docs
+      gobject-introspection
+      wrapGAppsNoGuiHook
+      # checkInput but checked for during the configuring
+      (python3.pythonOnBuildForHost.withPackages (
+        ps: with ps; [
+          pygobject3
+          dbus-python
+          python-dbusmock
+          argparse-manpage
+          shtab
+        ]
+      ))
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     bash-completion
@@ -116,6 +125,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests = {
       nixos = nixosTests.power-profiles-daemon;
     };
@@ -127,6 +137,10 @@ stdenv.mkDerivation rec {
     mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz picnoir lyndeno ];
+    maintainers = with maintainers; [
+      mvnetbiz
+      picnoir
+      lyndeno
+    ];
   };
-}
+})
