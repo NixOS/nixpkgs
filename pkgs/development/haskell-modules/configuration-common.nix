@@ -2044,6 +2044,11 @@ self: super: {
     tls = self.tls_2_0_6;
   });
 
+  # Requests version 2 of tls
+  diohsc = super.diohsc.overrideScope (self: super: {
+    tls = self.tls_2_0_6;
+  });
+
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
 
