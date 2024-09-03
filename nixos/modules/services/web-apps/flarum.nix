@@ -116,6 +116,7 @@ in {
       isSystemUser = true;
       home = cfg.stateDir;
       createHome = true;
+      homeMode = "755";
       group = cfg.group;
     };
     users.groups.${cfg.group} = {};
@@ -194,8 +195,6 @@ in {
         cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
         ln -sf ${cfg.package}/share/php/flarum/vendor .
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
-        chmod a+x . public
-        chmod +x site.php extend.php flarum
       '' + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
         if [ ! -f config.php ]; then
             php flarum install --file=${flarumInstallConfig}
