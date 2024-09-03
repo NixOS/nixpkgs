@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
+, mkNugetDeps
 , sqlite
 , withFFmpeg ? true # replace bundled ffprobe binary with symlink to ffmpeg package.
 , ffmpeg
@@ -15,6 +16,7 @@
 , python3Packages
 , nix
 , prefetch-yarn-deps
+, nuget-to-nix
 }:
 let
   version = "4.0.8.1874";
@@ -24,6 +26,9 @@ let
     rev = "v${version}";
     hash = "sha256-4WjeuVqzuUmgbKIjcQOJCNrTnT9Wn6kpVxS+1T1hqyQ=";
   };
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 in
 buildDotnetModule {
   pname = "sonarr";
@@ -63,12 +68,14 @@ buildDotnetModule {
     ln -s -- Sonarr "$out/bin/NzbDrone"
   '';
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = mkNugetDeps {
+    name = "sonarr";
+    sourceFile = ./deps.nix;
+  };
 
   runtimeDeps = [ sqlite ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  inherit dotnet-sdk dotnet-runtime;
 
   doCheck = true;
 
@@ -144,10 +151,18 @@ buildDotnetModule {
       {
         libraries = with python3Packages; [ requests ];
         makeWrapperArgs = [
+          "--set"
+          "NUGET_FALLBACK_PACKAGES"
+          "${dotnet-sdk.packages}/share/nuget/packages"
           "--prefix"
           "PATH"
           ":"
-          (lib.makeBinPath [ nix prefetch-yarn-deps ])
+          (lib.makeBinPath [
+            nix
+            prefetch-yarn-deps
+            dotnet-sdk
+            (nuget-to-nix.override { inherit dotnet-sdk; })
+          ])
         ];
       }
       ./update.py;
