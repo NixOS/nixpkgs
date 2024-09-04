@@ -6,7 +6,7 @@
 , installShellFiles
 , boost
 , lua
-, protobuf_21
+, protobuf
 , rapidjson
 , shapelib
 , sqlite
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake installShellFiles ];
 
-  buildInputs = [ boost lua protobuf_21 rapidjson shapelib sqlite zlib ];
+  buildInputs = [ boost lua protobuf rapidjson shapelib sqlite zlib ];
 
   cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     (lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc");
