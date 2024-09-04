@@ -29,12 +29,12 @@ let
       sha256 = "0hbs2rr4r8zlii3srbc9xbmn5wm3p88cdsx85xp2vibbf9d7kc2a";
     };
   };
-  binary = lib.optionals (binaries ? stdenv.system) [
+  binary = (
     binaries.${stdenv.system} or {
       url = "";
       sha256 = "";
     }
-  ] [ 0 ];
+  );
 in
 stdenv.mkDerivation {
   pname = "codelldb";
