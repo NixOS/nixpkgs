@@ -29,6 +29,8 @@ buildMongoDB {
     ./forget-build-dependencies-4-4.patch
     ./asio-no-experimental-string-view-4-4.patch
     ./fix-gcc-Wno-exceptions-5.0.patch
+    # Fix building with python 3.12 since the imp module was removed
+    ./mongodb-python312.patch
   ] ++ variants.patches;
   passthru.tests = { inherit (nixosTests) mongodb; };
 }

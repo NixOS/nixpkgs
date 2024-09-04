@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, unzip, which, makeWrapper, jdk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  which,
+  makeWrapper,
+  installShellFiles,
+  jdk,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 # at runtime, need jdk
 
@@ -11,12 +22,44 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2Ro93+NThx1MJlbT0KBcgovD/zbp1J29vsE9zZjwWHc=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    installShellFiles
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "groovy";
+      desktopName = "Groovy Console";
+      exec = "groovyConsole";
+      icon = "groovy";
+      comment = meta.description;
+      terminal = false;
+      startupNotify = false;
+      categories = [ "Development" ];
+    })
+  ];
 
   installPhase = ''
+    runHook preInstall
+
+    rm bin/*.bat
+
     mkdir -p $out
     mkdir -p $out/share/doc/groovy
-    rm bin/*.bat
+
+    #Install icons
+    mkdir -p $out/share/icons
+    mv bin/groovy.ico $out/share/icons/
+
+    #Install Completion
+    for p in grape groovy{,doc,c,sh,Console}; do
+      installShellCompletion --cmd $p --bash bin/''${p}_completion
+    done
+    rm bin/*_completion
+
     mv {bin,conf,grooid,lib} $out
     mv {licenses,LICENSE,NOTICE} $out/share/doc/groovy
 
@@ -24,9 +67,11 @@ stdenv.mkDerivation rec {
 
     for p in grape java2groovy groovy{,doc,c,sh,Console}; do
       wrapProgram $out/bin/$p \
-            --set JAVA_HOME "${jdk}" \
-            --prefix PATH ":" "${jdk}/bin"
+        --set JAVA_HOME "${jdk}" \
+        --prefix PATH ":" "${jdk}/bin"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

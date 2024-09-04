@@ -97,6 +97,7 @@ let
   # Running the tests should take something in the order of 1h.
   sage-tests = callPackage ./sage-tests.nix {
     inherit sage-with-env;
+    pytest = python3.pkgs.pytest;
   };
 
   sage-src = callPackage ./sage-src.nix {};

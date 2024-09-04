@@ -177,7 +177,8 @@ in
     # Handle empty vendorHash; avoid
     # error: empty hash requires explicit hash algorithm
     outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
-  }).overrideAttrs finalAttrs.passthru.overrideModAttrs;
+    # in case an overlay clears passthru by accident, don't fail evaluation
+  }).overrideAttrs (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
 
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
