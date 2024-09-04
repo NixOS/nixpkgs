@@ -46,12 +46,12 @@ rustPlatform.buildRustPackage {
 
   buildInputs =
     [
-      openssl
       zstd
       libgit2
       libssh2
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
