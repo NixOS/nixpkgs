@@ -467,6 +467,7 @@ Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to p
 
 - `yarnConfigHook`: Fetches the dependencies from the offline cache and installs them into `node_modules`.
 - `yarnBuildHook`: Runs `yarn build` or a specified `yarn` command that builds the project.
+- `yarnInstallHook`: Runs `yarn install --production` to prune dependencies and installs the project into `$out`.
 
 An example usage of the above attributes is:
 
@@ -501,9 +502,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
+    yarnInstallHook
     # Needed for executing package.json scripts
     nodejs
-    npmHooks.npmInstallHook
   ];
 
   meta = {
@@ -511,8 +512,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 ```
-
-Note that there is no setup hook for installing yarn based packages - `npmHooks.npmInstallHook` should fit most cases, but sometimes you may need to override the `installPhase` completely.
 
 #### `yarnConfigHook` arguments {#javascript-yarnconfighook}
 
@@ -525,9 +524,15 @@ This script by default runs `yarn --offline build`, and it relies upon the proje
 - `yarnBuildScript`: Sets a different `yarn --offline` subcommand (defaults to `build`).
 - `yarnBuildFlags`: Single string list of additional flags to pass the above command, or a Nix list of such additional flags.
 
+#### `yarnInstallHook` arguments {#javascript-yarninstallhook}
+
+To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup project files and dependencies. To disable this phase, you can set `dontYarnInstall = true` or override the `installPhase`. Below is a list of additional `mkDerivation` arguments read by this hook:
+
+- `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
+
 ### yarn2nix {#javascript-yarn2nix}
 
-WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook` and `yarnBuildHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
+WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
 #### Preparation {#javascript-yarn2nix-preparation}
 
