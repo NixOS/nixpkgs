@@ -35,7 +35,7 @@ in
     (lib.mkRenamedOptionModule [ "networking" "dnsExtensionMechanism" ] [ "networking" "resolvconf" "dnsExtensionMechanism" ])
     (lib.mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
     (lib.mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
-    (lib.mkRemovedOptionModule [ "networking" "resolvconf" "useHostResolvConf" ] "This option was never used for lib.anything lib.anyways")
+    (lib.mkRemovedOptionModule [ "networking" "resolvconf" "useHostResolvConf" ] "This option was never used for anything anyways")
   ];
 
   options = {
