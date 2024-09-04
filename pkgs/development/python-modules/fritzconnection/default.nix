@@ -1,28 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
+  pythonOlder,
   requests,
   segno,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
   version = "1.14.0";
-  format = "setuptools";
+  pyroject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kbr";
-    repo = pname;
+    repo = "fritzconnection";
     rev = "refs/tags/${version}";
     hash = "sha256-1LLfSEOKqUIhWIR/RQEG0Bp41d908hAKDlslJlWCHys=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   passthru.optional-dependencies = {
     qr = [ segno ];
