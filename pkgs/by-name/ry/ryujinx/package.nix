@@ -16,7 +16,6 @@
 , libXcursor
 , libXext
 , libXrandr
-, fontconfig
 , glew
 , libGL
 , udev
@@ -61,7 +60,6 @@ buildDotnetModule rec {
     libXcursor
     libXext
     libXrandr
-    fontconfig
     glew
 
     # Headless executable

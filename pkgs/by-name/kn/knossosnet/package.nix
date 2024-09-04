@@ -1,7 +1,6 @@
 {
   buildDotnetModule
   , fetchFromGitHub
-  , fontconfig
   , lib
   , openal
   , xorg
@@ -23,7 +22,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
   executables = [ "Knossos.NET" ];
 
-  runtimeDeps = [ fontconfig openal xorg.libX11 xorg.libICE xorg.libSM ];
+  runtimeDeps = [ openal xorg.libX11 xorg.libICE xorg.libSM ];
 
   meta = with lib; {
     homepage = "https://github.com/KnossosNET/Knossos.NET";

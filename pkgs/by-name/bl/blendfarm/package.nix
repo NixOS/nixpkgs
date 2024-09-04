@@ -83,7 +83,6 @@ buildDotnetModule rec {
     libgdiplus
     glib
     libXrandr
-    fontconfig
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 
   # there is no "*.so.3" or "*.so.5" in nixpkgs. So ignore the warning

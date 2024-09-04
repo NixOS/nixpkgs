@@ -8,7 +8,6 @@
   libX11,
   libICE,
   libSM,
-  fontconfig,
 
   xdg-utils,
 }:
@@ -42,7 +41,6 @@ buildDotnetModule rec {
     libX11
     libICE
     libSM
-    fontconfig
   ];
 
   # Required for OneClick

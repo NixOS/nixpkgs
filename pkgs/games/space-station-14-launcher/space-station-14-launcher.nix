@@ -13,7 +13,6 @@
 , libXcursor
 , libXext
 , libXrandr
-, fontconfig
 , glew
 , SDL2
 , glfw
@@ -102,7 +101,6 @@ buildDotnetModule rec {
     libXcursor
     libXext
     libXrandr
-    fontconfig
     glew
   ];
 

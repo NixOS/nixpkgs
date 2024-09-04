@@ -6,7 +6,6 @@
 , libX11
 , libICE
 , libSM
-, fontconfig
 , gtk3
 , copyDesktopItems
 , icoutils
@@ -35,7 +34,6 @@ buildDotnetModule rec {
     libX11
     libICE
     libSM
-    fontconfig
     gtk3
   ];
 

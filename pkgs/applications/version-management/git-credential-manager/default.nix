@@ -5,7 +5,6 @@
 , libX11
 , libICE
 , libSM
-, fontconfig
 , libsecret
 , git
 , git-credential-manager
@@ -36,8 +35,8 @@ buildDotnetModule rec {
   dotnetInstallFlags = [ "--framework" "net8.0" ];
   executables = [ "git-credential-manager" ];
 
-  runtimeDeps = [ fontconfig ]
-    ++ lib.optionals withGuiSupport [ libX11 libICE libSM ]
+  runtimeDeps =
+    lib.optionals withGuiSupport [ libX11 libICE libSM ]
     ++ lib.optional withLibsecretSupport libsecret;
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath ([ git ] ++ lib.optionals withGpgSupport [ gnupg pass ])}"

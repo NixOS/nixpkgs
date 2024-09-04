@@ -4,7 +4,6 @@
 , dotnet-runtime_8
 , buildDotnetModule
 , fetchFromGitHub
-, fontconfig
 , xorg
 , libglvnd
 , makeDesktopItem
@@ -34,7 +33,7 @@ buildDotnetModule rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ stdenv.cc.cc.lib fontconfig ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   postInstall = ''
     rm -rf $out/lib/${lib.toLower pname}/runtimes/{*musl*,win*}

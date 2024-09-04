@@ -32,7 +32,6 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     dbus
-    fontconfig
     libICE
     libSM
     libX11

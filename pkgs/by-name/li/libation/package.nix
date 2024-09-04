@@ -13,7 +13,6 @@
   libXcursor,
   libXext,
   libXrandr,
-  fontconfig,
   glew,
   gtk3,
 }:
@@ -55,7 +54,6 @@ buildDotnetModule rec {
     libXcursor
     libXext
     libXrandr
-    fontconfig
     glew
     # For file dialogs
     gtk3

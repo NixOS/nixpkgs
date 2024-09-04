@@ -5,7 +5,6 @@
   dotnetCorePackages,
   zlib,
   icu,
-  fontconfig,
   openssl,
   libX11,
   libICE,
@@ -36,7 +35,6 @@ buildDotnetModule rec {
   runtimeDeps = [
     zlib
     icu
-    fontconfig
     openssl
     libX11
     libICE

@@ -4,7 +4,6 @@
 , copyDesktopItems
 , makeDesktopItem
 , lib
-, fontconfig
 , libX11
 , libXcursor
 , libICE
@@ -44,7 +43,6 @@ buildDotnetModule {
   ];
 
   runtimeDeps = [
-    fontconfig
     libX11
     libICE
     libXcursor

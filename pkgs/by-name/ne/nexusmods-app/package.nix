@@ -63,7 +63,6 @@ buildDotnetModule (finalAttrs: {
   runtimeInputs = [ desktop-file-utils ];
 
   runtimeDeps = [
-    fontconfig
     libICE
     libSM
     libX11
