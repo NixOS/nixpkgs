@@ -11,6 +11,7 @@
   openssl,
   darwin,
   libiconv,
+  buildPackages,
   nix-update-script,
   testers,
   jujutsu,
@@ -64,15 +65,19 @@ rustPlatform.buildRustPackage {
     LIBSSH2_SYS_USE_PKG_CONFIG = "1";
   };
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    $out/bin/jj util mangen > ./jj.1
-    installManPage ./jj.1
+  postInstall =
+    let
+      jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      ${jj} util mangen > ./jj.1
+      installManPage ./jj.1
 
-    installShellCompletion --cmd jj \
-      --bash <($out/bin/jj util completion bash) \
-      --fish <($out/bin/jj util completion fish) \
-      --zsh <($out/bin/jj util completion zsh)
-  '';
+      installShellCompletion --cmd jj \
+        --bash <(${jj} util completion bash) \
+        --fish <(${jj} util completion fish) \
+        --zsh <(${jj} util completion zsh)
+    '';
 
   checkFlags = [
     # signing tests spin up an ssh-agent and do git checkouts
