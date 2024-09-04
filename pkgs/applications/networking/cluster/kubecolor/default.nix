@@ -15,6 +15,10 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
+  subPackages = [
+    "."
+  ];
+
   meta = with lib; {
     description = "Colorizes kubectl output";
     mainProgram = "kubecolor";
