@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   python3,
+  docutils,
   bzip2,
   zlib,
   darwin,
@@ -25,8 +26,11 @@ let
       strictDeps = true;
 
       outputs = [
+        "bin"
         "out"
         "dev"
+        "doc"
+        "man"
       ];
 
       src = fetchurl {
@@ -36,7 +40,11 @@ let
 
       inherit patches;
 
-      nativeBuildInputs = [ python3 ];
+      nativeBuildInputs = [
+        python3
+        docutils
+      ];
+
       buildInputs =
         [
           bzip2
@@ -59,10 +67,14 @@ let
       botanConfigureFlags =
         [
           "--prefix=${placeholder "out"}"
+          "--bindir=${placeholder "bin"}/bin"
+          "--docdir=${placeholder "doc"}/share/doc"
+          "--mandir=${placeholder "man"}/share/man"
           "--no-install-python-module"
           "--build-targets=${lib.concatStringsSep "," finalAttrs.buildTargets}"
           "--with-bzip2"
           "--with-zlib"
+          "--with-rst2man"
         ]
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
