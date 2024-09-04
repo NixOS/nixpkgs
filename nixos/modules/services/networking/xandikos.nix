@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.xandikos;
 in
@@ -9,12 +6,12 @@ in
 
   options = {
     services.xandikos = {
-      enable = mkEnableOption "Xandikos CalDAV and CardDAV server";
+      enable = lib.mkEnableOption "Xandikos CalDAV and CardDAV server";
 
-      package = mkPackageOption pkgs "xandikos" { };
+      package = lib.mkPackageOption pkgs "xandikos" { };
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = ''
           The IP address on which Xandikos will listen.
@@ -22,14 +19,14 @@ in
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8080;
         description = "The port of the Xandikos web application";
       };
 
-      routePrefix = mkOption {
-        type = types.str;
+      routePrefix = lib.mkOption {
+        type = lib.types.str;
         default = "/";
         description = ''
           Path to Xandikos.
@@ -37,10 +34,10 @@ in
         '';
       };
 
-      extraOptions = mkOption {
+      extraOptions = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
-        example = literalExpression ''
+        type = lib.types.listOf lib.types.str;
+        example = lib.literalExpression ''
           [ "--autocreate"
             "--defaults"
             "--current-user-principal user"
@@ -52,24 +49,24 @@ in
         '';
       };
 
-      nginx = mkOption {
+      nginx = lib.mkOption {
         default = {};
         description = ''
           Configuration for nginx reverse proxy.
         '';
 
-        type = types.submodule {
+        type = lib.types.submodule {
           options = {
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Configure the nginx reverse proxy settings.
               '';
             };
 
-            hostName = mkOption {
-              type = types.str;
+            hostName = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 The hostname use to setup the virtualhost configuration
               '';
@@ -82,8 +79,8 @@ in
 
   };
 
-  config = mkIf cfg.enable (
-    mkMerge [
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
       {
         meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
@@ -127,7 +124,7 @@ in
       }
 
       (
-        mkIf cfg.nginx.enable {
+        lib.mkIf cfg.nginx.enable {
           services.nginx = {
             enable = true;
             virtualHosts."${cfg.nginx.hostName}" = {

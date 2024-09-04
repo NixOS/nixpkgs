@@ -1,15 +1,12 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 {
   options = {
     services.v2raya = {
-      enable = options.mkEnableOption "the v2rayA service";
+      enable = lib.mkEnableOption "the v2rayA service";
     };
   };
 
-  config = mkIf config.services.v2raya.enable {
+  config = lib.mkIf config.services.v2raya.enable {
     environment.systemPackages = [ pkgs.v2raya ];
 
     systemd.services.v2raya =
@@ -17,7 +14,7 @@ with lib;
         nftablesEnabled = config.networking.nftables.enable;
         iptablesServices = [
           "iptables.service"
-        ] ++ optional config.networking.enableIPv6 "ip6tables.service";
+        ] ++ lib.optional config.networking.enableIPv6 "ip6tables.service";
         tableServices = if nftablesEnabled then [ "nftables.service" ] else iptablesServices;
       in
       {
@@ -33,7 +30,7 @@ with lib;
 
         serviceConfig = {
           User = "root";
-          ExecStart = "${getExe pkgs.v2raya} --log-disable-timestamp";
+          ExecStart = "${lib.getExe pkgs.v2raya} --log-disable-timestamp";
           Environment = [ "V2RAYA_LOG_FILE=/var/log/v2raya/v2raya.log" ];
           LimitNPROC = 500;
           LimitNOFILE = 1000000;
@@ -46,5 +43,5 @@ with lib;
       };
   };
 
-  meta.maintainers = with maintainers; [ elliot ];
+  meta.maintainers = with lib.maintainers; [ elliot ];
 }

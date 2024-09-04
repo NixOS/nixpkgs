@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.xinetd;
@@ -16,7 +13,7 @@ let
         ${cfg.extraDefaults}
       }
 
-      ${concatMapStrings makeService cfg.services}
+      ${lib.concatMapStrings makeService cfg.services}
     '';
 
   makeService = srv:
@@ -24,14 +21,14 @@ let
       service ${srv.name}
       {
         protocol    = ${srv.protocol}
-        ${optionalString srv.unlisted "type        = UNLISTED"}
-        ${optionalString (srv.flags != "") "flags = ${srv.flags}"}
+        ${lib.optionalString srv.unlisted "type        = UNLISTED"}
+        ${lib.optionalString (srv.flags != "") "flags = ${srv.flags}"}
         socket_type = ${if srv.protocol == "udp" then "dgram" else "stream"}
-        ${optionalString (srv.port != 0) "port        = ${toString srv.port}"}
+        ${lib.optionalString (srv.port != 0) "port        = ${toString srv.port}"}
         wait        = ${if srv.protocol == "udp" then "yes" else "no"}
         user        = ${srv.user}
         server      = ${srv.server}
-        ${optionalString (srv.serverArgs != "") "server_args = ${srv.serverArgs}"}
+        ${lib.optionalString (srv.serverArgs != "") "server_args = ${srv.serverArgs}"}
         ${srv.extraConfig}
       }
     '';
@@ -44,71 +41,71 @@ in
 
   options = {
 
-    services.xinetd.enable = mkEnableOption "the xinetd super-server daemon";
+    services.xinetd.enable = lib.mkEnableOption "the xinetd super-server daemon";
 
-    services.xinetd.extraDefaults = mkOption {
+    services.xinetd.extraDefaults = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Additional configuration lines added to the default section of xinetd's configuration.
       '';
     };
 
-    services.xinetd.services = mkOption {
+    services.xinetd.services = lib.mkOption {
       default = [];
       description = ''
         A list of services provided by xinetd.
       '';
 
-      type = with types; listOf (submodule ({
+      type = with lib.types; listOf (submodule ({
 
         options = {
 
-          name = mkOption {
-            type = types.str;
+          name = lib.mkOption {
+            type = lib.types.str;
             example = "login";
             description = "Name of the service.";
           };
 
-          protocol = mkOption {
-            type = types.str;
+          protocol = lib.mkOption {
+            type = lib.types.str;
             default = "tcp";
             description = "Protocol of the service.  Usually `tcp` or `udp`.";
           };
 
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 0;
             example = 123;
             description = "Port number of the service.";
           };
 
-          user = mkOption {
-            type = types.str;
+          user = lib.mkOption {
+            type = lib.types.str;
             default = "nobody";
             description = "User account for the service";
           };
 
-          server = mkOption {
-            type = types.str;
+          server = lib.mkOption {
+            type = lib.types.str;
             example = "/foo/bin/ftpd";
             description = "Path of the program that implements the service.";
           };
 
-          serverArgs = mkOption {
-            type = types.separatedString " ";
+          serverArgs = lib.mkOption {
+            type = lib.types.separatedString " ";
             default = "";
             description = "Command-line arguments for the server program.";
           };
 
-          flags = mkOption {
-            type = types.str;
+          flags = lib.mkOption {
+            type = lib.types.str;
             default = "";
             description = "";
           };
 
-          unlisted = mkOption {
-            type = types.bool;
+          unlisted = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Whether this server is listed in
@@ -117,8 +114,8 @@ in
             '';
           };
 
-          extraConfig = mkOption {
-            type = types.lines;
+          extraConfig = lib.mkOption {
+            type = lib.types.lines;
             default = "";
             description = "Extra configuration-lines added to the section of the service.";
           };
@@ -134,7 +131,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.xinetd = {
       description = "xinetd server";
       after = [ "network.target" ];

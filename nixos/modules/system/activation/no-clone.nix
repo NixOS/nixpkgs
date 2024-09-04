@@ -1,8 +1,5 @@
 { lib, ... }:
-
-with lib;
-
 {
-  boot.loader.grub.device = mkOverride 0 "nodev";
-  specialisation = mkOverride 0 {};
+  boot.loader.grub.device = lib.mkOverride 0 "nodev";
+  specialisation = lib.mkOverride 0 {};
 }

@@ -1,21 +1,18 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.manticore;
   format = pkgs.formats.json { };
 
   toSphinx = {
-    mkKeyValue    ? mkKeyValueDefault {} "=",
+    mkKeyValue    ? lib.mkKeyValueDefault {} "=",
     listsAsDuplicateKeys ? true
   }: attrsOfAttrs:
     let
         # map function to string for each key val
         mapAttrsToStringsSep = sep: mapFn: attrs:
-          concatStringsSep sep
-            (mapAttrsToList mapFn attrs);
+          lib.concatStringsSep sep
+            (lib.mapAttrsToList mapFn attrs);
         mkSection = sectName: sectValues: ''
           ${sectName} {
         '' + lib.generators.toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues + ''}'';
@@ -34,9 +31,9 @@ in {
   options = {
     services.manticore = {
 
-      enable = mkEnableOption "Manticoresearch";
+      enable = lib.mkEnableOption "Manticoresearch";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = {
           searchd = {
             listen = [
@@ -55,10 +52,10 @@ in {
           <https://manual.manticoresearch.com/Server%20settings>
           for more information.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = format.type;
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             searchd = {
                 listen = [
@@ -78,7 +75,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd = {
       packages = [ pkgs.manticoresearch ];

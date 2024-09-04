@@ -1,28 +1,25 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.dex;
   fixClient = client: if client ? secretFile then ((builtins.removeAttrs client [ "secretFile" ]) // { secret = client.secretFile; }) else client;
-  filteredSettings = mapAttrs (n: v: if n == "staticClients" then (builtins.map fixClient v) else v) cfg.settings;
-  secretFiles = flatten (builtins.map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or []));
+  filteredSettings = lib.mapAttrs (n: v: if n == "staticClients" then (builtins.map fixClient v) else v) cfg.settings;
+  secretFiles = lib.flatten (builtins.map (c: lib.optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or []));
 
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "config.yaml" filteredSettings;
 
   startPreScript = pkgs.writeShellScript "dex-start-pre"
-    (concatStringsSep "\n" (map (file: ''
+    (lib.concatStringsSep "\n" (map (file: ''
       replace-secret '${file}' '${file}' /run/dex/config.yaml
     '')
     secretFiles));
 in
 {
   options.services.dex = {
-    enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
+    enable = lib.mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Environment file (see `systemd.exec(5)`
@@ -31,10 +28,10 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           # External url
           issuer = "http://127.0.0.1:5556/dex";
@@ -66,11 +63,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.dex = {
       description = "dex identity provider";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
+      after = [ "networking.target" ] ++ (lib.optional (cfg.settings.storage.type == "postgres") "postgresql.service");
       path = with pkgs; [ replace-secret ];
       serviceConfig = {
         ExecStart = "${pkgs.dex-oidc}/bin/dex serve /run/dex/config.yaml";
@@ -90,7 +87,7 @@ in
           "-/etc/resolv.conf"
           "-/etc/ssl/certs/ca-certificates.crt"
         ];
-        BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
+        BindPaths = lib.optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
@@ -121,7 +118,7 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
         UMask = "0066";
-      } // optionalAttrs (cfg.environmentFile != null) {
+      } // lib.optionalAttrs (cfg.environmentFile != null) {
         EnvironmentFile = cfg.environmentFile;
       };
     };

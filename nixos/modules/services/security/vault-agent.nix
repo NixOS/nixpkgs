@@ -1,53 +1,50 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   format = pkgs.formats.json { };
-  commonOptions = { pkgName, flavour ? pkgName }: mkOption {
+  commonOptions = { pkgName, flavour ? pkgName }: lib.mkOption {
     default = { };
     description = ''
       Attribute set of ${flavour} instances.
       Creates independent `${flavour}-''${name}.service` systemd units for each instance defined here.
     '';
-    type = with types; attrsOf (submodule ({ name, ... }: {
+    type = with lib.types; attrsOf (submodule ({ name, ... }: {
       options = {
-        enable = mkEnableOption "this ${flavour} instance" // { default = true; };
+        enable = lib.mkEnableOption "this ${flavour} instance" // { default = true; };
 
-        package = mkPackageOption pkgs pkgName { };
+        package = lib.mkPackageOption pkgs pkgName { };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "root";
           description = ''
             User under which this instance runs.
           '';
         };
 
-        group = mkOption {
-          type = types.str;
+        group = lib.mkOption {
+          type = lib.types.str;
           default = "root";
           description = ''
             Group under which this instance runs.
           '';
         };
 
-        settings = mkOption {
-          type = types.submodule {
+        settings = lib.mkOption {
+          type = lib.types.submodule {
             freeformType = format.type;
 
             options = {
-              pid_file = mkOption {
+              pid_file = lib.mkOption {
                 default = "/run/${flavour}/${name}.pid";
-                type = types.str;
+                type = lib.types.str;
                 description = ''
                   Path to use for the pid file.
                 '';
               };
 
-              template = mkOption {
+              template = lib.mkOption {
                 default = [ ];
-                type = with types; listOf (attrsOf anything);
+                type = with lib.types; listOf (attrsOf anything);
                 description =
                   let upstreamDocs =
                     if flavour == "vault-agent"
@@ -86,7 +83,7 @@ let
     let
       configFile = format.generate "${name}.json" instance.settings;
     in
-    mkIf (instance.enable) {
+    lib.mkIf (instance.enable) {
       description = "${flavour} daemon - ${name}";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -97,7 +94,7 @@ let
         User = instance.user;
         Group = instance.group;
         RuntimeDirectory = flavour;
-        ExecStart = "${getExe instance.package} ${optionalString ((getName instance.package) == "vault") "agent"} -config ${configFile}";
+        ExecStart = "${lib.getExe instance.package} ${lib.optionalString ((lib.getName instance.package) == "vault") "agent"} -config ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";
@@ -111,16 +108,15 @@ in
     services.vault-agent.instances = commonOptions { pkgName = "vault"; flavour = "vault-agent"; };
   };
 
-  config = mkMerge (map
+  config = lib.mkMerge (map
     (flavour:
       let cfg = config.services.${flavour}; in
-      mkIf (cfg.instances != { }) {
-        systemd.services = mapAttrs'
-          (name: instance: nameValuePair "${flavour}-${name}" (createAgentInstance { inherit name instance flavour; }))
+      lib.mkIf (cfg.instances != { }) {
+        systemd.services = lib.mapAttrs'
+          (name: instance: lib.nameValuePair "${flavour}-${name}" (createAgentInstance { inherit name instance flavour; }))
           cfg.instances;
       })
     [ "consul-template" "vault-agent" ]);
 
-  meta.maintainers = with maintainers; [ emilylange tcheronneau ];
+  meta.maintainers = with lib.maintainers; [ emilylange tcheronneau ];
 }
-

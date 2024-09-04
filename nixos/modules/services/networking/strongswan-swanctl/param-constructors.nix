@@ -38,17 +38,14 @@
 # value -> string but a function from a value to an attribute set:
 # { "${name}" = string }. This allows parameters to change the attribute
 # name like in the previous example.
-
 lib :
-
-with lib;
 with (import ./param-lib.nix lib);
 
 rec {
   mkParamOfType = type : strongswanDefault : description : {
     _type = "param";
-    option = mkOption {
-      type = types.nullOr type;
+    option = lib.mkOption {
+      type = lib.types.nullOr type;
       default = null;
       description = documentDefault description strongswanDefault;
     };
@@ -66,12 +63,12 @@ rec {
 
   single = f: name: value: { ${name} = f value; };
 
-  mkStrParam         = mkParamOfType types.str;
+  mkStrParam         = mkParamOfType lib.types.str;
   mkOptionalStrParam = mkStrParam null;
 
-  mkEnumParam = values : mkParamOfType (types.enum values);
+  mkEnumParam = values : mkParamOfType (lib.types.enum values);
 
-  mkIntParam         = mkParamOfType types.int;
+  mkIntParam         = mkParamOfType lib.types.int;
   mkOptionalIntParam = mkIntParam null;
 
   # We should have floats in Nix...
@@ -87,8 +84,8 @@ rec {
 
   mkYesNoParam = strongswanDefault : description : {
     _type = "param";
-    option = mkOption {
-      type = types.nullOr types.bool;
+    option = lib.mkOption {
+      type = lib.types.nullOr lib.types.bool;
       default = null;
       description = documentDefault description strongswanDefault;
     };
@@ -102,62 +99,62 @@ rec {
 
   mkSepListParam = sep : strongswanDefault : description : {
     _type = "param";
-    option = mkOption {
-      type = types.nullOr (types.listOf types.str);
+    option = lib.mkOption {
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       default = null;
       description = documentDefault description strongswanDefault;
     };
-    render = single (value: concatStringsSep sep value);
+    render = single (value: lib.concatStringsSep sep value);
   };
 
   mkAttrsOfParams = params :
-    mkAttrsOf params (types.submodule {options = paramsToOptions params;});
+    mkAttrsOf params (lib.types.submodule {options = paramsToOptions params;});
 
   mkAttrsOfParam = param :
     mkAttrsOf param param.option.type;
 
   mkAttrsOf = param : option : description : {
     _type = "param";
-    option = mkOption {
-      type = types.attrsOf option;
+    option = lib.mkOption {
+      type = lib.types.attrsOf option;
       default = {};
       description = description;
     };
     render = single (attrs:
       (paramsToRenderedStrings attrs
-        (mapAttrs (_n: _v: param) attrs)));
+        (lib.mapAttrs (_n: _v: param) attrs)));
   };
 
   mkPrefixedAttrsOfParams = params :
-    mkPrefixedAttrsOf params (types.submodule {options = paramsToOptions params;});
+    mkPrefixedAttrsOf params (lib.types.submodule {options = paramsToOptions params;});
 
   mkPrefixedAttrsOfParam = param :
     mkPrefixedAttrsOf param param.option.type;
 
   mkPrefixedAttrsOf = p : option : description : {
     _type = "param";
-    option = mkOption {
-      type = types.attrsOf option;
+    option = lib.mkOption {
+      type = lib.types.attrsOf option;
       default = {};
       description = description;
     };
     render = prefix: attrs:
-      let prefixedAttrs = mapAttrs' (name: nameValuePair "${prefix}-${name}") attrs;
+      let prefixedAttrs = lib.mapAttrs' (name: lib.nameValuePair "${prefix}-${name}") attrs;
       in paramsToRenderedStrings prefixedAttrs
-           (mapAttrs (_n: _v: p) prefixedAttrs);
+           (lib.mapAttrs (_n: _v: p) prefixedAttrs);
   };
 
   mkPostfixedAttrsOfParams = params : description : {
     _type = "param";
-    option = mkOption {
-      type = types.attrsOf (types.submodule {options = paramsToOptions params;});
+    option = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule {options = paramsToOptions params;});
       default = {};
       description = description;
     };
     render = postfix: attrs:
-      let postfixedAttrs = mapAttrs' (name: nameValuePair "${name}-${postfix}") attrs;
+      let postfixedAttrs = lib.mapAttrs' (name: lib.nameValuePair "${name}-${postfix}") attrs;
       in paramsToRenderedStrings postfixedAttrs
-           (mapAttrs (_n: _v: params) postfixedAttrs);
+           (lib.mapAttrs (_n: _v: params) postfixedAttrs);
   };
 
 }

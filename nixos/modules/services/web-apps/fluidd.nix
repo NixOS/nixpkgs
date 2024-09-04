@@ -1,26 +1,25 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.fluidd;
   moonraker = config.services.moonraker;
 in
 {
   options.services.fluidd = {
-    enable = mkEnableOption "Fluidd, a Klipper web interface for managing your 3d printer";
+    enable = lib.mkEnableOption "Fluidd, a Klipper web interface for managing your 3d printer";
 
-    package = mkPackageOption pkgs "fluidd" { };
+    package = lib.mkPackageOption pkgs "fluidd" { };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "Hostname to serve fluidd on";
     };
 
-    nginx = mkOption {
-      type = types.submodule
+    nginx = lib.mkOption {
+      type = lib.types.submodule
         (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           serverAliases = [ "fluidd.''${config.networking.domain}" ];
         }
@@ -29,14 +28,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nginx = {
       enable = true;
       upstreams.fluidd-apiserver.servers."${moonraker.address}:${toString moonraker.port}" = { };
-      virtualHosts."${cfg.hostName}" = mkMerge [
+      virtualHosts."${cfg.hostName}" = lib.mkMerge [
         cfg.nginx
         {
-          root = mkForce "${cfg.package}/share/fluidd/htdocs";
+          root = lib.mkForce "${cfg.package}/share/fluidd/htdocs";
           locations = {
             "/" = {
               index = "index.html";
