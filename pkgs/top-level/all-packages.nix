@@ -22944,6 +22944,7 @@ with pkgs;
   glanceclient = with python311Packages; toPythonApplication python-glanceclient;
   heatclient = with python311Packages; toPythonApplication python-heatclient;
   ironicclient = with python311Packages; toPythonApplication python-ironicclient;
+  magnumclient = with python311Packages; toPythonApplication python-magnumclient;
   manilaclient = with python311Packages; toPythonApplication python-manilaclient;
   mistralclient = with python311Packages; toPythonApplication python-mistralclient;
   swiftclient = with python311Packages; toPythonApplication python-swiftclient;

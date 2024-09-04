@@ -12641,6 +12641,8 @@ self: super: with self; {
 
   python-magic = callPackage ../development/python-modules/python-magic { };
 
+  python-magnumclient = callPackage ../development/python-modules/python-magnumclient { };
+
   python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
