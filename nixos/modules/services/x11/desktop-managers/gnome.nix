@@ -357,6 +357,8 @@ in
         isSystem = true;
       };
 
+      services.orca.enable = notExcluded pkgs.orca;
+
       fonts.packages = with pkgs; [
         cantarell-fonts
         dejavu_fonts
@@ -380,7 +382,6 @@ in
             pkgs.gnome-shell-extensions
             pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
             pkgs.gnome-user-docs
-            pkgs.orca
             pkgs.glib # for gsettings program
             pkgs.gnome-menus
             pkgs.gtk3.out # for gtk-launch program
