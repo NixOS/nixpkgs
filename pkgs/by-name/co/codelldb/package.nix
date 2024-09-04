@@ -43,8 +43,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ unzip ];
 
   src = fetchurl {
-    url = binary.url;
-    sha256 = binary.sha256;
+    inherit (binary) url sha256;
   };
 
   unpackPhase = ''
