@@ -12483,6 +12483,15 @@
     githubId = 85435692;
     name = "Maxwell Berg";
   };
+  mahalel = {
+    email = "andrei@maha.nz";
+    github = "mahalel";
+    githubId = 12105276;
+    name = "Maha";
+    keys = [{
+      fingerprint = "4BDC EA50 A03B EE12 4B93  A4BC 9693 04C6 F060 A724";
+    }];
+  };
   mahe = {
     email = "matthias.mh.herrmann@gmail.com";
     github = "2chilled";
