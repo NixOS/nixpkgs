@@ -1,11 +1,26 @@
-{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
-, libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
-, openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
-, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
-, libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
+{ lib
+, alsa-lib
+, audiofile
+, config
 , darwin
+, fetchpatch
+, fetchurl
+, libGL
+, libGLU
+, libICE
+, libXext
+, libXrandr
+, libcap
+, libiconv
+, libpulseaudio
+, pkg-config
+, stdenv
+# Boolean flags
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
+, openglSupport ? libGLSupported
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 }:
 
 # NOTE: When editing this expression see if the same change applies to
