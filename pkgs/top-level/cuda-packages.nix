@@ -82,6 +82,9 @@ let
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
 
     writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
+    cmake-cuda-tests = builtins.import ../development/cuda-modules/cmake-cuda-tests {
+      inherit (final) callPackage lib;
+    };
   });
 
   mkVersionedPackageName =

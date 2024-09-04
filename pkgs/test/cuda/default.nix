@@ -24,13 +24,15 @@
   cudaPackages_12_1,
   cudaPackages_12_2,
   cudaPackages_12_3,
+  cudaPackages_12_4,
   cudaPackages_12,
 }@args:
 
 let
   isTest =
     name: package:
-    builtins.elem (package.pname or null) [
+    name == "cmake-cuda-tests"
+    || builtins.elem (package.pname or null) [
       "cuda-samples"
       "cuda-library-samples"
       "saxpy"
