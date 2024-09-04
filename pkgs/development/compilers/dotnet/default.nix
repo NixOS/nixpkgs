@@ -51,6 +51,9 @@ makeScopeWithSplicing' {
       patchNupkgs = callPackage ./patch-nupkgs.nix {};
       nugetPackageHook = callPackage ./nuget-package-hook.nix {};
 
+      mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
+      mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
+
       dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0.sdk_8_0_1xx; });
       dotnet_9 = recurseIntoAttrs (callPackage ./9 {});
     } // lib.optionalAttrs config.allowAliases {
