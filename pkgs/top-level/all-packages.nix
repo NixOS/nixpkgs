@@ -19489,13 +19489,10 @@ with pkgs;
 
   bosh-cli = callPackage ../applications/networking/cluster/bosh-cli { };
 
-  botan2 = callPackage ../development/libraries/botan/2.0.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
-
-  botan3 = callPackage ../development/libraries/botan/3.0.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  inherit (callPackages ../development/libraries/botan { })
+    botan2
+    botan3
+    ;
 
   box2d = callPackage ../development/libraries/box2d {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
