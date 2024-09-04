@@ -176,5 +176,6 @@ buildPythonPackage rec {
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
