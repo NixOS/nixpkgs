@@ -37,7 +37,6 @@ let
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional stdenv.isDarwin Cocoa;
-  rpath = lib.makeLibraryPath extraPropagatedBuildInputs;
 in
 
 stdenv.mkDerivation rec {
@@ -129,7 +128,9 @@ stdenv.mkDerivation rec {
   '';
 
   # See the same place in the expression for SDL2
-  postFixup = ''
+  postFixup = let
+    rpath = lib.makeLibraryPath extraPropagatedBuildInputs;
+  in ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
         patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
