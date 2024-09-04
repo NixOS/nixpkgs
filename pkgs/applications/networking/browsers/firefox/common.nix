@@ -237,7 +237,7 @@ buildStdenv.mkDerivation {
   patches = lib.optionals (lib.versionAtLeast version "111") [ ./env_var_for_system_dir-ff111.patch ]
   ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
   ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
-  ++ lib.optionals (lib.versionOlder version "128" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
+  ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
       name = "cbindgen-0.27.0-compat.patch";
