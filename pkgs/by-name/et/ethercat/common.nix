@@ -5,19 +5,32 @@
   gitUpdater,
   autoreconfHook,
   pkg-config,
+  withDocs ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
   version = "1.6.2";
 
-  src = fetchFromGitLab {
-    owner = "etherlab.org";
-    repo = "ethercat";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-NgRyvNvHy04jr7ieOscBYULRdWJ7YuHbuYbRrSfXYRU=";
-    fetchSubmodules = true;
-    leaveDotGit = true;
-  };
+  src = fetchFromGitLab (
+    {
+      owner = "etherlab.org";
+      repo = "ethercat";
+      rev = "refs/tags/${finalAttrs.version}";
+
+    }
+    // (
+      if withDocs then
+        {
+          hash = "sha256-b04T33eYmlCkLE+bVdYkUGtNaQDUZ+xlDdXM2w3Me3k=";
+          fetchSubmodules = true;
+          leaveDotGit = true;
+        }
+      else
+        {
+          hash = "sha256-NgRyvNvHy04jr7ieOscBYULRdWJ7YuHbuYbRrSfXYRU=";
+        }
+    )
+  );
 
   configureFlags = [
     # Features
