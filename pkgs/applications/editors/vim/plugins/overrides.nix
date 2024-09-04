@@ -662,6 +662,30 @@
     '';
   };
 
+  ddc-filter-matcher_head = super.ddc-filter-matcher_head.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-source-lsp = super.ddc-source-lsp.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-vim = super.ddc-vim.overrideAttrs {
+    dependencies = with self; [ denops-vim ];
+  };
+
+  ddc-filter-sorter_rank = super.ddc-filter-sorter_rank.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-ui-native = super.ddc-ui-native.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-ui-pum = super.ddc-ui-pum.overrideAttrs {
+    dependencies = with self; [ ddc-vim pum-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };
