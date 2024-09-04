@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     export mandir=/share/man
   '';
 
+  enableParallelBuilding = true;
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
