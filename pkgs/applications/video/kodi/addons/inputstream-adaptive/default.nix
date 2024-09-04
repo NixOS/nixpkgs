@@ -31,7 +31,6 @@ buildKodiBinaryAddon rec {
   extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
 
   extraInstallPhase = let n = namespace; in ''
-    ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
     ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so
   '';
 
