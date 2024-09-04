@@ -1,64 +1,107 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  runCommand,
-  shaka-packager,
+  fetchFromGitHub,
+  testers,
+  cmake,
+  ninja,
+  python3,
+  nix-update-script,
+  abseil-cpp,
+  curl,
+  gtest,
+  nlohmann_json,
+  libpng,
+  libxml2,
+  libwebm,
+  mbedtls,
+  mimalloc,
+  protobuf,
+  zlib,
 }:
 
-let
-  sources = {
-    "x86_64-linux" = {
-      filename = "packager-linux-x64";
-      hash = "sha256-MoMX6PEtvPmloXJwRpnC2lHlT+tozsV4dmbCqweyyI0=";
-    };
-    aarch64-linux = {
-      filename = "packager-linux-arm64";
-      hash = "sha256-6+7SfnwVRsqFwI7/1F7yqVtkJVIoOFUmhoGU3P6gdQ0=";
-    };
-    x86_64-darwin = {
-      filename = "packager-osx-x64";
-      hash = "sha256-fFBtOp/Zb37LP7TWAEB0yp0xM88cMT9QS59EwW4MrAY=";
-    };
-  };
-
-  source =
-    sources."${stdenv.hostPlatform.system}"
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "2.6.1";
+  version = "3.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/shaka-project/shaka-packager/releases/download/v${finalAttrs.version}/${source.filename}";
-    inherit (source) hash;
+  src = fetchFromGitHub {
+    owner = "shaka-project";
+    repo = "shaka-packager";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-L10IMsc4dTMa5zwYq612F4J+uKOmEEChY8k/m09wuNE=";
   };
 
-  dontUnpack = true;
-  sourceRoot = ".";
+  patches = [
+    # By default, the git commit hash and tag are used as version
+    # and shaka-packager fails to build if these are not available.
+    # This patch makes it possible to pass an external value as version.
+    # The value itself is declared further below in `cmakeFlags`.
+    ./0001-Allow-external-declaration-of-packager-version.patch
+    # Dependencies are vendored as git submodules inside shaka-packager.
+    # We want to reuse the dependencies from nixpkgs instead to avoid unnecessary
+    # build overhead and to ensure they are up to date.
+    # This patch disables the vendored dependencies (by excluding `third-party`),
+    # finds them inside the build environment and aliases them so they can be accessed
+    # without prefixing namespaces.
+    # The last step is necessary to keep the patch size to a minimum, otherwise we'd have
+    # to add the namespace identifiers everywhere a dependency is used.
+    ./0002-Unvendor-dependencies.patch
+    # As nixpkgs ships with a newer version of libcurl than the one vendored in shaka-packager,
+    # we have to fix one deprecation.
+    # See https://curl.se/libcurl/c/CURLOPT_PUT.html for further information.
+    ./0003-Fix-curl-deprecations.patch
+  ];
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-    install -m755 -D $src $out/bin/packager
+  buildInputs = [
+    python3
+    abseil-cpp
+    curl
+    gtest
+    nlohmann_json
+    libpng
+    libxml2
+    libwebm
+    mbedtls
+    mimalloc
+    (protobuf.override {
+      # must be the same version as for shaka-packager
+      inherit abseil-cpp;
+    })
+    zlib
+  ];
 
-    runHook postInstall
-  '';
+  cmakeFlags = [
+    "-DPACKAGER_VERSION=v${finalAttrs.version}-nixpkgs"
+    # Targets are selected below in ninjaFlags
+    "-DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON"
+  ];
 
-  passthru.tests = {
-    simple = runCommand "${finalAttrs.pname}-test" { } ''
-      ${shaka-packager}/bin/packager -version | grep ${finalAttrs.version} > $out
-    '';
+  ninjaFlags = [
+    "mpd_generator"
+    "packager"
+    "pssh_box_py"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}-nixpkgs-release";
+    };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Media packaging framework for VOD and Live DASH and HLS applications";
     homepage = "https://shaka-project.github.io/shaka-packager/html/";
-    license = lib.licenses.bsd3;
+    changelog = "https://github.com/shaka-project/shaka-packager/releases/tag/v${finalAttrs.version}";
+    license = licenses.bsd3;
     mainProgram = "packager";
-    maintainers = [ ];
-    platforms = builtins.attrNames sources;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ niklaskorz ];
+    platforms = platforms.all;
   };
 })

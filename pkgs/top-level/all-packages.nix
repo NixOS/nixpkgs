@@ -31337,7 +31337,9 @@ with pkgs;
 
   mpvScripts = mpv-unwrapped.scripts;
 
-  shaka-packager = callPackage ../applications/video/shaka-packager { };
+  shaka-packager = callPackage ../applications/video/shaka-packager {
+    abseil-cpp = abseil-cpp_202401;
+  };
 
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
