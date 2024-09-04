@@ -380,7 +380,6 @@ in
       xdg.portal.extraPortals = [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
       xdg.portal.configPackages = mkDefault [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
       # xdg-desktop-portal-kde expects PipeWire to be running.
-      # This does not, by default, replace PulseAudio.
       services.pipewire.enable = mkDefault true;
 
       # Update the start menu for each user that is currently logged in
@@ -476,7 +475,7 @@ in
         {
           # The user interface breaks without pulse
           assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
-          message = "Plasma Mobile requires pulseaudio.";
+          message = "Plasma Mobile requires a Pulseaudio compatible sound server.";
         }
       ];
 
@@ -512,7 +511,6 @@ in
 
       # The following services are needed or the UI is broken.
       hardware.bluetooth.enable = true;
-      hardware.pulseaudio.enable = true;
       networking.networkmanager.enable = true;
       # Required for autorotate
       hardware.sensor.iio.enable = lib.mkDefault true;
