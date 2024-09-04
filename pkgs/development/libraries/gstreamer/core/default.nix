@@ -15,8 +15,11 @@
 , lib
 , Cocoa
 , CoreServices
-, rustc
 , testers
+, rustc
+, withRust ?
+    lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms &&
+    lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms
 , gobject-introspection
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
@@ -63,11 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     glib
     bash-completion
-    rustc
   ] ++ lib.optionals stdenv.isLinux [
     libcap # for setcap binary
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
+  ] ++ lib.optionals withRust [
+    rustc
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
@@ -92,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "ptp-helper" withRust)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "libunwind" withLibunwind)
