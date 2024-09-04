@@ -13,8 +13,6 @@ in
 
 {
   imports = [
-    ../virtualisation/qemu-vm.nix
-
     # Avoid a dependency on stateVersion
     {
       disabledModules = [

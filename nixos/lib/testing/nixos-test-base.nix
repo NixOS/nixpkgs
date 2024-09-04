@@ -7,8 +7,8 @@ let
 in
 {
   imports = [
-    ../../modules/virtualisation/qemu-vm.nix
     ../../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
+    { key = "qemu-guest"; virtualisation.qemuGuest.enable = true; }
     { key = "no-manual"; documentation.nixos.enable = false; }
     {
       key = "no-revision";
@@ -22,6 +22,5 @@ in
         label = mkForce "test";
       };
     }
-
   ];
 }

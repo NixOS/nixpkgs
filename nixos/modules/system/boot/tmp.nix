@@ -47,7 +47,7 @@ in
   };
 
   config = {
-    # When changing remember to update /tmp mount in virtualisation/qemu-vm.nix
+    # When changing remember to update /tmp mount in virtualisation/qemu-guest.nix
     systemd.mounts = mkIf cfg.useTmpfs [
       {
         what = "tmpfs";

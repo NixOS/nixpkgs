@@ -78,13 +78,14 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       configFile = hostname: pkgs.writeText "configuration.nix" ''
         { lib, modulesPath, ... }: {
           imports = [
-            (modulesPath + "/virtualisation/qemu-vm.nix")
             (modulesPath + "/testing/test-instrumentation.nix")
             (modulesPath + "/../tests/common/user-account.nix")
             (lib.modules.importJSON ./target-configuration.json)
             (lib.modules.importJSON ./target-network.json)
             ./hardware-configuration.nix
           ];
+
+          virtualisation.qemuGuest.enable = true;
 
           boot.loader.grub = {
             enable = true;
