@@ -469,6 +469,8 @@ mapAliases ({
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysmart-smartx = pysmart; # added 2021-10-22
   pySmartDL = pysmartdl; # added 2023-10-11
+  pysmi-lextudio = pysmi; # added 2024-07-18
+  pysnmp-lextudio = pysnmp; # added 2024-07-18
   pysparse = throw "pysparse has been abandoned upstream."; # added 2023-02-28
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   PyStemmer = pystemmer; # added 2023-02-19
@@ -508,6 +510,7 @@ mapAliases ({
   pyuavcan = throw "pyuavcan has been renamed to pycyphal and the old package deprecated, use pycyphal instead"; # added 2024-02-09
   pyutilib = throw "pyutilib has been removed, since it is no longer maintained"; # added 2024-07-28
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
+  pyvicare = pyvicare-neo; # added 2024-08-31
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
