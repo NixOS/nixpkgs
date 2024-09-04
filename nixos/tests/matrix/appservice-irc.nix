@@ -75,13 +75,16 @@ import ../make-test-python.nix ({ pkgs, ... }:
             homeserver.url = homeserverUrl;
             homeserver.domain = "homeserver";
 
-            ircService.servers."ircd" = {
-              name = "IRCd";
-              port = 6667;
-              dynamicChannels = {
-                enabled = true;
-                aliasTemplate = "#irc_$CHANNEL";
+            ircService = {
+              servers."ircd" = {
+                name = "IRCd";
+                port = 6667;
+                dynamicChannels = {
+                  enabled = true;
+                  aliasTemplate = "#irc_$CHANNEL";
+                };
               };
+              mediaProxy.publicUrl = "http://localhost:11111/media";
             };
           };
         };
@@ -203,6 +206,8 @@ import ../make-test-python.nix ({ pkgs, ... }:
       with subtest("start the appservice"):
           appservice.wait_for_unit("matrix-appservice-irc.service")
           appservice.wait_for_open_port(8009)
+          appservice.wait_for_file("/var/lib/matrix-appservice-irc/media-signingkey.jwk")
+          appservice.wait_for_open_port(11111)
 
       with subtest("copy the registration file"):
           appservice.copy_from_vm("/var/lib/matrix-appservice-irc/registration.yml")
