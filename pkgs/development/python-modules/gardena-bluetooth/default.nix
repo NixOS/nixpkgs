@@ -26,9 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-H2v96G/mu17puq8jNyk6L9iuWUvRombPd+s6byNQ4Zw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     tzlocal
