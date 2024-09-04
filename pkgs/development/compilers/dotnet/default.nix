@@ -53,6 +53,7 @@ makeScopeWithSplicing' {
 
       mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
       mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
+      fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
 
       dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0.sdk_8_0_1xx; });
       dotnet_9 = recurseIntoAttrs (callPackage ./9 {});
