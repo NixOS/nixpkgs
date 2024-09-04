@@ -23454,8 +23454,6 @@ with pkgs;
     libGLU = null;
   });
 
-  SDL_compat = callPackage ../development/libraries/SDL_compat { };
-
   SDL = SDL_classic;
 
   SDL2 = callPackage ../development/libraries/SDL2 {
