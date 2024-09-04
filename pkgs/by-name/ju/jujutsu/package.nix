@@ -66,6 +66,8 @@ rustPlatform.buildRustPackage {
     openssh
   ];
 
+  useNextest = true;
+
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
