@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchzip
+, fetchurl
+, patchelf
 , wrapGAppsHook3
 , cairo
 , dbus
@@ -18,25 +20,38 @@
 , libglvnd
 , libuuid
 , libxcb
+, harfbuzz        # libWebView.so
+, libsoup_3       # libWebView.so
+, webkitgtk_4_1   # libWebView.so
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.0.11";
+  version = "1.0.42";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-GQeYR232zoHLIt1AzznD7rp6u4zMiAdj1+0OfXfT6AQ=";
+    hash = "sha256-CwWJ5hntnfE9/xBNlV5yCp/Ndd0xj7rQHVopwKLAgSU=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    (patchelf.overrideAttrs (old: {
+      version = "0.11";
+      src = fetchurl {
+        url = "https://nixos.org/releases/patchelf/patchelf-0.11/patchelf-0.11.tar.bz2";
+        sha256 = "16ms3ijcihb88j3x6cl8cbvhia72afmfcphczb9cfwr0gbc22chx";
+      };
+    }))
+  ];
 
   sourceRoot = ".";
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
@@ -65,6 +80,9 @@ preFixup = let
       libglvnd
       libuuid
       libxcb
+      harfbuzz
+      libsoup_3
+      webkitgtk_4_1
       stdenv.cc.cc.lib
     ];
   in ''
