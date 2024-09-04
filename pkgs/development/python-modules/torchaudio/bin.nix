@@ -1,22 +1,28 @@
 {
   lib,
   stdenv,
-  addDriverRunpath,
-  autoPatchelfHook,
   buildPythonPackage,
-  cudaPackages,
+  python,
   fetchurl,
+  pythonOlder,
+  pythonAtLeast,
+
+  # buildInputs
+  cudaPackages,
   ffmpeg_6,
   sox,
-  pythonAtLeast,
-  pythonOlder,
-  python,
+
+  # nativeBuildInputs
+  addDriverRunpath,
+  autoPatchelfHook,
+
+  # dependencies
   torch-bin,
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.4.0";
+  version = "2.4.1";
   format = "wheel";
 
   src =
