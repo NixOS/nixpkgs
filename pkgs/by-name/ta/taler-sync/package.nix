@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "sync";
+  pname = "taler-sync";
   version = "0.13.1";
 
   src = fetchgit {
