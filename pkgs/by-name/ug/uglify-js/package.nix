@@ -54,6 +54,7 @@ buildNpmPackage rec {
 
   meta = {
     homepage = "https://github.com/mishoo/UglifyJS";
+    changelog = "https://github.com/mishoo/UglifyJS/releases/tag/v" + version;
     description = "JavaScript parser / mangler / compressor / beautifier toolkit";
     mainProgram = "uglifyjs";
     license = lib.licenses.bsd2;
