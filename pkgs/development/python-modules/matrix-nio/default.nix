@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.24.0";
-  format = "pyproject";
+  version = "0.25.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
-    rev = version;
-    hash = "sha256-XlswVHLvKOi1qr+I7Mbm4IBjn1DG7glgDsNY48NA5Ew=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wk1UjnazBdK4BCWXRG5Bn9Rasrk+yy3qqideS8tEAk8=";
   };
 
   patches = [
@@ -82,6 +82,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "aiofiles"
     "aiohttp-socks" # Pending matrix-nio/matrix-nio#516
   ];
 
