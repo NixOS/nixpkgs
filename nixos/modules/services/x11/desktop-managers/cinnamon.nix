@@ -172,7 +172,6 @@ in
       ] ++ utils.removePackagesByName [
         # accessibility
         onboard
-        orca
 
         # theme
         sound-theme-freedesktop
@@ -198,6 +197,8 @@ in
           buildPortalsInGnome = false;
         })
       ];
+
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
 
       xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
 
