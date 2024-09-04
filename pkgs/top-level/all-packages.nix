@@ -22592,6 +22592,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks)
       AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate;
     pythonPackages = python3Packages;
+    # TODO(@connorbaker): OpenCV 4.9 only supports up to CUDA 12.3.
+    cudaPackages = cudaPackages_12_3;
   };
 
   opencv4WithoutCuda = opencv4.override {
