@@ -21,7 +21,7 @@ buildGoModule rec {
   };
   web = fetchurl {
     url = "https://github.com/${src.owner}/${src.repo}/releases/download/v${version}/artalk_ui.tar.gz";
-    hash = "sha256-3Rg5mCFigLkZ+X8Fxe6A16THd9j6hcTYMEAKU1SrLMw=";
+    hash = "sha256-Cx3fDpnl52kwILzH9BBLfsWe5qEbIl/ecJd1wJEB/Hc=";
   };
 
   CGO_ENABLED = 1;
