@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
   let
     homeserverUrl = "http://homeserver:8008";
   in
@@ -9,7 +9,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
     };
 
     nodes = {
-      homeserver = { pkgs, ... }: {
+      homeserver = {
         # We'll switch to this once the config is copied into place
         specialisation.running.configuration = {
           services.matrix-synapse = {
@@ -46,7 +46,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      ircd = { pkgs, ... }: {
+      ircd = {
         services.ngircd = {
           enable = true;
           config = ''
@@ -227,4 +227,4 @@ import ../make-test-python.nix ({ pkgs, ... }:
       with subtest("ensure messages can be exchanged"):
           client.succeed("do_test ${homeserverUrl} >&2")
     '';
-  })
+  }
