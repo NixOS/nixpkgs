@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   mkpasswd,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,6 +33,18 @@ rustPlatform.buildRustPackage rec {
   '';
 
   stripAllList = [ "bin" ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        userborn
+        userborn-mutable-users
+        userborn-mutable-etc
+        userborn-immutable-users
+        userborn-immutable-etc
+        ;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/nikstur/userborn";
