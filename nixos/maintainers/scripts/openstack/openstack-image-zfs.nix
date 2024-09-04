@@ -41,7 +41,7 @@ in
 
     ramMB = mkOption {
       type = types.int;
-      default = 1024;
+      default = (3 * 1024);
       description = "RAM allocation for build VM";
     };
 
