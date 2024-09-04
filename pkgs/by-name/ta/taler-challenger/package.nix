@@ -20,7 +20,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "challenger";
+  pname = "taler-challenger";
   version = "0.13.0";
 
   src = fetchgit {
