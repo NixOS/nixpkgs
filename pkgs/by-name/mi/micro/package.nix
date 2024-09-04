@@ -63,6 +63,7 @@ let
         inherit callPackage;
         directory = ./tests;
       };
+      wrapper = callPackage ./wrapper.nix { micro = self; };
     };
 
     meta = {
