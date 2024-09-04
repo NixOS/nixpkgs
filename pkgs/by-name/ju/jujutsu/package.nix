@@ -11,6 +11,9 @@
   openssl,
   darwin,
   libiconv,
+  git,
+  gnupg,
+  openssh,
   buildPackages,
   nix-update-script,
   testers,
@@ -38,7 +41,6 @@ rustPlatform.buildRustPackage {
     "--bin"
     "jj"
   ]; # don't install the fake editors
-  useNextest = false; # nextest is the upstream integration framework, but is problematic for test skipping
 
   nativeBuildInputs = [
     installShellFiles
@@ -57,6 +59,12 @@ rustPlatform.buildRustPackage {
       darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
+
+  nativeCheckInputs = [
+    git
+    gnupg
+    openssh
+  ];
 
   env = {
     # Disable vendored libraries.
@@ -78,11 +86,6 @@ rustPlatform.buildRustPackage {
         --fish <(${jj} util completion fish) \
         --zsh <(${jj} util completion zsh)
     '';
-
-  checkFlags = [
-    # signing tests spin up an ssh-agent and do git checkouts
-    "--skip=test_ssh_signing"
-  ];
 
   passthru = {
     updateScript = nix-update-script { };
