@@ -15,8 +15,15 @@
 
     systemd.services.auditd = {
       description = "Linux Audit daemon";
-      wantedBy = [ "basic.target" ];
-      before = [ "shutdown.target" ];
+      wantedBy = [ "sysinit.target" ];
+      after = [
+        "local-fs.target"
+        "systemd-tmpfiles-setup.service"
+      ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
       conflicts = [ "shutdown.target" ];
 
       unitConfig = {
