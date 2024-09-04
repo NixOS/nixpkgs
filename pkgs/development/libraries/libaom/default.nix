@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-XQ1sekNZDUAiYP/HriYRj4+40PAvE/OiyG9bbrdg63I=";
+    hash = "sha256-7xtIT8zalh1XJfVKWeC/+jAkhOuFHw6Q0+c2YMtDark=";
     stripRoot = false;
   };
 
