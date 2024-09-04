@@ -13,6 +13,7 @@
 , rustPlatform
 , stdenv
 , wayland
+, wayland-scanner
 , xorg
 }:
 
@@ -54,6 +55,7 @@ rustPlatform.buildRustPackage rec {
     git
     pkg-config
     rustPlatform.bindgenHook
+    wayland-scanner
   ];
 
   buildInputs = [
