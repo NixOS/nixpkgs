@@ -15,14 +15,14 @@
 }:
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
+    hash = "sha256-8SnHHZSIaX4elQJPi832XGnntsS/+H38724PaTkQLhk=";
   };
 
   enableParallelBuilding = false;
