@@ -18,7 +18,7 @@ let
 
   platform = toGoPlatform stdenv.hostPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "go-${version}-${platform}-bootstrap";
 
   src = fetchurl {
@@ -36,4 +36,14 @@ stdenv.mkDerivation rec {
     ln -s $out/share/go/bin/go $out/bin/go
     runHook postInstall
   '';
+
+  meta = with lib; {
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
+    description = "The Go Programming language";
+    homepage = "https://go.dev/";
+    license = licenses.bsd3;
+    maintainers = teams.golang.members;
+    platforms = platforms.darwin ++ platforms.linux;
+  };
 }
