@@ -1,6 +1,10 @@
-{ config, lib, pkgs, ... }:
-
 with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.security.auditd.enable = mkEnableOption "the Linux Audit daemon";
