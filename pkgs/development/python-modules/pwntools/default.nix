@@ -26,10 +26,35 @@
   unix-ar,
   zstandard,
   installShellFiles,
+  pkgsCross,
+  withAarch64 ? false,
+  withAvr ? false,
+  withAmd64 ? false,
+  withArm ? false,
+  withI386 ? false,
+  withM68k ? false,
+  withMsp430 ? false,
+  withPowerpc ? false,
+  withRiscv32 ? false,
+  withRiscv64 ? false,
+  withS390 ? false,
 }:
 
 let
   debuggerName = lib.strings.getName debugger;
+  binutilsList =
+    lib.optionals withAarch64 [ pkgsCross.aarch64-embedded.buildPackages.binutils ]
+    ++ lib.optionals withAvr [ pkgsCross.avr.buildPackages.binutils ]
+    ++ lib.optionals withAmd64 [ pkgsCross.x86_64-embedded.buildPackages.binutils ]
+    ++ lib.optionals withArm [ pkgsCross.armhf-embedded.buildPackages.binutils ]
+    ++ lib.optionals withI386 [ pkgsCross.i686-embedded.buildPackages.binutils ]
+    ++ lib.optionals withM68k [ pkgsCross.m68k.buildPackages.binutils ]
+    ++ lib.optionals withMsp430 [ pkgsCross.msp430.buildPackages.binutils-unwrapped ]
+    ++ lib.optionals withPowerpc [ pkgsCross.ppc-embedded.buildPackages.binutils ]
+    ++ lib.optionals withRiscv32 [ pkgsCross.riscv32-embedded.buildPackages.binutils ]
+    ++ lib.optionals withRiscv64 [ pkgsCross.riscv64-embedded.buildPackages.binutils ]
+    ++ lib.optionals withS390 [ pkgsCross.s390.buildPackages.binutils ];
+  binutilsPath = lib.makeBinPath binutilsList;
 in
 buildPythonPackage rec {
   pname = "pwntools";
@@ -45,6 +70,10 @@ buildPythonPackage rec {
     # Upstream hardcoded the check for the command `gdb-multiarch`;
     # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
+
+    # Make sure the binutils paths are searched by the assembler
+    substituteInPlace pwnlib/asm.py \
+      --replace "environ['PATH']" "(environ['PATH'] + os.pathsep + '${binutilsPath}').strip(os.pathsep)"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -74,7 +103,7 @@ buildPythonPackage rec {
     unicorn
     unix-ar
     zstandard
-  ];
+  ] ++ binutilsList;
 
   doCheck = false; # no setuptools tests for the package
 

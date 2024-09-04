@@ -38635,6 +38635,8 @@ with pkgs;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
 
+  pwntools-full = with python3Packages; toPythonApplication pwntools-full;
+
   putty = callPackage ../applications/networking/remote/putty {
     gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
   };
