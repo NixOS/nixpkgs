@@ -2161,10 +2161,6 @@ with pkgs;
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
-  gex = callPackage ../applications/version-management/gex {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   gfold = callPackage ../applications/version-management/gfold {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
