@@ -38,14 +38,13 @@ let
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional stdenv.isDarwin Cocoa;
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
+    url = "https://www.libsdl.org/release/SDL-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1tMWp5Pl40gVXw3ZO5eXmJM/uYqh7evMEIgp1kdKrQA=";
   };
 
   outputs = [ "out" "dev" ];
@@ -152,4 +151,4 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
     license     = licenses.lgpl21;
   };
-}
+})
