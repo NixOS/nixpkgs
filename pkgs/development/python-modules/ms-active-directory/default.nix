@@ -3,29 +3,42 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
+  fetchpatch,
   ldap3,
   pyasn1,
   pycryptodome,
   pythonOlder,
   pytz,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "ms-active-directory";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "1.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "zorn96";
     repo = "ms_active_directory";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+wfhtEGuC1R5jbEnWm4mDHIR096KKEcG/K8SuItwjGk=";
+    hash = "sha256-E0GzKkpQU9pJ1a1N0NZjB2Q99yMlJkzNR0QzyiUzOpg=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    # Fix introduced syntax errors, https://github.com/zorn96/ms_active_directory/pull/88
+    (fetchpatch {
+      name = "fix-syntax.patch";
+      url = "https://github.com/zorn96/ms_active_directory/pull/88/commits/35da06a224b9bff6d36ddbd2dee8fdedab7e17bc.patch";
+      hash = "sha256-0WGyr3Q4vcfFU72fox3/3AdHCmjzf6jGCGPx5vhhUvM=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     dnspython
     ldap3
     pyasn1
@@ -43,7 +56,7 @@ buildPythonPackage rec {
     description = "Python module for integrating with Microsoft Active Directory domains";
     homepage = "https://github.com/zorn96/ms_active_directory/";
     changelog = "https://github.com/zorn96/ms_active_directory/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -156,6 +156,17 @@ self: super: {
     })];
   }) super.ConfigFile;
 
+  # Compatibility with core libs of GHC 9.6
+  # Jailbreak to lift bound on time
+  kqueue = doJailbreak (appendPatches [
+    (pkgs.fetchpatch {
+      name = "kqueue-ghc-9.6.patch";
+      url = "https://github.com/hesselink/kqueue/pull/10/commits/a2735e807d761410e776482ec04515d9cf76a7f5.patch";
+      sha256 = "18rilz4nrwcmlvll3acjx2lp7s129pviggb8fy3hdb0z34ls5j84";
+      excludes = [ ".gitignore" ];
+    })
+  ] super.kqueue);
+
   # This runs into the following GHC bug currently affecting 9.6.* and 9.8.* as
   # well as 9.10.1: https://gitlab.haskell.org/ghc/ghc/-/issues/24432
   inherit (lib.mapAttrs (_: overrideCabal (drv: {

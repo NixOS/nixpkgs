@@ -6,6 +6,8 @@
   fetchFromGitHub,
   habluetooth,
   orjson,
+  pytest-asyncio,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
   yarl,
@@ -13,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "11.4.1";
+  version = "11.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioshelly";
     rev = "refs/tags/${version}";
-    hash = "sha256-qT5THlz1bd222NnY9EyJ9d0IX3CmXwUKvBntsl/yV90=";
+    hash = "sha256-aJA+iE8cyUPrL2n72N8/HI8//h0qR6k/hgD34vpwI+0=";
   };
 
   build-system = [ setuptools ];
@@ -35,8 +37,10 @@ buildPythonPackage rec {
     yarl
   ];
 
-  # Project has no test
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "aioshelly" ];
 

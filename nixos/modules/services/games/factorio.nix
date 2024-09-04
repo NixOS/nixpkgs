@@ -275,7 +275,7 @@ in
           "--create=${mkSavePath cfg.saveName}"
           (lib.optionalString (cfg.mods != []) "--mod-directory=${modDir}")
         ])
-        + (lib.optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.lib.escapeShellArg serverSettingsString}"
+        + (lib.optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.escapeShellArg serverSettingsString}"
           + " \"$(cat ${cfg.extraSettingsFile})\" | ${lib.getExe pkgs.jq} -s add"
           + " > ${stateDir}/server-settings.json"));
 

@@ -80,7 +80,7 @@ rec {
     '';
   };
 } // lib.mapAttrs (old: new: platform:
-  lib.warn "`rust.${old} platform` is deprecated. Use `platform.rust.${new}` instead."
+  lib.warn "`rust.${old} platform` is deprecated. Use `platform.rust.${lib.showAttrPath new}` instead."
     lib.getAttrFromPath new platform.rust)
 {
   toTargetArch = [ "platform" "arch" ];

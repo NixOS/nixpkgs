@@ -35,6 +35,8 @@ buildDotnetModule rec {
     sha256 = "1v8j9l2r9sz9s3jhakr3rc50hf6fbdr5cqdrjidjwvziykfckizk";
   };
 
+  enableParallelBuilding = false;
+
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
