@@ -14,16 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unl0kr";
-  version = "2.0.0";
+  version = "unl0kr-2.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
-    owner = "cherrypicker";
-    repo = "unl0kr";
+    owner = "postmarketOS";
+    repo = "buffybox";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-KPP4Ol1GCAWqdQYlNtKQD/jx8A/xuHdvKjcocPMqWa0=";
+    hash = "sha256-Q7Omunv7stL9zKDrdDRGc2wrh0wNUdrroAAwk/RPXfE=";
   };
+
+  # This should be migrated to the new branch ASAP. This has to be changed and stuff
 
   nativeBuildInputs = [
     meson
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Framebuffer-based disk unlocker for the initramfs based on LVGL";
     mainProgram = "unl0kr";
-    homepage = "https://gitlab.com/cherrypicker/unl0kr";
+    homepage = "https://gitlab.com/postmarketOS/buffybox";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tomfitzhenry ];
     platforms = platforms.linux;
