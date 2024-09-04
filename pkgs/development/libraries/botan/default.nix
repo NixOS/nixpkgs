@@ -53,6 +53,7 @@ let
       botanConfigureFlags =
         [
           "--prefix=${placeholder "out"}"
+          "--no-install-python-module"
           "--with-bzip2"
           "--with-zlib"
         ]
