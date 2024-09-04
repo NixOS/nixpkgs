@@ -2,7 +2,7 @@
 , extra-cmake-modules, kdoctools
 , qtscript, qtsvg, qtquickcontrols, qtwebengine
 , krunner, shared-mime-info, kparts, knewstuff
-, gpsd, perl, protobuf_21
+, gpsd, perl, protobuf
 }:
 
 mkDerivation {
@@ -15,7 +15,7 @@ mkDerivation {
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools perl ];
   propagatedBuildInputs = [
-    protobuf_21 qtscript qtsvg qtquickcontrols qtwebengine shared-mime-info krunner kparts
+    protobuf qtscript qtsvg qtquickcontrols qtwebengine shared-mime-info krunner kparts
     knewstuff gpsd
   ];
   preConfigure = ''
