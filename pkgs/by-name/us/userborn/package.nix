@@ -5,6 +5,7 @@
   makeBinaryWrapper,
   mkpasswd,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage rec {
   stripAllList = [ "bin" ];
 
   passthru = {
+    updateScript = nix-update-script { };
     tests = {
       inherit (nixosTests)
         userborn
