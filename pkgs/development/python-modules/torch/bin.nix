@@ -1,27 +1,34 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  autoAddDriverRunpath,
-  fetchurl,
   python,
-  pythonAtLeast,
+  buildPythonPackage,
   pythonOlder,
+  pythonAtLeast,
+  fetchurl,
+
+  # nativeBuildInputs
   addDriverRunpath,
-  callPackage,
-  cudaPackages,
-  future,
-  numpy,
+  autoAddDriverRunpath,
   autoPatchelfHook,
+
+  # buildInputs
+  cudaPackages,
+
+  # dependencies
+  filelock,
+  future,
+  jinja2,
+  networkx,
+  numpy,
   pyyaml,
   requests,
   setuptools,
-  typing-extensions,
   sympy,
-  jinja2,
-  networkx,
-  filelock,
+  typing-extensions,
   triton,
+
+  callPackage,
 }:
 
 let
@@ -44,8 +51,8 @@ buildPythonPackage {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addDriverRunpath
-    autoPatchelfHook
     autoAddDriverRunpath
+    autoPatchelfHook
   ];
 
   buildInputs = lib.optionals stdenv.isLinux (
@@ -77,16 +84,16 @@ buildPythonPackage {
   ];
 
   dependencies = [
+    filelock
     future
+    jinja2
+    networkx
     numpy
     pyyaml
     requests
     setuptools
-    typing-extensions
     sympy
-    jinja2
-    networkx
-    filelock
+    typing-extensions
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ triton ];
 
   postInstall = ''
