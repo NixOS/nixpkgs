@@ -18,13 +18,13 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "sync";
-  version = "0.11.0";
+  pname = "taler-sync";
+  version = "0.13.1";
 
   src = fetchgit {
     url = "https://git.taler.net/sync.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IGYc4Olbn9lVnN1THR2BXzllD1li/vhWwHg+1WU84YM=";
+    hash = "sha256-v5OQVpyTDWYGJrEbnOIDYu0nZlJcMN5AGunfn6G7s20=";
   };
 
   strictDeps = true;
