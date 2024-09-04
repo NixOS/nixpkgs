@@ -10,6 +10,7 @@
   fetchPypi,
   gn,
   pytestCheckHook,
+  cctools,
   xcodebuild,
   ApplicationServices,
   OpenGL,
@@ -53,11 +54,16 @@ buildPythonPackage rec {
           EOF
         '';
 
-  nativeBuildInputs = [
-    cython
-    ninja
-    setuptools-scm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  nativeBuildInputs =
+    [
+      cython
+      ninja
+      setuptools-scm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools.libtool
+      xcodebuild
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
