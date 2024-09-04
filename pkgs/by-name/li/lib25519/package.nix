@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs scripts-build
   '';
 
+  passthru.updateScript = ./update.sh;
+
   # NOTE: lib25519 uses a custom Python `./configure`: it does not expect standard
   # autoconfig --build --host etc. arguments: disable
   # Pass the hostPlatform string
