@@ -98,30 +98,25 @@ command at the python REPL will update the running driver based on the
 executable produced by the command provided.
 
 ```py
->>> rebuild("nix-build . -A nixosTests.login.driverInteractive", exe="./result/bin/nixos-test-driver")
+>>> rebuild("nix-build . -A nixosTests.login.driverInteractive")
 ```
 
-You can also specify the arguments at the command line when the driver is first
-launched. Then `rebuild()` can be called without arguments.
+By default the new `nixos-test-driver` executable is assumed to be located at
+the same place the running driver was launched from. This works when the
+`result/` symlink is updated to point at the new derivation output. If needed, the path
+can be overridden with the `exe` parameter to `rebuild()`.
+
+You can also specify the rebuild command at the command line when the driver is
+first launched. Then `rebuild()` can be called without arguments.
 
 ```ShellSession
 $ build_cmd="nix-build . -A nixosTests.login.driverInteractive"
-$ exe="./result/bin/nixos-test-driver"
 $ eval $build_cmd
-$ eval $exe --rebuild-cmd "$build_cmd" --rebuild-exe "$exe"
+$ ./result/bin/nixos-test-driver --rebuild-cmd "$build_cmd"
 >>> start_all()
 [test edited in another window]
 >>> rebuild()
 [new configurations deployed to VMs]
-```
-
-Or using the special `rebuildCmd` and `rebuildExe` environment variables:
-
-```ShellSession
-$ export rebuildCmd="nix-build . -A nixosTests.login.driverInteractive"
-$ export rebuildExe="./result/bin/nixos-test-driver"
-$ eval $rebuildCmd && eval $rebuildExe
->>> rebuild()
 ```
 
 ## Interactive-only test configuration {#sec-nixos-test-interactive-configuration}
