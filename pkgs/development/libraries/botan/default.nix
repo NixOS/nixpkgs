@@ -50,10 +50,17 @@ let
           ]
         );
 
+      buildTargets =
+        [ "cli" ]
+        ++ lib.optionals finalAttrs.doCheck [ "tests" ]
+        ++ lib.optionals static [ "static" ]
+        ++ lib.optionals (!static) [ "shared" ];
+
       botanConfigureFlags =
         [
           "--prefix=${placeholder "out"}"
           "--no-install-python-module"
+          "--build-targets=${lib.concatStringsSep "," finalAttrs.buildTargets}"
           "--with-bzip2"
           "--with-zlib"
         ]
@@ -62,10 +69,6 @@ let
         ]
         ++ lib.optionals stdenv.hostPlatform.isAarch64 [
           "--cpu=aarch64"
-        ]
-        ++ lib.optionals static [
-          "--enable-static-library"
-          "--disable-shared-library"
         ];
 
       configurePhase = ''
