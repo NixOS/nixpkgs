@@ -6,6 +6,7 @@
   pkg-config,
   libgit2,
   darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+  passthru.updateScript = nix-update-script { };
+
   buildInputs =
     [
       libgit2
@@ -29,10 +32,15 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
     ];
 
-  # force the libgit2-sys crate to use the system libgit2 library
-  LIBGIT2_NO_VENDOR = 1;
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
-  cargoHash = "sha256-HNz1wwn0eUhNR6ZLLPMse8LmAS4CzADx0ZR9gJgJQCg=";
+  cargoPatches = [
+    ./patch-libgit2.patch
+  ];
+
+  cargoHash = "sha256-GEQ4Zv14Dzo9mt1YIDmXEBHLPD6G0/O1ggmUTnSYD+k=";
 
   meta = with lib; {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
