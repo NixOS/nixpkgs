@@ -1,39 +1,39 @@
 { lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
 , SDL2
+, cmake
+, darwin
+, fetchFromGitHub
+, libGLU
 , libiconv
 , mesa
+, pkg-config
+, stdenv
+# Boolean flags
 , libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms
 , openglSupport ? libGLSupported
-, libGLU
-, darwin
 }:
 
 let
-  inherit (lib) optionals makeLibraryPath;
   inherit (darwin.apple_sdk.frameworks) Cocoa;
   inherit (darwin) autoSignDarwinBinariesHook;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_compat";
   version = "1.2.68";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
-    rev = "release-" + version;
+    rev = "release-" + finalAttrs.version;
     hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
-    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
   propagatedBuildInputs = [ SDL2 ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]
-    ++ optionals openglSupport [ libGLU ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]
+    ++ lib.optionals openglSupport [ libGLU ];
 
   enableParallelBuilding = true;
 
@@ -43,20 +43,20 @@ stdenv.mkDerivation rec {
     for lib in $out/lib/*${stdenv.hostPlatform.extensions.sharedLibrary}* ; do
       if [[ -L "$lib" ]]; then
         ${if stdenv.hostPlatform.isDarwin then ''
-          install_name_tool ${lib.strings.concatMapStrings (x: " -add_rpath ${makeLibraryPath [x]} ") propagatedBuildInputs} "$lib"
+          install_name_tool ${lib.strings.concatMapStrings (x: " -add_rpath ${lib.makeLibraryPath [x]} ") finalAttrs.propagatedBuildInputs} "$lib"
         '' else ''
-          patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
+          patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath finalAttrs.propagatedBuildInputs}" "$lib"
         ''}
       fi
     done
   '';
 
-  meta = with lib; {
-    description = "Cross-platform multimedia library - build SDL 1.2 applications against 2.0";
-    mainProgram = "sdl-config";
+  meta = {
     homepage = "https://www.libsdl.org/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    description = "Cross-platform multimedia library - build SDL 1.2 applications against 2.0";
+    license = lib.licenses.zlib;
+    mainProgram = "sdl-config";
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ peterhoeg ]);
+    platforms = lib.platforms.all;
   };
-}
+})
