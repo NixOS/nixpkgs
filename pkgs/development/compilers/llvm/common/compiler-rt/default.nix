@@ -38,7 +38,7 @@ let
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic && lib.versionAtLeast release_version "16";
-  inherit (stdenv.hostPlatform) isMusl isAarch64;
+  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
 
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
@@ -94,7 +94,7 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
   ] ++ lib.optionals (useLLVM && haveLibc) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=ON"
-  ] ++ lib.optionals (!haveLibc || bareMetal || isMusl || isDarwinStatic) [
+  ] ++ lib.optionals (!haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
   ] ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
     "-DCOMPILER_RT_BUILD_XRAY=OFF"

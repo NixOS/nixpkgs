@@ -325,6 +325,13 @@ rec {
     libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  # LLVM-based mingw-w64 for ARM
+  ucrtAarch64 = {
+    config = "aarch64-w64-mingw32";
+    libc = "ucrt";
+    useLLVM = true;
+  };
+
   # BSDs
 
   x86_64-freebsd = {
