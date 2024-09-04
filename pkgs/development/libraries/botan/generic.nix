@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
+{ lib, stdenv, fetchurl, python3, bzip2, zlib
 # Passed by version specific builders
 , baseVersion, revision, hash
 , sourceExtension ? "tar.xz"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit postPatch;
 
   nativeBuildInputs = [ python3 ];
-  buildInputs = [ bzip2 zlib gmp boost ]
+  buildInputs = [ bzip2 zlib ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   botanConfigureFlags = [
