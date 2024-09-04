@@ -38,9 +38,13 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip -nqd source $src
     chmod -R +rw source
     cd source
+
+    runHook postUnpack
   '';
 
   prePatch = ''
@@ -53,10 +57,14 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     dir=$out/share/nuget/packages/${lib.toLower pname}/${lib.toLower version}
     mkdir -p $dir
     cp -r . $dir
     echo {} > "$dir"/.nupkg.metadata
+
+    runHook postInstall
   '';
 
   preFixup = ''
