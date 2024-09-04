@@ -1,15 +1,21 @@
 {
   lib,
   stdenv,
+  python,
+  buildPythonPackage,
+  fetchurl,
+  pythonOlder,
+  pythonAtLeast,
+
+  # buildInputs
+  cudaPackages,
+
+  # nativeBuildInputs
   addDriverRunpath,
   autoPatchelfHook,
-  buildPythonPackage,
-  cudaPackages,
-  fetchurl,
-  pythonAtLeast,
-  pythonOlder,
+
+  # dependencies
   pillow,
-  python,
   torch-bin,
 }:
 
@@ -17,7 +23,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.19.0";
+  version = "0.19.1";
 in
 buildPythonPackage {
   inherit version;
@@ -40,8 +46,8 @@ buildPythonPackage {
     ];
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
-    autoPatchelfHook
     addDriverRunpath
+    autoPatchelfHook
   ];
 
   dependencies = [
