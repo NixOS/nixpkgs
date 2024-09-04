@@ -1,0 +1,38 @@
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index f8b834ac17...520e148428 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -39,23 +39,12 @@
+   add_compile_options(-D_GNU_SOURCE)
+ endif()
+ 
+-message(STATUS "Using in-tree miniupnpc")
+-set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
+-set(UPNPC_BUILD_TESTS FALSE CACHE BOOL "Disable miniupnp internal tests." FORCE)
+-add_subdirectory(miniupnp/miniupnpc)
+-set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
+-set_property(TARGET libminiupnpc-static PROPERTY POSITION_INDEPENDENT_CODE ON)
+-if(MSVC)
+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -wd4244 -wd4267")
+-elseif(NOT MSVC)
+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-undef -Wno-unused-result -Wno-unused-value")
+-endif()
+-if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+-	set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -D_NETBSD_SOURCE")
+-endif()
++include(FindPkgConfig)
++pkg_check_modules(MINIUPNPC REQUIRED IMPORTED_TARGET GLOBAL miniupnpc)
++get_target_property(MINIUPNPC_INCLUDE_DIR PkgConfig::MINIUPNPC INTERFACE_INCLUDE_DIRECTORIES)
++set_target_properties(PkgConfig::MINIUPNPC PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${MINIUPNPC_INCLUDE_DIR}/miniupnpc")
++set(UPNP_LIBRARIES PkgConfig::MINIUPNPC PARENT_SCOPE)
+ 
+-set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
+-
+ find_package(Unbound)
+ 
+ if(NOT UNBOUND_INCLUDE_DIR)
+@@ -72,4 +61,3 @@
+ add_subdirectory(db_drivers)
+ add_subdirectory(easylogging++)
+ add_subdirectory(qrcodegen)
+-add_subdirectory(randomx EXCLUDE_FROM_ALL)

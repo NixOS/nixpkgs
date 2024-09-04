@@ -1,0 +1,61 @@
+--- a/raylib/build.py	2024-05-18 18:36:26.911488056 +0200
++++ b/raylib/build.py	2024-05-18 18:40:04.770587090 +0200
+@@ -32,8 +32,8 @@
+     return subprocess.run(['pkg-config', '--exists', 'raylib'], text=True, stdout=subprocess.PIPE).returncode == 0
+ 
+ 
+-def get_the_include_path():
+-    return subprocess.run(['pkg-config', '--variable=includedir', 'raylib'], text=True,
++def get_the_include_path(libname):
++    return subprocess.run(['pkg-config', '--variable=includedir', libname], text=True,
+                           stdout=subprocess.PIPE).stdout.strip()
+ 
+ 
+@@ -106,9 +106,9 @@
+     if not check_raylib_installed():
+         raise Exception("ERROR: raylib not found by pkg-config.  Please install pkg-config and Raylib.")
+ 
+-    raylib_h = get_the_include_path() + "/raylib.h"
+-    rlgl_h = get_the_include_path() + "/rlgl.h"
+-    raymath_h = get_the_include_path() + "/raymath.h"
++    raylib_h = get_the_include_path("raylib") + "/raylib.h"
++    rlgl_h = get_the_include_path("raylib") + "/rlgl.h"
++    raymath_h = get_the_include_path("raylib") + "/raymath.h"
+ 
+     if not os.path.isfile(raylib_h):
+         raise Exception("ERROR: " + raylib_h + " not found.  Please install Raylib.")
+@@ -125,13 +125,13 @@
+     #include "raymath.h"
+     """
+ 
+-    glfw3_h = get_the_include_path() + "/GLFW/glfw3.h"
++    glfw3_h = get_the_include_path("glfw3") + "/GLFW/glfw3.h"
+     if check_header_exists(glfw3_h):
+         ffi_includes += """
+         #include "GLFW/glfw3.h"
+         """
+ 
+-    raygui_h = get_the_include_path() + "/raygui.h"
++    raygui_h = get_the_include_path("raygui") + "/raygui.h"
+     if check_header_exists(raygui_h):
+         ffi_includes += """
+         #define RAYGUI_IMPLEMENTATION
+@@ -139,7 +139,7 @@
+         #include "raygui.h"
+         """
+ 
+-    physac_h = get_the_include_path() + "/physac.h"
++    physac_h = get_the_include_path("physac") + "/physac.h"
+     if check_header_exists(physac_h):
+         ffi_includes += """
+         #define PHYSAC_IMPLEMENTATION
+@@ -172,7 +172,7 @@
+ 
+     ffibuilder.set_source("raylib._raylib_cffi",
+                           ffi_includes,
+-                          include_dirs=[get_the_include_path()],
++                          include_dirs=[get_the_include_path("libffi")],
+                           extra_link_args=extra_link_args,
+                           extra_compile_args=extra_compile_args,
+                           libraries=libraries)
+

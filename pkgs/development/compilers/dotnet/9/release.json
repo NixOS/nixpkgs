@@ -1,0 +1,10 @@
+{
+  "release": "9.0.0-preview.7",
+  "channel": "9.0",
+  "tag": "v9.0.0-preview.7.24405.7",
+  "sdkVersion": "9.0.100-preview.7.24407.1",
+  "runtimeVersion": "9.0.0-preview.7.24405.7",
+  "aspNetCoreVersion": "9.0.0-preview.7.24406.2",
+  "sourceRepository": "https://github.com/dotnet/dotnet",
+  "sourceVersion": "aecea31eada5f5506de2112d72b3bd238a5317b4"
+}

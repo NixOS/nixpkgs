@@ -1,0 +1,51 @@
+{
+  "attributes": [
+    "core"
+  ],
+  "isd_as": "42-ffaa:1:2",
+  "mtu": 1472,
+  "control_service": {
+    "cs": {
+      "addr": "127.0.0.1:31000"
+    }
+  },
+  "discovery_service": {
+    "cs": {
+      "addr": "127.0.0.1:31000"
+    }
+  },
+  "border_routers": {
+    "br": {
+      "internal_addr": "127.0.0.1:31002",
+      "interfaces": {
+        "1": {
+          "underlay": {
+            "public": "192.168.1.2:50012",
+            "remote": "192.168.1.1:50012"
+          },
+          "isd_as": "42-ffaa:1:1",
+          "link_to": "core",
+          "mtu": 1472
+        },
+        "2": {
+          "underlay": {
+            "public": "192.168.1.2:50023",
+            "remote": "192.168.1.3:50023"
+          },
+          "isd_as": "42-ffaa:1:3",
+          "link_to": "core",
+          "mtu": 1472
+        },
+        "3": {
+          "underlay": {
+            "public": "192.168.1.2:50025",
+            "remote": "192.168.1.5:50025"
+          },
+          "isd_as": "42-ffaa:1:5",
+          "link_to": "child",
+          "mtu": 1472
+        }
+      }
+    }
+  }
+}

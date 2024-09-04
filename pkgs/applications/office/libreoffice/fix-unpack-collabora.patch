@@ -1,0 +1,10 @@
+--- a/solenv/gbuild/UnpackedTarball.mk
++++ b/solenv/gbuild/UnpackedTarball.mk
+@@ -31,6 +31,7 @@ define gb_UnpackedTarget__command_unzip
+ unzip \
+ 	-qq \
+ 	-d $(UNPACKED_DIR) $(UNPACKED_TARBALL) \
++	&& chmod -R u+r $(UNPACKED_DIR) \
+ $(if $(filter-out 0,$(UNPACKED_STRIP_COMPONENTS)),\
+ 	&& UNZIP_DIR=`ls $(UNPACKED_DIR)` \
+ 	&& mv $(UNPACKED_DIR)/$$UNZIP_DIR/* $(UNPACKED_DIR) \

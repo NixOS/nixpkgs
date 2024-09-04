@@ -1,0 +1,65 @@
+{
+  llvmPackages,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  curl,
+  libxml2,
+  libffi,
+  xar,
+  versionCheckHook,
+}:
+
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
+  pname = "c3c";
+  version = "0.6.1";
+
+  src = fetchFromGitHub {
+    owner = "c3lang";
+    repo = "c3c";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-PKeQOVByNvhUq7QBhnNsl3LfR48MWhRC2rhiD58fVHY=";
+  };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
+  '';
+
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    llvmPackages.llvm
+    llvmPackages.lld
+    curl
+    libxml2
+    libffi
+  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [ xar ];
+
+  nativeCheckInputs = [ python3 ];
+
+  doCheck = llvmPackages.stdenv.system == "x86_64-linux";
+
+  checkPhase = ''
+    runHook preCheck
+    ( cd ../resources/testproject; ../../build/c3c build )
+    ( cd ../test; python src/tester.py ../build/c3c test_suite )
+    runHook postCheck
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = with lib; {
+    description = "Compiler for the C3 language";
+    homepage = "https://github.com/c3lang/c3c";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
+      luc65r
+      anas
+    ];
+    platforms = platforms.all;
+    mainProgram = "c3c";
+  };
+})

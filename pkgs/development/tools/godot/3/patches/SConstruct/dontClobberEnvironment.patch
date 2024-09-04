@@ -1,0 +1,20 @@
+diff --git a/SConstruct b/SConstruct
+index 057ec7628c..760be89fff 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -67,14 +67,7 @@ elif platform_arg == "javascript":
+ elif os.name == "nt" and methods.get_cmdline_bool("use_mingw", False):
+     custom_tools = ["mingw"]
+ 
+-# We let SCons build its default ENV as it includes OS-specific things which we don't
+-# want to have to pull in manually.
+-# Then we prepend PATH to make it take precedence, while preserving SCons' own entries.
+-env_base = Environment(tools=custom_tools)
+-env_base.PrependENVPath("PATH", os.getenv("PATH"))
+-env_base.PrependENVPath("PKG_CONFIG_PATH", os.getenv("PKG_CONFIG_PATH"))
+-if "TERM" in os.environ:  # Used for colored output.
+-    env_base["ENV"]["TERM"] = os.environ["TERM"]
++env_base = Environment(ENV = os.environ, tools=custom_tools)
+ 
+ env_base.disabled_modules = []
+ env_base.use_ptrcall = False

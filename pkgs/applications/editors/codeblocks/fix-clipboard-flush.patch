@@ -1,0 +1,24 @@
+diff --git a/src/src/app.cpp b/src/src/app.cpp
+index 81130fd..f98d37b 100644
+--- a/src/src/app.cpp
++++ b/src/src/app.cpp
+@@ -602,7 +602,8 @@ bool CodeBlocksApp::OnInit()
+     m_BatchWindowAutoClose = true;
+     m_pSingleInstance      = nullptr;
+ 
+-    wxTheClipboard->Flush();
++    if (wxTheClipboard->IsOpened())
++        wxTheClipboard->Flush();
+ 
+     wxCmdLineParser& parser = *Manager::GetCmdLineParser();
+     parser.SetDesc(cmdLineDesc);
+@@ -851,7 +852,8 @@ bool CodeBlocksApp::OnInit()
+ 
+ int CodeBlocksApp::OnExit()
+ {
+-    wxTheClipboard->Flush();
++    if (wxTheClipboard->IsOpened())
++        wxTheClipboard->Flush();
+ 
+     if (g_DDEServer) delete g_DDEServer;
+ 

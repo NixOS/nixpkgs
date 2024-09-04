@@ -1,0 +1,50 @@
+diff --git a/src/multimedia/darwin/qdarwinmediadevices.mm b/src/multimedia/darwin/qdarwinmediadevices.mm
+index b0a108935..881066928 100644
+--- a/src/multimedia/darwin/qdarwinmediadevices.mm
++++ b/src/multimedia/darwin/qdarwinmediadevices.mm
+@@ -42,7 +42,7 @@ static AudioDeviceID defaultAudioDevice(QAudioDevice::Mode mode)
+     const AudioObjectPropertyAddress propertyAddress = {
+         selector,
+         kAudioObjectPropertyScopeGlobal,
+-        kAudioObjectPropertyElementMain,
++        kAudioObjectPropertyElementMaster,
+     };
+ 
+     if (auto audioDevice = getAudioObject<AudioDeviceID>(kAudioObjectSystemObject, propertyAddress,
+@@ -77,7 +77,7 @@ static QList<QAudioDevice> availableAudioDevices(QAudioDevice::Mode mode)
+ 
+     const AudioObjectPropertyAddress audioDevicesPropertyAddress = {
+         kAudioHardwarePropertyDevices, kAudioObjectPropertyScopeGlobal,
+-        kAudioObjectPropertyElementMain
++        kAudioObjectPropertyElementMaster
+     };
+ 
+     if (auto audioDevices = getAudioData<AudioDeviceID>(
+@@ -130,11 +130,11 @@ static OSStatus audioDeviceChangeListener(AudioObjectID id, UInt32,
+ 
+ static constexpr AudioObjectPropertyAddress listenerAddresses[] = {
+     { kAudioHardwarePropertyDefaultInputDevice, kAudioObjectPropertyScopeGlobal,
+-      kAudioObjectPropertyElementMain },
++      kAudioObjectPropertyElementMaster },
+     { kAudioHardwarePropertyDefaultOutputDevice, kAudioObjectPropertyScopeGlobal,
+-      kAudioObjectPropertyElementMain },
++      kAudioObjectPropertyElementMaster },
+     { kAudioHardwarePropertyDevices, kAudioObjectPropertyScopeGlobal,
+-      kAudioObjectPropertyElementMain }
++      kAudioObjectPropertyElementMaster }
+ };
+ 
+ static void setAudioListeners(QDarwinMediaDevices &instance)
+diff --git a/src/multimedia/darwin/qmacosaudiodatautils_p.h b/src/multimedia/darwin/qmacosaudiodatautils_p.h
+index 8cc2f8440..5cd6fced2 100644
+--- a/src/multimedia/darwin/qmacosaudiodatautils_p.h
++++ b/src/multimedia/darwin/qmacosaudiodatautils_p.h
+@@ -44,7 +44,7 @@ void printUnableToReadWarning(const char *logName, AudioObjectID objectID, const
+ 
+ inline static AudioObjectPropertyAddress
+ makePropertyAddress(AudioObjectPropertySelector selector, QAudioDevice::Mode mode,
+-                    AudioObjectPropertyElement element = kAudioObjectPropertyElementMain)
++                    AudioObjectPropertyElement element = kAudioObjectPropertyElementMaster)
+ {
+     return { selector,
+              mode == QAudioDevice::Input ? kAudioDevicePropertyScopeInput

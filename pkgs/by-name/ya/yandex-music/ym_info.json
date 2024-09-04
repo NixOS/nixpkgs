@@ -1,0 +1,14 @@
+{
+  "ym": {
+    "version": "5.14.0",
+    "exe_name": "Yandex_Music_x64_5.14.0.exe",
+    "exe_link": "https://music-desktop-application.s3.yandex.net/stable/Yandex_Music_x64_5.14.0.exe",
+    "exe_sha256": "b7a0a974666e68b5ed324a72ca9f53dcbdb35271e2b48fe5adc6bc6c8876e03d"
+  },
+  "electron": {
+    "version": "29.4.6",
+    "x64": "https://github.com/electron/electron/releases/download/v29.4.6/electron-v29.4.6-linux-x64.zip",
+    "armv7l": "https://github.com/electron/electron/releases/download/v29.4.6/electron-v29.4.6-linux-armv7l.zip",
+    "arm64": "https://github.com/electron/electron/releases/download/v29.4.6/electron-v29.4.6-linux-arm64.zip"
+  }
+}

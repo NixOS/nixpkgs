@@ -1,0 +1,12 @@
+diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
+index 5481ce46031c..d50d9d547399 100644
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -231,6 +231,7 @@ def generate(
+                     "SELECTED_OP_LIST",
+                     "TORCH_CUDA_ARCH_LIST",
+                     "TRACING_BASED",
++                    "PYTHON_LIB_REL_PATH",
+                 )
+             }
+         )

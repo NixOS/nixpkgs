@@ -1,0 +1,31 @@
+diff --git a/CMakeModules/AFconfigure_deps_vars.cmake b/CMakeModules/AFconfigure_deps_vars.cmake
+index aac332f5a..e9e711159 100644
+--- a/CMakeModules/AFconfigure_deps_vars.cmake
++++ b/CMakeModules/AFconfigure_deps_vars.cmake
+@@ -94,7 +94,7 @@ macro(af_dep_check_and_populate dep_prefix)
+         URL            ${adcp_args_URI}
+         URL_HASH       ${adcp_args_REF}
+         DOWNLOAD_COMMAND \"\"
+-        UPDATE_DISCONNECTED ON
++        UPDATE_COMMAND \"\"
+         SOURCE_DIR     "${ArrayFire_SOURCE_DIR}/extern/${dep_prefix}-src"
+         BINARY_DIR     "${ArrayFire_BINARY_DIR}/extern/${dep_prefix}-build"
+         SUBBUILD_DIR   "${ArrayFire_BINARY_DIR}/extern/${dep_prefix}-subbuild"
+@@ -104,7 +104,7 @@ macro(af_dep_check_and_populate dep_prefix)
+         QUIET
+         URL            ${adcp_args_URI}
+         DOWNLOAD_COMMAND \"\"
+-        UPDATE_DISCONNECTED ON
++        UPDATE_COMMAND \"\"
+         SOURCE_DIR     "${ArrayFire_SOURCE_DIR}/extern/${dep_prefix}-src"
+         BINARY_DIR     "${ArrayFire_BINARY_DIR}/extern/${dep_prefix}-build"
+         SUBBUILD_DIR   "${ArrayFire_BINARY_DIR}/extern/${dep_prefix}-subbuild"
+@@ -116,7 +116,7 @@ macro(af_dep_check_and_populate dep_prefix)
+         GIT_REPOSITORY ${adcp_args_URI}
+         GIT_TAG        ${adcp_args_REF}
+         DOWNLOAD_COMMAND \"\"
+-        UPDATE_DISCONNECTED ON
++        UPDATE_COMMAND \"\"
+         SOURCE_DIR     "${ArrayFire_SOURCE_DIR}/extern/${dep_prefix}-src"
+         BINARY_DIR     "${ArrayFire_BINARY_DIR}/extern/${dep_prefix}-build"
+         SUBBUILD_DIR   "${ArrayFire_BINARY_DIR}/extern/${dep_prefix}-subbuild"

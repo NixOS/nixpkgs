@@ -1,0 +1,23 @@
+Allow BusyBox to be invoked as "<something>-busybox". This is
+necessary when it's run from the Nix store as <hash>-busybox during
+stdenv bootstrap.
+--- a/libbb/appletlib.c
++++ b/libbb/appletlib.c
+@@ -947,7 +947,7 @@ void FAST_FUNC run_applet_no_and_exit(int applet_no, const char *name, char **ar
+ static NORETURN void run_applet_and_exit(const char *name, char **argv)
+ {
+ #  if ENABLE_BUSYBOX
+-	if (is_prefixed_with(name, "busybox"))
++	if (strstr(name, "busybox") != 0)
+ 		exit(busybox_main(/*unused:*/ 0, argv));
+ #  endif
+ #  if NUM_APPLETS > 0
+@@ -1045,7 +1045,7 @@ int main(int argc UNUSED_PARAM, char **argv)
+
+ 	lbb_prepare("busybox" IF_FEATURE_INDIVIDUAL(, argv));
+ # if !ENABLE_BUSYBOX
+-	if (argv[1] && is_prefixed_with(bb_basename(argv[0]), "busybox"))
++	if (argv[1] && strstr(bb_basename(argv[0]), "busybox") != 0)
+ 		argv++;
+ # endif
+ 	applet_name = argv[0];

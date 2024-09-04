@@ -1,0 +1,14 @@
+diff --git a/ui/cocoa.m b/ui/cocoa.m
+index 25e0db9dd0..7ce889d798 100644
+--- a/ui/cocoa.m
++++ b/ui/cocoa.m
+@@ -539,9 +539,6 @@ - (NSSize)fixAspectRatio:(NSSize)max
+ - (NSSize) screenSafeAreaSize
+ {
+     NSSize size = [[[self window] screen] frame].size;
+-    NSEdgeInsets insets = [[[self window] screen] safeAreaInsets];
+-    size.width -= insets.left + insets.right;
+-    size.height -= insets.top + insets.bottom;
+     return size;
+ }
+ 

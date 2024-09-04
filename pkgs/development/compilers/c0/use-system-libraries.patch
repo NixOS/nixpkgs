@@ -1,0 +1,53 @@
+Use system libraries
+
+--- a/cc0/Makefile
++++ b/cc0/Makefile
+@@ -22,12 +22,12 @@ MLTON_BASIC = mlton $(MLTON_FLAGS) -verbose $(MLTON_VERB)  -output
+ MLTON_NATIVE := mlton -default-ann "redundantMatch error" -default-ann "sequenceNonUnit error"
+ MLTON_NATIVE += -link-opt "-lpthread -ldl -rdynamic" -cc-opt "-Iinclude" -default-ann "allowFFI true"
+ MLTON_NATIVE += -cc-opt "-I../externals/"
+-MLTON_NATIVE += -link-opt "../externals/readline/libreadline.a ../externals/readline/libhistory.a"
++MLTON_NATIVE += -link-opt "$(shell pkg-config readline --libs)"
+ MLTON_NATIVE += -link-opt "$(shell pkg-config libpng --libs)"
+ 
+ # libreadline dependencies
+ ifeq ($(PLATFORM),osx)
+-MLTON_NATIVE += -link-opt "-ltermcap"
++MLTON_NATIVE += -link-opt "-lncurses"
+ else
+ # (Assuming Linux)
+ MLTON_NATIVE += -link-opt "-ltinfo"
+@@ -122,9 +122,9 @@ endef
+ 
+ $(foreach rt,$(RUNTIMES),$(eval $(call runtime_template,$(rt))))
+ 
+-c0rt/$(call dllname,c0rt): gc libbacktrace
++c0rt/$(call dllname,c0rt):
+ 
+-unsafe/$(call dllname,unsafe): gc
++unsafe/$(call dllname,unsafe):
+ 
+ 
+ ### cc0 - the C0 compiler
+@@ -222,7 +222,6 @@ NATIVE_COIN    = $(NATIVE_CYMBOL) $(NATIVE_CALLING)
+ NATIVE_COIN += coin/c0readline.c
+ 
+ COIN_DEPS = $(CC0_DEPS) $(NATIVE_COIN) cymbol/cymbol*.cm cymbol/*.sml cymbol/*.mlb coin/coin*.cm coin/*.sml coin/*.sml
+-COIN_DEPS += readline
+ 
+ .PHONY: coin
+ coin: bin/coin
+--- a/cc0/lib.mk
++++ b/cc0/lib.mk
+@@ -15,9 +15,9 @@ TARGET = $(call dllname,$(LIBNAME))
+ endif
+ 
+ # These libs are handled specially by this file
+-NATIVELIBS = gc ncurses backtrace
++NATIVELIBS =
+ C0LIBS = $(filter-out $(NATIVELIBS),$(REQUIRES))
+-LIBS = -L$(abspath $(DEPTH)/lib) $(patsubst %,$(DEPTH)/lib/$(call dllname,%),$(C0LIBS))
++LIBS = -L$(abspath $(DEPTH)/lib)
+ LDFLAGS = 
+ 
+ # -fPIC is not supported on Windows and is not necessary there because we link statically
