@@ -4,8 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   rustPlatform,
-  Security,
-  SystemConfiguration,
+  darwin,
   pkg-config,
   libiconv,
   openssl,
@@ -55,8 +54,8 @@ rustPlatform.buildRustPackage rec {
       libssh2
     ]
     ++ lib.optionals stdenv.isDarwin [
-      Security
-      SystemConfiguration
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 
