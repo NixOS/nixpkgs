@@ -18,9 +18,13 @@
   jujutsu,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "jujutsu";
+let
   version = "0.21.0";
+in
+
+rustPlatform.buildRustPackage {
+  pname = "jujutsu";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "martinvonz";
