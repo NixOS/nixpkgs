@@ -878,9 +878,8 @@ with pkgs;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
 
-  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
-  inherit (dotnetCorePackages) mkNugetSource mkNugetDeps;
+  inherit (dotnetCorePackages) buildDotnetModule mkNugetSource mkNugetDeps;
 
   buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
 

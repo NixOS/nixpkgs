@@ -51,6 +51,7 @@ makeScopeWithSplicing' {
       patchNupkgs = callPackage ./patch-nupkgs.nix {};
       nugetPackageHook = callPackage ./nuget-package-hook.nix {};
 
+      buildDotnetModule = callPackage ../../../build-support/dotnet/build-dotnet-module { };
       mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
       mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
       fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
