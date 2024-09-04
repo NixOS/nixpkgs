@@ -50,6 +50,10 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image, and the layer created by `buildImage`).
   Otherwise, the resulting image with contain the single layer created by `buildImage`.
 
+  :::{.note}
+  Only **Env** configuration is inherited from the base image.
+  :::
+
   _Default value:_ `null`.
 
 `fromImageName` (String or Null; _optional_)
