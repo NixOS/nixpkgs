@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unl0kr";
-  version = "unl0kr-2.0.3";
+  version = "2.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
