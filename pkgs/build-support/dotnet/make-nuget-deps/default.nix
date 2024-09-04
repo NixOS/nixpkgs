@@ -39,8 +39,9 @@ lib.makeOverridable(
           ];
 
           unpackPhase = ''
-            unzip -nq $src
-            chmod -R +rw .
+            unzip -nqd source $src
+            chmod -R +rw source
+            cd source
           '';
 
           prePatch = ''
