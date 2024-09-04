@@ -68,6 +68,14 @@ rustPlatform.buildRustPackage {
 
   useNextest = true;
 
+  cargoTestFlags = [
+    # Don’t build the `gen-protos` build tool when running tests.
+    "-p"
+    "jj-lib"
+    "-p"
+    "jj-cli"
+  ];
+
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
