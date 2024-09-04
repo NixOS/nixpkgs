@@ -23,7 +23,7 @@ let
     "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
-    "19.1.0-rc3".officialRelease.sha256 = "sha256-SRonSpXt1pH6Xk+rQZk9mrfMdvYIvOImwUfMUu3sBgs=";
+    "19.1.0-rc4".officialRelease.sha256 = "sha256-OdhObJWQo/QS+TOAX1b9nUeDP1fq2G9m81njiKXCuqY=";
     "20.0.0-git".gitRelease = {
       rev = "837ee5b46a5f7f898f0de7e46a19600b896a0a1f";
       rev-version = "20.0.0-unstable-2024-09-01";
