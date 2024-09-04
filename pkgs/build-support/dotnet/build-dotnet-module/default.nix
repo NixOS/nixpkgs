@@ -18,10 +18,7 @@ let
   transformArgs =
     finalAttrs:
     {
-      name ? "${args.pname}-${args.version}",
-      pname ? name,
       enableParallelBuilding ? true,
-      doCheck ? false,
       # Flags to pass to `makeWrapper`. This is done to avoid double wrapping.
       makeWrapperArgs ? [ ],
 
@@ -118,7 +115,7 @@ let
             nugetDeps
           else
             mkNugetDeps {
-              inherit name;
+              inherit (finalAttrs.finalPackage) name;
               sourceFile = nugetDeps;
             }
         else
@@ -130,7 +127,21 @@ let
     in
     # Not all args need to be passed through to mkDerivation
     # TODO: We should probably filter out even more attrs
-    removeAttrs args [ "nugetDeps" ]
+    removeAttrs args [
+      "nugetDeps"
+      "installPath"
+      "executables"
+      "projectFile"
+      "projectReferences"
+      "runtimeDeps"
+      "runtimeId"
+      "disabledTests"
+      "testProjectFile"
+      "buildType"
+      "selfContainedBuild"
+      "useDotnet"
+      "useAppHost"
+    ]
     // {
       dotnetInstallPath = installPath;
       dotnetExecutables = executables;
@@ -145,9 +156,18 @@ let
       dotnetRuntimeDeps = map lib.getLib runtimeDeps;
       dotnetSelfContainedBuild = selfContainedBuild;
       dotnetUseAppHost = useAppHost;
-      inherit useDotnetFromEnv;
 
-      inherit enableParallelBuilding;
+      inherit
+        enableParallelBuilding
+        dotnetRestoreFlags
+        dotnetBuildFlags
+        dotnetTestFlags
+        dotnetInstallFlags
+        dotnetPackFlags
+        dotnetFlags
+        packNupkg
+        useDotnetFromEnv
+        ;
 
       nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
         dotnetConfigureHook
@@ -241,12 +261,12 @@ let
                   if lib.isPath nugetDepsFile && !lib.hasPrefix "${builtins.storeDir}/" (toString nugetDepsFile) then
                     toString nugetDepsFile
                   else
-                    ''$(mktemp -t "${pname}-deps-XXXXXX.nix")'';
+                    ''$(mktemp -t "${finalAttrs.pname ? finalAttrs.finalPackage.name}-deps-XXXXXX.nix")'';
                 nugetToNix = (nuget-to-nix.override { inherit dotnet-sdk; });
               };
 
             in
-            writeShellScript "${name}-fetch-deps" ''
+            writeShellScript "${finalAttrs.finalPackage.name}-fetch-deps" ''
               NIX_BUILD_SHELL="${runtimeShell}" exec ${nix}/bin/nix-shell \
                 --pure --run 'source "${innerScript}"' "${drv}"
             '';
