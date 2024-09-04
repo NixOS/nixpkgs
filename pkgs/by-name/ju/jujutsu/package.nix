@@ -84,12 +84,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/martinvonz/jj";
     changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       _0x4A6F
       thoughtpolice
     ];
