@@ -1487,6 +1487,8 @@ self: super: with self; {
 
   bbox = callPackage ../development/python-modules/bbox { };
 
+  bcc = toPythonModule (pkgs.bcc.override { python3Packages = self; });
+
   bc-detect-secrets = callPackage ../development/python-modules/bc-detect-secrets { };
 
   bc-jsonpath-ng = callPackage ../development/python-modules/bc-jsonpath-ng { };
@@ -10263,6 +10265,8 @@ self: super: with self; {
   };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
+
+  python-troveclient = callPackage ../development/python-modules/python-troveclient { };
 
   python-idzip = callPackage ../development/python-modules/python-idzip { };
 
