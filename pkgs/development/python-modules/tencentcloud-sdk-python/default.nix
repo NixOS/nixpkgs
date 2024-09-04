@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tencentcloud-sdk-python";
-  version = "3.0.1223";
+  version = "3.0.1224";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-dsp4R1XLyPZ5LXV3wQFCxP7ipM9ADoTTlwtd1WobbAI=";
+    hash = "sha256-HO4W3EevyPC1nmPsTOVAFyc18CTKAE3cKYnQ7onlLPg=";
   };
 
   build-system = [ setuptools ];
