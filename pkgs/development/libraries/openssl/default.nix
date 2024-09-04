@@ -309,8 +309,8 @@ in {
   };
 
   openssl_3_2 = common {
-    version = "3.2.2";
-    hash = "sha256-GXFJwY2enyksQ/BACsq6EuX1LKz+BQ89GZJ36nOOwuc=";
+    version = "3.2.3";
+    hash = "sha256-UrXxxrgCK8WGjDCMVPt3cF5wLWxvRZT5mg3yFqz0Yjk=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -318,8 +318,6 @@ in {
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
-
-      ./3.3/CVE-2024-5535.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./3.2/use-etc-ssl-certs-darwin.patch
