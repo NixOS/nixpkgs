@@ -6,24 +6,24 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "2.22.1";
+  version = "2.24.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WT32nkRcS+JFCJCZNXXFm38nzttYLsqU98tJD7YBn9w=";
+    hash = "sha256-8M2SRyAkuxNbwT5NRN6cwJ82OtprfBZXi9Yqwh1NLVY=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
@@ -34,20 +34,15 @@ buildPythonPackage rec {
     cython
     poetry-core
     setuptools
-    wheel
   ];
 
   dependencies = [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "dbus_fast"
@@ -101,7 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
-    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v${version}";
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
