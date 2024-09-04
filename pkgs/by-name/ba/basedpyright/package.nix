@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "1.17.1";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mFY0GvVGiozxd04ktSoqcezBwXkOAeIWTgNnv1zB74A=";
+    hash = "sha256-6pksb2drjiZo1Hp6P/G06LAj3nW5WXJbVNGt5897jAA=";
   };
 
   patchedPackageJSON = runCommand "package.json" { } ''
@@ -47,7 +47,7 @@ let
     pname = "pyright-internal";
     inherit version src;
     sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-IJMK/YhTldOr3Gh4ewlVLUSt3PlhIjilxB7QBJpdu80=";
+    npmDepsHash = "sha256-w6SurZ4EG2QW7paZsWxu0gNXMXxnzQygClOUdLeBKdw=";
     dontNpmBuild = true;
     # Uncomment this flag when using unreleased peer dependencies
     # npmFlags = [ "--legacy-peer-deps" ];
@@ -94,7 +94,7 @@ buildNpmPackage rec {
   inherit version src;
 
   sourceRoot = "${src.name}/packages/pyright";
-  npmDepsHash = "sha256-TmJrh/Pya7jXhMQyCz6wwCCP0gzTTKFNUKF+vBq22U0=";
+  npmDepsHash = "sha256-y7arZsXjJ0LdWpXdSZjc7EBJPN/oWAje4uQDEhkRbDM=";
 
   postPatch = ''
     chmod +w ../../
