@@ -3,9 +3,6 @@
 , fetchFromGitHub
 , glibc
 , zlib
-, libX11
-, libICE
-, libSM
 , gtk3
 , copyDesktopItems
 , icoutils
@@ -31,9 +28,6 @@ buildDotnetModule rec {
   runtimeDeps = [
     glibc
     zlib
-    libX11
-    libICE
-    libSM
     gtk3
   ];
 

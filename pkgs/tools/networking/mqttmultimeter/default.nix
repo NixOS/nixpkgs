@@ -4,7 +4,6 @@
 , dotnet-runtime_8
 , buildDotnetModule
 , fetchFromGitHub
-, xorg
 , libglvnd
 , makeDesktopItem
 , copyDesktopItems
@@ -41,9 +40,6 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     libglvnd
-    xorg.libSM
-    xorg.libICE
-    xorg.libX11
   ];
 
   desktopItems = makeDesktopItem {

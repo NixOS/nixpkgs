@@ -6,13 +6,6 @@
 , iconConvTools
 , copyDesktopItems
 , makeDesktopItem
-, libX11
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
 , glew
 , SDL2
 , glfw
@@ -94,13 +87,6 @@ buildDotnetModule rec {
     gdk-pixbuf
 
     # Avalonia UI dependencies.
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
     glew
   ];
 

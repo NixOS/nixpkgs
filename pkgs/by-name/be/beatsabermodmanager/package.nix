@@ -5,10 +5,6 @@
 
   dotnetCorePackages,
 
-  libX11,
-  libICE,
-  libSM,
-
   xdg-utils,
 }:
 
@@ -37,11 +33,6 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  runtimeDeps = [
-    libX11
-    libICE
-    libSM
-  ];
 
   # Required for OneClick
   makeWrapperArgs = [

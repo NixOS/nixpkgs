@@ -6,13 +6,6 @@
   dotnetCorePackages,
   wrapGAppsHook3,
 
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
   glew,
   gtk3,
 }:
@@ -47,13 +40,6 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     # For Avalonia UI
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
     glew
     # For file dialogs
     gtk3

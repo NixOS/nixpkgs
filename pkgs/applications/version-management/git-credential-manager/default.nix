@@ -2,21 +2,16 @@
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
-, libX11
-, libICE
-, libSM
 , libsecret
 , git
 , git-credential-manager
 , gnupg
 , pass
 , testers
-, withGuiSupport ? true
 , withLibsecretSupport ? true
 , withGpgSupport ? true
 }:
 
-assert withLibsecretSupport -> withGuiSupport;
 buildDotnetModule rec {
   pname = "git-credential-manager";
   version = "2.5.1";
@@ -36,8 +31,7 @@ buildDotnetModule rec {
   executables = [ "git-credential-manager" ];
 
   runtimeDeps =
-    lib.optionals withGuiSupport [ libX11 libICE libSM ]
-    ++ lib.optional withLibsecretSupport libsecret;
+    lib.optional withLibsecretSupport libsecret;
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath ([ git ] ++ lib.optionals withGpgSupport [ gnupg pass ])}"
   ];

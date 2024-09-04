@@ -6,9 +6,6 @@
   dotnetCorePackages,
   xz,
   pcre,
-  libX11,
-  libICE,
-  libSM,
   autoPatchelfHook,
   bintools,
   fixDarwinDylibNames,
@@ -77,9 +74,6 @@ buildDotnetModule rec {
   runtimeDeps = [
     xz
     pcre
-    libX11
-    libICE
-    libSM
     libgdiplus
     glib
     libXrandr

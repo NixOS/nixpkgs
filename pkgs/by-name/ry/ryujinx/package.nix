@@ -10,12 +10,6 @@
 , sndio
 , pulseaudio
 , vulkan-loader
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
 , glew
 , libGL
 , udev
@@ -54,12 +48,6 @@ buildDotnetModule rec {
     udev
 
     # Avalonia UI
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
     glew
 
     # Headless executable

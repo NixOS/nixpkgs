@@ -6,9 +6,6 @@
   zlib,
   icu,
   openssl,
-  libX11,
-  libICE,
-  libSM,
   icoutils,
   copyDesktopItems,
   makeDesktopItem,
@@ -36,9 +33,6 @@ buildDotnetModule rec {
     zlib
     icu
     openssl
-    libX11
-    libICE
-    libSM
   ];
 
   nativeBuildInputs = [
