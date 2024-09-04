@@ -143,12 +143,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
+    homepage = "http://www.libsdl.org/";
     description = "Cross-platform multimedia library";
+    license = lib.licenses.lgpl21;
     mainProgram = "sdl-config";
-    homepage    = "http://www.libsdl.org/";
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-    license     = licenses.lgpl21;
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ lovek323 ]);
+    platforms = lib.platforms.unix;
   };
 })
