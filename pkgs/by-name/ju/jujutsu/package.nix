@@ -7,7 +7,6 @@
   pkg-config,
   libiconv,
   openssl,
-  gzip,
   libssh2,
   libgit2,
   zstd,
@@ -41,7 +40,6 @@ rustPlatform.buildRustPackage {
   useNextest = false; # nextest is the upstream integration framework, but is problematic for test skipping
 
   nativeBuildInputs = [
-    gzip
     installShellFiles
     pkg-config
   ];
