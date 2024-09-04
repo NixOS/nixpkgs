@@ -55,8 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
-  buildInputs = [ ]
-    ++ lib.optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
+  buildInputs =
+    [ ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW && alsaSupport) [ audiofile ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
