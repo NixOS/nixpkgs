@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs scripts-build
   '';
 
+  passthru.updateScript = ./update.sh;
+
   nativeBuildInputs = [ python3 ];
 
   inherit (librandombytes) hardeningDisable configurePlatforms env;
