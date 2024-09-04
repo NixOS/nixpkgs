@@ -37,11 +37,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-BOO1jP1Y5CNbE97zj+tpariiBdcuxKb1wyvI7i/VpYI=";
 
-  cargoBuildFlags = [
-    "--bin"
-    "jj"
-  ]; # don't install the fake editors
-
   nativeBuildInputs = [
     installShellFiles
     pkg-config
@@ -64,6 +59,12 @@ rustPlatform.buildRustPackage {
     git
     gnupg
     openssh
+  ];
+
+  cargoBuildFlags = [
+    # Don’t install the `gen-protos` build tool.
+    "--bin"
+    "jj"
   ];
 
   useNextest = true;
