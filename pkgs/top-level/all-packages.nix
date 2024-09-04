@@ -523,8 +523,6 @@ with pkgs;
 
   conserver = callPackage ../tools/misc/conserver { };
 
-  containerlab = callPackage ../tools/networking/containerlab { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   confetty = callPackage ../applications/misc/confetty { };
@@ -4031,11 +4029,11 @@ with pkgs;
 
   autorandr = callPackage ../tools/misc/autorandr { };
 
-  avahi = callPackage ../development/libraries/avahi (config.avahi or {});
+  avahi = callPackage ../development/libraries/avahi { };
 
-  avahi-compat = callPackage ../development/libraries/avahi ((config.avahi or {}) // {
+  avahi-compat = callPackage ../development/libraries/avahi {
     withLibdnssdCompat = true;
-  });
+  };
 
   avro-c = callPackage ../development/libraries/avro-c { };
 
@@ -5620,8 +5618,6 @@ with pkgs;
   materialx = with python3Packages; toPythonApplication materialx;
 
   maxcso = callPackage ../tools/archivers/maxcso { };
-
-  measureme = callPackage ../development/tools/rust/measureme { };
 
   medusa = callPackage ../tools/security/medusa { };
 
@@ -22387,8 +22383,6 @@ with pkgs;
 
   yas = callPackage ../development/libraries/yas { };
 
-  libcyaml = callPackage ../development/libraries/libcyaml { };
-
   rang = callPackage ../development/libraries/rang { };
 
   libykclient = callPackage ../development/libraries/libykclient { };
@@ -25595,7 +25589,6 @@ with pkgs;
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-nginxlog-exporter = callPackage ../servers/monitoring/prometheus/nginxlog-exporter.nix { };
   prometheus-nut-exporter = callPackage ../servers/monitoring/prometheus/nut-exporter.nix { };
-  prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix { } ;
   prometheus-pgbouncer-exporter = callPackage ../servers/monitoring/prometheus/pgbouncer-exporter.nix { };
   prometheus-php-fpm-exporter = callPackage ../servers/monitoring/prometheus/php-fpm-exporter.nix { };
   prometheus-pihole-exporter = callPackage ../servers/monitoring/prometheus/pihole-exporter.nix {  };

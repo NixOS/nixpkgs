@@ -689,7 +689,7 @@ Here are examples of package tests:
 - [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
-- [Multiple tests for nanopb](development/libraries/nanopb/default.nix)
+- [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
 
 ### Linking NixOS module tests to a package
 

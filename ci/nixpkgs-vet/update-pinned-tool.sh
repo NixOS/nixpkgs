@@ -7,7 +7,7 @@ trace() { echo >&2 "$@"; }
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-repository=NixOS/nixpkgs-check-by-name
+repository=NixOS/nixpkgs-vet
 pin_file=$SCRIPT_DIR/pinned-version.txt
 
 trace -n "Fetching latest release of $repository.. "
