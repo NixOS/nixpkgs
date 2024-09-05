@@ -24,10 +24,10 @@ python3Packages.buildPythonApplication rec {
   format = "other";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-/dFvhiK3nCOOmAtrYkQEB8Ge8Rf1ea5cDO7puTwS5bI=";
+    owner = "waydroid";
+    repo = "waydroid";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/dFvhiK3nCOOmAtrYkQEB8Ge8Rf1ea5cDO7puTwS5bI=";
   };
 
   patches = [
@@ -60,9 +60,10 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
   dontWrapGApps = true;
 
-  installPhase = ''
-    make install PREFIX=$out USE_SYSTEMD=0
-  '';
+  installFlags = [
+    "PREFIX=$(out)"
+    "USE_SYSTEMD=0"
+  ];
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -99,10 +100,10 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu";
+    description = "Container-based approach to boot a full Android system on a regular GNU/Linux system";
     mainProgram = "waydroid";
     homepage = "https://github.com/waydroid/waydroid";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mcaju ];
   };
