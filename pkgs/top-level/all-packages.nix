@@ -18854,8 +18854,6 @@ with pkgs;
 
   shellharden = callPackage ../development/tools/shellharden { };
 
-  schemaspy = callPackage ../development/tools/database/schemaspy { };
-
   scenebuilder = callPackage ../development/tools/scenebuilder { };
 
   scenic-view = callPackage ../development/tools/scenic-view { };
