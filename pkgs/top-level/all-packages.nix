@@ -16771,6 +16771,14 @@ with pkgs;
   python2Packages = dontRecurseIntoAttrs python27Packages;
   python3Packages = dontRecurseIntoAttrs python312Packages;
 
+  # make Hydra build a version of the Python package set with numpy_2
+  python3WithNumpy2 = python3.override {
+    packageOverrides = self: super: {
+      numpy = self.numpy_2;
+    };
+  };
+  python3PackagesWithNumpy2 = recurseIntoAttrs python3WithNumpy2.pkgs;
+
   pypy = pypy2;
   pypy2 = pypy27;
   pypy3 = pypy39;
