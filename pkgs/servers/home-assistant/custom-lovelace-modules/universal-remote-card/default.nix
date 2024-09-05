@@ -4,33 +4,33 @@
 }:
 
 buildNpmPackage rec {
-  pname = "android-tv-card";
-  version = "3.9.4";
+  pname = "universal-remote-card";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Nerwyn";
     repo = "android-tv-card";
     rev = version;
-    hash = "sha256-I50WNH/OL7O6YrZ0yf+uPJc05STJrjP8DS/wfaSBTHU=";
+    hash = "sha256-vQfXsEMYPga816X8eGYdjgpou38KfMtLcKjIGkT25xU=";
   };
 
   patches = [ ./dont-call-git.patch ];
 
-  npmDepsHash = "sha256-cuc7+QziclvJWp7MncLjkzfub5UbWYPVoUC/DZfs38g=";
+  npmDepsHash = "sha256-lFpgO/5JEmnl1wXLuy/OqncxPSx96BTydbprGEN+feM=";
 
   installPhase = ''
     runHook preInstall
 
     mkdir $out
-    cp dist/android-tv-card.min.js $out
+    cp dist/universal-remote-card.min.js $out
 
     runHook postInstall
   '';
 
-  passthru.entrypoint = "android-tv-card.min.js";
+  passthru.entrypoint = "universal-remote-card.min.js";
 
   meta = with lib; {
-    description = "Universal Customizable TV Remote Card, with HA actions, super configurable touchpad, slider, haptics, and keyboard";
+    description = "Completely customizable universal remote card for Home Assistant. Supports multiple platforms out of the box";
     homepage = "https://github.com/Nerwyn/android-tv-card";
     license = licenses.asl20;
     maintainers = with maintainers; [ k900 ];
