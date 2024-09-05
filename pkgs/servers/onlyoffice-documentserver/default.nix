@@ -15,11 +15,11 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "8.1.1";
+    version = "8.1.3";
 
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))}/onlyoffice-documentserver_amd64.deb";
-      sha256 = "sha256-YzGImBG/CkJqKrZwQQ/mgptasxqYgmmE2ivzbYzbz9M=";
+      sha256 = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
     };
 
     preferLocalBuild = true;
