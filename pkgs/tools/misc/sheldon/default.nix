@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rossmacarthur/sheldon";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ seqizz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "sheldon";
   };
 }

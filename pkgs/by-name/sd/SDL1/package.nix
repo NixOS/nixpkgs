@@ -1,34 +1,50 @@
-{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
+{ lib
+, alsa-lib
+, audiofile
+, config
+, darwin
+, fetchpatch
+, fetchurl
+, libGL
+, libGLU
+, libICE
+, libXext
+, libXrandr
+, libcap
+, libiconv
+, libpulseaudio
+, pkg-config
+, stdenv
+# Boolean flags
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
-, openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
+, openglSupport ? libGLSupported
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
-, libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
-, OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
 let
+  inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   extraPropagatedBuildInputs = [ ]
     ++ lib.optionals x11Support [ libXext libICE libXrandr ]
-    ++ lib.optionals (openglSupport && stdenv.isLinux) [ libGL libGLU ]
+    ++ lib.optionals (openglSupport && stdenv.isLinux) [ libGL ]
+    # libGLU doesn’t work with Android's SDL
+    ++ lib.optionals (openglSupport && stdenv.isLinux && (!stdenv.hostPlatform.isAndroid)) [ libGLU ]
     ++ lib.optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional stdenv.isDarwin Cocoa;
-  rpath = lib.makeLibraryPath extraPropagatedBuildInputs;
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
+    url = "https://www.libsdl.org/release/SDL-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1tMWp5Pl40gVXw3ZO5eXmJM/uYqh7evMEIgp1kdKrQA=";
   };
 
   outputs = [ "out" "dev" ];
@@ -39,8 +55,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
-  buildInputs = [ ]
-    ++ lib.optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
+  buildInputs =
+    [ ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW && alsaSupport) [ audiofile ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
@@ -106,12 +123,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     moveToOutput share/aclocal "$dev"
   '';
 
   # See the same place in the expression for SDL2
-  postFixup = ''
+  postFixup = let
+    rpath = lib.makeLibraryPath extraPropagatedBuildInputs;
+  in ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
         patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
@@ -123,14 +144,12 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit openglSupport; };
 
-  enableParallelBuilding = true;
-
-  meta = with lib; {
+  meta = {
+    homepage = "http://www.libsdl.org/";
     description = "Cross-platform multimedia library";
+    license = lib.licenses.lgpl21;
     mainProgram = "sdl-config";
-    homepage    = "http://www.libsdl.org/";
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-    license     = licenses.lgpl21;
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ lovek323 ]);
+    platforms = lib.platforms.unix;
   };
-}
+})

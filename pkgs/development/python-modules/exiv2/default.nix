@@ -3,11 +3,14 @@
   pkg-config,
   exiv2,
   gettext,
-  python3Packages,
   fetchFromGitHub,
   gitUpdater,
+  buildPythonPackage,
+  setuptools,
+  toml,
+  unittestCheckHook,
 }:
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "exiv2";
   version = "0.17.0";
   pyproject = true;
@@ -30,7 +33,7 @@ python3Packages.buildPythonPackage rec {
         def test_localisation(self):"
   '';
 
-  build-system = with python3Packages; [
+  build-system = [
     setuptools
     toml
   ];
@@ -42,7 +45,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "exiv2" ];
-  nativeCheckInputs = with python3Packages; [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
   unittestFlagsArray = [
     "-s"
     "tests"

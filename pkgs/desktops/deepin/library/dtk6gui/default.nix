@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-pri-path.patch
   ];
 
+  postPatch = ''
+    substituteInPlace src/util/dsvgrenderer.cpp \
+      --replace-fail 'QLibrary("rsvg-2", "2")' 'QLibrary("${lib.getLib librsvg}/lib/librsvg-2.so")'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
