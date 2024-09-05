@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, speexdsp
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  speexdsp,
 }:
 rustPlatform.buildRustPackage {
   pname = "bark";
@@ -15,8 +16,11 @@ rustPlatform.buildRustPackage {
     hash = "sha256-sGroae6uJhB9UIpFmvt520Zs9k0ir7H8pGkhKJmVWek=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WqJZoYpOQQGJGvND2R1o2nvK5P24z7YeJ9i26mai45M=";
-  buildInputs = [ alsa-lib speexdsp ];
+  cargoHash = "sha256-OjlVn4fvKPm3UfqhKkv7cDuvK4mcLcQXPNPK+WScrMc=";
+  buildInputs = [
+    alsa-lib
+    speexdsp
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = {
@@ -28,4 +32,3 @@ rustPlatform.buildRustPackage {
     mainProgram = "bark";
   };
 }
-
