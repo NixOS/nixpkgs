@@ -47,7 +47,10 @@ let
       EOF
     '';
   };
+
+  boost = boost182;
 in
+
 stdenv.mkDerivation (self: {
   pname = "emilua";
   version = "0.10.1";
@@ -59,9 +62,9 @@ stdenv.mkDerivation (self: {
     hash = "sha256-D6XKXik9nWQ6t6EF6dLbRGB60iFbPUM8/H8iFAz1QlE=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     luajit_openresty
-    boost182
+    boost
     fmt
     ncurses
     serd
@@ -109,6 +112,7 @@ stdenv.mkDerivation (self: {
 
   passthru = {
     updateScript = gitUpdater {rev-prefix = "v";};
+    inherit boost;
     sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion self.version)))}";
   };
 
