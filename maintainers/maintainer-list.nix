@@ -2279,6 +2279,11 @@
     github = "barinov274";
     githubId = 54442153;
   };
+  BarrOff = {
+    name = "BarrOff";
+    github = "BarrOff";
+    githubId = 58253563;
+  };
   barrucadu = {
     email = "mike@barrucadu.co.uk";
     github = "barrucadu";
