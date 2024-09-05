@@ -34,7 +34,7 @@
 , gst_all_1
 , sassc
 , trackerSupport ? stdenv.hostPlatform.isLinux
-, tracker
+, tinysparql
 , x11Support ? stdenv.hostPlatform.isLinux
 , waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ] ++ lib.optionals trackerSupport [
-    tracker
+    tinysparql
   ] ++ lib.optionals waylandSupport [
     libGL
     wayland

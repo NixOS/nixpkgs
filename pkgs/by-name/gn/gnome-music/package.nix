@@ -5,7 +5,7 @@
   gettext,
   fetchurl,
   gdk-pixbuf,
-  tracker,
+  tinysparql,
   libxml2,
   python3,
   libnotify,
@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
       libsoup_3
       libadwaita
       gsettings-desktop-schemas
-      tracker
+      tinysparql
     ]
     ++ (with gst_all_1; [
       gstreamer

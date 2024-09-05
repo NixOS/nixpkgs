@@ -678,7 +678,7 @@ Some projects, especially GNOME applications, are built with the Meson Build Sys
 , blueprint-compiler
 , libadwaita
 , libsecret
-, tracker
+, tinysparql
 }:
 
 stdenv.mkDerivation rec {
@@ -712,7 +712,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libadwaita
     libsecret
-    tracker
+    tinysparql
   ];
 
   # ...

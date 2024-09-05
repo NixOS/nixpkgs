@@ -24,7 +24,7 @@
 , libmediaart
 , sqlite
 , systemd
-, tracker
+, tinysparql
 , shared-mime-info
 , gnome
 }:
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmediaart
     sqlite
     systemd
-    tracker
+    tinysparql
     shared-mime-info
   ] ++ (with gst_all_1; [
     gstreamer

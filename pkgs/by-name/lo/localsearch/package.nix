@@ -8,7 +8,7 @@
 , itstool
 , libxslt
 , gexiv2
-, tracker
+, tinysparql
 , meson
 , mesonEmulatorHook
 , ninja
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     gexiv2
     totem-pl-parser
-    tracker
+    tinysparql
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
