@@ -88,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nomic-ai/gpt4all";
     license = lib.licenses.mit;
     mainProgram = "gpt4all";
-    maintainers = with lib.maintainers; [ polygon ];
+    maintainers = with lib.maintainers; [ polygon titaniumtown ];
   };
 })
