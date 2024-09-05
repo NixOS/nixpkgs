@@ -16,6 +16,7 @@ _linkPackages() {
     local -r src="$1"
     local -r dest="$2"
     local dir
+    local x
 
     for x in "$src"/*/*; do
         dir=$dest/$(basename "$(dirname "$x")")
@@ -39,6 +40,8 @@ createNugetDirs() {
 }
 
 configureNuget() {
+    local x
+
     for x in "${!_nugetInputs[@]}"; do
         if [[ -d $x/share/nuget/packages ]]; then
             addToSearchPathWithCustomDelimiter ";" NUGET_FALLBACK_PACKAGES "$x/share/nuget/packages"
