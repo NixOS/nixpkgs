@@ -1,24 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   cffi,
   libheif,
+  piexif,
+  pillow,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyheif";
   version = "0.8.0";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6bTBHrrUgvwloIBM4pW0S2YMv3gpoij1awcfMl+eDeQ=";
+  src = fetchFromGitHub {
+    owner = "carsales";
+    repo = "pyheif";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-7De8ekDceSkUcOgK7ppKad5W5qE0yxdS4kbgYVjxTGg=";
   };
 
-  propagatedBuildInputs = [
-    cffi
-    libheif
+  build-system = [ setuptools ];
+
+  buildInputs = [ libheif ];
+
+  dependencies = [ cffi ];
+
+  pythonImportsCheck = [ "pyheif" ];
+
+  nativeCheckInputs = [
+    piexif
+    pillow
+    pytestCheckHook
   ];
 
   meta = with lib; {
