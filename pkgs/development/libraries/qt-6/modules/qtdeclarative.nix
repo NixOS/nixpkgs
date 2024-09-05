@@ -15,6 +15,9 @@ qtModule {
   strictDeps = true;
 
   patches = [
+    # invalidates qml caches created from nix applications at different
+    # store paths and disallows saving caches of bare qml files in the store.
+    ../patches/qtdeclarative-invalidate-caches-from-mismatched-store-paths.patch
     # add version specific QML import path
     ../patches/0002-qtdeclarative-also-use-versioned-qml-paths.patch
   ];
