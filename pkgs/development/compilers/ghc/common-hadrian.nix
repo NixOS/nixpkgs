@@ -622,6 +622,16 @@ stdenv.mkDerivation ({
       "otool command" "${toolPath "otool" installCC}" \
       "install_name_tool command" "${toolPath "install_name_tool" installCC}"
   ''
+  + lib.optionalString useLLVM ''
+    ghc-settings-edit "$settingsFile" \
+      "LLVM llc command" "${lib.getBin llvmPackages.llvm}/bin/llc" \
+      "LLVM opt command" "${lib.getBin llvmPackages.llvm}/bin/opt"
+  ''
+  # FIXME(@sternenseemann): use installCC instead if possible
+  + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
+    ghc-settings-edit "$settingsFile" \
+      "LLVM clang command" "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+  ''
   # Work around a GHC bug which causes unlit to be installed under a different
   # name than is used in the settings file.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/23317
