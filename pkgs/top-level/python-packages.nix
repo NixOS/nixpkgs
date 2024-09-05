@@ -2706,6 +2706,8 @@ self: super: with self; {
     ctranslate2-cpp = pkgs.ctranslate2;
   };
 
+  ctypesgen = callPackage ../development/python-modules/ctypesgen { };
+
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
