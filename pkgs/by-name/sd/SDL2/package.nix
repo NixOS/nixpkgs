@@ -74,17 +74,18 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "release-${finalAttrs.version}";
     hash = "sha256-ij9/VhSacUaPbMGX1hx2nz0n8b1tDb1PnC7IO9TlNhE=";
   };
-  dontDisableStatic = if withStatic then 1 else 0;
+
   outputs = [
     "out"
     "dev"
   ];
+
   outputBin = "dev"; # sdl-config
 
   patches = [
-    # `sdl2-config --cflags` from Nixpkgs returns include path to just SDL2.
-    # On a normal distro this is enough for includes from all SDL2* packages to work,
-    # but on NixOS they're spread across different paths.
+    # `sdl2-config --cflags` from Nixpkgs returns include path to just SDL2. On
+    # a normal distro this is enough for includes from all SDL2* packages to
+    # work, but on NixOS they're spread across different paths.
     # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
     ./0000-find-headers.patch
   ];
@@ -95,8 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure \
       --replace '$(WAYLAND_SCANNER)' 'wayland-scanner'
   '';
-
-  strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
 
@@ -160,14 +159,18 @@ stdenv.mkDerivation (finalAttrs: {
       OpenGL
     ];
 
-  enableParallelBuilding = true;
-
   configureFlags =
     [ "--disable-oss" ]
     ++ lib.optional (!x11Support) "--without-x"
     ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
     ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
+
+  dontDisableStatic = if withStatic then 1 else 0;
+
+  strictDeps = true;
+
+  enableParallelBuilding = true;
 
   # We remove libtool .la files when static libs are requested,
   # because they make the builds of downstream libs like `SDL_tff`
@@ -227,27 +230,27 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
       inherit
+        SDL2_gfx
+        SDL2_image
+        SDL2_mixer
+        SDL2_net
+        SDL2_sound
+        SDL2_ttf
         guile-sdl2
         jazz2
-        SDL2_ttf
-        SDL2_net
-        SDL2_gfx
-        SDL2_sound
-        SDL2_mixer
-        SDL2_image
         ;
       inherit (python3Packages) pygame pygame-ce pygame-sdl2;
     };
   };
 
-  meta = with lib; {
-    description = "Cross-platform multimedia library";
-    mainProgram = "sdl2-config";
+  meta = {
     homepage = "http://www.libsdl.org/";
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${finalAttrs.version}";
-    license = licenses.zlib;
-    platforms = platforms.all;
+    description = "Cross-platform multimedia library";
+    license = lib.licenses.zlib;
+    mainProgram = "sdl2-config";
     maintainers = lib.teams.sdl.members;
     pkgConfigModules = [ "sdl2" ];
+    platforms = lib.platforms.all;
   };
 })
