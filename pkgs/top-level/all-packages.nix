@@ -3824,8 +3824,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  waydroid = callPackage ../os-specific/linux/waydroid { };
-
   wgo = callPackage ../development/tools/wgo { };
 
   wiiload = callPackage ../development/tools/wiiload { };
