@@ -4,6 +4,6 @@
 }:
 mkKdeDerivation {
   pname = "dolphin";
-  
+
   extraBuildInputs = [qtsvg];
 }
