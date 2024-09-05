@@ -15033,6 +15033,8 @@ self: super: with self; {
 
   syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
 
+  sysrsync = callPackage ../development/python-modules/sysrsync { };
+
   systembridge = callPackage ../development/python-modules/systembridge { };
 
   systembridgeconnector = callPackage ../development/python-modules/systembridgeconnector { };
