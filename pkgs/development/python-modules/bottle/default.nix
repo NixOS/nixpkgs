@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "bottle";
-  version = "0.12.25";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4anJSXCubXELP7RSYpTf64byy0qB7/OkuY3ED7Dl4CE=";
+    hash = "sha256-zhG0VMOFPBsyg6q/aBCNFpsjO4X8XOs/C3Mr/iSqdG0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -25,30 +25,22 @@ buildPythonPackage rec {
     cd test
   '';
 
-  disabledTests =
-    [
-      "test_delete_cookie"
-      "test_error"
-      "test_error_in_generator_callback"
-      # timing sensitive
-      "test_ims"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # https://github.com/bottlepy/bottle/issues/1422
-      # ModuleNotFoundError: No module named 'bottle.ext'
-      "test_data_import"
-      "test_direkt_import"
-      "test_from_import"
-    ];
+  disabledTests = [
+    "test_delete_cookie"
+    "test_error"
+    "test_error_in_generator_callback"
+    # timing sensitive
+    "test_ims"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    homepage = "https://bottlepy.org/";
+  meta = {
+    homepage = "https://bottlepy.org";
     description = "Fast and simple micro-framework for small web-applications";
     mainProgram = "bottle.py";
     downloadPage = "https://github.com/bottlepy/bottle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }
