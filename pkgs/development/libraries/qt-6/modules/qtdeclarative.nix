@@ -22,6 +22,14 @@ qtModule {
     ../patches/0002-qtdeclarative-also-use-versioned-qml-paths.patch
   ];
 
+  # Only qml files with a matching tag will be loaded by qtdeclarative,
+  # so it is set to the unique store path of the build.
+  # The maximum length of the tag is 48 bytes, so the path is trimmed to
+  # only /nix/store/<hash>.
+  preConfigure = ''
+    echo ''${out:0:43} > .tag
+  '';
+
   cmakeFlags = [
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"
     # for some reason doesn't get found automatically on Darwin
