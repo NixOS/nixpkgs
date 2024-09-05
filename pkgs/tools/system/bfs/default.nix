@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libcap, acl, oniguruma, liburing }:
+{ lib, stdenv, fetchFromGitHub, attr, acl, libcap, liburing, oniguruma }:
 
 stdenv.mkDerivation rec {
   pname = "bfs";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-/thPPueNrYzbxxZYAqlxZ2GEsceCzd+LkI84S8AS1mo=";
   };
 
-  buildInputs = [ oniguruma ] ++ lib.optionals stdenv.isLinux [ libcap acl liburing ];
+  buildInputs = [ oniguruma ] ++
+    lib.optionals stdenv.isLinux [ acl attr libcap liburing ];
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
