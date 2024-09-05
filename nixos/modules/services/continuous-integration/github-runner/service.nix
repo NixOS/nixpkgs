@@ -50,7 +50,7 @@ with lib;
       } // cfg.extraEnvironment;
 
       path = (with pkgs; [
-        bash
+        bashInteractive
         coreutils
         git
         gnutar
