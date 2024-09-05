@@ -8,21 +8,28 @@
 with lib;
 let
   cfg = config.virtualisation.digitalOceanImage;
+  virtualisationOptions = import ./virtualisation-options.nix;
 in
 {
 
-  imports = [ ./digital-ocean-config.nix ];
+  imports = [
+    ./digital-ocean-config.nix
+    virtualisationOptions.diskSize
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "digitialOceanImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options = {
-    virtualisation.digitalOceanImage.diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
-      example = 4096;
-      description = ''
-        Size of disk image. Unit is MB.
-      '';
-    };
-
     virtualisation.digitalOceanImage.configFile = mkOption {
       type = with types; nullOr path;
       default = null;
@@ -52,7 +59,6 @@ in
 
   #### implementation
   config = {
-
     system.build.digitalOceanImage = import ../../lib/make-disk-image.nix {
       name = "digital-ocean-image";
       format = "qcow2";
@@ -73,7 +79,7 @@ in
           config.virtualisation.digitalOcean.defaultConfigFile
         else
           cfg.configFile;
-      inherit (cfg) diskSize;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
 
