@@ -617,6 +617,15 @@ stdenv.mkDerivation ({
       "Merge objects command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
       "ar command" "${toolPath "ar" installCC}" \
       "ranlib command" "${toolPath "ranlib" installCC}"
+  ''
+  # Work around a GHC bug which causes unlit to be installed under a different
+  # name than is used in the settings file.
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/23317
+  + lib.optionalString (lib.versionOlder version "9.8") ''
+    ghc-settings-edit "$settingsFile" \
+      "unlit command" "\$topdir/bin/${targetPrefix}unlit"
+  ''
+  + ''
 
     # Install the bash completion file.
     install -Dm 644 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
