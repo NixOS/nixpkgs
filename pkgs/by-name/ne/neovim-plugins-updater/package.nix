@@ -3,14 +3,12 @@
 , python3Packages
 , lib
 , luarocks-packages-updater
-# , nix-prefetch-git
-, nix-prefetch-scripts
-# , luarocks-nix
-, lua5_1
 , pluginupdate
+, luarocks-nix
 }:
 let
   path = lib.makeBinPath [
+    luarocks-nix
   ];
 
   attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
@@ -31,7 +29,6 @@ python3Packages.buildPythonApplication {
   propagatedBuildInputs = [
     python3Packages.gitpython
     (python3Packages.toPythonModule luarocks-packages-updater)
-
   ];
 
 
@@ -39,7 +36,9 @@ python3Packages.buildPythonApplication {
   postFixup = ''
     echo "pluginupdate folder ${pluginupdate}"
     wrapProgram $out/bin/neovim-plugins-updater \
-     --prefix PYTHONPATH : "${pluginupdate}"
+     --prefix PYTHONPATH : "${pluginupdate}" \
+     --prefix PATH : "${path}"
+
   '';
 
   # installPhase =

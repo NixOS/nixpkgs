@@ -18,6 +18,13 @@ let
     inherit (neovimUtils) buildNeovimPlugin;
   };
 
+  # neovim plugins that are generated via the
+  # pkgs/applications/editors/neovim/generated-plugins.nix
+  neovimPlugins =  callPackage ../../teto/neovim/generated-plugins.nix {
+    inherit buildVimPlugin;
+    inherit (neovimUtils) buildNeovimPlugin;
+  };
+
   # TL;DR
   # * Add your plugin to ./vim-plugin-names
   # * run ./update.py
