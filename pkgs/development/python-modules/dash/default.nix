@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.17.1";
+  version = "2.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = "dash";
     rev = "refs/tags/v${version}";
-    hash = "sha256-51/nMnXUhb+hTL4xS9x4urI+2eENo/8sEKtk/kt6xTk=";
+    hash = "sha256-4/MiiS2uspjfGg0KIrgzShG7eW10Be6CoISCOnXSou0=";
   };
 
   nativeBuildInputs = [
