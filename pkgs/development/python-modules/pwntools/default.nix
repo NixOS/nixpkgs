@@ -34,6 +34,8 @@
   withArm ? withAllFeatures,
   withI386 ? withAllFeatures,
   withM68k ? withAllFeatures,
+  withMips ? withAllFeatures,
+  withMips64 ? withAllFeatures,
   withMsp430 ? withAllFeatures,
   withPowerpc ? withAllFeatures,
   withRiscv32 ? withAllFeatures,
@@ -47,9 +49,11 @@ let
     lib.optionals withAarch64 [ pkgsCross.aarch64-embedded.buildPackages.binutils ]
     ++ lib.optionals withAvr [ pkgsCross.avr.buildPackages.binutils ]
     ++ lib.optionals withAmd64 [ pkgsCross.x86_64-embedded.buildPackages.binutils ]
-    ++ lib.optionals withArm [ pkgsCross.armhf-embedded.buildPackages.binutils ]
+    ++ lib.optionals withArm [ pkgsCross.arm-embedded.buildPackages.binutils ]
     ++ lib.optionals withI386 [ pkgsCross.i686-embedded.buildPackages.binutils ]
     ++ lib.optionals withM68k [ pkgsCross.m68k.buildPackages.binutils ]
+    ++ lib.optionals withMips [ pkgsCross.mips-embedded.buildPackages.binutils ]
+    ++ lib.optionals withMips64 [ pkgsCross.mips64-embedded.buildPackages.binutils ]
     ++ lib.optionals withMsp430 [ pkgsCross.msp430.buildPackages.binutils-unwrapped ]
     ++ lib.optionals withPowerpc [ pkgsCross.ppc-embedded.buildPackages.binutils ]
     ++ lib.optionals withRiscv32 [ pkgsCross.riscv32-embedded.buildPackages.binutils ]
