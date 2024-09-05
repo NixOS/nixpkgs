@@ -5,6 +5,7 @@
   setuptools,
   proton-keyring-linux,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -23,19 +24,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ proton-keyring-linux ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=proton.keyring_linux.secretservice --cov-report html --cov-report term" ""
-  '';
-
   pythonImportsCheck = [ "proton.keyring_linux" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "ProtonVPN component to access Linux's keyring secret service API";
     homepage = "https://github.com/ProtonVPN/python-proton-keyring-linux-secretservice";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }
