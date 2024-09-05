@@ -139,7 +139,7 @@
     nvimRequireCheck = "alpha";
   };
 
-  advanced-git-search-nvim = super.autosave-nvim.overrideAttrs {
+  advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
   };
 
