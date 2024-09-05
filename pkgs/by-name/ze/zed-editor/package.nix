@@ -28,6 +28,8 @@
   envsubst,
   nix-update-script,
   cargo-about,
+  testers,
+  zed-editor,
 
   withGLES ? false,
 }:
@@ -136,6 +138,8 @@ rustPlatform.buildRustPackage rec {
     # Setting this environment variable allows to disable auto-updates
     # https://zed.dev/docs/development/linux#notes-for-packaging-zed
     ZED_UPDATE_EXPLANATION = "zed has been installed using nix. Auto-updates have thus been disabled.";
+    # Used by `zed --version`
+    RELEASE_VERSION = version;
   };
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";
@@ -187,11 +191,17 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "v(.*)"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(.*)"
+      ];
+    };
+    tests.version = testers.testVersion {
+      inherit version;
+      package = zed-editor;
+    };
   };
 
   meta = {
