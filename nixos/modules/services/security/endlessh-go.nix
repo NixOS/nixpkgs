@@ -131,7 +131,7 @@ in
     };
 
     networking.firewall.allowedTCPPorts = with cfg;
-      optionals openFirewall [ port prometheus.port ];
+      optionals openFirewall [ port ];
   };
 
   meta.maintainers = with maintainers; [ azahi ];
