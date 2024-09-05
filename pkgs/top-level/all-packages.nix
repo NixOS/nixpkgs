@@ -12225,8 +12225,6 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qrcp = callPackage ../tools/networking/qrcp { };
-
   qrscan = callPackage ../tools/misc/qrscan { };
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
