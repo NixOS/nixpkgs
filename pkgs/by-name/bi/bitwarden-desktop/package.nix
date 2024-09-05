@@ -13,6 +13,7 @@
 , makeDesktopItem
 , makeWrapper
 , napi-rs-cli
+, nix-update-script
 , nodejs_20
 , patchutils_0_4_2
 , pkg-config
@@ -194,6 +195,12 @@ in buildNpmPackage rec {
       categories = [ "Utility" ];
     })
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--commit" "--version=stable" "--version-regex=^desktop-v(.*)$" ];
+    };
+  };
 
   meta = {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
