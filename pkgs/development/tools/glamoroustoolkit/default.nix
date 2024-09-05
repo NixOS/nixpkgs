@@ -1,5 +1,5 @@
 { lib
-, pkgs
+, zenity
 , stdenv
 , fetchzip
 , fetchurl
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-preFixup = let
+  preFixup = let
     libPath = lib.makeLibraryPath [
       cairo
       dbus
@@ -87,7 +87,7 @@ preFixup = let
       stdenv.cc.cc.lib
     ];
     binPath = lib.makeBinPath [
-      pkgs.gnome.zenity   # File selection dialog
+      zenity   # File selection dialog
     ];
   in ''
     chmod +x $out/lib/*.so
