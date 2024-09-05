@@ -32787,7 +32787,7 @@ with pkgs;
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
-  qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
+  qgroundcontrol = libsForQt5.callPackage ../by-name/qg/qgroundcontrol/package.nix { };
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
