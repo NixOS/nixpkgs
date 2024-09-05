@@ -159,11 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   configureFlags =
-    [ "--disable-oss" ]
-    ++ lib.optionals (!x11Support) [ "--without-x" ]
-    ++ lib.optionals alsaSupport [ "--with-alsa-prefix=${alsa-lib.out}/lib" ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ "--disable-video-opengles" ]
-    ++ lib.optionals (!enableSdltest) [ "--disable-sdltest" ];
+    [ (lib.enableFeature false "oss")
+      (lib.withFeature x11Support "x")
+      (lib.withFeatureAs alsaSupport "alsa-prefix" "${lib.getLib alsa-lib}/lib")
+      (lib.enableFeature (!stdenv.hostPlatform.isWindows) "video-opengles")
+      (lib.enableFeature enableSdltest "sdltest")
+    ];
 
   dontDisableStatic = withStatic;
 
