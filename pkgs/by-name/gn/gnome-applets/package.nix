@@ -18,7 +18,7 @@
   adwaita-icon-theme,
   libgweather,
   gucharmap,
-  tracker,
+  tinysparql,
   polkit,
   gnome,
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     libgweather
     gucharmap
-    tracker
+    tinysparql
     polkit
     wirelesstools
     linuxPackages.cpupower

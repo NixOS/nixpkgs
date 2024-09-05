@@ -60,7 +60,7 @@
   shadow,
   shared-mime-info,
   sound-theme-freedesktop,
-  tracker,
+  tinysparql,
   localsearch,
   tzdata,
   udisks2,
@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     samba
-    tracker
+    tinysparql
     localsearch # for search locations dialog
     udisks2
     upower

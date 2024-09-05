@@ -69,11 +69,11 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.tracker ];
+    environment.systemPackages = [ pkgs.tinysparql ];
 
-    services.dbus.packages = [ pkgs.tracker ];
+    services.dbus.packages = [ pkgs.tinysparql ];
 
-    systemd.packages = [ pkgs.tracker ];
+    systemd.packages = [ pkgs.tinysparql ];
 
   };
 
