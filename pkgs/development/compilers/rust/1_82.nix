@@ -20,6 +20,7 @@
   pkgsBuildTarget,
   pkgsBuildBuild,
   pkgsBuildHost,
+  pkgsHostTarget,
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
@@ -40,7 +41,7 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.llvmPackages_18.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages_18.clangUseLLVM;
         };
       }
     );
@@ -55,7 +56,7 @@ import ./default.nix
     llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
 
     # For use at runtime
-    llvmShared = llvmSharedFor { inherit llvmPackages_18 stdenv; };
+    llvmShared = llvmSharedFor pkgsHostTarget;
 
     # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
     llvmPackages =
@@ -74,7 +75,7 @@ import ./default.nix
               pkg.override {
                 stdenv = stdenv.override {
                   allowedRequisites = null;
-                  cc = llvmPackages.clangUseLLVM;
+                  cc = pkgsBuildHost.llvmPackages_18.clangUseLLVM;
                 };
               };
           in
@@ -87,7 +88,7 @@ import ./default.nix
             libcxx = llvmPackages.libcxx.override {
               stdenv = stdenv.override {
                 allowedRequisites = null;
-                cc = llvmPackages.clangNoLibcxx;
+                cc = pkgsBuildHost.llvmPackages_18.clangNoLibcxx;
                 hostPlatform = stdenv.hostPlatform // {
                   useLLVM = !stdenv.hostPlatform.isDarwin;
                 };
@@ -142,5 +143,6 @@ import ./default.nix
       "wrapCCWith"
       "overrideCC"
       "fetchpatch"
+      "pkgsHostTarget"
     ]
   )
