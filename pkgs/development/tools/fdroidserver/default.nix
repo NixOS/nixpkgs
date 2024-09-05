@@ -3,7 +3,6 @@
   fetchFromGitLab,
   fetchPypi,
   apksigner,
-  appdirs,
   buildPythonApplication,
   python3,
   installShellFiles,
@@ -17,8 +16,10 @@
   oscrypto,
   paramiko,
   pillow,
+  platformdirs,
   pyasn1,
   pyasn1-modules,
+  pycountry,
   python-vagrant,
   pyyaml,
   qrcode,
@@ -29,7 +30,7 @@
 }:
 
 let
-  version = "2.3a1";
+  version = "2.3a2";
 in
 buildPythonApplication {
   pname = "fdroidserver";
@@ -40,8 +41,8 @@ buildPythonApplication {
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = "2.3a1";
-    hash = "sha256-K6P5yGx2ZXHJZ/VyHTbQAObsvcfnOatrpwiW+ixLTuA=";
+    rev = version;
+    hash = "sha256-nsAFBZqxo4XVWU6nBjo2T6VhU8U4I8h/FRXd1L240rk=";
   };
 
   pythonRelaxDeps = [
@@ -68,11 +69,11 @@ buildPythonApplication {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ babel ];
+  build-system = [ babel ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     androguard
-    appdirs
+    platformdirs
     clint
     defusedxml
     gitpython
@@ -83,6 +84,7 @@ buildPythonApplication {
     pillow
     pyasn1
     pyasn1-modules
+    pycountry
     python-vagrant
     pyyaml
     qrcode
