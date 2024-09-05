@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi mpich reptyr tmux ];
 
-  buildInputs = [ autoconf makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ autoconf ];
 
   installPhase = ''
     runHook preInstall
