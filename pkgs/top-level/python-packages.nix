@@ -7935,6 +7935,8 @@ self: super: with self; {
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
+  mktestdocs = callPackage ../development/python-modules/mktestdocs { };
+
   ml-collections = callPackage ../development/python-modules/ml-collections { };
 
   ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
@@ -12649,6 +12651,8 @@ self: super: with self; {
 
   python-magic = callPackage ../development/python-modules/python-magic { };
 
+  python-magnumclient = callPackage ../development/python-modules/python-magnumclient { };
+
   python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
@@ -15757,6 +15761,11 @@ self: super: with self; {
   trytond = callPackage ../development/python-modules/trytond { };
 
   tsfresh = callPackage ../development/python-modules/tsfresh { };
+
+  tsid = toPythonModule (pkgs.tsid.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
 
   tskit = callPackage ../development/python-modules/tskit { };
 
