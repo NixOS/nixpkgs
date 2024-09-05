@@ -13,6 +13,7 @@
   pytest-asyncio,
   requests,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -37,11 +38,6 @@ buildPythonPackage rec {
     pynacl
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton.vpn.session --cov-report term" ""
-  '';
-
   pythonImportsCheck = [ "proton.vpn.session" ];
 
   postInstall = ''
@@ -55,12 +51,13 @@ buildPythonPackage rec {
     pytest-asyncio
     requests
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   meta = {
     description = "Provides utility classes to manage VPN sessions";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-session";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }
