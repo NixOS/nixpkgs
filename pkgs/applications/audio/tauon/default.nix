@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.8.2";
+  version = "7.8.3";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fVp3RWRNIBSeALbYNRIYjyWNH9An+YnS7neQt0x33yI=";
+    hash = "sha256-A7JRJ0Eh0ynuwPYZFLEeqWLf6OKdN59jM2vozdpSZC8=";
   };
 
   postUnpack = ''
