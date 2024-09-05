@@ -72,6 +72,7 @@
   zimg,
 
   overrideSDK,
+  swiftPackages, # TODO: set swift to match swiftPackages
 
   # Boolean
   alsaSupport ? stdenv.isLinux,
@@ -121,11 +122,13 @@ let
     ;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 
-  stdenv' =
-    if swiftSupport && stdenv.isDarwin && stdenv.isx86_64 then
-      overrideSDK stdenv "11.0" stdenv
+  stdenv' = let
+    stdenv'' = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
+  in
+    if swiftSupport && stdenv''.isDarwin && stdenv''.isx86_64 then
+      overrideSDK stdenv'' "11.0"
     else
-      stdenv;
+      stdenv'';
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
