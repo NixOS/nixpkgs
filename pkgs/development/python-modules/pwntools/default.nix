@@ -72,8 +72,7 @@ let
     ++ lib.optionals withS390 [ pkgsCross.s390.buildPackages.binutils-unwrapped ]
     ++ lib.optionals withSparc [ pkgsCross.sparc.buildPackages.binutils-unwrapped ]
     ++ lib.optionals withSparc64 [ pkgsCross.sparc64.buildPackages.binutils-unwrapped ]
-    ++ lib.optionals withVax [ pkgsCross.vax.buildPackages.binutils-unwrapped ]
-    ;
+    ++ lib.optionals withVax [ pkgsCross.vax.buildPackages.binutils-unwrapped ];
 
   binutilsPath = lib.makeBinPath binutilsList;
 in
