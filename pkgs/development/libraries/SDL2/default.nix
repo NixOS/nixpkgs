@@ -2,6 +2,7 @@
   lib,
   stdenv,
   config,
+  darwin,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
@@ -42,12 +43,6 @@
   pulseaudioSupport ?
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libpulseaudio,
-  AudioUnit,
-  Cocoa,
-  CoreAudio,
-  CoreServices,
-  ForceFeedback,
-  OpenGL,
   audiofile,
   libiconv,
   withStatic ? stdenv.hostPlatform.isMinGW,
@@ -66,7 +61,9 @@
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
-
+let
+  inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
   version = "2.30.6";
