@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   # TODO: package mavlink so we can build from a normal source tarball
   src = fetchFromGitHub {
     owner = "mavlink";
-    repo = pname;
+    repo = "qgroundcontrol";
     rev = "v${version}";
     hash = "sha256-2Bc4uC/2e+PTsvFZ4RjnTzkOiBO9vsYHeLPkcwpDRrg=";
     fetchSubmodules = true;
