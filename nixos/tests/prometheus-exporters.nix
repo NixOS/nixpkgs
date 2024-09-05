@@ -482,7 +482,6 @@ let
     json = {
       exporterConfig = {
         enable = true;
-        url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
           modules = {
             default = {

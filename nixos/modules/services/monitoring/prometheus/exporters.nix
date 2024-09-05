@@ -230,6 +230,7 @@ let
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
+      assertions = conf.assertions or [];
       users.users."${name}-exporter" = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
         description = "Prometheus ${name} exporter service user";
         isSystemUser = true;
