@@ -1,12 +1,13 @@
-{ stdenv
-, emilua
-, meson
-, gperf
-, ninja
-, asciidoctor
-, pkg-config
-, fetchFromGitLab
-, gitUpdater
+{
+  stdenv,
+  emilua,
+  meson,
+  gperf,
+  ninja,
+  asciidoctor,
+  pkg-config,
+  fetchFromGitLab,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (self: {
@@ -20,9 +21,17 @@ stdenv.mkDerivation (self: {
     hash = "sha256-HvfEigHJTZelPvHFk22PWxkTFEajHJXfiCndxXHVgq8=";
   };
 
-  buildInputs = [ emilua asciidoctor gperf ];
+  buildInputs = [
+    emilua
+    asciidoctor
+    gperf
+  ];
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ];
 
-  passthru.updateScript = gitUpdater {rev-prefix="v";};
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 })
