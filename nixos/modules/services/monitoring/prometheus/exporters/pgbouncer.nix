@@ -6,6 +6,7 @@ let
     mkOption
     types
     optionals
+    getExe
     escapeShellArg
     concatStringsSep
     ;
@@ -23,8 +24,8 @@ in
     };
 
     connectionString = mkOption {
-      type = types.str;
-      default = "";
+      type = types.nullOr types.str;
+      default = null;
       example = "postgres://admin:@localhost:6432/pgbouncer?sslmode=require";
       description = ''
         Connection string for accessing pgBouncer.
@@ -35,24 +36,28 @@ in
         in the services.pgbouncer.authFile if authType other than any is used.
 
         WARNING: this secret is stored in the world-readable Nix store!
-        Use {option}`connectionStringFile` instead.
+        Use [](#opt-services.prometheus.exporters.pgbouncer.connectionEnvFile) if the
+        URL contains a secret.
       '';
     };
 
-    connectionStringFile = mkOption {
-      type = types.nullOr types.path;
+    connectionEnvFile = mkOption {
+      type = types.nullOr types.str;
       default = null;
-      example = "/run/keys/pgBouncer-connection-string";
       description = ''
-        File that contains pgBouncer connection string in format:
-        postgres://admin:@localhost:6432/pgbouncer?sslmode=require
+        File that must contain the environment variable
+        `PGBOUNCER_EXPORTER_CONNECTION_STRING` which is set to the connection
+        string used by pgbouncer. I.e. the format is supposed to look like this:
 
-        NOTE: You MUST keep pgbouncer as database name (special internal db)!!!
+        ```
+        PGBOUNCER_EXPORTER_CONNECTION_STRING="postgres://admin@localhost:6432/pgbouncer?sslmode=require"
+        ```
 
-        NOTE: Admin user (with password or passwordless) MUST exist
-        in the services.pgbouncer.authFile if authType other than any is used.
+        NOTE: You MUST keep pgbouncer as database name (special internal db)!
+        NOTE: `services.pgbouncer.settings.pgbouncer.ignore_startup_parameters`
+        MUST contain "extra_float_digits".
 
-        {option}`connectionStringFile` takes precedence over {option}`connectionString`
+        Mutually exclusive with [](#opt-services.prometheus.exporters.pgbouncer.connectionString).
       '';
     };
 
@@ -120,10 +125,9 @@ in
       startScript = pkgs.writeShellScriptBin "pgbouncer-start" "${concatStringsSep " " ([
             "${pkgs.prometheus-pgbouncer-exporter}/bin/pgbouncer_exporter"
             "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
-            "--pgBouncer.connectionString ${if cfg.connectionStringFile != null then
-            "$(head -n1 ${cfg.connectionStringFile})" else "${escapeShellArg cfg.connectionString}"}"
-          ]
-            ++ optionals (cfg.telemetryPath != null) [
+          ] ++ optionals (cfg.connectionString != null) [
+            "--pgBouncer.connectionString ${escapeShellArg cfg.connectionString}"
+          ] ++ optionals (cfg.telemetryPath != null) [
             "--web.telemetry-path ${escapeShellArg cfg.telemetryPath}"
           ]
             ++ optionals (cfg.pidFile != null) [
@@ -145,6 +149,22 @@ in
       in
       {
         ExecStart = "${startScript}/bin/pgbouncer-start";
+        EnvironmentFile = lib.mkIf (cfg.connectionEnvFile != null) [
+          cfg.connectionEnvFile
+        ];
       };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "connectionStringFile" ] ''
+      As replacement, the option `services.prometheus.exporters.pgbouncer.connectionEnvFile`
+      has been added. In contrast to `connectionStringFile` it must be an environment file
+      with the connection string being set to `PGBOUNCER_EXPORTER_CONNECTION_STRING`.
+
+      The change was necessary since the former option wrote the contents of the file
+      into the cmdline of the exporter making the connection string effectively
+      world-readable.
+    '')
+    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+  ];
 }
