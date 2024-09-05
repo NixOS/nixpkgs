@@ -8,6 +8,7 @@
   proton-vpn-logger,
   jinja2,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -31,14 +32,12 @@ buildPythonPackage rec {
     proton-vpn-logger
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton.vpn.connection --cov-report html --cov-report term" ""
-  '';
-
   pythonImportsCheck = [ "proton.vpn.connection" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # Permission denied: '/run'
@@ -59,10 +58,10 @@ buildPythonPackage rec {
     "test_ovpnconfig_with_malformed_server_and_credentials"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Defines the interface that VPN connection backends should implement";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-connection";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }
