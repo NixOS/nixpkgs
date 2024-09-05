@@ -5,12 +5,14 @@
 , gnupg
 , gawk
 , procps
+, notmuch
 , withManpage ? false
 }:
 
 with python311.pkgs; buildPythonApplication rec {
   pname = "alot";
-  version = "0.10";
+  version = "0.11";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -23,8 +25,8 @@ with python311.pkgs; buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    rev = version;
-    sha256 = "sha256-1reAq8X9VwaaZDY5UfvcFzHDKd71J88CqJgH3+ANjis=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
   };
 
   postPatch = ''
@@ -32,7 +34,9 @@ with python311.pkgs; buildPythonApplication rec {
       --replace /usr/share "$out/share"
   '';
 
-  nativeBuildInputs = lib.optional withManpage sphinx;
+  nativeBuildInputs = [
+    setuptools-scm
+  ] ++ lib.optional withManpage sphinx;
 
   propagatedBuildInputs = [
     configobj
@@ -53,6 +57,7 @@ with python311.pkgs; buildPythonApplication rec {
     mock
     procps
     pytestCheckHook
+    notmuch
   ];
 
   postBuild = lib.optionalString withManpage [
