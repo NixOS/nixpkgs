@@ -6,13 +6,14 @@
   fetchPypi,
   minikerberos,
   pythonOlder,
+  setuptools,
   unicrypto,
 }:
 
 buildPythonPackage rec {
   pname = "asyauth";
   version = "0.0.21";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-NMwQxfhij/LiW1EW3JjvxcpFUy8WPM0/kUej4C3YEOs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     asysocks
     minikerberos
