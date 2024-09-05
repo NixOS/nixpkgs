@@ -23,9 +23,14 @@
     specialisation.new-generation.configuration = {
       environment.etc."newgen".text = "newgen";
     };
+    specialisation.newer-generation.configuration = {
+      environment.etc."newergen".text = "newergen";
+    };
   };
 
-  testScript = ''
+  testScript = /* python */ ''
+    newergen = machine.succeed("realpath /run/current-system/specialisation/newer-generation/bin/switch-to-configuration").rstrip()
+
     with subtest("/etc is mounted as an overlay"):
       machine.succeed("findmnt --kernel --type overlay /etc")
 
@@ -65,5 +70,13 @@
       print(machine.succeed("ls /etc/mountpoint"))
       print(machine.succeed("stat /etc/mountpoint/extra-file"))
       print(machine.succeed("findmnt /etc/filemount"))
+
+      machine.succeed(f"{newergen} switch")
+
+      tmpMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc\\..*' | wc -l").rstrip()
+      metaMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc-metadata\\..*' | wc -l").rstrip()
+
+      assert tmpMounts == "0", f"Found {tmpMounts} remaining tmpmounts"
+      assert metaMounts == "1", f"Found {metaMounts} remaining metamounts"
   '';
 }
