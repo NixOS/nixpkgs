@@ -61,7 +61,7 @@
   shared-mime-info,
   sound-theme-freedesktop,
   tracker,
-  tracker-miners,
+  localsearch,
   tzdata,
   udisks2,
   upower,
@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     samba
     tracker
-    tracker-miners # for search locations dialog
+    localsearch # for search locations dialog
     udisks2
     upower
     # For animations in Mouse panel.
