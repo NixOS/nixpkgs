@@ -27,6 +27,7 @@
   vulkan-loader,
   envsubst,
   nix-update-script,
+  cargo-about,
 
   withGLES ? false,
 }:
@@ -44,6 +45,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9xvCElW1J3LMiNPUeVxaNIexx7a2rVEoAh4Ntrh1N6E=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Zed uses cargo-install to install cargo-about during the script execution.
+    # We provide cargo-about ourselves and can skip this step.
+    ./0001-generate-licenses.patch
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -73,6 +80,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
     rustPlatform.bindgenHook
+    cargo-about
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
 
   buildInputs =
@@ -132,6 +140,10 @@ rustPlatform.buildRustPackage rec {
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";
   gpu-lib = if withGLES then libglvnd else vulkan-loader;
+
+  preBuild = ''
+    bash script/generate-licenses
+  '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
