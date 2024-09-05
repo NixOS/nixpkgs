@@ -25097,6 +25097,25 @@ with pkgs;
 
   meteor = callPackage ../servers/meteor { };
 
+  micro-full = micro.wrapper.override {
+    extraPackages = [
+      wl-clipboard
+      xclip
+    ];
+  };
+
+  micro-with-wl-clipboard = micro.wrapper.override {
+    extraPackages = [
+      wl-clipboard
+    ];
+  };
+
+  micro-with-xclip = micro.wrapper.override {
+    extraPackages = [
+      xclip
+    ];
+  };
+
   micronaut = callPackage ../development/tools/micronaut { };
 
   minio = callPackage ../servers/minio { };
