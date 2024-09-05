@@ -21,23 +21,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.4.2";
+  version = "1.4.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
     rev = "refs/tags/${version}";
-    hash = "sha256-/dFvhiK3nCOOmAtrYkQEB8Ge8Rf1ea5cDO7puTwS5bI=";
+    hash = "sha256-LejyuGYgW46++95XROuWc13Q+w0l+AzGAl9ekfmAIEk=";
   };
-
-  patches = [
-    # https://github.com/waydroid/waydroid/pull/1218
-    (fetchpatch {
-      url = "https://github.com/waydroid/waydroid/commit/595e0e5b309a79fedaa07d90b9073ddcb156314c.patch";
-      hash = "sha256-A+rUmJbFFhMZ5WpT+QBCTEcn82wJuvmi8Wbcsio41Nk=";
-    })
-  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -64,6 +56,7 @@ python3Packages.buildPythonApplication rec {
   installFlags = [
     "PREFIX=$(out)"
     "USE_SYSTEMD=0"
+    "SYSCONFDIR=$(out)/etc"
   ];
 
   preFixup = ''
