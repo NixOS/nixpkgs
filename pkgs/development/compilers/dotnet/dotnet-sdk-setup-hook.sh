@@ -60,7 +60,7 @@ configureNuget() {
         done
     fi
 
-    if [[ -f paket.dependencies ]]; then
+    if [[ -z ${keepNugetConfig-} && -f paket.dependencies ]]; then
        sed -i "s:source .*:source $nugetSource:" paket.dependencies
        sed -i "s:remote\:.*:remote\: $nugetSource:" paket.lock
 
