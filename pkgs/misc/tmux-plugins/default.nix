@@ -140,26 +140,26 @@ in rec {
     };
   };
 
-  copy-toolkit = mkTmuxPlugin rec {
+  copy-toolkit = mkTmuxPlugin {
     pluginName = "copy-toolkit";
     rtpFilePath = "copytk.tmux";
-    version = "1.1";
+    version = "2021-12-20";
     src = fetchFromGitHub {
       owner = "CrispyConductor";
       repo = "tmux-copy-toolkit";
-      rev = "v${version}";
-      sha256 = "MEMC9klm+PH66UHwrB2SqdCaZX0LAujL+Woo/hV84m4=";
+      rev = "c80c2c068059fe04f840ea9f125c21b83cb6f81f";
+      hash = "sha256-cLeOoJ+4MF8lSpwy5lkcPakvB3cpgey0RfLbVTwERNk=";
     };
     postInstall = ''
       sed -i -e 's|python3 |${pkgs.python3}/bin/python3 |g' $target/copytk.tmux
-      sed -i -e 's|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
+      sed -i -e 's|python3|${pkgs.python3}/bin/python3|g;s|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
     '';
     meta = {
       homepage = "https://github.com/CrispyConductor/tmux-copy-toolkit";
       description = "Various copy-mode tools";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ deejayem ];
+      maintainers = with lib.maintainers; [ deejayem sedlund ];
     };
   };
 

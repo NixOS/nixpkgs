@@ -44,6 +44,49 @@ let
   };
   initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
 
+  checkRelease = version:
+    let
+      parts = lib.versions.splitVersion version;
+      isVersion = lib.length parts == 2 && lib.all (p: lib.stringLength p == 2) parts;
+      majorVersion = lib.toIntBase10 (lib.elemAt parts 0);
+      minorVersion = lib.elemAt parts 1;
+
+      versionPatterns = [
+        # only 13.10
+        { fromMajor = 13; minor = [ "10" ]; }
+        # 14.04 and 14.12
+        { fromMajor = 14; minor = [ "04" "12" ]; }
+        # only 15.09
+        { fromMajor = 15; minor = [ "09" ]; }
+        # 16.03 to 20.09
+        { fromMajor = 16; minor = [ "03" "09" ]; }
+        # from 21.05
+        { fromMajor = 21; minor = [ "05" "11" ]; }
+      ];
+
+      # find the versioning pattern that applies by looking for the first
+      # major version newer than `majorVersion`, and picking the previous pattern
+      patternIndex = lib.lists.findFirstIndex
+        ({ fromMajor, ... }: fromMajor > majorVersion)
+        (lib.length versionPatterns)
+        versionPatterns;
+
+      validMinorVersions =
+        if patternIndex == 0
+        then []
+        else (lib.elemAt versionPatterns (patternIndex - 1)).minor;
+
+      correctMinorVersion = lib.elem minorVersion validMinorVersions;
+      notNewerThanNixpkgs = lib.versionAtLeast trivial.release version;
+    in isVersion && correctMinorVersion && notNewerThanNixpkgs;
+
+  releaseType = types.addCheck
+    (types.strMatching "[[:digit:]]{2}\\.[[:digit:]]{2}")
+    checkRelease // {
+      name = "nixosRelease";
+      description = "NixOS release version, e.g. \"${trivial.release}\"";
+      descriptionClass = "nonRestrictiveClause";
+    };
 in
 {
   imports = [
@@ -70,7 +113,7 @@ in
 
       release = mkOption {
         readOnly = true;
-        type = types.str;
+        type = releaseType;
         default = trivial.release;
         description = "The NixOS release (e.g. `16.03`).";
       };
@@ -151,7 +194,7 @@ in
     };
 
     stateVersion = mkOption {
-      type = types.str;
+      type = releaseType;
       # TODO Remove this and drop the default of the option so people are forced to set it.
       # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
       apply = v:

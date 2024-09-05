@@ -50,8 +50,6 @@ in
 
       services.accounts-daemon.enable = true; # messages
 
-      hardware.pulseaudio.enable = true; # sound
-
       # Lomiri-ish setup for Lomiri indicators
       # TODO move into a Lomiri module, once the package set is far enough for the DE to start
 

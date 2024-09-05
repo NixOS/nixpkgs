@@ -130,7 +130,6 @@ in
 
       # Default services
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.bamf.enable = true;

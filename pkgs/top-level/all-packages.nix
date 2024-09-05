@@ -971,6 +971,7 @@ with pkgs;
     prefetch-yarn-deps
     yarnConfigHook
     yarnBuildHook
+    yarnInstallHook
     fetchYarnDeps;
 
   find-cursor = callPackage ../tools/X11/find-cursor { };
@@ -11872,8 +11873,6 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qrcp = callPackage ../tools/networking/qrcp { };
-
   qrscan = callPackage ../tools/misc/qrscan { };
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
@@ -14793,7 +14792,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages) compcert;
+  inherit (coqPackages_8_19) compcert;
 
   computecpp-unwrapped = callPackage ../development/compilers/computecpp { };
   computecpp = wrapCCWith rec {
@@ -19489,13 +19488,10 @@ with pkgs;
 
   bosh-cli = callPackage ../applications/networking/cluster/bosh-cli { };
 
-  botan2 = callPackage ../development/libraries/botan/2.0.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
-
-  botan3 = callPackage ../development/libraries/botan/3.0.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  inherit (callPackages ../development/libraries/botan { })
+    botan2
+    botan3
+    ;
 
   box2d = callPackage ../development/libraries/box2d {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
@@ -21225,8 +21221,6 @@ with pkgs;
 
   libcue = callPackage ../development/libraries/libcue { };
 
-  libcutl = callPackage ../development/libraries/libcutl { };
-
   libcxxrt = callPackage ../development/libraries/libcxxrt {
     stdenv = if stdenv.hostPlatform.useLLVM or false
              then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
@@ -22952,6 +22946,7 @@ with pkgs;
   manilaclient = with python311Packages; toPythonApplication python-manilaclient;
   mistralclient = with python311Packages; toPythonApplication python-mistralclient;
   swiftclient = with python311Packages; toPythonApplication python-swiftclient;
+  troveclient = with python311Packages; toPythonApplication python-troveclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
@@ -26935,11 +26930,11 @@ with pkgs;
 
   # See `xenPackages` source for explanations.
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
-  qemu_xen = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-slim; });
   qemu_xen_4_19 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_19-slim; });
   qemu_xen_4_18 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_18-slim; });
   qemu_xen_4_17 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_17-slim; });
   qemu_xen_4_16 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_16-slim; });
+  qemu_xen = qemu_xen_4_19;
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
@@ -34343,7 +34338,6 @@ with pkgs;
 
   westonLite = weston.override {
     demoSupport = false;
-    hdrSupport = false;
     jpegSupport = false;
     lcmsSupport = false;
     pangoSupport = false;
@@ -38873,8 +38867,6 @@ with pkgs;
   go-swagger = callPackage ../development/tools/go-swagger { };
 
   jx = callPackage ../applications/networking/cluster/jx { };
-
-  prow = callPackage ../applications/networking/cluster/prow { };
 
   pv-migrate = callPackage ../applications/networking/cluster/pv-migrate { };
 
