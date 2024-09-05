@@ -6,13 +6,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-C0YjLak/m8ZMCzR5x22zjCATvzs72l56GRccN0Gur+4=";
+    sha256 = "sha256-0Eqk9X/qO9MkETaVIOCS6vyvywAK175/CDCNHH+YatQ=";
   };
 
   propagatedBuildInputs = with pythonPackages; [
