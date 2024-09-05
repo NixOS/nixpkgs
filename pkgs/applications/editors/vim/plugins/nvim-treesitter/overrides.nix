@@ -42,7 +42,7 @@ let
             (f (tree-sitter.builtGrammars // builtGrammars));
           copyGrammar = grammar:
             let name = lib.last (lib.splitString "-" grammar.name); in
-            "ln -s ${grammar}/parser/${name}.so $out/parser/${name}.so";
+            "ln -sf ${grammar}/parser/${name}.so $out/parser/${name}.so";
         in
         [
           (runCommand "vimplugin-treesitter-grammars"
