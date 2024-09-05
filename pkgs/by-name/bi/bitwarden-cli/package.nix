@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , python3
 , cctools
+, nix-update-script
 , nixosTests
 , xcbuild
 }:
@@ -58,8 +59,13 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  passthru.tests = {
-    vaultwarden = nixosTests.vaultwarden.sqlite;
+  passthru = {
+    tests = {
+      vaultwarden = nixosTests.vaultwarden.sqlite;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+    };
   };
 
   meta = with lib; {
