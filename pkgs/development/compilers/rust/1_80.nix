@@ -39,7 +39,7 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.llvmPackages_18.clangUseLLVM;
+          cc = pkgsBuildBuild.llvmPackages_18.clangUseLLVM;
         };
       }
     );
@@ -73,7 +73,7 @@ import ./default.nix
               pkg.override {
                 stdenv = stdenv.override {
                   allowedRequisites = null;
-                  cc = llvmPackages.clangUseLLVM;
+                  cc = pkgsBuildBuild.llvmPackages_18.clangUseLLVM;
                 };
               };
           in
