@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchPypi
-, postgresql
-, postgresqlTestHook
+{
+  fetchFromGitHub,
+  fetchPypi,
+  lib,
+  postgresql,
+  postgresqlTestHook,
+  python3,
 }:
 let
   python = python3.override {
@@ -25,21 +26,16 @@ let
 
 in
 python.pkgs.buildPythonApplication rec {
-  pname = "fit-trackee";
-  version = "0.8.6";
+  pname = "fittrackee";
+  version = "0.8.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lTDS+HfYG6ayXDotu7M2LUrw+1ZhQ0ftw0rTn4Mr3rQ=";
+    hash = "sha256-IO6M+HXAR3Gn0/71KwkaQr6sB0eCQzmnqHYgO+mzIZM=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail psycopg2-binary psycopg2
-  '';
 
   build-system = [
     python.pkgs.poetry-core
@@ -53,29 +49,32 @@ python.pkgs.buildPythonApplication rec {
     "pyopenssl"
   ];
 
-  dependencies = with python.pkgs; [
-    authlib
-    babel
-    click
-    dramatiq
-    flask
-    flask-bcrypt
-    flask-dramatiq
-    flask-limiter
-    flask-migrate
-    flask-sqlalchemy
-    gpxpy
-    gunicorn
-    humanize
-    psycopg2
-    pyjwt
-    pyopenssl
-    pytz
-    shortuuid
-    sqlalchemy
-    staticmap
-    ua-parser
-  ] ++ dramatiq.optional-dependencies.redis
+  dependencies =
+    with python.pkgs;
+    [
+      authlib
+      babel
+      click
+      dramatiq
+      flask
+      flask-bcrypt
+      flask-dramatiq
+      flask-limiter
+      flask-migrate
+      flask-sqlalchemy
+      gpxpy
+      gunicorn
+      humanize
+      psycopg2-binary
+      pyjwt
+      pyopenssl
+      pytz
+      shortuuid
+      sqlalchemy
+      staticmap
+      ua-parser
+    ]
+    ++ dramatiq.optional-dependencies.redis
     ++ flask-limiter.optional-dependencies.redis;
 
   pythonImportsCheck = [ "fittrackee" ];

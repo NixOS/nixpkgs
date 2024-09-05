@@ -464,6 +464,7 @@ mapAliases ({
   firmwareLinuxNonfree = linux-firmware; # Added 2022-01-09
   fishfight = jumpy; # Added 2022-08-03
   fitnesstrax = throw "fitnesstrax was removed from nixpkgs because it disappeared upstream and no longer compiles"; # added 2023-07-04
+  fit-trackee = fittrackee; # added 2024-09-03
   flashrom-stable = flashprog;   # Added 2024-03-01
   flatbuffers_2_0 = flatbuffers; # Added 2022-05-12
   flintqs = throw "FlintQS has been removed due to lack of maintenance and security issues; use SageMath or FLINT instead"; # Added 2024-03-21

@@ -2279,6 +2279,11 @@
     github = "barinov274";
     githubId = 54442153;
   };
+  BarrOff = {
+    name = "BarrOff";
+    github = "BarrOff";
+    githubId = 58253563;
+  };
   barrucadu = {
     email = "mike@barrucadu.co.uk";
     github = "barrucadu";
@@ -20989,6 +20994,14 @@
     name = "Theodor-Alexandru Irimia";
     github = "tirimia";
     githubId = 11174371;
+  };
+  titaniumtown = {
+    email = "titaniumtown@proton.me";
+    name = "Simon Gardling";
+    github = "titaniumtown";
+    githubId = 11786225;
+    matrix = "@titaniumtown:envs.net";
+    keys = [ { fingerprint = "D15E 4754 FE1A EDA1 5A6D  4702 9AB2 8AC1 0ECE 533D"; } ];
   };
   tjni = {
     email = "43ngvg@masqt.com";
