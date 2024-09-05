@@ -26,7 +26,7 @@
   librsvg,
   webp-pixbuf-loader,
   tracker,
-  tracker-miners,
+  localsearch,
   gexiv2,
   libselinux,
   libcloudproviders,
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcloudproviders
     shared-mime-info
     tracker
-    tracker-miners
+    localsearch
     gnome-autoar
   ];
 

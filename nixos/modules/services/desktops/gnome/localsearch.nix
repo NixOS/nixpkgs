@@ -35,11 +35,11 @@
 
   config = lib.mkIf config.services.gnome.localsearch.enable {
 
-    environment.systemPackages = [ pkgs.tracker-miners ];
+    environment.systemPackages = [ pkgs.localsearch ];
 
-    services.dbus.packages = [ pkgs.tracker-miners ];
+    services.dbus.packages = [ pkgs.localsearch ];
 
-    systemd.packages = [ pkgs.tracker-miners ];
+    systemd.packages = [ pkgs.localsearch ];
 
   };
 
