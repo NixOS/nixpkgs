@@ -18850,8 +18850,6 @@ with pkgs;
 
   shellharden = callPackage ../development/tools/shellharden { };
 
-  schemaspy = callPackage ../development/tools/database/schemaspy { };
-
   scenebuilder = callPackage ../development/tools/scenebuilder { };
 
   scenic-view = callPackage ../development/tools/scenic-view { };
@@ -25949,8 +25947,6 @@ with pkgs;
 
   ### SERVERS / GEOSPATIAL
 
-  fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
-
   martin = callPackage ../servers/geospatial/martin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -28903,7 +28899,7 @@ with pkgs;
 
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
-  backintime-qt = libsForQt5.callPackage ../applications/networking/sync/backintime/qt.nix { };
+  backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
 
   backintime = backintime-qt;
 
@@ -31877,10 +31873,6 @@ with pkgs;
 
   clerk = callPackage ../applications/audio/clerk { };
 
-  jujutsu = callPackage ../applications/version-management/jujutsu {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
-
   nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
@@ -32819,9 +32811,17 @@ with pkgs;
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
+    inherit (darwin.apple_sdk_12_3.frameworks) CoreServices Cocoa Hypervisor Kernel vmnet;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
+    stdenv =
+      if stdenv.hostPlatform.isDarwin then
+        overrideSDK stdenv {
+          darwinSdkVersion = "12.3";
+          darwinMinVersion = "12.0";
+        }
+      else
+        stdenv;
   };
 
   qemu-python-utils = python3Packages.toPythonApplication (

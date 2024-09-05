@@ -14,7 +14,6 @@
   config,
   cudaSupport ? config.cudaSupport,
   cupy,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -45,13 +44,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "array_api_compat" ];
 
   # CUDA (used via cupy) is not available in the testing sandbox
-  checkPhase = ''
-    runHook preCheck
-    python -m pytest -k 'not cupy'
-    runHook postCheck
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  pytestFlagsArray = [
+    "-k"
+    "'not cupy'"
+  ];
 
   meta = {
     homepage = "https://data-apis.org/array-api-compat";
