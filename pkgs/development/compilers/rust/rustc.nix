@@ -109,6 +109,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "--tools=rustc,rustdoc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
+    # For Nixpkgs it makes more sense to use stdenv's linker than
+    # letting rustc build its own.
+    "--disable-lld"
     "--build=${stdenv.buildPlatform.rust.rustcTargetSpec}"
     "--host=${stdenv.hostPlatform.rust.rustcTargetSpec}"
     # std is built for all platforms in --target.
