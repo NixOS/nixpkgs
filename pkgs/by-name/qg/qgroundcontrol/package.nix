@@ -101,12 +101,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = "https://qgroundcontrol.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       lopsided98
       pandapip1
     ];
