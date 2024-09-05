@@ -116,6 +116,7 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [
       _0x4A6F
       thoughtpolice
+      emily
     ];
     mainProgram = "jj";
   };
