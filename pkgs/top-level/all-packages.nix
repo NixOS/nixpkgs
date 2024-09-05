@@ -32016,7 +32016,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  musescore = libsForQt5.callPackage ../applications/audio/musescore { };
+  musescore = qt6.callPackage ../applications/audio/musescore { };
 
   music-player = callPackage ../applications/audio/music-player { };
 
