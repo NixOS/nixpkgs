@@ -1,6 +1,11 @@
 # nix-build '<nixpkgs/nixos>' -A config.system.build.openstackImage --arg configuration "{ imports = [ ./nixos/maintainers/scripts/openstack/openstack-image.nix ]; }"
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   copyChannel = true;
@@ -11,7 +16,6 @@ in
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
-
 
   options.openstackImage = {
     name = mkOption {
@@ -33,7 +37,10 @@ in
     };
 
     format = mkOption {
-      type = types.enum [ "raw" "qcow2" ];
+      type = types.enum [
+        "raw"
+        "qcow2"
+      ];
       default = "qcow2";
       description = "The image format to output";
     };
@@ -59,13 +66,12 @@ in
       inherit (cfg) contents format name;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
-      configFile = pkgs.writeText "configuration.nix"
-        ''
-          { modulesPath, ... }: {
-            imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
-            openstack.zfs.enable = true;
-          }
-        '';
+      configFile = pkgs.writeText "configuration.nix" ''
+        { modulesPath, ... }: {
+          imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
+          openstack.zfs.enable = true;
+        }
+      '';
 
       includeChannel = copyChannel;
 
