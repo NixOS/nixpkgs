@@ -3,28 +3,17 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
-  qtbase,
-  qtcharts,
-  qtlocation,
-  qtserialport,
-  qtsvg,
-  qtquickcontrols2,
-  qtgraphicaleffects,
-  qtspeech,
-  qtx11extras,
-  qmake,
-  qttools,
+  libsForQt5,
   gst_all_1,
   wayland,
   pkg-config,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
   version = "4.4.2";
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with libsForQt5; [
     qtbase
     qtcharts
     qtlocation
@@ -46,12 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-    qttools
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ (with libsForQt5; [
+      qmake
+      qttools
+      wrapQtAppsHook
+    ]);
 
   preConfigure = ''
     mkdir build
