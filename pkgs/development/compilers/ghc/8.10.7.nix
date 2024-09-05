@@ -466,6 +466,13 @@ stdenv.mkDerivation (rec {
       "Merge objects command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
       "ar command" "${toolPath "ar" installCC}" \
       "ranlib command" "${toolPath "ranlib" installCC}"
+  ''
+  + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    ghc-settings-edit "$settingsFile" \
+      "otool command" "${toolPath "otool" installCC}" \
+      "install_name_tool command" "${toolPath "install_name_tool" installCC}"
+  ''
+  + ''
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc

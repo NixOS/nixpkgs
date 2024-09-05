@@ -617,6 +617,11 @@ stdenv.mkDerivation ({
       "ar command" "${toolPath "ar" installCC}" \
       "ranlib command" "${toolPath "ranlib" installCC}"
   ''
+  + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    ghc-settings-edit "$settingsFile" \
+      "otool command" "${toolPath "otool" installCC}" \
+      "install_name_tool command" "${toolPath "install_name_tool" installCC}"
+  ''
   # Work around a GHC bug which causes unlit to be installed under a different
   # name than is used in the settings file.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/23317
