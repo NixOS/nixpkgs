@@ -48,14 +48,14 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "emilua";
   version = "0.10.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
-    rev = "v${version}";
+    rev = "v${self.version}";
     hash = "sha256-D6XKXik9nWQ6t6EF6dLbRGB60iFbPUM8/H8iFAz1QlE=";
   };
 
@@ -107,7 +107,10 @@ stdenv.mkDerivation rec {
     "--no-suite" "libpsx"
   ];
 
-  passthru.updateScript = gitUpdater {rev-prefix = "v";};
+  passthru = {
+    updateScript = gitUpdater {rev-prefix = "v";};
+    sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion self.version)))}";
+  };
 
   meta = with lib; {
     description = "Lua execution engine";
@@ -117,4 +120,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ manipuladordedados ];
     platforms = platforms.linux;
   };
-}
+})
