@@ -132,10 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "localsearch";
-      attrPath = "tracker-miners";
-    };
+    updateScript = gnome.updateScript { packageName = "localsearch"; };
   };
 
   meta = {
