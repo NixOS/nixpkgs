@@ -13781,11 +13781,6 @@ with pkgs;
   wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen-1.11.1";
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt-1.11.1";
 
-  wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    nodejs = nodejs_latest;
-  };
-
   wasm-tools = callPackage ../tools/misc/wasm-tools { };
 
   wasmedge = callPackage ../development/tools/wasmedge {
