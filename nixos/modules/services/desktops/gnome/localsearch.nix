@@ -1,6 +1,11 @@
 # LocalSearch daemons.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
@@ -9,7 +14,20 @@
   };
 
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "gnome" "tracker-miners" "enable" ] [ "services" "gnome" "localsearch" "enable" ])
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "gnome"
+        "tracker-miners"
+        "enable"
+      ]
+      [
+        "services"
+        "gnome"
+        "localsearch"
+        "enable"
+      ]
+    )
   ];
 
   ###### interface
