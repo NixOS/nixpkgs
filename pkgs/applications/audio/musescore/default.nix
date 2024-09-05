@@ -49,27 +49,15 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-oDbOaLFmSpZ7D8E7LBxUwFwiaPcucIUj3eEp6sXR5o8=";
+    sha256 = "sha256-eLtpLgXSc8L5y1Mg3s1wrxr09+/vBxNqJEtl9IoKYSM=";
   };
   patches = [
-    # https://github.com/musescore/MuseScore/pull/24247
-    (fetchpatch {
-      name = "skip-downloading-harfbuzz.patch";
-      url = "https://github.com/musescore/MuseScore/commit/686ea243d58b43eb3dff7ebdabb2e09de4d212e4.patch";
-      hash = "sha256-fsb1hKFKXwBdMPh+Ek0UT3XtI8qg3ieWUQW1/XDvhmg=";
-    })
-    # https://github.com/musescore/MuseScore/pull/24261
-    (fetchpatch {
-      name = "allow-using-system-harfbuzz.patch";
-      url = "https://github.com/musescore/MuseScore/commit/696279e362afe72db5e92f8a47aa64b3a0e86a86.patch";
-      hash = "sha256-z1W2SmzUUlVL7mRR2frzUZjMEnwqkVfRVz4TufR1tDU=";
-    })
     # https://github.com/musescore/MuseScore/pull/24326
     (fetchpatch {
       name = "fix-menubar-with-qt6.5+.patch";
