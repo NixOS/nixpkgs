@@ -117,6 +117,7 @@ rustPlatform.buildRustPackage {
       _0x4A6F
       thoughtpolice
       emily
+      bbigras
     ];
     mainProgram = "jj";
   };
