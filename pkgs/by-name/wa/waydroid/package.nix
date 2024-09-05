@@ -16,6 +16,7 @@
   wrapGAppsHook3,
   wl-clipboard,
   runtimeShell,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -98,6 +99,8 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
       --replace '"sh"' '"${runtimeShell}"'
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Container-based approach to boot a full Android system on a regular GNU/Linux system";
