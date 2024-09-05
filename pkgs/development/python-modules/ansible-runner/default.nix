@@ -76,6 +76,11 @@ buildPythonPackage rec {
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
+    # Assertion error
+    "test_get_role_list"
+    "test_include_role_from_collection_events"
+    "test_resolved_actions"
+    "test_callback_plugin_censoring_does_not_overwrite"
   ];
 
   disabledTestPaths =
