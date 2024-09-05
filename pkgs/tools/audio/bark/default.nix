@@ -4,23 +4,44 @@
   fetchFromGitHub,
   pkg-config,
   alsa-lib,
-  speexdsp,
+  cmake,
+  libopus,
+  soxr,
 }:
-rustPlatform.buildRustPackage {
-  pname = "bark";
-  version = "unstable-2023-08-22";
+let
+  version = "0.6.0";
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "bark";
-    rev = "2586b9fb58b496f8ef06f516c9cd3aace77521f7";
-    hash = "sha256-sGroae6uJhB9UIpFmvt520Zs9k0ir7H8pGkhKJmVWek=";
+    rev = "v${version}";
+    hash = "sha256-JaUIWGCYhasM0DgqL+DiG2rE1OWVg/N66my/4RWDN1E=";
   };
-  cargoHash = "sha256-OjlVn4fvKPm3UfqhKkv7cDuvK4mcLcQXPNPK+WScrMc=";
+in
+rustPlatform.buildRustPackage {
+  pname = "bark";
+  inherit version src;
+  # cargo.lock contains git dependencies (soxr) so we use a copied version for now.
+  # Fix this post v0.6.0 when soxr is published to crates.io
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "soxr-0.0.0" = "sha256-dizttu5GhC1otLlQHU81NymC1a9cQf8hFR0oI+SPqkM=";
+    };
+  };
+
+  # Broken rustdoc comment
+  patches = [ ./lol.patch ];
+
   buildInputs = [
     alsa-lib
-    speexdsp
+    libopus
+    soxr
   ];
-  nativeBuildInputs = [ pkg-config ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   meta = {
     description = "Live sync audio streaming for local networks";
