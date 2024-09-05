@@ -10692,17 +10692,7 @@ self: super: with self; {
 
   pwntools-full = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
-    withAarch64 = true;
-    withAvr = true;
-    withAmd64 = true;
-    withArm = true;
-    withI386 = true;
-    withM68k = true;
-    withMsp430 = true;
-    withPowerpc = true;
-    withRiscv32 = true;
-    withRiscv64 = true;
-    withS390 = true;
+    withAllFeatures = true;
   };
 
   py-air-control = callPackage ../development/python-modules/py-air-control { };
