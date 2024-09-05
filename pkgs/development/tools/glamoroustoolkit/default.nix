@@ -1,4 +1,5 @@
 { lib
+, pkgs
 , stdenv
 , fetchzip
 , fetchurl
@@ -85,6 +86,9 @@ preFixup = let
       webkitgtk_4_1
       stdenv.cc.cc.lib
     ];
+    binPath = lib.makeBinPath [
+      pkgs.gnome.zenity   # File selection dialog
+    ];
   in ''
     chmod +x $out/lib/*.so
     patchelf \
@@ -112,6 +116,10 @@ preFixup = let
     ln -s $out/lib/libcairo.so $out/lib/libcairo.so.2
     rm $out/lib/libgit2.so
     ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
+
+    gappsWrapperArgs+=(
+      --prefix PATH : ${binPath}
+    )
   '';
 
   meta = {
