@@ -22,6 +22,8 @@
 
   frigate = callPackage ./frigate {};
 
+  garmin_connect = callPackage ./garmin_connect {};
+
   govee-lan = callPackage ./govee-lan {};
 
   gpio = callPackage ./gpio {};
