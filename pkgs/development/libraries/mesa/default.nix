@@ -6,6 +6,7 @@
 , expat
 , fetchCrate
 , fetchFromGitLab
+, fetchpatch
 , file
 , flex
 , glslang
@@ -139,6 +140,18 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+
+    # dril/swrast fixes
+    # FIXME: remove when backported upstream
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/06d417af80bc1f171cadc338e63a7aa75c877754.diff";
+      hash = "sha256-JbrygyjtgNcQlggv1X+3HWf4WRWdtyeEvg3jwthEspM=";
+    })
+
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/56ac37845487b62f495428b0f20d145489f621e2.diff";
+      hash = "sha256-J6P7k6SuOqRzmeqiiAc+QgBDp5nIBY+sPwvnQ+hlCW8=";
+    })
   ];
 
   postPatch = ''
