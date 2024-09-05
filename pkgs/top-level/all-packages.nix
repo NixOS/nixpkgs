@@ -22912,9 +22912,7 @@ with pkgs;
 
   SDL = SDL1;
 
-  SDL2 = callPackage ../development/libraries/SDL2 {
-    inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
-  };
+  SDL2 = callPackage ../development/libraries/SDL2 { };
 
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
