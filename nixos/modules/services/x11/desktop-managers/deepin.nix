@@ -47,7 +47,6 @@ in
       '';
 
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
 
       services.deepin.dde-daemon.enable = mkForce true;
