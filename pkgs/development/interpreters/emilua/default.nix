@@ -110,6 +110,13 @@ stdenv.mkDerivation (self: {
     "--no-suite" "libpsx"
   ];
 
+  postInstall = ''
+    mkdir -p $out/nix-support
+    cp ${./setup-hook.sh} $out/nix-support/setup-hook
+    substituteInPlace $out/nix-support/setup-hook \
+      --replace @sitePackages@ "${self.passthru.sitePackages}"
+  '';
+
   passthru = {
     updateScript = gitUpdater {rev-prefix = "v";};
     inherit boost;
