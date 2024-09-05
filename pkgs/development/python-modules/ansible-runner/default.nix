@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"setuptools>=45, <=69.0.2", "setuptools-scm[toml]>=6.2, <=8.0.4"' '"setuptools", "setuptools-scm"'
+      --replace-fail '"setuptools>=45, <=69.0.2", "setuptools-scm[toml]>=6.2, <=8.0.4"' '"setuptools", "setuptools-scm"'
   '';
 
   build-system = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # Requires network access
+    # Tests require network access
     "test_callback_plugin_task_args_leak"
     "test_env_accuracy"
     # Times out on slower hardware
@@ -95,9 +95,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helps when interfacing with Ansible";
-    mainProgram = "ansible-runner";
     homepage = "https://github.com/ansible/ansible-runner";
+    changelog = "https://github.com/ansible/ansible-runner/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = [ ];
+    mainProgram = "ansible-runner";
   };
 }
