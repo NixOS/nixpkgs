@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, makeWrapper
-, libusb-compat-0_1
-, ncurses
-, usePython ? false
-, python ? null
-, swig2
-, extraPackages ? [ ]
-, buildPackages
-, testers
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  libusb-compat-0_1,
+  ncurses,
+  usePython ? false,
+  python ? null,
+  swig,
+  extraPackages ? [ ],
+  buildPackages,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,21 +40,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [
-    libusb-compat-0_1
-    ncurses
-  ] ++ lib.optionals usePython [
-    python
-    swig2
-  ];
+  buildInputs =
+    [
+      libusb-compat-0_1
+      ncurses
+    ]
+    ++ lib.optionals usePython [
+      python
+      swig
+    ];
 
-  propagatedBuildInputs = lib.optionals usePython [
-    python.pkgs.numpy
-  ];
+  propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
 
-  cmakeFlags = lib.optionals usePython [
-    "-DUSE_PYTHON_CONFIG=ON"
-  ];
+  cmakeFlags = lib.optionals usePython [ "-DUSE_PYTHON_CONFIG=ON" ];
 
   postFixup = lib.optionalString (extraPackages != [ ]) (
     # Join all plugins via symlinking
@@ -62,12 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
         ${buildPackages.xorg.lndir}/bin/lndir -silent ${pkg} $out
       ''))
       lib.concatStrings
-    ] + ''
+    ]
+    + ''
       # Needed for at least the remote plugin server
       for file in $out/bin/*; do
-          wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg (
-            lib.makeSearchPath finalAttrs.passthru.searchPath extraPackages
-          )}
+          wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg (lib.makeSearchPath finalAttrs.passthru.searchPath extraPackages)}
       done
     ''
   );

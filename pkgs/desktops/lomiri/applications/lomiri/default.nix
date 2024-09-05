@@ -263,7 +263,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests.lomiri) greeter desktop desktop-ayatana-indicators;
+      inherit (nixosTests.lomiri)
+        greeter
+        desktop-basics
+        desktop-appinteractions
+        desktop-ayatana-indicators
+        ;
     };
     updateScript = gitUpdater { };
     greeter = linkFarm "lomiri-greeter" [

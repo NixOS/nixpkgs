@@ -13,26 +13,24 @@
   hypothesis,
   testers,
   sqlite-utils,
+  setuptools,
 }:
-
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.36";
-  format = "setuptools";
+  version = "3.37";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3MMROU/obcFvZQN7AHXiOO/P0uEuZdU+0ZaVRQKZbzw=";
+    inherit version;
+    pname = "sqlite_utils";
+    hash = "sha256-VCpxAz1OeTb+kJIwrJeU0+IAAhg4q2Pbrzzo9bwic6Q=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click-default-group-wheel" "click-default-group"
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     click
     click-default-group
     python-dateutil

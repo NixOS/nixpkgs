@@ -87,13 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 dist/unix/armitage $out/bin/armitage
     substituteInPlace $out/bin/armitage \
-      --replace "armitage.jar" "$JAR"
+      --replace-fail "armitage.jar" "$JAR"
     wrapProgram $out/bin/armitage \
       --prefix PATH : "${lib.makeBinPath [ jdk11 metasploit ]}"
 
     install -Dm755 dist/unix/teamserver $out/bin/teamserver
     substituteInPlace $out/bin/teamserver \
-      --replace "armitage.jar" "$JAR"
+      --replace-fail "armitage.jar" "$JAR"
     wrapProgram $out/bin/teamserver \
       --prefix PATH : "${lib.makeBinPath [ jdk11 metasploit ]}"
 

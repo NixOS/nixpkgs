@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "21.4";
+  version = "21.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,21 +33,25 @@ buildPythonPackage rec {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5raEejd8WH9JrFvMIy2AuMGK9O/FJ2rq9PeVqK+IMOU=";
+    hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
   };
 
-  build-system = [ setuptools hatchling ];
-
-  dependencies = [
-    httpx
+  build-system = [
+    setuptools
+    hatchling
   ];
+
+  dependencies = [ httpx ];
 
   optional-dependencies = rec {
     all = ext ++ http2 ++ passport ++ socks;
     callback-data = [ cachetools ];
     ext = callback-data ++ job-queue ++ rate-limiter ++ webhooks;
     http2 = httpx.optional-dependencies.http2;
-    job-queue = [ apscheduler pytz ];
+    job-queue = [
+      apscheduler
+      pytz
+    ];
     passport = [ cryptography ] ++ lib.optionals (pythonAtLeast "3.13") [ cffi ];
     rate-limiter = [ aiolimiter ];
     socks = httpx.optional-dependencies.socks;

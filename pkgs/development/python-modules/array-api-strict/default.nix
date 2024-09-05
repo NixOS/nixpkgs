@@ -6,7 +6,6 @@
   numpy,
   pytestCheckHook,
   hypothesis,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -37,13 +36,11 @@ buildPythonPackage rec {
     "test_environment_variables"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
+  meta = {
     homepage = "https://data-apis.org/array-api-strict";
     changelog = "https://github.com/data-apis/array-api-strict/releases/tag/${version}";
     description = "A strict, minimal implementation of the Python array API";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.berquist ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ berquist ];
   };
 }

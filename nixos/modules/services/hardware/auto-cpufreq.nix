@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.auto-cpufreq;
   cfgFilename = "auto-cpufreq.conf";
@@ -9,9 +8,9 @@ let
 in {
   options = {
     services.auto-cpufreq = {
-      enable = mkEnableOption "auto-cpufreq daemon";
+      enable = lib.mkEnableOption "auto-cpufreq daemon";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Configuration for `auto-cpufreq`.
 
@@ -19,12 +18,12 @@ in {
           '';
 
         default = {};
-        type = types.submodule { freeformType = format.type; };
+        type = lib.types.submodule { freeformType = format.type; };
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.auto-cpufreq ];
 
     systemd = {

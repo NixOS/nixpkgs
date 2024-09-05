@@ -764,7 +764,7 @@
   "crow-translate": {
     "description": "Application that allows you to translate and speak text",
     "name": "crow-translate",
-    "project_path": "playground/office/crow-translate",
+    "project_path": "kde/office/crow-translate",
     "repo_path": "office/crow-translate"
   },
   "cutehmi": {

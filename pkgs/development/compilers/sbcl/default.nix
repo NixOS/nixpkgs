@@ -16,6 +16,9 @@ let
     "2.4.7" = {
       sha256 = "sha256-aFRNJQNjWs0BXVNMzJsq6faJltQptakGP9Iv8JJQEdI=";
     };
+    "2.4.8" = {
+      sha256 = "sha256-/G7NzFOOgKFKmY1TDMw4SkF5D09Pxs1//oyxJqZ3aUw=";
+    };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other

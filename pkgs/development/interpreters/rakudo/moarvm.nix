@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   pname = "moarvm";
   version = "2024.06";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";

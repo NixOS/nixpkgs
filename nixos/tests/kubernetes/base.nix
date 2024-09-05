@@ -62,7 +62,7 @@ let
                 # NOTE: what featureGates are useful for testing might change in
                 # the future, see link below to find new ones
                 # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
-                featureGates = {CPUManager = true; AppArmor= false;};
+                featureGates = {AnonymousAuthConfigurableEndpoints = true; ConsistentListFromCache = false;};
                 masterAddress = "${masterName}.${config.networking.domain}";
               };
             }

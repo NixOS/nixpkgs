@@ -88,8 +88,7 @@ python.pkgs.buildPythonApplication rec {
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
     substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' "" \
-      --replace-fail "--cov=snapcraft" ""
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -155,6 +154,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       pytest-check
+      pytest-cov-stub
       pytest-mock
       pytest-subprocess
       pytestCheckHook

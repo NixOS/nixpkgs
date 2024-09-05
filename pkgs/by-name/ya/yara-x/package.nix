@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yara-x";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KcUBaEn28hNpy1d+uqGQZUlZKCnaLcrB8th9KXHXnuQ=";
+    hash = "sha256-nzTksznwyLncQO2c2+ZI0Bn9kNXl6GthFCrkz3ihS3w=";
   };
 
-  cargoHash = "sha256-9W68Lm1Jc1GZ7wcS0FROZYGZkrzKn9wVBKdqlBjVOxk=";
+  cargoHash = "sha256-+0aroLCmi2HPILCxLBFzjtHPpe6f6AMkoPdH5CjoyEo=";
 
   nativeBuildInputs = [ cmake installShellFiles ];
 

@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, dde-qt-dbus-factory
-, wrapQtAppsHook
-, qtbase
-, qtx11extras
-, dtkwidget
-, qt5integration
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dde-qt-dbus-factory,
+  wrapQtAppsHook,
+  qtbase,
+  qtx11extras,
+  dtkwidget,
+  qt5integration,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {

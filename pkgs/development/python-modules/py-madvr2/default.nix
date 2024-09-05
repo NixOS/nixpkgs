@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "py-madvr2";
-  version = "1.6.29";
+  version = "1.6.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iloveicedgreentea";
     repo = "py-madvr";
     rev = "refs/tags/${version}";
-    hash = "sha256-ibgmUpHSmOr5glSZPIJXTBDlEnQoWtmJzmEGsggQxnk=";
+    hash = "sha256-yD8DNhYG9oauEGKnX8Qnh0oSwG/AZa8FIRtHVq4DyTE=";
   };
 
   build-system = [ setuptools ];

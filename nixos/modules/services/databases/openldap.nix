@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.openldap;
   openldap = cfg.package;
@@ -23,22 +21,22 @@ let
       merge = lib.mergeEqualOption;
     };
     # We don't coerce to lists of single values, as some values must be unique
-  in types.either singleLdapValueType (types.listOf singleLdapValueType);
+  in lib.types.either singleLdapValueType (lib.types.listOf singleLdapValueType);
 
   ldapAttrsType =
     let
       options = {
-        attrs = mkOption {
-          type = types.attrsOf ldapValueType;
+        attrs = lib.mkOption {
+          type = lib.types.attrsOf ldapValueType;
           default = {};
           description = "Attributes of the parent entry.";
         };
-        children = mkOption {
+        children = lib.mkOption {
           # Hide the child attributes, to avoid infinite recursion in e.g. documentation
           # Actual Nix evaluation is lazy, so this is not an issue there
           type = let
             hiddenOptions = lib.mapAttrs (name: attr: attr // { visible = false; }) options;
-          in types.attrsOf (types.submodule { options = hiddenOptions; });
+          in lib.types.attrsOf (lib.types.submodule { options = hiddenOptions; });
           default = {};
           description = "Child entries of the current entry, with recursively the same structure.";
           example = lib.literalExpression ''
@@ -56,15 +54,15 @@ let
             }
           '';
         };
-        includes = mkOption {
-          type = types.listOf types.path;
+        includes = lib.mkOption {
+          type = lib.types.listOf lib.types.path;
           default = [];
           description = ''
             LDIF files to include after the parent's attributes but before its children.
           '';
         };
       };
-    in types.submodule { inherit options; };
+    in lib.types.submodule { inherit options; };
 
   valueToLdif = attr: values: let
     listValues = if lib.isList values then values else lib.singleton values;
@@ -85,13 +83,13 @@ let
 in {
   options = {
     services.openldap = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the ldap server.";
       };
 
-      package = mkPackageOption pkgs "openldap" {
+      package = lib.mkPackageOption pkgs "openldap" {
         extraDescription = ''
           This can be used to, for example, set an OpenLDAP package
           with custom overrides to enable modules or other
@@ -99,26 +97,26 @@ in {
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "openldap";
         description = "User account under which slapd runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "openldap";
         description = "Group account under which slapd runs.";
       };
 
-      urlList = mkOption {
-        type = types.listOf types.str;
+      urlList = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "ldap:///" ];
         description = "URL list slapd should listen on.";
         example = [ "ldaps:///" ];
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = ldapAttrsType;
         description = "Configuration for OpenLDAP, in OLC format";
         example = lib.literalExpression ''
@@ -165,8 +163,8 @@ in {
       };
 
       # This option overrides settings
-      configDir = mkOption {
-        type = types.nullOr types.path;
+      configDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           Use this config directory instead of generating one from the
@@ -175,8 +173,8 @@ in {
         example = "/var/lib/openldap/slapd.d";
       };
 
-      mutableConfig = mkOption {
-        type = types.bool;
+      mutableConfig = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to allow writable on-line configuration. If
@@ -186,8 +184,8 @@ in {
         '';
       };
 
-      declarativeContents = mkOption {
-        type = with types; attrsOf lines;
+      declarativeContents = lib.mkOption {
+        type = with lib.types; attrsOf lines;
         default = {};
         description = ''
           Declarative contents for the LDAP database, in LDIF format by suffix.
@@ -225,8 +223,8 @@ in {
   meta.maintainers = with lib.maintainers; [ kwohlfahrt ];
 
   config = let
-    dbSettings = mapAttrs' (name: { attrs, ... }: nameValuePair attrs.olcSuffix attrs)
-      (filterAttrs (name: { attrs, ... }: (hasPrefix "olcDatabase=" name) && attrs ? olcSuffix) cfg.settings.children);
+    dbSettings = lib.mapAttrs' (name: { attrs, ... }: lib.nameValuePair attrs.olcSuffix attrs)
+      (lib.filterAttrs (name: { attrs, ... }: (lib.hasPrefix "olcDatabase=" name) && attrs ? olcSuffix) cfg.settings.children);
     settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
     writeConfig = pkgs.writeShellScript "openldap-config" ''
       set -euo pipefail
@@ -241,32 +239,32 @@ in {
       chmod -R ${if cfg.mutableConfig then "u+rw" else "u+r-w"} ${configDir}
     '';
 
-    contentsFiles = mapAttrs (dn: ldif: pkgs.writeText "${dn}.ldif" ldif) cfg.declarativeContents;
+    contentsFiles = lib.mapAttrs (dn: ldif: pkgs.writeText "${dn}.ldif" ldif) cfg.declarativeContents;
     writeContents = pkgs.writeShellScript "openldap-load" ''
       set -euo pipefail
 
       rm -rf $2/*
       ${openldap}/bin/slapadd -F ${configDir} -b $1 -l $3
     '';
-  in mkIf cfg.enable {
+  in lib.mkIf cfg.enable {
     assertions = [{
       assertion = (cfg.declarativeContents != {}) -> cfg.configDir == null;
       message = ''
-        Declarative DB contents (${attrNames cfg.declarativeContents}) are not
+        Declarative DB contents (${lib.attrNames cfg.declarativeContents}) are not
         supported with user-managed configuration.
       '';
     }] ++ (map (dn: {
-      assertion = (getAttr dn dbSettings) ? "olcDbDirectory";
+      assertion = (lib.getAttr dn dbSettings) ? "olcDbDirectory";
       # olcDbDirectory is necessary to prepopulate database using `slapadd`.
       message = ''
         Declarative DB ${dn} does not exist in `services.openldap.settings`, or does not have
         `olcDbDirectory` configured.
       '';
-    }) (attrNames cfg.declarativeContents)) ++ (mapAttrsToList (dn: { olcDbDirectory ? null, ... }: {
+    }) (lib.attrNames cfg.declarativeContents)) ++ (lib.mapAttrsToList (dn: { olcDbDirectory ? null, ... }: {
       # For forward compatibility with `DynamicUser`, and to avoid accidentally clobbering
       # directories with `declarativeContents`.
       assertion = (olcDbDirectory != null) ->
-      ((hasPrefix "/var/lib/openldap/" olcDbDirectory) && (olcDbDirectory != "/var/lib/openldap/"));
+      ((lib.hasPrefix "/var/lib/openldap/" olcDbDirectory) && (olcDbDirectory != "/var/lib/openldap/"));
       message = ''
         Database ${dn} has `olcDbDirectory` (${olcDbDirectory}) that is not a subdirectory of
         `/var/lib/openldap/`.
@@ -303,8 +301,8 @@ in {
           "!${pkgs.coreutils}/bin/mkdir -p ${configDir}"
           "+${pkgs.coreutils}/bin/chown $USER ${configDir}"
         ] ++ (lib.optional (cfg.configDir == null) writeConfig)
-        ++ (mapAttrsToList (dn: content: lib.escapeShellArgs [
-          writeContents dn (getAttr dn dbSettings).olcDbDirectory content
+        ++ (lib.mapAttrsToList (dn: content: lib.escapeShellArgs [
+          writeContents dn (lib.getAttr dn dbSettings).olcDbDirectory content
         ]) contentsFiles)
         ++ [ "${openldap}/bin/slaptest -u -F ${configDir}" ];
         ExecStart = lib.escapeShellArgs ([
@@ -317,7 +315,7 @@ in {
         NotifyAccess = "all";
         RuntimeDirectory = "openldap";
         StateDirectory = ["openldap"]
-          ++ (map ({olcDbDirectory, ... }: removePrefix "/var/lib/" olcDbDirectory) (attrValues dbSettings));
+          ++ (map ({olcDbDirectory, ... }: lib.removePrefix "/var/lib/" olcDbDirectory) (lib.attrValues dbSettings));
         StateDirectoryMode = "700";
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

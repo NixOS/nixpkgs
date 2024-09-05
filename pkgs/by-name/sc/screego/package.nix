@@ -10,13 +10,13 @@
 }:
 let
 
-  version = "1.10.4";
+  version = "1.10.5";
 
   src = fetchFromGitHub {
     owner = "screego";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-/GtlMLm2swmLV6bC7OWkcQUeB6WauRm7IOs0UhyocO0=";
+    hash = "sha256-4WF9PfG6W1BLBqgWkKhTFEzed0+jDpRFMTsHw/1lPnQ=";
   };
 
   ui = stdenv.mkDerivation {

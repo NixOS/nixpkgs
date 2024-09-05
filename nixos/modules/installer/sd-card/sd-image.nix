@@ -209,7 +209,7 @@ in
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
         # The "bootable" partition is where u-boot will look file for the bootloader
         # information (dtbs, extlinux.conf file).
-        sfdisk $img <<EOF
+        sfdisk --no-reread --no-tell-kernel $img <<EOF
             label: dos
             label-id: ${config.sdImage.firmwarePartitionID}
 

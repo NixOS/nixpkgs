@@ -25,7 +25,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.9.2";
+  version = "0.9.3";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8O+0yOdaHnc2vDLCPK7PIuR6IBeOmH9RNDo0uaw7EeU=";
+    hash = "sha256-XjHm9jBpBQcf1qaZJLDSSrPK9Nqi3olG0pMXHdNUjbg=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-ofF9eTXLVyFfrTnAj6rMYV3dMY613tjhKgoLs303CEA=";
+  cargoHash = "sha256-sFYvEKZVTS5v37CpIl/KjoOY0iWCHLgIJFUdht5SjJY=";
 
   patches = [
     # Remove "PermissionsStartOnly" from systemd service files,
@@ -61,13 +61,18 @@ rustPlatform.buildRustPackage {
     bzip2
     openssl
     sqlite
-    foundationdb
     zstd
+  ] ++ lib.optionals stdenv.isLinux [
+    foundationdb
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  # skip defaults on darwin because foundationdb is not available
+  buildNoDefaultFeatures = stdenv.isDarwin;
+  buildFeatures = lib.optional (stdenv.isDarwin) [ "sqlite" "postgres" "mysql" "rocks" "elastic" "s3" "redis" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.1.1";
+  version = "2.2.2";
   providers = {
     airplay = [
     ];
@@ -61,7 +61,10 @@
     ];
     soundcloud = [
     ]; # missing soundcloudpy
-    spotify = [
+    spotify = ps: with ps; [
+      pkce
+    ];
+    template_player_provider = [
     ];
     test = [
     ];

@@ -19,7 +19,7 @@ appimageTools.wrapType2 rec {
   src = fetchurl {
     url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/linux-Miru-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    hash = "sha256-NjsuI9GFMVJ6+E03UDPq6xrzlO0Vs1nfYsOE6TDVwY0=";
+    hash = "sha256-Kk8rdhKNLARG5zngWXRjcfoe9Fc6VHYre7FMkHLPMIo=";
   };
 
   extraInstallCommands =

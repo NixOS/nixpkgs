@@ -7,8 +7,8 @@ in
 {
   imports = [ ./azure-common.nix ];
 
-  options = {
-    virtualisation.azureImage.diskSize = mkOption {
+  options.virtualisation.azureImage = {
+    diskSize = mkOption {
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 2048;
@@ -16,14 +16,34 @@ in
         Size of disk image. Unit is MB.
       '';
     };
-    virtualisation.azureImage.contents = mkOption {
+
+    bootSize = mkOption {
+      type = types.int;
+      default = 256;
+      description = ''
+        ESP partition size. Unit is MB.
+        Only effective when vmGeneration is `v2`.
+      '';
+    };
+
+    contents = mkOption {
       type = with types; listOf attrs;
       default = [ ];
       description = ''
         Extra contents to add to the image.
       '';
     };
+
+    vmGeneration = mkOption {
+      type = with types; enum [ "v1" "v2" ];
+      default = "v1";
+      description = ''
+        VM Generation to use.
+        For v2, secure boot needs to be turned off during creation.
+      '';
+    };
   };
+
   config = {
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
@@ -33,9 +53,12 @@ in
       '';
       configFile = ./azure-config-user.nix;
       format = "raw";
+
+      bootSize = "${toString cfg.bootSize}M";
+      partitionTableType = if cfg.vmGeneration == "v2" then "efi" else "legacy";
+
       inherit (cfg) diskSize contents;
       inherit config lib pkgs;
     };
-
   };
 }

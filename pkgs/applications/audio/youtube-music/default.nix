@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postBuild = lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
+    cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
   '' + ''
     pnpm build
     ./node_modules/.bin/electron-builder \
       --dir \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
   '';
 

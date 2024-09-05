@@ -72,7 +72,7 @@
 , enableIscsi ? false
 , openiscsi
 , libiscsi
-, enableXen ? false
+, enableXen ? stdenv.isLinux && stdenv.isx86_64
 , xen
 , enableZfs ? stdenv.isLinux
 , zfs
@@ -163,6 +163,11 @@ stdenv.mkDerivation rec {
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
     sed -i '/domaincapstest/d' tests/meson.build
+  '' + lib.optionalString enableXen ''
+    # Has various hardcoded paths that don't exist outside of a Xen dom0.
+    sed -i '/libxlxml2domconfigtest/d' tests/meson.build
+    substituteInPlace src/libxl/libxl_capabilities.h \
+     --replace-fail /usr/lib/xen ${xen}/libexec/xen
   '';
 
   strictDeps = true;

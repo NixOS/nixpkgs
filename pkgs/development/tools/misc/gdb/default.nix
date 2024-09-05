@@ -154,8 +154,10 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    # GDB upstream does not support ARM darwin
-    platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ ["x86_64-darwin"];
+    platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ darwin;
+    # upstream does not support targeting aarch64-darwin;
+    # see https://inbox.sourceware.org/gdb/3185c3b8-8a91-4beb-a5d5-9db6afb93713@Spark/
+    badPlatforms = lib.optionals (stdenv.targetPlatform.system == "aarch64-darwin") meta.platforms;
     maintainers = with lib.maintainers; [ pierron globin lsix ];
   };
 }

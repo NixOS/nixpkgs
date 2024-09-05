@@ -17,12 +17,12 @@
 , prefetch-yarn-deps
 }:
 let
-  version = "4.0.8.1874";
+  version = "4.0.9.2244";
   src = fetchFromGitHub {
     owner = "Sonarr";
     repo = "Sonarr";
     rev = "v${version}";
-    hash = "sha256-4WjeuVqzuUmgbKIjcQOJCNrTnT9Wn6kpVxS+1T1hqyQ=";
+    hash = "sha256-RDhJUf8P2STTug69EGozW0q87qDE40jf5G7n7pezWeY=";
   };
 in
 buildDotnetModule {
@@ -38,7 +38,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-dSZBifvUGJx5lj7C+Sj+kJprK8JG6SE5vg6+X6QdCZ8=";
+    hash = "sha256-qL8vNKf0XqpO/TUfKMXbfrmRVAqnvKLREAjcsAYDqeE=";
   };
 
   ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' ffmpeg "ffprobe");

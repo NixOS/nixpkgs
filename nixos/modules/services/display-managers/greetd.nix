@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
   cfg = config.services.greetd;
   tty = "tty${toString cfg.vt}";
@@ -8,13 +6,13 @@ let
 in
 {
   options.services.greetd = {
-    enable = mkEnableOption "greetd, a minimal and flexible login manager daemon";
+    enable = lib.mkEnableOption "greetd, a minimal and flexible login manager daemon";
 
-    package = mkPackageOption pkgs [ "greetd" "greetd" ] { };
+    package = lib.mkPackageOption pkgs [ "greetd" "greetd" ] { };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           default_session = {
             command = "''${pkgs.greetd.greetd}/bin/agreety --cmd sway";
@@ -27,8 +25,8 @@ in
       '';
     };
 
-    greeterManagesPlymouth = mkOption {
-      type = types.bool;
+    greeterManagesPlymouth = lib.mkOption {
+      type = lib.types.bool;
       internal = true;
       default = false;
       description = ''
@@ -38,18 +36,18 @@ in
       '';
     };
 
-    vt = mkOption {
-      type = types.int;
+    vt = lib.mkOption {
+      type = lib.types.int;
       default = 1;
       description = ''
         The virtual console (tty) that greetd should use. This option also disables getty on that tty.
       '';
     };
 
-    restart = mkOption {
-      type = types.bool;
+    restart = lib.mkOption {
+      type = lib.types.bool;
       default = !(cfg.settings ? initial_session);
-      defaultText = literalExpression "!(config.services.greetd.settings ? initial_session)";
+      defaultText = lib.literalExpression "!(config.services.greetd.settings ? initial_session)";
       description = ''
         Whether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
@@ -57,15 +55,15 @@ in
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.greetd.settings.terminal.vt = mkDefault cfg.vt;
-    services.greetd.settings.default_session.user = mkDefault "greeter";
+    services.greetd.settings.terminal.vt = lib.mkDefault cfg.vt;
+    services.greetd.settings.default_session.user = lib.mkDefault "greeter";
 
     security.pam.services.greetd = {
       allowNullPassword = true;
       startSession = true;
-      enableGnomeKeyring = mkDefault config.services.gnome.gnome-keyring.enable;
+      enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
     };
 
     # This prevents nixos-rebuild from killing greetd by activating getty again
@@ -95,7 +93,7 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
 
-        Restart = mkIf cfg.restart "on-success";
+        Restart = lib.mkIf cfg.restart "on-success";
 
         # Defaults from greetd upstream configuration
         IgnoreSIGPIPE = false;
@@ -128,5 +126,5 @@ in
     users.groups.greeter = { };
   };
 
-  meta.maintainers = with maintainers; [ queezle ];
+  meta.maintainers = with lib.maintainers; [ queezle ];
 }

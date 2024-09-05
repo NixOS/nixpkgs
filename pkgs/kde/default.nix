@@ -55,13 +55,10 @@
       plasma-wayland-protocols = libsForQt5.plasma-wayland-protocols;
 
       selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
-      # Not ported to Qt6 yet
-      kdevelop-pg-qt = null;
-      okteta = null;
-      libmediawiki = null;
 
       alpaka = self.callPackage ./misc/alpaka {};
       kdiagram = self.callPackage ./misc/kdiagram {};
+      kdevelop-pg-qt = self.callPackage ./misc/kdevelop-pg-qt {};
       kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client {};
       kirigami-addons = self.callPackage ./misc/kirigami-addons {};
       kio-extras-kf5 = self.callPackage ./misc/kio-extras-kf5 {};
@@ -69,7 +66,6 @@
       ktextaddons = self.callPackage ./misc/ktextaddons {};
       kunifiedpush = self.callPackage ./misc/kunifiedpush {};
       kup = self.callPackage ./misc/kup {};
-      kweathercore = self.callPackage ./misc/kweathercore {};
       marknote = self.callPackage ./misc/marknote {};
       mpvqt = self.callPackage ./misc/mpvqt {};
       oxygen-icons = self.callPackage ./misc/oxygen-icons {};

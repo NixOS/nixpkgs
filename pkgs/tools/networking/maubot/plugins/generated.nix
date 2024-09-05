@@ -19,7 +19,7 @@ let
   resolveDeps = deps: map
     (name:
       let
-        packageName = builtins.head (builtins.match "([^~=<>]*).*" name);
+        packageName = builtins.head (builtins.match "([^~=<>@]*).*" name);
         lower = lib.toLower packageName;
         dash = builtins.replaceStrings ["_"] ["-"] packageName;
         lowerDash = builtins.replaceStrings ["_"] ["-"] lower;

@@ -32,7 +32,7 @@
 , wrapGAppsHook3
 , libxml2
 , gtk-doc
-, gnome
+, caribou
 , python3
 , keybinder3
 , cairo
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
 
     # bindings
     cairo
-    gnome.caribou
+    caribou
     keybinder3
     upower
     xapp
@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # https://github.com/NixOS/nixpkgs/issues/101881
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+      --prefix XDG_DATA_DIRS : "${caribou}/share"
     )
 
     buildPythonPath "$out ${python3.pkgs.python-xapp}"

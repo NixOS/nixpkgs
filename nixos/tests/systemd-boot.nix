@@ -200,7 +200,7 @@ in
       )
     '' + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
       machine.succeed(
-          "grep 'devicetree .*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+          r"grep 'devicetree /EFI/nixos/[a-z0-9]\{32\}.*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
       )
     '';
   };

@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     homepage = "http://graphics.pixar.com/opensubdiv";
     broken = openclSupport && cudaSupport;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [ ];
     license = lib.licenses.asl20;
   };
 }

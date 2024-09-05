@@ -281,7 +281,7 @@ in {
       '') cfg.streams);
 
     systemd.services.snapserver = {
-      after = [ "network.target" ];
+      after = [ "network.target" "nss-lookup.target" ];
       description = "Snapserver";
       wantedBy = [ "multi-user.target" ];
       before = [ "mpd.service" "mopidy.service" ];

@@ -61,6 +61,8 @@ let
 
   removePythonPrefix = lib.removePrefix namePrefix;
 
+  mkPythonMetaPackage = callPackage ./meta-package.nix { };
+
   # Convert derivation to a Python module.
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
@@ -97,6 +99,7 @@ in {
   inherit buildPythonPackage buildPythonApplication;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
+  inherit mkPythonMetaPackage;
 
   python = toPythonModule python;
 

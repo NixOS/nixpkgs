@@ -37,10 +37,10 @@ in stdenv.mkDerivation rec {
   '';
 
   # https://nodejs.org/api/os.html#osarch
-  npmFlagsArray = [ "--arch=${if stdenv.hostPlatform.parsed.cpu.name == "i686" then "ia32"
-                             else if stdenv.hostPlatform.parsed.cpu.name == "x86_64" then "x64"
-                             else if stdenv.hostPlatform.parsed.cpu.name == "aarch64" then "arm64"
-                             else stdenv.hostPlatform.parsed.cpu.name}" ];
+  npmFlags = [ "--arch=${if stdenv.hostPlatform.parsed.cpu.name == "i686" then "ia32"
+                        else if stdenv.hostPlatform.parsed.cpu.name == "x86_64" then "x64"
+                        else if stdenv.hostPlatform.parsed.cpu.name == "aarch64" then "arm64"
+                        else stdenv.hostPlatform.parsed.cpu.name}" ];
 
   installPhase = ''
     runHook preInstall

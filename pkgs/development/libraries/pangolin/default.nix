@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg, ffmpeg_4, libjpeg, libpng, libtiff, eigen
+, xorg, ffmpeg_7, libjpeg, libpng, libtiff, eigen
 , Carbon, Cocoa
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libGL
     glew
     xorg.libX11
-    ffmpeg_4
+    ffmpeg_7
     libjpeg
     libpng
     libtiff

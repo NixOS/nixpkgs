@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildNpmPackage
-, nodePackages
+, prisma
 , nix-update-script
 }:
 let
@@ -18,12 +18,14 @@ buildNpmPackage {
     hash = "sha256-uKOJVZ0GRHo/CYvd/Ix/tq1WDhutRji1tSGdcITsNlo=";
   };
 
+  nativeBuildInputs = [ prisma ];
+
   preBuild = ''
     # somehow for linux, npm is not finding the prisma package with the
     # packages installed with the lockfile.
     # This generates a prisma version incompatibility warning and is a kludge
     # until the upstream package-lock is modified.
-    ${nodePackages.prisma}/bin/prisma generate
+    prisma generate
   '';
 
   npmDepsHash = "sha256-+JbvFMi8xoyxkuL9k96K1Vq0neciCGkkyZUPd15ES2E=";

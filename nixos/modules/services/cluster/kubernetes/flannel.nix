@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   top = config.services.kubernetes;
   cfg = top.flannel;
@@ -12,28 +9,28 @@ in
 {
   ###### interface
   options.services.kubernetes.flannel = {
-    enable = mkEnableOption "flannel networking";
+    enable = lib.mkEnableOption "flannel networking";
 
-    openFirewallPorts = mkOption {
+    openFirewallPorts = lib.mkOption {
       description = ''
         Whether to open the Flannel UDP ports in the firewall on all interfaces.'';
-      type = types.bool;
+      type = lib.types.bool;
       default = true;
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.flannel = {
 
-      enable = mkDefault true;
-      network = mkDefault top.clusterCidr;
+      enable = lib.mkDefault true;
+      network = lib.mkDefault top.clusterCidr;
       inherit storageBackend;
       nodeName = config.services.kubernetes.kubelet.hostname;
     };
 
     services.kubernetes.kubelet = {
-      cni.config = mkDefault [{
+      cni.config = lib.mkDefault [{
         name = "mynet";
         type = "flannel";
         cniVersion = "0.3.1";
@@ -45,7 +42,7 @@ in
     };
 
     networking = {
-      firewall.allowedUDPPorts = mkIf cfg.openFirewallPorts [
+      firewall.allowedUDPPorts = lib.mkIf cfg.openFirewallPorts [
         8285  # flannel udp
         8472  # flannel vxlan
       ];
@@ -61,7 +58,7 @@ in
     };
 
     # give flannel some kubernetes rbac permissions if applicable
-    services.kubernetes.addonManager.bootstrapAddons = mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode)) {
+    services.kubernetes.addonManager.bootstrapAddons = lib.mkIf ((storageBackend == "kubernetes") && (lib.elem "RBAC" top.apiserver.authorizationMode)) {
 
       flannel-cr = {
         apiVersion = "rbac.authorization.k8s.io/v1";

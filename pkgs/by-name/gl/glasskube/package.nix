@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.16.0";
+  version = "0.17.0";
   gitSrc = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NZ7FQMJyQlJW5ZS8dNzsURhRcu0IQXyTn/6e91eGhEg=";
+    hash = "sha256-uo612trSSdbj6XpZHddXELNQideJ/M/qh+LLdzVZL6U=";
   };
   web-bundle = buildNpmPackage rec {
     inherit version;
@@ -20,7 +20,7 @@ let
 
     src = gitSrc;
 
-    npmDepsHash = "sha256-0PzjOOdKkKjKUsi+uWYkGAyEXynMNq2OODH/sX2SsWQ=";
+    npmDepsHash = "sha256-s3ViR6zBUTTu864fiD06N1ouMUYXccj6AMXt5pj+BSc=";
 
     dontNpmInstall = true;
 
@@ -40,7 +40,7 @@ in buildGoModule rec {
 
   src = gitSrc;
 
-  vendorHash = "sha256-bh1ZQhd3xYoz4AEe/EZ4baBryQx4WfdacTQDP1Roi2Y=";
+  vendorHash = "sha256-KzoFPhySX2w7ndU6nndx/KqoUfE8o6OT/9a2DEz5YuI=";
 
   CGO_ENABLED = 0;
 

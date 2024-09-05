@@ -11,7 +11,7 @@
   elfutils,
   enablePython ? false,
   pythonPackages ? null,
-  swig2,
+  swig4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
     ]
     ++ lib.optionals enablePython [
-      swig2
+      swig4
       pythonPackages.setuptools
     ];
   buildInputs = [

@@ -22,13 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-0uSoZC2cUgdOGE5saLlx5n0gbVPX61kkASCBFD4F5QM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ pysigma ];
+  dependencies = [ pysigma ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sigma.pipelines.crowdstrike" ];
+
+  disabledTests = [
+    # Windows binary not mocked
+    "test_crowdstrike_pipeline_parentimage"
+  ];
 
   meta = with lib; {
     description = "Library to support CrowdStrike pipeline for pySigma";

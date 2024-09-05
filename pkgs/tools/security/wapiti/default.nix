@@ -16,12 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Ekh31MXqxY6iSyQRX0YZ0Tl7DFhYqGtOepYS/VObZc0=";
   };
 
-  postPatch = ''
-    # Remove code coverage checking
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report=xml" ""
-  '';
-
   pythonRelaxDeps = true;
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -61,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     respx
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

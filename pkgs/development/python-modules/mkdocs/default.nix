@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-tpDKomHFoGYPLz7rcohkU9w7G/5+YkJ5Y6wJJRyMecI=";
+    hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
   build-system = [ hatchling ];

@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
-      eelco
       sielicki
       arianvp
     ];

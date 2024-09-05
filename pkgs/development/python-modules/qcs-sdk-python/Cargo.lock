@@ -311,9 +311,9 @@ checksum = "5ce89b21cab1437276d2650d57e971f9d548a2d9037cc231abdc0562b97498ce"
 
 [[package]]
 name = "bytemuck"
-version = "1.16.1"
+version = "1.16.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b236fc92302c97ed75b38da1f4917b5cdda4984745740f153a5d3059e48d725e"
+checksum = "102087e286b4677862ea56cf8fc58bb2cdfa8725c40ffb80fe3a008eb7f2fc83"
 
 [[package]]
 name = "byteorder"
@@ -2674,7 +2674,7 @@ dependencies = [
 
 [[package]]
 name = "qcs"
-version = "0.23.1"
+version = "0.23.2"
 dependencies = [
  "assert2",
  "async-trait",
@@ -2815,7 +2815,7 @@ dependencies = [
 
 [[package]]
 name = "qcs-sdk-python"
-version = "0.19.2"
+version = "0.19.3"
 dependencies = [
  "async-trait",
  "numpy",

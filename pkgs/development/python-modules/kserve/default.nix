@@ -85,7 +85,7 @@ buildPythonPackage rec {
     tabulate
     timing-asgi
     uvicorn
-  ] ++ ray.passthru.optional-dependencies.serve-deps;
+  ] ++ ray.optional-dependencies.serve-deps;
 
   pythonRelaxDeps = [
     "fastapi"

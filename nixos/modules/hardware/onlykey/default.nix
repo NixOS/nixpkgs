@@ -1,7 +1,4 @@
 { config, lib, ... }:
-
-with lib;
-
 {
 
   ####### interface
@@ -9,8 +6,8 @@ with lib;
   options = {
 
     hardware.onlykey = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable OnlyKey device (https://crp.to/p/) support.
@@ -25,7 +22,7 @@ with lib;
 
   ####### implementation
 
-  config = mkIf config.hardware.onlykey.enable {
+  config = lib.mkIf config.hardware.onlykey.enable {
     services.udev.extraRules = builtins.readFile ./onlykey.udev;
   };
 

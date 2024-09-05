@@ -15,17 +15,13 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-SCyCANZfi7PqexM2Kc8WJwwEEiBQxPBg0ggWsK9WB4k=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail " --cov" ""
-  '';
-
   build-system = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [ docopt];
 
   nativeCheckInputs = with python3.pkgs; [
     pyfakefs
+    pytest-cov-stub
     pytestCheckHook
   ];
 

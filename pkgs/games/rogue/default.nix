@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     mainProgram = "rogue";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
   };
 }

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qdPQMC8HCMdcbHyO8B0OFiefO+jM1ytA2dYNymE0Xuc=";
+    hash = "sha256-CV8nSz53wFeS/h7hGj9adN8qmyhsqOkTYj/0nuvhlSM=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 sheepforce ];
+    maintainers = with maintainers; [ hjones2199 sheepforce returntoreality ];
     platforms = platforms.unix;
   };
 })

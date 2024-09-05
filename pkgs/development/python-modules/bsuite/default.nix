@@ -26,7 +26,6 @@
   statsmodels,
   tensorflow-probability,
   termcolor,
-  trfl,
 }:
 
 let
@@ -83,7 +82,6 @@ let
       pytestCheckHook
       rlax
       tensorflow-probability
-      trfl
     ];
 
     pythonImportsCheck = [ "bsuite" ];

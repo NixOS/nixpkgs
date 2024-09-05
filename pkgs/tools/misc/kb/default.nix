@@ -22,11 +22,6 @@ python3.pkgs.buildPythonApplication rec {
       --replace \
         "install_requires=[\"colored\",\"toml\",\"attr\",\"attrs\",\"gitpython\"]," \
         "install_requires=[\"colored\",\"toml\",\"attrs\",\"gitpython\"],"
-
-    # pytest coverage reporting isn't necessary
-    substituteInPlace setup.cfg \
-      --replace \
-      "addopts = --cov=kb --cov-report term-missing" ""
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -37,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytestCheckHook
   ];
 

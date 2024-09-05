@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qbittorrent-enhanced";
-  version = "4.6.5.10";
+  version = "4.6.6.10";
 
   src = fetchFromGitHub {
     owner = "c0re100";
     repo = "qBittorrent-Enhanced-Edition";
     rev = "release-${version}";
-    hash = "sha256-Yy0DUTz1lWkseh9x1xnHJCI89BKqi/D7zUn/S+qC+kM=";
+    hash = "sha256-mmM/1eU8FTWAciq2rh7fRa96fOkovMk4ScoehnqHdIQ=";
   };
 
   nativeBuildInputs = [

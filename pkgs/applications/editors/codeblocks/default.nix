@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, file, zip, wxGTK32, gtk3
-, contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook3
+, contribPlugins ? false, hunspell, boost, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config file zip wrapGAppsHook3 ];
   buildInputs = [ wxGTK32 gtk3 ]
-    ++ lib.optionals contribPlugins [ hunspell gamin boost ];
+    ++ lib.optionals contribPlugins [ hunspell boost ];
   enableParallelBuilding = true;
   patches = [
     ./writable-projects.patch
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
   postConfigure = lib.optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
   configureFlags = [ "--enable-pch=no" ] ++ lib.optionals contribPlugins [
-    ("--with-contrib-plugins" + lib.optionalString stdenv.isDarwin "=all,-FileManager,-NassiShneiderman")
+    ("--with-contrib-plugins=all,-FileManager" + lib.optionalString stdenv.isDarwin ",-NassiShneiderman")
     "--with-boost-libdir=${boost}/lib"
   ];
   postInstall = lib.optionalString stdenv.isDarwin ''

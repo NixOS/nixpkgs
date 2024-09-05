@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , pkg-config
 , autoPatchelfHook
 , autoreconfHook
 , cairo
-, ffmpeg_4-headless
+, ffmpeg_7-headless
 , freerdp
 , libjpeg_turbo
 , libpng
@@ -35,6 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZrUaoWkZ3I/LxE7csDXXeUZ92jZDhkZ1c8EQU0gI1yY=";
   };
 
+  patches = [
+    # GUACAMOLE-1952: Add compatibility with FFMPEG 7.0
+    (fetchpatch2 {
+      url = "https://github.com/apache/guacamole-server/commit/cc8addf9beb90305037a32f9f861a893be4cae08.patch?full_index=1";
+      hash = "sha256-VCr2/8lQHKVdsdah9gvak4MjFHO+X4ixE5+zsvwIY1I=";
+    })
+  ];
+
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=format-truncation"
     "-Wno-error=format-overflow"
@@ -52,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    ffmpeg_4-headless
+    ffmpeg_7-headless
     freerdp
     libjpeg_turbo
     libossp_uuid

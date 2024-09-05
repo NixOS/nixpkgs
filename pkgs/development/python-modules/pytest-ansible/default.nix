@@ -29,18 +29,18 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace tests/conftest.py inventory \
-      --replace '/usr/bin/env' '${coreutils}/bin/env'
+    substituteInPlace inventory \
+      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ansible-core
     ansible-compat
     packaging

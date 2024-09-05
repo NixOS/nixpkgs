@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, autoreconfHook, unzip, m4, bison, flex, openssl, zlib }:
+{ lib, stdenv, fetchurl, autoreconfHook, unzip, m4, bison, flex, openssl, zlib, buildPackages }:
 
 let
   majorVersion = "2.8";
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
 in stdenv.mkDerivation rec {
   pname = "gsoap";
@@ -22,6 +23,10 @@ in stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace configure.ac \
       --replace 'AM_INIT_AUTOMAKE([foreign])' 'AM_INIT_AUTOMAKE([foreign subdir-objects])'
+    ${lib.optionalString isCross ''
+      substituteInPlace gsoap/wsdl/Makefile.am \
+        --replace-fail 'SOAP=$(top_builddir)/gsoap/src/soapcpp2$(EXEEXT)' 'SOAP=${lib.getExe' buildPackages.gsoap "soapcpp2"}'
+    ''}
   '';
 
   meta = with lib; {

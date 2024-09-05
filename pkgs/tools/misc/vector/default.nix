@@ -36,7 +36,7 @@
 
 let
   pname = "vector";
-  version = "0.40.0";
+  version = "0.40.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KJqixwOc9M8xBzeyJFF3sFfybqAroEYu4OPD8q+PMRY=";
+    hash = "sha256-1vFDFdO9E5mUAUfEdg9Ec5ptq2Kp7HpqNz5+9CMn30U=";
   };
 
   cargoLock = {
@@ -66,11 +66,6 @@ rustPlatform.buildRustPackage {
     [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
     ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
-
-  # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
-  # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
-  # TODO remove when upgrading Vector
-  RUSTFLAGS = "--allow unexpected_cfgs";
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";

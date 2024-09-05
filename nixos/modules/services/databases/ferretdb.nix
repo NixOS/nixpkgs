@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.ferretdb;
 in
@@ -11,11 +8,11 @@ in
 
   options = {
     services.ferretdb = {
-      enable = mkEnableOption "FerretDB, an Open Source MongoDB alternative";
+      enable = lib.mkEnableOption "FerretDB, an Open Source MongoDB alternative";
 
-      package = mkOption {
-        type = types.package;
-        example = literalExpression "pkgs.ferretdb";
+      package = lib.mkOption {
+        type = lib.types.package;
+        example = lib.literalExpression "pkgs.ferretdb";
         default = pkgs.ferretdb;
         defaultText = "pkgs.ferretdb";
         description = "FerretDB package to use.";
@@ -37,7 +34,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable
+  config = lib.mkIf cfg.enable
     {
 
       services.ferretdb.settings = {
@@ -76,4 +73,3 @@ in
       };
     };
 }
-

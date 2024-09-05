@@ -1,8 +1,30 @@
-{ version, rev, sourceSha256 }:
+{
+  version,
+  rev,
+  sourceSha256,
+}:
 
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, expat, fftw, gdcm, hdf5-cpp, libjpeg, libminc, libtiff, libpng
-, libX11, libuuid, xz, vtk, zlib, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  expat,
+  fftw,
+  gdcm,
+  hdf5-cpp,
+  libjpeg,
+  libminc,
+  libtiff,
+  libpng,
+  libX11,
+  libuuid,
+  xz,
+  vtk,
+  zlib,
+  Cocoa,
+}:
 
 let
   itkGenericLabelInterpolatorSrc = fetchFromGitHub {
@@ -59,12 +81,12 @@ stdenv.mkDerivation {
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
     "-DITK_FORBID_DOWNLOADS=ON"
-    "-DITK_USE_SYSTEM_LIBRARIES=ON"  # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
+    "-DITK_USE_SYSTEM_LIBRARIES=ON" # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
     # note ITK_USE_SYSTEM_EIGEN, part of ITK_USE_SYSTEM_LIBRARIES,
     # causes "...-itk-5.2.1/include/ITK-5.2/itkSymmetricEigenAnalysis.h:23:31: fatal error: Eigen/Eigenvalues: No such file or directory"
     # when compiling c3d, but maybe an ITK 5.2/eigen version issue:
     "-DITK_USE_SYSTEM_EIGEN=OFF"
-    "-DITK_USE_SYSTEM_GOOGLETEST=OFF"  # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
+    "-DITK_USE_SYSTEM_GOOGLETEST=OFF" # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
     "-DITK_USE_SYSTEM_GDCM=ON"
     "-DITK_USE_SYSTEM_MINC=ON"
     "-DLIBMINC_DIR=${libminc}/lib/cmake"
@@ -79,7 +101,10 @@ stdenv.mkDerivation {
     "-DModule_GenericLabelInterpolator=ON"
   ];
 
-  nativeBuildInputs = [ cmake xz ];
+  nativeBuildInputs = [
+    cmake
+    xz
+  ];
   buildInputs = [
     libX11
     libuuid
@@ -109,9 +134,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
-    mainProgram = "itkTestDriver";
     homepage = "https://www.itk.org";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

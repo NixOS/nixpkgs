@@ -57,18 +57,9 @@ writeScript "update-librewolf" ''
   ffHash=$(grep '\.source\.tar\.xz$' "$HOME"/shasums | grep '^[^ ]*' -o)
   echo "ffHash=$ffHash"
 
-  # upstream does not specify settings rev, so just get the latest. see https://github.com/NixOS/nixpkgs/issues/252276
-  settingsRev=$(curl 'https://codeberg.org/api/v1/repos/librewolf/settings/commits?sha=master&limit=1' | jq -r .[0].sha)
-  echo "settingsRev=$settingsRev"
-  repoUrl=https://codeberg.org/librewolf/settings
-  nix-prefetch-git $repoUrl --quiet --rev $settingsRev > $prefetchOut
-  settingsSha256=$(jq -r .sha256 < $prefetchOut)
-
   jq ".source.rev = \"$latestTag\"" $srcJson | sponge $srcJson
   jq ".source.sha256 = \"$srcHash\"" $srcJson | sponge $srcJson
   jq ".firefox.version = \"$ffVersion\"" $srcJson | sponge $srcJson
   jq ".firefox.sha512 = \"$ffHash\"" $srcJson | sponge $srcJson
   jq ".packageVersion = \"$lwVersion\"" $srcJson | sponge $srcJson
-  jq ".settings.rev = \"$settingsRev\"" $srcJson | sponge $srcJson
-  jq ".settings.sha256 = \"$settingsSha256\"" $srcJson | sponge $srcJson
 ''

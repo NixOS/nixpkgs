@@ -1,44 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, wrapQtAppsHook
-, wayland-scanner
-, dtk6declarative
-, dtk6widget
-, dde-qt-dbus-factory
-, qt6Packages
-, qt6integration
-, qt6platform-plugins
-, kdePackages
-, wayland
-, wayland-protocols
-, yaml-cpp
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  wrapQtAppsHook,
+  wayland-scanner,
+  dtk6declarative,
+  dtk6widget,
+  dde-qt-dbus-factory,
+  qt6Packages,
+  qt6integration,
+  qt6platform-plugins,
+  dde-tray-loader,
+  wayland,
+  wayland-protocols,
+  yaml-cpp,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-shell";
-  version = "0.0.23-unstable-2024-06-11";
+  version = "0.0.43";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
-    rev = "d68cc64ad2cd6978af2f34deb3ef48f991d54fc3";
-    hash = "sha256-hVrdfbtcL3EJitiDghNSuGr5MX/VVT1J3tuY6wjwYcw=";
+    rev = finalAttrs.version;
+    hash = "sha256-wSk1gEJbTxKUPZ6DiTeVw2qyX+CwANA37ZP0tXnz0J0=";
   };
 
   patches = [
-    ./disable-plugins-use-qt5.diff
     ./fix-path-for-nixos.diff
-    ./only-use-qt6.diff # remove in next release
+    (fetchpatch {
+      name = "fix-libdock-plugin_so-contains-a-forbidden-reference.diff";
+      url = "https://github.com/linuxdeepin/dde-shell/commit/bf9a0472bc44748a3c389d796d144dad6b13617b.patch";
+      hash = "sha256-cP5zMsfPyi4FIR1OIbVSnn+Z+KqRuIK7a214VjVb/7w=";
+    })
   ];
 
   postPatch = ''
-    for file in $(grep -rl "/usr/lib/dde-dock/tmp"); do
-      substituteInPlace $file --replace-fail "/usr/lib/dde-dock/tmp" "/run/current-system/sw/lib/dde-dock/tmp"
+    for file in $(grep -rl "/usr/lib/dde-dock"); do
+      substituteInPlace $file --replace-fail "/usr/lib/dde-dock" "/run/current-system/sw/lib/dde-dock"
     done
 
     for file in $(grep -rl "/usr/lib/deepin-daemon"); do
@@ -56,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    dde-tray-loader
     dtk6declarative
     dtk6widget
     dde-qt-dbus-factory
@@ -63,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtwayland
     qt6Packages.qtsvg
     qt6platform-plugins
-    kdePackages.networkmanager-qt
+    qt6integration
     wayland
     wayland-protocols
     yaml-cpp
@@ -73,15 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
-  cmakeFlags = [
-    "-DQML_INSTALL_DIR=${placeholder "out"}/${qt6Packages.qtbase.qtQmlPrefix}"
-  ];
+  cmakeFlags = [ "-DQML_INSTALL_DIR=${placeholder "out"}/${qt6Packages.qtbase.qtQmlPrefix}" ];
 
   qtWrapperArgs = [
-     # qt6integration must be placed before qtsvg in QT_PLUGIN_PATH
-     "--prefix QT_PLUGIN_PATH : ${qt6integration}/${qt6Packages.qtbase.qtPluginPrefix}"
-     "--suffix DDE_SHELL_PLUGIN_PATH : /run/current-system/sw/lib/dde-shell"
-     "--suffix DDE_SHELL_PACKAGE_PATH : /run/current-system/sw/share/dde-shell"
+    "--prefix TRAY_LOADER_EXECUTE_PATH : ${dde-tray-loader}/libexec/trayplugin-loader"
+    "--suffix DDE_SHELL_PLUGIN_PATH : /run/current-system/sw/lib/dde-shell"
+    "--suffix DDE_SHELL_PACKAGE_PATH : /run/current-system/sw/share/dde-shell"
   ];
 
   meta = {

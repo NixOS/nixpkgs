@@ -97,7 +97,6 @@ in
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));

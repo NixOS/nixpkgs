@@ -35,6 +35,12 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  # FIXME: Remove this after https://github.com/GRA0007/crab.fit/pull/341 is merged,
+  # or upstream bumps their locked version of 0.3 time to 0.3.36 or later
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

@@ -12,9 +12,6 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-let
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
-in
 # NOTE mqtt-explorer has 3 yarn subpackages and uses relative links
 # between them, which makes it hard to package them via 3 `mkYarnPackage`
 # since the resulting `node_modules` directories don't have the same structure
@@ -88,7 +85,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs {node_modules,app/node_modules,backend/node_modules}
 
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     runHook postConfigure

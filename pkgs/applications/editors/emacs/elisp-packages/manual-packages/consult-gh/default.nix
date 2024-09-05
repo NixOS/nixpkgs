@@ -1,7 +1,7 @@
 {
   lib,
   consult,
-  embark,
+  embark-consult,
   fetchFromGitHub,
   forge,
   gh,
@@ -12,23 +12,25 @@
 
 melpaBuild {
   pname = "consult-gh";
-  version = "1.0-unstable-2024-08-11";
+  version = "1.0-unstable-2024-08-24";
 
   src = fetchFromGitHub {
     owner = "armindarvish";
     repo = "consult-gh";
-    rev = "640d4b9c71aa6dfff4f29c0207cc02316f1d61c8";
-    hash = "sha256-hFHex4cUAP1U5aK1bfa+va1jiWS8tRqtnMGxr17NWio=";
+    rev = "b1d85d179438e4b6469e1b78906a7dde8f07c822";
+    hash = "sha256-VmxuXvO0nl0h9IKU+XWfjW90KG/1B+qHoOVhvYJ8XTs=";
   };
 
   packageRequires = [
     consult
-    embark
+    embark-consult
     forge
     markdown-mode
   ];
 
   propagatedUserEnvPkgs = [ gh ];
+
+  ignoreCompilationError = false;
 
   passthru.updateScript = unstableGitUpdater { };
 

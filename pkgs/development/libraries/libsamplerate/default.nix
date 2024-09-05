@@ -32,5 +32,7 @@ in stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
+    # Linker is unhappy with the `.def` file.
+    broken      = stdenv.hostPlatform.isMinGW;
   };
 }

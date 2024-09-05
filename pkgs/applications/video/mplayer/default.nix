@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg_6
+{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg_7
 , aalibSupport ? true, aalib
 , fontconfigSupport ? true, fontconfig, freefont_ttf
 , fribidiSupport ? true, fribidi
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
-  buildInputs = [ freetype ffmpeg_6 ]
+  buildInputs = [ freetype ffmpeg_7 ]
     ++ lib.optional aalibSupport aalib
     ++ lib.optional fontconfigSupport fontconfig
     ++ lib.optional fribidiSupport fribidi
@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
     description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
   };
 }

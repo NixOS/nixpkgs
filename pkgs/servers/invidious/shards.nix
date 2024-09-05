@@ -1,8 +1,8 @@
 {
   ameba = {
     url = "https://github.com/crystal-ameba/ameba.git";
-    rev = "v1.5.0";
-    sha256 = "1idivsbpmi40aqvs82fsv37nrgikirprxrj3ls9chsb876fq9p2d";
+    rev = "v1.6.1";
+    sha256 = "1qlgqpgycfxvvrfzih7b9ayb6fvkffz5aw0msbj70z2q7wvsq29p";
   };
   athena-negotiation = {
     url = "https://github.com/athena-framework/negotiation.git";

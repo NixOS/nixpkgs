@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_30,
+  electron_31,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -11,22 +11,22 @@
 }:
 let
   pname = "feishin";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${version}";
-    hash = "sha256-UOY0wjWGK7sal/qQbbkHjFUIA49QtbO+Ei6hSTOyHWk=";
+    hash = "sha256-KaZA7ZAeN6f1PWMeUl0Z4Xl/S/uD2vLPHM5uM+dIbko=";
   };
 
-  electron = electron_30;
+  electron = electron_31;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-FLo8FCpxvh2Iqd3pkpgwRZ4f2viX4iET64VAuXN362g=";
+  npmDepsHash = "sha256-1BG4U6x+e204KdrIh0S/rrdj/3wh2iuuWQgFXLjO3iw=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -60,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-fQV2yqyNZCjeNUekBaXUsND2lIZYYz07YQ6TGoFxT9Q=";
+        npmDepsHash = "sha256-//K8jiO3nEHs08l9eMDW2HnZBeBgxBMai2omoCI7wQw=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
@@ -79,7 +79,7 @@ buildNpmPackage {
   postBuild =
     lib.optionalString stdenv.isDarwin ''
       # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
-      cp -r ${electron}/Applications/Electron.app ./
+      cp -r ${electron.dist}/Electron.app ./
       find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
       # Disable code signing during build on macOS.
@@ -90,7 +90,7 @@ buildNpmPackage {
     + ''
       npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${if stdenv.isDarwin then "./" else "${electron}/libexec/electron"} \
+        -c.electronDist=${if stdenv.isDarwin then "./" else electron.dist} \
         -c.electronVersion=${electron.version} \
         -c.npmRebuild=false
     '';

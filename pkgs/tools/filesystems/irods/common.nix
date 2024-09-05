@@ -27,15 +27,13 @@
     "-DCPACK_GENERATOR=TGZ"
     "-DCMAKE_CXX_FLAGS=-I${lib.getDev libcxx}/include/c++/v1"
     "-DPAM_LIBRARY=${pam}/lib/libpam.so"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+    "-DIRODS_HOME_DIRECTORY=${placeholder "out"}"
+    "-DCMAKE_INSTALL_SBINDIR=${placeholder "out"}/sbin"
   ];
 
   postPatch = ''
     patchShebangs ./packaging ./scripts
-    export cmakeFlags="$cmakeFlags
-      -DCMAKE_INSTALL_PREFIX=$out
-      -DIRODS_HOME_DIRECTORY=$out
-      -DCMAKE_INSTALL_SBINDIR=$out/sbin
-    "
   '';
 
   meta = with lib; {

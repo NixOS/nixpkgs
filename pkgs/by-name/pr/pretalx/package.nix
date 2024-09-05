@@ -74,9 +74,6 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
       --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
-
-    substituteInPlace src/setup.cfg \
-      --replace "--cov=./ --cov-report=" ""
   '';
 
   nativeBuildInputs = [
@@ -196,6 +193,7 @@ python.pkgs.buildPythonApplication rec {
     faker
     freezegun
     jsonschema
+    pytest-cov-stub
     pytest-django
     pytest-mock
     pytest-xdist

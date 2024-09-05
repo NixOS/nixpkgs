@@ -29,6 +29,7 @@
   vulkan-headers,
   vulkan-loader,
   wayland,
+  wayland-scanner,
   wrapGAppsHook3,
   wxGTK32,
   zarchive,
@@ -73,6 +74,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wxGTK32
+    wayland-scanner
   ];
 
   buildInputs = [

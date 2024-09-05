@@ -9,18 +9,30 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
-  version = "1.9.0-43"; # TODO try to remove preCheck phase on upgrade
+  version = "1.9.0-993"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "sha256-466jB8ZRqHkU5XCY+j0Fh7Dq/mMaOu10rHECKbtNGrs=";
+    sha256 = "sha256-pqytFWrSWfEwQqRdRbaigGCq68s8mdgj2j8M+kclslE=";
   };
 
   patches = [
+    ./remove-old-functional-patterns.patch
+    ./fix-fltk-guard.patch
+
     (fetchpatch {
-      name = "pari_2_11.patch";
-      url = "https://raw.githubusercontent.com/sagemath/sage/21ba7540d385a9864b44850d6987893dfa16bfc0/build/pkgs/giac/patches/pari_2_11.patch";
-      sha256 = "sha256-vEo/5MNzMdYRPWgLFPsDcMT1W80Qzj4EPBjx/B8j68k=";
+      name = "pari_2_15.patch";
+      url = "https://raw.githubusercontent.com/sagemath/sage/07a2afd65fb4b0a1c9cbc43ede7d4a18c921a000/build/pkgs/giac/patches/pari_2_15.patch";
+      sha256 = "sha256-Q3xBFED7XEAyNz6AHjzt63XtospmdGAIdS6iPq1C2UE=";
+    })
+
+    (fetchpatch {
+      name = "infinity.patch";
+      url = "https://github.com/geogebra/giac/commit/851c2cd91e879c79d6652f8a5d5bed03b65c6d39.patch";
+      sha256 = "sha256-WJRT2b8I9kgAkRuIugMiXoF4hT7yR7qyad8A6IspNTM=";
+      stripLen = 5;
+      extraPrefix = "/src/";
+      excludes = [ "src/kdisplay.cc" ];
     })
 
     # giac calls scanf/printf with non-constant first arguments, which
@@ -31,8 +43,12 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-r+M+9MRPRqhHcdhYWI6inxyNvWbXUbBcPCeDY7aulvk=";
     })
 
-    # increase pari stack size for test chk_fhan{4,6}
-    ./increase-pari-stack-size.patch
+    # issue with include path precedence
+    (fetchpatch {
+      name = "fix_implicit_declaration.patch";
+      url = "https://salsa.debian.org/science-team/giac/-/raw/c05ae9b9e74d3c6ee6411d391071989426a76201/debian/patches/fix_implicit_declaration.patch";
+      sha256 = "sha256-ompUceYJLiL0ftfjBkIMcYvX1YqG2/XA7e1yDyFY0IY=";
+    })
   ] ++ lib.optionals (!enableGUI) [
     # when enableGui is false, giac is compiled without fltk. That
     # means some outputs differ in the make check. Patch around this:
@@ -86,6 +102,12 @@ stdenv.mkDerivation rec {
     # when fltk is disabled. disable these tests for now.
     echo > check/chk_fhan2
     echo > check/chk_fhan9
+  '' + lib.optionalString (stdenv.isDarwin) ''
+    # these cover a known regression in giac, likely due to how pari state
+    # is shared between multiple giac instances (see pari.cc.old).
+    # see https://github.com/NixOS/nixpkgs/pull/264126 for more information
+    echo > check/chk_fhan4
+    echo > check/chk_fhan6
   '';
 
   enableParallelBuilding = true;
@@ -96,6 +118,8 @@ stdenv.mkDerivation rec {
     "--enable-ao" "--enable-ecm" "--enable-glpk"
   ] ++ lib.optionals enableGUI [
     "--enable-gui" "--with-x"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--disable-nls"
   ] ++ lib.optionals (!enableGUI) [
     "--disable-fltk"
   ] ++ lib.optionals (!enableMicroPy) [
@@ -129,7 +153,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ (optionals (!enableGUI) platforms.darwin);
-    broken = stdenv.isDarwin && stdenv.isAarch64;
     maintainers = [ maintainers.symphorien ];
   };
 }

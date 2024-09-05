@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.25.3";
+  version = "2.25.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-m0Fngbvt/N95/1moc8PW1KU/yfRE/NC+1d0Ste7V8HU=";
+    hash = "sha256-NPMUfSbujT1qHsdpCazDX2xF54HvFJkOaxHSUG/FQwM=";
   };
 
   pythonRelaxDeps = [

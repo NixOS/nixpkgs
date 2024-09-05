@@ -34,8 +34,15 @@ buildGoModule rec {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    hash = "sha256-zoXruGoWitx6kietF3HKTYCtUrXp5SOrf2FEGgVPzkQ=";
+    hash = "sha256-ehXkYOMQz6zEmofK+3ajwxLK9vIRZava/F3Ki5jTzYo=";
     fetchSubmodules = true;
+    # The public hydra server on `hydra.nixos.org` is configured with
+    # `max_output_size` of 3GB. The purpose of this `postFetch` step
+    # is to stay below that limit and save 4.1GiB and 428MiB in output
+    # size respectively. These folders are not referenced in tinygo.
+    postFetch = ''
+      rm -r $out/lib/cmsis-svd/data/{SiliconLabs,Freescale}
+    '';
   };
 
   vendorHash = "sha256-rJ8AfJkIpxDkk+9Tf7ORnn7ueJB1kjJUBiLMDV5tias=";

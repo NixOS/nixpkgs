@@ -7,6 +7,7 @@
   dos2unix,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -15,24 +16,25 @@
 buildPythonPackage rec {
   pname = "zeversolarlocal";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ExZy5k5RE7k+D0lGmuIkGWrWQ+m24K2oqbUEg4BAVuY=";
+    hash = "sha256-ExZy5k5RE7k+D0lGmuIkGWrWQ+m24K2oqbUEg4BAVuY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
     dos2unix
   ];
 
-  propagatedBuildInputs = [ httpx ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
@@ -50,11 +52,6 @@ buildPythonPackage rec {
       hash = "sha256-tzFCwPzhAfwVfN5mLY/DMwRv7zGzx3ScBe+kKzkYcvo=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov zeversolarlocal --cov-report xml:cov.xml --cov-report term-missing -vv" ""
-  '';
 
   disabledTests = [
     # Test requires network access

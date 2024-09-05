@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     mainProgram = "sylpheed";
-    maintainers = with maintainers; [ eelco ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2;
   };

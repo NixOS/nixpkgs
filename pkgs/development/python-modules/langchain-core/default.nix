@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.2.33";
+  version = "0.2.37";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-vM3FY9E8PeC8LHP4QCTM1ggFynI+PscF7pv7CMaSZlU=";
+    hash = "sha256-An2ApN0pgCrQjqu9XPFfPyPvWx0+6JnUkGPrcD0/3kg=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -80,7 +80,7 @@ buildPythonPackage rec {
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
-      set -eu -o pipefail
+      set -u -o pipefail +e
       nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
       nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
       nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain

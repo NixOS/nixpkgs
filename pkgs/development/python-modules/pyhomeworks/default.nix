@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyhomeworks";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RwaVjOhMztQsKD+F++PLcwa0gqfC+8aQmloMVnQJjv8=";
+    hash = "sha256-Jq+rjhjmnPFNaEuCHyi+8i20RgLf1rpZg6QqwE7ax7M=";
   };
 
   postPatch = ''

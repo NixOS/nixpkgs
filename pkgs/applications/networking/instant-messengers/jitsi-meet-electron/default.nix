@@ -16,8 +16,6 @@
 
 let
   inherit (darwin.apple_sdk.frameworks) Carbon CoreFoundation ApplicationServices OpenGL;
-
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
@@ -70,7 +68,7 @@ buildNpmPackage rec {
   '';
 
   postBuild = ''
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     # npmRebuild is needed because robotjs won't be built on darwin otherwise

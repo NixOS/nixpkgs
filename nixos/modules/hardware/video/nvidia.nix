@@ -254,10 +254,21 @@ in
         '';
       };
 
-      open = lib.mkEnableOption ''
-        the open source NVIDIA kernel module
+      open = lib.mkOption {
+        example = true;
+        description = "Whether to enable the open source NVIDIA kernel module.";
+        type = lib.types.bool;
+        defaultText = lib.literalExpression ''
+          lib.mkIf (lib.versionOlder config.hardware.nvidia.package.version "560") false
+        '';
+      };
+
+      gsp.enable = lib.mkEnableOption ''
+        the GPU System Processor (GSP) on the video card
       '' // {
-        defaultText = lib.literalExpression ''lib.versionAtLeast config.hardware.nvidia.package.version "560"'';
+        defaultText = lib.literalExpression ''
+          config.hardware.nvidia.open || lib.versionAtLeast config.hardware.nvidia.package.version "555"
+        '';
       };
     };
   };
@@ -308,7 +319,8 @@ in
           };
           environment.systemPackages = [ nvidia_x11.bin ];
 
-          hardware.nvidia.open = lib.mkDefault (lib.versionAtLeast nvidia_x11.version "560");
+          hardware.nvidia.open = lib.mkIf (lib.versionOlder nvidia_x11.version "560") (lib.mkDefault false);
+          hardware.nvidia.gsp.enable = lib.mkDefault (cfg.open || lib.versionAtLeast nvidia_x11.version "555");
         })
 
         # X11
@@ -367,8 +379,18 @@ in
             }
 
             {
-              assertion = cfg.open -> (cfg.package ? open && cfg.package ? firmware);
-              message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver";
+              assertion = cfg.gsp.enable -> (cfg.package ? firmware);
+              message = "This version of NVIDIA driver does not provide a GSP firmware.";
+            }
+
+            {
+              assertion = cfg.open -> (cfg.package ? open);
+              message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver.";
+            }
+
+            {
+              assertion = cfg.open -> cfg.gsp.enable;
+              message = "The GSP cannot be disabled when using the opensource kernel driver.";
             }
 
             {
@@ -555,7 +577,7 @@ in
 
           services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
 
-          hardware.firmware = lib.optional (cfg.open || lib.versionAtLeast nvidia_x11.version "555") nvidia_x11.firmware;
+          hardware.firmware = lib.optional cfg.gsp.enable nvidia_x11.firmware;
 
           systemd.tmpfiles.rules =
             [

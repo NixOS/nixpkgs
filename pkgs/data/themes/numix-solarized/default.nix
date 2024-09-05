@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall

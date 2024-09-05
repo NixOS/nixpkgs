@@ -17,14 +17,14 @@
 }:
 buildPythonPackage rec {
   pname = "webdataset";
-  version = "0.2.96";
+  version = "0.2.100";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdataset";
     repo = "webdataset";
     rev = "refs/tags/${version}";
-    hash = "sha256-Wz6dLi2xW9aF+QjDx4yn64zU7u7SCyDXVKkS+1TyYaU=";
+    hash = "sha256-+Rvb4VY4qBcVKM1CUkLZTQdlZklpHcuiMO8r6VNInLc=";
   };
 
   build-system = [

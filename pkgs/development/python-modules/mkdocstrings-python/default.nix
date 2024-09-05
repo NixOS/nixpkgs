@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "1.10.8";
+  version = "1.10.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = "refs/tags/${version}";
-    hash = "sha256-3fXT2cV9jXkBNqK0LhKh8V11YLz+ulR3yAtq3GVOkTU=";
+    hash = "sha256-ClIWH3JixDI7SMOaDKELeYlX7HqhzJ3JNO8FW/eCpuA=";
   };
 
   build-system = [ pdm-backend ];

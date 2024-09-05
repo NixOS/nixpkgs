@@ -33,27 +33,27 @@
   pkg-config,
   rnnoise,
   rubberband,
-  speexdsp,
   soundtouch,
+  speexdsp,
   tbb,
   wrapGAppsHook4,
   zam-plugins,
   zita-convolver,
 }:
+
 let
   # Fix crashes with speexdsp effects
   speexdsp' = speexdsp.override { withFftw3 = false; };
 in
-
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.1.7";
+  version = "7.1.8";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
-    rev = "v${version}";
-    hash = "sha256-y7we7/MQWweAoZkM8SuHiOTVyWFj9/foufLYBum/KKc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eDjtmr100WOCd0k0p3rUEtu6O9LlSGs43oaIXT07ikI=";
   };
 
   nativeBuildInputs = [

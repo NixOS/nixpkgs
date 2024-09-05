@@ -15,16 +15,25 @@ let
   makeGoldenTest = testname: runCommand "make-binary-wrapper-test-${testname}" env ''
     mkdir -p tmp/foo # for the chdir test
 
-    params=$(<"${./.}/${testname}.cmdline")
+    source=${lib.fileset.toSource {
+      root = ./.;
+      fileset = lib.fileset.unions [
+        (./. + "/${testname}.cmdline")
+        (./. + "/${testname}.c")
+        (lib.fileset.maybeMissing (./. + "/${testname}.env"))
+      ];
+    }}
+
+    params=$(<"$source/${testname}.cmdline")
     eval "makeCWrapper /send/me/flags $params" > wrapper.c
 
-    diff wrapper.c "${./.}/${testname}.c"
+    diff wrapper.c "$source/${testname}.c"
 
-    if [ -f "${./.}/${testname}.env" ]; then
+    if [ -f "$source/${testname}.env" ]; then
       eval "makeWrapper ${envCheck} wrapped $params"
       env -i ./wrapped > env.txt
       sed "s#SUBST_ARGV0#${envCheck}#;s#SUBST_CWD#$PWD#" \
-        "${./.}/${testname}.env" > golden-env.txt
+        "$source/${testname}.env" > golden-env.txt
       if ! diff env.txt golden-env.txt; then
         echo "env/argv should be:"
         cat golden-env.txt

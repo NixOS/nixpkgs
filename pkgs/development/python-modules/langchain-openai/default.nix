@@ -19,11 +19,12 @@
   responses,
   syrupy,
   toml,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.1.22";
+  version = "0.1.23";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-5UAijSTfQ6nQxdZvKHl2o01wDW6+Jphf38V+dAs7Ffk=";
+    hash = "sha256-j+oaC0xmvDBsAREXwKF+kmFlplN43ROH6n9j1+H1ufk=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -83,6 +84,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-openai==(.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";

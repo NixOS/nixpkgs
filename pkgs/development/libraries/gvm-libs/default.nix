@@ -25,14 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "22.8.0";
+  version = "22.10.0";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-libs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nFqYpt9OWEPgSbaNsHLhs9mg7ChQcmfcgHh7nFfQh18=";
+    hash = "sha256-o86bNwoGUw6VLESkaamWXPOfrdbFipJZmQCL6W5+nfk=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "-Werror" ""
+  '';
 
   nativeBuildInputs = [
     cmake

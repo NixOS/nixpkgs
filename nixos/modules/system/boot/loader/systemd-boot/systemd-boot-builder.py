@@ -33,6 +33,7 @@ CAN_TOUCH_EFI_VARIABLES = "@canTouchEfiVariables@"
 GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
 CHECK_MOUNTPOINTS = "@checkMountpoints@"
+STORE_DIR = "@storeDir@"
 
 @dataclass
 class BootSpec:
@@ -106,7 +107,7 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
         if not EDITOR:
             f.write("editor 0\n")
         if REBOOT_FOR_BITLOCKER:
-            f.write("reboot-for-bitlocker yes\n");
+            f.write("reboot-for-bitlocker yes\n")
         f.write(f"console-mode {CONSOLE_MODE}\n")
         f.flush()
         os.fsync(f.fileno())
@@ -150,11 +151,12 @@ def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
 def copy_from_file(file: str, dry_run: bool = False) -> str:
     store_file_path = os.path.realpath(file)
     suffix = os.path.basename(store_file_path)
-    store_dir = os.path.basename(os.path.dirname(store_file_path))
-    efi_file_path = f"{NIXOS_DIR}/{store_dir}-{suffix}.efi"
+    store_subdir = os.path.relpath(store_file_path, start=STORE_DIR).split(os.path.sep)[0]
+    efi_file_path = f"{NIXOS_DIR}/{suffix}.efi" if suffix == store_subdir else f"{NIXOS_DIR}/{store_subdir}-{suffix}.efi"
     if not dry_run:
         copy_if_not_exists(store_file_path, f"{BOOT_MOUNT_POINT}{efi_file_path}")
     return efi_file_path
+
 
 def write_entry(profile: str | None, generation: int, specialisation: str | None,
                 machine_id: str, bootspec: BootSpec, current: bool) -> None:

@@ -102,14 +102,12 @@ let
     "flac"
     "libjpeg"
     "libpng"
-  ] ++ lib.optionals (!chromiumVersionAtLeast "124") [
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
-    "libwebp"
-  ] ++ [
+    # "libwebp"
     "libxslt"
     # "opus"
   ];

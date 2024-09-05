@@ -164,11 +164,11 @@ let
 
   linux = stdenv.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "127.0.6533.119";
+    version = "128.0.6613.113";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-k9rsELAtOFdLSi1dOTV4Lr7E2Uu5sR1/GOL9BWDqZl4=";
+      hash = "sha256-jdgZFmkPZwNt+4nb6/4ahCM4jNEKUkIfaI9MqOcjHys=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -243,7 +243,13 @@ let
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+        --add-flags ${
+          lib.concatStringsSep " " [
+            (lib.escapeShellArg commandLineArgs)
+            # Disables auto updates and browser outdated popup
+            "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'"
+          ]
+        }
 
       for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
         patchelf --set-rpath $rpath $elf
@@ -256,11 +262,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "127.0.6533.120";
+    version = "128.0.6613.114";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/adqui4t7hzlljw2m2mmu2dvb6tmq_127.0.6533.120/GoogleChrome-127.0.6533.120.dmg";
-      hash = "sha256-kfUCTu8BIGcZTMaby0iylOCFxI+pLXcq9fKo2ow6HrM=";
+      url = "http://dl.google.com/release2/chrome/j7qfyaczqq4hpgxunewwclxnky_128.0.6613.114/GoogleChrome-128.0.6613.114.dmg";
+      hash = "sha256-6y99T+9abmUS9wKglNgPgj9M/cyLxb85rxpgCLxXR3E=";
     };
 
     dontPatch = true;
@@ -283,7 +289,13 @@ let
 
       mkdir -p $out/bin
       makeWrapper $out/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $out/bin/google-chrome-stable \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+        --add-flags ${
+          lib.concatStringsSep " " [
+            (lib.escapeShellArg commandLineArgs)
+            # Disables auto updates and browser outdated popup
+            "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'"
+          ]
+        }
 
       runHook postInstall
     '';

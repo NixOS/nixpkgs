@@ -1,12 +1,9 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   tzdir = "${pkgs.tzdata}/share/zoneinfo";
-  nospace  = str: filter (c: c == " ") (stringToCharacters str) == [];
-  timezone = types.nullOr (types.addCheck types.str nospace)
+  nospace  = str: lib.filter (c: c == " ") (lib.stringToCharacters str) == [];
+  timezone = lib.types.nullOr (lib.types.addCheck lib.types.str nospace)
     // { description = "null or string without spaces"; };
 
   lcfg = config.location;
@@ -18,7 +15,7 @@ in
 
     time = {
 
-      timeZone = mkOption {
+      timeZone = lib.mkOption {
         default = null;
         type = timezone;
         example = "America/New_York";
@@ -31,9 +28,9 @@ in
         '';
       };
 
-      hardwareClockInLocalTime = mkOption {
+      hardwareClockInLocalTime = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "If set, keep the hardware clock in local time instead of UTC.";
       };
 
@@ -41,8 +38,8 @@ in
 
     location = {
 
-      latitude = mkOption {
-        type = types.float;
+      latitude = lib.mkOption {
+        type = lib.types.float;
         description = ''
           Your current latitude, between
           `-90.0` and `90.0`. Must be provided
@@ -50,8 +47,8 @@ in
         '';
       };
 
-      longitude = mkOption {
-        type = types.float;
+      longitude = lib.mkOption {
+        type = lib.types.float;
         description = ''
           Your current longitude, between
           between `-180.0` and `180.0`. Must be
@@ -59,8 +56,8 @@ in
         '';
       };
 
-      provider = mkOption {
-        type = types.enum [ "manual" "geoclue2" ];
+      provider = lib.mkOption {
+        type = lib.types.enum [ "manual" "geoclue2" ];
         default = "manual";
         description = ''
           The location provider to use for determining your location. If set to
@@ -75,7 +72,7 @@ in
 
     environment.sessionVariables.TZDIR = "/etc/zoneinfo";
 
-    services.geoclue2.enable = mkIf (lcfg.provider == "geoclue2") true;
+    services.geoclue2.enable = lib.mkIf (lcfg.provider == "geoclue2") true;
 
     # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;

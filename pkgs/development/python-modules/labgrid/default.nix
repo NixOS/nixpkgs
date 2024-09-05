@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "24.0";
+  version = "24.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XlndAmLkDjb4S2BD85noTMJCeqa5srZocjgg1x6Ry/g=";
+    hash = "sha256-KZO6HeB1Kkc3r6OI0ZXIL1WvGLYL5SLxaOn+EX5akOE=";
   };
 
   build-system = [

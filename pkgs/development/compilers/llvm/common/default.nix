@@ -84,7 +84,12 @@ let
                 }
                 {
                   after = "19";
+                  before = "20";
                   path = ../19;
+                }
+                {
+                  after = "20";
+                  path = ../git;
                 }
               ];
               "clang/purity.patch" = [
@@ -260,6 +265,7 @@ let
               "openmp/fix-find-tool.patch" = [
                 {
                   after = "17";
+                  before = "19";
                   path = ../17;
                 }
               ];
@@ -1059,9 +1065,9 @@ let
 
       openmp = callPackage ./openmp {
         patches =
-          lib.optional (lib.versionAtLeast metadata.release_version "15") (
-            metadata.getVersionFile "openmp/fix-find-tool.patch"
-          )
+          lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && lib.versionOlder metadata.release_version "19"
+          ) (metadata.getVersionFile "openmp/fix-find-tool.patch")
           ++ lib.optional (
             lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
           ) (metadata.getVersionFile "openmp/gnu-install-dirs.patch")

@@ -12,6 +12,7 @@
 , nodejs
 , openssl
 , pkg-config
+, pnpm_9
 , rustc
 , Security
 , stdenv
@@ -30,8 +31,10 @@
 , extPatches ? []
 , cargoHash ? null
 , cargoLock ? null
-, yarnHash
+, yarnHash ? null
+, pnpmHash ? null
 }:
+assert yarnHash != null || pnpmHash != null;
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
   src = fetchFromGitHub {
@@ -40,6 +43,7 @@ let
     rev = "v${version}";
     inherit hash;
   };
+  pname = "teleport";
   inherit version;
 
   rdpClient = rustPlatform.buildRustPackage rec {
@@ -76,33 +80,45 @@ let
 
     cargoDeps = rustPlatform.importCargoLock cargoLock;
 
-    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ] ++
-      lib.optional (lib.versionAtLeast version "15") [
-        binaryen
-        cargo
-        rustc
-        rustc.llvmPackages.lld
-        rustPlatform.cargoSetupHook
-        wasm-bindgen-cli
-        wasm-pack
-      ];
+    pnpmDeps = if pnpmHash != null then pnpm_9.fetchDeps {
+      inherit src pname version;
+      hash = pnpmHash;
+    } else null;
+
+    nativeBuildInputs = [ nodejs ] ++ lib.optional (lib.versionAtLeast version "15") [
+      binaryen
+      cargo
+      nodejs
+      rustc
+      rustc.llvmPackages.lld
+      rustPlatform.cargoSetupHook
+      wasm-bindgen-cli
+      wasm-pack
+    ] ++ (if lib.versionAtLeast version "16" then [ pnpm_9.configHook ] else [ yarn fixup-yarn-lock ]);
 
     configurePhase = ''
+      runHook preConfigure
+
       export HOME=$(mktemp -d)
+
+      runHook postConfigure
     '';
 
     buildPhase = ''
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-      fixup-yarn-lock yarn.lock
+      ${lib.optionalString (lib.versionOlder version "16") ''
+        yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+        fixup-yarn-lock yarn.lock
 
-      yarn install --offline \
-        --frozen-lockfile \
-        --ignore-engines --ignore-scripts
-      patchShebangs .
+        yarn install --offline \
+          --frozen-lockfile \
+          --ignore-engines --ignore-scripts
+        patchShebangs .
+      ''}
+
+      PATH=$PATH:$PWD/node_modules/.bin
 
       ${if lib.versionAtLeast version "15"
       then ''
-        PATH=$PATH:$PWD/node_modules/.bin
         pushd web/packages/teleport
         # https://github.com/gravitational/teleport/blob/6b91fe5bbb9e87db4c63d19f94ed4f7d0f9eba43/web/packages/teleport/README.md?plain=1#L18-L20
         RUST_MIN_STACK=16777216 wasm-pack build ./src/ironrdp --target web --mode no-install
@@ -119,9 +135,7 @@ let
   };
 in
 buildGoModule rec {
-  pname = "teleport";
-
-  inherit src version;
+  inherit pname src version;
   inherit vendorHash;
   proxyVendor = true;
 
@@ -136,11 +150,16 @@ buildGoModule rec {
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
-    ./tsh.patch
+    (if lib.versionAtLeast version "16" then ./tsh_16.patch else ./tsh.patch)
   ];
 
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
+
+  prePatch = ''
+    # TODO: remove after https://github.com/NixOS/nixpkgs/pull/332852 merges
+    sed -i 's/go 1.22.6/go 1.22.5/' go.mod
+  '';
 
   preBuild = ''
     cp -r ${webassets} webassets

@@ -4,7 +4,7 @@
   exiv2, lcms2, cfitsio,
   baloo, kactivities, kio, kipi-plugins, kitemmodels, kparts, libkdcraw, libkipi,
   phonon, qtimageformats, qtsvg, qtx11extras, kinit, kpurpose, kcolorpicker, kimageannotator,
-  wayland, wayland-protocols
+  wayland, wayland-protocols, wayland-scanner
 }:
 
 mkDerivation {
@@ -20,7 +20,7 @@ mkDerivation {
   # Fix build with versioned kImageAnnotator
   patches = [./kimageannotator.patch];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
   buildInputs = [
     baloo kactivities kio kitemmodels kparts libkdcraw libkipi phonon
     exiv2 lcms2 cfitsio

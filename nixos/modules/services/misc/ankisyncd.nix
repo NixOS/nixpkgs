@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.ankisyncd;
 
@@ -22,37 +19,37 @@ let
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption "ankisyncd, a standalone unofficial anky sync server";
+      enable = lib.mkEnableOption "ankisyncd, a standalone unofficial anky sync server";
 
-      package = mkPackageOption pkgs "ankisyncd" { };
+      package = lib.mkPackageOption pkgs "ankisyncd" { };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "ankisyncd host";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 27701;
         description = "ankisyncd port";
       };
 
-      openFirewall = mkOption {
+      openFirewall = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to open the firewall for the specified port.";
       };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
       warnings = [
         ''
         `services.ankisyncd` has been replaced by `services.anki-sync-server` and will be removed after
         24.05 because anki-sync-server(-rs and python) are not maintained.
         ''
       ];
-      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
       systemd.services.ankisyncd = {
         description = "ankisyncd - Anki sync server";

@@ -4,6 +4,7 @@
 , fetchNpmDeps
 , npmHooks
 , nodejs
+, python3
 , pkg-config
 , sqlite
 , zstd
@@ -14,26 +15,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-authentication-service";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-authentication-service";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e5JlkcSJ44iE+pVnGQpGiSNahxUcIFeaPyOjp9E3eD0=";
+    hash = "sha256-cZJ9ibBtxVBBVCBTGhtfM6lQTFvgUnO1WPO1WmDGuks=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "opa-wasm-0.1.0" = "sha256-f3IIln7BbN7NJiCVMgfoell/plzlqkSm4YYK7mqzKgw=";
-    };
-  };
+  cargoHash = "sha256-mUHN1uEc1qM1Bm/J7qf0zyMKaJvyt9YbQ8TxvxG+vcM=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
     src = "${src}/${npmRoot}";
-    hash = "sha256-xoPclMK+io/3tx139MNyMSP0kr61XHiSzAf3YkX0YZo=";
+    hash = "sha256-CMdnHS3sj9gXLpVlmuKvqFJ28+7fddG2Ld6t2nSFp24=";
   };
 
   npmRoot = "frontend";
@@ -43,6 +39,7 @@ rustPlatform.buildRustPackage rec {
     open-policy-agent
     npmHooks.npmConfigHook
     nodejs
+    (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
   ];
 
   buildInputs = [

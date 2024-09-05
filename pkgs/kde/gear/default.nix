@@ -105,6 +105,7 @@
   kget = callPackage ./kget {};
   kgoldrunner = callPackage ./kgoldrunner {};
   kgpg = callPackage ./kgpg {};
+  kgraphviewer = callPackage ./kgraphviewer {};
   khangman = callPackage ./khangman {};
   khealthcertificate = callPackage ./khealthcertificate {};
   khelpcenter = callPackage ./khelpcenter {};
@@ -118,7 +119,6 @@
   kio-extras = callPackage ./kio-extras {};
   kio-gdrive = callPackage ./kio-gdrive {};
   kio-zeroconf = callPackage ./kio-zeroconf {};
-  kipi-plugins = callPackage ./kipi-plugins {};
   kirigami-gallery = callPackage ./kirigami-gallery {};
   kiriki = callPackage ./kiriki {};
   kiten = callPackage ./kiten {};
@@ -145,7 +145,6 @@
   knavalbattle = callPackage ./knavalbattle {};
   knetwalk = callPackage ./knetwalk {};
   knights = callPackage ./knights {};
-  knotes = callPackage ./knotes {};
   koko = callPackage ./koko {};
   kolf = callPackage ./kolf {};
   kollision = callPackage ./kollision {};
@@ -195,6 +194,7 @@
   kwalletmanager = callPackage ./kwalletmanager {};
   kwave = callPackage ./kwave {};
   kweather = callPackage ./kweather {};
+  kweathercore = callPackage ./kweathercore {};
   kwordquiz = callPackage ./kwordquiz {};
   libgravatar = callPackage ./libgravatar {};
   libkcddb = callPackage ./libkcddb {};
@@ -205,7 +205,6 @@
   libkeduvocdocument = callPackage ./libkeduvocdocument {};
   libkexiv2 = callPackage ./libkexiv2 {};
   libkgapi = callPackage ./libkgapi {};
-  libkipi = callPackage ./libkipi {};
   libkleo = callPackage ./libkleo {};
   libkmahjongg = callPackage ./libkmahjongg {};
   libkomparediff2 = callPackage ./libkomparediff2 {};
@@ -218,6 +217,7 @@
   mailimporter = callPackage ./mailimporter {};
   marble = callPackage ./marble {};
   markdownpart = callPackage ./markdownpart {};
+  massif-visualizer = callPackage ./massif-visualizer {};
   mbox-importer = callPackage ./mbox-importer {};
   merkuro = callPackage ./merkuro {};
   messagelib = callPackage ./messagelib {};

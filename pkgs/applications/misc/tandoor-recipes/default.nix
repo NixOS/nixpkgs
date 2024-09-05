@@ -165,8 +165,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
 
   # flaky
   disabledTests = [
+    "test_add_duplicate"
+    "test_reset_inherit_space_fields"
     "test_search_count"
     "test_url_import_regex_replace"
+    "test_url_validator"
     "test_delete"
   ];
 

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , buildGoModule
 , makeWrapper
-, breakpointHook
 , jq
 , curl
 , kubectl
@@ -32,7 +31,7 @@ buildGoModule {
   subPackages = [ "." ];
   vendorHash = "sha256-JkQbQ2NEaumXbAfsv0fNiQf/EwMs3SDLHvu7c/bU7fU=";
 
-  nativeBuildInputs = [ makeWrapper jq curl breakpointHook ];
+  nativeBuildInputs = [ makeWrapper jq curl ];
 
   ldflags = [
     "-s"

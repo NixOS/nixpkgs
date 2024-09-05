@@ -1,4 +1,4 @@
-{ symlinkJoin, makeWrapper, kakoune, plugins ? [], configure ? {} }:
+{ lib, symlinkJoin, makeWrapper, kakoune, plugins ? [], configure ? {} }:
 
 let
   # "plugins" is the preferred way, but some configurations may be
@@ -34,5 +34,5 @@ in
       rm -Rf "$out/DELETE_ME"
     '';
 
-    meta = kakoune.meta // { priority = (kakoune.meta.priority or 0) - 1; };
+    meta = kakoune.meta // { priority = (kakoune.meta.priority or lib.meta.defaultPriority) - 1; };
   }

@@ -1,4 +1,4 @@
-{ symlinkJoin, R, makeWrapper, recommendedPackages, packages }:
+{ lib, symlinkJoin, R, makeWrapper, recommendedPackages, packages }:
 symlinkJoin {
   name = R.name + "-wrapper";
   preferLocalBuild = true;
@@ -26,6 +26,6 @@ symlinkJoin {
       # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package
-      priority = (R.meta.priority or 0) - 1;
+      priority = (R.meta.priority or lib.meta.defaultPriority) - 1;
     };
 }

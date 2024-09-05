@@ -35,11 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-    sed -i "/--no-cov-on-fail/d" setup.cfg
-  '';
-
   build-system = with python3.pkgs; [
     flit-core
   ];
@@ -76,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   ;
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytestCheckHook
   ];
 

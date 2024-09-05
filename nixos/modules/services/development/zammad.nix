@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.zammad;
   settingsFormat = pkgs.formats.yaml { };
-  filterNull = filterAttrs (_: v: v != null);
+  filterNull = lib.filterAttrs (_: v: v != null);
   serviceConfig = {
     Type = "simple";
     Restart = "always";
@@ -29,88 +26,88 @@ in
 
   options = {
     services.zammad = {
-      enable = mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
+      enable = lib.mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
 
-      package = mkPackageOption pkgs "zammad" { };
+      package = lib.mkPackageOption pkgs "zammad" { };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/zammad";
         description = ''
           Path to a folder that will contain Zammad working directory.
         '';
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         example = "192.168.23.42";
         description = "Host address.";
       };
 
-      openPorts = mkOption {
-        type = types.bool;
+      openPorts = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to open firewall ports for Zammad";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3000;
         description = "Web service port.";
       };
 
-      websocketPort = mkOption {
-        type = types.port;
+      websocketPort = lib.mkOption {
+        type = lib.types.port;
         default = 6042;
         description = "Websocket service port.";
       };
 
       redis = {
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether to create a local redis automatically.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "zammad";
           description = ''
             Name of the redis server. Only used if `createLocally` is set to true.
           '';
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
           description = ''
             Redis server address.
           '';
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 6379;
           description = "Port of the redis server.";
         };
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [ "PostgreSQL" "MySQL" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "PostgreSQL" "MySQL" ];
           default = "PostgreSQL";
           example = "MySQL";
           description = "Database engine to use.";
         };
 
-        host = mkOption {
-          type = types.nullOr types.str;
+        host = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = {
             PostgreSQL = "/run/postgresql";
             MySQL = "localhost";
           }.${cfg.database.type};
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             {
               PostgreSQL = "/run/postgresql";
               MySQL = "localhost";
@@ -121,28 +118,28 @@ in
           '';
         };
 
-        port = mkOption {
-          type = types.nullOr types.port;
+        port = lib.mkOption {
+          type = lib.types.nullOr lib.types.port;
           default = null;
           description = "Database port. Use `null` for default port.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "zammad";
           description = ''
             Database name.
           '';
         };
 
-        user = mkOption {
-          type = types.nullOr types.str;
+        user = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = "zammad";
           description = "Database user.";
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/zammad-dbpassword";
           description = ''
@@ -150,16 +147,16 @@ in
           '';
         };
 
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = "Whether to create a local database automatically.";
         };
 
-        settings = mkOption {
+        settings = lib.mkOption {
           type = settingsFormat.type;
           default = { };
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
             }
           '';
@@ -171,8 +168,8 @@ in
         };
       };
 
-      secretKeyBaseFile = mkOption {
-        type = types.nullOr types.path;
+      secretKeyBaseFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/secret_key_base";
         description = ''
@@ -197,10 +194,10 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.zammad.database.settings = {
-      production = mapAttrs (_: v: mkDefault v) (filterNull {
+      production = lib.mapAttrs (_: v: lib.mkDefault v) (filterNull {
         adapter = {
           PostgreSQL = "postgresql";
           MySQL = "mysql2";
@@ -215,7 +212,7 @@ in
       });
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openPorts [
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts [
       config.services.zammad.port
       config.services.zammad.websocketPort
     ];
@@ -243,9 +240,9 @@ in
       }
     ];
 
-    services.mysql = optionalAttrs (cfg.database.createLocally && cfg.database.type == "MySQL") {
+    services.mysql = lib.optionalAttrs (cfg.database.createLocally && cfg.database.type == "MySQL") {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
@@ -255,7 +252,7 @@ in
       ];
     };
 
-    services.postgresql = optionalAttrs (cfg.database.createLocally && cfg.database.type == "PostgreSQL") {
+    services.postgresql = lib.optionalAttrs (cfg.database.createLocally && cfg.database.type == "PostgreSQL") {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -266,7 +263,7 @@ in
       ];
     };
 
-    services.redis = optionalAttrs cfg.redis.createLocally {
+    services.redis = lib.optionalAttrs cfg.redis.createLocally {
       servers."${cfg.redis.name}" = {
         enable = true;
         port = cfg.redis.port;
@@ -282,7 +279,7 @@ in
       after = [
         "network.target"
         "postgresql.service"
-      ] ++ optionals cfg.redis.createLocally [
+      ] ++ lib.optionals cfg.redis.createLocally [
         "redis-${cfg.redis.name}.service"
       ];
       requires = [
@@ -301,13 +298,13 @@ in
         # config file
         cp ${databaseConfig} ./config/database.yml
         chmod -R +w .
-        ${optionalString (cfg.database.passwordFile != null) ''
+        ${lib.optionalString (cfg.database.passwordFile != null) ''
         {
           echo -n "  password: "
           cat ${cfg.database.passwordFile}
         } >> ./config/database.yml
         ''}
-        ${optionalString (cfg.secretKeyBaseFile != null) ''
+        ${lib.optionalString (cfg.secretKeyBaseFile != null) ''
         {
           echo "production: "
           echo -n "  secret_key_base: "
@@ -317,7 +314,7 @@ in
 
         if [ `${config.services.postgresql.package}/bin/psql \
                   --host ${cfg.database.host} \
-                  ${optionalString
+                  ${lib.optionalString
                     (cfg.database.port != null)
                     "--port ${toString cfg.database.port}"} \
                   --username ${cfg.database.user} \

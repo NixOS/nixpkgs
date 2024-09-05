@@ -46,6 +46,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "authlib"
     "flask-limiter"
     "gunicorn"
     "pyjwt"

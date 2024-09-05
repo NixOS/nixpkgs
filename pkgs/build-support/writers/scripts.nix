@@ -310,7 +310,7 @@ rec {
   #   writeBash "example"
   #     {
   #       makeWrapperArgs = [
-  #         "--prefix" "PATH" ":" "${pkgs.hello}/bin"
+  #         "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #       ];
   #     }
   #     ''
@@ -336,7 +336,7 @@ rec {
   #  writeBashBin "example"
   #    {
   #      makeWrapperArgs = [
-  #        "--prefix", "PATH", ":", "${pkgs.hello}/bin",
+  #        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #      ];
   #    }
   #    ''
@@ -357,7 +357,7 @@ rec {
   #   writeDash "example"
   #     {
   #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
+  #         "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #       ];
   #     }
   #     ''
@@ -383,7 +383,7 @@ rec {
   #  writeDashBin "example"
   #    {
   #      makeWrapperArgs = [
-  #        "--prefix", "PATH", ":", "${pkgs.hello}/bin",
+  #        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #      ];
   #    }
   #    ''
@@ -404,7 +404,7 @@ rec {
   #   writeFish "example"
   #     {
   #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
+  #         "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #       ];
   #     }
   #     ''
@@ -439,7 +439,7 @@ rec {
   #   writeFishBin "example"
   #     {
   #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
+  #         "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #       ];
   #     }
   #     ''
@@ -496,7 +496,7 @@ rec {
   #   writeNu "example"
   #     {
   #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
+  #         "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #       ];
   #     }
   #     ''
@@ -524,7 +524,7 @@ rec {
   #   writeNuBin "example"
   #     {
   #       makeWrapperArgs = [
-  #         "--prefix", "PATH", ":", "${pkgs.hello}/bin",
+  #         "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
   #       ];
   #     }
   #    ''

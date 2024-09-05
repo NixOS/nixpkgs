@@ -164,7 +164,7 @@ let
     meta = {
       description = "Image processing routines for SciPy";
       homepage = "https://scikit-image.org";
-      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${src.rev}";
+      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ yl3dy ];
     };

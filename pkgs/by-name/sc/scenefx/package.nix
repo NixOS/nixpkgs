@@ -16,6 +16,7 @@
   mesa,
   validatePkgConfig,
   testers,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,12 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     scdoc
     validatePkgConfig
+    wayland-scanner
   ];
 
   buildInputs = [

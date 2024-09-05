@@ -37,6 +37,6 @@ symlinkJoin {
   '';
 
   meta = rofi-unwrapped.meta // {
-    priority = (rofi-unwrapped.meta.priority or 0) - 1;
+    priority = (rofi-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

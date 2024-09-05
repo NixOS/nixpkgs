@@ -250,9 +250,6 @@ let
     libusb-ffi = super.libusb-ffi.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libusb-compat-0_1 ];
     });
-    cl-fam = super.cl-fam.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.fam ];
-    });
     jpeg-turbo = super.jpeg-turbo.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libjpeg_turbo ];
     });

@@ -8,6 +8,7 @@
   pkg-config,
   scdoc,
   wayland,
+  wayland-scanner,
   wayland-protocols,
   zig_0_12,
 }:
@@ -30,11 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     scdoc
-    wayland
+    wayland-scanner
     zig_0_12.hook
   ];
 
   buildInputs = [
+    wayland
     wayland-protocols
     libxkbcommon
     pam

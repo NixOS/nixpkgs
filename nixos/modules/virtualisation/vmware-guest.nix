@@ -65,9 +65,9 @@ in
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
     services.xserver = mkIf (!cfg.headless) {
-      modules = [ xf86inputvmmouse ];
+      modules = lib.optionals pkgs.stdenv.hostPlatform.isx86 [ xf86inputvmmouse ];
 
-      config = ''
+      config = lib.optionalString (pkgs.stdenv.hostPlatform.isx86) ''
           Section "InputClass"
             Identifier "VMMouse"
             MatchDevicePath "/dev/input/event*"

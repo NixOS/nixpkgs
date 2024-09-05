@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace betterdiscordctl \
-      --replace "DISABLE_SELF_UPGRADE=" "DISABLE_SELF_UPGRADE=yes"
+      --replace-fail "DISABLE_SELF_UPGRADE=" "DISABLE_SELF_UPGRADE=yes"
   '';
 
   installPhase = ''

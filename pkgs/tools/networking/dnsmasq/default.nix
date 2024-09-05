@@ -93,6 +93,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     mainProgram = "dnsmasq";
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ eelco fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

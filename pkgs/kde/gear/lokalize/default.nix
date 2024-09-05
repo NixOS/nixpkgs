@@ -1,6 +1,11 @@
-{mkKdeDerivation}:
+{
+  mkKdeDerivation,
+  pkg-config,
+  hunspell,
+}:
 mkKdeDerivation {
   pname = "lokalize";
-  # FIXME(qt5)
-  meta.broken = true;
+
+  extraNativeBuildInputs = [pkg-config];
+  extraBuildInputs = [hunspell];
 }

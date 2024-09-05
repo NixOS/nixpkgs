@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   makeWrapper,
   cmake,
@@ -75,6 +76,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-deu8zvgseDg2gQEnZiCda4TrbA6pleE9iItoZlsoMtE=";
   };
 
+  patches = [
+    # Fixes broken OpenGL applications on Apple silicon (Asahi Linux)
+    # Based on commit https://github.com/hyprwm/Hyprland/commit/279ec1c291021479b050c83a0435ac7076c1aee0
+    ./asahi-fix.patch
+
+    # https://github.com/hyprwm/Hyprland/pull/7467
+    (fetchpatch {
+      url = "https://github.com/hyprwm/Hyprland/commit/a437e44a6af8e8f42966ffe3a26c1d562fce6b33.diff";
+      hash = "sha256-Y0P4rY6HyPN8Y5Kowlgyj0PiAHh6nqPRAQ4iFT0l4E8=";
+    })
+  ];
+
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
@@ -144,12 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       wayland
       wayland-protocols
+      xorg.libXcursor
     ]
     ++ lib.optionals stdenv.hostPlatform.isBSD [ epoll-shim ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
     ++ lib.optionals enableXWayland [
       xorg.libxcb
-      xorg.libXcursor
       xorg.libXdmcp
       xorg.xcbutil
       xorg.xcbutilerrors

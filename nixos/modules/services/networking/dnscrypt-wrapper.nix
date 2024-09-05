@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
   cfg     = config.services.dnscrypt-wrapper;
   dataDir = "/var/lib/dnscrypt-wrapper";
@@ -40,7 +38,7 @@ let
     cd ${dataDir}
 
     # generate provider keypair (first run only)
-    ${optionalString (cfg.providerKey.public == null || cfg.providerKey.secret == null) ''
+    ${lib.optionalString (cfg.providerKey.public == null || cfg.providerKey.secret == null) ''
       if [ ! -f ${publicKey} ] || [ ! -f ${secretKey} ]; then
         dnscrypt-wrapper --gen-provider-keypair
       fi
@@ -96,12 +94,12 @@ let
         sha256 = "0c4mq741q4rpmdn09agwmxap32kf0vgfz7pkhcdc5h54chc3g3xy";
       };
 
-      configureFlags = optional stdenv.isLinux "--with-systemd";
+      configureFlags = lib.optional stdenv.isLinux "--with-systemd";
 
       nativeBuildInputs = [ autoreconfHook pkg-config ];
 
       # <ldns/ldns.h> depends on <openssl/ssl.h>
-      buildInputs = [ libsodium openssl.dev ldns ] ++ optional stdenv.isLinux systemd;
+      buildInputs = [ libsodium openssl.dev ldns ] ++ lib.optional stdenv.isLinux systemd;
 
       postInstall = ''
         # Previous versions required libtool files to load plugins; they are
@@ -112,9 +110,9 @@ let
       meta = {
         description = "A tool for securing communications between a client and a DNS resolver";
         homepage = "https://github.com/dyne/dnscrypt-proxy";
-        license = licenses.isc;
-        maintainers = with maintainers; [ rnhmjoj ];
-        platforms = platforms.linux;
+        license = lib.licenses.isc;
+        maintainers = with lib.maintainers; [ rnhmjoj ];
+        platforms = lib.platforms.linux;
       };
     }) { };
 
@@ -124,28 +122,28 @@ in {
   ###### interface
 
   options.services.dnscrypt-wrapper = {
-    enable = mkEnableOption "DNSCrypt wrapper";
+    enable = lib.mkEnableOption "DNSCrypt wrapper";
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = ''
         The DNSCrypt wrapper will bind to this IP address.
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5353;
       description = ''
         The DNSCrypt wrapper will listen for DNS queries on this port.
       '';
     };
 
-    providerName = mkOption {
-      type = types.str;
+    providerName = lib.mkOption {
+      type = lib.types.str;
       default = "2.dnscrypt-cert.${config.networking.hostName}";
-      defaultText = literalExpression ''"2.dnscrypt-cert.''${config.networking.hostName}"'';
+      defaultText = lib.literalExpression ''"2.dnscrypt-cert.''${config.networking.hostName}"'';
       example = "2.dnscrypt-cert.myresolver";
       description = ''
         The name that will be given to this DNSCrypt resolver.
@@ -153,8 +151,8 @@ in {
       '';
     };
 
-    providerKey.public = mkOption {
-      type = types.nullOr types.path;
+    providerKey.public = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/etc/secrets/public.key";
       description = ''
@@ -163,8 +161,8 @@ in {
       '';
     };
 
-    providerKey.secret = mkOption {
-      type = types.nullOr types.path;
+    providerKey.secret = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/etc/secrets/secret.key";
       description = ''
@@ -173,24 +171,24 @@ in {
       '';
     };
 
-    upstream.address = mkOption {
-      type = types.str;
+    upstream.address = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = ''
         The IP address of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
 
-    upstream.port = mkOption {
-      type = types.port;
+    upstream.port = lib.mkOption {
+      type = lib.types.port;
       default = 53;
       description = ''
         The port of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
 
-    keys.expiration = mkOption {
-      type = types.int;
+    keys.expiration = lib.mkOption {
+      type = lib.types.int;
       default = 30;
       description = ''
         The duration (in days) of the time-limited secret key.
@@ -198,8 +196,8 @@ in {
       '';
     };
 
-    keys.checkInterval = mkOption {
-      type = types.int;
+    keys.checkInterval = lib.mkOption {
+      type = lib.types.int;
       default = 1440;
       description = ''
         The time interval (in minutes) between key expiration checks.
@@ -211,7 +209,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.dnscrypt-wrapper = {
       description = "dnscrypt-wrapper daemon user";

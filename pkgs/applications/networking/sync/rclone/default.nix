@@ -8,6 +8,8 @@ buildGoModule rec {
   pname = "rclone";
   version = "1.67.0";
 
+  outputs = [ "out" "man" ];
+
   src = fetchFromGitHub {
     owner = "rclone";
     repo = "rclone";
@@ -19,14 +21,18 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  outputs = [ "out" "man" ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   tags = lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [ "-s" "-w" "-X github.com/rclone/rclone/fs.Version=${version}" ];
+
+  postConfigure = lib.optionalString (!stdenv.isDarwin) ''
+    substituteInPlace vendor/github.com/winfsp/cgofuse/fuse/host_cgo.go \
+        --replace-fail '"libfuse.so.2"' '"${lib.getLib fuse}/lib/libfuse.so.2"'
+  '';
 
   postInstall =
     let
@@ -50,8 +56,7 @@ buildGoModule rec {
       # as the setuid wrapper is required as non-root on NixOS.
       ''
       wrapProgram $out/bin/rclone \
-        --suffix PATH : "${lib.makeBinPath [ fuse3 ] }" \
-        --prefix LD_LIBRARY_PATH : "${fuse3}/lib"
+        --suffix PATH : "${lib.makeBinPath [ fuse3 ] }"
     '';
 
   passthru.tests = {

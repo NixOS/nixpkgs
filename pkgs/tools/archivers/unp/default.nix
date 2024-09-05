@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
   };
 
   dontConfigure = true;
-  buildPhase = "true";
+  dontBuild = true;
   installPhase = ''
   mkdir -p $out/bin
   mkdir -p $out/share/man/man1

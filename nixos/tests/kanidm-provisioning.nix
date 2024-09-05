@@ -4,6 +4,13 @@ import ./make-test-python.nix (
     certs = import ./common/acme/server/snakeoil-certs.nix;
     serverDomain = certs.domain;
 
+    # copy certs to store to work around mount namespacing
+    certsPath = pkgs.runCommandNoCC "snakeoil-certs" { } ''
+      mkdir $out
+      cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
+      cp ${certs."${serverDomain}".key} $out/snakeoil.key
+    '';
+
     provisionAdminPassword = "very-strong-password-for-admin";
     provisionIdmAdminPassword = "very-strong-password-for-idm-admin";
     provisionIdmAdminPassword2 = "very-strong-alternative-password-for-idm-admin";
@@ -23,8 +30,8 @@ import ./make-test-python.nix (
             domain = serverDomain;
             bindaddress = "[::]:443";
             ldapbindaddress = "[::1]:636";
-            tls_chain = certs."${serverDomain}".cert;
-            tls_key = certs."${serverDomain}".key;
+            tls_chain = "${certsPath}/snakeoil.crt";
+            tls_key = "${certsPath}/snakeoil.key";
           };
           # So we can check whether provisioning did what we wanted
           enableClient = true;
@@ -151,7 +158,11 @@ import ./make-test-python.nix (
               groups.service1-admin = { };
               systems.oauth2.service1 = {
                 displayName = "Service One (changed)";
-                originUrl = "https://changed-one.example.com/";
+                # multiple origin urls
+                originUrl = [
+                  "https://changed-one.example.com/"
+                  "https://changed-one.example.org/"
+                ];
                 originLanding = "https://changed-one.example.com/landing-changed";
                 basicSecretFile = pkgs.writeText "bs-service1" "changed-very-strong-secret-for-service1";
                 scopeMaps.service1-access = [
@@ -398,6 +409,7 @@ import ./make-test-python.nix (
             assert_contains(out, "name: service1")
             assert_contains(out, "displayname: Service One (changed)")
             assert_contains(out, "oauth2_rs_origin: https://changed-one.example.com/")
+            assert_contains(out, "oauth2_rs_origin: https://changed-one.example.org/")
             assert_contains(out, "oauth2_rs_origin_landing: https://changed-one.example.com/landing")
             assert_matches(out, 'oauth2_rs_scope_map: service1-access.*{"email", "openid"}')
             assert_matches(out, 'oauth2_rs_sup_scope_map: service1-admin.*{"adminchanged"}')
@@ -453,6 +465,7 @@ import ./make-test-python.nix (
             assert_contains(out, "name: service1")
             assert_contains(out, "displayname: Service One (changed)")
             assert_contains(out, "oauth2_rs_origin: https://changed-one.example.com/")
+            assert_lacks(out, "oauth2_rs_origin: https://changed-one.example.org/")
             assert_contains(out, "oauth2_rs_origin_landing: https://changed-one.example.com/landing")
             assert_lacks(out, "oauth2_rs_scope_map")
             assert_lacks(out, "oauth2_rs_sup_scope_map")

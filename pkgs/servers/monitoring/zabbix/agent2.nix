@@ -1,6 +1,22 @@
-{ lib, buildGoModule, fetchurl, autoreconfHook, pkg-config, libiconv, openssl, pcre, zlib }:
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  libiconv,
+  openssl,
+  pcre,
+  zlib,
+}:
 
-import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version ${version} for zabbix-agent2", ... }:
+import ./versions.nix (
+  {
+    version,
+    hash,
+    vendorHash ? throw "unsupported version ${version} for zabbix-agent2",
+    ...
+  }:
   buildGoModule {
     pname = "zabbix-agent2";
     inherit version;
@@ -14,8 +30,16 @@ import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version 
 
     inherit vendorHash;
 
-    nativeBuildInputs = [ autoreconfHook pkg-config ];
-    buildInputs = [ libiconv openssl pcre zlib ];
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+    ];
+    buildInputs = [
+      libiconv
+      openssl
+      pcre
+      zlib
+    ];
 
     inherit (buildGoModule.go) GOOS GOARCH;
 
@@ -59,8 +83,10 @@ import ./versions.nix ({ version, hash, vendorHash ? throw "unsupported version 
     meta = {
       description = "Enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
-      license = lib.licenses.gpl2Plus;
+      license =
+        if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [ aanderse ];
       platforms = lib.platforms.unix;
     };
-  })
+  }
+)

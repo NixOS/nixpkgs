@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   libraries = lib.makeLibraryPath [ gtk2 curl ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     install -m 644 -D $src $out/bin/ckan.exe

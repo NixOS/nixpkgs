@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, libiconv, openssl, pcre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libiconv,
+  openssl,
+  pcre,
+}:
 
-import ./versions.nix ({ version, hash, ... }:
+import ./versions.nix (
+  { version, hash, ... }:
   stdenv.mkDerivation {
     pname = "zabbix-agent";
     inherit version;
@@ -36,8 +45,13 @@ import ./versions.nix ({ version, hash, ... }:
     meta = {
       description = "Enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
-      license = lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [ mmahut psyanticy ];
+      license =
+        if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [
+        mmahut
+        psyanticy
+      ];
       platforms = lib.platforms.unix;
     };
-  })
+  }
+)

@@ -26,7 +26,7 @@ in
       hash = "sha256-3YvQAqN5tdSZ37BQ3R+pr4Ap6ARh9LtsUjxJlz9aOfM=";
     };
 
-    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/402562e2559e198c6660171dec58e7a25cc14ec2/security/openssh-portable/files/extra-patch-hpn"; in
+    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/7ba88c964b6e5724eec462021d984da3989e6a08/security/openssh-portable/files/extra-patch-hpn"; in
     [
       ./ssh-keysign-8.5.patch
 
@@ -36,7 +36,7 @@ in
         inherit url;
         stripLen = 1;
         excludes = [ "channels.c" ];
-        hash = "sha256-CZ35dQpanzt0Uoo/2sDET5J/hYRF8ofiAz60HlAsCV8=";
+        hash = "sha256-zk7t6FNzTE+8aDU4QuteR1x0W3O2gjIQmeCkTNbaUfA=";
       })
 
       (fetchpatch {

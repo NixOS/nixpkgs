@@ -12,23 +12,24 @@
 , pytestCheckHook
 , pytest-benchmark
 , pytest-cov
+, pytest-mock
 , pandas
 , azure-storage-blob
 }:
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "0.18.2";
+  version = "0.19.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xvmtaHNkE6bXwVJtYJBc30qutZuMlcx4JmElCRdxmu8=";
+    hash = "sha256-Xgn6uyIfuB6YnCg8FieOr/tuhXBtmDZKvNpcDGynNZg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-/2K8/hsMIeidfviCKK+ffWPB51svWZa+9eZoK9erBaY=";
+    hash = "sha256-ebX51/ztIdhY81sd0fdPsKvaGtCEk8oofrj/Nrt8nfA=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
@@ -60,6 +61,7 @@ buildPythonPackage rec {
     pandas
     pytest-benchmark
     pytest-cov
+    pytest-mock
     azure-storage-blob
   ];
 

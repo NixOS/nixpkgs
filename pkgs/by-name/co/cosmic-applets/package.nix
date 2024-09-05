@@ -48,10 +48,6 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
   nativeBuildInputs = [ just pkg-config util-linuxMinimal ];
   buildInputs = [ dbus glib libinput libxkbcommon pulseaudio wayland udev ];
 

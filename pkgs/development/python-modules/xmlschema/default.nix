@@ -35,10 +35,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # -file://///filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
-    # +file:////filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
-    "test_normalize_url_slashes"
-    "test_normalize_url_with_base_unc_path"
+    # Incorrect error message in pickling test for Python 3.12 in Debian
+    # https://github.com/sissaschool/xmlschema/issues/412
+    "test_pickling_subclassed_schema__issue_263"
   ];
 
   pythonImportsCheck = [ "xmlschema" ];

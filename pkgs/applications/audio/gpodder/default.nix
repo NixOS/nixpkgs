@@ -47,7 +47,7 @@ python311Packages.buildPythonApplication rec {
     minimock
     pytest
     pytest-httpserver
-    pytest-cov
+    pytest-cov-stub
   ];
 
   doCheck = true;

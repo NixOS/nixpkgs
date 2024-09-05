@@ -4,11 +4,11 @@
   buildPythonPackage,
   chardet,
   colorama,
+  distutils,
   fetchFromGitHub,
   netaddr,
   pycurl,
   pyparsing,
-  pytest,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -19,14 +19,14 @@
 buildPythonPackage rec {
   pname = "wfuzz";
   version = "3.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "xmendez";
-    repo = pname;
-    rev = "v${version}";
+    repo = "wfuzz";
+    rev = "refs/tags/v${version}";
     hash = "sha256-RM6QM/iR00ymg0FBUtaWAtxPHIX4u9U/t5N/UT/T6sc=";
   };
 
@@ -41,15 +41,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pyparsing>=2.4*" "pyparsing>=2.4"
-
-    # fix distutils use for Python 3.12
-    substituteInPlace src/wfuzz/plugin_api/base.py \
-      --replace-fail "from distutils import util" "from setuptools._distutils import util"
+      --replace-fail "pyparsing>=2.4*" "pyparsing>=2.4"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
+    distutils # src/wfuzz/plugin_api/base.py
     pycurl
     six
     setuptools
@@ -58,7 +57,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     netaddr
-    pytest
     pytestCheckHook
   ];
 
@@ -82,6 +80,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/xmendez/wfuzz/releases/tag/v${version}";
     description = "Web content fuzzer to facilitate web applications assessments";
     longDescription = ''
       Wfuzz provides a framework to automate web applications security assessments

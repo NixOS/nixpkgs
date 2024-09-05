@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   # Strip out references to unfree fonts from the test suite
   postPatch = ''
-    substituteInPlace test/test_styles.ipynb --replace "font='Times', " ""
+    substituteInPlace test/test_backend.ipynb --replace-fail "(font='Times')" "()"
   '';
 
   preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files

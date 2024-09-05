@@ -13,7 +13,7 @@
 , rtl_sdr_source ? true, rtl-sdr-osmocom, libusb1  # osmocom better w/ rtlsdr v4
 , rtl_tcp_source ? true
 , sdrplay_source ? false, sdrplay
-, soapy_source ? true, soapysdr
+, soapy_source ? true, soapysdr-with-plugins
 , spyserver_source ? true
 , usrp_source	? false, uhd, boost
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional limesdr_source limesuite
     ++ lib.optionals rtl_sdr_source [ rtl-sdr-osmocom libusb1 ]
     ++ lib.optional sdrplay_source sdrplay
-    ++ lib.optional soapy_source soapysdr
+    ++ lib.optional soapy_source soapysdr-with-plugins
     ++ lib.optionals plutosdr_source [ libiio libad9361 ]
     ++ lib.optionals usrp_source [ uhd boost ]
     ++ lib.optional audio_sink rtaudio

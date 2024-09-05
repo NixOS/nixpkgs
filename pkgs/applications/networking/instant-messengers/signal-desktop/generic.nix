@@ -1,8 +1,13 @@
 { stdenv
 , lib
+, callPackage
 , fetchurl
 , autoPatchelfHook
+, noto-fonts-color-emoji
 , dpkg
+, asar
+, rsync
+, python3
 , wrapGAppsHook3
 , makeWrapper
 , nixosTests
@@ -57,6 +62,27 @@
 let
   inherit (stdenv) targetPlatform;
   ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
+
+  # Noto Color Emoji PNG files for emoji replacement; see below.
+  noto-fonts-color-emoji-png = noto-fonts-color-emoji.overrideAttrs (prevAttrs: {
+    pname = "noto-fonts-color-emoji-png";
+
+    # The build produces 136×128 PNGs by default for arcane font
+    # reasons, but we want square PNGs.
+    buildFlags = prevAttrs.buildFlags or [ ] ++ [ "BODY_DIMENSIONS=128x128" ];
+
+    makeTargets = [ "compressed" ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share
+      mv build/compressed_pngs $out/share/noto-fonts-color-emoji-png
+      python3 add_aliases.py --srcdir=$out/share/noto-fonts-color-emoji-png
+
+      runHook postInstall
+    '';
+  });
 in
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -71,11 +97,36 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit url hash;
+    recursiveHash = true;
+    downloadToTemp = true;
+    nativeBuildInputs = [ dpkg asar ];
+    # Signal ships the Apple emoji set without a licence via an npm
+    # package and upstream does not seem terribly interested in fixing
+    # this; see:
+    #
+    # * <https://github.com/signalapp/Signal-Android/issues/5862>
+    # * <https://whispersystems.discoursehosting.net/t/signal-is-likely-violating-apple-license-terms-by-using-apple-emoji-in-the-sticker-creator-and-android-and-desktop-apps/52883>
+    #
+    # We work around this by replacing it with the Noto Color Emoji
+    # set, which is available under a FOSS licence and more likely to
+    # be used on a NixOS machine anyway. The Apple emoji are removed
+    # during `fetchurl` to ensure that the build doesn’t cache the
+    # unlicensed emoji files, but the rest of the work is done in the
+    # main derivation.
+    postFetch = ''
+      dpkg-deb -x $downloadedFile $out
+      asar extract "$out/opt/${dir}/resources/app.asar" $out/asar-contents
+      rm -r \
+        "$out/opt/${dir}/resources/app.asar"{,.unpacked} \
+        $out/asar-contents/node_modules/emoji-datasource-apple
+    '';
   };
 
   nativeBuildInputs = [
+    rsync
+    asar
+    python3
     autoPatchelfHook
-    dpkg
     (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
@@ -127,10 +178,12 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   dontBuild = true;
   dontConfigure = true;
+
+  unpackPhase = ''
+    rsync -a --chmod=+w $src/ .
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -146,6 +199,30 @@ stdenv.mkDerivation rec {
 
     # Create required symlinks:
     ln -s libGLESv2.so "$out/lib/${dir}/libGLESv2.so.2"
+
+    # Copy the Noto Color Emoji PNGs into the ASAR contents. See `src`
+    # for the motivation, and the script for the technical details.
+    emojiPrefix=$(
+      python3 ${./copy-noto-emoji.py} \
+      ${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png \
+      asar-contents
+    )
+
+    # Replace the URL used for fetching large versions of emoji with
+    # the local path to our copied PNGs.
+    substituteInPlace asar-contents/preload.bundle.js \
+      --replace-fail \
+        'emoji://jumbo?emoji=' \
+        "file://$out/lib/${lib.escapeURL dir}/resources/app.asar/$emojiPrefix/"
+
+    # `asar(1)` copies files from the corresponding `.unpacked`
+    # directory when extracting, and will put them back in the modified
+    # archive if you don’t specify them again when repacking. Signal
+    # leaves their native `.node` libraries unpacked, so we match that.
+    asar pack \
+      --unpack '*.node' \
+      asar-contents \
+      "$out/lib/${dir}/resources/app.asar"
 
     runHook postInstall
   '';
@@ -180,8 +257,21 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://signal.org/";
     changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant mic92 equirosa urandom bkchr teutat3s ];
+    license = [
+      lib.licenses.agpl3Only
+
+      # Various npm packages
+      lib.licenses.free
+    ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      mic92
+      equirosa
+      urandom
+      bkchr
+      teutat3s
+      emily
+    ];
     mainProgram = pname;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
