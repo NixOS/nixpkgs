@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "emilua";
-  version = "0.7.3";
+  version = "0.10.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "emilua";
     rev = "v${version}";
-    hash = "sha256-j8ohhqHjSBgc4Xk9PcQNrbADmsz4VH2zCv+UNqiCv4I=";
+    hash = "sha256-D6XKXik9nWQ6t6EF6dLbRGB60iFbPUM8/H8iFAz1QlE=";
   };
 
   buildInputs = [
