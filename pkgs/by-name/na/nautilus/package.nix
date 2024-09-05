@@ -25,7 +25,7 @@
   libseccomp,
   librsvg,
   webp-pixbuf-loader,
-  tracker,
+  tinysparql,
   localsearch,
   gexiv2,
   libselinux,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Hardcode required paths.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tracker;
+      inherit tinysparql;
     })
   ];
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libcloudproviders
     shared-mime-info
-    tracker
+    tinysparql
     localsearch
     gnome-autoar
   ];

@@ -162,10 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
-      attrPath = "tracker";
-    };
+    updateScript = gnome.updateScript { packageName = finalAttrs.pname; };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
