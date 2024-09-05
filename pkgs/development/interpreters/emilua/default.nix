@@ -22,6 +22,7 @@
   cmake,
   asciidoctor,
   makeWrapper,
+  gitUpdater
 }:
 
 let
@@ -105,6 +106,8 @@ stdenv.mkDerivation rec {
     # Known issue with no-new-privs disabled in the Nix build environment.
     "--no-suite" "libpsx"
   ];
+
+  passthru.updateScript = gitUpdater {rev-prefix = "v";};
 
   meta = with lib; {
     description = "Lua execution engine";
