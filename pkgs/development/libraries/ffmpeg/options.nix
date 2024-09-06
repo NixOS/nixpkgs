@@ -37,6 +37,11 @@ let
         default = "0"; # Unknown/Enable in any version
         description = "Minimum version that understands this flag. Flag will not be passed when lower.";
       };
+      versionMax = lib.mkOption {
+        type = lib.types.str;
+        default = "99999999"; # Unknown/Enable in any version
+        description = "Maximum version that understands this flag. Flag will not be passed when higher.";
+      };
       variant = lib.mkOption {
         type = lib.types.enum [ "headless" "small" "full" ];
         default = "headless";
@@ -100,7 +105,101 @@ let
     with pkgs;
     with pkgs.darwin.apple_sdk.frameworks;
     with pkgs.xorg;
+    let
+      enable = lib.mapAttrs (n: v: v.enable) config;
+    in
     {
+    /*
+     *  Licensing flags
+     */
+    gpl = { };
+    version3 = { };
+    gplv3 = {
+      gate = enable.gpl && enable.version3;
+      flags = [ ]; # internal
+    };
+    unfree = {
+      enable = false;
+      flags = [ "nonfree" ];
+    };
+    /*
+      *  Build flags
+      */
+    static = { gate = stdenv.hostPlatform.isStatic; };
+    shared = { gate = !stdenv.hostPlatform.isStatic; };
+    pic = { };
+    thumb = { enable = false; };
+    small = { enable = false; };
+    runtime-cpudetect = { };
+    gray = { variant = full; };
+    swscale-alpha = { }; # TODO same as swscale?
+    hardcoded-tables = { };
+    safe-bitstream-reader = { };
+
+    small = { };
+    runtime-cpudetect = { };
+    gray = { };
+    swscale-alpha = { };
+    hardcoded-tables = { };
+    safe-bitstream-reader = { };
+
+    multithread = { flags = [ ]; };
+    pthreads = {
+      gate = enable.multithread && stdenv.hostPlatform.isUnix;
+    };
+    w32threads = {
+      gate = enable.multithread && stdenv.hostPlatform.isWindows;
+    };
+    os2threads = {
+      # We don't support OS/2
+      enable = false;
+    };
+
+    network = { };
+    pixelutils = { };
+
+    /*
+      *  Program flags
+      */
+    ffmpeg = { };
+    ffplay = { variant = small; };
+    ffprobe = { };
+
+    /*
+      *  Library flags
+      */
+    avcodec = { };
+    avdevice = { };
+    avfilter = { };
+    avformat = { };
+    avresample = {
+      # Ffmpeg > 4 doesn't know about the flag anymore
+      versionMax = "5";
+    };
+
+    avutil = { };
+    postproc = { gate = enable.gpl; };
+    swresample = { };
+    swscale = { };
+
+    /*
+      *  Documentation flags
+      */
+    doc = { };
+    htmlpages = { };
+    manpages = { };
+    podpages = { };
+    txtpages = { };
+
+    /*
+      * Developer flags
+      */
+    debug = { enable = false; };
+    optimizations = { };
+    extra-warnings = { enable = false; };
+    stripping = { enable = false; };
+
+    # Feature flags
     alsa = { packages = { inherit alsa-lib; }; };
     aom = {
       variant = full;
@@ -193,21 +292,21 @@ let
       flagPrefix = "lib";
     };
     dvdnav = {
-      gate = config.gpl;
+      gate = enable.gpl;
       variant = full;
       version = "7";
       packages = { inherit libdvdnav; };
       flagPrefix = "lib";
     };
     dvdread = {
-      gate = config.gpl;
+      gate = enable.gpl;
       variant = full;
       version = "7";
       packages = { inherit libdvdread; };
       flagPrefix = "lib";
     };
     fdk-aac = {
-      gate = with config; !gpl || unfree;
+      gate = with enable; !gpl || unfree;
       variant = full;
       packages = { inherit fdk_aac; };
       flagPrefix = "lib";
@@ -236,7 +335,7 @@ let
       flagPrefix = "lib";
     };
     frei0r = {
-      gate = config.gpl;
+      gate = enable.gpl;
       variant = full;
       packages = { inherit frei0r; };
     };
@@ -319,7 +418,7 @@ let
       packages = { inherit ocl-icd opencl-headers; };
     };
     opencore-amr = {
-      gate = config.gplv3;
+      gate = enable.gplv3;
       variant = full;
       packages = { inherit opencore-amr; };
       flags = [ "libopencore-amrnb" "libopencore-amrwb" ];
@@ -460,7 +559,7 @@ let
       packages = { inherit VideoToolbox; };
     };
     vidstab = {
-      gate = config.gpl;
+      gate = enable.gpl;
       variant = full;
       packages = { inherit vid-stab; };
       flagPrefix = "lib";
@@ -473,7 +572,7 @@ let
       flagPrefix = "lib";
     };
     vo-amrwbenc = {
-      gate = config.gplv3;
+      gate = enable.gplv3;
       variant = full;
       packages = { inherit vo-amrwbenc; };
       flagPrefix = "lib";
@@ -502,23 +601,23 @@ let
       flagPrefix = "lib";
     };
     x264 = {
-      gate = config.gpl;
+      gate = enable.gpl;
       packages = { inherit x264; };
       flagPrefix = "lib";
     };
     x265 = {
-      gate = config.gpl;
+      gate = enable.gpl;
       packages = { inherit x265; };
       flagPrefix = "lib";
     };
     xavs = {
-      gate = config.gpl;
+      gate = enable.gpl;
       variant = full;
       packages = { inherit xavs; };
       flagPrefix = "lib";
     };
     xcb = {
-      gate = with (lib.mapAttrs (n: v: v.enable) config); xcb-shape || xcb-shm || xcb-xfixes;
+      gate = with enable; xcb-shape || xcb-shm || xcb-xfixes;
       packages = { inherit libxcb; };
       flagPrefix = "lib";
     };
@@ -558,7 +657,7 @@ let
       flagPrefix = "lib";
     };
     xvid = {
-      gate = config.gpl;
+      gate = enable.gpl;
       packages = { inherit xvidcore; };
       flagPrefix = "lib";
     };
@@ -577,7 +676,7 @@ in
 
 {
   options = {
-    features = lib.mapAttrs mkFfmpegOption (featureOptions (config.features // { gpl = true; gplv3 = true; unfree = false; })); # TODO
+    features = lib.mapAttrs mkFfmpegOption (featureOptions (config.features));
     foo = lib.mkOption { default = isInVariant "full"; };
   };
 }

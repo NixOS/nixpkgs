@@ -18,131 +18,11 @@
 , fetchgit
 , fetchpatch2
 
-  # Feature flags
-, withAppKit ? withHeadlessDeps && stdenv.isDarwin # Apple AppKit framework
-, withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
-, withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
-, withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
-, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
-, withAvisynth ? withFullDeps # AviSynth script files reading
-, withBluray ? withFullDeps # BluRay reading
-, withBs2b ? withFullDeps # bs2b DSP library
-, withBzlib ? withHeadlessDeps
-, withCaca ? withFullDeps # Textual display (ASCII art)
-, withCelt ? withFullDeps # CELT decoder
-, withChromaprint ? withFullDeps # Audio fingerprinting
-, withCodec2 ? withFullDeps # codec2 en/decoding
-, withCoreImage ? withHeadlessDeps && stdenv.isDarwin # Apple CoreImage framework
-, withCuda ? withFullDeps && withNvcodec
-, withCudaLLVM ? withFullDeps
-, withCuvid ? withHeadlessDeps && withNvcodec
-, withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
-, withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
-, withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
-, withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7" # needed for DVD demuxing
-, withDvdread ? withFullDeps && withGPL && lib.versionAtLeast version "7" # needed for DVD demuxing
-, withFdkAac ? withFullDeps && (!withGPL || withUnfree) # Fraunhofer FDK AAC de/encoder
-, withNvcodec ? withHeadlessDeps && (with stdenv; !isDarwin && !isAarch32 && !hostPlatform.isRiscV && hostPlatform == buildPlatform) # dynamically linked Nvidia code
-, withFlite ? withFullDeps # Voice Synthesis
-, withFontconfig ? withHeadlessDeps # Needed for drawtext filter
-, withFreetype ? withHeadlessDeps # Needed for drawtext filter
-, withFrei0r ? withFullDeps && withGPL # frei0r video filtering
-, withFribidi ? withFullDeps # Needed for drawtext filter
-, withGme ? withFullDeps # Game Music Emulator
-, withGnutls ? withHeadlessDeps
-, withGsm ? withFullDeps # GSM de/encoder
-, withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
-, withIconv ? withHeadlessDeps
-, withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
-, withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
-, withLadspa ? withFullDeps # LADSPA audio filtering
-, withLzma ? withHeadlessDeps # xz-utils
-, withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
-, withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
-, withMp3lame ? withHeadlessDeps # LAME MP3 encoder
-, withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && withNvcodec
-, withNvenc ? withHeadlessDeps && withNvcodec
-, withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
-, withOpenal ? withFullDeps # OpenAL 1.1 capture support
-, withOpencl ? withFullDeps
-, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
-, withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
-, withOpengl ? withFullDeps && !stdenv.isDarwin # OpenGL rendering
-, withOpenh264 ? withFullDeps # H.264/AVC encoder
-, withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
-, withOpenmpt ? withFullDeps # Tracked music files decoder
-, withOpus ? withHeadlessDeps # Opus de/encoder
-, withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
-, withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
-, withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
-, withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
-, withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
-, withRtmp ? withFullDeps # RTMP[E] support
-, withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
-, withSdl2 ? withSmallDeps
-, withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
-, withSoxr ? withHeadlessDeps # Resampling via soxr
-, withSpeex ? withHeadlessDeps # Speex de/encoder
-, withSrt ? withHeadlessDeps # Secure Reliable Transport (SRT) protocol
-, withSsh ? withHeadlessDeps # SFTP protocol
-, withSvg ? withFullDeps # SVG protocol
-, withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
-, withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
-, withTheora ? withHeadlessDeps # Theora encoder
-, withV4l2 ? withHeadlessDeps && stdenv.isLinux  # Video 4 Linux support
-, withV4l2M2m ? withV4l2
-, withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
-, withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW # Vdpau hardware acceleration
-, withVideoToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple VideoToolbox
-, withVidStab ? withFullDeps && withGPL # Video stabilization
-, withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
-, withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
-, withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
-, withVpl ? false # Hardware acceleration via intel libvpl
-, withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
-, withVulkan ? withSmallDeps && !stdenv.isDarwin
-, withWebp ? withFullDeps # WebP encoder
-, withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
-, withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
-, withXavs ? withFullDeps && withGPL # AVS encoder
-, withXcb ? withXcbShm || withXcbxfixes || withXcbShape # X11 grabbing using XCB
-, withXcbShape ? withFullDeps # X11 grabbing shape rendering
-, withXcbShm ? withFullDeps # X11 grabbing shm communication
-, withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC encoding
-, withXlib ? withFullDeps # Xlib support
-, withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
-, withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
-, withZimg ? withHeadlessDeps
-, withZlib ? withHeadlessDeps
-, withZmq ? withFullDeps # Message passing
-
-/*
- *  Licensing options (yes some are listed twice, filters and such are not listed)
- */
-, withGPL ? true
-, withVersion3 ? true # When withGPL is set this implies GPLv3 otherwise it is LGPLv3
-, withGPLv3 ? withGPL && withVersion3
-, withUnfree ? false
 
 /*
  *  Build options
  */
-, withSmallBuild ? false # Optimize for size instead of speed
-, withRuntimeCPUDetection ? true # Detect CPU capabilities at runtime (disable to compile natively)
-, withGrayscale ? withFullDeps # Full grayscale support
-, withSwscaleAlpha ? buildSwscale # Alpha channel support in swscale. You probably want this when buildSwscale.
-, withHardcodedTables ? withHeadlessDeps # Hardcode decode tables instead of runtime generation
-, withSafeBitstreamReader ? withHeadlessDeps # Buffer boundary checking in bitreaders
-, withMultithread ? true # Multithreading via pthreads/win32 threads
-, withNetwork ? withHeadlessDeps # Network support
 , withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
-, withStatic ? stdenv.hostPlatform.isStatic
-, withShared ? !stdenv.hostPlatform.isStatic
-, withPic ? true
-, withThumb ? false # On some ARM platforms
 
 /*
  *  Program options
@@ -150,8 +30,8 @@
 , buildFfmpeg ? withHeadlessDeps # Build ffmpeg executable
 , buildFfplay ? withSmallDeps # Build ffplay executable
 , buildFfprobe ? withHeadlessDeps # Build ffprobe executable
-, buildQtFaststart ? withFullDeps # Build qt-faststart executable
-, withBin ? buildFfmpeg || buildFfplay || buildFfprobe || buildQtFaststart
+, buildQtFaststart ? withFullDeps # Build qt-faststart executable # TODO
+, withBin ? buildFfmpeg || buildFfplay || buildFfprobe || buildQtFaststart # TODO
 /*
  *  Library options
  */
@@ -166,7 +46,7 @@
 , buildPostproc ? withHeadlessDeps # Build postproc library
 , buildSwresample ? withHeadlessDeps # Build swresample library
 , buildSwscale ? withHeadlessDeps # Build swscale library
-, withLib ? buildAvcodec
+, withLib ? buildAvcodec # TODO
   || buildAvdevice
   || buildAvfilter
   || buildAvformat
@@ -177,22 +57,14 @@
 /*
  *  Documentation options
  */
-, withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc
+, withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc # TODO
 , withHtmlDoc ? withHeadlessDeps # HTML documentation pages
 , withManPages ? withHeadlessDeps # Man documentation pages
 , withPodDoc ? withHeadlessDeps # POD documentation pages
 , withTxtDoc ? withHeadlessDeps # Text documentation pages
 # Whether a "doc" output will be produced. Note that withManPages does not produce
 # a "doc" output because its files go to "man".
-, withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc)
-
-/*
- *  Developer options
- */
-, withDebug ? false
-, withOptimisations ? true
-, withExtraWarnings ? false
-, withStripping ? false
+, withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc) # TODO
 
 /*
  *  External libraries options
@@ -340,6 +212,23 @@ let
   };
   inherit (eval) config;
   inherit (config) features;
+
+  # Feature flags
+  withCuda = features.cuda.enable;
+  withCudaLLVM = features.cuda-llvm.enable;
+  withCuvid = features.cuvid.enable;
+  withNvcodec = features.nvcodec.enable;
+  withFrei0r = features.frei0r.enable;
+  withMfx = features.mfx.enable;
+  withNvdec = features.nvdec.enable;
+  withNvenc = features.nvenc.enable;
+  withVpl = features.vpl.enable;
+  withVulkan = features.vulkan.enable;
+  withGPL = features.gpl.enable;
+  withVersion3 = features.version3.enable;
+  withGPLv3 = features.gplv3.enable;
+  withUnfree = features.unfree.enable;
+
 in
 
 
@@ -453,99 +342,38 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePlatforms = [];
   setOutputFlags = false; # Only accepts some of them
-  configureFlags = [
+  configureFlags = (lib.sort (p: q: lib.compare p q == -1)) ([
     #mingw64 is internally treated as mingw32, so 32 and 64 make no difference here
     "--target_os=${if stdenv.hostPlatform.isMinGW then "mingw64" else stdenv.hostPlatform.parsed.kernel.name}"
     "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     "--pkg-config=${buildPackages.pkg-config.targetPrefix}pkg-config"
-    /*
-     *  Licensing flags
-     */
-    (enableFeature withGPL "gpl")
-    (enableFeature withVersion3 "version3")
-    (enableFeature withUnfree "nonfree")
-    /*
-     *  Build flags
-     */
-    (enableFeature withStatic "static")
-    (enableFeature withShared "shared")
-    (enableFeature withPic "pic")
-    (enableFeature withThumb "thumb")
-
-    (enableFeature withSmallBuild "small")
-    (enableFeature withRuntimeCPUDetection "runtime-cpudetect")
-    (enableFeature withGrayscale "gray")
-    (enableFeature withSwscaleAlpha "swscale-alpha")
-    (enableFeature withHardcodedTables "hardcoded-tables")
-    (enableFeature withSafeBitstreamReader "safe-bitstream-reader")
-
-    (enableFeature (withMultithread && stdenv.hostPlatform.isUnix) "pthreads")
-    (enableFeature (withMultithread && stdenv.hostPlatform.isWindows) "w32threads")
-    "--disable-os2threads" # We don't support OS/2
-
-    (enableFeature withNetwork "network")
-    (enableFeature withPixelutils "pixelutils")
 
     "--datadir=${placeholder "data"}/share/ffmpeg"
-
-    /*
-     *  Program flags
-     */
-    (enableFeature buildFfmpeg "ffmpeg")
-    (enableFeature buildFfplay "ffplay")
-    (enableFeature buildFfprobe "ffprobe")
   ] ++ optionals withBin [
     "--bindir=${placeholder "bin"}/bin"
   ] ++ [
-    /*
-     *  Library flags
-     */
-    (enableFeature buildAvcodec "avcodec")
-    (enableFeature buildAvdevice "avdevice")
-    (enableFeature buildAvfilter "avfilter")
-    (enableFeature buildAvformat "avformat")
   ] ++ optionals (lib.versionOlder version "5") [
-    # Ffmpeg > 4 doesn't know about the flag anymore
-    (enableFeature buildAvresample "avresample")
   ] ++ [
-    (enableFeature buildAvutil "avutil")
-    (enableFeature (buildPostproc && withGPL) "postproc")
-    (enableFeature buildSwresample "swresample")
-    (enableFeature buildSwscale "swscale")
   ] ++ optionals withLib [
     "--libdir=${placeholder "lib"}/lib"
     "--incdir=${placeholder "dev"}/include"
   ] ++ [
-    /*
-     *  Documentation flags
-     */
-    (enableFeature withDocumentation "doc")
-    (enableFeature withHtmlDoc "htmlpages")
-    (enableFeature withManPages "manpages")
   ] ++ optionals withManPages [
     "--mandir=${placeholder "man"}/share/man"
   ] ++ [
-    (enableFeature withPodDoc "podpages")
-    (enableFeature withTxtDoc "txtpages")
   ] ++ optionals withDoc [
     "--docdir=${placeholder "doc"}/share/doc/ffmpeg"
   ] ++ [
-    /*
-     * Developer flags
-     */
-    (enableFeature withDebug "debug")
-    (enableFeature withOptimisations "optimizations")
-    (enableFeature withExtraWarnings "extra-warnings")
-    (enableFeature withStripping "stripping")
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
-    "--enable-cross-compile"
+    "--enable-cross-compile" # TODO
     "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ optionals stdenv.cc.isClang [
     "--cc=clang"
     "--cxx=clang++"
   ] ++ lib.pipe eval.config.features [
     (lib.filterAttrs (n: v: lib.versionAtLeast version v.version))
+    (lib.filterAttrs (n: v: lib.versionOlder version v.versionMax))
     (lib.mapAttrsToList (n: feature: (map (lib.enableFeature feature.enable) feature.flags)))
     lib.flatten
   ]);
@@ -568,8 +396,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.pipe eval.config.features [
     (lib.filterAttrs (n: v: v.enable))
     (lib.filterAttrs (n: v: lib.versionAtLeast version v.version))
+    (lib.filterAttrs (n: v: lib.versionOlder version v.versionMax))
     (lib.mapAttrsToList (n: v: lib.attrValues v.packages))
     lib.flatten
+    (lib.sort (p: q: lib.compare (p.pname or "") (q.pname or "") == -1))
   ];
 
   buildFlags = [ "all" ]
