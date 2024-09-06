@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openmp }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages }:
 
 stdenv.mkDerivation rec {
   pname = "vid.stab";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ openmp ];
+  propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   meta = with lib; {
     description = "Video stabilization library";

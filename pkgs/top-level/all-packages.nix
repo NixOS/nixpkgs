@@ -23977,10 +23977,6 @@ with pkgs;
 
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
-  vid-stab = callPackage ../development/libraries/vid-stab {
-    inherit (llvmPackages) openmp;
-  };
-
   vigra = callPackage ../development/libraries/vigra {
     hdf5 = hdf5.override { usev110Api = true; };
   };
