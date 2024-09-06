@@ -16630,8 +16630,9 @@ with pkgs;
   zuo = callPackage ../development/interpreters/zuo { };
 
   ### LUA interpreters
-  emiluaPlugins = callPackage ./emilua-plugins.nix {}
-    (callPackage ../development/interpreters/emilua { });
+  emiluaPlugins = recurseIntoAttrs
+    (callPackage ./emilua-plugins.nix {}
+      (callPackage ../development/interpreters/emilua { }));
 
   inherit (emiluaPlugins) emilua;
 
