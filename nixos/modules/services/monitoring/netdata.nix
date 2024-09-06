@@ -51,6 +51,13 @@ let
   defaultUser = "netdata";
 
   isThereAnyWireGuardTunnels = config.networking.wireguard.enable || lib.any (c: lib.hasAttrByPath [ "netdevConfig" "Kind" ] c && c.netdevConfig.Kind == "wireguard") (builtins.attrValues config.systemd.network.netdevs);
+
+  extraNdsudoPathsEnv = pkgs.buildEnv {
+    name = "netdata-ndsudo-env";
+    paths = cfg.extraNdsudoPackages;
+    pathsToLink = [ "/bin" ];
+  };
+
 in {
   options = {
     services.netdata = {
@@ -131,6 +138,27 @@ in {
           <https://docs.netdata.cloud/collectors/plugins.d/>
 
           Cannot be combined with configText.
+        '';
+      };
+
+      extraNdsudoPackages = mkOption {
+        type = with types; listOf package;
+        default = [ ];
+        description = ''
+          Extra packages to add to `PATH` to make avaialable to `ndsudo`.
+          ::: {.warning}
+          `ndsudo` has SUID priveleges, be careful about packages you list here.
+          :::
+
+          ::: {.note}
+          `cfg.package` must be built with `withNdsudo = true`
+          :::
+        '';
+        example = ''
+          [
+            pkgs.smartmontools
+            pkgs.nvme-cli
+          ]
         '';
       };
 
@@ -224,6 +252,31 @@ in {
     services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
+
+
+    systemd.tmpfiles.settings = lib.mkIf cfg.package.withNdsudo {
+      "95-netdata-ndsudo" = {
+        "/var/lib/netdata/ndsudo" = {
+          "d" = {
+            mode = "0550";
+            user = cfg.user;
+            group = cfg.group;
+          };
+        };
+
+        "/var/lib/netdata/ndsudo/ndsudo" = {
+          "L+" = {
+            argument = "/run/wrappers/bin/ndsudo";
+          };
+        };
+
+        "/var/lib/netdata/ndsudo/runtime-dependencies" = {
+          "L+" = {
+            argument = "${extraNdsudoPathsEnv}/bin";
+          };
+        };
+      };
+    };
 
     systemd.services.netdata = {
       description = "Real time performance monitoring";
@@ -395,6 +448,14 @@ in {
         source = "${cfg.package}/libexec/netdata/plugins.d/network-viewer.plugin.org";
         capabilities = "cap_sys_admin,cap_dac_read_search,cap_sys_ptrace+ep";
         owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+    } // optionalAttrs (cfg.package.withNdsudo) {
+      "ndsudo" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/ndsudo.org";
+        setuid = true;
+        owner = "root";
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
       };
