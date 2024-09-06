@@ -879,9 +879,7 @@ with pkgs;
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
 
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
-  inherit (dotnetCorePackages) buildDotnetModule mkNugetSource mkNugetDeps;
-
-  buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
+  inherit (dotnetCorePackages) buildDotnetModule buildDotnetGlobalTool mkNugetSource mkNugetDeps;
 
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
 
