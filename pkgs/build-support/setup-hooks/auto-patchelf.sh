@@ -79,7 +79,7 @@ autoPatchelf() {
         fi
     done
 
-    @pythonInterpreter@ @autoPatchelfScript@                            \
+    auto-patchelf                                                       \
         ${norecurse:+--no-recurse}                                      \
         --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
         --paths "$@"                                                    \
