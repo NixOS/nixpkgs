@@ -1,10 +1,11 @@
-{ blas
-, gnumake
-, fetchFromGitHub
-, gfortran
-, lapack
-, lib
-, stdenv
+{
+  blas,
+  gnumake,
+  fetchFromGitHub,
+  gfortran,
+  lapack,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation {
@@ -22,8 +23,14 @@ stdenv.mkDerivation {
 
   makeFlags = lib.optionals blas.isILP64 [ "CFLAGS='$CFLAGS -DPRIMME_BLASINT_SIZE=64'" ];
 
-  nativeBuildInputs = [ gnumake gfortran ];
-  buildInputs = [ blas lapack ];
+  nativeBuildInputs = [
+    gnumake
+    gfortran
+  ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   enableParallelBuilding = true;
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;

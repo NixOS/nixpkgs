@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, blas
-, lapack
-, numpy
-, scipy
-, setuptools
-, cython
-, doCheck ? true
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  blas,
+  lapack,
+  numpy,
+  scipy,
+  setuptools,
+  cython,
+  doCheck ? true,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -36,9 +37,18 @@ buildPythonPackage {
 
   strictDeps = true;
 
-  buildInputs = [ blas lapack ];
-  nativeBuildInputs = [ cython setuptools ];
-  propagatedBuildInputs = [ numpy scipy ];
+  buildInputs = [
+    blas
+    lapack
+  ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+  ];
 
   enableParallelBuilding = true;
   inherit doCheck;
