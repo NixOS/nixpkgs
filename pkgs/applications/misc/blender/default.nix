@@ -150,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
+      "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
       "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
       "-DPYTHON_LIBPATH=${python3}/lib"
       "-DPYTHON_LIBRARY=${python3.libPrefix}"
@@ -162,7 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_FFTW3=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
-      "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
       "-DWITH_OPENCOLORIO=ON"
