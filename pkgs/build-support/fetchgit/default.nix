@@ -17,6 +17,7 @@ lib.makeOverridable (
 , sparseCheckout ? []
 , nonConeMode ? false
 , name ? urlToName url rev
+, nativeBuildInputs ? []
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
@@ -68,7 +69,8 @@ stdenvNoCC.mkDerivation {
   fetcher = ./nix-prefetch-git;
 
   nativeBuildInputs = [ git ]
-    ++ lib.optionals fetchLFS [ git-lfs ];
+    ++ lib.optionals fetchLFS [ git-lfs ]
+    ++ nativeBuildInputs;
 
   outputHashAlgo = if hash != "" then null else "sha256";
   outputHashMode = "recursive";
