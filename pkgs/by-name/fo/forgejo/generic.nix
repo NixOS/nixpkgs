@@ -1,12 +1,12 @@
 {
   lts ? false,
-  version,
-  rev ? null,
-  srcOverride ? null,
-  hash,
+  version, # used as revision if 'rev' is not given
+  rev ? null, # specify this to use a different revision than the version directly. Included later in version string.
+  source ? null, # to override the entire forgejo source. Don't use overrideAttrs for this!
+  hash ? "", # specify if you don't specify source
   npmDepsHash,
   vendorHash,
-  extraRuntimeInputs ? [ ],
+  extraRuntimeInputs ? [ ], # list of packages the forgejo executable should have access to
   nixUpdateExtraArgs ? [ ],
 }:
 
@@ -33,8 +33,8 @@
 let
   versionString = if builtins.isString rev then "${version}-${rev}" else version;
   src =
-    if !builtins.isNull srcOverride then
-      srcOverride
+    if !builtins.isNull source then
+      source
     else
       fetchFromGitea {
         domain = "codeberg.org";
