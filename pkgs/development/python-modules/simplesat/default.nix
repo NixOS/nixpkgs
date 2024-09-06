@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.8.2";
+  version = "0.9.0";
   format = "setuptools";
 
   versionFile = writeText "simplesat_ver" ''
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "enthought";
     repo = "sat-solver";
-    rev = "v${version}";
-    hash = "sha256-6BQn1W2JGrMmNqgxi+sXx06XzNMcvwqYGMkpD0SSpT8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8sUOV42MLM3otG3EKvVzKKGAUpSlaTj850QZxZa62bE=";
   };
 
   preConfigure = ''
