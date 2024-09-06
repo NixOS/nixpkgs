@@ -7016,6 +7016,12 @@
     githubId = 1202014;
     name = "Falco Peijnenburg";
   };
+  fqidz = {
+    email = "faidz.arante@gmail.com";
+    github = "fqidz";
+    githubId = 82884264;
+    name = "Faidz Arante";
+  };
   fragamus = {
     email = "innovative.engineer@gmail.com";
     github = "fragamus";
