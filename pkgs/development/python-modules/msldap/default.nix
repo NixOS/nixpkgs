@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-RKKj0oUPkl5QtrgtRRXHTO6lSLfB/E09DT9t9loMxUA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     unicrypto
     asyauth
     asysocks
