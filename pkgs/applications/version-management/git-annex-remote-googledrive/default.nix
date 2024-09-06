@@ -7,6 +7,7 @@
 , humanfriendly
 , tenacity
 , setuptools
+, distutils
 }:
 
 buildPythonApplication rec {
@@ -27,6 +28,7 @@ buildPythonApplication rec {
     gitpython
     tenacity
     humanfriendly
+    distutils
   ];
 
   # while git-annex does come with a testremote command that *could* be used,
