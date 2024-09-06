@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ felixalbrigtsen kierdavis zimbatm ];
+    maintainers = with maintainers; [ felixalbrigtsen zimbatm ];
   };
 }
