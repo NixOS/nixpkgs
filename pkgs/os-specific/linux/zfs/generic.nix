@@ -182,10 +182,11 @@ let
       # Remove tests because they add a runtime dependency on gcc
       rm -rf $out/share/zfs/zfs-tests
 
-      # Add Bash completions.
-      install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
-    '' + optionalString (lib.versionOlder version "2.2.6") ''
-      (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ${optionalString (lib.versionOlder version "2.2") ''
+        # Add Bash completions.
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+        (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ''}
     '';
 
     postFixup = let
