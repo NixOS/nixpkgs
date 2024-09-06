@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   llvmPackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   propagatedBuildInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Video stabilization library";
