@@ -1,9 +1,12 @@
 {
   lts ? false,
   version,
+  rev ? null,
+  srcOverride ? null,
   hash,
   npmDepsHash,
   vendorHash,
+  extraRuntimeInputs ? [ ],
   nixUpdateExtraArgs ? [ ],
 }:
 
@@ -28,17 +31,23 @@
 }:
 
 let
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "forgejo";
-    repo = "forgejo";
-    rev = "v${version}";
-    inherit hash;
-  };
+  versionString = if builtins.isString rev then "${version}-${rev}" else version;
+  src =
+    if !builtins.isNull srcOverride then
+      srcOverride
+    else
+      fetchFromGitea {
+        domain = "codeberg.org";
+        owner = "forgejo";
+        repo = "forgejo";
+        rev = if builtins.isString rev then rev else "v${version}";
+        inherit hash;
+      };
 
   frontend = buildNpmPackage {
     pname = "forgejo-frontend";
-    inherit src version npmDepsHash;
+    version = versionString;
+    inherit src npmDepsHash;
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -54,8 +63,8 @@ in
 buildGoModule rec {
   pname = "forgejo" + lib.optionalString lts "-lts";
 
+  version = versionString;
   inherit
-    version
     src
     vendorHash
     ;
@@ -95,12 +104,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${versionString}"
     "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
   ];
 
   preConfigure = ''
-    export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
+    export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${versionString} make show-version-api)"
   '';
 
   preCheck = ''
@@ -136,12 +145,15 @@ buildGoModule rec {
     cp -R ./options/locale $out/locale
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${
-        lib.makeBinPath [
-          bash
-          git
-          gzip
-          openssh
-        ]
+        lib.makeBinPath (
+          [
+            bash
+            git
+            gzip
+            openssh
+          ]
+          ++ extraRuntimeInputs
+        )
       }
   '';
 
