@@ -130,12 +130,13 @@ let
 
   passthru = let
     # When we override the interpreter we also need to override the spliced versions of the interpreter
-    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
+    # bluez is excluded manually to break an infinite recursion.
+    inputs' = lib.filterAttrs (n: v: n != "bluez" && n != "passthruFun" && ! lib.isDerivation v) inputs;
     override = attr: let python = attr.override (inputs' // { self = python; }); in python;
   in passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";
-    libPrefix = "python${pythonVersion}";
+    libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
@@ -366,11 +367,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     };
   in [
     "${mingw-patch}/*.patch"
-  ]) ++ optionals isPy312 [
-    # backport fix for various platforms; armv7l, riscv64, s390
-    # https://github.com/python/cpython/pull/121178
-    ./3.12/0001-Fix-build-with-_PY_SHORT_FLOAT_REPR-0.patch
-  ];
+  ]);
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \

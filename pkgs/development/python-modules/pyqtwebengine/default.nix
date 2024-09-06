@@ -12,6 +12,7 @@
   pyqt5,
   sip,
   pyqt-builder,
+  mesa,
 }:
 
 let
@@ -98,7 +99,7 @@ buildPythonPackage (
       description = "Python bindings for Qt5";
       homepage = "http://www.riverbankcomputing.co.uk";
       license = lib.licenses.gpl3;
-      hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms lib.platforms.mesaPlatforms;
+      hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms mesa.meta.platforms;
     };
   }
   // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {

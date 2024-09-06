@@ -37,6 +37,7 @@ edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
     inherit (edk2.meta) license platforms;
     description = "UEFI Shell from Tianocore EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/ShellPkg";
-    maintainers = with lib.maintainers; [ LunNova ];
+    maintainers = with lib.maintainers; [ LunNova mjoerg ];
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 })

@@ -19,6 +19,7 @@
 , proton-vpn-session
 , pycairo
 , pygobject3
+, pytest-cov-stub
 , pytestCheckHook
 , withIndicator ? true
 , libappindicator-gtk3
@@ -69,11 +70,6 @@ buildPythonApplication rec {
     pygobject3
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton --cov-report=html --cov-report=term" ""
-  '';
-
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}
     install -Dm 644 ${src}/rpmbuild/SOURCES/protonvpn-app.desktop $out/share/applications
@@ -81,6 +77,7 @@ buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 

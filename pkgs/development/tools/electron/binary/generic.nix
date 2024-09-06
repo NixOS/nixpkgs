@@ -107,7 +107,7 @@ let
     ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libGL vulkan-loader ]
   );
 
-  linux = {
+  linux = finalAttrs: {
     buildInputs = [ glib gtk3 ];
 
     nativeBuildInputs = [
@@ -142,9 +142,11 @@ let
       rm "$out/libexec/electron/libvulkan.so.1"
       ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
+
+    passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
   };
 
-  darwin = {
+  darwin = finalAttrs: {
     nativeBuildInputs = [
       makeWrapper
       unzip
@@ -157,9 +159,12 @@ let
       mkdir -p $out/bin
       makeWrapper $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
     '';
+
+    passthru.dist = finalAttrs.finalPackage + "/Applications";
   };
 in
-  stdenv.mkDerivation (
-    (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
+  stdenv.mkDerivation (finalAttrs:
+    lib.recursiveUpdate
+      (common stdenv.hostPlatform)
+      ((if stdenv.isDarwin then darwin else linux) finalAttrs)
   )

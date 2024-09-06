@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for preparing small molecule for docking";
     homepage = "https://github.com/forlilab/Meeko";
-    changelog = "https://github.com/forlilab/Meeko/releases/tag/${src.rev}";
+    changelog = "https://github.com/forlilab/Meeko/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ natsukium ];
   };

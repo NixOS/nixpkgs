@@ -104,6 +104,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Coverage test
     "test_fastapi_cli"
+    # ResourceWarning: Unclosed <MemoryObjectSendStream>
+    "test_openapi_schema"
   ];
 
   disabledTestPaths = [

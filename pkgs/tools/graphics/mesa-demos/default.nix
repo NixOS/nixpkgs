@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
-  strictDeps = true;
-
   depsBuildBuild = [
     pkg-config
   ];
@@ -57,9 +55,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dwith-system-data-files=true"
-    "-Dgles1=disabled"
-    "-Dosmesa=disabled"
+    "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"
+    (lib.mesonEnable "libdrm" (stdenv.isLinux))
+    (lib.mesonEnable "osmesa" false)
+    (lib.mesonEnable "wayland" (lib.meta.availableOn stdenv.hostPlatform wayland))
   ];
 
   meta = with lib; {

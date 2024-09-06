@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, perl
 , Security ? null
 }:
 
@@ -25,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  nativeBuildInputs = [ perl ];
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {

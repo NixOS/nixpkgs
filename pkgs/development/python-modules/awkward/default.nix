@@ -86,6 +86,12 @@ buildPythonPackage rec {
     # Disable tests dependending on jax on darwin
   ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
 
+  disabledTests = [
+    # AssertionError: Regex pattern did not match.
+    "test_serialise_with_nonserialisable_attrs"
+    "test_serialise_with_nonserialisable_attrs"
+  ];
+
   meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";

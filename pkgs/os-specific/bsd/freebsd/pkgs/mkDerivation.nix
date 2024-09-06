@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  stdenvNoLibs,
+  stdenvNoLibc,
   overrideCC,
   buildPackages,
   stdenvNoLibcxx ? overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx,
@@ -28,7 +28,7 @@ lib.makeOverridable (
       if attrs.noCC or false then
         stdenvNoCC
       else if attrs.noLibc or false then
-        stdenvNoLibs
+        stdenvNoLibc
       else if attrs.noLibcxx or false then
         stdenvNoLibcxx
       else

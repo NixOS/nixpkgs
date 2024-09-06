@@ -3654,7 +3654,7 @@ dependencies = [
 
 [[package]]
 name = "cumulus-client-consensus-aura"
-version = "0.17.0"
+version = "0.17.1"
 dependencies = [
  "async-trait",
  "cumulus-client-collator",
@@ -11507,7 +11507,7 @@ dependencies = [
 
 [[package]]
 name = "pallet-timestamp"
-version = "36.0.0"
+version = "36.0.1"
 dependencies = [
  "docify",
  "frame-benchmarking",
@@ -12833,7 +12833,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-dispute-distribution"
-version = "17.0.0"
+version = "17.0.1"
 dependencies = [
  "assert_matches",
  "async-channel",
@@ -13862,7 +13862,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-runtime-parachains"
-version = "16.0.1"
+version = "16.0.2"
 dependencies = [
  "assert_matches",
  "bitflags 1.3.2",

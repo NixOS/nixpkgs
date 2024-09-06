@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonPackage {
   pname = "edl";
-  version = "3.52.1-unstable-2024-07-05";
+  version = "3.52.1-unstable-2024-08-27";
 
   src = fetchFromGitHub {
     owner = "bkerler";
     repo = "edl";
-    rev = "53671740213046bcf875acd2feb1c1d07fb1605c";
+    rev = "d2c585e4ccc066895b71ca9014c1ebb5af316e07";
     fetchSubmodules = true;
-    hash = "sha256-jm5BSnjAuqOa5oHhboruqQJ9BdsyjQic4vbwSNgIneQ=";
+    hash = "sha256-hQturda+iDmH5DVP1CjG526wcggdzTSrW2jqrEzLXtY=";
   };
 
   propagatedBuildInputs = with python3Packages; [

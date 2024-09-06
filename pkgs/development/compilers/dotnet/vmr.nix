@@ -11,7 +11,7 @@
 , zlib
 , icu
 , lttng-ust_2_12
-, libkrb5
+, krb5
 , glibcLocales
 , ensureNewerSourcesForZipFilesHook
 , darwin
@@ -98,13 +98,13 @@ in stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optionals isLinux [
-    libkrb5
+    krb5
     lttng-ust_2_12
   ]
   ++ lib.optionals isDarwin (with apple_sdk.frameworks; [
     xcbuild
     swift
-    (libkrb5.overrideAttrs (old: {
+    (krb5.overrideAttrs (old: {
       # the propagated build inputs break swift compilation
       buildInputs = old.buildInputs ++ old.propagatedBuildInputs;
       propagatedBuildInputs = [];
@@ -249,7 +249,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace \
       src/runtime/src/native/libs/System.Net.Security.Native/pal_gssapi.c \
-      --replace-fail '"libgssapi_krb5.so.2"' '"${libkrb5}/lib/libgssapi_krb5.so.2"'
+      --replace-fail '"libgssapi_krb5.so.2"' '"${lib.getLib krb5}/lib/libgssapi_krb5.so.2"'
 
     substituteInPlace \
       src/runtime/src/native/libs/System.Globalization.Native/pal_icushim.c \

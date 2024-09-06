@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentry-native";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
     rev = version;
-    hash = "sha256-S9fkxLCeQdHOt1FUa8CcZMmORNcxwQSuchng/dNq4g8=";
+    hash = "sha256-L7VlsxgjWPCceDuJ9OR6Et6wzaBn1hb0AOFbc7PuZWw=";
   };
 
   nativeBuildInputs = [

@@ -13,21 +13,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.10.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-H1b275dVZGjkvXCV/zHDQtIrJiFMc7tmxbHh3B1+nPE=";
+    sha256 = "sha256-ngDxabfs5cPu04Hn1V10qF1ryi100jzp5MmvPrkOD3k=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "quantization-0.1.0" = "sha256-xqcwn9NmCKEulh4CTV6bwhPOlDgQt8EZaQbqdDjxgNA=";
-      "tonic-0.9.2" = "sha256-ZlcDUZy/FhxcgZE7DtYhAubOq8DMSO17T+TCmXar1jE=";
-      "wal-0.1.2" = "sha256-YjOXYg8dnYsb+Zl6xUkAccjZZn3tyf3fR/kWTfUjlgg=";
+      "wal-0.1.2" = "sha256-QcyS0v7O1BziVT3oahebpq+u4l5JGaujCaRIPdmsJl4=";
     };
   };
 

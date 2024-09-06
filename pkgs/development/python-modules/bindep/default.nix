@@ -1,9 +1,14 @@
 {
   lib,
-  python3Packages,
   fetchPypi,
+  buildPythonPackage,
+  distro,
+  pbr,
+  setuptools,
+  packaging,
+  parsley,
 }:
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "bindep";
   version = "2.11.0";
   format = "pyproject";
@@ -13,13 +18,13 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-rLLyWbzh/RUIhzR5YJu95bmq5Qg3hHamjWtqGQAufi8=";
   };
 
-  buildInputs = with python3Packages; [
+  buildInputs = [
     distro
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     parsley
     pbr
     packaging

@@ -1,0 +1,50 @@
+commit 1e8fdf3f90fd142c5ddd63e44ca1e5c172dbfb7f
+Author: Simon Gardling <titaniumtown@proton.me>
+Date:   Tue Aug 27 12:45:14 2024 -0400
+
+    use locally downloaded embeddings
+
+index 27f3f5d9..9e25528a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -90,6 +90,7 @@ elseif (APPLE)
+ endif()
+ 
+ # Embedding model
++#[[
+ set(LOCAL_EMBEDDING_MODEL "nomic-embed-text-v1.5.f16.gguf")
+ set(LOCAL_EMBEDDING_MODEL_MD5 "a5401e7f7e46ed9fcaed5b60a281d547")
+ set(LOCAL_EMBEDDING_MODEL_PATH "${CMAKE_BINARY_DIR}/resources/${LOCAL_EMBEDDING_MODEL}")
+@@ -104,6 +105,7 @@
+ if (APPLE)
+     list(APPEND CHAT_EXE_RESOURCES "${LOCAL_EMBEDDING_MODEL_PATH}")
+ endif()
++]]
+ 
+ qt_add_executable(chat
+     main.cpp
+@@ -383,11 +385,13 @@
+     endif()
+ endif()
+ 
++#[[
+ if (NOT APPLE)
+     install(FILES "${CMAKE_BINARY_DIR}/resources/${LOCAL_EMBEDDING_MODEL}"
+             DESTINATION resources
+             COMPONENT ${COMPONENT_NAME_MAIN})
+ endif()
++]]
+ 
+ set(CPACK_GENERATOR "IFW")
+ set(CPACK_VERBATIM_VARIABLES YES)
+--- a/embllm.cpp
++++ b/embllm.cpp
+@@ -84,7 +84,7 @@ bool EmbeddingLLMWorker::loadModel()
+ 
+     QString filePath = embPathFmt.arg(QCoreApplication::applicationDirPath(), LOCAL_EMBEDDING_MODEL);
+     if (!QFileInfo::exists(filePath)) {
+-        qWarning() << "embllm WARNING: Local embedding model not found";
++        qWarning() << "embllm WARNING: Local embedding model not found: " << filePath;
+         return false;
+     }
+

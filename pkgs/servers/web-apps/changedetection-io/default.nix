@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     chardet
     cryptography
     dnspython
+    elementpath
     eventlet
     feedgen
     flask

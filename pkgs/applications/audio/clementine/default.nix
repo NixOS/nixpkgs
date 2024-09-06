@@ -47,15 +47,16 @@ let
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
-in mkDerivation {
+in
+mkDerivation {
   pname = "clementine";
-  version = "unstable-2022-04-11";
+  version = "1.4.rc2-unstable-2024-05-12";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
-    rev = "250024e117fbe5fae7c62b9c8e655d66412a6ed7";
-    sha256 = "06fcbs3wig3mh711iypyj49qm5246f7qhvgvv8brqfrd8cqyh6qf";
+    rev = "7607ddcb96e79d373c4b60d9de21f3315719c7d8";
+    sha256 = "sha256-yOG/Je6N8YEsu5AOtxOFgDl3iqb97assYMZYMSwQqqk=";
   };
 
   nativeBuildInputs = [
@@ -117,6 +118,7 @@ in mkDerivation {
   '';
 
   cmakeFlags = [
+    "-DFORCE_GIT_REVISION=1.3.1"
     "-DUSE_SYSTEM_PROJECTM=ON"
     "-DSPOTIFY_BLOB=OFF"
   ];

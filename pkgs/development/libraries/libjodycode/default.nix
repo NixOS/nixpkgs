@@ -3,9 +3,10 @@
   stdenv,
   fetchFromGitea,
   jdupes,
+  fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjodycode";
   version = "3.1.1";
 
@@ -19,9 +20,11 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "jbruchon";
     repo = "libjodycode";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sVEa2gNvgRJK1Ycmv4inbViTBPQFjzcZ8XHlAdsNzOk=";
   };
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   env.PREFIX = placeholder "out";
 
@@ -29,11 +32,11 @@ stdenv.mkDerivation rec {
     inherit jdupes;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Shared code used by several utilities written by Jody Bruchon";
-    homepage = "https://github.com/jbruchon/libjodycode";
-    changelog = "https://github.com/jbruchon/libjodycode/blob/${src.rev}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
+    homepage = "https://codeberg.org/jbruchon/libjodycode";
+    changelog = "https://codeberg.org/jbruchon/libjodycode/src/branch/master/CHANGES.txt";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

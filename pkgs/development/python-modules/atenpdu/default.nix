@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   async-timeout,
-  pysnmp-lextudio,
+  pysnmp,
   pythonOlder,
   poetry-core,
 }:
@@ -20,11 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-KzRoE4tE/tQkKYroq5PbWKREmEl8AwbIOg3IHRZZtsQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail pysnmp-lextudio pysnmp
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     async-timeout
-    pysnmp-lextudio
+    pysnmp
   ];
 
   # Module has no test

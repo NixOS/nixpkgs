@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
 
   cfg  = config.services.salt.master;
@@ -20,16 +17,16 @@ in
 {
   options = {
     services.salt.master = {
-      enable = mkEnableOption "Salt configuration management system master service";
-      configuration = mkOption {
-        type = types.attrs;
+      enable = lib.mkEnableOption "Salt configuration management system master service";
+      configuration = lib.mkOption {
+        type = lib.types.attrs;
         default = {};
         description = "Salt master configuration as Nix attribute set.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment = {
       # Set this up in /etc/salt/master so `salt`, `salt-key`, etc. work.
       # The alternatives are

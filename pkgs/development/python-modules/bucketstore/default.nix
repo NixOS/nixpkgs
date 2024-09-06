@@ -6,26 +6,24 @@
   pytestCheckHook,
   boto3,
   moto,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "bucketstore";
-  version = "0.2.2";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jpetrucciani";
     repo = "bucketstore";
     rev = "refs/tags/${version}";
-    hash = "sha256-BtoyGqFbeBhGQeXnmeSfiuJLZtXFrK26WO0SDlAtKG4=";
+    hash = "sha256-WjweYFnlDEoR+TYzNgjPMdCLdUUEbdPROubov6kancc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "version=__version__," 'version="${version}",'
-  '';
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [ boto3 ];
 

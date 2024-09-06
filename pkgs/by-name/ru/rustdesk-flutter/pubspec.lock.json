@@ -416,7 +416,7 @@
       "description": {
         "path": ".",
         "ref": "HEAD",
-        "resolved-ref": "336308d86ec8b9640504a371b50ba500eb779363",
+        "resolved-ref": "80b063b9d4e015f62e17f42a5aa0b3d20a365926",
         "url": "https://github.com/rustdesk-org/rustdesk_desktop_multi_window"
       },
       "source": "git",
@@ -468,7 +468,7 @@
         "path": ".",
         "ref": "24cb88413fa5181d949ddacbb30a65d5c459e7d9",
         "resolved-ref": "24cb88413fa5181d949ddacbb30a65d5c459e7d9",
-        "url": "https://github.com/21pages/dynamic_layouts.git"
+        "url": "https://github.com/rustdesk-org/dynamic_layouts.git"
       },
       "source": "git",
       "version": "0.0.1+1"
@@ -635,7 +635,7 @@
         "path": ".",
         "ref": "38951317afe79d953ab25733667bd96e172a80d3",
         "resolved-ref": "38951317afe79d953ab25733667bd96e172a80d3",
-        "url": "https://github.com/21pages/flutter_gpu_texture_renderer"
+        "url": "https://github.com/rustdesk-org/flutter_gpu_texture_renderer"
       },
       "source": "git",
       "version": "0.0.1"

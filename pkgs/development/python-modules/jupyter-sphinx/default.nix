@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter Sphinx Extensions";
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
-    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/${src.rev}";
+    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.bsd3;
   };
 }

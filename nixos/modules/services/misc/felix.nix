@@ -1,8 +1,5 @@
 # Felix server
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.felix;
@@ -17,23 +14,23 @@ in
 
     services.felix = {
 
-      enable = mkEnableOption "the Apache Felix OSGi service";
+      enable = lib.mkEnableOption "the Apache Felix OSGi service";
 
-      bundles = mkOption {
-        type = types.listOf types.package;
+      bundles = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ pkgs.felix_remoteshell ];
-        defaultText = literalExpression "[ pkgs.felix_remoteshell ]";
+        defaultText = lib.literalExpression "[ pkgs.felix_remoteshell ]";
         description = "List of bundles that should be activated on startup";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "osgi";
         description = "User account under which Apache Felix runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "osgi";
         description = "Group account under which Apache Felix runs.";
       };
@@ -45,7 +42,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.osgi.gid = config.ids.gids.osgi;
 
     users.users.osgi =

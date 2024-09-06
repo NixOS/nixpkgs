@@ -1,0 +1,44 @@
+From 2db52008be2e2d504889f4f19318c2ba5a2a4797 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Sat, 24 Apr 2021 10:20:16 +0200
+Subject: [PATCH 2/3] Remove impure dirs
+
+Purity: don't look for library dependencies (of the form `-lfoo') in
+/lib and /usr/lib. It's a stupid feature anyway. Likewise, when
+searching for included Makefiles, don't look in /usr/include and
+friends.
+---
+ src/read.c   | 3 ---
+ src/remake.c | 2 --
+ 2 files changed, 5 deletions(-)
+
+diff --git a/src/read.c b/src/read.c
+index b0fc1e1f..d6b41c17 100644
+--- a/src/read.c
++++ b/src/read.c
+@@ -111,9 +111,6 @@ static const char *default_include_directories[] =
+     INCLUDEDIR,
+ #endif
+ #ifndef _AMIGA
+-    "/usr/gnu/include",
+-    "/usr/local/include",
+-    "/usr/include",
+ #endif
+     0
+   };
+diff --git a/src/remake.c b/src/remake.c
+index fe67ab28..1b76560c 100644
+--- a/src/remake.c
++++ b/src/remake.c
+@@ -1690,8 +1690,6 @@ library_search (const char *lib, FILE_TIMESTAMP *mtime_ptr)
+   static const char *dirs[] =
+     {
+ #ifndef _AMIGA
+-      "/lib",
+-      "/usr/lib",
+ #endif
+ #if defined(WINDOWS32) && !defined(LIBDIR)
+ /*
+-- 
+2.44.1
+

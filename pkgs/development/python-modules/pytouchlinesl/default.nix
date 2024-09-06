@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "A Python API client for Roth's TouchlineSL API";
     homepage = "https://github.com/jnsgruk/pytouchlinesl";
-    changelog = "https://github.com/jnsgruk/pytouchlinesl/releases/tag/${src.rev}";
+    changelog = "https://github.com/jnsgruk/pytouchlinesl/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jnsgruk ];
   };

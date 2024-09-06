@@ -103,7 +103,7 @@ buildNpmPackage' rec {
     ${
       if stdenv.isDarwin then
         ''
-          cp -r ${electron}/Applications/Electron.app ./
+          cp -r ${electron.dist}/Electron.app ./
           find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
           substituteInPlace electron-builder-config.js \
@@ -121,7 +121,7 @@ buildNpmPackage' rec {
         ''
           npm exec electron-builder -- \
             --dir \
-            -c.electronDist=${electron}/libexec/electron \
+            -c.electronDist=${electron.dist} \
             -c.electronVersion=${electron.version} \
             -c.npmRebuild=false
         ''

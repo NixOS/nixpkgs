@@ -607,7 +607,7 @@ in
             $out/bin/zfs --help >/dev/null 2>&1
             $out/bin/zpool --help >/dev/null 2>&1
           '';
-        postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (concatStringsSep "\n" ([''
+        postResumeCommands = mkIf (!config.boot.initrd.systemd.enable) (concatStringsSep "\n" ([''
             ZFS_FORCE="${optionalString cfgZfs.forceImportRoot "-f"}"
           ''] ++ [(importLib {
             # See comments at importLib definition.

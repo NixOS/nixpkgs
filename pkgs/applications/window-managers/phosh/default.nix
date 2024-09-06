@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , python3
+, wayland-scanner
 , wrapGAppsHook4
 , libadwaita
 , libhandy
@@ -16,8 +17,11 @@
 , evince
 , glib
 , gtk4
-, gnome
+, gnome-bluetooth
+, gnome-control-center
 , gnome-desktop
+, gnome-session
+, gnome-shell
 , gcr
 , pam
 , systemd
@@ -51,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -69,10 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     gmobile
-    gnome.gnome-bluetooth
-    gnome.gnome-control-center
+    gnome-bluetooth
+    gnome-control-center
     gnome-desktop
-    gnome.gnome-session
+    gnome-session
     gtk4
     pam
     systemd
@@ -107,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
-      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gnome-shell}"
+      --set GNOME_SESSION "${gnome-session}/bin/gnome-session"
     )
   '';
 

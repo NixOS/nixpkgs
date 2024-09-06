@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
   cfg = config.environment.memoryAllocator;
 
@@ -85,12 +83,12 @@ in
 
 {
   meta = {
-    maintainers = [ maintainers.joachifm ];
+    maintainers = [ lib.maintainers.joachifm ];
   };
 
   options = {
-    environment.memoryAllocator.provider = mkOption {
-      type = types.enum ([ "libc" ] ++ attrNames providers);
+    environment.memoryAllocator.provider = lib.mkOption {
+      type = lib.types.enum ([ "libc" ] ++ lib.attrNames providers);
       default = "libc";
       description = ''
         The system-wide memory allocator.
@@ -98,8 +96,8 @@ in
         Briefly, the system-wide memory allocator providers are:
 
         - `libc`: the standard allocator provided by libc
-        ${concatStringsSep "\n" (mapAttrsToList
-            (name: value: "- `${name}`: ${replaceStrings [ "\n" ] [ " " ] value.description}")
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList
+            (name: value: "- `${name}`: ${lib.replaceStrings [ "\n" ] [ " " ] value.description}")
             providers)}
 
         ::: {.warning}
@@ -111,7 +109,7 @@ in
     };
   };
 
-  config = mkIf (cfg.provider != "libc") {
+  config = lib.mkIf (cfg.provider != "libc") {
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}
     '';

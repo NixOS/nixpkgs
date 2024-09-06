@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
     license = licenses.gpl3Plus;
     homepage = "http://bowtie-bio.sf.net/bowtie2";
-    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     maintainers = with maintainers; [ rybern ];
     platforms = platforms.all;
     mainProgram = "bowtie2";

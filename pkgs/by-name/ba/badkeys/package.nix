@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Tool to find common vulnerabilities in cryptographic public keys";
     homepage = "https://badkeys.info/";
-    changelog = "https://github.com/badkeys/badkeys/releases/tag/${src.rev}";
+    changelog = "https://github.com/badkeys/badkeys/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     mainProgram = "badkeys";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];

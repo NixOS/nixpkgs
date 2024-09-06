@@ -55,6 +55,12 @@ in
 
     services.speechd.enable = lib.mkDefault true;
 
+    services.pipewire = {
+      enable = lib.mkDefault true;
+      pulse.enable = lib.mkDefault true;
+      alsa.enable = lib.mkDefault true;
+    };
+
     systemd.defaultUnit = lib.mkIf (xcfg.autorun || dmcfg.enable) "graphical.target";
 
     xdg = {

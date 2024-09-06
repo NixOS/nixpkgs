@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
     (lib.getOutput "cxxdev" opencv4)
   ] ++ (with libsForQt5; [
+    kimageformats
     qtbase
     qtimageformats
     qtsvg

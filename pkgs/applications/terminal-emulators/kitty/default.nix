@@ -16,6 +16,7 @@
 , UserNotifications
 , libcanberra
 , libicns
+, wayland-scanner
 , libpng
 , python3
 , zlib
@@ -83,11 +84,14 @@ buildPythonApplication rec {
     sphinx-inline-tabs
     go
     fontconfig
-    (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   outputs = [ "out" "terminfo" "shell_integration" "kitten" ];
 
@@ -132,6 +136,11 @@ buildPythonApplication rec {
     '';
   in ''
     runHook preBuild
+
+    # Add the font by hand because fontconfig does not finds it in darwin
+    mkdir ./fonts/
+    cp "${(nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})}/share/fonts/truetype/NerdFonts/SymbolsNerdFontMono-Regular.ttf" ./fonts/
+
     ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.isDarwin then ''
       ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}

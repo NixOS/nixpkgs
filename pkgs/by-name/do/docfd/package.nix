@@ -21,7 +21,7 @@ let
 in
 buildDunePackage' rec {
   pname = "docfd";
-  version = "7.0.0";
+  version = "8.0.1";
 
   minimalOCamlVersion = "5.1";
 
@@ -29,7 +29,7 @@ buildDunePackage' rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-R/UOA1rf9NnEQQWn/ToCZuUSC48DPqglrb+5ZjCdpb0=";
+    hash = "sha256-0VeUT9i3/eEA64XsrpUi3oXyrinEFSJWzsEXrsUly30=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +41,8 @@ buildDunePackage' rec {
   buildInputs = with ocamlPackages; [
     cmdliner
     containers-data
+    decompress
     digestif
-    domainslib
     eio_main
     lwd
     nottui

@@ -49,12 +49,8 @@ buildPythonPackage rec {
     "-DBUILD_HPMC=${onOffBool components.hpmc}"
     "-DBUILD_MD=${onOffBool components.md}"
     "-DBUILD_METAL=${onOffBool components.metal}"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/${python.sitePackages}"
   ];
-
-  preConfigure = ''
-    # Since we can't expand $out in `cmakeFlags`
-    cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_PREFIX=$out/${python.sitePackages}"
-  '';
 
   # tests fail but have tested that package runs properly
   doCheck = false;

@@ -1,0 +1,36 @@
+From a1e6ccfeaf8ef10361280b9ecad958e9d556005b Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Tue, 3 Sep 2024 09:00:34 +0200
+Subject: [PATCH 2/3] Fix library resolving
+
+As ctypes doesn't do lookups in the Nix store for libraries, we supply the exact paths.
+
+Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+---
+ mkosi/sandbox/__init__.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mkosi/sandbox/__init__.py b/mkosi/sandbox/__init__.py
+index 7db340c5..3d0a0e56 100644
+--- a/mkosi/sandbox/__init__.py
++++ b/mkosi/sandbox/__init__.py
+@@ -78,7 +78,7 @@ class cap_user_data_t(ctypes.Structure):
+     ]
+
+
+-libc = ctypes.CDLL(None, use_errno=True)
++libc = ctypes.CDLL("@LIBC@", use_errno=True)
+
+ libc.syscall.restype = ctypes.c_long
+ libc.unshare.argtypes = (ctypes.c_int,)
+@@ -175,7 +175,7 @@ def seccomp_suppress_chown() -> None:
+     Unfortunately, non-root users can only create files owned by their own uid. To still allow non-root users to build
+     images, if requested we install a seccomp filter that makes calls to chown() and friends a noop.
+     """
+-    libseccomp = ctypes.CDLL("libseccomp.so.2")
++    libseccomp = ctypes.CDLL("@LIBSECCOMP@")
+     if libseccomp is None:
+         raise FileNotFoundError("libseccomp.so.2")
+
+--
+2.45.2

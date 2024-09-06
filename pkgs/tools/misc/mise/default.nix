@@ -17,13 +17,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.5.9";
+  version = "2024.9.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-vmY+uI/NqMCLJwJaQU+aDppmn5OSLPUIbeqCSlN8Xb0=";
+    hash = "sha256-q515JEpws1UnZm1b8zgGxPvudH846XV+Ct4qKN2mNMQ=";
 
     # registry is not needed for compilation nor for tests.
     # contains files with the same name but different case, which cause problems with hash on darwin
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-7kcs1vOM68uKjMrRn8jGI6mgXd90TeMUeYWnAGl8sgE=";
+  cargoHash = "sha256-jGqaGbue+AEK0YjhHMlm84XBgA20p8Um03TjctjXVz0=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
@@ -41,20 +41,27 @@ rustPlatform.buildRustPackage rec {
     patchShebangs --build \
       ./test/data/plugins/**/bin/* \
       ./src/fake_asdf.rs \
+      ./src/cli/generate/git_pre_commit.rs \
+      ./src/cli/generate/snapshots/*.snap \
       ./src/cli/reshim.rs \
       ./test/cwd/.mise/tasks/filetask
 
+    substituteInPlace ./src/test.rs \
+      --replace-fail '/usr/bin/env bash' '${bash}/bin/bash'
+
     substituteInPlace ./src/env_diff.rs \
-      --replace '"bash"' '"${bash}/bin/bash"'
+      --replace-fail '"bash"' '"${bash}/bin/bash"'
 
     substituteInPlace ./src/cli/direnv/exec.rs \
-      --replace '"env"' '"${coreutils}/bin/env"' \
-      --replace 'cmd!("direnv"' 'cmd!("${direnv}/bin/direnv"'
+      --replace-fail '"env"' '"${coreutils}/bin/env"' \
+      --replace-fail 'cmd!("direnv"' 'cmd!("${direnv}/bin/direnv"'
   '';
 
   checkFlags = [
     # Requires .git directory to be present
     "--skip=cli::plugins::ls::tests::test_plugin_list_urls"
+    "--skip=cli::generate::git_pre_commit::tests::test_git_pre_commit"
+    "--skip=cli::generate::github_action::tests::test_github_action"
   ];
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions

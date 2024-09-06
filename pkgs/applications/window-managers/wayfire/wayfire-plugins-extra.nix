@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , wayfire
+, wayland-scanner
 , wf-config
 , libevdev
 , libinput
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

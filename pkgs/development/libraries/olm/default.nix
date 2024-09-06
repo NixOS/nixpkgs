@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
       disclaims that its implementations are not cryptographically secure
       and should not be used when cryptographic security is required.
 
-      It is not known that the issues can be exploited over the network in
-      practical conditions. Upstream has stated that the library should
-      not be used going forwards, and there are no plans to move to a
-      another cryptography implementation or otherwise further maintain
-      the library at all.
+      It is not known if the issues can be exploited over the network in
+      practical conditions. Upstream does not believe such an attack is
+      feasible, but has stated that the library should not be used going
+      forward, and there are no plans to move to a another cryptography
+      implementation or otherwise further maintain the library at all.
 
       You should make an informed decision about whether to override this
       security warning, especially if you critically rely on end‐to‐end
@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
       * The blog post disclosing the details of the known vulnerabilities:
         <https://soatok.blog/2024/08/14/security-issues-in-matrixs-olm-library/>
 
-      * The announcement in This Week in Matrix from the Matrix.org
-        project lead:
-        <https://matrix.org/blog/2024/08/16/this-week-in-matrix-2024-08-16/#dept-of-encryption-closed-lock-with-key>
+      * The statement about the deprecation and vulnerabilities from the
+        Matrix.org Foundation:
+        <https://matrix.org/blog/2024/08/libolm-deprecation/>
 
       * A (likely incomplete) aggregation of client tracking issue links:
         <https://github.com/NixOS/nixpkgs/pull/334638#issuecomment-2289025802>

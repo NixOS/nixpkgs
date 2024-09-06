@@ -35,7 +35,7 @@ let
     };
     idrisLibraries = [idris2Api lspLib];
 
-    buildInputs = [makeWrapper];
+    nativeBuildInputs = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/idris2-lsp \
         --suffix IDRIS2_PACKAGE_PATH ':' "${globalLibrariesPath}"

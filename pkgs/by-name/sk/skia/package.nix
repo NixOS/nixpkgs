@@ -70,39 +70,34 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
   ];
 
-  configurePhase = let
+  gnFlags = let
     cpu = {
       "x86_64" = "x64";
       "i686" = "x86";
       "arm" = "arm";
       "aarch64" = "arm64";
     }.${stdenv.hostPlatform.parsed.cpu.name};
-  in ''
-    runHook preConfigure
-    gn gen build --args='${toString ([
-      # Build in release mode
-      "is_official_build=true"
-      "is_component_build=true"
-      # Don't use missing tools
-      "skia_use_dng_sdk=false"
-      "skia_use_wuffs=false"
-      # Use system dependencies
-      "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
-      "cc=\"${stdenv.cc.targetPrefix}cc\""
-      "cxx=\"${stdenv.cc.targetPrefix}c++\""
-      "ar=\"${stdenv.cc.targetPrefix}ar\""
-      "target_cpu=\"${cpu}\""
-    ] ++ map (lib: "skia_use_system_${lib}=true") [
-      "zlib"
-      "harfbuzz"
-      "libpng"
-      "libwebp"
-    ] ++ lib.optionals enableVulkan [
-      "skia_use_vulkan=true"
-    ])}'
-    cd build
-    runHook postConfigure
-  '';
+  in [
+    # Build in release mode
+    "is_official_build=true"
+    "is_component_build=true"
+    # Don't use missing tools
+    "skia_use_dng_sdk=false"
+    "skia_use_wuffs=false"
+    # Use system dependencies
+    "extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+    "cc=\"${stdenv.cc.targetPrefix}cc\""
+    "cxx=\"${stdenv.cc.targetPrefix}c++\""
+    "ar=\"${stdenv.cc.targetPrefix}ar\""
+    "target_cpu=\"${cpu}\""
+  ] ++ map (lib: "skia_use_system_${lib}=true") [
+    "zlib"
+    "harfbuzz"
+    "libpng"
+    "libwebp"
+  ] ++ lib.optionals enableVulkan [
+    "skia_use_vulkan=true"
+  ];
 
   # Somewhat arbitrary, but similar to what other distros are doing
   installPhase = ''
@@ -113,10 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp *.so *.a $out/lib
 
     # Includes
-    pushd ../include
+    pushd ../../include
     find . -name '*.h' -exec install -Dm644 {} $out/include/skia/{} \;
     popd
-    pushd ../modules
+    pushd ../../modules
     find . -name '*.h' -exec install -Dm644 {} $out/include/skia/modules/{} \;
     popd
 

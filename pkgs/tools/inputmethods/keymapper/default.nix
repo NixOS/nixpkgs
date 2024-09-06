@@ -8,6 +8,7 @@
 , pkg-config
 , udev
 , wayland
+, wayland-scanner
 , libxkbcommon
 , gtk3
 , libayatana-appindicator
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     dbus
     wayland
+    wayland-scanner
     libX11
     udev
     libusb1

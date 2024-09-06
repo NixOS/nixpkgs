@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '/bin/echo' 'echo'
+      --replace-fail '/bin/echo' 'echo'
   '';
 
   dontConfigure = true;

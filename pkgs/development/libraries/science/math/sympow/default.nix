@@ -59,10 +59,17 @@ stdenv.mkDerivation rec {
 
   # Example from the README as a sanity check.
   doInstallCheck = true;
-  installCheckPhase = ''
-    export HOME=$TMPDIR
-    "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
-  '';
+  installCheckPhase =
+    ''
+      export HOME=$TMPDIR
+      "$out/bin/sympow" -curve "[1,2,3,4,5]" -moddeg | grep 'Modular Degree is 464'
+      echo "[1,-1,0,-79,289]" | "$out/bin/sympow" -analrank | grep ^"Analytic Rank is 4"
+      "$out/bin/sympow" -curve "[1,-1,0,-79,289]" -analrank | grep ^"Analytic Rank is 4"
+      "$out/bin/sympow" -curve "[0,1,1,-2,0]" -analrank | grep ^"Analytic Rank is 2"
+    ''
+    + lib.optionalString (!stdenv.isAarch64) ''
+      "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
+    '';
 
   meta = {
     description = "Compute special values of symmetric power elliptic curve L-functions";
@@ -73,6 +80,6 @@ stdenv.mkDerivation rec {
       free = true;
     };
     maintainers = lib.teams.sage.members;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

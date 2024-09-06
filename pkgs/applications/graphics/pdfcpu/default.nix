@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pdfcpu";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E1D2DvwwrtlY06kvCZkoAO5VcdtkBJYLcxuqGsulFUA=";
+    hash = "sha256-NrR7qjVlac4on3pUde6Au8xlnU0wxWrRRh4QdviNPt4=";
     # Apparently upstream requires that the compiled executable will know the
     # commit hash and the date of the commit. This information is also presented
     # in the output of `pdfcpu version` which we use as a sanity check in the
@@ -31,7 +31,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-4k4aZnQ9SjcGr/ziCacfcVfVk7w4Qhli2rOeYE76Qs0=";
+  vendorHash = "sha256-EGQd2hMf3eWswQ6a2GMqbkf7bE8HVMEqjY6fmWNHmBo=";
 
   ldflags = [
     "-s"

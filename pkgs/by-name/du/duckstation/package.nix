@@ -76,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
       substituteAllInPlace src/scmversion/gen_scmversion.sh
   '';
 
+  # error: cannot convert 'int16x8_t' to '__Int32x4_t'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-flax-vector-conversions";
+
   installCheckPhase = ''
     runHook preCheck
 

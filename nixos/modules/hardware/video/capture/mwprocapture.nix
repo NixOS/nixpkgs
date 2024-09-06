@@ -1,7 +1,4 @@
 { config, lib, ... }:
-
-with lib;
-
 let
 
   cfg = config.hardware.mwProCapture;
@@ -12,9 +9,9 @@ in
 
 {
 
-  options.hardware.mwProCapture.enable = mkEnableOption "the Magewell Pro Capture family kernel module";
+  options.hardware.mwProCapture.enable = lib.mkEnableOption "the Magewell Pro Capture family kernel module";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     boot.kernelModules = [ "ProCapture" ];
 

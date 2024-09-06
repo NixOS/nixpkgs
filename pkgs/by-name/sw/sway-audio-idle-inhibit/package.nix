@@ -7,6 +7,7 @@
 , libpulseaudio
 , wayland
 , wayland-protocols
+, wayland-scanner
 }:
 stdenv.mkDerivation {
   pname = "sway-audio-idle-inhibit";
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config
+    meson ninja pkg-config wayland-scanner
   ];
 
   buildInputs = [

@@ -28,7 +28,7 @@ buildPythonPackage rec {
     ninja
     pybind11
     scikit-build-core
-  ] ++ scikit-build-core.optional-dependencies.pyproject;
+  ];
 
   dependencies = [ numpy ];
 

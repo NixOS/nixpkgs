@@ -167,7 +167,7 @@ You can use `dconf-editor` tool to explore which GSettings you can set.
 
     extraGSettingsOverridePackages = [
       pkgs.gsettings-desktop-schemas # for org.gnome.desktop
-      pkgs.gnome.gnome-shell # for org.gnome.shell
+      pkgs.gnome-shell # for org.gnome.shell
     ];
   };
 }

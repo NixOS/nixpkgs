@@ -22,6 +22,8 @@
 
   frigate = callPackage ./frigate {};
 
+  garmin_connect = callPackage ./garmin_connect {};
+
   govee-lan = callPackage ./govee-lan {};
 
   gpio = callPackage ./gpio {};
@@ -57,6 +59,8 @@
   smartir = callPackage ./smartir {};
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
+
+  solis-sensor = callPackage ./solis-sensor {};
 
   somweb = callPackage ./somweb {};
 

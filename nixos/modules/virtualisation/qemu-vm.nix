@@ -329,7 +329,7 @@ in
 
     virtualisation.diskSize =
       mkOption {
-        type = types.nullOr types.ints.positive;
+        type = types.ints.positive;
         default = 1024;
         description = ''
             The disk size in megabytes of the virtual machine.

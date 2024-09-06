@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vala-lint";
-  version = "0-unstable-2023-12-05";
+  version = "0-unstable-2024-08-28";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "8ae2bb65fe66458263d94711ae4ddd978faece00";
-    sha256 = "sha256-FZV726ZeNEX4ulEh+IIzwZqpnVRr7IeZb47FV1C7YjU=";
+    rev = "4ed1443c35a8a84445fb59292d539358365d8263";
+    sha256 = "sha256-NPadBrL2g5w95slwDpp7kNXBgLJ9na8Yd/J7zm28SSo=";
   };
 
   nativeBuildInputs = [

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.pcscd;
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
@@ -18,17 +15,17 @@ let
 in
 {
   options.services.pcscd = {
-    enable = mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
+    enable = lib.mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
 
-    plugins = mkOption {
-      type = types.listOf types.package;
-      defaultText = literalExpression "[ pkgs.ccid ]";
-      example = literalExpression "[ pkgs.pcsc-cyberjack ]";
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      defaultText = lib.literalExpression "[ pkgs.ccid ]";
+      example = lib.literalExpression "[ pkgs.pcsc-cyberjack ]";
       description = "Plugin packages to be used for PCSC-Lite.";
     };
 
-    readerConfig = mkOption {
-      type = types.lines;
+    readerConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         FRIENDLYNAME      "Some serial reader"
@@ -43,14 +40,14 @@ in
       '';
     };
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = "Extra command line arguments to be passed to the PCSC daemon.";
     };
   };
 
-  config = mkIf config.services.pcscd.enable {
+  config = lib.mkIf config.services.pcscd.enable {
     environment.etc."reader.conf".source = cfgFile;
 
     environment.systemPackages = [ package ];

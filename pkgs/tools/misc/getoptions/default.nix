@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "getoptions";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "ko1nksm";
     repo = "getoptions";
     rev = "v${version}";
-    hash = "sha256-HHxImHMT5862ysI+1QGkzaA21YsrUUUOH2LwAkVBPf0=";
+    hash = "sha256-hapOGPibqt2Mm6k73v63gHxrX+lifZ8xcwzj8vWbtgo=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

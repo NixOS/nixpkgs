@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, gnome, gettext, glib }:
+{ lib, stdenv, fetchzip, gnome-shell, gettext, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clock-override";
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ rhoriguchi ];
     homepage = "https://github.com/stuartlangridge/gnome-shell-clock-override";
-    broken = versionOlder gnome.gnome-shell.version "3.18";
+    broken = versionOlder gnome-shell.version "3.18";
   };
 }

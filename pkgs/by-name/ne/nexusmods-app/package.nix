@@ -10,21 +10,22 @@
   libICE,
   libSM,
   libX11,
-  nexusmods-app,
   runCommand,
   pname ? "nexusmods-app",
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   inherit pname;
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
   };
+
+  enableParallelBuilding = false;
 
   # If the whole solution is published, there seems to be a race condition where
   # it will sometimes publish the wrong version of a dependent assembly, for
@@ -54,9 +55,12 @@ buildDotnetModule rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}"
-    "--set APPIMAGE ${placeholder "out"}/bin/${meta.mainProgram}" # Make associating with nxm links work on Linux
+    "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
+    # Make associating with nxm links work on Linux
+    "--set APPIMAGE ${placeholder "out"}/bin/NexusMods.App"
   ];
+
+  runtimeInputs = [ desktop-file-utils ];
 
   runtimeDeps = [
     fontconfig
@@ -65,43 +69,36 @@ buildDotnetModule rec {
     libX11
   ];
 
-  executables = [ meta.mainProgram ];
+  executables = [ "NexusMods.App" ];
 
   doCheck = true;
 
-  dotnetTestFlags = [
-    "--environment=USER=nobody"
-    (
-      "--filter="
-      + lib.strings.concatStringsSep "&" (
-        [
-          "Category!=Disabled"
-          "FlakeyTest!=True"
-          "RequiresNetworking!=True"
-          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-          "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
-        ]
-        ++ lib.optionals (!_7zz.meta.unfree) [
-          "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-        ]
-      )
-    )
+  dotnetTestFlags = [ "--environment=USER=nobody" ];
+
+  testFilters = [
+    "Category!=Disabled"
+    "FlakeyTest!=True"
+    "RequiresNetworking!=True"
   ];
+
+  disabledTests =
+    [
+      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
+      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+    ]
+    ++ lib.optionals (!_7zz.meta.unfree) [
+      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+    ];
 
   passthru = {
     tests =
       let
         runTest =
           name: script:
-          runCommand "${pname}-test-${name}"
-            {
-              # TODO: use finalAttrs when buildDotnetModule has support
-              nativeBuildInputs = [ nexusmods-app ];
-            }
-            ''
-              ${script}
-              touch $out
-            '';
+          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+            ${script}
+            touch $out
+          '';
       in
       {
         serve = runTest "serve" ''
@@ -123,7 +120,7 @@ buildDotnetModule rec {
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${src.rev}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0
@@ -158,4 +155,4 @@ buildDotnetModule rec {
       }
     '';
   };
-}
+})

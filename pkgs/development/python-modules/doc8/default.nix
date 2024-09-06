@@ -53,6 +53,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pythonRelaxDeps = [ "docutils" ];
+
   pythonImportsCheck = [ "doc8" ];
 
   meta = with lib; {

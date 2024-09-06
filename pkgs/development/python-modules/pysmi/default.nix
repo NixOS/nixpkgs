@@ -1,29 +1,59 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   ply,
+  jinja2,
+  requests,
+
+  # tests
+  pysmi,
+  pysnmp,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.3.4";
-  format = "setuptools";
+  version = "1.4.4";
   pname = "pysmi";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bd15a15020aee8376cab5be264c26330824a8b8164ed0195bd402dd59e4e8f7c";
+  src = fetchFromGitHub {
+    owner = "lextudio";
+    repo = "pysmi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9ArKo1UT4g+H8Z51NZ6rHlOhyz2grAc1V8Xl+ztfYic=";
   };
 
-  propagatedBuildInputs = [ ply ];
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    ply
+    jinja2
+    requests
+  ];
 
   # Tests require pysnmp, which in turn requires pysmi => infinite recursion
   doCheck = false;
 
+  nativeCheckInputs = [
+    pysnmp
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "pysmi" ];
+
+  passthru.tests.pytest = pysmi.overridePythonAttrs { doCheck = true; };
+
   meta = with lib; {
-    homepage = "http://pysmi.sf.net";
-    description = "SNMP SMI/MIB Parser";
+    description = "SNMP MIB parser";
+    homepage = "https://github.com/lextudio/pysmi";
+    changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [ fab ];
   };
 }

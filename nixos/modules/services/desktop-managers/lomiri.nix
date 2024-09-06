@@ -50,7 +50,6 @@ in {
       };
     };
 
-    hardware.pulseaudio.enable = lib.mkDefault true;
     networking.networkmanager.enable = lib.mkDefault true;
 
     systemd.packages = with pkgs.lomiri; [

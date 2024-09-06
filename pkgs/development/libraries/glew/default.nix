@@ -10,6 +10,7 @@
 , OpenGL
 , enableEGL ? (!stdenv.isDarwin)
 , testers
+, mesa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "glew" ];
     platforms = with platforms;
       if enableEGL then
-        subtractLists darwin mesaPlatforms
+        subtractLists darwin mesa.meta.platforms
       else
-        mesaPlatforms;
+        mesa.meta.platforms;
   };
 })

@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.freeciv;
   inherit (config.users) groups;
@@ -16,31 +15,31 @@ let
     generate = name: value:
       let mkParam = k: v:
             if v == null then []
-            else if isBool v then optional v ("--"+k)
+            else if lib.isBool v then lib.optional v ("--"+k)
             else [("--"+k) v];
-          mkParams = k: v: map (mkParam k) (if isList v then v else [v]);
-      in escapeShellArgs (concatLists (concatLists (mapAttrsToList mkParams value)));
+          mkParams = k: v: map (mkParam k) (if lib.isList v then v else [v]);
+      in lib.escapeShellArgs (lib.concatLists (lib.concatLists (lib.mapAttrsToList mkParams value)));
   };
 in
 {
   options = {
     services.freeciv = {
-      enable = mkEnableOption ''freeciv'';
-      settings = mkOption {
+      enable = lib.mkEnableOption ''freeciv'';
+      settings = lib.mkOption {
         description = ''
           Parameters of freeciv-server.
         '';
         default = {};
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = argsFormat.type;
-          options.Announce = mkOption {
-            type = types.enum ["IPv4" "IPv6" "none"];
+          options.Announce = lib.mkOption {
+            type = lib.types.enum ["IPv4" "IPv6" "none"];
             default = "none";
             description = "Announce game in LAN using given protocol.";
           };
-          options.auth = mkEnableOption "server authentication";
-          options.Database = mkOption {
-            type = types.nullOr types.str;
+          options.auth = lib.mkEnableOption "server authentication";
+          options.Database = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             apply = pkgs.writeText "auth.conf";
             default = ''
               [fcdb]
@@ -49,34 +48,34 @@ in
             '';
             description = "Enable database connection with given configuration.";
           };
-          options.debug = mkOption {
-            type = types.ints.between 0 3;
+          options.debug = lib.mkOption {
+            type = lib.types.ints.between 0 3;
             default = 0;
             description = "Set debug log level.";
           };
-          options.exit-on-end = mkEnableOption "exit instead of restarting when a game ends";
-          options.Guests = mkEnableOption "guests to login if auth is enabled";
-          options.Newusers = mkEnableOption "new users to login if auth is enabled";
-          options.port = mkOption {
-            type = types.port;
+          options.exit-on-end = lib.mkEnableOption "exit instead of restarting when a game ends";
+          options.Guests = lib.mkEnableOption "guests to login if auth is enabled";
+          options.Newusers = lib.mkEnableOption "new users to login if auth is enabled";
+          options.port = lib.mkOption {
+            type = lib.types.port;
             default = 5556;
             description = "Listen for clients on given port";
           };
-          options.quitidle = mkOption {
-            type = types.nullOr types.int;
+          options.quitidle = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
             default = null;
             description = "Quit if no players for given time in seconds.";
           };
-          options.read = mkOption {
-            type = types.lines;
+          options.read = lib.mkOption {
+            type = lib.types.lines;
             apply = v: pkgs.writeTextDir "read.serv" v + "/read";
             default = ''
               /fcdb lua sqlite_createdb()
             '';
             description = "Startup script.";
           };
-          options.saves = mkOption {
-            type = types.nullOr types.str;
+          options.saves = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
             default = "/var/lib/freeciv/saves/";
             description = ''
               Save games to given directory,
@@ -86,10 +85,10 @@ in
           };
         };
       };
-      openFirewall = mkEnableOption "opening the firewall for the port listening for clients";
+      openFirewall = lib.mkEnableOption "opening the firewall for the port listening for clients";
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.freeciv = {};
     # Use with:
     #   journalctl -u freeciv.service -f -o cat &
@@ -119,8 +118,8 @@ in
           set -eux
           savedir=$(date +%Y-%m-%d_%H-%M-%S)
           '' + "${pkgs.freeciv}/bin/freeciv-server"
-          + " " + optionalString (cfg.settings.saves != null)
-            (concatStringsSep " " [ "--saves" "${escapeShellArg cfg.settings.saves}/$savedir" ])
+          + " " + lib.optionalString (cfg.settings.saves != null)
+            (lib.concatStringsSep " " [ "--saves" "${lib.escapeShellArg cfg.settings.saves}/$savedir" ])
           + " " + argsFormat.generate "freeciv-server" (cfg.settings // { saves = null; }));
         DynamicUser = true;
         # Create rootDir in the host's mount namespace.
@@ -152,7 +151,7 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
-        PrivateNetwork = mkDefault false;
+        PrivateNetwork = lib.mkDefault false;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
@@ -180,7 +179,7 @@ in
         SystemCallErrorNumber = "EPERM";
       };
     };
-    networking.firewall = mkIf cfg.openFirewall
+    networking.firewall = lib.mkIf cfg.openFirewall
       { allowedTCPPorts = [ cfg.settings.port ]; };
   };
   meta.maintainers = with lib.maintainers; [ julm ];

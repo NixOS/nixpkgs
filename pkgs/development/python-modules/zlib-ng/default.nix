@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  substituteAll,
 
   # build-system
   cmake,
   setuptools,
+  versioningit,
 
   # native dependencies
   zlib-ng,
@@ -16,19 +18,27 @@
 
 buildPythonPackage rec {
   pname = "zlib-ng";
-  version = "0.4.3";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-zlib-ng";
     rev = "v${version}";
-    hash = "sha256-M0R39vUX3JMDEDJfsRzg1ipxbWJ/kl0FzW6ZUMXvGDs=";
+    hash = "sha256-H8Niz6BbmNCccNKHBfRma4SUt0RY846fCiHidEvcd5E=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
+
+  build-system = [
     cmake
     setuptools
+    versioningit
   ];
 
   dontUseCmakeConfigure = true;

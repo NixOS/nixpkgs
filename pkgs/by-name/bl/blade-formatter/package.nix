@@ -1,33 +1,44 @@
 {
+  stdenvNoCC,
   lib,
-  buildNpmPackage,
   fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  yarnInstallHook,
+  nodejs,
+  nix-update-script,
   testers,
   writeText,
   runCommand,
   blade-formatter,
-  nodejs,
 }:
 
-buildNpmPackage rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blade-formatter";
   version = "1.41.1";
 
   src = fetchFromGitHub {
     owner = "shufo";
     repo = "blade-formatter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iaWpIa+H+ocAXGc042PfmCu9UcJZeso9ripWB2/1oTs=";
   };
 
-  postPatch = ''
-    cp ${./package-lock.json} ./package-lock.json
-  '';
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-zn0PgLIWk23EhYeOKF2RkpvLOusVrqoBazKcJpIAzm8=";
+  };
 
-  npmDepsHash = "sha256-wEz0DTbg+Fdmsf0Qyeu9QS+I8gkPJeaJC/3HuP913og=";
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    nodejs
+  ];
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
         package = blade-formatter;
@@ -64,4 +75,4 @@ buildNpmPackage rec {
     mainProgram = "blade-formatter";
     inherit (nodejs.meta) platforms;
   };
-}
+})

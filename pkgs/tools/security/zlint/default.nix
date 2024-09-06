@@ -48,7 +48,7 @@ buildGoModule rec {
       requirements (e.g. CA/Browser Forum Baseline Requirements).
     '';
     homepage = "https://github.com/zmap/zlint";
-    changelog = "https://github.com/zmap/zlint/releases/tag/${src.rev}";
+    changelog = "https://github.com/zmap/zlint/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ baloo ];
   };

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "mizani";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a/+yZ7oUZG0fKgBUMwIf3XHUjac8Gsh3AosDVuUVoJU=";
+    hash = "sha256-aTc8LC/2zLrrTfOXABWs049m752PctpvlguA6qhyhp8=";
   };
 
   build-system = [ setuptools-scm ];

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.rstudio-server;
@@ -18,41 +15,41 @@ let
 
 in
 {
-  meta.maintainers = with maintainers; [ jbedo cfhammill ];
+  meta.maintainers = with lib.maintainers; [ jbedo cfhammill ];
 
   options.services.rstudio-server = {
-    enable = mkEnableOption "RStudio server";
+    enable = lib.mkEnableOption "RStudio server";
 
-    serverWorkingDir = mkOption {
-      type = types.str;
+    serverWorkingDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/rstudio-server";
       description = ''
         Default working directory for server (server-working-dir in rserver.conf).
       '';
     };
 
-    listenAddr = mkOption {
-      type = types.str;
+    listenAddr = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = ''
         Address to listen on (www-address in rserver.conf).
       '';
     };
 
-    package = mkPackageOption pkgs "rstudio-server" {
+    package = lib.mkPackageOption pkgs "rstudio-server" {
       example = "rstudioServerWrapper.override { packages = [ pkgs.rPackages.ggplot2 ]; }";
     };
 
-    rserverExtraConfig = mkOption {
-      type = types.str;
+    rserverExtraConfig = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         Extra contents for rserver.conf.
       '';
     };
 
-    rsessionExtraConfig = mkOption {
-      type = types.str;
+    rsessionExtraConfig = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = ''
         Extra contents for resssion.conf.
@@ -61,7 +58,7 @@ in
 
   };
 
-  config = mkIf cfg.enable
+  config = lib.mkIf cfg.enable
     {
       systemd.services.rstudio-server = {
         description = "Rstudio server";

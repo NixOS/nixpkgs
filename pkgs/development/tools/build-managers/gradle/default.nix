@@ -217,7 +217,7 @@ rec {
       meta = gradle.meta // {
         # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
         # and passthru
-        priority = (gradle.meta.priority or 0) + 1;
+        priority = (gradle.meta.priority or lib.meta.defaultPriority) + 1;
       };
     }) { };
 }

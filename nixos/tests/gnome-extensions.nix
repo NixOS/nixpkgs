@@ -45,7 +45,7 @@ import ./make-test-python.nix (
               # Eval API is now internal so Shell needs to run in unsafe mode.
               # TODO: improve test driver so that it supports openqa-like manipulation
               # that would allow us to drop this mess.
-              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+              "${pkgs.gnome-shell}/bin/gnome-shell --unsafe-mode"
             ];
           };
         };

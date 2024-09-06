@@ -28,5 +28,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ jordanisaacs ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin && stdenv.isAarch64; # build timeout
   };
 }

@@ -7,6 +7,7 @@
   ifaddr,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-timeout,
   pythonOlder,
   pytestCheckHook,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.132.2";
+  version = "0.133.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,13 +25,8 @@ buildPythonPackage rec {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
-    hash = "sha256-Jmz9zs//EVdBbEElq6OEfGZiOiMvjV5CJxZOM/lHvok=";
+    hash = "sha256-nS3zr+56K819GujzA4uLqcZJb4OxbAOV3FfxssDEEQA=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3.0.8" "Cython"
-  '';
 
   build-system = [
     cython
@@ -42,13 +38,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ];
-
-  preCheck = ''
-    sed -i '/addopts/d' pyproject.toml
-  '';
 
   disabledTests = [
     # OSError: [Errno 19] No such device

@@ -181,7 +181,7 @@ buildPythonPackage {
         or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
       )
     else
-      gpuSrcs."${gpuSrcVersionString}";
+      gpuSrcs."${gpuSrcVersionString}" or (throw "jaxlib-bin: No gpuSrc for ${gpuSrcVersionString}");
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.

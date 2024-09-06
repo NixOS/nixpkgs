@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, version, hashes }:
+{ lib, stdenv, fetchurl, version, hashes }:
 let
   toGoKernel = platform:
     if platform.isDarwin then "darwin"
@@ -18,7 +18,7 @@ let
 
   platform = toGoPlatform stdenv.hostPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "go-${version}-${platform}-bootstrap";
 
   src = fetchurl {
@@ -36,4 +36,14 @@ stdenv.mkDerivation rec {
     ln -s $out/share/go/bin/go $out/bin/go
     runHook postInstall
   '';
+
+  meta = {
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
+    description = "The Go Programming language";
+    homepage = "https://go.dev/";
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.golang.members;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+  };
 }

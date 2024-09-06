@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://xfs.org/";
+    homepage = "https://xfs.wiki.kernel.org";
     description = "SGI XFS utilities";
     license = with licenses; [ gpl2Only lgpl21 gpl3Plus ];  # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
     platforms = platforms.linux;

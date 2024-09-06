@@ -1,10 +1,12 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchPypi,
   oniguruma,
+  setuptools,
+  cffi,
 }:
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "onigurumacffi";
   version = "1.3.0";
   format = "pyproject";
@@ -14,7 +16,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-d0XNxWCWrOyIofOwhmCiKwnGWe040/WdtsHK12qXa+8=";
   };
 
-  buildInputs = with python3Packages; [
+  buildInputs = [
     oniguruma
     setuptools
     cffi

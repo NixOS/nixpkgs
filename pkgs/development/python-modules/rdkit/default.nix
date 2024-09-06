@@ -100,10 +100,10 @@ buildPythonPackage rec {
 
   preConfigure = ''
     # Since we can't expand with bash in cmakeFlags
-    cmakeFlags="$cmakeFlags -DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
-    cmakeFlags="$cmakeFlags -DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
-    cmakeFlags="$cmakeFlags -DFREESASA_SRC_DIR=$PWD/External/FreeSASA/freesasa"
-    cmakeFlags="$cmakeFlags -DAVALONTOOLS_DIR=$PWD/External/AvalonTools/avalon"
+    appendToVar cmakeFlags "-DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
+    appendToVar cmakeFlags "-DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
+    appendToVar cmakeFlags "-DFREESASA_SRC_DIR=$PWD/External/FreeSASA/freesasa"
+    appendToVar cmakeFlags "-DAVALONTOOLS_DIR=$PWD/External/AvalonTools/avalon"
   '';
 
   cmakeFlags = [

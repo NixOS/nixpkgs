@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
 , db, iptables, elfutils, libmnl ,libbpf
-, gitUpdater
+, gitUpdater, pkgsStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -47,9 +47,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libmnl libbpf ]
+  buildInputs = [ db iptables libmnl  ]
     # needed to uploaded bpf programs
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      elfutils libbpf
+  ];
 
   enableParallelBuilding = true;
 
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
     url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
     rev-prefix = "v";
   };
+  # needed for nixos-anywhere
+  passthru.tests.static = pkgsStatic.iproute2;
 
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";

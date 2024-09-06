@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests" ];
-  disabledTests = lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
-    # slightly exceeds numerical tolerance on aarch64-linux:
-    "test_fts_frozen_bn_track_running_stats"
-  ];
+  disabledTests =
+    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
+    lib.optionals (pythonOlder "3.12") [
+      "test_fts_dynamo_enforce_p0"
+      "test_fts_dynamo_resume"
+      "test_fts_dynamo_intrafit"
+    ]
+    ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+      # slightly exceeds numerical tolerance on aarch64-linux:
+      "test_fts_frozen_bn_track_running_stats"
+    ];
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
 

@@ -16,6 +16,7 @@
   libportal,
   packagekit,
   wayland,
+  wayland-scanner,
   wingpanel,
 }:
 
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
+    wayland-scanner
   ];
 
   buildInputs = [

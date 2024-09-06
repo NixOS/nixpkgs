@@ -36,9 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
     cmake
-  ];
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   buildInputs = [ glfw ]
     ++ lib.optionals stdenv.isLinux [ mesa libXi libXcursor libXrandr libXinerama ]
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # fix libasound.so/libpulse.so not being found
-  appendRunpaths = [
+  appendRunpaths = lib.optionals stdenv.isLinux [
     (lib.makeLibraryPath (lib.optional alsaSupport alsa-lib ++ lib.optional pulseSupport libpulseaudio))
   ];
 

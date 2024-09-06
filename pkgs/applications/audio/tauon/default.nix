@@ -19,21 +19,22 @@
   mpg123,
   opusfile,
   pango,
+  pipewire,
   wavpack,
   ffmpeg,
   pulseaudio,
-  withDiscordRPC ? false,
+  withDiscordRPC ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.8.0";
+  version = "7.8.2";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
-    repo = "TauonMusicBox";
+    repo = "Tauon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8UnUcEvG206tPwyD+WqxcJgDvQlYvTJ6v+sm0u30Z3k=";
+    hash = "sha256-fVp3RWRNIBSeALbYNRIYjyWNH9An+YnS7neQt0x33yI=";
   };
 
   postUnpack = ''
@@ -54,15 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'libopenmpt.so' '${lib.getLib libopenmpt}/lib/libopenmpt.so'
 
     substituteInPlace t_modules/t_phazor.py \
-      --replace-fail 'lib/libphazor.so' '../../lib/libphazor.so'
+      --replace-fail 'lib/libphazor' '../../lib/libphazor'
 
-    substituteInPlace compile-phazor.sh --replace-fail 'gcc' '${stdenv.cc.targetPrefix}cc'
+    substituteInPlace compile-phazor*.sh --replace-fail 'gcc' '${stdenv.cc.targetPrefix}cc'
 
     substituteInPlace extra/tauonmb.desktop --replace-fail 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
   postBuild = ''
     bash ./compile-phazor.sh
+    bash ./compile-phazor-pipewire.sh
   '';
 
   nativeBuildInputs = [
@@ -84,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     mpg123
     opusfile
     pango
+    pipewire
     wavpack
   ];
 
@@ -92,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       beautifulsoup4
       dbus-python
-      isounidecode
+      unidecode
       jxlpy
       musicbrainzngs
       mutagen

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Manipulate mmCIF and PDB files";
     homepage = "https://github.com/PDB-REDO/libcifpp";
-    changelog = "https://github.com/PDB-REDO/libcifpp/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/PDB-REDO/libcifpp/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;

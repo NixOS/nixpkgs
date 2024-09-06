@@ -211,7 +211,7 @@ let
     sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
 
     # Let killall expect "containerd-shim" in the Nix store
-    to_replace="k3s/data/\[\^/\]\*/bin/containerd-shim"
+    to_replace="/data/\[\^/\]\*/bin/containerd-shim"
     replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
     changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
     if [ -z "$changes" ]; then

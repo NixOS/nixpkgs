@@ -13,6 +13,7 @@
 , udev
 , wayland
 , wayland-protocols
+, wayland-scanner
 , wlroots_0_18
 , xwayland
 , zig_0_13
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    wayland
+    wayland-scanner
     xwayland
     zig_0_13.hook
   ]
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pixman
     udev
+    wayland
     wayland-protocols
     wlroots_0_18
   ] ++ lib.optional xwaylandSupport libX11;

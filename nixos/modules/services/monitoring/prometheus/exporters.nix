@@ -63,7 +63,6 @@ let
     "nginxlog"
     "node"
     "nut"
-    "openldap"
     "pgbouncer"
     "php-fpm"
     "pihole"

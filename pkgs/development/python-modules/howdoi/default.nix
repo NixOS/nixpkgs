@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   appdirs,
   buildPythonPackage,
@@ -7,6 +6,7 @@
   colorama,
   cssselect,
   fetchFromGitHub,
+  fetchpatch,
   keep,
   lxml,
   pygments,
@@ -30,6 +30,16 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-u0k+h7Sp2t/JUnfPqRzDpEA+vNXB7CpyZ/SRvk+B9t0=";
   };
+
+  patches = [
+    # Bad test case fix: comparing hardcoded string to internet search result
+    # PR merged: https://github.com/gleitz/howdoi/pull/497
+    # Please remove on the next release
+    (fetchpatch {
+      url = "https://github.com/gleitz/howdoi/commit/7d24e9e1c87811a6e66d60f504381383cf1ac3fd.patch";
+      sha256 = "sha256-AFQMnMEijaExqiimbNaVeIRmZJ4Yj0nGUOEjfsvBLh8=";
+    })
+  ];
 
   propagatedBuildInputs = [
     appdirs
@@ -55,7 +65,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "howdoi" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     changelog = "https://github.com/gleitz/howdoi/blob/v${version}/CHANGES.txt";
     description = "Instant coding answers via the command line";
     homepage = "https://github.com/gleitz/howdoi";

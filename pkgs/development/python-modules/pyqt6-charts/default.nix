@@ -8,6 +8,7 @@
   pythonOlder,
   pyqt6,
   python,
+  mesa,
 }:
 
 buildPythonPackage rec {
@@ -67,7 +68,7 @@ buildPythonPackage rec {
     description = "Python bindings for Qt6 QtCharts";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ dandellion ];
   };
 }

@@ -285,7 +285,7 @@ You, as the writer of documentation, are still in charge of its content.
   - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
   - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
   - Nix types aren't in code spans, because they are not code
-  - Nix types are capitalized, to distinguish them from the camelCase [Module System](#module-system) types, which _are_ code and behave like functions.
+  - Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
 
 #### Examples
 

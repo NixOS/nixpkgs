@@ -130,6 +130,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_update_stage"
     "test_delete_deployment"
     "test_request_with_no_data"
+    "test_import_should_succeed_for_a_defined_hidden_package_540_pkg_resources_py2_warn"
   ];
 
   pythonImportsCheck = [

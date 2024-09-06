@@ -38,7 +38,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/henriklovhaug/md-tui";
     changelog = "https://github.com/henriklovhaug/md-tui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      anas
+    ];
     platforms = lib.platforms.all;
     mainProgram = "mdt";
   };

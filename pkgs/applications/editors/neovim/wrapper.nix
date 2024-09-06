@@ -214,7 +214,7 @@ let
       # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package
-      priority = (neovim-unwrapped.meta.priority or 0) - 1;
+      priority = (neovim-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
     };
   });
 in

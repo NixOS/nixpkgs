@@ -170,6 +170,11 @@ stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
+  # cmake can't find the binary itself
+  cmakeFlags = [
+    (lib.cmakeFeature "Xsltproc_BIN" (lib.getExe' libxslt "xsltproc"))
+  ];
+
   meta = {
     description = "Darktable fork minus the bloat plus some design vision";
     homepage = "https://ansel.photos/";

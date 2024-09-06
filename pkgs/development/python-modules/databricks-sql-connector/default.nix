@@ -12,7 +12,6 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
-  pythonAtLeast,
   sqlalchemy,
   thrift,
   requests,
@@ -25,9 +24,7 @@ buildPythonPackage rec {
   version = "3.3.0";
   format = "pyproject";
 
-  # Depends on thrift that at the moment do not work in Python 3.12
-  # see PR 328415 fix this.
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "databricks";

@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "3.0.13";
+  version = "3.0.15";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-/B7udtkRP8rOYzXupWSEGg0FrJoRJ63l4uLtQWe2CZ8=";
-      x86_64-darwin = "sha256-XZN1jTv/FhJXuFxZ6D6h/vFMdKi84Z9UWfj2CrMgBBA=";
-      aarch64-darwin = "sha256-lsODOBkZ4+x5D6Er2/paTzAMKZvqIBVkKrWHh5iRvrk=";
+      x86_64-linux = "sha256-rNKYihIbdfGZEIGURyty+hS82ftHsqV1YjqM8VYB6RU=";
+      x86_64-darwin = "sha256-s7gZSr/5VOg8bqxGPckK7UxDpvmsNgdhjDg+lxnO/lU=";
+      aarch64-darwin = "sha256-UzAGYIKd5swtl6XNFVTPeg0nqwKKtu0e36+LA0Qiusw=";
     }.${system} or throwSystem;
   };
 

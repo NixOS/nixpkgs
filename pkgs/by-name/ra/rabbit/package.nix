@@ -5,19 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rabbit";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
     rev = "refs/tags/${version}";
-    hash = "sha256-l5k5wPEd6/x7xHc+GlnoyTry7GRTnzNiTLxrLAZFVzQ=";
+    hash = "sha256-diy94QhgLHLvkb1kKhGDxiHAyQ43BNJUXjHFYahEDpw=";
   };
 
   pythonRelaxDeps = [
     "numpy"
+    "scikit-learn"
     "scipy"
+    "tqdm"
   ];
 
   build-system = [
@@ -26,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
+    joblib
     numpy
     pandas
     python-dateutil
@@ -34,7 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     scipy
     tqdm
     urllib3
-    xgboost
   ];
 
   pythonImportsCheck = [ "rabbit" ];

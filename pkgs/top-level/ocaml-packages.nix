@@ -64,6 +64,8 @@ let
 
     b0 = callPackage ../development/ocaml-modules/b0 { };
 
+    backoff = callPackage ../development/ocaml-modules/backoff { };
+
     bap = janeStreet_0_15.bap;
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -1198,6 +1200,10 @@ let
     msat = callPackage ../development/ocaml-modules/msat { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
+
+    multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
+
+    multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 

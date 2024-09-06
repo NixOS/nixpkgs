@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch2
 , govee-led-wez
+, pytest-cov-stub
 , pytest-homeassistant-custom-component
 , pytestCheckHook
 }:
@@ -26,11 +27,6 @@ buildHomeAssistantComponent {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=custom_components" ""
-  '';
-
   dontBuild = true;
 
   propagatedBuildInputs = [
@@ -41,10 +37,10 @@ buildHomeAssistantComponent {
   doCheck = false;
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-homeassistant-custom-component
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Control Govee lights via the LAN API from Home Assistant";

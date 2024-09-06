@@ -110,16 +110,16 @@ There's some limitations as to which packages can be defined using this structur
 
 ## Validation
 
-CI performs [certain checks](https://github.com/NixOS/nixpkgs-check-by-name?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
-This is done using the [`nixpkgs-check-by-name` tool](https://github.com/NixOS/nixpkgs-check-by-name).
+CI performs [certain checks](https://github.com/NixOS/nixpkgs-vet?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
+This is done using the [`nixpkgs-vet` tool](https://github.com/NixOS/nixpkgs-vet).
 
 You can locally emulate the CI check using
 
 ```
-$ ./maintainers/scripts/check-by-name.sh master
+$ ./ci/nixpkgs-vet.sh master
 ```
 
-See [here](../../.github/workflows/check-by-name.yml) for more info.
+See [here](../../.github/workflows/nixpkgs-vet.yml) for more info.
 
 ## Recommendation for new packages with multiple versions
 

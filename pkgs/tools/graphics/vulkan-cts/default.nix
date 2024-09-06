@@ -91,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   cmakeFlags = [
     # Fix cts cmake not coping with absolute install dirs
     "-DCMAKE_INSTALL_BINDIR=bin"

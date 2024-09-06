@@ -163,6 +163,20 @@ in
   };
 
   config = {
+    warnings =
+      let
+        paths = lib.filter (path:
+          path != null && lib.hasPrefix "/etc/tmpfiles.d/" path
+        ) (map (path: path.target) config.boot.initrd.systemd.storePaths);
+      in
+      lib.optional (lib.length paths > 0) (lib.concatStringsSep " " [
+        "Files inside /etc/tmpfiles.d in the initrd need to be created with"
+        "boot.initrd.systemd.tmpfiles.settings."
+        "Creating them by hand using boot.initrd.systemd.contents or"
+        "boot.initrd.systemd.storePaths will lead to errors in the future."
+        "Found these problematic files: ${lib.concatStringsSep ", " paths}"
+      ]);
+
     systemd.additionalUpstreamSystemUnits = [
       "systemd-tmpfiles-clean.service"
       "systemd-tmpfiles-clean.timer"

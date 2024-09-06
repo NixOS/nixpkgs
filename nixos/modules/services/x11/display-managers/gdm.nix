@@ -153,7 +153,7 @@ in
           XDG_DATA_DIRS = lib.makeSearchPath "share" [
             gdm # for gnome-login.session
             config.services.displayManager.sessionData.desktops
-            pkgs.gnome.gnome-control-center # for accessibility icon
+            pkgs.gnome-control-center # for accessibility icon
             pkgs.adwaita-icon-theme
             pkgs.hicolor-icon-theme # empty icon theme as a base
           ];
@@ -181,7 +181,11 @@ in
     ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
-    systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
+    systemd.packages = with pkgs.gnome; [
+      gdm
+      pkgs.gnome-session
+      pkgs.gnome-shell
+    ];
     environment.systemPackages = [ pkgs.adwaita-icon-theme ];
 
     # We dont use the upstream gdm service
@@ -232,7 +236,7 @@ in
       EnvironmentFile = "-/etc/locale.conf";
     };
 
-    systemd.services.display-manager.path = [ pkgs.gnome.gnome-session ];
+    systemd.services.display-manager.path = [ pkgs.gnome-session ];
 
     # Allow choosing an user account
     services.accounts-daemon.enable = true;

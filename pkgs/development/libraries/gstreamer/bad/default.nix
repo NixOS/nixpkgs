@@ -11,6 +11,7 @@
 , orc
 , gstreamer
 , gobject-introspection
+, wayland-scanner
 , enableZbar ? false
 , faacSupport ? false
 , faac
@@ -142,7 +143,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
-    wayland # for wayland-scanner
+    wayland-scanner
   ];
 
   buildInputs = [

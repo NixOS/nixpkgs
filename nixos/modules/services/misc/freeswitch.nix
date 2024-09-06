@@ -1,5 +1,4 @@
 { config, lib, pkgs, ...}:
-with lib;
 let
   cfg = config.services.freeswitch;
   pkg = cfg.package;
@@ -7,7 +6,7 @@ let
     mkdir -p $out
     cp -rT ${cfg.configTemplate} $out
     chmod -R +w $out
-    ${concatStringsSep "\n" (mapAttrsToList (fileName: filePath: ''
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (fileName: filePath: ''
       mkdir -p $out/$(dirname ${fileName})
       cp ${filePath} $out/${fileName}
     '') cfg.configDir)}
@@ -18,10 +17,10 @@ let
 in {
   options = {
     services.freeswitch = {
-      enable = mkEnableOption "FreeSWITCH";
-      enableReload = mkOption {
+      enable = lib.mkEnableOption "FreeSWITCH";
+      enableReload = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Issue the `reloadxml` command to FreeSWITCH when configuration directory changes (instead of restart).
           See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Reloading) for more info.
@@ -29,21 +28,21 @@ in {
           See also `systemd.services.*.restartIfChanged`.
         '';
       };
-      configTemplate = mkOption {
-        type = types.path;
+      configTemplate = lib.mkOption {
+        type = lib.types.path;
         default = "${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
-        defaultText = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
-        example = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
+        defaultText = lib.literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
+        example = lib.literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
         description = ''
           Configuration template to use.
           See available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
           You can also set your own configuration directory.
         '';
       };
-      configDir = mkOption {
-        type = with types; attrsOf path;
+      configDir = lib.mkOption {
+        type = with lib.types; attrsOf path;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "freeswitch.xml" = ./freeswitch.xml;
             "dialplan/default.xml" = pkgs.writeText "dialplan-default.xml" '''
@@ -58,14 +57,14 @@ in {
           Also check available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
         '';
       };
-      package = mkPackageOption pkgs "freeswitch" { };
+      package = lib.mkPackageOption pkgs "freeswitch" { };
     };
   };
-  config = mkIf cfg.enable {
-    environment.etc.freeswitch = mkIf cfg.enableReload {
+  config = lib.mkIf cfg.enable {
+    environment.etc.freeswitch = lib.mkIf cfg.enableReload {
       source = configDirectory;
     };
-    systemd.services.freeswitch-config-reload = mkIf cfg.enableReload {
+    systemd.services.freeswitch-config-reload = lib.mkIf cfg.enableReload {
       before = [ "freeswitch.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configDirectory ];

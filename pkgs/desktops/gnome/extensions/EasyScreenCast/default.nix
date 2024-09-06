@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome, gettext, jq, intltool }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome-shell, gettext, jq, intltool }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (substituteAll {
       src = ./fix-gi-path.patch;
-      gnomeShell = gnome.gnome-shell;
+      gnomeShell = gnome-shell;
     })
   ];
 

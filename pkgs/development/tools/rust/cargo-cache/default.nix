@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  checkFlagsArray = [ "offline_tests" ];
+  checkFlags = [ "offline_tests" ];
 
   meta = with lib; {
     description = "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";

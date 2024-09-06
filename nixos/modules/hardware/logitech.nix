@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.hardware.logitech;
 
@@ -12,25 +9,25 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "hardware" "logitech" "enable" ] [ "hardware" "logitech" "wireless" "enable" ])
-    (mkRenamedOptionModule [ "hardware" "logitech" "enableGraphical" ] [ "hardware" "logitech" "wireless" "enableGraphical" ])
+    (lib.mkRenamedOptionModule [ "hardware" "logitech" "enable" ] [ "hardware" "logitech" "wireless" "enable" ])
+    (lib.mkRenamedOptionModule [ "hardware" "logitech" "enableGraphical" ] [ "hardware" "logitech" "wireless" "enableGraphical" ])
   ];
 
   options.hardware.logitech = {
 
     lcd = {
-      enable = mkEnableOption "support for Logitech LCD Devices";
+      enable = lib.mkEnableOption "support for Logitech LCD Devices";
 
-      startWhenNeeded = mkOption {
-        type = types.bool;
+      startWhenNeeded = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Only run the service when an actual supported device is plugged.
         '';
       };
 
-      devices = mkOption {
-        type = types.listOf types.str;
+      devices = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "0a07" "c222" "c225" "c227" "c251" ];
         description = ''
           List of USB device ids supported by g15daemon.
@@ -41,10 +38,10 @@ in
     };
 
     wireless = {
-      enable = mkEnableOption "support for Logitech Wireless Devices";
+      enable = lib.mkEnableOption "support for Logitech Wireless Devices";
 
-      enableGraphical = mkOption {
-        type = types.bool;
+      enableGraphical = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable graphical support applications.";
       };
