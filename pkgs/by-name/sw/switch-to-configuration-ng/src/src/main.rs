@@ -1678,6 +1678,7 @@ won't take effect until you reboot the system.
                 std::process::Command::new(&myself)
                     .uid(uid)
                     .gid(gid)
+                    .env_clear()
                     .env("XDG_RUNTIME_DIR", runtime_path)
                     .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
                     .spawn()
