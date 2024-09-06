@@ -1459,7 +1459,7 @@
     patches = [ ./patches/ranger.nvim/fix-paths.patch ];
 
     postPatch = ''
-      substituteInPlace lua/ranger-nvim.lua --replace '@ranger@' ${ranger}
+      substituteInPlace lua/ranger-nvim.lua --replace '@ranger@' ${ranger}/bin/ranger
     '';
   };
 
