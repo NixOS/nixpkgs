@@ -1,43 +1,48 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  langchain-core,
+  langgraph-checkpoint,
+
+  # tests
   aiosqlite,
   dataclasses-json,
-  fetchFromGitHub,
   grandalf,
   httpx,
-  langchain-core,
-  langgraph-sdk,
-  langgraph-checkpoint,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
-  psycopg,
   langsmith,
-  poetry-core,
+  psycopg,
   pydantic,
   pytest-asyncio,
   pytest-mock,
   pytest-repeat,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   postgresql,
   postgresqlTestHook,
+
+  # passthru
+  langgraph-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.4";
+  version = "0.2.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-jUBaWXrHCXAph8EGEJnH7lbKIyjQ8oPt4eDMyIkbURo=";
+    hash = "sha256-S1Y/RyUruUqp6MPZQ+uc73+RvFlZPUX2MbNmTqQ2kE0=";
   };
 
   postgresqlTestSetupPost = ''
