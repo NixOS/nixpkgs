@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fasmg";
-  version = "j27m";
+  version = "kd3c";
 
   src = fetchzip {
     url = "https://flatassembler.net/fasmg.${version}.zip";
-    sha256 = "0qmklb24n3r0my2risid8r61pi88gqrvm1c0xvyd0bp1ans6d7zd";
+    sha256 = "sha256-duxune/UjXppKf/yWp7y85rpBn4EIC6JcZPNDhScsEA=";
     stripRoot = false;
   };
 
