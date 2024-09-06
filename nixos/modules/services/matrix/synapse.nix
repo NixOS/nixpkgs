@@ -1303,6 +1303,23 @@ in {
       user = "matrix-synapse";
     };
 
+    services.postgresql = lib.mkIf hasLocalPostgresDB {
+      ensureUsers = [{
+        name = cfg.settings.database.args.user;
+      }];
+      ensureDatabases = [
+        {
+          name = cfg.settings.database.args.database;
+          withOptions = {
+            owner = cfg.settings.database.args.user;
+            template = "template0";
+            encoding = "UTF8";
+            locale = "C";
+          };
+        }
+      ];
+    };
+
     environment.systemPackages = lib.optionals cfg.enableRegistrationScript [
       registerNewMatrixUser
     ];
