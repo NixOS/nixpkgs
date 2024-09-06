@@ -5272,12 +5272,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  gpu-burn = callPackage ../applications/misc/gpu-burn {
-    # gpu-burn doesn't build on gcc11. CUDA 11.3 is the last version to use
-    # pre-gcc11, in particular gcc9.
-    stdenv = gcc9Stdenv;
-  };
-
   gpu-viewer = callPackage ../applications/misc/gpu-viewer { };
 
   greg = callPackage ../applications/audio/greg {
@@ -13778,11 +13772,6 @@ with pkgs;
   wasm-strip = nodePackages."@webassemblyjs/wasm-strip";
   wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen-1.11.1";
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt-1.11.1";
-
-  wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    nodejs = nodejs_latest;
-  };
 
   wasm-tools = callPackage ../tools/misc/wasm-tools { };
 
