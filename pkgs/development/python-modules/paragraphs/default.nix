@@ -2,41 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
-  paragraphs,
-  lxml,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "docx2python";
-  version = "3.0.0";
+  pname = "paragraphs";
+  version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ShayHill";
-    repo = "docx2python";
+    repo = "paragraphs";
     rev = "refs/tags/${version}";
-    hash = "sha256-ucLDdfmLAWcGunOKvh8tBQknXTPI1qOqyXgVGjQOGoQ=";
+    hash = "sha256-u5/oNOCLdvfQVEIEpraeNLjTUoh3eJQ6qSExnkzTmNw=";
   };
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [
-    paragraphs
-    lxml
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "docx2python" ];
+  pythonImportsCheck = [ "paragraphs" ];
 
   meta = {
-    homepage = "https://github.com/ShayHill/docx2python";
-    description = "Extract docx headers, footers, (formatted) text, footnotes, endnotes, properties, and images";
+    homepage = "https://github.com/ShayHill/paragraphs";
+    description = "Incorporate long strings painlessly, beautifully into Python code";
     changelog = "https://github.com/ShayHill/docx2python/blob/${src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ sigmanificient ];
     license = lib.licenses.mit;

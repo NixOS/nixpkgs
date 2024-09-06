@@ -9526,6 +9526,8 @@ self: super: with self; {
 
   para = callPackage ../development/python-modules/para { };
 
+  paragraphs = callPackage ../development/python-modules/paragraphs { };
+
   param = callPackage ../development/python-modules/param { };
 
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
