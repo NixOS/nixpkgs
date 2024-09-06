@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vid.stab";
-  version = "unstable-2022-05-30";
+  version = "1.1.1-unstable-2024-06-15";
 
   src = fetchFromGitHub {
     owner = "georgmartius";
     repo = pname;
-    rev = "90c76aca2cb06c3ff6f7476a7cd6851b39436656";
-    sha256 = "sha256-p1VRnkBeUpET3O2FmaJMyN5/EoSOQLdmRIVbzZcQaKY=";
+    rev = "8dff7ad3c10ac663745f2263037f6e42b993519c";
+    sha256 = "sha256-WqTNDGGAxP1pPZbZM6aU+2eJh+L0JqlOoySdx9ttoI8=";
   };
 
   nativeBuildInputs = [ cmake ];
