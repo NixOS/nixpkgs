@@ -674,10 +674,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-prboom",
-            "rev": "2972aa92e0490194a37c9fb849ffc420abeb0ce4",
-            "hash": "sha256-VXrhSZpGNjfxU34b2gzxaPe0YKXv4K7+vB7MrC7/bkY="
+            "rev": "2a96b2a22cf98bdd508b1efc31afceb78717f4ba",
+            "hash": "sha256-Pf6U9RTkMUsRl2mOU6ooFPhVu0G9MZQjJYKVQ9WneIE="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-09-05"
     },
     "prosystem": {
         "fetcher": "fetchFromGitHub",
