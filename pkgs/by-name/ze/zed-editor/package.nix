@@ -30,12 +30,59 @@
   cargo-about,
   testers,
   zed-editor,
+  buildFHSEnv,
 
   withGLES ? false,
 }:
 
 assert withGLES -> stdenv.isLinux;
 
+let
+  executableName = "zed";
+  # Based on vscode.fhs
+  # Zed allows for users to download and use extensions
+  # which often include the usage of pre-built binaries.
+  # See #309662
+  #
+  # buildFHSEnv allows for users to use the existing Zed
+  # extension tooling without significant pain.
+  fhs =
+    {
+      additionalPkgs ? pkgs: [ ],
+    }:
+    buildFHSEnv {
+      # also determines the name of the wrapped command
+      name = executableName;
+
+      # additional libraries which are commonly needed for extensions
+      targetPkgs =
+        pkgs:
+        (with pkgs; [
+          # ld-linux-x86-64-linux.so.2 and others
+          glibc
+        ])
+        ++ additionalPkgs pkgs;
+
+      # symlink shared assets, including icons and desktop entries
+      extraInstallCommands = ''
+        ln -s "${zed-editor}/share" "$out/"
+      '';
+
+      runScript = "${zed-editor}/bin/${executableName}";
+
+      passthru = {
+        inherit executableName;
+        inherit (zed-editor) pname version;
+      };
+
+      meta = zed-editor.meta // {
+        description = ''
+          Wrapped variant of ${zed-editor.pname} which launches in a FHS compatible environment.
+          Should allow for easy usage of extensions without nix-specific modifications.
+        '';
+      };
+    };
+in
 rustPlatform.buildRustPackage rec {
   pname = "zed";
   version = "0.151.1";
@@ -202,6 +249,8 @@ rustPlatform.buildRustPackage rec {
       inherit version;
       package = zed-editor;
     };
+    fhs = fhs { };
+    fhsWithPackages = f: fhs { additionalPkgs = f; };
   };
 
   meta = {
