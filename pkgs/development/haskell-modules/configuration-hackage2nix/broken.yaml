@@ -799,7 +799,6 @@ broken-packages:
   - clanki # failure in job https://hydra.nixos.org/build/233196970 at 2023-09-02
   - clarifai # failure in job https://hydra.nixos.org/build/233229480 at 2023-09-02
   - CLASE # failure in job https://hydra.nixos.org/build/233234459 at 2023-09-02
-  - clash-prelude # failure in job https://hydra.nixos.org/build/233252128 at 2023-09-02
   - Clash-Royale-Hack-Cheats # failure in job https://hydra.nixos.org/build/233216034 at 2023-09-02
   - ClasshSS # failure in job https://hydra.nixos.org/build/255688076 at 2024-04-16
   - ClassLaws # failure in job https://hydra.nixos.org/build/233243019 at 2023-09-02
