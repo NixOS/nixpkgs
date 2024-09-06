@@ -652,11 +652,11 @@
         "src": {
             "owner": "jpd002",
             "repo": "Play-",
-            "rev": "663a1d9a75f72c34befc304901ad6063f34dc9d3",
-            "hash": "sha256-j3lqwp2qKkt2ytHQvs4IuzpFfA++uVwgz1mupOuCzH8=",
+            "rev": "9752b303037186a2e2581b864bc25136402cdc79",
+            "hash": "sha256-zJFgZjE9CvozH/5hFdnGsVL6q2Pb4QFvyipebzYjB3g=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-08-27"
+        "version": "unstable-2024-09-04"
     },
     "ppsspp": {
         "fetcher": "fetchFromGitHub",
