@@ -80,6 +80,47 @@ in
       '';
     };
 
+
+    preBuildHook = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+
+      default = null;
+
+      description = ''
+        A shell splice run before the new configuration is built.
+      '';
+    };
+
+    postBuildHook = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+
+      default = null;
+
+      description = ''
+        A shell splice run after the new configuration is built.
+      '';
+    };
+
+    preActivationHook = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+
+      default = null;
+
+      description = ''
+        A shell splice run before the new configuration is activated.
+      '';
+    };
+
+    postActivationHook = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+
+      default = null;
+
+      description = ''
+        Shell splice run after the new configuration is activated.
+      '';
+    };
+
     repository = lib.mkOption {
       type =
         with lib.types;
@@ -152,9 +193,11 @@ in
 
       after = requires;
 
-      environment.GIT_SSH_COMMAND = lib.mkIf (
-        cfg.sshKeyFile != null
-      ) "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
+      environment = {
+        GIT_SSH_COMMAND = lib.mkIf (cfg.sshKeyFile != null)
+          "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
+        REPO_DIR = repositoryDirectory;
+      };
 
       restartIfChanged = false;
 
@@ -178,6 +221,8 @@ in
 
         ${gitWithRepo} checkout FETCH_HEAD
 
+        ${toString cfg.preBuildHook}
+
         nix-build${renderNixArgs cfg.nixArgs} ${
           lib.cli.toGNUCommandLineShell { } {
             attr = cfg.nixAttribute;
@@ -185,11 +230,16 @@ in
           }
         } ${lib.escapeShellArg "${repositoryDirectory}${cfg.nixFile}"}
 
+        ${toString cfg.postBuildHook}
+        ${toString cfg.preActivationHook}
+
         ${lib.optionalString (
           cfg.switchCommand != "test"
         ) "nix-env --profile /nix/var/nix/profiles/system --set ${outPath}"}
 
         ${outPath}/bin/switch-to-configuration ${cfg.switchCommand}
+
+        ${toString cfg.postActivationHook}
 
         rm ${outPath}
 
