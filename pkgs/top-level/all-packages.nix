@@ -16616,7 +16616,11 @@ with pkgs;
   zuo = callPackage ../development/interpreters/zuo { };
 
   ### LUA interpreters
-  emilua = callPackage ../development/interpreters/emilua { };
+  emiluaPlugins = recurseIntoAttrs
+    (callPackage ./emilua-plugins.nix {}
+      (callPackage ../development/interpreters/emilua { }));
+
+  inherit (emiluaPlugins) emilua;
 
   luaInterpreters = callPackage ./../development/interpreters/lua-5 { };
   inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_2_1 luajit_2_0 luajit_openresty;
@@ -31995,8 +31999,6 @@ with pkgs;
   };
 
   musescore = qt6.callPackage ../applications/audio/musescore { };
-
-  music-player = callPackage ../applications/audio/music-player { };
 
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
