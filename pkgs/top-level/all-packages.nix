@@ -38635,8 +38635,6 @@ with pkgs;
 
   pt = callPackage ../applications/misc/pt { };
 
-  primme = callPackage ../development/libraries/science/math/primme { };
-
   protocol = callPackage ../applications/networking/protocol { };
 
   pykms = callPackage ../tools/networking/pykms { };
