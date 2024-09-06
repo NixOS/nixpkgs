@@ -105,11 +105,10 @@ let
     inherit default; # Default done via ffmpegFlag type
     description =
       let
-        additionalDescription = ": ${default.description}.";
         hasDescription = default.description or null != null;
+        additionalDescription = lib.optionalString hasDescription ": ${default.description}";
       in
-        "Control ${name} support in ffmpeg"
-        + (if hasDescription then additionalDescription else ".");
+        "Control ${name} support in ffmpeg${additionalDescription}.";
   };
 
   inherit (variants) headless small full;
