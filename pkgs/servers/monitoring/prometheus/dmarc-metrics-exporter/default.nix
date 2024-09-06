@@ -8,8 +8,6 @@ python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
   version = "1.1.0";
 
-  disabled = python3.pythonOlder "3.8";
-
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -21,11 +19,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     with python3.pkgs;
     [
       bite-parser
