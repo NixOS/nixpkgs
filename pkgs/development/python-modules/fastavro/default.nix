@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.9.5";
+  version = "1.9.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rw0kTSROCFthjo8SrLevBiACNaKpKWcZfIYoc89Q3eM=";
+    hash = "sha256-hKhwQqNJ+QvYf4x9FesNOPg36m8zC6D6dmlhANXCcsk=";
   };
 
   preBuild = ''
