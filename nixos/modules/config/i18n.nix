@@ -13,7 +13,7 @@
         };
         defaultText = lib.literalExpression ''
           pkgs.glibcLocales.override {
-            allLocales = any (x: x == "all") config.i18n.supportedLocales;
+            allLocales = lib.any (x: x == "all") config.i18n.supportedLocales;
             locales = config.i18n.supportedLocales;
           }
         '';

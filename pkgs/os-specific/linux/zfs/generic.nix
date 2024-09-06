@@ -184,6 +184,7 @@ let
 
       # Add Bash completions.
       install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+    '' + optionalString (lib.versionOlder version "2.2.6") ''
       (cd $out/share/bash-completion/completions; ln -s zfs zpool)
     '';
 
@@ -201,7 +202,7 @@ let
       inherit enableMail kernelModuleAttribute;
       latestCompatibleLinuxPackages = lib.pipe linuxKernel.packages [
         builtins.attrValues
-        (builtins.filter (kPkgs: (builtins.tryEval kPkgs).success && kPkgs ? kernel && kPkgs.kernel.passthru.isVanilla && kernelCompatible kPkgs.kernel))
+        (builtins.filter (kPkgs: (builtins.tryEval kPkgs).success && kPkgs ? kernel && kPkgs.kernel.passthru.isVanilla && kPkgs.kernel.pname == "linux" && kernelCompatible kPkgs.kernel))
         (builtins.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)))
         lib.last
       ];

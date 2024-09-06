@@ -12,6 +12,7 @@
   python-heatclient,
   python-ironicclient,
   python-keystoneclient,
+  python-magnumclient,
   python-manilaclient,
   python-mistralclient,
   python-neutronclient,
@@ -74,6 +75,7 @@ buildPythonPackage rec {
         python-designateclient
         python-heatclient
         python-ironicclient
+        python-magnumclient
         python-manilaclient
         python-mistralclient
         python-neutronclient

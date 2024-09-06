@@ -239,6 +239,15 @@ in
 
         security.pam.services.samba = {};
         environment.systemPackages = [ cfg.package ];
+        # Like other mount* related commands that need the setuid bit, this is
+        # required too.
+        security.wrappers."mount.cifs" = {
+          program = "mount.cifs";
+          source = "${lib.getBin pkgs.cifs-utils}/bin/mount.cifs";
+          owner = "root";
+          group = "root";
+          setuid = true;
+        };
 
         networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
         networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];

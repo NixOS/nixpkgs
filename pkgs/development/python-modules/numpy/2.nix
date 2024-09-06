@@ -58,7 +58,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-fckNoAgffh2knsTjmO3mqOnMT16+X54GtEPtiJ7pqqI=";
+    hash = "sha256-0M99VbEFE4eAdAWziY76+oYpl7TLqKpdvmV755Sv6v0=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -176,5 +176,6 @@ buildPythonPackage rec {
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl
 , file, openssl, perl, nettools
-, withPerlTools ? false }: let
+, autoreconfHook
+, withPerlTools ? false
+, darwin }: let
 
   perlWithPkgs = perl.withPackages (ps: with ps; [
     JSON
@@ -52,9 +54,15 @@ in stdenv.mkDerivation rec {
       -e "/NETSNMP_CONFIGURE_OPTIONS/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g"
   '';
 
-  nativeBuildInputs = [ nettools file ];
+  nativeBuildInputs = [ nettools file autoreconfHook ];
   buildInputs = [ openssl ]
-    ++ lib.optional withPerlTools perlWithPkgs;
+    ++ lib.optional withPerlTools perlWithPkgs
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.ApplicationServices
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.DiskArbitration
+    ];
 
   enableParallelBuilding = true;
   # Missing dependencies during relinking:
@@ -74,6 +82,6 @@ in stdenv.mkDerivation rec {
     description = "Clients and server for the SNMP network monitoring protocol";
     homepage = "http://www.net-snmp.org/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

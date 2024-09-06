@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, overrideSDK, buildPackages
 , pixman, vde2, alsa-lib, flex, pcre2
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson
 , sigtool
 , makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
-, CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
+, CoreServices, Cocoa, Hypervisor, Kernel, rez, setfile, vmnet
 , guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !minimal, numactl
 , seccompSupport ? stdenv.isLinux && !minimal, libseccomp
@@ -52,6 +52,16 @@
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
+
+  buildPlatformStdenv =
+    if stdenv.buildPlatform.isDarwin then
+      overrideSDK buildPackages.stdenv {
+        # Keep these values in sync with `all-packages.nix`.
+        darwinSdkVersion = "12.3";
+        darwinMinVersion = "12.0";
+      }
+    else
+      buildPackages.stdenv;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,14 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "9.0.2";
+  version = "9.1.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qMP1lq7Olto7AMr7dLqvoNFFFer7jtHuP39cLQ6/ArY=";
+    hash = "sha256-gWtwIqi6fCrDDi4M+XPoJva8yFBTOWAyEsXt6OlNeDQ=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ]
+  depsBuildBuild = [ buildPlatformStdenv.cc ]
     ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
@@ -82,16 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals enableDocs [ python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]
-    ++ lib.optionals (!userOnly) [ dtc ]
-    # workaround, remove once this patch lands: https://lore.kernel.org/qemu-devel/20240805104921.4035256-1-hi@alyssa.is/
-    ++ lib.optionals (hexagonSupport && stdenv.hostPlatform.isStatic) [ pcre2 ];
+    ++ lib.optionals (!userOnly) [ dtc ];
 
   buildInputs = [ zlib glib pixman
     vde2 lzo snappy libtasn1
     gnutls nettle curl libslirp
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile vmnet ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor Kernel rez setfile vmnet ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -129,17 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix-qemu-ga.patch
 
-    # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
-    # support on nix requires utimensat fallback. The patch adding this fallback
-    # set was removed during the process of upstreaming this functionality, and
-    # will still be needed in nix until the macOS SDK reaches 10.13+.
-    ./provide-fallback-for-utimensat.patch
-    # Cocoa clipboard support only works on macOS 10.14+
-    ./revert-ui-cocoa-add-clipboard-support.patch
-    # Standard about panel requires AppKit and macOS 10.13+
-    ./revert-ui-cocoa-use-the-standard-about-panel.patch
-    # Safe area insets require macOS 11+
-    ./remove-ui-cocoa-use-safe-area-insets.patch
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
     (fetchpatch {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
@@ -296,7 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.qemu.org/";
     description = "Generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [ qyliss ] ++ lib.optionals xenSupport xen.meta.maintainers;
     platforms = platforms.unix;
   }
   # toolsOnly: Does not have qemu-kvm and there's no main support tool

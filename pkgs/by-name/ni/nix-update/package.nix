@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-update";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
-    rev = version;
-    hash = "sha256-zWkJs6anDddTiUestnqGVfG1GErLJr5EarWI3DcKZpU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JXls4EgMDAWtd736nXS2lYTUv9QIjRpkCTimxNtMN7Q=";
   };
 
   nativeBuildInputs = [

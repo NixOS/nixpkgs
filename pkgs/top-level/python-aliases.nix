@@ -332,6 +332,13 @@ mapAliases ({
   multi_key_dict = multi-key-dict; # added 2023-11-05
   mutmut = throw "mutmut has been promoted to a top-level attribute name: `pkgs.mutmut`"; # added 2022-10-02
   nbmerge = throw "nbmerge has moved to pkgs.nbmerge"; # added 2024-07-05
+  mypy-boto3-alexaforbusiness = throw "mypy-boto3-alexaforbusiness was removed because it is unmaintained"; # added 2024-09-04
+  mypy-boto3-backupstorage = throw "mypy-boto3-backupstorage was removed because it is unmaintained"; # added 2024-09-04
+  mypy-boto3-gamesparks = throw "mypy-boto3-gamesparks was removed because it is unmaintained"; # added 2024-09-04
+  mypy-boto3-honeycode = throw "mypy-boto3-honeycode was removed because it is unmaintained"; # added 2024-09-04
+  mypy-boto3-iot-roborunner = throw "mypy-boto3-iot-roborunner was removed because it is unmaintained"; # added 2024-09-04
+  mypy-boto3-macie = throw "mypy-boto3-macie was removed because it is unmaintained"; # added 2024-09-04
+  mypy-boto3-mobile = throw "mypy-boto3-mobile was removed because it is unmaintained"; # added 2024-09-04
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   ninja-python = ninja; # add 2022-08-03
@@ -462,6 +469,8 @@ mapAliases ({
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysmart-smartx = pysmart; # added 2021-10-22
   pySmartDL = pysmartdl; # added 2023-10-11
+  pysmi-lextudio = pysmi; # added 2024-07-18
+  pysnmp-lextudio = pysnmp; # added 2024-07-18
   pysparse = throw "pysparse has been abandoned upstream."; # added 2023-02-28
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   PyStemmer = pystemmer; # added 2023-02-19
@@ -501,6 +510,7 @@ mapAliases ({
   pyuavcan = throw "pyuavcan has been renamed to pycyphal and the old package deprecated, use pycyphal instead"; # added 2024-02-09
   pyutilib = throw "pyutilib has been removed, since it is no longer maintained"; # added 2024-07-28
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
+  pyvicare = pyvicare-neo; # added 2024-08-31
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
