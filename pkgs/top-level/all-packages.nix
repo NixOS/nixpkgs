@@ -7239,8 +7239,6 @@ with pkgs;
 
   duplicacy = callPackage ../tools/backup/duplicacy { };
 
-  duplicati = callPackage ../tools/backup/duplicati { };
-
   duplicity = callPackage ../tools/backup/duplicity { };
 
   duply = callPackage ../tools/backup/duply { };
