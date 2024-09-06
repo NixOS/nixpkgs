@@ -11458,6 +11458,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  pizauth = callPackage ../tools/misc/pizauth { };
+
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
