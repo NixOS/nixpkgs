@@ -11,17 +11,19 @@
 
 
 let
-  isInVariant = v:
+  # Checks whether the given variant of the flag is contained in the currently
+  # active variant. full ⊃ small ⊃ headless
+  isInVariant = flagVariant:
     let
-      checks = rec {
+      checks = {
         full = variant == variants.full;
-        small = variant == variants.small || full;
-        headless = variant == variants.headless || small;
+        small = variant == variants.small || checks.full;
+        headless = variant == variants.headless || checks.small;
       };
-    in checks.${v} or false;
+    in checks.${flagVariant} or false;
   ffmpegFlag = lib.types.submodule ({ config, name, ... }: {
     options = {
-      enable = lib.mkEnableOption "Whether to enable this feature." // lib.mkOption {
+      enable = lib.mkEnableOption "Whether to enable ${name} support in ffmpeg." // lib.mkOption {
         # TODO this works but doesn't allow for convenient overrides yet. You
         # can easily override enable = true but it will still be gated behind
         # the variant check.
@@ -30,7 +32,7 @@ let
       packages = lib.mkOption {
         type = with lib.types; attrsOf package;
         default = { };
-        description = "The dependencies required to enable this feature.";
+        description = "The dependencies required to enable ${name} support.";
       };
       version = lib.mkOption {
         type = lib.types.str;
@@ -106,7 +108,7 @@ let
         additionalDescription = ": ${default.description}.";
         hasDescription = default.description or null != null;
       in
-        "Whether to enable ${name} in ffmpeg"
+        "Control ${name} support in ffmpeg"
         + (if hasDescription then additionalDescription else ".");
   };
 
