@@ -77,6 +77,7 @@
   tbb,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   waylandSupport ? stdenv.isLinux,
   zlib,
   zstd,
@@ -223,7 +224,10 @@ stdenv.mkDerivation (finalAttrs: {
       addDriverRunpath
       cudaPackages.cuda_nvcc
     ]
-    ++ lib.optionals waylandSupport [ pkg-config ];
+    ++ lib.optionals waylandSupport [
+      pkg-config
+      wayland-scanner
+    ];
 
   buildInputs =
     [
