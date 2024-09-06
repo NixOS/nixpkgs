@@ -7016,6 +7016,12 @@
     githubId = 1202014;
     name = "Falco Peijnenburg";
   };
+  fqidz = {
+    email = "faidz.arante@gmail.com";
+    github = "fqidz";
+    githubId = 82884264;
+    name = "Faidz Arante";
+  };
   fragamus = {
     email = "innovative.engineer@gmail.com";
     github = "fragamus";
@@ -10867,12 +10873,6 @@
     github = "Kidsan";
     githubId = 8798449;
     name = "kidsan";
-  };
-  kierdavis = {
-    email = "kierdavis@gmail.com";
-    github = "kierdavis";
-    githubId = 845652;
-    name = "Kier Davis";
   };
   kiike = {
     email = "me@enric.me";
@@ -16973,6 +16973,12 @@
     github = "q3k";
     githubId = 315234;
     name = "Serge Bazanski";
+  };
+  qaidvoid = {
+    email = "contact@qaidvoid.dev";
+    github = "qaidvoid";
+    githubId = 12017109;
+    name = "Rabindra Dhakal";
   };
   qbit = {
     name = "Aaron Bieber";
