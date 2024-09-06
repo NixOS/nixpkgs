@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ruff-lsp";
-  version = "0.0.55";
+  version = "0.0.56";
   pyproject = true;
   disabled = python3.pythonOlder "3.7";
 
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FFIZ8fDAPK03tnkjd2AUrz7iL8S9FziJQJKOxAisu48=";
+    hash = "sha256-L5bfGW5R9kDCK8zcFh+a/zquJefwKxOB0JdYDTyPFuQ=";
   };
 
   postPatch = ''
