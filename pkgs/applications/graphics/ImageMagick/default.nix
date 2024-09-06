@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
     inherit nixos-icons;
     inherit (perlPackages) ImageMagick;
-    inherit (python3.pkgs) img2pdf;
+    inherit (python3.pkgs) img2pdf willow;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       version = lib.head (lib.splitString "-" finalAttrs.version);

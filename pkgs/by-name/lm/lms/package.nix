@@ -16,16 +16,17 @@
   zlib,
   libSM,
   libICE,
+  stb,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.51.1";
+  version = "3.56.0";
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-5lEbrB218EVVHIzo1efvQYybut2OpfDKpLlRs0brhXg=";
+    hash = "sha256-o/wgh/PtFcTOmfl5H1cc1cTsWFvEnVQYhh4hPTnLNMU=";
   };
 
   strictDeps = true;
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     zlib
     libSM
     libICE
+    stb
   ];
 
   postPatch = ''

@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-MPeyPTkxpi6iw/BT5m4S7jVBD0c2zG2rsv+UZWQxpUU=";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postFixup = ''
     wrapProgram $out/bin/sink-rotate \

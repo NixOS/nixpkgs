@@ -54,10 +54,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # test fails with sandbox enabled
-    "test_checksum"
-  ];
+  disabledTests =
+    [
+      # Test requires network access
+      "test_config_expansions"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Test fails with sandbox enabled
+      "test_checksum"
+    ];
 
   pythonImportsCheck = [ "sshfs" ];
 

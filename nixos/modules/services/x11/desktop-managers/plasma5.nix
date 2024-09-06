@@ -357,6 +357,9 @@ in
         pkgs.media-player-info
       ];
 
+      # Enable screen reader by default
+      services.orca.enable = mkDefault true;
+
       services.displayManager.sddm = {
         theme = mkDefault "breeze";
       };

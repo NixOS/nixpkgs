@@ -175,6 +175,7 @@ in
         # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
         pkgs.pantheon.mutter
       ];
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
       systemd.packages = with pkgs; [
         gnome-session
         pantheon.gala
@@ -211,7 +212,6 @@ in
         adwaita-icon-theme
         gtk3.out # for gtk-launch program
         onboard
-        orca # elementary/greeter#668
         sound-theme-freedesktop
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
       ]) ++ (with pkgs.pantheon; [

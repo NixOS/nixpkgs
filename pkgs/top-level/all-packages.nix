@@ -18854,8 +18854,6 @@ with pkgs;
 
   shellharden = callPackage ../development/tools/shellharden { };
 
-  schemaspy = callPackage ../development/tools/database/schemaspy { };
-
   scenebuilder = callPackage ../development/tools/scenebuilder { };
 
   scenic-view = callPackage ../development/tools/scenic-view { };
@@ -22943,6 +22941,7 @@ with pkgs;
   glanceclient = with python311Packages; toPythonApplication python-glanceclient;
   heatclient = with python311Packages; toPythonApplication python-heatclient;
   ironicclient = with python311Packages; toPythonApplication python-ironicclient;
+  magnumclient = with python311Packages; toPythonApplication python-magnumclient;
   manilaclient = with python311Packages; toPythonApplication python-manilaclient;
   mistralclient = with python311Packages; toPythonApplication python-mistralclient;
   swiftclient = with python311Packages; toPythonApplication python-swiftclient;
@@ -23441,19 +23440,7 @@ with pkgs;
 
   scope-lite = callPackage ../development/libraries/scope-lite { };
 
-  SDL_classic = callPackage ../development/libraries/SDL ({
-    inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
-  } // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
-    # libGLU doesn’t work with Android’s SDL
-    libGLU = null;
-  });
-
-  SDL_compat = callPackage ../development/libraries/SDL_compat {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  SDL = SDL_classic;
+  SDL = SDL1;
 
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
@@ -25108,6 +25095,25 @@ with pkgs;
 
   meteor = callPackage ../servers/meteor { };
 
+  micro-full = micro.wrapper.override {
+    extraPackages = [
+      wl-clipboard
+      xclip
+    ];
+  };
+
+  micro-with-wl-clipboard = micro.wrapper.override {
+    extraPackages = [
+      wl-clipboard
+    ];
+  };
+
+  micro-with-xclip = micro.wrapper.override {
+    extraPackages = [
+      xclip
+    ];
+  };
+
   micronaut = callPackage ../development/tools/micronaut { };
 
   minio = callPackage ../servers/minio { };
@@ -25944,8 +25950,6 @@ with pkgs;
   zipkin = callPackage ../servers/monitoring/zipkin { };
 
   ### SERVERS / GEOSPATIAL
-
-  fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
 
   martin = callPackage ../servers/geospatial/martin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
@@ -28899,7 +28903,7 @@ with pkgs;
 
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
-  backintime-qt = libsForQt5.callPackage ../applications/networking/sync/backintime/qt.nix { };
+  backintime-qt = qt6.callPackage ../applications/networking/sync/backintime/qt.nix { };
 
   backintime = backintime-qt;
 
@@ -31072,12 +31076,13 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  inherit (callPackage ../applications/networking/cluster/k3s {
-    buildGoModule = buildGo121Module;
-    go = go_1_21;
-  }) k3s_1_28 k3s_1_29;
-  inherit (callPackage ../applications/networking/cluster/k3s { }) k3s_1_30;
-  k3s = k3s_1_30;
+  inherit (callPackage ../applications/networking/cluster/k3s { })
+    k3s_1_28
+    k3s_1_29
+    k3s_1_30
+    k3s_1_31
+    ;
+  k3s = k3s_1_31;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 
@@ -31382,8 +31387,6 @@ with pkgs;
   legitify = callPackage ../development/tools/legitify { };
 
   lens = callPackage ../applications/networking/cluster/lens { };
-
-  openlens = callPackage ../applications/networking/cluster/openlens { };
 
   leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
 
@@ -31875,10 +31878,6 @@ with pkgs;
 
   clerk = callPackage ../applications/audio/clerk { };
 
-  jujutsu = callPackage ../applications/version-management/jujutsu {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
-
   nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
@@ -32010,7 +32009,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  musescore = libsForQt5.callPackage ../applications/audio/musescore { };
+  musescore = qt6.callPackage ../applications/audio/musescore { };
 
   music-player = callPackage ../applications/audio/music-player { };
 
@@ -32817,9 +32816,17 @@ with pkgs;
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Hypervisor vmnet;
+    inherit (darwin.apple_sdk_12_3.frameworks) CoreServices Cocoa Hypervisor Kernel vmnet;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
+    stdenv =
+      if stdenv.hostPlatform.isDarwin then
+        overrideSDK stdenv {
+          darwinSdkVersion = "12.3";
+          darwinMinVersion = "12.0";
+        }
+      else
+        stdenv;
   };
 
   qemu-python-utils = python3Packages.toPythonApplication (

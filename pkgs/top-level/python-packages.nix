@@ -2706,6 +2706,8 @@ self: super: with self; {
     ctranslate2-cpp = pkgs.ctranslate2;
   };
 
+  ctypesgen = callPackage ../development/python-modules/ctypesgen { };
+
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
@@ -4355,6 +4357,8 @@ self: super: with self; {
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
+
+  fickling = callPackage ../development/python-modules/fickling { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
 
@@ -6616,6 +6620,8 @@ self: super: with self; {
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
 
+  kaleido = callPackage ../development/python-modules/kaleido { };
+
   kanidm = callPackage ../development/python-modules/kanidm { };
 
   kaptan = callPackage ../development/python-modules/kaptan { };
@@ -7934,6 +7940,8 @@ self: super: with self; {
   mkdocstrings-python = callPackage ../development/python-modules/mkdocstrings-python { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
+
+  mktestdocs = callPackage ../development/python-modules/mktestdocs { };
 
   ml-collections = callPackage ../development/python-modules/ml-collections { };
 
@@ -10106,6 +10114,8 @@ self: super: with self; {
   pynobo = callPackage ../development/python-modules/pynobo { };
 
   pynotifier = callPackage ../development/python-modules/pynotifier { };
+
+  pynslookup = callPackage ../development/python-modules/pynslookup { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
 
@@ -12648,6 +12658,8 @@ self: super: with self; {
   };
 
   python-magic = callPackage ../development/python-modules/python-magic { };
+
+  python-magnumclient = callPackage ../development/python-modules/python-magnumclient { };
 
   python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
@@ -15757,6 +15769,11 @@ self: super: with self; {
   trytond = callPackage ../development/python-modules/trytond { };
 
   tsfresh = callPackage ../development/python-modules/tsfresh { };
+
+  tsid = toPythonModule (pkgs.tsid.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
 
   tskit = callPackage ../development/python-modules/tskit { };
 

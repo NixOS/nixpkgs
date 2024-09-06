@@ -2279,6 +2279,11 @@
     github = "barinov274";
     githubId = 54442153;
   };
+  BarrOff = {
+    name = "BarrOff";
+    github = "BarrOff";
+    githubId = 58253563;
+  };
   barrucadu = {
     email = "mike@barrucadu.co.uk";
     github = "barrucadu";
@@ -3188,6 +3193,15 @@
     keys = [
       { fingerprint = "7B9E E848 D074 AE03 7A0C  651A 8ED4 DEF7 375A 30C8"; }
       { fingerprint = "208A 2A66 8A2F CDE7 B5D3  8F64 CDDC 792F 6552 51ED"; }
+    ];
+  };
+  cageyv = {
+    email = "pingme@cageyv.dev";
+    github = "cageyv";
+    githubId = 51059484;
+    name = "Vladmir Samoylov";
+    keys = [
+      { fingerprint = "8916 F727 734E 77AB 437F  A33A 19AB 76F5 CEE1 1392"; }
     ];
   };
   CaitlinDavitt = {
@@ -5791,6 +5805,14 @@
     github = "ederoyd46";
     githubId = 119483;
     name = "Matthew Brown";
+  };
+  edgar-vincent = {
+    name = "Edgar Vincent";
+    email = "e-v@posteo.net";
+    matrix = "@edgar.vincent:matrix.org";
+    github = "edgar-vincent";
+    githubId = 63352906;
+    keys = [ { fingerprint = "922F CA48 5FDB 20B1 ED1B  A61F 284D 11D3 33C4 D21B"; } ];
   };
   edlimerkaj = {
     name = "Edli Merkaj";
@@ -12014,13 +12036,6 @@
     github = "LouisDK1";
     githubId = 4969294;
     name = "Louis Tim Larsen";
-  };
-  loveisgrief = {
-    name = "LoveIsGrief";
-    email = "loveisgrief@tuta.io";
-    github = "LoveIsGrief";
-    githubId = 2829538;
-    keys = [ { fingerprint = "9847 4F48 18C6 4E0A F0C5  3529 E96D 1EDF A053 45EB"; } ];
   };
   lovek323 = {
     email = "jason@oconal.id.au";
@@ -20980,6 +20995,14 @@
     github = "tirimia";
     githubId = 11174371;
   };
+  titaniumtown = {
+    email = "titaniumtown@proton.me";
+    name = "Simon Gardling";
+    github = "titaniumtown";
+    githubId = 11786225;
+    matrix = "@titaniumtown:envs.net";
+    keys = [ { fingerprint = "D15E 4754 FE1A EDA1 5A6D  4702 9AB2 8AC1 0ECE 533D"; } ];
+  };
   tjni = {
     email = "43ngvg@masqt.com";
     matrix = "@tni:matrix.org";
@@ -21491,6 +21514,13 @@
     githubId = 12422133;
     name = "Chromo-residuum-opec";
   };
+  uku3lig = {
+    name = "uku";
+    email = "hi@uku.moe";
+    matrix = "@uku:m.uku.moe";
+    github = "uku3lig";
+    githubId = 61147779;
+  };
   ulrikstrid = {
     email = "ulrik.strid@outlook.com";
     github = "ulrikstrid";
@@ -21792,6 +21822,12 @@
     matrix = "@vector1dev:vector1.dev";
     github = "vector1dev";
     githubId = 127302590;
+  };
+  vedantmgoyal9 = {
+    name = "Vedant Mohan Goyal";
+    matrix = "@vedantmgoyal:beeper.com";
+    github = "vedantmgoyal9";
+    githubId = 83997633;
   };
   veehaitch = {
     name = "Vincent Haupert";
