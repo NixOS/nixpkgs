@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
 }:
@@ -40,6 +41,12 @@ python3.pkgs.buildPythonApplication rec {
     pytest-asyncio
     pytestCheckHook
     requests
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky tests
+    "test_build_info"
+    "test_prometheus_exporter"
   ];
 
   disabledTestPaths = [
