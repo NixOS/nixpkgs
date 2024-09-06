@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "0.0.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
@@ -32,9 +32,9 @@ buildPythonPackage rec {
     "pydantic"
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     httpx
     pydantic
@@ -54,10 +54,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for the SFR Box API";
-    mainProgram = "sfrbox-api";
     homepage = "https://github.com/hacf-fr/sfrbox-api";
     changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sfrbox-api";
   };
 }
