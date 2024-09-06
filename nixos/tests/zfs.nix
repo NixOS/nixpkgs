@@ -45,13 +45,13 @@ let
         specialisation.samba.configuration = {
           services.samba = {
             enable = true;
-            extraConfig = ''
-              registry shares = yes
-              usershare path = ${usersharePath}
-              usershare allow guests = yes
-              usershare max shares = 100
-              usershare owner only = no
-            '';
+            settings.global = {
+              "registry shares" = true;
+              "usershare path" = "${usersharePath}";
+              "usershare allow guests" = true;
+              "usershare max shares" = "100";
+              "usershare owner only" = false;
+            };
           };
           systemd.services.samba-smbd.serviceConfig.ExecStartPre =
             "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
