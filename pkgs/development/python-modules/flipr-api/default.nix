@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "flipr-api";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "cnico";
     repo = "flipr-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-sFCeWfu5rwImIizzik9RzfCWaEHiqhsQrapfuCXHr+4=";
+    hash = "sha256-/px8NuBwukAPMxdXvHdyfO/j/a9UatKbdrjDNuT0f4k=";
   };
 
   build-system = [ poetry-core ];

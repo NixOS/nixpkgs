@@ -259,7 +259,6 @@ in {
   dhparams = handleTest ./dhparams.nix {};
   disable-installer-tools = handleTest ./disable-installer-tools.nix {};
   discourse = handleTest ./discourse.nix {};
-  dm-verity = runTest ./dm-verity.nix;
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   dnscrypt-wrapper = runTestOn ["x86_64-linux"] ./dnscrypt-wrapper;
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
@@ -571,7 +570,7 @@ in {
   mate-wayland = handleTest ./mate-wayland.nix {};
   matter-server = handleTest ./matter-server.nix {};
   matomo = handleTest ./matomo.nix {};
-  matrix-appservice-irc = handleTest ./matrix/appservice-irc.nix {};
+  matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
   matrix-conduit = handleTest ./matrix/conduit.nix {};
   matrix-synapse = handleTest ./matrix/synapse.nix {};
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix {};

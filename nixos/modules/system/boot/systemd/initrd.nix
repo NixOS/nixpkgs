@@ -218,7 +218,7 @@ in {
     };
 
     root = lib.mkOption {
-      type = lib.types.nullOr (lib.types.enum [ "fstab" "gpt-auto" ]);
+      type = lib.types.enum [ "fstab" "gpt-auto" ];
       default = "fstab";
       example = "gpt-auto";
       description = ''
@@ -227,9 +227,6 @@ in {
         allow specifying the root file system itself this
         way. Instead, the `fstab` value is used in order to interpret
         the root file system specified with the `fileSystems` option.
-
-        If the root FS is mounted by other means, such as systemd generators other than
-        `fstab`, `gpt-auto` or a custom generator, set this to `null`.
       '';
     };
 
@@ -401,9 +398,9 @@ in {
     ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb"
     ++ lib.optional cfg.package.withEfi "efivarfs";
 
-    boot.kernelParams =
-      lib.optional (config.boot.initrd.systemd.root != null) "root=${config.boot.initrd.systemd.root}"
-      ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+    boot.kernelParams = [
+      "root=${config.boot.initrd.systemd.root}"
+    ] ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
       # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
       # For NixOS activation to succeed, we need to have root writable in initrd.
       ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
