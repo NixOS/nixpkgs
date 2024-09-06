@@ -122,13 +122,14 @@ let
     ;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 
-  stdenv' = let
-    stdenv'' = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
-  in
-    if swiftSupport && stdenv''.isDarwin && stdenv''.isx86_64 then
-      overrideSDK stdenv'' "11.0"
+  stdenv' =
+    if stdenv.isDarwin then
+      if swiftSupport && stdenv.isx86_64 then
+        overrideSDK swiftPackages.stdenv "11.0"
+      else
+        swiftPackages.stdenv
     else
-      stdenv'';
+      stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
