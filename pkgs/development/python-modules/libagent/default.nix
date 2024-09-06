@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.14.8";
+  version = "0.15.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "v${version}";
-    hash = "sha256-tcVott/GlHsICQf640Gm5jx89fZWsCdcYnBxi/Kh2oc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
   # hardcode the path to gpgconf in the libagent library
