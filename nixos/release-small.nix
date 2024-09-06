@@ -103,7 +103,6 @@ in rec {
         "nixpkgs.tarball"
         "nixpkgs.release-checks"
       ]
-      (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")
       (map (onSystems [ "x86_64-linux" ]) [
         "nixos.tests.installer.lvm"
         "nixos.tests.installer.separateBoot"
@@ -117,6 +116,7 @@ in rec {
         "nixos.tests.containers-ip"
         "nixos.tests.firewall"
         "nixos.tests.ipv6"
+        "nixos.tests.installer.simpleUefiSystemdBoot"
         "nixos.tests.login"
         "nixos.tests.misc"
         "nixos.tests.nat.firewall"
