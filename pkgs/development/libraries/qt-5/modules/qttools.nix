@@ -5,6 +5,7 @@
   qtbase,
   qtdeclarative,
   substituteAll,
+  llvmPackages,
 }:
 
 qtModule {
@@ -14,6 +15,11 @@ qtModule {
     "out"
     "dev"
     "bin"
+  ];
+
+  buildInputs = with llvmPackages; [
+    libclang
+    libllvm
   ];
 
   propagatedBuildInputs = [
@@ -26,6 +32,11 @@ qtModule {
     (substituteAll {
       src = ./qttools-QT_HOST_DATA-refs.patch;
       qtbaseDev = lib.getDev qtbase;
+    })
+
+    (substituteAll {
+      src = ./qttools-libclang-main-header.patch;
+      libclangDev = lib.getDev llvmPackages.libclang;
     })
   ];
 
