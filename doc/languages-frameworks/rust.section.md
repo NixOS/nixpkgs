@@ -162,9 +162,10 @@ rustPlatform.buildRustPackage {
 }
 ```
 
-Note that setting `cargoLock.lockFile` or `cargoLock.lockFileContents`
-doesn't add a `Cargo.lock` to your `src`, and a `Cargo.lock` is still
-required to build a rust package. A simple fix is to use:
+If the upstream source repository lacks a `Cargo.lock` file, you must add one
+to `src`, as it is essential for building a Rust package. Setting
+`cargoLock.lockFile` or `cargoLock.lockFileContents` will not automatically add
+a `Cargo.lock` file to `src`. A straightforward solution is to use:
 
 ```nix
 {
