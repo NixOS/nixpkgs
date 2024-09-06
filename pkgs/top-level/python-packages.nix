@@ -4345,6 +4345,8 @@ self: super: with self; {
 
   f90nml = callPackage ../development/python-modules/f90nml { };
 
+  fabio = callPackage ../development/python-modules/fabio { };
+
   fabric = callPackage ../development/python-modules/fabric { };
 
   faadelays = callPackage ../development/python-modules/faadelays { };
