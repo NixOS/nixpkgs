@@ -120,12 +120,12 @@ in stdenv'.mkDerivation (finalAttrs: {
     qtbase
     qtdeclarative
     qt5compat
-    qtwayland
     qtsvg
     qtscxml
     qtnetworkauth
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
+    qtwayland
   ];
 
   postInstall = ''
