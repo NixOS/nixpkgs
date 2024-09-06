@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "brother-ql";
-  version = "0.11.1";
+  version = "0.11.2";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "brother_ql_next";
     inherit version;
-    hash = "sha256-jG8OvzDy2+2OpdVVixNguLsSwRbSIyvVEbVvorcgxfU=";
+    hash = "sha256-3rTf+4W5KK7zSGIE3bBHXHE0hjyvpjB0IiEtbax6mkU=";
   };
 
   propagatedBuildInputs = [
