@@ -10,16 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "music-player";
-  version = "0.2.0-alpha.14";
+  version = "0.2.0-alpha.14-unstable-2024-08-24";
 
   src = fetchFromGitHub {
     owner = "tsirysndr";
     repo = "music-player";
-    rev = "v${version}";
-    hash = "sha256-l8Y1fc5v0YDm87b+d3DuMgKFiem6WFfJEASplHoqva0=";
+    # No patch for 0.2.0, diff patch has a big size, temporarily until the next release
+    rev = "cf01ae4d2dcf5c804559250f2c7f922d870ae26d";
+    hash = "sha256-8C8uFnXSBalLD2MUgzzfg4ylvTVecyPJOSUri5jbvkM=";
   };
 
-  cargoHash = "sha256-nnOHuAn+eGf+iiX3QbDTH4zHMQ6KV4QP6RnyBhLMrEc=";
+  cargoHash = "sha256-JmyuA5p6/7jtNuOMWuAuspYYid+dGOeollIlS0DRCIE=";
 
   nativeBuildInputs = [
     protobuf
