@@ -148,7 +148,11 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
-    # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
-    broken = stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis));
+    broken =
+      # Several failed assertions causing tests to fail
+      # https://github.com/NixOS/nixpkgs/issues/340087
+      (stdenv.isDarwin && stdenv.isx86_64)
+      # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
+      || (stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis)));
   };
 }
