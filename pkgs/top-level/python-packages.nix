@@ -3591,6 +3591,8 @@ self: super: with self; {
 
   doc8 = callPackage ../development/python-modules/doc8 { };
 
+  docarray = callPackage ../development/python-modules/docarray { };
+
   docformatter = callPackage ../development/python-modules/docformatter { };
 
   docker = callPackage ../development/python-modules/docker { };
