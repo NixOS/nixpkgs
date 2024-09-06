@@ -53,6 +53,7 @@
   nixosTests,
   nv-codec-headers-11,
   openalSoft,
+  overrideSDK,
   pipewire,
   pkg-config,
   python3,
@@ -60,7 +61,7 @@
   shaderc, # instead of spirv-cross
   speex,
   stdenv,
-  swift,
+  swiftPackages,
   testers,
   vapoursynth,
   vulkan-headers,
@@ -70,10 +71,6 @@
   wayland-scanner,
   xcbuild,
   zimg,
-
-  overrideSDK,
-  swiftPackages, # TODO: set swift to match swiftPackages
-
   # Boolean
   alsaSupport ? stdenv.isLinux,
   archiveSupport ? true,
@@ -174,7 +171,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   # Ensure we reference 'lib' (not 'out') of Swift.
   preConfigure = lib.optionalString swiftSupport ''
-    export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
+    export SWIFT_LIB_DYNAMIC="${lib.getLib swiftPackages.swift.swift}/lib/swift/macosx"
   '';
 
   mesonFlags =
@@ -211,7 +208,7 @@ stdenv'.mkDerivation (finalAttrs: {
       buildPackages.darwin.sigtool
       xcbuild.xcrun
     ]
-    ++ lib.optionals swiftSupport [ swift ]
+    ++ lib.optionals swiftSupport [ swiftPackages.swift ]
     ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs =
