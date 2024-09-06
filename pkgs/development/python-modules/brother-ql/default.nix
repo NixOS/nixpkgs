@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "brother-ql";
   version = "0.11.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "brother_ql_next";
