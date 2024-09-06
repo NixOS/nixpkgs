@@ -128,7 +128,7 @@ stdenv.mkDerivation (self: {
     mainProgram = "emilua";
     homepage = "https://emilua.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ manipuladordedados ];
+    maintainers = with maintainers; [ manipuladordedados lucasew ];
     platforms = platforms.linux;
   };
 })
