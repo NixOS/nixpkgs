@@ -1657,14 +1657,18 @@ won't take effect until you reboot the system.
         }
         Ok(users) => {
             for (uid, name, user_dbus_path) in users {
-                let gid: u32 = dbus_conn
-                    .with_proxy(
-                        "org.freedesktop.login1",
-                        &user_dbus_path,
-                        Duration::from_millis(5000),
-                    )
+                let proxy = dbus_conn.with_proxy(
+                    "org.freedesktop.login1",
+                    &user_dbus_path,
+                    Duration::from_millis(5000),
+                );
+                let gid: u32 = proxy
                     .get("org.freedesktop.login1.User", "GID")
                     .with_context(|| format!("Failed to get GID for {name}"))?;
+
+                let runtime_path: String = proxy
+                    .get("org.freedesktop.login1.User", "RuntimePath")
+                    .with_context(|| format!("Failed to get runtime directory for {name}"))?;
 
                 eprintln!("reloading user units for {}...", name);
                 let myself = Path::new("/proc/self/exe")
@@ -1674,7 +1678,7 @@ won't take effect until you reboot the system.
                 std::process::Command::new(&myself)
                     .uid(uid)
                     .gid(gid)
-                    .env("XDG_RUNTIME_DIR", format!("/run/user/{}", uid))
+                    .env("XDG_RUNTIME_DIR", runtime_path)
                     .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
                     .spawn()
                     .with_context(|| format!("Failed to spawn user activation for {name}"))?
