@@ -32000,8 +32000,6 @@ with pkgs;
 
   musescore = qt6.callPackage ../applications/audio/musescore { };
 
-  music-player = callPackage ../applications/audio/music-player { };
-
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
