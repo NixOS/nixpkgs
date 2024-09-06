@@ -6,6 +6,7 @@
   requests,
   six,
   tenacity,
+  kaleido,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,7 @@ buildPythonPackage rec {
     requests
     six
     tenacity
+    kaleido
   ];
 
   # No tests in archive
@@ -33,6 +35,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/plotly/plotly.py";
     homepage = "https://plot.ly/python/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pandapip1 ];
   };
 }
