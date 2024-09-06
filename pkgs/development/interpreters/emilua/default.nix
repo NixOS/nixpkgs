@@ -29,8 +29,22 @@ let
     owner = "breese";
     repo = "trial.protocol";
     rev = "79149f604a49b8dfec57857ca28aaf508069b669";
-    name = "trial-protocol";
-    hash = "sha256-Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
+    sparseCheckout = [
+      "include"
+    ];
+    hash = "sha256-QpQ70KDcJyR67PtOowAF6w48GitMJ700B8HiEwDA5sU=";
+    postFetch = ''
+      rm $out/*.*
+      mkdir -p $out/lib/pkgconfig
+      cat > $out/lib/pkgconfig/trial-protocol.pc << EOF
+        Name: trial.protocol
+        Version: 0-unstable-2023-02-10
+        Description:  C++ header-only library with parsers and generators for network wire protocols
+        Requires:
+        Libs:
+        Cflags:
+      EOF
+    '';
   };
 in
 stdenv.mkDerivation rec {
@@ -55,6 +69,7 @@ stdenv.mkDerivation rec {
     liburing
     openssl
     cereal
+    trial-protocol-wrap
   ];
 
   nativeBuildInputs = [
@@ -80,12 +95,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    pushd subprojects
-    cp -r ${trial-protocol-wrap} trial-protocol
-    chmod +w trial-protocol
-    cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
-    popd
-
     patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
   '';
 
