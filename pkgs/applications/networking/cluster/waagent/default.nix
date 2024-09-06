@@ -1,11 +1,12 @@
-{ coreutils
-, fetchFromGitHub
-, lib
-, python39
+{
+  coreutils,
+  fetchFromGitHub,
+  lib,
+  python39,
+  bash,
 }:
 
 let
-  inherit (lib) makeBinPath;
   # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
   python = python39;
 
@@ -26,12 +27,14 @@ python.pkgs.buildPythonApplication rec {
   ];
   doCheck = false;
 
-  # azure-product-uuid chmod rule invokes chmod to change the mode of
-  # product_uuid (which is not a device itself).
-  # Replace this with an absolute path.
+  # Replace tools used in udev rules with their full path and ensure they are present.
   postPatch = ''
+    substituteInPlace config/66-azure-storage.rules \
+      --replace-fail readlink ${coreutils}/bin/readlink \
+      --replace-fail cut ${coreutils}/bin/cut \
+      --replace-fail /bin/sh ${bash}/bin/sh
     substituteInPlace config/99-azure-product-uuid.rules \
-      --replace "/bin/chmod" "${coreutils}/bin/chmod"
+      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
   '';
 
   propagatedBuildInputs = [ python.pkgs.distro ];
