@@ -1657,6 +1657,12 @@ won't take effect until you reboot the system.
         }
         Ok(users) => {
             for (uid, name, user_dbus_path) in users {
+                // Root user does not have systemd or dbus instances running, nothing to do in this
+                // case.
+                if uid == 0 {
+                    continue;
+                }
+
                 let gid: u32 = dbus_conn
                     .with_proxy(
                         "org.freedesktop.login1",
