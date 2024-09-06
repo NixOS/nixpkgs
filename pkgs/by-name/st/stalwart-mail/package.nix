@@ -15,6 +15,7 @@
   nix-update-script,
   nixosTests,
   rocksdb_8_11,
+  callPackage,
 }:
 
 let
@@ -144,6 +145,7 @@ rustPlatform.buildRustPackage {
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   passthru = {
+    webadmin = callPackage ./webadmin.nix { };
     update-script = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
