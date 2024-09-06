@@ -2,26 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   httpx,
   httpx-sse,
   orjson,
-  poetry-core,
-  pythonOlder,
+
+  # passthru
   writeScript,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.26";
+  version = "0.1.30";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/sdk==${version}";
-    hash = "sha256-o7JrB2WSWfPm927tDRMcjzx+6Io6Q+Yjp4XPVs2+F4o=";
+    hash = "sha256-gI12XuxFplqIKVlVjeO60YxT7WG/SSsZ0aWfjg5bHIs=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
