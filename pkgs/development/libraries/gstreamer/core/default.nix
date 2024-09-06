@@ -15,6 +15,7 @@
 , lib
 , Cocoa
 , CoreServices
+, xpc
 , testers
 , rustc
 , withRust ?
@@ -87,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreServices
+    xpc
   ];
 
   propagatedBuildInputs = [
