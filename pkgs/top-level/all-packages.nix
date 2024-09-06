@@ -16805,7 +16805,7 @@ with pkgs;
 
   guile-ssh = callPackage ../development/guile-modules/guile-ssh { };
 
-  guile-xcb = callPackage ../development/guile-modules/guile-xcb {
+  guile-xcb = callPackage ../by-name/gu/guile-xcb/package.nix {
     guile = guile_2_2;
   };
 
