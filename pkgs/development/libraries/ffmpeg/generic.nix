@@ -451,6 +451,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   passthru.config = config;
+  passthru.options = eval.options;
   passthru.variants = variants;
 
   meta = with lib; {
