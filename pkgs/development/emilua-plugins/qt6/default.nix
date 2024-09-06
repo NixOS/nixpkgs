@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchFromGitLab, asciidoctor, ninja, gperf, gawk, pkg-config
-, cmake, boost, luajit_openresty, fmt, meson, emilua, qt6, openssl, liburing }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  asciidoctor,
+  ninja,
+  gperf,
+  gawk,
+  pkg-config,
+  boost,
+  luajit_openresty,
+  fmt,
+  meson,
+  emilua,
+  qt6,
+  openssl,
+  liburing,
+}:
 
 stdenv.mkDerivation rec {
   pname = "emilua-qt6";
@@ -28,7 +44,6 @@ stdenv.mkDerivation rec {
     gawk
     asciidoctor
     pkg-config
-    cmake
     meson
     ninja
     qt6.wrapQtAppsHook

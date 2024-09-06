@@ -1,5 +1,20 @@
-{ lib, stdenv, meson, ninja, fetchFromGitLab, gperf, gawk, pkg-config, boost
-, luajit_openresty, asciidoctor, qt5, emilua, liburing, fmt }:
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  fetchFromGitLab,
+  gperf,
+  gawk,
+  pkg-config,
+  boost,
+  luajit_openresty,
+  asciidoctor,
+  qt5,
+  emilua,
+  liburing,
+  fmt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "emilua-qt5";
@@ -12,8 +27,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-FkBfzGzUX7dvHjWRBjVwppU4jZBbY02gP+fIta8mjIw=";
   };
 
-  buildInputs =
-    [ luajit_openresty boost qt5.qtdeclarative emilua liburing fmt qt5.qtbase ];
+  buildInputs = [
+    luajit_openresty
+    boost
+    qt5.qtdeclarative
+    emilua
+    liburing
+    fmt
+    qt5.qtbase
+  ];
 
   nativeBuildInputs = [
     gperf
