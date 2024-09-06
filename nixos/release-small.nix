@@ -32,7 +32,7 @@ let
 in rec {
 
   nixos = {
-    inherit (nixos') channel manual options iso_minimal dummy;
+    inherit (nixos') channel manual options dummy;
     tests = {
       inherit (nixos'.tests)
         acme
