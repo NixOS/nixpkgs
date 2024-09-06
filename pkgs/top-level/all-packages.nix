@@ -16773,8 +16773,6 @@ with pkgs;
 
   guile = guile_3_0;
 
-  guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
-
   guile-commonmark = callPackage ../development/guile-modules/guile-commonmark { };
 
   guile-config = callPackage ../development/guile-modules/guile-config { };
