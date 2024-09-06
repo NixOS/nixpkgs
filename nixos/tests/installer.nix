@@ -626,6 +626,9 @@ let
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
             ntp
+            perlPackages.ConfigIniFiles
+            perlPackages.FileSlurp
+            perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             # make-options-doc/default.nix
