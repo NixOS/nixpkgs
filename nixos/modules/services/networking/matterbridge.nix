@@ -19,6 +19,8 @@ in
     services.matterbridge = {
       enable = mkEnableOption "Matterbridge chat platform bridge";
 
+      package = mkPackageOption pkgs "matterbridge" { };
+
       configPath = mkOption {
         type = with types; nullOr str;
         default = null;
@@ -111,7 +113,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.matterbridge}/bin/matterbridge -conf ${matterbridgeConfToml}";
+        ExecStart = "${cfg.package}/bin/matterbridge -conf ${matterbridgeConfToml}";
         Restart = "always";
         RestartSec = "10";
       };
