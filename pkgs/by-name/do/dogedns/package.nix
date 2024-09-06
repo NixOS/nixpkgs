@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dogedns";
-  version = "0.2.6";
+  version = "0.2.8-beta";
 
   src = fetchFromGitHub {
     owner = "Dj-Codeman";
     repo = "doge";
-    rev = "6dd0383f31c096bfe2b6918c36b6e2c48414e753";
-    hash = "sha256-cvqDSTHFf/le2jItGTSkAGURj64WRvOmMRI+vFH0/50=";
+    rev = "v${version}";
+    hash = "sha256-EF/090/wWgFt6+V8xDmbAWd+jpHhx0mlGYtQqo8YsEI=";
   };
 
-  cargoHash = "sha256-v9AuX7FZfy18yu4P9ovHsL5AQIYhPa8NEsMziEeHCJ8=";
+  cargoHash = "sha256-V7QoLSwhu+Nq7a4V0i57VityfhkVabkojxpjwW/wpsc=";
 
   patches = [
     # remove date info to make the build reproducible
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Reviving A command-line DNS client";
+    description = "Reviving a command-line DNS client";
     homepage = "https://github.com/Dj-Codeman/doge";
     license = licenses.eupl12;
     mainProgram = "doge";
