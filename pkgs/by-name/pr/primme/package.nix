@@ -21,7 +21,13 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  makeFlags = lib.optionals blas.isILP64 [ "CFLAGS='$CFLAGS -DPRIMME_BLASINT_SIZE=64'" ];
+  preConfigure =
+    ''
+      export PREFIX=$out
+    ''
+    + lib.optionalString blas.isILP64 ''
+      export CFLAGS="$CFLAGS -DPRIMME_BLASINT_SIZE=64"
+    '';
 
   nativeBuildInputs = [
     gnumake
