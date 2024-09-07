@@ -10,7 +10,7 @@
   boost,
   luajit_openresty,
   asciidoctor,
-  qt5,
+  libsForQt5,
   emilua,
   liburing,
   fmt,
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     luajit_openresty
     boost
-    qt5.qtdeclarative
+    libsForQt5.qtdeclarative
     emilua
     liburing
     fmt
-    qt5.qtbase
+    libsForQt5.qtbase
   ];
 
   nativeBuildInputs = [
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
     asciidoctor
     meson
     ninja
-    qt5.wrapQtAppsHook
-    qt5.qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
   ];
 
   meta = with lib; {
