@@ -25995,8 +25995,6 @@ with pkgs;
 
   mlxbf-bootimages = callPackage ../misc/mlxbf-bootimages { };
 
-  microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
-
   iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
 
   inherit (callPackages ../os-specific/linux/apparmor { })
