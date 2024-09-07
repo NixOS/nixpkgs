@@ -77,6 +77,6 @@ configureNuget() {
 }
 
 if [[ -z ${dontConfigureNuget-} ]]; then
-    prePhases+=(createNugetDirs)
-    preConfigurePhases+=(configureNuget)
+    appendToVar prePhases createNugetDirs
+    appendToVar preConfigurePhases configureNuget
 fi
