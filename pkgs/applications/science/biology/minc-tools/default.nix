@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minc-tools";
-  version = "unstable-2020-07-25";
+  version = "2.3.06-unstable-2023-08-12";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = pname;
-    rev = "fb0a68a07d281e4e099c5d54df29925240de14c1";
-    sha256 = "0zcv2sdj3k6k0xjqdq8j5bxq8smm48dzai90vwsmz8znmbbm6kvw";
+    rev = "c86a767dbb63aaa05ee981306fa09f6133bde427";
+    hash = "sha256-PLNcuDU0ht1PcjloDhrPzpOpE42gbhPP3rfHtP7WnM4=";
   };
 
   nativeBuildInputs = [
