@@ -261,7 +261,7 @@ It returns a derivation with all `package-lock.json` dependencies downloaded int
 This function replaces the npm dependency references in `package.json` and `package-lock.json` with paths to the Nix store.
 How each dependency is fetched can be customized with the `fetcherOpts` argument.
 
-This is simpler and more convenient alternative to [`fetchNpmDeps`](#javascript-buildNpmPackage-fetchNpmDeps) for managing npm dependencies in Nix.
+This is a simpler and more convenient alternative to [`fetchNpmDeps`](#javascript-buildNpmPackage-fetchNpmDeps) for managing npm dependencies in Nixpkgs.
 There is no need to specify a `hash`; since it relies entirely on the integrity hashes already present in the `package-lock.json` file.
 
 ##### Inputs {#javascript-buildNpmPackage-inputs}
