@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchFromGitLab
-, glm
-, glslang
-, meson
-, ninja
-, openxr-loader
-, pkg-config
-, vulkan-headers
-, vulkan-loader
-, xxd
-, SDL2
-, makeWrapper
-, libGL
-, glib
-, unstableGitUpdater
+{
+  SDL2,
+  fetchFromGitLab,
+  glib,
+  glm,
+  glslang,
+  lib,
+  libGL,
+  makeWrapper,
+  meson,
+  ninja,
+  openxr-loader,
+  pkg-config,
+  stdenv,
+  unstableGitUpdater,
+  vulkan-headers,
+  vulkan-loader,
+  xxd,
 }:
 
 stdenv.mkDerivation {
@@ -47,7 +49,12 @@ stdenv.mkDerivation {
 
   fixupPhase = ''
     wrapProgram $out/bin/xrgears \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ SDL2 libGL ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          SDL2
+          libGL
+        ]
+      }
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -58,6 +65,9 @@ stdenv.mkDerivation {
     mainProgram = "xrgears";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 Scrumplex ];
+    maintainers = with maintainers; [
+      expipiplus1
+      Scrumplex
+    ];
   };
 }
