@@ -1,0 +1,28 @@
+From 572afb06f66f83ca95efa1b9386fceeaa1c9e11b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@stgraber.org>
+Date: Fri, 6 Sep 2024 15:51:35 -0400
+Subject: [PATCH] incusd/instance/qemu: Set O_DIRECT when passing in FDs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is required in most cases with QEMU 9.1.0.
+
+Signed-off-by: Stéphane Graber <stgraber@stgraber.org>
+---
+ internal/server/instance/drivers/driver_qemu.go | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/internal/server/instance/drivers/driver_qemu.go b/internal/server/instance/drivers/driver_qemu.go
+index 37da21f42f..e25aab0667 100644
+--- a/internal/server/instance/drivers/driver_qemu.go
++++ b/internal/server/instance/drivers/driver_qemu.go
+@@ -4277,6 +4277,8 @@ func (d *qemu) addDriveConfig(qemuDev map[string]string, bootIndexes map[string]
+ 				permissions = unix.O_RDONLY
+ 			}
+ 
++			permissions |= unix.O_DIRECT
++
+ 			f, err := os.OpenFile(driveConf.DevPath, permissions, 0)
+ 			if err != nil {
+ 				return fmt.Errorf("Failed opening file descriptor for disk device %q: %w", driveConf.DevName, err)
