@@ -553,13 +553,13 @@ in {
         '' else ''
           ln -fs /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
         '';
-        copyCustomLovelaceModules = if cfg.lovelaceResourcePackages != [] then ''
+        copyLovelaceResources = if cfg.lovelaceResourcePackages != [] then ''
           mkdir -p "${cfg.configDir}/www"
           ln -fns ${lovelaceResourcesDirectory} "${cfg.configDir}/www/nixos-lovelace-modules"
         '' else ''
           rm -f "${cfg.configDir}/www/nixos-lovelace-modules"
         '';
-        copyCustomComponents = ''
+        copyIntegrationPackages = ''
           mkdir -p "${cfg.configDir}/custom_components"
 
           # remove components symlinked in from below the /nix/store
@@ -581,8 +581,8 @@ in {
       in
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig) +
-        copyCustomLovelaceModules +
-        copyCustomComponents
+        copyLovelaceResources +
+        copyIntegrationPackages
       ;
       environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
