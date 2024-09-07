@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "0.3.4";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
     rev = "refs/tags/${version}";
-    hash = "sha256-igaW8vFUYagBfVQXL1Ulo7uhGilbOxxuyZV9Eda/Gto=";
+    hash = "sha256-jNwM+5On0BoCiqPfaWhHupXTQhinfobEkLbchP7OIHQ=";
   };
 
   build-system = [ poetry-core ];
