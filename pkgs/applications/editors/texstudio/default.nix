@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       spell checking and support of any compilation chain.
     '';
     homepage = "https://texstudio.org";
-    changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/CHANGELOG.txt";
+    changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/source/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ajs124 cfouche ];
