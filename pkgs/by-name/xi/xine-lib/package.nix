@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchhg
 , aalib
 , alsa-lib
 , autoreconfHook
@@ -31,11 +31,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xine-lib";
-  version = "1.2.13";
+  version = "1.2.13-unstable-2024-06-29";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xine/xine-lib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XxDW1xikpRwX7RsysDHU+bgLBh6CdlNbK+MeWsS3Xm8=";
+  src = fetchhg {
+    url = "http://hg.code.sf.net/p/xine/xine-lib-1.2";
+    rev = "53845e2f6b1f3b69328de5c030c0ab27eb8f043d";
+    hash = "sha256-O5lIYmNC2TpoY4QbPMsDWxNOoxdw61967Q4QG9d/+Bg=";
   };
 
   outputs = [ "out" "dev" "man" ];
