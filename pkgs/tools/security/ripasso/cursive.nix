@@ -16,30 +16,21 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.6.4";
+  version = "0.7.0";
   pname = "ripasso-cursive";
 
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
     rev = "release-${version}";
-    hash = "sha256-9wBaFq2KVfLTd1j8ZPoUlmZJDW2UhvGBAaCGX+qg92s=";
+    hash = "sha256-j98X/+UTea4lCtFfMpClnfcKlvxm4DpOujLc0xc3VUY=";
   };
+
+  cargoHash = "sha256-dP8H4OOgtQEBEJxpbaR3KnXFtgBdX4r+dCpBJjBK1MM=";
 
   patches = [
     ./fix-tests.patch
   ];
-
-  cargoPatches = [
-    ./fix-build.patch
-  ];
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "qml-0.0.9" = "sha256-ILqvUaH7nSu2JtEs8ox7KroOzYnU5ai44k1HE4Bz5gg=";
-    };
-  };
 
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 
