@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "3.4.0";
+  version = "3.4.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qsCPJqMdxN/9koIVJ9FoLZnVL572hRloEUqHKPPCdNM=";
+    hash = "sha256-ixUwKHCvf2ZS8uA4l1wdKXPwYEbLXX1lNVZos+y+zgw=";
   };
 
   patches = [
