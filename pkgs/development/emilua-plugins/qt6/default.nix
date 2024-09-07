@@ -7,12 +7,17 @@
   gperf,
   gawk,
   pkg-config,
+  cmake,
   boost,
   luajit_openresty,
   fmt,
   meson,
   emilua,
-  qt6,
+  qt,
+  qtdeclarative,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
   openssl,
   liburing,
 }:
@@ -35,8 +40,8 @@ stdenv.mkDerivation rec {
     fmt
     openssl
     liburing
-    qt6.qtdeclarative
-    qt6.qtbase
+    qtdeclarative
+    qtbase
   ];
 
   nativeBuildInputs = [
@@ -46,8 +51,8 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    qt6.wrapQtAppsHook
-    qt6.qttools
+    wrapQtAppsHook
+    qttools
   ];
 
   meta = with lib; {
