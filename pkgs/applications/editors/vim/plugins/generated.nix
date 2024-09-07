@@ -18636,5 +18636,15 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
-
+  leetcode-nvim = buildVimPlugin {
+    pname = "leetcode.nvim";
+    version = "2024-06-27";
+    src = fetchFromGitHub {
+      owner = "kawre";
+      repo = "leetcode.nvim";
+      rev = "02fb2c855658ad6b60e43671f6b040c812181a1d";
+      sha256 = "sha256-YoFRd9Uf+Yv4YM6/l7MVLMjfRqhroSS3RCmZvNowIAo=";
+    };
+    meta.homepage = "https://github.com/kawre/leetcode.nvim/";
+  };
 }
