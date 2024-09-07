@@ -73,8 +73,14 @@ in {
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
-      config.resource = {
+      config.resource = let
+        hasHttpListener = builtins.any (listener: listener.protocol == "http") (lib.attrValues cfg.settings.server.listener);
+      in {
         spam-filter = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+      } // lib.optionalAttrs (
+        (builtins.hasAttr "listener" cfg.settings.server) && hasHttpListener
+      ) {
+        webadmin = lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip";
       };
     };
 

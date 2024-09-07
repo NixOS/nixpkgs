@@ -9461,6 +9461,8 @@ self: super: with self; {
 
   packaging = callPackage ../development/python-modules/packaging { };
 
+  packaging-legacy = callPackage ../development/python-modules/packaging-legacy { };
+
   packbits = callPackage ../development/python-modules/packbits { };
 
   packet-python = callPackage ../development/python-modules/packet-python { };
@@ -9525,6 +9527,8 @@ self: super: with self; {
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
   para = callPackage ../development/python-modules/para { };
+
+  paragraphs = callPackage ../development/python-modules/paragraphs { };
 
   param = callPackage ../development/python-modules/param { };
 

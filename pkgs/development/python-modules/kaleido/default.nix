@@ -97,7 +97,9 @@ buildPythonPackage rec {
     #ln -s ${lato}/share/fonts/lato/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato/
   '';
 
-  passthru.tests.kaleido = callPackage ./tests.nix { };
+  passthru.tests = lib.optionalAttrs (!stdenv.isDarwin) {
+    kaleido = callPackage ./tests.nix { };
+  };
 
   meta = {
     description = "Fast static image export for web-based visualization libraries with zero dependencies";
@@ -112,6 +114,5 @@ buildPythonPackage rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ]; # Trust me, I'm not happy. But after literal hours of trying to reverse-engineer their build system and getting nowhere, I'll use the stupid binaries >:(
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pandapip1 ];
-    broken = stdenv.isDarwin; # Tests fail on darwin for some reason
   };
 }

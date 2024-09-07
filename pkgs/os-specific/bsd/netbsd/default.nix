@@ -1,6 +1,6 @@
 {
   lib,
-  crossLibcStdenv,
+  stdenvNoLibc,
   stdenvNoCC,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
@@ -37,7 +37,7 @@ makeScopeWithSplicing' {
 
       compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isNetBSD) self.compat;
 
-      stdenvLibcMinimal = crossLibcStdenv.override (old: {
+      stdenvLibcMinimal = stdenvNoLibc.override (old: {
         cc = old.cc.override {
           libc = self.libcMinimal;
           noLibc = false;
