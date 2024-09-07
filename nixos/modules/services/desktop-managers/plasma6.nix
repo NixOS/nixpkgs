@@ -62,6 +62,7 @@ in {
       requiredPackages = [
         qtwayland # Hack? To make everything run on Wayland
         qtsvg # Needed to render SVG icons
+        qtbase # Needed by xdg-mime
 
         # Frameworks with globally loadable bits
         frameworkintegration # provides Qt plugin
