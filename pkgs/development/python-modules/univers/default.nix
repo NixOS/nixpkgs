@@ -58,8 +58,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for parsing version ranges and expressions";
-    homepage = "https://github.com/nexB/univers";
-    changelog = "https://github.com/nexB/univers/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/univers";
+    changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [
       asl20
       bsd3
