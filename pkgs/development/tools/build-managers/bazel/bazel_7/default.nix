@@ -107,6 +107,7 @@ let
   # Bootstrap an existing Bazel so we can vendor deps with vendor mode
   bazel_bootstrap = stdenv.mkDerivation rec {
     name = "bazel_bootstrap";
+
     src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
       url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
       hash = "sha256-05fHtz47OilpOVYawB17VRVEDpycfYTIHBmwYCOyPjI=";
@@ -144,6 +145,8 @@ let
       wrapProgram $out/bin/bazel \
         --prefix PATH : ${lib.makeBinPath nativeBuildInputs}
     '';
+
+    meta.sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
   # The bootstrapped Bazel did not work on its own for vendoring, but a wrapped FHS did
