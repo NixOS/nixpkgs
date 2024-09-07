@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-r4IWaOEZUX+3wW47rX8+lsixIjr14zAaXfFIFcbLVMM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     jsonschema
@@ -37,10 +37,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for CVSS2/3/4";
-    mainProgram = "cvss_calculator";
     homepage = "https://github.com/RedHatProductSecurity/cvss";
     changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/v${version}";
-    license = with licenses; [ lgpl3Plus ];
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cvss_calculator";
   };
 }
