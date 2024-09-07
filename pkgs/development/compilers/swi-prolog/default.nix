@@ -63,7 +63,7 @@
 
 let
   # minorVersion is even for stable, odd for unstable
-  version = "9.2.6";
+  version = "9.2.7";
 
   # This package provides several with* options, which replaces the old extraLibraries option.
   # This error should help users that still use this option find their way to these flags.
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl";
     rev = "V${version}";
-    hash = "sha256-FgEn+Ht45++GFpfcdaJ5In5x+NyIOopSlSAs+t7sPDE=";
+    hash = "sha256-O9ogltcbBST111FA85jEVW6jGOLJSt/5PeBABtMu2Ws=";
     fetchSubmodules = true;
   };
 
