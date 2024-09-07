@@ -27,8 +27,9 @@
     fully_kiosk = ps: with ps; [
       python-fullykiosk
     ];
-    hass = [
-    ]; # missing hass-client
+    hass = ps: with ps; [
+      hass-client
+    ];
     hass_players = [
     ];
     jellyfin = ps: with ps; [
