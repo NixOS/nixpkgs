@@ -1201,6 +1201,7 @@ lib.mapAttrs mkLicense ({
   };
 
   ufl = {
+    spdxId = "Ubuntu-font-1.0";
     fullName = "Ubuntu Font License 1.0";
     url = "https://ubuntu.com/legal/font-licence";
   };
