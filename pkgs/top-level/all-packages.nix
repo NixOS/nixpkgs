@@ -20300,7 +20300,10 @@ with pkgs;
     else if name == "relibc" then targetPackages.relibc or relibc
     else throw "Unknown libc ${name}";
 
-  libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
+  libcCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform
+    then null
+    else libcCrossChooser stdenv.targetPlatform.libc;
 
   threadsCross =
     lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
