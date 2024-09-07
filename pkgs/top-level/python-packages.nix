@@ -9641,6 +9641,8 @@ self: super: with self; {
 
   parts = callPackage ../development/python-modules/parts { };
 
+  partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
+
   particle = callPackage ../development/python-modules/particle { };
 
   parver = callPackage ../development/python-modules/parver { };
