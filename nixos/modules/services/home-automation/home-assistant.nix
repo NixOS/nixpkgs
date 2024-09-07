@@ -44,7 +44,7 @@ let
   # options shown in settings.
   # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
   # https://www.home-assistant.io/docs/configuration/secrets/
-  filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ null ])) (recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
+  filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ null ])) (recursiveUpdate lovelaceResourceConfig (cfg.config or {}));
   configFile = pkgs.runCommandLocal "configuration.yaml" { } ''
     cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
@@ -93,24 +93,24 @@ let
   package = (cfg.package.override (oldArgs: {
     # Respect overrides that already exist in the passed package and
     # concat it with values passed via the module.
-    extraComponents = oldArgs.extraComponents or [] ++ extraComponents;
+    extraComponents = oldArgs.integrations or [] ++ integrations;
     extraPackages = ps: (oldArgs.extraPackages or (_: []) ps)
-      ++ (cfg.extraPackages ps)
-      ++ (concatMap (component: component.propagatedBuildInputs or []) cfg.customComponents);
+      ++ (cfg.extraPythonPackages ps)
+      ++ (concatMap (component: component.propagatedBuildInputs or []) cfg.integrationPackages);
   }));
 
   # Create a directory that holds all lovelace modules
-  customLovelaceModulesDir = pkgs.buildEnv {
+  lovelaceResourcesDirectory = pkgs.buildEnv {
     name = "home-assistant-custom-lovelace-modules";
     paths = cfg.customLovelaceModules;
   };
 
   # Create parts of the lovelace config that reference lovelave modules as resources
-  customLovelaceModulesResources = {
-    lovelace.resources = map (card: {
-      url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
+  lovelaceResourceConfig = {
+    lovelace.resources = map (resource: {
+      url = "/local/nixos-lovelace-modules/${resource.entrypoint or (resource.pname + ".js")}?${resource.version}";
       type = "module";
-    }) cfg.customLovelaceModules;
+    }) cfg.lovelaceResourcePackages;
   };
 in {
   imports = [
@@ -555,7 +555,7 @@ in {
         '';
         copyCustomLovelaceModules = if cfg.customLovelaceModules != [] then ''
           mkdir -p "${cfg.configDir}/www"
-          ln -fns ${customLovelaceModulesDir} "${cfg.configDir}/www/nixos-lovelace-modules"
+          ln -fns ${lovelaceResourcesDirectory} "${cfg.configDir}/www/nixos-lovelace-modules"
         '' else ''
           rm -f "${cfg.configDir}/www/nixos-lovelace-modules"
         '';
@@ -571,7 +571,7 @@ in {
           done
 
           # recreate symlinks for desired components
-          declare -a components=(${escapeShellArgs cfg.customComponents})
+          declare -a components=(${escapeShellArgs cfg.integrationPackages})
           for component in "''${components[@]}"; do
             readarray -t manifests < <(find "$component" -name manifest.json)
             readarray -t paths < <(dirname "''${manifests[@]}")
