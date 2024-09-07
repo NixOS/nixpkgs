@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.4.10";
+  version = "0.4.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uN5lbhuPt9axp2ZTTxDgHuDRwlQjXANEkGPgQJL1o90=";
+    hash = "sha256-bWb1HtI1T3byBmE+rA1j83z9ntRL6figZZTUECRCc9c=";
   };
 
   propagatedBuildInputs = [
