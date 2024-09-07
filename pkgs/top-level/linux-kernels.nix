@@ -605,6 +605,8 @@ in {
 
     drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
 
+    nullfs = callPackage ../os-specific/linux/nullfs { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
