@@ -5,6 +5,7 @@
 , dotnetCorePackages
 , makeDesktopItem
 , copyDesktopItems
+, makeWrapper
 , ffmpeg
 , alsa-lib
 , SDL2
@@ -32,7 +33,10 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   runtimeDeps = [
     ffmpeg
@@ -58,6 +62,9 @@ buildDotnetModule rec {
 
   fixupPhase = ''
     runHook preFixup
+
+    wrapProgram $out/bin/osu\! \
+      --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
