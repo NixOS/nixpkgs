@@ -5390,8 +5390,6 @@ with pkgs;
 
   iotas = callPackage ../applications/office/iotas { };
 
-  iotools = callPackage ../tools/misc/iotools { };
-
   jellycli = callPackage ../applications/audio/jellycli { };
 
   jellyfin-ffmpeg = callPackage ../development/libraries/jellyfin-ffmpeg { };
