@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libarchive, iucode-tool }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libarchive,
+  iucode-tool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-O2UWa04MnU9ndzvWy8fruOTm85PexEd+i1McQNz6uFE=";
   };
 
-  nativeBuildInputs = [ iucode-tool libarchive ];
+  nativeBuildInputs = [
+    iucode-tool
+    libarchive
+  ];
 
   installPhase = ''
     runHook preInstall
