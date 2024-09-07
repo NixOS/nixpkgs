@@ -3048,8 +3048,6 @@ with pkgs;
     ammonite_2_13;
   ammonite = ammonite_2_13;
 
-  amp = callPackage ../applications/editors/amp { };
-
   ams = callPackage ../applications/audio/ams { };
 
   amtterm = callPackage ../tools/system/amtterm { };
