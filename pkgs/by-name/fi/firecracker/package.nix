@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "1.8.0";
+  version = "1.9.0";
   # nixpkgs-update: no auto update
 
   suffix =
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-vImb2u+NCqew+vv0miv2R+AphVj0+u5Elw2HocbRri0=";
-    aarch64-linux = "sha256-ZLSc61MWfXYWv0/Sxz3vaWoyAlnqbgfPFEfJCRxfknE=";
+    x86_64-linux = "sha256-lcE3QMfKGm37QOD1HNCp7v7h8iPNLDU4dV0Dw6m6Ujc=";
+    aarch64-linux = "sha256-xVZOdt7CuOgJLFLw+KTF9FzzF5HpWpMC9DYKdx33j2k=";
   };
 
   dontConfigure = true;
