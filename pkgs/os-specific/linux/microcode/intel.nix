@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/${src.rev}";
     description = "Microcode for Intel processors";
     license = licenses.unfreeRedistributableFirmware;
-    platforms = platforms.linux;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ felixsinger ];
   };
 }
