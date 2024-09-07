@@ -1,30 +1,60 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libminc, bicpl, itk, fftwFloat, gsl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  perl,
+  libminc,
+  bicpl,
+  itk_5_2,
+  fftwFloat,
+  gsl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "EZminc";
-  version = "unstable-2019-03-12";
+  version = "2.2.00-unstable-2023-10-06";
 
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "5e3333ee356f914d34d66d33ea8df809c7f7fa51";
-    sha256 = "0wy8cppf5xpgfqvgb3mqs1cjh81n6qzkk6zxv29wvng8nar9wsy4";
+    owner = "BIC-MNI";
+    repo = "EZminc";
+    rev = "5fdf112e837000d155891e423041d7065ea13c3f";
+    hash = "sha256-0KdFIWRHnIHrau0ysGMVpg3oz01UdIvna1y2I4YEWJw=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ itk libminc bicpl fftwFloat gsl ];
+  postPatch = ''
+    patchShebangs scripts/*
+  '';
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake"
-                 "-DEZMINC_BUILD_TOOLS=TRUE"
-                 "-DEZMINC_BUILD_MRFSEG=TRUE"
-                 "-DEZMINC_BUILD_DD=TRUE" ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  meta = with lib; {
-    homepage = "https://github.com/BIC-MNI/${pname}";
+  buildInputs = [
+    itk_5_2
+    libminc
+    bicpl
+    fftwFloat
+    gsl
+    perl
+  ];
+
+  cmakeFlags = [
+    "-DLIBMINC_DIR=${libminc}/lib/cmake"
+    "-DEZMINC_BUILD_TOOLS=TRUE"
+    "-DEZMINC_BUILD_MRFSEG=TRUE"
+    # "-DEZMINC_BUILD_DD=TRUE" # numerous compilation issues
+  ];
+
+  doCheck = false; # test programs/data exist but no actual test harness
+
+  meta = {
+    homepage = "https://github.com/BIC-MNI/EZminc";
     description = "Collection of Perl and shell scripts for processing MINC files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
-    broken = true;  # ITK5 compatibility issue (https://github.com/BIC-MNI/EZminc/issues/15)
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.linux; # can't detect opengl on Darwin
+    license = lib.licenses.free;
   };
-}
+})
