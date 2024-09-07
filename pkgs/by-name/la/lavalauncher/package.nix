@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchgit
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland-scanner
-, cairo
-, librsvg
-, libxkbcommon
-, wayland
-, wayland-protocols
+{
+  lib,
+  cairo,
+  fetchgit,
+  librsvg,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  stdenv,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,15 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+
   buildInputs = [
     cairo
     librsvg
@@ -33,7 +42,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~leon_plickat/lavalauncher";
     description = "Simple launcher panel for Wayland desktops";
     longDescription = ''
@@ -52,9 +61,9 @@ stdenv.mkDerivation rec {
       The Wayland compositor must implement the Layer-Shell and XDG-Output for
       LavaLauncher to work.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "lavalauncher";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (wayland.meta) platforms;
   };
 }
