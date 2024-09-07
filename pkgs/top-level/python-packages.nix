@@ -12243,6 +12243,8 @@ self: super: with self; {
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
+  pytest-alembic = callPackage ../development/python-modules/pytest-alembic { };
+
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
 
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
