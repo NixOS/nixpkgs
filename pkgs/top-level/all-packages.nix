@@ -10743,7 +10743,9 @@ with pkgs;
 
   noisetorch = callPackage ../applications/audio/noisetorch { };
 
-  notation = callPackage ../tools/security/notation { };
+  notation = callPackage ../by-name/no/notation/package.nix {
+    buildGoModule = buildGo123Module;
+  };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
