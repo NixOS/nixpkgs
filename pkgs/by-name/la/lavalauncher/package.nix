@@ -1,7 +1,7 @@
 {
   lib,
   cairo,
-  fetchgit,
+  fetchFromSourcehut,
   librsvg,
   libxkbcommon,
   meson,
@@ -18,10 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lavalauncher";
   version = "2.1.1";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~leon_plickat/lavalauncher";
+  src = fetchFromSourcehut {
+    pname = "lavalauncher-source";
+    inherit (finalAttrs) version;
+    owner = "~leon_plickat";
+    repo = "lavalauncher";
     rev = "v${finalAttrs.version}";
-    sha256 = "hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
+    hash = "sha256-hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
   };
 
   depsBuildBuild = [ pkg-config ];
