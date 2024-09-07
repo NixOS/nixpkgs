@@ -126,6 +126,8 @@ in stdenv'.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     qtwayland
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Cocoa
   ];
 
   postInstall = ''
