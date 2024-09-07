@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rune-languageserver";
-  version = "0.12.4";
+  version = "0.13.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-KVNof5s3hiCabsoypwS22FMyJIPF9aU8HNqVKPNo7Fk=";
+    hash = "sha256-Kw6Qh/9eQPMj4V689+7AxuJB+aCciK3FZTfcdhyZXGY=";
   };
 
-  cargoHash = "sha256-HiydWqOHz4LJJwJTclRlQfOphE1W03HTMjCtqr1XnJs=";
+  cargoHash = "sha256-GlzT7lN9iCNiPFIjhL/UfqohgtOwDaIeTVEWOyaeicM=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
