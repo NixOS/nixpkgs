@@ -11,6 +11,7 @@
   python-dateutil,
   python-snappy,
   pythonOlder,
+  setuptools,
   zlib-ng,
   zstandard,
 }:
@@ -18,7 +19,7 @@
 buildPythonPackage rec {
   pname = "fastavro";
   version = "1.9.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -33,9 +34,12 @@ buildPythonPackage rec {
     export FASTAVRO_USE_CYTHON=1
   '';
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     codecs = [
       lz4
       python-snappy
@@ -52,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     zlib-ng
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
