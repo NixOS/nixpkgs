@@ -9,7 +9,7 @@
   pandas,
   pytestCheckHook,
   python-dateutil,
-  python-snappy,
+  cramjam,
   pythonOlder,
   setuptools,
   zlib-ng,
@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     codecs = [
+      cramjam
       lz4
-      python-snappy
       zstandard
     ];
-    snappy = [ python-snappy ];
+    snappy = [ cramjam ];
     zstandard = [ zstandard ];
     lz4 = [ lz4 ];
   };
