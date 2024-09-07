@@ -1,0 +1,11 @@
+--- a/netatop.service
++++ b/netatop.service
+@@ -8,5 +8,5 @@
+ Type=oneshot
+-ExecStartPre=/sbin/modprobe netatop
+-ExecStart=/usr/sbin/netatopd
+-ExecStopPost=/sbin/rmmod netatop
++ExecStartPre=@kmod@/bin/modprobe netatop
++ExecStart=@out@/bin/netatopd
++ExecStopPost=@kmod@/bin/rmmod netatop
+ PIDFile=/var/run/netatop.pid

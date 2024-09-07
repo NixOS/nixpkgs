@@ -1,0 +1,11 @@
+diff -Naurd rakarrack-0.6.1/src/Looper.C rakarrack-0.6.1-segfault/src/Looper.C
+--- rakarrack-0.6.1/src/Looper.C	2010-10-01 01:27:55.000000000 +0000
++++ rakarrack-0.6.1-segfault/src/Looper.C	2023-12-08 21:12:31.818569726 +0000
+@@ -34,6 +34,7 @@
+   efxoutr = efxoutr_;
+ 
+   //default values
++      Ppreset = 0;
+       Pclear = 1;
+       Pplay = 0;
+       Precord = 0;

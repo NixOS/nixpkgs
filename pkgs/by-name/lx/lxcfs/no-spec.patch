@@ -1,0 +1,24 @@
+diff --git a/meson.build b/meson.build
+index a0289ad..93fc61a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -253,19 +253,6 @@ if want_tests == true
+         c_args: '-DRELOADTEST -DDEBUG')
+ endif
+ 
+-# RPM spec.
+-lxcfs_spec = custom_target(
+-    'lxcfs.spec',
+-    build_by_default: true,
+-    input: 'lxcfs.spec.in',
+-    output: 'lxcfs.spec',
+-    command: [
+-        meson_render_jinja2,
+-        config_h,
+-        '@INPUT@',
+-        '@OUTPUT@',
+-    ])
+-
+ # Man pages
+ if want_docs == true
+     help2man = find_program('help2man')

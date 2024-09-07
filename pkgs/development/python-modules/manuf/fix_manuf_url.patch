@@ -1,0 +1,14 @@
+diff --git a/manuf/manuf.py b/manuf/manuf.py
+index 09e9687..0ac9296 100755
+--- a/manuf/manuf.py
++++ b/manuf/manuf.py
+@@ -61,7 +61,8 @@ class MacParser(object):
+         IOError: If manuf file could not be found.
+ 
+     """
+-    MANUF_URL = "https://gitlab.com/wireshark/wireshark/raw/master/manuf"
++    # https://github.com/coolbho3k/manuf/issues/34
++    MANUF_URL = "https://www.wireshark.org/download/automated/data/manuf"
+     WFA_URL = "https://gitlab.com/wireshark/wireshark/raw/master/wka"
+ 
+     def  __init__(self, manuf_name=None, update=False):

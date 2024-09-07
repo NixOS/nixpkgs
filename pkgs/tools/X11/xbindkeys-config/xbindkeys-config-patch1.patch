@@ -1,0 +1,108 @@
+---
+ Makefile           |  6 +++---
+ menu.c             | 11 ++++++++---
+ middle.c           |  9 +++++++--
+ xbindkeys_config.c |  3 ++-
+ 4 files changed, 20 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 602875c..28e46cd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,9 +1,9 @@
+ # makefile crée par Laurent VUIBERT
+ 
+-CC=	gcc -O3 -Wall
++CC=	gcc $(CFLAGS)
+ STD=	_GNU_SOURCE
+-GTK=	`gtk-config  --cflags --libs`
+-GTK2=	`gtk-config  --cflags`
++GTK=	`pkg-config  --cflags --libs gtk+-2.0`
++GTK2=	`pkg-config  --cflags gtk+-2.0`
+ OBJS=	xbindkeys_config.o menu.o middle.o speedc.o
+ NOM=    xbindkeys_config
+ 
+diff --git a/menu.c b/menu.c
+index ed3e7ec..f11526d 100644
+--- a/menu.c
++++ b/menu.c
+@@ -283,6 +283,8 @@ void menu_manual (GtkMenuItem *menuitem, gpointer user_data)
+   GtkWidget *window;
+   GtkWidget *text;
+   GtkWidget *vbox;
++  GtkTextBuffer *textbuffer;
++  GtkTextIter iter;
+   
+   window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+   gtk_window_set_title(GTK_WINDOW(window),
+@@ -293,10 +295,13 @@ void menu_manual (GtkMenuItem *menuitem, gpointer user_data)
+   text = gtk_label_new("\nManual\n");
+   gtk_box_pack_start(GTK_BOX(vbox), text, FALSE, FALSE, 0);
+   
+-  text = gtk_text_new(NULL,NULL);
++/* BDD - FIXME */
++/*  text = gtk_text_new(NULL,NULL); */
++  text = gtk_text_view_new();
++  textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text));
++  gtk_text_buffer_get_iter_at_offset (textbuffer, &iter, 0);
+   
+-  
+-  gtk_text_insert (GTK_TEXT(text), NULL, NULL, NULL,
++  gtk_text_buffer_insert (textbuffer, &iter, 
+ 		   MANUAL_TEXT, sizeof(MANUAL_TEXT)-1);
+   gtk_box_pack_start(GTK_BOX(vbox), text, TRUE, TRUE, 0);
+   gtk_widget_set_usize(text,300,250);
+diff --git a/middle.c b/middle.c
+index daa61aa..605ab10 100644
+--- a/middle.c
++++ b/middle.c
+@@ -551,6 +551,8 @@ void view_generated_file()
+   GtkWidget *window;
+   GtkWidget *text;
+   GtkWidget *src;
++  GtkTextBuffer *textbuffer;
++  GtkTextIter iter;
+   char line  [1024];
+ 
+   unlink(TEMP_FILE); 
+@@ -561,11 +563,13 @@ void view_generated_file()
+     gtk_window_set_title(GTK_WINDOW(window), "Generated File");
+     src = gtk_scrolled_window_new ( NULL, NULL );
+     gtk_widget_set_usize(src,500,400);
+-    text = gtk_text_new (NULL, NULL);
++    text = gtk_text_view_new ();
++    textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text));
++    gtk_text_buffer_get_iter_at_offset (textbuffer, &iter, 0);
+     gtk_container_add (GTK_CONTAINER(src),  text);
+ 
+     while (fgets (line, sizeof(line), f))
+-      gtk_text_insert (GTK_TEXT(text), NULL, NULL, NULL,
++      gtk_text_buffer_insert (textbuffer, &iter,
+ 		       line, strlen(line));
+ 
+     gtk_container_add(GTK_CONTAINER(window),src);
+@@ -610,6 +614,7 @@ void  save_file(char file_out[])
+   fprintf(f, "# m:xxx + c:xxx \n");
+   fprintf(f, "# Shift+... \n\n\n\n\n");
+ 
++
+   if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(Flag_NumLock)))
+     fprintf(f,"keystate_numlock = enable\n");
+   else 
+diff --git a/xbindkeys_config.c b/xbindkeys_config.c
+index 75bad30..3c02a2b 100644
+--- a/xbindkeys_config.c
++++ b/xbindkeys_config.c
+@@ -95,7 +95,8 @@ int main (int argc, char *argv[])
+      accel_group = gtk_accel_group_new();
+      menu=xbindkeys_config_menu(accel_group);
+      gtk_box_pack_start(GTK_BOX(vbox),menu,FALSE,FALSE,0);
+-     gtk_accel_group_attach(accel_group, GTK_OBJECT(window));
++/* BDD - FIXME - Don't need this? */
++/*     gtk_accel_group_attach(accel_group, GTK_OBJECT(window)); */
+      
+      middle= xbindkeys_config_middle();
+      gtk_box_pack_start(GTK_BOX(vbox),middle,TRUE,TRUE,0);
+-- 
+2.1.3
+

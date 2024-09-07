@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 8c542078..e91cef5e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -82,7 +82,7 @@ LIB_INSTALLER=gprinstall -p -f --target=$(TARGET) $(RBD) "--prefix=${prefix}"
+ CLEANER=gprclean -q $(RBD)
+ 
+ GPRBUILD_BUILDER=$(BUILDER) $(GPRBUILD_GPR) \
+-	-XLIBRARY_TYPE=static -XXMLADA_BUILD=static
++	-XLIBRARY_TYPE=relocatable -XXMLADA_BUILD=relocatable
+ LIBGPR_BUILDER=$(BUILDER) $(GPR_GPR) $(LIBGPR_OS)
+ LIBGPR_INSTALLER=$(LIB_INSTALLER) $(GPR_GPR) $(LIBGPR_OS) -XBUILD=${BUILD} \
+ 	--install-name=gpr \

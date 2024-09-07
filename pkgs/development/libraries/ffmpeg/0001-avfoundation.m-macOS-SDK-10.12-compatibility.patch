@@ -1,0 +1,25 @@
+From a804dd05351716b1fd9a7c2b7ed636613edd9c0f Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Fri, 21 Jun 2024 18:59:49 +0000
+Subject: [PATCH] avfoundation.m: macOS SDK 10.12 compatibility
+
+---
+ libavdevice/avfoundation.m | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavdevice/avfoundation.m b/libavdevice/avfoundation.m
+index d9b17ccdae..2a1f66d751 100644
+--- a/libavdevice/avfoundation.m
++++ b/libavdevice/avfoundation.m
+@@ -762,7 +762,7 @@ static int get_audio_config(AVFormatContext *s)
+     return 0;
+ }
+ 
+-static NSArray* getDevicesWithMediaType(AVMediaType mediaType) {
++static NSArray* getDevicesWithMediaType(NSString * mediaType) {
+ #if ((TARGET_OS_IPHONE && __IPHONE_OS_VERSION_MIN_REQUIRED >= 100000) || (TARGET_OS_OSX && __MAC_OS_X_VERSION_MIN_REQUIRED >= 101500))
+     NSMutableArray *deviceTypes = nil;
+     if (mediaType == AVMediaTypeVideo) {
+-- 
+2.44.0
+

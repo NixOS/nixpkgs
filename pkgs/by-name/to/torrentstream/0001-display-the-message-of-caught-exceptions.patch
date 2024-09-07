@@ -1,0 +1,37 @@
+diff --git a/Program.cs b/Program.cs
+index 5697d79..7cfba20 100644
+--- a/Program.cs
++++ b/Program.cs
+@@ -79,6 +79,8 @@ app.MapGet ( "/proxyvideolist", ProxyHandler.ProxyVideolist );
+ app.MapGet ( "/proxyvideopart", ProxyHandler.ProxyVideoPart );
+ app.MapGet ( "/playerws", ExternalPlayer.ExternalWebSocket );
+ 
++Console.WriteLine ($"BaseFolder: {GlobalConfiguration.BaseFolder}");
++
+ await TorrentHandler.LoadState ();
+ 
+ app.Run ();
+diff --git a/StreamHandler.cs b/StreamHandler.cs
+index 43aa61c..7d26681 100644
+--- a/StreamHandler.cs
++++ b/StreamHandler.cs
+@@ -110,7 +110,8 @@ namespace TorrentStream {
+                     context.Response.StatusCode = 302;
+                     context.Response.Headers.Location = ( RuntimeInformation.IsOSPlatform ( OSPlatform.Windows ) ? "file:///" : "file://" ) + currentFile.FullPath;
+                 }
+-            } catch {
++            } catch (Exception e) {
++                Console.WriteLine($"Exception caught: {e.Message}");
+                 context.Response.StatusCode = 500;
+             }
+         }
+@@ -192,7 +193,8 @@ namespace TorrentStream {
+                 }
+                 context.Response.StatusCode = 200;
+                 await context.Response.WriteAsync ( "Downloading started" );
+-            } catch {
++            } catch (Exception e) {
++                Console.WriteLine($"Exception caught: {e.Message}");
+                 context.Response.StatusCode = 500;
+             }
+         }

@@ -1,0 +1,110 @@
+From e4a0d0b48905bb949831c30c941e921da0b6f09c Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Sat, 3 Aug 2024 12:21:12 +0100
+Subject: [PATCH 4/4] Use pkg-config to find libresample and kissfft
+
+---
+ .travis.yml              |  2 ++
+ CMakeLists.txt           | 12 ++++++++++++
+ libmusly/CMakeLists.txt  | 12 +++---------
+ libmusly/powerspectrum.h |  2 +-
+ libmusly/resampler.h     |  2 +-
+ 5 files changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/.travis.yml b/.travis.yml
+index b051004..b354641 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -31,3 +31,5 @@ addons:
+             - libavcodec-dev
+             - libavformat-dev
+             - libavutil-dev
++            - libresample-dev
++            - libkissfft-dev
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8d8bf0e..c5b0d2c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -60,6 +60,18 @@ pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
+     libavcodec
+     libavformat
+     libavutil)
++pkg_check_modules(LIBRESAMPLE REQUIRED IMPORTED_TARGET libresample)
++pkg_search_module(KISSFFT REQUIRED IMPORTED_TARGET
++    kissfft-simd
++    kissfft-double
++    kissfft-float
++    kissfft-int32_t
++    kissfft-int16_t
++    kissfft-simd-openmp
++    kissfft-double-openmp
++    kissfft-float-openmp
++    kissfft-int32_t-openmp
++    kissfft-int16_t-openmp)
+ 
+ include_directories(
+     "${PROJECT_SOURCE_DIR}/include")
+diff --git a/libmusly/CMakeLists.txt b/libmusly/CMakeLists.txt
+index b9f6d11..6f8c8e9 100644
+--- a/libmusly/CMakeLists.txt
++++ b/libmusly/CMakeLists.txt
+@@ -13,19 +13,11 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external")
+         PROPERTIES COMPILE_FLAGS "-DLIBMUSLY_EXTERNAL ${LIBMUSLY_EXTERNAL_FLAGS}")
+ endif()
+ 
+-if(USE_OPENMP AND OPENMP_FOUND)
+-    # disable OpenMP for kiss FFT, it slows things down terribly
+-    set_source_files_properties(kissfft/kiss_fft.c
+-        PROPERTIES COMPILE_FLAGS "-U_OPENMP")
+-endif()
+-
+ include_directories(
+     ${LIBMUSLY_INCLUDE}
+     ${CMAKE_CURRENT_SOURCE_DIR})
+ 
+ add_library(libmusly
+-    kissfft/kiss_fft.c
+-    kissfft/kiss_fftr.c
+     methods/mandelellis.cpp
+     methods/timbre.cpp
+     decoders/libav.cpp
+@@ -56,7 +48,9 @@ set_target_properties(libmusly
+ target_link_libraries(libmusly
+     ${LIBMUSLY_LIBS}
+     PkgConfig::EIGEN3
+-    PkgConfig::FFMPEG)
++    PkgConfig::FFMPEG
++    PkgConfig::LIBRESAMPLE
++    PkgConfig::KISSFFT)
+ if(WIN32 OR MINGW)
+     # link against winsock2 for ntohl() and htonl()
+     target_link_libraries(libmusly ws2_32)
+diff --git a/libmusly/powerspectrum.h b/libmusly/powerspectrum.h
+index 6957db4..096fc31 100644
+--- a/libmusly/powerspectrum.h
++++ b/libmusly/powerspectrum.h
+@@ -14,7 +14,7 @@
+ 
+ #include <Eigen/Core>
+ extern "C" {
+-    #include "kissfft/kiss_fftr.h"
++    #include <kissfft/kiss_fftr.h>
+ }
+ 
+ 
+diff --git a/libmusly/resampler.h b/libmusly/resampler.h
+index df8aaa4..f48e22a 100644
+--- a/libmusly/resampler.h
++++ b/libmusly/resampler.h
+@@ -14,7 +14,7 @@
+ 
+ #include <vector>
+ extern "C" {
+-    #include "libresample/libresample.h"
++    #include <libresample.h>
+ }
+ 
+ namespace musly {
+-- 
+2.45.2
+

@@ -1,0 +1,40 @@
+diff --git a/data/meson.build b/data/meson.build
+index 5e4ce69..982b3c9 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -31,7 +31,7 @@ i18n.merge_file(
+ 
+ install_data(
+   'org.gnome.pomodoro.gschema.xml',
+-  install_dir: get_option('datadir') / 'glib-2.0' / 'schemas',
++  install_dir: gschema_dir,
+ )
+ 
+ subdir('icons')
+diff --git a/meson-post-install.sh b/meson-post-install.sh
+index bf4013a..c87fba4 100644
+--- a/meson-post-install.sh
++++ b/meson-post-install.sh
+@@ -7,7 +7,7 @@ datadir="${prefix}/$1"
+ # want/need us to do the below
+ if [ -z "${DESTDIR}" ]; then
+     echo "Compiling GSchema..."
+-    glib-compile-schemas "${datadir}/glib-2.0/schemas"
++    glib-compile-schemas "${datadir}/gsettings-schemas/@pname@-@version@/glib-2.0/schemas"
+ 
+     echo "Updating icon cache..."
+     gtk-update-icon-cache -f -t "${datadir}/icons/hicolor"
+diff --git a/meson.build b/meson.build
+index 09857a1..a07d27c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -40,7 +40,8 @@ add_project_arguments(
+ )
+ 
+ # We are going to use these variables later on for the plugins
+-gschema_dir = get_option('prefix') / get_option('datadir') / 'glib-2.0' / 'schemas'
++nix_package_name = '@pname@' + '-' + '@version@'
++gschema_dir = get_option('prefix') / get_option('datadir') / 'gsettings-schemas' / nix_package_name / 'glib-2.0' / 'schemas'
+ plugin_libdir = get_option('prefix') / get_option('libdir') / meson.project_name() / 'plugins'
+ extension_dir = get_option('prefix') / get_option('datadir') / 'gnome-shell' / 'extensions' / 'pomodoro@arun.codito.in'
+ 

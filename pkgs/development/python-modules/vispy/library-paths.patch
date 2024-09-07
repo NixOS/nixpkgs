@@ -1,0 +1,39 @@
+diff --git a/vispy/ext/fontconfig.py b/vispy/ext/fontconfig.py
+index ff24662b..6a5079f0 100644
+--- a/vispy/ext/fontconfig.py
++++ b/vispy/ext/fontconfig.py
+@@ -7,10 +7,7 @@ from ..util.wrappers import run_subprocess
+ 
+ # Some code adapted from Pyglet
+ 
+-fc = util.find_library('fontconfig')
+-if fc is None:
+-    raise ImportError('fontconfig not found')
+-fontconfig = cdll.LoadLibrary(fc)
++fontconfig = cdll.LoadLibrary('@fontconfig@')
+ 
+ FC_FAMILY = 'family'.encode('ASCII')
+ FC_SIZE = 'size'.encode('ASCII')
+diff --git a/vispy/gloo/gl/gl2.py b/vispy/gloo/gl/gl2.py
+index d5bd9c38..63350e73 100644
+--- a/vispy/gloo/gl/gl2.py
++++ b/vispy/gloo/gl/gl2.py
+@@ -39,16 +39,8 @@ elif sys.platform.startswith('win'):
+         pass
+ else:
+     # Unix-ish
+-    if sys.platform.startswith('darwin'):
+-        _fname = ctypes.util.find_library('OpenGL')
+-    else:
+-        _fname = ctypes.util.find_library('GL')
+-    if not _fname:
+-        logger.warning('Could not load OpenGL library.')
+-        _lib = None
+-    else:
+-        # Load lib
+-        _lib = ctypes.cdll.LoadLibrary(_fname)
++    # Load lib
++    _lib = ctypes.cdll.LoadLibrary("@gl@")
+ 
+ 
+ def _have_context():

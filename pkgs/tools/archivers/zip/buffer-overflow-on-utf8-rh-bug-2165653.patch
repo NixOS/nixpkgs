@@ -1,0 +1,12 @@
+diff -urp zip30/fileio.c zip30/fileio.c
+--- zip30/fileio.c	2008-05-29 03:13:24.000000000 +0300
++++ zip30/fileio.c	2023-05-02 12:19:50.488314853 +0300
+@@ -3502,7 +3502,7 @@ zwchar *local_to_wide_string(local_strin
+   if ((wc_string = (wchar_t *)malloc((wsize + 1) * sizeof(wchar_t))) == NULL) {
+     ZIPERR(ZE_MEM, "local_to_wide_string");
+   }
+-  wsize = mbstowcs(wc_string, local_string, strlen(local_string) + 1);
++  wsize = mbstowcs(wc_string, local_string, wsize + 1);
+   wc_string[wsize] = (wchar_t) 0;
+ 
+   /* in case wchar_t is not zwchar */

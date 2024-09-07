@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 55ae3280..cac86220 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -85,8 +85,8 @@ ecm_find_qmlmodule(QtPositioning 6.0)
+ ecm_find_qmlmodule(org.kde.kitemmodels 5.245)
+ ecm_find_qmlmodule(org.kde.prison 5.245)
+ ecm_find_qmlmodule(org.kde.prison.scanner 5.245)
+-ecm_find_qmlmodule(org.kde.kosmindoormap 24.02 REQUIRED)
+-ecm_find_qmlmodule(org.kde.kopeninghours 24.02 REQUIRED)
++ecm_find_qmlmodule(org.kde.kosmindoormap 24.02)
++ecm_find_qmlmodule(org.kde.kopeninghours 24.02)
+ 
+ # runtime dependencies are build-time dependencies on Android
+ if (ANDROID)

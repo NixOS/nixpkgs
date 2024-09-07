@@ -1,0 +1,13 @@
+diff --git a/src/common/env.c b/src/common/env.c
+index 4dad18fef1..730f28af96 100644
+--- a/src/common/env.c
++++ b/src/common/env.c
+@@ -2073,7 +2073,7 @@ char **env_array_user_default(const char *username, int timeout, int mode,
+ 	char **env = NULL;
+ 	char *starttoken = "XXXXSLURMSTARTPARSINGHEREXXXX";
+ 	char *stoptoken  = "XXXXSLURMSTOPPARSINGHEREXXXXX";
+-	char cmdstr[256], *env_loc = NULL;
++	char cmdstr[PATH_MAX], *env_loc = NULL;
+ 	char *stepd_path = NULL;
+ 	int fildes[2], found, fval, len, rc, timeleft;
+ 	int buf_read, buf_rem, config_timeout;

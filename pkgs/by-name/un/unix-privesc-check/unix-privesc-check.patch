@@ -1,0 +1,20 @@
+--- a/unix-privesc-check	2024-02-14 20:21:24.725453661 +0100
++++ b/unix-privesc-check	2024-02-14 20:21:46.577446690 +0100
+@@ -484,17 +484,6 @@
+ # Set path so we can access usual directories.  HPUX and some linuxes don't have sbin in the path.
+ PATH=$PATH:/usr/bin:/bin:/sbin:/usr/sbin; export PATH
+ 
+-# Check dependent programs are installed
+-# Assume "which" is installed!
+-PROGS="ls awk grep cat mount xargs file ldd strings"
+-for PROG in $PROGS; do
+-	which $PROG 2>&1 > /dev/null
+-	if [ ! $? = "0" ]; then
+-		echo "ERROR: Dependend program '$PROG' is mising.  Can't run.  Sorry!"
+-		exit 1
+-	fi
+-done
+-
+ banner
+ 
+ section "Recording hostname"

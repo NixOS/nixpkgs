@@ -1,0 +1,35 @@
+diff --git a/plugins/lame/encoderlame.cpp b/plugins/lame/encoderlame.cpp
+index 48d1d76..2643d6a 100644
+--- a/plugins/lame/encoderlame.cpp
++++ b/plugins/lame/encoderlame.cpp
+@@ -244,7 +244,7 @@ long EncoderLame::readInit(long /*size*/)
+ 
+     // -r raw/pcm
+     // -s 44.1 (because it is raw you have to specify this)
+-    *(d->currentEncodeProcess) << QStringLiteral("lame") << QStringLiteral("--verbose") << QStringLiteral("-r") << QStringLiteral("-s")
++    *(d->currentEncodeProcess) << QStringLiteral("@lame@") << QStringLiteral("--verbose") << QStringLiteral("-r") << QStringLiteral("-s")
+                                << QStringLiteral("44.1");
+     *(d->currentEncodeProcess) << args;
+     if (Settings::self()->id3_tag())
+diff --git a/plugins/opus/encoderopus.cpp b/plugins/opus/encoderopus.cpp
+index ef297fb..465bb3e 100644
+--- a/plugins/opus/encoderopus.cpp
++++ b/plugins/opus/encoderopus.cpp
+@@ -82,7 +82,7 @@ QWidget *EncoderOpus::getConfigureWidget(KConfigSkeleton **manager) const
+ bool EncoderOpus::init()
+ {
+     // Determine if opusenc is installed on the system or not.
+-    if (QStandardPaths::findExecutable(QStringLiteral("opusenc")).isEmpty())
++    if (QStandardPaths::findExecutable(QStringLiteral("@opusenc@")).isEmpty())
+         return false;
+ 
+     return true;
+@@ -140,7 +140,7 @@ long EncoderOpus::readInit(long /*size*/)
+ 
+     // --raw raw/pcm
+     // --raw-rate 44100 (because it is raw you have to specify this)
+-    *(d->currentEncodeProcess) << QStringLiteral("opusenc") << QStringLiteral("--raw") << QStringLiteral("--raw-rate") << QStringLiteral("44100");
++    *(d->currentEncodeProcess) << QStringLiteral("@opusenc@") << QStringLiteral("--raw") << QStringLiteral("--raw-rate") << QStringLiteral("44100");
+     *(d->currentEncodeProcess) << args;
+     *d->currentEncodeProcess << trackInfo;
+ 

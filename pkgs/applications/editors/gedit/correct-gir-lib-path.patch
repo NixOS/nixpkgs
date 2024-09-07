@@ -1,0 +1,13 @@
+diff --git a/gedit/meson.build b/gedit/meson.build
+index a8683e61a..fc48669f7 100644
+--- a/gedit/meson.build
++++ b/gedit/meson.build
+@@ -191,7 +191,7 @@ libgedit_shared_lib = shared_library(
+   c_args: libgedit_c_args,
+   link_args: libgedit_link_args,
+   install: true,
+-  install_dir: get_option('libdir') / 'gedit',
++  install_dir: get_option('prefix') / get_option('libdir') / 'gedit',
+ )
+ 
+ # GObject Introspection

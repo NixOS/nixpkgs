@@ -1,0 +1,11 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 636531ee..af1b0e4e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,6 +39,7 @@ INCLUDE ( FindJPEG )
+ if (JPEG_FOUND)
+   include_directories( ${JPEG_INCLUDE_DIR} )
+   target_link_libraries( yuvconvert ${JPEG_LIBRARY} )
++  target_link_libraries( ${ly_lib_shared} ${JPEG_LIBRARY} )
+   add_definitions( -DHAVE_JPEG )
+ endif()

@@ -1,0 +1,322 @@
+--- _install/install_ucb.c
++++ _install/install_ucb.c
+@@ -267,7 +267,7 @@ cp(const char *src, const char *tgt, struct stat *dsp)
+ 	if (check(src, tgt, dsp, &sst) != OKAY)
+ 		return;
+ 	unlink(tgt);
+-	if ((dfd = creat(tgt, 0700)) < 0 || fchmod(dfd, 0700) < 0 ||
++	if ((dfd = creat(tgt, 0700)) < 0 || chmod(tgt, 0700) < 0 ||
+ 			fstat(dfd, &nst) < 0) {
+ 		fprintf(stderr, "%s: %s: %s\n", progname, src,
+ 				strerror(errno));
+--- libcommon/Makefile.mk
++++ libcommon/Makefile.mk
+@@ -15,7 +15,7 @@ CHECK: CHECK.c
+ headers: CHECK
+ 	one() { \
+ 		rm -f "$$1.h"; \
+-		if grep "$$1_h[	 ]*=[ 	]*[^0][	 ]*;" CHECK >/dev/null; \
++		if true; \
+ 		then \
+ 			ln -s "_$$1.h" "$$1.h"; \
+ 		fi; \
+--- libcommon/atoll.h
++++ libcommon/atoll.h
+@@ -1,8 +1,10 @@
+ /*	Sccsid @(#)atoll.h	1.4 (gritter) 7/18/04	*/
+ 
+ #if defined (__hpux) || defined (_AIX) || \
+-	defined (__FreeBSD__) && (__FreeBSD__) < 5
++	(defined (__FreeBSD__) && (__FreeBSD__) < 5) || defined (__TINYC__)
++#ifndef __TINYC__
+ extern long long strtoll(const char *nptr, char **endptr, int base);
+ extern unsigned long long strtoull(const char *nptr, char **endptr, int base);
++#endif
+ extern long long atoll(const char *nptr);
+ #endif	/* __hpux || _AIX || __FreeBSD__ < 5 */
+--- libcommon/blank.h
++++ libcommon/blank.h
+@@ -5,7 +5,7 @@
+  */
+ /*	Sccsid @(#)blank.h	1.3 (gritter) 5/1/04	*/
+ 
+-#ifndef	__dietlibc__
++#if !defined(__dietlibc__) && !defined(__TINYC__)
+ #ifndef	LIBCOMMON_BLANK_H
+ #define	LIBCOMMON_BLANK_H	1
+ 
+--- libcommon/getdir.c
++++ libcommon/getdir.c
+@@ -52,7 +52,7 @@ extern int	getdents(int, struct dirent *, size_t);
+ #undef	d_ino
+ #endif	/* __FreeBSD__ || __NetBSD__ || __OpenBSD__ || __DragonFly__
+ 	 || __APPLE__ */
+-#elif defined	(__dietlibc__)
++#elif defined	(__dietlibc__) || defined(__TINYC__)
+ #include	<dirent.h>
+ #include	<unistd.h>
+ #else		/* !__GLIBC__, !__dietlibc__ */
+--- libcommon/memalign.c
++++ libcommon/memalign.c
+@@ -23,7 +23,7 @@
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (_AIX) || \
+ 	defined (__NetBSD__) || defined (__OpenBSD__) || \
+-	defined (__DragonFly__) || defined (__APPLE__)
++	defined (__DragonFly__) || defined (__APPLE__) || defined(__TINYC__)
+ /*
+  * FreeBSD malloc(3) promises to page-align the return of malloc() calls
+  * if size is at least a page. This serves for a poor man's memalign() 
+--- libcommon/memalign.h
++++ libcommon/memalign.h
+@@ -26,7 +26,7 @@
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (_AIX) || \
+ 	defined (__NetBSD__) || defined (__OpenBSD__) || \
+-	defined (__DragonFly__) || defined (__APPLE__)
++	defined (__DragonFly__) || defined (__APPLE__) || defined(__TINYC__)
+ #include	<stdlib.h>
+ 
+ extern void	*memalign(size_t, size_t);
+--- libcommon/pathconf.c
++++ libcommon/pathconf.c
+@@ -21,7 +21,7 @@
+  */
+ /*	Sccsid @(#)pathconf.c	1.2 (gritter) 5/1/04	*/
+ 
+-#ifdef	__dietlibc__
++#if defined(__dietlibc__) || defined(__TINYC__)
+ #include <unistd.h>
+ #include "pathconf.h"
+ 
+--- libcommon/pathconf.h
++++ libcommon/pathconf.h
+@@ -21,7 +21,7 @@
+  */
+ /*	Sccsid @(#)pathconf.h	1.2 (gritter) 5/1/04	*/
+ 
+-#ifdef	__dietlibc__
++#if defined(__dietlibc__) || defined(__TINYC__)
+ #include <unistd.h>
+ 
+ extern long	fpathconf(int, int);
+--- libcommon/regexp.h
++++ libcommon/regexp.h
+@@ -47,7 +47,7 @@
+ static const char regexp_h_sccsid[] REGEXP_H_USED =
+ 	"@(#)regexp.sl	1.56 (gritter) 5/29/05";
+ 
+-#if !defined (REGEXP_H_USED_FROM_VI) && !defined (__dietlibc__)
++#if !defined (REGEXP_H_USED_FROM_VI) && !defined (__dietlibc__) && !defined (__TINYC__)
+ #define	REGEXP_H_WCHARS
+ #endif
+ 
+--- libcommon/sfile.c
++++ libcommon/sfile.c
+@@ -21,7 +21,7 @@
+  */
+ /*	Sccsid @(#)sfile.c	1.9 (gritter) 6/7/04	*/
+ 
+-#ifdef	__linux__
++#if defined(__linux__) && !defined(__TINYC__)
+ #undef	_FILE_OFFSET_BITS
+ 
+ #include	<sys/types.h>
+--- libcommon/sighold.c
++++ libcommon/sighold.c
+@@ -22,7 +22,7 @@
+ /*	Sccsid @(#)sighold.c	1.7 (gritter) 1/22/06	*/
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (__NetBSD__) || \
+-	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__)
++	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__) || defined (__TINYC__)
+ #include <signal.h>
+ #include "sigset.h"
+ 
+--- libcommon/sigignore.c
++++ libcommon/sigignore.c
+@@ -22,7 +22,7 @@
+ /*	Sccsid @(#)sigignore.c	1.6 (gritter) 1/22/06	*/
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (__NetBSD__) || \
+-	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__)
++	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__) || defined (__TINYC__)
+ #include <signal.h>
+ #include "sigset.h"
+ 
+--- libcommon/sigpause.c
++++ libcommon/sigpause.c
+@@ -22,7 +22,7 @@
+ /*	Sccsid @(#)sigpause.c	1.6 (gritter) 1/22/06	*/
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (__NetBSD__) || \
+-	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__)
++	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__) || defined (__TINYC__)
+ #include <signal.h>
+ #include "sigset.h"
+ 
+--- libcommon/sigrelse.c
++++ libcommon/sigrelse.c
+@@ -22,7 +22,7 @@
+ /*	Sccsid @(#)sigrelse.c	1.8 (gritter) 1/22/06	*/
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (__NetBSD__) || \
+-	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__)
++	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__) || defined (__TINYC__)
+ #include <signal.h>
+ #include "sigset.h"
+ 
+--- libcommon/sigset.c
++++ libcommon/sigset.c
+@@ -22,7 +22,7 @@
+ /*	Sccsid @(#)sigset.c	1.7 (gritter) 1/22/06	*/
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (__NetBSD__) || \
+-	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__)
++	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__) || defined (__TINYC__)
+ #include <signal.h>
+ #include "sigset.h"
+ 
+@@ -46,10 +46,7 @@ void (*sigset(int sig, void (*func)(int)))(int)
+ 	if (sigaction(sig, func==SIG_HOLD?(struct sigaction *)0:&nact, &oact)
+ 			== -1)
+ 		return SIG_ERR;
+-	if (sigismember(&oset, sig))
+-		return SIG_HOLD;
+-	else
+-		return (oact.sa_handler);
++	return (oact.sa_handler);
+ }
+ #endif	/* __FreeBSD__ || __dietlibc__ || __NetBSD__ || __OpenBSD__ ||
+ 	__DragonFly__ || __APPLE__ */
+--- libcommon/sigset.h
++++ libcommon/sigset.h
+@@ -22,7 +22,7 @@
+ /*	Sccsid @(#)sigset.h	1.9 (gritter) 1/22/06	*/
+ 
+ #if defined (__FreeBSD__) || defined (__dietlibc__) || defined (__NetBSD__) || \
+-	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__)
++	defined (__OpenBSD__) || defined (__DragonFly__) || defined (__APPLE__) || defined (__TINYC__)
+ 
+ #ifndef	SIG_HOLD
+ #define	SIG_HOLD	((void (*)(int))2)
+--- libcommon/strtol.c
++++ libcommon/strtol.c
+@@ -1,7 +1,7 @@
+ /*	Sccsid @(#)strtol.c	1.6 (gritter) 7/18/04	*/
+ 
+ #if defined (__hpux) || defined (_AIX) || \
+-	defined (__FreeBSD__) && (__FreeBSD__) < 5
++	(defined (__FreeBSD__) && (__FreeBSD__) < 5) || defined (__TINYC__)
+ 
+ #include	<stdlib.h>
+ #include	<ctype.h>
+@@ -97,6 +97,7 @@ out:	if (pp <= bptr) {
+ 	return v * sign;
+ }
+ 
++#ifndef __TINYC__
+ long long
+ strtoll(const char *nptr, char **endptr, int base)
+ {
+@@ -108,6 +109,7 @@ strtoull(const char *nptr, char **endptr, int base)
+ {
+ 	return (unsigned long long)internal(nptr, endptr, base, 3);
+ }
++#endif
+ 
+ long long
+ atoll(const char *nptr)
+--- nawk/awk.h
++++ nawk/awk.h
+@@ -156,7 +156,6 @@ extern Cell	*rlengthloc;	/* RLENGTH */
+ #endif
+ 
+ #ifndef	IN_MAKETAB
+-#include <wchar.h>
+ 
+ /*
+  * Get next character from string s and store it in wc; n is set to
+--- nawk/awk.lx.l
++++ nawk/awk.lx.l
+@@ -71,7 +71,6 @@
+ 
+ #include	"awk.h"
+ #include	"y.tab.h"
+-#include	<pfmt.h>
+ #include	<unistd.h>
+ 
+ static void	awk_unputstr(const char *s);
+--- nawk/run.c
++++ nawk/run.c
+@@ -1467,14 +1467,6 @@ Cell *bltin(Node **a, int n)
+ 	case FRAND:
+ 		u = (Awkfloat) (rand() % 32767) / 32767.0;
+ 		break;
+-	case FSRAND:
+-		u = saved_srand; /* return previous seed */
+-		if (x->tval & REC)	/* no argument provided */
+-			saved_srand = time(NULL);
+-		else
+-			saved_srand = getfval(x);
+-		srand((int) saved_srand);
+-		break;
+ 	case FTOUPPER:
+ 	case FTOLOWER:
+ 		p = getsval(x);
+--- pgrep/pgrep.c
++++ pgrep/pgrep.c
+@@ -214,7 +214,7 @@ chdir_to_proc(void)
+ 		fprintf(stderr, "%s: cannot open %s\n", progname, PROCDIR);
+ 		exit(3);
+ 	}
+-	if (fchdir(fd) < 0) {
++	if (chdir(PROCDIR) < 0) {
+ 		fprintf(stderr, "%s: cannot chdir to %s\n", progname, PROCDIR);
+ 		exit(3);
+ 	}
+--- rm/rm.c
++++ rm/rm.c
+@@ -242,7 +242,7 @@ rm(size_t pend, const char *base, const int olddir, int ssub, int level)
+ 				}
+ 				return;
+ 			}
+-			if (fchdir(df) < 0) {
++			if (chdir(base) < 0) {
+ 				if (rmfile(base, &st) < 0) {
+ 					fprintf(stderr,
+ 						"%s: cannot chdir to %s\n",
+@@ -270,7 +270,7 @@ rm(size_t pend, const char *base, const int olddir, int ssub, int level)
+ 					progname, path);
+ 				errcnt |= 4;
+ 			}
+-			if (olddir >= 0 && fchdir(olddir) < 0) {
++			if (olddir >= 0) {
+ 				fprintf(stderr, "%s: cannot change backwards\n",
+ 						progname);
+ 				exit(1);
+@@ -316,24 +316,6 @@ subproc(size_t pend, const char *base, int level)
+ 		int status;
+ 
+ 		while (waitpid(pid, &status, 0) != pid);
+-		if (status && WIFSIGNALED(status)) {
+-			/*
+-			 * If the signal was sent due to a tty keypress,
+-			 * we should be terminated automatically and
+-			 * never reach this point. Otherwise, we terminate
+-			 * with the same signal, but make sure that we do
+-			 * not overwrite a possibly generated core file.
+-			 * This results in nearly the usual behavior except
+-			 * that the shell never prints a 'core dumped'
+-			 * message.
+-			 */
+-			struct rlimit	rl;
+-
+-			rl.rlim_cur = rl.rlim_max = 0;
+-			setrlimit(RLIMIT_CORE, &rl);
+-			raise(WTERMSIG(status));
+-			pause();
+-		}
+ 		return status ? WEXITSTATUS(status) : 0;
+ 	}
+ 	case -1:

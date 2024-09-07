@@ -1,0 +1,38 @@
+diff --git a/lib/Configuration.php b/lib/Configuration.php
+index 63f67a3c..f0a53a24 100644
+--- a/lib/Configuration.php
++++ b/lib/Configuration.php
+@@ -81,8 +81,8 @@ public static function loadConfiguration(array $customConfig = [], array $env =
+             }
+         }
+ 
+-        if (file_exists(__DIR__ . '/../whitelist.txt')) {
+-            $enabledBridges = trim(file_get_contents(__DIR__ . '/../whitelist.txt'));
++        if (file_exists(getenv('RSSBRIDGE_DATA') . '/whitelist.txt')) {
++            $enabledBridges = trim(file_get_contents(getenv('RSSBRIDGE_DATA') . '/whitelist.txt'));
+             if ($enabledBridges === '*') {
+                 self::setConfig('system', 'enabled_bridges', ['*']);
+             } else {
+diff --git a/lib/bootstrap.php b/lib/bootstrap.php
+index 6465f5f9..4605596f 100644
+--- a/lib/bootstrap.php
++++ b/lib/bootstrap.php
+@@ -1,7 +1,7 @@
+ <?php
+ 
+ const PATH_LIB_CACHES = __DIR__ . '/../caches/';
+-const PATH_CACHE = __DIR__ . '/../cache/';
++define('PATH_CACHE', getenv('RSSBRIDGE_DATA') . '/cache/');
+ 
+ // Allow larger files for simple_html_dom
+ // todo: extract to config (if possible)
+@@ -43,7 +43,7 @@
+ });
+ 
+ $customConfig = [];
+-if (file_exists(__DIR__ . '/../config.ini.php')) {
+-    $customConfig = parse_ini_file(__DIR__ . '/../config.ini.php', true, INI_SCANNER_TYPED);
++if (file_exists(getenv('RSSBRIDGE_DATA') . '/config.ini.php')) {
++    $customConfig = parse_ini_file(getenv('RSSBRIDGE_DATA') . '/config.ini.php', true, INI_SCANNER_TYPED);
+ }
+ Configuration::loadConfiguration($customConfig, getenv());

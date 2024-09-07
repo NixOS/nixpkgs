@@ -1,0 +1,40 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "ast_pattern_matching"
+      ],
+      "path": "/nix/store/b4rlaqmh5cm1yk62w8ij05swgdc9n5xq-source",
+      "ref": "master",
+      "rev": "eb8b99d595517fd5d41ccc954edb896267f2db78",
+      "sha256": "13l1qracvcyykjkmgl6zla960yayj1ka6y983wxp6z8fpwb25wn0",
+      "srcDir": "src",
+      "url": "https://github.com/nim-lang/ast-pattern-matching/archive/eb8b99d595517fd5d41ccc954edb896267f2db78.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "asynctools"
+      ],
+      "path": "/nix/store/7hkns6lb477pnpyzkj2cq8q10shbshwn-source",
+      "ref": "master",
+      "rev": "a1a17d06713727d97810cad291e29dd7c672738f",
+      "sha256": "160h0k26f7xd5fbblc2l29d19ndgixb3aand3j5adrdbkkqhlgz0",
+      "srcDir": "",
+      "url": "https://github.com/cheatfate/asynctools/archive/a1a17d06713727d97810cad291e29dd7c672738f.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "jsonschema"
+      ],
+      "path": "/nix/store/f9yjcyrvkz9rk1871377hkzlv9rq1x3b-source",
+      "ref": "packedjson",
+      "rev": "40208614ea3758e05ea39ab090de258046f99cb3",
+      "sha256": "12rli1qsx3hsldbs08qphcajh3nbv7hbclsygjacmxxc8im1y5m0",
+      "srcDir": "src",
+      "url": "https://github.com/PMunch/jsonschema/archive/40208614ea3758e05ea39ab090de258046f99cb3.tar.gz"
+    }
+  ]
+}
