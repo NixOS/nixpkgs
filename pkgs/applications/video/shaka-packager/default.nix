@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, runCommand
-, shaka-packager
+{
+  lib,
+  stdenv,
+  fetchurl,
+  runCommand,
+  shaka-packager,
 }:
 
 let
@@ -21,8 +22,9 @@ let
     };
   };
 
-  source = sources."${stdenv.hostPlatform.system}"
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  source =
+    sources."${stdenv.hostPlatform.system}"
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
