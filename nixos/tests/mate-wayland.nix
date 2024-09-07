@@ -20,8 +20,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
     services.xserver.desktopManager.mate.enableWaylandSession = true;
 
-    hardware.pulseaudio.enable = true;
-
     # Need to switch to a different GPU driver than the default one (-vga std) so that wayfire can launch:
     virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };
