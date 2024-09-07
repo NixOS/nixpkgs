@@ -1,31 +1,30 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  writeScript,
   appstream-glib,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
   cairo,
+  cargo,
   desktop-file-utils,
+  fetchFromGitLab,
   gdb,
   gdk-pixbuf,
   glib,
   gtk4,
   gtksourceview5,
+  lib,
   libadwaita,
   libgit2,
   libusb1,
+  meson,
+  ninja,
+  nix-update-script,
   openssl,
   pango,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
   vte-gtk4,
+  wrapGAppsHook4,
   zlib,
-  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,11 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ gdb ]}"
   '';
 
-  passthru.updateScript = writeScript "envision-update" ''
-    source ${builtins.head (unstableGitUpdater { })}
-
-    cp $tmpdir/Cargo.lock ./pkgs/by-name/en/envision-unwrapped/Cargo.lock
-  '';
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
   meta = {
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";
