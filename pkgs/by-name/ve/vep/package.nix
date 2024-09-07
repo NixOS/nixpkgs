@@ -1,4 +1,4 @@
-# Instructions:http://www.ensembl.org/info/docs/api/api_installation.html
+# Instructions:http://www.ensembl.org/info/docs/api/api_installation.html,
 # Do not use https://github.com/Ensembl/ensembl-vep/archive/release/${version}.zip
 # We cannot use INSTALL.pl but it’s not that bad:install the dependencies and copies the .pm files should be ok
 {
@@ -30,7 +30,12 @@ let
         repo = name;
         rev = "release/${version}";
       };
-      installPhase = customInstallPhase;
+      installPhase = ''
+        runHook preInstall
+
+        ${customInstallPhase}
+
+        runHook postInstall'';
     };
 
   vepPlugins = fetchFromGitHub {
@@ -100,16 +105,20 @@ perlPackages.buildPerlModule rec {
   doCheck = false;
 
   outputs = [ "out" ];
-  postFixup = ''
-    wrapProgram $out/bin/vep \
-      --add-flags "--dir_plugins ${vepPlugins}";
-  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/${perl.libPrefix}/${perl.version}/
-    tests=$(find modules/ -mindepth 1 -maxdepth 1 -type d | grep -v t)
-    cp -r $tests $out/${perl.libPrefix}/${perl.version}/
+    mkdir -p $out/bin
+    install -D -m755 filter_vep vep $out/bin/
+
+    wrapProgram $out/bin/vep \
+      --prefix PERL5LIB : $out/${perl.libPrefix}/${perl.version}/ \
+      --add-flags "--dir_plugins ${vepPlugins}"
+
+    wrapProgram $out/bin/filter_vep \
+      --prefix PERL5LIB : $out/${perl.libPrefix}/${perl.version}/
+    ${customInstallPhase}
 
     runHook postInstall
   '';
