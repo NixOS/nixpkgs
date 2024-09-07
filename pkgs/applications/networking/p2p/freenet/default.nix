@@ -22,9 +22,15 @@ let
     sha256 = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
   };
 
-  seednodes = fetchurl {
-    url = "https://downloads.freenetproject.org/alpha/opennet/seednodes.fref";
-    sha256 = "08awwr8n80b4cdzzb3y8hf2fzkr1f2ly4nlq779d6pvi5jymqdvv";
+  seednodes = fetchFromGitHub {
+    name = "freenet-seednodes";
+    owner = "hyphanet";
+    repo = "seedrefs";
+    rev = "9df1bf93ab64aba634bdfc5f4d0e960571ce4ba5";
+    hash = "sha256-nvwJvKw5IPhItPe4k/jnOGaa8H4DtOi8XxKFOKFMAuY=";
+    postFetch = ''
+      cat $out/* > $out/seednodes.fref
+    '';
   };
 
   patches = [
@@ -81,12 +87,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 build/libs/freenet.jar $out/share/freenet/freenet.jar
+
+    install -Dm644 build/libs/freenet.jar $out/share/freenet/freenet.jar
     ln -s ${freenet_ext} $out/share/freenet/freenet-ext.jar
     mkdir -p $out/bin
-    install -Dm555 ${wrapper} $out/bin/freenet
+    install -Dm755 ${wrapper} $out/bin/freenet
+    export CLASSPATH="$(find ${mitmCache} -name "*.jar"| sort | grep -v bcprov-jdk15on-1.48.jar|tr $'\n' :):$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar"
     substituteInPlace $out/bin/freenet \
-      --subst-var-by outFreenet $out
+      --subst-var-by CLASSPATH "$CLASSPATH"
+
     runHook postInstall
   '';
 
