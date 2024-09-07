@@ -5,11 +5,6 @@
 
   dotnetCorePackages,
 
-  libX11,
-  libICE,
-  libSM,
-  fontconfig,
-
   xdg-utils,
 }:
 
@@ -38,12 +33,6 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  runtimeDeps = [
-    libX11
-    libICE
-    libSM
-    fontconfig
-  ];
 
   # Required for OneClick
   makeWrapperArgs = [
