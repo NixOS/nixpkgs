@@ -77,6 +77,7 @@
   tbb,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   waylandSupport ? stdenv.isLinux,
   zlib,
   zstd,
@@ -149,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
+      "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
       "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
       "-DPYTHON_LIBPATH=${python3}/lib"
       "-DPYTHON_LIBRARY=${python3.libPrefix}"
@@ -156,21 +158,28 @@ stdenv.mkDerivation (finalAttrs: {
       "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python3.sitePackages}"
       "-DPYTHON_VERSION=${python3.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
+      "-DWITH_BUILDINFO=OFF"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
+      "-DWITH_CPU_CHECK=OFF"
+      "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
+      "-DWITH_CYCLES_OSL=OFF"
       "-DWITH_FFTW3=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
-      "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
+      "-DWITH_JACK=${if jackaudioSupport then "ON" else "OFF"}"
+      "-DWITH_LIBS_PRECOMPILED=OFF"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
       "-DWITH_OPENCOLORIO=ON"
       "-DWITH_OPENSUBDIV=ON"
       "-DWITH_OPENVDB=ON"
+      "-DWITH_PULSEAUDIO=OFF"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
       "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
       "-DWITH_SDL=OFF"
+      "-DWITH_STRICT_BUILD_OPTIONS=ON"
       "-DWITH_TBB=ON"
       "-DWITH_USD=ON"
 
@@ -189,16 +198,13 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.isDarwin [
       "-DLIBDIR=/does-not-exist"
-      "-DWITH_CYCLES_OSL=OFF" # causes segfault on aarch64-darwin
       "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
       "-DWITH_USD=OFF" # currently fails on darwin
     ]
     ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
-    ++ lib.optional jackaudioSupport "-DWITH_JACK=ON"
     ++ lib.optionals cudaSupport [
       "-DOPTIX_ROOT_DIR=${optix}"
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
-      "-DWITH_CYCLES_DEVICE_OPTIX=ON"
     ];
 
   preConfigure = ''
@@ -223,7 +229,10 @@ stdenv.mkDerivation (finalAttrs: {
       addDriverRunpath
       cudaPackages.cuda_nvcc
     ]
-    ++ lib.optionals waylandSupport [ pkg-config ];
+    ++ lib.optionals waylandSupport [
+      pkg-config
+      wayland-scanner
+    ];
 
   buildInputs =
     [

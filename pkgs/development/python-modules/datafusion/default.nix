@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "datafusion-cargo-deps";
-    inherit src pname version;
+    inherit src;
     hash = "sha256-M2ZNAFWdsnN9C4+YbqFxZVH9fHR10Bimf1Xzrd9oy9E=";
   };
 

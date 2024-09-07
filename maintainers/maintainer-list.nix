@@ -4851,6 +4851,12 @@
     name = "David Morgan";
     keys = [ { fingerprint = "9B43 6B14 77A8 79C2 6CDB  6604 C171 2510 02C2 00F2"; } ];
   };
+  deekahy = {
+    email = "Lennart.Diego.Kahn@gmail.com";
+    github = "deekahy";
+    githubId = 97156953;
+    name = "Lennart Diego Kahn";
+  };
   deemp = {
     email = "deempleton@gmail.com";
     github = "deemp";

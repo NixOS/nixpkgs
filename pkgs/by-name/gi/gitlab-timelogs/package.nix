@@ -11,11 +11,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitlab-timelogs";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-n+Jvm4RqHkXIeQcY55iOEBgwvbr77vLMhqxXgdau5MQ=";
+    hash = "sha256-EWFzMNuNquHR0grmmi14vuraIwvrmkw88QAYkvbO2QM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       iconv
     ];
 
-  cargoHash = "sha256-REE7DWY0l4TTDTwWFWVr3Zk/oLQlOjrbFEWSFUlBEig=";
+  cargoHash = "sha256-IXiIrX+nR7uB7UYqdVgKR+IHJlRl0i0cklwITGF5jAg=";
 
   meta = {
     description = " CLI utility to support you with your time logs in GitLab";
