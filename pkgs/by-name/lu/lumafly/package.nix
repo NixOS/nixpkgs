@@ -5,11 +5,7 @@
   dotnetCorePackages,
   zlib,
   icu,
-  fontconfig,
   openssl,
-  libX11,
-  libICE,
-  libSM,
   icoutils,
   copyDesktopItems,
   makeDesktopItem,
@@ -36,11 +32,7 @@ buildDotnetModule rec {
   runtimeDeps = [
     zlib
     icu
-    fontconfig
     openssl
-    libX11
-    libICE
-    libSM
   ];
 
   nativeBuildInputs = [

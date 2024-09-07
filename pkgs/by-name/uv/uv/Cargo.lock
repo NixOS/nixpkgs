@@ -4452,7 +4452,7 @@ checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
 
 [[package]]
 name = "uv"
-version = "0.4.4"
+version = "0.4.6"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4463,6 +4463,8 @@ dependencies = [
  "byteorder",
  "cache-key",
  "clap",
+ "ctrlc",
+ "distribution-filename",
  "distribution-types",
  "etcetera",
  "filetime",
@@ -4511,6 +4513,7 @@ dependencies = [
  "uv-configuration",
  "uv-dispatch",
  "uv-distribution",
+ "uv-extract",
  "uv-fs",
  "uv-git",
  "uv-installer",
@@ -4558,6 +4561,7 @@ dependencies = [
 name = "uv-build"
 version = "0.0.1"
 dependencies = [
+ "anstream",
  "anyhow",
  "distribution-types",
  "fs-err",
@@ -4715,7 +4719,6 @@ dependencies = [
  "distribution-filename",
  "distribution-types",
  "fs-err",
- "install-wheel-rs",
  "itertools 0.13.0",
  "markdown",
  "mimalloc",
@@ -4725,7 +4728,6 @@ dependencies = [
  "pretty_assertions",
  "pypi-types",
  "resvg",
- "rustc-hash",
  "schemars",
  "serde",
  "serde_json",
@@ -4736,20 +4738,14 @@ dependencies = [
  "tracing",
  "tracing-durations-export",
  "tracing-subscriber",
- "uv-build",
  "uv-cache",
  "uv-cli",
  "uv-client",
- "uv-configuration",
- "uv-dispatch",
- "uv-git",
  "uv-installer",
  "uv-macros",
  "uv-options-metadata",
  "uv-python",
- "uv-resolver",
  "uv-settings",
- "uv-types",
  "uv-workspace",
  "walkdir",
 ]
@@ -5209,7 +5205,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.4.4"
+version = "0.4.6"
 
 [[package]]
 name = "uv-virtualenv"

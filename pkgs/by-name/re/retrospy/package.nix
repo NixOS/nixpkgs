@@ -4,11 +4,6 @@
 , copyDesktopItems
 , makeDesktopItem
 , lib
-, fontconfig
-, libX11
-, libXcursor
-, libICE
-, libSM
 , runCommandLocal
 }:
 let
@@ -41,14 +36,6 @@ buildDotnetModule {
 
   nativeBuildInputs = [
     copyDesktopItems
-  ];
-
-  runtimeDeps = [
-    fontconfig
-    libX11
-    libICE
-    libXcursor
-    libSM
   ];
 
   projectFile = [
