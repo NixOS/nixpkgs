@@ -13,7 +13,6 @@
   fmt,
   meson,
   emilua,
-  qt,
   qtdeclarative,
   qtbase,
   qttools,
