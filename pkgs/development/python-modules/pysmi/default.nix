@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  ply,
   jinja2,
-  requests,
-
-  # tests
+  ply,
+  poetry-core,
   pysmi,
   pysnmp,
   pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   version = "1.5.0";
   pname = "pysmi";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lextudio";
@@ -37,13 +34,13 @@ buildPythonPackage rec {
     requests
   ];
 
-  # Tests require pysnmp, which in turn requires pysmi => infinite recursion
-  doCheck = false;
-
   nativeCheckInputs = [
     pysnmp
     pytestCheckHook
   ];
+
+  # Tests require pysnmp, which in turn requires pysmi => infinite recursion
+  doCheck = false;
 
   pythonImportsCheck = [ "pysmi" ];
 
