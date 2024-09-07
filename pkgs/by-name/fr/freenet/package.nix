@@ -3,9 +3,9 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  jdk,
-  jre,
-  gradle,
+  jdk17_headless,
+  jre17_minimal,
+  gradle_7,
   bash,
   coreutils,
   substituteAll,
@@ -15,6 +15,21 @@
 }:
 
 let
+  gradle = gradle_7;
+  jdk = jdk17_headless;
+  # Reduce closure size
+  jre = jre17_minimal.override {
+    modules = [
+      "java.base"
+      "java.logging"
+      "java.naming"
+      "java.sql"
+      "java.desktop"
+      "java.management"
+    ];
+    jdk = jdk17_headless;
+  };
+
   version = "01497";
 
   freenet_ext = fetchurl {

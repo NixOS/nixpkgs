@@ -30169,23 +30169,6 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  freenet = callPackage ../applications/networking/p2p/freenet {
-    gradle = gradle_7;
-    jdk = jdk17_headless;
-    # Reduce closure size
-    jre = pkgs.jre17_minimal.override {
-      modules = [
-        "java.base"
-        "java.logging"
-        "java.naming"
-        "java.sql"
-        "java.desktop"
-        "java.management"
-      ];
-      jdk = jdk17_headless;
-    };
-  };
-
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
 
   freepv = callPackage ../applications/graphics/freepv { };
