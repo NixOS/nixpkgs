@@ -3131,6 +3131,7 @@ with self; {
     };
     propagatedBuildInputs = [ Filepushd SubName ];
     buildInputs = [ CGI CaptureTiny ModuleBuildTiny SubIdentify Switch TestNoWarnings TestRequires TryTiny ];
+    preCheck = "rm t/race-conditions.t"; # this test is unstable
     meta = {
       description = "Compile .cgi scripts to a code reference like ModPerl::Registry";
       homepage = "https://github.com/miyagawa/CGI-Compile";
