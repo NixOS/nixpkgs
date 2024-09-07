@@ -1,14 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, electron_29
+, electron_31
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 }:
 
 let
-  electron = electron_29;
+  electron = electron_31;
 in
 stdenv.mkDerivation rec {
   pname = "passky-desktop";
