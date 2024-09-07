@@ -572,6 +572,7 @@ dont-distribute-packages:
  - aviation-weight-balance
  - awesomium
  - awesomium-glut
+ - aws-arn
  - aws-configuration-tools
  - aws-dynamodb-conduit
  - aws-dynamodb-streams
@@ -1440,6 +1441,8 @@ dont-distribute-packages:
  - frpnow-gtk
  - frpnow-gtk3
  - frpnow-vty
+ - fs-api
+ - fs-sim
  - ftdi
  - ftp-client-conduit
  - ftree
@@ -3157,7 +3160,7 @@ dont-distribute-packages:
  - poseidon
  - poseidon-postgis
  - postgresql-common-persistent
- - postgresql-libpq_0_10_2_0
+ - postgresql-libpq_0_11_0_0
  - postgresql-pure
  - postgresql-simple-ltree
  - postgresql-simple-queue
@@ -3306,6 +3309,7 @@ dont-distribute-packages:
  - rc
  - rdf4h-vocab-activitystreams
  - rdioh
+ - rds-data
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -3561,6 +3565,7 @@ dont-distribute-packages:
  - serv
  - serv-wai
  - servant-aeson-generics-typescript
+ - servant-auth-client_0_4_2_0
  - servant-auth-hmac
  - servant-auth-token
  - servant-auth-token-acid
