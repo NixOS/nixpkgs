@@ -16521,6 +16521,12 @@ with pkgs;
     wxSupport = false;
     systemdSupport = false;
   };
+  beam_nodocs = callPackage ./beam-packages.nix {
+    beam = beam_nodocs;
+    wxSupport = false;
+    systemdSupport = false;
+    ex_docSupport = false;
+  };
 
   inherit (beam.interpreters)
     erlang erlang_27 erlang_26 erlang_25 erlang_24
