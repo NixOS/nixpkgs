@@ -33,7 +33,7 @@ buildDotnetModule rec {
     jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
     mv global.json.tmp global.json
 
-    substituteInPlace $projectFile \
+    substituteInPlace $dotnetProjectFiles \
       --replace-fail \
         '>win-x64;win-arm64;linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>' \
         '>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
@@ -58,7 +58,7 @@ buildDotnetModule rec {
     ''
       runHook preInstall
 
-      env dotnet publish $projectFile \
+      env dotnet publish $dotnetProjectFiles \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
           -p:InformationalVersion=$version \

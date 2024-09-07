@@ -6891,6 +6891,8 @@ self: super: with self; {
 
   ldap3 = callPackage ../development/python-modules/ldap3 { };
 
+  ldap3-bleeding-edge = callPackage ../development/python-modules/ldap3-bleeding-edge { };
+
   ldapdomaindump = callPackage ../development/python-modules/ldapdomaindump { };
 
   ldappool = callPackage ../development/python-modules/ldappool { };
