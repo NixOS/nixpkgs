@@ -7927,6 +7927,8 @@ self: super: with self; {
 
   misoc = callPackage ../development/python-modules/misoc { };
 
+  mistral-common = callPackage ../development/python-modules/mistral-common { };
+
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
   mistune = callPackage ../development/python-modules/mistune { };
