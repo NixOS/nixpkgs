@@ -1,40 +1,60 @@
 {
   lib,
   stdenv,
-  python,
-  buildPythonPackage,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
-  which,
-  ninja,
+  buildPythonPackage,
+  python,
+
+  # nativeBuildInputs
   cmake,
+  git,
+  ninja,
+  which,
+
+  # build-system
   packaging,
   setuptools,
-  torch,
-  outlines,
-  wheel,
-  psutil,
-  ray,
-  pandas,
-  pyarrow,
-  sentencepiece,
-  numpy,
-  transformers,
-  xformers,
-  fastapi,
-  uvicorn,
-  pydantic,
+
+  # dependencies
+  aiohttp,
   aioprometheus,
-  pynvml,
-  openai,
-  pyzmq,
-  tiktoken,
-  torchvision,
-  py-cpuinfo,
+  fastapi,
+  filelock,
+  gguf,
+  importlib-metadata,
   lm-format-enforcer,
+  mistral-common,
+  msgspec,
+  numpy,
+  openai,
+  outlines,
+  pandas,
+  partial-json-parser,
+  pillow,
+  prometheus-client,
   prometheus-fastapi-instrumentator,
+  protobuf,
+  psutil,
+  pyarrow,
+  py-cpuinfo,
+  pyyaml,
+  pydantic,
+  pyzmq,
+  ray,
+  requests,
+  sentencepiece,
+  tiktoken,
+  tokenizers,
+  torchvision,
+  transformers,
+  tqdm,
+  uvicorn,
+  xformers,
   cupy,
-  writeShellScript,
+  pynvml,
+  torchWithCuda,
+  vllm-flash-attn,
+  torchWithRocm,
 
   config,
 
@@ -52,22 +72,23 @@ let
     owner = "NVIDIA";
     repo = "cutlass";
     rev = "refs/tags/v3.5.0";
-    sha256 = "sha256-D/s7eYsa5l/mfx73tE4mnFcTQdYqGmXa9d9TCryw4e4=";
+    hash = "sha256-D/s7eYsa5l/mfx73tE4mnFcTQdYqGmXa9d9TCryw4e4=";
   };
 in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.5.3.post1";
+  version = "0.6.1.post2";
   pyproject = true;
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
-    repo = pname;
+    repo = "vllm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-++DK2Y2zz+1KrEcdQc5XFrSjc7fCwMD2DQ/RqY7PoFU=";
+    hash = "sha256-eRtnQTeEi0elrubkH+aMlwuXGT83Coe29JHyeIdRMhg=";
+    leaveDotGit = true;
   };
 
   patches = [
@@ -86,15 +107,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    git
     ninja
-    pythonRelaxDepsHook
     which
   ] ++ lib.optionals rocmSupport [ rocmPackages.hipcc ];
 
   build-system = [
     packaging
     setuptools
-    wheel
   ];
 
   buildInputs =
@@ -123,24 +143,37 @@ buildPythonPackage rec {
 
   dependencies =
     [
+      aiohttp
       aioprometheus
       fastapi
+      filelock
+      gguf
+      importlib-metadata
       lm-format-enforcer
+      mistral-common
+      msgspec
       numpy
       openai
       outlines
       pandas
+      partial-json-parser
+      pillow
+      prometheus-client
       prometheus-fastapi-instrumentator
+      protobuf
       psutil
-      py-cpuinfo
       pyarrow
+      py-cpuinfo
       pydantic
+      pyyaml
       pyzmq
       ray
+      requests
       sentencepiece
       tiktoken
-      torch
+      tokenizers
       torchvision
+      tqdm
       transformers
       uvicorn
       xformers
@@ -150,22 +183,35 @@ buildPythonPackage rec {
     ++ lib.optionals cudaSupport [
       cupy
       pynvml
+      torchWithCuda
+      vllm-flash-attn
+    ]
+    ++ lib.optionals rocmSupport [
+      torchWithRocm
     ];
 
   dontUseCmakeConfigure = true;
   cmakeFlags = [ (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}") ];
 
   env =
-    lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; }
+    lib.optionalAttrs cudaSupport {
+      CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
+      VLLM_TARGET_DEVICE = "cuda";
+    }
     // lib.optionalAttrs rocmSupport {
       # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
       PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
       ROCM_HOME = "${rocmPackages.clr}";
+      VLLM_TARGET_DEVICE = "rocm";
     };
 
   pythonRelaxDeps = true;
 
   pythonImportsCheck = [ "vllm" ];
+
+  passthru = {
+    inherit cutlass;
+  };
 
   meta = with lib; {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
@@ -176,6 +222,6 @@ buildPythonPackage rec {
       happysalada
       lach
     ];
-    broken = !cudaSupport && !rocmSupport;
+    broken = (!cudaSupport && !rocmSupport) || (cudaSupport && rocmSupport);
   };
 }
