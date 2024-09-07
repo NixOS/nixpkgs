@@ -221,7 +221,7 @@ impure-cmds // apple-source-packages // apple-source-headers // stubs // {
 
   trash = callPackage ../os-specific/darwin/trash { };
 
-  xattr = pkgs.python3Packages.callPackage ../os-specific/darwin/xattr { };
+  inherit (self.file_cmds) xattr;
 
   inherit (pkgs.callPackages ../os-specific/darwin/xcode { })
     xcode_8_1 xcode_8_2
