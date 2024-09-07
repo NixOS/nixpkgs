@@ -262,7 +262,7 @@ This function replaces the npm dependency references in `package.json` and `pack
 How each dependency is fetched can be customized with the `fetcherOpts` argument.
 
 This is a simpler and more convenient alternative to [`fetchNpmDeps`](#javascript-buildNpmPackage-fetchNpmDeps) for managing npm dependencies in Nixpkgs.
-There is no need to specify a `hash`; since it relies entirely on the integrity hashes already present in the `package-lock.json` file.
+There is no need to specify a `hash`, since it relies entirely on the integrity hashes already present in the `package-lock.json` file.
 
 ##### Inputs {#javascript-buildNpmPackage-inputs}
 
