@@ -183,7 +183,7 @@ in
         networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
       })
 
-      (lib.mkIf cfg.nmbd.enable {
+      (lib.mkIf (cfg.enable && cfg.nmbd.enable) {
         systemd.services.samba-nmbd = {
           description = "Samba NMB Daemon";
           documentation = [ "man:nmbd(8)" "man:samba(7)" "man:smb.conf(5)" ];
@@ -214,7 +214,7 @@ in
         };
       })
 
-      (lib.mkIf cfg.smbd.enable {
+      (lib.mkIf (cfg.enable && cfg.smbd.enable) {
         systemd.services.samba-smbd = {
           description = "Samba SMB Daemon";
           documentation = [ "man:smbd(8)" "man:samba(7)" "man:smb.conf(5)" ];
@@ -250,7 +250,7 @@ in
         };
       })
 
-      (lib.mkIf cfg.winbindd.enable {
+      (lib.mkIf (cfg.enable && cfg.winbindd.enable) {
         systemd.services.samba-winbindd = {
           description = "Samba Winbind Daemon";
           documentation = [ "man:winbindd(8)" "man:samba(7)" "man:smb.conf(5)" ];

@@ -361,6 +361,7 @@ mapAliases ({
   ### E ###
 
   EBTKS = ebtks; # Added 2024-01-21
+  eask = eask-cli; # Added 2024-09-05
   ec2_ami_tools = ec2-ami-tools; # Added 2021-10-08
   ec2_api_tools = ec2-api-tools; # Added 2021-10-08
   ec2-utils = amazon-ec2-utils; # Added 2022-02-01
