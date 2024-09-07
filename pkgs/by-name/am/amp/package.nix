@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jmacdonald";
-    repo = pname;
+    repo = "amp";
     rev = version;
-    sha256 = "sha256-xNadwz2agPbxvgUqrUf1+KsWTmeNh8hJIWcNwTzzM/M=";
+    hash = "sha256-xNadwz2agPbxvgUqrUf1+KsWTmeNh8hJIWcNwTzzM/M=";
   };
 
   cargoPatches = [ ./update_time_crate.patch ];
@@ -51,12 +51,11 @@ rustPlatform.buildRustPackage rec {
   # Tests need to write to the theme directory in HOME.
   preCheck = "export HOME=`mktemp -d`";
 
-  meta = with lib; {
+  meta = {
     description = "Modern text editor inspired by Vim";
     homepage = "https://amp.rs";
-    license = [ licenses.gpl3 ];
-    maintainers = [ maintainers.sb0 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sb0 ];
     mainProgram = "amp";
   };
 }
