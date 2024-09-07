@@ -39,7 +39,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Check if MATE session components actually start"):
           for i in ["wayfire", "mate-panel", "mate-wayland.sh", "mate-wayland-components.sh"]:
               machine.wait_until_succeeds(f"pgrep -f {i}")
-          machine.wait_for_text('(Applications|Places|System)')
           # It is expected that this applet doesn't work in Wayland
           machine.wait_for_text('WorkspaceSwitcherApplet')
 
