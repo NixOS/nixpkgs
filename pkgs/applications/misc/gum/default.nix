@@ -1,4 +1,4 @@
-{ lib, buildGoModule, installShellFiles, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, installShellFiles, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gum";
@@ -22,6 +22,7 @@ buildGoModule rec {
   postInstall = ''
     $out/bin/gum man > gum.1
     installManPage gum.1
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gum \
       --bash <($out/bin/gum completion bash) \
       --fish <($out/bin/gum completion fish) \
