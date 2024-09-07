@@ -5886,7 +5886,6 @@ broken-packages:
   - system-command # failure in job https://hydra.nixos.org/build/233239356 at 2023-09-02
   - systemd-ntfy # failure in job https://hydra.nixos.org/build/236686880 at 2023-10-04
   - system-extra # failure in job https://hydra.nixos.org/build/233203137 at 2023-09-02
-  - system-fileio # failure in job https://hydra.nixos.org/build/252731084 at 2024-03-16
   - system-inotify # failure in job https://hydra.nixos.org/build/233206871 at 2023-09-02
   - system-lifted # failure in job https://hydra.nixos.org/build/233236013 at 2023-09-02
   - system-linux-proc # failure in job https://hydra.nixos.org/build/233209447 at 2023-09-02
