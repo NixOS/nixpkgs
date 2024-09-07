@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
+  strictDeps = true;
+
   meta = {
     homepage = "https://git.sr.ht/~leon_plickat/lavalauncher";
     description = "Simple launcher panel for Wayland desktops";
