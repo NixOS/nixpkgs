@@ -46,6 +46,8 @@
           yq
         ];
 
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
         installPhase = ''
           runHook preInstall
 
