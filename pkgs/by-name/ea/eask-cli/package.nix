@@ -5,7 +5,7 @@
 }:
 
 buildNpmPackage rec {
-  pname = "eask";
+  pname = "eask-cli";
   version = "0.10.0";
 
   src = fetchFromGitHub {

@@ -13,19 +13,19 @@
 
 let
   pname = "matrix-appservice-irc";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZT8ugev+Tgu47KLuVVo5sFfiGtWLDc6JW5NZvsQ1mA8=";
+    hash = "sha256-LlcGcE3ik/xaiySyW5vfemGmukR7rlZrhfZOJwwfLDM=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     name = "${pname}-${version}-offline-cache";
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-13OUcxZOlW1pp4uB1aRmqlzKf6rTgyP/nMnLmksXV3w=";
+    hash = "sha256-VUqi1OBuUeLbjDH0yBZDSkJBkaMWdzYddcHB5rikJwQ=";
   };
 
 in

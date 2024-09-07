@@ -356,6 +356,7 @@ in
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
       reloadTriggers = optional cfg.enableReload cfg.configFile;
+      restartTriggers = optional (! cfg.enableReload) cfg.configFile;
 
       serviceConfig = let
         runOptions = ''--config ${configPath} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
