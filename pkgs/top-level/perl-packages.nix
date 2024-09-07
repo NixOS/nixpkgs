@@ -1418,6 +1418,7 @@ with self; {
       # -dss1 doesn't exist for dgst in openssl 1.1, -sha1 can also handle DSA keys now
       sed -i 's|-dss1|-sha1|' lib/Authen/ModAuthPubTkt.pm
     '';
+    preCheck = "rm t/04-verify-dsa.t"; # remove unstable test: https://rt.cpan.org/Ticket/Display.html?id=110752
     meta = {
       description = "Generate Tickets (Signed HTTP Cookies) for mod_auth_pubtkt protected websites";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
