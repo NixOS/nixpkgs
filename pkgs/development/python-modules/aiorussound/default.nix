@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   poetry-core,
@@ -18,6 +19,9 @@ buildPythonPackage rec {
   pname = "aiorussound";
   version = "3.0.5";
   pyproject = true;
+
+  # requires newer f-strings introduced in 3.12
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "noahhusby";
