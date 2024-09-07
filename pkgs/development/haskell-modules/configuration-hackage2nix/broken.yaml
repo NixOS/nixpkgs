@@ -1318,7 +1318,6 @@ broken-packages:
   - dijkstra-simple # failure in job https://hydra.nixos.org/build/233218373 at 2023-09-02
   - DimensionalHash # failure in job https://hydra.nixos.org/build/233230945 at 2023-09-02
   - dino # failure in job https://hydra.nixos.org/build/252725815 at 2024-03-16
-  - diohsc # failure in job https://hydra.nixos.org/build/259625302 at 2024-05-15
   - diophantine # failure in job https://hydra.nixos.org/build/233229215 at 2023-09-02
   - diplomacy # failure in job https://hydra.nixos.org/build/233207895 at 2023-09-02
   - direct-binary-files # failure in job https://hydra.nixos.org/build/233246387 at 2023-09-02
