@@ -3,6 +3,7 @@
 , runCommandWith
 , writeShellScript
 , fetchFromGitHub
+, fetchpatch
 , nixosTests
 
 , freetype
@@ -114,10 +115,26 @@ in stdenv.mkDerivation {
     repo = "darling";
     rev = "25afbc76428c39c3909e9efcf5caef1140425211";
     fetchSubmodules = true;
-    hash = "sha256-T0g38loUFv3jHvUu3R3QH9hwP8JVe2al4g4VhXnBDMc=";
+    hash = "sha256-z9IMgc5hH2Upn8wHl1OgP42q9HTSkeHnxB3N812A+Kc=";
+    # Remove 500MB of dependency test files to get under Hydra output limit
+    postFetch = ''
+      rm -r $out/src/external/openjdk/test
+      rm -r $out/src/external/libmalloc/tests
+      rm -r $out/src/external/libarchive/libarchive/tar/test
+    '';
   };
 
   outputs = [ "out" "sdk" ];
+
+  patches = [
+    # Fix 'clang: error: no such file or directory: .../signal/mach_excUser.c'
+    # https://github.com/darlinghq/darling/issues/1511
+    # https://github.com/darlinghq/darling/commit/f46eb721c11d32addd807f092f4b3a6ea515bb6d
+    (fetchpatch {
+      url = "https://github.com/darlinghq/darling/commit/f46eb721c11d32addd807f092f4b3a6ea515bb6d.patch?full_index=1";
+      hash = "sha256-FnLcHnK4cNto+E3OQSxE3iK+FHSU8y459FcpMvrzd6o=";
+    })
+  ];
 
   postPatch = ''
     # We have to be careful - Patching everything indiscriminately
