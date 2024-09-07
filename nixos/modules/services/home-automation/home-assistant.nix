@@ -102,7 +102,7 @@ let
   # Create a directory that holds all lovelace modules
   lovelaceResourcesDirectory = pkgs.buildEnv {
     name = "home-assistant-custom-lovelace-modules";
-    paths = cfg.customLovelaceModules;
+    paths = cfg.lovelaceResourcePackages;
   };
 
   # Create parts of the lovelace config that reference lovelave modules as resources
@@ -553,7 +553,7 @@ in {
         '' else ''
           ln -fs /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
         '';
-        copyCustomLovelaceModules = if cfg.customLovelaceModules != [] then ''
+        copyCustomLovelaceModules = if cfg.lovelaceResourcePackages != [] then ''
           mkdir -p "${cfg.configDir}/www"
           ln -fns ${lovelaceResourcesDirectory} "${cfg.configDir}/www/nixos-lovelace-modules"
         '' else ''
