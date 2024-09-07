@@ -81,7 +81,10 @@ let
       changelog = "https://github.com/simonw/llm/releases/tag/${version}";
       license = licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [ aldoborrero ];
+      maintainers = with maintainers; [
+        aldoborrero
+        mccartykim
+      ];
     };
   };
 
