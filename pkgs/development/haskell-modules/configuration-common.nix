@@ -2044,7 +2044,7 @@ self: super: {
     tls = self.tls_2_0_6;
   });
 
-  # Requests version 2 of tls
+  # Requests version 2 of tls, can be removed once it's the default
   diohsc = super.diohsc.overrideScope (self: super: {
     tls = self.tls_2_0_6;
   });
