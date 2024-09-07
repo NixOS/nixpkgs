@@ -699,6 +699,7 @@ with self; {
     meta = {
       description = "Run the interactive Perl debugger under mod_perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      broken = true; # DB.c:(.text+0x153): undefined reference to `Perl_init_debugger'
     };
   };
 
