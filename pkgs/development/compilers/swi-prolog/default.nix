@@ -54,7 +54,7 @@
 #     url = "https://raw.githubusercontent.com/samer--/prolog/master/typedef/release/typedef-0.1.9.tgz";
 #     sha256 = "056nqjn01g18fb1b2qivv9s7hb4azk24nx2d4kvkbmm1k91f44p3";
 #   };
-#   swiProlog = pkgs.swiProlog.override { extraPacks = map (dep-path: "'file://${dep-path}'") [
+#   swi-prolog = pkgs.swi-prolog.override { extraPacks = map (dep-path: "'file://${dep-path}'") [
 #     julian delay list_util typedef
 #   ]; };
 , extraPacks ? []
