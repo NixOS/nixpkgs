@@ -54,8 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,share/pixmaps}
 
-    ln -s "${icon}" "$out/share/pixmaps/winbox.png"
-
+    cp -v "assets/img/winbox.png" "$out/share/pixmaps/winbox.png"
     cp -v "WinBox" "$out/bin/"
 
     runHook postInstall
