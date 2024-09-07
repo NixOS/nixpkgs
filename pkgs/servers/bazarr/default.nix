@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       ps.gevent-websocket
       ps.pillow
       ps.setuptools
+      ps.psycopg2
     ]))
   ] ++ runtimeProgDeps;
 
