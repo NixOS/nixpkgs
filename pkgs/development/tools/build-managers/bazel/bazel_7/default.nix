@@ -107,9 +107,18 @@ let
   # Bootstrap an existing Bazel so we can vendor deps with vendor mode
   bazel_bootstrap = stdenv.mkDerivation rec {
     name = "bazel_bootstrap";
-    src = fetchurl {
+    src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
       url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
       hash = "sha256-05fHtz47OilpOVYawB17VRVEDpycfYTIHBmwYCOyPjI=";
+    } else if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
+      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
+      hash = "sha256-olrlIia/oXWleXp12E+LGXv+F1m4/S4jj/t7p2/xGdM=";
+    } else if stdenv.hostPlatform.system == "x86_64-darwin" then fetchurl {
+      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-darwin-x86_64";
+      hash = "sha256-e5RRZTrhzoTMk2NRRl9m2K5+h1/+5mJNW2vF8h0uftc=";
+    } else fetchurl { # stdenv.hostPlatform.system == "aarch64-darwin"
+        url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-darwin-arm64";
+        hash = "sha256-ciNBdqm+cIrNR1Wu2wt+wGGb6m9i9aE8LhRqL4BJ0Y4=";
     };
 
     nativeBuildInputs = defaultShellUtils;
@@ -681,7 +690,7 @@ stdenv.mkDerivation rec {
   passthru = {
     # Additional tests that check bazel’s functionality. Execute
     #
-    #     nix-build . -A bazel_73.tests
+    #     nix-build . -A bazel_7.tests
     #
     # in the nixpkgs checkout root to exercise them locally.
     # tests = callPackage ./tests.nix {
