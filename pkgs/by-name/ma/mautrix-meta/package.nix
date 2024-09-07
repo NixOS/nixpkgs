@@ -1,6 +1,7 @@
 { buildGoModule
 , config
 , fetchFromGitHub
+, nix-update-script
 , lib
 , nixosTests
 , olm
@@ -37,13 +38,16 @@ buildGoModule rec {
         mautrix-meta-sqlite
         ;
     };
+
+    updateScript = nix-update-script { };
   };
+
 
   meta = {
     homepage = "https://github.com/mautrix/meta";
-    description = "Matrix <-> Facebook and Mautrix <-> Instagram hybrid puppeting/relaybot bridge";
+    description = "Matrix <-> Facebook and Matrix <-> Instagram hybrid puppeting/relaybot bridge";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ rutherther ];
+    maintainers = with lib.maintainers; [ rutherther eyjhb ];
     mainProgram = "mautrix-meta";
   };
 }
