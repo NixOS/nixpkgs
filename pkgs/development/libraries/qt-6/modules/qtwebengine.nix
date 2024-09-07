@@ -50,7 +50,7 @@
 , systemd
 , pipewire
 , gn
-, ffmpeg_7
+, ffmpeg
 , lib
 , stdenv
 , glib
@@ -237,7 +237,7 @@ qtModule {
     lcms2
 
     libevent
-    ffmpeg_7
+    ffmpeg
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     zlib

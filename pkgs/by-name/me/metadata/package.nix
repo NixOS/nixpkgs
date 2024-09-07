@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , pkg-config
-, ffmpeg_7
+, ffmpeg
 , rustPlatform
 , glib
 , installShellFiles
@@ -35,11 +35,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildInputs = [
-    ffmpeg_7
+    ffmpeg
     glib
   ];
 
-  env.FFMPEG_DIR = ffmpeg_7.dev;
+  env.FFMPEG_DIR = ffmpeg.dev;
 
   meta = {
     description = "Media metadata parser and formatter designed for human consumption, powered by FFmpeg";

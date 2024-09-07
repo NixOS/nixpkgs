@@ -6,7 +6,7 @@
 , perl
 , openssl
 , zlib
-, ffmpeg_7
+, ffmpeg
 , libvpx
 , libopus
 , libuuid
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl srt zlib ffmpeg_7 libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
+  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
 
   preBuild = ''
     cd src
