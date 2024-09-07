@@ -63,11 +63,11 @@ buildDotnetModule rec {
   fixupPhase = ''
     runHook preFixup
 
-    wrapProgram $out/bin/osu\! \
+    wrapProgram $out/bin/osu! \
       --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
+      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu!.png
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
