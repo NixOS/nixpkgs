@@ -10,7 +10,7 @@ anyhow = "1.0.82"
 dbus = "0.9.7"
 glob = "0.3.1"
 log = "0.4.21"
-nix = { version = "0.28.0", features = ["fs", "signal"] }
+nix = { version = "0.28.0", features = ["fs", "signal", "user"] }
 regex = "1.10.4"
 rust-ini = "0.21.0"
 syslog = "6.1.1"
