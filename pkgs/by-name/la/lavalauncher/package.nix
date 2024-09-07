@@ -14,13 +14,13 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lavalauncher";
   version = "2.1.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~leon_plickat/lavalauncher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
   };
 
@@ -61,9 +61,10 @@ stdenv.mkDerivation rec {
       The Wayland compositor must implement the Layer-Shell and XDG-Output for
       LavaLauncher to work.
     '';
+    changelog = "https://git.sr.ht/~leon_plickat/lavalauncher/refs/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "lavalauncher";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
-}
+})
