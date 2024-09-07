@@ -2049,9 +2049,7 @@ with pkgs;
 
   vrrtest = callPackage ../tools/video/vrrtest { };
 
-  winbox = callPackage ../tools/admin/winbox {
-    wine = wineWowPackages.stable;
-  };
+  winbox = callPackage ../tools/admin/winbox { };
 
   wwcd = callPackage ../tools/misc/wwcd { };
 

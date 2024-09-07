@@ -2,10 +2,16 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  fetchzip,
   copyDesktopItems,
   makeDesktopItem,
-  makeBinaryWrapper,
-  wine,
+  autoPatchelfHook,
+  libGL,
+  libz,
+  freetype,
+  fontconfig,
+  libxkbcommon,
+  xorg,
 }:
 
 let
@@ -18,37 +24,39 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winbox";
-  version = "3.41";
+  version = "4.0beta4";
 
-  src = fetchurl (
-    if (wine.meta.mainProgram == "wine64") then
-      {
-        url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/winbox64.exe";
-        hash = "sha256-i8Ps8fNZUmAOyxo4DDjIjp1jwIGjIgT9CU1YgjAHC/Y=";
-      }
-    else
-      {
-        url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/winbox.exe";
-        hash = "sha256-NypSEC5YKpqldlkSIRFtWVD4xJZcjGcfjnphSg70wmE=";
-      }
-  );
+  src = fetchzip {
+    url = "https://download.mikrotik.com/routeros/winbox/4.0beta4/WinBox_Linux.zip";
+    sha256 = "sha256-AW0k5v60qIaQElypQhRpD0AVigOh2lR5YReT697H4ko=";
+    stripRoot = false;
+  };
 
-  dontUnpack = true;
+  buildInputs = [
+    libGL # libGL.so.1, libEGL.so.1
+    libz # libz.so.1
+    fontconfig
+    freetype # libfreetype.so.6
+    libxkbcommon # libxkbcommon.so.0 libxkbcommon-x11.so.0 libxcb-icccm.so.4 libxcb-image.so.0 libxcb-keysyms.so.1 libxcb-randr.so.0 libxcb-render-util.so.0
+    xorg.xcbutilwm # libxcb-icccm.so.4
+    xorg.xcbutilimage # libxcb-image.so.0
+    xorg.xcbutilkeysyms # libxcb-keysyms.so.1
+    xorg.xcbutilrenderutil # libxcb-render-util.so.0
+  ];
 
   nativeBuildInputs = [
-    makeBinaryWrapper
     copyDesktopItems
+    autoPatchelfHook
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,libexec,share/pixmaps}
+    mkdir -p $out/{bin,share/pixmaps}
 
     ln -s "${icon}" "$out/share/pixmaps/winbox.png"
 
-    makeWrapper ${lib.getExe wine} $out/bin/winbox \
-      --add-flags $src
+    cp -v "WinBox" "$out/bin/"
 
     runHook postInstall
   '';
@@ -58,7 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       name = "winbox";
       desktopName = "Winbox";
       comment = "GUI administration for Mikrotik RouterOS";
-      exec = "winbox";
+      exec = "WinBox";
       icon = "winbox";
       categories = [ "Utility" ];
     })
