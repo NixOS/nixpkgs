@@ -2234,6 +2234,13 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  leetcode-nvim = super.leetcode-nvim.overrideAttrs {
+    dependencies = with self; [ nui-nvim plenary-nvim telescope-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "leetcode";
+  };
+
   YouCompleteMe = super.YouCompleteMe.overrideAttrs {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
