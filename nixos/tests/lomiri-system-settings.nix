@@ -37,7 +37,7 @@
   testScript =
     let
       settingsPages = [
-        # Base pages
+        # Order == how they're shown in LSS
         {
           name = "wifi";
           type = "internal";
@@ -48,10 +48,10 @@
           type = "internal";
           element = "discoverable|None detected";
         }
-        # only text we can really look for with VPN is on a button, OCR on CI struggles with it
         {
           name = "vpn";
           type = "internal";
+          # only text we can really look for with VPN is on a button, OCR on CI struggles with it
           element = "Add|Manual|Configuration";
           skipOCR = true;
         }
@@ -76,6 +76,29 @@
           element = "Display language|External keyboard";
         }
         {
+          name = "online-accounts";
+          type = "external";
+          element = "No accounts";
+          elementLocalised = "Keine Konten";
+          # Check that LOA within LSSOA is localised
+          #extraLocalised = ''
+          #  machine.succeed("xdotool mousemove 512 102 click 1")
+          #  machine.wait_for_text("Kennung")
+          #  machine.screenshot("lss_localised_page_online-accounts-plugin")
+          #
+          #  # Return focus
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #  machine.send_key("shift-tab")
+          #'';
+        }
+        {
           name = "notification";
           type = "internal";
           element = "Apps that notify";
@@ -95,10 +118,9 @@
           type = "internal";
           element = "Time zone|Set the time and date";
         }
-
-        # External plugins
         {
           name = "security-privacy";
+          # No longer external, but elementLocalised check is currently bound to external plugins
           type = "external";
           element = "Locking|unlocking|permissions";
           elementLocalised = "Sperren|Entsperren|Berechtigungen";
