@@ -1,18 +1,24 @@
-{ lib, stdenv, fetchurl, gtk2, libjack2, lilv, lv2, pkg-config, python3
-, serd, sord , sratom, suil, wafHook }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wrapGAppsHook3
+, gtk2, gtk3, libjack2, lilv, lv2, serd, sord , sratom, suil
+}:
 
 stdenv.mkDerivation  rec {
   pname = "jalv";
-  version = "1.6.6";
+  version = "1.6.8";
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ktFBeBtmQ3MgfDQ868XpuM7UYfryb9zLld8AB7BjnhY=";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
+    hash = "sha256-7a53sSgOpE1MCytzJobe/TcP3iXtHaKJiW2fU7b8FeE=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook ];
-  buildInputs = [
-    gtk2 libjack2 lilv lv2 python3 serd sord sratom suil
+  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook3 ];
+  buildInputs = [ gtk2 gtk3 libjack2 lilv lv2 serd sord sratom suil ];
+
+  mesonFlags = [
+    "-Dgtk2=enabled"
+    "-Dgtk3=enabled"
+    "-Dqt5=disabled"
+    "-Dportaudio=disabled" # portaudio and jack are mutually exclusive
   ];
 
   meta = with lib; {
