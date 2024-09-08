@@ -111,5 +111,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
