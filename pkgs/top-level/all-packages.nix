@@ -17032,8 +17032,6 @@ with pkgs;
 
   eltclsh = callPackage ../development/tools/eltclsh { };
 
-  waagent = callPackage ../applications/networking/cluster/waagent { };
-
   wasm = ocamlPackages.wasm;
 
   wasm3 = callPackage ../development/interpreters/wasm3 { };
