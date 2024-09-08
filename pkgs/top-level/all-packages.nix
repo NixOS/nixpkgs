@@ -21684,6 +21684,13 @@ with pkgs;
 
   libxml2 = callPackage ../development/libraries/libxml2 {
     python = python3;
+    stdenv =
+      # libxml2 is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
+      # that does not propagate xcrun.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
   };
 
   libxml2Python = let
