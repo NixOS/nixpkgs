@@ -12,29 +12,29 @@ let
            "unknown";
 
     # These files can be found in src/evaluate.h
-    nnueBigFile = "nn-b1a57edbea57.nnue";
+    nnueBigFile = "nn-1111cefa1111.nnue";
     nnueBig = fetchurl {
       name = nnueBigFile;
       url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-      sha256 = "sha256-saV+2+pXTKi4jWg3RzhFeRvrU9iF+H+G1czdVln787I=";
+      sha256 = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
     };
-    nnueSmallFile = "nn-baff1ede1f90.nnue";
+    nnueSmallFile = "nn-37f18f62d772.nnue";
     nnueSmall = fetchurl {
       name = nnueSmallFile;
       url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-      sha256 = "sha256-uv8e3h+Qwd0bT3cvHv8phIghgB6BhjRdp/DrQSG9b2M=";
+      sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
     };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "16.1";
+  version = "17";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
     rev = "sf_${version}";
-    sha256 = "sha256-xTtjfJgEHF0SQT9Fw/9RLZA0Quh00jrIbihr7IYCm2U=";
+    sha256 = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
   };
 
   postUnpack = ''
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
       '';
-    maintainers = with maintainers; [ luispedro siraben ];
+    maintainers = with maintainers; [ luispedro siraben thibaultd ];
     platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
     license = licenses.gpl3Only;
   };
