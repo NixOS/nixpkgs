@@ -27,10 +27,14 @@ _linkPackages() {
 
 createNugetDirs() {
     nugetTemp=$PWD/.nuget-temp
-    export NUGET_PACKAGES=$nugetTemp/packages
-    export NUGET_FALLBACK_PACKAGES=$nugetTemp/fallback
+    # trailing slash required here:
+    # Microsoft.Managed.Core.targets(236,5): error : SourceRoot paths are required to end with a slash or backslash: '/build/.nuget-temp/packages'
+    # also e.g. from avalonia:
+    # <EmbeddedResource Include="$(NuGetPackageRoot)sourcelink/1.1.0/tools/pdbstr.exe" />
+    export NUGET_PACKAGES=$nugetTemp/packages/
+    export NUGET_FALLBACK_PACKAGES=$nugetTemp/fallback/
     nugetSource=$nugetTemp/source
-    mkdir -p "$NUGET_PACKAGES" "$NUGET_FALLBACK_PACKAGES" "$nugetSource"
+    mkdir -p "${NUGET_PACKAGES%/}" "${NUGET_FALLBACK_PACKAGES%/}" "$nugetSource"
 
     dotnet new nugetconfig
     if [[ -z ${keepNugetConfig-} ]]; then
@@ -45,7 +49,7 @@ configureNuget() {
 
     for x in "${!_nugetInputs[@]}"; do
         if [[ -d $x/share/nuget/packages ]]; then
-            _linkPackages "$x/share/nuget/packages" "$NUGET_FALLBACK_PACKAGES"
+            _linkPackages "$x/share/nuget/packages" "${NUGET_FALLBACK_PACKAGES%/}"
         fi
 
         if [[ -d $x/share/nuget/source ]]; then
@@ -59,7 +63,7 @@ configureNuget() {
         || -f paket.dependencies ]]; then
         for x in "${!_nugetInputs[@]}"; do
             if [[ -d $x/share/nuget/packages ]]; then
-                @lndir@/bin/lndir -silent "$x/share/nuget/packages" "$NUGET_PACKAGES"
+                @lndir@/bin/lndir -silent "$x/share/nuget/packages" "${NUGET_PACKAGES%/}"
             fi
         done
     fi
@@ -70,7 +74,7 @@ configureNuget() {
 
        for x in "${!_nugetInputs[@]}"; do
            if [[ -d $x/share/nuget/source ]]; then
-               @lndir@/bin/lndir -silent "$x/share/nuget/source" "$NUGET_PACKAGES"
+               @lndir@/bin/lndir -silent "$x/share/nuget/source" "${NUGET_PACKAGES%/}"
            fi
        done
     fi
