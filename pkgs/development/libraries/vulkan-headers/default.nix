@@ -5,6 +5,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # TODO: investigate why <algorithm> isn't found
+  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DVULKAN_HEADERS_ENABLE_MODULE=OFF" ];
+
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
