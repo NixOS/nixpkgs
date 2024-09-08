@@ -88,10 +88,36 @@ buildPythonPackage rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
-    description = "Optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
+    description = "Optimising static compiler for both the Python and the extended Cython programming languages";
+    longDescription = ''
+      Cython is an optimising static compiler for both the Python programming
+      language and the extended Cython programming language (based on Pyrex). It
+      makes writing C extensions for Python as easy as Python itself.
+
+      Cython gives you the combined power of Python and C to let you:
+
+      - write Python code that calls back and forth from and to C or C++ code
+        natively at any point.
+      - easily tune readable Python code into plain C performance by adding
+        static type declarations, also in Python syntax.
+      - use combined source code level debugging to find bugs in your Python,
+        Cython and C code.
+      - interact efficiently with large data sets, e.g. using multi-dimensional
+        NumPy arrays.
+      - quickly build your applications within the large, mature and widely used
+        CPython ecosystem.
+      - integrate natively with existing code and data from legacy, low-level or
+        high-performance libraries and applications.
+
+      The Cython language is a superset of the Python language that additionally
+      supports calling C functions and declaring C types on variables and class
+      attributes. This allows the compiler to generate very efficient C code
+      from Cython code.
+    '';
+    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
+    mainProgram = "cython";
   };
 }
 # TODO: investigate recursive loop when doCheck is true
