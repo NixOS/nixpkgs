@@ -83,7 +83,7 @@ buildPythonPackage rec {
     inherit pygame-ce sage;
   };
 
-  # force regeneration of generated code in source distributions
+  # Force code regeneration in source distributions
   # https://github.com/cython/cython/issues/5089
   setupHook = ./setup-hook.sh;
 
