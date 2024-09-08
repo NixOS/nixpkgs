@@ -9,7 +9,6 @@
 , curl
 , gnugrep
 , gawk
-, dotnet-sdk
 }:
 
 runCommandLocal "nuget-to-nix" {
@@ -25,7 +24,6 @@ runCommandLocal "nuget-to-nix" {
       curl
       gnugrep
       gawk
-      dotnet-sdk
     ];
   };
 

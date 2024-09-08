@@ -3,7 +3,7 @@
 set -euo pipefail
 shopt -s nullglob
 
-export PATH="@binPath@"
+export PATH="@binPath@:$PATH"
 # used for glob ordering of package names
 export LC_ALL=C
 
