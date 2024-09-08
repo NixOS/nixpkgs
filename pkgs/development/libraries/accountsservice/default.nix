@@ -74,6 +74,14 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=return-mismatch"
+    ];
+  };
+
   mesonFlags = [
     "-Dadmin_group=wheel"
     "-Dlocalstatedir=/var"
