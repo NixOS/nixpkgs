@@ -26,6 +26,7 @@ let
     any
     attrNames
     attrValues
+    attrsToList
     concatLists
     concatMap
     concatMapStringsSep
@@ -195,11 +196,12 @@ rec {
       mkLine = k: v: indent + mkKeyValue k v + "\n";
       mkLines =
         if listsAsDuplicateKeys then
-          k: v: map (mkLine k) (if isList v then v else [ v ])
+          { name, value }: map (mkLine name) (if isList value then value else [ value ])
         else
-          k: v: [ (mkLine k v) ];
+          { name, value }: [ (mkLine name value) ];
     in
-    attrs: concatStrings (concatLists (mapAttrsToList mkLines attrs));
+    attrs:
+    concatStrings (concatLists (map mkLines (if isAttrs attrs then attrsToList attrs else attrs)));
 
   /**
     Generate an INI-style config file from an
