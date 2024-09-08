@@ -5,7 +5,7 @@ export MSBUILDTERMINALLOGGER=false
 declare -Ag _nugetInputs
 
 addNugetInputs() {
-    if [[ -d "$1/share/nuget" ]]; then
+    if [[ -d $1/share/nuget ]]; then
         _nugetInputs[$1]=1
     fi
 }
@@ -53,7 +53,7 @@ configureNuget() {
         fi
     done
 
-    if [[ -n "${linkNugetPackages-}"
+    if [[ -n ${linkNugetPackages-}
         || -f .config/dotnet-tools.json
         || -f dotnet-tools.json
         || -f paket.dependencies ]]; then
