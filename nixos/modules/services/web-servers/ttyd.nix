@@ -7,8 +7,6 @@ let
   inherit (lib)
     optionals
     types
-    concatLists
-    mapAttrsToList
     mkOption
     ;
 
@@ -17,7 +15,7 @@ let
          ++ optionals (cfg.socket != null) [ "--interface" cfg.socket ]
          ++ optionals (cfg.interface != null) [ "--interface" cfg.interface ]
          ++ [ "--signal" (toString cfg.signal) ]
-         ++ (concatLists (mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
+         ++ (lib.concatLists (lib.mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
          ++ [ "--terminal-type" cfg.terminalType ]
          ++ optionals cfg.checkOrigin [ "--check-origin" ]
          ++ optionals cfg.writeable [ "--writable" ] # the typo is correct
