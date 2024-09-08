@@ -5,19 +5,20 @@
 , fetchFromGitHub
 , python3
 , cctools
+, nix-update-script
 , nixosTests
 , xcbuild
 }:
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.8.1";
+  version = "2024.8.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-l9fLh1YFivVcMs688vM0pHoN0Um2r/EDpo7dvwvZFwY=";
+    hash = "sha256-F/UbaNKkyf8AoTSa0B0Ipdr5Z8qAkbk7tJ0Cdq7gk+U=";
   };
 
   postPatch = ''
@@ -27,7 +28,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-/6yWdTy6/GvYy8u5eZB+x5KRG6vhPVE0DIn+RUAO5MI=";
+  npmDepsHash = "sha256-SnrK26QaxHYKX0532rGBASjx9PwxKSsVFRzZ3Cs2GPk=";
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ setuptools ]))
@@ -58,8 +59,13 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  passthru.tests = {
-    vaultwarden = nixosTests.vaultwarden.sqlite;
+  passthru = {
+    tests = {
+      vaultwarden = nixosTests.vaultwarden.sqlite;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+    };
   };
 
   meta = with lib; {
