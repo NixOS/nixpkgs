@@ -3,6 +3,7 @@
 set -euo pipefail
 shopt -s nullglob
 
+export SSL_CERT_FILE=@cacert@/etc/ssl/certs/ca-bundle.crt
 export PATH="@binPath@:$PATH"
 # used for glob ordering of package names
 export LC_ALL=C
