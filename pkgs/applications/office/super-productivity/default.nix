@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "super-productivity";
-  version = "9.0.5";
+  version = "10.0.10";
 
   src = fetchurl {
     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
-    sha256 = "sha256-eNAoLcQWnsTDA7sG8i0Ur9BZ+pNt4AK1GOppFCD1ZGg=";
+    hash = "sha256-wtkuxkWEyOwWjA4/0SmhBLsZaPIU149YX7EjluTRnSs=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -40,12 +40,13 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/${pname}/resources/app.asar
   '';
 
-  meta = with lib; {
+  meta = {
     description = "To Do List / Time Tracker with Jira Integration";
     homepage = "https://super-productivity.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ offline ];
+    maintainers = with lib.maintainers; [ offline ];
     mainProgram = "super-productivity";
+    sourceProvenance = with lib.sourceTypes;[ binaryNativeCode ];
   };
 }
