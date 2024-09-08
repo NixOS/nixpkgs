@@ -10,7 +10,7 @@
 , espeak-ng
 , sonic
 , utf8cpp
-, AudioUnit
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoconf automake libtool ];
 
   buildInputs = [ libsndfile libpulseaudio espeak-ng sonic utf8cpp ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
 
   meta = with lib; {
     description = "Chinese text-to-speech software";

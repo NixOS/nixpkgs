@@ -29516,10 +29516,6 @@ with pkgs;
 
   oed = callPackage ../applications/editors/oed { };
 
-  ekho = callPackage ../applications/audio/ekho {
-    inherit (darwin.apple_sdk.frameworks) AudioUnit;
-  };
-
   electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
 
   electrum = libsForQt5.callPackage ../applications/misc/electrum { };
