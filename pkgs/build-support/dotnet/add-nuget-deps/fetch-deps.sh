@@ -8,13 +8,9 @@ export TMPDIR="$tmp/.tmp"
 mkdir "$HOME" "$TMPDIR"
 cd "$tmp"
 
-phases="
-    ${prePhases[*]:-}
-    unpackPhase
-    patchPhase
-    ${preConfigurePhases[*]:-}
-    configurePhase
-" genericBuild
+export NIX_SSL_CERT_FILE=@cacert@/etc/ssl/certs/ca-bundle.crt
+
+genericBuild
 
 depsFile=$(realpath "${1:-@defaultDepsFile@}")
 tmpFile="$tmp"/deps.nix
