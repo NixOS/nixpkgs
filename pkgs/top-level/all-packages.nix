@@ -23561,7 +23561,15 @@ with pkgs;
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
-  zlib = callPackage ../development/libraries/zlib { };
+  zlib = callPackage ../development/libraries/zlib {
+    stdenv =
+      # zlib is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
+      # that does not propagate xcrun.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
+  };
 
   zlib-ng = callPackage ../development/libraries/zlib-ng { };
 
