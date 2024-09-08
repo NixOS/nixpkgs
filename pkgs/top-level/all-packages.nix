@@ -10192,6 +10192,10 @@ with pkgs;
       };
     };
 
+  mecab-ko-dic = callPackage ../tools/text/mecab-ko-dic { };
+
+  mecab-ko = callPackage ../tools/text/mecab-ko { };
+
   mediawiki = callPackage ../servers/web-apps/mediawiki { };
 
   mediawriter = callPackage ../tools/system/mediawriter { };
