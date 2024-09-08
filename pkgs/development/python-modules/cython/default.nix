@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   gdb,
   ncurses,
   numpy,
@@ -17,10 +17,11 @@ buildPythonPackage rec {
   version = "3.0.11";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "cython";
-    inherit version;
-    hash = "sha256-cUbdKvhoK0ymEzGFHmrrzp/lFY51MAND+AwHyoCx+v8=";
+  src = fetchFromGitHub {
+    owner = "cython";
+    repo = "cython";
+    rev = version;
+    hash = "sha256-ZyDNv95eS9YrVHIh5C/Xq8OvfX1cnI3f9GjA+OfaONA=";
   };
 
   build-system = [
