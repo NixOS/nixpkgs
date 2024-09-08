@@ -5281,8 +5281,6 @@ with pkgs;
 
   grobi = callPackage ../tools/X11/grobi { };
 
-  gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
-
   gsctl = callPackage ../applications/misc/gsctl { };
 
   gsocket = callPackage ../tools/networking/gsocket { };
