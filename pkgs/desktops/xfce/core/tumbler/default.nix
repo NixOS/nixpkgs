@@ -6,6 +6,8 @@
 , freetype
 , libgepub
 , libgsf
+, libjxl
+, librsvg
 , poppler
 , gst_all_1
 , webp-pixbuf-loader
@@ -35,7 +37,8 @@ mkXfceDerivation {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ libjxl librsvg webp-pixbuf-loader ]}"
     )
   '';
 
