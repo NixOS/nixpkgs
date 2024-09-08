@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
-  version = "0.2.3";
+  version = "0.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "universal_pathlib";
     inherit version;
-    hash = "sha256-IvXyif7exLZjlWWWdCZS4hd7yiRmG2yKFz9ZdM/uAFI=";
+    hash = "sha256-VXChH9iMrRu8YiCz5yP92K38XF4AhlIJ6IrwP/SqFUs=";
   };
 
   nativeBuildInputs = [
