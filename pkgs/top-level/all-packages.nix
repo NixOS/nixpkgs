@@ -1623,8 +1623,6 @@ with pkgs;
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku akkuPackages;
 
-  albert = qt6Packages.callPackage ../applications/misc/albert { };
-
   alice-lg = callPackage ../servers/alice-lg{ };
 
   alice-tools = callPackage ../tools/games/alice-tools {
