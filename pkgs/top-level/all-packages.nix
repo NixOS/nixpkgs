@@ -8551,11 +8551,7 @@ with pkgs;
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
 
-  hylafaxplus = callPackage ../servers/hylafaxplus {
-    # needs this fork of libtiff, because original libtiff
-    # stopped packaging required tools with version 4.6
-    libtiff = libtiff_t;
-  };
+  hylafaxplus = callPackage ../servers/hylafaxplus { };
 
   hyphen = callPackage ../development/libraries/hyphen { };
 
