@@ -2,6 +2,8 @@
 , updateAutotoolsGnuConfigScriptsHook
 , sslSupport ? true, openssl
 , fetchpatch
+
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +23,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = lib.optional (!sslSupport) "--disable-openssl";
+  configureFlags = lib.flatten [
+    (lib.optional (!sslSupport) "--disable-openssl")
+    (lib.optionals static ["--disable-shared" "--with-pic"])
+  ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16

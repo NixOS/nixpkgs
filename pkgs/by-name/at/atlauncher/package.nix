@@ -21,13 +21,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.37.2";
+  version = "3.4.37.3";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1sIzQBJWbkGk8VrZdRi3eIHBAfiu90lodEZVouZNzVM=";
+    hash = "sha256-XdTbrM7FPR0o0d+p4ko48UonMsY+nLfiXj5fP2a3/zI=";
   };
 
   postPatch = ''
