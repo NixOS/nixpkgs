@@ -8735,8 +8735,6 @@ with pkgs;
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
 
-  hylafaxplus = callPackage ../servers/hylafaxplus { };
-
   hyphen = callPackage ../development/libraries/hyphen { };
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix {});
