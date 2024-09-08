@@ -9869,6 +9869,8 @@ self: super: with self; {
 
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
+  pycvc = callPackage ../development/python-modules/pycvc { };
+
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
   phunspell = callPackage ../development/python-modules/phunspell { };
