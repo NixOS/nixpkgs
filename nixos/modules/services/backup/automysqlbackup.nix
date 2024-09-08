@@ -2,8 +2,8 @@
 
 let
 
-  inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExpression;
-  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption mkRenamedOptionModule optional types;
+  inherit (lib) concatMapStringsSep concatStringsSep getName isInt isList literalExpression;
+  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption mkRenamedOptionModule optional optionalAttrs types versionAtLeast;
 
   cfg = config.services.automysqlbackup;
   pkg = pkgs.automysqlbackup;
@@ -21,7 +21,7 @@ let
     #version=${pkg.version}
     # DONT'T REMOVE THE PREVIOUS VERSION LINE!
     #
-    ${concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
+    ${concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.settings)}
   '';
 
 in
@@ -74,10 +74,11 @@ in
       }
     ];
 
-    services.automysqlbackup.config = mapAttrs (name: mkDefault) {
+    services.automysqlbackup.settings = mapAttrs (name: mkDefault) {
       mysql_dump_username = user;
       mysql_dump_host = "localhost";
       mysql_dump_socket = "/run/mysqld/mysqld.sock";
+      mysql_dump_port = "";
       backup_dir = "/var/backup/mysql";
       db_exclude = [ "information_schema" "performance_schema" ];
       mailcontent = "stdout";
@@ -111,14 +112,16 @@ in
     users.groups.${group} = { };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.config.backup_dir}' 0750 ${user} ${group} - -"
+      "d '${cfg.settings.backup_dir}' 0750 ${user} ${group} - -"
     ];
 
-    services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") {
+    services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.settings.mysql_dump_host == "localhost") {
       name = user;
       ensurePermissions = {
         "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES, EVENT";
-
+      } // optionalAttrs (
+        getName config.services.mysql.package == getName pkgs.mariadb -> versionAtLeast config.services.mysql.package.version "10.6"
+      ) {
         # https://forums.mysql.com/read.php?10,668311,668315#msg-668315
         "function sys.extract_table_from_file_name" = "execute";
         "function sys.format_path" = "execute";
