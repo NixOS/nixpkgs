@@ -24,9 +24,10 @@ let
          ++ [ "--max-clients" (toString cfg.maxClients) ]
          ++ optionals (cfg.indexFile != null) [ "--index" cfg.indexFile ]
          ++ optionals cfg.enableIPv6 [ "--ipv6" ]
-         ++ optionals cfg.enableSSL [ "--ssl-cert" cfg.certFile
-                                      "--ssl-key" cfg.keyFile
-                                      "--ssl-ca" cfg.caFile ]
+         ++ optionals cfg.enableSSL [ "--ssl"
+                                      "--ssl-cert" cfg.certFile
+                                      "--ssl-key" cfg.keyFile ]
+         ++ optionals ( cfg.enableSSL && cfg.caFile != null ) [ "--ssl-ca" cfg.caFile ]
          ++ [ "--debug" (toString cfg.logLevel) ];
 
 in
@@ -197,8 +198,8 @@ in
 
     assertions =
       [ { assertion = cfg.enableSSL
-            -> cfg.certFile != null && cfg.keyFile != null && cfg.caFile != null;
-          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specified."; }
+            -> cfg.certFile != null && cfg.keyFile != null;
+          message = "SSL is enabled for ttyd, but no certFile or keyFile has been specified."; }
         { assertion = cfg.writeable != null;
           message = "services.ttyd.writeable must be set"; }
         { assertion = ! (cfg.interface != null && cfg.socket != null);
