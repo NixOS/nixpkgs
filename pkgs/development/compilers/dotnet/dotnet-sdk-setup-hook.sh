@@ -42,6 +42,7 @@ createNugetDirs() {
     fi
 
     dotnet nuget add source "$nugetSource" -n _nix
+    nugetConfig=$PWD/nuget.config
 }
 
 configureNuget() {
@@ -54,6 +55,21 @@ configureNuget() {
 
         if [[ -d $x/share/nuget/source ]]; then
             _linkPackages "$x/share/nuget/source" "$nugetSource"
+        fi
+    done
+
+    find -iname nuget.config -print0 | while IFS= read -rd "" config; do
+        if [[ -n ${keepNugetConfig-} ]]; then
+            # If we're keeping the existing configs, we'll add _nix everywhere,
+            # in case sources are cleared.
+            dotnet nuget add source "$nugetSource" -n _nix --configfile "$config"
+        else
+            # This will allow everything to fall through to our config in the
+            # build root. Deleting them causes some build failures.
+            @xmlstarlet@/bin/xmlstarlet \
+                ed --inplace \
+                -d '//configuration/*' \
+                "$config"
         fi
     done
 
