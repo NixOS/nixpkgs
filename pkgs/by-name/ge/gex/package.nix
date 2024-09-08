@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [
       azd325
+      bot-wxt1221
       evanrichter
       piturnah
     ];
