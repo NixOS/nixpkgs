@@ -13065,6 +13065,8 @@ self: super: with self; {
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
+  pyepsilla = callPackage ../development/python-modules/pyepsilla { };
+
   pyequihash = callPackage ../development/python-modules/pyequihash { };
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
