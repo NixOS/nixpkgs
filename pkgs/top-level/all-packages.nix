@@ -7438,10 +7438,6 @@ with pkgs;
 
   zeekscript = callPackage ../tools/security/zeekscript { };
 
-  zoekt = callPackage ../tools/text/zoekt {
-    buildGoModule = buildGo121Module;
-  };
-
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
   zotero-translation-server = callPackage ../tools/misc/zotero-translation-server { };
