@@ -103,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zylon-ai/private-gpt";
     license = lib.licenses.asl20;
     mainProgram = "private-gpt";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
