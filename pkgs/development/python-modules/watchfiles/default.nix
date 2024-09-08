@@ -18,23 +18,27 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.22.0";
-  format = "pyproject";
+  version = "0.23.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = pname;
+    repo = "watchfiles";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TtRSRgtMOqsnhdvsic3lg33xlA+r/DcYHlzewSOu/44=";
+    hash = "sha256-kFScg3pkOD0gASRtfXSfwZxyW/XvW9x0zgMn0AQek4A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-n9yN/VRNQWCxh+BoliIMkKqJC51inpB9DQ9WtqR4oA0=";
+    hash = "sha256-fg+uH/ATjIW67er7yZJLpnKOWremd+cPt5ksSAjv9xY=";
   };
+
+  postPatch = ''
+    sed -i "/^requires-python =.*/a version = '${version}'" pyproject.toml
+  '';
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
@@ -48,7 +52,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  propagatedBuildInputs = [ anyio ];
+  dependencies = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -61,10 +65,6 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i "/^requires-python =.*/a version = '${version}'" pyproject.toml
-  '';
 
   preCheck = ''
     rm -rf watchfiles
@@ -79,9 +79,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "File watching and code reload";
-    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
+    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "watchfiles";
   };
 }
