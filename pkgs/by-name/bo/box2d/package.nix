@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libGLU
-, libGL
-, libglut
-, libX11
-, libXcursor
-, libXinerama
-, libXrandr
-, xorgproto
-, libXi
-, pkg-config
-, darwin
-, settingsFile ? "include/box2d/b2_settings.h"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libGLU,
+  libGL,
+  libglut,
+  libX11,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  xorgproto,
+  libXi,
+  pkg-config,
+  darwin,
+  settingsFile ? "include/box2d/b2_settings.h",
 }:
 
 let
@@ -31,24 +32,29 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yvhpgiZpjTPeSY7Ma1bh4LwIokUUKB10v2WHlamL9D8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-
-  buildInputs = [
-    libGLU
-    libGL
-    libglut
-    libX11
-    libXcursor
-    libXinerama
-    libXrandr
-    xorgproto
-    libXi
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Carbon
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.Kernel
-    darwin.apple_sdk.frameworks.OpenGL
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      libGLU
+      libGL
+      libglut
+      libX11
+      libXcursor
+      libXinerama
+      libXrandr
+      xorgproto
+      libXi
+    ]
+    ++ optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Carbon
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.Kernel
+      darwin.apple_sdk.frameworks.OpenGL
+    ];
 
   cmakeFlags = [
     (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
