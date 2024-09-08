@@ -105,7 +105,7 @@ let
   inherit (versionDefinition) pkg;
 
   # Mark versions older than minSupportedVersion as EOL.
-  minSupportedVersion = "4.16";
+  minSupportedVersion = "4.17";
 
   ## Pre-fetched Source Handling ##
 
