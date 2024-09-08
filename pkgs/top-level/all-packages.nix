@@ -10192,10 +10192,6 @@ with pkgs;
       };
     };
 
-  mecab-ko-dic = callPackage ../by-name/me/mecab-ko-dic/package.nix { };
-
-  mecab-ko = callPackage ../by-name/me/mecab-ko/package.nix { };
-
   mediawiki = callPackage ../servers/web-apps/mediawiki { };
 
   mediawriter = callPackage ../tools/system/mediawriter { };
