@@ -3,6 +3,7 @@
   fetchFromGitHub,
   bech32,
   buildPythonPackage,
+  setuptools,
   cryptography,
   ed25519,
   ecdsa,
@@ -11,7 +12,7 @@
   mnemonic,
   unidecode,
   mock,
-  pytest,
+  pytestCheckHook,
   backports-shutil-which,
   configargparse,
   python-daemon,
@@ -24,7 +25,7 @@
 buildPythonPackage rec {
   pname = "libagent";
   version = "0.15.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romanz";
@@ -40,7 +41,9 @@ buildPythonPackage rec {
       --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     unidecode
     backports-shutil-which
     configargparse
@@ -55,14 +58,17 @@ buildPythonPackage rec {
     cryptography
   ];
 
+  pythonImportsCheck = [ "libagent" ];
+
   nativeCheckInputs = [
     mock
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    py.test libagent/tests
-  '';
+  disabledTests = [
+    # test fails in sandbox
+    "test_get_agent_sock_path"
+  ];
 
   meta = with lib; {
     description = "Using hardware wallets as SSH/GPG agent";
