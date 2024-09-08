@@ -68,7 +68,10 @@ in stdenv.mkDerivation rec {
     ${optionalString withRuby_3_2   "./configure ruby   --module=ruby32   --ruby=${ruby_3_2}/bin/ruby"}
   '';
 
-  passthru.tests.unit-php = nixosTests.unit-php;
+  passthru.tests = {
+    unit-perl = nixosTests.unit-perl;
+    unit-php = nixosTests.unit-php;
+  };
 
   meta = with lib; {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
