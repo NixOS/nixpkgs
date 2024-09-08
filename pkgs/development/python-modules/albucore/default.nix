@@ -7,7 +7,6 @@
   pytestCheckHook,
   numpy,
   opencv4,
-  tomli,
   typing-extensions,
 }:
 
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     opencv4
-    tomli
     typing-extensions
   ];
 
