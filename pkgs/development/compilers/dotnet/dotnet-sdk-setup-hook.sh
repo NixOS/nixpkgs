@@ -18,11 +18,14 @@ _linkPackages() {
     local dir
     local x
 
-    for x in "$src"/*/*; do
-        dir=$dest/$(basename "$(dirname "$x")")
-        mkdir -p "$dir"
-        ln -s "$x" "$dir"/
-    done
+    (
+        shopt -s nullglob
+        for x in "$src"/*/*; do
+            dir=$dest/$(basename "$(dirname "$x")")
+            mkdir -p "$dir"
+            ln -s "$x" "$dir"/
+        done
+    )
 }
 
 createNugetDirs() {
