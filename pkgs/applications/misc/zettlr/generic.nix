@@ -1,9 +1,11 @@
-{ pname
-, version
-, hash
-, appimageTools
-, lib
-, fetchurl
+{
+  pname,
+  version,
+  hash,
+  appimageTools,
+  lib,
+  fetchurl,
+  makeWrapper,
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
@@ -19,21 +21,27 @@ in
 appimageTools.wrapType2 rec {
   inherit pname version src;
 
-  extraPkgs = pkgs: [ pkgs.texliveMedium pkgs.pandoc ];
+  extraPkgs = pkgs: [
+    pkgs.texliveMedium
+    pkgs.pandoc
+  ];
 
   extraInstallCommands = ''
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/zettlr \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop
     install -m 444 -D ${appimageContents}/Zettlr.png $out/share/icons/hicolor/512x512/apps/Zettlr.png
     substituteInPlace $out/share/applications/Zettlr.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Markdown editor for writing academic texts and taking notes";
     homepage = "https://www.zettlr.com";
     platforms = [ "x86_64-linux" ];
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ tfmoraes ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tfmoraes ];
     mainProgram = "zettlr";
   };
 }
