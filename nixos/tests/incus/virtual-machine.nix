@@ -42,6 +42,8 @@ in
   };
 
   testScript = ''
+    import json
+
     def instance_is_up(_) -> bool:
       status, _ = machine.execute("incus exec ${instance-name} --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
       return status == 0
@@ -78,6 +80,22 @@ in
         machine.succeed("incus config set ${instance-name} limits.cpu=2")
         count = int(machine.succeed("incus exec ${instance-name} -- nproc").strip())
         assert count == 2, f"Wrong number of CPUs reported, want: 2, got: {count}"
+
+    def get_root_disk_size():
+        lsblk = json.loads(machine.succeed("incus exec ${instance-name} -- lsblk /dev/sda --json"))
+        for blk in lsblk["blockdevices"]:
+            if blk["name"] == "sda":
+                size = blk["size"]
+                break
+        return size
+
+    with subtest("guest supports live disk resize"):
+        size = get_root_disk_size()
+        assert size == "10G", f"Wrong root disk size reported, want: 10G, got: {size}"
+
+        machine.succeed("incus config device override ${instance-name} root size=20GiB")
+        size = get_root_disk_size()
+        assert size == "20G", f"Wrong root disk size reported, want: 20G, got: {size}"
 
     with subtest("Instance remains running when softDaemonRestart is enabled and services is stopped"):
         pid = machine.succeed("incus info ${instance-name} | grep 'PID'").split(":")[1].strip()

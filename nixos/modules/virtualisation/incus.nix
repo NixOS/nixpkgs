@@ -38,6 +38,7 @@ let
         libnvidia-container
         libxfs
         lvm2
+        lxcfs
         minio
         minio-client
         nftables
@@ -58,9 +59,6 @@ let
       ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
         skopeo
         umoci
-      ]
-      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.4.0") [
-        lxcfs
       ]
       ++ lib.optionals config.security.apparmor.enable [
         apparmor-bin-utils
