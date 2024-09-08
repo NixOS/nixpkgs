@@ -4,10 +4,11 @@
   nixosTests,
   glib,
   lndir,
+  lomiri-system-settings-online-accounts,
   lomiri-system-settings-unwrapped,
   wrapGAppsHook3,
   wrapQtAppsHook,
-  plugins ? [ ],
+  plugins ? [ lomiri-system-settings-online-accounts ],
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -57,6 +58,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
+      --prefix XDG_DATA_DIRS : ${
+        lib.makeSearchPathOutput "out" "share" (
+          lib.lists.foldl (
+            prefixes: plugin: prefixes ++ (plugin.passthru.extraSearchPrefixes or [ ])
+          ) [ ] plugins
+        )
+      }
       --set NIX_LSS_PREFIX "$out"
     )
   '';
