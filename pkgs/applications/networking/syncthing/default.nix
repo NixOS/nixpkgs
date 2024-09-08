@@ -61,14 +61,14 @@ let
         inherit (nixosTests) syncthing syncthing-init syncthing-relay;
       };
 
-      meta = with lib; {
+      meta = {
         homepage = "https://syncthing.net/";
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
-        license = licenses.mpl20;
-        maintainers = with maintainers; [ joko peterhoeg ];
+        license = lib.licenses.mpl20;
+        maintainers = with lib.maintainers; [ joko peterhoeg ];
         mainProgram = target;
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
       };
     };
 
@@ -90,17 +90,13 @@ in
     '' + lib.optionalString (stdenv.isLinux) ''
       mkdir -p $out/lib/systemd/{system,user}
 
-      substitute etc/linux-systemd/system/syncthing-resume.service \
-                 $out/lib/systemd/system/syncthing-resume.service \
-                 --replace /usr/bin/pkill ${procps}/bin/pkill
-
       substitute etc/linux-systemd/system/syncthing@.service \
                  $out/lib/systemd/system/syncthing@.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
 
       substitute etc/linux-systemd/user/syncthing.service \
                  $out/lib/systemd/user/syncthing.service \
-                 --replace /usr/bin/syncthing $out/bin/syncthing
+                 --replace-fail /usr/bin/syncthing $out/bin/syncthing
     '';
   };
 
@@ -118,7 +114,7 @@ in
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \
                  $out/lib/systemd/system/strelaysrv.service \
-                 --replace /usr/bin/strelaysrv $out/bin/strelaysrv
+                 --replace-fail /usr/bin/strelaysrv $out/bin/strelaysrv
     '';
   };
 }
