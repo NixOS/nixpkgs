@@ -37,6 +37,7 @@
 , withAmf ? lib.meta.availableOn stdenv.hostPlatform amf # AMD Media Framework video encoding
 , withAom ? withHeadlessDeps # AV1 reference encoder
 , withAppKit ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AppKit framework
+, withAribb24 ? withFullDeps # ARIB text and caption decoding
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AudioToolbox
@@ -226,6 +227,7 @@
 , alsa-lib
 , amf
 , amf-headers
+, aribb24
 , avisynthplus
 , bzip2
 , celt
@@ -556,6 +558,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withAmf "amf")
     (enableFeature withAom "libaom")
     (enableFeature withAppKit "appkit")
+    (enableFeature withAribb24 "libaribb24")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
@@ -729,6 +732,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withAmf [ amf-headers ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAppKit [ AppKit ]
+  ++ optionals withAribb24 [ aribb24 ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
   ++ optionals withAudioToolbox [ AudioToolbox ]
