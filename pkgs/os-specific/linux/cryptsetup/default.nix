@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.7.4";
+  version = "2.7.5";
 
   outputs = [ "bin" "out" "dev" "man" ];
   separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-3OKZA6WPe3dP5hGR5+belV3g9A2eJ7ACj/zzQ4wOlIA=";
+    hash = "sha256-0r5Dlbj1A7Dr9LLYHbkMNalwUKNY7iH+YqDftm5dVSI=";
   };
 
   patches = [
