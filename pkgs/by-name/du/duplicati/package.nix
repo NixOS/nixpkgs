@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.duplicati.com/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ nyanloutre bot-wxt1221 ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.all;
   };
 }
