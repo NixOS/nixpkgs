@@ -105,6 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dkeyring=disabled"
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
+      --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
