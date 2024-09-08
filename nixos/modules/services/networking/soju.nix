@@ -27,7 +27,7 @@ let
   '';
 
   sojuctl = pkgs.writeShellScriptBin "sojuctl" ''
-    exec ${cfg.package}/bin/sojuctl --config ${configFile} "$@"
+    exec ${lib.getExe' cfg.package "sojuctl"} --config ${cfg.configFile} "$@"
   '';
 in
 {
@@ -109,6 +109,17 @@ in
       default = "";
       description = "Lines added verbatim to the configuration file.";
     };
+
+    configFile = mkOption {
+      type = types.path;
+      default = configFile;
+      defaultText = "Config file generated from other options.";
+      description = ''
+        Path to config file. If this option is set, it will override any
+        configuration done using other options.
+      '';
+      example = literalExpression "./soju.conf";
+    };
   };
 
   ###### implementation
@@ -134,7 +145,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/soju -config ${configFile}";
+        ExecStart = "${lib.getExe' cfg.package "soju"} -config ${cfg.configFile}";
         StateDirectory = "soju";
         RuntimeDirectory = "soju";
       };
