@@ -19701,11 +19701,11 @@
     name = "Kylie McClain";
   };
   SomeoneSerge = {
-    email = "sergei.kozlukov@aalto.fi";
+    email = "else+nixpkgs@someonex.net";
     matrix = "@ss:someonex.net";
     github = "SomeoneSerge";
     githubId = 9720532;
-    name = "Sergei K";
+    name = "Else Someone";
   };
   sontek = {
     email = "sontek@gmail.com";
