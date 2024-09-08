@@ -19,8 +19,8 @@ buildDotnetModule rec {
     hash = "sha256-HE0KxPKU7tYZbYiCL8sm6I/NZiX0MJktt+5d6qB1A2E=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "OpenUtau.sln";
   nugetDeps = ./deps.nix;
@@ -37,11 +37,11 @@ buildDotnetModule rec {
   # socket cannot bind to localhost on darwin for tests
   doCheck = !stdenv.isDarwin;
 
-  # net7.0 replacement needed until upstream bumps to dotnet 7
+  # net8.0 replacement needed until upstream bumps to dotnet 8
   postPatch = ''
     substituteInPlace OpenUtau/OpenUtau.csproj OpenUtau.Test/OpenUtau.Test.csproj --replace \
       '<TargetFramework>net6.0</TargetFramework>' \
-      '<TargetFramework>net7.0</TargetFramework>'
+      '<TargetFramework>net8.0</TargetFramework>'
 
     substituteInPlace OpenUtau/Program.cs --replace \
       '/usr/bin/fc-match' \
@@ -70,12 +70,7 @@ buildDotnetModule rec {
       # some deps and worldline resampler
       binaryNativeCode
     ];
-    license = with licenses; [
-      # dotnet code and worldline resampler binary
-      mit
-      # worldline resampler binary - no source is available (hence "unfree") but usage of the binary is MIT
-      unfreeRedistributable
-    ];
+    license = licenses.mit;
     maintainers = [ ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "OpenUtau";
