@@ -7,6 +7,7 @@
   makeWrapper,
   runCommand,
   amber-lang,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,10 +46,13 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/amber" --prefix PATH : "${lib.makeBinPath [ bc ]}"
   '';
 
-  passthru.tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
-    diff -U3 --color=auto <(amber -e 'echo "Hello, World"') <(echo 'Hello, World')
-    touch $out
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.run = runCommand "amber-lang-eval-test" { nativeBuildInputs = [ amber-lang ]; } ''
+      diff -U3 --color=auto <(amber -e 'echo "Hello, World"') <(echo 'Hello, World')
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "Programming language compiled to bash";
