@@ -12,6 +12,7 @@
 
   # dependneices
   numpy,
+  libusb-compat-0_1,
 
   # optional-dependenices
   pyusb,
@@ -29,16 +30,25 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.6.0";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ead9G4i8/mFwPqL2PGsndtmX93Njld3nvTTr6ROJTac=";
+    hash = "sha256-NzZ+ZRfJ97Ufp6hmqN6ziBFfdvJXpmWwh9A66od/8Hc=";
     leaveDotGit = true;
   };
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    # pkgconfig cant find libusb, doing it manually
+    substituteInPlace setup.py \
+      --replace-fail 'pkgconfig.parse("libusb")' \
+        "{'include_dirs': ['${libusb-compat-0_1}/include'], 'library_dirs': ['${libusb-compat-0_1}/lib'], 'libraries': ['usb']}"
+  '';
 
   nativeBuildInputs = [
     cython
@@ -48,7 +58,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    numpy
+    libusb-compat-0_1
+  ];
 
   passthru.optional-dependencies = {
     pyseabreeze = [ pyusb ];
@@ -65,6 +78,8 @@ buildPythonPackage rec {
     mock
     zipp
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  disabledTests = [ "TestHardware" ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 

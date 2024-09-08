@@ -10,7 +10,7 @@
   update scripts.
  */
 let
-  pkgs = import ../.. {};
+  pkgs = import ../.. { config.allowAliases = false; };
 
   inherit (pkgs) lib;
 

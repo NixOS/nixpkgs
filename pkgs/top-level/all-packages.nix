@@ -875,12 +875,8 @@ with pkgs;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
 
-  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
-  mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
-  mkNugetDeps = (newScope dotnetCorePackages) ../build-support/dotnet/make-nuget-deps { };
-
-  buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
+  inherit (dotnetCorePackages) buildDotnetModule buildDotnetGlobalTool mkNugetSource mkNugetDeps;
 
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
 
@@ -3046,8 +3042,6 @@ with pkgs;
     ammonite_2_13;
   ammonite = ammonite_2_13;
 
-  amp = callPackage ../applications/editors/amp { };
-
   ams = callPackage ../applications/audio/ams { };
 
   amtterm = callPackage ../tools/system/amtterm { };
@@ -4013,7 +4007,9 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
-  atlas = callPackage ../development/tools/database/atlas { };
+  atlas = callPackage ../by-name/at/atlas/package.nix {
+    buildGoModule = buildGo123Module;
+  };
 
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5393,8 +5389,6 @@ with pkgs;
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
 
   iotas = callPackage ../applications/office/iotas { };
-
-  iotools = callPackage ../tools/misc/iotools { };
 
   jellycli = callPackage ../applications/audio/jellycli { };
 
@@ -10751,7 +10745,9 @@ with pkgs;
 
   noisetorch = callPackage ../applications/audio/noisetorch { };
 
-  notation = callPackage ../tools/security/notation { };
+  notation = callPackage ../by-name/no/notation/package.nix {
+    buildGoModule = buildGo123Module;
+  };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
@@ -15903,9 +15899,18 @@ with pkgs;
 
   makeRustPlatform = callPackage ../development/compilers/rust/make-rust-platform.nix { };
 
-  buildRustCrate = callPackage ../build-support/rust/build-rust-crate ({ } // lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
-    stdenv = stdenvNoCC; # Some build targets without libc will fail to evaluate with a normal stdenv.
-  });
+  buildRustCrate =
+    let
+      # Returns a true if the builder's rustc was built with support for the target.
+      targetAlreadyIncluded = lib.elem stdenv.hostPlatform.rust.rustcTarget
+        (lib.splitString "," (lib.removePrefix "--target=" (
+          lib.elemAt (lib.filter (f: lib.hasPrefix "--target=" f) pkgsBuildBuild.rustc.unwrapped.configureFlags) 0
+        )));
+    in
+    callPackage ../build-support/rust/build-rust-crate ({ } // lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
+      stdenv = stdenvNoCC; # Some build targets without libc will fail to evaluate with a normal stdenv.
+    } // lib.optionalAttrs targetAlreadyIncluded { inherit (pkgsBuildBuild) rustc cargo; } # Optimization.
+  );
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
   cargo2junit = callPackage ../development/tools/rust/cargo2junit { };
@@ -16520,6 +16525,12 @@ with pkgs;
     beam = beam_minimal;
     wxSupport = false;
     systemdSupport = false;
+  };
+  beam_nodocs = callPackage ./beam-packages.nix {
+    beam = beam_nodocs;
+    wxSupport = false;
+    systemdSupport = false;
+    ex_docSupport = false;
   };
 
   inherit (beam.interpreters)
@@ -20289,7 +20300,10 @@ with pkgs;
     else if name == "relibc" then targetPackages.relibc or relibc
     else throw "Unknown libc ${name}";
 
-  libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
+  libcCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform
+    then null
+    else libcCrossChooser stdenv.targetPlatform.libc;
 
   threadsCross =
     lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
@@ -22172,8 +22186,6 @@ with pkgs;
   libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
 
   liburcu = callPackage ../development/libraries/liburcu { };
-
-  libjaylink = callPackage ../development/libraries/libjaylink { };
 
   libusb-compat-0_1 = callPackage ../development/libraries/libusb-compat/0.1.nix { };
 
@@ -25985,12 +25997,6 @@ with pkgs;
     ;
 
   mlxbf-bootimages = callPackage ../misc/mlxbf-bootimages { };
-
-  microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
-
-  microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
-
-  iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
 
   inherit (callPackages ../os-specific/linux/apparmor { })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam

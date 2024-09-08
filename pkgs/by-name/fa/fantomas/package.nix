@@ -2,9 +2,9 @@
 
 buildDotnetGlobalTool {
   pname = "fantomas";
-  version = "6.3.11";
+  version = "6.3.12";
 
-  nugetHash = "sha256-11bHGEAZTNtdp2pTg5zqLrQiyI/j/AT7GGL/2CR4+dw=";
+  nugetHash = "sha256-LFZn2cO72FlsmLI0vTLz52Bn4XBeGILTOr8rz/EuXeg=";
 
   meta = with lib; {
     description = "F# source code formatter";

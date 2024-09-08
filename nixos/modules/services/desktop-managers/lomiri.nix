@@ -50,6 +50,10 @@ in {
       };
     };
 
+    hardware = {
+      bluetooth.enable = lib.mkDefault true;
+    };
+
     networking.networkmanager.enable = lib.mkDefault true;
 
     systemd.packages = with pkgs.lomiri; [
@@ -87,6 +91,8 @@ in {
         ayatana-indicator-messages
         ayatana-indicator-power
         ayatana-indicator-session
+      ] ++ lib.optionals config.hardware.bluetooth.enable [
+        ayatana-indicator-bluetooth
       ] ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         ayatana-indicator-sound
       ]) ++ (with pkgs.lomiri; [

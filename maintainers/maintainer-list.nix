@@ -95,6 +95,11 @@
     github = "0x120581f";
     githubId = 130835755;
   };
+  _0x3f = {
+    name = "0x3f";
+    github = "0x3fiona";
+    githubId = 178507884;
+  };
   _0x4A6F = {
     email = "mail-maintainer@0x4A6F.dev";
     matrix = "@0x4a6f:matrix.org";
@@ -3229,6 +3234,13 @@
     githubId = 24193;
     name = "Dan Callahan";
   };
+  callumio = {
+    email = "git@cleslie.uk";
+    github = "callumio";
+    githubId = 16057677;
+    name = "Callum Leslie";
+    keys = [ { fingerprint = "BC82 4BB5 1656 D144 285E  A0EC D382 C4AF EECE AA90"; } ];
+  };
   calvertvl = {
     email = "calvertvl@gmail.com";
     github = "calvertvl";
@@ -4850,6 +4862,12 @@
     githubId = 2564003;
     name = "David Morgan";
     keys = [ { fingerprint = "9B43 6B14 77A8 79C2 6CDB  6604 C171 2510 02C2 00F2"; } ];
+  };
+  deekahy = {
+    email = "Lennart.Diego.Kahn@gmail.com";
+    github = "deekahy";
+    githubId = 97156953;
+    name = "Lennart Diego Kahn";
   };
   deemp = {
     email = "deempleton@gmail.com";
@@ -13143,6 +13161,12 @@
     github = "CajuM";
     githubId = 10420834;
     name = "Mihai-Drosi Caju";
+  };
+  mccartykim = {
+    email = "mccartykim@zoho.com";
+    github = "mccartykim";
+    githubId = 9851221;
+    name = "Kimberly McCarty";
   };
   mccurdyc = {
     email = "mccurdyc22@gmail.com";

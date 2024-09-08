@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   rustPlatform,
   asciidoctor,
   installShellFiles,
@@ -11,11 +11,11 @@ rustPlatform.buildRustPackage rec {
   pname = "qrtool";
   version = "0.11.4";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";
-    hash = "sha256-lD/xi2k5baZGUUixy/032jTBevr0uQIT/JmX+d+kPyA=";
+    sha256 = "sha256-lD/xi2k5baZGUUixy/032jTBevr0uQIT/JmX+d+kPyA=";
   };
 
   cargoHash = "sha256-lR/LusIgdA+G7YeSLHjxdcC96tOSqSyalVamS42ORs0=";

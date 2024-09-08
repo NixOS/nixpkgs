@@ -361,6 +361,7 @@ mapAliases ({
   ### E ###
 
   EBTKS = ebtks; # Added 2024-01-21
+  eask = eask-cli; # Added 2024-09-05
   ec2_ami_tools = ec2-ami-tools; # Added 2021-10-08
   ec2_api_tools = ec2-api-tools; # Added 2021-10-08
   ec2-utils = amazon-ec2-utils; # Added 2022-02-01
@@ -969,6 +970,8 @@ mapAliases ({
   mdt = md-tui; # Added 2024-09-03
   meme = meme-image-generator; # Added 2021-04-21
   mess = throw "'mess' has been renamed to/replaced by 'mame'"; # Converted to throw 2023-09-10
+  microcodeAmd = microcode-amd; # Added 2024-09-08
+  microcodeIntel = microcode-intel; # Added 2024-09-08
   microsoft_gsl = microsoft-gsl; # Added 2023-05-26
   MIDIVisualizer = midivisualizer; # Added 2024-06-12
   migraphx = throw "'migraphx' has been replaced with 'rocmPackages.migraphx'"; # Added 2023-10-08
