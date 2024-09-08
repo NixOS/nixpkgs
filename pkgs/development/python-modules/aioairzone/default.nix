@@ -21,9 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-32fd4+y3EICVesrtSZUf/jYUEIqvPPnSp4hrpgXZoxU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Module to control AirZone devices";
     homepage = "https://github.com/Noltari/aioairzone";
     changelog = "https://github.com/Noltari/aioairzone/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
