@@ -1,5 +1,6 @@
 {
   _7zz,
+  avalonia,
   buildDotnetModule,
   copyDesktopItems,
   desktop-file-utils,
