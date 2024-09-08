@@ -4,27 +4,33 @@
   cython,
   fetchFromGitHub,
   numpy,
+  numpy_2,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gsd";
   version = "3.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
-    repo = pname;
+    repo = "gsd";
     rev = "refs/tags/v${version}";
     hash = "sha256-4NxZPu4DrwQW6qHeYairefabfN7J0+48tvVwi6ti4vk=";
   };
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    numpy_2
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
