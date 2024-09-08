@@ -62,8 +62,6 @@ dotnetFromEnv'
 }
 
 dotnetFixupHook() {
-    echo "Executing dotnetFixupPhase"
-
     local -r dotnetInstallPath="${dotnetInstallPath-$out/lib/$pname}"
 
     local executable executableBasename
@@ -94,8 +92,6 @@ dotnetFixupHook() {
             wrapDotnetProgram "$executable" "$out/bin/$executableBasename" \;
         done < <(find "$dotnetInstallPath" ! -name "*.dll" -executable -type f -print0)
     fi
-
-    echo "Finished dotnetFixupPhase"
 }
 
 if [[ -z "${dontDotnetFixup-}" ]]; then
