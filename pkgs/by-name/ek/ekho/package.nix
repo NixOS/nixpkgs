@@ -13,14 +13,14 @@
 , darwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ekho";
   version = "9.0";
 
   src = fetchFromGitHub {
     owner = "hgneng";
     repo = "ekho";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VYN9tR3BJXd3UA0V5vqQJNItJe1e1knZ+S7tLeaeYYk=";
   };
 
@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "ekho";
   };
-}
+})
