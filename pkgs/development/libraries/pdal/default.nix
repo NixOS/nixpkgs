@@ -28,18 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.7.2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-ukBZLr/iyYQ68sv9JWrR4YP0ahHfGhytgcWKPzrF3Ps=";
+    hash = "sha256-VHcUyYADmNzxZ+Ix56TNuaP9wG+vRlEl71cNM0uMaHg=";
   };
-
-  patches = [
-    ./pdal.pc.in.patch
-  ];
 
   nativeBuildInputs = [
     cmake

@@ -4005,7 +4005,9 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
-  atlas = callPackage ../development/tools/database/atlas { };
+  atlas = callPackage ../by-name/at/atlas/package.nix {
+    buildGoModule = buildGo123Module;
+  };
 
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -20292,7 +20294,10 @@ with pkgs;
     else if name == "relibc" then targetPackages.relibc or relibc
     else throw "Unknown libc ${name}";
 
-  libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
+  libcCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform
+    then null
+    else libcCrossChooser stdenv.targetPlatform.libc;
 
   threadsCross =
     lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
@@ -25986,12 +25991,6 @@ with pkgs;
     ;
 
   mlxbf-bootimages = callPackage ../misc/mlxbf-bootimages { };
-
-  microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
-
-  microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
-
-  iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
 
   inherit (callPackages ../os-specific/linux/apparmor { })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
