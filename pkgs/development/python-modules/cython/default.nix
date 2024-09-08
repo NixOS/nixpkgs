@@ -1,17 +1,15 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  python,
-  pkg-config,
   gdb,
-  numpy,
   ncurses,
-
-  # Reverse dependency
-  sage,
+  numpy,
+  pkg-config,
+  python,
+  sage, # Reverse dependency
+  setuptools,
+  stdenv,
 }:
 
 let
