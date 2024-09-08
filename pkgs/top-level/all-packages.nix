@@ -34528,8 +34528,6 @@ with pkgs;
   xine-ui = callPackage ../applications/video/xine/ui.nix { };
   xine-lib = callPackage ../applications/video/xine/lib.nix { };
 
-  xlsxgrep = callPackage ../applications/search/xlsxgrep { };
-
   xmind = callPackage ../applications/misc/xmind { };
 
   xneur = callPackage ../applications/misc/xneur { };
