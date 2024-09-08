@@ -1,16 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, gdal
-, proj
-, protobuf
-, qt5
-, withGeoimage ? true, exiv2
-, withGpsdlib ? (!stdenv.isDarwin), gpsd
-, withLibproxy ? false, libproxy
-, withZbar ? false, zbar
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  gdal,
+  proj,
+  protobuf,
+  qt5,
+  withGeoimage ? true,
+  exiv2,
+  withGpsdlib ? (!stdenv.isDarwin),
+  gpsd,
+  withLibproxy ? false,
+  libproxy,
+  withZbar ? false,
+  zbar,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +29,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-oxLGhIE1qJ9+GOztD1HvrLGRGVO3gyy7Rc6CyzKTFec=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qt5.qttools qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt5.qttools
+    qt5.wrapQtAppsHook
+  ];
 
-  buildInputs = [ gdal proj protobuf qt5.qtnetworkauth qt5.qtsvg qt5.qtwebengine ]
+  buildInputs =
+    [
+      gdal
+      proj
+      protobuf
+      qt5.qtnetworkauth
+      qt5.qtsvg
+      qt5.qtwebengine
+    ]
     ++ lib.optional withGeoimage exiv2
     ++ lib.optional withGpsdlib gpsd
     ++ lib.optional withLibproxy libproxy
