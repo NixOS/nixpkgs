@@ -13,10 +13,6 @@
   xorgproto,
   libXi,
   pkg-config,
-  Carbon,
-  Cocoa,
-  Kernel,
-  OpenGL,
   settingsFile ? "include/box2d/b2_settings.h",
 }:
 
@@ -40,24 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libGLU
-      libGL
-      libglut
-      libX11
-      libXcursor
-      libXinerama
-      libXrandr
-      xorgproto
-      libXi
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-      Kernel
-      OpenGL
-    ];
+  buildInputs = [
+    libGL
+    libGLU
+    libX11
+    libXcursor
+    libXi
+    libXinerama
+    libXrandr
+    libglut
+    xorgproto
+  ];
 
   cmakeFlags = [
     (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
