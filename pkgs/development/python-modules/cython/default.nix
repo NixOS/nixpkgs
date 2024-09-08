@@ -41,6 +41,8 @@ buildPythonPackage rec {
   # Temporary solution
   doCheck = false;
 
+  strictDeps = true;
+
   checkPhase =
     let
       excludedTests =
