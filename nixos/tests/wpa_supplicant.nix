@@ -55,7 +55,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       # wireless client
       networking.wireless = {
         # the override is needed because the wifi is
-        # disabled with mkVMOverride in qemu-vm.nix.
+        # disabled with mkVMOverride in qemu-guest.nix.
         enable = lib.mkOverride 0 true;
         userControlled.enable = true;
         interfaces = [ "wlan1" ];
@@ -80,7 +80,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       # wireless client
       networking.wireless = {
         # the override is needed because the wifi is
-        # disabled with mkVMOverride in qemu-vm.nix.
+        # disabled with mkVMOverride in qemu-guest.nix.
         enable = lib.mkOverride 0 true;
         userControlled.enable = true;
         interfaces = [ "wlan1" ];

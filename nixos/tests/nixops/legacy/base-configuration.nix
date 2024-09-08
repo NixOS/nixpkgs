@@ -12,7 +12,6 @@ let
 in
 {
   imports = [
-    (modulesPath + "/virtualisation/qemu-vm.nix")
     (modulesPath + "/testing/test-instrumentation.nix")
   ];
   virtualisation.writableStore = true;

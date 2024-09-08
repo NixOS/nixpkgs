@@ -45,7 +45,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     '';
 
     # Note: the overrides are needed because the wifi is
-    # disabled with mkVMOverride in qemu-vm.nix.
+    # disabled with mkVMOverride in qemu-guest.nix.
     services.connman.enable = lib.mkOverride 0 true;
     services.connman.networkInterfaceBlacklist = [ "eth0" ];
     networking.wireless.enable = lib.mkOverride 0 true;

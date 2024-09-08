@@ -108,7 +108,7 @@ There are a few special NixOS options for test VMs:
     that run Nix operations that modify the store.
 
 For more options, see the module
-[`qemu-vm.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-vm.nix).
+[`qemu-guest.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/qemu-guest.nix).
 
 The test script is a sequence of Python statements that perform various
 actions, such as starting VMs, executing commands in the VMs, and so on.

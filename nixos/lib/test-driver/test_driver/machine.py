@@ -213,7 +213,7 @@ class StartCommand:
 
 
 class NixStartScript(StartCommand):
-    """A start script from nixos/modules/virtualiation/qemu-vm.nix
+    """A start script from nixos/modules/virtualiation/qemu-guest.nix
     that also satisfies the requirement of the BaseStartCommand.
     These Nix commands have the particular characteristic that the
     machine name can be extracted out of them via a regex match.
