@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pysmlight";
-  version = "0.0.14";
+  version = "0.0.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
     rev = "refs/tags/v${version}";
-    hash = "sha256-23MDNsN7eAhDYKmsSciChCe6sJVdrL4VuEJixoczVsk=";
+    hash = "sha256-DbuVbA6Tdi+qpop6Gnubra9Pv0qAQr1QvgWLJx9elkU=";
   };
 
   build-system = [ poetry-core ];

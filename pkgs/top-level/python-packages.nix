@@ -9497,6 +9497,8 @@ self: super: with self; {
 
   panasonic-viera = callPackage ../development/python-modules/panasonic-viera { };
 
+  pandantic = callPackage ../development/python-modules/pandantic { };
+
   pandas = callPackage ../development/python-modules/pandas {
     inherit (pkgs.darwin) adv_cmds;
   };
