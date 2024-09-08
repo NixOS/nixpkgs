@@ -12,10 +12,7 @@
 , xorgproto
 , libXi
 , pkg-config
-, Carbon
-, Cocoa
-, Kernel
-, OpenGL
+, darwin
 , settingsFile ? "include/box2d/b2_settings.h"
 }:
 
@@ -47,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
     libXi
   ] ++ optionals stdenv.hostPlatform.isDarwin [
-    Carbon Cocoa Kernel OpenGL
+    darwin.apple_sdk.frameworks.Carbon
+    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.Kernel
+    darwin.apple_sdk.frameworks.OpenGL
   ];
 
   cmakeFlags = [
