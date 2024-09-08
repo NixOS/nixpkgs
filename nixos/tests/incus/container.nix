@@ -122,6 +122,16 @@ in
 
             check_sysctl("container")
 
+  '' + lib.optionalString (lib.versionAtLeast incus.version "6.4.0") ''
+    with subtest("supports per-instance lxcfs"):
+        machine.fail("pgrep -a lxcfs | grep 'incus/devices/container/lxcfs'")
+        machine.succeed("incus config set instances.lxcfs.per_instance=true")
+        machine.succeed("incus restart container")
+        with machine.nested("Waiting for instance to start and be usable"):
+          retry(instance_is_up)
+        machine.succeed("pgrep -a lxcfs | grep 'incus/devices/container/lxcfs'")
+
+  '' + ''
     with subtest("softDaemonRestart"):
         with subtest("Instance remains running when softDaemonRestart is enabled and services is stopped"):
             pid = machine.succeed("incus info container | grep 'PID'").split(":")[1].strip()
