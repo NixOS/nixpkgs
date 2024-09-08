@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "univers";
-  version = "30.12.0";
+  version = "30.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NbsoYfTk5SWyUQZnOdm+ZCXK7wD+DV/updRHqHoU49c=";
+    hash = "sha256-whuUM3IHnuK5bkXJ8SPrMoO3cRnm0yxKBPxBSfeQIFY=";
   };
 
   build-system = [
@@ -58,8 +58,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for parsing version ranges and expressions";
-    homepage = "https://github.com/nexB/univers";
-    changelog = "https://github.com/nexB/univers/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/univers";
+    changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [
       asl20
       bsd3
