@@ -13070,7 +13070,7 @@ with pkgs;
     extraFonts = true;
   };
 
-  texmaker = libsForQt5.callPackage ../applications/editors/texmaker { };
+  texmaker = qt6Packages.callPackage ../applications/editors/texmaker { };
 
   texstudio = qt6Packages.callPackage ../applications/editors/texstudio { };
 
