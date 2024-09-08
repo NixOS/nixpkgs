@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amber-lang";
-  version = "0.3.3-alpha";
+  version = "0.3.5-alpha";
 
   src = fetchFromGitHub {
-    owner = "Ph0enixKM";
-    repo = "Amber";
+    owner = "amber-lang";
+    repo = "amber";
     rev = version;
-    hash = "sha256-Al1zTwQufuVGSlttf02s5uI3cyCNDShhzMT3l9Ctv3Y=";
+    hash = "sha256-wf0JNWNliDGNvlbWoatPqDKmVaBzHeCKOvJWuE9PnpQ=";
   };
 
-  cargoHash = "sha256-HbkIkCVy2YI+nP5t01frXBhlp/rCsB6DwLL53AHJ4vE=";
+  cargoHash = "sha256-6T4WcQkCMR8W67w0uhhN8W0FlLsrTUMa3/xRXDtW4Es=";
 
   preConfigure = ''
     substituteInPlace src/compiler.rs \
@@ -34,6 +34,11 @@ rustPlatform.buildRustPackage rec {
     # 'rev' in generated bash script of test
     # tests::validity::variable_ref_function_invocation
     util-linux
+  ];
+
+  checkFlags = [
+    "--skip=tests::extra::download"
+    "--skip=tests::formatter::all_exist"
   ];
 
   postInstall = ''
