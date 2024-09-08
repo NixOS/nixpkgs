@@ -1,19 +1,22 @@
-{ stdenv
-, fetchFromBitbucket
-, mecab-ko-dic
-, lib
+{
+  stdenv,
+  fetchFromBitbucket,
+  mecab-ko-dic,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
   name = "mecab-ko";
   version = "0.9.2";
 
-  src = (fetchFromBitbucket {
-    owner = "eunjeon";
-    repo = "mecab-ko";
-    rev = "release-${version}";
-    hash = "sha256-vZ7qQi/k5OXlaFSasKNF+I6VrWjvmqbq+A1tDFSww0w=";
-  });
+  src = (
+    fetchFromBitbucket {
+      owner = "eunjeon";
+      repo = "mecab-ko";
+      rev = "release-${version}";
+      hash = "sha256-vZ7qQi/k5OXlaFSasKNF+I6VrWjvmqbq+A1tDFSww0w=";
+    }
+  );
 
   postInstall = ''
     mkdir -p $out/lib/mecab/dic
@@ -31,7 +34,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A Korean morphological analyzer";
     homepage = "https://bitbucket.org/eunjeon/mecab-ko";
-    license = with licenses; [ gpl2Only lgpl21Only bsd3 ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+      bsd3
+    ];
     platforms = platforms.unix;
     mainProgram = "mecab";
     maintainers = with maintainers; [ samdroid-apps ];
