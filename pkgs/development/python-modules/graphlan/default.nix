@@ -11,14 +11,15 @@
 buildPythonPackage rec {
   pname = "graphlan";
   version = "0-unstable-2024-08-07";
+
   pyproject = true;
+  build-system = [ setuptools ];
 
   patchPhase = ''
     sed -i 's|biopython==|biopython>=|' setup.py
   '';
 
   dependencies = [
-    setuptools
     biopython
     matplotlib
     scipy
