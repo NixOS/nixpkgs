@@ -22083,7 +22083,14 @@ with pkgs;
   ncurses =
     if stdenv.hostPlatform.useiOSPrebuilt
     then null
-    else callPackage ../development/libraries/ncurses { };
+    else callPackage ../development/libraries/ncurses {
+      # ncurses is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
+      stdenv =
+        if stdenv.isDarwin then
+          darwin.bootstrapStdenv
+        else
+          stdenv;
+    };
 
   ndi = callPackage ../development/libraries/ndi { };
 
