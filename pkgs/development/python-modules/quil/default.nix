@@ -42,7 +42,12 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  pythonImportsCheck = [ "numpy" ];
+  pythonImportsCheck = [
+    "quil.expression"
+    "quil.instructions"
+    "quil.program"
+    "quil.validation"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
