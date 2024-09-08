@@ -1,0 +1,25 @@
+diff -rc checkinstall-orig/checkinstall checkinstall/checkinstall
+*** checkinstall-orig/checkinstall	2009-03-27 17:07:26.000000000 +0100
+--- checkinstall/checkinstall	2009-04-14 16:34:08.000000000 +0200
+***************
+*** 2607,2615 ****
+     chmod 755 $BUILD_DIR/DEBIAN/postrm
+  fi
+  
+! # Tag files in /etc to be conffiles
+  find $BUILD_DIR/etc 2> /dev/null | sed -e "s,$BUILD_DIR,," | \
+! 	grep -v '^/etc$' > $BUILD_DIR/DEBIAN/conffiles
+  
+  # The package will be saved here (ignores <epoch>: prefix):
+  DEBPKG="${DIRECTORIO_FUENTE}/${NAME}_`echo ${VERSION} | sed -e 's/^[0123456789]*://'`-${RELEASE}_${ARCHITECTURE}.deb"
+--- 2607,2616 ----
+     chmod 755 $BUILD_DIR/DEBIAN/postrm
+  fi
+  
+! # Tag non-directory files in /etc to be conffiles
+  find $BUILD_DIR/etc 2> /dev/null | sed -e "s,$BUILD_DIR,," | \
+!         (while read fn; do test ! -d "$BUILD_DIR/$fn" && echo "$fn"; done) \
+!         > $BUILD_DIR/DEBIAN/conffiles
+  
+  # The package will be saved here (ignores <epoch>: prefix):
+  DEBPKG="${DIRECTORIO_FUENTE}/${NAME}_`echo ${VERSION} | sed -e 's/^[0123456789]*://'`-${RELEASE}_${ARCHITECTURE}.deb"
