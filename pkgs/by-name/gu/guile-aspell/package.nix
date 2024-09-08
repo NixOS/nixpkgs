@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, guile
-, autoreconfHook
-, pkg-config
-, aspell
-, texinfo
+{
+  lib,
+  aspell,
+  autoreconfHook,
+  fetchFromGitHub,
+  guile,
+  pkg-config,
+  stdenv,
+  texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,28 +20,29 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CvLECZLwf4MujAQCL3I81O5xFvq6ezVhV0BjbqI3mR0=";
   };
 
-  strictDeps = true;
+  outputs = [
+    "out"
+    "info"
+  ];
 
   nativeBuildInputs = [
-    guile
     autoreconfHook
+    guile
     pkg-config
     texinfo
   ];
 
-  buildInputs = [
-    guile
-  ];
+  buildInputs = [ guile ];
 
-  propagatedBuildInputs = [
-    aspell
-  ];
+  propagatedBuildInputs = [ aspell ];
 
-  meta = with lib; {
-    description = "Guile bindings for the aspell library";
+  strictDeps = true;
+
+  meta = {
     homepage = "https://github.com/spk121/guile-aspell";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ snowflake ];
-    platforms = guile.meta.platforms;
+    description = "Guile bindings for the aspell library";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ snowflake ];
+    inherit (guile.meta) platforms;
   };
 })
