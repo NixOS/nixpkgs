@@ -25,6 +25,7 @@ let
     addErrorContext
     assertMsg
     attrNames
+    attrsToList
     concatLists
     concatMapStringsSep
     concatStrings
@@ -177,9 +178,9 @@ in rec {
   }:
   let mkLine = k: v: indent + mkKeyValue k v + "\n";
       mkLines = if listsAsDuplicateKeys
-        then k: v: map (mkLine k) (if isList v then v else [v])
-        else k: v: [ (mkLine k v) ];
-  in attrs: concatStrings (concatLists (mapAttrsToList mkLines attrs));
+        then {name, value}: map (mkLine name) (if isList value then value else [value])
+        else {name, value}: [ (mkLine name value) ];
+  in attrs: concatStrings (concatLists (map mkLines (if isAttrs attrs then attrsToList attrs else attrs)));
 
 
   /**
