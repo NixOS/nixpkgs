@@ -5341,7 +5341,7 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };  };
 
   hyprland = callPackage ../by-name/hy/hyprland/package.nix {
-    libliftoff = libliftoff_0_4;
+    stdenv = gcc14Stdenv;
   };
 
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
