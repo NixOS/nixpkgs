@@ -27,6 +27,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  makeWrapperArgs = [ "--set NO_UPDATE_NOTIFIER true" ];
+
   postInstall =
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd clever \
