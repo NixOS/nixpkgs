@@ -112,6 +112,7 @@ in
             lomiri-download-manager
             lomiri-filemanager-app
             lomiri-gallery-app
+            lomiri-online-accounts
             lomiri-history-service
             lomiri-mediaplayer-app
             lomiri-music-app
