@@ -1,8 +1,7 @@
 #! @bash@/bin/bash
 set -eo pipefail
 PATH=@coreutils@/bin:$PATH
-export CLASSPATH=$(find @outFreenet@/deps/ -name "*.jar"|grep -v bcprov-jdk15on-1.48.jar|tr $'\n' :)
-CLASSPATH=$CLASSPATH:@outFreenet@/share/freenet/freenet-ext.jar:@outFreenet@/share/freenet/freenet.jar
+export CLASSPATH=@CLASSPATH@
 
 export FREENET_HOME="$HOME/.local/share/freenet"
 if [ -n "$XDG_DATA_HOME" ] ; then
@@ -11,7 +10,7 @@ fi
 
 mkdir -p -- $FREENET_HOME
 
-cp -u -- @seednodes@ $FREENET_HOME/seednodes.fref
+cp -u -- @seednodes@/seednodes.fref $FREENET_HOME/seednodes.fref
 chmod u+rw -- $FREENET_HOME/seednodes.fref
 
 cd -- $FREENET_HOME
