@@ -12,24 +12,6 @@
   stdenv,
 }:
 
-let
-  excludedTests =
-    [ "reimport_from_subinterpreter" ]
-    # cython's testsuite is not working very well with libc++
-    # We are however optimistic about things outside of testsuite still working
-    ++ lib.optionals (stdenv.cc.isClang or false) [
-      "cpdef_extern_func"
-      "libcpp_algo"
-    ]
-    # Some tests in the test suite isn't working on aarch64. Disable them for
-    # now until upstream finds a workaround.
-    # Upstream issue here: https://github.com/cython/cython/issues/2308
-    ++ lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
-    ++ lib.optionals stdenv.isi686 [
-      "future_division"
-      "overflow_check_longlong"
-    ];
-in
 buildPythonPackage rec {
   pname = "cython";
   version = "3.0.11";
@@ -54,21 +36,44 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  checkPhase = ''
-    export HOME="$NIX_BUILD_TOP"
-    ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
-      --no-code-style \
-      ${
-        lib.optionalString (
-          builtins.length excludedTests != 0
-        ) ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''
-      }
-  '';
-
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-  # doCheck = !stdenv.isDarwin;
+
+  checkPhase =
+    let
+      excludedTests =
+        [ "reimport_from_subinterpreter" ]
+        # cython's testsuite is not working very well with libc++
+        # We are however optimistic about things outside of testsuite still working
+        ++ lib.optionals (stdenv.cc.isClang or false) [
+          "cpdef_extern_func"
+          "libcpp_algo"
+        ]
+        # Some tests in the test suite aren't working on aarch64.
+        # Disable them for now until upstream finds a workaround.
+        # Upstream issue: https://github.com/cython/cython/issues/2308
+        ++ lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
+        ++ lib.optionals stdenv.isi686 [
+          "future_division"
+          "overflow_check_longlong"
+        ];
+      commandline = builtins.concatStringsSep " " (
+        [
+          "-j$NIX_BUILD_CORES"
+          "--no-code-style"
+        ]
+        ++ lib.optionals (builtins.length excludedTests != 0) [
+          ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''
+        ]
+      );
+    in
+    ''
+      runHook preCheck
+      export HOME="$NIX_BUILD_TOP"
+      ${python.interpreter} runtests.py ${commandline}
+      runHook postCheck
+    '';
 
   passthru.tests = {
     inherit sage;
@@ -85,3 +90,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
   };
 }
+# TODO: investigate recursive loop when doCheck is true
