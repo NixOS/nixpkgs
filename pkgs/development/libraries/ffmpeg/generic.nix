@@ -143,6 +143,7 @@
 , withZimg ? withHeadlessDeps
 , withZlib ? withHeadlessDeps
 , withZmq ? withFullDeps # Message passing
+, withZvbi ? withFullDeps # Teletext support
 
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -325,6 +326,7 @@
 , zeromq4
 , zimg
 , zlib
+, zvbi
 /*
  *  Darwin frameworks
  */
@@ -683,6 +685,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withZimg "libzimg")
     (enableFeature withZlib "zlib")
     (enableFeature withZmq "libzmq")
+    (enableFeature withZvbi "libzvbi")
     /*
      * Developer flags
      */
@@ -821,6 +824,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withZimg [ zimg ]
   ++ optionals withZlib [ zlib ]
   ++ optionals withZmq [ zeromq4 ]
+  ++ optionals withZvbi [ zvbi ]
   ;
 
   buildFlags = [ "all" ]
