@@ -8,8 +8,6 @@
   makeWrapper,
   dotnetCorePackages,
   cacert,
-  unzip,
-  yq,
   addNuGetDeps,
 }:
 let
@@ -149,8 +147,6 @@ let
         cacert
         makeWrapper
         dotnet-sdk
-        unzip
-        yq
       ];
 
       buildInputs =

@@ -1,5 +1,43 @@
 # shellcheck shell=bash disable=SC2154
 
+_unpackNugetPackagesInOutput() {
+    local -r unpacked="$prefix"/share/nuget/packages/.unpacked
+    (
+        shopt -s nullglob globstar
+        for nupkg in "$prefix"/share/nuget/source/**/*.nupkg; do
+            mkdir -p "$unpacked"
+            @unzip@/bin/unzip -qd "$unpacked" "$nupkg"
+            chmod -R +rw "$unpacked"
+            echo {} > "$unpacked"/.nupkg.metadata
+            @xmlstarlet@/bin/xmlstarlet \
+                sel -t \
+                -m /_:package/_:metadata \
+                -v _:id -nl \
+                -v _:version -nl \
+                "$unpacked"/*.nuspec | (
+                read id
+                read version
+                id=''${id,,}
+                version=''${version,,}
+                mkdir -p "$prefix"/share/nuget/packages/"$id"
+                mv "$unpacked" "$prefix"/share/nuget/packages/"$id"/"$version"
+            )
+        done
+        rm -rf "$prefix"/share/nuget/source
+    )
+}
+
+unpackNugetPackages() {
+    local output
+    for output in $(getAllOutputNames); do
+        prefix="${!output}" _unpackNugetPackagesInOutput
+    done
+}
+
+if [[ -z ${dontUnpackNugetPackages-} ]]; then
+    preFixupHooks+=(unpackNugetPackages)
+fi
+
 _createNugetSourceInOutput() {
     local package version id dir nupkg content
     local -a nuspec
