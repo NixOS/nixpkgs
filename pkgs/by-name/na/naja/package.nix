@@ -15,20 +15,20 @@
 }:
 stdenv.mkDerivation {
   pname = "naja";
-  version = "0-unstable-2024-07-21";
+  version = "0-unstable-2024-08-27";
 
   src = fetchFromGitHub {
     owner = "najaeda";
     repo = "naja";
-    rev = "8c068f3bd1bbd57b851547f191a58a375fd35cda";
-    hash = "sha256-aUYPJGr4D5n92fp0namPT6I/gMRZoF7YHnB7GoRzwYI=";
+    rev = "ca7a544d16abb31d6992e702ccbd97be3a644c08";
+    hash = "sha256-lmgXv2nmmjKph0Tf9ZvV3kQBtbiGXYA7jrE77cgM+KU=";
     fetchSubmodules = true;
   };
 
   outputs = [
-    "dev"
-    "lib"
     "out"
+    "lib"
+    "dev"
   ];
 
   strictDeps = true;
@@ -51,10 +51,14 @@ stdenv.mkDerivation {
     tbb_2021_11
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
-    (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_ZSTD" true)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
+      (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_ZSTD" true)
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "10.14") # For aligned allocation
+    ];
 
   doCheck = true;
 
@@ -67,7 +71,5 @@ stdenv.mkDerivation {
     ];
     mainProgram = "naja_edit";
     platforms = lib.platforms.all;
-    # "aligned deallocation function of type [...] is only available on macOS 10.13 or newer" even with 11.0 SDK
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

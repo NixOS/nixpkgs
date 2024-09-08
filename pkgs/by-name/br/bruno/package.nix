@@ -26,20 +26,20 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.25.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-TXEe0ICrkljxfnvW1wv/e1BB7J6p/KW3JklCvYyjqSs=";
+    hash = "sha256-SLND+eEEMFVHE5XPt2EKkJ+BjENqvUSrWkqnC6ghUBI=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-/1/QPKjSgJJDtmUipgbiVR+Buea9cXO+HvICfKVX/2g=";
+  npmDepsHash = "sha256-RFn7Bbx1xMm4gt++lhPflXjEfTIgmls2TkrJ8Ta2qpI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -79,15 +79,12 @@ buildNpmPackage' rec {
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-
-  # remove giflib dependency
-  npmRebuildFlags = [ "--ignore-scripts" ];
-  preBuild = ''
-    substituteInPlace node_modules/canvas/binding.gyp \
-      --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
-    npm rebuild
+  postConfigure = ''
+    # sh: line 1: /build/source/packages/bruno-common/node_modules/.bin/rollup: cannot execute: required file not found
+    patchShebangs packages/*/node_modules
   '';
+
+  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   dontNpmBuild = true;
   postBuild = ''
@@ -96,6 +93,8 @@ buildNpmPackage' rec {
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
 
+    npm run sandbox:bundle-libraries --workspace=packages/bruno-js
+
     bash scripts/build-electron.sh
 
     pushd packages/bruno-electron
@@ -103,7 +102,7 @@ buildNpmPackage' rec {
     ${
       if stdenv.isDarwin then
         ''
-          cp -r ${electron}/Applications/Electron.app ./
+          cp -r ${electron.dist}/Electron.app ./
           find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
           substituteInPlace electron-builder-config.js \
@@ -121,7 +120,7 @@ buildNpmPackage' rec {
         ''
           npm exec electron-builder -- \
             --dir \
-            -c.electronDist=${electron}/libexec/electron \
+            -c.electronDist=${electron.dist} \
             -c.electronVersion=${electron.version} \
             -c.npmRebuild=false
         ''

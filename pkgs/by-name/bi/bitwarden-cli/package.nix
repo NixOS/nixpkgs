@@ -5,19 +5,20 @@
 , fetchFromGitHub
 , python3
 , cctools
+, nix-update-script
 , nixosTests
 , xcbuild
 }:
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.8.0";
+  version = "2024.8.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-vosEc8HCMHEaaQadzA+jDjQA1liEtD8sS1Zndz/Iv00=";
+    hash = "sha256-F/UbaNKkyf8AoTSa0B0Ipdr5Z8qAkbk7tJ0Cdq7gk+U=";
   };
 
   postPatch = ''
@@ -27,10 +28,10 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-5neEpU7ZhVO5OR181owsvAnFfl7lr0MymvqbRFCPs3M=";
+  npmDepsHash = "sha256-SnrK26QaxHYKX0532rGBASjx9PwxKSsVFRzZ3Cs2GPk=";
 
   nativeBuildInputs = [
-    python3
+    (python3.withPackages (ps: with ps; [ setuptools ]))
   ] ++ lib.optionals stdenv.isDarwin [
     cctools
     xcbuild.xcrun
@@ -38,7 +39,19 @@ buildNpmPackage rec {
 
   makeCacheWritable = true;
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    npm_config_build_from_source = "true";
+  };
+
+  # node-argon2 builds with LTO, but that causes missing symbols. So disable it
+  # and rebuild. See https://github.com/ranisalt/node-argon2/pull/415
+  preConfigure = ''
+    pushd node_modules/argon2
+    substituteInPlace binding.gyp --replace-fail '"-flto", ' ""
+    "$npm_config_node_gyp" rebuild
+    popd
+  '';
 
   npmBuildScript = "build:oss:prod";
 
@@ -46,8 +59,13 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  passthru.tests = {
-    vaultwarden = nixosTests.vaultwarden.sqlite;
+  passthru = {
+    tests = {
+      vaultwarden = nixosTests.vaultwarden.sqlite;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+    };
   };
 
   meta = with lib; {

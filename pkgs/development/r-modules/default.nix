@@ -318,6 +318,7 @@ let
     svaNUMT = [ jbedo ];
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
+    RQuantLib = [ kupac ];
   };
 
   packagesWithRDepends = {
@@ -767,6 +768,7 @@ let
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     markets = [ pkgs.gsl ];
+    rlas = [ pkgs.boost ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     poisbinom = [ pkgs.fftw.dev ];
     PoissonMultinomial = [ pkgs.fftw.dev ];

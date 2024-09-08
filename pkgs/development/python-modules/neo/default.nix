@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   numpy,
   packaging,
   quantities,
@@ -14,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.13.2";
+  version = "0.13.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aYDZVC55XVNR/VtdnTlBBKR/MNDvfwUR+spqe14ncrw=";
+  src = fetchFromGitHub {
+    owner = "NeuralEnsemble";
+    repo = "python-neo";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7Q80vbQInVWxPCr6VvmI9tFfTIAzo9FPJ19q51Xd2KM=";
   };
 
   build-system = [ setuptools ];

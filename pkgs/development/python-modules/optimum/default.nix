@@ -120,7 +120,7 @@ buildPythonPackage rec {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
-    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.rev}";
+    changelog = "https://github.com/huggingface/optimum/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Textlint rule that check no start with duplicated conjunction";
     homepage = "https://github.com/textlint-rule/textlint-rule-no-start-duplicated-conjunction";
-    changelog = "https://github.com/textlint-rule/textlint-rule-no-start-duplicated-conjunction/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-no-start-duplicated-conjunction/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;

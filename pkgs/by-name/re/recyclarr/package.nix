@@ -40,6 +40,8 @@ buildDotnetModule (finalAttrs: {
   '';
   patches = [ ./001-Git-Version.patch ];
 
+  enableParallelBuilding = false;
+
   dotnetRestoreFlags = [ "--configfile=${nuget-config}" ];
 
   doCheck = false;

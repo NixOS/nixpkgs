@@ -5,13 +5,13 @@
 , knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi
 , qtx11extras, knewstuff, kwayland, qttools, kcolorpicker, kimageannotator
 , qcoro, qtquickcontrols2, wayland, plasma-wayland-protocols, kpurpose, kpipewire
-, wrapGAppsHook3
+, wrapGAppsHook3, wayland-scanner
 }:
 
 mkDerivation {
   pname = "spectacle";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 wayland-scanner ];
   buildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras xcb-util-cursor

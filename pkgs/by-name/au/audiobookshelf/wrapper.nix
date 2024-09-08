@@ -52,6 +52,7 @@
 
     NODE_ENV=production \
       SOURCE=nixpkgs \
+      SKIP_BINARIES_CHECK=1 \
       FFMPEG_PATH=${ffmpeg-full}/bin/ffmpeg \
       FFPROBE_PATH=${ffmpeg-full}/bin/ffprobe \
       CONFIG_PATH="$config" \

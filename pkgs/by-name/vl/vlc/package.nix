@@ -79,6 +79,7 @@
 , unzip
 , wayland
 , wayland-protocols
+, wayland-scanner
 , wrapGAppsHook3
 , writeShellScript
 , xcbutilkeysyms
@@ -120,8 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals chromecastSupport [ protobuf ]
   ++ optionals withQt5 [ libsForQt5.wrapQtAppsHook ]
   ++ optionals waylandSupport [
-    wayland
-    wayland-protocols
+    wayland-scanner
   ];
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of

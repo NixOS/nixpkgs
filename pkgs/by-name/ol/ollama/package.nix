@@ -40,13 +40,13 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.3.5";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-2lPOkpZ9AmgDFoIHKi+Im1AwXnTxSY3LLtyui1ep3Dw=";
+    hash = "sha256-h/IFD7OaiIWNhJywqWG4uOPXExHfcnipr6f9YD1OjNc=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +63,6 @@ let
     (preparePatch "05-default-pretokenizer.diff" "sha256-PQ0DgfzycUQ8t6S6/yjsMHHx/nFJ0w8AH6afv5Po89w=")
     (preparePatch "06-embeddings.diff" "sha256-lqg2SI0OapD9LCoAG6MJW6HIHXEmCTv7P75rE9yq/Mo=")
     (preparePatch "07-clip-unicode.diff" "sha256-1qMJoXhDewxsqPbmi+/7xILQfGaybZDyXc5eH0winL8=")
-    (preparePatch "08-pooling.diff" "sha256-7meKWbr06lbVrtxau0AU9BwJ88Z9svwtDXhmHI+hYBk=")
     (preparePatch "09-lora.diff" "sha256-tNtI3WHHjBq+PJZGJCBsXHa15dlNJeJm+IiaUbFC0LE=")
     (preparePatch "11-phi3-sliding-window.diff" "sha256-VbcR4SLa9UXoh8Jq/bPVBerxfg68JZyWALRs7fz7hEs=")
   ];
@@ -179,9 +178,6 @@ goBuild (
       # this also disables necessary patches contained in `ollama/llm/patches/`
       # those patches are added to `llamacppPatches`, and reapplied here in the patch phase
       ./disable-git.patch
-      # disable a check that unnecessarily exits compilation during rocm builds
-      # since `rocmPath` is in `LD_LIBRARY_PATH`, ollama uses rocm correctly
-      ./disable-lib-check.patch
     ] ++ llamacppPatches;
     postPatch = ''
       # replace inaccurate version number with actual release version

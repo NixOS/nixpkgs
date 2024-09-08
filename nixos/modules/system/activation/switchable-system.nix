@@ -4,14 +4,6 @@ let
 
   perlWrapped = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
 
-  description = extra: ''
-    Whether to include the capability to switch configurations.
-
-    Disabling this makes the system unable to be reconfigured via `nixos-rebuild`.
-
-    ${extra}
-  '';
-
 in
 
 {
@@ -20,7 +12,11 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = description ''
+      description = ''
+        Whether to include the capability to switch configurations.
+
+        Disabling this makes the system unable to be reconfigured via `nixos-rebuild`.
+
         This is good for image based appliances where updates are handled
         outside the image. Reducing features makes the image lighter and
         slightly more secure.
@@ -29,23 +25,17 @@ in
 
     enableNg = lib.mkOption {
       type = lib.types.bool;
-      default = false;
-      description = description ''
-        Whether to use `switch-to-configuration-ng`, an experimental
-        re-implementation of `switch-to-configuration` with the goal of
-        replacing the original.
+      default = config.system.switch.enable;
+      defaultText = lib.literalExpression "config.system.switch.enable";
+      description = ''
+        Whether to use `switch-to-configuration-ng`, the Rust-based
+        re-implementation of the original Perl `switch-to-configuration`.
       '';
     };
   };
 
   config = lib.mkMerge [
-    {
-      assertions = [{
-        assertion = with config.system.switch; enable -> !enableNg;
-        message = "Only one of system.switch.enable and system.switch.enableNg may be enabled at a time";
-      }];
-    }
-    (lib.mkIf config.system.switch.enable {
+    (lib.mkIf (config.system.switch.enable && !config.system.switch.enableNg) {
       system.activatableSystemBuilderCommands = ''
         mkdir $out/bin
         substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \

@@ -237,30 +237,12 @@ buildStdenv.mkDerivation {
   patches = lib.optionals (lib.versionAtLeast version "111") [ ./env_var_for_system_dir-ff111.patch ]
   ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
   ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
-  ++ lib.optionals (lib.versionOlder version "131") [
+  ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
       name = "cbindgen-0.27.0-compat.patch";
       url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
       hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
-    })
-  ]
-  ++ lib.optionals (lib.versionOlder version "130" && lib.versionAtLeast version "128") [
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1898476
-    (fetchpatch {
-      name = "mozbz-1898476-1.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f9323daf7abe";
-      hash = "sha256-fvIowXJLWnm16LeiSz6EasGypTi1ilG+s/T6+lNLbMQ=";
-    })
-    (fetchpatch {
-      name = "mozbz-1898476-2.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/a264ff9e9f6f";
-      hash = "sha256-9vkI/Ho4BXvLnoRGdfTzUODcIlA6K3RjbdhZjb/LEz0=";
-    })
-    (fetchpatch {
-      name = "mozbz-1898476-3.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/eb230ecdf8eb";
-      hash = "sha256-IaLltxf5W1WEzxvbi10wphqXVQPtBiLc2zlk38CIiz4=";
     })
   ]
   ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch  ]

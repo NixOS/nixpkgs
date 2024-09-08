@@ -36,6 +36,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl2Only;
 
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
-    maintainers = with lib.maintainers; [ kierdavis ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

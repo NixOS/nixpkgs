@@ -41,7 +41,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
-    # should be mesaPlatforms, darwin build breaks.
+    # should be mesa.meta.platforms, darwin build breaks.
     platforms = platforms.linux;
   };
 }

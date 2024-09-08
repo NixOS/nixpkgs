@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
 
   pythonRelaxDeps = [
+    "protobuf"
     "urwid"
   ];
 

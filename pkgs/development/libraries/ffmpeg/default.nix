@@ -6,6 +6,7 @@ let
     callPackage ./generic.nix (
       {
         inherit (darwin.apple_sdk.frameworks)
+          Accelerate
           AppKit
           AudioToolbox
           AVFoundation
@@ -23,13 +24,13 @@ let
   };
 
   v6 = {
-    version = "6.1.1";
-    hash = "sha256-Q0c95hbCVUHQWPoh5uC8uzMylmB4BnWg+VhXEgSouzo=";
+    version = "6.1.2";
+    hash = "sha256-h/N56iKkAR5kH+PRQceWZvHe3k+70KWMDEP5iVq/YFQ=";
   };
 
   v7 = {
-    version = "7.0.1";
-    hash = "sha256-HiCT6bvLx4zmJ6ffutoimdz5ENQ55CRF64WBT3HeXMA=";
+    version = "7.0.2";
+    hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
   };
 in
 

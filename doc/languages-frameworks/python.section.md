@@ -214,9 +214,6 @@ because their behaviour is different:
   paths included in this list. Items listed in `install_requires` go here.
 * `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_requires` go here.
 
-Aside from propagating dependencies,
-  `buildPythonPackage` also injects code into and wraps executables with the
-  paths included in this list. Items listed in `extras_requires` go here.
 
 ##### Overriding Python packages {#overriding-python-packages}
 
@@ -360,6 +357,22 @@ modifications.
 ```
 
 Do pay attention to passing in the right Python version!
+
+#### `mkPythonMetaPackage` function {#mkpythonmetapackage-function}
+
+This will create a meta package containing [metadata files](https://packaging.python.org/en/latest/specifications/recording-installed-packages/) to satisfy a dependency on a package, without it actually having been installed into the environment.
+In nixpkgs this is used to package Python packages with split binary/source distributions such as [psycopg2](https://pypi.org/project/psycopg2/)/[psycopg2-binary](https://pypi.org/project/psycopg2-binary/).
+
+```nix
+mkPythonMetaPackage {
+  pname = "psycopg2-binary";
+  inherit (psycopg2) optional-dependencies version;
+  dependencies = [ psycopg2 ];
+  meta = {
+    inherit (psycopg2.meta) description homepage;
+  };
+}
+```
 
 #### `python.buildEnv` function {#python.buildenv-function}
 
@@ -2033,8 +2046,8 @@ no maintainer, so maintenance falls back to the package set maintainers.
 
 ### Updating packages in bulk {#python-package-bulk-updates}
 
-There is a tool to update alot of python libraries in bulk, it exists at
-`maintainers/scripts/update-python-libraries` with this repository.
+A tool to bulk-update numerous Python libraries is available in the
+repository at `maintainers/scripts/update-python-libraries`.
 
 It can quickly update minor or major versions for all packages selected
 and create update commits, and supports the `fetchPypi`, `fetchurl` and

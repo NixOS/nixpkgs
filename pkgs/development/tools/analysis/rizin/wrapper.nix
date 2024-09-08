@@ -39,6 +39,6 @@ symlinkJoin {
 
   meta = unwrapped.meta // {
     # prefer wrapped over unwrapped
-    priority = (unwrapped.meta.priority or 0) - 1;
+    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

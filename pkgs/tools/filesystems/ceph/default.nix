@@ -323,6 +323,11 @@ in rec {
         name = "ceph-reef-ceph-volume-fix-set_dmcrypt_no_workqueue.patch";
         hash = "sha256-r+7hcCz2WF/rJfgKwTatKY9unJlE8Uw3fmOyaY5jVH0=";
       })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/607eb34b2c278566c386efcbf3018629cf08ccfd.patch";
+        name = "ceph-volume-fix-set_dmcrypt_no_workqueue-regex.patch";
+        hash = "sha256-q28Q7OIyFoMyMBCPXGA+AdNqp+9/6J/XwD4ODjx+JXY=";
+      })
     ];
 
     postPatch = ''
@@ -487,7 +492,8 @@ in rec {
         inherit (nixosTests)
           ceph-multi-node
           ceph-single-node
-          ceph-single-node-bluestore;
+          ceph-single-node-bluestore
+          ceph-single-node-bluestore-dmcrypt;
       };
     };
   };

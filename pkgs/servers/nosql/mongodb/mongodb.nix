@@ -13,7 +13,6 @@
 , openldap
 , openssl
 , libpcap
-, python311Packages
 , curl
 , Security
 , CoreFoundation
@@ -32,12 +31,13 @@
 }:
 
 let
-  scons = buildPackages.scons.override{ python3Packages = python311Packages; };
+  scons = buildPackages.scons;
   python = scons.python.withPackages (ps: with ps; [
     pyyaml
     cheetah3
     psutil
     setuptools
+    distutils
   ] ++ lib.optionals (lib.versionAtLeast version "6.0") [
     packaging
     pymongo

@@ -84,9 +84,4 @@ buildPythonPackage rec {
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_rigetti" ];
-
-  meta = cirq-core.meta // {
-    # ModuleNotFoundError: No module named 'pyquil.parser'
-    broken = lib.versionAtLeast pyquil.version "4";
-  };
 }

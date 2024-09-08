@@ -8,6 +8,7 @@
 , libgsf
 , poppler
 , gst_all_1
+, webp-pixbuf-loader
 , libxfce4util
 }:
 
@@ -31,6 +32,12 @@ mkXfceDerivation {
     libgsf
     poppler # technically the glib binding
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
+    )
+  '';
 
   # WrapGAppsHook won't touch this binary automatically, so we wrap manually.
   postFixup = ''

@@ -48,10 +48,7 @@ in {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
-      system.switch = {
-        enable = !ng;
-        enableNg = ng;
-      };
+      system.switch.enableNg = ng;
 
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;

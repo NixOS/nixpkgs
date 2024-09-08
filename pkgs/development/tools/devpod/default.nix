@@ -96,7 +96,7 @@ rec {
         dontInstall = true;
       };
 
-      rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+      rustTargetPlatformSpec = stdenv.hostPlatform.rust.rustcTarget;
     in
     rustPlatform.buildRustPackage {
       inherit version src;

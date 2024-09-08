@@ -2,13 +2,15 @@
   lib,
   aiohttp,
   aresponses,
+  async-timeout,
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
   packaging,
   poetry-core,
-  pydantic,
+  mashumaro,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -17,47 +19,41 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.5.18";
-  format = "pyproject";
+  version = "0.6.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "liudger";
-    repo = pname;
+    repo = "python-bsblan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SJUIJhsVn4LZiUx9h3Q2uWoeaQiKoIRrijTfPgCHnAA=";
+    hash = "sha256-/rdYCd5eyFqW96XaIzQOhsApzcTkrI46Gt226sLTLUQ=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-    sed -i "/covdefaults/d" pyproject.toml
     sed -i "/ruff/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  env.PACKAGE_VERSION = version;
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
+    async-timeout
     backoff
     packaging
-    pydantic
+    mashumaro
     yarl
   ];
 
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
-    # https://github.com/liudger/python-bsblan/issues/808
-    "test_http_error400"
-    "test_not_authorized_401_response"
   ];
 
   pythonImportsCheck = [ "bsblan" ];
@@ -66,7 +62,7 @@ buildPythonPackage rec {
     description = "Module to control and monitor an BSBLan device programmatically";
     homepage = "https://github.com/liudger/python-bsblan";
     changelog = "https://github.com/liudger/python-bsblan/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

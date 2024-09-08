@@ -193,6 +193,7 @@
   ./programs/fish.nix
   ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
+  ./programs/foot
   ./programs/freetds.nix
   ./programs/fuse.nix
   ./programs/fzf.nix
@@ -286,6 +287,7 @@
   ./programs/ssh.nix
   ./programs/starship.nix
   ./programs/steam.nix
+  ./programs/streamcontroller.nix
   ./programs/streamdeck-ui.nix
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
@@ -361,6 +363,7 @@
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
   ./security/wrappers/default.nix
+  ./services/accessibility/orca.nix
   ./services/accessibility/speechd.nix
   ./services/admin/docuum.nix
   ./services/admin/meshcentral.nix
@@ -654,6 +657,7 @@
   ./services/logging/syslogd.nix
   ./services/logging/vector.nix
   ./services/logging/ulogd.nix
+  ./services/mail/automx2.nix
   ./services/mail/clamsmtp.nix
   ./services/mail/davmail.nix
   ./services/mail/dkimproxy-out.nix
@@ -1345,6 +1349,7 @@
   ./services/system/systembus-notify.nix
   ./services/system/systemd-lock-handler.nix
   ./services/system/uptimed.nix
+  ./services/system/userborn.nix
   ./services/system/zram-generator.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
@@ -1401,6 +1406,7 @@
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii.nix
+  ./services/web-apps/firefly-iii-data-importer.nix
   ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
   ./services/web-apps/freshrss.nix
@@ -1474,6 +1480,7 @@
   ./services/web-apps/pretix.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/rimgo.nix
+  ./services/web-apps/rutorrent.nix
   ./services/web-apps/screego.nix
   ./services/web-apps/sftpgo.nix
   ./services/web-apps/suwayomi-server.nix
@@ -1489,6 +1496,7 @@
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/vikunja.nix
+  ./services/web-apps/wakapi.nix
   ./services/web-apps/weblate.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/wiki-js.nix

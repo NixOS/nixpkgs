@@ -4,7 +4,7 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra_unstable` which prints the jobset description
+  `pkgs.hydra` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
@@ -345,6 +345,7 @@ let
         nixfmt-rfc-style
         nota
         nvfetcher
+        oama
         ormolu
         # pakcs broken by set-extra on 2024-03-15
         pandoc

@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-pdaOTMzEOfAKFK+P/4f51bQbmCssMNvq2OGvGVPzvhw=";
+    hash = "sha256-AldYWbLtkVtM1sWBCgNym9RZ0QszIh59vQhoysl5/3I=";
   };
 
   cargoLock = {

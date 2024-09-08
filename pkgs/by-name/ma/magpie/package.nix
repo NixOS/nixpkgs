@@ -5,7 +5,7 @@
   fetchpatch,
   stdenv,
   pkg-config,
-  gnome,
+  gnome-settings-daemon,
   gettext,
   gobject-introspection,
   cairo,
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     glib
     gnome-desktop
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gobject-introspection
     gsettings-desktop-schemas
     gtk3

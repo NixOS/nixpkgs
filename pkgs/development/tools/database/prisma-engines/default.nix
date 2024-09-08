@@ -9,18 +9,18 @@
 , stdenv
 }:
 
-# Updating this package will force an update for nodePackages.prisma. The
-# version of prisma-engines and nodePackages.prisma must be the same for them to
+# Updating this package will force an update for prisma. The
+# version of prisma-engines and prisma must be the same for them to
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.16.1";
+  version = "5.18.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-uJJX5lI0YFXygWLeaOuYxjgyswJcjSujPcqHn1aKn8M=";
+    hash = "sha256-ucAOz00dBgX2Bb63ueaBbyu1XtVQD+96EncUyo7STwA=";
   };
 
   # Use system openssl.
@@ -43,6 +43,12 @@ rustPlatform.buildRustPackage rec {
     openssl
     protobuf
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  # FIXME: Workaround Rust 1.80 support by updating time to 0.3.36
+  # https://github.com/prisma/prisma-engines/issues/4989
+  postPatch = ''
+    ln -sfn ${./Cargo.lock} Cargo.lock
+  '';
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
@@ -83,7 +89,7 @@ rustPlatform.buildRustPackage rec {
 # Here's an example application using Prisma with Nix: https://github.com/pimeys/nix-prisma-example
 # At example's `flake.nix` shellHook, notice the requirement of defining environment variables for prisma, it's values will show on `prisma --version`.
 # Read the example's README: https://github.com/pimeys/nix-prisma-example/blob/main/README.md
-# Prisma requires 2 packages, `prisma-engines` and `nodePackages.prisma`, to be at *exact* same versions.
+# Prisma requires 2 packages, `prisma-engines` and `prisma`, to be at *exact* same versions.
 # Certify at `package.json` that dependencies "@prisma/client" and "prisma" are equal, meaning no caret (`^`) in version.
 # Configure NPM to use exact version: `npm config set save-exact=true`
 # Delete `package-lock.json`, delete `node_modules` directory and run `npm install`.

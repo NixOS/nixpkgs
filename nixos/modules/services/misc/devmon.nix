@@ -1,18 +1,15 @@
 { pkgs, config, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.devmon;
 
 in {
   options = {
     services.devmon = {
-      enable = mkEnableOption "devmon, an automatic device mounting daemon";
+      enable = lib.mkEnableOption "devmon, an automatic device mounting daemon";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.devmon = {
       description = "devmon automatic device mounting daemon";
       wantedBy = [ "default.target" ];

@@ -13,7 +13,7 @@
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
-, curl, bzip2, zip, unzip, glxinfo
+, curl, bzip2, zip, unzip, mesa-demos
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
@@ -119,7 +119,7 @@ in stdenv.mkDerivation (finalAttrs: {
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
-      curl bzip2 zip unzip glxinfo
+      curl bzip2 zip unzip mesa-demos
       libcec libcec_platform dcadec libuuid
       libxcrypt libgcrypt libgpg-error libunistring
       libcrossguid libplist
@@ -229,7 +229,7 @@ in stdenv.mkDerivation (finalAttrs: {
       # TODO: figure out which binaries should be wrapped this way and which shouldn't
       for p in $(ls --ignore=kodi-send $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
+          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python mesa-demos ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libcec libcec_platform libass ]

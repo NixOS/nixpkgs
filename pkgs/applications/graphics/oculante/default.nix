@@ -41,8 +41,6 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
-
   buildInputs = [
     openssl
     fontconfig
@@ -62,6 +60,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=bench"
+    "--skip=tests::net" # requires network access
   ];
 
   postInstall = ''

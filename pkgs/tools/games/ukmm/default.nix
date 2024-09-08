@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ukmm";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = "ukmm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IhVpsDdFpeE27GY+2iZyAmXjS6F8S4ME09SneQCSuZg=";
+    hash = "sha256-NZN+T2N+N+oxrjBRvVbRWbB2KY5im9SN7gPHzfvovl8=";
   };
 
   cargoLock = {
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       "egui-aesthetix-0.2.4" = "sha256-6Nt+nx1pAkuehXINRLp8xgiXmq1PzWgtu/hVbcDm5iA=";
       "junction-0.2.0" = "sha256-6+pPp5wG1NoIj16Z+OvO4Pvy0jnQibn/A9cTaHAEVq4=";
       "msbt-0.1.1" = "sha256-PtBs60xgYrwS7yPnRzXpExwYUD3azIaqObRnnJEL5dE=";
-      "msyt-1.4.0" = "sha256-Ovp0QVzMR4sT/qKArLJYFG1Olp4SytI1QDE9ixhTIS0=";
+      "msyt-1.2.1" = "sha256-aw5whCoQBhO0u9Fx2rTO1sRuPdGnAAlmPWv5q8CbQcI=";
     };
   };
 

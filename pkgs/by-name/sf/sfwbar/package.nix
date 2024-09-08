@@ -14,6 +14,7 @@
   alsa-lib,
   makeWrapper,
   docutils,
+  wayland-scanner,
 }:
 let
   version = "1.0_beta15";
@@ -45,6 +46,7 @@ stdenv.mkDerivation {
     ninja
     pkg-config
     makeWrapper
+    wayland-scanner
   ];
 
   postFixup = ''

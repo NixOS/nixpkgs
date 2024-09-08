@@ -1,7 +1,3 @@
-#!@bash@/bin/bash
-PATH=@bash@/bin:@coreutils@/bin:@utillinux@/bin:@btrfsProgs@/bin:$PATH
-beesd_bin=@bees@/lib/bees/bees
-# PLEASE KEEP NIX-ISMS ABOVE THIS LINE TO EASE UPSTREAM MERGE
 #!/usr/bin/env bash
 
 shopt -s extglob

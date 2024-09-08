@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     install -m 444 -D nselib/data/passwords.lst $out/share/wordlists/nmap.lst
   '';
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change liblinear.so.5 ${liblinear.out}/lib/liblinear.5.dylib $out/bin/nmap
+  '';
+
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
     "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"

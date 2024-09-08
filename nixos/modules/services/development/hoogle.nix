@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.hoogle;
@@ -14,21 +11,21 @@ let
 in {
 
   options.services.hoogle = {
-    enable = mkEnableOption "Haskell documentation server";
+    enable = lib.mkEnableOption "Haskell documentation server";
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       description = ''
         Port number Hoogle will be listening to.
       '';
     };
 
-    packages = mkOption {
-      type = types.functionTo (types.listOf types.package);
+    packages = lib.mkOption {
+      type = lib.types.functionTo (lib.types.listOf lib.types.package);
       default = hp: [];
-      defaultText = literalExpression "hp: []";
-      example = literalExpression "hp: with hp; [ text lens ]";
+      defaultText = lib.literalExpression "hp: []";
+      example = lib.literalExpression "hp: with hp; [ text lens ]";
       description = ''
         The Haskell packages to generate documentation for.
 
@@ -38,27 +35,27 @@ in {
       '';
     };
 
-    haskellPackages = mkOption {
+    haskellPackages = lib.mkOption {
       description = "Which haskell package set to use.";
-      type = types.attrs;
+      type = lib.types.attrs;
       default = pkgs.haskellPackages;
-      defaultText = literalExpression "pkgs.haskellPackages";
+      defaultText = lib.literalExpression "pkgs.haskellPackages";
     };
 
-    home = mkOption {
-      type = types.str;
+    home = lib.mkOption {
+      type = lib.types.str;
       description = "Url for hoogle logo";
       default = "https://hoogle.haskell.org";
     };
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       description = "Set the host to bind on.";
       default = "127.0.0.1";
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "--no-security-headers" ];
       description = ''
@@ -68,7 +65,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.hoogle = {
       description = "Haskell documentation server";
 
@@ -78,7 +75,7 @@ in {
         Restart = "always";
         ExecStart = ''
           ${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host} \
-            ${concatStringsSep " " cfg.extraOptions}
+            ${lib.concatStringsSep " " cfg.extraOptions}
         '';
 
         DynamicUser = true;

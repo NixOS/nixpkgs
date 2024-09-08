@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mailchecker";
-  version = "6.0.5";
+  version = "6.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jdcewXJO8I83zvAKb4UbKmuQC4SUbtS5H+RmFDTNwcI=";
+    hash = "sha256-3Og42v2DAquCPvzL6sRnKbs5nZuAO2AWa+UkltWR43Y=";
   };
 
   build-system = [ setuptools ];

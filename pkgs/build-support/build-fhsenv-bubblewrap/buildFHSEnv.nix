@@ -149,22 +149,22 @@ let
               target=$(readlink $out/share/glib-2.0)
               rm $out/share/glib-2.0
               mkdir $out/share/glib-2.0
-              ln -fs $target/* $out/share/glib-2.0
+              ln -fsr $target/* $out/share/glib-2.0
           fi
 
           if [[ -L $out/share/glib-2.0/schemas ]]; then
               target=$(readlink $out/share/glib-2.0/schemas)
               rm $out/share/glib-2.0/schemas
               mkdir $out/share/glib-2.0/schemas
-              ln -fs $target/* $out/share/glib-2.0/schemas
+              ln -fsr $target/* $out/share/glib-2.0/schemas
           fi
 
           mkdir -p $out/share/glib-2.0/schemas
 
           for d in $out/share/gsettings-schemas/*; do
               # Force symlink, in case there are duplicates
-              ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
-              ln -fs $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
+              ln -fsr $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
+              ln -fsr $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
           done
 
           # and compile them

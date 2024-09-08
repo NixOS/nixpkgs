@@ -23,6 +23,12 @@
   libslirp,
   wayland,
   wayland-scanner,
+  libsndfile,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  libmpg123,
 
   enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch,
   enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
@@ -34,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "86Box";
-  version = "4.1.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ioE0EVIXv/biXXvLqwhmtZ/RJM0nLqcE+i+CU+WXBY4=";
+    hash = "sha256-ue5Coy2MpP7Iwl81KJPQPC7eD53/Db5a0PGIR+DdPYI=";
   };
 
   patches = [ ./darwin.patch ];
@@ -75,6 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
       libslirp
       qt5.qtbase
       qt5.qttools
+      libsndfile
+      flac.dev
+      libogg.dev
+      libvorbis.dev
+      libopus.dev
+      libmpg123.dev
     ]
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
@@ -107,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "86Box";
       repo = "roms";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-58nNTOLund/KeDlNwzwwihjFVigs/P0K8SN07zExE2c=";
+      hash = "sha256-p3djn950mTUIchFCEg56JbJtIsUuxmqRdYFRl50kI5Y=";
     };
     updateScript = ./update.sh;
   };

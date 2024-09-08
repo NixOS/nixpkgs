@@ -1,24 +1,23 @@
 { config, options, lib, ... }:
-with lib;
 let
   cfgSev = config.hardware.cpu.amd.sev;
   cfgSevGuest = config.hardware.cpu.amd.sevGuest;
 
   optionsFor = device: group: {
-    enable = mkEnableOption "access to the AMD ${device} device";
-    user = mkOption {
+    enable = lib.mkEnableOption "access to the AMD ${device} device";
+    user = lib.mkOption {
       description = "Owner to assign to the ${device} device.";
-      type = types.str;
+      type = lib.types.str;
       default = "root";
     };
-    group = mkOption {
+    group = lib.mkOption {
       description = "Group to assign to the ${device} device.";
-      type = types.str;
+      type = lib.types.str;
       default = group;
     };
-    mode = mkOption {
+    mode = lib.mkOption {
       description = "Mode to set for the ${device} device.";
-      type = types.str;
+      type = lib.types.str;
       default = "0660";
     };
   };
@@ -28,16 +27,16 @@ with lib; {
 
   options.hardware.cpu.amd.sevGuest = optionsFor "SEV guest" "sev-guest";
 
-  config = mkMerge [
+  config = lib.mkMerge [
     # /dev/sev
-    (mkIf cfgSev.enable {
+    (lib.mkIf cfgSev.enable {
       assertions = [
         {
-          assertion = hasAttr cfgSev.user config.users.users;
+          assertion = lib.hasAttr cfgSev.user config.users.users;
           message = "Given user does not exist";
         }
         {
-          assertion = (cfgSev.group == options.hardware.cpu.amd.sev.group.default) || (hasAttr cfgSev.group config.users.groups);
+          assertion = (cfgSev.group == options.hardware.cpu.amd.sev.group.default) || (lib.hasAttr cfgSev.group config.users.groups);
           message = "Given group does not exist";
         }
       ];
@@ -46,7 +45,7 @@ with lib; {
         options kvm_amd sev=1
       '';
 
-      users.groups = optionalAttrs (cfgSev.group == options.hardware.cpu.amd.sev.group.default) {
+      users.groups = lib.optionalAttrs (cfgSev.group == options.hardware.cpu.amd.sev.group.default) {
         "${cfgSev.group}" = { };
       };
 
@@ -56,19 +55,19 @@ with lib; {
     })
 
     # /dev/sev-guest
-    (mkIf cfgSevGuest.enable {
+    (lib.mkIf cfgSevGuest.enable {
       assertions = [
         {
-          assertion = hasAttr cfgSevGuest.user config.users.users;
+          assertion = lib.hasAttr cfgSevGuest.user config.users.users;
           message = "Given user does not exist";
         }
         {
-          assertion = (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default) || (hasAttr cfgSevGuest.group config.users.groups);
+          assertion = (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default) || (lib.hasAttr cfgSevGuest.group config.users.groups);
           message = "Given group does not exist";
         }
       ];
 
-      users.groups = optionalAttrs (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default) {
+      users.groups = lib.optionalAttrs (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default) {
         "${cfgSevGuest.group}" = { };
       };
 

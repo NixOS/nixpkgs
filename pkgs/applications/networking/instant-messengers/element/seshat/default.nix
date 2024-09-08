@@ -36,7 +36,7 @@ in rustPlatform.buildRustPackage rec {
     fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
-    node_modules/.bin/neon build --release -- --target ${rust.toRustTargetSpec stdenv.hostPlatform} -Z unstable-options --out-dir target/release
+    node_modules/.bin/neon build --release -- --target ${stdenv.hostPlatform.rust.rustcTarget} -Z unstable-options --out-dir target/release
     runHook postBuild
   '';
 

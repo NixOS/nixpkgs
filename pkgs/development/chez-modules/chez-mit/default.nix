@@ -2,18 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-mit";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-mit";
     rev = "v${version}";
-    sha256 = "sha256-YM4/Sj8otuWJCrUBsglVnihxRGI32F6tSbODFM0a8TA=";
+    sha256 = "sha256-TmoLA0zLETKE+PsrGS5dce9xLQUIKwSNixRSVjbrOlk=";
   };
 
   buildInputs = [ chez chez-srfi ];
 
-  makeFlags = [ "CHEZ=${lib.getExe chez}" ];
+  makeFlags = [
+    "CHEZ=${lib.getExe chez}"
+    "PREFIX=$(out)"
+    "CHEZSCHEMELIBDIRS=${chez-srfi}/lib/csv${lib.versions.majorMinor chez.version}-site"
+  ];
 
   doCheck = false;
 
@@ -22,7 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fedeinthemix/chez-mit/";
     maintainers = [ maintainers.jitwit ];
     license = licenses.gpl3Plus;
-    broken = true;
   };
 
 }

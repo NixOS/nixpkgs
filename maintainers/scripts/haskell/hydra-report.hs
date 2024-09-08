@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p "haskellPackages.ghcWithPackages (p: [p.aeson p.req])"
-#! nix-shell -p hydra-unstable
+#! nix-shell -p hydra
 #! nix-shell -i runhaskell
 
 {-

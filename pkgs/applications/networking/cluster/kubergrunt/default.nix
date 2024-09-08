@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubergrunt";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "kubergrunt";
     rev = "v${version}";
-    sha256 = "sha256-yN5tpe3ayQPhTlBvxlt7CD6mSURCB4lxGatEK9OThzs=";
+    sha256 = "sha256-FOXnerB6qmUUotWLlTTsR5x0+A0Q9D8PVDTMG8j8b9o=";
   };
 
-  vendorHash = "sha256-VJkqg2cnpYHuEYOv5+spoyRWFAdFWE7YIVYaN9OmIZM=";
+  vendorHash = "sha256-rgU6Yv+gmKShWfpPaWtK2VIBPgFSsPVOnUzIp2+V7oI=";
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure

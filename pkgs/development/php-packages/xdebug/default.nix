@@ -20,7 +20,6 @@ buildPecl {
   };
 
   doCheck = true;
-  checkTarget = "test";
 
   zendExtension = true;
 

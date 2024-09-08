@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = "yazi";
     rev = "v${version}";
-    hash = "sha256-tK2dm+WIEJGSq/PbRyagt7x43nd/o1HxP8HMj23HfnQ=";
+    hash = "sha256-bTDf8muJN0G4+c6UagtWgNLlmGN15twEBjdmKEP0bCE=";
   };
 
-  cargoHash = "sha256-Lb9gu4/i+vPH3dhdzIn9V2s6fKooxEefcN2T/oDqVmg=";
+  cargoHash = "sha256-8UsdanF8y4uFoXdC7aAw7pVFRd9GACcfVvqkUtFmN5k=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2024-08-15";
+  env.VERGEN_BUILD_DATE = "2024-09-04";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Foundation ];

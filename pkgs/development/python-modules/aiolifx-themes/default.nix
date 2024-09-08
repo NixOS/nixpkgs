@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0qC8FvXk7MlvdO4k7tihjE91tbMbnzOs8YvOyzpL4J4=";
+    hash = "sha256-e07moT5XKrJ8PYZFsnibxV9kxUptMNo+Q/noOkKllnI=";
   };
 
   build-system = [ poetry-core ];

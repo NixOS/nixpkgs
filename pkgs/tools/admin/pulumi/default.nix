@@ -131,7 +131,8 @@ buildGoModule rec {
       ''
         mkdir -p $out/bin
         makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
-          --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib
+          --suffix PATH : ${lib.makeBinPath (f pulumiPackages)} \
+          --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
       '';
   };
 

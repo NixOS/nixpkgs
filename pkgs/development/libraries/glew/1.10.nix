@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, libGLU, libXmu, libXi, libXext
 , AGL, OpenGL
 , testers
+, mesa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]
     pkgConfigModules = [ "glew" ];
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
   };
 })

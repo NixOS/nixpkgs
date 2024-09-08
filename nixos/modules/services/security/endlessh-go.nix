@@ -9,6 +9,8 @@ in
   options.services.endlessh-go = {
     enable = mkEnableOption "endlessh-go service";
 
+    package = mkPackageOption pkgs "endlessh-go" { };
+
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
@@ -86,7 +88,7 @@ in
         {
           Restart = "always";
           ExecStart = with cfg; concatStringsSep " " ([
-            "${pkgs.endlessh-go}/bin/endlessh-go"
+            (lib.getExe cfg.package)
             "-logtostderr"
             "-host=${listenAddress}"
             "-port=${toString port}"
@@ -131,7 +133,7 @@ in
     };
 
     networking.firewall.allowedTCPPorts = with cfg;
-      optionals openFirewall [ port prometheus.port ];
+      optionals openFirewall [ port ];
   };
 
   meta.maintainers = with maintainers; [ azahi ];

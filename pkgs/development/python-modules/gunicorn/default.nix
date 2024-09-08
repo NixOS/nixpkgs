@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "22.0.0";
+  version = "23.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
     rev = "refs/tags/${version}";
-    hash = "sha256-xIXQMAdTZEBORu6789tLpT1OpBL+aveL/MfDj4f4bes=";
+    hash = "sha256-Dq/mrQwo3II6DBvYfD1FHsKHaIlyHlJCZ+ZyrM4Efe0=";
   };
 
   build-system = [ setuptools ];

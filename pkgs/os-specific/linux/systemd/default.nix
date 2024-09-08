@@ -336,6 +336,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   ;
 
+  autoPatchelfFlags = [ "--keep-libc" ];
+
   buildInputs =
     [
       libxcrypt
@@ -827,7 +829,9 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ flokli kloenk ];
-    platforms = lib.platforms.linux;
+    # See src/basic/missing_syscall_def.h
+    platforms = with lib.platforms; lib.intersectLists linux
+      (aarch ++ x86 ++ loongarch64 ++ m68k ++ mips ++ power ++ riscv ++ s390);
     priority = 10;
     badPlatforms = [
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965

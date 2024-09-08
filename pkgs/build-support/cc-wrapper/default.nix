@@ -752,6 +752,6 @@ stdenvNoCC.mkDerivation {
     (optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
     { description = attrByPath ["meta" "description"] "System C compiler" cc_ + " (wrapper script)";
       priority = 10;
-      mainProgram = if name != "" then name else ccName;
+      mainProgram = if name != "" then name else "${targetPrefix}${ccName}";
   };
 }

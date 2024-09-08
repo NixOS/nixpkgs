@@ -13,9 +13,6 @@
   electron,
 }:
 
-let
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
   version = "1.6.7";
@@ -52,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
   postBuild = ''
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     yarn --offline run electron-builder --dir \
       -c.electronDist=electron-dist \
@@ -117,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/v${finalAttrs.version}";
-    description = "A cross-platform ebook reader";
+    description = "Cross-platform ebook reader";
     longDescription = ''
       A modern ebook manager and reader with sync and backup capacities
       for Windows, macOS, Linux and Web

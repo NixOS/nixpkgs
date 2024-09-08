@@ -139,6 +139,11 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-eventgrid "10.2.0b2" "zip"
           "sha256-QcHY1wCwQyVOEdUi06/wEa4dqJH5Ccd33gJ1Sju0qZA=";
 
+      # ValueError: The operation 'azure.mgmt.hdinsight.operations#ExtensionsOperations.get_azure_monitor_agent_status' is invalid.
+      azure-mgmt-hdinsight =
+        overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0b3" "tar.gz"
+          "sha256-clSeCP8+7T1uI4Nec+zhzDK980C9+JGeeJFsNSwgD2Q=";
+
       # ValueError: The operation 'azure.mgmt.kusto.operations#ClustersOperations.delete' is invalid.
       azure-mgmt-kusto =
         (overrideAzureMgmtPackage super.azure-mgmt-kusto "0.3.0" "zip"

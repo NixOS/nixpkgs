@@ -21,6 +21,7 @@
 , unzip
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xcbutilerrors
 , xcbutilimage
 , xcbutilwm
@@ -79,6 +80,7 @@ stdenv.mkDerivation {
     pandoc
     pkg-config
     unzip
+    wayland-scanner
   ];
 
   buildInputs = [

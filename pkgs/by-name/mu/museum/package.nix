@@ -7,7 +7,7 @@
 
 buildGoModule rec {
 
-  version = "photos-v0.9.16";
+  version = "photos-v0.9.30";
   pname = "museum";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ buildGoModule rec {
     repo = "ente";
     sparseCheckout = [ "server" ];
     rev = version;
-    hash = "sha256-ZtlwDV3Iksi2QNzoAsAtbN7B/n0UKubU4nlXx4N0l+E=";
+    hash = "sha256-R85eI8n9jQB55l8V4881X74RGH3k0JhGS+phLBrZHvc=";
   };
 
   sourceRoot = "${src.name}/server";
@@ -42,7 +42,7 @@ buildGoModule rec {
     mainProgram = "museum";
     platforms = platforms.linux;
   };
-  vendorHash = "sha256-Vo3KhWWxO0k/d5qUFRfX44oTZBXtJeUlz6qaUvXLDag=";
+  vendorHash = "sha256-Vz9AodHoClSmo51ExdOS4bWH13i1Sug++LQMIsZY2xY=";
 }
 
 

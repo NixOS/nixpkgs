@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apr";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-/GSN6YPzoqbJ543qHxgGOb0vrWwG1VbUNnpwH+XDVXc=";
+    hash = "sha256-zQ9dUrmrFwTHIWDF7j7V09TKLfSn+KtWTjyzUrZyMvI=";
   };
 
   patches = [

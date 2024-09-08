@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Experimental Python API for Ruff";
     homepage = "https://github.com/amyreese/ruff-api";
-    changelog = "https://github.com/amyreese/ruff-api/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/amyreese/ruff-api/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

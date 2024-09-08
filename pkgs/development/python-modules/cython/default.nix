@@ -34,13 +34,13 @@ let
 in
 buildPythonPackage rec {
   pname = "cython";
-  version = "3.0.10";
+  version = "3.0.11";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "Cython";
+    pname = "cython";
     inherit version;
-    hash = "sha256-3MlnOTMfuFTc9QP5RgdXbP6EiAZsYcpQ39VYNvEy3pk=";
+    hash = "sha256-cUbdKvhoK0ymEzGFHmrrzp/lFY51MAND+AwHyoCx+v8=";
   };
 
   build-system = [

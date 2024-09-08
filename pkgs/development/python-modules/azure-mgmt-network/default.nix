@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-network";
-  version = "25.4.0";
+  version = "26.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ozjmLYH9vwUPgCFDwoy5ZbB+3UOADvBQTN+muIVNdVQ=";
+    hash = "sha256-TeZ2GEGVBT/bEGpuoQQqiU5wxzGm08imM9UvUin07hs=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -10,6 +10,7 @@
   nixosTests,
   enableLocalIcons ? false,
   nix-update-script,
+  git,
 }:
 let
   dashboardIcons = fetchFromGitHub {
@@ -49,7 +50,7 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ cctools ];
+  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.isDarwin [ cctools ];
 
   buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
@@ -68,9 +69,21 @@ buildNpmPackage rec {
 
     chmod +x $out/share/homepage/server.js
 
+    # This patch must be applied here, as it's patching the `dist` directory
+    # of NextJS. Without this, homepage-dashboard errors when trying to
+    # write its prerender cache.
+    #
+    # This patch ensures that the cache implementation respects the env
+    # variable `HOMEPAGE_CACHE_DIR`, which is set by default in the
+    # wrapper below.
+    pushd $out
+    git apply ${./prerender_cache_path.patch}
+    popd
+
     makeWrapper $out/share/homepage/server.js $out/bin/homepage \
       --set-default PORT 3000 \
-      --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard
+      --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
+      --set-default HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard
 
     ${if enableLocalIcons then installLocalIcons else ""}
 

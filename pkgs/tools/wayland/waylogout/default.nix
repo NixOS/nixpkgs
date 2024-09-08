@@ -6,6 +6,7 @@
 , pkg-config
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , cairo
 , gdk-pixbuf
@@ -28,6 +29,7 @@ stdenv.mkDerivation {
     meson
     ninja
     scdoc
+    wayland-scanner
   ];
 
   buildInputs = [

@@ -4,24 +4,24 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.5";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yrltqnePNnNwsVGkfXgtrtL/FuazRvmoVL4L0H4j4Bg=";
+    hash = "sha256-juubQHAAQYN9mSssfF3prYByy+wxscZFxwgspJU8zYA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ async-timeout ];
+  dependencies = [ async-timeout ];
 
   # Tests are not present
   doCheck = false;

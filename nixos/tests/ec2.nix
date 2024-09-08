@@ -22,6 +22,8 @@ let
           ln -s vda1 /dev/xvda1
         '';
 
+        amazonImage.format = "qcow2";
+
         # In a NixOS test the serial console is occupied by the "backdoor"
         # (see testing/test-instrumentation.nix) and is incompatible with
         # the configuration in virtualisation/amazon-image.nix.
@@ -53,7 +55,7 @@ let
       }
     ];
   }).config;
-  image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.vhd";
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.qcow2";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
@@ -63,6 +65,7 @@ let
 in {
   boot-ec2-nixops = makeEc2Test {
     name         = "nixops-userdata";
+    meta.timeout = 600;
     inherit image;
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
@@ -95,7 +98,7 @@ in {
       machine.succeed(
           "echo localhost,127.0.0.1 ${snakeOilPublicKey} > ~/.ssh/known_hosts"
       )
-      machine.succeed("ssh -o BatchMode=yes localhost exit")
+      machine.succeed("ssh -o BatchMode=yes localhost exit", timeout=120)
 
       # Test whether the root disk was resized.
       blocks, block_size = map(int, machine.succeed("stat -c %b:%S -f /").split(":"))

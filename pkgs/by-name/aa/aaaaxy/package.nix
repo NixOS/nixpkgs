@@ -20,13 +20,13 @@
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.5.183";
+  version = "1.5.190";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uXu9z4J3ufe7thXsAGWGTSgb8LVPboM7CSTNf7NBw1Q=";
+    hash = "sha256-yMap8Po3NeFwaqTn0gCHp8f30iiNg1AmG/ALQcW8eYA=";
     fetchSubmodules = true;
   };
 

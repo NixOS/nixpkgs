@@ -318,7 +318,7 @@ buildDotnetModule rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse zimbatm ];
+    maintainers = with maintainers; [ veehaitch kfollesdal aanderse zimbatm ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

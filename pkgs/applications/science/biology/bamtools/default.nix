@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ API & command-line toolkit for working with BAM data";
     mainProgram = "bamtools";
     homepage = "https://github.com/pezmaster31/bamtools";
-    changelog = "https://github.com/pezmaster31/bamtools/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/pezmaster31/bamtools/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;

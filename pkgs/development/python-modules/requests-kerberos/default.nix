@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -24,11 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-s1Q3zqKPSuTkiFExr+axai9Eta1xjw/cip8xzfDGR88=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    requests
-    pyspnego
-  ] ++ pyspnego.optional-dependencies.kerberos;
+  propagatedBuildInputs =
+    [
+      cryptography
+      requests
+      pyspnego
+    ]
+    # Avoid broken Python krb5 package on Darwin
+    ++ lib.optionals (!stdenv.isDarwin) pyspnego.optional-dependencies.kerberos;
 
   nativeCheckInputs = [
     pytestCheckHook

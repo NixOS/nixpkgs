@@ -1,10 +1,11 @@
 {
   lib,
-  python3Packages,
+  setuptools-scm,
   fetchPypi,
+  buildPythonPackage,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "orgparse";
   version = "0.4.20231004";
 
@@ -13,7 +14,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-pOOK6tq/mYiw9npmrNCCedGCILy8QioSkGDCiQu6kaA=";
   };
 
-  nativeBuildInputs = [ python3Packages.setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   pyproject = true;
 

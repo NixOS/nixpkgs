@@ -5,11 +5,11 @@
 , elfutils
 , expat
 , fetchCrate
-, fetchurl
-, fetchpatch
+, fetchFromGitLab
 , file
 , flex
 , glslang
+, spirv-tools
 , intltool
 , jdupes
 , libdrm
@@ -40,16 +40,17 @@
 , xorg
 , zstd
 , enablePatentEncumberedCodecs ? true
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light
 
 , galliumDrivers ? [
     "d3d12" # WSL emulated GPU (aka Dozen)
     "iris" # new Intel (Broadwell+)
-    "kmsro" # special "render only" driver for GPUs without a display controller
+    "llvmpipe" # software renderer
     "nouveau" # Nvidia
-    "radeonsi" # new AMD (GCN+)
     "r300" # very old AMD
     "r600" # less old AMD
-    "swrast" # software renderer (aka LLVMPipe)
+    "radeonsi" # new AMD (GCN+)
+    "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
@@ -103,8 +104,8 @@ let
     }
     {
       pname = "proc-macro2";
-      version = "1.0.70";
-      hash = "sha256-e4ZgyZUTu5nAtaH5QVkLelqJQX/XPj/rWkzf/g2c+1g=";
+      version = "1.0.86";
+      hash = "sha256-9fYAlWRGVIwPp8OKX7Id84Kjt8OoN2cANJ/D9ZOUUZE=";
     }
     {
       pname = "quote";
@@ -113,8 +114,8 @@ let
     }
     {
       pname = "syn";
-      version = "2.0.39";
-      hash = "sha256-Mjen2L/omhVbhU/+Ao65mogs3BP3fY+Bodab3uU63EI=";
+      version = "2.0.68";
+      hash = "sha256-nGLBbxR0DFBpsXMngXdegTm/o13FBS6QsM7TwxHXbgQ=";
     }
     {
       pname = "unicode-ident";
@@ -132,19 +133,12 @@ let
 
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  common = import ./common.nix { inherit lib fetchurl; };
+  common = import ./common.nix { inherit lib fetchFromGitLab; };
 in stdenv.mkDerivation {
   inherit (common) pname version src meta;
 
   patches = [
     ./opencl.patch
-
-    # Fixes video corruption / crashes when decoding video on AMD iGPUs
-    # FIXME: remove in the next update
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/8b35da91b23afc65256b78a59d116fd09544cd28.patch";
-      hash = "sha256-z0KKBtot3VxXiS16YcmwZbeg8HSCLzEbvWdufI/fOk8=";
-    })
   ];
 
   postPatch = ''
@@ -221,6 +215,7 @@ in stdenv.mkDerivation {
     # meson auto_features enables this, but we do not want it
     (lib.mesonEnable "android-libbacktrace" false)
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
@@ -233,7 +228,7 @@ in stdenv.mkDerivation {
     directx-headers
     elfutils
     expat
-    glslang
+    spirv-tools
     libglvnd
     libomxil-bellagio
     libunwind
@@ -254,13 +249,14 @@ in stdenv.mkDerivation {
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev
-    valgrind-light
     vulkan-loader
     wayland
     wayland-protocols
     xcbutilkeysyms
     xorgproto
     zstd
+  ] ++ lib.optionals withValgrind [
+    valgrind-light
   ];
 
   depsBuildBuild = [
@@ -281,8 +277,11 @@ in stdenv.mkDerivation {
     python3Packages.pycparser
     python3Packages.mako
     python3Packages.ply
+    python3Packages.pyyaml
     jdupes
-    glslang
+    # Use bin output from glslang to not propagate the dev output at
+    # the build time with the host glslang.
+    (lib.getBin glslang)
     rustc
     rust-bindgen
     rust-cbindgen
@@ -372,7 +371,7 @@ in stdenv.mkDerivation {
     done
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/dri/zink_dri.so
+    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([

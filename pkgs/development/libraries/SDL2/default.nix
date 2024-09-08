@@ -5,7 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
-  libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms,
+  libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
   libGL,
   alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
@@ -68,13 +68,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.30.5";
+  version = "2.30.6";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-ZonlvXAAWCTfDYf/w5RxP1Av67v89kex4H43xkbPYEA=";
+    hash = "sha256-ij9/VhSacUaPbMGX1hx2nz0n8b1tDb1PnC7IO9TlNhE=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [
@@ -249,7 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${finalAttrs.version}";
     license = licenses.zlib;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cpages ];
+    maintainers = lib.teams.sdl.members;
     pkgConfigModules = [ "sdl2" ];
   };
 })

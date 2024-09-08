@@ -15,24 +15,24 @@
 }:
 
 let
-  version = "7.0.12";
+  version = "7.0.14";
 
   srcs = version: {
     "x86_64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-Kgq66rOBKgNIVw6bvzNrpnGRxyoBCP0AWnfzs9ReVVk=";
+      hash = "sha256-tM+MquEIeFE17Mi4atjtbfXW77hLm5WlDsui/CRs4IQ=";
     };
     "aarch64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-OLxPpAYFicWrqRJo3cNIG5Y0S6MIMd2vW8bluQkqnyk=";
+      hash = "sha256-4XiHv6JKopZ/3xrXwT+nvQ2OsbkhL79uwBCnOOMaNlc=";
     };
     "x86_64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-sKfg1EpRQ7L2rgJArRHQLrawU8bh42liih5GR2/3jok=";
+      hash = "sha256-mw9w/qz3xBVC7n0JBeL4CQsJ1bhBPwyQeUBsCa/XosA=";
     };
     "aarch64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-XkFSuKKxgSRoyzzrPYamE/44FV8ol125nqDOB9EnSMM=";
+      hash = "sha256-iAX4szgBzQe5ARjCXlB7DeIcatQms3X75J6Jb/xXXQ4=";
     };
   };
 in
@@ -49,10 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   buildInputs = [
-    # This is to avoid the following error:
-    # ./result/bin/mongod: /nix/store/y6w7agm3aw5p96q7vsgzivba0dqq3rd0-curl-8.8.0/lib/libcurl.so.4: no version information available (required by ./result/bin/mongod)
-    # When running `mongod --version`
-    # See https://discourse.nixos.org/t/patchelf-and-libcurl-no-version-information-available/24453
+    # Remove this after https://github.com/NixOS/nixpkgs/pull/336712
+    # has landed in `nixpkgs-unstable`
     (curl.overrideAttrs (old: {
       configureFlags = old.configureFlags ++ [ "--enable-versioned-symbols" ];
     })).dev
@@ -90,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
               NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r7.0")) | select(contains("rc") | not) | .[1:])')
 
               # Check if the new version is available for download, if not, exit
-              AVAILABLE=$(curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION")
+              curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
 
               if [[ "${version}" = "$NEW_VERSION" ]]; then
                   echo "The new version same as the old version."

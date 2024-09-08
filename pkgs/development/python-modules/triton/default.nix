@@ -178,7 +178,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     # build/temp* refers to build_ext.build_temp (looked up in the build logs)
-    (cd /build/source/python/build/temp* ; ctest)
+    (cd ./build/temp* ; ctest)
 
     # For pytestCheckHook
     cd test/unit

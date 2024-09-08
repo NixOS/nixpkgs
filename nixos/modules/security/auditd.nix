@@ -1,19 +1,29 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  options.security.auditd.enable = mkEnableOption "the Linux Audit daemon";
+  options.security.auditd.enable = lib.mkEnableOption "the Linux Audit daemon";
 
-  config = mkIf config.security.auditd.enable {
+  config = lib.mkIf config.security.auditd.enable {
     boot.kernelParams = [ "audit=1" ];
 
     environment.systemPackages = [ pkgs.audit ];
 
     systemd.services.auditd = {
       description = "Linux Audit daemon";
-      wantedBy = [ "basic.target" ];
-      before = [ "shutdown.target" ];
+      wantedBy = [ "sysinit.target" ];
+      after = [
+        "local-fs.target"
+        "systemd-tmpfiles-setup.service"
+      ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
       conflicts = [ "shutdown.target" ];
 
       unitConfig = {

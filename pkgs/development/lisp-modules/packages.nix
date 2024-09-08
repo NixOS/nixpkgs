@@ -104,7 +104,6 @@ let
     nativeBuildInputs = [ pkgs.allegro5 ];
     nativeLibs = [ pkgs.allegro5 ];
     lispLibs = super.cl-liballegro-nuklear.lispLibs ++ [ self.cl-liballegro ];
-    patches = [ ./patches/cl-liballegro-nuklear-missing-dll.patch ];
   };
 
   lessp = build-asdf-system {

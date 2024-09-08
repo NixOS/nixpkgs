@@ -400,6 +400,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-socks5"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77f634add2445eb2c1f785642a67ca1073fedd71e73dc3ca69435ef9b9bdedc7"
+dependencies = [
+ "async-trait",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
 name = "async-stream"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2123,6 +2134,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "hyper-socks2"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc38166fc2732d450e9372388d269eb38ff0b75a3cfb4c542e65b2f6893629c4"
+dependencies = [
+ "async-socks5",
+ "futures",
+ "http 0.2.12",
+ "hyper 0.14.28",
+ "hyper-tls 0.5.0",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
 name = "hyper-timeout"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2132,6 +2158,19 @@ dependencies = [
  "pin-project-lite",
  "tokio",
  "tokio-io-timeout",
+]
+
+[[package]]
+name = "hyper-tls"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6183ddfa99b85da61a140bea0efc93fdf56ceaa041b37d553518030827f9905"
+dependencies = [
+ "bytes",
+ "hyper 0.14.28",
+ "native-tls",
+ "tokio",
+ "tokio-native-tls",
 ]
 
 [[package]]
@@ -3676,7 +3715,7 @@ dependencies = [
  "http-body 1.0.1",
  "http-body-util",
  "hyper 1.4.1",
- "hyper-tls",
+ "hyper-tls 0.6.0",
  "hyper-util",
  "ipnet",
  "js-sys",
@@ -4753,7 +4792,7 @@ dependencies = [
  "http-body-util",
  "hyper 1.4.1",
  "hyper-rustls 0.26.0",
- "hyper-tls",
+ "hyper-tls 0.6.0",
  "hyper-util",
  "serde",
  "serde_derive",
@@ -4791,7 +4830,7 @@ dependencies = [
 
 [[package]]
 name = "svix-server"
-version = "1.28.0"
+version = "1.30.0"
 dependencies = [
  "aide",
  "anyhow",
@@ -4818,6 +4857,7 @@ dependencies = [
  "http 0.2.12",
  "hyper 0.14.28",
  "hyper-openssl",
+ "hyper-socks2",
  "indexmap 1.9.3",
  "ipnet",
  "jsonschema",

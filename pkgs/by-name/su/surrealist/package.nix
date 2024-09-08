@@ -5,9 +5,10 @@
 , esbuild
 , fetchFromGitHub
 , gdk-pixbuf
+, glib-networking
 , gobject-introspection
 , lib
-, libsoup
+, libsoup_3
 , makeBinaryWrapper
 , nodejs
 , openssl
@@ -18,12 +19,30 @@
 , rustPlatform
 , stdenv
 , stdenvNoCC
-, webkitgtk
+, webkitgtk_4_1
 }:
 
 let
 
-  esbuild-20-2 = let version = "0.20.2";
+  cargo-tauri_2 = let
+    version = "2.0.0-rc.3";
+    src = fetchFromGitHub {
+      owner = "tauri-apps";
+      repo = "tauri";
+      rev = "tauri-v${version}";
+      hash = "sha256-PV8m/MzYgbY4Hv71dZrqVbrxmxrwFfOAraLJIaQk6FQ=";
+    };
+  in cargo-tauri.overrideAttrs (drv: {
+    inherit src version;
+    cargoDeps = drv.cargoDeps.overrideAttrs (lib.const {
+      inherit src;
+      name = "tauri-${version}-vendor.tar.gz";
+      outputHash = "sha256-BrIH0JkGMp68O+4B+0g7X3lSdNSPXo+otlBgslCzPZE=";
+    });
+  });
+
+  esbuild_21-5 = let
+    version = "0.21.5";
   in esbuild.override {
     buildGoModule = args:
       buildGoModule (args // {
@@ -32,7 +51,7 @@ let
           owner = "evanw";
           repo = "esbuild";
           rev = "v${version}";
-          hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
+          hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
         };
         vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
       });
@@ -40,16 +59,26 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "2.0.6";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-5OiVqn+ujssxXZXC6pnGiG1Nw8cAhoDU5IIl9skywBw=";
+    hash = "sha256-jOjOdrVOcGPenFW5mkkXKA64C6c+/f9KzlvtUmw6vXc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-tauri";
+
+  # HACK: A dependency (surrealist -> tauri -> **reqwest**) contains hyper-tls
+  # as an actually optional dependency. It ends up in the `Cargo.lock` file of
+  # tauri, but not in the one of surrealist. We apply a patch to `Cargo.toml`
+  # and `Cargo.lock` to ensure that we have it in our vendor archive. This may
+  # be a result of the following bug:
+  # https://github.com/rust-lang/cargo/issues/10801
+  patches = [
+    ./0001-Cargo.patch
+  ];
 
   ui = stdenvNoCC.mkDerivation {
     inherit (finalAttrs) src version;
@@ -57,17 +86,17 @@ in stdenv.mkDerivation (finalAttrs: {
 
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
-      hash = "sha256-apvU7nanzueaF7PEQL7EKjVT5z1M6I7PZpEIJxfKuCQ=";
+      hash = "sha256-zGs1MWJ8TEFuHOoekCNIKQo2PBnp95xLz+R8mzeJXh8=";
     };
 
-    ESBUILD_BINARY_PATH = "${lib.getExe esbuild-20-2}";
+    ESBUILD_BINARY_PATH = lib.getExe esbuild_21-5;
 
     nativeBuildInputs = [ nodejs pnpm.configHook ];
 
     buildPhase = ''
       runHook preBuild
 
-      pnpm build
+      pnpm build:desktop
 
       runHook postBuild
     '';
@@ -82,22 +111,29 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src sourceRoot version;
+    inherit (finalAttrs) patches src sourceRoot;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-uE4r0smgSbl4l77/MsHtn1Ar5fqspsYcLC/u8TUrcu8=";
+    hash = "sha256-LtQS0kH+2P4odV7BJYiH6T51+iZHAM9W9mV96rNfNWs=";
   };
 
   nativeBuildInputs = [
     cargo
-    cargo-tauri
+    cargo-tauri_2
+    gobject-introspection
     makeBinaryWrapper
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [ cairo gdk-pixbuf gobject-introspection libsoup openssl pango webkitgtk ];
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    libsoup_3
+    openssl
+    pango
+    webkitgtk_4_1
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -105,8 +141,8 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./tauri.conf.json \
-      --replace-fail '"distDir": "../dist",' '"distDir": "${finalAttrs.ui}",' \
-      --replace-fail '"beforeBuildCommand": "pnpm build",' '"beforeBuildCommand": "",'
+      --replace-fail '"frontendDist": "../dist",' '"frontendDist": "${finalAttrs.ui}",' \
+      --replace-fail '"beforeBuildCommand": "pnpm build:desktop",' '"beforeBuildCommand": "",'
   '';
 
   postBuild = ''
@@ -114,12 +150,14 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm555 target/release/bundle/deb/surrealist_${finalAttrs.version}_*/data/usr/bin/surrealist -t $out/bin
-    cp -r target/release/bundle/deb/surrealist_${finalAttrs.version}_*/data/usr/share $out
+    install -Dm555 target/release/bundle/deb/Surrealist_${finalAttrs.version}_*/data/usr/bin/surrealist -t $out/bin
+    cp -r target/release/bundle/deb/Surrealist_${finalAttrs.version}_*/data/usr/share $out
   '';
 
   postFixup = ''
-    wrapProgram "$out/bin/surrealist" --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    wrapProgram "$out/bin/surrealist" \
+      --set GIO_EXTRA_MODULES ${glib-networking}/lib/gio/modules \
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
   '';
 
   meta = with lib; {

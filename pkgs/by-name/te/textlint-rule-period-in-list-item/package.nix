@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Textlint rule that check with or without period in list item";
     homepage = "https://github.com/textlint-rule/textlint-rule-period-in-list-item";
-    changelog = "https://github.com/textlint-rule/textlint-rule-period-in-list-item/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-period-in-list-item/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;

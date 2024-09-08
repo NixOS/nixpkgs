@@ -29,7 +29,8 @@ in {
   postInstall = ''
     mkdir -p $out/lib
     cp -r ./resources/* -t $out/lib/
-    cp LICENSE* $out/
+    mkdir -p $out/share/doc/affine/
+    cp LICENSE* $out/share/doc/affine/
     install -Dm644 ${icon} $out/share/pixmaps/affine.png
     makeWrapper "${electron}/bin/electron" $out/bin/affine \
       --inherit-argv0 \

@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-PBvfkv9GQ5Vj5I5SygtmHXtqqHMJ4XgNV1/I+lSU0/U=";
   };
 
+  patches = [
+    # TODO: replace after the PR is merged or tagged
+    ./get_iter.patch
+  ];
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm

@@ -50,7 +50,7 @@ dotnetConfigureHook() {
         fi
     done
 
-    if [[ -f .config/dotnet-tools.json || -f .dotnet-tools.json ]]; then
+    if [[ -f .config/dotnet-tools.json || -f dotnet-tools.json ]]; then
         dotnet tool restore
     fi
 

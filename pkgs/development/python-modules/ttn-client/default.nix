@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CAodXoc2T/vyAQKWYCm3te3urbSpGMZ7gmYlvDmTEQY=";
+    hash = "sha256-dWEXoqW4JyYeLFLS3J4CaRJ45wjdVf8wrtMGCKgBds8=";
   };
 
   build-system = [ hatchling ];

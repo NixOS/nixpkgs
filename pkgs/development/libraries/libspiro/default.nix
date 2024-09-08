@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libspiro";
-  version = "20221101";
+  version = "20240902";
 
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/9UCrdq69RO22593qiA8pZ4qfY9UVGqlGYB9zatsOgw=";
+    sha256 = "sha256-GaLfNxL/Y0JsRXIldxliBFaB2ZLFVPR7Du8GTZ77HFo=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

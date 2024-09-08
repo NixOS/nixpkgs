@@ -4,14 +4,16 @@
   writeText,
   lib,
   attrs,
-  six,
+  mock,
   okonomiyaki,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  six,
 }:
 
 let
-  version = "0.8.2";
-  format = "setuptools";
-
+  version = "0.9.0";
   versionFile = writeText "simplesat_ver" ''
     version = '${version}'
     full_version = '${version}'
@@ -24,26 +26,36 @@ in
 buildPythonPackage rec {
   pname = "simplesat";
   inherit version;
-
-  propagatedBuildInputs = [
-    attrs
-    six
-    okonomiyaki
-  ];
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "enthought";
     repo = "sat-solver";
-    rev = "v${version}";
-    hash = "sha256-6BQn1W2JGrMmNqgxi+sXx06XzNMcvwqYGMkpD0SSpT8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8sUOV42MLM3otG3EKvVzKKGAUpSlaTj850QZxZa62bE=";
   };
 
   preConfigure = ''
     cp ${versionFile} simplesat/_version.py
   '';
-  dontUseSetuptoolsCheck = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    attrs
+    okonomiyaki
+    six
+  ];
 
   pythonImportsCheck = [ "simplesat" ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+    pyyaml
+  ];
+
+  pytestFlagsArray = [ "simplesat/tests" ];
 
   meta = with lib; {
     homepage = "https://github.com/enthought/sat-solver";

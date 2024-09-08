@@ -18,6 +18,8 @@ python3.pkgs.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/src";
 
+  pythonRelaxDeps = [ "setuptools" ];
+
   build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [

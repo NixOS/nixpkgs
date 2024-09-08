@@ -1,7 +1,7 @@
 {
   image,
   method,
-  python3Packages,
+  invisible-watermark,
   runCommand,
   testName,
   withOnnx,
@@ -25,7 +25,7 @@ let
     else
       "fnörd1";
   length = (builtins.stringLength message) * 8;
-  invisible-watermark' = python3Packages.invisible-watermark.override { inherit withOnnx; };
+  invisible-watermark' = invisible-watermark.override { inherit withOnnx; };
   expected-exit-code = if method == "rivaGan" && !withOnnx then "1" else "0";
 in
 runCommand "invisible-watermark-test-${testName}" { nativeBuildInputs = [ invisible-watermark' ]; }

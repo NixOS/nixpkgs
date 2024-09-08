@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
-  meta.maintainers = with maintainers; [ grahamc ];
+  meta.maintainers = with lib.maintainers; [ grahamc ];
   options = {
 
     hardware.mcelog = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable the Machine Check Exception logger.
@@ -18,7 +15,7 @@ with lib;
 
   };
 
-  config = mkIf config.hardware.mcelog.enable {
+  config = lib.mkIf config.hardware.mcelog.enable {
     systemd = {
       packages = [ pkgs.mcelog ];
 

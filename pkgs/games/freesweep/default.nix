@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mainProgram = "freesweep";
     homepage = "https://github.com/rwestlund/freesweep";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ kierdavis ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

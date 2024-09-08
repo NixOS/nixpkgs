@@ -15,6 +15,11 @@
 , readline
 , systemdMinimal
 , udev
+# Test gobject-introspection instead of pygobject because the latter
+# causes an infinite recursion.
+, gobject-introspection
+, buildPackages
+, installTests ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" "test" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional installTests "test";
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
@@ -122,22 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   in
   ''
-    mkdir -p $test/{bin,test}
-    cp -a test $test
-    pushd $test/test
-    for t in \
-            list-devices \
-            monitor-bluetooth \
-            simple-agent \
-            test-adapter \
-            test-device \
-            test-thermometer \
-            ; do
-      ln -s ../test/$t $test/bin/bluez-$t
-    done
-    popd
-    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
-
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -157,6 +147,22 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm755 tools/$filename $out/bin/$filename
     done
     install -Dm755 attrib/gatttool $out/bin/gatttool
+  '' + lib.optionalString installTests ''
+    mkdir -p $test/{bin,test}
+    cp -a test $test
+    pushd $test/test
+    for t in \
+            list-devices \
+            monitor-bluetooth \
+            simple-agent \
+            test-adapter \
+            test-device \
+            test-thermometer \
+            ; do
+      ln -s ../test/$t $test/bin/bluez-$t
+    done
+    popd
+    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
   '';
 
   enableParallelBuilding = true;

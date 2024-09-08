@@ -16,11 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-vXQFgP0KDWo1VWe7tMGCB2yEYlr/1KMXsiNupBVLBqc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=gato" ""
-  '';
-
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     wheel
@@ -36,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     git
+    pytest-cov-stub
     pytestCheckHook
   ];
 

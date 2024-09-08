@@ -1,0 +1,32 @@
+From 3eec5afbd0b6377eca893c392569b2faf094d970 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Mon, 5 Aug 2024 00:17:17 +0200
+Subject: [PATCH] sigpipe: init the struct so that first apply ignores
+
+Initializes 'no_signal' to TRUE, so that a call to sigpipe_apply() after
+init ignores the signal (unless CURLOPT_NOSIGNAL) is set.
+
+I have read the existing code multiple times now and I think it gets the
+initial state reversed this missing to ignore.
+
+Regression from 17e6f06ea37136c36d27
+
+Reported-by: Rasmus Thomsen
+Fixes #14344
+Closes #14390
+---
+ lib/sigpipe.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/sigpipe.h b/lib/sigpipe.h
+index b91a2f51333956..d78afd905d3414 100644
+--- a/lib/sigpipe.h
++++ b/lib/sigpipe.h
+@@ -39,6 +39,7 @@ struct sigpipe_ignore {
+ static void sigpipe_init(struct sigpipe_ignore *ig)
+ {
+   memset(ig, 0, sizeof(*ig));
++  ig->no_signal = TRUE;
+ }
+ 
+ /*

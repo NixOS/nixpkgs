@@ -24,7 +24,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-SiQw6pq0Fyy8Ia39S/Vgp9Mlfog2drtVn43g+GXiQuI=";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   CGO_ENABLED = 0;
 

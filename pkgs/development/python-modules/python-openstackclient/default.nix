@@ -12,7 +12,10 @@
   python-heatclient,
   python-ironicclient,
   python-keystoneclient,
+  python-magnumclient,
   python-manilaclient,
+  python-mistralclient,
+  python-neutronclient,
   python-openstackclient,
   requests-mock,
   requests,
@@ -72,7 +75,10 @@ buildPythonPackage rec {
         python-designateclient
         python-heatclient
         python-ironicclient
+        python-magnumclient
         python-manilaclient
+        python-mistralclient
+        python-neutronclient
       ];
     };
     tests.version = testers.testVersion {

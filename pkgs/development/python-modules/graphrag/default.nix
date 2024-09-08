@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-97X9a3ietWDc5UgdgQ2ZSc7DPDEi96LxfO5aVZMNOfg=";
+    hash = "sha256-tfncCFQTeGpTBns+Gt/O7JnFVF5OcpWOwplD0hLWVvc=";
   };
 
   build-system = [

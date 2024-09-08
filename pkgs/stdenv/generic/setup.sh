@@ -330,16 +330,16 @@ prependToVar() {
     fi
 
     # check if variable already exist and if it does then do extra checks
-    if declare -p "$1" 2> /dev/null | grep -q '^'; then
-        type="$(declare -p "$1")"
-        if [[ "$type" =~ "declare -A" ]]; then
-            echo "prependToVar(): ERROR: trying to use prependToVar on an associative array." >&2
-            return 1
-        elif [[ "$type" =~ "declare -a" ]]; then
-            useArray=true
-        else
-            useArray=false
-        fi
+    if type=$(declare -p "$1" 2> /dev/null); then
+        case "${type#* }" in
+            -A*)
+                echo "prependToVar(): ERROR: trying to use prependToVar on an associative array." >&2
+                return 1 ;;
+            -a*)
+                useArray=true ;;
+            *)
+                useArray=false ;;
+        esac
     fi
 
     shift
@@ -363,16 +363,16 @@ appendToVar() {
     fi
 
     # check if variable already exist and if it does then do extra checks
-    if declare -p "$1" 2> /dev/null | grep -q '^'; then
-        type="$(declare -p "$1")"
-        if [[ "$type" =~ "declare -A" ]]; then
-            echo "appendToVar(): ERROR: trying to use appendToVar on an associative array, use variable+=([\"X\"]=\"Y\") instead." >&2
-            return 1
-        elif [[ "$type" =~ "declare -a" ]]; then
-            useArray=true
-        else
-            useArray=false
-        fi
+    if type=$(declare -p "$1" 2> /dev/null); then
+        case "${type#* }" in
+            -A*)
+                echo "appendToVar(): ERROR: trying to use appendToVar on an associative array, use variable+=([\"X\"]=\"Y\") instead." >&2
+                return 1 ;;
+            -a*)
+                useArray=true ;;
+            *)
+                useArray=false ;;
+        esac
     fi
 
     shift
@@ -384,36 +384,64 @@ appendToVar() {
     fi
 }
 
-# Accumulate into `flagsArray` the flags from the named variables.
+# Accumulate flags from the named variables $2+ into the indexed array $1.
 #
-# If __structuredAttrs, the variables are all treated as arrays
-# and simply concatenated onto `flagsArray`.
-#
-# If not __structuredAttrs, then:
-#   * Each variable is treated as a string, and split on whitespace;
-#   * except variables whose names end in "Array", which are treated
-#     as arrays.
-_accumFlagsArray() {
-    local name
-    if [ -n "$__structuredAttrs" ]; then
-        for name in "$@"; do
+# Arrays are simply concatenated, strings are split on whitespace.
+concatTo() {
+    local -n targetref="$1"; shift
+    local name type
+    for name in "$@"; do
+        if type=$(declare -p "$name" 2> /dev/null); then
             local -n nameref="$name"
-            flagsArray+=( ${nameref+"${nameref[@]}"} )
-        done
-    else
-        for name in "$@"; do
-            local -n nameref="$name"
-            case "$name" in
-                *Array)
-                    # shellcheck disable=SC2206
-                    flagsArray+=( ${nameref+"${nameref[@]}"} ) ;;
+            case "${type#* }" in
+                -A*)
+                    echo "concatTo(): ERROR: trying to use concatTo on an associative array." >&2
+                    return 1 ;;
+                -a*)
+                    targetref+=( "${nameref[@]}" ) ;;
                 *)
-                    # shellcheck disable=SC2206
-                    flagsArray+=( ${nameref-} ) ;;
+                    if [[ "$name" = *"Array" ]]; then
+                        nixErrorLog "concatTo(): $name is not declared as array, treating as a singleton. This will become an error in future"
+                        # Reproduces https://github.com/NixOS/nixpkgs/pull/318614/files#diff-7c7ca80928136cfc73a02d5b28350bd900e331d6d304857053ffc9f7beaad576L359
+                        targetref+=( ${nameref+"${nameref[@]}"} )
+                    else
+                        # shellcheck disable=SC2206
+                        targetref+=( ${nameref-} )
+                    fi
+                    ;;
             esac
-        done
-    fi
+        fi
+    done
+}
 
+# Concatenate a list of strings ($2) with a separator ($1) between each element.
+# The list can be an indexed array of strings or a single string. A single string
+# is split on spaces and then concatenated with the separator.
+#
+# $ flags="lorem ipsum dolor sit amet"
+# $ concatStringsSep ";" flags
+# lorem;ipsum;dolor;sit;amet
+#
+# $ flags=("lorem ipsum" "dolor" "sit amet")
+# $ concatStringsSep ";" flags
+# lorem ipsum;dolor;sit amet
+concatStringsSep() {
+    local sep="$1"
+    local name="$2"
+    local type oldifs
+    if type=$(declare -p "$name" 2> /dev/null); then
+        local -n nameref="$name"
+        case "${type#* }" in
+            -A*)
+                echo "concatStringsSep(): ERROR: trying to use concatStringsSep on an associative array." >&2
+                return 1 ;;
+            -a*)
+                local IFS="$sep"
+                echo -n "${nameref[*]}" ;;
+            *)
+                echo -n "${nameref// /"${sep}"}" ;;
+        esac
+    fi
 }
 
 # Add $1/lib* into rpaths.
@@ -1093,7 +1121,13 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        install -m 0600 <(export 2>/dev/null) "$NIX_BUILD_TOP/env-vars" || true
+        # On darwin, install(1) cannot be called with /dev/stdin or fd from process substitution
+        # so first we create the file and then write to it
+        # See https://github.com/NixOS/nixpkgs/issues/335016
+        {
+            install -m 0600 /dev/null "$NIX_BUILD_TOP/env-vars" &&
+            export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars"
+        } || true
     fi
 }
 
@@ -1220,12 +1254,7 @@ unpackPhase() {
     fi
 
     local -a srcsArray
-    if [ -n "$__structuredAttrs" ]; then
-        srcsArray=( "${srcs[@]}" )
-    else
-        # shellcheck disable=SC2206
-        srcsArray=( $srcs )
-    fi
+    concatTo srcsArray srcs
 
     # To determine the source directory created by unpacking the
     # source archives, we record the contents of the current
@@ -1290,13 +1319,7 @@ patchPhase() {
     runHook prePatch
 
     local -a patchesArray
-    if [ -n "$__structuredAttrs" ]; then
-        # shellcheck disable=SC2206
-        patchesArray=( ${patches:+"${patches[@]}"} )
-    else
-        # shellcheck disable=SC2206
-        patchesArray=( ${patches:-} )
-    fi
+    concatTo patchesArray patches
 
     for i in "${patchesArray[@]}"; do
         echo "applying patch $i"
@@ -1317,12 +1340,8 @@ patchPhase() {
         esac
 
         local -a flagsArray
-        if [ -n "$__structuredAttrs" ]; then
-            flagsArray=( "${patchFlags[@]:--p1}" )
-        else
-            # shellcheck disable=SC2086,SC2206
-            flagsArray=( ${patchFlags:--p1} )
-        fi
+        : "${patchFlags:=-p1}"
+        concatTo flagsArray patchFlags
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
@@ -1408,7 +1427,7 @@ configurePhase() {
 
     if [ -n "$configureScript" ]; then
         local -a flagsArray
-        _accumFlagsArray configureFlags configureFlagsArray
+        concatTo flagsArray configureFlags configureFlagsArray
 
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1435,7 +1454,7 @@ buildPhase() {
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
         )
-        _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+        concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
         echoCmd 'build flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1474,16 +1493,8 @@ checkPhase() {
             SHELL="$SHELL"
         )
 
-        _accumFlagsArray makeFlags makeFlagsArray
-        if [ -n "$__structuredAttrs" ]; then
-            flagsArray+=( "${checkFlags[@]:-VERBOSE=y}" )
-        else
-            # shellcheck disable=SC2206
-            flagsArray+=( ${checkFlags:-VERBOSE=y} )
-        fi
-        _accumFlagsArray checkFlagsArray
-        # shellcheck disable=SC2206
-        flagsArray+=( ${checkTarget} )
+        : "${checkFlags:=VERBOSE=y}"
+        concatTo flagsArray makeFlags makeFlagsArray checkFlags checkFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1516,13 +1527,9 @@ installPhase() {
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL="$SHELL"
     )
-    _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
-    if [ -n "$__structuredAttrs" ]; then
-        flagsArray+=( "${installTargets[@]:-install}" )
-    else
-        # shellcheck disable=SC2206
-        flagsArray+=( ${installTargets:-install} )
-    fi
+
+    : "${installTargets:=install}"
+    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets
 
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1605,10 +1612,9 @@ installCheckPhase() {
             SHELL="$SHELL"
         )
 
-        _accumFlagsArray makeFlags makeFlagsArray \
-          installCheckFlags installCheckFlagsArray
-        # shellcheck disable=SC2206
-        flagsArray+=( ${installCheckTarget:-installcheck} )
+        : "${installCheckTarget:=installcheck}"
+        concatTo flagsArray makeFlags makeFlagsArray \
+          installCheckFlags installCheckFlagsArray installCheckTarget
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1623,9 +1629,8 @@ distPhase() {
     runHook preDist
 
     local flagsArray=()
-    _accumFlagsArray distFlags distFlagsArray
-    # shellcheck disable=SC2206
-    flagsArray+=( ${distTarget:-dist} )
+    : "${distTarget:=dist}"
+    concatTo flagsArray distFlags distFlagsArray distTarget
 
     echo 'dist flags: %q' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"

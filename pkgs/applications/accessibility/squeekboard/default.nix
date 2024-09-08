@@ -10,6 +10,7 @@
 , gtk3
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libbsd
 , libxml2
 , libxkbcommon
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
-    wayland
+    wayland-scanner
     wrapGAppsHook3
     rustPlatform.cargoSetupHook
     cargo

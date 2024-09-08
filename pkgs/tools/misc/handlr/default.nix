@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     description = "Alternative to xdg-open to manage default applications with ease";
     homepage = "https://github.com/chmln/handlr";
     license = licenses.mit;
-    maintainers = with maintainers; [ mredaelli artturin ];
+    maintainers = with maintainers; [ artturin ];
     mainProgram = "handlr";
   };
 }

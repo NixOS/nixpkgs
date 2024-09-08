@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "flipr-api";
-  version = "1.5.1";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,12 +22,12 @@ buildPythonPackage rec {
     owner = "cnico";
     repo = "flipr-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-xgLi2lH+EPPNlMixqOzdBGVLuoJh5dhZ2tHZ0UH+lOk=";
+    hash = "sha256-/px8NuBwukAPMxdXvHdyfO/j/a9UatKbdrjDNuT0f4k=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     requests
   ];
@@ -38,6 +38,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  env = {
+    # used in test_session
+    FLIPR_USERNAME = "foobar";
+    FLIPR_PASSWORD = "secret";
+  };
+
   pythonImportsCheck = [ "flipr_api" ];
 
   meta = with lib; {
@@ -45,7 +51,7 @@ buildPythonPackage rec {
     mainProgram = "flipr-api";
     homepage = "https://github.com/cnico/flipr-api";
     changelog = "https://github.com/cnico/flipr-api/releases/tag/${version}";
-    license = licenses.mit;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

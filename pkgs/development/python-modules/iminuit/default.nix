@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pathspec
     ninja
     pyproject-metadata
-  ] ++ scikit-build-core.optional-dependencies.pyproject;
+  ];
 
   propagatedBuildInputs = [ numpy ];
 
