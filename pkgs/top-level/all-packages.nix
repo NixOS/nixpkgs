@@ -13289,8 +13289,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   };
 
-  trunk-io = callPackage ../development/tools/trunk-io { };
-
   trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
