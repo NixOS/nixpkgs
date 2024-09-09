@@ -516,6 +516,7 @@ in {
         };
         before = [ "shutdown.target" ];
         conflicts = [ "shutdown.target" ];
+        requiredBy = [ "initrd.target" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
@@ -579,7 +580,7 @@ in {
       ];
 
       services.initrd-nixos-activation = {
-        wants = [
+        requires = [
           config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
         ];
         after = [
@@ -587,7 +588,12 @@ in {
           config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
         ];
         requiredBy = [ "initrd.target" ];
-        unitConfig.AssertPathExists = "/etc/initrd-release";
+        unitConfig = {
+          AssertPathExists = "/etc/initrd-release";
+          RequiresMountsFor = [
+            "/sysroot/run"
+          ];
+        };
         serviceConfig.Type = "oneshot";
         description = "NixOS Activation";
 
