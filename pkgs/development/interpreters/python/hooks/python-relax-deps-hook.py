@@ -10,6 +10,7 @@ import sys
 from argparse import ArgumentParser
 
 from packaging.metadata import Metadata, parse_email
+from packaging.specifiers import Specifier, SpecifierSet
 
 argparser = ArgumentParser()
 argparser.add_argument(
@@ -42,6 +43,9 @@ argparser.add_argument(
     default=[],
     help="Which dependency to remove, can be provided multiple times",
 )
+argparser.add_argument(
+    "--relax-upper-only", action="store_true", help="Relax upper version constraints"
+)
 
 
 if __name__ == "__main__":
@@ -63,7 +67,30 @@ if __name__ == "__main__":
 
         # relax
         if args.relax_all or requirement.name in args.relax:
-            requirement.specifier = None
+
+            # relax all version constraints
+            if not args.relax_upper_only:
+                requirement.specifier = None
+
+            # relax upper version constraints, if any
+            elif requirement.specifier:
+                new_specifier_set = []
+                for specifier in requirement.specifier:
+                    if specifier.operator in (">", ">="):
+                        # keep
+                        new_specifier_set.append(specifier)
+                    elif specifier.operator in ("~=", "=="):
+                        # relax
+                        new_specifier_set.append(Specifier(f">={specifier.version}"))
+                    elif specifier.operator in ("!=", "<=", "<", "==="):
+                        # remove
+                        pass
+                    else:
+                        # packaging.specifiers.Specifier should raise packaging.specifiers.InvalidSpecifier in this case
+                        assert False, f"unknown specifier operator: {specifier.operator!r}"
+                requirement.specifier = SpecifierSet(
+                    ",".join(sorted(str(s) for s in new_specifier_set))
+                )
 
         new_requires_dist.append(requirement)
 

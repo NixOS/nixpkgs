@@ -11,6 +11,10 @@
 #     # This will relax the dependency restrictions
 #     # e.g.: abc>1,<=2 -> abc
 #     pythonRelaxDeps = [ "abc" ];
+#     # This will relax only the upper bound
+#     # e.g.: abc>1,<=2 -> abc>1
+#     pythonRelaxDeps = [ "abc" ];
+#     pythonRelaxDepsUpperOnly = true;
 #     # This will relax all dependencies restrictions instead
 #     # pythonRelaxDeps = true;
 #     # This will remove the dependency
@@ -63,6 +67,10 @@ pythonRelaxDepsHook() {
         for dep in $pythonRemoveDeps; do
             hookArgs+=(--remove "$dep")
         done
+    fi
+
+    if [[ "${pythonRelaxDepsUpperOnly:-0}" == 1 ]]; then
+        hookArgs+=(--relax-upper-only)
     fi
 
     # We generally shouldn't have multiple wheel files, but let's be safer here
