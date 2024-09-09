@@ -157,11 +157,18 @@ in
     };
 
     nginx = mkOption {
-      type = types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+      type = types.submodule (
+        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
+          # enable encryption by default,
+          # as sensitive login credentials should not be transmitted in clear text.
+          options.forceSSL.default = true;
+          options.enableACME.default = true;
+        }
+      );
       default = { };
       example = {
-        enableACME = true;
-        forceSSL = true;
+        enableACME = false;
+        forceSSL = false;
       };
       description = "Extra configuration for the nginx virtual host of gancio.";
     };
@@ -260,8 +267,6 @@ in
       virtualHosts."${cfg.settings.hostname}" = mkMerge [
         cfg.nginx
         {
-          enableACME = mkDefault true;
-          forceSSL = mkDefault true;
           locations = {
             "/" = {
               index = "index.html";
