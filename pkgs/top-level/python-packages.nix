@@ -5818,6 +5818,10 @@ self: super: with self; {
 
   humann = callPackage ../development/python-modules/humann { };
 
+  humann-unwrapped = callPackage ../development/python-modules/humann {
+    humann-db = null;
+  };
+
   human-readable = callPackage ../development/python-modules/human-readable { };
 
   humblewx = callPackage ../development/python-modules/humblewx { };
