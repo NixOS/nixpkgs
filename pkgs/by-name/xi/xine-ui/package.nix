@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchhg
-, autoreconfHook
-, perl
-, curl
-, libXext
-, libXft
-, libXi
-, libXinerama
-, libXtst
-, libXv
-, libXxf86vm
-, libjpeg
-, libpng
-, lirc
-, ncurses
-, pkg-config
-, readline
-, shared-mime-info
-, xine-lib
-, xorgproto
+{
+  lib,
+  autoreconfHook,
+  curl,
+  fetchhg,
+  libXext,
+  libXft,
+  libXi,
+  libXinerama,
+  libXtst,
+  libXv,
+  libXxf86vm,
+  libjpeg,
+  libpng,
+  lirc,
+  ncurses,
+  perl,
+  pkg-config,
+  readline,
+  shared-mime-info,
+  stdenv,
+  xine-lib,
+  xorgproto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y08JX9q4w6pSJRCa5mWN11BnA6mZJSO/yn3X8YyZ6E4=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -62,21 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--with-readline=${readline.dev}" ];
 
   env = {
-    LIRC_CFLAGS="-I${lirc}/include";
-    LIRC_LIBS="-L ${lirc}/lib -llirc_client";
+    LIRC_CFLAGS = "-I${lib.getInclude lirc}/include";
+    LIRC_LIBS = "-L ${lib.getLib lirc}/lib -llirc_client";
   };
 
   strictDeps = true;
-
-  postInstall = ''
-    substituteInPlace $out/share/applications/xine.desktop \
-      --replace "MimeType=;" "MimeType="
-  '';
 
   meta = {
     homepage = "https://xine.sourceforge.net/";
     description = "Xlib-based frontend for Xine video player";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "xine";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
