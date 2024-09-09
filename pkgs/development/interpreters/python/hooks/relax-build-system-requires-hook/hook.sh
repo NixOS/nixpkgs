@@ -5,6 +5,7 @@ relaxBuildSystemRequiresHook() {
     echo "Executing relaxBuildSystemRequires"
 
     echo "Relaxing build-system requires"
+    export PYTHONPATH=$PYTHONPATH:@hookdir@
     @pythonInterpreter@ @hook@
 
     echo "Finished executing relaxBuildSystemRequires"

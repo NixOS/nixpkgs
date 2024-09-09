@@ -199,12 +199,13 @@ in {
       ];
       substitutions = {
         inherit pythonInterpreter;
-        hook = ./relax-build-system-requires-hook.py;
+        hook = ./relax-build-system-requires-hook/_hook.py;
+        hookdir = ./relax-build-system-requires-hook;
       };
-      passthru.tests = callPackage ./relax-build-system-requires-hook-test.nix {
+      passthru.tests = callPackage ./relax-build-system-requires-hook/tests.nix {
         inherit pythonOnBuildForHost;
       };
-    } ./relax-build-system-requires-hook.sh) {};
+    } ./relax-build-system-requires-hook/hook.sh) {};
 
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {
