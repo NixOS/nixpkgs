@@ -115,6 +115,12 @@ buildPythonPackage rec {
       "test_hinting_data"
       "test_waterfallplot"
     ]
+    ++ lib.optionals (stdenv.cc.isGNU) [
+      # broke in the gcc 13 → 14 update
+      "test_dump"
+      "test_input_formats"
+      "test_other_input_formats"
+    ]
     ++ lib.optionals (!runAllTests) [
       # Disable slow tests, reduces test time ~25 %
       "test_report"
