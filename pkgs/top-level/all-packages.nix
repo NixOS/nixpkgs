@@ -5545,11 +5545,6 @@ with pkgs;
 
   loccount = callPackage ../development/tools/misc/loccount { };
 
-  logseq = callPackage ../by-name/lo/logseq/package.nix {
-    # electron version from: https://github.com/logseq/logseq/blob/0.10.9/package.json#L116
-    electron = electron_27;
-  };
-
   long-shebang = callPackage ../misc/long-shebang { };
 
   lssecret = callPackage ../misc/lssecret {};
