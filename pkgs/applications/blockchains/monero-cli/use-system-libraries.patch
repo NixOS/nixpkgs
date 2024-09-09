@@ -56,23 +56,3 @@ index 71f5393e8..bb48083d0 100644
  
  #undef MONERO_DEFAULT_LOG_CATEGORY
  #define MONERO_DEFAULT_LOG_CATEGORY "net.p2p"
-@@ -2989,7 +2989,8 @@ namespace nodetool
-     UPNPUrls urls;
-     IGDdatas igdData;
-     char lanAddress[64];
--    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
-+    char wanAddress[64];
-+    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress, wanAddress, sizeof wanAddress);
-     freeUPNPDevlist(deviceList);
-     if (result > 0) {
-       if (result == 1) {
-@@ -3057,7 +3058,8 @@ namespace nodetool
-     UPNPUrls urls;
-     IGDdatas igdData;
-     char lanAddress[64];
--    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
-+    char wanAddress[64];
-+    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress, wanAddress, sizeof wanAddress);
-     freeUPNPDevlist(deviceList);
-     if (result > 0) {
-       if (result == 1) {
