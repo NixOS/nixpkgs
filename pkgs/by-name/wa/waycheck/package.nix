@@ -9,6 +9,7 @@
   wayland,
   glib,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
