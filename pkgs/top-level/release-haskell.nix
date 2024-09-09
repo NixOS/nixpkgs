@@ -394,19 +394,7 @@ let
       };
 
       # GHCs linked to musl.
-      pkgsMusl.haskell.compiler = lib.recursiveUpdate
-        (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
-        {
-          # remove musl ghc865Binary since it is known to be broken and
-          # causes an evaluation error on darwin.
-          ghc865Binary = {};
-
-          ghcjs = {};
-          ghcjs810 = {};
-        };
-
-      # Get some cache going for MUSL-enabled GHC.
-      pkgsMusl.haskellPackages =
+      pkgsMusl =
         removePlatforms
           [
             # pkgsMusl is compiled natively with musl.  It is not
@@ -420,11 +408,26 @@ let
             "aarch64-darwin"
           ]
           {
-            inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
-              hello
-              lens
-              random
-              ;
+            haskell.compiler = lib.recursiveUpdate
+              (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
+              {
+                # remove musl ghc865Binary since it is known to be broken and
+                # causes an evaluation error on darwin.
+                ghc865Binary = {};
+
+                ghcjs = {};
+                ghcjs810 = {};
+              };
+
+            # Get some cache going for MUSL-enabled GHC.
+            haskellPackages =
+              {
+                inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
+                  hello
+                  lens
+                  random
+                ;
+              };
           };
 
       # Test some statically linked packages to catch regressions
