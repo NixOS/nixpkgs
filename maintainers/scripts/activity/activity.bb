@@ -9,6 +9,8 @@
 ;;       $ nix-shell -p babashka curl --run "bb nrepl-server"
 ;;   - connect to 127.0.0.1:1667 with emacs/cider or vscode/calva
 
+;; # Configuration
+
 (require '[babashka.curl :as curl]
          '[babashka.cli :as cli])
 
@@ -50,18 +52,64 @@
 ")
           (System/exit 1))))
 
+;; ## nixos org and its repositories
 
-(defn query [q & [v n]]
+(comment
+  ;; to regenerate org id
+  (unwrap (file-query :org-repos {:org "nixos"})
+          [:organization :id]))
+
+(def org-id "O_kgDOAAdwkA")
+
+(def repo-map (edn/read (java.io.PushbackReader.
+                         (io/reader (io/file graphql-path
+                                             "repos.edn")))))
+
+(def interesting-repo?
+  (into #{}
+        (map repo-map)
+        #_["nix" "nixpkgs"] ; to scope down which repos to look at
+        (keys repo-map)))
+
+;; # low-level access: graphql
+
+(defn query
+  "github graphql API access"
+  [query & [variables operation-name]]
   (->
    (curl/post "https://api.github.com/graphql"
               {:headers {"Authorization" (str "bearer " (get-access-token))}
                :throw false
-               :body (json/encode {:query q
-                                   :variables v
-                                   :operationName n})})
+               :body (json/encode {:query query
+                                   :variables variables
+                                   :operationName operation-name})})
    (update :body json/decode keyword)))
 
-(defn unpack-search-result [{:keys [status headers body]}]
+(defn unwrap
+  "graphql result unpacking with error check and print remaining credits"
+  [response path]
+  (let [{:keys [status headers body err]} response
+        _ (when-not (= 200 status)
+            (throw (ex-info "Non-200 HTTP status" {:response response})))
+        _ (.println System/err (format ".. got %s/%s credits left"
+                                       (get headers "x-ratelimit-remaining")
+                                       (get headers "x-ratelimit-limit")))
+        {:keys [data errors]
+         {:keys [warnings]} :extensions} body
+        _ (when-not (empty? errors)
+            (throw (ex-info "GQL Errors" {:body body})))
+        _ (when-not (empty? warnings)
+            (doseq [w warnings]
+              (.println System/err (format "WARNING: %s" w))))]
+    (get-in data path)))
+
+;; # low-level access: search
+
+;; Search API has its own credit system and lives in its own universe
+
+(defn unpack-search-result
+  "search response unpacking with error check and print remaining credits"
+  [{:keys [status headers body]}]
   (assert (= 200 status))
   (.println System/err (format ".. got %s/%s search credits left"
                                (get headers "x-ratelimit-remaining")
@@ -69,7 +117,10 @@
   {:total (:total_count body)
    :latest (-> body :items first
                (select-keys [:node_id :url :updated_at :commit]))})
-(defn search-issues [& {:keys [q]}]
+
+(defn search-issues
+  "github search API for issues and PRs"
+  [& {:keys [q]}]
   (->
    (curl/get "https://api.github.com/search/issues"
              {:headers
@@ -87,7 +138,9 @@
    (update :body json/decode keyword)
    (unpack-search-result)))
 
-(defn search-commits [& {:keys [q]}]
+(defn search-commits
+  "github search API for commits"
+  [& {:keys [q]}]
   (->
    (curl/get "https://api.github.com/search/commits"
              {:headers
@@ -105,68 +158,9 @@
    (update :body json/decode keyword)
    (unpack-search-result)))
 
-(defn file-query [file-name & [variables operation-name extra-query]]
-  (query (str (slurp (fs/file graphql-path (str (name file-name) ".gql")))
-              extra-query)
-         variables
-         operation-name))
-
-(defn unwrap [response path]
-  (let [{:keys [status headers body err]} response
-        _ (when-not (= 200 status)
-            (throw (ex-info "Non-200 HTTP status" {:response response})))
-        _ (.println System/err (format ".. got %s/%s credits left"
-                                       (get headers "x-ratelimit-remaining")
-                                       (get headers "x-ratelimit-limit")))
-        {:keys [data errors]
-         {:keys [warnings]} :extensions} body
-        _ (when-not (empty? errors)
-            (throw (ex-info "GQL Errors" {:body body})))
-        _ (when-not (empty? warnings)
-            (doseq [w warnings]
-              (.println System/err (format "WARNING: %s" w))))]
-    (get-in data path)))
-
-(comment
-  ;; to regenerate org id
-  (unwrap (file-query :org-repos {:org "nixos"})
-          [:organization :id]))
-
-(def org-id "O_kgDOAAdwkA")
-
-(def repo-map (edn/read (java.io.PushbackReader.
-                         (io/reader (io/file graphql-path
-                                             "repos.edn")))))
-
-(def interesting-repo?
-  (into #{}
-        (map repo-map)
-        #_["nix" "nixpkgs"]
-        (keys repo-map)))
-
-(defn issue-comment-page [login after-cursor]
-  (.println System/err (format "Fetching issue comments for %s after page %s" login after-cursor))
-  (unwrap (file-query :issue-comments
-                      {:login "bendlas"
-                       :after after-cursor
-                       :pageSize 100}
-                      "IssueCommentsFor")
-          [:user :issueComments]))
-
-(defn issue-comments [login & [after-cursor]]
-  (lazy-seq
-   (let [{:keys [pageInfo nodes]} (issue-comment-page login after-cursor)]
-     (concat nodes
-             (when (:hasNextPage pageInfo)
-               (issue-comments login (:endCursor pageInfo)))))))
-
-(defn latest-issue-comment-for [login]
-  (-> (issue-comments login)
-   (->> (filter (comp interesting-repo? :id :repository)))
-   first
-   (dissoc :repository)))
-
-(defn search-for [user]
+(defn search-for
+  "Find user activity in nixos via search api"
+  [user]
   {:authored-issue (search-issues
                     :q {:org "NixOS" :author user})
    :commented-issue (search-issues
@@ -176,7 +170,61 @@
    :committed-commit (search-commits
                       :q {:org "NixOS" :committer user})})
 
-(defn latest-contributions-for [user]
+;; # Queries: GQL for fine-grained data, REST for search API
+
+(defn file-query
+  "Query one of the *.gql files"
+  [file-name & [variables operation-name extra-query]]
+  (query (str (slurp (fs/file graphql-path (str (name file-name) ".gql")))
+              extra-query)
+         variables
+         operation-name))
+
+;; issue comments are already finicky, because they can be accessed by
+;; user, but across all github repos. So if a user is active in other
+;; repositories, their latest comment to a nixos repo issue may not
+;; even be on the first page
+
+;; so we search backwards, until we find a nixos repo issue comment ..
+
+(defn issue-comment-page
+  "Get a page of issue comments for user (across all of github)"
+  [login after-cursor]
+  (.println System/err (format "Fetching issue comments for %s after page %s" login after-cursor))
+  (unwrap (file-query :issue-comments
+                      {:login "bendlas"
+                       :after after-cursor
+                       :pageSize 100}
+                      "IssueCommentsFor")
+          [:user :issueComments]))
+
+;; .. by (lazily) fetching all of them ..
+
+(defn issue-comments
+  "Lazy sequence of all issue comments for user (across all of github)"
+  [login & [after-cursor]]
+  (lazy-seq
+   (let [{:keys [pageInfo nodes]} (issue-comment-page login after-cursor)]
+     (concat nodes
+             (when (:hasNextPage pageInfo)
+               (issue-comments login (:endCursor pageInfo)))))))
+
+;; .. and finding the first one from a repo, we've listed in ./repos.edn
+
+(defn latest-issue-comment-for
+  "Find latest issue comment for user within NixOS"
+  [login]
+  (-> (issue-comments login)
+      (->> (filter (comp interesting-repo? :id :repository)))
+      first
+      (dissoc :repository)))
+
+;; Contributions are what backs the user front page. They can be
+;; fetched per fixed time frame, max 1 year
+
+(defn latest-contributions-for
+  "Find org contributions via github activity"
+  [user]
   (->
    (file-query :org-contributions {:login user :orgId org-id})
    (unwrap [:user :contributionsCollection])))
@@ -186,7 +234,11 @@
   (file-query :issue-comments {:login "bendlas"})
   (def icp (issue-comment-page "bendlas" nil))
   (def icb (issue-comments "bendlas"))
-  (file-query :org-contributions {:login "bendlas" :orgId org-id})
+  (file-query :org-contributions {:login "bendlas" :orgId org-id}))
+
+;; Batched queries are a specialty use case, enabled by graphql named
+;; queries. Cannot be parameterized in a .gql file, so needs full
+;; query generation.
 
 (comment
   (file-query :issue-comments
@@ -200,12 +252,15 @@ query Main($after:String,$pageSize:Int!) {
 ")
   )
 
-  )
-
-(defn gql-sanitize [user]
+(defn- gql-sanitize [user]
   (str "_" (str/replace user #"[^a-zA-Z0-9]" "_")))
 
-(defn issue-comments-queries [users]
+(defn issue-comments-queries
+  "Get a page of issue comments for multiple users simultaneously.
+   This functionality is subject to restricted capability from github:
+   If requesting too much data at once (especially users in parallel),
+   then queries can start timing out."
+  [users]
   (str/join
    (concat
     ["query Main($after:String,$pageSize:Int!) {\n"]
@@ -223,13 +278,19 @@ query Main($after:String,$pageSize:Int!) {
               (issue-comments-queries ["SuperSandro2000" "bendlas" "superherointj" "thiagokokada"]))
   )
 
-(defn read-maintainer-list []
+;; Easily process maintainers-list.nix
+
+(defn read-maintainer-list
+  "Read maintainer-list.nix"
+  []
   (-> (shell/sh "nix" "eval" "--impure" "--json" "--expr"
                 (str "import "
                      (fs/file maintainers-path "maintainer-list.nix")))
       :out json/parse-string))
 
-(defn maintainer-names [ml]
+(defn maintainer-names
+  "List maintainer github handles from maintainer map"
+  [ml]
   (mapv (fn [[k {:strs [github]}]]
           (or github
               (do (.println System/err (str "WARNING: User " k " has no associated github user"))
@@ -249,7 +310,7 @@ query Main($after:String,$pageSize:Int!) {
      (unwrap [])))
   )
 
-;;; graphql explorer
+;; # graphql explorer
 
 ;; proxying requests to https://api.github.com/graphql
 ;; in order to work with CORS rules
@@ -290,7 +351,7 @@ query Main($after:String,$pageSize:Int!) {
   (def server (future (serve-explorer (get-access-token))))
   #__)
 
-;;; CLI - Command line interface
+;; # CLI - Command line interface
 
 (defn exit-error [{:keys [spec type cause msg option] :as data}]
   (if (= :org.babashka/cli type)
@@ -306,11 +367,6 @@ query Main($after:String,$pageSize:Int!) {
 (def user-spec
   {:user {:require true
           :desc "A GitHub user to operate on"}})
-
-(defn entry-point [f & opt-names]
-  (fn [{:as arg :keys [opts]}]
-    (assoc arg :entry-fn
-           #(apply f (map opts opt-names)))))
 
 (declare help-dispatch)
 (def table
@@ -343,19 +399,18 @@ query Main($after:String,$pageSize:Int!) {
     :fn #(assoc % :entry (comp maintainer-names read-maintainer-list))}
    {:cmds [] :fn #(assoc-in % [:opts :help] true)}])
 
-(defn show-help [{:as arg :keys [dispatch]}]6
-  (if-let [dc (some #(and (= (:cmds %)
+(defn show-help [{:as arg :keys [dispatch]}]
+  (when-let [dc (some #(and (= (:cmds %)
                              dispatch)
                           %)
                     table)]
-    (do
-      (apply println (concat (:cmds dc) (:args->opts dc)))
-      (println
-       (cli/format-opts
-        (assoc dc
-               :order (vec (keys (:spec dc)))))))
-    (doseq [{:keys [cmds args->opts]} table]
-      (apply println "" (concat cmds args->opts)))))
+    (apply println (concat (:cmds dc) (:args->opts dc)))
+    (println
+     (cli/format-opts
+      (assoc dc
+             :order (vec (keys (:spec dc)))))))
+  (doseq [{:keys [cmds args->opts]} table]
+    (apply println "" (concat cmds args->opts))))
 
 (defn -main [& args]
   (let [{:as arg :keys [opts help entry eargs]} (cli/dispatch table args)]
