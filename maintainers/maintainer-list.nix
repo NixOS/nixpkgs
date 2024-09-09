@@ -4389,6 +4389,8 @@
   cyewashish = {
     name = "Cyewashish";
     email = "wawashish@cyekaivy.dev";
+    github = "cyewashish";
+    githubId = 180875322;
   };
   cynerd = {
     name = "Karel Kočí";
