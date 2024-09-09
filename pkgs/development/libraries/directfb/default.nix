@@ -65,7 +65,11 @@ stdenv.mkDerivation rec {
       libXrender
     ]);
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env = {
+    NIX_LDFLAGS = "-lgcc_s";
+  } // lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+  };
 
   configureFlags = [
     "--enable-sdl"
