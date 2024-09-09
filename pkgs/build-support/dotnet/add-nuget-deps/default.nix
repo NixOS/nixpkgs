@@ -42,8 +42,8 @@ attrs
     // {
       nugetDeps = deps;
     }
-    // lib.optionalAttrs (nugetDeps == null || lib.isPath nugetDeps) {
-      fetch-deps =
+    // lib.optionalAttrs (nugetDeps == null || lib.isPath nugetDeps) rec {
+      fetch-drv =
         let
           pkg' = finalPackage.overrideAttrs (old: {
             buildInputs = attrs.buildInputs or [ ];
@@ -56,10 +56,11 @@ attrs
             dontFixup = true;
             doDist = false;
           });
-
-          pkg'' = pkg'.overrideAttrs overrideFetchAttrs;
-
-          drv = builtins.unsafeDiscardOutputDependency pkg''.drvPath;
+        in
+        pkg'.overrideAttrs overrideFetchAttrs;
+      fetch-deps =
+        let
+          drv = builtins.unsafeDiscardOutputDependency fetch-drv.drvPath;
 
           innerScript = substituteAll {
             src = ./fetch-deps.sh;
