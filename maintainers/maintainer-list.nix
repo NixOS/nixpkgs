@@ -16232,6 +16232,11 @@
     githubId = 13309623;
     name = "Philipp Herzog";
   };
+  PhilVoel = {
+    github = "PhilVoel";
+    githubId = 56931301;
+    name = "Philipp Völler";
+  };
   phip1611 = {
     email = "phip1611@gmail.com";
     github = "phip1611";
