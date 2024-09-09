@@ -354,13 +354,13 @@
     "vendorHash": "sha256-yOuZcvaregVLf0O6Teuvv6FtapuQGgHjTkqiH2euV8U="
   },
   "dnsimple": {
-    "hash": "sha256-xF0zvUKJgB67rKNkeHKyKU0k7INiCKzN+G6v0PIq204=",
+    "hash": "sha256-19h4x+kxhFwlNUdTmTLjoLRQB7fNBh0CxxoQDGRPPiQ=",
     "homepage": "https://registry.terraform.io/providers/dnsimple/dnsimple",
     "owner": "dnsimple",
     "repo": "terraform-provider-dnsimple",
-    "rev": "v1.6.0",
+    "rev": "v1.7.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Zl98s0+sgs+n/OkrJMsia0MxqO/AGWId8zzY+/n6LXM="
+    "vendorHash": "sha256-5445cUKxjNlZcQ6opJKgXgT7I9XUmqbPMB/iKuEBPwg="
   },
   "docker": {
     "hash": "sha256-UyHOI8C0eDV5YllAi9clHp/CEldHjIp3FHHMPy1rK58=",
