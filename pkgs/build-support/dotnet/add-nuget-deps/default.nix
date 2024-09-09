@@ -87,12 +87,15 @@ attrs
           TMPDIR=$(mktemp -d -t fetch-deps-${finalPackage.name}.XXXXXX)
           trap 'chmod -R +w "$TMPDIR" && rm -fr "$TMPDIR"' EXIT
 
+          export NUGET_HTTP_CACHE_PATH=''${NUGET_HTTP_CACHE_PATH-~/.local/share/NuGet/v3-cache}
+
           HOME=$TMPDIR/home
           mkdir "$HOME"
 
           cd "$TMPDIR"
+
           NIX_BUILD_SHELL="${runtimeShell}" ${nix}/bin/nix-shell \
-            --pure --run 'source "${innerScript}"' "${drv}"
+            --pure --keep NUGET_HTTP_CACHE_PATH --run 'source "${innerScript}"' "${drv}"
         '';
     };
 }
