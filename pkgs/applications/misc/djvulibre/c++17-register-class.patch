@@ -1,0 +1,21 @@
+diff -ur a/libdjvu/GBitmap.h b/libdjvu/GBitmap.h
+--- a/libdjvu/GBitmap.h	2020-11-20 09:57:32.000000000 -0700
++++ b/libdjvu/GBitmap.h	2023-07-07 07:07:45.519912414 -0600
+@@ -620,7 +620,7 @@
+ inline int
+ GBitmap::read_run(unsigned char *&data)
+ {
+-  register int z=*data++;
++  int z=*data++;
+   return (z>=RUNOVERFLOWVALUE)?
+     ((z&~RUNOVERFLOWVALUE)<<8)|(*data++):z;
+ }
+@@ -628,7 +628,7 @@
+ inline int
+ GBitmap::read_run(const unsigned char *&data)
+ {
+-  register int z=*data++;
++  int z=*data++;
+   return (z>=RUNOVERFLOWVALUE)?
+     ((z&~RUNOVERFLOWVALUE)<<8)|(*data++):z;
+ }

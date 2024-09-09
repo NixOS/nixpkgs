@@ -1,0 +1,46 @@
+--- a/src/cpp/session/CMakeLists.txt
++++ b/src/cpp/session/CMakeLists.txt
+@@ -36,18 +36,14 @@
+    else()
+       set(RSTUDIO_DEPENDENCIES_DICTIONARIES_DIR "${RSTUDIO_DEPENDENCIES_DIR}/dictionaries")
+    endif()
+-   
++
+    if(EXISTS "${RSTUDIO_TOOLS_ROOT}/mathjax-27")
+       set(RSTUDIO_DEPENDENCIES_MATHJAX_DIR "${RSTUDIO_TOOLS_ROOT}/mathjax-27")
+    else()
+       set(RSTUDIO_DEPENDENCIES_MATHJAX_DIR "${RSTUDIO_DEPENDENCIES_DIR}/mathjax-27")
+    endif()
+ 
+-   if(EXISTS "${RSTUDIO_TOOLS_ROOT}/quarto")
+-      set(RSTUDIO_DEPENDENCIES_QUARTO_DIR "${RSTUDIO_TOOLS_ROOT}/quarto")
+-   else()
+-      set(RSTUDIO_DEPENDENCIES_QUARTO_DIR "${RSTUDIO_DEPENDENCIES_DIR}/quarto")
+-   endif()
++   set(RSTUDIO_DEPENDENCIES_QUARTO_DIR "@quarto@")
+ 
+ endif()
+ 
+@@ -56,7 +52,7 @@
+ # - by default, we use quarto + quarto's bundled pandoc
+ # - if quarto is not enabled, use pandoc fallback
+ if(QUARTO_ENABLED)
+-   set(RSTUDIO_DEPENDENCIES_PANDOC_DIR "${RSTUDIO_DEPENDENCIES_QUARTO_DIR}/bin/tools")
++   set(RSTUDIO_DEPENDENCIES_PANDOC_DIR "@pandoc@/bin")
+ elseif(EXISTS "${RSTUDIO_TOOLS_ROOT}/pandoc/${PANDOC_VERSION}")
+    set(RSTUDIO_DEPENDENCIES_PANDOC_DIR "${RSTUDIO_TOOLS_ROOT}/pandoc/${PANDOC_VERSION}")
+ else()
+@@ -66,11 +62,9 @@
+ 
+ # validate our dependencies exist
+ foreach(VAR RSTUDIO_DEPENDENCIES_DICTIONARIES_DIR
+-            RSTUDIO_DEPENDENCIES_MATHJAX_DIR
+-            RSTUDIO_DEPENDENCIES_PANDOC_DIR
+-            RSTUDIO_DEPENDENCIES_QUARTO_DIR)
++            RSTUDIO_DEPENDENCIES_MATHJAX_DIR)
++
+ 
+- 
+    # skip quarto if not enabled
+    if("${VAR}" STREQUAL "RSTUDIO_DEPENDENCIES_QUARTO_DIR" AND NOT QUARTO_ENABLED)
+       continue()

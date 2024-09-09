@@ -1,0 +1,8 @@
+[flake8]
+# E111 => 4 spaces tabs
+# don't let spaces else it is not recognized
+# E123 buggy
+ignore =
+	E501,E265,E402
+
+max-line-length = 120

@@ -1,0 +1,16 @@
+diff --git a/kBuild/units/qt5.kmk b/kBuild/units/qt5.kmk
+index 71b96a3..73391f0 100644
+--- a/kBuild/units/qt5.kmk
++++ b/kBuild/units/qt5.kmk
+@@ -1054,9 +1054,9 @@ else
+    $(eval $(target)_LIBS   += $(PATH_SDK_QT5_LIB)/$(qt_prefix)qtmain$(qt_infix)$(SUFF_LIB) )
+   endif
+  else
+-  $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), $(PATH_SDK_QT5_LIB)/lib$(qt_prefix)Qt5$(module)$(qt_infix)$(SUFF_DLL)) )
++  $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), $(if $(filter Help,$(module)),$(PATH_QT5_TOOLS_LIB),$(if $(filter X11Extras,$(module)),$(PATH_QT5_X11_EXTRAS_LIB),$(PATH_SDK_QT5_LIB)))/lib$(qt_prefix)Qt5$(module)$(qt_infix)$(SUFF_DLL)) )
+  endif
+- $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT5_INC)/Qt,$(qt_modules)) $(PATH_SDK_QT5_INC) )
++ $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT5_INC)/Qt,$(qt_modules)) $(PATH_SDK_QT5_INC) $(PATH_QT5_X11_EXTRAS_INC)/QtX11Extras $(PATH_QT5_TOOLS_INC))
+ endif
+ $(eval $(target)_DEFS      += $(foreach module,$(toupper $(qt_modules)), QT_$(module)_LIB) )
+

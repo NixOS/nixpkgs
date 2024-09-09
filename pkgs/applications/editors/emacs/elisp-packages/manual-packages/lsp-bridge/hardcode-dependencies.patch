@@ -1,0 +1,25 @@
+diff --git a/lsp-bridge.el b/lsp-bridge.el
+index 278c27e..f0c67c2 100644
+--- a/lsp-bridge.el
++++ b/lsp-bridge.el
+@@ -340,19 +340,7 @@ Setting this to nil or 0 will turn off the indicator."
+   "Name of LSP-Bridge buffer."
+   :type 'string)
+ 
+-(defcustom lsp-bridge-python-command (cond ((memq system-type '(cygwin windows-nt ms-dos))
+-                                            (cond ((executable-find "pypy3.exe")
+-                                                   "pypy3.exe")
+-                                                  ((executable-find "python3.exe")
+-                                                   "python3.exe")
+-                                                  ((executable-find "python.exe")
+-                                                   "python.exe")))
+-                                           (t (cond ((executable-find "pypy3")
+-                                                     "pypy3")
+-                                                    ((executable-find "python3")
+-                                                     "python3")
+-                                                    ((executable-find "python")
+-                                                     "python"))))
++(defcustom lsp-bridge-python-command "@python@"
+   "The Python interpreter used to run lsp_bridge.py."
+   :type 'string)
+ 

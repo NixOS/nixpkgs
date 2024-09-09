@@ -1,0 +1,21 @@
+diff --git a/lib/discourse_js_processor.rb b/lib/discourse_js_processor.rb
+index 26d142fa4d..6040aba6f4 100644
+--- a/lib/discourse_js_processor.rb
++++ b/lib/discourse_js_processor.rb
+@@ -68,7 +68,7 @@ class DiscourseJsProcessor
+     TRANSPILER_PATH =
+       (
+         if Rails.env.production?
+-          "tmp/theme-transpiler.js"
++          "app/assets/javascripts/theme-transpiler.js"
+         else
+           "tmp/theme-transpiler/#{Process.pid}.js"
+         end
+@@ -87,6 +87,6 @@ class DiscourseJsProcessor
+         "node",
+         "app/assets/javascripts/theme-transpiler/build.js",
+         TRANSPILER_PATH,
+-      )
++      ) if !Rails.env.production? or !File.file?(TRANSPILER_PATH)
+       TRANSPILER_PATH
+     end

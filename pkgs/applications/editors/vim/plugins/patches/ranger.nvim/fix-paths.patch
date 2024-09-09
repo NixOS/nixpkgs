@@ -1,0 +1,22 @@
+diff --git a/lua/ranger-nvim.lua b/lua/ranger-nvim.lua
+index 3b18880..78eb9db 100644
+--- a/lua/ranger-nvim.lua
++++ b/lua/ranger-nvim.lua
+@@ -109,7 +109,7 @@ local function build_ranger_cmd(select_current_file)
+ 	end
+ 	local selectfile_flag = select_current_file and " --selectfile=" .. selected_file or ""
+ 	return string.format(
+-		"ranger --choosefiles=%s %s %s",
++		"@ranger@ --choosefiles=%s %s %s",
+ 		SELECTED_FILEPATH,
+ 		selectfile_flag,
+ 		create_ranger_cmd_flags(create_cmd_values(opts.keybinds))
+@@ -182,7 +182,7 @@ end
+ ---Opens ranger and open selected files on exit.
+ ---@param select_current_file boolean|nil open ranger and select the current file. Defaults to true.
+ function M.open(select_current_file)
+-	if vim.fn.executable("ranger") ~= 1 then
++	if vim.fn.executable("@ranger@") ~= 1 then
+ 		vim.api.nvim_err_write(
+ 			"ranger executable not found, please check that ranger is installed and is in your path\n"
+ 		)

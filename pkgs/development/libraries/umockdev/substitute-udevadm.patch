@@ -1,0 +1,41 @@
+From 09efbe8090f501c60975d5467fb587ed633d6a01 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Wed, 24 Jan 2024 14:29:28 +0200
+Subject: [PATCH] substitute udevadm
+
+---
+ src/umockdev-record.vala     | 2 +-
+ tests/test-umockdev-run.vala | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/umockdev-record.vala b/src/umockdev-record.vala
+index 2d49bc8..272f25e 100644
+--- a/src/umockdev-record.vala
++++ b/src/umockdev-record.vala
+@@ -223,7 +223,7 @@ record_device(string dev)
+     int exitcode;
+     try {
+         Process.spawn_sync(null,
+-                           {"udevadm", "info", "--query=all", "--path", dev},
++                           {"@udevadm@", "info", "--query=all", "--path", dev},
+                            null,
+                            SpawnFlags.SEARCH_PATH,
+                            null,
+diff --git a/tests/test-umockdev-run.vala b/tests/test-umockdev-run.vala
+index cd00a08..94616cb 100644
+--- a/tests/test-umockdev-run.vala
++++ b/tests/test-umockdev-run.vala
+@@ -199,8 +199,8 @@ A: size=1048576\n
+ 
+     // unfortunately the udevadm output between distros is not entirely constant
+     assert (get_program_out (
+-            "udevadm",
+-            umockdev_run_command + "-d " + umockdev_file + " -- udevadm info --query=all --name=/dev/loop23",
++            "@udevadm@",
++            umockdev_run_command + "-d " + umockdev_file + " -- @udevadm@ info --query=all --name=/dev/loop23",
+             out sout, out serr, out exit));
+ 
+     assert_cmpstr (serr, CompareOperator.EQ, "");
+-- 
+2.43.0
+

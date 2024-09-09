@@ -1,0 +1,41 @@
+Add support for 2-digit zlib version like "1.3".
+--- a/src/acinclude.m4
++++ b/src/acinclude.m4
+@@ -67,7 +67,7 @@ char* my_strdup (char *str)
+ 
+ int main (int argc, char *argv[])
+ {
+-  int major, minor, micro, zlib_major_version, zlib_minor_version, zlib_micro_version;
++  int major, minor, micro, zlib_major_version, zlib_minor_version, zlib_micro_version = 0;
+ 
+   char *zlibver, *tmp_version;
+ 
+@@ -85,7 +85,7 @@ int main (int argc, char *argv[])
+     printf("%s, bad version string for\n\tmin_zlib_version... ", "$min_zlib_version");
+     exit(1);
+   }
+-  if (sscanf(zlibver, "%d.%d.%d", &zlib_major_version, &zlib_minor_version, &zlib_micro_version) != 3) {
++  if (sscanf(zlibver, "%d.%d.%d", &zlib_major_version, &zlib_minor_version, &zlib_micro_version) != 3 && sscanf(zlibver, "%d.%d", &zlib_major_version, &zlib_minor_version) != 2) {
+     printf("%s, bad version string given\n", zlibver);
+     puts("\tby zlib, sometimes due to very old zlibs that didnt correctly");
+     printf("\tdefine their version. Please upgrade if you are running an\n\told zlib... ");
+--- a/src/configure
++++ b/src/configure
+@@ -3817,7 +3817,7 @@ char* my_strdup (char *str)
+ 
+ int main (int argc, char *argv[])
+ {
+-  int major, minor, micro, zlib_major_version, zlib_minor_version, zlib_micro_version;
++  int major, minor, micro, zlib_major_version, zlib_minor_version, zlib_micro_version = 0;
+ 
+   char *zlibver, *tmp_version;
+ 
+@@ -3835,7 +3835,7 @@ int main (int argc, char *argv[])
+     printf("%s, bad version string for\n\tmin_zlib_version... ", "$min_zlib_version");
+     exit(1);
+   }
+-  if (sscanf(zlibver, "%d.%d.%d", &zlib_major_version, &zlib_minor_version, &zlib_micro_version) != 3) {
++  if (sscanf(zlibver, "%d.%d.%d", &zlib_major_version, &zlib_minor_version, &zlib_micro_version) != 3 && sscanf(zlibver, "%d.%d", &zlib_major_version, &zlib_minor_version) != 2) {
+     printf("%s, bad version string given\n", zlibver);
+     puts("\tby zlib, sometimes due to very old zlibs that didnt correctly");
+     printf("\tdefine their version. Please upgrade if you are running an\n\told zlib... ");

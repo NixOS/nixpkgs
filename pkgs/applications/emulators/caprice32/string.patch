@@ -1,0 +1,12 @@
+diff --git a/src/configuration.h b/src/configuration.h
+index 34fd690..97fb0e5 100644
+--- a/src/configuration.h
++++ b/src/configuration.h
+@@ -2,6 +2,7 @@
+ #define CONFIGURATION_H
+ 
+ #include <map>
++#include <string>
+ 
+ namespace config
+ {

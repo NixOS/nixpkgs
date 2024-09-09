@@ -1,0 +1,25 @@
+Index: smpeg-0.4.5+cvs20030824/Makefile.am
+===================================================================
+--- smpeg-0.4.5+cvs20030824.orig/Makefile.am
++++ smpeg-0.4.5+cvs20030824/Makefile.am
+@@ -74,7 +74,7 @@
+ 
+ # Sources for gtv
+ gtv_SOURCES = gtv.c gtv.h
+-gtv_LDADD = @GTK_LIBS@ libsmpeg.la
++gtv_LDADD = @GTK_LIBS@ @X11_LIBS@ libsmpeg.la
+ 
+ # Sources for glmovie
+ glmovie_SOURCES = glmovie-tile.c glmovie.c glmovie.h
+Index: smpeg-0.4.5+cvs20030824/configure.in
+===================================================================
+--- smpeg-0.4.5+cvs20030824.orig/configure.in
++++ smpeg-0.4.5+cvs20030824/configure.in
+@@ -215,6 +215,7 @@
+         CFLAGS="$CFLAGS $GTK_CFLAGS"
+     fi
+     AC_SUBST(GTK_LIBS)
++    PKG_CHECK_MODULES([X11], [x11])
+ fi
+ AM_CONDITIONAL(HAVE_GTK, test x$have_gtk = xyes)
+ 

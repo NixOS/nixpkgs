@@ -1,0 +1,116 @@
+# `nixpkgs-vet` is a tool to vet Nixpkgs: its architecture, package structure, and more.
+# Among other checks, it makes sure that `pkgs/by-name` (see `../../pkgs/by-name/README.md`) follows the validity rules outlined in [RFC 140](https://github.com/NixOS/rfcs/pull/140).
+# When you make changes to this workflow, please also update `ci/nixpkgs-vet.sh` to reflect the impact of your work to the CI.
+# See https://github.com/NixOS/nixpkgs-vet for details on the tool and its checks.
+name: Vet nixpkgs
+
+on:
+  # Using pull_request_target instead of pull_request avoids having to approve first time contributors.
+  pull_request_target:
+    # This workflow depends on the base branch of the PR, but changing the base branch is not included in the default trigger events, which would be `opened`, `synchronize` or `reopened`.
+    # Instead it causes an `edited` event, so we need to add it explicitly here.
+    # While `edited` is also triggered when the PR title/body is changed, this PR action is fairly quick, and PRs don't get edited **that** often, so it shouldn't be a problem.
+    # There is a feature request for adding a `base_changed` event: https://github.com/orgs/community/discussions/35058
+    types: [opened, synchronize, reopened, edited]
+
+permissions: {}
+
+# We don't use a concurrency group here, because the action is triggered quite often (due to the PR edit trigger), and contributors would get notified on any canceled run.
+# There is a feature request for suppressing notifications on concurrency-canceled runs: https://github.com/orgs/community/discussions/13015
+
+jobs:
+  check:
+    name: nixpkgs-vet
+    # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases.
+    runs-on: ubuntu-latest
+    # This should take 1 minute at most, but let's be generous. The default of 6 hours is definitely too long.
+    timeout-minutes: 10
+    steps:
+      # This step has to be in this file, because it's needed to determine which revision of the repository to fetch, and we can only use other files from the repository once it's fetched.
+      - name: Resolving the merge commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # This checks for mergeability of a pull request as recommended in
+          # https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests
+
+          # Retry the API query this many times
+          retryCount=5
+          # Start with 5 seconds, but double every retry
+          retryInterval=5
+          while true; do
+            echo "Checking whether the pull request can be merged"
+            prInfo=$(gh api \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/"$GITHUB_REPOSITORY"/pulls/${{ github.event.pull_request.number }})
+            mergeable=$(jq -r .mergeable <<< "$prInfo")
+            mergedSha=$(jq -r .merge_commit_sha <<< "$prInfo")
+
+            if [[ "$mergeable" == "null" ]]; then
+              if (( retryCount == 0 )); then
+                echo "Not retrying anymore. It's likely that GitHub is having internal issues: check https://www.githubstatus.com/"
+                exit 1
+              else
+                (( retryCount -= 1 )) || true
+
+                # null indicates that GitHub is still computing whether it's mergeable
+                # Wait a couple seconds before trying again
+                echo "GitHub is still computing whether this PR can be merged, waiting $retryInterval seconds before trying again ($retryCount retries left)"
+                sleep "$retryInterval"
+
+                (( retryInterval *= 2 )) || true
+              fi
+            else
+              break
+            fi
+          done
+
+          if [[ "$mergeable" == "true" ]]; then
+            echo "The PR can be merged, checking the merge commit $mergedSha"
+            echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
+          else
+            echo "The PR cannot be merged, it has a merge conflict, skipping the rest.."
+          fi
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        if: env.mergedSha
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: ${{ env.mergedSha }}
+          # Fetches the merge commit and its parents
+          fetch-depth: 2
+      - name: Checking out base branch
+        if: env.mergedSha
+        run: |
+          base=$(mktemp -d)
+          git worktree add "$base" "$(git rev-parse HEAD^1)"
+          echo "base=$base" >> "$GITHUB_ENV"
+      - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
+        if: env.mergedSha
+      - name: Fetching the pinned tool
+        if: env.mergedSha
+        # Update the pinned version using ci/nixpkgs-vet/update-pinned-tool.sh
+        run: |
+          # The pinned version of the tooling to use.
+          toolVersion=$(<ci/nixpkgs-vet/pinned-version.txt)
+
+          # Fetch the x86_64-linux-specific release artifact containing the gzipped NAR of the pre-built tool.
+          toolPath=$(curl -sSfL https://github.com/NixOS/nixpkgs-vet/releases/download/"$toolVersion"/x86_64-linux.nar.gz \
+            | gzip -cd | nix-store --import | tail -1)
+
+          # Adds a result symlink as a GC root.
+          nix-store --realise "$toolPath" --add-root result
+      - name: Running nixpkgs-vet
+        if: env.mergedSha
+        env:
+          # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
+          CLICOLOR_FORCE: 1
+        run: |
+          if result/bin/nixpkgs-vet --base "$base" .; then
+            exit 0
+          else
+            exitCode=$?
+            echo "To run locally: ./ci/nixpkgs-vet.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
+            echo "If you're having trouble, ping @NixOS/nixpkgs-vet"
+            exit "$exitCode"
+          fi

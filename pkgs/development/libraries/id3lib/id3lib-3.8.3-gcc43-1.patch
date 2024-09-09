@@ -1,0 +1,104 @@
+http://www.linuxfromscratch.org/patches/downloads/id3lib/id3lib-3.8.3-gcc43-1.patch 
+
+Submitted By: Ken Moffat <ken at linuxfromscratch dot org>
+Date: 2008-11-21
+Initial Package Version: 3.8.3
+Upstream Status: unknown
+Origin: fedora
+Description: Allows it to compile with gcc-4.3.
+
+diff -up id3lib-3.8.3/include/id3/id3lib_strings.h~ id3lib-3.8.3/include/id3/id3lib_strings.h
+--- id3lib-3.8.3/include/id3/id3lib_strings.h~	2003-03-02 02:23:00.000000000 +0200
++++ id3lib-3.8.3/include/id3/id3lib_strings.h	2008-01-04 01:30:52.000000000 +0200
+@@ -29,6 +29,7 @@
+ #ifndef _ID3LIB_STRINGS_H_
+ #define _ID3LIB_STRINGS_H_
+ 
++#include <cstring>
+ #include <string>
+ 
+ #if (defined(__GNUC__) && (__GNUC__ >= 3) || (defined(_MSC_VER) && _MSC_VER > 1000))
+diff -up id3lib-3.8.3/configure.in~ id3lib-3.8.3/configure.in
+--- id3lib-3.8.3/configure.in~	2008-01-04 11:39:01.000000000 +0100
++++ id3lib-3.8.3/configure.in	2008-01-04 11:39:01.000000000 +0100
+@@ -227,7 +227,6 @@ AC_CHECK_HEADERS(fstream iostream iomani
+ )
+ AC_CHECK_HEADERS(               \
+   string                        \
+-  iomanip.h                     \
+   ,,AC_MSG_ERROR([Missing a vital header file for id3lib])
+ )
+ 
+diff -up id3lib-3.8.3/configure~ id3lib-3.8.3/configure
+--- id3lib-3.8.3/configure~	2008-01-04 11:39:10.000000000 +0100
++++ id3lib-3.8.3/configure	2008-01-04 11:39:10.000000000 +0100
+@@ -22976,7 +22976,6 @@ done
+ 
+ for ac_header in \
+   string                        \
+-  iomanip.h                     \
+ 
+ do
+ as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+diff -up id3lib-3.8.3/include/id3/writers.h~ id3lib-3.8.3/include/id3/writers.h
+--- id3lib-3.8.3/include/id3/writers.h~	2008-01-04 11:59:39.000000000 +0100
++++ id3lib-3.8.3/include/id3/writers.h	2008-01-04 11:59:39.000000000 +0100
+@@ -28,9 +28,9 @@
+ #ifndef _ID3LIB_WRITERS_H_
+ #define _ID3LIB_WRITERS_H_
+ 
++#include <cstring>
+ #include "id3/writer.h"
+ #include "id3/id3lib_streams.h"
+-//#include <string.h>
+ 
+ class ID3_CPP_EXPORT ID3_OStreamWriter : public ID3_Writer
+ {
+diff -up id3lib-3.8.3/examples/demo_info.cpp~ id3lib-3.8.3/examples/demo_info.cpp
+--- id3lib-3.8.3/examples/demo_info.cpp~	2008-01-04 12:00:56.000000000 +0100
++++ id3lib-3.8.3/examples/demo_info.cpp	2008-01-04 12:00:56.000000000 +0100
+@@ -309,7 +309,7 @@ void PrintInformation(const ID3_Tag &myT
+ 
+ #define DEBUG
+ 
+-int main( unsigned int argc, char * const argv[])
++int main(int argc, char * const argv[])
+ {
+   ID3D_INIT_DOUT();
+ 
+diff -up id3lib-3.8.3/examples/demo_copy.cpp~ id3lib-3.8.3/examples/demo_copy.cpp
+--- id3lib-3.8.3/examples/demo_copy.cpp~	2008-01-04 12:01:26.000000000 +0100
++++ id3lib-3.8.3/examples/demo_copy.cpp	2008-01-04 12:01:26.000000000 +0100
+@@ -81,7 +81,7 @@ void DisplayTags(ostream &os, luint nTag
+   }
+ }
+ 
+-int main( unsigned int argc, char * const argv[])
++int main(int argc, char * const argv[])
+ {
+   int ulFlag = ID3TT_ID3;
+   ID3D_INIT_DOUT();
+diff -up id3lib-3.8.3/examples/demo_convert.cpp~ id3lib-3.8.3/examples/demo_convert.cpp
+--- id3lib-3.8.3/examples/demo_convert.cpp~	2008-01-04 12:01:20.000000000 +0100
++++ id3lib-3.8.3/examples/demo_convert.cpp	2008-01-04 12:01:20.000000000 +0100
+@@ -84,7 +84,7 @@ void DisplayTags(ostream &os, luint nTag
+   }
+ }
+ 
+-int main( unsigned int argc, char * const argv[])
++int main(int argc, char * const argv[])
+ {
+   flags_t ulFlag = ID3TT_ALL;
+   gengetopt_args_info args;
+diff -up id3lib-3.8.3/examples/demo_tag.cpp~ id3lib-3.8.3/examples/demo_tag.cpp
+--- id3lib-3.8.3/examples/demo_tag.cpp~	2008-01-04 12:01:41.000000000 +0100
++++ id3lib-3.8.3/examples/demo_tag.cpp	2008-01-04 12:01:41.000000000 +0100
+@@ -46,7 +46,7 @@ void DisplayTags(ostream &os, luint nTag
+     os << "v2";
+ }
+ 
+-int main( unsigned int argc, char * const argv[])
++int main(int argc, char * const argv[])
+ {
+   int ulFlag = ID3TT_ID3;
+   ID3D_INIT_DOUT();

@@ -1,0 +1,5 @@
+#! /bin/sh
+
+echo "let pkgs = import <nixpkgs$2> {}; x = pkgs.callPackage $1 { $3 }; in ${4:-x}" |
+nix-instantiate --show-trace - |
+xargs nix-store -r -K

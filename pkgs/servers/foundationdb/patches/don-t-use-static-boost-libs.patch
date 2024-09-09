@@ -1,0 +1,27 @@
+From 1a217164f8086137ce175da09329745d5ea63027 Mon Sep 17 00:00:00 2001
+From: Jente Hidskes Ankarberg <jente@griffin.sh>
+Date: Tue, 7 Feb 2023 17:17:16 +0100
+Subject: Don't use static Boost libs
+
+We cannot override this in our CMake flags, hence we have to patch it in the source.
+
+---
+ cmake/CompileBoost.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git cmake/CompileBoost.cmake cmake/CompileBoost.cmake
+index 3bc47c776..62b448421 100644
+--- a/cmake/CompileBoost.cmake
++++ b/cmake/CompileBoost.cmake
+@@ -85,7 +85,7 @@ if(USE_SANITIZER)
+ endif()
+ 
+ # since boost 1.72 boost installs cmake configs. We will enforce config mode
+-set(Boost_USE_STATIC_LIBS ON)
++set(Boost_USE_STATIC_LIBS OFF)
+ 
+ # Clang and Gcc will have different name mangling to std::call_once, etc.
+ if (UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "Clang$")
+-- 
+2.37.1 (Apple Git-137.1)
+
