@@ -5,9 +5,10 @@
   pnpm,
   nodejs,
   stdenv,
+  meta,
 }:
 stdenv.mkDerivation {
-  inherit version src;
+  inherit version src meta;
   pname = "${pname}-webui";
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
