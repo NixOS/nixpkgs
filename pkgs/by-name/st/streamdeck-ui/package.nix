@@ -11,35 +11,28 @@
   xvfb-run,
 }:
 
-let
-  # There are breaking changes between 6 and 7
-  importlib-metadata_6 = python3Packages.importlib-metadata.overrideAttrs (_: rec {
-    version = "6.9.0";
-    src = fetchPypi {
-      pname = "importlib_metadata";
-      inherit version;
-      hash = "sha256-6Ky1I8M1qRgiZ04Um0bAOZ7E0yjE0fbknCc9pf8CAbk=";
-    };
-  });
-in
-
 python3Packages.buildPythonApplication rec {
   pname = "streamdeck-ui";
-  version = "4.1.2";
+  version = "4.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
     rev = "v${version}";
-    hash = "sha256-CSsFPGnKVQUCND6YOA9kfO41KS85C57YL9LcrWlQRKo=";
+    hash = "sha256-KpsW3EycYRYU5YOg7NNGv5eeZbS9MAikj0Ke2ybPzAU=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [
+    "importlib-metadata"
+    "pillow"
+  ];
 
-  pythonRelaxDeps = [ "pillow" ];
+  build-system = [
+    python3Packages.poetry-core
+  ];
 
   nativeBuildInputs = [
-    python3Packages.poetry-core
     copyDesktopItems
     qt6.wrapQtAppsHook
     wrapGAppsHook3
@@ -56,7 +49,7 @@ python3Packages.buildPythonApplication rec {
       pyside6
       streamdeck
       xlib
-      importlib-metadata_6
+      importlib-metadata
       evdev
     ]
     ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ];
@@ -128,6 +121,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
+    changelog = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/releases/tag/v${version}";
     description = "Linux compatible UI for the Elgato Stream Deck";
     downloadPage = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/";
     homepage = "https://streamdeck-linux-gui.github.io/streamdeck-linux-gui/";
