@@ -1,34 +1,22 @@
-{ stdenvNoCC
+{ stdenv
 , lib
 , fetchFromGitHub
+, meson
+, ninja
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "eglexternalplatform";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "Nvidia";
     repo = "eglexternalplatform";
-    rev = "7c8f8e2218e46b1a4aa9538520919747f1184d86";
-    sha256 = "0lr5s2xa1zn220ghmbsiwgmx77l156wk54c7hybia0xpr9yr2nhb";
+    rev = version;
+    hash = "sha256-t0dka5aUv5hB4G8PbSGiIY74XIFAsmo5a7dfWb2QCLM=";
   };
 
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/include/
-    cp interface/* $out/include/
-
-    substituteInPlace eglexternalplatform.pc \
-      --replace "/usr/include/EGL" "$out/include"
-    install -Dm644 {.,$out/share/pkgconfig}/eglexternalplatform.pc
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ meson ninja ];
 
   meta = with lib; {
     description = "EGL External Platform interface";
