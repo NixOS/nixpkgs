@@ -6,7 +6,6 @@
   tqdm,
   libusb1,
   setuptools,
-  setuptools-git-versioning,
   pythonOlder,
 }:
 
@@ -25,16 +24,19 @@ buildPythonPackage rec {
     hash = "sha256-Kyc3f8beTg0W1+U7SvZuNPN1pdsco9rBUfoEtR7AI44=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
   dependencies = [
     pyusb
     tqdm
     libusb1
   ];
 
-  build-system = [
-    setuptools
-    setuptools-git-versioning
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [
     "fwup"
