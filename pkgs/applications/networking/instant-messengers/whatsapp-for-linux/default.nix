@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "whatsapp-for-linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ bartuka ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 })
