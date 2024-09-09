@@ -5298,6 +5298,10 @@ self: super: with self; {
 
   gpt-2-simple = callPackage ../development/python-modules/gpt-2-simple { };
 
+  gpt4all = callPackage ../development/python-modules/gpt4all {
+    basepkg = if pkgs.config.cudaSupport then pkgs.gpt4all-cuda else pkgs.gpt4all;
+  };
+
   gptcache = callPackage ../development/python-modules/gptcache { };
 
   gql = callPackage ../development/python-modules/gql { };
