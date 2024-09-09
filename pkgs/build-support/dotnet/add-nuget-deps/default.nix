@@ -79,7 +79,12 @@ attrs
 
         in
         writeShellScript "${finalPackage.name}-fetch-deps" ''
-          NIX_BUILD_SHELL="${runtimeShell}" exec ${nix}/bin/nix-shell \
+          set -eu
+          export TMPDIR
+          TMPDIR=$(mktemp -d -t fetch-deps-${finalPackage.name}.XXXXXX)
+          trap 'chmod -R +w "$TMPDIR" && rm -fr "$TMPDIR"' EXIT
+          cd "$TMPDIR"
+          NIX_BUILD_SHELL="${runtimeShell}" {nix}/bin/nix-shell \
             --pure --run 'source "${innerScript}"' "${drv}"
         '';
     };
