@@ -2153,6 +2153,10 @@ with pkgs;
 
   delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta { };
 
+  debase = callPackage ../by-name/de/debase/package.nix {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
+
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
@@ -26918,7 +26922,6 @@ with pkgs;
   qemu_xen_4_19 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_19-slim; });
   qemu_xen_4_18 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_18-slim; });
   qemu_xen_4_17 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_17-slim; });
-  qemu_xen_4_16 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_16-slim; });
   qemu_xen = qemu_xen_4_19;
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
