@@ -1,0 +1,19 @@
+mutation CreatePR(
+  $repositoryId: String!
+  $title: String!,
+  $body: String!,
+  $branch: String!){
+  createPullRequest(input:{
+      repositoryId: $repositoryId,
+      baseRefName: "master",
+      headRefName: $branch,
+      title: $title,
+      body: $body
+    }) {
+    clientMutationId
+    pullRequest {
+      id
+      url
+    }
+  }
+}
