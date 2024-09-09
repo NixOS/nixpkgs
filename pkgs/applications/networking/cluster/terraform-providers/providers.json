@@ -931,11 +931,11 @@
     "vendorHash": "sha256-vsK74qZ20VOID5sg7kHjxBXiu1dkyJ961zFf0+QkqH0="
   },
   "opsgenie": {
-    "hash": "sha256-ZssKhfwFrzCjvlebEmKAHWBInN5daVqxbmVFoA92dv8=",
+    "hash": "sha256-+msy9kPAryR0Ll5jKOd47DMjeMxEdSIfKZZKVHohQGY=",
     "homepage": "https://registry.terraform.io/providers/opsgenie/opsgenie",
     "owner": "opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.35",
+    "rev": "v0.6.37",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
