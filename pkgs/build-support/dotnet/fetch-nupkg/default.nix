@@ -43,8 +43,7 @@ let
     unpackPhase = ''
       runHook preUnpack
 
-      unzip -nqd source $src
-      chmod -R +rw source
+      unpackNupkg "$src" source
       cd source
 
       runHook postUnpack
