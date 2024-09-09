@@ -32,7 +32,7 @@ in
       default = { };
       example = {
         "application/pdf" = "firefox.desktop";
-        "text/xml" = [
+        "text/*" = [
           "nvim.desktop"
           "codium.desktop"
         ];
@@ -40,6 +40,7 @@ in
       description = ''
         Adds associations between mimetypes and applications. See the
         [specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.
+        Globs in all variations are supported.
       '';
     };
 
@@ -48,7 +49,7 @@ in
       default = { };
       example = {
         "application/pdf" = "firefox.desktop";
-        "image/png" = [
+        "image/*" = [
           "sxiv.desktop"
           "gimp.desktop"
         ];
@@ -56,6 +57,7 @@ in
       description = ''
         Sets the default applications for given mimetypes. See the
         [specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#default) for more information.
+        Globs in all variations are supported.
       '';
     };
 
@@ -63,7 +65,7 @@ in
       type = associationOptions;
       default = { };
       example = {
-        "audio/mp3" = [
+        "audio/*" = [
           "mpv.desktop"
           "umpv.desktop"
         ];
@@ -72,20 +74,54 @@ in
       description = ''
         Removes associations between mimetypes and applications. See the
         [specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.
+        Globs in all variations are supported.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
     environment.etc."xdg/mimeapps.list" =
+      let
+        generateMimeScript =
+          title: attrs:
+          lib.optionalString (attrs != { }) ''
+            echo "[${title}]" >> $out
+          ''
+          + (lib.concatStringsSep "\n" (
+            lib.attrValues (
+              lib.mapAttrs (
+                k: v: ''generateMimeItem "${k}" "${if lib.isList v then lib.concatStringsSep ";" v else v}"''
+              ) attrs
+            )
+          ));
+      in
       lib.mkIf
         (cfg.addedAssociations != { } || cfg.defaultApplications != { } || cfg.removedAssociations != { })
         {
-          text = lib.generators.toINI { } {
-            "Added Associations" = cfg.addedAssociations;
-            "Default Applications" = cfg.defaultApplications;
-            "Removed Associations" = cfg.removedAssociations;
-          };
+          source = pkgs.runCommandLocal "mimeapps.list" { } ''
+            function generateMimeItem() {
+              mime=$1
+              app=$2
+              if [[ $mime == *"*"* ]]; then
+                while read line; do
+                  if [[ $line == $mime ]]; then
+                    echo "$line=$app" >> $out
+                  fi
+                done < ${pkgs.shared-mime-info}/share/mime/types
+              else
+                echo "$mime=$app" >> $out
+              fi
+            }
+            ${lib.concatStringsSep "\n" (
+              lib.attrValues (
+                lib.mapAttrs generateMimeScript {
+                  "Added Associations" = cfg.addedAssociations;
+                  "Default Applications" = cfg.defaultApplications;
+                  "Removed Associations" = cfg.removedAssociations;
+                }
+              )
+            )}
+          '';
         };
 
     environment.pathsToLink = [ "/share/mime" ];
