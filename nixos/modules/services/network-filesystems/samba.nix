@@ -29,7 +29,7 @@ in
     '')
     (lib.mkRemovedOptionModule [ "services" "samba" "extraConfig" ] "Use services.samba.settings instead.")
     (lib.mkRenamedOptionModule [ "services" "samba" "invalidUsers" ] [ "services" "samba" "settings" "global" "invalid users" ])
-    (lib.mkRenamedOptionModule [ "services" "samba" "securityType" ] [ "services" "samba" "settings" "global" "security type" ])
+    (lib.mkRenamedOptionModule [ "services" "samba" "securityType" ] [ "services" "samba" "settings" "global" "security" ])
     (lib.mkRenamedOptionModule [ "services" "samba" "shares" ] [ "services" "samba" "settings" ])
 
     (lib.mkRenamedOptionModule [ "services" "samba" "enableWinbindd" ] [ "services" "samba" "winbindd" "enable" ])
@@ -106,13 +106,39 @@ in
       '';
 
       settings = lib.mkOption {
-        type = lib.types.submodule { freeformType = settingsFormat.type; };
-        default = {};
+        type = lib.types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            global.security = lib.mkOption {
+              type = lib.types.enum [ "auto" "user" "domain" "ads" ];
+              default = "user";
+              description = "Samba security type.";
+            };
+            global."invalid users" = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ "root" ];
+              description = "List of users who are denied to login via Samba.";
+              apply = x: lib.concatStringsSep " " x;
+            };
+            global."passwd program" = lib.mkOption {
+              type = lib.types.str;
+              default = "/run/wrappers/bin/passwd %u";
+              description = "Path to a program that can be used to set UNIX user passwords.";
+            };
+          };
+        };
+        default = {
+          "global" = {
+            "security" = "user";
+            "passwd program" = "/run/wrappers/bin/passwd %u";
+            "invalid users" = [ "root" ];
+          };
+        };
         example = {
           "global" = {
             "security" = "user";
             "passwd program" = "/run/wrappers/bin/passwd %u";
-            "invalid users" = "root";
+            "invalid users" = [ "root" ];
           };
           "public" = {
             "path" = "/srv/public";

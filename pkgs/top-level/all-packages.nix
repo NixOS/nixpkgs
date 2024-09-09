@@ -1623,8 +1623,6 @@ with pkgs;
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku akkuPackages;
 
-  albert = qt6Packages.callPackage ../applications/misc/albert { };
-
   alice-lg = callPackage ../servers/alice-lg{ };
 
   alice-tools = callPackage ../tools/games/alice-tools {
@@ -2160,10 +2158,6 @@ with pkgs;
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
-
-  gex = callPackage ../applications/version-management/gex {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   gfold = callPackage ../applications/version-management/gfold {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -3654,6 +3648,10 @@ with pkgs;
   gammaray = qt6Packages.callPackage ../development/tools/gammaray { };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
+
+  gancioPlugins = recurseIntoAttrs (
+    callPackage ../by-name/ga/gancio/plugins.nix { inherit (gancio) nodejs; }
+  );
 
   gem = callPackage ../applications/audio/pd-plugins/gem { };
 
@@ -5343,7 +5341,7 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };  };
 
   hyprland = callPackage ../by-name/hy/hyprland/package.nix {
-    libliftoff = libliftoff_0_4;
+    stdenv = gcc14Stdenv;
   };
 
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
@@ -13074,7 +13072,7 @@ with pkgs;
     extraFonts = true;
   };
 
-  texmaker = libsForQt5.callPackage ../applications/editors/texmaker { };
+  texmaker = qt6Packages.callPackage ../applications/editors/texmaker { };
 
   texstudio = qt6Packages.callPackage ../applications/editors/texstudio { };
 
@@ -17032,8 +17030,6 @@ with pkgs;
 
   eltclsh = callPackage ../development/tools/eltclsh { };
 
-  waagent = callPackage ../applications/networking/cluster/waagent { };
-
   wasm = ocamlPackages.wasm;
 
   wasm3 = callPackage ../development/interpreters/wasm3 { };
@@ -19122,7 +19118,9 @@ with pkgs;
   valgrind = callPackage ../development/tools/analysis/valgrind {
     inherit (buildPackages.darwin) xnu bootstrap_cmds;
   };
-  valgrind-light = res.valgrind.override { gdb = null; };
+  valgrind-light = (res.valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
+    meta.description = "${oldAttrs.meta.description} (without GDB)";
+  });
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
 
@@ -30164,23 +30162,6 @@ with pkgs;
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
-  freenet = callPackage ../applications/networking/p2p/freenet {
-    gradle = gradle_7;
-    jdk = jdk17_headless;
-    # Reduce closure size
-    jre = pkgs.jre17_minimal.override {
-      modules = [
-        "java.base"
-        "java.logging"
-        "java.naming"
-        "java.sql"
-        "java.desktop"
-        "java.management"
-      ];
-      jdk = jdk17_headless;
-    };
   };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };

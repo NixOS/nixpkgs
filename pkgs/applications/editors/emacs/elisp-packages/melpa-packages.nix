@@ -451,6 +451,13 @@ let
 
         orgit-forge = buildWithGit super.orgit-forge;
 
+        ormolu = super.ormolu.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace ormolu.el \
+              --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
+          '';
+        });
+
         ox-rss = buildWithGit super.ox-rss;
 
         python-isort = super.python-isort.overrideAttrs (attrs: {

@@ -1,4 +1,4 @@
-{ stdenv, lib, akku, curl, git, substituteAll }:
+{ stdenv, lib, akku, curl, git }:
 let
   joinOverrides =
     overrides: pkg: old:
@@ -39,11 +39,14 @@ in
   };
 
   akku = joinOverrides [
+    # uses chez
     (addToBuildInputs [ curl git ])
     (pkg: old: {
-      # hardcode-libcurl
-      patches = akku.patches;
+      # bump akku to 1.1.0-unstable-2024-03-03
+      src = akku.src;
     })
+    # not a tar archive
+    (pkg: old: removeAttrs old [ "unpackPhase" ])
   ];
 
   # circular dependency on wak-trc-testing !?

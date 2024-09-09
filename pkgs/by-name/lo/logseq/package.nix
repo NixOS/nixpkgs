@@ -92,7 +92,7 @@ in {
     changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = lib.licenses.agpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ cheeseecake ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "logseq";
   };
