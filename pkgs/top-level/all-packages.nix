@@ -4838,9 +4838,7 @@ with pkgs;
 
   eschalot = callPackage ../tools/security/eschalot { };
 
-  espanso = callPackage ../applications/office/espanso {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation Carbon QTKit AVKit WebKit System;
-  };
+  espanso = callPackage ../applications/office/espanso { };
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = true;
