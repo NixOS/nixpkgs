@@ -59,19 +59,12 @@ in
             description = "The URL path under which the server is reachable.";
           };
           server = {
-            host = mkOption {
-              type = types.str;
-              default = "localhost";
-              example = "::";
+            socket = mkOption {
+              type = types.path;
+              readOnly = true;
+              default = "/run/gancio/socket";
               description = ''
-                The address (IPv4, IPv6 or DNS) for the gancio server to listen on.
-              '';
-            };
-            port = mkOption {
-              type = types.port;
-              default = 13120;
-              description = ''
-                Port number of the gancio server to listen on.
+                The unix socket for the gancio server to listen on.
               '';
             };
           };
@@ -231,6 +224,10 @@ in
 
         serviceConfig = {
           ExecStart = "${getExe cfg.package} start ${configFile}";
+          # set umask so that nginx can write to the server socket
+          # FIXME: upstream socket permission configuration in Nuxt
+          UMask = "0002";
+          RuntimeDirectory = "gancio";
           StateDirectory = "gancio";
           WorkingDirectory = "/var/lib/gancio";
           LogsDirectory = "gancio";
@@ -274,12 +271,14 @@ in
             };
             "@proxy" = {
               proxyWebsockets = true;
-              proxyPass = "http://${cfg.settings.server.host}:${toString cfg.settings.server.port}";
+              proxyPass = "http://unix:${cfg.settings.server.socket}";
               recommendedProxySettings = true;
             };
           };
         }
       ];
     };
+    # for nginx to access gancio socket
+    users.users."${config.services.nginx.user}".extraGroups = [ config.users.users.${cfg.user}.group ];
   };
 }
