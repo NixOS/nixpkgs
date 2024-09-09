@@ -34,10 +34,6 @@ buildDotnetModule {
   pname = "sonarr";
   inherit version src;
 
-  patches = [
-    ./nuget-config.patch
-  ];
-
   strictDeps = true;
   nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps fixup-yarn-lock ];
 
