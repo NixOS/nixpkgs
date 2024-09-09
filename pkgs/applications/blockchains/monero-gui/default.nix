@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
       libusb1
       protobuf_21
       python3
+    ]
+    ++ lib.optionals (trezorSupport && stdenv.isLinux) [
       udev
     ];
 

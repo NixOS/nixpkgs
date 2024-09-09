@@ -92,6 +92,8 @@ stdenv.mkDerivation rec {
       hidapi
       libusb1
       protobuf_21
+    ]
+    ++ lib.optionals (trezorSupport && stdenv.isLinux) [
       udev
     ];
 
