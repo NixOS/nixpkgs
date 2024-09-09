@@ -56,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
     homepage = "https://gitlab.freedesktop.org/serebit/waycheck";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ julienmalka ];
+    maintainers = with lib.maintainers; [
+      julienmalka
+      pandapip1
+    ];
     mainProgram = "waycheck";
     platforms = lib.platforms.linux;
   };
