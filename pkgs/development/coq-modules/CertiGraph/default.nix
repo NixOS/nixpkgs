@@ -19,7 +19,7 @@ mkCoqDerivation {
     ] null;
   release."live" = {
     rev = "a2db4cf823730a104ddbde7f170627a47fc2f1b7";
-    sha256 = "sha256-Bg1f8RHwXhaX0Fu1hM++MMGwfUE27pRZEKX2Zs6UPvI=";
+    sha256 = "sha256-653Prxa1iKV/feHRLU0qrbAk00IUOZ8c16jZ5Z+Xkq8=";
   };
 
   propagatedBuildInputs = [ VST ];
