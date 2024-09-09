@@ -1,0 +1,2 @@
+gupnp{_1_6}: fix cross
+Add alsa-plugins path to ALSA_PLUGIN_DIR
