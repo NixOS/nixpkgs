@@ -5543,11 +5543,6 @@ with pkgs;
 
   loccount = callPackage ../development/tools/misc/loccount { };
 
-  logseq = callPackage ../by-name/lo/logseq/package.nix {
-    # electron version from: https://github.com/logseq/logseq/blob/0.10.9/package.json#L116
-    electron = electron_27;
-  };
-
   long-shebang = callPackage ../misc/long-shebang { };
 
   lssecret = callPackage ../misc/lssecret {};
@@ -20680,8 +20675,6 @@ with pkgs;
 
   hound = callPackage ../development/tools/misc/hound { };
 
-  hpp-fcl = callPackage ../development/libraries/hpp-fcl { };
-
   hpx = callPackage ../development/libraries/hpx {
     boost = boost179;
     asio = asio.override { boost = boost179; };
@@ -34927,7 +34920,7 @@ with pkgs;
   lndmanage = callPackage ../applications/blockchains/lndmanage { };
 
   monero-cli = callPackage ../applications/blockchains/monero-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit;
   };
 
   haven-cli = callPackage ../applications/blockchains/haven-cli {

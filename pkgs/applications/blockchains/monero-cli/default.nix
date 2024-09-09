@@ -1,9 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch2, cmake, ninja, pkg-config
-, boost, miniupnpc, openssl, unbound
-, zeromq, pcsclite, readline, libsodium, hidapi
-, randomx, rapidjson
-, CoreData, IOKit, PCSC
-, trezorSupport ? true, libusb1, protobuf, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  boost,
+  libsodium,
+  miniupnpc,
+  openssl,
+  python3,
+  randomx,
+  rapidjson,
+  readline,
+  unbound,
+  zeromq,
+
+  # darwin
+  CoreData,
+  IOKit,
+
+  trezorSupport ? true,
+  hidapi,
+  libusb1,
+  protobuf_21,
+  udev,
 }:
 
 let
@@ -25,40 +46,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.3.3";
+  version = "0.18.3.4";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-1LkKIrud317BEE+713t5wiJV6FcDlJdj4ypXPR0bKTs=";
+    hash = "sha256-nDiFJjhsISYM8kTgJUaPYL44iyccnz5+Pd5beBh+lsM=";
   };
 
-  patches = [
-    # cmake: remove unused/extera cmake/FindMiniupnpc.cmake and only rely on external/miniupnpc
-    # https://github.com/monero-project/monero/pull/9366
-    (fetchpatch2 {
-      url = "https://github.com/monero-project/monero/commit/5074a543a49f7e23fb39b6462fd4c4c9741c3693.patch?full_index=1";
-      hash = "sha256-dS2hhEU6m2of0ULlsf+/tZMHUmq3vGGXJPGHvtnpQnY=";
-    })
-
-    # cmake: add different parameters to add_monero_library.
-    # https://github.com/monero-project/monero/pull/9367
-    (fetchpatch2 {
-      url = "https://github.com/monero-project/monero/commit/b91ead90254ac6d6daf908f689c38e372a44c615.patch?full_index=1";
-      hash = "sha256-DL2YqkvEONbeEDqLOAo2eSF5JF5gOzKcLKeNlUXBY1w=";
-    })
-
-    # external: update miniupnpc to 2.2.8
-    # https://github.com/monero-project/monero/pull/9367
-    (fetchpatch2 {
-      url = "https://github.com/monero-project/monero/commit/d81da086ec5088a04b3f7b34831e72910300e2f7.patch?full_index=1";
-      hash = "sha256-ZJGiDMk5DMmEXwzoUYPC+DIoebluFh54kMQtQU78ckI=";
-      excludes = [ "external/miniupnp" ];
-    })
-
-    ./use-system-libraries.patch
-  ];
+  patches = [ ./use-system-libraries.patch ];
 
   postPatch = ''
     # manually install submodules
@@ -69,31 +66,60 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [
-    boost miniupnpc openssl unbound
-    zeromq pcsclite readline
-    libsodium hidapi randomx rapidjson
-    protobuf
-  ] ++ lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
-    ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
+  buildInputs =
+    [
+      boost
+      libsodium
+      miniupnpc
+      openssl
+      randomx
+      rapidjson
+      readline
+      unbound
+      zeromq
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      IOKit
+      CoreData
+    ]
+    ++ lib.optionals trezorSupport [
+      python3
+      hidapi
+      libusb1
+      protobuf_21
+    ]
+    ++ lib.optionals (trezorSupport && stdenv.isLinux) [
+      udev
+    ];
 
-  cmakeFlags = [
-    "-DUSE_DEVICE_TREZOR=ON"
-    "-DBUILD_GUI_DEPS=ON"
-    "-DReadline_ROOT_DIR=${readline.dev}"
-    "-DRandomX_ROOT_DIR=${randomx}"
-  ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
+  cmakeFlags =
+    [
+      # skip submodules init
+      "-DMANUAL_SUBMODULES=ON"
+      # required by monero-gui
+      "-DBUILD_GUI_DEPS=ON"
+      "-DReadline_ROOT_DIR=${readline.dev}"
+    ]
+    ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
+    ++ lib.optional trezorSupport [
+      "-DUSE_DEVICE_TREZOR=ON"
+      # fix build on recent gcc versions
+      "-DCMAKE_CXX_FLAGS=-fpermissive"
+    ];
 
   outputs = [ "out" "source" ];
 
-  meta = with lib; {
+  meta = {
     description = "Private, secure, untraceable currency";
-    homepage    = "https://getmonero.org/";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ rnhmjoj ];
+    homepage = "https://getmonero.org/";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
     mainProgram = "monero-wallet-cli";
   };
 }
