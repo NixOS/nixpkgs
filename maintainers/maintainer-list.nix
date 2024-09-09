@@ -21404,6 +21404,13 @@
     githubId = 563054;
     name = "Thomas Tuegel";
   };
+  tudbut = {
+    name = "Daniella Hennig";
+    email = "nixpkgs@mail.tudbut.de";
+    matrix = "@tudbut:matrix.tudbut.de";
+    github = "tudbut";
+    githubId = 48156391;
+  };
   tu-maurice = {
     email = "valentin.gehrke+nixpkgs@zom.bi";
     github = "tu-maurice";
