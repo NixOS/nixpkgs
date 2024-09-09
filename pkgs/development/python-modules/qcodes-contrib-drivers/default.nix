@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes_contrib_drivers" ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+  disabledTests = lib.optionals (stdenv.isDarwin) [
     # At index 13 diff: 'sour6:volt 0.29000000000000004' != 'sour6:volt 0.29'
     "test_stability_diagram_external"
   ];
