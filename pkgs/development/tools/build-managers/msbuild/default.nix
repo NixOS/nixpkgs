@@ -49,10 +49,6 @@ mkPackage rec {
       "${glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
-    # this is not a valid name for the dotnet build hooks, but it's referenced
-    # by internal scripts, so we need both
-    ln -s NuGet.config nuget.config
-
     # not patchShebangs, there is /bin/bash in the body of the script as well
     substituteInPlace ./eng/cibuild_bootstrapped_msbuild.sh --replace /bin/bash ${stdenv.shell}
 

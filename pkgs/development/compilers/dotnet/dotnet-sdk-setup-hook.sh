@@ -28,8 +28,12 @@ _linkPackages() {
     )
 }
 
-createNugetDirs() {
-    nugetTemp=$PWD/.nuget-temp
+configureNuget() {
+    runHook preConfigureNuGet
+
+    local nugetTemp x
+
+    nugetTemp="$(mktemp -dt nuget.XXXXXX)"
     # trailing slash required here:
     # Microsoft.Managed.Core.targets(236,5): error : SourceRoot paths are required to end with a slash or backslash: '/build/.nuget-temp/packages'
     # also e.g. from avalonia:
@@ -39,20 +43,6 @@ createNugetDirs() {
     nugetSource=$nugetTemp/source
     mkdir -p "${NUGET_PACKAGES%/}" "${NUGET_FALLBACK_PACKAGES%/}" "$nugetSource"
 
-    dotnet new nugetconfig
-    if [[ -z ${keepNugetConfig-} ]]; then
-        dotnet nuget disable source nuget
-    fi
-
-    dotnet nuget add source "$nugetSource" -n _nix
-    nugetConfig=$PWD/nuget.config
-}
-
-configureNuget() {
-    runHook preConfigureNuGet
-
-    local x
-
     for x in "${!_nugetInputs[@]}"; do
         if [[ -d $x/share/nuget/packages ]]; then
             _linkPackages "$x/share/nuget/packages" "${NUGET_FALLBACK_PACKAGES%/}"
@@ -60,21 +50,6 @@ configureNuget() {
 
         if [[ -d $x/share/nuget/source ]]; then
             _linkPackages "$x/share/nuget/source" "$nugetSource"
-        fi
-    done
-
-    find -iname nuget.config -print0 | while IFS= read -rd "" config; do
-        if [[ -n ${keepNugetConfig-} ]]; then
-            # If we're keeping the existing configs, we'll add _nix everywhere,
-            # in case sources are cleared.
-            dotnet nuget add source "$nugetSource" -n _nix --configfile "$config"
-        else
-            # This will allow everything to fall through to our config in the
-            # build root. Deleting them causes some build failures.
-            @xmlstarlet@/bin/xmlstarlet \
-                ed --inplace \
-                -d '//configuration/*' \
-                "$config"
         fi
     done
 
@@ -100,10 +75,123 @@ configureNuget() {
        done
     fi
 
+    # create a root nuget.config if one doesn't exist
+    local rootConfig
+    rootConfig=$(find . -maxdepth 1 -iname nuget.config -print -quit)
+    if [[ -z $rootConfig ]]; then
+        dotnet new nugetconfig
+    fi
+
+    (
+        shopt -s nullglob
+
+        local -a xmlConfigArgs=() xmlRootConfigArgs=()
+
+        local -ra xmlSourceConfigArgs=(
+            -s /configuration -t elem -n packageSources
+            -d '/configuration/packageSources[position() != 1]'
+            -s /configuration/packageSources -t elem -n __new
+            -i /configuration/packageSources/__new -t attr -n key -v _nix
+            -i /configuration/packageSources/__new -t attr -n value -v "$nugetSource"
+            -r /configuration/packageSources/__new -v add)
+
+        if [[ -z ${keepNugetConfig-} ]]; then
+            xmlConfigArgs+=(-d '//configuration/*')
+            xmlRootConfigArgs+=("${xmlSourceConfigArgs[@]}")
+        else
+            if [[ -n ${mapNuGetDependencies-} ]]; then
+                xmlConfigArgs+=(
+                    -s /configuration -t elem -n __tmp
+                    # If there's no packageSourceMapping, we need to add * patterns for
+                    # all the sources, else they won't be used.
+                    -u \$prev -x ../packageSources/add
+                    -d '/configuration/__tmp/add/@*[name() != "key"]'
+                    -r /configuration/__tmp/add -v packageSource
+                    -s /configuration/__tmp/packageSource -t elem -n package
+                    -i \$prev -t attr -n pattern -v \*
+                    -r /configuration/__tmp -v packageSourceMapping
+                    -d '/configuration/packageSourceMapping[position() != 1]'
+                    "${xmlSourceConfigArgs[@]}"
+                    # add package source mappings from all existing patterns to _nix
+                    # this ensures _nix is always considered
+                    -s /configuration/packageSourceMapping -t elem -n packageSource
+                    -u \$prev -x ../packageSource/package
+                    -i \$prev -t attr -n key -v _nix)
+
+                cd "$nugetSource"
+                local id
+                for id in *; do
+                    id=${id,,}
+                    xmlConfigArgs+=(
+                        # unmap any fully-qualified patterns that exist, so they
+                        # can't be used, using a horrific method for
+                        # case-insensitivity in xpath1
+                        -d "/configuration/packageSourceMapping/packageSource/package[translate(@pattern, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = ${id@Q}]"
+                        -s '/configuration/packageSourceMapping/packageSource[@key="_nix"]' -t elem -n package
+                        -i \$prev -t attr -n pattern -v "$id")
+                done
+                cd - < /dev/null
+            else
+                xmlConfigArgs+=(
+                    "${xmlSourceConfigArgs[@]}"
+                    # add package source mappings from all existing patterns to _nix
+                    # this ensures _nix is always considered
+                    -s /configuration/packageSourceMapping -t elem -n packageSource
+                    -u \$prev -x '../packageSource/package'
+                    -i \$prev -t attr -n key -v _nix
+                    # delete empty _nix mapping
+                    -d '/configuration/packageSourceMapping/packageSource[@key="_nix" and not(*)]')
+            fi
+        fi
+
+        # try to stop the global config from having any effect
+        if [[ -z ${keepNugetConfig-} || -z ${allowGlobalNuGetConfig-} ]]; then
+            local -ar configSections=(
+                config
+                bindingRedirects
+                packageRestore
+                solution
+                packageSources
+                auditSources
+                apikeys
+                disabledPackageSources
+                activePackageSource
+                fallbackPackageFolders
+                packageSourceMapping
+                packageManagement)
+
+            for section in "${configSections[@]}"; do
+                xmlRootConfigArgs+=(
+                    -s /configuration -t elem -n "$section"
+                    # hacky way of ensuring we use existing sections when they exist
+                    -d "/configuration/$section[position() != 1]"
+                    # hacky way of adding to the start of a possibly empty element
+                    -s "/configuration/$section" -t elem -n __unused
+                    -i "/configuration/$section/*[1]" -t elem -n clear
+                    -d "/configuration/$section/__unused"
+                    # delete consecutive clears
+                    # these actually cause nuget tools to fail in some cases
+                    -d "/configuration/$section/clear[position() = 2 and name() = \"clear\"]")
+            done
+        fi
+
+        find . \( -iname nuget.config \) -print0 | while IFS= read -rd "" config; do
+            local dir isRoot=
+
+            dir=$(dirname "$config")
+            [[ $dir != . ]] || isRoot=1
+
+            @xmlstarlet@/bin/xmlstarlet \
+                ed --inplace \
+                "${xmlConfigArgs[@]}" \
+                ${isRoot:+"${xmlRootConfigArgs[@]}"} \
+                "$config"
+        done
+    )
+
     runHook postConfigureNuGet
 }
 
 if [[ -z ${dontConfigureNuget-} ]]; then
-    prePhases+=(createNugetDirs)
     preConfigurePhases+=(configureNuget)
 fi
