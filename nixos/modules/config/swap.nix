@@ -268,8 +268,8 @@ in
                 ${lib.optionalString (sw.size != null) ''
                   currentSize=$(( $(stat -c "%s" "$DEVICE" 2>/dev/null || echo 0) / 1024 / 1024 ))
                   if [[ ! -b "$DEVICE" && "${toString sw.size}" != "$currentSize" ]]; then
-                    if [[  $(stat -f -c %T $(dirname "${sw.device}")) == "btrfs" ]]; then
-                      # Use btrfs mkswapfile to speed up the creation of swapfile. 
+                    if [[ $(stat -f -c %T $(dirname "${sw.device}")) == "btrfs" ]]; then
+                      # Use btrfs mkswapfile to speed up the creation of swapfile.
                       rm -f "${sw.device}"
                       btrfs filesystem mkswapfile --size "${toString sw.size}M" --uuid clear "${sw.device}"
                     else
