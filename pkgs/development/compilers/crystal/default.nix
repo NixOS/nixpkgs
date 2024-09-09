@@ -43,7 +43,7 @@ let
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
 
-  nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
+  nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi pcre2 ];
 
   binaryUrl = version: rel:
     if arch == archs.aarch64-linux then
@@ -174,12 +174,15 @@ let
         zlib
         libxml2
         openssl
+        pcre2
+        libffi
       ] ++ extraBuildInputs
       ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
         "progress=1"
+        "interpreter=1"
       ];
 
       LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
@@ -239,6 +242,7 @@ let
 
       preCheck = ''
         export LIBRARY_PATH=${lib.makeLibraryPath nativeCheckInputs}:$LIBRARY_PATH
+        export LD_LIBRARY_PATH=${lib.makeLibraryPath nativeCheckInputs}:$LD_LIBRARY_PATH
         export PATH=${lib.makeBinPath nativeCheckInputs}:$PATH
       '';
 
