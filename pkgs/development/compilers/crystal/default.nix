@@ -47,6 +47,7 @@ let
     gmp
     openssl
     readline
+    pcre2
     libxml2
     libyaml
     libffi
@@ -192,6 +193,7 @@ let
         zlib
         libxml2
         openssl
+        libffi
       ]
       ++ extraBuildInputs
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
@@ -199,6 +201,7 @@ let
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
         "progress=1"
+        "interpreter=1"
       ];
 
       LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
