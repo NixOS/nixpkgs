@@ -8479,7 +8479,7 @@ with pkgs;
   gvproxy = callPackage ../tools/networking/gvproxy { };
 
   gyroflow = qt6Packages.callPackage ../applications/video/gyroflow {
-    ffmpeg = ffmpeg_6;
+    ffmpeg = ffmpeg_7;
   };
 
   gzip = callPackage ../tools/compression/gzip { };
