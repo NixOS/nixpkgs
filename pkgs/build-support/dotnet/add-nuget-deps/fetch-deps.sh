@@ -3,8 +3,6 @@ set -e
 HOME=$NIX_BUILD_TOP/home
 mkdir "$HOME"
 
-export NIX_SSL_CERT_FILE=@cacert@/etc/ssl/certs/ca-bundle.crt
-
 genericBuild
 
 depsFile=$(realpath "${1:-@defaultDepsFile@}")
