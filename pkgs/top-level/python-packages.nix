@@ -6,18 +6,24 @@
 #
 # For more details, please see the Python section in the Nixpkgs manual.
 
-self: super: with self; {
+self: super:
+
+let
+  inherit (self) callPackage toPythonModule lib pkgs stdenv pythonOlder disabledIf isPyPy python buildPythonPackage isPy3k isPy27 pythonAtLeast;
+in
+
+{
 
   bootstrap = lib.recurseIntoAttrs {
     flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
     installer = toPythonModule (callPackage ../development/python-modules/bootstrap/installer {
-      inherit (bootstrap) flit-core;
+      inherit (self.bootstrap) flit-core;
     });
     build = toPythonModule (callPackage ../development/python-modules/bootstrap/build {
-      inherit (bootstrap) flit-core installer;
+      inherit (self.bootstrap) flit-core installer;
     });
     packaging = toPythonModule (callPackage ../development/python-modules/bootstrap/packaging {
-      inherit (bootstrap) flit-core installer;
+      inherit (self.bootstrap) flit-core installer;
     });
   };
 
@@ -1042,7 +1048,7 @@ self: super: with self; {
   autotrash = callPackage ../development/python-modules/autotrash { };
 
   avahi = toPythonModule (pkgs.avahi.override {
-    inherit python;
+    inherit (self) python;
     withPython = true;
   });
 
@@ -6306,14 +6312,14 @@ self: super: with self; {
     inherit (pkgs.config) cudaSupport;
   };
 
-  jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
+  jaxlib-build = callPackage ../development/python-modules/jaxlib {
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     inherit (pkgs.config) cudaSupport;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
   };
 
   # Use the -bin on macOS since the source build doesn't support it (see #323154)
-  jaxlib = if jaxlib-build.meta.unsupported then jaxlib-bin else jaxlib-build;
+  jaxlib = if self.jaxlib-build.meta.unsupported then self.jaxlib-bin else self.jaxlib-build;
 
   jaxlibWithCuda = self.jaxlib.override {
     cudaSupport = true;
@@ -8796,7 +8802,7 @@ self: super: with self; {
 
   neuron-full = pkgs.neuron-full.override { python3 = python; };
 
-  neuronpy = toPythonModule neuron-full;
+  neuronpy = toPythonModule self.neuron-full;
 
   nevow = callPackage ../development/python-modules/nevow { };
 
@@ -9002,7 +9008,7 @@ self: super: with self; {
 
   numpy_1 = callPackage ../development/python-modules/numpy/1.nix { };
   numpy_2 = callPackage ../development/python-modules/numpy/2.nix { };
-  numpy = if self.pythonOlder "3.13" then numpy_1 else numpy_2;
+  numpy = if self.pythonOlder "3.13" then self.numpy_1 else self.numpy_2;
 
   numpy-groupies = callPackage ../development/python-modules/numpy-groupies { };
 
@@ -9479,7 +9485,7 @@ self: super: with self; {
 
   paho-mqtt_1 = callPackage ../development/python-modules/paho-mqtt/1.nix { };
   paho-mqtt_2 = callPackage ../development/python-modules/paho-mqtt/default.nix { };
-  paho-mqtt = paho-mqtt_1;
+  paho-mqtt = self.paho-mqtt_1;
 
   palace = callPackage ../development/python-modules/palace { };
 
@@ -10579,7 +10585,7 @@ self: super: with self; {
   protobuf5 = callPackage ../development/python-modules/protobuf/default.nix { };
 
   # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-  protobuf = protobuf4;
+  protobuf = self.protobuf4;
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
@@ -10637,8 +10643,8 @@ self: super: with self; {
   psychrolib = callPackage ../development/python-modules/psychrolib { };
 
   psycopg = callPackage ../development/python-modules/psycopg { };
-  psycopg-pool = psycopg.pool;
-  psycopg-c = psycopg.c;
+  psycopg-pool = self.psycopg.pool;
+  psycopg-c = self.psycopg.c;
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
 
@@ -12241,7 +12247,7 @@ self: super: with self; {
 
   pytest_7 = callPackage ../development/python-modules/pytest/7.nix { };
 
-  pytest7CheckHook = pytestCheckHook.override { pytest = pytest_7; };
+  pytest7CheckHook = self.pytestCheckHook.override { pytest = self.pytest_7; };
 
   pytest-aio = callPackage ../development/python-modules/pytest-aio { };
 
@@ -12259,7 +12265,7 @@ self: super: with self; {
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
-  pytest-asyncio_0_21 = pytest-asyncio.overridePythonAttrs (old: rec {
+  pytest-asyncio_0_21 = self.pytest-asyncio.overridePythonAttrs (old: rec {
     version = "0.21.2";
     src = pkgs.fetchFromGitHub {
       owner = "pytest-dev";
@@ -14030,7 +14036,7 @@ self: super: with self; {
 
   sentry-sdk_1 = callPackage ../development/python-modules/sentry-sdk/1.nix { };
   sentry-sdk_2 = callPackage ../development/python-modules/sentry-sdk/default.nix { };
-  sentry-sdk = sentry-sdk_1;
+  sentry-sdk = self.sentry-sdk_1;
 
   sepaxml = callPackage ../development/python-modules/sepaxml { };
 
@@ -15368,7 +15374,7 @@ self: super: with self; {
   textacy = callPackage ../development/python-modules/textacy { };
 
   textnets = callPackage ../development/python-modules/textnets {
-    en_core_web_sm = spacy-models.en_core_web_sm;
+    en_core_web_sm = self.spacy-models.en_core_web_sm;
   };
 
   texttable = callPackage ../development/python-modules/texttable { };
