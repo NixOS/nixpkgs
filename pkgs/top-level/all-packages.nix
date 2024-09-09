@@ -26699,8 +26699,8 @@ with pkgs;
 
   ginkgo = callPackage ../development/tools/ginkgo { };
 
-  gdlv = darwin.apple_sdk_11_0.callPackage ../development/tools/gdlv {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation CoreGraphics Metal AppKit;
+  gdlv = callPackage ../by-name/gd/gdlv/package.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreGraphics Foundation Metal;
   };
 
   go-bindata = callPackage ../development/tools/go-bindata { };
