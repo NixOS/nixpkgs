@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
-    ln -s $out/opt/REAPER/reamote-server $out/bin/
 
     runHook postInstall
   '';

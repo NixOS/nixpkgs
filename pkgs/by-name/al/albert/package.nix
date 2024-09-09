@@ -2,19 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  qt6,
   cmake,
   libqalculate,
   muparser,
   libarchive,
   python3Packages,
-  qtbase,
-  qtscxml,
-  qtsvg,
-  qtdeclarative,
-  qtwayland,
-  qt5compat,
-  qttools,
-  wrapQtAppsHook,
   nix-update-script,
   pkg-config,
 }:
@@ -34,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs =
@@ -42,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
       libqalculate
       libarchive
       muparser
-      qtbase
-      qtscxml
-      qtsvg
-      qtdeclarative
-      qtwayland
-      qt5compat
-      qttools
+      qt6.qtbase
+      qt6.qtscxml
+      qt6.qtsvg
+      qt6.qtdeclarative
+      qt6.qtwayland
+      qt6.qt5compat
+      qt6.qttools
     ]
     ++ (with python3Packages; [
       python

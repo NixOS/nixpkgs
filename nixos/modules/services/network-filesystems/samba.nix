@@ -106,13 +106,39 @@ in
       '';
 
       settings = lib.mkOption {
-        type = lib.types.submodule { freeformType = settingsFormat.type; };
-        default = {};
+        type = lib.types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            global.security = lib.mkOption {
+              type = lib.types.enum [ "auto" "user" "domain" "ads" ];
+              default = "user";
+              description = "Samba security type.";
+            };
+            global."invalid users" = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ "root" ];
+              description = "List of users who are denied to login via Samba.";
+              apply = x: lib.concatStringsSep " " x;
+            };
+            global."passwd program" = lib.mkOption {
+              type = lib.types.str;
+              default = "/run/wrappers/bin/passwd %u";
+              description = "Path to a program that can be used to set UNIX user passwords.";
+            };
+          };
+        };
+        default = {
+          "global" = {
+            "security" = "user";
+            "passwd program" = "/run/wrappers/bin/passwd %u";
+            "invalid users" = [ "root" ];
+          };
+        };
         example = {
           "global" = {
             "security" = "user";
             "passwd program" = "/run/wrappers/bin/passwd %u";
-            "invalid users" = "root";
+            "invalid users" = [ "root" ];
           };
           "public" = {
             "path" = "/srv/public";
