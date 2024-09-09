@@ -11,9 +11,11 @@ let
 
   inherit (builtins)
     readDir
+    pathExists
     ;
 
   inherit (lib.attrsets)
+    filterAttrs
     mapAttrs
     mapAttrsToList
     mergeAttrsList
@@ -31,9 +33,11 @@ let
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
       { }
     else
-      mapAttrs
-        (name: _: baseDirectory + "/${shard}/${name}/package.nix")
-        (readDir (baseDirectory + "/${shard}"));
+      filterAttrs (_: path: pathExists path) (
+        mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
+          readDir (baseDirectory + "/${shard}")
+        )
+      );
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
