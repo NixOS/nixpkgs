@@ -8477,7 +8477,7 @@ with pkgs;
   gvproxy = callPackage ../tools/networking/gvproxy { };
 
   gyroflow = qt6Packages.callPackage ../applications/video/gyroflow {
-    ffmpeg = ffmpeg_6;
+    ffmpeg = ffmpeg_7;
   };
 
   gzip = callPackage ../tools/compression/gzip { };
@@ -13286,8 +13286,6 @@ with pkgs;
   trunk = callPackage ../development/tools/trunk {
     inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   };
-
-  trunk-io = callPackage ../development/tools/trunk-io { };
 
   trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
@@ -19114,7 +19112,7 @@ with pkgs;
     inherit (buildPackages.darwin) xnu bootstrap_cmds;
   };
   valgrind-light = (res.valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
-    meta.description = "${oldAttrs.meta.description} (without GDB)";
+    meta = oldAttrs.meta // { description = "${oldAttrs.meta.description} (without GDB)"; };
   });
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };

@@ -50,8 +50,8 @@ in rec {
   thunderbird = thunderbird-128;
 
   thunderbird-115 = common {
-    version = "115.14.0";
-    sha512 = "b12e1302d6be94dd88bee6dd069d3fec944bfce95e1afc1d72c14cc188d952fd5a85f0e70575317250701ac89498d876f3384b022957689fabcef61ad7d78c29";
+    version = "115.15.0";
+    sha512 = "b161b99e09b6d1ba833f77264e35034ad199438b4fc88d244a6b68c84693fa2e90fbab60dafb827a2e23b37c484f9843a58751d93826ba7cdd0391114d253de2";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-115";

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-pytest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s+0kk9kmMctPCKFd5rbdEwGgfHKYRvKq0rY9eosifCU=";
+    hash = "sha256-F5tbqm1k4SdTHIUgwSunLIL2W5mhJoMI4x4UZBLidlA=";
   };
 
   build-system = [
