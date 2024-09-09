@@ -36,7 +36,7 @@
   []
   (or (System/getenv "ACCESS_TOKEN")
       (try
-        (slurp (fs/file (fs/home) ".config/nix/gh-access-token"))
+        (slurp (fs/file (fs/home) ".config/nix/maintainer-activity-access-token"))
         (catch Exception e nil))
       (try
         (->> (line-seq (io/reader (fs/file (fs/home) ".config/nix/nix.conf")))
@@ -47,7 +47,7 @@
         (catch Exception e nil))
       (do (.println System/err "Please set GitHub Access Token
   - ACCESS_TOKEN=<token>
-  - ~/.config/nix/gh-access-token <token>
+  - ~/.config/nix/maintainer-activity-access-token <token>
   - ~/.config/nix/nix.conf access-tokens = github.com=<token>
 ")
           (System/exit 1))))
@@ -237,8 +237,8 @@
   (file-query :org-contributions {:login "bendlas" :orgId org-id}))
 
 ;; Batched queries are a specialty use case, enabled by graphql named
-;; queries. Cannot be parameterized in a .gql file, so needs full
-;; query generation.
+;; queries. Cannot be parameterized in a .gql file (but still re-use
+;; fragments), so need stringual query generation.
 
 (comment
   (file-query :issue-comments
