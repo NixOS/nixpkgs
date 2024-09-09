@@ -1310,13 +1310,13 @@
     "vendorHash": "sha256-oaVBYSH2ix9SUqvrFo+oBIS80/Sb3E7Z/Jpvznt+OtU="
   },
   "vault": {
-    "hash": "sha256-tPRwdSwygypfgXAS3QmZNAb4GXe/8IFsRs8YGa4HDJg=",
+    "hash": "sha256-EiCLz5Z0ztwWrn8yHG9JnuIizicpi3WtvDSGyBtzgSY=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vault",
     "owner": "hashicorp",
     "repo": "terraform-provider-vault",
-    "rev": "v4.3.0",
+    "rev": "v4.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rS6tigtjTGG2c4FwSjn6dvblwqYtPQS/tl7qQ+P7uVM="
+    "vendorHash": "sha256-z9qg6NVKYIU2OQTW8g72t6B69aTL/BeLCUFeoII75cE="
   },
   "vcd": {
     "hash": "sha256-4+7CblKeop9Uwpl7XxjmR33XE/mcmZfOuFJrJuqzZmw=",
