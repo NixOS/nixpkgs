@@ -88,33 +88,11 @@ let
     };
   };
 
-  withPlugins =
-    plugins:
-    buildPythonApplication {
-      inherit (llm) pname version;
-      format = "other";
+  withPlugins = throw ''
+    llm.withPlugins was confusing to use and has been removed.
+    Please migrate to using python3.withPackages(ps: [ ps.llm ]) instead.
 
-      disabled = pythonOlder "3.8";
-
-      dontUnpack = true;
-      dontBuild = true;
-      doCheck = false;
-
-      nativeBuildInputs = [ makeWrapper ];
-
-      installPhase = ''
-        makeWrapper ${llm}/bin/llm $out/bin/llm \
-          --prefix PYTHONPATH : "${llm}/${python.sitePackages}:$PYTHONPATH"
-        ln -sfv ${llm}/lib $out/lib
-      '';
-
-      propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
-
-      passthru = llm.passthru // {
-        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
-      };
-
-      inherit (llm) meta;
-    };
+    See https://nixos.org/manual/nixpkgs/stable/#python.withpackages-function for more usage examples.
+  '';
 in
 llm
