@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     "-Wno-elaborated-enum-base"
   ]);
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
