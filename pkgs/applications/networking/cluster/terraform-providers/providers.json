@@ -1246,11 +1246,11 @@
     "vendorHash": "sha256-eeVkzZ+ATTyZCEq4loEbIb0XO/Ir1jejUaWi4Jd6nMo="
   },
   "thunder": {
-    "hash": "sha256-ezolcZ652YUV/CDoNKNRZkiRpRoa5AMqHxeYLxluA5A=",
+    "hash": "sha256-2i1DSOSt/vbFs0QCPogEBvADhLJFKbrQzwZ20ChCQMk=",
     "homepage": "https://registry.terraform.io/providers/a10networks/thunder",
     "owner": "a10networks",
     "repo": "terraform-provider-thunder",
-    "rev": "v1.4.1",
+    "rev": "v1.4.2",
     "spdx": "BSD-2-Clause",
     "vendorHash": null
   },
