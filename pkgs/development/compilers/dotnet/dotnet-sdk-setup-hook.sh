@@ -53,26 +53,31 @@ configureNuget() {
         fi
     done
 
-    if [[ -n ${linkNugetPackages-}
-        || -f .config/dotnet-tools.json
-        || -f dotnet-tools.json
-        || -f paket.dependencies ]]; then
-        for x in "${!_nugetInputs[@]}"; do
-            if [[ -d $x/share/nuget/packages ]]; then
-                @lndir@/bin/lndir -silent "$x/share/nuget/packages" "${NUGET_PACKAGES%/}"
-            fi
-        done
+    if [[ -f .config/dotnet-tools.json
+        || -f dotnet-tools.json ]]; then
+        : ${linkNugetPackages=1}
     fi
 
     if [[ -z ${keepNugetConfig-} && -f paket.dependencies ]]; then
-       sed -i "s:source .*:source $nugetSource:" paket.dependencies
-       sed -i "s:remote\:.*:remote\: $nugetSource:" paket.lock
+        sed -i "s:source .*:source $nugetSource:" paket.dependencies
+        sed -i "s:remote\:.*:remote\: $nugetSource:" paket.lock
 
+        : ${linkNuGetPackagesAndSources=1}
+    fi
+
+    if [[ -n ${linkNuGetPackagesAndSources-} ]]; then
        for x in "${!_nugetInputs[@]}"; do
            if [[ -d $x/share/nuget/source ]]; then
+               @lndir@/bin/lndir -silent "$x/share/nuget/packages" "${NUGET_PACKAGES%/}"
                @lndir@/bin/lndir -silent "$x/share/nuget/source" "${NUGET_PACKAGES%/}"
            fi
        done
+    elif [[ -n ${linkNugetPackages-} ]]; then
+        for x in "${!_nugetInputs[@]}"; do
+            if [[ -d $x/share/nuget/packages ]]; then
+                _linkPackages "$x/share/nuget/packages" "${NUGET_PACKAGES%/}"
+            fi
+        done
     fi
 
     # create a root nuget.config if one doesn't exist
