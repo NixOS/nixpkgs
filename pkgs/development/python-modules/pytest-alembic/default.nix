@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-A+Nl+DAK8uhC3iOgS1i6x/nj9BJ0My3lpft+pRdoab8=";
   };
   pyproject = true;
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
   dependencies = [
     alembic
     pytest
