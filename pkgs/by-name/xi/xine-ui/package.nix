@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     LIRC_LIBS="-L ${lirc}/lib -llirc_client";
   };
 
+  strictDeps = true;
+
   postInstall = ''
     substituteInPlace $out/share/applications/xine.desktop \
       --replace "MimeType=;" "MimeType="
