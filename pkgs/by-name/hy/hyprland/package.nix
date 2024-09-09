@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   makeWrapper,
   cmake,
@@ -11,34 +10,23 @@
   binutils,
   cairo,
   epoll-shim,
-  expat,
-  fribidi,
   git,
-  hwdata,
   hyprcursor,
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
   jq,
   libGL,
-  libdatrie,
-  libdisplay-info,
   libdrm,
   libexecinfo,
   libinput,
-  libliftoff,
-  libselinux,
-  libsepol,
-  libthai,
   libuuid,
   libxkbcommon,
   mesa,
   pango,
   pciutils,
-  pcre2,
   pkgconf,
   python3,
-  seatd,
   systemd,
   tomlplusplus,
   wayland,
@@ -66,26 +54,19 @@ assert lib.assertMsg (!hidpiXWayland)
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.42.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-deu8zvgseDg2gQEnZiCda4TrbA6pleE9iItoZlsoMtE=";
+    hash = "sha256-+wE97utoDfhQP6AMdZHUmBeL8grbce/Jv2i5M+6AbaE=";
   };
 
   patches = [
-    # Fixes broken OpenGL applications on Apple silicon (Asahi Linux)
-    # Based on commit https://github.com/hyprwm/Hyprland/commit/279ec1c291021479b050c83a0435ac7076c1aee0
-    ./asahi-fix.patch
-
-    # https://github.com/hyprwm/Hyprland/pull/7467
-    (fetchpatch {
-      url = "https://github.com/hyprwm/Hyprland/commit/a437e44a6af8e8f42966ffe3a26c1d562fce6b33.diff";
-      hash = "sha256-Y0P4rY6HyPN8Y5Kowlgyj0PiAHh6nqPRAQ4iFT0l4E8=";
-    })
+    # forces GCC to use -std=c++26 on CMake < 3.30
+    "${finalAttrs.src}/nix/stdcxx.patch"
   ];
 
   postPatch = ''
@@ -131,29 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     [
       aquamarine
       cairo
-      expat
-      fribidi
       git
-      hwdata
       hyprcursor.dev
       hyprlang
       hyprutils
       libGL
-      libdatrie
-      libdisplay-info
       libdrm
       libinput
-      libliftoff
-      libselinux
-      libsepol
-      libthai
       libuuid
       libxkbcommon
       mesa
       pango
       pciutils
-      pcre2
-      seatd
       tomlplusplus
       wayland
       wayland-protocols
@@ -164,9 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals enableXWayland [
       xorg.libxcb
       xorg.libXdmcp
-      xorg.xcbutil
       xorg.xcbutilerrors
-      xorg.xcbutilrenderutil
       xorg.xcbutilwm
       xwayland
     ]
