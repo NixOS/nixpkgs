@@ -272,11 +272,11 @@
   },
   "constellix": {
     "deleteVendor": true,
-    "hash": "sha256-ecwXWYrs7XJM1web+kia2ccpvTjxAVFPzav6lLal4e4=",
+    "hash": "sha256-yDXZ+lizDK+Ds8/Z3jfNLjO7fvlfRhx5y88bMLZCaj0=",
     "homepage": "https://registry.terraform.io/providers/Constellix/constellix",
     "owner": "Constellix",
     "repo": "terraform-provider-constellix",
-    "rev": "v0.4.5",
+    "rev": "v0.4.6",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-UJHDX/vx3n/RTuQ50Y6TAhpEEFk9yBoaz8yK02E8Fhw="
   },
