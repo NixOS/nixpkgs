@@ -1,14 +1,30 @@
 # shellcheck shell=bash disable=SC2154
 
+unpackNupkg() {
+    local -r nupkg="$1" unpacked="$2"
+    local nuspec nuspec_l
+
+    mkdir -p "$unpacked"
+    @unzip@/bin/unzip -nqd "$unpacked" "$nupkg"
+    cd "$unpacked"
+    chmod -R +rw .
+    nuspec=(*.nuspec)
+    nuspec_l="${nuspec,,}"
+    if [[ $nuspec != "$nuspec_l" ]]; then
+        mv "$nuspec" "$nuspec".tmp
+        mv "$nuspec".tmp "$nuspec_l"
+    fi
+    echo {} > .nupkg.metadata
+    cd - >/dev/null
+}
+
 _unpackNugetPackagesInOutput() {
     local -r unpacked="$prefix"/share/nuget/packages/.unpacked
+    local nuspec nuspec_l
     (
         shopt -s nullglob globstar
         for nupkg in "$prefix"/share/nuget/source/**/*.nupkg; do
-            mkdir -p "$unpacked"
-            @unzip@/bin/unzip -qd "$unpacked" "$nupkg"
-            chmod -R +rw "$unpacked"
-            echo {} > "$unpacked"/.nupkg.metadata
+            unpackNupkg "$nupkg" "$unpacked"
             @xmlstarlet@/bin/xmlstarlet \
                 sel -t \
                 -m /_:package/_:metadata \
