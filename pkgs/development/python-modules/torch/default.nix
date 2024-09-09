@@ -478,7 +478,8 @@ buildPythonPackage rec {
       ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
       ++ lists.optionals useSystemNccl [
         # Some platforms do not support NCCL (i.e., Jetson)
-        nccl # Provides nccl.h AND a static copy of NCCL!
+        (lib.getDev nccl)
+        (lib.getOutput "static" nccl)
       ]
       ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
         cuda_nvprof # <cuda_profiler_api.h>
