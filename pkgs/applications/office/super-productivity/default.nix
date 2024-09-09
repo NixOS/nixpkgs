@@ -1,17 +1,24 @@
-{ stdenv , lib , fetchurl , appimageTools , makeWrapper , electron }:
+{ stdenv
+, lib
+, fetchurl
+, appimageTools
+, makeWrapper
+, electron
+}:
 
 stdenv.mkDerivation rec {
   pname = "super-productivity";
-  version = "9.0.5";
+  version = "10.0.2";
 
   src = fetchurl {
     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
-    sha256 = "sha256-eNAoLcQWnsTDA7sG8i0Ur9BZ+pNt4AK1GOppFCD1ZGg=";
+    hash = "sha256-TPe2wijTzlro9rtESJHPL1phtraSW5kTHfctSTTumGs=";
     name = "${pname}-${version}.AppImage";
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
+    name = "${pname}-${version}";
+    inherit src;
   };
 
   dontUnpack = true;
@@ -41,11 +48,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "To Do List / Time Tracker with Jira Integration";
+    description = "To-do list & time tracker for programmers and other digital workers with Jira, Github, and Gitlab integration";
     homepage = "https://super-productivity.com";
+    downloadPage = "https://github.com/johannesjo/super-productivity/releases";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ offline ];
-    mainProgram = "super-productivity";
+    platforms = [ "x86_64-linux" ];
+    mainProgram = pname;
   };
 }
