@@ -4988,6 +4988,12 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  denperidge = {
+    email = "contact@denperidge.com";
+    github = "denperidge";
+    githubId = 27348469;
+    name = "Cat";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
@@ -19385,6 +19391,13 @@
     github = "sjmackenzie";
     githubId = 158321;
     name = "Stewart Mackenzie";
+  };
+  skeuchel = {
+    name = "Steven Keuchel";
+    email = "steven.keuchel@gmail.com";
+    github = "skeuchel";
+    githubId = 617130;
+    keys = [ { fingerprint = "C4F7 46C7 B560 38D8 210F  0288 5877 DEE9 7428 557F"; } ];
   };
   skovati = {
     github = "skovati";
