@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "To-do list & time tracker for programmers and other digital workers with Jira, Github, and Gitlab integration";
     homepage = "https://super-productivity.com";
-    downloadPage = "https://github.com/johannesjo/super-productivity/releases";
+    downloadPage = "https://github.com/johannesjo/super-productivity";
     license = licenses.mit;
-    maintainers = with maintainers; [ offline ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = pname;
+    maintainers = with maintainers; [ offline ];
+    mainProgram = "super-productivity";
   };
 }
