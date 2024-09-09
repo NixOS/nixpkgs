@@ -9089,6 +9089,12 @@
     githubId = 13622947;
     keys = [ { fingerprint = "1412 816B A9FA F62F D051 1975 D3E1 B013 B463 1293"; } ];
   };
+  istoph = {
+    email = "chr@istoph.de";
+    name = "Christoph Hüffelmann";
+    github = "istoph";
+    githubId = 114227790;
+  };
   ius = {
     email = "j.de.gram@gmail.com";
     name = "Joerie de Gram";
@@ -20623,6 +20629,12 @@
     github = "tex";
     githubId = 27386;
     name = "Milan Svoboda";
+  };
+  textshell = {
+    email = "textshell@uchuujin.de";
+    github = "textshell";
+    githubId = 6579711;
+    name = "Martin Hostettler";
   };
   tfc = {
     email = "jacek@galowicz.de";
