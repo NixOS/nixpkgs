@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.1.1";
+  version = "0.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "yaleman";
     repo = "aussiebb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XNf9vYMlTLqhYIVNw9GjPcXpOm5EYCcC4aGukR8g3zc=";
+    hash = "sha256-IW2HraJbgvf0G1eRXNpnsPMWlLXi2P9DTyk+tG5Hc2U=";
   };
 
   nativeBuildInputs = [ poetry-core ];
