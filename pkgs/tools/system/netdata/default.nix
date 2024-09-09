@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/{var,usr,etc}
   '';
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   passthru = rec {
     netdata-go-modules = (buildGoModule {
