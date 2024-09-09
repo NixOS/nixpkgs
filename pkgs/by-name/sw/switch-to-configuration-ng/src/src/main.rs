@@ -398,7 +398,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
             // If the [Unit] section was removed, make sure that only keys were in it that are
             // ignored
             if section_name == "Unit" {
-                for (ini_key, _ini_val) in section_val {
+                for ini_key in section_val.keys() {
                     if !unit_section_ignores.contains_key(ini_key.as_str()) {
                         return UnitComparison::UnequalNeedsRestart;
                     }
@@ -480,7 +480,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
     if !section_cmp.is_empty() {
         if section_cmp.keys().len() == 1 && section_cmp.contains_key("Unit") {
             if let Some(new_unit_unit) = new_unit.get("Unit") {
-                for (ini_key, _) in new_unit_unit {
+                for ini_key in new_unit_unit.keys() {
                     if !unit_section_ignores.contains_key(ini_key.as_str()) {
                         return UnitComparison::UnequalNeedsRestart;
                     } else if ini_key == "X-Reload-Triggers" {
@@ -787,7 +787,7 @@ fn filter_units(
 ) -> HashMap<String, ()> {
     let mut res = HashMap::new();
 
-    for (unit, _) in units {
+    for unit in units.keys() {
         if !units_to_filter.contains_key(unit) {
             res.insert(unit.to_string(), ());
         }
@@ -796,7 +796,7 @@ fn filter_units(
     res
 }
 
-fn unit_is_active<'a>(conn: &LocalConnection, unit: &str) -> Result<bool> {
+fn unit_is_active(conn: &LocalConnection, unit: &str) -> Result<bool> {
     let unit_object_path = conn
         .with_proxy(
             "org.freedesktop.systemd1",
@@ -1295,7 +1295,7 @@ won't take effect until you reboot the system.
 
     // Also handles swap devices.
     for (device, _) in current_swaps {
-        if new_swaps.get(&device).is_none() {
+        if !new_swaps.contains_key(&device) {
             // Swap entry disappeared, so turn it off.  Can't use "systemctl stop" here because
             // systemd has lots of alias units that prevent a stop from actually calling "swapoff".
             if *action == Action::DryActivate {
