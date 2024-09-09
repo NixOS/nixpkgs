@@ -285,7 +285,10 @@ let
 
   buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
-  installCC = pkgsHostTarget.targetPackages.stdenv.cc;
+  installCC =
+    if targetPlatform.isGhcjs
+    then pkgsHostTarget.emscripten
+    else pkgsHostTarget.targetPackages.stdenv.cc;
 
   # toolPath calculates the absolute path to the name tool associated with a
   # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
