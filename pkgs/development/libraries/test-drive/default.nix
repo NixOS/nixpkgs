@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     mesonEmulatorHook
   ];
 
+  mesonAutoFeatures = "auto";
+
   meta = with lib; {
     description = "Procedural Fortran testing framework";
     homepage = "https://github.com/fortran-lang/test-drive";
