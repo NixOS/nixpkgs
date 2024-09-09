@@ -74,26 +74,29 @@ rustPlatform.buildRustPackage rec {
       ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
     '';
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    wrapGAppsHook3
-    pkg-config
-    cargo-tauri
-  ];
+  nativeBuildInputs =
+    [
+      cargo-tauri
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+      wrapGAppsHook3
+      pkg-config
+    ];
 
   buildInputs =
     [
       openssl
-      dbus
-      glib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+      glib
       glib-networking
       libayatana-appindicator
       webkitgtk
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
+      darwin.apple_sdk.frameworks.Cocoa
       darwin.apple_sdk.frameworks.WebKit
     ];
 
