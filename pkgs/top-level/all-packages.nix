@@ -19123,7 +19123,7 @@ with pkgs;
     inherit (buildPackages.darwin) xnu bootstrap_cmds;
   };
   valgrind-light = (res.valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
-    meta.description = "${oldAttrs.meta.description} (without GDB)";
+    meta = oldAttrs.meta // { description = "${oldAttrs.meta.description} (without GDB)"; };
   });
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
