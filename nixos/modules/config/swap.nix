@@ -258,7 +258,7 @@ in
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" "shutdown.target"];
             conflicts = [ "shutdown.target" ];
-            path = [ pkgs.util-linux pkgs.e2fsprogs ]
+            path = [ pkgs.util-linux pkgs.e2fsprogs pkgs.btrfs-progs ]
               ++ lib.optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             environment.DEVICE = sw.device;
