@@ -3,9 +3,6 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, libiconv
-, Security
-, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,9 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = true;
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   checkFlags = [ "--skip=tests::cli" ];
 
@@ -33,7 +29,9 @@ rustPlatform.buildRustPackage rec {
     description = "Bundle any web page into a single HTML file";
     mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
-    license = licenses.unlicense;
+    license = licenses.cc0;
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

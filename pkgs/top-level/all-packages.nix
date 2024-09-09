@@ -10337,9 +10337,7 @@ with pkgs;
 
   monocraft = callPackage ../data/fonts/monocraft { };
 
-  monolith = callPackage ../tools/backup/monolith {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
+  monolith = callPackage ../tools/backup/monolith { };
 
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
