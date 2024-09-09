@@ -1784,6 +1784,8 @@ let
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
+    terml = callPackage ../development/ocaml-modules/terml { };
+
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
     tezt = callPackage ../development/ocaml-modules/tezt { };
