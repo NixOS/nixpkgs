@@ -125,7 +125,6 @@ in buildFHSEnv rec {
     xorg.libXi
     xorg.libSM
     xorg.libICE
-    gnome2.GConf
     curl
     nspr
     nss
