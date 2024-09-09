@@ -13,10 +13,7 @@
   fmt,
   meson,
   emilua,
-  qtdeclarative,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  qt6Packages,
   openssl,
   liburing,
 }:
@@ -32,26 +29,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-azMnM17HQMzC0ExgWurQzbR3fX9EwBRSu4kVTm3U2Ic=";
   };
 
-  buildInputs = [
+  buildInputs = with qt6Packages; [
+    qtbase
+    qtdeclarative
     boost
     luajit_openresty
     emilua
     fmt
     openssl
     liburing
-    qtdeclarative
-    qtbase
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with qt6Packages; [
+    qttools
+    wrapQtAppsHook
     gperf
     gawk
     asciidoctor
     pkg-config
     meson
     ninja
-    wrapQtAppsHook
-    qttools
   ];
 
   meta = with lib; {
