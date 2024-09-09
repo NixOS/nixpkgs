@@ -79,9 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
   ];
 
+  env.NIX_LDFLAGS = "-lxcb-shm";
+
   enableParallelBuilding = true;
 
-  env.NIX_LDFLAGS = "-lxcb-shm";
+  strictDeps = true;
 
   meta = {
     homepage = "https://xine.sourceforge.net/";
