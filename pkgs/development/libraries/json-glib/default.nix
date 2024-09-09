@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.9.2";
+  version = "1.10.0";
 
   outputs = [ "out" "dev" "installedTests" ]
     ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "j58E4ARb2oKv/UZO5XV5ZgD+KQFLgXOSo7cs6y0QxZU=";
+    sha256 = "G8qNZtlhBuzBR98xM7laW7eE8fpvFdBt18Go+0oQr3s=";
   };
 
   patches = [
