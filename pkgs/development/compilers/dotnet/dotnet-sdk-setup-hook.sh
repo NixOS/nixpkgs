@@ -49,6 +49,8 @@ createNugetDirs() {
 }
 
 configureNuget() {
+    runHook preConfigureNuGet
+
     local x
 
     for x in "${!_nugetInputs[@]}"; do
@@ -97,6 +99,8 @@ configureNuget() {
            fi
        done
     fi
+
+    runHook postConfigureNuGet
 }
 
 if [[ -z ${dontConfigureNuget-} ]]; then
