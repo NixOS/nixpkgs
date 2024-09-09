@@ -591,6 +591,7 @@ in {
     };
 
     other = {
+      system.switch.enable = true;
       users.mutableUsers = true;
     };
   };
