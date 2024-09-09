@@ -4,7 +4,7 @@ let
   # The scripted initrd contains some magic to add the prefix to the
   # paths just in time, so we don't add it here.
   sysrootPrefix = fs:
-    if config.boot.initrd.systemd.enable && (utils.fsNeededForBoot fs) then
+    if config.boot.initrd.systemd.enable && fs.overlay.useStage1BaseDirectories && (utils.fsNeededForBoot fs) then
       "/sysroot"
     else
       "";
@@ -47,11 +47,11 @@ let
         description = ''
           The list of path(s) to the lowerdir(s).
 
-          To create a writable overlay, you MUST provide an upperdir and a
-          workdir.
+          To create a writable overlay, you MUST provide an `upperdir` and a
+          `workdir`.
 
           You can create a read-only overlay when you provide multiple (at
-          least 2!) lowerdirs and neither an upperdir nor a workdir.
+          least 2!) lowerdirs and neither an `upperdir` nor a `workdir`.
         '';
       };
 
@@ -63,6 +63,9 @@ let
 
           If this is null, a read-only overlay is created using the lowerdir.
 
+          If the filesystem is `neededForBoot`, this will be prefixed with `/sysroot`,
+          unless `useStage1BaseDirectories` is set to `true`.
+
           If you set this to some value you MUST also set `workdir`.
         '';
       };
@@ -73,10 +76,24 @@ let
         description = ''
           The path to the workdir.
 
+          If the filesystem is `neededForBoot`, this will be prefixed with `/sysroot`,
+          unless `useStage1BaseDirectories` is set to `true`.
+
           This MUST be set if you set `upperdir`.
         '';
       };
 
+      useStage1BaseDirectories = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          If enabled, `lowerdir`, `upperdir` and `workdir` will be prefixed with `/sysroot`.
+
+          Disabling this can be useful to create an overlay over directories which aren't on the real root.
+
+          Disabling this does not work with the scripted (i.e. non-systemd) initrd.
+        '';
+      };
     };
 
     config = lib.mkIf (config.overlay.lowerdir != null) {
@@ -139,6 +156,13 @@ in
                 (fs.overlay.lowerdir != null && fs.overlay.upperdir == null)
                 -> (lib.length fs.overlay.lowerdir) >= 2;
               message = "A read-only overlay (without an `upperdir`) requires at least 2 `lowerdir`s: ${fs.mountPoint}";
+            }
+            {
+              assertion = !fs.overlay.useStage1BaseDirectories -> config.boot.initrd.systemd.enable;
+              message = ''
+                Stage 1 overlay file system ${fs.mountPoint} has 'useStage1BaseDirectories' set to false,
+                which is not supported with scripted initrd. Please enable 'boot.initrd.systemd.enable'.
+              '';
             }
           ]) overlayFileSystems
         )
