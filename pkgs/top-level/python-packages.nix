@@ -7779,6 +7779,10 @@ self: super: with self; {
 
   metaphlan = callPackage ../development/python-modules/metaphlan { };
 
+  metaphlan-unwrapped = callPackage ../development/python-modules/metaphlan {
+    metaphlan-db = null;
+  };
+
   metar = callPackage ../development/python-modules/metar { };
 
   metawear = callPackage ../development/python-modules/metawear { };
