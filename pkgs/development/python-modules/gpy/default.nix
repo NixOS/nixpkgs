@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -16,18 +15,22 @@
 
 buildPythonPackage rec {
   pname = "gpy";
-  version = "1.13.1";
+  version = "1.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  # 1.13.0 not on PyPI yet
   src = fetchFromGitHub {
     owner = "SheffieldML";
     repo = "GPy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ykoGdXy1uagKrP9Nqn74mDESZwKVPq6wQgnHlCznevM=";
+    hash = "sha256-kggXePDKJcgw8qwLIBTxbwhiLw2H4dkx7082FguKP0Y=";
   };
+
+  pythonRelaxDeps = [
+    "paramz"
+    "scipy"
+  ];
 
   nativeBuildInputs = [ setuptools ];
   buildInputs = [ cython ];
@@ -55,6 +58,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/SheffieldML/GPy/releases/tag/v.${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
-    broken = stdenv.isDarwin; # See inscrutable error message here: https://github.com/NixOS/nixpkgs/pull/107653#issuecomment-751527547
   };
 }
