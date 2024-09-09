@@ -5,7 +5,7 @@
 , nix
 , coreutils
 , jq
-, yq
+, xmlstarlet
 , curl
 , gnugrep
 , gawk
@@ -21,7 +21,7 @@ runCommandLocal "nuget-to-nix" {
       nix
       coreutils
       jq
-      yq
+      xmlstarlet
       curl
       gnugrep
       gawk
