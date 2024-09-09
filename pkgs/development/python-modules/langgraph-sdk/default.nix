@@ -48,6 +48,9 @@ buildPythonPackage rec {
       set -eu -o pipefail
       nix-update --commit --version-regex '(.*)' python3Packages.langgraph
       nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
+      nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
+      nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
+      nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
     '';
   };
 
