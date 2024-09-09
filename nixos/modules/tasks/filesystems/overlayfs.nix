@@ -4,7 +4,7 @@ let
   # The scripted initrd contains some magic to add the prefix to the
   # paths just in time, so we don't add it here.
   sysrootPrefix = fs:
-    if config.boot.initrd.systemd.enable && (utils.fsNeededForBoot fs) then
+    if config.boot.initrd.systemd.enable && fs.overlay.prefixWithSysroot && (utils.fsNeededForBoot fs) then
       "/sysroot"
     else
       "";
@@ -47,11 +47,11 @@ let
         description = ''
           The list of path(s) to the lowerdir(s).
 
-          To create a writable overlay, you MUST provide an upperdir and a
-          workdir.
+          To create a writable overlay, you MUST provide an `upperdir` and a
+          `workdir`.
 
           You can create a read-only overlay when you provide multiple (at
-          least 2!) lowerdirs and neither an upperdir nor a workdir.
+          least 2!) lowerdirs and neither an `upperdir` nor a `workdir`.
         '';
       };
 
@@ -63,6 +63,9 @@ let
 
           If this is null, a read-only overlay is created using the lowerdir.
 
+          If the filesystem is `neededForBoot`, this will be prefixed with `/sysroot`,
+          unless `prefixWithSysroot` is set to `false`.
+
           If you set this to some value you MUST also set `workdir`.
         '';
       };
@@ -73,10 +76,22 @@ let
         description = ''
           The path to the workdir.
 
+          If the filesystem is `neededForBoot`, this will be prefixed with `/sysroot`,
+          unless `prefixWithSysroot` is set to `false`.
+
           This MUST be set if you set `upperdir`.
         '';
       };
 
+      prefixWithSysroot = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          If enabled, `lowerdir`, `upperdir` and `workdir` will be prefixed with `/sysroot`.
+
+          Disabling this can be useful to mount paths from the initrd root into the real root.
+        '';
+      };
     };
 
     config = lib.mkIf (config.overlay.lowerdir != null) {
