@@ -38,6 +38,5 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pandapip1 ];
     mainProgram = "motoc";
-    platforms = lib.platforms.all;
   };
 }
