@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Pytest plugin to test alembic migrations (with default tests) and which enables you to write tests specific to your migrations.";
+    description = "Pytest plugin to test alembic migrations (with default tests) and which enables you to write tests specific to your migrations";
     homepage = "https://github.com/schireson/pytest-alembic";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rcoeurjoly ];
