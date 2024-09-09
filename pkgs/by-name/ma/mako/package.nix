@@ -44,6 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  postInstall = ''
+    mkdir -p $out/lib/systemd/user
+    substitute $src/contrib/systemd/mako.service $out/lib/systemd/user/mako.service \
+      --replace-fail '/usr/bin' "$out/bin"
+    chmod 0644 $out/lib/systemd/user/mako.service
+  '';
+
   meta = {
     description = "Lightweight Wayland notification daemon";
     homepage = "https://wayland.emersion.fr/mako/";
