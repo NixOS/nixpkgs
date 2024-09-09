@@ -3404,6 +3404,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/diagnostic-nvim/";
   };
 
+  diagram-nvim = buildVimPlugin {
+    pname = "diagram.nvim";
+    version = "2024-08-30";
+    src = fetchFromGitHub {
+      owner = "3rd";
+      repo = "diagram.nvim";
+      rev = "d19b9bb2ca162facc242c357c2802b8cfab6b55c";
+      sha256 = "0scgbhjcq0ivlys0a813gwcvw2ckkykyhhjqni6l81gghcc9qgjr";
+    };
+    meta.homepage = "https://github.com/3rd/diagram.nvim/";
+  };
+
   dial-nvim = buildVimPlugin {
     pname = "dial.nvim";
     version = "2024-07-15";
