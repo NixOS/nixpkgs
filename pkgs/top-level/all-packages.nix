@@ -34933,7 +34933,7 @@ with pkgs;
   lndmanage = callPackage ../applications/blockchains/lndmanage { };
 
   monero-cli = callPackage ../applications/blockchains/monero-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit;
   };
 
   haven-cli = callPackage ../applications/blockchains/haven-cli {
