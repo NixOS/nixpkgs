@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, lz4
-, lzo
-, which
-, xz
-, zlib
-, zstd
-, bigEndian ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lz4,
+  lzo,
+  which,
+  xz,
+  zlib,
+  zstd,
+  bigEndian ? false,
 }:
 
 let
@@ -26,7 +27,13 @@ let
 
     strictDeps = true;
     nativeBuildInputs = [ which ];
-    buildInputs = [ zlib xz zstd lz4 lzo ];
+    buildInputs = [
+      zlib
+      xz
+      zstd
+      lz4
+      lzo
+    ];
 
     preBuild = ''
       cd squashfs-tools
