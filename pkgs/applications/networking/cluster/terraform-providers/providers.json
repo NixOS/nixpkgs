@@ -696,13 +696,13 @@
     "vendorHash": "sha256-MfXuVZC7aroO83CJTNCh5YfbmMlUG1CiPeGgxhUFjN0="
   },
   "launchdarkly": {
-    "hash": "sha256-ZJxtrDGUH/Ea07CwBX+om0Ccsg6oSUjoS9pKIOnl0GM=",
+    "hash": "sha256-ke7o4I6d1JSsk+/6hk0EXUatnyCnXzb8xdgPX/cr4eM=",
     "homepage": "https://registry.terraform.io/providers/launchdarkly/launchdarkly",
     "owner": "launchdarkly",
     "repo": "terraform-provider-launchdarkly",
-    "rev": "v2.19.0",
+    "rev": "v2.20.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-pO9QTtqA+YG0i+o1+p3PYg8E/mUpzIV3II++CxQcuHE="
+    "vendorHash": "sha256-v9N7lj7bEgR5HZm1SO0+DSCmQFVnsRvHPMycYMfpYwo="
   },
   "libvirt": {
     "hash": "sha256-yGlNBbixrQxjh7zgZoK3YXpUmr1vrLiLZhKpXvQULYg=",
