@@ -1,8 +1,5 @@
 set -e
 
-HOME=$NIX_BUILD_TOP/home
-mkdir "$HOME"
-
 genericBuild
 
 depsFile=$(realpath "${1:-@defaultDepsFile@}")
