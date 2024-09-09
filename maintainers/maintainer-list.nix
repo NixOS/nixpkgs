@@ -12073,6 +12073,11 @@
     githubId = 4969294;
     name = "Louis Tim Larsen";
   };
+  louis-thevenet = {
+    name = "Louis Thevenet";
+    github = "louis-thevenet";
+    githubId = 55986107;
+  };
   lovek323 = {
     email = "jason@oconal.id.au";
     github = "lovek323";
