@@ -4386,6 +4386,12 @@
 
     keys = [ { fingerprint = "BBED 1B08 8CED 7F95 8917 FBE8 5004 F0FA D051 576D"; } ];
   };
+  cyewashish = {
+    name = "Cyewashish";
+    email = "wawashish@cyekaivy.dev";
+    github = "cyewashish";
+    githubId = 180875322;
+  };
   cynerd = {
     name = "Karel Kočí";
     email = "cynerd@email.cz";
