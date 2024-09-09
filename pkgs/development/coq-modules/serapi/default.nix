@@ -2,6 +2,7 @@
 
 let
   release = {
+    "8.20.0+0.20.0".sha256 = "sha256-Mll3m7CVfh52yA5zACDzMZk8lwhOONMMliqQ2l/ObKI=";
     "8.19.0+0.19.3".sha256 = "sha256-QWRXBTcjtAGskZBeLIuX7WDE95KfH6SxV8MJSMx8B2Q=";
     "8.18.0+0.18.3".sha256 = "sha256-3JGZCyn62LYJVpfXiwnSMxvdA2vQNTL7li2ZBPcjF0M=";
     "8.17.0+0.17.3".sha256 = "sha256-XolzpJd8zs4LLyJO4eWvCiAJ0HJSGBJTGVSBClQRGnw=";
@@ -17,10 +18,12 @@ in
 
 (mkCoqDerivation {
   pname = "serapi";
+  owner = "ejgallego";
   repo = "coq-serapi";
   inherit version release;
 
   defaultVersion = lib.switch coq.version [
+      { case = lib.versions.isEq "8.20"; out = "8.20.0+0.20.0"; }
       { case = lib.versions.isEq "8.19"; out = "8.19.0+0.19.3"; }
       { case = lib.versions.isEq "8.18"; out = "8.18.0+0.18.3"; }
       { case = lib.versions.isEq "8.17"; out = "8.17.0+0.17.3"; }
