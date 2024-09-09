@@ -19,9 +19,9 @@ index 5a96998..383aa6c 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -13,3 +13,6 @@ option('tests',
- option('nls',
-        type: 'feature', value: 'auto', yield: true,
-        description: 'Enable native language support (translations)')
+ option('installed_tests',
+        type: 'boolean', value: true,
+        description: 'Enable installed tests')
 +option('installed_test_prefix',
 +       description: 'Prefix for installed tests',
 +       type: 'string')
