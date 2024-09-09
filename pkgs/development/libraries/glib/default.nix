@@ -68,11 +68,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.81.1";
+  version = "2.82.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YpNlzecpp7drBi/CGKEJqEu8RmjKDJKrWQ7Mz5afgkw=";
+    hash = "sha256-9Mgq2lE2a92s5J17pUsztOTWBnr6MAjkhH9By5tcONM=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -183,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # https://gitlab.gnome.org/GNOME/glib/-/issues/3421#note_2206315
     "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
     (lib.mesonEnable "dtrace" withDtrace)
     (lib.mesonEnable "systemtap" withDtrace) # requires dtrace option to be enabled
