@@ -48,9 +48,47 @@ in
     };
     scion04 = { ... }: {
       imports = (imports 4);
+      networking.interfaces."lo".ipv4.addresses = [{ address = "172.16.1.1"; prefixLength = 32; }];
+      services.scion.scion-ip-gateway = {
+        enable = true;
+        config = {
+          tunnel = {
+            src_ipv4 = "172.16.1.1";
+          };
+        };
+        trafficConfig = {
+          ASes = {
+            "42-ffaa:1:5" = {
+              Nets = [
+                "172.16.100.0/24"
+              ];
+            };
+          };
+          ConfigVersion = 9001;
+        };
+      };
     };
     scion05 = { ... }: {
       imports = (imports 5);
+      networking.interfaces."lo".ipv4.addresses = [{ address = "172.16.100.1"; prefixLength = 32; }];
+      services.scion.scion-ip-gateway = {
+        enable = true;
+        config = {
+          tunnel = {
+            src_ipv4 = "172.16.100.1";
+          };
+        };
+        trafficConfig = {
+          ASes = {
+            "42-ffaa:1:4" = {
+              Nets = [
+                "172.16.1.0/24"
+              ];
+            };
+          };
+          ConfigVersion = 9001;
+        };
+      };
     };
   };
   testScript = let
@@ -125,6 +163,10 @@ in
 
     # Execute pingAll command on all instances
     succeed("${pingAll} >&2")
+
+    # Execute ICMP pings across scion-ip-gateway
+    scion04.succeed("ping -c 3 172.16.100.1 >&2")
+    scion05.succeed("ping -c 3 172.16.1.1 >&2")
 
     # Restart all scion services and ping again to test robustness
     succeed("systemctl restart scion-* >&2")
