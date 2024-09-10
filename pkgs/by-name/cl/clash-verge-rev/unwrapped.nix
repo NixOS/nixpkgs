@@ -13,7 +13,7 @@
   openssl,
 }:
 rustPlatform.buildRustPackage {
-  inherit version src;
+  inherit version src meta;
   pname = "${pname}-unwrapped";
   sourceRoot = "${src.name}/src-tauri";
 
