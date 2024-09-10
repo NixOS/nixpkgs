@@ -24,19 +24,17 @@
 installManPage() {
     local path
     for path in "$@"; do
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            echo "installManPage: installing $path"
-        fi
         if test -z "$path"; then
-            echo "installManPage: error: path cannot be empty" >&2
+            nixErrorLog "${FUNCNAME[0]}: path cannot be empty"
             return 1
         fi
+        nixInfoLog "${FUNCNAME[0]}: installing $path"
         local basename
         basename=$(stripHash "$path") # use stripHash in case it's a nix store path
         local trimmed=${basename%.gz} # don't get fooled by compressed manpages
         local suffix=${trimmed##*.}
         if test -z "$suffix" -o "$suffix" = "$trimmed"; then
-            echo "installManPage: error: path missing manpage section suffix: $path" >&2
+            nixErrorLog "${FUNCNAME[0]}: path missing manpage section suffix: $path"
             return 1
         fi
         local outRoot
@@ -45,7 +43,8 @@ installManPage() {
         else
             outRoot=${!outputMan:?}
         fi
-        install -Dm644 -T "$path" "${outRoot}/share/man/man$suffix/$basename" || return
+        local outPath="${outRoot}/share/man/man$suffix/$basename"
+        install -D --mode=644 --no-target-directory "$path" "$outPath"
     done
 }
 
@@ -107,7 +106,7 @@ installShellCompletion() {
             --name)
                 name=$1
                 shift || {
-                    echo 'installShellCompletion: error: --name flag expected an argument' >&2
+                    nixErrorLog "${FUNCNAME[0]}: --name flag expected an argument"
                     return 1
                 }
                 continue;;
@@ -118,7 +117,7 @@ installShellCompletion() {
             --cmd)
                 cmdname=$1
                 shift || {
-                    echo 'installShellCompletion: error: --cmd flag expected an argument' >&2
+                    nixErrorLog "${FUNCNAME[0]}: --cmd flag expected an argument"
                     return 1
                 }
                 continue;;
@@ -127,7 +126,7 @@ installShellCompletion() {
                 cmdname=${arg#--cmd=}
                 continue;;
             --?*)
-                echo "installShellCompletion: warning: unknown flag ${arg%%=*}" >&2
+                nixWarnLog "${FUNCNAME[0]}: unknown flag ${arg%%=*}"
                 retval=2
                 continue;;
             --)
@@ -136,23 +135,21 @@ installShellCompletion() {
                 continue;;
             esac
         fi
-        if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            echo "installShellCompletion: installing $arg${name:+ as $name}"
-        fi
+        nixInfoLog "${FUNCNAME[0]}: installing $arg${name:+ as $name}"
         # if we get here, this is a path or named pipe
         # Identify shell and output name
         local curShell=$shell
         local outName=''
         if [[ -z "$arg" ]]; then
-            echo "installShellCompletion: error: empty path is not allowed" >&2
+            nixErrorLog "${FUNCNAME[0]}: empty path is not allowed"
             return 1
         elif [[ -p "$arg" ]]; then
             # this is a named fd or fifo
             if [[ -z "$curShell" ]]; then
-                echo "installShellCompletion: error: named pipe requires one of --bash, --fish, or --zsh" >&2
+                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --bash, --fish, or --zsh"
                 return 1
             elif [[ -z "$name" && -z "$cmdname" ]]; then
-                echo "installShellCompletion: error: named pipe requires one of --cmd or --name" >&2
+                nixErrorLog "${FUNCNAME[0]}: named pipe requires one of --cmd or --name"
                 return 1
             fi
         else
@@ -168,10 +165,10 @@ installShellCompletion() {
                 *)
                     if [[ "$argbase" = _* && "$argbase" != *.* ]]; then
                         # probably zsh
-                        echo "installShellCompletion: warning: assuming path \`$arg' is zsh; please specify with --zsh" >&2
+                        nixWarnLog "${FUNCNAME[0]}: assuming path \`$arg' is zsh; please specify with --zsh"
                         curShell=zsh
                     else
-                        echo "installShellCompletion: warning: unknown shell for path: $arg" >&2
+                        nixWarnLog "${FUNCNAME[0]}: unknown shell for path: $arg" >&2
                         retval=2
                         continue
                     fi;;
@@ -188,7 +185,7 @@ installShellCompletion() {
             zsh) outName=_$cmdname;;
             *)
                 # Our list of shells is out of sync with the flags we accept or extensions we detect.
-                echo 'installShellCompletion: internal error' >&2
+                nixErrorLog "${FUNCNAME[0]}: internal: shell $curShell not recognized"
                 return 1;;
             esac
         fi
@@ -206,7 +203,7 @@ installShellCompletion() {
             fi;;
         *)
             # Our list of shells is out of sync with the flags we accept or extensions we detect.
-            echo 'installShellCompletion: internal error' >&2
+            nixErrorLog "${FUNCNAME[0]}: internal: shell $curShell not recognized"
             return 1;;
         esac
         # Install file
@@ -217,19 +214,43 @@ installShellCompletion() {
             mkdir -p "$outDir" \
             && cat "$arg" > "$outPath"
         else
-            install -Dm644 -T "$arg" "$outPath"
-        fi || return
+            install -D --mode=644 --no-target-directory "$arg" "$outPath"
+        fi
 
         if [ ! -s "$outPath" ]; then
-            echo "installShellCompletion: error: installed shell completion file \`$outPath' does not exist or has zero size" >&2
+            nixErrorLog "${FUNCNAME[0]}: installed shell completion file \`$outPath' does not exist or has zero size"
             return 1
         fi
         # Clear the per-path flags
         name=
     done
     if [[ -n "$name" ]]; then
-        echo 'installShellCompletion: error: --name flag given with no path' >&2
+        nixErrorLog "${FUNCNAME[0]}: --name flag given with no path" >&2
         return 1
     fi
     return $retval
+}
+
+# installBin <path> [...<path>]
+#
+# Install each argument to $outputBin
+installBin() {
+    local path
+    for path in "$@"; do
+        if test -z "$path"; then
+            nixErrorLog "${FUNCNAME[0]}: path cannot be empty"
+            return 1
+        fi
+        nixInfoLog "${FUNCNAME[0]}: installing $path"
+
+        local basename
+        # use stripHash in case it's a nix store path
+        basename=$(stripHash "$path")
+
+        local outRoot
+        outRoot=${!outputBin:?}
+
+        local outPath="${outRoot}/bin/$basename"
+        install -D --mode=755 --no-target-directory "$path" "${outRoot}/bin/$basename"
+    done
 }

@@ -49,11 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   buildInputs = [
-    # Remove this after https://github.com/NixOS/nixpkgs/pull/336712
-    # has landed in `nixpkgs-unstable`
-    (curl.overrideAttrs (old: {
-      configureFlags = old.configureFlags ++ [ "--enable-versioned-symbols" ];
-    })).dev
+    curl.dev
     openssl.dev
     stdenv.cc.cc.lib
   ];

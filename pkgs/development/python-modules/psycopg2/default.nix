@@ -37,7 +37,7 @@ buildPythonPackage rec {
     # some linker flags are added but the linker ignores them because they're incompatible
     # https://github.com/psycopg/psycopg2/blob/89005ac5b849c6428c05660b23c5a266c96e677d/setup.py
     substituteInPlace setup.py \
-      --replace "self.pg_config_exe = self.build_ext.pg_config" 'self.pg_config_exe = "${lib.getExe' buildPackages.postgresql "pg_config"}"'
+      --replace-fail "self.pg_config_exe = self.build_ext.pg_config" 'self.pg_config_exe = "${lib.getDev buildPackages.postgresql}/bin/pg_config"'
   '';
 
   nativeBuildInputs = [

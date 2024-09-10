@@ -82,7 +82,6 @@ in stdenv.mkDerivation rec {
         s:^# \(LOOKUP_PGSQL=yes\)$:\1:
         s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lpq -L${postgresql.lib}/lib:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lpq -L${postgresql.lib}/lib:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${postgresql}/include:
       ''}
       ${lib.optionalString enableSqlite ''
         s:^# \(LOOKUP_SQLITE=yes\)$:\1:

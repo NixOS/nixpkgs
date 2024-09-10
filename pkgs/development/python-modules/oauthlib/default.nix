@@ -47,6 +47,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  disabledTests = [
+    # https://github.com/oauthlib/oauthlib/issues/877
+    "test_rsa_bad_keys"
+  ];
+
   pythonImportsCheck = [ "oauthlib" ];
 
   passthru.tests = {
