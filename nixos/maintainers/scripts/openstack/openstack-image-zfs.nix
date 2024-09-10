@@ -1,36 +1,17 @@
 # nix-build '<nixpkgs/nixos>' -A config.system.build.openstackImage --arg configuration "{ imports = [ ./nixos/maintainers/scripts/openstack/openstack-image.nix ]; }"
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
   inherit (lib) mkOption types;
   copyChannel = true;
   cfg = config.openstackImage;
   imageBootMode = if config.openstack.efi then "uefi" else "legacy-bios";
-  virtualisationOptions = import ../../../modules/virtualisation/virtualisation-options.nix;
 in
 {
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
-    virtualisationOptions.diskSize
-    (lib.mkRenamedOptionModuleWith {
-      sinceRelease = 2411;
-      from = [
-        "virtualisation"
-        "openstackImage"
-        "sizeMB"
-      ];
-      to = [
-        "virtualisation"
-        "diskSize"
-      ];
-    })
-
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
+
 
   options.openstackImage = {
     name = mkOption {
@@ -41,15 +22,18 @@ in
 
     ramMB = mkOption {
       type = types.int;
-      default = (3 * 1024);
+      default = 1024;
       description = "RAM allocation for build VM";
     };
 
+    sizeMB = mkOption {
+      type = types.int;
+      default = 8192;
+      description = "The size in MB of the image";
+    };
+
     format = mkOption {
-      type = types.enum [
-        "raw"
-        "qcow2"
-      ];
+      type = types.enum [ "raw" "qcow2" ];
       default = "qcow2";
       description = "The image format to output";
     };
@@ -70,26 +54,24 @@ in
       };
     };
 
-    virtualisation.diskSize = lib.mkDefault (8 * 1024);
-    virtualisation.diskSizeAutoSupported = false;
-
     system.build.openstackImage = import ../../../lib/make-single-disk-zfs-image.nix {
       inherit lib config;
       inherit (cfg) contents format name;
       pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
 
-      configFile = pkgs.writeText "configuration.nix" ''
-        { modulesPath, ... }: {
-          imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
-          openstack.zfs.enable = true;
-        }
-      '';
+      configFile = pkgs.writeText "configuration.nix"
+        ''
+          { modulesPath, ... }: {
+            imports = [ "''${modulesPath}/virtualisation/openstack-config.nix" ];
+            openstack.zfs.enable = true;
+          }
+        '';
 
       includeChannel = copyChannel;
 
       bootSize = 1000;
       memSize = cfg.ramMB;
-      rootSize = config.virtualisation.diskSize;
+      rootSize = cfg.sizeMB;
       rootPoolProperties = {
         ashift = 12;
         autoexpand = "on";
