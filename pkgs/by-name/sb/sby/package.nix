@@ -20,13 +20,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sby";
-  version = "0.44";
+  version = "0.45";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
     rev = "yosys-${version}";
-    hash = "sha256-/oDbbdZuWPdg0Xrh+c4i283vML9QTfyWVu8kryb4WaE=";
+    hash = "sha256-HRQ5ZL0w3GLUySTFekE/T/VlxJLFIQQr0bW8l7rp/zs=";
   };
 
   nativeBuildInputs = [ bash ];
