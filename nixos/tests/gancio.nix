@@ -71,7 +71,7 @@ import ./make-test-python.nix (
       server.wait_for_unit("postgresql")
       server.wait_for_unit("gancio")
       server.wait_for_unit("nginx")
-      server.wait_for_open_port(13120)
+      server.wait_for_file("/run/gancio/socket")
       server.wait_for_open_port(80)
 
       # Check can create user via cli

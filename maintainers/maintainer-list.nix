@@ -18547,6 +18547,13 @@
     githubId = 695473;
     name = "Sascha Grunert";
   };
+  saturn745 = {
+    email = "git-commits.rk7uq@aleeas.com";
+    github = "saturn745";
+    githubId = 90934664;
+    name = "Saturn745";
+    matrix = "@galaxyyy:matrix.org";
+  };
   saulecabrera = {
     name = "Saúl Cabrera";
     email = "saulecabrera@gmail.com";
