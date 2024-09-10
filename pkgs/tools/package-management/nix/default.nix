@@ -224,7 +224,7 @@ in lib.makeExtensible (self: ({
     stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
   })).overrideAttrs (o: {
     meta.knownVulnerabilities = [
-      "Nix >= 2.24.0 and master have a vulnerability. Please downgrade from nix_2_24 to nix_2_23"
+      "Nix >= 2.24.0 and master have a vulnerability. Please downgrade from nixVersions.git to nixVersions.nix_2_23"
     ];
   });
 
