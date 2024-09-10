@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ mit zlib ];
     maintainers = with lib.maintainers; [
       jmbaur
-      eclairevoyant
     ];
     mainProgram = "fnott";
     platforms = lib.platforms.linux;

@@ -264,7 +264,6 @@ stdenv.mkDerivation rec {
       lib.licenses.free
     ];
     maintainers = with lib.maintainers; [
-      eclairevoyant
       mic92
       equirosa
       urandom

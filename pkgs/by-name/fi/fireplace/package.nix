@@ -31,7 +31,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       multivac61
-      eclairevoyant
     ];
     mainProgram = "fireplace";
     platforms = lib.platforms.all;

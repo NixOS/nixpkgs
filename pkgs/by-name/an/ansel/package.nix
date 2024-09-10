@@ -179,7 +179,7 @@ stdenv.mkDerivation {
     description = "Darktable fork minus the bloat plus some design vision";
     homepage = "https://ansel.photos/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "ansel";
     platforms = lib.platforms.linux;
   };

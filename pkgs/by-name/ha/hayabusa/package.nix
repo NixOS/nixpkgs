@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
     description = "Swift rust fetch program";
     homepage = "https://github.com/notarin/hayabusa";
     license = lib.licenses.cc-by-nc-nd-40;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "hayabusa";
     platforms = lib.platforms.linux;
   };

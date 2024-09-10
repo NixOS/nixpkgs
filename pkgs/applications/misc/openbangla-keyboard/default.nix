@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     mainProgram = "openbangla-gui";
     homepage = "https://openbangla.github.io/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant hqurve ];
+    maintainers = with lib.maintainers; [ hqurve ];
     platforms = lib.platforms.linux;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;

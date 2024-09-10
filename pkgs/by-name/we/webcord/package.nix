@@ -85,7 +85,6 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
-      eclairevoyant
       huantian
     ];
     platforms = lib.platforms.linux;
