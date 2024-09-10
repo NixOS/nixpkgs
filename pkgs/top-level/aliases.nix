@@ -1221,6 +1221,7 @@ mapAliases ({
   pgtap = postgresqlPackages.pgtap;
   plv8 = postgresqlPackages.plv8;
   postgis = postgresqlPackages.postgis;
+  texinfo5 = throw "'texinfo5' has been removed from nixpkgs"; # Added 2024-09-10
   timescaledb = postgresqlPackages.timescaledb;
   tsearch_extras = postgresqlPackages.tsearch_extras;
 

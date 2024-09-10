@@ -19016,7 +19016,6 @@ with pkgs;
   texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
   inherit (texinfoPackages)
     texinfo413
-    texinfo5 # needed for gcc48
     texinfo6_5 # needed for allegro
     texinfo6_7 # needed for gpm, iksemel and fwknop
     texinfo6
