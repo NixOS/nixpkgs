@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.2.2";
+  version = "2.2.3";
   providers = {
     airplay = [
     ];
