@@ -54,9 +54,12 @@ in
           };
           baseurl = mkOption {
             type = types.str;
-            default = "";
-            example = "/gancio";
-            description = "The URL path under which the server is reachable.";
+            default = "http${
+              lib.optionalString config.services.nginx.virtualHosts."${cfg.settings.hostname}".enableACME "s"
+            }://${cfg.settings.hostname}";
+            defaultText = lib.literalExpression ''"https://''${cfg.settings.hostname}"'';
+            example = "https://demo.gancio.org/gancio";
+            description = "The full URL under which the server is reachable.";
           };
           server = {
             socket = mkOption {
