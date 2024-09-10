@@ -1,4 +1,6 @@
 # Setup hook to use for pypa/build projects
+# shellcheck shell=bash
+
 echo "Sourcing pypa-build-hook"
 
 pypaBuildPhase() {
