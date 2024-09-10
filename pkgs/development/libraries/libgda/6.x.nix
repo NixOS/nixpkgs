@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     postgresql
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+
   postPatch = ''
     patchShebangs \
       providers/raw_spec.py \
