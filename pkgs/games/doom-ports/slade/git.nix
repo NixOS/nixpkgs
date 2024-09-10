@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slade";
-  version = "3.2.4-unstable-2023-09-30";
+  version = "3.2.6-unstable-2024-06-16";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "d05af4bd3a9a655dfe17d02760bab3542cc0b909";
-    sha256 = "sha256-lzTSE0WH+4fOad9E/pL3LDc4L151W0hFEmD0zsS0gpQ=";
+    rev = "e745dc0f59fd53f1c8c252a36855ea4ee5816128";
+    sha256 = "sha256-FOVcvDfN5nuRSNtHpXSPTGJU5pXayjyGG0YzhfNrvBI=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ertes ];
   };
