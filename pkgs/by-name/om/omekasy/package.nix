@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "omekasy";
-  version = "1.2.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "ikanago";
     repo = "omekasy";
     rev = "v${version}";
-    hash = "sha256-oPhO+gRWrwgABc+gGXnIC519F5XVvewUHo2y54RoE4U=";
+    hash = "sha256-wI+xN6pyNoP4xknjHHDydHq275Gb1nyp7YtqmABlTBA=";
   };
 
-  cargoHash = "sha256-6GjNn7FAcAihqNhPD18sUFe40ZQwXmFEQmoZNZL2trQ=";
+  cargoHash = "sha256-6CU2ff4o7Y3CmZSf/xs2SSGco2mu4oRLJYIciCld8zo=";
 
   buildNoDefaultFeatures = stdenv.targetPlatform.isWasi;
 
