@@ -1,4 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
+, autoreconfHook
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -14,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.75";
+  version = "1.4.76";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-i3IcqTnTEq+qbvMdy9avtRYe04Wsgo5vzNTFt2vhidY=";
+    sha256 = "sha256-jL9CluNzz9DO3+nZeHYLWwXFj9xASLTivK8KYayPUBE=";
   };
 
   separateDebugInfo = true;
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ pcre2 pcre2.dev libxml2 zlib bzip2 which file openssl ]
              ++ lib.optional enableDbi libdbi
              ++ lib.optional enableMagnet lua5_1
