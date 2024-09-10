@@ -8,6 +8,11 @@ let
   cfg = config.power.ups;
   defaultPort = 3493;
 
+  envVars = {
+    NUT_CONFPATH = "/etc/nut";
+    NUT_STATEPATH = "/var/lib/nut";
+  };
+
   nutFormat = {
 
     type = with lib.types; let
@@ -520,8 +525,7 @@ in
         ExecReload = "${pkgs.nut}/sbin/upsmon -c reload";
         LoadCredential = mapAttrsToList (name: monitor: "upsmon_password_${name}:${monitor.passwordFile}") cfg.upsmon.monitor;
       };
-      environment.NUT_CONFPATH = "/etc/nut";
-      environment.NUT_STATEPATH = "/var/lib/nut";
+      environment = envVars;
     };
 
     systemd.services.upsd = let
@@ -540,8 +544,7 @@ in
         ExecReload = "${pkgs.nut}/sbin/upsd -c reload";
         LoadCredential = mapAttrsToList (name: user: "upsdusers_password_${name}:${user.passwordFile}") cfg.users;
       };
-      environment.NUT_CONFPATH = "/etc/nut";
-      environment.NUT_STATEPATH = "/var/lib/nut";
+      environment = envVars;
       restartTriggers = [
         config.environment.etc."nut/upsd.conf".source
       ];
@@ -558,8 +561,7 @@ in
         # TODO: replace 'root' by another username.
         ExecStart = "${pkgs.nut}/bin/upsdrvctl -u root start";
       };
-      environment.NUT_CONFPATH = "/etc/nut";
-      environment.NUT_STATEPATH = "/var/lib/nut";
+      environment = envVars;
       restartTriggers = [
         config.environment.etc."nut/ups.conf".source
       ];
