@@ -7,10 +7,11 @@
   pname,
   webkitgtk,
   service-cargo-hash,
+  meta,
 }:
 rustPlatform.buildRustPackage {
   pname = "${pname}-service";
-  inherit version;
+  inherit version meta;
 
   src = src-service;
   sourceRoot = "${src-service.name}";
