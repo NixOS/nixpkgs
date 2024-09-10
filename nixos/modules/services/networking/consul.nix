@@ -72,6 +72,14 @@ in
             The name of the interface to pull the bind_addr from.
           '';
         };
+
+        client = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc ''
+            The name of the interface to pull an additional client_addr from.
+          '';
+        };
       };
 
       forceAddrFamily = mkOption {
@@ -205,6 +213,7 @@ in
             "-4"
           else
             "";
+          prefix = name: if name == "client" then "127.0.0.1 " else "";
         in ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}
@@ -233,7 +242,7 @@ in
         ''
         + concatStrings (flip mapAttrsToList cfg.interface (name: i:
           optionalString (i != null) ''
-            echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
+            echo "$delim \"${name}_addr\": \"${prefix name}$(getAddr "${i}")\"" >> /etc/consul-addrs.json
             delim=","
           ''))
         + ''
