@@ -11448,6 +11448,8 @@ with pkgs;
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
+  plag = callPackage ../tools/networking/plag { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   plantuml-c4 = callPackage ../tools/misc/plantuml/plantuml-c4.nix { };
