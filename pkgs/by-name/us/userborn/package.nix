@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nikstur/userborn";
     description = "Declaratively bear (manage) Linux users and groups";
     license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "userborn";
   };
