@@ -9,19 +9,27 @@ with lib;
 
 let
   cfg = config.hyperv;
-
 in
 {
+
+  imports = [
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "hyperv"
+        "baseImageSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
+
   options = {
     hyperv = {
-      baseImageSize = mkOption {
-        type = with types; either (enum [ "auto" ]) int;
-        default = "auto";
-        example = 2048;
-        description = ''
-          The size of the hyper-v base image in MiB.
-        '';
-      };
       vmDerivationName = mkOption {
         type = types.str;
         default = "nixos-hyperv-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
@@ -40,6 +48,8 @@ in
   };
 
   config = {
+    virtualisation.diskSize = lib.mkDefault (4 * 1024);
+
     system.build.hypervImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
       postVM = ''
@@ -47,7 +57,7 @@ in
         rm $diskImage
       '';
       format = "raw";
-      diskSize = cfg.baseImageSize;
+      inherit (config.virtualisation) diskSize;
       partitionTableType = "efi";
       inherit config lib pkgs;
     };
