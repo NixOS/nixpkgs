@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.8.2";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-9isWxY87ppFPIA6hjyuuCqKxt7Io4h8PUhIs+SPSBvA=";
+    hash = "sha256-YsSpa3beRny+Tpn7B93OtYqYxjtAMaBa5k4I2zvKgbY=";
   };
 
   pythonRelaxDeps = [
@@ -61,6 +61,10 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     scdoc < twitch-dl.1.scd > twitch-dl.1
     installManPage twitch-dl.1
+  '';
+
+  preInstallCheck = ''
+    export HOME="$(mktemp -d)"
   '';
 
   meta = with lib; {
