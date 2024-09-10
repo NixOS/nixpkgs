@@ -19211,6 +19211,11 @@ with pkgs;
 
   ytt = callPackage ../development/tools/ytt { };
 
+  zigmod = callPackage ../by-name/zi/zigmod/package.nix {
+    zig = zig_0_12;
+  };
+  buildZigmodPackage = callPackage ../by-name/zi/zigmod/buildZigmodPackage.nix { };
+
   zydis = callPackage ../development/libraries/zydis { };
 
   grabserial = callPackage ../development/tools/grabserial { };
