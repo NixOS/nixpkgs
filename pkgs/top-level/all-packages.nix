@@ -3369,7 +3369,9 @@ with pkgs;
 
   base16384 = callPackage ../tools/text/base16384 { };
 
-  bashate = python3Packages.callPackage ../development/tools/bashate { };
+  bashate = python3Packages.callPackage ../development/tools/bashate {
+    python3Packages = python311Packages;
+  };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
@@ -18713,7 +18715,9 @@ with pkgs;
 
   regex-cli = callPackage ../development/tools/misc/regex-cli { };
 
-  reno = callPackage ../development/tools/reno { };
+  reno = callPackage ../development/tools/reno {
+    python3Packages = python311Packages;
+  };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
 
