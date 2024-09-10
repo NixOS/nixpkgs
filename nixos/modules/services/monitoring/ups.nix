@@ -498,7 +498,9 @@ in
       })
     ];
 
+    # For interactive use.
     environment.systemPackages = [ pkgs.nut ];
+    environment.variables = envVars;
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts =
