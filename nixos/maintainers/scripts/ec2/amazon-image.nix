@@ -15,11 +15,23 @@ let
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
   amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
-
 in
 {
-
-  imports = [ ../../../modules/virtualisation/amazon-image.nix ];
+  imports = [
+    ../../../modules/virtualisation/amazon-image.nix
+    ../../../modules/virtualisation/disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "amazonImage"
+        "sizeMB"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   # Amazon recommends setting this to the highest possible value for a good EBS
   # experience, which prior to 4.15 was 255.
@@ -52,13 +64,6 @@ in
       '';
     };
 
-    sizeMB = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = 3072;
-      example = 8192;
-      description = "The size in MB of the image";
-    };
-
     format = mkOption {
       type = types.enum [
         "raw"
@@ -69,6 +74,11 @@ in
       description = "The image format to output";
     };
   };
+
+  # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+  # to avoid breaking existing configs using that.
+  config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024);
+  config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
   config.system.build.amazonImage =
     let
@@ -98,7 +108,7 @@ in
 
         bootSize = 1000; # 1G is the minimum EBS volume
 
-        rootSize = cfg.sizeMB;
+        rootSize = config.virtualisation.diskSize;
         rootPoolProperties = {
           ashift = 12;
           autoexpand = "on";
@@ -151,7 +161,7 @@ in
         fsType = "ext4";
         partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
 
-        diskSize = cfg.sizeMB;
+        inherit (config.virtualisation) diskSize;
 
         postVM = ''
            extension=''${diskImage##*.}
