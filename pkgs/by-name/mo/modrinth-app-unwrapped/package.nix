@@ -1,35 +1,31 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
   buildGoModule,
   nix-update-script,
-  modrinth-app-unwrapped,
-  cacert,
   cargo-tauri,
   desktop-file-utils,
   esbuild,
   darwin,
-  jq,
   libsoup,
-  moreutils,
   pnpm_8,
   nodejs,
   openssl,
   pkg-config,
   webkitgtk,
 }:
-rustPlatform.buildRustPackage {
+
+rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "theseus";
-    rev = "v${modrinth-app-unwrapped.version}";
-    sha256 = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
   };
 
   cargoLock = {
@@ -39,49 +35,21 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  pnpm-deps = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "${modrinth-app-unwrapped.pname}-pnpm-deps";
-    inherit (modrinth-app-unwrapped) version src;
-    sourceRoot = "${finalAttrs.src.name}/theseus_gui";
-
-    dontConfigure = true;
-    dontBuild = true;
-    doCheck = false;
-
-    nativeBuildInputs = [
-      cacert
-      jq
-      moreutils
-      pnpm_8
-    ];
-
-    # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-    installPhase = ''
-      export HOME=$(mktemp -d)
-
-      pnpm config set store-dir "$out"
-      pnpm install --frozen-lockfile --ignore-script --force
-
-      # remove timestamp and sort json files
-      rm -rf "$out"/v3/tmp
-      for f in $(find "$out" -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . "$f" | sponge "$f"
-      done
-    '';
-
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
-  });
-
   nativeBuildInputs = [
     cargo-tauri
     desktop-file-utils
-    pnpm_8
+    pnpm_8.configHook
     nodejs
     pkg-config
   ];
+
+  pnpmRoot = "theseus_gui";
+
+  pnpmDeps = pnpm_8.fetchDeps {
+    inherit pname src;
+    sourceRoot = "${src.name}/${pnpmRoot}";
+    hash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
+  };
 
   buildInputs =
     [ openssl ]
@@ -99,48 +67,30 @@ rustPlatform.buildRustPackage {
       ]
     );
 
-  env = {
-    tauriBundle =
-      {
-        Linux = "deb";
-        Darwin = "app";
-      }
-      .${stdenv.hostPlatform.uname.system}
-      or (builtins.throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
-
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.override {
-        buildGoModule = args: buildGoModule (args // rec {
-          version = "0.20.2";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-      }
-    );
-  };
-
-  postPatch = ''
-    export HOME=$(mktemp -d)
-    export STORE_PATH=$(mktemp -d)
-
-    pushd theseus_gui
-    cp -rT ${modrinth-app-unwrapped.pnpm-deps} "$STORE_PATH"
-    chmod -R +w "$STORE_PATH"
-
-    pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script
-    popd
-  '';
+  env.ESBUILD_BINARY_PATH = lib.getExe (
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // rec {
+            version = "0.20.2";
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    }
+  );
 
   buildPhase = ''
     runHook preBuild
 
-    cargo tauri build --bundles "$tauriBundle"
+    cargo tauri build --bundles ${if stdenv.isDarwin then "app" else "deb"}
 
     runHook postBuild
   '';
@@ -156,7 +106,7 @@ rustPlatform.buildRustPackage {
       ln -s "$out"/bin/modrinth-app "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App
     ''
     + lib.optionalString stdenv.isLinux ''
-      cp -r target/release/bundle/"$tauriBundle"/*/data/usr "$out"
+      cp -r target/release/bundle/deb/*/data/usr "$out"
       desktop-file-edit \
         --set-comment "Modrinth's game launcher" \
         --set-key="StartupNotify" --set-value="true" \
@@ -181,7 +131,7 @@ rustPlatform.buildRustPackage {
     '';
     mainProgram = "modrinth-app";
     homepage = "https://modrinth.com";
-    changelog = "https://github.com/modrinth/theseus/releases/tag/v${modrinth-app-unwrapped.version}";
+    changelog = "https://github.com/modrinth/theseus/releases/tag/v${version}";
     license = with lib.licenses; [
       gpl3Plus
       unfreeRedistributable
