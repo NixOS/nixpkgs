@@ -203,7 +203,7 @@ let
       inherit enableMail kernelModuleAttribute;
       latestCompatibleLinuxPackages = lib.pipe linuxKernel.packages [
         builtins.attrValues
-        (builtins.filter (kPkgs: (builtins.tryEval kPkgs).success && kPkgs ? kernel && kPkgs.kernel.passthru.isVanilla && kPkgs.kernel.pname == "linux" && kernelCompatible kPkgs.kernel))
+        (builtins.filter (kPkgs: (builtins.tryEval kPkgs).success && kPkgs ? kernel && kPkgs.kernel.pname == "linux" && kernelCompatible kPkgs.kernel))
         (builtins.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)))
         lib.last
       ];
