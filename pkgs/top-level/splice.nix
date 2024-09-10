@@ -14,8 +14,7 @@
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
 # parameter there the boolean value of that equality check.
-lib: pkgs: actuallySplice:
-
+lib:
 let
   inherit (lib)
     attrByPath
@@ -31,7 +30,10 @@ let
     optionalAttrs
     splitString
     ;
+in
+pkgs: actuallySplice:
 
+let
   spliceReal =
     { pkgsBuildBuild
     , pkgsBuildHost
