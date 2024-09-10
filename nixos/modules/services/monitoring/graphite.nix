@@ -1,11 +1,8 @@
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.graphite;
   opt = options.services.graphite;
-  writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
+  writeTextOrNull = f: t: lib.mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
   staticDir = cfg.dataDir + "/static";
@@ -20,7 +17,7 @@ let
 
   graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (
     "STATIC_ROOT = '${staticDir}'\n" +
-    optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n"
+    lib.optionalString (config.time.timeZone != null) "TIME_ZONE = '${config.time.timeZone}'\n"
     + cfg.web.extraConfig
   );
 
@@ -32,7 +29,7 @@ let
 
   configDir = pkgs.buildEnv {
     name = "graphite-config";
-    paths = lists.filter (el: el != null) [
+    paths = lib.lists.filter (el: el != null) [
       (writeTextOrNull "carbon.conf" cfg.carbon.config)
       (writeTextOrNull "storage-aggregation.conf" cfg.carbon.storageAggregation)
       (writeTextOrNull "storage-schemas.conf" cfg.carbon.storageSchemas)
@@ -62,16 +59,16 @@ let
 in {
 
   imports = [
-    (mkRemovedOptionModule ["services" "graphite" "api"] "")
-    (mkRemovedOptionModule ["services" "graphite" "beacon"] "")
-    (mkRemovedOptionModule ["services" "graphite" "pager"] "")
+    (lib.mkRemovedOptionModule ["services" "graphite" "api"] "")
+    (lib.mkRemovedOptionModule ["services" "graphite" "beacon"] "")
+    (lib.mkRemovedOptionModule ["services" "graphite" "pager"] "")
   ];
 
   ###### interface
 
   options.services.graphite = {
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/db/graphite";
       description = ''
         Data directory for graphite.
@@ -79,26 +76,26 @@ in {
     };
 
     web = {
-      enable = mkOption {
+      enable = lib.mkOption {
         description = "Whether to enable graphite web frontend.";
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      listenAddress = mkOption {
+      listenAddress = lib.mkOption {
         description = "Graphite web frontend listen address.";
         default = "127.0.0.1";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         description = "Graphite web frontend port.";
         default = 8080;
-        type = types.port;
+        type = lib.types.port;
       };
 
-      extraConfig = mkOption {
-        type = types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Graphite webapp settings. See:
@@ -108,7 +105,7 @@ in {
     };
 
     carbon = {
-      config = mkOption {
+      config = lib.mkOption {
         description = "Content of carbon configuration file.";
         default = ''
           [cache]
@@ -121,19 +118,19 @@ in {
           LOG_UPDATES = False
           LOG_CACHE_HITS = False
         '';
-        type = types.str;
+        type = lib.types.str;
       };
 
-      enableCache = mkOption {
+      enableCache = lib.mkOption {
         description = "Whether to enable carbon cache, the graphite storage daemon.";
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      storageAggregation = mkOption {
+      storageAggregation = lib.mkOption {
         description = "Defines how to aggregate data to lower-precision retentions.";
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = ''
           [all_min]
           pattern = \.min$
@@ -142,10 +139,10 @@ in {
         '';
       };
 
-      storageSchemas = mkOption {
+      storageSchemas = lib.mkOption {
         description = "Defines retention rates for storing metrics.";
         default = "";
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = ''
           [apache_busyWorkers]
           pattern = ^servers\.www.*\.workers\.busyWorkers$
@@ -153,27 +150,27 @@ in {
         '';
       };
 
-      blacklist = mkOption {
+      blacklist = lib.mkOption {
         description = "Any metrics received which match one of the expressions will be dropped.";
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
-      whitelist = mkOption {
+      whitelist = lib.mkOption {
         description = "Only metrics received which match one of the expressions will be persisted.";
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = ".*";
       };
 
-      rewriteRules = mkOption {
+      rewriteRules = lib.mkOption {
         description = ''
           Regular expression patterns that can be used to rewrite metric names
           in a search and replace fashion.
         '';
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = ''
           [post]
           _sum$ =
@@ -181,16 +178,16 @@ in {
         '';
       };
 
-      enableRelay = mkOption {
+      enableRelay = lib.mkOption {
         description = "Whether to enable carbon relay, the carbon replication and sharding service.";
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      relayRules = mkOption {
+      relayRules = lib.mkOption {
         description = "Relay rules are used to send certain metrics to a certain backend.";
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = ''
           [example]
           pattern = ^mydata\.foo\..+
@@ -198,16 +195,16 @@ in {
         '';
       };
 
-      enableAggregator = mkOption {
+      enableAggregator = lib.mkOption {
         description = "Whether to enable carbon aggregator, the carbon buffering service.";
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      aggregationRules = mkOption {
+      aggregationRules = lib.mkOption {
         description = "Defines if and how received metrics will be aggregated.";
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = ''
           <env>.applications.<app>.all.requests (60) = sum <env>.applications.<app>.*.requests
           <env>.applications.<app>.all.latency (60) = avg <env>.applications.<app>.*.latency
@@ -216,47 +213,47 @@ in {
     };
 
     seyren = {
-      enable = mkOption {
+      enable = lib.mkOption {
         description = "Whether to enable seyren service.";
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         description = "Seyren listening port.";
         default = 8081;
-        type = types.port;
+        type = lib.types.port;
       };
 
-      seyrenUrl = mkOption {
+      seyrenUrl = lib.mkOption {
         default = "http://localhost:${toString cfg.seyren.port}/";
-        defaultText = literalExpression ''"http://localhost:''${toString config.${opt.seyren.port}}/"'';
+        defaultText = lib.literalExpression ''"http://localhost:''${toString config.${opt.seyren.port}}/"'';
         description = "Host where seyren is accessible.";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      graphiteUrl = mkOption {
+      graphiteUrl = lib.mkOption {
         default = "http://${cfg.web.listenAddress}:${toString cfg.web.port}";
-        defaultText = literalExpression ''"http://''${config.${opt.web.listenAddress}}:''${toString config.${opt.web.port}}"'';
+        defaultText = lib.literalExpression ''"http://''${config.${opt.web.listenAddress}}:''${toString config.${opt.web.port}}"'';
         description = "Host where graphite service runs.";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      mongoUrl = mkOption {
+      mongoUrl = lib.mkOption {
         default = "mongodb://${config.services.mongodb.bind_ip}:27017/seyren";
-        defaultText = literalExpression ''"mongodb://''${config.services.mongodb.bind_ip}:27017/seyren"'';
+        defaultText = lib.literalExpression ''"mongodb://''${config.services.mongodb.bind_ip}:27017/seyren"'';
         description = "Mongodb connection string.";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = {};
         description = ''
           Extra seyren configuration. See
           <https://github.com/scobal/seyren#config>
         '';
-        type = types.attrsOf types.str;
-        example = literalExpression ''
+        type = lib.types.attrsOf lib.types.str;
+        example = lib.literalExpression ''
           {
             GRAPHITE_USERNAME = "user";
             GRAPHITE_PASSWORD = "pass";
@@ -268,8 +265,8 @@ in {
 
   ###### implementation
 
-  config = mkMerge [
-    (mkIf cfg.carbon.enableCache {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.carbon.enableCache {
       systemd.services.carbonCache = let name = "carbon-cache"; in {
         description = "Graphite Data Storage Backend";
         wantedBy = [ "multi-user.target" ];
@@ -290,7 +287,7 @@ in {
       };
     })
 
-    (mkIf cfg.carbon.enableAggregator {
+    (lib.mkIf cfg.carbon.enableAggregator {
       systemd.services.carbonAggregator = let name = "carbon-aggregator"; in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
@@ -307,7 +304,7 @@ in {
       };
     })
 
-    (mkIf cfg.carbon.enableRelay {
+    (lib.mkIf cfg.carbon.enableRelay {
       systemd.services.carbonRelay = let name = "carbon-relay"; in {
         description = "Carbon Data Relay";
         wantedBy = [ "multi-user.target" ];
@@ -323,13 +320,13 @@ in {
       };
     })
 
-    (mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay) {
+    (lib.mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay) {
       environment.systemPackages = [
         pkgs.python3Packages.carbon
       ];
     })
 
-    (mkIf cfg.web.enable ({
+    (lib.mkIf cfg.web.enable ({
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
@@ -343,7 +340,7 @@ in {
                 ];
               };
               penvPack = "${penv}/${pkgs.python3.sitePackages}";
-            in concatStringsSep ":" [
+            in lib.concatStringsSep ":" [
                  "${graphiteLocalSettingsDir}"
                  "${penvPack}"
                  # explicitly adding pycairo in path because it cannot be imported via buildEnv
@@ -389,7 +386,7 @@ in {
       environment.systemPackages = [ pkgs.python3Packages.graphite-web ];
     }))
 
-    (mkIf cfg.seyren.enable {
+    (lib.mkIf cfg.seyren.enable {
       systemd.services.seyren = {
         description = "Graphite Alerting Dashboard";
         wantedBy = [ "multi-user.target" ];
@@ -409,10 +406,10 @@ in {
         '';
       };
 
-      services.mongodb.enable = mkDefault true;
+      services.mongodb.enable = lib.mkDefault true;
     })
 
-    (mkIf (
+    (lib.mkIf (
       cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
       cfg.web.enable || cfg.seyren.enable
      ) {
