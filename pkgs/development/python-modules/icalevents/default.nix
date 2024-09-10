@@ -5,7 +5,6 @@
   pythonOlder,
   pytestCheckHook,
   poetry-core,
-  datetime,
   httplib2,
   icalendar,
   python-dateutil,
@@ -21,17 +20,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = pname;
+    repo = "icalevents";
     rev = "refs/tags/v${version}";
     hash = "sha256-JX4j2CsEY/bHrD7Rb9ru3C4T2e94mpC369nDN6Cv/I0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    datetime
+  dependencies = [
     httplib2
     icalendar
     python-dateutil
@@ -39,7 +37,6 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "datetime"
     "httplib2"
     "icalendar"
     "pytz"
