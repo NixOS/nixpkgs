@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   preAutoreconf = ''
+    substituteInPlace src/Makefile.am \
+      --replace-fail Iphlpapi iphlpapi
     export RELEASE_VERSION=${version}
   '';
 
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libimobiledevice/libimobiledevice-glue";
     description = "Library with common code used by the libraries and tools around the libimobiledevice project";
     license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = [ ];
   };
 }
