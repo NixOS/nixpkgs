@@ -6,8 +6,23 @@
 }:
 
 with lib;
-
 {
+  imports = [
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "proxmox"
+        "qemuConf"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
+
   options.proxmox = {
     qemuConf = {
       # essential configs
@@ -93,16 +108,6 @@ with lib;
         description = ''
           Size of the boot partition. Is only used if partitionTableType is
           either "efi" or "hybrid".
-        '';
-      };
-      diskSize = mkOption {
-        type = types.str;
-        default = "auto";
-        example = "20480";
-        description = ''
-          The size of the disk, in megabytes.
-          if "auto" size is calculated based on the contents copied to it and
-          additionalSpace is taken into account.
         '';
       };
       net0 = mkOption {
@@ -305,7 +310,8 @@ with lib;
             mkdir -p $out/nix-support
             echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" > $out/nix-support/hydra-build-products
           '';
-        inherit (cfg.qemuConf) additionalSpace diskSize bootSize;
+        inherit (cfg.qemuConf) additionalSpace bootSize;
+        inherit (config.virtualisation) diskSize;
         format = "raw";
         inherit config lib pkgs;
       };

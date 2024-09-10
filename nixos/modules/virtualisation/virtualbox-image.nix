@@ -7,22 +7,27 @@
 let
 
   cfg = config.virtualbox;
-
 in
 {
+  imports = [
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualbox"
+        "baseImageSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options = {
     virtualbox = {
-      baseImageSize = lib.mkOption {
-        type = with lib.types; either (enum [ "auto" ]) int;
-        default = "auto";
-        example = 50 * 1024;
-        description = ''
-          The size of the VirtualBox base image in MiB.
-        '';
-      };
       baseImageFreeSpace = lib.mkOption {
-        type = with lib.types; int;
+        type = lib.types.int;
         default = 30 * 1024;
         description = ''
           Free space in the VirtualBox base image in MiB.
@@ -180,6 +185,9 @@ in
   };
 
   config = {
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (50 * 1024);
 
     virtualbox.params = lib.mkMerge [
       (lib.mapAttrs (name: lib.mkDefault) {
@@ -204,7 +212,7 @@ in
 
       inherit pkgs lib config;
       partitionTableType = "legacy";
-      diskSize = cfg.baseImageSize;
+      inherit (config.virtualisation) diskSize;
       additionalSpace = "${toString cfg.baseImageFreeSpace}M";
 
       postVM = ''

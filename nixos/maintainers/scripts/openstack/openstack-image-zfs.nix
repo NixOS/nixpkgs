@@ -15,6 +15,18 @@ in
 {
   imports = [
     ../../../modules/virtualisation/openstack-config.nix
+    ../../../modules/virtualisation/disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "openstackImage"
+        "sizeMB"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
   ] ++ (lib.optional copyChannel ../../../modules/installer/cd-dvd/channel.nix);
 
   options.openstackImage = {
@@ -26,14 +38,8 @@ in
 
     ramMB = mkOption {
       type = types.int;
-      default = 1024;
+      default = (3 * 1024);
       description = "RAM allocation for build VM";
-    };
-
-    sizeMB = mkOption {
-      type = types.int;
-      default = 8192;
-      description = "The size in MB of the image";
     };
 
     format = mkOption {
@@ -61,6 +67,11 @@ in
       };
     };
 
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
+    virtualisation.diskSizeAutoSupported = false;
+
     system.build.openstackImage = import ../../../lib/make-single-disk-zfs-image.nix {
       inherit lib config;
       inherit (cfg) contents format name;
@@ -77,7 +88,7 @@ in
 
       bootSize = 1000;
       memSize = cfg.ramMB;
-      rootSize = cfg.sizeMB;
+      rootSize = config.virtualisation.diskSize;
       rootPoolProperties = {
         ashift = 12;
         autoexpand = "on";

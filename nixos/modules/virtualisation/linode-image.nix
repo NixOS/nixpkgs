@@ -17,17 +17,24 @@ let
   '';
 in
 {
-  imports = [ ./linode-config.nix ];
+  imports = [
+    ./linode-config.nix
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "linodeImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options = {
-    virtualisation.linodeImage.diskSize = mkOption {
-      type = with types; either (enum (singleton "auto")) ints.positive;
-      default = "auto";
-      example = 1536;
-      description = ''
-        Size of disk image in MB.
-      '';
-    };
 
     virtualisation.linodeImage.configFile = mkOption {
       type = with types; nullOr str;
@@ -62,7 +69,7 @@ in
       format = "raw";
       partitionTableType = "none";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
-      inherit (cfg) diskSize;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
   };

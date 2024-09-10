@@ -312,7 +312,7 @@ in rec {
         [ configuration
           versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
-          ({ ... }: { amazonImage.sizeMB = "auto"; })
+          ({ ... }: { amazonImage.virtualisation.diskSize = "auto"; })
         ];
     }).config.system.build.amazonImage)
 
