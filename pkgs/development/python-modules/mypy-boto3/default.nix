@@ -702,8 +702,8 @@ rec {
       "sha256-MkWcD/B95hvrb7w8CkKNtL5mmZYcV+ROCBvTkRDthbk=";
 
   mypy-boto3-ivs-realtime =
-    buildMypyBoto3Package "ivs-realtime" "1.35.0"
-      "sha256-GGo1Bw8qXesTJMESq6hjCJuXzhsroGVMH56IN3yIygw=";
+    buildMypyBoto3Package "ivs-realtime" "1.35.15"
+      "sha256-pO8W60U+c56/1F7LECM4AcOMIW7sHifSd9Ov+HJ4TpQ=";
 
   mypy-boto3-ivschat =
     buildMypyBoto3Package "ivschat" "1.35.0"
