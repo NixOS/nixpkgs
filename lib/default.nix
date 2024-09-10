@@ -63,6 +63,7 @@ let
 
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
+    rfc_0169 = callLibs ./rfc_0169.nix;
 
     # network
     network = callLibs ./network;
@@ -172,5 +173,6 @@ let
       nixType imap;
     inherit (self.versions)
       splitVersion;
+    inherit (self.rfc_0169) rfc0169Renamed;
   });
 in lib
