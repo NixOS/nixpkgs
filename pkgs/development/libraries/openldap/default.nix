@@ -9,6 +9,7 @@
 , libtool
 , openssl
 , systemdMinimal
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , libxcrypt
 
 # passthru
@@ -47,10 +48,10 @@ stdenv.mkDerivation rec {
     libsodium
     libtool
     openssl
-  ] ++ lib.optionals (stdenv.isLinux) [
-    libxcrypt # causes linking issues on *-darwin
-    systemdMinimal
-  ];
+  ]
+  # causes linking issues on *-darwin
+  ++ lib.optional (stdenv.isLinux) libxcrypt
+  ++ lib.optional systemdSupport systemdMinimal;
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
@@ -137,5 +138,9 @@ stdenv.mkDerivation rec {
     license = licenses.openldap;
     maintainers = with maintainers; [ hexa ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;
+
+    # https://bugs.openldap.org/show_bug.cgi?id=10056
+    broken = stdenv.hostPlatform.isStatic;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
   };
 }
