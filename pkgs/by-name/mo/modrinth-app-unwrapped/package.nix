@@ -5,6 +5,7 @@
   rustPlatform,
   buildGoModule,
   nix-update-script,
+  cargo,
   cargo-tauri,
   desktop-file-utils,
   esbuild,
@@ -17,18 +18,26 @@
   webkitgtk,
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "modrinth-app-unwrapped";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "theseus";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
   };
 
-  cargoLock = {
+  pnpmRoot = "theseus_gui";
+
+  pnpmDeps = pnpm_8.fetchDeps {
+    inherit (finalAttrs) pname src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
+    hash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
+  };
+
+  cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "tauri-plugin-single-instance-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
@@ -36,20 +45,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    cargo-tauri
-    desktop-file-utils
     pnpm_8.configHook
     nodejs
+
+    rustPlatform.cargoSetupHook
+    cargo
+    cargo-tauri
+
+    desktop-file-utils
     pkg-config
   ];
-
-  pnpmRoot = "theseus_gui";
-
-  pnpmDeps = pnpm_8.fetchDeps {
-    inherit pname src;
-    sourceRoot = "${src.name}/${pnpmRoot}";
-    hash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
-  };
 
   buildInputs =
     [ openssl ]
@@ -131,7 +136,7 @@ rustPlatform.buildRustPackage rec {
     '';
     mainProgram = "modrinth-app";
     homepage = "https://modrinth.com";
-    changelog = "https://github.com/modrinth/theseus/releases/tag/v${version}";
+    changelog = "https://github.com/modrinth/theseus/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       gpl3Plus
       unfreeRedistributable
@@ -141,4 +146,4 @@ rustPlatform.buildRustPackage rec {
     # this builds on architectures like aarch64, but the launcher itself does not support them yet
     broken = !stdenv.isx86_64;
   };
-}
+})
