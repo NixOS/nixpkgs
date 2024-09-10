@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     ./quakespasm-darwin-makefile-improvements.patch
   ];
 
+  # Quakespasm tries to set a 10.6 deployment target, but that’s too low for SDL2.
+  postPatch = ''
+    sed -i Makefile.darwin -e '/-mmacosx-version-min/d'
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
