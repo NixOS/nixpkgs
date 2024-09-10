@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-layer-shell";
-  version = "0.8.2";
+  version = "0.9.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # for demo
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wmww";
     repo = "gtk-layer-shell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8wpfoZcgusJdEbKGZ02UtOOcSogMTNP9Lm+ujo/eKdA=";
+    hash = "sha256-9hQE1NY5QCuj+5R5aSjJ0DaMUQuO7HPpZooj+1+96RY=";
   };
 
   strictDeps = true;
