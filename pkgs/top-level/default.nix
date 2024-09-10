@@ -141,4 +141,4 @@ in let
 
   pkgs = boot stages;
 
-in checked pkgs
+in (checked pkgs).pkgsCross.aarch64-multiplatform
