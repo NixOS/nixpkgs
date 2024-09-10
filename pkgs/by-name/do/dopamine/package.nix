@@ -6,11 +6,11 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "dopamine";
-  version = "3.0.0-preview.32";
+  version = "3.0.0-preview.33";
 
   src = fetchurl {
     url = "https://github.com/digimezzo/dopamine/releases/download/v${version}/Dopamine-${version}.AppImage";
-    hash = "sha256-1gn/oD9UL6+xjEwQIAhvJjHJybI0tY2We3QF1biHDgg=";
+    hash = "sha256-W8XkXnsP0AqYV0wznKe1dbPm2VuhoZWl03G7hib/uxE=";
   };
 
   extraInstallCommands =
