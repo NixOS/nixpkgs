@@ -93,7 +93,6 @@ let
   is7  = majorVersion == "7";
   is6  = majorVersion == "6";
   is49 = majorVersion == "4" && versions.minor version == "9";
-  is48 = majorVersion == "4" && versions.minor version == "8";
 
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
@@ -429,8 +428,8 @@ pipe ((callFile ./common/builder.nix {}) ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD langJava version;
     isGNU = true;
-    hardeningUnsupportedFlags = optional is48 "stackprotector"
-      ++ optional (
+    hardeningUnsupportedFlags =
+      optional (
         (targetPlatform.isAarch64 && !atLeast9) || !atLeast8
       ) "stackclashprotection"
       ++ optional (!atLeast11) "zerocallusedregs"
@@ -461,7 +460,7 @@ pipe ((callFile ./common/builder.nix {}) ({
     badPlatforms =
       # avr-gcc8 is maintained for the `qmk` package
       if (is8 && targetPlatform.isAvr) then []
-      else if !(is48 || is49 || is6) then [ "aarch64-darwin" ]
+      else if !(is49 || is6) then [ "aarch64-darwin" ]
       else platforms.darwin;
   } // optionalAttrs is10 {
     badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
