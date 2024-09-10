@@ -169,7 +169,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
-  ] ++ optionals useLLVM [
+  ] ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
     # https://github.com/NixOS/nixpkgs/issues/311930
     "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
     "--enable-use-libcxx"
@@ -259,7 +259,7 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ openssl ]
     ++ optionals stdenv.isDarwin [ libiconv Security zlib ]
     ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM) [
+    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
       llvmPackages.libunwind
       # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
       (runCommandLocal "libunwind-libgcc" {} ''
