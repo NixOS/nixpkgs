@@ -150,6 +150,15 @@ in
         Whether to configure the sd image to expand it's partition on boot.
       '';
     };
+
+    nixPathRegistrationFile = mkOption {
+      type = types.str;
+      default = "/nix-path-registration";
+      description = ''
+        Location of the file containing the input for nix-store --load-db once the machine has booted.
+        If overriding fileSystems."/" then you should to set this to the root mount + /nix-path-registration
+      '';
+    };
   };
 
   config = {
@@ -267,23 +276,24 @@ in
         ${pkgs.parted}/bin/partprobe
         ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
       '';
+      nixPathRegistrationFile = config.sdImage.nixPathRegistrationFile;
     in ''
       # On the first boot do some maintenance tasks
-      if [ -f /nix-path-registration ]; then
+      if [ -f ${nixPathRegistrationFile} ]; then
         set -euo pipefail
         set -x
 
         ${expandOnBoot}
 
         # Register the contents of the initial Nix store
-        ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration
+        ${config.nix.package.out}/bin/nix-store --load-db < ${nixPathRegistrationFile}
 
         # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
         touch /etc/NIXOS
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
         # Prevents this from running on later boots.
-        rm -f /nix-path-registration
+        rm -f ${nixPathRegistrationFile}
       fi
     '';
   };
