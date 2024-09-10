@@ -111,7 +111,7 @@ in
       outputs = ["out" "dev" "devtools"];
 
       nativeBuildInputs = [cmake qt6.wrapQtAppsHook moveDevHook] ++ extraNativeBuildInputs;
-      buildInputs = [qt6.qtbase] ++ extraBuildInputs;
+      buildInputs = [qt6.qtbase qt6.qtwayland] ++ extraBuildInputs;
 
       # FIXME: figure out what to propagate here
       propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
