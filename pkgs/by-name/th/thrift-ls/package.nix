@@ -17,6 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-YoZ2dku84065Ygh9XU6dOwmCkuwX0r8a0Oo8c1HPsS4=";
 
+  postInstall = ''
+    mv $out/bin/thrift-ls $out/bin/thriftls
+  '';
+
   ldflags = [
     "-s"
     "-w"
@@ -26,7 +30,10 @@ buildGoModule rec {
     description = "Thrift Language Server";
     homepage = "https://github.com/joyme123/thrift-ls";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ callumio ];
-    mainProgram = "thrift-ls";
+    maintainers = with lib.maintainers; [
+      callumio
+      hughmandalidis
+    ];
+    mainProgram = "thriftls";
   };
 }

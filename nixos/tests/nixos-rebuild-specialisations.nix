@@ -21,6 +21,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         pkgs.grub2
       ];
 
+      system.switch.enable = true;
+
       virtualisation = {
         cores = 2;
         memorySize = 4096;
