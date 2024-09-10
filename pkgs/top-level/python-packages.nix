@@ -1658,6 +1658,8 @@ self: super: with self; {
 
   black = callPackage ../development/python-modules/black { };
 
+  blackfire = callPackage ../development/python-modules/blackfire { };
+
   blackjax = callPackage ../development/python-modules/blackjax { };
 
   black-macchiato = callPackage ../development/python-modules/black-macchiato { };
