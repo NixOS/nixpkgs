@@ -18,11 +18,11 @@ function _concatSep {
     echo "$result"
 }
 
-function _pytestComputeDisabledTestsString () {
+function _pytestComputeDisabledTestsString() {
     declare -a tests
     local tests=($1)
     local prefix="not "
-    prefixed=( "${tests[@]/#/$prefix}" )
+    prefixed=("${tests[@]/#/$prefix}")
     result=$(_concatSep "and" prefixed)
     echo "$result"
 }
@@ -35,7 +35,7 @@ function pytestCheckPhase() {
     args=" -m pytest"
     if [ -n "$disabledTests" ]; then
         disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
-      args+=" -k \""$disabledTestsString"\""
+        args+=" -k \""$disabledTestsString"\""
     fi
 
     if [ -n "${disabledTestPaths-}" ]; then
@@ -43,11 +43,11 @@ function pytestCheckPhase() {
     fi
 
     for path in ${disabledTestPaths[@]}; do
-      if [ ! -e "$path" ]; then
-        echo "Disabled tests path \"$path\" does not exist. Aborting"
-        exit 1
-      fi
-      args+=" --ignore=\"$path\""
+        if [ ! -e "$path" ]; then
+            echo "Disabled tests path \"$path\" does not exist. Aborting"
+            exit 1
+        fi
+        args+=" --ignore=\"$path\""
     done
     args+=" ${pytestFlagsArray[@]}"
     eval "@pythonCheckInterpreter@ $args"
