@@ -735,6 +735,10 @@
     };
   };
 
+  diagram-nvim = super.diagram-nvim.overrideAttrs {
+    dependencies = with self; [ image-nvim ];
+  };
+
   diffview-nvim = super.diffview-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
 

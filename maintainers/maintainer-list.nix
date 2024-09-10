@@ -10154,12 +10154,6 @@
     githubId = 57130301;
     keys = [ { fingerprint = "1CC5 B67C EB9A 13A5 EDF6 F10E 0B4A 3662 FC58 9202"; } ];
   };
-  jonafato = {
-    email = "jon@jonafato.com";
-    github = "jonafato";
-    githubId = 392720;
-    name = "Jon Banafato";
-  };
   jonas-w = {
     email = "nixpkgs@03j.de";
     github = "jonas-w";
@@ -16249,6 +16243,11 @@
     github = "philtaken";
     githubId = 13309623;
     name = "Philipp Herzog";
+  };
+  PhilVoel = {
+    github = "PhilVoel";
+    githubId = 56931301;
+    name = "Philipp Völler";
   };
   phip1611 = {
     email = "phip1611@gmail.com";
