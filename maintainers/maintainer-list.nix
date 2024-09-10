@@ -11263,6 +11263,12 @@
     githubId = 4032;
     name = "Kristoffer Thømt Ravneberg";
   };
+  kreyren = {
+    email = "kreyren@proton.me";
+    github = "kreyren";
+    githubId = 11302521;
+    name = "Jacob KREYREN Hrbek";
+  };
   kristian-brucaj = {
     email = "kbrucaj@gmail.com";
     github = "Flameslice";
