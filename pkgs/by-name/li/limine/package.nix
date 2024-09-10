@@ -1,48 +1,49 @@
-# Builds limine with all available features.
-
+# Derivation containing the Limine host tool and the compiled bootloader
+# artifacts for all supported architectures.
 {
-  # Helpers
-  stdenv
-, fetchurl
-, lib
-, # Dependencies
-  llvmPackages
-, mtools
-, nasm
+  stdenv,
+  fetchurl,
+  lib,
 }:
 
 let
-  version = "7.9.1";
+  version = "8.0.11";
 in
-# The output of the derivation is a tool to create bootable images using Limine
-# as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation {
   inherit version;
   pname = "limine";
-  # We don't use the Git source but the release tarball, as the source has a
-  # `./bootstrap` script performing network access to download resources.
-  # Packaging that in Nix is very cumbersome.
+  # We download the source to build the host tool and the pre cross-compiled
+  # bootloader artifacts for all architectures. Experiences showed that it is
+  # cumbersome to build them in a Nix derivation.
   src = fetchurl {
-    url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
-    sha256 = "sha256-cR6ilV5giwvbqUoOGbnXQnqZzUz/oL7OGZPYNoFKvy0=";
+    url = "https://github.com/limine-bootloader/limine/archive/refs/tags/v${version}-binary.tar.gz";
+    sha256 = "sha256-A0CYnQSs546h1h0pqiEdvPS9tHWrzDtxZ1l1CZmSnFw=";
   };
 
-  nativeBuildInputs = [
-    llvmPackages.bintools
-    # gcc is used for the host tool, while clang is used for the bootloader.
-    llvmPackages.clang
-    llvmPackages.lld
-    mtools
-    nasm
+  doConfigure = false;
+  doCheck = false;
+
+  installPhase = ''
+    runHook preInstall
+
+    # The host tool
+    mkdir -p $out/bin
+    cp limine $out/bin
+
+    # Cross-compiled bootloader artifacts
+    mkdir -p $out/share/limine
+    find -name '*.EFI' -exec cp {} $out/share/limine \;
+    find -name '*.bin' -exec cp {} $out/share/limine \;
+    find -name 'limine.bin' -exec cp {} $out/share/limine \;
+    cp limine-bios.sys $out/share/limine
+
+    runHook postInstall
+  '';
+
+  outputs = [
+    "out"
+    "dev"
   ];
-
-  configureFlags = [
-    "--enable-all"
-  ];
-
-  installFlags = [ "destdir=$out" "manprefix=/share" ];
-
-  outputs = [ "out" "doc" "dev" "man" ];
 
   meta = with lib; {
     homepage = "https://limine-bootloader.org/";
