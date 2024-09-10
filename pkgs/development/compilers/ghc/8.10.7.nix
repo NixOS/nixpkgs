@@ -302,6 +302,9 @@ stdenv.mkDerivation (rec {
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+  '' + lib.optionalString useLLVM ''
+    export LLC="${llvmPackages.llvm}/bin/llc"
+    export OPT="${llvmPackages.llvm}/bin/opt"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + lib.optionalString stdenv.isDarwin ''
@@ -347,6 +350,11 @@ stdenv.mkDerivation (rec {
   ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include"
     "--with-iconv-libraries=${libiconv}/lib"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # N.B. GHC uses clang as its assembler on Darwin
+    "CLANG=${llvmPackages.clang}/bin/clang"
+    "CFLAGS=--target=${stdenv.hostPlatform.config}"
+    "CONF_CC_OPTS_STAGE2=--target=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ lib.optionals useLdGold [
