@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Setup hook for checking whether Python imports succeed
 echo "Sourcing python-imports-check-hook.sh"
 
@@ -10,7 +12,7 @@ pythonImportsCheckPhase() {
         pythonImportsCheckOutput="$out"
         if [ -n "${python-}" ]; then
             echo "Using python specific output \$python for imports check"
-            pythonImportsCheckOutput=$python
+            pythonImportsCheckOutput="$python"
         fi
         export PYTHONPATH="$pythonImportsCheckOutput/@pythonSitePackages@:$PYTHONPATH"
         (cd "$pythonImportsCheckOutput" && PYTHON_IMPORTS_CHECK="${pythonImportsCheck[*]}" @pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["PYTHON_IMPORTS_CHECK"].split()))')
