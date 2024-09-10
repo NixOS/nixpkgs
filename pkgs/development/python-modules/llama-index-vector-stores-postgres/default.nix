@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-postgres";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_postgres";
     inherit version;
-    hash = "sha256-xjlFAa3HTJRP/34HaN4fN5BE1VvfAWSLDZnj2s/ES/U=";
+    hash = "sha256-0QTT8eLkQb6Wjs+I2IbfJ8c4/vOJwQu4u1xOy4iDOCc=";
   };
 
   pythonRemoveDeps = [ "psycopg2-binary" ];
