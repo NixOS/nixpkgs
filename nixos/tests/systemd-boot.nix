@@ -13,6 +13,7 @@ let
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
+    system.switch.enable = true;
   };
 
   commonXbootldr = { config, lib, pkgs, ... }:

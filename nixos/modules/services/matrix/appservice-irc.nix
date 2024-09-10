@@ -147,10 +147,13 @@ in {
                     '';
                   };
                   ttlSeconds = lib.mkOption {
-                    type = ints.positive;
+                    type = ints.unsigned;
                     default = 3600;
+                    example = 0;
                     description = ''
                       Lifetime in seconds, that generated URLs stay valid.
+
+                      Set the lifetime to 0 to prevent URLs from becoming invalid.
                     '';
                   };
                   bindPort = lib.mkOption {
