@@ -184,7 +184,7 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_23";
   };
 
-  nix_2_24 = (common {
+  nix_2_24 = ((common {
     version = "2.24.5";
     hash = "sha256-mYvdPwl4gcc17UAomkbbOJEgxBQpowmJDrRMWtlYzFY=";
     self_attribute_name = "nix_2_24";
@@ -197,9 +197,13 @@ in lib.makeExtensible (self: ({
     # allocation function Clang uses with this setting actually works
     # all the way back to 10.6.
     stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
+  })).overrideAttrs (o: {
+    meta.knownVulnerabilities = [
+      "Nix >= 2.24.0 and master have a vulnerability. Please downgrade from nix_2_24 to nix_2_23"
+    ];
   });
 
-  git = (common rec {
+  git = ((common rec {
     version = "2.25.0";
     suffix = "pre20240807_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
@@ -218,9 +222,13 @@ in lib.makeExtensible (self: ({
     # allocation function Clang uses with this setting actually works
     # all the way back to 10.6.
     stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
+  })).overrideAttrs (o: {
+    meta.knownVulnerabilities = [
+      "Nix >= 2.24.0 and master have a vulnerability. Please downgrade from nixVersions.git to nixVersions.nix_2_23"
+    ];
   });
 
-  latest = self.nix_2_24;
+  latest = self.nix_2_23;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,

@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
@@ -15,27 +10,19 @@ let
       ];
     }
   '';
-  virtualisationOptions = import ./virtualisation-options.nix;
 in
 {
-  imports = [
-    ./linode-config.nix
-    virtualisationOptions.diskSize
-    (lib.mkRenamedOptionModuleWith {
-      sinceRelease = 2411;
-      from = [
-        "virtualisation"
-        "linodeImage"
-        "diskSize"
-      ];
-      to = [
-        "virtualisation"
-        "diskSize"
-      ];
-    })
-  ];
+  imports = [ ./linode-config.nix ];
 
   options = {
+    virtualisation.linodeImage.diskSize = mkOption {
+      type = with types; either (enum (singleton "auto")) ints.positive;
+      default = "auto";
+      example = 1536;
+      description = ''
+        Size of disk image in MB.
+      '';
+    };
 
     virtualisation.linodeImage.configFile = mkOption {
       type = with types; nullOr str;
@@ -70,7 +57,7 @@ in
       format = "raw";
       partitionTableType = "none";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
-      inherit (config.virtualisation) diskSize;
+      inherit (cfg) diskSize;
       inherit config lib pkgs;
     };
   };
