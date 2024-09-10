@@ -255,11 +255,8 @@ in
       '';
     }) {};
 
-    boot.postBootCommands = lib.mkIf config.sdImage.expandOnBoot ''
-      # On the first boot do some maintenance tasks
-      if [ -f /nix-path-registration ]; then
-        set -euo pipefail
-        set -x
+    boot.postBootCommands = let
+      expandOnBoot = lib.optionalString config.sdImage.expandOnBoot ''
         # Figure out device names for the boot device and root filesystem.
         rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
@@ -269,6 +266,14 @@ in
         echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
         ${pkgs.parted}/bin/partprobe
         ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
+      '';
+    in ''
+      # On the first boot do some maintenance tasks
+      if [ -f /nix-path-registration ]; then
+        set -euo pipefail
+        set -x
+
+        ${expandOnBoot}
 
         # Register the contents of the initial Nix store
         ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration
