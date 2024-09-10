@@ -317,12 +317,11 @@ let
     copyChannel = false;
     OVMF = cfg.efi.OVMF;
   };
-
 in
-
 {
   imports = [
     ../profiles/qemu-guest.nix
+    ./disk-size-option.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -375,14 +374,6 @@ in
         The msize (maximum packet size) option passed to 9p file systems, in
         bytes. Increasing this should increase performance significantly,
         at the cost of higher RAM usage.
-      '';
-    };
-
-    virtualisation.diskSize = mkOption {
-      type = types.ints.positive;
-      default = 1024;
-      description = ''
-        The disk size in megabytes of the virtual machine.
       '';
     };
 
@@ -1249,6 +1240,8 @@ in
     # filesystems don't necessarily exist in the VM). You can disable this
     # override by setting `virtualisation.fileSystems = lib.mkForce { };`.
     fileSystems = lib.mkIf (cfg.fileSystems != { }) (mkVMOverride cfg.fileSystems);
+
+    virtualisation.diskSizeAutoSupported = false;
 
     virtualisation.fileSystems =
       let
