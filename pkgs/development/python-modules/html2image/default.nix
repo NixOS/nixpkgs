@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "html2image";
-  version = "2.0.4.3";
+  version = "2.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vgalin";
     repo = "html2image";
-    rev = version;
-    hash = "sha256-BDl2Kibp1WOAOYNlXa2aaEgQTitk+OZu72OgytciZYI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-k5y89nUF+fhUj9uzTAPkkAdOb2TsTL2jm/ZXwHlxu/A=";
   };
 
   postPatch = ''
