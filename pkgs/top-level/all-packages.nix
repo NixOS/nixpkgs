@@ -16352,6 +16352,9 @@ with pkgs;
     inherit bintools libc;
   } // extraArgs; in self);
 
+
+  mkWrapper = callPackage ../build-support/make-wrapper.nix {};
+
   yaml-language-server = callPackage  ../development/tools/language-servers/yaml-language-server { };
 
   # prolog
