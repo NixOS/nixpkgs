@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
 
   checkFlags = [
-    # requires docker daemon
-    "-skip=TestNewPublisherCanPublish"
+    # requires docker daemon or network
+    "-skip=^Test(NewPublisherCanPublish|Debugger)$"
   ];
 
   nativeCheckInputs = [ git ];
