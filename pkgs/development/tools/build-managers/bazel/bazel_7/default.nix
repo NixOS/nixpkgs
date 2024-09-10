@@ -149,8 +149,7 @@ let
     meta.sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  # The bootstrapped Bazel did not work on its own for vendoring, but a wrapped FHS did
-  bazel_fhs = buildFHSEnv {
+  bazelFhs = buildFHSEnv {
     name = "bazel";
     targetPkgs = _: [ bazel_bootstrap ];
     runScript = "bazel";
@@ -160,13 +159,9 @@ let
   # See https://bazel.build/versions/7.3.0/external/vendor for details.
   # Note that it may be possible to vendor less than the full set of deps in
   # the future, as this is approximately 16GB.
-  bazel_deps = stdenv.mkDerivation {
-    name = "bazel_deps";
-    src = fetchurl {
-      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-      hash = "sha256-8FAfkMn8dM1pM9vcWeF7jWJy1sCfi448QomFxYlxR8c=";
-    };
-    inherit version;
+  bazelDeps = stdenv.mkDerivation {
+    name = "bazelDeps";
+    inherit src version;
     sourceRoot = ".";
     patches = [
       # The repo rule that creates a manifest of the bazel source for testing
@@ -180,7 +175,7 @@ let
     ];
     nativeBuildInputs = [
       unzip
-      bazel_fhs
+      bazelFhs
     ];
     configurePhase = ''
       runHook preConfigure
@@ -196,8 +191,8 @@ let
     buildPhase = ''
       runHook preBuild
       export HOME=$TMP
-      (cd bazel_src; ${bazel_fhs}/bin/bazel --server_javabase=${runJdk} mod deps --curses=no;
-      ${bazel_fhs}/bin/bazel --server_javabase=${runJdk} vendor \
+      (cd bazel_src; ${bazelFhs}/bin/bazel --server_javabase=${runJdk} mod deps --curses=no;
+      ${bazelFhs}/bin/bazel --server_javabase=${runJdk} vendor \
       --curses=no \
       --vendor_dir ../vendor_dir \
       --verbose_failures \
@@ -215,7 +210,10 @@ let
       # the GOCACHE is poisonous!
       rm -rf vendor_dir/gazelle~~non_module_deps~bazel_gazelle_go_repository_cache/gocache
 
-      # so are .pyc files apparently
+      # as is the go versions file (changes when new versions show up)
+      rm -f vendor_dir/rules_go~~go_sdk~go_default_sdk/versions.json
+
+      # and so are .pyc files
       find vendor_dir -name "*.pyc" -type f -delete
 
       runHook postBuild
@@ -227,7 +225,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-xW+KZIsOGrDV7WIcg/elHpFEmfs1TfFky3bVqCdWr9k=";
+    outputHash = "sha256-GjktM25K4OPrww1o9jB38h0FwJrcJo7TR0x0owZV9I0=";
     outputHashAlgo = "sha256";
 
   };
@@ -555,7 +553,7 @@ stdenv.mkDerivation rec {
     mv !(bazel_src) bazel_src
     # Augment bundled repository_cache with our extra paths
     mkdir vendor_dir
-    ${lndir}/bin/lndir ${bazel_deps}/vendor_dir vendor_dir
+    ${lndir}/bin/lndir ${bazelDeps}/vendor_dir vendor_dir
     rm vendor_dir/VENDOR.bazel
     find vendor_dir -maxdepth 1 -type d -printf "pin(\"@@%P\")\n" > vendor_dir/VENDOR.bazel
   '';
@@ -700,9 +698,9 @@ stdenv.mkDerivation rec {
     #   inherit Foundation bazel_self lockfile repoCache;
     # };
     # TODO tests have not been updated yet and will likely need a rewrite
-    # tests = callPackage ./tests.nix { inherit Foundation bazel_deps bazel_self; };
+    # tests = callPackage ./tests.nix { inherit Foundation bazelDeps bazel_self; };
 
     # For ease of debugging
-    inherit bazel_deps bazel_fhs;
+    inherit bazelDeps bazelFhs;
   };
 }
