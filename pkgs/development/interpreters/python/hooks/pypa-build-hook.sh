@@ -5,9 +5,23 @@ pypaBuildPhase() {
     echo "Executing pypaBuildPhase"
     runHook preBuild
 
+    # ShellCheck seems unable to parse nameref used to implement concatTo.
+    # shellcheck disable=2034
+    declare -a defaultPypaBuildFlags=(
+        --no-isolation
+        --outdir dist/
+        --wheel
+    )
+
+    local -a flagsArray=()
+    concatTo flagsArray defaultPypaBuildFlags pypaBuildFlags
+
     echo "Creating a wheel..."
-    @build@/bin/pyproject-build --no-isolation --outdir dist/ --wheel $pypaBuildFlags
+    # shellcheck disable=2154
+    @build@/bin/pyproject-build "${flagsArray[@]}"
     echo "Finished creating a wheel..."
+
+    unset flagsArray
 
     runHook postBuild
     echo "Finished executing pypaBuildPhase"
