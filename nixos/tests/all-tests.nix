@@ -1046,6 +1046,7 @@ in {
   txredisapi = handleTest ./txredisapi.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
+  tusd = handleTest ./tusd.nix {};
   tuxguitar = handleTest ./tuxguitar.nix {};
   twingate = runTest ./twingate.nix;
   typesense = handleTest ./typesense.nix {};
