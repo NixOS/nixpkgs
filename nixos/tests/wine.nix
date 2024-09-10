@@ -3,7 +3,7 @@
 }:
 
 let
-  inherit (pkgs.lib) concatMapStrings listToAttrs optionals optionalString;
+  inherit (pkgs.lib) concatMapStrings listToAttrs optionals;
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
 
   hello32 = "${pkgs.pkgsCross.mingw32.hello}/bin/hello.exe";
@@ -24,15 +24,11 @@ let
         machine.wait_for_unit("multi-user.target")
         ${concatMapStrings (exe: ''
           greeting = machine.succeed(
-              "bash -c 'wine ${exe} 2> >(tee wine-stderr >&2)'"
+              "machinectl shell ''' /bin/sh -c 'wine ${exe}; echo Exit status $?'"
           )
-          assert 'Hello, world!' in greeting
-        ''
-        # only the full version contains Gecko, but the error is not printed reliably in other variants
-        + optionalString (variant == "full") ''
-          machine.fail(
-              "fgrep 'Could not find Wine Gecko. HTML rendering will be disabled.' wine-stderr"
-          )
+          assert 'Hello, world!' in greeting, "Didn't find greeting"
+          assert 'Exit status 0' in greeting, "Greeting failed"
+          assert 'Could not find Wine Gecko. HTML rendering will be disabled.' not in greeting, "Couldn't find Gecko"
         '') exes}
       '';
     };
@@ -44,8 +40,5 @@ in
 listToAttrs (
   map (makeWineTest "winePackages" [ hello32 ]) variants
   ++ optionals pkgs.stdenv.is64bit
-    (map (makeWineTest "wineWowPackages" [ hello32 hello64 ])
-         # This wayland combination times out after spending many hours.
-         # https://hydra.nixos.org/job/nixos/trunk-combined/nixos.tests.wine.wineWowPackages-wayland.x86_64-linux
-         (pkgs.lib.remove "wayland" variants))
+    (map (makeWineTest "wineWowPackages" [ hello32 hello64 ]) variants)
 )
