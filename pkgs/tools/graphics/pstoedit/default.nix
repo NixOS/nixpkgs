@@ -1,24 +1,19 @@
 { stdenv, fetchurl, pkg-config, darwin, lib
 , zlib, ghostscript, imagemagick, plotutils, gd
-, libjpeg, libwebp, libiconv
+, libjpeg, libwebp, libiconv, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "pstoedit";
-  version = "3.78";
+  version = "4.01";
 
   src = fetchurl {
     url = "mirror://sourceforge/pstoedit/pstoedit-${version}.tar.gz";
-    sha256 = "sha256-jMKONLx/iNkTeA+AdOgT3VqqCsIFams21L8ASg6Q2AE=";
+    hash = "sha256-RZdlq3NssQ+VVKesAsXqfzVcbC6fz9IXYRx9UQKxB2s=";
   };
 
-  #
-  # Turn on "-rdb" option (REALLYDELAYBIND) by default to ensure compatibility with gs-9.22
-  #
-  patches = [ ./pstoedit-gs-9.22-compat.patch  ];
-
   outputs = [ "out" "dev" ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     libiconv ApplicationServices
@@ -28,6 +23,11 @@ stdenv.mkDerivation rec {
   # so we need to remove it from the pkg-config file as well
   preConfigure = ''
     substituteInPlace config/pstoedit.pc.in --replace '@LIBPNG_LDFLAGS@' ""
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/pstoedit \
+      --prefix PATH : ${lib.makeBinPath [ ghostscript ]}
   '';
 
   meta = with lib; {
