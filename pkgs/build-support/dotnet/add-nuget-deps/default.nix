@@ -83,6 +83,8 @@ attrs
         writeShellScript "${finalPackage.name}-fetch-deps" ''
           set -eu
 
+          echo 'fetching dependencies for' ${lib.escapeShellArg finalPackage.name} >&2
+
           export TMPDIR
           TMPDIR=$(mktemp -d -t fetch-deps-${finalPackage.name}.XXXXXX)
           trap 'chmod -R +w "$TMPDIR" && rm -fr "$TMPDIR"' EXIT
