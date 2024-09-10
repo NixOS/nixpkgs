@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pragtical";
-  version = "3.4.2";
+  version = "3.4.4";
   pluginManagerVersion = "1.2.9";
 
   src = fetchFromGitHub {
@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
           --replace-fail 'revision = head' 'revision = v${finalAttrs.pluginManagerVersion}'
 
       ${lib.getExe meson} subprojects download \
-          colors plugins ppm
+          colors widget plugins ppm
 
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
 
-    hash = "sha256-mYLYRyyKfjTCD8mi1KrQNLqwd8QX1wgpJtpWASQCLQU=";
+    hash = "sha256-YAIndKTqne4I+wuCrVtfkjdp1rsFF+xyBnl5WcuDyz4=";
   };
 
   nativeBuildInputs = [
