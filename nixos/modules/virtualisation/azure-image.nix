@@ -10,18 +10,24 @@ let
   cfg = config.virtualisation.azureImage;
 in
 {
-  imports = [ ./azure-common.nix ];
+  imports = [
+    ./azure-common.nix
+    ./disk-size-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "azureImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options.virtualisation.azureImage = {
-    diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
-      example = 2048;
-      description = ''
-        Size of disk image. Unit is MB.
-      '';
-    };
-
     bootSize = mkOption {
       type = types.int;
       default = 256;
@@ -67,7 +73,8 @@ in
       bootSize = "${toString cfg.bootSize}M";
       partitionTableType = if cfg.vmGeneration == "v2" then "efi" else "legacy";
 
-      inherit (cfg) diskSize contents;
+      inherit (cfg) contents;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
   };
