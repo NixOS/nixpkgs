@@ -3,6 +3,7 @@
   stdenv,
   fetchPypi,
   python,
+  numpy_2,
   pythonAtLeast,
   pythonOlder,
   buildPythonPackage,
@@ -166,6 +167,7 @@ buildPythonPackage rec {
     blas = blas.provider;
     blasImplementation = blas.implementation;
     inherit cfg;
+    coreIncludeDir = "${numpy_2}/${python.sitePackages}/numpy/_core/include";
     tests = {
       inherit sage;
     };
