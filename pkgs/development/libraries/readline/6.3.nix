@@ -1,4 +1,9 @@
-{ fetchurl, lib, stdenv, ncurses }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ncurses,
+}:
 
 stdenv.mkDerivation {
   pname = "readline";
@@ -9,30 +14,41 @@ stdenv.mkDerivation {
     sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
   };
 
-  outputs = [ "out" "dev" "man" "doc" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+    "info"
+  ];
 
   strictDeps = true;
   propagatedBuildInputs = [ ncurses ];
 
   patchFlags = [ "-p0" ];
 
-  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    # This test requires running host code
-    "bash_cv_wcwidth_broken=no";
+  configureFlags =
+    lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+      # This test requires running host code
+      "bash_cv_wcwidth_broken=no";
 
   patches =
-    [ ./link-against-ncurses.patch
+    [
+      ./link-against-ncurses.patch
       ./no-arch_only-6.3.patch
-    ] ++ lib.optional stdenv.hostPlatform.useAndroidPrebuilt ./android.patch
-    ++
-    (let
-       patch = nr: sha256:
-         fetchurl {
-           url = "mirror://gnu/readline/readline-6.3-patches/readline63-${nr}";
-           inherit sha256;
-         };
-     in
-       import ./readline-6.3-patches.nix patch);
+    ]
+    ++ lib.optional stdenv.hostPlatform.useAndroidPrebuilt ./android.patch
+    ++ (
+      let
+        patch =
+          nr: sha256:
+          fetchurl {
+            url = "mirror://gnu/readline/readline-6.3-patches/readline63-${nr}";
+            inherit sha256;
+          };
+      in
+      import ./readline-6.3-patches.nix patch
+    );
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
