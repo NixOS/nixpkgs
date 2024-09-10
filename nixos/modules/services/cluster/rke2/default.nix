@@ -5,7 +5,9 @@ let
   cfg = config.services.rke2;
 in
 {
-  imports = [ ];
+  imports = [
+    (mkRenamedOptionModule [ "services" "rke2" "configPath" ] [ "services" "rke2" "configFile" ])
+  ];
 
   options.services.rke2 = {
     enable = mkEnableOption "rke2";
@@ -31,7 +33,7 @@ in
       default = "server";
     };
 
-    configPath = mkOption {
+    configFile = mkOption {
       type = types.path;
       description = "Load configuration from FILE.";
       default = "/etc/rancher/rke2/config.yaml";
@@ -202,12 +204,12 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configPath || cfg.serverAddr != "");
-        message = "serverAddr or configPath (with 'server' key) should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configFile || cfg.serverAddr != "");
+        message = "serverAddr or configFile (with 'server' key) should be set if role is 'agent'";
       }
       {
-        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configPath || cfg.tokenFile != null || cfg.token != "");
-        message = "token or tokenFile or configPath (with 'token' or 'token-file' keys) should be set if role is 'agent'";
+        assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configFile || cfg.tokenFile != null || cfg.token != "");
+        message = "token or tokenFile or configFile (with 'token' or 'token-file' keys) should be set if role is 'agent'";
       }
       {
         assertion = cfg.role == "agent" -> ! (cfg.agentTokenFile != null || cfg.agentToken != "");
@@ -278,7 +280,7 @@ in
           "-${pkgs.kmod}/bin/modprobe overlay"
         ];
         ExecStart = "${cfg.package}/bin/rke2 '${cfg.role}' ${escapeShellArgs (
-             (optional (cfg.configPath != "/etc/rancher/rke2/config.yaml") "--config=${cfg.configPath}")
+             (optional (cfg.configFile != "/etc/rancher/rke2/config.yaml") "--config=${cfg.configFile}")
           ++ (optional cfg.debug "--debug")
           ++ (optional (cfg.dataDir != "/var/lib/rancher/rke2") "--data-dir=${cfg.dataDir}")
           ++ (optional (cfg.token != "") "--token=${cfg.token}")
@@ -296,15 +298,17 @@ in
           ++ (optional cfg.cisHardening "--profile=${if cfg.package.version >= "1.25" then "cis-1.23" else "cis-1.6"}")
           ++ cfg.extraFlags
         )}";
-        ExecStopPost = let
-          killProcess = pkgs.writeScript "kill-process.sh" ''
-            #! ${pkgs.runtimeShell}
-            /run/current-system/systemd/bin/systemd-cgls /system.slice/$1 | \
-            ${pkgs.gnugrep}/bin/grep -Eo '[0-9]+ (containerd|kubelet)' | \
-            ${pkgs.gawk}/bin/awk '{print $1}' | \
-            ${pkgs.findutils}/bin/xargs -r ${pkgs.util-linux}/bin/kill
-          '';
-        in "-${killProcess} %n";
+        ExecStopPost =
+          let
+            killProcess = pkgs.writeScript "kill-process.sh" ''
+              #! ${pkgs.runtimeShell}
+              /run/current-system/systemd/bin/systemd-cgls /system.slice/$1 | \
+              ${pkgs.gnugrep}/bin/grep -Eo '[0-9]+ (containerd|kubelet)' | \
+              ${pkgs.gawk}/bin/awk '{print $1}' | \
+              ${pkgs.findutils}/bin/xargs -r ${pkgs.util-linux}/bin/kill
+            '';
+          in
+          "-${killProcess} %n";
       };
     };
   };
