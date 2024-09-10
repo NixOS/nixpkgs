@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   patchFlags = [ "-p0" ];
 
   configureFlags =
-    lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    lib.optional (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
       # This test requires running host code
       "bash_cv_wcwidth_broken=no";
 
