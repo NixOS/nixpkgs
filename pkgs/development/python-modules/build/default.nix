@@ -15,12 +15,13 @@
   pythonOlder,
   setuptools,
   tomli,
+  virtualenv,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "build";
     rev = "refs/tags/${version}";
-    hash = "sha256-G0g+1v19sQMUuQlZKGELZOwwX07i7TIdEdaYzr8bKtI=";
+    hash = "sha256-pord65+Mg3TmHpAtU6PQAzxAmGtNu6MSxTruJsnA0EE=";
   };
 
   postPatch = ''
@@ -65,6 +66,7 @@ buildPythonPackage rec {
         pytest-xdist
         pytestCheckHook
         setuptools
+        virtualenv
         wheel
       ];
 
@@ -85,6 +87,9 @@ buildPythonPackage rec {
           "test_init"
           "test_output"
           "test_wheel_metadata"
+          # Tests require network access to run pip install
+          "test_verbose_output"
+          "test_requirement_installation"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # Expects Apple's Python and its quirks
