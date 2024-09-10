@@ -184,9 +184,9 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_23";
   };
 
-  nix_2_24 = ((common {
-    version = "2.24.5";
-    hash = "sha256-mYvdPwl4gcc17UAomkbbOJEgxBQpowmJDrRMWtlYzFY=";
+  nix_2_24 = (common {
+    version = "2.24.6";
+    hash = "sha256-kgq3B+olx62bzGD5C6ighdAoDweLq+AebxVHcDnKH4w=";
     self_attribute_name = "nix_2_24";
   }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
     # Fix the following error with the default x86_64-darwin SDK:
@@ -197,20 +197,16 @@ in lib.makeExtensible (self: ({
     # allocation function Clang uses with this setting actually works
     # all the way back to 10.6.
     stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  })).overrideAttrs (o: {
-    meta.knownVulnerabilities = [
-      "Nix >= 2.24.0 and master have a vulnerability. Please downgrade from nix_2_24 to nix_2_23"
-    ];
   });
 
-  git = ((common rec {
+  git = (common rec {
     version = "2.25.0";
-    suffix = "pre20240807_${lib.substring 0 8 src.rev}";
+    suffix = "pre20240910_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "cfe66dbec325d5dcb601b642bd9c149ae1353147";
-      hash = "sha256-1hqjl4br3MRK1pkzDrhBSxKUhdfQ/P4b5KbLfGua64g=";
+      rev = "b9d3cdfbd2b873cf34600b262247d77109dfd905";
+      hash = "sha256-7zH8TU5g3Bsg6ES0O8RcTm6JGYOMuDCGlSI3AQKbKy8=";
     };
     self_attribute_name = "git";
   }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
@@ -222,13 +218,9 @@ in lib.makeExtensible (self: ({
     # allocation function Clang uses with this setting actually works
     # all the way back to 10.6.
     stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  })).overrideAttrs (o: {
-    meta.knownVulnerabilities = [
-      "Nix >= 2.24.0 and master have a vulnerability. Please downgrade from nixVersions.git to nixVersions.nix_2_23"
-    ];
   });
 
-  latest = self.nix_2_23;
+  latest = self.nix_2_24;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
