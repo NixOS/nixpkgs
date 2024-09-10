@@ -102,7 +102,6 @@ lib.listToAttrs (
     "aarch64"
     "riscv"
     "ppc64"
-    "nds32le"
   ]
 )
 
