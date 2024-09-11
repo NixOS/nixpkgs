@@ -213,8 +213,8 @@ in {
     enableSystemdStage1 = true;
   };
 
-  installerBoot = (import ./installer.nix { }).separateBootZfs;
-  installer = (import ./installer.nix { }).zfsroot;
+  installerBoot = (import ./installer.nix { inherit system; }).separateBootZfs;
+  installer = (import ./installer.nix { inherit system; }).zfsroot;
 
   expand-partitions = makeTest {
     name = "multi-disk-zfs";
