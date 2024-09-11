@@ -10,6 +10,7 @@
   glib,
   glm,
   gtest,
+  json_c,
   libevdev,
   libglvnd,
   libnotify,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "mattkae";
     repo = "miracle-wm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-X55qHQxdG0i9THcGsgibBMC2Imq3P3gwuNsLYw14PB0=";
+    hash = "sha256-2OoMkD4ChNXzqqzdOvzYRL0UYU7Uecm5yTXCvG45jCI=";
   };
 
   patches = [
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     glib
     glm
+    json_c
     libevdev
     libglvnd
     libnotify
