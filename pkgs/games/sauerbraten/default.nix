@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchzip
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, zlib
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchzip,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  zlib,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,9 @@ stdenv.mkDerivation rec {
   version = "2020-12-27";
 
   src = fetchzip {
-    url = "mirror://sourceforge/sauerbraten/sauerbraten_${builtins.replaceStrings [ "-" ] [ "_" ] version}_linux.tar.bz2";
+    url = "mirror://sourceforge/sauerbraten/sauerbraten_${
+      builtins.replaceStrings [ "-" ] [ "_" ] version
+    }_linux.tar.bz2";
     sha256 = "0llknzj23vx6f3y452by9c7wlhzclyq4bqi22qd52m3l916z2mn5";
   };
 
@@ -42,7 +45,11 @@ stdenv.mkDerivation rec {
       icon = "sauerbraten";
       desktopName = "Sauerbraten";
       comment = "FPS that uses an improved version of the Cube engine";
-      categories = [ "Application" "Game" "ActionGame" ];
+      categories = [
+        "Application"
+        "Game"
+        "ActionGame"
+      ];
     })
   ];
 
@@ -67,7 +74,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
     homepage = "http://sauerbraten.org";
-    maintainers = with maintainers; [ raskin ajs124 ];
+    maintainers = with maintainers; [
+      raskin
+      ajs124
+    ];
     mainProgram = "sauerbraten_client";
     hydraPlatforms =
       # raskin: tested amd64-linux;
