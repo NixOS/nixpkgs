@@ -488,8 +488,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sysvrcnd-path" "")
 
     # Login
-    (lib.mesonOption "sulogin-path" "${util-linux.login}/bin/sulogin")
-    (lib.mesonOption "nologin-path" "${util-linux.login}/bin/nologin")
+    (lib.mesonOption "sulogin-path" "${lib.getOutput "login" util-linux}/bin/sulogin")
+    (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
 
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
