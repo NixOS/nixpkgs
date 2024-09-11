@@ -9,7 +9,7 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  pname = "paup";
+  pname = "paup-cli";
   version = "4.0a168";
 
   src = fetchurl {
