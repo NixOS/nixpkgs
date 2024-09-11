@@ -13,14 +13,14 @@
 
 buildBazelPackage {
   pname = "fcitx5-mozc";
-  version = "unstable-2024-02-09";
+  version = "unstable-2024-07-31";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "mozc";
     fetchSubmodules = true;
-    rev = "c687b82fccd443917359a5c2a7b9b1c5fd3737c9";
-    hash = "sha256-lXEW7F7ctI7kNdKEjdeYHbyeF8hf6C5AohoWVIfDbjM=";
+    rev = "57e67f2a25e4c0861e0e422da0c7d4c232d89fcc";
+    hash = "sha256-1EZjEbMl+LRipH5gEgFpaKP8uEKPfupHmiiTNJc/T1k=";
   };
 
   sourceRoot = "source/src";
@@ -62,7 +62,7 @@ buildBazelPackage {
       rm -rf $bazelOut/external/fcitx5
     '';
 
-    sha256 = "sha256-nJbxmF5zbPO7HrFDeI5Ur42ID0M4pqGZoxEF+CBRQ/E=";
+    sha256 = "sha256-rrRp/v1pty7Py80/6I8rVVQvkeY72W+nlixUeYkjp+o=";
   };
 
   buildAttrs = {
@@ -93,17 +93,26 @@ buildBazelPackage {
 
       # These are relative symlinks, they will always resolve to files within $out
 
-      install -Dm444 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx-mozc.png
-      ln -s org.fcitx.Fcitx5.fcitx-mozc.png $out/share/icons/hicolor/128x128/apps/fcitx-mozc.png
+      install -Dm444 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx_mozc.png
+      ln -s org.fcitx.Fcitx5.fcitx_mozc.png $out/share/icons/hicolor/128x128/apps/fcitx_mozc.png
 
-      rm {mozc,dictionary,properties,tool}.svg
-      for svg in *.svg outlined/*.svg; do
-        name=$(basename -- ''${svg//_/-})
+      for svg in \
+        alpha_full.svg \
+        alpha_half.svg \
+        direct.svg \
+        hiragana.svg \
+        katakana_full.svg \
+        katakana_half.svg \
+        outlined/dictionary.svg \
+        outlined/properties.svg \
+        outlined/tool.svg
+      do
+        name=$(basename -- $svg)
         path=$out/share/icons/hicolor/scalable/apps
-        prefix=org.fcitx.Fcitx5.fcitx-mozc
+        prefix=org.fcitx.Fcitx5.fcitx_mozc
 
-        install -Dm444 $svg $path/$prefix-$name
-        ln -s $prefix-$name $path/fcitx-mozc-$name
+        install -Dm444 $svg $path/$prefix_$name
+        ln -s $prefix_$name $path/fcitx_mozc_$name
       done
 
       runHook postInstall
