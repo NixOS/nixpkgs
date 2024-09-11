@@ -4,14 +4,18 @@
 
 self: super:
 
-with self; with super; {
+let
+  inherit (self) callPackage toPythonModule disabled;
+in
+
+{
   attrs = callPackage ../development/python2-modules/attrs { };
 
   backports-functools-lru-cache = callPackage ../development/python2-modules/backports-functools-lru-cache { };
 
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
-  cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
+  cffi = callPackage ../development/python2-modules/cffi { inherit (super) cffi; };
 
   configparser = callPackage ../development/python2-modules/configparser { };
 
@@ -39,7 +43,7 @@ with self; with super; {
 
   # ninja python stub was created to help simplify python builds using PyPA's
   # build tool in Python 3, but it does not yet support Python 2
-  ninja = pkgs.buildPackages.ninja;
+  ninja = super.pkgs.buildPackages.ninja;
 
   packaging = callPackage ../development/python2-modules/packaging { };
 
@@ -48,7 +52,7 @@ with self; with super; {
   pluggy = callPackage ../development/python2-modules/pluggy { };
 
   pycairo = callPackage ../development/python2-modules/pycairo {
-    inherit (pkgs.buildPackages) meson;
+    inherit (super.pkgs.buildPackages) meson;
   };
 
   pygobject2 = callPackage ../development/python2-modules/pygobject { };
@@ -57,7 +61,7 @@ with self; with super; {
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
-  pytest = pytest_4;
+  pytest = self.pytest_4;
 
   pytest_4 = callPackage
     ../development/python2-modules/pytest {
@@ -88,7 +92,7 @@ with self; with super; {
   });
 
   wcwidth = callPackage ../development/python2-modules/wcwidth {
-    inherit wcwidth;
+    inherit (super) wcwidth;
   };
 
   wheel = callPackage ../development/python2-modules/wheel { };
