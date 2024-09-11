@@ -767,7 +767,6 @@ in
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
-
     doCheck = true;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
@@ -784,7 +783,7 @@ in
 
       nvim --headless -i NONE \
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
-        -c "PlenaryBustedDirectory test/auto/ { minimal_init = './test/minimal_init.vim' }"
+        -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
     '';
 
   });
