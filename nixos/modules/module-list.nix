@@ -215,7 +215,7 @@
   ./programs/iftop.nix
   ./programs/i3lock.nix
   ./programs/iio-hyprland.nix
-  ./programs/immersed-vr.nix
+  ./programs/immersed.nix
   ./programs/iotop.nix
   ./programs/java.nix
   ./programs/joycond-cemuhook.nix
