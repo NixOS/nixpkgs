@@ -79,6 +79,17 @@ assert lib.assertMsg (docCargoHash != null || docCargoLock != null)
   "Either `lix-doc`'s cargoHash using `docCargoHash` or `lix-doc`'s `cargoLock.lockFile` using `docCargoLock` must be set!";
 let
   isLegacyParser = lib.versionOlder version "2.91";
+
+  editline-patched = editline.overrideAttrs (prev: {
+    patches = (prev.patches or [ ]) ++ [
+      # Recognize `Alt-Left` and `Alt-Right` for navigating by words in more
+      # terminals/shells/platforms.
+      #
+      # See: https://github.com/troglobit/editline/pull/70
+      # See: https://gerrit.lix.systems/c/lix/+/1883
+      ./editline.patch
+    ];
+  });
 in
 stdenv.mkDerivation {
   pname = "lix";
@@ -132,7 +143,7 @@ stdenv.mkDerivation {
       brotli
       bzip2
       curl
-      editline
+      editline-patched
       libsodium
       openssl
       sqlite

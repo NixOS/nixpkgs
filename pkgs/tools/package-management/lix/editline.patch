@@ -1,0 +1,106 @@
+From d0f2a5bc2300b96b2434c7838184c1dfd6a639f5 Mon Sep 17 00:00:00 2001
+From: Rebecca Turner <rbt@sent.as>
+Date: Sun, 8 Sep 2024 15:42:42 -0700
+Subject: [PATCH 1/2] Recognize Meta+Left and Meta+Right
+
+Recognize `Alt-Left` and `Alt-Right` for navigating by words in more
+terminals/shells/platforms.
+
+I'm not sure exactly where to find canonical documentation for these
+codes, but this seems to match what my terminal produces (macOS + iTerm2
++ Fish + Tmux).
+
+It might also be nice to have some more support for editing the bindings
+for these characters; sequences of more than one character are not
+supported by `el_bind_key` and similar.
+
+Originally from: https://github.com/troglobit/editline/pull/70
+This patch is applied upstream: https://gerrit.lix.systems/c/lix/+/1883
+
+---
+ src/editline.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/src/editline.c b/src/editline.c
+index 5ec9afb..d1cfbbc 100644
+--- a/src/editline.c
++++ b/src/editline.c
+@@ -1034,6 +1034,30 @@ static el_status_t meta(void)
+         return CSeof;
+ 
+ #ifdef CONFIG_ANSI_ARROWS
++    /* See: https://en.wikipedia.org/wiki/ANSI_escape_code */
++    /* Recognize ANSI escapes for `Meta+Left` and `Meta+Right`. */
++    if (c == '\e') {
++        switch (tty_get()) {
++        case '[':
++        {
++            switch (tty_get()) {
++            /* \e\e[C = Meta+Left */
++            case 'C': return fd_word();
++            /* \e\e[D = Meta+Right */
++            case 'D': return bk_word();
++            default:
++                break;
++            }
++
++            return el_ring_bell();
++        }
++        default:
++            break;
++        }
++
++        return el_ring_bell();
++    }
++
+     /* Also include VT-100 arrows. */
+     if (c == '[' || c == 'O') {
+         switch (tty_get()) {
+@@ -1043,6 +1067,7 @@ static el_status_t meta(void)
+             char seq[4] = { 0 };
+             seq[0] = tty_get();
+ 
++            /* \e[1~ */
+             if (seq[0] == '~')
+                 return beg_line(); /* Home */
+ 
+@@ -1050,9 +1075,9 @@ static el_status_t meta(void)
+                 seq[c] = tty_get();
+ 
+             if (!strncmp(seq, ";5C", 3))
+-                return fd_word(); /* Ctrl+Right */
++                return fd_word(); /* \e[1;5C = Ctrl+Right */
+             if (!strncmp(seq, ";5D", 3))
+-                return bk_word(); /* Ctrl+Left */
++                return bk_word(); /* \e[1;5D = Ctrl+Left */
+ 
+             break;
+         }
+
+From 4c4455353a0a88bee09d5f27c28f81f747682fed Mon Sep 17 00:00:00 2001
+From: Rebecca Turner <rbt@sent.as>
+Date: Mon, 9 Sep 2024 09:44:44 -0700
+Subject: [PATCH 2/2] Add support for \e[1;3C and \e[1;3D
+
+---
+ src/editline.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/editline.c b/src/editline.c
+index d1cfbbc..350b5cb 100644
+--- a/src/editline.c
++++ b/src/editline.c
+@@ -1074,9 +1074,11 @@ static el_status_t meta(void)
+             for (c = 1; c < 3; c++)
+                 seq[c] = tty_get();
+ 
+-            if (!strncmp(seq, ";5C", 3))
++            if (!strncmp(seq, ";5C", 3)
++                || !strncmp(seq, ";3C", 3))
+                 return fd_word(); /* \e[1;5C = Ctrl+Right */
+-            if (!strncmp(seq, ";5D", 3))
++            if (!strncmp(seq, ";5D", 3)
++                || !strncmp(seq, ";3D", 3))
+                 return bk_word(); /* \e[1;5D = Ctrl+Left */
+ 
+             break;
