@@ -82,7 +82,6 @@ let
   atLeast8  = versionAtLeast version  "8";
   atLeast7  = versionAtLeast version  "7";
   atLeast6  = versionAtLeast version  "6";
-  atLeast49 = versionAtLeast version  "4.9";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
@@ -92,7 +91,6 @@ let
   is8  = majorVersion == "8";
   is7  = majorVersion == "7";
   is6  = majorVersion == "6";
-  is49 = majorVersion == "4" && versions.minor version == "9";
 
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
@@ -277,7 +275,7 @@ pipe ((callFile ./common/builder.nix {}) ({
   outputs =
     if atLeast7
     then [ "out" "man" "info" ] ++ optional (!langJit) "lib"
-    else if atLeast49 && (langJava || langGo || (if atLeast6 then langJit else targetPlatform.isDarwin)) then ["out" "man" "info"]
+    else if (langJava || langGo || (if atLeast6 then langJit else targetPlatform.isDarwin)) then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
 
   setOutputFlags = false;
@@ -460,7 +458,7 @@ pipe ((callFile ./common/builder.nix {}) ({
     badPlatforms =
       # avr-gcc8 is maintained for the `qmk` package
       if (is8 && targetPlatform.isAvr) then []
-      else if !(is49 || is6) then [ "aarch64-darwin" ]
+      else if !(is6) then [ "aarch64-darwin" ]
       else platforms.darwin;
   } // optionalAttrs is10 {
     badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
@@ -474,7 +472,7 @@ pipe ((callFile ./common/builder.nix {}) ({
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 } // optionalAttrs enableMultilib {
   dontMoveLib64 = true;
-} // optionalAttrs (((is49 && !stdenv.hostPlatform.isDarwin) || is6) && langJava) {
+} // optionalAttrs (is6 && langJava) {
   postFixup = ''
     target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
     patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
