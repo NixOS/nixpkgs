@@ -201,11 +201,11 @@ in {
             --syncmode ${cfg.syncmode} \
             ${optionalString (cfg.permissioned)
             "--permissioned"} \
-            --mine --minerthreads 1 \
+            --mine --miner.threads 1 \
             ${optionalString (cfg.rpc.enable)
             "--rpc --rpcaddr ${cfg.rpc.address} --rpcport ${toString cfg.rpc.port} --rpcapi ${cfg.rpc.api}"} \
             ${optionalString (cfg.ws.enable)
-            "--ws --wsaddr ${cfg.ws.address} --wsport ${toString cfg.ws.port} --wsapi ${cfg.ws.api} --wsorigins ${cfg.ws.origins}"} \
+            "--ws --ws.addr ${cfg.ws.address} --ws.port ${toString cfg.ws.port} --ws.api ${cfg.ws.api} --ws.origins ${cfg.ws.origins}"} \
             --emitcheckpoints \
             --datadir ${dataDir} \
             --port ${toString cfg.port}'';
