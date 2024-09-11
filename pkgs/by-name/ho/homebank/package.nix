@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, gtk, pkg-config, libofx, intltool, wrapGAppsHook3
+{ fetchurl, lib, stdenv, gtk3, pkg-config, libofx, intltool, wrapGAppsHook3
 , libsoup_3, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
-  buildInputs = [ gtk libofx libsoup_3 adwaita-icon-theme];
+  buildInputs = [ gtk3 libofx libsoup_3 adwaita-icon-theme];
 
   meta = with lib; {
     description = "Free, easy, personal accounting for everyone";
