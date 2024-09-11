@@ -14,14 +14,12 @@
 , libGL
 , SDL2
 , SDL2_mixer
-, AGL
-, Cocoa
-, GLUT
-, OpenGL
+, darwin
 , graphicsmagick
 }:
 
 let
+  inherit (darwin.apple_sdk.frameworks) AGL Cocoa GLUT OpenGL;
   wrapper = "eduke32-wrapper";
   swWrapper = "voidsw-wrapper";
 
