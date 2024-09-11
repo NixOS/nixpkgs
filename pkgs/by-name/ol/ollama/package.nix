@@ -181,6 +181,14 @@ goBuild (
       # replace inaccurate version number with actual release version
       substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
     '';
+
+    overrideModAttrs = (
+      finalAttrs: prevAttrs: {
+        # don't run llama.cpp build in the module fetch phase
+        preBuild = "";
+      }
+    );
+
     preBuild = ''
       # disable uses of `git`, since nix removes the git directory
       export OLLAMA_SKIP_PATCHING=true
