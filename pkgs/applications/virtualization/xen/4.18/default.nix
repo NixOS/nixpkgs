@@ -16,9 +16,6 @@ let
     with upstreamPatches;
     [
       QUBES_REPRODUCIBLE_BUILDS
-      XSA_458
-      XSA_460
-      XSA_461
     ]
   );
 in
@@ -26,12 +23,12 @@ in
 callPackage (import ../generic/default.nix {
   pname = "xen";
   branch = "4.18";
-  version = "4.18.2";
+  version = "4.18.3";
   latest = false;
   pkg = {
     xen = {
-      rev = "d152a0424677d8b78e00ed1270a583c5dafff16f";
-      hash = "sha256-pHCjj+Bcy4xQfB9xHU9fccFwVdP2DXrUhdszwGvrdmY=";
+      rev = "bd51e573a730efc569646379cd59ccba967cde97";
+      hash = "sha256-OFiFdpPCXR+sWjzFHCORtY4DkWyggvxkcsGdgEyO1ts=";
       patches = [ ] ++ upstreamPatchList;
     };
     qemu = {
