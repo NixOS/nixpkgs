@@ -10746,10 +10746,6 @@ with pkgs;
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
-  notes = qt6Packages.callPackage ../applications/office/notes {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   notes-up = callPackage ../applications/office/notes-up { };
 
   notify-osd-customizable = callPackage ../applications/misc/notify-osd-customizable { };
@@ -31410,8 +31406,6 @@ with pkgs;
   libresprite = callPackage ../applications/editors/libresprite {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
-
-  libvmi = callPackage ../development/libraries/libvmi { };
 
   libutp = callPackage ../applications/networking/p2p/libutp { };
   libutp_3_4 = callPackage ../applications/networking/p2p/libutp/3.4.nix { };

@@ -3,7 +3,7 @@
 rec {
   gen =
 
-    { version, nativeVersion, hash,
+    { version, hash,
 
       # The default JDK/JRE that will be used for derived Gradle packages.
       # A current LTS version of a JDK is a good choice.
@@ -36,6 +36,7 @@ rec {
     , testers
     , runCommand
     , writeText
+    , autoPatchelfHook
 
     # The JDK/JRE used for running Gradle.
     , java ? defaultJava
@@ -57,8 +58,22 @@ rec {
 
       dontBuild = true;
 
-      nativeBuildInputs = [ makeWrapper unzip ];
-      buildInputs = [ java ];
+      nativeBuildInputs = [
+        makeWrapper
+        unzip
+      ] ++ lib.optionals stdenv.isLinux [
+        autoPatchelfHook
+      ];
+
+      buildInputs = [
+        java
+        stdenv.cc.cc
+        ncurses5
+        ncurses6
+      ];
+
+      # We only need to patchelf some libs embedded in JARs.
+      dontAutoPatchelf = true;
 
       installPhase = with builtins;
         let
@@ -87,17 +102,21 @@ rec {
 
       fixupPhase = let arch = if stdenv.is64bit then "amd64" else "i386";
       in ''
+        . ${./patching.sh}
+
+        nativeVersion="$(extractVersion native-platform $out/lib/gradle/lib/native-platform-*.jar)"
         for variant in "" "-ncurses5" "-ncurses6"; do
-          mkdir "patching$variant"
-          pushd "patching$variant"
-          jar xf $out/lib/gradle/lib/native-platform-linux-${arch}$variant-${nativeVersion}.jar
-          patchelf \
-            --set-rpath "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}" \
-            net/rubygrapefruit/platform/linux-${arch}$variant/libnative-platform*.so
-          jar cf native-platform-linux-${arch}$variant-${nativeVersion}.jar .
-          mv native-platform-linux-${arch}$variant-${nativeVersion}.jar $out/lib/gradle/lib/
-          popd
+          autoPatchelfInJar \
+            $out/lib/gradle/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
+            "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}"
         done
+
+        # The file-events library _seems_ to follow the native-platform version, but
+        # we won’t assume that.
+        fileEventsVersion="$(extractVersion file-events $out/lib/gradle/lib/file-events-*.jar)"
+        autoPatchelfInJar \
+          $out/lib/gradle/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
+          "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
 
         # The scanner doesn't pick up the runtime dependency in the jar.
         # Manually add a reference where it will be found.
@@ -162,21 +181,18 @@ rec {
 
   gradle_8 = gen {
     version = "8.10";
-    nativeVersion = "0.22-milestone-26";
     hash = "sha256-W5xes/n8LJSrrqV9kL14dHyhF927+WyFnTdBGBoSvyo=";
     defaultJava = jdk21;
   };
 
   gradle_7 = gen {
     version = "7.6.4";
-    nativeVersion = "0.22-milestone-25";
     hash = "sha256-vtHaM8yg9VerE2kcd/OLtnOIEZ5HlNET4FEDm4Cvm7E=";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
     version = "6.9.4";
-    nativeVersion = "0.22-milestone-20";
     hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
     defaultJava = jdk11;
   };
