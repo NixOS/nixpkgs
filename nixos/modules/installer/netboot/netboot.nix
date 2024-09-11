@@ -47,7 +47,7 @@ with lib;
     fileSystems."/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
         device = "../nix-store.squashfs";
-        options = [ "loop" ];
+        options = [ "loop" "threads=multi" ];
         neededForBoot = true;
       };
 
