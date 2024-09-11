@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   packaging,
   tenacity,
@@ -13,12 +13,16 @@ buildPythonPackage rec {
   version = "5.24.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6un09URIaCRCySwelxSOOtDFLwz4Ywbht22rokrdVUo=";
+  src = fetchFromGitHub {
+    owner = "plotly";
+    repo = "plotly.py";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-frSUybQxst4wG8g8U43Nay9dYCUXuR3dBealwPVyFdI=";
   };
 
   postPatch = ''
+    cd packages/python/plotly
+
     substituteInPlace pyproject.toml \
       --replace-fail "\"jupyterlab~=3.0;python_version>='3.6'\"," ""
   '';
