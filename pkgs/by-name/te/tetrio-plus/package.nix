@@ -19,7 +19,7 @@
 
 let
   version = "0.27.2";
-  rev = "electron-v${version}-tetrio-v${lib.versions.major tetrio-desktop.version}";
+  rev = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
 
   src = fetchFromGitLab {
     owner = "UniQMG";

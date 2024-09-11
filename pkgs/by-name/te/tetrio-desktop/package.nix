@@ -12,10 +12,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetrio-desktop";
-  version = "9.0.0";
+  version = "9";
 
   src = fetchzip {
-    url = "https://tetr.io/about/desktop/builds/${lib.versions.major finalAttrs.version}/TETR.IO%20Setup.deb";
+    url = "https://tetr.io/about/desktop/builds/${finalAttrs.version}/TETR.IO%20Setup.deb";
     hash = "sha256-TgegFy+sHjv0ILaiLO1ghyUhKXoj8v43ACJOJhKyI0c=";
     nativeBuildInputs = [ dpkg ];
   };
