@@ -52,7 +52,9 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-7nm8Cz05Qa44TMC0ioklvKAXQnE9J2wUDZFXLQt2A1w=";
+  patches = [ ./fix-maven-plugin-versions.patch ];
+
+  mvnHash = "sha256-Tr5HyvB/VboLLN6lJbkfGmUUNMsYqaDAbcg3GHrOENY=";
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"
