@@ -29,10 +29,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     # Solves ImportError: cannot import name NM, introspection typelib not found
     gobject-introspection
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     # Needed here for the NM namespace
     networkmanager
     proton-vpn-api-core

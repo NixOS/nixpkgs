@@ -20,9 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-XZqjAhxgIiATJd3JcW2WWUMC1b6+cfZRhXlIPyMUFH8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ proton-core ];
+  dependencies = [ proton-core ];
 
   pythonImportsCheck = [ "proton.vpn.killswitch.interface" ];
 

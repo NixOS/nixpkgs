@@ -25,9 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-IiKmtgcCSe2q3qaNuUSaC/D/vSQzVq7w8VN2Xq81+tQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     aiohttp
     pyopenssl

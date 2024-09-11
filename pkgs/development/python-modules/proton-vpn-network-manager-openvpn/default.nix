@@ -25,10 +25,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     # Solves Namespace NM not available
     gobject-introspection
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     proton-core
     proton-vpn-network-manager
   ];

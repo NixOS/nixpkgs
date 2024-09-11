@@ -20,9 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-IZPT2bL/1YD2TH/djwIQHUE1RRbYMTkQDacjjoqDQWo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ proton-keyring-linux ];
+  dependencies = [ proton-keyring-linux ];
 
   pythonImportsCheck = [ "proton.keyring_linux" ];
 

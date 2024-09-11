@@ -55,7 +55,7 @@ buildPythonApplication rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dbus-python
     packaging
     proton-core
@@ -78,6 +78,11 @@ buildPythonApplication rec {
     mkdir -p $out/share/{applications,pixmaps}
     install -Dm 644 ${src}/rpmbuild/SOURCES/protonvpn-app.desktop $out/share/applications
     install -Dm 644 ${src}/rpmbuild/SOURCES/proton-vpn-logo.svg $out/share/pixmaps
+  '';
+
+  preCheck = ''
+    # Needed for Permission denied: '/homeless-shelter'
+    export HOME=$(mktemp -d)
   '';
 
   # Gets a segmentation fault after the widgets test

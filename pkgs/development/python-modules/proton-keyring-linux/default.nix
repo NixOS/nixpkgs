@@ -21,9 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-c2wdbd8Hkz2hF9zYMy4/V/W6uZRItz7tWqLJqTsJoHU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     keyring
     proton-core
   ];

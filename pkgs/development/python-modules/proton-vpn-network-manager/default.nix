@@ -30,10 +30,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     # Needed to recognize the NM namespace
     gobject-introspection
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     # Needed here for the NM namespace
     networkmanager
     proton-core

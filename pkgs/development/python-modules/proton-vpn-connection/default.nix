@@ -23,9 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-Ze/te0G0tDzyZPGVVqvuJlZoHWJqJ36LnHO+Cy5nxx8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     proton-core
     proton-vpn-killswitch

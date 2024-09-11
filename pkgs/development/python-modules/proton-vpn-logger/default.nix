@@ -20,9 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-/LfMjyTs/EusgnKEQugsdJzqDZBvaAhbsTUVLDCRw0I=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ proton-core ];
+  dependencies = [ proton-core ];
 
   pythonImportsCheck = [ "proton.vpn.logging" ];
 
