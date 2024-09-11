@@ -1953,6 +1953,7 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
+  ./virtualisation/xen-domU.nix
   # keep-sorted end
   {
     documentation.nixos.extraModules = [
