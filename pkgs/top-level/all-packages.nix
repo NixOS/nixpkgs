@@ -23454,6 +23454,8 @@ with pkgs;
 
   serf = callPackage ../development/libraries/serf { };
 
+  sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
+
   sfsexp = callPackage ../development/libraries/sfsexp { };
 
   shhmsg = callPackage ../development/libraries/shhmsg { };
@@ -34739,8 +34741,6 @@ with pkgs;
   zita-at1 = callPackage ../applications/audio/zita-at1 { };
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
-
-  zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
 

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-squashfs";
-  version = "1.6";
+  version = "1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.squashfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-XTVGhTnDtuYTAjEeliwYDjuKfP7ljHIxaQAsQI1x5lk=";
+    hash = "sha256-ZRMCh/ycF594pADnX01S9oVxuY/cnJa4LLXP4ARoDs0=";
   };
 
   build-system = [
