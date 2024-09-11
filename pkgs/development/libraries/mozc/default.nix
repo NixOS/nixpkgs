@@ -24,7 +24,7 @@
 
 buildBazelPackage {
   pname = "mozc";
-  version = "unstable-2024-02-09";
+  version = "unstable-2024-07-29";
 
   srcs = [
     (fetchFromGitHub rec {
@@ -32,89 +32,85 @@ buildBazelPackage {
       repo = "mozc";
       name = repo;
       fetchSubmodules = true;
-      rev = "c2fcbf6515c5884437977de46187c16a8cb7bb50";
-      hash = "sha256-AcIN5sWPBe4JotAUYv1fytgQw+mJzdFhKuVPLR48soA=";
+      rev = "5e6abfe1853b080766def432b746a9bed79e54b0";
+      hash = "sha256-w0bjoMmq8gL7DSehEG7cKqp5e4kNOXnCYLW31Zl9FRs=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "merge-ut-dictionaries";
       name = repo;
-      rev = "a3d6fc4005aff2092657ebca98b9de226e1c617f";
-      hash = "sha256-UK29ACZUK9zGfzW7C85uMw2aF5Gk+0aDeUdNV71PY+0=";
+      rev = "1f1cdcf545b952f84fdad78d58c0db7a662b592d";
+      hash = "sha256-BrjHLTomoaF/DHmxUEFVzyTWBXfB+LUtt5b/MiuZ8EU=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-alt-cannadic";
       name = repo;
-      rev = "4e548e6356b874c76e8db438bf4d8a0b452f2435";
-      hash = "sha256-4gzqVoCIhC0k3mh0qbEr8yYttz9YR0fItkFNlu7cYOY=";
+      rev = "50fee0397b87fe508f9edd45bac56f5290d8ce66";
+      hash = "sha256-KKUj3d9yR2kTTTFbroZQs+OZR4KUyAUYE/X3z9/vQvM=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-edict2";
       name = repo;
-      rev = "b2eec665b81214082d61acee1c5a1b5b115baf1a";
-      hash = "sha256-LIpGt6xB8dLUnazbJHZk6EH1/ZyAHMIn1m6Qpr2dsHs=";
+      rev = "b2112277d0d479b9218f42772356da3601b3e8cf";
+      hash = "sha256-DIIp8FooWxyHMrQmq+2KUGEmYHKy+H6NtHrvRldxXqc=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-jawiki";
       name = repo;
-      rev = "6e08b8c823f3d2d09064ad2080e7a16552a7b473";
-      hash = "sha256-0YwAinlcI6yojCdW1MpLgMZfyYV7gk9Q+Wlu4lR3Hrg=";
+      rev = "29dd6d3202119d88a2356a11300b7b338f5cb950";
+      hash = "sha256-tgg9fOFnRypJjb9jWoTOOu4kbCdzNDry3/fpy5Tms9s=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-neologd";
       name = repo;
-      rev = "bf9d0d217107f2fb2e7d1a26648ef429d9fdcd27";
-      hash = "sha256-e0iM5fohwpNNhPl9CjkD753/Rgatg7GdwN0NSvlN94c=";
+      rev = "b7035b88db25ad1a933f05a33f193711c6c3b2db";
+      hash = "sha256-JPTrWaDtdNs/Z0uLRwaS8Qc/l4/Y7NtwLanivyefXnk=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-personal-names";
       name = repo;
-      rev = "8a500f82c553936cbdd33b85955120e731069d44";
-      hash = "sha256-pMyYvl5S0+U++MO5m9rmbtxDzAmO4Xs8sFewOUGqgUA=";
+      rev = "5df5cedaef3b55c509cacfbf3e97ded852535a1b";
+      hash = "sha256-zTJVhbZEIG+xiRWAPsK9faxxxnKeHIt/gc7HuAXqOl4=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-place-names";
       name = repo;
-      rev = "a847a02e0137ab9e2fdbbaaf120826f870408ca6";
-      hash = "sha256-B0kW8Wa/nCT4KEYl2Rz6gQcj0Po3GxU6i42unHhgZeU=";
+      rev = "5c2167541200528d8b25214c52be7a4c3dd3b89b";
+      hash = "sha256-GUfze7iSRQiMPExr6tZ3fvO6W+cfU1I4MwXyZzgNrig=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-skk-jisyo";
       name = repo;
-      rev = "ee94f6546ce52edfeec0fd203030f52d4d99656f";
-      hash = "sha256-RXxO878ZBkxenrdo7cFom5NjM0m7CdYQk0dFu/HPp/Y=";
+      rev = "7300f19e6a3f27334ed7af64589de8782549a13f";
+      hash = "sha256-LJ1rP+uyh8K3IWCgKMDYt0EwEDiQqQL+wBdQCFbZM/k=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-sudachidict";
       name = repo;
-      rev = "55f61c3fca81dec661c36c73eb29b2631c8ed618";
-      hash = "sha256-gNnBcuVU1M7rllfZXIrLg7WYUhKqPJsUjR8Scnq3Fw8=";
+      rev = "a754f1fff5fded62cc066aa6be0ab0169059a144";
+      hash = "sha256-WzhWNpqtiG9TtFHEOSbHG1mbb4ak0zCkO13g9ZWqyBE=";
     })
-    (fetchurl rec {
-      name = "jawiki";
-      url = "https://dumps.wikimedia.org/${name}/20240120/${name}-20240120-all-titles-in-ns0.gz";
-      recursiveHash = true;
-      hash = "sha256-Mp7ya2tM6E0IKE6kOYSlRx6gZBS/DK1zAwyT6jvZxrY=";
-      downloadToTemp = true;
-      postFetch = ''
-        mkdir -p "$out"
-        install -Dm444 "$downloadedFile" "$out/${name}.gz"
-      '';
+    (fetchFromGitHub rec {
+      owner = "musjj";
+      repo = "jawiki-archive";
+      name = repo;
+      rev = "d205f63665e351ea853edc72157f14daa22a227f";
+      hash = "sha256-Jj2vH8UMhgSzWv+RnOipnVNSdeOF6jttcLN/kVYa4D4=";
     })
     (fetchFromGitHub rec {
       owner = "musjj";
       repo = "jp-zip-codes";
       name = repo;
-      rev = "cfbb54655223d8e2cea6fedbaef202919d8d62fe";
-      hash = "sha256-ZvZL/6yTE6JrBu4ja7HvyBUKWUAIL0jULii5Im+zmLQ=";
+      rev = "995d7cce9ae68a31efe4b5882137dd67ac26f7ff";
+      hash = "sha256-VnzczwIbYPUpWpWLMm2TYGqiDxzZaDDKs7xh4F3xA0E=";
     })
   ];
 
@@ -124,7 +120,6 @@ buildBazelPackage {
     glibcLocales
     pkg-config
     python3
-    ruby
     wrapQtAppsHook
   ];
 
@@ -133,10 +128,6 @@ buildBazelPackage {
   preBuild = ''
     cd mozc/src
   '';
-
-  # Required so that the ruby scripts can work
-  env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-  env.LC_ALL = "en_US.UTF-8";
 
   bazel = bazel_6;
   removeRulesCC = false;
@@ -169,7 +160,7 @@ buildBazelPackage {
       rm -rf $bazelOut/external/qt_linux
     '';
 
-    sha256 = "sha256-gpRLwbYHPW2o9LkOhO10sOVhtXZr7MPfMRdJympwPyk=";
+    sha256 = "sha256-EiRTuK6J9vgnw9HQwSpeGQcOp4AcTBluFYjjr69ILv4=";
   };
 
   buildAttrs = {
@@ -179,10 +170,10 @@ buildBazelPackage {
       (
         cd merge-ut-dictionaries/src
 
-        sed -i -e "s|https://raw.githubusercontent.com/google/mozc/master|../../mozc|" remove_duplicate_ut_entries.rb
+        sed -i -e "s|https://raw.githubusercontent.com/google/mozc/master/src|file://$PWD/../../mozc/src|" remove_duplicate_ut_entries.py
 
-        sed -i -e '/wget/d' count_word_hits.rb
-        sed -i -e "s|^filename = \"jawiki-.*|filename = \"../../jawiki/jawiki.gz\"|" count_word_hits.rb
+        sed -i -e '/wget/d' count_word_hits.py
+        sed -i -e "s|^file_name = \"jawiki-latest-all-titles-in-ns0.gz\"|file_name = \"../../jawiki-archive/jawiki-latest-all-titles-in-ns0.gz\"|" count_word_hits.py
 
         [[ -e mozcdic-ut.txt ]] && rm mozcdic-ut.txt
 
@@ -194,9 +185,9 @@ buildBazelPackage {
           cat mozcdic-ut-$name.txt >>mozcdic-ut.txt
         done
 
-        ruby remove_duplicate_ut_entries.rb mozcdic-ut.txt
-        ruby count_word_hits.rb
-        ruby apply_word_hits.rb mozcdic-ut.txt
+        python remove_duplicate_ut_entries.py mozcdic-ut.txt
+        python count_word_hits.py
+        python apply_word_hits.py mozcdic-ut.txt
 
         cat mozcdic-ut.txt >>../../mozc/src/data/dictionary_oss/dictionary00.txt
       )
