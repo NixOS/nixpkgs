@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gO2vuOQMvl6KYp529k3CYDyma5ECzOr/lcSvP4OpUUo=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.turn-rs;
+  };
 
   meta = {
     description = "Pure rust implemented turn server";
