@@ -32,7 +32,6 @@ buildNpmPackage rec {
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
-    sed -i 's/7z a -tzip/zip -r/g' Makefile
   '';
 
   npmBuildScript = "tsc";
@@ -40,6 +39,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
+    substituteInPlace Makefile --replace-fail '7z a -tzip' 'zip -r'
     make krohnkite-${version}.kwinscript
     kpackagetool6 --type=KWin/Script --install=krohnkite-${version}.kwinscript --packageroot=$out/share/kwin/scripts
 
