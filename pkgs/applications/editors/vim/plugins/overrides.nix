@@ -65,6 +65,7 @@
 , zathura
 , zenity
 , zsh
+, xdg-utils
 , # codeium-nvim dependencies
   codeium
 , # codesnap-nvim dependencies
@@ -890,6 +891,10 @@
 
   guard-nvim = super.guard-nvim.overrideAttrs {
     dependencies = with self; [ guard-collection ];
+  };
+
+  gx-nvim = super.gx-nvim.overrideAttrs {
+    dependencies = lib.optional stdenv.hostPlatform.isLinux xdg-utils;
   };
 
   hardhat-nvim = super.hardhat-nvim.overrideAttrs {
