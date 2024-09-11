@@ -294,6 +294,9 @@ checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
 checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
+# Check coerced option merging.
+checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already declared in .*/declare-coerced-value-no-default.nix.' config.value ./declare-coerced-value.nix ./declare-coerced-value-no-default.nix
+
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
