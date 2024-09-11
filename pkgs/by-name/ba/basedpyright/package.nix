@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "1.17.2";
+  version = "1.17.3";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6pksb2drjiZo1Hp6P/G06LAj3nW5WXJbVNGt5897jAA=";
+    hash = "sha256-cnhtge0ueveo70cYDpb/+ss5osHbO1Yyv74NrYBYZOM=";
   };
 
   patchedPackageJSON = runCommand "package.json" { } ''
