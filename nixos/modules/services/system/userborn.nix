@@ -97,7 +97,7 @@ in
       # home.
       tmpfiles.settings.home-directories = lib.mapAttrs' (
         username: opts:
-        lib.nameValuePair opts.home {
+        lib.nameValuePair (toString opts.home) {
           d = {
             mode = opts.homeMode;
             user = username;
