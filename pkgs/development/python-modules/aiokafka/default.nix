@@ -2,17 +2,15 @@
   lib,
   async-timeout,
   buildPythonPackage,
+  cramjam,
   cython,
   fetchFromGitHub,
   gssapi,
-  kafka-python,
-  lz4,
   packaging,
-  python-snappy,
   pythonOlder,
   setuptools,
+  typing-extensions,
   zlib,
-  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +18,7 @@ buildPythonPackage rec {
   version = "0.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -38,15 +36,19 @@ buildPythonPackage rec {
 
   dependencies = [
     async-timeout
-    kafka-python
     packaging
+    typing-extensions
   ];
 
   optional-dependencies = {
-    snappy = [ python-snappy ];
-    lz4 = [ lz4 ];
-    zstd = [ zstandard ];
+    snappy = [ cramjam ];
+    lz4 = [ cramjam ];
+    zstd = [ cramjam ];
     gssapi = [ gssapi ];
+    all = [
+      cramjam
+      gssapi
+    ];
   };
 
   # Checks require running Kafka server
