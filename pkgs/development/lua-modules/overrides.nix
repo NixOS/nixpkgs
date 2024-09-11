@@ -545,8 +545,7 @@ in
   });
 
   neotest  = prev.neotest.overrideAttrs(oa: {
-    # A few tests fail for strange reasons on darwin
-    doCheck = !stdenv.isDarwin;
+    doCheck = true;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
       final.nlua final.busted neovim-unwrapped
     ];
@@ -560,7 +559,7 @@ in
       export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
       nvim --headless -i NONE \
         --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
-        -c "PlenaryBustedDirectory tests/ {}"
+        -c "PlenaryBustedDirectory tests/ {sequential = true}"
 
       runHook postCheck
       '';
