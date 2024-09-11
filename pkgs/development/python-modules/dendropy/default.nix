@@ -7,12 +7,12 @@
   pythonOlder,
   nix-update-script,
   setuptools,
-  paup,
+  paup-cli,
   paupIntegration ? false,
 }:
 
 let
-  paupPath = if paupIntegration then lib.getExe paup else "NONE";
+  paupPath = if paupIntegration then lib.getExe paup-cli else "NONE";
 in
 buildPythonPackage rec {
   pname = "dendropy";
