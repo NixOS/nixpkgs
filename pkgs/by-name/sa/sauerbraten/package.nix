@@ -2,24 +2,29 @@
   lib,
   stdenv,
   fetchzip,
+
+  # nativeBuildInputs
+  makeWrapper,
+  copyDesktopItems,
+
+  # buildInputs
   SDL2,
   SDL2_image,
   SDL2_mixer,
   zlib,
-  makeWrapper,
-  copyDesktopItems,
+
   makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sauerbraten";
-  version = "2020-12-27";
+  version = "2020-12-29";
 
   src = fetchzip {
     url = "mirror://sourceforge/sauerbraten/sauerbraten_${
       builtins.replaceStrings [ "-" ] [ "_" ] version
     }_linux.tar.bz2";
-    sha256 = "0llknzj23vx6f3y452by9c7wlhzclyq4bqi22qd52m3l916z2mn5";
+    hash = "sha256-os3SmonqHRw1+5dIRVt7EeXfnSq298GiyKpusS1K3rM=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +34,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    SDL2_mixer
     SDL2_image
+    SDL2_mixer
     zlib
   ];
 
@@ -71,10 +76,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
     homepage = "http://sauerbraten.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       ajs124
     ];
@@ -84,6 +89,6 @@ stdenv.mkDerivation rec {
       # not setting platforms because it is 0.5+ GiB of game data
       [ ];
     license = "freeware"; # as an aggregate - data files have different licenses code is under zlib license
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
