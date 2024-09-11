@@ -219,9 +219,9 @@ stdenv.mkDerivation (finalAttrs: {
       free and open source and great for both casual users and computer experts.
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
-    license = if unrarSupport
-              then lib.licenses.unrar
-              else lib.licenses.gpl3Plus;
+    license = [ lib.licenses.gpl3Plus ]
+      # the extra unfree is because gpl license cannot legally be combined with unfree licenses
+      ++ lib.optionals unrarSupport [ lib.licenses.unrar lib.licenses.unfree];
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
