@@ -9,7 +9,6 @@
   eth-rlp,
   eth-utils,
   websockets,
-  setuptools,
   hexbytes,
   pythonOlder,
   rlp,
@@ -25,7 +24,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-account";
     rev = "v${version}";
-    hash = "sha256-Ps/vzJv0W1+wy1mSJaqRNNU6CoCMchReHIocB9kPrGs=";
+    hash = "sha256-657l7M7euUGXXKTrQyB/kVA4miyePr310enhkaSBJss=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     hexbytes
     rlp
     websockets
-    setuptools
   ];
 
   # require buildinga npm project
