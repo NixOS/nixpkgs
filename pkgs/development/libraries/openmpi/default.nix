@@ -175,7 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
         // lib.optionalAttrs fortranSupport {
           "fort" = [
             "gfortran"
-            "${targetPackages.gfortran}/bin/${targetPackages.gfortran.targetPrefix}gfortran"
+            "${targetPackages.gfortran or gfortran}/bin/${
+              targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
+            }gfortran"
           ];
         };
       # The -wrapper-data.txt files that are not symlinks, need to be iterated as
