@@ -39,9 +39,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plotly" ];
 
-  # No tests in archive
-  doCheck = false;
-
   meta = with lib; {
     description = "Python plotting library for collaborative, interactive, publication-quality graphs";
     downloadPage = "https://github.com/plotly/plotly.py";
