@@ -9,6 +9,7 @@
   eth-rlp,
   eth-utils,
   websockets,
+  setuptools,
   hexbytes,
   pythonOlder,
   rlp,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "eth-account";
-  version = "0.9.0";
+  version = "0.13.3";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     hexbytes
     rlp
     websockets
+    setuptools
   ];
 
   # require buildinga npm project
