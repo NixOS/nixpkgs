@@ -34740,8 +34740,6 @@ with pkgs;
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
 
-  zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
-
   zotero = callPackage ../applications/office/zotero { };
 
   zotero_7 = pkgs.zotero-beta;
