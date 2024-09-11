@@ -34506,9 +34506,6 @@ with pkgs;
 
   xfractint = callPackage ../applications/graphics/xfractint { };
 
-  xine-ui = callPackage ../applications/video/xine/ui.nix { };
-  xine-lib = callPackage ../applications/video/xine/lib.nix { };
-
   xlsxgrep = callPackage ../applications/search/xlsxgrep { };
 
   xmind = callPackage ../applications/misc/xmind { };
