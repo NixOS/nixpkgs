@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildNpmPackage rec {
@@ -17,6 +18,9 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-yhy2bTXeBYxGaLYb2by+7Y5DfKJ04hroYiOIvwcBojY=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
