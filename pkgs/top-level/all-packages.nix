@@ -31623,8 +31623,6 @@ with pkgs;
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
-  merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
-
   mepo = callPackage ../applications/misc/mepo { };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
