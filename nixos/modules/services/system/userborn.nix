@@ -104,7 +104,7 @@ in
             inherit (opts) group;
           };
         }
-      ) (lib.filterAttrs (_username: opts: opts.home != "/var/empty") userCfg.users);
+      ) (lib.filterAttrs (_username: opts: opts.createHome && opts.home != "/var/empty") userCfg.users);
 
       services.userborn = {
         wantedBy = [ "sysinit.target" ];
