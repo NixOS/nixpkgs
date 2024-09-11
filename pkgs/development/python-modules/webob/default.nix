@@ -1,22 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+
+  # for passthru.tests
+  pyramid,
+  routes,
+  tokenlib,
 }:
 
 buildPythonPackage rec {
   pname = "webob";
-  version = "1.8.7";
+  version = "1.8.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "WebOb";
-    inherit version;
-    hash = "sha256-tk71FBvlWc+t5EjwRPpFwiYDUe3Lao72t+AMfc7wwyM=";
+  src = fetchFromGitHub {
+    owner = "Pylons";
+    repo = "webob";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QN0UMLzO0g8Oalnn5GlOulXUxtXOx89jeeEvJV53rVs=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -28,6 +34,10 @@ buildPythonPackage rec {
     "tests/test_in_wsgiref.py"
     "tests/test_client_functional.py"
   ];
+
+  passthru.tests = {
+    inherit pyramid routes tokenlib;
+  };
 
   meta = with lib; {
     description = "WSGI request and response object";
