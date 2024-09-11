@@ -914,6 +914,7 @@ mapAliases {
   paperless-ng = paperless-ngx; # Added 2022-04-11
   partition-manager = libsForQt5.partitionmanager; # Added 2024-01-08
   patchelfStable = patchelf; # Added 2024-01-25
+  paup =  paup-cli; # Added 2024-09-11
   pcsctools = pcsc-tools; # Added 2023-12-07
   pcsxr = throw "pcsxr was removed as it has been abandoned for over a decade; please use DuckStation, Mednafen, or the RetroArch PCSX ReARMed core"; # Added 2024-08-20
   pdf4tcl = tclPackages.pdf4tcl; # Added 2024-10-02
