@@ -9,6 +9,7 @@
 , cmake
 , testers
 , veilid
+, gitUpdater
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -54,9 +55,12 @@ rustPlatform.buildRustPackage rec {
     moveToOutput "lib" "$lib"
   '';
 
-  passthru.tests = {
-    veilid-version = testers.testVersion {
-      package = veilid;
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      veilid-version = testers.testVersion {
+        package = veilid;
+      };
     };
   };
 

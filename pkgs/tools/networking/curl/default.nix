@@ -120,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
+      "--enable-versioned-symbols"
       # Build without manual
       "--disable-manual"
       (lib.enableFeature c-aresSupport "ares")

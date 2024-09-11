@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
   qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.isDarwin [
-    "PGSQL_INC=${postgresql}/include"
-    "PGSQL_LIB=${postgresql.lib}/lib/libpq.dylib"
+    "PGSQL_INC=${lib.getDev postgresql}/include"
+    "PGSQL_LIB=${lib.getLib postgresql}/lib/libpq.dylib"
     "XML_INC=${libxml2.dev}/include/libxml2"
     "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
     "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"

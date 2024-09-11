@@ -1466,6 +1466,7 @@ mapAliases ({
   spotify-unwrapped = spotify; # added 2022-11-06
   spring-boot = spring-boot-cli; # added 2020-04-24
   squid4 = throw "'squid4' has been renamed to/replaced by 'squid'"; # Converted to throw 2023-09-10
+  srvc = throw "'srvc' has been removed, as it was broken and unmaintained"; # Added 2024-09-09
   ssb = throw "'ssb' has been removed, as it was broken and unmaintained"; # Added 2023-12-21
   ssm-agent = amazon-ssm-agent; # Added 2023-10-17
   starboard-octant-plugin = throw "starboard-octant-plugin has been dropped due to needing octant which is archived"; # Added 2023-09-29

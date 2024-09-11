@@ -6,6 +6,7 @@
 , expat
 , fetchCrate
 , fetchFromGitLab
+, fetchpatch
 , file
 , flex
 , glslang

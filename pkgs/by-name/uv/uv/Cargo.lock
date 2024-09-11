@@ -1040,6 +1040,7 @@ dependencies = [
  "platform-tags",
  "pypi-types",
  "rkyv",
+ "rustc-hash",
  "schemars",
  "serde",
  "serde_json",
@@ -1047,6 +1048,7 @@ dependencies = [
  "tracing",
  "url",
  "urlencoding",
+ "uv-cache-info",
  "uv-fs",
  "uv-git",
  "uv-normalize",
@@ -1779,6 +1781,7 @@ dependencies = [
  "tempfile",
  "thiserror",
  "tracing",
+ "uv-cache-info",
  "uv-fs",
  "uv-normalize",
  "uv-warnings",
@@ -2825,9 +2828,9 @@ dependencies = [
 
 [[package]]
 name = "quinn-proto"
-version = "0.11.6"
+version = "0.11.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba92fb39ec7ad06ca2582c0ca834dfeadcaf06ddfc8e635c80aa7e1c05315fdd"
+checksum = "ea0a9b3a42929fad8a7c3de7f86ce0814cfa893328157672680e9fb1145549c5"
 dependencies = [
  "bytes",
  "rand",
@@ -4441,7 +4444,7 @@ checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
 
 [[package]]
 name = "uv"
-version = "0.4.7"
+version = "0.4.8"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4497,6 +4500,7 @@ dependencies = [
  "url",
  "uv-auth",
  "uv-cache",
+ "uv-cache-info",
  "uv-cli",
  "uv-client",
  "uv-configuration",
@@ -4594,9 +4598,22 @@ dependencies = [
  "tempfile",
  "tracing",
  "url",
+ "uv-cache-info",
  "uv-fs",
  "uv-normalize",
  "walkdir",
+]
+
+[[package]]
+name = "uv-cache-info"
+version = "0.0.1"
+dependencies = [
+ "fs-err",
+ "schemars",
+ "serde",
+ "thiserror",
+ "toml",
+ "tracing",
 ]
 
 [[package]]
@@ -4680,6 +4697,7 @@ name = "uv-configuration"
 version = "0.0.1"
 dependencies = [
  "anyhow",
+ "cache-key",
  "clap",
  "distribution-types",
  "either",
@@ -4695,6 +4713,7 @@ dependencies = [
  "url",
  "uv-auth",
  "uv-cache",
+ "uv-cache-info",
  "uv-normalize",
 ]
 
@@ -4792,6 +4811,7 @@ dependencies = [
  "tracing",
  "url",
  "uv-cache",
+ "uv-cache-info",
  "uv-client",
  "uv-configuration",
  "uv-extract",
@@ -4895,6 +4915,7 @@ dependencies = [
  "tracing",
  "url",
  "uv-cache",
+ "uv-cache-info",
  "uv-configuration",
  "uv-distribution",
  "uv-extract",
@@ -4983,6 +5004,7 @@ dependencies = [
  "tracing",
  "url",
  "uv-cache",
+ "uv-cache-info",
  "uv-client",
  "uv-extract",
  "uv-fs",
@@ -5115,6 +5137,7 @@ dependencies = [
  "thiserror",
  "toml",
  "tracing",
+ "uv-cache-info",
  "uv-configuration",
  "uv-fs",
  "uv-macros",
@@ -5194,7 +5217,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.4.7"
+version = "0.4.8"
 
 [[package]]
 name = "uv-virtualenv"
@@ -5225,6 +5248,8 @@ dependencies = [
 name = "uv-workspace"
 version = "0.0.1"
 dependencies = [
+ "anyhow",
+ "assert_fs",
  "either",
  "fs-err",
  "glob",
@@ -5238,6 +5263,7 @@ dependencies = [
  "same-file",
  "schemars",
  "serde",
+ "tempfile",
  "thiserror",
  "tokio",
  "toml",

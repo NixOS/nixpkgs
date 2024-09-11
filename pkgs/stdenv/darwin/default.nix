@@ -2334,7 +2334,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             openpam
             openssl.out
             patch
-            xar
+            xar.lib
             xz.bin
             xz.out
             zlib.dev

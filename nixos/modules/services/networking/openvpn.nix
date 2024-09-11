@@ -64,7 +64,7 @@ let
 
       path = [ pkgs.iptables pkgs.iproute2 pkgs.nettools ];
 
-      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
+      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile} ${cfg.extraArgs}";
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
@@ -179,6 +179,15 @@ in
               update resolv.conf with the DNS information provided by openvpn. The
               script will be run after the "up" commands and before the "down" commands.
             '';
+          };
+
+          extraArgs = mkOption {
+            default = null;
+            type = listOf str;
+            description = ''
+              Additional command line arguments to pass to this OpenVPN instance.
+            '';
+            apply = lib.escapeShellArgs;
           };
 
           authUserPass = mkOption {

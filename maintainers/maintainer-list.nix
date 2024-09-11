@@ -8604,6 +8604,12 @@
     githubId = 1592375;
     name = "Walter Huf";
   };
+  hughmandalidis = {
+    name = "Hugh Mandalidis";
+    email = "mandalidis.hugh@gmail.com";
+    github = "ThanePatrol";
+    githubId = 23148089;
+  };
   hughobrien = {
     email = "github@hughobrien.ie";
     github = "hughobrien";
@@ -18546,6 +18552,13 @@
     github = "saschagrunert";
     githubId = 695473;
     name = "Sascha Grunert";
+  };
+  saturn745 = {
+    email = "git-commits.rk7uq@aleeas.com";
+    github = "saturn745";
+    githubId = 90934664;
+    name = "Saturn745";
+    matrix = "@galaxyyy:matrix.org";
   };
   saulecabrera = {
     name = "Saúl Cabrera";

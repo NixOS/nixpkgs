@@ -3,7 +3,7 @@
 let
   inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
     mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
-    optional types mkOptionDefault flip attrNames;
+    optional types mkOptionDefault flip attrNames xor;
 
   cfg = config.services.prometheus.exporters;
 
@@ -230,6 +230,7 @@ let
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
+      assertions = conf.assertions or [];
       users.users."${name}-exporter" = (mkIf (conf.user == "${name}-exporter" && !enableDynamicUser) {
         description = "Prometheus ${name} exporter service user";
         isSystemUser = true;
@@ -360,13 +361,6 @@ in
           'services.prometheus.exporters.nextcloud.tokenFile'
       '';
     } {
-      assertion =  cfg.pgbouncer.enable -> (
-        (cfg.pgbouncer.connectionStringFile != null || cfg.pgbouncer.connectionString != "")
-      );
-        message = ''
-          PgBouncer exporter needs either connectionStringFile or connectionString configured"
-        '';
-    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -405,7 +399,15 @@ in
         Please ensure you have either `services.prometheus.exporters.deluge.delugePassword'
           or `services.prometheus.exporters.deluge.delugePasswordFile' set!
       '';
-    } ] ++ (flip map (attrNames exporterOpts) (exporter: {
+    } {
+      assertion = cfg.pgbouncer.enable -> (
+        xor (cfg.pgbouncer.connectionEnvFile == null) (cfg.pgbouncer.connectionString == null)
+      );
+      message = ''
+        Options `services.prometheus.exporters.pgbouncer.connectionEnvFile` and
+        `services.prometheus.exporters.pgbouncer.connectionString` are mutually exclusive!
+      '';
+    }] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
         The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
@@ -417,11 +419,6 @@ in
           Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
           `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
           Consider using `services.prometheus.exporters.idrac.configuration` instead.
-        ''
-      )
-      (mkIf
-        (cfg.pgbouncer.enable && cfg.pgbouncer.connectionString != "") ''
-          config.services.prometheus.exporters.pgbouncer.connectionString is insecure. Use connectionStringFile instead.
         ''
       )
     ] ++ config.services.prometheus.exporters.warnings;

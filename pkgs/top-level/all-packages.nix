@@ -1196,8 +1196,6 @@ with pkgs;
     inherit url;
   };
 
-  installShellFiles = callPackage ../build-support/install-shell-files { };
-
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
@@ -3371,7 +3369,9 @@ with pkgs;
 
   base16384 = callPackage ../tools/text/base16384 { };
 
-  bashate = python3Packages.callPackage ../development/tools/bashate { };
+  bashate = python3Packages.callPackage ../development/tools/bashate {
+    python3Packages = python311Packages;
+  };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
@@ -3793,8 +3793,8 @@ with pkgs;
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
   livebook = callPackage ../servers/web-apps/livebook {
-    elixir = elixir_1_16;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_16; });
+    elixir = elixir_1_17;
+    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
   };
 
   lsix = callPackage ../tools/graphics/lsix { };
@@ -6003,8 +6003,6 @@ with pkgs;
   socklog = callPackage ../tools/system/socklog { };
 
   spacevim = callPackage ../applications/editors/spacevim { };
-
-  srvc = callPackage ../applications/version-management/srvc { };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
@@ -13964,8 +13962,6 @@ with pkgs;
 
   vul = callPackage ../applications/misc/vul { };
 
-  xar = callPackage ../tools/compression/xar { };
-
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
@@ -18719,7 +18715,9 @@ with pkgs;
 
   regex-cli = callPackage ../development/tools/misc/regex-cli { };
 
-  reno = callPackage ../development/tools/reno { };
+  reno = callPackage ../development/tools/reno {
+    python3Packages = python311Packages;
+  };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
 
@@ -18963,7 +18961,7 @@ with pkgs;
 
   swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
   swig4 = callPackage ../development/tools/misc/swig/4.nix { };
-  swig = swig3;
+  swig = swig4;
   swigWithJava = swig;
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
@@ -19450,7 +19448,7 @@ with pkgs;
 
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = if stdenv.hostPlatform.useAndroidPrebuilt
-    then pkgs."androidndkPkgs_${stdenv.hostPlatform.androidNdkVer}".libraries
+    then pkgs."androidndkPkgs_${stdenv.hostPlatform.androidNdkVersion}".libraries
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
@@ -27171,6 +27169,7 @@ with pkgs;
     ubootOlimexA64Teres1
     ubootOrangePi3
     ubootOrangePi5
+    ubootOrangePi5Plus
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
     ubootOrangePiZero
@@ -30574,9 +30573,7 @@ with pkgs;
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
-  hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng {
-    protobuf = protobuf_21;
-  };
+  hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
@@ -31195,8 +31192,6 @@ with pkgs;
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
   kubectl-explore = callPackage ../applications/networking/cluster/kubectl-explore { };
-
-  kubectl-gadget = callPackage ../applications/networking/cluster/kubectl-gadget { };
 
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 

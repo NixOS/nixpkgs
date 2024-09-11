@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.oci;
@@ -12,12 +7,9 @@ in
   imports = [ ./oci-common.nix ];
 
   config = {
-    virtualisation.diskSize = lib.mkDefault (8 * 1024);
-    virtualisation.diskSizeAutoSupported = false;
-
     system.build.OCIImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
-      inherit (config.virtualisation) diskSize;
+      inherit (cfg) diskSize;
       name = "oci-image";
       configFile = ./oci-config-user.nix;
       format = "qcow2";
@@ -33,10 +25,7 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
-      path = [
-        pkgs.coreutils
-        pkgs.curl
-      ];
+      path  = [ pkgs.coreutils pkgs.curl ];
       script = ''
         mkdir -m 0700 -p /root/.ssh
         if [ -f /root/.ssh/authorized_keys ]; then

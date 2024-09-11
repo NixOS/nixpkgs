@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
-    "--with-postgresql=${postgresql}"
+    "--with-postgresql=${lib.getDev postgresql}"
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyee ];
 
   nativeBuildInputs = [ setuptools-scm ];
-  pythonImportCheck = [ "ffmpeg" ];
+  pythonImportsCheck = [ "ffmpeg" ];
 
   meta = {
     homepage = "https://github.com/jonghwanhyeon/python-ffmpeg";
