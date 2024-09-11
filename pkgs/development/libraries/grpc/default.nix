@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.62.1"; # N.B: if you change this, please update:
+  version = "1.62.3"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-L0bn6Bg36UKIRxznH9o4T7WXUqMwFjr8ybeQfbUi8xM=";
+    hash = "sha256-ShcC90WSMFVjpuM1up+0JShqK3RGW2edxlp9wMt6dPg=";
     fetchSubmodules = true;
   };
 
