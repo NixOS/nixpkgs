@@ -2,9 +2,11 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  stdenv,
   nixosTests,
   nix-update-script,
   versionCheckHook,
+  darwin,
 }:
 
 let
@@ -25,6 +27,9 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-3b+pX/qQuhOY1OYr+CfT5wtiJcEJ8CJJsQZ4QOcYv74=";
 
   nativeBuildInputs = [ versionCheckHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   doInstallCheck = true;
 
