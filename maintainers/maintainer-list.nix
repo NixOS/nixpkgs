@@ -243,6 +243,12 @@
     github = "48cf";
     githubId = 32851089;
   };
+  _4ever2 = {
+    email = "eske@cs.au.dk";
+    github = "4ever2";
+    githubId = 3417013;
+    name = "Eske Nielsen";
+  };
   _6543 = {
     email = "6543@obermui.de";
     github = "6543";
