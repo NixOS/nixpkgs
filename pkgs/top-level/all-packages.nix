@@ -3465,7 +3465,9 @@ with pkgs;
 
   deterministic-uname = callPackage ../build-support/deterministic-uname { };
 
-  deterministic-host-uname = deterministic-uname.override { forPlatform = stdenv.hostPlatform; };
+  deterministic-host-uname = deterministic-uname.override {
+    forPlatform = stdenv.targetPlatform; # offset by 1 so it works in nativeBuildInputs
+  };
 
   dfmt = callPackage ../tools/text/dfmt { };
 
