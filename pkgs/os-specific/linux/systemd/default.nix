@@ -857,11 +857,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Avoid *.EFI binary stripping.
   # At least on aarch64-linux strip removes too much from PE32+ files:
   #   https://github.com/NixOS/nixpkgs/issues/169693
-  # The hack is to move EFI file out of lib/ before doStrip run and return it
-  # after doStrip run.
-  preFixup = lib.optionalString withBootloader ''
-    mv $out/lib/systemd/boot/efi $out/dont-strip-me
-  '';
+  stripExclude = [ "lib/systemd/boot/efi/*" ];
 
   # Wrap in the correct path for LUKS2 tokens.
   postFixup =
@@ -870,9 +866,6 @@ stdenv.mkDerivation (finalAttrs: {
         # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
         wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
       done
-    ''
-    + lib.optionalString withBootloader ''
-      mv $out/dont-strip-me $out/lib/systemd/boot/efi
     ''
     + lib.optionalString withUkify ''
       # To cross compile a derivation that builds a UKI with ukify, we need to wrap
