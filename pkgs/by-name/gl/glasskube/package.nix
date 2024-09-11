@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo123Module
 , buildNpmPackage
 , fetchFromGitHub
 , nix-update-script
@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.17.0";
+  version = "0.20.1";
   gitSrc = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uo612trSSdbj6XpZHddXELNQideJ/M/qh+LLdzVZL6U=";
+    hash = "sha256-0ndYFpfijuBSODdl5XJah6/avLE1Bf6OZ0p0KGRB3dw=";
   };
   web-bundle = buildNpmPackage rec {
     inherit version;
@@ -20,7 +20,7 @@ let
 
     src = gitSrc;
 
-    npmDepsHash = "sha256-s3ViR6zBUTTu864fiD06N1ouMUYXccj6AMXt5pj+BSc=";
+    npmDepsHash = "sha256-BcYrZ95BLxKXQ4c1bHqNZKT9Tv4rAK72WSwrjhIsASY=";
 
     dontNpmInstall = true;
 
@@ -34,13 +34,13 @@ let
     '';
   };
 
-in buildGoModule rec {
+in buildGo123Module rec {
   inherit version;
   pname = "glasskube";
 
   src = gitSrc;
 
-  vendorHash = "sha256-KzoFPhySX2w7ndU6nndx/KqoUfE8o6OT/9a2DEz5YuI=";
+  vendorHash = "sha256-BTJzhKf8aGHKbG0fdWVRWy0rFob9ZSTH45ME+4rdohU=";
 
   CGO_ENABLED = 0;
 
