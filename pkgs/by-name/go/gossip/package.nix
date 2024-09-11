@@ -13,6 +13,7 @@
 , rustPlatform
 , stdenv
 , wayland
+, wayland-scanner
 , xorg
 }:
 
@@ -54,6 +55,8 @@ rustPlatform.buildRustPackage rec {
     git
     pkg-config
     rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -64,8 +67,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.ForceFeedback
+    darwin.apple_sdk.frameworks.AVFoundation
   ] ++ lib.optionals stdenv.isLinux [
     wayland
     xorg.libX11
@@ -84,7 +90,7 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/logo/gossip.png $out/share/icons/hicolor/128x128/apps/gossip.png
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     patchelf $out/bin/gossip \
       --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
   '';
