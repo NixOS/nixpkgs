@@ -347,7 +347,7 @@ rec {
 
     : Each overlay function takes two arguments, by convention `final` and `prev`, and returns an attribute set.
       - `final` is the result of the fixed-point function, with all overlays applied.
-      - `prev` is the result of the previous overlay function.
+      - `prev` is the result of the previous overlay function(s).
 
     # Type
 
@@ -356,9 +356,9 @@ rec {
     let
       #               final      prev
       #                 ↓          ↓
-      OverlayFn :: ( { ... } -> { ... } -> { ... } );
+      OverlayFn = { ... } -> { ... } -> { ... };
     in
-      composeManyExtensions :: [ OverlayFn ] -> OverlayFn
+      composeManyExtensions :: ListOf OverlayFn -> OverlayFn
     ```
 
     # Examples
@@ -368,7 +368,7 @@ rec {
     ```nix
     let
       # The "original function" that is extended by the overlays.
-      # Note that it doesn't have prev: as argument since it can be thought of as the first function.
+      # Note that it doesn't have prev: as argument since no overlay function precedes it.
       original = final: { a = 1; };
 
       # Each overlay function has 'final' and 'prev' as arguments.
