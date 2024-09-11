@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.9.0";
+  version = "4.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "ydataai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-OZCgtnsLXLJ0m1t/mWqQTbFL8DPKaR9Tr7QCGT2HpvE=";
+    hash = "sha256-uB8E7qp1xohAdcIIt1T2DxwSu93XhJoI8/qn54fSvGY=";
   };
 
   preBuild = ''
