@@ -32,14 +32,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
-  version = "0-unstable-2024-02-17";
+  version = "0-unstable-2024-07-26";
 
   src = fetchFromGitLab {
     domain = "voidpoint.io";
     owner = "terminx";
     repo = "eduke32";
-    rev = "8afa42e388e0434b38979fdddc763363717a2727";
-    hash = "sha256-dyZ4JtDBxsTDe9uQDWxJe7M74X7m+5wpEHm+i+s9hwo=";
+    rev = "19c21b9ab10b0c17147c9ad951cc15279ed33f77";
+    hash = "sha256-lwnx2tVjbHouB0vaT7Dh1Ozea8+7Az6e4Wn6HmxDxCo=";
   };
 
   patches = [
@@ -95,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"
+    # git rev-list --count HEAD
+    "VC_REV=10593"
+    "VC_HASH=${lib.substring 0 9 finalAttrs.src.rev}"
+    "VC_BRANCH=master"
   ];
 
   buildFlags = [
