@@ -4,19 +4,17 @@
 , makeWrapper
 , rustPlatform
 , testers
-
 , cachix
 , darwin
 , libgit2
-, nix
+, nixVersions
 , openssl
 , pkg-config
-
 , devenv  # required to run version test
 }:
 
 let
-  devenv_nix = nix.overrideAttrs (old: {
+  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
     version = "2.24-devenv";
     src = fetchFromGitHub {
       owner = "domenkozar";
