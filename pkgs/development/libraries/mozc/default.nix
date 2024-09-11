@@ -1,16 +1,17 @@
-{ bazel_6
-, buildBazelPackage
-, fetchFromGitHub
-, fetchurl
-, glibcLocales
-, lib
-, pkg-config
-, python3
-, qtbase
-, qtwayland
-, ruby
-, wrapQtAppsHook
-, dictionaries ? [
+{
+  bazel_6,
+  buildBazelPackage,
+  fetchFromGitHub,
+  fetchurl,
+  glibcLocales,
+  lib,
+  pkg-config,
+  python3,
+  qtbase,
+  qtwayland,
+  ruby,
+  wrapQtAppsHook,
+  dictionaries ? [
     "alt-cannadic"
     "edict2"
     "jawiki"
@@ -19,7 +20,7 @@
     "place-names"
     "skk-jisyo"
     "sudachidict"
-  ]
+  ],
 }:
 
 buildBazelPackage {
@@ -123,7 +124,10 @@ buildBazelPackage {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase qtwayland ];
+  buildInputs = [
+    qtbase
+    qtwayland
+  ];
 
   preBuild = ''
     cd mozc/src
@@ -210,11 +214,12 @@ buildBazelPackage {
     description = "The Open Source edition of Google Japanese Input bundled with the UT dictionary";
     homepage = "https://github.com/google/mozc";
     license = with licenses; [
-      asl20 # abseil-cpp, merge-ut-dictionaries, mozcdic-ut-alt-cannadic,
-            # mozcdic-ut-edict2, mozcdic-ut-jawiki, mozcdic-ut-neologd,
-            # mecab-ipadic-neologd, mozcdic-ut-personal-names,
-            # mozcdic-ut-place-names, mozcdic-ut-skk-jisyo,
-            # mozcdic-ut-sudachidict
+      # abseil-cpp, merge-ut-dictionaries, mozcdic-ut-alt-cannadic,
+      # mozcdic-ut-edict2, mozcdic-ut-jawiki, mozcdic-ut-neologd,
+      # mecab-ipadic-neologd, mozcdic-ut-personal-names,
+      # mozcdic-ut-place-names, mozcdic-ut-skk-jisyo,
+      # mozcdic-ut-sudachidict
+      asl20
       bsd2 # japanese-usage-dictionary
       bsd3 # mozc, breakpad, gtest, gyp, japanese-usage-dictionary, protobuf, id.def
       cc-by-sa-30 # jawiki-latest-all-titles, mozcdic-ut-jawiki.txt, jawiki
