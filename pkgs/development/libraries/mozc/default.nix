@@ -1,4 +1,4 @@
-{ bazel
+{ bazel_6
 , buildBazelPackage
 , fetchFromGitHub
 , fetchurl
@@ -138,7 +138,7 @@ buildBazelPackage {
   env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
   env.LC_ALL = "en_US.UTF-8";
 
-  inherit bazel;
+  bazel = bazel_6;
   removeRulesCC = false;
   dontAddBazelOpts = true;
 

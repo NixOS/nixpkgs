@@ -1,4 +1,4 @@
-{ bazel
+{ bazel_6
 , buildBazelPackage
 , fcitx5
 , fetchFromGitHub
@@ -41,7 +41,7 @@ buildBazelPackage {
     sed -i -e 's|^\(LINUX_MOZC_SERVER_DIR = \).\+|\1"${mozc}/lib/mozc"|' config.bzl
   '';
 
-  inherit bazel;
+  bazel = bazel_6;
   removeRulesCC = false;
   dontAddBazelOpts = true;
 
