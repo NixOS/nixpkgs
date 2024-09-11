@@ -40,8 +40,8 @@ let
   source =
     if enablePlumed then
       {
-        version = "2023";
-        hash = "sha256-rJLG2nL7vMpBT9io2Xnlbs8XxMHNq+0tpc+05yd7e6g=";
+        version = "2024.2";
+        hash = "sha256-gCp+M18uiVdw9XsVnk7DaOuw/yzm2sz3BsboAlw2hSs=";
       }
     else
       {
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./pkgconfig.patch ];
 
   postPatch = lib.optionalString enablePlumed ''
-    plumed patch -p -e gromacs-2023
+    plumed patch -p -e gromacs-${source.version}
   '';
 
   outputs = [ "out" "dev" "man" ];
