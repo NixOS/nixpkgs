@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       coffeeispower
-      eclairevoyant
       figsoda
       lom
       w-lfchen

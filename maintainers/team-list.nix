@@ -942,7 +942,6 @@ with lib.maintainers;
   steam = {
     members = [
       atemu
-      eclairevoyant
       k900
       mkg20001
     ];

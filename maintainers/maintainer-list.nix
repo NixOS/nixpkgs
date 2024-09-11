@@ -5813,12 +5813,6 @@
     githubId = 8146736;
     name = "Florentin Eckl";
   };
-  eclairevoyant = {
-    email = "contactmeongithubinstead@proton.me";
-    github = "eclairevoyant";
-    githubId = 848000;
-    name = "éclairevoyant";
-  };
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
