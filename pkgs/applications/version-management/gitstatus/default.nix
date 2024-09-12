@@ -1,5 +1,12 @@
-{ callPackage, lib, stdenv, fetchFromGitHub, git, zsh }:
-
+{
+  callPackage,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  zsh,
+  runtimeShell,
+}:
 stdenv.mkDerivation rec {
   pname = "gitstatus";
   version = "1.5.5";
@@ -23,6 +30,8 @@ stdenv.mkDerivation rec {
     install -Dm755 usrbin/gitstatusd $out/bin/gitstatusd
     install -Dm444 gitstatus.plugin.sh -t $out/share/gitstatus/
     install -Dm444 gitstatus.plugin.zsh -t $out/share/gitstatus/
+    install -Dm444 gitstatus.prompt.sh -t $out/share/gitstatus/
+    install -Dm444 gitstatus.prompt.zsh -t $out/share/gitstatus/
     install -Dm555 install -t $out/share/gitstatus/
     install -Dm444 build.info -t $out/share/gitstatus/
 
@@ -30,6 +39,14 @@ stdenv.mkDerivation rec {
     # because the FHS directories don't start at /
     substituteInPlace install \
       --replace "_gitstatus_install_main ." "_gitstatus_install_main $out"
+
+    cat <<EOF > $out/bin/gitstatus-share
+    #!${runtimeShell}
+    # Run this script to find the gitstatus shared folder where all the shell
+    # integration scripts are living.
+    echo $out/share/gitstatus
+    EOF
+    chmod +x $out/bin/gitstatus-share
   '';
 
   # Don't install the "install" and "build.info" files, which the end user
@@ -38,6 +55,8 @@ stdenv.mkDerivation rec {
     "/bin/gitstatusd"
     "/share/gitstatus/gitstatus.plugin.sh"
     "/share/gitstatus/gitstatus.plugin.zsh"
+    "/share/gitstatus/gitstatus.prompt.sh"
+    "/share/gitstatus/gitstatus.prompt.zsh"
   ];
 
   # The install check sets up an empty Git repository and a minimal zshrc that
@@ -45,7 +64,10 @@ stdenv.mkDerivation rec {
   # that the script was sourced successfully and that the "gitstatus_query"
   # command ran successfully. This tests the binary itself and the zsh
   # integration.
-  nativeInstallCheckInputs = [ git zsh ];
+  nativeInstallCheckInputs = [
+    git
+    zsh
+  ];
   doInstallCheck = true;
   installCheckPhase = ''
     TEMP=$(mktemp -d)
@@ -83,9 +105,20 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "10x faster implementation of `git status` command";
+    longDescription = ''
+      To enable the included gitstatus prompt, add the appropriate line to your NixOS configuration:
+      `programs.bash.promptInit = "source $(gitstatus-share)/gitstatus.prompt.sh";`
+      `programs.zsh.promptInit = "source $(gitstatus-share)/gitstatus.prompt.zsh";`
+
+      See the project homepage for details on customization.
+    '';
     homepage = "https://github.com/romkatv/gitstatus";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mmlb hexa SuperSandro2000 ];
+    maintainers = with maintainers; [
+      mmlb
+      hexa
+      SuperSandro2000
+    ];
     platforms = platforms.all;
     mainProgram = "gitstatusd";
   };
