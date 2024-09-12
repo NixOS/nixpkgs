@@ -7,20 +7,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.23.2";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wXBfrlb4i4G3Sm0SopvDVGcQ0/hRGtUdzUQYyUj8/Ps=";
+    hash = "sha256-HRwQ2IDTa3dlxTlToiwBvjxjQgD18rv/F5OIuG7FKG8=";
   };
 
   pythonRelaxDeps = [
     "defusedxml"
     "ijson"
     "sqlalchemy"
+    "xsdata"
   ];
 
   build-system = with python3.pkgs; [
