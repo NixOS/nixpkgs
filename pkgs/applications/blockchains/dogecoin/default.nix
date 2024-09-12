@@ -3,18 +3,18 @@
 , db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, qtbase ? null
 , wrapQtAppsHook ? null, qttools ? null, qmake ? null, qrencode
-, withGui, withUpnp ? true, withUtils ? true, withWallet ? true
+, withGui, withUpnp ? false, withUtils ? true, withWallet ? true
 , withZmq ? true, zeromq, util-linux ? null, Cocoa ? null }:
 
 stdenv.mkDerivation rec {
   pname = "dogecoin" + lib.optionalString (!withGui) "d";
-  version = "1.14.6";
+  version = "1.14.8";
 
   src = fetchFromGitHub {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "sha256-PmbmmA2Mq07dwB3cI7A9c/ewtu0I+sWvQT39Yekm/sU=";
+    sha256 = "sha256-Jmdxaona9bI9mw+WDGnrFU2ETgVTTQ7HHaWRodK/c4k=";
   };
 
   preConfigure = lib.optionalString withGui ''
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.dogecoin.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ edwtjo offline ];
+    maintainers = with maintainers; [ edwtjo offline cleverca22 craigem ];
     platforms = platforms.unix;
-    broken = true;
+    broken = withGui;
   };
 }
