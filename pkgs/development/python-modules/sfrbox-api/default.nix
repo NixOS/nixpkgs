@@ -5,8 +5,8 @@
   defusedxml,
   fetchFromGitHub,
   httpx,
+  mashumaro,
   poetry-core,
-  pydantic,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "sfrbox-api";
-  version = "0.0.10";
+  version = "0.0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = "sfrbox-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xvtusgqCseXAmiPQBFFZnRS9KmuhzHhZUAj5aaqyFrE=";
+    hash = "sha256-Ec3UOserFijBK6goyM6AMOekfLgjBq8l/9sMKYnj240=";
   };
 
   pythonRelaxDeps = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   dependencies = [
     defusedxml
     httpx
-    pydantic
+    mashumaro
   ];
 
   passthru.optional-dependencies = {
