@@ -149,9 +149,19 @@ let
     )
   );
 
+  mimeTypesConfig = lib.concatLines (
+    flip mapAttrsToList cfg.addMimeTypes (
+      mimeType: extensions: ''
+        ${mimeType} ${concatStringsSep " " extensions};
+      ''
+    )
+  );
+
   commonHttpConfig = ''
-    # Load mime types and configure maximum size of the types hash tables.
-    include ${cfg.defaultMimeTypes};
+    # Load mime types.
+    ${optionalString (cfg.defaultMimeTypes != null) "include ${cfg.defaultMimeTypes};"}
+    ${optionalString (cfg.addMimeTypes != { }) "types {\n${mimeTypesConfig}\n}"}
+    # Configure maximum size of the types hash tables.
     types_hash_max_size ${toString cfg.typesHashMaxSize};
 
     include ${cfg.package}/conf/fastcgi.conf;
@@ -755,7 +765,7 @@ in
       };
 
       defaultMimeTypes = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         default = "${pkgs.mailcap}/etc/nginx/mime.types";
         defaultText = literalExpression "$''{pkgs.mailcap}/etc/nginx/mime.types";
         example = literalExpression "$''{pkgs.nginx}/conf/mime.types";
@@ -763,6 +773,23 @@ in
           Default MIME types for NGINX, as MIME types definitions from NGINX are very incomplete,
           we use by default the ones bundled in the mailcap package, used by most of the other
           Linux distributions.
+        '';
+      };
+
+      addMimeTypes = mkOption {
+        type = types.submodule {
+          freeformType = types.attrsOf (types.listOf types.str);
+        };
+        default = { };
+        example = literalExpression ''
+          "application/atom+xml" = [ "atom" ];
+          "image/jpeg" = [ "jpg" "jpef" ];
+          "text/css" = [ "css" ];
+        '';
+        description = ''
+          Enabling custom mime types to an existing list {option}`services.nginx.defaultMimeTypes`.
+          This option does not allow overriding existing mime-types in
+          {option}`services.nginx.defaultMimeTypes` and may cause duplicate mime-types.
         '';
       };
 
