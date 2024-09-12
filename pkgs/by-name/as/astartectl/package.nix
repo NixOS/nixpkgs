@@ -7,10 +7,6 @@ buildGoModule rec {
   pname = "astartectl";
   version = "24.5.0";
 
-  # Workaround for go vendor failing
-  # https://github.com/astarte-platform/astartectl/pull/244
-  postPatch = "go mod edit -go=1.22";
-
   src = fetchFromGitHub {
     owner = "astarte-platform";
     repo = "astartectl";
