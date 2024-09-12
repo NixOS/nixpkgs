@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6,
+  darwin,
+  overrideSDK,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "notes";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "nuttyartist";
     repo = "notes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ShChF87ysRoisKshY86kJTa3ZAiQhBOImuL8OsEqgBo=";
+    hash = "sha256-Z89Z7Il9K9pOxvNfFCoRUkRs0Wf5a6TQACDbBrQhGyw=";
     fetchSubmodules = true;
   };
 
@@ -24,15 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtdeclarative
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      qt6.qtbase
+      qt6.qtdeclarative
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Cocoa
+    ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
@@ -41,11 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Fast and beautiful note-taking app";
+    homepage = "https://github.com/nuttyartist/notes";
     mainProgram = "notes";
-    downloadPage = "https://github.com/nuttyartist/notes";
-    homepage = "https://www.get-notes.com";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ zendo ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 })

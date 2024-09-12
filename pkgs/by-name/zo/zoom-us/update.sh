@@ -4,7 +4,7 @@
 set -eu -o pipefail
 
 scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
-nixpkgs=$(realpath "$scriptDir"/../../../../..)
+nixpkgs=$(realpath "$scriptDir"/../../../..)
 
 echo >&2 "=== Obtaining version data from https://zoom.us/rest/download ..."
 linux_data=$(curl -Ls 'https://zoom.us/rest/download?os=linux' | jq .result.downloadVO)
@@ -20,12 +20,12 @@ echo >&2 "=== Downloading packages and computing hashes..."
 # by running `nix-build --system <architecture> -A zoom-us.src` which
 # causes cross compiling headaches; using nix-prefetch-url with
 # hard-coded URLs is simpler.  Keep these URLs in sync with the ones
-# in default.nix where `srcs` is defined.
+# in package.nix where `srcs` is defined.
 hash_aarch64_darwin=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_aarch64_darwin}/zoomusInstallerFull.pkg?archType=arm64"))
 hash_x86_64_darwin=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_x86_64_darwin}/zoomusInstallerFull.pkg"))
 hash_x86_64_linux=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_x86_64_linux}/zoom_x86_64.pkg.tar.xz"))
 
-echo >&2 "=== Updating default.nix ..."
+echo >&2 "=== Updating package.nix ..."
 # update-source-version expects to be at the root of nixpkgs
 (cd "$nixpkgs" && update-source-version zoom-us "$version_aarch64_darwin" $hash_aarch64_darwin --system=aarch64-darwin --version-key=versions.aarch64-darwin)
 (cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_darwin" $hash_x86_64_darwin --system=x86_64-darwin --version-key=versions.x86_64-darwin)

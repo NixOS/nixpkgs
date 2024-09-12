@@ -100,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       freezeboy
       gepbird
-      k900
     ];
     license = licenses.sustainableUse;
     mainProgram = "n8n";

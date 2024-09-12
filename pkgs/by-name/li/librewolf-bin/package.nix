@@ -27,7 +27,7 @@ appimageTools.wrapType2 {
     description = "Fork of Firefox, focused on privacy, security and freedom (upstream AppImage release)";
     homepage = "https://librewolf.net";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "librewolf";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

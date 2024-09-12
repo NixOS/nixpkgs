@@ -76,6 +76,7 @@
 
       applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 {};
       karousel = self.callPackage ./third-party/karousel {};
+      krohnkite = self.callPackage ./third-party/krohnkite {};
       kzones = self.callPackage ./third-party/kzones {};
     }
   );

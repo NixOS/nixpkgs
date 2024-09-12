@@ -6612,8 +6612,6 @@ self: super: with self; {
 
   kaa-metadata = callPackage ../development/python-modules/kaa-metadata { };
 
-  kafka-python = callPackage ../development/python-modules/kafka-python { };
-
   kafka-python-ng = callPackage ../development/python-modules/kafka-python-ng { };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
@@ -14179,6 +14177,8 @@ self: super: with self; {
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simber = callPackage ../development/python-modules/simber { };
+
+  simple-parsing = callPackage ../development/python-modules/simple-parsing { };
 
   simple-term-menu = callPackage ../development/python-modules/simple-term-menu { };
 

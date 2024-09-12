@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "userborn";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "userborn";
     rev = version;
-    hash = "sha256-aptFDrL9RPPTu4wp2ee3LVaEruRdCWtLGIKdOgsR+/s=";
+    hash = "sha256-LEKdgmw1inBOi0sriG8laCrtx0ycqR5ftdnmszadx3U=";
   };
 
   sourceRoot = "${src.name}/rust/userborn";
 
-  cargoHash = "sha256-m39AC26E0Pxu1E/ap2kSwr5uznJNgExf5QUrZ+zTNX0=";
+  cargoHash = "sha256-Pjzu6db2WomNsC+jNK1fr1u7koZwUvWPIY5JHMo1gkA=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nikstur/userborn";
     description = "Declaratively bear (manage) Linux users and groups";
     license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "userborn";
   };
