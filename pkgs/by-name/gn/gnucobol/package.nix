@@ -16,15 +16,22 @@
   help2man,
   texinfo,
   texliveBasic,
-# test
+  # test
+  perl,
 }:
-
-stdenv.mkDerivation rec {
+let
+  nistTestSuite = fetchurl {
+    # Used to check GnuCOBOL with the NIST test suite
+    url = "mirror://sourceforge/gnucobol/newcob.val.tar.gz";
+    hash = "sha256-5FE/JqmziRH3v4gv49MzmoC0XKvCyvheswVbD1zofuA=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnucobol";
   version = "3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnucobol/${lib.versions.majorMinor version}/gnucobol-${version}.tar.xz";
+    url = "mirror://gnu/gnucobol/gnucobol-${finalAttrs.version}.tar.xz";
     hash = "sha256-O7SK9GztR3n6z0H9wu5g5My4bqqZ0BCzZoUxXfOcLuI=";
   };
 
@@ -32,8 +39,9 @@ stdenv.mkDerivation rec {
     pkg-config
     autoconf269
     automake
-    libtool
     help2man
+    libtool
+    perl
     texinfo
     texliveBasic
   ];
@@ -59,10 +67,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i '/^AT_CHECK.*crud\.cob/i AT_SKIP_IF([true])' tests/testsuite.src/listings.at
     # upstream reports the following tests as known failures
-    # test 843:
-    sed -i '14180i\AT_SKIP_IF([true])' tests/testsuite.src/run_misc.at
-    # test 875:
-    sed -i '2894s/^/AT_SKIP_IF([true])/' tests/testsuite.src/run_file.at
+    # test 843 (runtime check: write to internal storage (1))
+    sed -i "/^843;/d" tests/testsuite
+    # test 875 (INDEXED sample)
+    sed -i "/^875;/d" tests/testsuite
   '';
 
   preConfigure =
@@ -99,6 +107,10 @@ stdenv.mkDerivation rec {
     # Run tests
     TESTSUITEFLAGS="--jobs=$NIX_BUILD_CORES" make check
 
+    # Run NIST tests
+    cp -v ${nistTestSuite} ./tests/cobol85/newcob.val.tar.gz
+    TESTSUITEFLAGS="--jobs=$NIX_BUILD_CORES" make test
+
     # Sanity check
     message="Hello, COBOL!"
     # XXX: Don't for a second think you can just get rid of these spaces, they
@@ -132,4 +144,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
   };
-}
+})
