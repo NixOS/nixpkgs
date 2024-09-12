@@ -21,7 +21,7 @@ in
 
 buildPythonPackage rec {
   pname = "polars";
-  version = "0.20.15";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-N/VIi0s5unYWqlR5Mpaq9cqXl2ccbzWPuOtE2UbmQw8=";
+    hash = "sha256-qJTBGGRxMAirgygm7Ke60olO5sTZboZ80JkYI0LZSMk=";
   };
 
   # Cargo.lock file is sometimes behind actual release which throws an error,
@@ -40,7 +40,10 @@ buildPythonPackage rec {
     #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
   '';
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes."numpy-0.21.0" = "sha256-u0Z+6L8pXSPaA3cE1sUpY6sCoaU1clXUcj/avnNzmsw=";
+  };
 
   buildAndTestSubdir = "py-polars";
 
@@ -53,7 +56,7 @@ buildPythonPackage rec {
   # with simd enabled with our stable rust (instead of nightly).
   maturinBuildFlags = [
     "--no-default-features"
-    "--features=all"
+    "--all-features"
   ];
 
   dontUseCmakeConfigure = true;

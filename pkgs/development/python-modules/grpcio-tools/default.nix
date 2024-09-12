@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-UFX/6EDqj1BcMDeL4Cr7Tb7LM0gOVU3r4Qtj1rL2QcM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
-  '';
-
   outputs = [
     "out"
     "dev"
@@ -30,7 +25,14 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+    "grpcio"
+  ];
+
+  dependencies = [
     protobuf
     grpcio
     setuptools

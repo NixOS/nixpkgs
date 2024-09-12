@@ -1,38 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  freezegun,
+  fetchFromGitHub,
   jaraco-functools,
-  pytest-freezegun,
+  pytest-freezer,
   pytestCheckHook,
+  python-dateutil,
   pythonOlder,
-  pytz,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.6.0";
-  format = "pyproject";
+  version = "5.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-O/zBLL27uv7KrMuQl/w3VENbnQY9zkMzjk+ofTkQSu0=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "tempora";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-M6nWKYvgn4tk2diiTDAYb1uQdP8H1M8yqhsFLJ9H7HU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jaraco-functools
-    pytz
+    python-dateutil
   ];
 
   nativeCheckInputs = [
-    freezegun
-    pytest-freezegun
+    pytest-freezer
     pytestCheckHook
   ];
 
