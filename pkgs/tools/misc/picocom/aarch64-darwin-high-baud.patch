@@ -1,0 +1,23 @@
+From f806bf28266cccdb75ba89d754de8d8fa64c6127 Mon Sep 17 00:00:00 2001
+From: Jack Ma <jack@radxa.com>
+Date: Thu, 16 Dec 2021 14:14:52 +0800
+Subject: [PATCH] macOS: support high baud rate on Apple arm64 processor
+
+Signed-off-by: Jack Ma <jack@radxa.com>
+---
+ custbaud.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/custbaud.h b/custbaud.h
+index c1734ce..6a3fd86 100644
+--- a/custbaud.h
++++ b/custbaud.h
+@@ -58,7 +58,7 @@
+ #elif TARGET_OS_IPHONE
+ /* Do not enable by default for iOS until it has been tested */
+ #elif TARGET_OS_MAC
+-#if defined (__i386__) || defined (__x86_64__)
++#if defined (__i386__) || defined (__x86_64__) || defined (__arm64__)
+ /* Enable by-default for Intel Mac, macOS / OSX >= 10.4 (Tiger) */
+ #ifndef USE_CUSTOM_BAUD
+ #define USE_CUSTOM_BAUD

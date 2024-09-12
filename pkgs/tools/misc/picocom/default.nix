@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cs2bxqZfTbnY5d+VJ257C5hssaFvYup3tBKz68ROnAo=";
   };
 
+  patches = [
+    # support high baud rates on Apple arm64 processor
+    # https://github.com/npat-efault/picocom/pull/129
+    ./aarch64-darwin-high-baud.patch
+  ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace '.picocom_history' '.cache/picocom_history'
