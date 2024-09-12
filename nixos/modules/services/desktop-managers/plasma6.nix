@@ -315,5 +315,14 @@ in {
       serviceConfig.Type = "oneshot";
       script = activationScript;
     };
+
+    services.signond = {
+      enable = true;
+      package = kdePackages.signond;
+      plugins = with kdePackages; [
+        signon-plugin-oauth2
+        signon-kwallet-extension
+      ];
+    };
   };
 }
