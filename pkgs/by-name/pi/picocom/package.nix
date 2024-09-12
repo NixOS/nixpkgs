@@ -3,8 +3,10 @@
   stdenv,
   fetchFromGitLab,
   replaceVars,
+  pkg-config,
   go-md2man,
   installShellFiles,
+  linenoise,
   darwin,
   lrzsz,
 }:
@@ -21,15 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    ./use-system-linenoise.patch
     (replaceVars ./lrzsz-path.patch { inherit lrzsz; })
   ];
 
   nativeBuildInputs = [
+    pkg-config
     go-md2man
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  buildInputs = [
+    linenoise
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   makeFlags = [
     "HISTFILE=.cache/picocom_history"
