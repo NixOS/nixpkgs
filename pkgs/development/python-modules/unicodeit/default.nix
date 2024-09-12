@@ -24,7 +24,7 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       # Defines a CLI entry point, so `setuptools` generates an `unicodeit` executable
-      url = "https://github.com/svenkreiss/unicodeit/pull/79.patch";
+      url = "https://github.com/svenkreiss/unicodeit/pull/79/commits/9f4a4fee5cb62a101075adf3054832cdb1e6a5ad.patch";
       hash = "sha256-mAhmU17K0adEFFAIf7ZeJ/cNohrzrL+sol7gYfWbPGo=";
     })
   ];
