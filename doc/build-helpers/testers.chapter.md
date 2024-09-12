@@ -165,6 +165,59 @@ testers.shellcheck {
 A derivation that runs `shellcheck` on the given script(s).
 The build will fail if `shellcheck` finds any issues.
 
+## `testLibs` {#tester-testLibs}
+
+Some packages are sensitive to the version of the libraries they link against. The `testLibs` tester allows you to run an arbitrary command with the `LD_DEBUG` environment variable set to `libs`, which will cause the dynamic linker to print out the libraries it is loading. Through the `testLibs` tester, you can run assertions of the form:
+
+- soname was or was not searched for
+- soname was or was not loaded, optionally from a path matching a pattern
+
+:::{.example #ex-testLibs}
+# Run `testers.testLibs`
+
+```nix
+testers.testLibs {
+  name = "TODO";
+  bin = {
+    path = ./script.sh;
+    args = [ "arg1" "arg2" ];
+  };
+  assertions = [
+    { soname = "libfoo.so.1"; loaded = true; description = "Required library"; }
+    { soname = "libbar.so.2"; loaded = false; description = "Unnecessary library"; }
+    { soname = "libbaz.so.3"; loaded = true; path = "/path/to/libbaz.so.3"; }
+    { soname = "libqux.so.4"; loaded = false; path = "/path/to/libqux.so.4"; description = "Forbidden library"; }
+  ];
+}
+```
+
+:::
+
+### Inputs {#tester-testLibs-inputs}
+
+[`bin.path` (path or string)]{#tester-testLibs-param-bin-path}
+
+: The path to the executable to be run.
+  This is expected to be a single executable file.
+
+[`bin.args` (list of strings)]{#tester-testLibs-param-bin-args}
+
+: The arguments to pass to the executable.
+
+[`assertions` (list of attribute sets)]{#tester-testLibs-param-assertions}
+
+: A list of assertions to check.
+  Each assertion is an attribute set with the following attributes:
+
+  - `soname` (string): The soname of the library to check.
+  - `loaded` (boolean): Whether the library should be loaded.
+  - `path` (string, optional): The path the library should be loaded from.
+  - `description` (string, optional): A description of the assertion.
+
+### Return value {#tester-shellcheck-return}
+
+A derivation that runs `testLibs` on the given binary.
+
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
