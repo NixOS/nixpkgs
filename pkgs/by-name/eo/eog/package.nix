@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "47.beta";
+  version = "47.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/eog/${lib.versions.major version}/eog-${version}.tar.xz";
-    hash = "sha256-XOLyMAMkl+nEvR7AWm9fGMYVZ7WMyAM7Gn5IsJqKDic=";
+    hash = "sha256-217b9SJNdRJqe32O5OknKi8wqVMzHVuvbT88DODL3mY=";
   };
 
   patches = [
