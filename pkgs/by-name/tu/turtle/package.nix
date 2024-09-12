@@ -41,6 +41,9 @@ python3Packages.buildPythonApplication rec {
     dbus-python
   ];
 
+  # Upstream requiring pygit2==1.14.1
+  pythonRelaxDeps = [ "pygit2" ];
+
   postInstall = ''
     python ./install.py install
   '';
