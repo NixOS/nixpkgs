@@ -28,25 +28,26 @@
   bash,
   python,
   setuptools,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "39.0.0";
+  version = "40.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l4qKbTfQRWiRsoHN9fiAAiGMGP+q3gwRH1pMSXV/eSU=";
+    hash = "sha256-s2EvD1TDoRoKrvpRc6h3P7xRyT941nW1hveucXDLB4w=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pbr
     cliff
     defusedxml
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     prettytable
     urllib3
     debtcollector
+    testscenarios
   ];
 
   nativeCheckInputs = [
