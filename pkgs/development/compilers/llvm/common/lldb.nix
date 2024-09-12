@@ -5,8 +5,7 @@
 , cmake
 , zlib
 , ncurses
-, swig3
-, swig4
+, swig
 , which
 , libedit
 , libxml2
@@ -42,7 +41,6 @@ let
     name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
     version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
   };
-  swig = if lib.versionAtLeast release_version "18" then swig4 else swig3;
 in
 
 stdenv.mkDerivation (rec {
