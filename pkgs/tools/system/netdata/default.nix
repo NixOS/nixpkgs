@@ -49,14 +49,14 @@
   withSystemdJournal ? (!stdenv.isDarwin),
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.47.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash =
       if withCloudUi then
         "sha256-eMapy4HQaEblDfZt2uVSfBWRlkstX7TxZDBgSv5bW/I="
@@ -185,7 +185,7 @@ stdenv.mkDerivation rec {
     substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
       --replace-fail \
         'GOPROXY=https://proxy.golang.org' \
-        'GOPROXY=file://${passthru.netdata-go-modules}'
+        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules}'
 
     # Prevent the path to be caught into the Nix store path.
     substituteInPlace CMakeLists.txt \
@@ -242,9 +242,9 @@ stdenv.mkDerivation rec {
     netdata-go-modules =
       (buildGoModule {
         pname = "netdata-go-plugins";
-        inherit version src;
+        inherit (finalAttrs) version src;
 
-        sourceRoot = "${src.name}/src/go/plugin/go.d";
+        sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
         vendorHash = "sha256-NZ1tg+lvXNgypqmjjb5f7dHH6DIA9VOa4PMM4eq11n0=";
         doCheck = false;
@@ -253,11 +253,11 @@ stdenv.mkDerivation rec {
         ldflags = [
           "-s"
           "-w"
-          "-X main.version=${version}"
+          "-X main.version=${finalAttrs.version}"
         ];
 
         passthru.tests = tests;
-        meta = meta // {
+        meta = finalAttrs.meta // {
           description = "Netdata orchestrator for data collection modules written in Go";
           mainProgram = "godplugin";
           license = lib.licenses.gpl3Only;
@@ -276,4 +276,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ ];
   };
-}
+})
