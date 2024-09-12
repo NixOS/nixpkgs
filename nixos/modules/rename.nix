@@ -52,6 +52,7 @@ in
       is broken when using cgroups-v2.
     '')
     (mkRemovedOptionModule [ "services" "antennas" ] "The antennas package and the corresponding module have been removed as they only work with tvheadend, which nobody was willing to maintain and was stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version.")
+    (mkRemovedOptionModule [ "services" "ankisyncd" ] "`services.ankisyncd` has been replaced by `services.anki-sync-server`.")
     (mkRemovedOptionModule [ "services" "baget" "enable" ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")

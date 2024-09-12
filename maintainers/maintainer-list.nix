@@ -3078,7 +3078,7 @@
   };
   bryanhonof = {
     name = "Bryan Honof";
-    email = "bryanhonof@gmail.com";
+    email = "bryanhonof+nixpkgs@gmail.com";
     github = "bryanhonof";
     githubId = 5932804;
   };
@@ -9935,6 +9935,12 @@
       # Email encryption
       { fingerprint = "816D 23F5 E672 EC58 7674  4A73 197F 9A63 2D13 9E30"; }
     ];
+  };
+  jmendyk = {
+    email = "jakub@ndyk.me";
+    github = "JMendyk";
+    githubId = 9089004;
+    name = "Jakub Mendyk";
   };
   jmettes = {
     email = "jonathan@jmettes.com";
