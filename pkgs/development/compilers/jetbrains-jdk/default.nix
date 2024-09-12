@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, testers
+, nixosTests
 , jetbrains
 , jdk
 , git
@@ -152,5 +154,13 @@ jdk.overrideAttrs (oldAttrs: rec {
 
   passthru = oldAttrs.passthru // {
     home = "${jetbrains.jdk}/lib/openjdk";
+    tests = {
+      version = testers.testVersion {
+        package = jetbrains.jdk;
+        command = "java --version";
+        version = javaVersion;
+      };
+      jcef = nixosTests.jetbrains-jdk;
+    };
   };
 })

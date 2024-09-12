@@ -481,6 +481,7 @@ in {
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
   jenkins-cli = handleTest ./jenkins-cli.nix {};
+  jetbrains-jdk = runTest ./jetbrains-jdk;
   jibri = handleTest ./jibri.nix {};
   jirafeau = handleTest ./jirafeau.nix {};
   jitsi-meet = handleTest ./jitsi-meet.nix {};
