@@ -18,7 +18,7 @@ pkgs
 
 ```
 
-Where `some-package` is the package name and `so` is the lowercased 2-letter prefix of the package name.
+Where `some-package` is the attribute name corresponding to the package, and `so` is the lowercase 2-letter prefix of the attribute name.
 
 The `package.nix` may look like this:
 
