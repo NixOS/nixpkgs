@@ -1,0 +1,37 @@
+From e52d75248a5d18bcf965591eb240a11a23147634 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Sat, 3 Aug 2024 22:38:49 +0300
+Subject: [PATCH] Don't build the Selenium Manager.
+
+---
+ py/setup.py | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/py/setup.py b/py/setup.py
+index a71007f..fdda74e 100755
+--- a/py/setup.py
++++ b/py/setup.py
+@@ -19,7 +19,6 @@ from distutils.command.install import INSTALL_SCHEMES
+ from os.path import dirname, join, abspath
+ from setuptools import setup
+ from setuptools.command.install import install
+-from setuptools_rust import Binding, RustExtension
+
+
+ for scheme in INSTALL_SCHEMES.values():
+@@ -84,12 +83,6 @@ setup_args = {
+         "typing_extensions~=4.9",
+         "websocket-client~=1.8",
+     ],
+-    'rust_extensions': [
+-        RustExtension(
+-            {"selenium-manager": "selenium.webdriver.common.selenium-manager"},
+-            binding=Binding.Exec
+-        )
+-    ],
+     'zip_safe': False
+ }
+
+--
+2.45.2
+
