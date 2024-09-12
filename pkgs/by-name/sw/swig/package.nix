@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  bison,
+  pcre2,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swig";
@@ -12,7 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   PCRE_CONFIG = "${pcre2.dev}/bin/pcre-config";
-  nativeBuildInputs = [ autoconf automake libtool bison ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    bison
+  ];
   buildInputs = [ pcre2 ];
 
   configureFlags = [ "--without-tcl" ];
