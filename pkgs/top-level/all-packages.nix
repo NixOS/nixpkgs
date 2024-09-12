@@ -18955,11 +18955,6 @@ with pkgs;
 
   systemfd = callPackage ../development/tools/systemfd { };
 
-  swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
-  swig4 = callPackage ../development/tools/misc/swig/4.nix { };
-  swig = swig4;
-  swigWithJava = swig;
-
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
 
   c0 = callPackage ../development/compilers/c0 {
@@ -32027,9 +32022,7 @@ with pkgs;
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
-  openmm = callPackage ../development/libraries/science/chemistry/openmm {
-    swig = swig4;
-  };
+  openmm = callPackage ../development/libraries/science/chemistry/openmm { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
@@ -37630,9 +37623,6 @@ with pkgs;
 
   faiss = callPackage ../development/libraries/science/math/faiss {
     pythonPackages = python3Packages;
-    # faiss wants the "-doxygen" option
-    # available only since swig4
-    swig = swig4;
   };
 
   faissWithCuda = faiss.override {

@@ -10,7 +10,7 @@
 , libiconv
 , enablePython ? false
 , python ? null
-, swig4
+, swig
 , expat
 , libuuid
 , openjpeg
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     ApplicationServices
     Cocoa
     libiconv
-  ] ++ lib.optionals enablePython [ swig4 python ];
+  ] ++ lib.optionals enablePython [ swig python ];
 
   disabledTests = [
     # require networking:
