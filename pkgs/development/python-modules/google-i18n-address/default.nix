@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "google-i18n-address";
   version = "3.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-7RqS/+6zInlhWydJwp4xf2uGpfmSdiSwvJugpL8Mlpk=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google's i18n address data packaged for Python";
-    mainProgram = "update-validation-files";
     homepage = "https://github.com/mirumee/google-i18n-address";
     changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = [ ];
+    mainProgram = "update-validation-files";
   };
 }
