@@ -22,15 +22,21 @@
 }:
 stdenv.mkDerivation (self: {
   pname = "louvre";
-  version = "2.2.0-1";
-  rev = "v${self.version}";
-  hash = "sha256-Ds1TTxHFq0Z88djdpAunhtKAipOCTodKIKOh5oxF568=";
+  version = "2.9.0-1";
 
   src = fetchFromGitHub {
-    inherit (self) rev hash;
     owner = "CuarzoSoftware";
     repo = "Louvre";
+    rev = "v${self.version}";
+    hash = "sha256-0M1Hl5kF8r4iFflkGBb9CWqwzauSZPVKSRNWZKFZC4U=";
   };
+
+  sourceRoot = "${self.src.name}/src";
+
+  postPatch = ''
+    substituteInPlace examples/meson.build \
+      --replace-fail "/usr/local/share/wayland-sessions" "${placeholder "out"}/share/wayland-sessions"
+  '';
 
   nativeBuildInputs = [
     meson
@@ -57,11 +63,6 @@ stdenv.mkDerivation (self: {
   ];
 
   outputs = [ "out" "dev" ];
-
-  preConfigure = ''
-    # The root meson.build file is in src/
-    cd src
-  '';
 
   meta = {
     description = "C++ library for building Wayland compositors";
