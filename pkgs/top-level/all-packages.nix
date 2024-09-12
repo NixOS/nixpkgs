@@ -3218,8 +3218,6 @@ with pkgs;
 
   boxxy = callPackage ../tools/misc/boxxy { };
 
-  boundary = callPackage ../tools/networking/boundary { };
-
   chamber = callPackage ../tools/admin/chamber {  };
 
   chaos = callPackage ../tools/networking/chaos {  };
