@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-jByO7cJ9oQ4lQopzXCii11wqhg9tIlm/AFFViH+P3O0=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.4/bookmarks-14.2.4.tar.gz",
-    "version": "14.2.4",
+    "hash": "sha256-ZWdz7Hl3wrTEHrXdOsPKRcE5GAnHYHjudbY5F0VjG4Y=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.5/bookmarks-14.2.5.tar.gz",
+    "version": "14.2.5",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users and via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -90,10 +90,10 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-AMhhpzznCMW6vHc5vHkP4/wWY+NcqSvB/ZTVj2U6peM=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.8/groupfolders-v16.0.8.tar.gz",
-    "version": "16.0.8",
-    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
+    "hash": "sha256-PtxAidIono2roSVA/VLQZ13TVcqWZL069eXpY+npFB8=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.9/groupfolders-v16.0.9.tar.gz",
+    "version": "16.0.9",
+    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
       "agpl"
@@ -160,10 +160,10 @@
     ]
   },
   "music": {
-    "hash": "sha256-RnTyQYCbmkHDZhtonpvbKLUM3n93u53IhknyTrNGh9Y=",
-    "url": "https://github.com/owncloud/music/releases/download/v2.0.0/music_2.0.0_for_nextcloud.tar.gz",
-    "version": "2.0.0",
-    "description": "A stand-alone music player app and a \"lite\" player for the Files app\r\n\r\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\r\n- Playlist support with import from m3u, m3u8, and pls files\r\n- Browse by artists, albums, genres, or folders\r\n- Gapless play\r\n- Filter the shown content with the search function\r\n- Play internet radio and podcast channels\r\n- Setup Last.fm connection to see background information on artists, albums, and songs\r\n- Control with media control keys on the keyboard or OS\r\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\r\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone",
+    "hash": "sha256-yexffDYu0dv/i/V0Z+U1jD1+6X/JZuWZ4/mqWny5Nxs=",
+    "url": "https://github.com/owncloud/music/releases/download/v2.0.1/music_2.0.1_for_nextcloud.tar.gz",
+    "version": "2.0.1",
+    "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone",
     "homepage": "https://github.com/owncloud/music",
     "licenses": [
       "agpl"
@@ -210,9 +210,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-tSnR5O+OCYjoPoh2/WX3ntCagw9xanmxCR+DaMnAhJA=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.1/polls-v7.2.1.tar.gz",
-    "version": "7.2.1",
+    "hash": "sha256-TBCNr57MKEe8OSXEqWohZH9zuCwFTMDnwnZ1nFZ+FWY=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.2/polls-v7.2.2.tar.gz",
+    "version": "7.2.2",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -310,9 +310,9 @@
     ]
   },
   "unsplash": {
-    "hash": "sha256-xfu5m5VOZZ9ATnRg44sw/MTEXitrDFCuAcm+siNilsY=",
-    "url": "https://github.com/nextcloud/unsplash/releases/download/v3.0.0/unsplash.tar.gz",
-    "version": "3.0.0",
+    "hash": "sha256-kNDQk4HYkrBA+o+5/bNYj65ZJbViBjhnbSA87tsu6YE=",
+    "url": "https://github.com/nextcloud/unsplash/releases/download/v3.0.1/unsplash.tar.gz",
+    "version": "3.0.1",
     "description": "Show a new random featured nature photo in your nextcloud. Now with choosable motives!",
     "homepage": "https://github.com/nextcloud/unsplash/",
     "licenses": [
