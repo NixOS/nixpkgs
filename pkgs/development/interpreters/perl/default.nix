@@ -69,4 +69,12 @@ in rec {
     sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
     inherit passthruFun;
   };
+
+  # Maint version
+  perl540 = callPackage ./interpreter.nix {
+    self = perl540;
+    version = "5.40.0";
+    sha256 = "sha256-x0A0jzVzljJ6l5XT6DI7r9D+ilx4NfwcuroMyN/nFh8=";
+    inherit passthruFun;
+  };
 }
