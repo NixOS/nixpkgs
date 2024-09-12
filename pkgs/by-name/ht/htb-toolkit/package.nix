@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     owner = "D3vil0p3r";
     repo = "htb-toolkit";
     # https://github.com/D3vil0p3r/htb-toolkit/issues/3
-    rev = "b005cd275a0b00d3fb1acc22aebe1c412b11fa71";
+    rev = "25a4c0baffd10bcf16ac4d144b665c03742e5cf5";
     hash = "sha256-o91p/m06pm9qoYZZVh+qHulqHO2G7xVJQPpEvRsq+8Q=";
   };
 
