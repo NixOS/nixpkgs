@@ -196,7 +196,7 @@
  */
 
 let
-  inherit (lib) optional optionals optionalString enableFeature versionOlder versionAtLeast;
+  inherit (lib) optional optionals optionalString versionOlder versionAtLeast;
   variants = lib.genAttrs [ "headless" "small" "full" ] lib.id;
   eval = lib.evalModules {
     modules = [
@@ -342,7 +342,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePlatforms = [];
   setOutputFlags = false; # Only accepts some of them
-  configureFlags = (lib.sort (p: q: lib.compare p q == -1)) ([
+  configureFlags = [
     #mingw64 is internally treated as mingw32, so 32 and 64 make no difference here
     "--target_os=${if stdenv.hostPlatform.isMinGW then "mingw64" else stdenv.hostPlatform.parsed.kernel.name}"
     "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
@@ -351,19 +351,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--datadir=${placeholder "data"}/share/ffmpeg"
   ] ++ optionals withBin [
     "--bindir=${placeholder "bin"}/bin"
-  ] ++ [
-  ] ++ optionals (lib.versionOlder version "5") [
-  ] ++ [
   ] ++ optionals withLib [
     "--libdir=${placeholder "lib"}/lib"
     "--incdir=${placeholder "dev"}/include"
-  ] ++ [
   ] ++ optionals withManPages [
     "--mandir=${placeholder "man"}/share/man"
-  ] ++ [
   ] ++ optionals withDoc [
     "--docdir=${placeholder "doc"}/share/doc/ffmpeg"
-  ] ++ [
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--enable-cross-compile" # TODO
@@ -372,11 +366,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--cc=clang"
     "--cxx=clang++"
   ] ++ lib.pipe eval.config.features [
-    (lib.filterAttrs (n: v: lib.versionAtLeast version v.version))
-    (lib.filterAttrs (n: v: lib.versionOlder version v.versionMax))
+    (lib.filterAttrs (n: v: lib.versionAtLeast version v.version && lib.versionOlder version v.versionMax))
     (lib.mapAttrsToList (n: feature: (map (lib.enableFeature feature.enable) feature.flags)))
     lib.flatten
-  ]);
+  ];
 
   # ffmpeg embeds the configureFlags verbatim in its binaries and because we
   # configure binary, include, library dir etc., this causes references in
@@ -394,12 +387,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCudaLLVM [ clang ];
 
   buildInputs = lib.pipe eval.config.features [
-    (lib.filterAttrs (n: v: v.enable))
-    (lib.filterAttrs (n: v: lib.versionAtLeast version v.version))
-    (lib.filterAttrs (n: v: lib.versionOlder version v.versionMax))
+    (lib.filterAttrs (n: v: v.enable && lib.versionAtLeast version v.version && lib.versionOlder version v.versionMax))
     (lib.mapAttrsToList (n: v: lib.attrValues v.packages))
     lib.flatten
-    (lib.sort (p: q: lib.compare (p.pname or "") (q.pname or "") == -1))
   ];
 
   buildFlags = [ "all" ]
