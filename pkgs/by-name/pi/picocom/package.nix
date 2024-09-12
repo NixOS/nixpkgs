@@ -1,51 +1,60 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
+  replaceVars,
+  go-md2man,
   installShellFiles,
-  lrzsz,
   darwin,
+  lrzsz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "picocom";
-  # last tagged release is 3.1 but 3.2 is still considered a release
-  version = "3.2a";
+  version = "2024-07";
 
-  # upstream is quiet as the original author is no longer active since March 2018
-  src = fetchFromGitHub {
-    owner = "npat-efault";
+  src = fetchFromGitLab {
+    owner = "wsakernel";
     repo = "picocom";
-    rev = "1acf1ddabaf3576b4023c4f6f09c5a3e4b086fb8";
-    sha256 = "sha256-cs2bxqZfTbnY5d+VJ257C5hssaFvYup3tBKz68ROnAo=";
+    rev = finalAttrs.version;
+    hash = "sha256-cQoEfi75iltjeAm26NvXgfrL7d1Hm+1veQ4dVe0S1q8=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace '.picocom_history' '.cache/picocom_history'
+  patches = [
+    (replaceVars ./lrzsz-path.patch { inherit lrzsz; })
+  ];
 
-    substituteInPlace picocom.c \
-      --replace '"rz -vv -E"' '"${lrzsz}/bin/rz -vv -E"' \
-      --replace '"sz -vv"' '"${lrzsz}/bin/sz -vv"'
-  '';
-
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
+  makeFlags = [
+    "HISTFILE=.cache/picocom_history"
+    "all"
+    "doc"
+  ];
+
+  enableParallelBuilding = true;
+
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin picocom
     installManPage picocom.1
     installShellCompletion --bash bash_completion/picocom
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal dumb-terminal emulation program";
-    homepage = "https://github.com/npat-efault/picocom/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    homepage = "https://gitlab.com/wsakernel/picocom";
+    changelog = "https://gitlab.com/wsakernel/picocom/-/releases";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "picocom";
   };
-}
+})
