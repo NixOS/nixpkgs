@@ -35984,8 +35984,6 @@ with pkgs;
     openjdk = openjdk8;
   };
 
-  sauerbraten = callPackage ../games/sauerbraten { };
-
   scid = callPackage ../games/scid { };
 
   scid-vs-pc = callPackage ../games/scid-vs-pc { };
