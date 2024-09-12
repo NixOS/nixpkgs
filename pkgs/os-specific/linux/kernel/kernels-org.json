@@ -24,8 +24,8 @@
         "hash": "sha256:1n86dfv8qcm21z3inrz0n7gnwik7s51xfrabyq8ajy15b93a2fpi"
     },
     "6.6": {
-        "version": "6.6.50",
-        "hash": "sha256:0vp8sbm9fqj09vh7fib39rw18n5cj8zfydqsr5h00898mxny6rf0"
+        "version": "6.6.51",
+        "hash": "sha256:1cq8l3n12gnk6kgms5c7v71l199ip8lc9fpx7s8w8y88cla9l30w"
     },
     "6.8": {
         "version": "6.8.12",
