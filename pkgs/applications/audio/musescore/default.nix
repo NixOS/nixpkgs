@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, wrapGAppsHook3
 , wrapQtAppsHook
 , pkg-config
 , ninja
@@ -101,6 +102,10 @@ in stdenv'.mkDerivation (finalAttrs: {
     qttools
     pkg-config
     ninja
+  ] ++ lib.optionals stdenv.isLinux [
+    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+    # GTK3 is needed for file dialogs.
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -138,6 +143,12 @@ in stdenv'.mkDerivation (finalAttrs: {
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
     ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  '';
+
+  # Move gapps wrapper args to qt wrapper args to make a single wrapper (#78792).
+  dontWrapGApps = stdenv.isLinux;
+  preFixup = lib.optionalString stdenv.isLinux ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
