@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , nix-update-script
 , installShellFiles
+, versionCheckHook
 }:
 
 let
@@ -54,6 +55,8 @@ in buildGo123Module rec {
   subPackages = [ "cmd/glasskube" "cmd/package-operator" ];
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   preBuild = ''
     cp -r ${web-bundle}/bundle internal/web/root/static/bundle
