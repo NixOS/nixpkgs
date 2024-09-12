@@ -1,7 +1,4 @@
 { pkgs, lib, config, ... }:
-
-with lib;
-
 let
   cfg = config.services.shout;
   shoutHome = "/var/lib/shout";
@@ -23,10 +20,10 @@ let
 
 in {
   options.services.shout = {
-    enable = mkEnableOption "Shout web IRC client";
+    enable = lib.mkEnableOption "Shout web IRC client";
 
-    private = mkOption {
-      type = types.bool;
+    private = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Make your shout instance private. You will need to configure user
@@ -34,20 +31,20 @@ in {
       '';
     };
 
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
       description = "IP interface to listen on for http connections.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 9000;
       description = "TCP port to listen on for http connections.";
     };
 
-    configFile = mkOption {
-      type = types.nullOr types.lines;
+    configFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.lines;
       default = null;
       description = ''
         Contents of Shout's {file}`config.js` file.
@@ -59,9 +56,9 @@ in {
       '';
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       default = {};
-      type = types.attrs;
+      type = lib.types.attrs;
       example = {
         displayNetwork = false;
         defaults = {
@@ -81,7 +78,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.shout = {
       isSystemUser = true;
       group = "shout";
@@ -97,7 +94,7 @@ in {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       preStart = "ln -sf ${pkgs.writeText "config.js" finalConfigFile} ${shoutHome}/config.js";
-      script = concatStringsSep " " [
+      script = lib.concatStringsSep " " [
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
         "--port" (toString cfg.port)

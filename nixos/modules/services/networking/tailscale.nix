@@ -1,44 +1,41 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
 in {
-  meta.maintainers = with maintainers; [ mbaillie mfrw ];
+  meta.maintainers = with lib.maintainers; [ mbaillie mfrw ];
 
   options.services.tailscale = {
-    enable = mkEnableOption "Tailscale client daemon";
+    enable = lib.mkEnableOption "Tailscale client daemon";
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 41641;
       description = "The port to listen on for tunnel traffic (0=autoselect).";
     };
 
-    interfaceName = mkOption {
-      type = types.str;
+    interfaceName = lib.mkOption {
+      type = lib.types.str;
       default = "tailscale0";
       description = ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
     };
 
-    permitCertUid = mkOption {
-      type = types.nullOr types.nonEmptyStr;
+    permitCertUid = lib.mkOption {
+      type = lib.types.nullOr lib.types.nonEmptyStr;
       default = null;
       description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
     package = lib.mkPackageOption pkgs "tailscale" {};
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to open the firewall for the specified port.";
     };
 
-    useRoutingFeatures = mkOption {
-      type = types.enum [ "none" "client" "server" "both" ];
+    useRoutingFeatures = lib.mkOption {
+      type = lib.types.enum [ "none" "client" "server" "both" ];
       default = "none";
       example = "server";
       description = ''
@@ -51,8 +48,8 @@ in {
       '';
     };
 
-    authKeyFile = mkOption {
-      type = types.nullOr types.path;
+    authKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/secrets/tailscale_key";
       description = ''
@@ -60,31 +57,31 @@ in {
       '';
     };
 
-    extraUpFlags = mkOption {
+    extraUpFlags = lib.mkOption {
       description = ''
         Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
       '';
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = ["--ssh"];
     };
 
-    extraSetFlags = mkOption {
+    extraSetFlags = lib.mkOption {
       description = "Extra flags to pass to {command}`tailscale set`.";
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = ["--advertise-exit-node"];
     };
 
-    extraDaemonFlags = mkOption {
+    extraDaemonFlags = lib.mkOption {
       description = "Extra flags to pass to {command}`tailscaled`.";
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = ["--no-logs-no-support"];
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
@@ -114,7 +111,7 @@ in {
       stopIfChanged = false;
     };
 
-    systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
+    systemd.services.tailscaled-autoconnect = lib.mkIf (cfg.authKeyFile != null) {
       after = ["tailscaled.service"];
       wants = ["tailscaled.service"];
       wantedBy = [ "multi-user.target" ];
@@ -124,12 +121,12 @@ in {
       script = ''
         status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
         if [[ $status != Connected* ]]; then
-          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
+          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${lib.escapeShellArgs cfg.extraUpFlags}
         fi
       '';
     };
 
-    systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != []) {
+    systemd.services.tailscaled-set = lib.mkIf (cfg.extraSetFlags != []) {
       after = ["tailscaled.service"];
       wants = ["tailscaled.service"];
       wantedBy = [ "multi-user.target" ];
@@ -137,22 +134,22 @@ in {
         Type = "oneshot";
       };
       script = ''
-        ${cfg.package}/bin/tailscale set ${escapeShellArgs cfg.extraSetFlags}
+        ${cfg.package}/bin/tailscale set ${lib.escapeShellArgs cfg.extraSetFlags}
       '';
     };
 
-    boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
-      "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
-      "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
+    boot.kernel.sysctl = lib.mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
+      "net.ipv4.conf.all.forwarding" = lib.mkOverride 97 true;
+      "net.ipv6.conf.all.forwarding" = lib.mkOverride 97 true;
     };
 
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
-    networking.firewall.checkReversePath = mkIf (cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both") "loose";
+    networking.firewall.checkReversePath = lib.mkIf (cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both") "loose";
 
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 
-    systemd.network.networks."50-tailscale" = mkIf isNetworkd {
+    systemd.network.networks."50-tailscale" = lib.mkIf isNetworkd {
       matchConfig = {
         Name = cfg.interfaceName;
       };

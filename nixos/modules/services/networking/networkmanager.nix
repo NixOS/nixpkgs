@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.networking.networkmanager;
   ini = pkgs.formats.ini { };
@@ -63,12 +60,12 @@ let
   '';
 
   ns = xs: pkgs.writeText "nameservers" (
-    concatStrings (map (s: "nameserver ${s}\n") xs)
+    lib.concatStrings (map (s: "nameserver ${s}\n") xs)
   );
 
   overrideNameserversScript = pkgs.writeScript "02overridedns" ''
     #!/bin/sh
-    PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
+    PATH=${with pkgs; lib.makeBinPath [ gnused gnugrep coreutils ]}
     tmp=$(mktemp)
     sed '/nameserver /d' /etc/resolv.conf > $tmp
     grep 'nameserver ' /etc/resolv.conf | \
@@ -83,8 +80,8 @@ let
     pre-down = "pre-down.d/";
   };
 
-  macAddressOptWifi = mkOption {
-    type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" "stable-ssid" ]);
+  macAddressOptWifi = lib.mkOption {
+    type = lib.types.either lib.types.str (lib.types.enum [ "permanent" "preserve" "random" "stable" "stable-ssid" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = ''
@@ -99,8 +96,8 @@ let
     '';
   };
 
-  macAddressOptEth = mkOption {
-    type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" ]);
+  macAddressOptEth = lib.mkOption {
+    type = lib.types.either lib.types.str (lib.types.enum [ "permanent" "preserve" "random" "stable" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = ''
@@ -127,7 +124,7 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   ###### interface
@@ -136,8 +133,8 @@ in
 
     networking.networkmanager = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use NetworkManager to obtain an IP address and other
@@ -148,8 +145,8 @@ in
         '';
       };
 
-      connectionConfig = mkOption {
-        type = with types; attrsOf (nullOr (oneOf [
+      connectionConfig = lib.mkOption {
+        type = with lib.types; attrsOf (nullOr (oneOf [
           bool
           int
           str
@@ -167,7 +164,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = ini.type;
         default = {};
         description = ''
@@ -182,8 +179,8 @@ in
         '';
       };
 
-      unmanaged = mkOption {
-        type = types.listOf types.str;
+      unmanaged = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
@@ -197,15 +194,15 @@ in
         '';
       };
 
-      plugins = mkOption {
+      plugins = lib.mkOption {
         type =
           let
-            networkManagerPluginPackage = types.package // {
+            networkManagerPluginPackage = lib.types.package // {
               description = "NetworkManager plug-in";
               check =
                 p:
                 lib.assertMsg
-                  (types.package.check p
+                  (lib.types.package.check p
                     && p ? networkManagerPlugin
                     && lib.isString p.networkManagerPlugin)
                   ''
@@ -214,7 +211,7 @@ in
                   '';
             };
           in
-          types.listOf networkManagerPluginPackage;
+          lib.types.listOf networkManagerPluginPackage;
         default = [ ];
         description = ''
           List of NetworkManager plug-ins to enable.
@@ -222,24 +219,24 @@ in
         '';
       };
 
-      dhcp = mkOption {
-        type = types.enum [ "dhcpcd" "internal" ];
+      dhcp = lib.mkOption {
+        type = lib.types.enum [ "dhcpcd" "internal" ];
         default = "internal";
         description = ''
           Which program (or internal library) should be used for DHCP.
         '';
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
+      logLevel = lib.mkOption {
+        type = lib.types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
         description = ''
           Set the default logging verbosity level.
         '';
       };
 
-      appendNameservers = mkOption {
-        type = types.listOf types.str;
+      appendNameservers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           A list of name servers that should be appended
@@ -247,8 +244,8 @@ in
         '';
       };
 
-      insertNameservers = mkOption {
-        type = types.listOf types.str;
+      insertNameservers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = ''
           A list of name servers that should be inserted before
@@ -261,8 +258,8 @@ in
       wifi = {
         macAddress = macAddressOptWifi;
 
-        backend = mkOption {
-          type = types.enum [ "wpa_supplicant" "iwd" ];
+        backend = lib.mkOption {
+          type = lib.types.enum [ "wpa_supplicant" "iwd" ];
           default = "wpa_supplicant";
           description = ''
             Specify the Wi-Fi backend used for the device.
@@ -270,16 +267,16 @@ in
           '';
         };
 
-        powersave = mkOption {
-          type = types.nullOr types.bool;
+        powersave = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
           default = null;
           description = ''
             Whether to enable Wi-Fi power saving.
           '';
         };
 
-        scanRandMacAddress = mkOption {
-          type = types.bool;
+        scanRandMacAddress = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to enable MAC address randomization of a Wi-Fi device
@@ -288,8 +285,8 @@ in
         };
       };
 
-      dns = mkOption {
-        type = types.enum [ "default" "dnsmasq" "systemd-resolved" "none" ];
+      dns = lib.mkOption {
+        type = lib.types.enum [ "default" "dnsmasq" "systemd-resolved" "none" ];
         default = "default";
         description = ''
           Set the DNS (`resolv.conf`) processing mode.
@@ -303,18 +300,18 @@ in
         '';
       };
 
-      dispatcherScripts = mkOption {
-        type = types.listOf (types.submodule {
+      dispatcherScripts = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
           options = {
-            source = mkOption {
-              type = types.path;
+            source = lib.mkOption {
+              type = lib.types.path;
               description = ''
                 Path to the hook script.
               '';
             };
 
-            type = mkOption {
-              type = types.enum (attrNames dispatcherTypesSubdirMap);
+            type = lib.mkOption {
+              type = lib.types.enum (lib.attrNames dispatcherTypesSubdirMap);
               default = "basic";
               description = ''
                 Dispatcher hook type. Look up the hooks described at
@@ -326,7 +323,7 @@ in
           };
         });
         default = [ ];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [ {
             source = pkgs.writeText "upHook" '''
               if [ "$2" != "up" ]; then
@@ -345,8 +342,8 @@ in
         '';
       };
 
-      enableStrongSwan = mkOption {
-        type = types.bool;
+      enableStrongSwan = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable the StrongSwan plugin.
@@ -358,28 +355,28 @@ in
         '';
       };
 
-      fccUnlockScripts = mkOption {
-        type = types.listOf (types.submodule {
+      fccUnlockScripts = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
           options = {
-            id = mkOption {
-              type = types.str;
+            id = lib.mkOption {
+              type = lib.types.str;
               description = "vid:pid of either the PCI or USB vendor and product ID";
             };
-            path = mkOption {
-              type = types.path;
+            path = lib.mkOption {
+              type = lib.types.path;
               description = "Path to the unlock script";
             };
           };
         });
         default = [ ];
-        example = literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
+        example = lib.literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
         description = ''
           List of FCC unlock scripts to enable on the system, behaving as described in
           https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
         '';
       };
       ensureProfiles = {
-        profiles = with lib.types; mkOption {
+        profiles = with lib.types; lib.mkOption {
           type = attrsOf (submodule {
             freeformType = ini.type;
 
@@ -437,9 +434,9 @@ in
             If `networking.resolvconf.enable` is true, attributes affecting the name resolution (such as `ignore-auto-dns`) may not end up changing `/etc/resolv.conf` as expected when other name services (for example `networking.dhcpcd`) are enabled. Run `resolvconf -l` in the terminal to see what each service produces.
           '';
         };
-        environmentFiles = mkOption {
+        environmentFiles = lib.mkOption {
           default = [];
-          type = types.listOf types.path;
+          type = lib.types.listOf lib.types.path;
           example = [ "/run/secrets/network-manager.env" ];
           description = ''
             Files to load as environment file. Environment variables from this file
@@ -451,15 +448,15 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ]
     )
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "networking" "networkmanager" "useDnsmasq" ]
       [ "networking" "networkmanager" "dns" ]
     )
-    (mkRemovedOptionModule [ "networking" "networkmanager" "extraConfig" ] ''
+    (lib.mkRemovedOptionModule [ "networking" "networkmanager" "extraConfig" ] ''
       This option was removed in favour of `networking.networkmanager.settings`,
       which accepts structured nix-code equivalent to the ini
       and allows for overriding settings.
@@ -475,14 +472,14 @@ in
       ```
     ''
     )
-    (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
+    (lib.mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
       This option was removed, because using bundled FCC unlock scripts is risky,
       might conflict with vendor-provided unlock scripts, and should
       be a conscious decision on a per-device basis.
       Instead it's recommended to use the
       `networking.networkmanager.fccUnlockScripts` option.
     '')
-    (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
+    (lib.mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
       vector. There seem to be very rare cases where this might be useful.
@@ -490,7 +487,7 @@ in
       them via the DNS server in your network, or use environment.etc
       to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
     '')
-    (mkRemovedOptionModule [ "networking" "networkmanager" "firewallBackend" ] ''
+    (lib.mkRemovedOptionModule [ "networking" "networkmanager" "firewallBackend" ] ''
       This option was removed as NixOS is now using iptables-nftables-compat even when using iptables, therefore Networkmanager now uses the nftables backend unconditionally.
     '')
   ];
@@ -498,7 +495,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -516,20 +513,20 @@ in
       "NetworkManager/NetworkManager.conf".source = configFile;
     }
     // builtins.listToAttrs (map
-      (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
+      (pkg: lib.nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
         source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
       })
       cfg.plugins)
     // builtins.listToAttrs (map
-      (e: nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
+      (e: lib.nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
         source = e.path;
       })
       cfg.fccUnlockScripts)
-    // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
+    // lib.optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
       {
         "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
       }
-    // listToAttrs (lib.imap1
+    // lib.listToAttrs (lib.imap1
       (i: s:
         {
           name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
@@ -598,7 +595,7 @@ in
       aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 
-    systemd.services.NetworkManager-ensure-profiles = mkIf (cfg.ensureProfiles.profiles != { }) {
+    systemd.services.NetworkManager-ensure-profiles = lib.mkIf (cfg.ensureProfiles.profiles != { }) {
       description = "Ensure that NetworkManager declarative profiles are created";
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
@@ -622,8 +619,8 @@ in
     };
 
     # Turn off NixOS' network management when networking is managed entirely by NetworkManager
-    networking = mkMerge [
-      (mkIf (!delegateWireless) {
+    networking = lib.mkMerge [
+      (lib.mkIf (!delegateWireless) {
         useDHCP = false;
       })
 
@@ -639,11 +636,11 @@ in
         ];
       }
 
-      (mkIf cfg.enableStrongSwan {
+      (lib.mkIf cfg.enableStrongSwan {
         networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
       })
 
-      (mkIf enableIwd {
+      (lib.mkIf enableIwd {
         wireless.iwd.enable = true;
       })
 
@@ -665,8 +662,8 @@ in
     security.polkit.extraConfig = polkitConf;
 
     services.dbus.packages = packages
-      ++ optional cfg.enableStrongSwan pkgs.strongswanNM
-      ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
+      ++ lib.optional cfg.enableStrongSwan pkgs.strongswanNM
+      ++ lib.optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
     services.udev.packages = packages;
   };

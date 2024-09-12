@@ -1,10 +1,7 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.nbd;
-  iniFields = with types; attrsOf (oneOf [ bool int float str ]);
+  iniFields = with lib.types; attrsOf (oneOf [ bool int float str ]);
   # The `[generic]` section must come before all the others in the
   # config file.  This means we can't just dump an attrset to INI
   # because that sorts the sections by name.  Instead, we serialize it
@@ -14,17 +11,17 @@ let
       user = "root";
       group = "root";
       port = cfg.server.listenPort;
-    } // (optionalAttrs (cfg.server.listenAddress != null) {
+    } // (lib.optionalAttrs (cfg.server.listenAddress != null) {
       listenaddr = cfg.server.listenAddress;
     }));
   };
   exportSections =
-    mapAttrs
+    lib.mapAttrs
       (_: { path, allowAddresses, extraOptions }:
         extraOptions // {
           exportname = path;
-        } // (optionalAttrs (allowAddresses != null) {
-          authfile = pkgs.writeText "authfile" (concatStringsSep "\n" allowAddresses);
+        } // (lib.optionalAttrs (allowAddresses != null) {
+          authfile = pkgs.writeText "authfile" (lib.concatStringsSep "\n" allowAddresses);
         }))
       cfg.server.exports;
   serverConfig =
@@ -33,9 +30,9 @@ let
       ${lib.generators.toINI {} exportSections}
     '';
   splitLists =
-    partition
-      (path: hasPrefix "/dev/" path)
-      (mapAttrsToList (_: { path, ... }: path) cfg.server.exports);
+    lib.partition
+      (path: lib.hasPrefix "/dev/" path)
+      (lib.mapAttrsToList (_: { path, ... }: path) cfg.server.exports);
   allowedDevices = splitLists.right;
   boundPaths = splitLists.wrong;
 in
@@ -43,15 +40,15 @@ in
   options = {
     services.nbd = {
       server = {
-        enable = mkEnableOption "the Network Block Device (nbd) server";
+        enable = lib.mkEnableOption "the Network Block Device (nbd) server";
 
-        listenPort = mkOption {
-          type = types.port;
+        listenPort = lib.mkOption {
+          type = lib.types.port;
           default = 10809;
           description = "Port to listen on. The port is NOT automatically opened in the firewall.";
         };
 
-        extraOptions = mkOption {
+        extraOptions = lib.mkOption {
           type = iniFields;
           default = {
             allowlist = false;
@@ -62,26 +59,26 @@ in
           '';
         };
 
-        exports = mkOption {
+        exports = lib.mkOption {
           description = "Files or block devices to make available over the network.";
           default = { };
-          type = with types; attrsOf
+          type = with lib.types; attrsOf
             (submodule {
               options = {
-                path = mkOption {
+                path = lib.mkOption {
                   type = str;
                   description = "File or block device to export.";
                   example = "/dev/sdb1";
                 };
 
-                allowAddresses = mkOption {
+                allowAddresses = lib.mkOption {
                   type = nullOr (listOf str);
                   default = null;
                   example = [ "10.10.0.0/24" "127.0.0.1" ];
                   description = "IPs and subnets that are authorized to connect for this device. If not specified, the server will allow all connections.";
                 };
 
-                extraOptions = mkOption {
+                extraOptions = lib.mkOption {
                   type = iniFields;
                   default = {
                     flush = true;
@@ -96,8 +93,8 @@ in
             });
         };
 
-        listenAddress = mkOption {
-          type = with types; nullOr str;
+        listenAddress = lib.mkOption {
+          type = with lib.types; nullOr str;
           description = "Address to listen on. If not specified, the server will listen on all interfaces.";
           default = null;
           example = "10.10.0.1";
@@ -106,7 +103,7 @@ in
     };
   };
 
-  config = mkIf cfg.server.enable {
+  config = lib.mkIf cfg.server.enable {
     assertions = [
       {
         assertion = !(cfg.server.exports ? "generic");

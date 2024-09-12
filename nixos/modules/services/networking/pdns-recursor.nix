@@ -1,52 +1,49 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.pdns-recursor;
 
-  oneOrMore  = type: with types; either type (listOf type);
-  valueType  = with types; oneOf [ int str bool path ];
-  configType = with types; attrsOf (nullOr (oneOrMore valueType));
+  oneOrMore  = type: with lib.types; either type (listOf type);
+  valueType  = with lib.types; oneOf [ int str bool path ];
+  configType = with lib.types; attrsOf (nullOr (oneOrMore valueType));
 
   toBool    = val: if val then "yes" else "no";
-  serialize = val: with types;
+  serialize = val: with lib.types;
          if str.check       val then val
     else if int.check       val then toString val
     else if path.check      val then toString val
     else if bool.check      val then toBool val
-    else if builtins.isList val then (concatMapStringsSep "," serialize val)
+    else if builtins.isList val then (lib.concatMapStringsSep "," serialize val)
     else "";
 
   configDir = pkgs.writeTextDir "recursor.conf"
-    (concatStringsSep "\n"
-      (flip mapAttrsToList cfg.settings
+    (lib.concatStringsSep "\n"
+      (lib.flip lib.mapAttrsToList cfg.settings
         (name: val: "${name}=${serialize val}")));
 
-  mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
+  mkDefaultAttrs = lib.mapAttrs (n: v: lib.mkDefault v);
 
 in {
   options.services.pdns-recursor = {
-    enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
+    enable = lib.mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
-    dns.address = mkOption {
-      type = oneOrMore types.str;
+    dns.address = lib.mkOption {
+      type = oneOrMore lib.types.str;
       default = [ "::" "0.0.0.0" ];
       description = ''
         IP addresses Recursor DNS server will bind to.
       '';
     };
 
-    dns.port = mkOption {
-      type = types.port;
+    dns.port = lib.mkOption {
+      type = lib.types.port;
       default = 53;
       description = ''
         Port number Recursor DNS server will bind to.
       '';
     };
 
-    dns.allowFrom = mkOption {
-      type = types.listOf types.str;
+    dns.allowFrom = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [
         "127.0.0.0/8" "10.0.0.0/8" "100.64.0.0/10"
         "169.254.0.0/16" "192.168.0.0/16" "172.16.0.0/12"
@@ -58,24 +55,24 @@ in {
       '';
     };
 
-    api.address = mkOption {
-      type = types.str;
+    api.address = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
       description = ''
         IP address Recursor REST API server will bind to.
       '';
     };
 
-    api.port = mkOption {
-      type = types.port;
+    api.port = lib.mkOption {
+      type = lib.types.port;
       default = 8082;
       description = ''
         Port number Recursor REST API server will bind to.
       '';
     };
 
-    api.allowFrom = mkOption {
-      type = types.listOf types.str;
+    api.allowFrom = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "127.0.0.1" "::1" ];
       example = [ "0.0.0.0/0" "::/0" ];
       description = ''
@@ -83,24 +80,24 @@ in {
       '';
     };
 
-    exportHosts = mkOption {
-      type = types.bool;
+    exportHosts = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
        Whether to export names and IP addresses defined in /etc/hosts.
       '';
     };
 
-    forwardZones = mkOption {
-      type = types.attrs;
+    forwardZones = lib.mkOption {
+      type = lib.types.attrs;
       default = {};
       description = ''
         DNS zones to be forwarded to other authoritative servers.
       '';
     };
 
-    forwardZonesRecurse = mkOption {
-      type = types.attrs;
+    forwardZonesRecurse = lib.mkOption {
+      type = lib.types.attrs;
       example = { eth = "[::1]:5353"; };
       default = {};
       description = ''
@@ -108,8 +105,8 @@ in {
       '';
     };
 
-    dnssecValidation = mkOption {
-      type = types.enum ["off" "process-no-validate" "process" "log-fail" "validate"];
+    dnssecValidation = lib.mkOption {
+      type = lib.types.enum ["off" "process-no-validate" "process" "log-fail" "validate"];
       default = "validate";
       description = ''
         Controls the level of DNSSEC processing done by the PowerDNS Recursor.
@@ -117,8 +114,8 @@ in {
       '';
     };
 
-    serveRFC1918 = mkOption {
-      type = types.bool;
+    serveRFC1918 = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to directly resolve the RFC1918 reverse-mapping domains:
@@ -129,10 +126,10 @@ in {
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = configType;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           loglevel = 8;
           log-common-errors = true;
@@ -147,8 +144,8 @@ in {
       '';
     };
 
-    luaConfig = mkOption {
-      type = types.lines;
+    luaConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         The content Lua configuration file for PowerDNS Recursor. See
@@ -157,7 +154,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc."pdns-recursor".source = configDir;
 
@@ -170,8 +167,8 @@ in {
       webserver-port       = cfg.api.port;
       webserver-allow-from = cfg.api.allowFrom;
 
-      forward-zones         = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
-      forward-zones-recurse = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
+      forward-zones         = lib.mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
+      forward-zones-recurse = lib.mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
       export-etc-hosts = cfg.exportHosts;
       dnssec           = cfg.dnssecValidation;
       serve-rfc1918    = cfg.serveRFC1918;
@@ -204,7 +201,7 @@ in {
   };
 
   imports = [
-   (mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
+   (lib.mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
      "To change extra Recursor settings use services.pdns-recursor.settings instead.")
   ];
 

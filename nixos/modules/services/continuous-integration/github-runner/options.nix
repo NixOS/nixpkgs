@@ -2,10 +2,8 @@
 , pkgs
 , ...
 }:
-
-with lib;
 {
-  options.services.github-runners = mkOption {
+  options.services.github-runners = lib.mkOption {
     description = ''
       Multiple GitHub Runners.
     '';
@@ -25,9 +23,9 @@ with lib;
       };
     };
     default = { };
-    type = types.attrsOf (types.submodule ({ name, ... }: {
+    type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
       options = {
-        enable = mkOption {
+        enable = lib.mkOption {
           default = false;
           example = true;
           description = ''
@@ -36,11 +34,11 @@ with lib;
             Note: GitHub recommends using self-hosted runners with private repositories only. Learn more here:
             [About self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners).
           '';
-          type = types.bool;
+          type = lib.types.bool;
         };
 
-        url = mkOption {
-          type = types.str;
+        url = lib.mkOption {
+          type = lib.types.str;
           description = ''
             Repository to add the runner to.
 
@@ -57,8 +55,8 @@ with lib;
           example = "https://github.com/nixos/nixpkgs";
         };
 
-        tokenFile = mkOption {
-          type = types.path;
+        tokenFile = lib.mkOption {
+          type = lib.types.path;
           description = ''
             The full path to a file which contains either
 
@@ -100,8 +98,8 @@ with lib;
           example = "/run/secrets/github-runner/nixos.token";
         };
 
-        name = mkOption {
-          type = types.nullOr types.str;
+        name = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           description = ''
             Name of the runner to configure. If null, defaults to the hostname.
 
@@ -111,8 +109,8 @@ with lib;
           default = name;
         };
 
-        runnerGroup = mkOption {
-          type = types.nullOr types.str;
+        runnerGroup = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           description = ''
             Name of the runner group to add this runner to (defaults to the default runner group).
 
@@ -121,19 +119,19 @@ with lib;
           default = null;
         };
 
-        extraLabels = mkOption {
-          type = types.listOf types.str;
+        extraLabels = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           description = ''
             Extra labels in addition to the default (unless disabled through the `noDefaultLabels` option).
 
             Changing this option triggers a new runner registration.
           '';
-          example = literalExpression ''[ "nixos" ]'';
+          example = lib.literalExpression ''[ "nixos" ]'';
           default = [ ];
         };
 
-        noDefaultLabels = mkOption {
-          type = types.bool;
+        noDefaultLabels = lib.mkOption {
+          type = lib.types.bool;
           description = ''
             Disables adding the default labels. Also see the `extraLabels` option.
 
@@ -142,8 +140,8 @@ with lib;
           default = false;
         };
 
-        replace = mkOption {
-          type = types.bool;
+        replace = lib.mkOption {
+          type = lib.types.bool;
           description = ''
             Replace any existing runner with the same name.
 
@@ -152,16 +150,16 @@ with lib;
           default = false;
         };
 
-        extraPackages = mkOption {
-          type = types.listOf types.package;
+        extraPackages = lib.mkOption {
+          type = lib.types.listOf lib.types.package;
           description = ''
             Extra packages to add to `PATH` of the service to make them available to workflows.
           '';
           default = [ ];
         };
 
-        extraEnvironment = mkOption {
-          type = types.attrs;
+        extraEnvironment = lib.mkOption {
+          type = lib.types.attrs;
           description = ''
             Extra environment variables to set for the runner, as an attrset.
           '';
@@ -171,8 +169,8 @@ with lib;
           default = { };
         };
 
-        serviceOverrides = mkOption {
-          type = types.attrs;
+        serviceOverrides = lib.mkOption {
+          type = lib.types.attrs;
           description = ''
             Modify the systemd service. Can be used to, e.g., adjust the sandboxing options.
             See {manpage}`systemd.exec(5)` for more options.
@@ -184,10 +182,10 @@ with lib;
           default = { };
         };
 
-        package = mkPackageOption pkgs "github-runner" { };
+        package = lib.mkPackageOption pkgs "github-runner" { };
 
-        ephemeral = mkOption {
-          type = types.bool;
+        ephemeral = lib.mkOption {
+          type = lib.types.bool;
           description = ''
             If enabled, causes the following behavior:
 
@@ -206,8 +204,8 @@ with lib;
           default = false;
         };
 
-        user = mkOption {
-          type = types.nullOr types.str;
+        user = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           description = ''
             User under which to run the service.
 
@@ -217,11 +215,11 @@ with lib;
             Also see the `group` option for an overview on the effects of the `user` and `group` settings.
           '';
           default = null;
-          defaultText = literalExpression "username";
+          defaultText = lib.literalExpression "username";
         };
 
-        group = mkOption {
-          type = types.nullOr types.str;
+        group = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           description = ''
             Group under which to run the service.
 
@@ -236,11 +234,11 @@ with lib;
               but run as root implicitly. If this is really what you want, set `user = "root"` explicitly.
           '';
           default = null;
-          defaultText = literalExpression "groupname";
+          defaultText = lib.literalExpression "groupname";
         };
 
-        workDir = mkOption {
-          type = with types; nullOr str;
+        workDir = lib.mkOption {
+          type = with lib.types; nullOr str;
           description = ''
             Working directory, available as `$GITHUB_WORKSPACE` during workflow runs
             and used as a default for [repository checkouts](https://github.com/actions/checkout).
@@ -253,8 +251,8 @@ with lib;
           default = null;
         };
 
-        nodeRuntimes = mkOption {
-          type = with types; nonEmptyListOf (enum [ "node20" ]);
+        nodeRuntimes = lib.mkOption {
+          type = with lib.types; nonEmptyListOf (enum [ "node20" ]);
           default = [ "node20" ];
           description = ''
             List of Node.js runtimes the runner should support.

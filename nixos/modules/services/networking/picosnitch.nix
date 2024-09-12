@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.picosnitch;
 in
 {
   options.services.picosnitch = {
-    enable = mkEnableOption "picosnitch daemon";
+    enable = lib.mkEnableOption "picosnitch daemon";
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.picosnitch ];
     systemd.services.picosnitch = {
       description = "picosnitch";

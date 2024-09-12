@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.jenkinsSlave;
   masterCfg = config.services.jenkins;
@@ -11,8 +10,8 @@ in {
       # enable ssh slaves.
       # * Optionally configure the node as a jenkins ad-hoc slave. This would imply configuration
       # properties for the master node.
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If true the system will be configured to work as a jenkins slave.
@@ -21,42 +20,42 @@ in {
         '';
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "jenkins";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           User the jenkins slave agent should execute under.
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "jenkins";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           If the default slave agent user "jenkins" is configured then this is
           the primary group of that user.
         '';
       };
 
-      home = mkOption {
+      home = lib.mkOption {
         default = "/var/lib/jenkins";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           The path to use as JENKINS_HOME. If the default user "jenkins" is configured then
           this is the home of the "jenkins" user.
         '';
       };
 
-      javaPackage = mkPackageOption pkgs "jdk" { };
+      javaPackage = lib.mkPackageOption pkgs "jdk" { };
     };
   };
 
-  config = mkIf (cfg.enable && !masterCfg.enable) {
-    users.groups = optionalAttrs (cfg.group == "jenkins") {
+  config = lib.mkIf (cfg.enable && !masterCfg.enable) {
+    users.groups = lib.optionalAttrs (cfg.group == "jenkins") {
       jenkins.gid = config.ids.gids.jenkins;
     };
 
-    users.users = optionalAttrs (cfg.user == "jenkins") {
+    users.users = lib.optionalAttrs (cfg.user == "jenkins") {
       jenkins = {
         description = "jenkins user";
         createHome = true;

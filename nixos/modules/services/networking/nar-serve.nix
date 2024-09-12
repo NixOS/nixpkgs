@@ -1,29 +1,27 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.nar-serve;
 in
 {
   meta = {
-    maintainers = [ maintainers.rizary maintainers.zimbatm ];
+    maintainers = [ lib.maintainers.rizary lib.maintainers.zimbatm ];
   };
   options = {
     services.nar-serve = {
-      enable = mkEnableOption "serving NAR file contents via HTTP";
+      enable = lib.mkEnableOption "serving NAR file contents via HTTP";
 
-      package = mkPackageOption pkgs "nar-serve" { };
+      package = lib.mkPackageOption pkgs "nar-serve" { };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8383;
         description = ''
           Port number where nar-serve will listen on.
         '';
       };
 
-      cacheURL = mkOption {
-        type = types.str;
+      cacheURL = lib.mkOption {
+        type = lib.types.str;
         default = "https://cache.nixos.org/";
         description = ''
           Binary cache URL to connect to.
@@ -35,8 +33,8 @@ in
         '';
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           When set, enables the feature of serving <nar-hash>.<domain>
@@ -48,7 +46,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.nar-serve = {
       description = "NAR server";
       after = [ "network.target" ];

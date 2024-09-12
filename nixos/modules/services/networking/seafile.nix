@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.seafile;
   settingsFormat = pkgs.formats.ini { };
@@ -38,16 +37,16 @@ in
   ###### Interface
 
   options.services.seafile = {
-    enable = mkEnableOption "Seafile server";
+    enable = lib.mkEnableOption "Seafile server";
 
-    ccnetSettings = mkOption {
-      type = types.submodule {
+    ccnetSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
           General = {
-            SERVICE_URL = mkOption {
-              type = types.str;
+            SERVICE_URL = lib.mkOption {
+              type = lib.types.str;
               example = "https://www.example.com";
               description = ''
                 Seahub public URL.
@@ -64,21 +63,21 @@ in
       '';
     };
 
-    seafileSettings = mkOption {
-      type = types.submodule {
+    seafileSettings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
           fileserver = {
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               default = 8082;
               description = ''
                 The tcp port used by seafile fileserver.
               '';
             };
-            host = mkOption {
-              type = types.str;
+            host = lib.mkOption {
+              type = lib.types.str;
               default = "127.0.0.1";
               example = "0.0.0.0";
               description = ''
@@ -96,8 +95,8 @@ in
       '';
     };
 
-    workers = mkOption {
-      type = types.int;
+    workers = lib.mkOption {
+      type = lib.types.int;
       default = 4;
       example = 10;
       description = ''
@@ -105,28 +104,28 @@ in
       '';
     };
 
-    adminEmail = mkOption {
+    adminEmail = lib.mkOption {
       example = "john@example.com";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Seafile Seahub Admin Account Email.
       '';
     };
 
-    initialAdminPassword = mkOption {
+    initialAdminPassword = lib.mkOption {
       example = "someStrongPass";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Seafile Seahub Admin Account initial password.
         Should be change via Seahub web front-end.
       '';
     };
 
-    seafilePackage = mkPackageOption pkgs "seafile-server" { };
+    seafilePackage = lib.mkPackageOption pkgs "seafile-server" { };
 
-    seahubExtraConf = mkOption {
+    seahubExtraConf = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Extra config to append to `seahub_settings.py` file.
         Refer to <https://manual.seafile.com/config/seahub_settings_py/>
@@ -137,7 +136,7 @@ in
 
   ###### Implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc."seafile/ccnet.conf".source = ccnetConf;
     environment.etc."seafile/seafile.conf".source = seafileConf;

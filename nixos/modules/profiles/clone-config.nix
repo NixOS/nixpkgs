@@ -1,7 +1,4 @@
 { config, lib, pkgs, modules, ... }:
-
-with lib;
-
 let
 
   # Location of the repository on the harddrive
@@ -10,19 +7,19 @@ let
   # Check if the path is from the NixOS repository
   isNixOSFile = path:
     let s = toString path; in
-      removePrefix nixosPath s != s;
+      lib.removePrefix nixosPath s != s;
 
   # Copy modules given as extra configuration files.  Unfortunately, we
   # cannot serialized attribute set given in the list of modules (that's why
   # you should use files).
   moduleFiles =
     # FIXME: use typeOf (Nix 1.6.1).
-    filter (x: !isAttrs x && !lib.isFunction x) modules;
+    lib.filter (x: !lib.isAttrs x && !lib.isFunction x) modules;
 
   # Partition module files because between NixOS and non-NixOS files.  NixOS
   # files may change if the repository is updated.
-  partitionedModuleFiles =
-    let p = partition isNixOSFile moduleFiles; in
+  lib.partitionedModuleFiles =
+    let p = lib.partition isNixOSFile moduleFiles; in
     { nixos = p.right; others = p.wrong; };
 
   # Path transformed to be valid on the installation device.  Thus the
@@ -30,9 +27,9 @@ let
   relocatedModuleFiles =
     let
       relocateNixOS = path:
-        "<nixpkgs/nixos" + removePrefix nixosPath (toString path) + ">";
+        "<nixpkgs/nixos" + lib.removePrefix nixosPath (toString path) + ">";
     in
-      { nixos = map relocateNixOS partitionedModuleFiles.nixos;
+      { nixos = map relocateNixOS lib.partitionedModuleFiles.nixos;
         others = []; # TODO: copy the modules to the install-device repository.
       };
 
@@ -59,7 +56,7 @@ in
 
   options = {
 
-    installer.cloneConfig = mkOption {
+    installer.cloneConfig = lib.mkOption {
       default = true;
       description = ''
         Try to clone the installation-device configuration by re-using it's
@@ -67,7 +64,7 @@ in
       '';
     };
 
-    installer.cloneConfigIncludes = mkOption {
+    installer.cloneConfigIncludes = lib.mkOption {
       default = [];
       example = [ "./nixos/modules/hardware/network/rt73.nix" ];
       description = ''
@@ -75,7 +72,7 @@ in
       '';
     };
 
-    installer.cloneConfigExtra = mkOption {
+    installer.cloneConfigExtra = lib.mkOption {
       default = "";
       description = ''
         Extra text to include in the cloned configuration.nix included in this
@@ -94,7 +91,7 @@ in
         # Provide a mount point for nixos-install.
         mkdir -p /mnt
 
-        ${optionalString config.installer.cloneConfig ''
+        ${lib.optionalString config.installer.cloneConfig ''
           # Provide a configuration for the CD/DVD itself, to allow users
           # to run nixos-rebuild to change the configuration of the
           # running system on the CD/DVD.

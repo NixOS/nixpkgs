@@ -2,41 +2,38 @@
 # contain any graphical stuff.
 
 { config, lib, ... }:
-
-with lib;
-
 {
-  environment.noXlibs = mkDefault true;
+  environment.noXlibs = lib.mkDefault true;
 
-  documentation.enable = mkDefault false;
+  documentation.enable = lib.mkDefault false;
 
-  documentation.doc.enable = mkDefault false;
+  documentation.doc.enable = lib.mkDefault false;
 
-  documentation.info.enable = mkDefault false;
+  documentation.info.enable = lib.mkDefault false;
 
-  documentation.man.enable = mkDefault false;
+  documentation.man.enable = lib.mkDefault false;
 
-  documentation.nixos.enable = mkDefault false;
+  documentation.nixos.enable = lib.mkDefault false;
 
   # Perl is a default package.
-  environment.defaultPackages = mkDefault [ ];
+  environment.defaultPackages = lib.mkDefault [ ];
 
   environment.stub-ld.enable = false;
 
   # The lessopen package pulls in Perl.
-  programs.less.lessopen = mkDefault null;
+  programs.less.lessopen = lib.mkDefault null;
 
   # This pulls in nixos-containers which depends on Perl.
-  boot.enableContainers = mkDefault false;
+  boot.enableContainers = lib.mkDefault false;
 
-  programs.command-not-found.enable = mkDefault false;
+  programs.command-not-found.enable = lib.mkDefault false;
 
-  services.logrotate.enable = mkDefault false;
+  services.logrotate.enable = lib.mkDefault false;
 
-  services.udisks2.enable = mkDefault false;
+  services.udisks2.enable = lib.mkDefault false;
 
-  xdg.autostart.enable = mkDefault false;
-  xdg.icons.enable = mkDefault false;
-  xdg.mime.enable = mkDefault false;
-  xdg.sounds.enable = mkDefault false;
+  xdg.autostart.enable = lib.mkDefault false;
+  xdg.icons.enable = lib.mkDefault false;
+  xdg.mime.enable = lib.mkDefault false;
+  xdg.sounds.enable = lib.mkDefault false;
 }

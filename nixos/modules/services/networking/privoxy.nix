@@ -1,17 +1,14 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.privoxy;
 
   serialise = name: val:
-         if isList val then concatMapStrings (serialise name) val
-    else if isBool val then serialise name (if val then "1" else "0")
+         if lib.isList val then lib.concatMapStrings (serialise name) val
+    else if lib.isBool val then serialise name (if val then "1" else "0")
     else "${name} ${toString val}\n";
 
-  configType = with types;
+  configType = with lib.types;
     let atom = oneOf [ int bool str path ];
     in attrsOf (either atom (listOf atom))
     // { description = ''
@@ -21,21 +18,21 @@ let
         '';
        };
 
-  ageType = types.str // {
+  ageType = lib.types.str // {
     check = x:
-      isString x &&
+      lib.isString x &&
       (builtins.match "([0-9]+([smhdw]|min|ms|us)*)+" x != null);
     description = "tmpfiles.d(5) age format";
   };
 
   configFile = pkgs.writeText "privoxy.conf"
-    (concatStrings (
+    (lib.concatStrings (
       # Relative paths in some options are relative to confdir. Privoxy seems
       # to parse the options in order of appearance, so this must come first.
       # Nix however doesn't preserve the order in attrsets, so we have to
       # hardcode confdir here.
       [ "confdir ${pkgs.privoxy}/etc\n" ]
-      ++ mapAttrsToList serialise cfg.settings
+      ++ lib.mapAttrsToList serialise cfg.settings
     ));
 
   inspectAction = pkgs.writeText "inspect-all-https.action"
@@ -53,10 +50,10 @@ in
 
   options.services.privoxy = {
 
-    enable = mkEnableOption "Privoxy, non-caching filtering proxy";
+    enable = lib.mkEnableOption "Privoxy, non-caching lib.filtering proxy";
 
-    enableTor = mkOption {
-      type = types.bool;
+    enableTor = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to configure Privoxy to use Tor's faster SOCKS port,
@@ -64,12 +61,12 @@ in
       '';
     };
 
-    inspectHttps = mkOption {
-      type = types.bool;
+    inspectHttps = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to configure Privoxy to inspect HTTPS requests, meaning all
-        encrypted traffic will be filtered as well. This works by decrypting
+        encrypted traffic will be lib.filtered as well. This works by decrypting
         and re-encrypting the requests using a per-domain generated certificate.
 
         To issue per-domain certificates, Privoxy must be provided with a CA
@@ -85,7 +82,7 @@ in
       '';
     };
 
-    certsLifetime = mkOption {
+    certsLifetime = lib.mkOption {
       type = ageType;
       default = "10d";
       example = "12h";
@@ -105,8 +102,8 @@ in
       '';
     };
 
-    userActions = mkOption {
-      type = types.lines;
+    userActions = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Actions to be included in a `user.action` file. This
@@ -115,37 +112,37 @@ in
       '';
     };
 
-    userFilters = mkOption {
-      type = types.lines;
+    userFilters = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
-        Filters to be included in a `user.filter` file. This
+        Filters to be included in a `user.lib.filter` file. This
         will have a higher priority and can be used to override all other
-        filters definitions.
+        lib.filters definitions.
       '';
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = configType;
 
-        options.listen-address = mkOption {
-          type = types.str;
+        options.listen-address = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1:8118";
           description = "Pair of address:port the proxy server is listening to.";
         };
 
-        options.enable-edit-actions = mkOption {
-          type = types.bool;
+        options.enable-edit-actions = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = "Whether the web-based actions file editor may be used.";
         };
 
-        options.actionsfile = mkOption {
-          type = types.listOf types.str;
+        options.actionsfile = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           # This must come after all other entries, in order to override the
-          # other actions/filters installed by Privoxy or the user.
-          apply = x: x ++ optional (cfg.userActions != "")
+          # other actions/lib.filters installed by Privoxy or the user.
+          apply = x: x ++ lib.optional (cfg.userActions != "")
             (toString (pkgs.writeText "user.actions" cfg.userActions));
           default = [ "match-all.action" "default.action" ];
           description = ''
@@ -154,26 +151,26 @@ in
           '';
         };
 
-        options.filterfile = mkOption {
-          type = types.listOf types.str;
-          default = [ "default.filter" ];
-          apply = x: x ++ optional (cfg.userFilters != "")
-            (toString (pkgs.writeText "user.filter" cfg.userFilters));
+        options.lib.filterfile = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ "default.lib.filter" ];
+          apply = x: x ++ lib.optional (cfg.userFilters != "")
+            (toString (pkgs.writeText "user.lib.filter" cfg.userFilters));
           description = ''
-            List of paths to Privoxy filter files. These paths may either be
+            List of paths to Privoxy lib.filter files. These paths may either be
             absolute or relative to the privoxy configuration directory.
           '';
         };
       };
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { # Listen on IPv6 only
           listen-address = "[::]:8118";
 
           # Forward .onion requests to Tor
           forward-socks5 = ".onion localhost:9050 .";
 
-          # Log redirects and filters
+          # Log redirects and lib.filters
           debug = [ 128 64 ];
           # This is equivalent to writing these lines
           # in the Privoxy configuration file:
@@ -197,7 +194,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.privoxy = {
       description = "Privoxy daemon user";
@@ -207,7 +204,7 @@ in
 
     users.groups.privoxy = {};
 
-    systemd.tmpfiles.rules = optional cfg.inspectHttps
+    systemd.tmpfiles.rules = lib.optional cfg.inspectHttps
       "d ${cfg.settings.certificate-directory} 0770 privoxy privoxy ${cfg.certsLifetime}";
 
     systemd.services.privoxy = {
@@ -223,33 +220,33 @@ in
         ProtectHome = true;
         ProtectSystem = "full";
       };
-      unitConfig =  mkIf cfg.inspectHttps {
+      unitConfig =  lib.mkIf cfg.inspectHttps {
         ConditionPathExists = with cfg.settings;
           [ ca-cert-file ca-key-file ];
       };
     };
 
-    services.tor.settings.SOCKSPort = mkIf cfg.enableTor [
+    services.tor.settings.SOCKSPort = lib.mkIf cfg.enableTor [
       # Route HTTP traffic over a faster port (without IsolateDestAddr).
       { addr = "127.0.0.1"; port = 9063; IsolateDestAddr = false; }
     ];
 
     services.privoxy.settings = {
       user-manual = "${pkgs.privoxy}/share/doc/privoxy/user-manual";
-      # This is needed for external filters
+      # This is needed for external lib.filters
       temporary-directory = "/tmp";
-      filterfile = [ "default.filter" ];
+      lib.filterfile = [ "default.lib.filter" ];
       actionsfile =
         [ "match-all.action"
           "default.action"
-        ] ++ optional cfg.inspectHttps (toString inspectAction);
-    } // (optionalAttrs cfg.enableTor {
+        ] ++ lib.optional cfg.inspectHttps (toString inspectAction);
+    } // (lib.optionalAttrs cfg.enableTor {
       forward-socks5 = "/ 127.0.0.1:9063 .";
       toggle = true;
       enable-remote-toggle = false;
       enable-edit-actions = false;
       enable-remote-http-toggle = false;
-    }) // (optionalAttrs cfg.inspectHttps {
+    }) // (lib.optionalAttrs cfg.inspectHttps {
       # This allows setting absolute key/crt paths
       ca-directory = "/var/empty";
       certificate-directory = "/run/privoxy/certs";
@@ -263,11 +260,11 @@ in
       top = x: [ "services" "privoxy" x ];
       setting = x: [ "services" "privoxy" "settings" x ];
     in
-    [ (mkRenamedOptionModule (top "enableEditActions") (setting "enable-edit-actions"))
-      (mkRenamedOptionModule (top "listenAddress") (setting "listen-address"))
-      (mkRenamedOptionModule (top "actionsFiles") (setting "actionsfile"))
-      (mkRenamedOptionModule (top "filterFiles") (setting "filterfile"))
-      (mkRemovedOptionModule (top "extraConfig")
+    [ (lib.mkRenamedOptionModule (top "enableEditActions") (setting "enable-edit-actions"))
+      (lib.mkRenamedOptionModule (top "listenAddress") (setting "listen-address"))
+      (lib.mkRenamedOptionModule (top "actionsFiles") (setting "actionsfile"))
+      (lib.mkRenamedOptionModule (top "lib.filterFiles") (setting "lib.filterfile"))
+      (lib.mkRemovedOptionModule (top "extraConfig")
       ''
         Use services.privoxy.settings instead.
         This is part of the general move to use structured settings instead of raw
