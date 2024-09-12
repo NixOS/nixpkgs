@@ -29286,7 +29286,7 @@ with pkgs;
 
   darkman = callPackage ../applications/misc/darkman { };
 
-  darktable = callPackage ../applications/graphics/darktable {
+  darktable = callPackage ../by-name/da/darktable/package.nix {
     lua = lua5_4;
     pugixml = pugixml.override { shared = true; };
     stdenv = if stdenv.isDarwin && stdenv.isx86_64 then overrideSDK llvmPackages_18.stdenv { darwinMinVersion = "10.14"; darwinSdkVersion = "11.0"; } else stdenv;
