@@ -14528,7 +14528,9 @@ with pkgs;
 
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
-  carapace = callPackage ../shells/carapace { };
+  carapace = callPackage ../shells/carapace {
+    buildGoModule = buildGo123Module;
+  };
 
   dash = callPackage ../shells/dash { };
 
