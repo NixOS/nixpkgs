@@ -23,5 +23,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+    knownVulnerabilities = [
+      "CVE-2023-50671"
+      "CVE-2024-42851"
+    ];
   };
 }

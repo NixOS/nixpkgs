@@ -17,7 +17,9 @@
 , # Misc dependencies
   arrow-cpp
 , Cocoa
+, coc-clangd
 , coc-diagnostic
+, coc-pyright
 , code-minimap
 , dasht
 , deno
@@ -139,7 +141,7 @@
     nvimRequireCheck = "alpha";
   };
 
-  advanced-git-search-nvim = super.autosave-nvim.overrideAttrs {
+  advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
   };
 
@@ -344,9 +346,20 @@
     dependencies = with self; [ nvim-cmp zsh ];
   };
 
+  coc-clangd = buildVimPlugin {
+    inherit (coc-clangd) pname version meta;
+    src = "${coc-clangd}/lib/node_modules/coc-clangd";
+  };
+
   coc-diagnostic = buildVimPlugin {
     inherit (coc-diagnostic) pname version meta;
     src = "${coc-diagnostic}/lib/node_modules/coc-diagnostic";
+  };
+
+  coc-pyright = buildVimPlugin {
+    pname = "coc-pyright";
+    inherit (coc-pyright) version meta;
+    src = "${coc-pyright}/lib/node_modules/coc-pyright";
   };
 
   coc-nginx = buildVimPlugin {
@@ -662,6 +675,30 @@
     '';
   };
 
+  ddc-filter-matcher_head = super.ddc-filter-matcher_head.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-source-lsp = super.ddc-source-lsp.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-vim = super.ddc-vim.overrideAttrs {
+    dependencies = with self; [ denops-vim ];
+  };
+
+  ddc-filter-sorter_rank = super.ddc-filter-sorter_rank.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-ui-native = super.ddc-ui-native.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
+  ddc-ui-pum = super.ddc-ui-pum.overrideAttrs {
+    dependencies = with self; [ ddc-vim pum-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };
@@ -696,6 +733,10 @@
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ jorsn ];
     };
+  };
+
+  diagram-nvim = super.diagram-nvim.overrideAttrs {
+    dependencies = with self; [ image-nvim ];
   };
 
   diffview-nvim = super.diffview-nvim.overrideAttrs {
@@ -1002,6 +1043,11 @@
 
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
+  };
+
+  lsp-progress-nvim = neovimUtils.buildNeovimPlugin {
+    luaAttr = "lsp-progress-nvim";
+    nvimRequireCheck = "lsp-progress";
   };
 
   luasnip = super.luasnip.overrideAttrs {
@@ -1430,7 +1476,7 @@
     patches = [ ./patches/ranger.nvim/fix-paths.patch ];
 
     postPatch = ''
-      substituteInPlace lua/ranger-nvim.lua --replace '@ranger@' ${ranger}
+      substituteInPlace lua/ranger-nvim.lua --replace '@ranger@' ${ranger}/bin/ranger
     '';
   };
 
@@ -2212,7 +2258,6 @@
   // (
   let
     nodePackageNames = [
-      "coc-clangd"
       "coc-cmake"
       "coc-css"
       "coc-docker"
@@ -2234,7 +2279,6 @@
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
-      "coc-pyright"
       "coc-python"
       "coc-r-lsp"
       "coc-rls"

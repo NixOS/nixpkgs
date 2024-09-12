@@ -10,6 +10,7 @@
   matplotlib,
   pandas,
   scikit-learn,
+  stdenv,
   streamlit,
   tabulate,
 }:
@@ -44,13 +45,18 @@ buildPythonPackage rec {
     streamlit
   ];
   pytestFlagsArray = [ "skops" ];
-  disabledTestPaths = [
-    # try to download data from Huggingface Hub:
-    "skops/hub_utils/tests"
-    "skops/card/tests"
-    # minor output formatting issue
-    "skops/card/_model_card.py"
-  ];
+  disabledTestPaths =
+    [
+      # try to download data from Huggingface Hub:
+      "skops/hub_utils/tests"
+      "skops/card/tests"
+      # minor output formatting issue
+      "skops/card/_model_card.py"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Segfaults on darwin
+      "skops/io/tests/test_persist.py"
+    ];
 
   pythonImportsCheck = [ "skops" ];
 

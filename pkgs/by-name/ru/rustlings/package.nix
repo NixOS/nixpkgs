@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -33,6 +35,8 @@ rustPlatform.buildRustPackage {
     pkg-config
     makeWrapper
   ];
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
 
   postFixup = ''
     wrapProgram $out/bin/rustlings --suffix PATH : ${

@@ -6,6 +6,7 @@
 , expat
 , fetchCrate
 , fetchFromGitLab
+, fetchpatch
 , file
 , flex
 , glslang
@@ -40,7 +41,7 @@
 , xorg
 , zstd
 , enablePatentEncumberedCodecs ? true
-, enableValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light
 
 , galliumDrivers ? [
     "d3d12" # WSL emulated GPU (aka Dozen)
@@ -215,7 +216,7 @@ in stdenv.mkDerivation {
     # meson auto_features enables this, but we do not want it
     (lib.mesonEnable "android-libbacktrace" false)
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
-    (lib.mesonEnable "valgrind" enableValgrind)
+    (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
@@ -255,7 +256,7 @@ in stdenv.mkDerivation {
     xcbutilkeysyms
     xorgproto
     zstd
-  ] ++ lib.optionals enableValgrind [
+  ] ++ lib.optionals withValgrind [
     valgrind-light
   ];
 

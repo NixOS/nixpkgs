@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "unl0kr";
     homepage = "https://gitlab.com/cherrypicker/unl0kr";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 })

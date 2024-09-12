@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Textlint rule that check unexpanded acronym";
     homepage = "https://github.com/textlint-rule/textlint-rule-unexpanded-acronym";
-    changelog = "https://github.com/textlint-rule/textlint-rule-unexpanded-acronym/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-unexpanded-acronym/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;

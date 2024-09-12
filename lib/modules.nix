@@ -861,7 +861,7 @@ let
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
-        throw "The option `${showOption loc}' is used but not defined.";
+        throw "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
 
     isDefined = defsFinal != [];
 

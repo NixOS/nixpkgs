@@ -41,7 +41,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     cacert
     setuptools
-    matrix-nio
+    (matrix-nio.override { withOlm = true; })
     python-magic
     markdown
     pillow
@@ -51,7 +51,7 @@ buildPythonApplication rec {
     pyxdg
     python-olm
     emoji
-  ] ++ matrix-nio.optional-dependencies.e2e;
+  ];
 
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";

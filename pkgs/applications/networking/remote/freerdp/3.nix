@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , docbook-xsl-nons
 , libxslt
@@ -70,14 +71,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-o/Sp9mMEIxtXa0oIpxYG9Fm8YejStUYcW/jkdPwyE5I=";
+    hash = "sha256-zqqPfAXHjY4IV18mgbNxWDw7ZP/7SvoYn1u0FahpcNk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "clang-fix-unwind-getlanguagespecificdata.patch";
+      url = "https://github.com/FreeRDP/FreeRDP/commit/6fb7bfd043d159d3819486fb601b598102cca823.patch";
+      hash = "sha256-U2Oz+IVvlIdg7kJ4rgAWhJVdzthY50YaCYKMMc2he7Y=";
+    })
+  ];
+
 
   postPatch = ''
     export HOME=$TMP

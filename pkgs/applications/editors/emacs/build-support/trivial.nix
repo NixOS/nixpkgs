@@ -14,6 +14,11 @@ args:
   buildPhase = args.buildPhase or ''
     runHook preBuild
 
+    # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
+    if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
+      foundMakefile=1
+    fi
+
     emacs -L . --batch -f batch-byte-compile *.el
 
     runHook postBuild

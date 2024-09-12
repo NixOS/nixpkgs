@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-calendar";
-  version = "5.14.1";
+  version = "5.14.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-08xkdiP0/haHY3jdHSoA1zXRxMi2t+qxLxbcRc7EO6Q=";
+    hash = "sha256-bZxNOBtLjop0eYxpMeoomaWYvPcMyDfQfgGPK9m+ARo=";
   };
 
   patches = [ ./fix-wrapped-name-not-in-whitelist.diff ];

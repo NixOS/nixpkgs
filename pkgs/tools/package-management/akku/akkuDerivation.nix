@@ -18,8 +18,7 @@ stdenv.mkDerivation ({
     # only install the project
     rm -f Akku.lock Akku.manifest
 
-    # build, filter out guile warnings
-    akku install 2>&1 | grep -v "\(guile-user\)" - | cat
+    akku install
 
     # make sure akku metadata is present during testing and onwards
     echo $PWD $CHEZSCHEMELIBDIRS \

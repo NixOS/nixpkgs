@@ -366,7 +366,7 @@ in {
       };
     };
 
-    services.kubernetes.kubelet.clusterDns = mkDefault cfg.clusterIp;
+    services.kubernetes.kubelet.clusterDns = mkDefault [ cfg.clusterIp ];
   };
 
   meta.buildDocsInSandbox = false;

@@ -32,6 +32,9 @@ stdenvNoCC.mkDerivation rec {
     # find zmodules/ -type f -exec install -m 744 "{}" "$outdir/{}" \;
 
   '';
+  postInstall = ''
+    installManPage doc/zinit.1
+  '';
   #TODO:doc output
 
   meta = with lib; {

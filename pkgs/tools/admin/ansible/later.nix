@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
     toolz
     unidiff
     yamllint
+    distutils
   ];
 
   nativeCheckInputs = with python3.pkgs; [

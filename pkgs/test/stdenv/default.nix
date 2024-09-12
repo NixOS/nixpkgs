@@ -109,21 +109,30 @@ let
           declare -A associativeArray=(["X"]="Y")
           [[ $(concatTo nowhere associativeArray 2>&1) =~ "trying to use" ]] || (echo "concatTo did not throw concatenating associativeArray" && false)
 
+          empty_array=()
+          empty_string=""
+
           declare -a flagsArray
-          concatTo flagsArray string list
+          concatTo flagsArray string list notset=e=f empty_array=g empty_string=h
           declare -p flagsArray
           [[ "''${flagsArray[0]}" == "a" ]] || (echo "'\$flagsArray[0]' was not 'a'" && false)
           [[ "''${flagsArray[1]}" == "b" ]] || (echo "'\$flagsArray[1]' was not 'b'" && false)
           [[ "''${flagsArray[2]}" == "c" ]] || (echo "'\$flagsArray[2]' was not 'c'" && false)
           [[ "''${flagsArray[3]}" == "d" ]] || (echo "'\$flagsArray[3]' was not 'd'" && false)
+          [[ "''${flagsArray[4]}" == "e=f" ]] || (echo "'\$flagsArray[4]' was not 'e=f'" && false)
+          [[ "''${flagsArray[5]}" == "g" ]] || (echo "'\$flagsArray[5]' was not 'g'" && false)
+          [[ "''${flagsArray[6]}" == "h" ]] || (echo "'\$flagsArray[6]' was not 'h'" && false)
 
           # test concatenating to unset variable
-          concatTo nonExistant string list
+          concatTo nonExistant string list notset=e=f empty_array=g empty_string=h
           declare -p nonExistant
           [[ "''${nonExistant[0]}" == "a" ]] || (echo "'\$nonExistant[0]' was not 'a'" && false)
           [[ "''${nonExistant[1]}" == "b" ]] || (echo "'\$nonExistant[1]' was not 'b'" && false)
           [[ "''${nonExistant[2]}" == "c" ]] || (echo "'\$nonExistant[2]' was not 'c'" && false)
           [[ "''${nonExistant[3]}" == "d" ]] || (echo "'\$nonExistant[3]' was not 'd'" && false)
+          [[ "''${nonExistant[4]}" == "e=f" ]] || (echo "'\$nonExistant[4]' was not 'e=f'" && false)
+          [[ "''${nonExistant[5]}" == "g" ]] || (echo "'\$nonExistant[5]' was not 'g'" && false)
+          [[ "''${nonExistant[6]}" == "h" ]] || (echo "'\$nonExistant[6]' was not 'h'" && false)
 
           eval "$extraTest"
 

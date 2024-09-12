@@ -1,33 +1,35 @@
 { lib
-, stdenv
 , buildGoModule
-, fetchFromGitHub
-, pkg-config
 , bzip2
+, fetchFromGitHub
 , lz4
-, rocksdb_6_23
+, nixosTests
+, pkg-config
+, rocksdb_7_10
 , snappy
+, stdenv
 , zeromq
 , zlib
-, nixosTests
 }:
 
 let
-  rocksdb = rocksdb_6_23;
+  rocksdb = rocksdb_7_10;
 in
 buildGoModule rec {
   pname = "blockbook";
-  version = "0.3.6";
-  commit = "5f8cf45";
+  version = "0.4.0";
+  commit = "b227dfe";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "blockbook";
     rev = "v${version}";
-    hash = "sha256-WwphMHFEuF5PavaPv+uc/k3DKT3P77Tr1WsOD1lJYck=";
+    hash = "sha256-98tp3QYaHfhVIiJ4xkA3bUanXwK1q05t+YNroFtBUxE=";
   };
 
-  vendorHash = "sha256-KJ92WztrtKjibvGBYRdnRag4XeZS4d7kyskJqD4GLPE=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-n03eWWy+58KAbYnKxI3/ulWIpmR+ivtImQSqbe2kpYU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,7 +41,7 @@ buildGoModule rec {
     "-X github.com/trezor/blockbook/common.buildDate=unknown"
   ];
 
-  tags = [ "rocksdb_6_16" ];
+  tags = [ "rocksdb_7_10" ];
 
   CGO_LDFLAGS = [
     "-L${stdenv.cc.cc.lib}/lib"

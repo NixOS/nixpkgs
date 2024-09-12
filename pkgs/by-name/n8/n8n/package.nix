@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.55.3";
+  version = "1.57.0";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-SgDw0je16Qf0ohzrVUjJM6FFovWxM2mvZjvfKkEESos=";
+    hash = "sha256-0ShG/9Hj132mbNC06HzduMCosAefufbI1M/KJUYK1TQ=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-KvSsWf1EHCQ46M4Z4wqyYb4mW9y9kNwB9e090YC1ZWs=";
+    hash = "sha256-EfK8cmfkVebc/kIYaW+Eje1oPW1EpVpa2/jMs+KE5wg=";
   };
 
   nativeBuildInputs = [
@@ -100,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       freezeboy
       gepbird
-      k900
     ];
     license = licenses.sustainableUse;
     mainProgram = "n8n";

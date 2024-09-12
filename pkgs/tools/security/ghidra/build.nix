@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
-    gradle -I gradle/support/fetchDependencies.gradle init
+    gradle -I gradle/support/fetchDependencies.gradle
   '';
 
   gradleBuildTask = "buildGhidra";

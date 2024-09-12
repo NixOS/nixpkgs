@@ -2,8 +2,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
   passphrase = "secret";
 in {
   name = "systemd-initrd-luks-unl0kr";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ tomfitzhenry ];
+  meta = {
+    maintainers = [];
   };
 
   enableOCR = true;

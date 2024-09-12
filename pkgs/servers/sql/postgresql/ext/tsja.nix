@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/local/pgsql ${postgresql} \
-      --replace -L/usr/local/lib "" \
-      --replace -I/usr/local/include ""
-    substituteInPlace tsja.c --replace /usr/local/lib/mecab ${mecab}/lib/mecab
+      --replace-fail /usr/local/pgsql ${lib.getDev postgresql} \
+      --replace-fail -L/usr/local/lib "" \
+      --replace-fail -I/usr/local/include ""
+    substituteInPlace tsja.c --replace-fail /usr/local/lib/mecab ${mecab}/lib/mecab
   '';
 
   buildInputs = [ mecab postgresql ];

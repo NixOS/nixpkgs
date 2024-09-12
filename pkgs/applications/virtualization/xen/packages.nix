@@ -53,13 +53,4 @@ rec {
     withInternalIPXE = false;
     inherit (slim) meta;
   };
-
-  xen_4_16 = callPackage ./4.16/default.nix { inherit (standard) meta; };
-  xen_4_16-slim = xen_4_16.override {
-    withInternalQEMU = false;
-    withInternalSeaBIOS = false;
-    withInternalOVMF = false;
-    withInternalIPXE = false;
-    inherit (slim) meta;
-  };
 }

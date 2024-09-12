@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Textual plugin for a DirectoryTree compatible with remote filesystems";
     homepage = "https://github.com/juftin/textual-universal-directorytree";
-    changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/${src.rev}";
+    changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

@@ -298,8 +298,11 @@ let
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
+          # Note: we guarantee that the return value is either `null` or a path
+          # to an emulator program. That is, if an emulator requires additional
+          # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          then "${pkgs.execline}/bin/exec"
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
@@ -376,6 +379,7 @@ let
               "armv7l" = "armv7";
               "armv6l" = "arm";
               "armv5tel" = "armv5te";
+              "riscv32" = "riscv32gc";
               "riscv64" = "riscv64gc";
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;

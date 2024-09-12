@@ -46,6 +46,7 @@
   peewee,
   pony,
   pytestCheckHook,
+  requests,
   zxcvbn,
 }:
 
@@ -114,6 +115,7 @@ buildPythonPackage rec {
       peewee
       pony
       pytestCheckHook
+      requests
       zxcvbn
     ]
     ++ optional-dependencies.babel

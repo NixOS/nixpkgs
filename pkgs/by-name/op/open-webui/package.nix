@@ -7,25 +7,25 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.16";
+  version = "0.3.21";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "v${version}";
-    hash = "sha256-AxD7WHL5fGM0CBKi7zc/gmoSJQBohDh0HgIDU1/BQ7w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-b+r+nEv+9IM56KkCi9tZqnEbyCX69mFhp0Be5/9lR9c=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-Ik+wXymso3jdKXQgLydnhhWvpHl0d82pwYSmUR0yfPE=";
+    npmDepsHash = "sha256-LH07LzYZpVzRAvkjoTgt7LJdXZZoDMt//ZAl30z7AHw=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build" \
+        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox

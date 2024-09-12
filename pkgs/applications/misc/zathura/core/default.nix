@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -28,14 +29,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.6";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura";
     rev = finalAttrs.version;
-    hash = "sha256-lTEBIZ3lkzjJ+L1qecrcL8iseo8AvSIo3Wh65/ikwac=";
+    hash = "sha256-k6DEJpUA3s0mGxE38aYnX7uea98LrzevJhWW1abHo/c=";
   };
+
+  patches = [
+    # https://github.com/pwmt/zathura/issues/664
+    (fetchpatch {
+      name = "fix-build-on-macos.patch";
+      url = "https://github.com/pwmt/zathura/commit/53f151f775091abec55ccc4b63893a8f9a668588.patch";
+      hash = "sha256-d8lRdlBN1Kfw/aTjz8x0gvTKy+SqSYWHLQCjV7hF5MI=";
+    })
+  ];
 
   outputs = [
     "bin"
@@ -54,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Make sure tests are enabled for doCheck
     # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "landlock" stdenv.hostPlatform.isLinux)
   ];
 
   nativeBuildInputs = [
@@ -85,11 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pwmt.org/projects/zathura";
     description = "Core component for zathura PDF viewer";
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ globin ];
   };
 })

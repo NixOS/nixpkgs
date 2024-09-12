@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-artifact-registry";
-  version = "1.11.4";
+  version = "1.11.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Rf1kC+XSFciXMeZ2LjdkqQ0AYQZ0cdN2TvccGvOXgkk=";
+    pname = "google_cloud_artifact_registry";
+    inherit version;
+    hash = "sha256-lNWDbgu9DDNRSh7cC1TfiYvy237bH16QduskPzQt9Mg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-auth
     grpc-google-iam-v1

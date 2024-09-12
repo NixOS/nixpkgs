@@ -1,11 +1,16 @@
 {
   lib,
-  python3Packages,
+  setuptools,
+  setuptools-scm,
+  jsonschema,
+  requirements-parser,
+  pyyaml,
   podman,
   fetchPypi,
   bindep,
+  buildPythonPackage,
 }:
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "ansible-builder";
   version = "3.0.1";
   format = "pyproject";
@@ -15,14 +20,14 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-rxyhgj9Cad751tPAptCTLCtXQLUXaRYv39bkoFzzjOk=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ bindep ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     podman
     jsonschema
     requirements-parser

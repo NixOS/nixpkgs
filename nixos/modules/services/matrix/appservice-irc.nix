@@ -137,6 +137,40 @@ in {
                   type = submodule { freeformType = jsonType; };
                   description = "IRC servers to connect to";
                 };
+
+                mediaProxy = {
+                  signingKeyPath = lib.mkOption {
+                    type = path;
+                    default = "/var/lib/matrix-appservice-irc/media-signingkey.jwk";
+                    description = ''
+                      Path to the signing key file for authenticated media.
+                    '';
+                  };
+                  ttlSeconds = lib.mkOption {
+                    type = ints.unsigned;
+                    default = 3600;
+                    example = 0;
+                    description = ''
+                      Lifetime in seconds, that generated URLs stay valid.
+
+                      Set the lifetime to 0 to prevent URLs from becoming invalid.
+                    '';
+                  };
+                  bindPort = lib.mkOption {
+                    type = port;
+                    default = 11111;
+                    description = ''
+                      Port that the media proxy binds to.
+                    '';
+                  };
+                  publicUrl = lib.mkOption {
+                    type = str;
+                    example = "https://matrix.example.com/media";
+                    description = ''
+                      URL under which the media proxy is publicly acccessible.
+                    '';
+                  };
+                };
               };
             };
           };
@@ -144,6 +178,7 @@ in {
       };
     };
   };
+
   config = lib.mkIf cfg.enable {
     systemd.services.matrix-appservice-irc = {
       description = "Matrix-IRC bridge";
@@ -180,6 +215,9 @@ in {
           sed -i "s/^id:.*$/$id/g" ${registrationFile}
           sed -i "s/^hs_token:.*$/$hs_token/g" ${registrationFile}
           sed -i "s/^as_token:.*$/$as_token/g" ${registrationFile}
+        fi
+        if ! [ -f "${cfg.settings.ircService.mediaProxy.signingKeyPath}"]; then
+          ${lib.getExe pkgs.nodejs} ${pkg}/lib/generate-signing-key.js > "${cfg.settings.ircService.mediaProxy.signingKeyPath}"
         fi
         # Allow synapse access to the registration
         if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then

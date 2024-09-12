@@ -74,7 +74,7 @@ buildGoModule {
 
   meta = {
     mainProgram = "api";
-    homepage = "https://hay-kot.github.io/homebox/";
+    homepage = "https://homebox.software/";
     description = "Inventory and organization system built for the Home User";
     maintainers = with lib.maintainers; [ patrickdag ];
     license = lib.licenses.agpl3Only;

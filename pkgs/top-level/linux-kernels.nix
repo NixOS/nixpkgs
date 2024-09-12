@@ -389,8 +389,6 @@ in {
 
     ena = callPackage ../os-specific/linux/ena {};
 
-    kvdo = callPackage ../os-specific/linux/kvdo {};
-
     lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
 
     linux-gpib = callPackage ../applications/science/electronics/linux-gpib/kernel.nix { };
@@ -605,6 +603,8 @@ in {
 
     drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
 
+    nullfs = callPackage ../os-specific/linux/nullfs { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
@@ -613,6 +613,7 @@ in {
     vm-tools = self.mm-tools;
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
+    kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);

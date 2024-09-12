@@ -18,7 +18,7 @@ let
         inherit flint3;
         inherit sage-src env-locations singular;
         inherit (maxima) lisp-compiler;
-        linbox = pkgs.linbox.override { withSage = true; };
+        linbox = pkgs.linbox;
         pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
       };
 
@@ -97,6 +97,7 @@ let
   # Running the tests should take something in the order of 1h.
   sage-tests = callPackage ./sage-tests.nix {
     inherit sage-with-env;
+    pytest = python3.pkgs.pytest;
   };
 
   sage-src = callPackage ./sage-src.nix {};

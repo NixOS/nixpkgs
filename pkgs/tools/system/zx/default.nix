@@ -3,20 +3,24 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildNpmPackage rec {
   pname = "zx";
-  version = "8.1.5";
+  version = "8.1.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
     rev = version;
-    hash = "sha256-CeFUALi5MXQqd/LwSsyi6sBTFJpZGfCCMuD7Moyk9hM=";
+    hash = "sha256-bjYfeEsKO4hkLfGBVqFTomh0P3dhlvvq+PqEiZHySLs=";
   };
 
-  npmDepsHash = "sha256-yhy2bTXeBYxGaLYb2by+7Y5DfKJ04hroYiOIvwcBojY=";
+  npmDepsHash = "sha256-bAxqxxqhRE3Vw6NtKK5dnM41ypgq7FIpgK0hEpZ53/Q=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

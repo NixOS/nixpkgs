@@ -753,6 +753,7 @@ with lib.maintainers;
     members = [
       SuperSandro2000
       anthonyroussel
+      vinetos
     ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";
@@ -941,7 +942,6 @@ with lib.maintainers;
   steam = {
     members = [
       atemu
-      eclairevoyant
       k900
       mkg20001
     ];

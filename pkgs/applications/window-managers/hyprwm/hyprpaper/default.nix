@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , cairo
 , expat
@@ -22,6 +23,7 @@
 , util-linux
 , wayland
 , wayland-protocols
+, wayland-scanner
 , hyprwayland-scanner
 , hyprutils
 }:
@@ -37,10 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HIK7XJWQCM0BAnwW5uC7P0e7DAkVTy5jlxQ0NwoSy4M=";
   };
 
+  patches = [
+    # CMakeLists: look for wayland.xml protocol in wayland-scanner pkgdata
+    (fetchpatch {
+      url = "https://github.com/hyprwm/hyprpaper/commit/6c6e54faa84d2de94d2321eda43a8a669ebf3312.patch";
+      hash = "sha256-Ns7HlUPVgBDIocZRGR6kIW58Mt92kJPQRMSKTvp6Vik=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
     hyprwayland-scanner
+    wayland-scanner
   ];
 
   buildInputs = [

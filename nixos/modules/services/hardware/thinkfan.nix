@@ -12,7 +12,7 @@ let
       tuple = ts: lib.mkOptionType {
         name = "tuple";
         merge = lib.mergeOneOption;
-        check = xs: all id (zipListsWith (t: x: t.check x) ts xs);
+        check = xs: lib.all lib.id (lib.zipListsWith (t: x: t.check x) ts xs);
         description = "tuple of" + lib.concatMapStrings (t: " (${t.description})") ts;
       };
       level = ints.unsigned;

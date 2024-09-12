@@ -10,7 +10,7 @@
 , wrapGAppsHook3
 , libinput
 , gobject-introspection
-, gnome
+, mutter
 , gnome-desktop
 , glib
 , gtk3
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gnome-desktop
     # For keybindings settings schemas
-    gnome.mutter
+    mutter
     json-glib
     wayland
     finalAttrs.wlroots

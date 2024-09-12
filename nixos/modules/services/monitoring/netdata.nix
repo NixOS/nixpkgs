@@ -374,14 +374,6 @@ in {
         permissions = "u+rx,g+x,o-rwx";
       };
 
-      "logs-management.plugin" = {
-        source = "${cfg.package}/libexec/netdata/plugins.d/logs-management.plugin.org";
-        capabilities = "cap_dac_read_search,cap_syslog+ep";
-        owner = cfg.user;
-        group = cfg.group;
-        permissions = "u+rx,g+x,o-rwx";
-      };
-
       "slabinfo.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
         capabilities = "cap_dac_override+ep";

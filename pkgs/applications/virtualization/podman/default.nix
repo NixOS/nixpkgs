@@ -23,7 +23,6 @@
 , runc
 , conmon
 , extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
-, slirp4netns
 , fuse-overlayfs
 , util-linux
 , iptables
@@ -33,6 +32,7 @@
 , aardvark-dns
 , netavark
 , passt
+, vfkit
 , testers
 , podman
 }:
@@ -44,6 +44,8 @@ let
     util-linux
     iptables
     iproute2
+  ] ++ lib.optionals stdenv.isDarwin [
+    vfkit
   ] ++ extraPackages);
 
   helpersBin = symlinkJoin {
@@ -56,7 +58,6 @@ let
       aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
-      slirp4netns
       passt
       conmon
       crun

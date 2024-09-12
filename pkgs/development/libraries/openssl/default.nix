@@ -87,6 +87,7 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         powerpc64-linux = "./Configure linux-ppc64";
+        riscv32-linux = "./Configure ${if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"}";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
@@ -102,6 +103,7 @@ let
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
           then if stdenv.hostPlatform.isx86_64 then "./Configure linux-x86_64"
+          else if stdenv.hostPlatform.isMicroBlaze then "./Configure linux-latomic"
           else if stdenv.hostPlatform.isMips32 then "./Configure linux-mips32"
           else if stdenv.hostPlatform.isMips64n32 then "./Configure linux-mips64"
           else if stdenv.hostPlatform.isMips64n64 then "./Configure linux64-mips64"

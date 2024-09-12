@@ -1,14 +1,15 @@
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
-index f8b834ac17...520e148428 100644
+index 5b7f69a56..cc4b0a346 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -39,23 +39,12 @@
-   add_compile_options(-D_GNU_SOURCE)
- endif()
+@@ -35,25 +35,14 @@
+ # ...except for FreeBSD, because FreeBSD is a special case that doesn't play well with
+ # others.
  
+-find_package(Miniupnpc REQUIRED)
+-
 -message(STATUS "Using in-tree miniupnpc")
 -set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
--set(UPNPC_BUILD_TESTS FALSE CACHE BOOL "Disable miniupnp internal tests." FORCE)
 -add_subdirectory(miniupnp/miniupnpc)
 -set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
 -set_property(TARGET libminiupnpc-static PROPERTY POSITION_INDEPENDENT_CODE ON)
@@ -20,19 +21,58 @@ index f8b834ac17...520e148428 100644
 -if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
 -	set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -D_NETBSD_SOURCE")
 -endif()
-+include(FindPkgConfig)
-+pkg_check_modules(MINIUPNPC REQUIRED IMPORTED_TARGET GLOBAL miniupnpc)
-+get_target_property(MINIUPNPC_INCLUDE_DIR PkgConfig::MINIUPNPC INTERFACE_INCLUDE_DIRECTORIES)
-+set_target_properties(PkgConfig::MINIUPNPC PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${MINIUPNPC_INCLUDE_DIR}/miniupnpc")
-+set(UPNP_LIBRARIES PkgConfig::MINIUPNPC PARENT_SCOPE)
- 
--set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
 -
+-set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(MINIUPNPC REQUIRED miniupnpc)
++link_libraries(${MINIUPNPC_LIBRARIES})
++include_directories(${MINIUPNPC_INCLUDE_DIRS})
+ 
++find_package(RapidJSON)
  find_package(Unbound)
++find_library(RANDOMX_LIBRARY randomx)
  
  if(NOT UNBOUND_INCLUDE_DIR)
-@@ -72,4 +61,3 @@
+   die("Could not find libunbound")
+@@ -69,4 +58,3 @@ endif()
  add_subdirectory(db_drivers)
  add_subdirectory(easylogging++)
  add_subdirectory(qrcodegen)
 -add_subdirectory(randomx EXCLUDE_FROM_ALL)
+diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
+index 71f5393e8..bb48083d0 100644
+--- a/src/p2p/net_node.inl
++++ b/src/p2p/net_node.inl
+@@ -60,9 +60,9 @@
+ #include "cryptonote_core/cryptonote_core.h"
+ #include "net/parse.h"
+ 
+-#include <miniupnp/miniupnpc/miniupnpc.h>
+-#include <miniupnp/miniupnpc/upnpcommands.h>
+-#include <miniupnp/miniupnpc/upnperrors.h>
++#include <miniupnpc/miniupnpc.h>
++#include <miniupnpc/upnpcommands.h>
++#include <miniupnpc/upnperrors.h>
+ 
+ #undef MONERO_DEFAULT_LOG_CATEGORY
+ #define MONERO_DEFAULT_LOG_CATEGORY "net.p2p"
+@@ -2989,7 +2989,8 @@ namespace nodetool
+     UPNPUrls urls;
+     IGDdatas igdData;
+     char lanAddress[64];
+-    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
++    char wanAddress[64];
++    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress, wanAddress, sizeof wanAddress);
+     freeUPNPDevlist(deviceList);
+     if (result > 0) {
+       if (result == 1) {
+@@ -3057,7 +3058,8 @@ namespace nodetool
+     UPNPUrls urls;
+     IGDdatas igdData;
+     char lanAddress[64];
+-    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
++    char wanAddress[64];
++    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress, wanAddress, sizeof wanAddress);
+     freeUPNPDevlist(deviceList);
+     if (result > 0) {
+       if (result == 1) {

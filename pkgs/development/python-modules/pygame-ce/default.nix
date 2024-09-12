@@ -65,7 +65,9 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
       substituteInPlace pyproject.toml \
+        --replace-fail '"cython<=3.0.10",' '"cython",' \
         --replace-fail '"meson<=1.5.0",' '"meson",' \
         --replace-fail '"sphinx<=7.2.6",' "" \
         --replace-fail '"ninja<=1.11.1.1",' ""

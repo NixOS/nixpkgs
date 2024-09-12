@@ -387,12 +387,16 @@ appendToVar() {
 # Accumulate flags from the named variables $2+ into the indexed array $1.
 #
 # Arrays are simply concatenated, strings are split on whitespace.
+# Default values can be passed via name=default.
 concatTo() {
     local -n targetref="$1"; shift
-    local name type
-    for name in "$@"; do
-        if type=$(declare -p "$name" 2> /dev/null); then
-            local -n nameref="$name"
+    local arg default name type
+    for arg in "$@"; do
+        IFS="=" read -r name default <<< "$arg"
+        local -n nameref="$name"
+        if [[ ! -n "${nameref[@]}" && -n "$default" ]]; then
+            targetref+=( "$default" )
+        elif type=$(declare -p "$name" 2> /dev/null); then
             case "${type#* }" in
                 -A*)
                     echo "concatTo(): ERROR: trying to use concatTo on an associative array." >&2
@@ -1340,8 +1344,7 @@ patchPhase() {
         esac
 
         local -a flagsArray
-        : "${patchFlags:=-p1}"
-        concatTo flagsArray patchFlags
+        concatTo flagsArray patchFlags=-p1
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
@@ -1493,8 +1496,7 @@ checkPhase() {
             SHELL="$SHELL"
         )
 
-        : "${checkFlags:=VERBOSE=y}"
-        concatTo flagsArray makeFlags makeFlagsArray checkFlags checkFlagsArray checkTarget
+        concatTo flagsArray makeFlags makeFlagsArray checkFlags=VERBOSE=y checkFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1528,8 +1530,7 @@ installPhase() {
         SHELL="$SHELL"
     )
 
-    : "${installTargets:=install}"
-    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets
+    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets=install
 
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1612,9 +1613,8 @@ installCheckPhase() {
             SHELL="$SHELL"
         )
 
-        : "${installCheckTarget:=installcheck}"
         concatTo flagsArray makeFlags makeFlagsArray \
-          installCheckFlags installCheckFlagsArray installCheckTarget
+          installCheckFlags installCheckFlagsArray installCheckTarget=installcheck
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1629,8 +1629,7 @@ distPhase() {
     runHook preDist
 
     local flagsArray=()
-    : "${distTarget:=dist}"
-    concatTo flagsArray distFlags distFlagsArray distTarget
+    concatTo flagsArray distFlags distFlagsArray distTarget=dist
 
     echo 'dist flags: %q' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"

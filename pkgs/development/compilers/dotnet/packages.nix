@@ -65,6 +65,7 @@ in {
             read version
             mkdir -p "$packages"/share/nuget/packages/"$id"
             cp -r "$package" "$packages"/share/nuget/packages/"$id"/"$version"
+            echo {} > "$packages"/share/nuget/packages/"$id"/"$version"/.nupkg.metadata
           )
         fi
       done

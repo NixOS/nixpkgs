@@ -27,30 +27,86 @@
   vulkan-loader,
   envsubst,
   nix-update-script,
+  cargo-about,
+  testers,
+  zed-editor,
+  buildFHSEnv,
 
   withGLES ? false,
 }:
 
 assert withGLES -> stdenv.isLinux;
 
+let
+  executableName = "zed";
+  # Based on vscode.fhs
+  # Zed allows for users to download and use extensions
+  # which often include the usage of pre-built binaries.
+  # See #309662
+  #
+  # buildFHSEnv allows for users to use the existing Zed
+  # extension tooling without significant pain.
+  fhs =
+    {
+      additionalPkgs ? pkgs: [ ],
+    }:
+    buildFHSEnv {
+      # also determines the name of the wrapped command
+      name = executableName;
+
+      # additional libraries which are commonly needed for extensions
+      targetPkgs =
+        pkgs:
+        (with pkgs; [
+          # ld-linux-x86-64-linux.so.2 and others
+          glibc
+        ])
+        ++ additionalPkgs pkgs;
+
+      # symlink shared assets, including icons and desktop entries
+      extraInstallCommands = ''
+        ln -s "${zed-editor}/share" "$out/"
+      '';
+
+      runScript = "${zed-editor}/bin/${executableName}";
+
+      passthru = {
+        inherit executableName;
+        inherit (zed-editor) pname version;
+      };
+
+      meta = zed-editor.meta // {
+        description = ''
+          Wrapped variant of ${zed-editor.pname} which launches in a FHS compatible environment.
+          Should allow for easy usage of extensions without nix-specific modifications.
+        '';
+      };
+    };
+in
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.150.4";
+  version = "0.152.3";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dMhsKaqEWyjPjxaSYrz6zAvOzDbWrsPh6oKRu+D57cM=";
+    hash = "sha256-0goeDz0mrZGPxsU51WGJz0mG5hdbY/75l/1Dyg2JLl4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Zed uses cargo-install to install cargo-about during the script execution.
+    # We provide cargo-about ourselves and can skip this step.
+    ./0001-generate-licenses.patch
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "alacritty_terminal-0.24.1-dev" = "sha256-aVB1CNOLjNh6AtvdbomODNrk00Md8yz8QzldzvDo1LI=";
+      "alacritty_terminal-0.24.1-dev" = "sha256-b4oSDhsAAYjpYGfFgA1Q1642JoJQ9k5RTsPgFUpAFmc=";
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-sGXhXmgtd7Wx/Gf7HCWro4RsQOGS4pQt8+S3T+2wMfY=";
+      "blade-graphics-0.5.0" = "sha256-j/JI34ZPD7RAHNHu3krgDLnIq4QmmZaZaU1FwD7f2FM=";
       "cosmic-text-0.11.2" = "sha256-TLPDnqixuW+aPAhiBhSvuZIa69vgV3xLcw32OlkdCcM=";
       "font-kit-0.14.1" = "sha256-qUKvmi+RDoyhMrZ7T6SoVAyMc/aasQ9Y/okzre4SzXo=";
       "lsp-types-0.95.1" = "sha256-N4MKoU9j1p/Xeowki/+XiNQPwIcTm9DgmfM/Eieq4js=";
@@ -73,6 +129,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
     rustPlatform.bindgenHook
+    cargo-about
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
 
   buildInputs =
@@ -121,17 +178,23 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [
-        "${src}/assets/fonts/zed-mono"
-        "${src}/assets/fonts/zed-sans"
+        "${src}/assets/fonts/plex-mono"
+        "${src}/assets/fonts/plex-sans"
       ];
     };
     # Setting this environment variable allows to disable auto-updates
     # https://zed.dev/docs/development/linux#notes-for-packaging-zed
     ZED_UPDATE_EXPLANATION = "zed has been installed using nix. Auto-updates have thus been disabled.";
+    # Used by `zed --version`
+    RELEASE_VERSION = version;
   };
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";
   gpu-lib = if withGLES then libglvnd else vulkan-loader;
+
+  preBuild = ''
+    bash script/generate-licenses
+  '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
@@ -175,11 +238,19 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "v(.*)"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(.*)"
+      ];
+    };
+    tests.version = testers.testVersion {
+      inherit version;
+      package = zed-editor;
+    };
+    fhs = fhs { };
+    fhsWithPackages = f: fhs { additionalPkgs = f; };
   };
 
   meta = {

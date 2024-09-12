@@ -18,7 +18,7 @@ pkgs
 
 ```
 
-Where `some-package` is the package name and `so` is the lowercased 2-letter prefix of the package name.
+Where `some-package` is the attribute name corresponding to the package, and `so` is the lowercase 2-letter prefix of the attribute name.
 
 The `package.nix` may look like this:
 
@@ -79,18 +79,21 @@ and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-p
 ## Manual migration guidelines
 
 Most packages are still defined in `all-packages.nix` and the [category hierarchy](../README.md#category-hierarchy).
-Please hold off migrating your maintained packages to this directory.
+Since it would take a lot of contributor and reviewer time to migrate all packages manually,
+an [automated migration is planned](https://github.com/NixOS/nixpkgs/pull/211832),
+though it is expected to still take some time to get done.
+If you're interested in helping out with this effort,
+please see [this ticket](https://github.com/NixOS/nixpkgs-vet/issues/56).
 
-1. An automated migration for the majority of packages [is being worked on](https://github.com/NixOS/nixpkgs/pull/211832).
-   In order to save on contributor and reviewer time, packages should only be migrated manually afterwards if they couldn't be migrated automatically.
+Since [only PRs to packages in `pkgs/by-name` can be automatically merged](../../CONTRIBUTING.md#how-to-merge-pull-requests),
+if package maintainers would like to use this feature, they are welcome to migrate their packages to `pkgs/by-name`.
+To lessen PR traffic, they're encouraged to also perform some more general maintenance on the package in the same PR,
+though this is not required and must not be expected.
 
-1. Manual migrations should only be lightly encouraged if the relevant code is being worked on anyways.
-   For example with a package update or refactoring.
-
-1. Manual migrations should not remove definitions from `all-packages.nix` with custom arguments.
-   That is a backwards-incompatible change because it changes the `.override` interface.
-   Such packages may still be moved to `pkgs/by-name` however, while keeping the definition in `all-packages.nix`.
-   See also [changing implicit attribute defaults](#changing-implicit-attribute-defaults).
+Note that definitions in `all-packages.nix` with custom arguments should not be removed.
+That is a backwards-incompatible change because it changes the `.override` interface.
+Such packages may still be moved to `pkgs/by-name` however, while keeping the definition in `all-packages.nix`.
+See also [changing implicit attribute defaults](#changing-implicit-attribute-defaults).
 
 ## Limitations
 
@@ -110,16 +113,16 @@ There's some limitations as to which packages can be defined using this structur
 
 ## Validation
 
-CI performs [certain checks](https://github.com/NixOS/nixpkgs-check-by-name?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
-This is done using the [`nixpkgs-check-by-name` tool](https://github.com/NixOS/nixpkgs-check-by-name).
+CI performs [certain checks](https://github.com/NixOS/nixpkgs-vet?tab=readme-ov-file#validity-checks) on the `pkgs/by-name` structure.
+This is done using the [`nixpkgs-vet` tool](https://github.com/NixOS/nixpkgs-vet).
 
 You can locally emulate the CI check using
 
 ```
-$ ./maintainers/scripts/check-by-name.sh master
+$ ./ci/nixpkgs-vet.sh master
 ```
 
-See [here](../../.github/workflows/check-by-name.yml) for more info.
+See [here](../../.github/workflows/nixpkgs-vet.yml) for more info.
 
 ## Recommendation for new packages with multiple versions
 

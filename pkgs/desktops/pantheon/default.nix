@@ -38,10 +38,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = lib.teams.pantheon.members;
 
-  mutter = pkgs.gnome.mutter43;
+  mutter = pkgs.mutter43;
 
   # Using 43 to match Mutter used in Pantheon
-  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon43;
+  gnome-settings-daemon = pkgs.gnome-settings-daemon43;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -95,9 +95,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
-  elementary-session-settings = callPackage ./desktop/elementary-session-settings {
-    inherit (gnome) gnome-session;
-  };
+  elementary-session-settings = callPackage ./desktop/elementary-session-settings { };
 
   elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
 

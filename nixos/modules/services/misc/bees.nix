@@ -23,7 +23,7 @@ let
       example = "LABEL=MyBulkDataDrive";
     };
     options.hashTableSizeMB = lib.mkOption {
-      type = lib.types.addCheck lib.types.int (n: mod n 16 == 0);
+      type = lib.types.addCheck lib.types.int (n: lib.mod n 16 == 0);
       default = 1024; # 1GB; default from upstream beesd script
       description = ''
         Hash table size in MB; must be a multiple of 16.

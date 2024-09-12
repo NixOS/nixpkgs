@@ -6,9 +6,9 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  hatchling,
   kasa-crypt,
   orjson,
-  poetry-core,
   ptpython,
   pydantic,
   pytest-asyncio,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,10 +31,10 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-JfTFed591z1ZxTKP5FqYyaMBq8uCs4StlnqKp3Tc7Ug=";
+    hash = "sha256-41FY1KaPDQxOHtxgaKRakNbiBm/qPYCICpvzxVAmSD8=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

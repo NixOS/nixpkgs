@@ -45,6 +45,7 @@ lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
+lsp-progress.nvim,,,,,,gepbird
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,

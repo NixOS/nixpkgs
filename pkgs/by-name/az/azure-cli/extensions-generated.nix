@@ -59,9 +59,9 @@
   };
   aks-preview = mkAzExtension rec {
     pname = "aks-preview";
-    version = "7.0.0b6";
+    version = "8.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "268457ea6463d03775caa822b4b7a70749c503b47cb2aa9c898e1186cfb423f6";
+    sha256 = "500a670e0f4cd8ef9399a0928fbcef6440a68cdc2978c62db911d1585f351b75";
     description = "Provides a preview for upcoming AKS features";
   };
   akshybrid = mkAzExtension rec {
@@ -87,9 +87,9 @@
   };
   amg = mkAzExtension rec {
     pname = "amg";
-    version = "2.1.0";
+    version = "2.2.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/amg-${version}-py3-none-any.whl";
-    sha256 = "b28952d967b9a1e0d81dac280bdff23b44fdbb06dedd66cdf99477bdd7541d6c";
+    sha256 = "8d832463a35329e61840bce5fe2c3ba214f8e800cc38140fe58dc2bf13ffeb90";
     description = "Microsoft Azure Command-Line Tools Azure Managed Grafana Extension";
   };
   amlfs = mkAzExtension rec {
@@ -150,9 +150,9 @@
   };
   azurelargeinstance = mkAzExtension rec {
     pname = "azurelargeinstance";
-    version = "1.0.0b2";
+    version = "1.0.0b3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/azurelargeinstance-${version}-py3-none-any.whl";
-    sha256 = "6948ac3306269ea6c8ff6d32d5673989dfd4dfa0a4e4c5d6d3991b364d5dc628";
+    sha256 = "093a2fa900e3df53f8bf15b335156058333efe0eff9584a11db4bac0bccc7b1d";
     description = "Microsoft Azure Command-Line Tools Azurelargeinstance Extension";
   };
   azurestackhci = mkAzExtension rec {
@@ -164,10 +164,10 @@
   };
   baremetal-infrastructure = mkAzExtension rec {
     pname = "baremetal-infrastructure";
-    version = "2.0.1";
-    url = "https://github.com/Azure/azure-baremetalinfrastructure-cli-extension/releases/download/${version}/baremetal_infrastructure-2.0.1-py2.py3-none-any.whl";
-    sha256 = "ea127d64603c8a45774cdf9aa80c4c8b5839a42719971b296beb96105fe5ef2d";
-    description = "Additional commands for working with BareMetal instances";
+    version = "3.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/baremetal_infrastructure-${version}-py3-none-any.whl";
+    sha256 = "83ff3e4540f522a5f3578a923155715160e90a15a8d919a2e5569c08f1295a2f";
+    description = "Microsoft Azure Command-Line Tools BaremetalInfrastructure Extension";
   };
   bastion = mkAzExtension rec {
     pname = "bastion";
@@ -595,6 +595,13 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_extension-${version}-py3-none-any.whl";
     sha256 = "41861d65b9d86e0b622986a4984ce7a611f87b92da578db8c0527ec74334f32c";
     description = "Microsoft Azure Command-Line Tools K8s-extension Extension";
+  };
+  k8s-runtime = mkAzExtension rec {
+    pname = "k8s-runtime";
+    version = "1.0.3";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_runtime-${version}-py3-none-any.whl";
+    sha256 = "133dd153979c74d37aa25956ed8a9aa741c334929848cd67c26f268332759d40";
+    description = "Microsoft Azure Command-Line Tools K8sRuntime Extension";
   };
   kusto = mkAzExtension rec {
     pname = "kusto";

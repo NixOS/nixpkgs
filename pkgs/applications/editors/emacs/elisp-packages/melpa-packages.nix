@@ -451,6 +451,13 @@ let
 
         orgit-forge = buildWithGit super.orgit-forge;
 
+        ormolu = super.ormolu.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace ormolu.el \
+              --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
+          '';
+        });
+
         ox-rss = buildWithGit super.ox-rss;
 
         python-isort = super.python-isort.overrideAttrs (attrs: {
@@ -541,6 +548,13 @@ let
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace typst-mode.el \
               --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+          '';
+        });
+
+        units-mode = super.units-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace units-mode.el \
+              --replace-fail 'units-binary-path "units"' 'units-binary-path "${lib.getExe pkgs.units}"'
           '';
         });
 

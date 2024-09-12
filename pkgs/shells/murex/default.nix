@@ -25,4 +25,8 @@ buildGoModule rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ dit7ya kashw2 ];
   };
+
+  passthru = {
+    shellPath = "/bin/murex";
+  };
 }

@@ -22,7 +22,6 @@ dont-distribute-packages:
  - Advise-me
  - AlgoRhythm
  - AlignmentAlgorithms
- - Allure
  - AndroidViewHierarchyImporter
  - Annotations
  - ApplePush
@@ -247,7 +246,6 @@ dont-distribute-packages:
  - KiCS-prophecy
  - LDAPv3
  - LPPaver
- - LambdaHack
  - LambdaINet
  - LambdaPrettyQuote
  - LambdaShell
@@ -783,6 +781,7 @@ dont-distribute-packages:
  - category
  - category-extras
  - cattrap
+ - cauldron
  - cctools-workqueue
  - cef3-simple
  - ceilometer-common
@@ -1418,6 +1417,9 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
+ - freckle-http
+ - freckle-memcached
+ - freckle-otel
  - free-functors
  - free-game
  - free-theorems-seq-webui
@@ -2213,6 +2215,8 @@ dont-distribute-packages:
  - hsyslog-tcp
  - html-kure
  - html2hamlet
+ - htmx-lucid
+ - htmx-servant
  - htoml-parse
  - htsn-import
  - http-client-auth
@@ -2585,6 +2589,7 @@ dont-distribute-packages:
  - list-t-html-parser
  - list-tuple
  - list-witnesses
+ - list1
  - listenbrainz-client
  - liszt
  - lit
@@ -2764,7 +2769,6 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
- - monomer
  - monomer-flatpak-example
  - monte-carlo
  - moo
@@ -2913,7 +2917,7 @@ dont-distribute-packages:
  - nonlinear-optimization-backprop
  - not-gloss
  - not-gloss-examples
- - nothunks_0_2_1_1
+ - nothunks_0_3_0_0
  - notmuch-web
  - now-haskell
  - nri-env-parser
@@ -2963,7 +2967,6 @@ dont-distribute-packages:
  - opc-xml-da-client
  - open-adt-tutorial
  - open-typerep
- - opencv-extra
  - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
@@ -3154,6 +3157,7 @@ dont-distribute-packages:
  - poseidon
  - poseidon-postgis
  - postgresql-common-persistent
+ - postgresql-libpq_0_10_2_0
  - postgresql-pure
  - postgresql-simple-ltree
  - postgresql-simple-queue
@@ -3463,6 +3467,7 @@ dont-distribute-packages:
  - rv
  - s-expression
  - safe-coloured-text-layout-gen
+ - safe-coloured-text-layout-gen_0_0_0_1
  - safe-coupling
  - safe-failure
  - safe-failure-cme
@@ -3521,11 +3526,7 @@ dont-distribute-packages:
  - scrabble-bot
  - scrapbook
  - scroll
- - sdl-try-drivers
- - sdl2-cairo
- - sdl2-gfx
  - sdl2-sprite
- - sdl2-ttf
  - sdp-binary
  - sdp-deepseq
  - sdp-hashable
@@ -3820,8 +3821,10 @@ dont-distribute-packages:
  - syb-with-class-instances-text
  - sydtest-amqp
  - sydtest-webdriver-screenshot
+ - sydtest-webdriver-screenshot_0_1_0_0
  - sydtest-webdriver-yesod
  - sydtest-yesod
+ - sydtest_0_17_0_0
  - sylvia
  - symantic-atom
  - symantic-http-demo
@@ -4004,6 +4007,7 @@ dont-distribute-packages:
  - type-sub-th
  - typed-admin
  - typed-encoding-encoding
+ - typed-gui
  - typed-streams
  - typedflow
  - typelevel
@@ -4185,6 +4189,9 @@ dont-distribute-packages:
  - wheb-strapped
  - whitespace
  - wholepixels
+ - wikimusic-api
+ - wikimusic-api-spec
+ - wikimusic-ssr
  - wikipedia4epub
  - wild-bind-indicator
  - wild-bind-task-x11

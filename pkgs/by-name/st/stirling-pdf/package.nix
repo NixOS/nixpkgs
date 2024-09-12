@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.26.1";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-msxP2n8Varc7/h9RVwYRBuD253JZu6/p7zQC1lmNmqc=";
+    hash = "sha256-88UdJPn9AeLtpKEu3efHm+xj4lheQ0EPyvId4vYskIo=";
   };
 
   patches = [
@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";

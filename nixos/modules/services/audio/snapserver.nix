@@ -1,7 +1,4 @@
 { config, options, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   name = "snapserver";
@@ -9,8 +6,8 @@ let
   cfg = config.services.snapserver;
 
   # Using types.nullOr to inherit upstream defaults.
-  sampleFormat = mkOption {
-    type = with types; nullOr str;
+  sampleFormat = lib.mkOption {
+    type = with lib.types; nullOr str;
     default = null;
     description = ''
       Default sample format.
@@ -18,8 +15,8 @@ let
     example = "48000:16:2";
   };
 
-  codec = mkOption {
-    type = with types; nullOr str;
+  codec = lib.mkOption {
+    type = with lib.types; nullOr str;
     default = null;
     description = ''
       Default audio compression method.
@@ -30,20 +27,20 @@ let
   streamToOption = name: opt:
     let
       os = val:
-        optionalString (val != null) "${val}";
+        lib.optionalString (val != null) "${val}";
       os' = prefix: val:
-        optionalString (val != null) (prefix + "${val}");
+        lib.optionalString (val != null) (prefix + "${val}");
       flatten = key: value:
         "&${key}=${value}";
     in
       "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
         + os' "&sampleformat=" opt.sampleFormat + os' "&codec=" opt.codec
-        + concatStrings (mapAttrsToList flatten opt.query) + "\"";
+        + lib.concatStrings (lib.mapAttrsToList lib.flatten opt.query) + "\"";
 
   optionalNull = val: ret:
-    optional (val != null) ret;
+    lib.optional (val != null) ret;
 
-  optionString = concatStringsSep " " (mapAttrsToList streamToOption cfg.streams
+  optionString = lib.concatStringsSep " " (lib.mapAttrsToList streamToOption cfg.streams
     # global options
     ++ [ "--stream.bind_to_address=${cfg.listenAddress}" ]
     ++ [ "--stream.port=${toString cfg.port}" ]
@@ -51,22 +48,22 @@ let
     ++ optionalNull cfg.codec "--stream.codec=${cfg.codec}"
     ++ optionalNull cfg.streamBuffer "--stream.stream_buffer=${toString cfg.streamBuffer}"
     ++ optionalNull cfg.buffer "--stream.buffer=${toString cfg.buffer}"
-    ++ optional cfg.sendToMuted "--stream.send_to_muted"
+    ++ lib.optional cfg.sendToMuted "--stream.send_to_muted"
     # tcp json rpc
     ++ [ "--tcp.enabled=${toString cfg.tcp.enable}" ]
-    ++ optionals cfg.tcp.enable [
+    ++ lib.optionals cfg.tcp.enable [
       "--tcp.bind_to_address=${cfg.tcp.listenAddress}"
       "--tcp.port=${toString cfg.tcp.port}" ]
      # http json rpc
     ++ [ "--http.enabled=${toString cfg.http.enable}" ]
-    ++ optionals cfg.http.enable [
+    ++ lib.optionals cfg.http.enable [
       "--http.bind_to_address=${cfg.http.listenAddress}"
       "--http.port=${toString cfg.http.port}"
-    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root=\"${toString cfg.http.docRoot}\"");
+    ] ++ lib.optional (cfg.http.docRoot != null) "--http.doc_root=\"${toString cfg.http.docRoot}\"");
 
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "snapserver" "controlPort" ] [ "services" "snapserver" "tcp" "port" ])
+    (lib.mkRenamedOptionModule [ "services" "snapserver" "controlPort" ] [ "services" "snapserver" "tcp" "port" ])
   ];
 
   ###### interface
@@ -75,16 +72,16 @@ in {
 
     services.snapserver = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable snapserver.
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "::";
         example = "0.0.0.0";
         description = ''
@@ -92,16 +89,16 @@ in {
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 1704;
         description = ''
           The port that snapclients can connect to.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to automatically open the specified ports in the firewall.
@@ -111,8 +108,8 @@ in {
       inherit sampleFormat;
       inherit codec;
 
-      streamBuffer = mkOption {
-        type = with types; nullOr int;
+      streamBuffer = lib.mkOption {
+        type = with lib.types; nullOr int;
         default = null;
         description = ''
           Stream read (input) buffer in ms.
@@ -120,8 +117,8 @@ in {
         example = 20;
       };
 
-      buffer = mkOption {
-        type = with types; nullOr int;
+      buffer = lib.mkOption {
+        type = with lib.types; nullOr int;
         default = null;
         description = ''
           Network buffer in ms.
@@ -129,24 +126,24 @@ in {
         example = 1000;
       };
 
-      sendToMuted = mkOption {
-        type = types.bool;
+      sendToMuted = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Send audio to muted clients.
         '';
       };
 
-      tcp.enable = mkOption {
-        type = types.bool;
+      tcp.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the JSON-RPC via TCP.
         '';
       };
 
-      tcp.listenAddress = mkOption {
-        type = types.str;
+      tcp.listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "::";
         example = "0.0.0.0";
         description = ''
@@ -154,24 +151,24 @@ in {
         '';
       };
 
-      tcp.port = mkOption {
-        type = types.port;
+      tcp.port = lib.mkOption {
+        type = lib.types.port;
         default = 1705;
         description = ''
           The port where the TCP JSON-RPC listens on.
         '';
       };
 
-      http.enable = mkOption {
-        type = types.bool;
+      http.enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the JSON-RPC via HTTP.
         '';
       };
 
-      http.listenAddress = mkOption {
-        type = types.str;
+      http.listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "::";
         example = "0.0.0.0";
         description = ''
@@ -179,27 +176,27 @@ in {
         '';
       };
 
-      http.port = mkOption {
-        type = types.port;
+      http.port = lib.mkOption {
+        type = lib.types.port;
         default = 1780;
         description = ''
           The port where the HTTP JSON-RPC listens on.
         '';
       };
 
-      http.docRoot = mkOption {
-        type = with types; nullOr path;
+      http.docRoot = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
         description = ''
           Path to serve from the HTTP servers root.
         '';
       };
 
-      streams = mkOption {
-        type = with types; attrsOf (submodule {
+      streams = lib.mkOption {
+        type = with lib.types; attrsOf (submodule {
           options = {
-            location = mkOption {
-              type = types.oneOf [ types.path types.str ];
+            location = lib.mkOption {
+              type = lib.types.oneOf [ lib.types.path lib.types.str ];
               description = ''
                 For type `pipe` or `file`, the path to the pipe or file.
                 For type `librespot`, `airplay` or `process`, the path to the corresponding binary.
@@ -207,27 +204,27 @@ in {
                 For type `meta`, a list of stream names in the form `/one/two/...`. Don't forget the leading slash.
                 For type `alsa`, use an empty string.
               '';
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 "/path/to/pipe"
                 "/path/to/librespot"
                 "192.168.1.2:4444"
                 "/MyTCP/Spotify/MyPipe"
               '';
             };
-            type = mkOption {
-              type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" "meta" ];
+            type = lib.mkOption {
+              type = lib.types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" "meta" ];
               default = "pipe";
               description = ''
                 The type of input stream.
               '';
             };
-            query = mkOption {
+            query = lib.mkOption {
               type = attrsOf str;
               default = {};
               description = ''
                 Key-value pairs that convey additional parameters about a stream.
               '';
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 # for type == "pipe":
                 {
                   mode = "create";
@@ -255,7 +252,7 @@ in {
         description = ''
           The definition for an input source.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             mpd = {
               type = "pipe";
@@ -272,11 +269,11 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     warnings =
       # https://github.com/badaix/snapcast/blob/98ac8b2fb7305084376607b59173ce4097c620d8/server/streamreader/stream_manager.cpp#L85
-      filter (w: w != "") (mapAttrsToList (k: v: optionalString (v.type == "spotify") ''
+      lib.filter (w: w != "") (lib.mapAttrsToList (k: v: lib.optionalString (v.type == "spotify") ''
         services.snapserver.streams.${k}.type = "spotify" is deprecated, use services.snapserver.streams.${k}.type = "librespot" instead.
       '') cfg.streams);
 
@@ -305,13 +302,13 @@ in {
     };
 
     networking.firewall.allowedTCPPorts =
-      optionals cfg.openFirewall [ cfg.port ]
-      ++ optional (cfg.openFirewall && cfg.tcp.enable) cfg.tcp.port
-      ++ optional (cfg.openFirewall && cfg.http.enable) cfg.http.port;
+      lib.optionals cfg.openFirewall [ cfg.port ]
+      ++ lib.optional (cfg.openFirewall && cfg.tcp.enable) cfg.tcp.port
+      ++ lib.optional (cfg.openFirewall && cfg.http.enable) cfg.http.port;
   };
 
   meta = {
-    maintainers = with maintainers; [ tobim ];
+    maintainers = with lib.maintainers; [ tobim ];
   };
 
 }

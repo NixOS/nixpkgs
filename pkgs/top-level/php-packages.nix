@@ -586,7 +586,7 @@ in {
         {
           name = "pdo_pgsql";
           internalDeps = [ php.extensions.pdo ];
-          configureFlags = [ "--with-pdo-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pdo-pgsql=${lib.getDev postgresql}" ];
           doCheck = false;
         }
         {
@@ -599,7 +599,7 @@ in {
         {
           name = "pgsql";
           buildInputs = [ pcre2 ];
-          configureFlags = [ "--with-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pgsql=${lib.getDev postgresql}" ];
           doCheck = false;
         }
         { name = "posix"; doCheck = false; }
@@ -704,6 +704,12 @@ in {
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2") [
+            # Fix test 'bug55639.phpt'
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/1b52ecd78ad1a211a4a9db65975df34d2539125b.patch";
+              hash = "sha256-LVk9sfwl5D+rHzyYjfV4pAuhBjSPXj1WjTfnrzBJXhY";
             })
           ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
             (fetchpatch {

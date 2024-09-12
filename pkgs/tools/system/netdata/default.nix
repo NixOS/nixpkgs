@@ -20,7 +20,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.46.1";
+  version = "1.47.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-tFjczhJ7bIEUDZx3MxYBu4tGkJhoQn5V79D4sLV2o8U="
+      then "sha256-eMapy4HQaEblDfZt2uVSfBWRlkstX7TxZDBgSv5bW/I="
       # we delete the v2 GUI after fetching
-      else "sha256-uW3jRiJjFIFSfmmavM3KVF985F8nMKa+lQAgNBZvKyE=";
+      else "sha256-Gx7u3Owh/fVAnSw91xfdcmyx4m+bvQAvDaUxzXQ36/0=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config makeWrapper go ninja ]
     ++ lib.optionals withCups [ cups.dev ];
   # bash is only used to rewrite shebangs
-  buildInputs = [ bash curl jemalloc json_c libuv zlib libyaml ]
+  buildInputs = [ bash curl jemalloc json_c libuv zlib libyaml lm_sensors ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ lib.optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ lib.optionals withCups [ cups ]
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     ./dashboard-v2-removal.patch
   ];
 
-  # Guard against unused buld-time development inputs in closure. Without
+  # Guard against unused build-time development inputs in closure. Without
   # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
   # to bootstrap tools:
   #   https://github.com/NixOS/nixpkgs/pull/175719
@@ -94,8 +94,6 @@ stdenv.mkDerivation rec {
        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
     mv $out/libexec/netdata/plugins.d/debugfs.plugin \
        $out/libexec/netdata/plugins.d/debugfs.plugin.org
-    mv $out/libexec/netdata/plugins.d/logs-management.plugin \
-       $out/libexec/netdata/plugins.d/logs-management.plugin.org
     ${lib.optionalString withSystemdJournal ''
       mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
          $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
@@ -115,30 +113,31 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = lib.optionalString (!stdenv.isDarwin) ''
-    substituteInPlace src/collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
-      --replace-fail 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
-  '' + ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH=$TMPDIR/go
-    export GOPROXY=file://${passthru.netdata-go-modules}
     export GOSUMDB=off
+
+    substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
+      --replace-fail \
+        'GOPROXY=https://proxy.golang.org' \
+        'GOPROXY=file://${passthru.netdata-go-modules}'
 
     # Prevent the path to be caught into the Nix store path.
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CACHE_DIR "''${CMAKE_INSTALL_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
-      --replace-fail 'set(CONFIG_DIR "''${CMAKE_INSTALL_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
-      --replace-fail 'set(LIBCONFIG_DIR "''${CMAKE_INSTALL_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
-      --replace-fail 'set(LOG_DIR "''${CMAKE_INSTALL_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
-      --replace-fail 'set(PLUGINS_DIR "''${CMAKE_INSTALL_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
-      --replace-fail 'set(VARLIB_DIR "''${CMAKE_INSTALL_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
-      --replace-fail 'set(pkglibexecdir_POST "''${CMAKE_INSTALL_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
-      --replace-fail 'set(localstatedir_POST "''${CMAKE_INSTALL_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
-      --replace-fail 'set(sbindir_POST "''${CMAKE_INSTALL_PREFIX}/usr/sbin")' 'set(sbindir_POST "${placeholder "out"}/bin")' \
-      --replace-fail 'set(configdir_POST "''${CMAKE_INSTALL_PREFIX}/etc/netdata")' 'set(configdir_POST "/etc/netdata")' \
-      --replace-fail 'set(libconfigdir_POST "''${CMAKE_INSTALL_PREFIX}/usr/lib/netdata/conf.d")' 'set(libconfigdir_POST "${placeholder "out"}/share/netdata/conf.d")' \
-      --replace-fail 'set(cachedir_POST "''${CMAKE_INSTALL_PREFIX}/var/cache/netdata")' 'set(libconfigdir_POST "/var/cache/netdata")' \
-      --replace-fail 'set(registrydir_POST "''${CMAKE_INSTALL_PREFIX}/var/lib/netdata/registry")' 'set(registrydir_POST "/var/lib/netdata/registry")' \
-      --replace-fail 'set(varlibdir_POST "''${CMAKE_INSTALL_PREFIX}/var/lib/netdata")' 'set(varlibdir_POST "/var/lib/netdata")'
+      --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
+      --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
+      --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
+      --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
+      --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
+      --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
+      --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
+      --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
+      --replace-fail 'set(sbindir_POST "''${NETDATA_RUNTIME_PREFIX}/''${BINDIR}")' 'set(sbindir_POST "${placeholder "out"}/bin")' \
+      --replace-fail 'set(configdir_POST "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(configdir_POST "/etc/netdata")' \
+      --replace-fail 'set(libconfigdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(libconfigdir_POST "${placeholder "out"}/share/netdata/conf.d")' \
+      --replace-fail 'set(cachedir_POST "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(libconfigdir_POST "/var/cache/netdata")' \
+      --replace-fail 'set(registrydir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata/registry")' 'set(registrydir_POST "/var/lib/netdata/registry")' \
+      --replace-fail 'set(varlibdir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(varlibdir_POST "/var/lib/netdata")'
   '';
 
   cmakeFlags = [
@@ -179,9 +178,9 @@ stdenv.mkDerivation rec {
       pname = "netdata-go-plugins";
       inherit version src;
 
-      sourceRoot = "${src.name}/src/go/collectors/go.d.plugin";
+      sourceRoot = "${src.name}/src/go/plugin/go.d";
 
-      vendorHash = "sha256-fK6pboXgJom77iakb+CJvNuweQjLIrpS7suWRNY/KM4=";
+      vendorHash = "sha256-NZ1tg+lvXNgypqmjjb5f7dHH6DIA9VOa4PMM4eq11n0=";
       doCheck = false;
       proxyVendor = true;
 

@@ -32,9 +32,6 @@ with lib;
   # there is no power management backend such as upower).
   powerManagement.enable = true;
 
-  # Enable sound in graphical iso's.
-  hardware.pulseaudio.enable = true;
-
   # VM guest additions to improve host-guest interaction
   services.spice-vdagentd.enable = true;
   services.qemuGuest.enable = true;

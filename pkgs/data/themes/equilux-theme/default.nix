@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gnome, gnome-themes-extra, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
+{ lib, stdenv, fetchFromGitHub, gnome-shell, gnome-themes-extra, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
 
 stdenv.mkDerivation rec {
   pname = "equilux-theme";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs install.sh
     sed -i install.sh \
       -e "s|if .*which gnome-shell.*;|if true;|" \
-      -e "s|CURRENT_GS_VERSION=.*$|CURRENT_GS_VERSION=${lib.versions.majorMinor gnome.gnome-shell.version}|"
+      -e "s|CURRENT_GS_VERSION=.*$|CURRENT_GS_VERSION=${lib.versions.majorMinor gnome-shell.version}|"
     mkdir -p $out/share/themes
     ./install.sh --dest $out/share/themes
     rm $out/share/themes/*/COPYING

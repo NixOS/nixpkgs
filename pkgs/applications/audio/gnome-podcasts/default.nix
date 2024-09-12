@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+    inherit src;
     hash = "sha256-XTfKqKs7874ak7Lzscxw8E2qcnJOWMZaaol8TpIB6Vw=";
   };
 

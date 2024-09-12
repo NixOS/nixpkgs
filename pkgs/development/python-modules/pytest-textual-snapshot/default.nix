@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-textual-snapshot";
-  version = "0.4.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "pytest-textual-snapshot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XkXeyodRdwWqCP63Onx82Z3IbNLDDR/Lvaw8xUY7fAg=";
+    hash = "sha256-C8vL2kLOvVcDlTtNiG/pf7PwHzb/F0sWdkEcLvdGrd8=";
   };
 
   nativeBuildInputs = [ poetry-core ];

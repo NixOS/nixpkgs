@@ -1,11 +1,12 @@
 {
-  stdenv,
   lib,
+  stdenv,
   asyncssh,
   bcrypt,
   buildPythonPackage,
   fetchFromGitHub,
   fsspec,
+  importlib-metadata,
   mock-ssh-server,
   pytest-asyncio,
   pytestCheckHook,
@@ -15,39 +16,53 @@
 
 buildPythonPackage rec {
   pname = "sshfs";
-  version = "2024.4.1";
+  version = "2024.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "sshfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-qkEojf/3YBMoYbRt0Q93MJYXyL9AWR24AEe3/zdn58U=";
+    hash = "sha256-8Vut/JDLmWrTys8aaIBRbaWlvGCg6edaXmMCFxjGhag=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncssh
-    bcrypt
     fsspec
   ];
+
+  optional-dependencies = {
+    bcrypt = [ asyncssh ] ++ asyncssh.optional-dependencies.bcrypt;
+    fido2 = [ asyncssh ] ++ asyncssh.optional-dependencies.fido2;
+    gssapi = [ asyncssh ] ++ asyncssh.optional-dependencies.gssapi;
+    libnacl = [ asyncssh ] ++ asyncssh.optional-dependencies.libnacl;
+    pkcs11 = [ asyncssh ] ++ asyncssh.optional-dependencies.python-pkcs11;
+    pyopenssl = [ asyncssh ] ++ asyncssh.optional-dependencies.pyopenssl;
+  };
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    importlib-metadata
     mock-ssh-server
     pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # test fails with sandbox enabled
-    "test_checksum"
-  ];
+  disabledTests =
+    [
+      # Test requires network access
+      "test_config_expansions"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Test fails with sandbox enabled
+      "test_checksum"
+    ];
 
   pythonImportsCheck = [ "sshfs" ];
 

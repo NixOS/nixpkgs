@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-AcPONkfFTDRd7CQC5d0C7Fr3pKRsQXl8+GhaNlqpgiY=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.15/calendar-v4.7.15.tar.gz",
-    "version": "4.7.15",
+    "hash": "sha256-NwXTuSHl278Q2Wko4DC3rzqvNHnDI513UJ+8/3Rp5/U=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.16/calendar-v4.7.16.tar.gz",
+    "version": "4.7.16",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-oXdwApzy67tCsUNsPTdsE3HIs89g46I2W+cCVCPkRow=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.7/mail-v3.7.7.tar.gz",
-    "version": "3.7.7",
+    "hash": "sha256-8xQglDlOudopTsEqvnlsOTwOU6eAt6argVSXDxJdWUA=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.8/mail-v3.7.8.tar.gz",
+    "version": "3.7.8",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -210,9 +210,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-6vYcZvI0F+imCMRO1XwBcyLmNJR+1miOkR2mpPpYAJE=",
-    "url": "https://github.com/nextcloud/polls/releases/download/v7.2.0/polls.tar.gz",
-    "version": "7.2.0",
+    "hash": "sha256-tSnR5O+OCYjoPoh2/WX3ntCagw9xanmxCR+DaMnAhJA=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.1/polls-v7.2.1.tar.gz",
+    "version": "7.2.1",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -250,9 +250,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-uTY8li9cIBd/0/k9UAcoTboPNnvb66+6vB3nlplLY1E=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.4/richdocuments-v8.4.4.tar.gz",
-    "version": "8.4.4",
+    "hash": "sha256-kAY1Y4PB7AIFWNx+Yi1ovZopGEER/r5RveIlS/y6Veo=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.5/richdocuments-v8.4.5.tar.gz",
+    "version": "8.4.5",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -260,9 +260,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-8PuYhxqP4594+Tt1lwGw93K2/dZwm97hSw13J0T3lhc=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.7/spreed-v19.0.7.tar.gz",
-    "version": "19.0.7",
+    "hash": "sha256-/WD/UAtuLYdtZjBNIur2qRaPNXGTG1lfPTOlJpZfyCI=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.8/spreed-v19.0.8.tar.gz",
+    "version": "19.0.8",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [

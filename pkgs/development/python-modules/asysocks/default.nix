@@ -2,23 +2,32 @@
   lib,
   asn1crypto,
   buildPythonPackage,
+  cryptography,
   fetchPypi,
+  h11,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "asysocks";
-  version = "0.2.12";
-  format = "setuptools";
+  version = "0.2.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uilvJjuZrvdC2m4zhXCkbzLjwtbC1liWEZ20Ya7FYJ0=";
+    hash = "sha256-RBhbLEceY7cpMXOWfu87D15g7VzBt2UKMKlWnkn/Jfg=";
   };
 
-  propagatedBuildInputs = [ asn1crypto ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    asn1crypto
+    cryptography
+    h11
+  ];
 
   # Upstream hasn't release the tests yet
   doCheck = false;

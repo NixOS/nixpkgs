@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +18,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-v48eM43+/dt2M1J9yfjfTpBetv6AA2Hhzu8rrL3gojg=";
+
+  buildInputs = lib.optionals stdenv.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      SystemConfiguration
+    ]
+  );
 
   checkFlags = [
     # Tests failing due to networking errors in Nix build environment

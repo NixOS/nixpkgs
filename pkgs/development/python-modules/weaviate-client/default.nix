@@ -9,8 +9,8 @@
   httpx,
   pydantic,
   pythonOlder,
+  requests,
   setuptools-scm,
-  tqdm,
   validators,
 }:
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     grpcio-tools
     httpx
     pydantic
-    tqdm
+    requests
     validators
   ];
 

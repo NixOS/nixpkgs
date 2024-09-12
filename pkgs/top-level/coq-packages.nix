@@ -60,6 +60,7 @@ let
       corn = callPackage ../development/coq-modules/corn {};
       deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
+      ElmExtraction = callPackage ../development/coq-modules/ElmExtraction {};
       equations = callPackage ../development/coq-modules/equations { };
       extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
@@ -232,6 +233,6 @@ in rec {
   coqPackages_8_19 = mkCoqPackages coq_8_19;
   coqPackages_8_20 = mkCoqPackages coq_8_20;
 
-  coqPackages = recurseIntoAttrs coqPackages_8_19;
+  coqPackages = recurseIntoAttrs coqPackages_8_20;
   coq = coqPackages.coq;
 }

@@ -1,15 +1,16 @@
 {
   lib,
   wrapPython,
-  python3,
+  python,
   stdenv,
+  dnf4,
   dnf-plugins-core,
   plugins ? [ dnf-plugins-core ],
 }:
 let
-  pluginPaths = map (p: "${p}/${python3.sitePackages}/dnf-plugins") plugins;
+  pluginPaths = map (p: "${p}/${python.sitePackages}/dnf-plugins") plugins;
 
-  dnf4-unwrapped = python3.pkgs.dnf4;
+  dnf4-unwrapped = dnf4;
 in
 
 stdenv.mkDerivation {

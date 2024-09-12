@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "vector-im";
+    owner = "element-hq";
     repo = "hydrogen-web";
     rev = "v${finalAttrs.version}";
     hash = "sha256-u8Yex3r7EZH+JztQHJbfncYeyyl6hgb1ZNFIg//wcb0=";
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lightweight matrix client with legacy and mobile browser support";
-    homepage = "https://github.com/vector-im/hydrogen-web";
+    homepage = "https://github.com/element-hq/hydrogen-web";
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

@@ -654,12 +654,18 @@ in
               machine.send_key("left")
               machine.send_key("left")
               machine.send_key("left")
+              machine.send_key("left")
               # Notifications are usually empty, nothing to check there
 
               with subtest("ayatana indicator display works"):
                   # We start on this, don't go right
                   wait_for_text("Lock")
                   machine.screenshot("indicators_display")
+
+              with subtest("ayatana indicator bluetooth works"):
+                  machine.send_key("right")
+                  wait_for_text("Bluetooth settings")
+                  machine.screenshot("indicators_bluetooth")
 
               with subtest("lomiri indicator network works"):
                   machine.send_key("right")

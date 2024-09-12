@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "emptty";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9qNAQBmcFKPpJ+AqfOy3emA1fvqI/XaT39KwI5fpXHU=";
+    hash = "sha256-xZfR4sn20fDaTNAxuxVflpr+8AFg5Z7vesO7P8Jxw6A=";
   };
 
   buildInputs = [ pam libX11 ];

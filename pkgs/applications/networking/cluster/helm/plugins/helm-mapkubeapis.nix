@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "helm-mapkubeapis";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm-mapkubeapis";
     rev = "v${version}";
-    hash = "sha256-SYNCzVGGeuRj0PoOKU+1zydvAXVg4gUpIsqBTGChOgE=";
+    hash = "sha256-0DIBdSi/WIHVF8O7OtJOaFnIfpObsUXzgpj25kJuS6E=";
   };
 
   vendorHash = "sha256-G3Q8XCwKLgHeWLF46C5lWfvuynr/cJbkq7xdydfTHZ4=";

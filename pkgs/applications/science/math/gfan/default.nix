@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gmp, mpir, cddlib}:
+{lib, stdenv, fetchpatch, fetchurl, gmp, mpir, cddlib}:
 stdenv.mkDerivation rec {
   pname = "gfan";
   version = "0.6.2";
@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gfan-0.6.2-cddlib-prefix.patch
+  ] ++ lib.optionals (stdenv.cc.isClang) [
+    (fetchpatch {
+      name = "clang-fix-miscompilation.patch";
+      url = "https://raw.githubusercontent.com/sagemath/sage/eea1f59394a5066e9acd8ae39a90302820914ee3/build/pkgs/gfan/patches/nodel.patch";
+      sha256 = "sha256-RrncSgFyrBIk/Bwe3accxiJ2rpOSJKQ84cV/uBvQsDc=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.cc.isClang ''

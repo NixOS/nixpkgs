@@ -688,7 +688,7 @@ stdenvNoCC.mkDerivation {
     ''
 
     + optionalString targetPlatform.isAndroid ''
-      echo "-D__ANDROID_API__=${targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
+      echo "-D__ANDROID_API__=${targetPlatform.androidSdkVersion}" >> $out/nix-support/cc-cflags
     ''
 
     # There are a few tools (to name one libstdcxx5) which do not work
@@ -752,6 +752,6 @@ stdenvNoCC.mkDerivation {
     (optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
     { description = attrByPath ["meta" "description"] "System C compiler" cc_ + " (wrapper script)";
       priority = 10;
-      mainProgram = if name != "" then name else ccName;
+      mainProgram = if name != "" then name else "${targetPrefix}${ccName}";
   };
 }

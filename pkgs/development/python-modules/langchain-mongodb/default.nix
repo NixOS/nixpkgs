@@ -18,6 +18,7 @@
   responses,
   syrupy,
   toml,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -61,6 +62,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_mongodb" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-mongodb==(.*)"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-mongodb==${version}";

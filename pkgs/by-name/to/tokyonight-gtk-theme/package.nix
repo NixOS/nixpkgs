@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gnome,
+  gnome-shell,
   sassc,
   gnome-themes-extra,
   gtk-engine-murrine,
@@ -83,7 +83,7 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
     propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
     nativeBuildInputs = [
-      gnome.gnome-shell
+      gnome-shell
       sassc
     ];
     buildInputs = [ gnome-themes-extra ];
