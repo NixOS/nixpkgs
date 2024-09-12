@@ -196,16 +196,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Display server and Wayland compositor developed by Canonical";
     homepage = "https://mir-server.io";
     changelog = "https://github.com/canonical/mir/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       onny
       OPNA2608
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "miral"
       "mircommon"

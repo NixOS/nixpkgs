@@ -75,7 +75,7 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: Optional[st
             "gear": "releases",
             "plasma": "plasma",
         }[set]
-        sources_url = f"https://kde.org/info/sources/source-{set_url}-{version}.html"
+        sources_url = f"https://kde.org/info/sources/source-{set_url}-{version}/"
 
     sources = httpx.get(sources_url)
     sources.raise_for_status()

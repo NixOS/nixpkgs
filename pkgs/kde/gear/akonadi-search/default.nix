@@ -7,7 +7,7 @@
   cargo,
   rustc,
   # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-XZ40qGBPRz7xyem3EP4+hzTliryxxDyGtvfjbNNVDQo=",
+  cargoHash ? "sha256-myS9icWi2ZeQCCHZRP3xEMKToAa+afc8C+s3T8y19RE=",
 }:
 mkKdeDerivation rec {
   pname = "akonadi-search";
