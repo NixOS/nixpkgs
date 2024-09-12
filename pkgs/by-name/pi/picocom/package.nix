@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , installShellFiles
 , lrzsz
-, IOKit
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.isDarwin IOKit;
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   installPhase = ''
     install -Dm555 -t $out/bin picocom
