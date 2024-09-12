@@ -34821,6 +34821,13 @@ with pkgs;
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
+  dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
+    withGui = true;
+  };
+  dogecoind = callPackage ../applications/blockchains/dogecoin {
+    withGui = false;
+  };
+
   eclair = callPackage ../applications/blockchains/eclair { };
 
   electrs = callPackage ../applications/blockchains/electrs {
