@@ -9,6 +9,7 @@
   infrastructure. Regular updates should be done through the individual packages
   update scripts.
  */
+{ startWith ? null }:
 let
   pkgs = import ../.. { config.allowAliases = false; };
 
@@ -40,7 +41,8 @@ let
     (lib.filter (p:
       (builtins.tryEval p.outPath).success ||
       builtins.trace "warning: skipping ${p.name} because it failed to evaluate" false)
-    (packagesWith (p: p ? fetch-deps) pkgs));
+    ((pkgs: (lib.drop (lib.lists.findFirstIndex (p: p.name == startWith) 0 pkgs) pkgs))
+    (packagesWith (p: p ? fetch-deps) pkgs)));
 
   helpText = ''
     Please run:
