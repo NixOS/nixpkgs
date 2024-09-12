@@ -392,7 +392,7 @@ in stdenv.mkDerivation {
   '';
 
   # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
-  hardeningDisable = lib.optional stdenv.isDarwin "zerocallusedregs";
+  hardeningDisable = lib.optional stdenv.isAarch64 "zerocallusedregs";
 
   configurePhase = ''
     export SWIFT_SOURCE_ROOT="$PWD"
