@@ -2,7 +2,7 @@
   stdenv,
   lib,
   idris2,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 # Usage: let
 #          pkg = idris2Packages.buildIdris {
@@ -61,11 +61,11 @@ let
       src = src;
       nativeBuildInputs = [
         idris2
-        makeWrapper
+        makeBinaryWrapper
       ] ++ attrs.nativeBuildInputs or [ ];
       buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [ ];
 
-      IDRIS2_PACKAGE_PATH = libDirs;
+      env.IDRIS2_PACKAGE_PATH = libDirs;
 
       buildPhase = ''
         runHook preBuild
@@ -75,10 +75,10 @@ let
 
       passthru = {
         inherit propagatedIdrisLibraries;
-      };
+      } // (attrs.passthru or { });
 
       shellHook = ''
-        export IDRIS2_PACKAGE_PATH="${finalAttrs.IDRIS2_PACKAGE_PATH}"
+        export IDRIS2_PACKAGE_PATH="${finalAttrs.env.IDRIS2_PACKAGE_PATH}"
       '';
     }
   );
