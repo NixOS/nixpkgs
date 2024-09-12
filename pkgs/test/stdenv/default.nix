@@ -101,7 +101,7 @@ let
       ({
         inherit name;
 
-        string = "a b";
+        string = "a *";
         list = ["c" "d"];
 
         passAsFile = [ "buildCommand" ] ++ lib.optionals (extraAttrs ? extraTest) [ "extraTest" ];
@@ -116,7 +116,7 @@ let
           concatTo flagsArray string list notset=e=f empty_array=g empty_string=h
           declare -p flagsArray
           [[ "''${flagsArray[0]}" == "a" ]] || (echo "'\$flagsArray[0]' was not 'a'" && false)
-          [[ "''${flagsArray[1]}" == "b" ]] || (echo "'\$flagsArray[1]' was not 'b'" && false)
+          [[ "''${flagsArray[1]}" == "*" ]] || (echo "'\$flagsArray[1]' was not '*'" && false)
           [[ "''${flagsArray[2]}" == "c" ]] || (echo "'\$flagsArray[2]' was not 'c'" && false)
           [[ "''${flagsArray[3]}" == "d" ]] || (echo "'\$flagsArray[3]' was not 'd'" && false)
           [[ "''${flagsArray[4]}" == "e=f" ]] || (echo "'\$flagsArray[4]' was not 'e=f'" && false)
@@ -127,7 +127,7 @@ let
           concatTo nonExistant string list notset=e=f empty_array=g empty_string=h
           declare -p nonExistant
           [[ "''${nonExistant[0]}" == "a" ]] || (echo "'\$nonExistant[0]' was not 'a'" && false)
-          [[ "''${nonExistant[1]}" == "b" ]] || (echo "'\$nonExistant[1]' was not 'b'" && false)
+          [[ "''${nonExistant[1]}" == "*" ]] || (echo "'\$nonExistant[1]' was not '*'" && false)
           [[ "''${nonExistant[2]}" == "c" ]] || (echo "'\$nonExistant[2]' was not 'c'" && false)
           [[ "''${nonExistant[3]}" == "d" ]] || (echo "'\$nonExistant[3]' was not 'd'" && false)
           [[ "''${nonExistant[4]}" == "e=f" ]] || (echo "'\$nonExistant[4]' was not 'e=f'" && false)
@@ -344,7 +344,7 @@ in
           concatTo flagsWithSpaces string listWithSpaces
           declare -p flagsWithSpaces
           [[ "''${flagsWithSpaces[0]}" == "a" ]] || (echo "'\$flagsWithSpaces[0]' was not 'a'" && false)
-          [[ "''${flagsWithSpaces[1]}" == "b" ]] || (echo "'\$flagsWithSpaces[1]' was not 'b'" && false)
+          [[ "''${flagsWithSpaces[1]}" == "*" ]] || (echo "'\$flagsWithSpaces[1]' was not '*'" && false)
           [[ "''${flagsWithSpaces[2]}" == "c c" ]] || (echo "'\$flagsWithSpaces[2]' was not 'c c'" && false)
           [[ "''${flagsWithSpaces[3]}" == "d d" ]] || (echo "'\$flagsWithSpaces[3]' was not 'd d'" && false)
         '';

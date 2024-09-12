@@ -389,6 +389,8 @@ appendToVar() {
 # Arrays are simply concatenated, strings are split on whitespace.
 # Default values can be passed via name=default.
 concatTo() {
+    local -
+    set -o noglob
     local -n targetref="$1"; shift
     local arg default name type
     for arg in "$@"; do
