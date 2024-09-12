@@ -820,6 +820,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "all" ]
     ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   # Fails with SIGABRT otherwise FIXME: Why?

@@ -8,7 +8,7 @@ let
     nativeBuildInputs = [ bison ];
 
     # Jam uses c89 conventions
-    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-std=c89";
+    env.NIX_CFLAGS_COMPILE = "-std=c89";
 
     # Jambase expects ar to have flags.
     preConfigure = ''

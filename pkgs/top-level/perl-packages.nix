@@ -7305,10 +7305,16 @@ with self; {
   DBI = buildPerlPackage {
     pname = "DBI";
     version = "1.644";
+
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.644.tar.gz";
       hash = "sha256-Ipe5neCeZwhmQLWQaZ4OmC+0adpjqT/ijcFHgtt6U8g=";
     };
+
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
+
     postInstall = lib.optionalString (perl ? crossVersion) ''
       mkdir -p $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI
       cat > $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI.pm <<EOF
@@ -7347,6 +7353,7 @@ with self; {
       1;
       EOF
     '';
+
     meta = {
       description = "Database independent interface for Perl";
       homepage = "https://dbi.perl.org";
@@ -27505,6 +27512,12 @@ with self; {
     ];
     makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=implicit-int"
+        "-Wno-error=incompatible-pointer-types"
+      ];
+    };
     doCheck = false;            # Expects working X11.
     meta = {
       description = "Tk - a Graphical User Interface Toolkit";

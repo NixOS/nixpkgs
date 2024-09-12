@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
     "-DGEN_FILES=off"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=calloc-transposed-args";
+  };
+
   doCheck = true;
 
   # Parallel checking causes test failures
