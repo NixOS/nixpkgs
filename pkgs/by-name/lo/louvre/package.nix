@@ -19,19 +19,20 @@
 , udev
 , wayland
 , xorgproto
+, nix-update-script
 }:
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "louvre";
   version = "2.9.0-1";
 
   src = fetchFromGitHub {
     owner = "CuarzoSoftware";
     repo = "Louvre";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0M1Hl5kF8r4iFflkGBb9CWqwzauSZPVKSRNWZKFZC4U=";
   };
 
-  sourceRoot = "${self.src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace examples/meson.build \
@@ -63,6 +64,10 @@ stdenv.mkDerivation (self: {
   ];
 
   outputs = [ "out" "dev" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "C++ library for building Wayland compositors";
