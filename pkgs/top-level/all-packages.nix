@@ -26905,9 +26905,9 @@ with pkgs;
 
   # See `xenPackages` source for explanations.
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
-  qemu_xen_4_19 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_19-slim; });
-  qemu_xen_4_18 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_18-slim; });
-  qemu_xen_4_17 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xenPackages.xen_4_17-slim; });
+  qemu_xen_4_19 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_19-slim; });
+  qemu_xen_4_18 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_18-slim; });
+  qemu_xen_4_17 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_17-slim; });
   qemu_xen = qemu_xen_4_19;
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
