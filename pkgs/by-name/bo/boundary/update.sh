@@ -4,9 +4,9 @@
 set -euo pipefail
 
 ROOT="$(dirname "$(readlink -f "$0")")"
-NIX_DRV="$ROOT/default.nix"
+NIX_DRV="$ROOT/package.nix"
 if [ ! -f "$NIX_DRV" ]; then
-  echo "ERROR: cannot find default.nix in $ROOT"
+  echo "ERROR: cannot find package.nix in $ROOT"
   exit 1
 fi
 
