@@ -68,9 +68,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/updaterevision/UpdateRevision.cmake \
-      --replace "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
-      --replace "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
-      --replace "ret_var(Hash)" "ret_var(\"${src.rev}\")"
+      --replace-fail "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
+      --replace-fail "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
+      --replace-fail "ret_var(Hash)" "ret_var(\"${src.rev}\")" \
+      --replace-fail "<unknown version>" "${src.rev}"
   '';
 
   cmakeFlags = [
@@ -96,8 +97,8 @@ stdenv.mkDerivation rec {
 
     for size in 16 24 32 48 64 128; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -background none -resize "$size"x"$size" $src/src/win32/icon1.ico -flatten \
-        $out/share/icons/hicolor/"$size"x"$size"/apps/gzdoom.png
+      magick $src/src/win32/icon1.ico -background none -resize "$size"x"$size" -flatten \
+       $out/share/icons/hicolor/"$size"x"$size"/apps/gzdoom.png
     done;
   '';
 
