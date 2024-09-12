@@ -79,6 +79,7 @@
       karousel = self.callPackage ./third-party/karousel {};
       krohnkite = self.callPackage ./third-party/krohnkite {};
       kzones = self.callPackage ./third-party/kzones {};
+      signon-plugin-oauth2 = self.callPackage ./third-party/signon-plugin-oauth2 {};
     }
   );
 in
