@@ -640,77 +640,93 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
-    inherit branch;
-    # Short description for Xen.
-    description =
-      "Xen Hypervisor"
-      # The "and related components" addition is automatically hidden if said components aren't being built.
-      + lib.strings.optionalString (prefetchedSources != { }) " and related components"
-      # To alter the description inside the paranthesis, edit ./packages.nix.
-      + lib.strings.optionalString (lib.attrsets.hasAttrByPath [
+  meta =
+    if
+      !(lib.attrsets.hasAttrByPath [
         "meta"
-        "description"
-      ] packageDefinition) " (${packageDefinition.meta.description})";
-    # Long description for Xen.
-    longDescription =
-      # Starts with the longDescription from ./packages.nix.
-      (packageDefinition.meta.longDescription or "")
-      + lib.strings.optionalString (!withInternalQEMU) (
-        "\nUse with `qemu_xen_${lib.strings.stringAsChars (x: if x == "." then "_" else x) branch}`"
-        + lib.strings.optionalString latest " or `qemu_xen`"
-        + ".\n"
-      )
-      # Then, if any of the optional with* components are being built, add the "Includes:" string.
-      +
-        lib.strings.optionalString
-          (
-            withInternalQEMU
-            || withInternalSeaBIOS
-            || withInternalOVMF
-            || withInternalIPXE
-            || withEFI
-            || withFlask
+      ] versionDefinition)
+    then
+      {
+        inherit branch;
+
+        # Short description for Xen.
+        description =
+          "Xen Hypervisor"
+          # The "and related components" addition is automatically hidden if said components aren't being built.
+          + lib.strings.optionalString (prefetchedSources != { }) " and related components"
+          # To alter the description inside the paranthesis, edit ./packages.nix.
+          + lib.strings.optionalString (lib.attrsets.hasAttrByPath [
+            "meta"
+            "description"
+          ] packageDefinition) " (${packageDefinition.meta.description})";
+
+        # Long description for Xen.
+        longDescription =
+          # Starts with the longDescription from ./packages.nix.
+          (packageDefinition.meta.longDescription or "")
+          + lib.strings.optionalString (!withInternalQEMU) (
+            "\nUse with `qemu_xen_${lib.strings.stringAsChars (x: if x == "." then "_" else x) branch}`"
+            + lib.strings.optionalString latest " or `qemu_xen`"
+            + ".\n"
           )
-          (
-            "\nIncludes:"
-            # Originally, this was a call for the complicated withPrefetchedSources. Since there aren't
-            # that many optional components, we just use lib.strings.optionalString, because it's simpler.
-            # Optional components that aren't being built are automatically hidden.
-            + lib.strings.optionalString withEFI "\n* `xen.efi`: Xen's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
-            + lib.strings.optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
-            + lib.strings.optionalString withInternalQEMU "\n* `qemu-xen`: Xen's mirror of [QEMU](https://www.qemu.org/)."
-            + lib.strings.optionalString withInternalSeaBIOS "\n* `seabios-xen`: Xen's mirror of [SeaBIOS](https://www.seabios.org/SeaBIOS)."
-            + lib.strings.optionalString withInternalOVMF "\n* `ovmf-xen`: Xen's mirror of [OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF)."
-            + lib.strings.optionalString withInternalIPXE "\n* `ipxe-xen`: Xen's pinned version of [iPXE](https://ipxe.org/)."
-          )
-      # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
-      # This will hopefully give users the peace of mind that their Xen is secure, without needing
-      # to search the source code for the XSA patches.
-      + lib.strings.optionalString (writeAdvisoryDescription != [ ]) (
-        "\n\nThis Xen (${version}) has been patched against the following known security vulnerabilities:\n"
-        + lib.strings.removeSuffix "\n" (lib.strings.concatLines writeAdvisoryDescription)
-      );
-    homepage = "https://xenproject.org/";
-    downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
-    changelog = "https://wiki.xenproject.org/wiki/Xen_Project_${branch}_Release_Notes";
-    license = with lib.licenses; [
-      # Documentation.
-      cc-by-40
-      # Most of Xen is licensed under the GPL v2.0.
-      gpl2Only
-      # Xen Libraries and the `xl` command-line utility.
-      lgpl21Only
-      # Development headers in $dev/include.
-      mit
-    ];
-    # This automatically removes maintainers from EOL versions of Xen, so we aren't bothered about versions we don't explictly support.
-    maintainers = lib.lists.optionals (lib.strings.versionAtLeast version minSupportedVersion) (
-      with lib.maintainers; [ sigmasquadron ]
-    );
-    mainProgram = "xl";
-    # Evaluates to x86_64-linux.
-    platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
-    knownVulnerabilities = lib.lists.optional (lib.strings.versionOlder version minSupportedVersion) "Xen ${version} is no longer supported by the Xen Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
-  };
+          # Then, if any of the optional with* components are being built, add the "Includes:" string.
+          +
+            lib.strings.optionalString
+              (
+                withInternalQEMU
+                || withInternalSeaBIOS
+                || withInternalOVMF
+                || withInternalIPXE
+                || withEFI
+                || withFlask
+              )
+              (
+                "\nIncludes:"
+                # Originally, this was a call for the complicated withPrefetchedSources. Since there aren't
+                # that many optional components, we just use lib.strings.optionalString, because it's simpler.
+                # Optional components that aren't being built are automatically hidden.
+                + lib.strings.optionalString withEFI "\n* `xen.efi`: Xen's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+                + lib.strings.optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
+                + lib.strings.optionalString withInternalQEMU "\n* `qemu-xen`: Xen's mirror of [QEMU](https://www.qemu.org/)."
+                + lib.strings.optionalString withInternalSeaBIOS "\n* `seabios-xen`: Xen's mirror of [SeaBIOS](https://www.seabios.org/SeaBIOS)."
+                + lib.strings.optionalString withInternalOVMF "\n* `ovmf-xen`: Xen's mirror of [OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF)."
+                + lib.strings.optionalString withInternalIPXE "\n* `ipxe-xen`: Xen's pinned version of [iPXE](https://ipxe.org/)."
+              )
+          # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
+          # This will hopefully give users the peace of mind that their Xen is secure, without needing
+          # to search the source code for the XSA patches.
+          + lib.strings.optionalString (writeAdvisoryDescription != [ ]) (
+            "\n\nThis Xen (${version}) has been patched against the following known security vulnerabilities:\n"
+            + lib.strings.removeSuffix "\n" (lib.strings.concatLines writeAdvisoryDescription)
+          );
+
+        homepage = "https://xenproject.org/";
+        downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
+        changelog = "https://wiki.xenproject.org/wiki/Xen_Project_${branch}_Release_Notes";
+
+        license = with lib.licenses; [
+          # Documentation.
+          cc-by-40
+          # Most of Xen is licensed under the GPL v2.0.
+          gpl2Only
+          # Xen Libraries and the `xl` command-line utility.
+          lgpl21Only
+          # Development headers in $dev/include.
+          mit
+        ];
+
+        # This automatically removes maintainers from EOL versions of Xen, so we aren't bothered about versions we don't explictly support.
+        maintainers = lib.lists.optionals (lib.strings.versionAtLeast version minSupportedVersion) (
+          with lib.maintainers; [ sigmasquadron ]
+        );
+        knownVulnerabilities = lib.lists.optional (lib.strings.versionOlder version minSupportedVersion) "Xen ${version} is no longer supported by the Xen Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
+
+        mainProgram = "xl";
+
+        # Evaluates to x86_64-linux.
+        platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
+
+      }
+    else
+      versionDefinition.meta;
 })
