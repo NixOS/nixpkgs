@@ -10,15 +10,12 @@ if [ ! -f "$NIX_DRV" ]; then
   exit 1
 fi
 
-fetch_arch() {
-  VER="$1"; ARCH="$2"
-  URL="https://releases.hashicorp.com/boundary/${VER}/boundary_${VER}_${ARCH}.zip"
-  nix-prefetch "{ stdenv, fetchzip }:
-stdenv.mkDerivation rec {
-  pname = \"boundary\"; version = \"${VER}\";
-  src = fetchzip { url = \"$URL\"; };
-}
-"
+function calc_hash () {
+    local version=$1
+    local arch=$2
+    url="https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${arch}.zip"
+    zip_hash=$(nix-prefetch-url --unpack $url)
+    nix hash to-sri --type sha256 "$zip_hash"
 }
 
 replace_sha() {
@@ -28,10 +25,10 @@ replace_sha() {
 # https://releases.hashicorp.com/boundary/0.1.4/boundary_0.1.4_linux_amd64.zip
 BOUNDARY_VER=$(curl -Ls -w "%{url_effective}" -o /dev/null https://github.com/hashicorp/boundary/releases/latest | awk -F'/' '{print $NF}' | sed 's/v//')
 
-BOUNDARY_LINUX_X64_SHA256=$(fetch_arch "$BOUNDARY_VER" "linux_amd64")
-BOUNDARY_DARWIN_X64_SHA256=$(fetch_arch "$BOUNDARY_VER" "darwin_amd64")
-BOUNDARY_LINUX_AARCH64_SHA256=$(fetch_arch "$BOUNDARY_VER" "linux_arm64")
-BOUNDARY_DARWIN_AARCH64_SHA256=$(fetch_arch "$BOUNDARY_VER" "darwin_arm64")
+BOUNDARY_LINUX_X64_SHA256=$(calc_hash "$BOUNDARY_VER" "linux_amd64")
+BOUNDARY_DARWIN_X64_SHA256=$(calc_hash "$BOUNDARY_VER" "darwin_amd64")
+BOUNDARY_LINUX_AARCH64_SHA256=$(calc_hash "$BOUNDARY_VER" "linux_arm64")
+BOUNDARY_DARWIN_AARCH64_SHA256=$(calc_hash "$BOUNDARY_VER" "darwin_arm64")
 
 sed -i "s/version = \".*\"/version = \"$BOUNDARY_VER\"/" "$NIX_DRV"
 

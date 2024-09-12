@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
         x86_64-darwin = "darwin_amd64";
         aarch64-darwin = "darwin_arm64";
       };
-      sha256 = selectSystem {
+      hash = selectSystem {
         x86_64-linux = "sha256-43Q69Pp5NLB4fITy2X8d0XHp5EX+gFLnwtHOontISoU=";
         aarch64-linux = "sha256-z87peCBv50eJr/kiFWPZUOeb0WCN4X+0JnxCvn3lCXo=";
         x86_64-darwin = "sha256-SAhlZNGq5rkNitKVd+EjLOeeTErhWg14tHFG4Bsexv8=";
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     in
     fetchzip {
       url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
-      inherit sha256;
+      inherit hash;
+      stripRoot = false;
     };
 
   dontConfigure = true;
