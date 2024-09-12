@@ -37,29 +37,26 @@ let
     "x86_64-linux" = "x64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   cpu = stdenv.hostPlatform.parsed.cpu.name;
+
+  versionInfo = lib.importJSON ./version-info.json;
+
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "21.0.4";
-  build = "598.4";
-  # To get the new tag:
-  # git clone https://github.com/jetbrains/jetbrainsruntime
-  # cd jetbrainsruntime
-  # git checkout jbr-release-${javaVersion}b${build}
-  # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-21.0.4+8";
+  inherit (versionInfo)
+    javaVersion
+    build
+    openjdkTag
+    SOURCE_DATE_EPOCH;
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
-    rev = "jb${version}";
-    hash = "sha256-YF5Z1A4qmD9Z4TE6f2i8wv9ZD+NqHGY5Q0oIVQiC3Bg=";
+    inherit (versionInfo) rev hash;
   };
 
   BOOT_JDK = jdk.home;
-  # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-  SOURCE_DATE_EPOCH = 1726275531;
 
   patches = [ ];
 
@@ -162,5 +159,6 @@ jdk.overrideAttrs (oldAttrs: rec {
       };
       jcef = nixosTests.jetbrains-jdk;
     };
+    updateScript = [ ./update.py jetbrains.idea-ultimate.src jetbrains.idea-ultimate.version ];
   };
 })
