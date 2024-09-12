@@ -48,6 +48,7 @@ buildPythonPackage rec {
     description = "OpenStack Library to profile request between all involved services";
     homepage = "https://opendev.org/openstack/osprofiler/";
     license = licenses.asl20;
+    mainProgram = "osprofiler";
     maintainers = teams.openstack.members;
   };
 }
