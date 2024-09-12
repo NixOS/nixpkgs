@@ -17001,6 +17001,18 @@ final: prev:
     meta.homepage = "https://github.com/michal-h21/vim-zettel/";
   };
 
+  vim-zscript = buildVimPlugin {
+    pname = "vim-zscript";
+    version = "2023-10-02";
+    src = fetchFromGitHub {
+      owner = "marrub--";
+      repo = "vim-zscript";
+      rev = "8c9352effb0847f838dbe32dc946ab38937b3d26";
+      sha256 = "1q619ial566gbf93d8v13njkhqx6blmcp402cpa3may4npf3qric";
+    };
+    meta.homepage = "https://github.com/marrub--/vim-zscript/";
+  };
+
   vim2hs = buildVimPlugin {
     pname = "vim2hs";
     version = "2014-04-16";
