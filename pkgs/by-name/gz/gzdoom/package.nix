@@ -91,7 +91,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/bin/gzdoom $out/share/games/doom/gzdoom
-    makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom
+    makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
 
     for size in 16 24 32 48 64 128; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
