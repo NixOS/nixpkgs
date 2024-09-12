@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script }:
+{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script, procps }:
 
 python3Packages.buildPythonApplication rec {
   pname = "flashfocus";
@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     setuptools
+    procps
   ];
 
   pythonRelaxDeps = [
