@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/lib
       mkdir -p $out/bin
       cp -r ../include $out
-      install -Dm755 ../lib_lightgbm.so $out/lib/lib_lightgbm.so
+      install -Dm755 ../lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary}
     '' + lib.optionalString (!rLibrary && !pythonLibrary) ''
       install -Dm755 ../lightgbm $out/bin/lightgbm
     '' + lib.optionalString javaWrapper ''
