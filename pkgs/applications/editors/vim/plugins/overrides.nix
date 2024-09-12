@@ -17,7 +17,9 @@
 , # Misc dependencies
   arrow-cpp
 , Cocoa
+, coc-clangd
 , coc-diagnostic
+, coc-pyright
 , code-minimap
 , dasht
 , deno
@@ -139,7 +141,7 @@
     nvimRequireCheck = "alpha";
   };
 
-  advanced-git-search-nvim = super.autosave-nvim.overrideAttrs {
+  advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
     dependencies = with super; [ telescope-nvim vim-fugitive vim-rhubarb ];
   };
 
@@ -344,9 +346,20 @@
     dependencies = with self; [ nvim-cmp zsh ];
   };
 
+  coc-clangd = buildVimPlugin {
+    inherit (coc-clangd) pname version meta;
+    src = "${coc-clangd}/lib/node_modules/coc-clangd";
+  };
+
   coc-diagnostic = buildVimPlugin {
     inherit (coc-diagnostic) pname version meta;
     src = "${coc-diagnostic}/lib/node_modules/coc-diagnostic";
+  };
+
+  coc-pyright = buildVimPlugin {
+    pname = "coc-pyright";
+    inherit (coc-pyright) version meta;
+    src = "${coc-pyright}/lib/node_modules/coc-pyright";
   };
 
   coc-nginx = buildVimPlugin {
@@ -720,6 +733,10 @@
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ jorsn ];
     };
+  };
+
+  diagram-nvim = super.diagram-nvim.overrideAttrs {
+    dependencies = with self; [ image-nvim ];
   };
 
   diffview-nvim = super.diffview-nvim.overrideAttrs {
@@ -2241,7 +2258,6 @@
   // (
   let
     nodePackageNames = [
-      "coc-clangd"
       "coc-cmake"
       "coc-css"
       "coc-docker"
@@ -2263,7 +2279,6 @@
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
-      "coc-pyright"
       "coc-python"
       "coc-r-lsp"
       "coc-rls"

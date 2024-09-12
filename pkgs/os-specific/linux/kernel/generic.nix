@@ -230,7 +230,6 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
   passthru = previousAttrs.passthru or { } // basicArgs // {
     features = kernelFeatures;
     inherit commonStructuredConfig structuredExtraConfig extraMakeFlags isZen isHardened isLibre;
-    isVanilla = !(isHardened || isLibre || isZen);
     isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
 
     # Adds dependencies needed to edit the config:

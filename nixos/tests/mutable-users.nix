@@ -7,19 +7,19 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    machine = { ... }: {
-      users.mutableUsers = false;
-    };
-    mutable = { ... }: {
-      users.mutableUsers = true;
-      users.users.dry-test.isNormalUser = true;
+    machine = {
+      specialisation.immutable.configuration = {
+        users.mutableUsers = false;
+      };
+
+      specialisation.mutable.configuration = {
+        users.mutableUsers = true;
+        users.users.dry-test.isNormalUser = true;
+      };
     };
   };
 
-  testScript = {nodes, ...}: let
-    immutableSystem = nodes.machine.config.system.build.toplevel;
-    mutableSystem = nodes.mutable.config.system.build.toplevel;
-  in ''
+  testScript = ''
     machine.start()
     machine.wait_for_unit("default.target")
 
@@ -30,7 +30,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.succeed("sudo useradd foobar")
         assert "foobar" in machine.succeed("cat /etc/passwd")
         machine.succeed(
-            "${immutableSystem}/bin/switch-to-configuration test"
+            "/run/booted-system/specialisation/immutable/bin/switch-to-configuration test"
         )
         assert "foobar" not in machine.succeed("cat /etc/passwd")
 
@@ -39,7 +39,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     with subtest("Password is wrapped in mutable mode"):
         assert "/run/current-system/" in machine.succeed("which passwd")
         machine.succeed(
-            "${mutableSystem}/bin/switch-to-configuration test"
+            "/run/booted-system/specialisation/mutable/bin/switch-to-configuration test"
         )
         assert "/run/wrappers/" in machine.succeed("which passwd")
 
@@ -63,7 +63,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             expected_hashes[file] = machine.succeed(f"sha256sum {file}")
             expected_stats[file] = machine.succeed(f"stat {file}")
 
-        machine.succeed("/run/current-system/bin/switch-to-configuration dry-activate")
+        machine.succeed("/run/booted-system/specialisation/mutable/bin/switch-to-configuration dry-activate")
 
         machine.fail('test -e /home/dry-test')  # home was not recreated
         for file in files_to_check:

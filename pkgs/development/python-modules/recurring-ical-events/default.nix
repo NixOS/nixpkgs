@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   setuptools,
   icalendar,
   python-dateutil,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "3.2.0";
+  version = "3.3.0";
 
   disabled = pythonOlder "3.8";
 
@@ -27,17 +26,8 @@ buildPythonPackage rec {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
     rev = "v${version}";
-    hash = "sha256-qglApMoRtMqg03HBO00k9anRquA5X9ew919QUMWIpjo=";
+    hash = "sha256-1Ggxi61epge6Rxc/vJ7OuuNjjeaQYReEPeOZV8DLghk=";
   };
-
-  patches = [
-    # https://github.com/niccokunzmann/python-recurring-ical-events/pull/169
-    (fetchpatch2 {
-      name = "make-tests-compatible-with-icalendar-v5.patch";
-      url = "https://github.com/niccokunzmann/python-recurring-ical-events/commit/0bb4b4586b55978a1d154cd7abbc42eaf1cefb92.patch";
-      hash = "sha256-1tG/U0ELMIwS50eolXNou0aFQBZGNjcc2Zcz1gd8rd4=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -55,6 +45,12 @@ buildPythonPackage rec {
     pytz
     restructuredtext-lint
     pygments
+  ];
+
+  disabledTests = lib.optionals (lib.versionOlder icalendar.version "6") [
+    # ModuleNotFoundError: No module named 'icalendar.timezone'
+    "test_can_import_zoneinfo"
+    "test_documentation_file"
   ];
 
   pythonImportsCheck = [ "recurring_ical_events" ];

@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "CLI for indexing and searching packages in Nix expressions";
     homepage = "https://github.com/replit/rippkgs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant cdmistman ];
+    maintainers = with lib.maintainers; [ cdmistman ];
     mainProgram = "rippkgs";
   };
 }

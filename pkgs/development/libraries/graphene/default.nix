@@ -11,7 +11,7 @@
 , mutest
 , nixosTests
 , glib
-, withDocumentation ? !stdenv.hostPlatform.isStatic
+, withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform || stdenv.hostPlatform.emulatorAvailable buildPackages
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -65,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     docbook_xsl
     gtk-doc
+  ] ++ lib.optionals (withDocumentation && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   in lib.optionalString withIntrospection ''
     if [ -x '${introspectionPy}' ] ; then
       wrapProgram '${introspectionPy}' \
-        --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ glib.out (placeholder "out") ]}"
     fi
   '';
 

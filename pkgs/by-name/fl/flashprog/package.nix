@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger ];
+    maintainers = with maintainers; [ felixsinger funkeleinhorn ];
     platforms = platforms.all;
     mainProgram = "flashprog";
   };

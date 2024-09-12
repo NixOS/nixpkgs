@@ -202,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
       }:
       runCommand "gnome-flashback-${wmName}.target" { } ''
         mkdir -p $out/lib/systemd/user
-        cp -r "${finalAttrs.gnome-flashback}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
+        cp -r "${finalAttrs.finalPackage}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
           "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d"
       '';
 

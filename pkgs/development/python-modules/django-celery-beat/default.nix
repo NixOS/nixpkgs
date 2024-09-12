@@ -29,6 +29,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  pythonRelaxDeps = [ "django" ];
+
   propagatedBuildInputs = [
     cron-descriptor
     python-crontab

@@ -5,8 +5,10 @@
   pythonOlder,
   setuptools,
   requests,
+  polling,
   pytestCheckHook,
   mock,
+  httpretty,
 }:
 
 buildPythonPackage rec {
@@ -26,11 +28,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+    polling
+  ];
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
+    mock
+    httpretty
+  ];
+
+  disabledTestPaths = [
+    # needs api token
+    "test/integration"
   ];
 
   pythonImportsCheck = [ "linode_api4" ];

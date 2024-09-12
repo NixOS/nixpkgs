@@ -245,6 +245,7 @@ if [[ -z $noBootLoader ]]; then
     ln -sfn /proc/mounts "$mountPoint"/etc/mtab
     export mountPoint
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -c "$(cat <<'EOF'
+      set -e
       # Create a bind mount for each of the mount points inside the target file
       # system. This preserves the validity of their absolute paths after changing
       # the root with `nixos-enter`.

@@ -1,4 +1,4 @@
-{ lib, buildGraalvmNativeImage, graalvmCEPackages, removeReferencesTo, fetchurl
+{ lib, buildGraalvmNativeImage, graalvmCEPackages, fetchurl
 }:
 
 buildGraalvmNativeImage rec {
@@ -13,14 +13,8 @@ buildGraalvmNativeImage rec {
 
   graalvmDrv = graalvmCEPackages.graalvm-ce;
 
-  nativeBuildInputs = [ removeReferencesTo ];
-
   extraNativeImageBuildArgs =
     [ "-H:+ReportExceptionStackTraces" "--no-fallback" ];
-
-  postInstall = ''
-    remove-references-to -t ${graalvmDrv} $out/bin/${pname}
-  '';
 
   meta = with lib; {
     description = "Linter for Clojure code that sparks joy";

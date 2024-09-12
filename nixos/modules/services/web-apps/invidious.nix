@@ -199,6 +199,41 @@ let
     };
   };
 
+  sigHelperConfig = lib.mkIf cfg.sig-helper.enable {
+    services.invidious.settings.signature_server = "tcp://${cfg.sig-helper.listenAddress}";
+    systemd.services.invidious-sig-helper = {
+      script = ''
+        exec ${lib.getExe cfg.sig-helper.package} --tcp "${cfg.sig-helper.listenAddress}"
+      '';
+      wantedBy = [ "multi-user.target" ];
+      before = [ "invidious.service" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      serviceConfig = {
+        User = "invidious-sig-helper";
+        DynamicUser = true;
+        Restart = "always";
+
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectSystem = true;
+        ProtectProc = "invisible";
+        ProtectHome = true;
+        PrivateDevices = true;
+        NoNewPrivileges = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        ProtectKernelLogs = true;
+        CapabilityBoundingSet = "";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" "@network-io" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+      };
+    };
+  };
+
   nginxConfig = lib.mkIf cfg.nginx.enable {
     services.invidious.settings = {
       https_only = config.services.nginx.virtualHosts.${cfg.domain}.forceSSL;
@@ -392,6 +427,30 @@ in
 
       package = lib.mkPackageOption pkgs "http3-ytproxy" { };
     };
+
+    sig-helper = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to enable and configure inv-sig-helper to emulate the youtube client's javascript. This is required
+          to make certain videos playable.
+
+          This will download and run completely untrusted javascript from youtube! While this service is sandboxed,
+          this may still be an issue!
+        '';
+      };
+
+      package = lib.mkPackageOption pkgs "inv-sig-helper" { };
+
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
+        default = "127.0.0.1:2999";
+        description = ''
+          The IP address/port where inv-sig-helper should listen.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
@@ -399,5 +458,6 @@ in
     localDatabaseConfig
     nginxConfig
     ytproxyConfig
+    sigHelperConfig
   ]);
 }

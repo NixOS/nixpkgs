@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  distutils,
   fetchFromGitHub,
   passlib,
   pip,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   setuptools-git,
+  setuptools,
   twine,
   watchdog,
   webtest,
@@ -17,29 +18,40 @@
 buildPythonPackage rec {
   pname = "pypiserver";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pypiserver";
+    repo = "pypiserver";
     rev = "refs/tags/v${version}";
     hash = "sha256-Eh/3URt7pcJhoDDLRP8iHyjlPsE5E9M/0Hixqi5YNdg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-git
     wheel
   ];
 
-  propagatedBuildInputs = [ pip ];
+  dependencies = [
+    distutils
+    pip
+  ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     passlib = [ passlib ];
     cache = [ watchdog ];
   };
+
+  nativeCheckInputs = [
+    pip
+    pytestCheckHook
+    setuptools
+    twine
+    webtest
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 
@@ -51,14 +63,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
   '';
-
-  nativeCheckInputs = [
-    pip
-    pytestCheckHook
-    setuptools
-    twine
-    webtest
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     # Fails to install the package
@@ -76,7 +80,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal PyPI server for use with pip/easy_install";
-    mainProgram = "pypi-server";
     homepage = "https://github.com/pypiserver/pypiserver";
     changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
     license = with licenses; [
@@ -84,5 +87,6 @@ buildPythonPackage rec {
       zlib
     ];
     maintainers = with maintainers; [ austinbutler ];
+    mainProgram = "pypi-server";
   };
 }

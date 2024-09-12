@@ -177,14 +177,8 @@ let
     mkdir -p $dst
 
     # fonts.conf
-    cp ${pkg.out}/etc/fonts/fonts.conf \
+    ln -s ${pkg.out}/etc/fonts/fonts.conf \
           $dst/../fonts.conf
-
-    # horrible sed hack to add the line that was accidentally removed
-    # from the default config in #324516
-    # FIXME: fix that, revert this
-    sed '5i <include ignore_missing="yes">/etc/fonts/conf.d</include>' -i $dst/../fonts.conf
-
     # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
     mkdir -p $out/etc/fonts/2.11
     ln -s /etc/fonts/fonts.conf \

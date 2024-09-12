@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , validatePkgConfig
+, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +16,8 @@ stdenv.mkDerivation {
     hash = "sha256-GsrYg16gpjHkkmpCU3yGzqNS/buZl+JoWALLvwzmT4A=";
   };
 
-  nativeBuildInputs = [ validatePkgConfig ];
+  nativeBuildInputs = [ validatePkgConfig ]
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
     runHook preBuild

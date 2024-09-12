@@ -180,5 +180,6 @@ clangStdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pca006132 raskin ];
     mainProgram = "openscad";
+    broken = true;  # https://github.com/NixOS/nixpkgs/issues/341043
   };
 }

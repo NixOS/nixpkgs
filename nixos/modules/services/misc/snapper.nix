@@ -4,17 +4,14 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.snapper;
 
   mkValue =
     v:
-    if isList v then
+    if lib.isList v then
       "\"${
-        concatMapStringsSep " " (escape [
+        lib.concatMapStringsSep " " (lib.escape [
           "\\"
           " "
         ]) v
@@ -23,7 +20,7 @@ let
       "yes"
     else if v == false then
       "no"
-    else if isString v then
+    else if lib.isString v then
       "\"${v}\""
     else
       builtins.toJSON v;
@@ -33,14 +30,14 @@ let
   # "it's recommended to always specify the filesystem type"  -- man snapper-configs
   defaultOf = k: if k == "FSTYPE" then null else configOptions.${k}.default or null;
 
-  safeStr = types.strMatching "[^\n\"]*" // {
+  safeStr = lib.types.strMatching "[^\n\"]*" // {
     description = "string without line breaks or quotes";
     descriptionClass = "conjunction";
   };
 
   configOptions = {
-    SUBVOLUME = mkOption {
-      type = types.path;
+    SUBVOLUME = lib.mkOption {
+      type = lib.types.path;
       description = ''
         Path of the subvolume or mount point.
         This path is a subvolume and has to contain a subvolume named
@@ -49,16 +46,16 @@ let
       '';
     };
 
-    FSTYPE = mkOption {
-      type = types.enum [ "btrfs" ];
+    FSTYPE = lib.mkOption {
+      type = lib.types.enum [ "btrfs" ];
       default = "btrfs";
       description = ''
         Filesystem type. Only btrfs is stable and tested.
       '';
     };
 
-    ALLOW_GROUPS = mkOption {
-      type = types.listOf safeStr;
+    ALLOW_GROUPS = lib.mkOption {
+      type = lib.types.listOf safeStr;
       default = [ ];
       description = ''
         List of groups allowed to operate with the config.
@@ -67,8 +64,8 @@ let
       '';
     };
 
-    ALLOW_USERS = mkOption {
-      type = types.listOf safeStr;
+    ALLOW_USERS = lib.mkOption {
+      type = lib.types.listOf safeStr;
       default = [ ];
       example = [ "alice" ];
       description = ''
@@ -79,64 +76,64 @@ let
       '';
     };
 
-    TIMELINE_CLEANUP = mkOption {
-      type = types.bool;
+    TIMELINE_CLEANUP = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Defines whether the timeline cleanup algorithm should be run for the config.
       '';
     };
 
-    TIMELINE_CREATE = mkOption {
-      type = types.bool;
+    TIMELINE_CREATE = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Defines whether hourly snapshots should be created.
       '';
     };
 
-    TIMELINE_LIMIT_HOURLY = mkOption {
-      type = types.int;
+    TIMELINE_LIMIT_HOURLY = lib.mkOption {
+      type = lib.types.int;
       default = 10;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
-    TIMELINE_LIMIT_DAILY = mkOption {
-      type = types.int;
+    TIMELINE_LIMIT_DAILY = lib.mkOption {
+      type = lib.types.int;
       default = 10;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
-    TIMELINE_LIMIT_WEEKLY = mkOption {
-      type = types.int;
+    TIMELINE_LIMIT_WEEKLY = lib.mkOption {
+      type = lib.types.int;
       default = 0;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
-    TIMELINE_LIMIT_MONTHLY = mkOption {
-      type = types.int;
+    TIMELINE_LIMIT_MONTHLY = lib.mkOption {
+      type = lib.types.int;
       default = 10;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
-    TIMELINE_LIMIT_QUARTERLY = mkOption {
-      type = types.int;
+    TIMELINE_LIMIT_QUARTERLY = lib.mkOption {
+      type = lib.types.int;
       default = 0;
       description = ''
         Limits for timeline cleanup.
       '';
     };
 
-    TIMELINE_LIMIT_YEARLY = mkOption {
-      type = types.int;
+    TIMELINE_LIMIT_YEARLY = lib.mkOption {
+      type = lib.types.int;
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -148,16 +145,16 @@ in
 {
   options.services.snapper = {
 
-    snapshotRootOnBoot = mkOption {
-      type = types.bool;
+    snapshotRootOnBoot = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to snapshot root on boot
       '';
     };
 
-    snapshotInterval = mkOption {
-      type = types.str;
+    snapshotInterval = lib.mkOption {
+      type = lib.types.str;
       default = "hourly";
       description = ''
         Snapshot interval.
@@ -167,9 +164,9 @@ in
       '';
     };
 
-    persistentTimer = mkOption {
+    persistentTimer = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       example = true;
       description = ''
         Set the `Persistent` option for the
@@ -179,8 +176,8 @@ in
       '';
     };
 
-    cleanupInterval = mkOption {
-      type = types.str;
+    cleanupInterval = lib.mkOption {
+      type = lib.types.str;
       default = "1d";
       description = ''
         Cleanup interval.
@@ -190,17 +187,17 @@ in
       '';
     };
 
-    filters = mkOption {
-      type = types.nullOr types.lines;
+    filters = lib.mkOption {
+      type = lib.types.nullOr lib.types.lines;
       default = null;
       description = ''
         Global display difference filter. See man:snapper(8) for more details.
       '';
     };
 
-    configs = mkOption {
+    configs = lib.mkOption {
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           home = {
             SUBVOLUME = "/home";
@@ -216,14 +213,14 @@ in
         is valid here, even if NixOS doesn't document it.
       '';
 
-      type = types.attrsOf (
-        types.submodule {
-          freeformType = types.attrsOf (
-            types.oneOf [
-              (types.listOf safeStr)
-              types.bool
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          freeformType = lib.types.attrsOf (
+            lib.types.oneOf [
+              (lib.types.listOf safeStr)
+              lib.types.bool
               safeStr
-              types.number
+              lib.types.number
             ]
           );
 
@@ -233,7 +230,7 @@ in
     };
   };
 
-  config = mkIf (cfg.configs != { }) (
+  config = lib.mkIf (cfg.configs != { }) (
     let
       documentation = [
         "man:snapper(8)"
@@ -254,11 +251,11 @@ in
               SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
             '';
           }
-          // (mapAttrs' (
+          // (lib.mapAttrs' (
             name: subvolume:
-            nameValuePair "snapper/configs/${name}" ({
+            lib.nameValuePair "snapper/configs/${name}" ({
               text = lib.generators.toKeyValue { inherit mkKeyValue; } (
-                filterAttrs (k: v: v != defaultOf k) subvolume
+                lib.filterAttrs (k: v: v != defaultOf k) subvolume
               );
             })
           ) cfg.configs)
@@ -324,7 +321,7 @@ in
         unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
       };
 
-      assertions = concatMap (
+      assertions = lib.concatMap (
         name:
         let
           sub = cfg.configs.${name};
@@ -341,16 +338,16 @@ in
         ++
           map
             (attr: {
-              assertion = !(hasAttr attr sub);
+              assertion = !(lib.hasAttr attr sub);
               message = ''
-                The option definition `services.snapper.configs.${name}.${attr}' has been renamed to `services.snapper.configs.${name}.${toUpper attr}'.
+                The option definition `services.snapper.configs.${name}.${attr}' has been renamed to `services.snapper.configs.${name}.${lib.toUpper attr}'.
               '';
             })
             [
               "fstype"
               "subvolume"
             ]
-      ) (attrNames cfg.configs);
+      ) (lib.attrNames cfg.configs);
     }
   );
 

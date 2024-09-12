@@ -671,7 +671,7 @@ in
     # Force pkg-config lookup for libpq.
     # See https://github.com/ged/ruby-pg/blob/6629dec6656f7ca27619e4675b45225d9e422112/ext/extconf.rb#L34-L55
     #
-    # Note that setting --with-pg-config=${postgresql}/bin/pg_config would add
+    # Note that setting --with-pg-config=${lib.getDev postgresql}/bin/pg_config would add
     # an unnecessary reference to the entire postgresql package.
     buildFlags = [ "--with-pg-config=ignore" ];
     nativeBuildInputs = [ pkg-config ];

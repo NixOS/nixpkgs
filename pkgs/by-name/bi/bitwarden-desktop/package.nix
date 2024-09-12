@@ -13,6 +13,7 @@
 , makeDesktopItem
 , makeWrapper
 , napi-rs-cli
+, nix-update-script
 , nodejs_20
 , patchutils_0_4_2
 , pkg-config
@@ -28,13 +29,13 @@ let
   electron = electron_31;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.8.1";
+  version = "2024.8.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-FBNqgPjWSY8SCIGyKpoOl7I3pWQxDbWiFtcPZScDE4A=";
+    hash = "sha256-KATT4W2pP7VTcoHeshGx5VrBwlg3UqzKPcRY0Rzo7II=";
   };
 
   patches = [
@@ -51,7 +52,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-8cxhor90GqgO34AD8Jhd3N7PCnBnbhg8h7agVq0i3jk=";
+  npmDepsHash = "sha256-SnrK26QaxHYKX0532rGBASjx9PwxKSsVFRzZ3Cs2GPk=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -67,7 +68,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-zc5AarCbrJixcin8t+Ws8fH0ULM9rp3sUFsDb0htPuM=";
+    hash = "sha256-MjGKQky6LGtpG1maBWd+WkMZlnZfdl9Sm2dlvdD8ANw=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -194,6 +195,12 @@ in buildNpmPackage rec {
       categories = [ "Utility" ];
     })
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--commit" "--version=stable" "--version-regex=^desktop-v(.*)$" ];
+    };
+  };
 
   meta = {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";

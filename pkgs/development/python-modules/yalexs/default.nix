@@ -10,12 +10,13 @@
   freenub,
   poetry-core,
   pyjwt,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezegun,
   pytestCheckHook,
   python-dateutil,
   python-socketio,
   pythonOlder,
-  pytest-asyncio,
-  pytest-cov-stub,
   requests-mock,
   requests,
   typing-extensions,
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "8.6.3";
+  version = "8.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-z01q+sUuj9BvcN56+c3vti8xUnWhYGuV/BTXhvcTl30=";
+    hash = "sha256-KUm+e/ZrfkrS4MA0Wb3VAo9URYmC0ucKw3L+yMMoMtU=";
   };
 
   build-system = [ poetry-core ];
@@ -54,9 +55,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     aiounittest
-    pytestCheckHook
     pytest-asyncio
     pytest-cov-stub
+    pytest-freezegun
+    pytestCheckHook
     requests-mock
   ];
 

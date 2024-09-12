@@ -105,7 +105,7 @@ let
   inherit (versionDefinition) pkg;
 
   # Mark versions older than minSupportedVersion as EOL.
-  minSupportedVersion = "4.16";
+  minSupportedVersion = "4.17";
 
   ## Pre-fetched Source Handling ##
 
@@ -711,8 +711,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xl";
     # Evaluates to x86_64-linux.
     platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
-    knownVulnerabilities = lib.lists.optionals (lib.strings.versionOlder version minSupportedVersion) [
-      "Xen ${version} is no longer supported by the Xen Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html"
-    ];
+    knownVulnerabilities = lib.lists.optional (lib.strings.versionOlder version minSupportedVersion) "Xen ${version} is no longer supported by the Xen Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
   };
 })

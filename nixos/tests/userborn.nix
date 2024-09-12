@@ -99,6 +99,10 @@ in
     with subtest("sysusers group is created"):
       print(machine.succeed("getent group sysusers"))
 
+    with subtest("Check files"):
+      print(machine.succeed("grpck -r"))
+      print(machine.succeed("pwck -r"))
+
 
     machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
 
@@ -123,5 +127,9 @@ in
 
     with subtest("new-group group is created after switching to new generation"):
       print(machine.succeed("getent group new-group"))
+
+    with subtest("Check files"):
+      print(machine.succeed("grpck -r"))
+      print(machine.succeed("pwck -r"))
   '';
 }

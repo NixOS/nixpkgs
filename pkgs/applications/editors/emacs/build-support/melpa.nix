@@ -63,11 +63,10 @@ libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
   /*
     recipe: Optional MELPA recipe.
     Default: a minimally functional recipe
+    This can be a path of a recipe file, a string of the recipe content or an empty string.
+    The default value is used if it is an empty string.
   */
-, recipe ? (writeText "${finalAttrs.pname}-recipe" ''
-    (${finalAttrs.ename} :fetcher git :url ""
-              ${lib.optionalString (finalAttrs.files != null) ":files ${finalAttrs.files}"})
-  '')
+, recipe ? ""
 , preUnpack ? ""
 , postUnpack ? ""
 , meta ? {}
@@ -98,9 +97,21 @@ libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
 
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
-    if [ -n "$recipe" ]; then
-      cp "$recipe" "$NIX_BUILD_TOP/recipes/$ename"
+    recipeFile="$NIX_BUILD_TOP/recipes/$ename"
+    if [ -r "$recipe" ]; then
+      ln -s "$recipe" "$recipeFile"
+      nixInfoLog "link recipe"
+    elif [ -n "$recipe" ]; then
+      printf "%s" "$recipe" > "$recipeFile"
+      nixInfoLog "write recipe"
+    else
+      cat > "$recipeFile" <<'EOF'
+(${finalAttrs.ename} :fetcher git :url "" ${lib.optionalString (finalAttrs.files != null) ":files ${finalAttrs.files}"})
+EOF
+      nixInfoLog "use default recipe"
     fi
+    nixInfoLog "recipe content:" "$(< $recipeFile)"
+    unset -v recipeFile
 
     ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
 
@@ -114,6 +125,11 @@ libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
 
   buildPhase = args.buildPhase or ''
     runHook preBuild
+
+    # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
+    if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
+      foundMakefile=1
+    fi
 
     pushd "$NIX_BUILD_TOP"
 

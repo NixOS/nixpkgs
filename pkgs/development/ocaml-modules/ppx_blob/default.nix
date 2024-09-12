@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "ppx_blob";
-  version = "0.8.0";
+  version = "0.9.0";
 
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/johnwhitington/${pname}/releases/download/${version}/ppx_blob-${version}.tbz";
-    sha256 = "sha256-drobFwMTKd/a3aP5CX/08WhvgS1CkARH6zo+nSiwl08=";
+    sha256 = "sha256-8RXpCl8Qdc7cnZMKuRJx+GcOzk3uENwRR6s5uK+1cOQ=";
   };
 
   checkInputs = [ alcotest ];

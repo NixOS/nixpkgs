@@ -48,6 +48,13 @@ let
       };
     };
 
+    # The original argument name `websocketPingFrequency` is a misnomer, as the frequency is the inverse of the interval.
+    websocketPingInterval = lib.mkOption {
+      description = "Frequency at which the client will send websocket ping to the server.";
+      type = lib.types.nullOr lib.types.ints.unsigned;
+      default = null;
+    };
+
     loggingLevel = lib.mkOption {
       description = ''
         Passed to --log-lvl
@@ -232,13 +239,6 @@ let
           default = true;
         };
 
-        # The original argument name `websocketPingFrequency` is a misnomer, as the frequency is the inverse of the interval.
-        websocketPingInterval = lib.mkOption {
-          description = "Frequency at which the client will send websocket ping to the server.";
-          type = lib.types.nullOr lib.types.ints.unsigned;
-          default = null;
-        };
-
         upgradeCredentials = lib.mkOption {
           description = ''
             Use these credentials to authenticate during the HTTP upgrade request
@@ -321,6 +321,7 @@ let
                   tls-certificate =
                     if useACMEHost != null then "${certConfig.directory}/fullchain.pem" else "${tlsCertificate}";
                   tls-private-key = if useACMEHost != null then "${certConfig.directory}/key.pem" else "${tlsKey}";
+                  websocket-ping-frequency-sec = websocketPingInterval;
                 } extraArgs
               )
             } \

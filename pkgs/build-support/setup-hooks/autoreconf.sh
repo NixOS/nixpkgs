@@ -4,8 +4,11 @@ autoreconfPhase() {
     runHook preAutoreconf
 
     local flagsArray=()
-    : "${autoreconfFlags:=--install --force --verbose}"
-    concatTo flagsArray autoreconfFlags
+    if [[ -v autoreconfFlags ]]; then
+        concatTo flagsArray autoreconfFlags
+    else
+        flagsArray+=(--install --force --verbose)
+    fi
 
     autoreconf "${flagsArray[@]}"
     runHook postAutoreconf

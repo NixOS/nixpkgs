@@ -1,48 +1,51 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
+  rustPlatform,
+
+  # nativeBuildInputs
+  cargo,
+  rustc,
+  setuptools-rust,
+
+  # buildInputs
+  libiconv,
+
+  # tests
   h5py,
   numpy,
-  pythonOlder,
   pytestCheckHook,
-  rustc,
-  rustPlatform,
-  setuptools-rust,
   torch,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7tJeWs7kodK4Su8EaCjBuuWoMb93Ty3uiBrHZHdeTJc=";
+    hash = "sha256-gr4hBbecaGHaoNhRQQXWfLfNB0/wQPKftSiTnGgngog=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-Frcru/GGWHDxd027mvjJu3iR30KO2ddpPz54kGD6mjc=";
+    hash = "sha256-zDXzEVvmJF1dEVUFGBc3losr9U1q/qJCjNFkdJ/pCd4=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
-    setuptools-rust
     cargo
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    setuptools-rust
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];

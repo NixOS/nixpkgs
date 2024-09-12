@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, python3Packages
+, python311Packages
 , fetchFromGitHub
 , fetchurl
 , cargo
@@ -83,7 +83,7 @@ let
       substituteInPlace build-tar.py \
         --replace-fail 'run(yarn + ["--cwd", src_join(), "install", "--prefer-offline"])' 'pass'
 
-      ${python3Packages.python}/bin/python3 build-tar.py \
+      ${python311Packages.python}/bin/python3 build-tar.py \
         --output isl-dist.tar.xz \
         --yarn 'yarn --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress'
 
@@ -101,7 +101,7 @@ let
   };
 in
 # Builds the main `sl` binary and its Python extensions
-python3Packages.buildPythonApplication {
+python311Packages.buildPythonApplication {
   pname = "sapling";
   inherit src version;
 

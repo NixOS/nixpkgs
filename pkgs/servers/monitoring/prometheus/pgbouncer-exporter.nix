@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pgbouncer-exporter";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "pgbouncer_exporter";
     rev = "v${version}";
-    hash = "sha256-QnA9H4qedCPZKqJQ1I2OJO42mCWcWqYxLmeF3+JXzTw=";
+    hash = "sha256-fKoyRHYLwVefsZ014eazVCD5B9eV8/CUkuHE4mbUqVo=";
   };
 
-  vendorHash = "sha256-NYiVW+CNrxFrEUl1nsTeNNgy7SmTYgqs1d50rCvyBcw=";
+  vendorHash = "sha256-IxmxfF9WsF0Hbym4G0UecyW8hAvucoaCFUE1kXUljJs=";
 
   meta = with lib; {
     description = "Prometheus exporter for PgBouncer";

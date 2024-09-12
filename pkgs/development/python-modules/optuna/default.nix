@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "3.6.1";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "optuna";
     repo = "optuna";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+ZqMRIza4K5VWTUm7tC87S08SI+C8GKd2Uh3rGoHwd0=";
+    hash = "sha256-ZCK6otX90s8SB91TLkKwJ4net2dGmAKdIESeHXy87K0=";
   };
 
   nativeBuildInputs = [

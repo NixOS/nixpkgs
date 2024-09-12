@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, withFuse ? stdenv.isLinux || stdenv.isDarwin, fuse3, macfuse-stubs
+, withFuse ? stdenv.isLinux, fuse3
 , shared ? !stdenv.hostPlatform.isStatic
 , e2fsprogs, runCommand
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [ libuuid gettext ]
-    ++ lib.optional withFuse (if stdenv.isDarwin then macfuse-stubs else fuse3);
+    ++ lib.optionals withFuse [ fuse3 ];
 
   patches = [
     # Avoid trouble with older systems like NixOS 23.05.
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       url = "https://lore.kernel.org/linux-ext4/20240527091542.4121237-2-hi@alyssa.is/raw";
       hash = "sha256-pMoqm2eo5zYaTdU+Ppa4+posCVFb2A9S4uo5oApaaqc=";
     })
-  ] ++ lib.optional stdenv.isDarwin ./macfuse.patch;
+  ];
 
   configureFlags =
     if stdenv.isLinux then [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       "--disable-uuidd"
     ] else [
       "--enable-libuuid --disable-e2initrd-helper"
-    ] ++ lib.optional stdenv.isDarwin "CFLAGS=-D_FILE_OFFSET_BITS=64";
+    ];
 
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;

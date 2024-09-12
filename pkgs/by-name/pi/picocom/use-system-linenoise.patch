@@ -1,0 +1,30 @@
+diff --git a/Makefile b/Makefile
+index 8fca24ee38..33b59b5b96 100644
+--- a/Makefile
++++ b/Makefile
+@@ -39,9 +39,9 @@
+ ## Comment these out to disable "linenoise"-library support
+ HISTFILE = .picocom_history
+ CPPFLAGS += -DHISTFILE=\"$(HISTFILE)\" \
+-	    -DLINENOISE
+-OBJS += linenoise-1.0/linenoise.o
+-linenoise-1.0/linenoise.o : linenoise-1.0/linenoise.c linenoise-1.0/linenoise.h
++	    -DLINENOISE \
++	    $(shell pkg-config --cflags linenoise)
++LDFLAGS += $(shell pkg-config --libs linenoise)
+ 
+ ## Comment this in to enable (force) custom baudrate support
+ ## even on systems not enabled by default.
+diff --git a/picocom.c b/picocom.c
+index 775ee9c3bb..ba2f9bd666 100644
+--- a/picocom.c
++++ b/picocom.c
+@@ -48,7 +48,7 @@
+ #include "split.h"
+ #include "term.h"
+ #ifdef LINENOISE
+-#include "linenoise-1.0/linenoise.h"
++#include <linenoise.h>
+ #endif
+ 
+ #include "custbaud.h"

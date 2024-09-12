@@ -61,6 +61,8 @@ let
 
   removePythonPrefix = lib.removePrefix namePrefix;
 
+  mkPythonEditablePackage = callPackage ./editable.nix { };
+
   mkPythonMetaPackage = callPackage ./meta-package.nix { };
 
   # Convert derivation to a Python module.
@@ -99,7 +101,7 @@ in {
   inherit buildPythonPackage buildPythonApplication;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
-  inherit mkPythonMetaPackage;
+  inherit mkPythonMetaPackage mkPythonEditablePackage;
 
   python = toPythonModule python;
 

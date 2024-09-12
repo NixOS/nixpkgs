@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.8.0";
+  version = "4.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "cloudtools";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-JmoPXYEqaFxDIW8NmmZ8VpKX9gfZ1rVFu+dPZOL7C5k=";
+    hash = "sha256-qwU0SsS9qxKtUsZcsMZQ9NqB+Ye8lhDO8tR+ThmoxY8=";
   };
 
   propagatedBuildInputs = [ cfn-flip ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];

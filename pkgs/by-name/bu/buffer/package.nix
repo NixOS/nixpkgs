@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffer";
-  version = "0.9.2";
+  version = "0.9.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "cheywood";
     repo = "buffer";
     rev = finalAttrs.version;
-    hash = "sha256-EIyaFL2AEez8FIErL8+x7QNHnCYxj4mOuz7E+Svvh5I=";
+    hash = "sha256-WhUSiZ2Nty5CdaJC8zZVkUptP5cRnMByZKy3e9TAyjs=";
   };
 
   nativeBuildInputs = [

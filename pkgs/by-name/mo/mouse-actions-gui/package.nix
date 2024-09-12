@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mouse-actions-gui";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "jersou";
     repo = "mouse-actions";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-02E4HrKIoBV3qZPVH6Tjz9Bv/mh5C8amO1Ilmd+YO5g=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-44F4CdsDHuN2FuijnpfmoFy4a/eAbYOoBYijl9mOctg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/config-editor";
@@ -58,16 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-Rnr5jRupdUu6mIsWvdN6AnQnsxB5h31n/24pYslGs5g=";
+    hash = "sha256-amDTYAvEoDHb7+dg39+lUne0dv0M9vVe1vHoXk2agZA=";
   };
 
   cargoRoot = "src-tauri";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.sourceRoot}/${finalAttrs.cargoRoot}";
-    hash = "sha256-VQFRatnxzmywAiMLfkVgB7g8AFoqfWFYjt/vezpE1o8=";
+    hash = "sha256-H8TMpYFJWp227jPA5H2ZhSqTMiT/U6pT6eLyjibuoLU=";
   };
 
   buildPhase = ''

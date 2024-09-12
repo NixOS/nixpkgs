@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       It is not known if the issues can be exploited over the network in
       practical conditions. Upstream does not believe such an attack is
       feasible, but has stated that the library should not be used going
-      forward, and there are no plans to move to a another cryptography
+      forward, and there are no plans to move to another cryptography
       implementation or otherwise further maintain the library at all.
 
       You should make an informed decision about whether to override this

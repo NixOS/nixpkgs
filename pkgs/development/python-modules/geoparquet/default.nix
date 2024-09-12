@@ -34,7 +34,7 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportCheck = "geoparquet";
+  pythonImportsCheck = [ "geoparquet" ];
 
   doCheck = false; # no tests
 

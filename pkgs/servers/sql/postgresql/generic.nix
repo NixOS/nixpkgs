@@ -3,12 +3,13 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, fetchpatch, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
+      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
+      , removeReferencesTo
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
+      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs && !stdenv.hostPlatform.isStatic
       , enableSystemd ? null
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
@@ -23,7 +24,7 @@ let
 
       # JIT
       , jitSupport
-      , nukeReferences, patchelf, llvmPackages
+      , nukeReferences, llvmPackages, overrideCC
 
       # PL/Python
       , pythonSupport ? false
@@ -39,11 +40,20 @@ let
     lz4Enabled = atLeast "14";
     zstdEnabled = atLeast "15";
 
+    dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
+
     systemdSupport' = if enableSystemd == null then systemdSupport else (lib.warn "postgresql: argument enableSystemd is deprecated, please use systemdSupport instead." enableSystemd);
 
     pname = "postgresql";
 
-    stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
+    stdenv' =
+      if jitSupport then
+        overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
+          # LLVM bintools are not used by default, but are needed to make -flto work below.
+          bintools = llvmPackages.bintools;
+        })
+      else
+        stdenv;
   in stdenv'.mkDerivation (finalAttrs: {
     inherit version;
     pname = pname + lib.optionalString jitSupport "-jit";
@@ -53,10 +63,31 @@ let
       inherit hash;
     };
 
+    __structuredAttrs = true;
+
     hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
-    outputs = [ "out" "lib" "doc" "man" ];
-    setOutputFlags = false; # $out retains configureFlags :-/
+    outputs = [ "out" "dev" "doc" "lib" "man" ];
+    outputChecks.out = {
+      disallowedReferences = [ "dev" "doc" "man" ];
+      disallowedRequisites = [
+        stdenv'.cc
+      ] ++ (
+        map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs)
+      ) ++ lib.optionals jitSupport [
+        llvmPackages.llvm.out
+      ];
+    };
+    outputChecks.lib = {
+      disallowedReferences = [ "out" "dev" "doc" "man" ];
+      disallowedRequisites = [
+        stdenv'.cc
+      ] ++ (
+        map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs)
+      ) ++ lib.optionals jitSupport [
+        llvmPackages.llvm.out
+      ];
+    };
 
     buildInputs = [
       zlib
@@ -69,7 +100,7 @@ let
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
-      ++ lib.optionals systemdSupport' [ systemd ]
+      ++ lib.optionals systemdSupport' [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals stdenv'.isLinux [ linux-pam ]
@@ -78,8 +109,9 @@ let
     nativeBuildInputs = [
       makeWrapper
       pkg-config
+      removeReferencesTo
     ]
-      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
+      ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences ];
 
     enableParallelBuilding = true;
 
@@ -87,16 +119,23 @@ let
 
     buildFlags = [ "world" ];
 
-    # Makes cross-compiling work when xml2-config can't be executed on the host.
-    # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
-    env.NIX_CFLAGS_COMPILE = lib.optionalString (olderThan "13") "-I${libxml2.dev}/include/libxml2";
+    # libpgcommon.a and libpgport.a contain all paths returned by pg_config and are linked
+    # into all binaries. However, almost no binaries actually use those paths. The following
+    # flags will remove unused sections from all shared libraries and binaries - including
+    # those paths. This avoids a lot of circular dependency problems with different outputs,
+    # and allows splitting them cleanly.
+    env.CFLAGS = "-fdata-sections -ffunction-sections"
+      + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections")
+      + lib.optionalString (stdenv'.isDarwin && jitSupport) " -fuse-ld=lld"
+      # Makes cross-compiling work when xml2-config can't be executed on the host.
+      # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
+      + lib.optionalString (olderThan "13") " -I${libxml2.dev}/include/libxml2";
 
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
       "--with-icu"
       "--sysconfdir=/etc"
-      "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString systemdSupport' "--with-systemd")
@@ -106,13 +145,16 @@ let
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
-      ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
+      ++ lib.optionals stdenv'.isLinux [ "--with-pam" ]
+      # This could be removed once the upstream issue is resolved:
+      # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
+      ++ lib.optionals (stdenv'.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
+      (if atLeast "15" then ./patches/empty-pg-config-view-15+.patch else ./patches/empty-pg-config-view.patch)
       ./patches/less-is-more.patch
       ./patches/paths-for-split-outputs.patch
-      ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/paths-with-postgresql-suffix.patch
 
       (substituteAll {
@@ -124,33 +166,46 @@ let
       map fetchurl (lib.attrValues muslPatches)
     ) ++ lib.optionals stdenv'.isLinux  [
       (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
+    ] ++ lib.optionals (stdenv'.isDarwin && olderThan "16") [
+      ./patches/export-dynamic-darwin-15-.patch
     ];
 
     installTargets = [ "install-world" ];
 
     postPatch = ''
-      # Hardcode the path to pgxs so pg_config returns the path in $out
-      substituteInPlace "src/common/config_info.c" --subst-var out
-    '' + lib.optionalString jitSupport ''
-        # Force lookup of jit stuff in $out instead of $lib
-        substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit.c --replace pkglib_path \"$out/lib\"
-        substituteInPlace src/backend/jit/llvm/llvmjit_inline.cpp --replace pkglib_path \"$out/lib\"
+      substituteInPlace "src/Makefile.global.in" --subst-var out
+      # Hardcode the path to pgxs so pg_config returns the path in $dev
+      substituteInPlace "src/common/config_info.c" --subst-var dev
     '';
 
     postInstall =
       ''
-        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/libpgcommon*.a" "$out"
-        moveToOutput "lib/libpgport*.a" "$out"
-        moveToOutput "lib/libecpg*" "$out"
+        moveToOutput "bin/ecpg" "$dev"
+        moveToOutput "lib/pgxs" "$dev"
 
-        # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
+        # Pretend pg_config is located in $out/bin to return correct paths, but
+        # actually have it in -dev to avoid pulling in all other outputs.
+        moveToOutput "bin/pg_config" "$dev"
+        # To prevent a "pg_config: could not find own program executable" error, we fake
+        # pg_config in the default output.
+        cat << EOF > "$out/bin/pg_config" && chmod +x "$out/bin/pg_config"
+        #!${stdenv'.shell}
+        echo The real pg_config can be found in the -dev output.
+        exit 1
+        EOF
+        wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
+
+        # postgres exposes external symbols get_pkginclude_path and similar. Those
+        # can't be stripped away by --gc-sections/LTO, because they could theoretically
+        # be used by dynamically loaded modules / extensions. To avoid circular dependencies,
+        # references to -dev, -doc and -man are removed here. References to -lib must be kept,
+        # because there is a realistic use-case for extensions to locate the /lib directory to
+        # load other shared modules.
+        remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
-          for i in $out/lib/*.a $lib/lib/*.a; do
+          for i in $lib/lib/*.a; do
             name="$(basename "$i")"
             ext="${stdenv'.hostPlatform.extensions.sharedLibrary}"
             if [ -e "$lib/lib/''${name%.a}$ext" ] || [ -e "''${i%.a}$ext" ]; then
@@ -158,36 +213,18 @@ let
             fi
           done
         fi
+        # The remaining static libraries are libpgcommon.a, libpgport.a and related.
+        # Those are only used when building e.g. extensions, so go to $dev.
+        moveToOutput "lib/*.a" "$dev"
       '' + lib.optionalString jitSupport ''
-        # Move the bitcode and libllvmjit.so library out of $lib; otherwise, every client that
-        # depends on libpq.so will also have libLLVM.so in its closure too, bloating it
-        moveToOutput "lib/bitcode" "$out"
-        moveToOutput "lib/llvmjit*" "$out"
+        # In the case of JIT support, prevent useless dependencies on header files
+        find "$out/lib" -iname '*.bc' -type f -exec nuke-refs '{}' +
 
-        # In the case of JIT support, prevent a retained dependency on clang-wrapper
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/clang clang
-        nuke-refs $out/lib/llvmjit_types.bc $(find $out/lib/bitcode -type f)
-
-        # Stop out depending on the default output of llvm
-        substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.out}/bin "" \
-          --replace '$(LLVM_BINPATH)/' ""
-
-        # Stop out depending on the -dev output of llvm
-        substituteInPlace $out/lib/pgxs/src/Makefile.global \
-          --replace ${llvmPackages.llvm.dev}/bin/llvm-config llvm-config \
-          --replace -I${llvmPackages.llvm.dev}/include ""
-
-        ${lib.optionalString (!stdenv'.isDarwin) ''
-          # Stop lib depending on the -dev output of llvm
-          rpath=$(patchelf --print-rpath $out/lib/llvmjit.so)
-          nuke-refs -e $out $out/lib/llvmjit.so
-          # Restore the correct rpath
-          patchelf $out/lib/llvmjit.so --set-rpath "$rpath"
-        ''}
+        # Stop lib depending on the -dev output of llvm
+        remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
       '';
 
-    postFixup = lib.optionalString (!stdenv'.isDarwin && stdenv'.hostPlatform.libc == "glibc")
+    postFixup = lib.optionalString stdenv'.hostPlatform.isGnu
       ''
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
@@ -197,8 +234,6 @@ let
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
 
-    disallowedReferences = [ stdenv'.cc ];
-
     passthru = let
       this = self.callPackage generic args;
       jitToggle = this.override {
@@ -206,12 +241,12 @@ let
       };
     in
     {
+      inherit dlSuffix;
+
       psqlSchema = lib.versions.major version;
 
       withJIT = if jitSupport then this else jitToggle;
       withoutJIT = if jitSupport then jitToggle else this;
-
-      dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
 
       pkgs = let
         scope = {
@@ -225,7 +260,7 @@ let
       in import ./ext newSelf newSuper;
 
       withPackages = postgresqlWithPackages {
-                       inherit makeWrapper buildEnv;
+                       inherit buildEnv;
                        postgresql = this;
                      }
                      this.pkgs;
@@ -265,36 +300,18 @@ let
       # resulting LLVM IR isn't platform-independent this doesn't give you much.
       # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
       # a query, postgres would coredump with `Illegal instruction`.
-      broken = (jitSupport && stdenv.hostPlatform != stdenv.buildPlatform)
-        # Allmost all tests fail FATAL errors for v12 and v13
-        || (jitSupport && stdenv.hostPlatform.isMusl && olderThan "14");
+      broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
     };
   });
 
-  postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
+  postgresqlWithPackages = { postgresql, buildEnv }: pkgs: f: buildEnv {
     name = "postgresql-and-plugins-${postgresql.version}";
     paths = f pkgs ++ [
         postgresql
-        postgresql.lib
         postgresql.man   # in case user installs this into environment
     ];
-    nativeBuildInputs = [ makeWrapper ];
 
-
-    # We include /bin to ensure the $out/bin directory is created, which is
-    # needed because we'll be removing the files from that directory in postBuild
-    # below. See #22653
-    pathsToLink = ["/" "/bin"];
-
-    # Note: the duplication of executables is about 4MB size.
-    # So a nicer solution was patching postgresql to allow setting the
-    # libdir explicitly.
-    postBuild = ''
-      mkdir -p $out/bin
-      rm $out/bin/{pg_config,postgres,pg_ctl}
-      cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
-      wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
-    '';
+    pathsToLink = ["/"];
 
     passthru.version = postgresql.version;
     passthru.psqlSchema = postgresql.psqlSchema;

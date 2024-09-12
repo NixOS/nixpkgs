@@ -194,9 +194,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  env.NIX_CFLAGS_COMPILE = "-pthread";
-
-  OPENLDAP_ROOT = openldap;
+  env = {
+    NIX_CFLAGS_COMPILE = "-pthread";
+    OPENLDAP_ROOT = openldap;
+  };
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH

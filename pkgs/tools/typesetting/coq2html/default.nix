@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation  rec {
   pname = "coq2html";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "coq2html";
     rev = "v${version}";
-    hash = "sha256-2J9uETDt+P+t4E9KhTIypA4MQpTCCxYmR6FYF30RqKk=";
+    hash = "sha256-dBXYeRwBhBWXJfdULLzfgZU+WD6WC6R8wV2eS1zAkq8=";
   };
 
   nativeBuildInputs = [ ocaml ];

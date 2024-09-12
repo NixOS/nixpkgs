@@ -387,3 +387,8 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/os-specific/linux/checkpolicy @RossComputerGuy
 /pkgs/os-specific/linux/libselinux  @RossComputerGuy
 /pkgs/os-specific/linux/libsepol    @RossComputerGuy
+
+# installShellFiles
+/pkgs/by-name/in/installShellFiles/*     @Ericson2314
+/pkgs/test/install-shell-files/*         @Ericson2314
+/doc/hooks/installShellFiles.section.md  @Ericson2314

@@ -154,7 +154,7 @@ let
     defaultGemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
         buildFlags =
-        [ "--with-pg-config=${pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
+        [ "--with-pg-config=${lib.getDev pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
       };
     };
   };
@@ -172,7 +172,7 @@ let
     gemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
         buildFlags =
-        [ "--with-pg-config=${pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
+        [ "--with-pg-config=${lib.getDev pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
       };
     };
   };
@@ -190,9 +190,7 @@ let
         defaultGemConfig = super.defaultGemConfig // {
           pg = attrs: {
             buildFlags = [
-              "--with-pg-config=${
-                pkgs."postgresql_${pg_version}"
-              }/bin/pg_config"
+              "--with-pg-config=${lib.getDev pkgs."postgresql_${pg_version}"}/bin/pg_config"
             ];
           };
         };

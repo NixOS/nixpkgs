@@ -283,6 +283,7 @@ mapAliases ({
   jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
   jupyterlab_launcher = throw "jupyterlab_launcher has been removed as it's abandoned for over 5 years and broken"; # added 2023-11-11
   jupyterlab_server = jupyterlab-server; # added 2023-11-12
+  kafka-python = kafka-python-ng; # added 2024-07-19
   Kajiki = kajiki; # added 2023-02-19
   keepkey_agent = keepkey-agent; # added 2024-01-06
   Keras = keras; # added 2021-11-25

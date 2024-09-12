@@ -100,12 +100,6 @@ let
         ];
       });
 
-      debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
-        # tests are deadlocking too often
-        # https://github.com/NixOS/nixpkgs/issues/262000
-        doCheck = false;
-      });
-
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
         src = fetchFromGitHub {
@@ -414,7 +408,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.9.0";
+  hassVersion = "2024.9.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -432,13 +426,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-tzEiT+1NvwmH/j1FnmUcanwjSGS8+M/FJ2wZY7qAdYk=";
+    hash = "sha256-jwkLlmwP9rxwGFVagVyVrO6scOMzuva1Pz706nb3Ato=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-KTseRVRn3O75Sjot4f7fgKioKKEY33eXHcFufsPKLak=";
+    hash = "sha256-0+tXKnkcpjISqapvFh7nPKfPxJrSACuxulejk4pCPUQ=";
   };
 
   build-system = with python.pkgs; [
@@ -569,10 +563,7 @@ in python.pkgs.buildPythonApplication rec {
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
-    "debugpy"
     "hue"
-    "qwikswitch"
-    "sentry"
   ];
 
   pytestFlagsArray = [
@@ -605,6 +596,8 @@ in python.pkgs.buildPythonApplication rec {
     "tests/hassfest"
     # we don't care about code quality
     "tests/pylint"
+    # redundant component import test, which would make debugpy & sentry expensive to review
+    "tests/test_circular_imports.py"
     # don't bulk test all components
     "tests/components"
   ];

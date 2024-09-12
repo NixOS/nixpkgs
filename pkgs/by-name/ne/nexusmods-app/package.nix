@@ -7,9 +7,6 @@
   fetchFromGitHub,
   fontconfig,
   lib,
-  libICE,
-  libSM,
-  libX11,
   runCommand,
   pname ? "nexusmods-app",
 }:
@@ -61,13 +58,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   runtimeInputs = [ desktop-file-utils ];
-
-  runtimeDeps = [
-    fontconfig
-    libICE
-    libSM
-    libX11
-  ];
 
   executables = [ "NexusMods.App" ];
 

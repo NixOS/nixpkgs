@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , casadi
 , cmake
 , boost
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "pinocchio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WgMqb+NHnaxW9/qSZ0UGI4zGxGjh12a5DwtdX9byBiw=";
+    hash = "sha256-8V+n1TwFojXKOVkGG8k9aXVadt2NBFlZKba93L+NRNU=";
   };
 
   # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
@@ -34,19 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "add_pinocchio_unit_test(force)" ""
   '';
 
-  patches = [
-    # fix urdf & collision support on aarch64-darwin
-    (fetchpatch {
-      name = "static-pointer_cast.patch";
-      url = "https://github.com/stack-of-tasks/pinocchio/pull/2339/commits/ead869e8f3cce757851b9a011c4a2f55fb66582b.patch";
-      hash = "sha256-CkrWQJP/pPNs6B3a1FclfM7JWwkmsPzRumS46KQHv0s=";
-    })
-  ];
-
   postPatch = ''
     # example-robot-data models are used in checks.
     # Upstream provide them as git submodule, but we can use our own version instead.
-    rmdir models/example-robot-data
+    test -d models/example-robot-data && rmdir models/example-robot-data
     ln -s ${example-robot-data.src} models/example-robot-data
 
     # allow package:// uri use in examples
@@ -99,9 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  pythonImportsCheck = lib.optionals (!pythonSupport) [
-    "pinocchio"
-  ];
+  # pythonImportsCheck, but in stdenv.mkDerivation
+  postInstall = lib.optionalString pythonSupport ''
+    PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
+    python -c "import pinocchio"
+  '';
 
   meta = {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";

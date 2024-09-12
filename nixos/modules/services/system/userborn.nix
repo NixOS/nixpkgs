@@ -97,14 +97,14 @@ in
       # home.
       tmpfiles.settings.home-directories = lib.mapAttrs' (
         username: opts:
-        lib.nameValuePair opts.home {
+        lib.nameValuePair (toString opts.home) {
           d = {
             mode = opts.homeMode;
             user = username;
             inherit (opts) group;
           };
         }
-      ) (lib.filterAttrs (_username: opts: opts.home != "/var/empty") userCfg.users);
+      ) (lib.filterAttrs (_username: opts: opts.createHome && opts.home != "/var/empty") userCfg.users);
 
       services.userborn = {
         wantedBy = [ "sysinit.target" ];

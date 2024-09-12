@@ -1,14 +1,16 @@
 {
   lib,
+  stdenv,
   absl-py,
   buildPythonPackage,
+  fetchFromGitHub,
 
   # build-system
   flit-core,
 
   # dependencies
   etils,
-  fetchPypi,
+  humanize,
   importlib-resources,
   jax,
   jaxlib,
@@ -20,32 +22,34 @@
   tensorstore,
   typing-extensions,
 
-  # checks
+  # tests
+  chex,
   google-cloud-logging,
   mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.5.20";
+  version = "0.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    pname = "orbax_checkpoint";
-    inherit version;
-    hash = "sha256-V91BdeaYqMSVeZGrfmwZ17OoeSrnByuc0rJnzls0iE0=";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "orbax";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yqccXQGEvxYnWP8rWmRLjjB0pkSEeXBrRvJIwVowUx0=";
   };
+
+  sourceRoot = "${src.name}/checkpoint";
 
   build-system = [ flit-core ];
 
   dependencies = [
     absl-py
     etils
+    humanize
     importlib-resources
     jax
     jaxlib
@@ -59,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    chex
     google-cloud-logging
     mock
     pytest-xdist
@@ -68,6 +73,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "orbax"
     "orbax.checkpoint"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Probably failing because of a filesystem impurity
+    # self.assertFalse(os.path.exists(dst_dir))
+    # AssertionError: True is not false
+    "test_create_snapshot"
   ];
 
   disabledTestPaths = [

@@ -1,21 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, cmake, darwin, openssl, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+
+  cmake,
+  pkg-config,
+
+  darwin,
+  dbus,
+  openssl,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20240830";
+  version = "20240910";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
     rev = version;
-    hash = "sha256-d93f/kKOd7D7FdtgrhrJhQS1DxiUKsdcf2JuUTmRDrw=";
+    hash = "sha256-VOC13xXWRGHq7K5ju1U/+SNj+qgkJCSYN11l01hwYhI=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.isLinux [
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
     sqlite
+  ] ++ lib.optionals stdenv.isLinux [
+    dbus
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security
   ];

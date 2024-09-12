@@ -4,6 +4,7 @@
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
+, enableMD2 ? false
 , enableKTLS ? stdenv.isLinux
 , static ? stdenv.hostPlatform.isStatic
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
@@ -130,7 +131,8 @@ let
     ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ] ++ lib.optional enableSSL2 "enable-ssl2"
+    ] ++ lib.optional enableMD2 "enable-md2"
+      ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.

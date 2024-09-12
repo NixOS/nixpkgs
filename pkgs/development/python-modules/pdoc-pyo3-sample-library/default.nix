@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+    inherit src;
     hash = "sha256-KrEBr998AV/bKcIoq0tX72/QwPD9bQplrS0Zw+JiSMQ=";
   };
 

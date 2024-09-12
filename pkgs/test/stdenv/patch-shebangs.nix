@@ -87,6 +87,20 @@ let
       };
     };
 
+    dont-patch-builtins = stdenv.mkDerivation {
+      name = "dont-patch-builtins";
+      strictDeps = false;
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/bin
+        echo "#!/usr/bin/builtin" > $out/bin/test
+        chmod +x $out/bin/test
+        dontPatchShebangs=
+      '';
+      passthru = {
+        assertion = "grep '^#!/usr/bin/builtin' $out/bin/test > /dev/null";
+      };
+    };
   };
 in
 stdenv.mkDerivation {

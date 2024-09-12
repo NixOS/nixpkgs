@@ -2,44 +2,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
-  pythonOlder,
+
+  # dependencies
   aiohttp,
   dataclasses-json,
-  langchain,
   langchain-core,
-  langchain-standard-tests,
+  langchain,
   langsmith,
-  httpx,
-  lark,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+
+  # optional-dependencies
+  typer,
   numpy,
+
+  # tests
+  httpx,
+  langchain-standard-tests,
+  lark,
   pandas,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pyyaml,
-  requests,
   requests-mock,
   responses,
-  sqlalchemy,
   syrupy,
-  tenacity,
   toml,
-  typer,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.15";
+  version = "0.2.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-R1C+tEXCLqYHzQ2zrYaYa6cqJn/UWZEHBMC+WjbdQaQ=";
+    hash = "sha256-0FKbx/ZPX7sioof5pMdqpnVWc46+eOiTIseyxwYK49E=";
   };
 
   sourceRoot = "${src.name}/libs/community";

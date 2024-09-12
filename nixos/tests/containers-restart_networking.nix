@@ -1,20 +1,4 @@
-let
-  client_base = {
-    networking.firewall.enable = false;
-
-    containers.webserver = {
-      autoStart = true;
-      privateNetwork = true;
-      hostBridge = "br0";
-      config = {
-        networking.firewall.enable = false;
-        networking.interfaces.eth0.ipv4.addresses = [
-          { address = "192.168.1.122"; prefixLength = 24; }
-        ];
-      };
-    };
-  };
-in import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 {
   name = "containers-restart_networking";
   meta = {
@@ -22,46 +6,55 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }:
   };
 
   nodes = {
-    client = { lib, ... }: client_base // {
+    client = {
       virtualisation.vlans = [ 1 ];
+
+      networking.firewall.enable = false;
+
+      containers.webserver = {
+        autoStart = true;
+        privateNetwork = true;
+        hostBridge = "br0";
+        config = {
+          networking.firewall.enable = false;
+          networking.interfaces.eth0.ipv4.addresses = [
+            { address = "192.168.1.122"; prefixLength = 24; }
+          ];
+        };
+      };
 
       networking.bridges.br0 = {
         interfaces = [];
         rstp = false;
       };
-      networking.interfaces = {
-        eth1.ipv4.addresses = lib.mkOverride 0 [ ];
-        br0.ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+
+      networking.interfaces.br0.ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+
+      specialisation.eth1.configuration = {
+        networking.bridges.br0.interfaces = [ "eth1" ];
+        networking.interfaces = {
+          eth1.ipv4.addresses = lib.mkForce [ ];
+          eth1.ipv6.addresses = lib.mkForce [ ];
+          br0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+        };
       };
 
-    };
-    client_eth1 = { lib, ... }: client_base // {
-      networking.bridges.br0 = {
-        interfaces = [ "eth1" ];
-        rstp = false;
-      };
-      networking.interfaces = {
-        eth1.ipv4.addresses = lib.mkOverride 0 [ ];
-        br0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
-      };
-    };
-    client_eth1_rstp = { lib, ... }: client_base // {
-      networking.bridges.br0 = {
-        interfaces = [ "eth1" ];
-        rstp = true;
-      };
-      networking.interfaces = {
-        eth1.ipv4.addresses = lib.mkOverride 0 [ ];
-        br0.ipv4.addresses =  [ { address = "192.168.1.2"; prefixLength = 24; } ];
+      specialisation.eth1-rstp.configuration = {
+        networking.bridges.br0 = {
+          interfaces = [ "eth1" ];
+          rstp = lib.mkForce true;
+        };
+
+        networking.interfaces = {
+          eth1.ipv4.addresses = lib.mkForce [ ];
+          eth1.ipv6.addresses = lib.mkForce [ ];
+          br0.ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+        };
       };
     };
   };
 
-  testScript = {nodes, ...}: let
-    originalSystem = nodes.client.config.system.build.toplevel;
-    eth1_bridged = nodes.client_eth1.config.system.build.toplevel;
-    eth1_rstp = nodes.client_eth1_rstp.config.system.build.toplevel;
-  in ''
+  testScript = ''
     client.start()
 
     client.wait_for_unit("default.target")
@@ -75,7 +68,7 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     with subtest("Bridged configuration without STP preserves connectivity"):
         client.succeed(
-            "${eth1_bridged}/bin/switch-to-configuration test >&2"
+            "/run/booted-system/specialisation/eth1/bin/switch-to-configuration test >&2"
         )
 
         client.succeed(
@@ -87,7 +80,7 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     #  activating rstp needs another service, therefore the bridge will restart and the container will lose its connectivity
     # with subtest("Bridged configuration with STP"):
-    #     client.succeed("${eth1_rstp}/bin/switch-to-configuration test >&2")
+    #     client.succeed("/run/booted-system/specialisation/eth1-rstp/bin/switch-to-configuration test >&2")
     #     client.execute("ip -4 a >&2")
     #     client.execute("ip l >&2")
     #
@@ -100,7 +93,7 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }:
 
     with subtest("Reverting to initial configuration preserves connectivity"):
         client.succeed(
-            "${originalSystem}/bin/switch-to-configuration test >&2"
+            "/run/booted-system/bin/switch-to-configuration test >&2"
         )
 
         client.succeed("ping 192.168.1.122 -c 1 -n >&2")

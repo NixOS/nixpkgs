@@ -60,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs misc/*
   '';
 
+  # some tools like 'zoekt' want an unambiguous binary name, so give it to them
+  postInstall = ''
+    ln -s $out/bin/ctags $out/bin/universal-ctags
+  '';
+
   doCheck = true;
 
   checkFlags = [

@@ -84,7 +84,10 @@
                   aliasTemplate = "#irc_$CHANNEL";
                 };
               };
-              mediaProxy.publicUrl = "http://localhost:11111/media";
+              mediaProxy = {
+                publicUrl = "http://localhost:11111/media";
+                ttl = 0;
+              };
             };
           };
         };

@@ -841,7 +841,7 @@ with self; {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7047.tar.gz";
       hash = "sha256-lj5jxuGocl/y9iTpCGOWrhUNtR3QozfDeB0JqZSvBaU=";
     };
-    # Use TLS endpoints for downloads and metadata by default
+    # CVE-2024-45321: Use TLS endpoints for downloads and metadata
     preConfigure = ''
       substituteInPlace bin/cpanm \
         --replace-fail http://www.cpan.org https://www.cpan.org \

@@ -7,18 +7,20 @@
 , libcanberra-gtk3
 , pkg-config
 , sound-theme-freedesktop
+, libspelling
+, gtksourceview5
 , wrapGAppsHook4
 }:
 
 buildGoModule rec {
   pname = "dissent";
-  version = "0.0.27";
+  version = "0.0.30";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
     rev = "v${version}";
-    hash = "sha256-aksQgkeisNvfp++Gobg4ITA1au2GzTgKmFtVCrLkfac=";
+    hash = "sha256-wBDN9eUPOr9skTTgA0ea50Byta3qVr1loRrfMWhnxP8=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +39,8 @@ buildGoModule rec {
     libadwaita
     libcanberra-gtk3
     sound-theme-freedesktop
+    libspelling
+    gtksourceview5
   ];
 
   postInstall = ''
@@ -47,7 +51,7 @@ buildGoModule rec {
     install -D -m 444 -t $out/share/dbus-1/services nix/so.libdb.dissent.service
   '';
 
-  vendorHash = "sha256-8LY7XEMe91rGOGLr6TJhoEnl2cWArcQ5VXMV9NpZaL8=";
+  vendorHash = "sha256-TXqdO+DjnDD/+zwm3gK3+sxMTEVSHuceKz4ZJVH5Y34=";
 
   meta = with lib; {
     description = "A third-party Discord client designed for a smooth, native experience (formerly gtkcord4)";
