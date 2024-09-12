@@ -1,34 +1,34 @@
 {
   lib,
+  bash,
   buildPythonPackage,
+  cliff,
+  debtcollector,
   defusedxml,
   fetchPypi,
-  pbr,
-  cliff,
+  fixtures,
+  hacking,
   jsonschema,
-  testtools,
-  paramiko,
   netaddr,
   oslo-concurrency,
   oslo-config,
   oslo-log,
-  stestr,
   oslo-serialization,
   oslo-utils,
-  fixtures,
+  oslotest,
+  paramiko,
+  pbr,
+  prettytable,
+  python,
   pythonOlder,
   pyyaml,
-  subunit,
-  stevedore,
-  prettytable,
-  urllib3,
-  debtcollector,
-  hacking,
-  oslotest,
-  bash,
-  python,
   setuptools,
+  stestr,
+  stevedore,
+  subunit,
   testscenarios,
+  testtools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -48,33 +48,33 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    pbr
     cliff
+    debtcollector
     defusedxml
+    fixtures
     jsonschema
-    testtools
-    paramiko
     netaddr
     oslo-concurrency
     oslo-config
     oslo-log
-    stestr
     oslo-serialization
     oslo-utils
-    fixtures
-    pyyaml
-    subunit
-    stevedore
+    paramiko
+    pbr
     prettytable
-    urllib3
-    debtcollector
+    pyyaml
+    stestr
+    stevedore
+    subunit
     testscenarios
+    testtools
+    urllib3
   ];
 
   nativeCheckInputs = [
-    stestr
     hacking
     oslotest
+    stestr
   ];
 
   checkPhase = ''
