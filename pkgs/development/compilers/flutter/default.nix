@@ -1,4 +1,4 @@
-{ useNixpkgsEngine ? false, callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }@args:
+{ useNixpkgsEngine ? false, callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
@@ -19,7 +19,7 @@ let
     , pubspecLock
     , artifactHashes
     , channel
-    }@fargs:
+    }:
     let
       args = {
         inherit version engineVersion engineSwiftShaderRev engineSwiftShaderHash engineHashes enginePatches patches pubspecLock artifactHashes useNixpkgsEngine channel;
