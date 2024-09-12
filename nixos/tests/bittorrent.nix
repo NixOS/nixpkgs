@@ -20,7 +20,7 @@ let
   externalTrackerAddress = "80.100.100.3";
 
   download-dir = "/var/lib/transmission/Downloads";
-  transmissionConfig = { ... }: {
+  transmissionConfig = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.transmission_3 ];
     services.transmission = {
       enable = true;
