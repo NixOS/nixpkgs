@@ -4,6 +4,7 @@
   fetchPypi,
   netaddr,
   oslo-concurrency,
+  oslo-config,
   oslo-serialization,
   oslo-utils,
   prettytable,
@@ -14,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "osprofiler";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V4N7YgWBsTREouIFZHddT8c+/2fHiIr5mUftWC/lFLA=";
+    hash = "sha256-bdHEviZFqPJBIQVdpbtGFojcr8fmtNS6vA7xumaQJ4E=";
   };
 
   build-system = [ setuptools ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     netaddr
     oslo-concurrency
+    oslo-config
     oslo-serialization
     oslo-utils
     prettytable
