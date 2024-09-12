@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
-  version = "3.1.0";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mirumee";
     repo = "google-i18n-address";
     rev = "refs/tags/${version}";
-    hash = "sha256-dW/1wwnFDjYpym1ZaSZ7mOLpkHxsvuAHC8zBRekxWaw=";
+    hash = "sha256-7RqS/+6zInlhWydJwp4xf2uGpfmSdiSwvJugpL8Mlpk=";
   };
 
   nativeBuildInputs = [ hatchling ];
