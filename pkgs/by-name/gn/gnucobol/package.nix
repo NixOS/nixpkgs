@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, autoconf269
-, automake
-, libtool
-, pkg-config
-# libs
-, cjson
-, db
-, gmp
-, libxml2
-, ncurses
-# docs
-, help2man
-, texinfo
-, texliveBasic
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf269,
+  automake,
+  libtool,
+  pkg-config,
+  # libs
+  cjson,
+  db,
+  gmp,
+  libxml2,
+  ncurses,
+  # docs
+  help2man,
+  texinfo,
+  texliveBasic,
 # test
 }:
 
@@ -45,9 +46,14 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  outputs = [ "bin" "dev" "lib" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "lib"
+    "out"
+  ];
   # XXX: Without this, we get a cycle between bin and dev
-  propagatedBuildOutputs = [];
+  propagatedBuildOutputs = [ ];
 
   # Skips a broken test
   postPatch = ''
@@ -59,15 +65,17 @@ stdenv.mkDerivation rec {
     sed -i '2894s/^/AT_SKIP_IF([true])/' tests/testsuite.src/run_file.at
   '';
 
-  preConfigure = ''
-    autoconf
-    aclocal
-    automake
-  '' + lib.optionalString stdenv.isDarwin ''
-    # when building with nix on darwin, configure will use GNU strip,
-    # which fails due to using --strip-unneeded, which is not supported
-    substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
-  '';
+  preConfigure =
+    ''
+      autoconf
+      aclocal
+      automake
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # when building with nix on darwin, configure will use GNU strip,
+      # which fails due to using --strip-unneeded, which is not supported
+      substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
+    '';
 
   # error: call to undeclared function 'xmlCleanupParser'
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
@@ -75,7 +83,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = [ "install-pdf" "install-html" "localedir=$out/share/locale" ];
+  installFlags = [
+    "install-pdf"
+    "install-html"
+    "localedir=$out/share/locale"
+  ];
 
   # Tests must run after install.
   doCheck = false;
@@ -109,8 +121,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free/libre COBOL compiler";
     homepage = "https://gnu.org/software/gnucobol/";
-    license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = with maintainers; [ ericsagnes lovesegfault techknowlogick ];
+    license = with licenses; [
+      gpl3Only
+      lgpl3Only
+    ];
+    maintainers = with maintainers; [
+      ericsagnes
+      lovesegfault
+      techknowlogick
+    ];
     platforms = platforms.all;
   };
 }
