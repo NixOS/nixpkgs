@@ -12,6 +12,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  bodymiscale = callPackage ./bodymiscale { };
+
   dwd = callPackage ./dwd { };
 
   elevenlabs_tts = callPackage ./elevenlabs_tts {};
