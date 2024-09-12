@@ -1,0 +1,20 @@
+diff --git a/CMake/Utils/MyGUIConfigTargets.cmake b/CMake/Utils/MyGUIConfigTargets.cmake
+index 7e279c986..b33f097c0 100644
+--- a/CMake/Utils/MyGUIConfigTargets.cmake
++++ b/CMake/Utils/MyGUIConfigTargets.cmake
+@@ -418,15 +418,6 @@ function(mygui_config_lib PROJECTNAME)
+ 		if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+ 			# add GCC visibility flags to shared library build
+ 			set_target_properties(${PROJECTNAME} PROPERTIES COMPILE_FLAGS "${MYGUI_GCC_VISIBILITY_FLAGS}")
+-			if (APPLE)
+-				# deal with Mac OS X's framework system
+-				set_target_properties(${PROJECTNAME} PROPERTIES FRAMEWORK TRUE)
+-				set_target_properties(${PROJECTNAME} PROPERTIES PUBLIC_HEADER "${${PROJECTNAME}_HEADERS}")
+-				set_target_properties(${PROJECTNAME} PROPERTIES OUTPUT_NAME ${PROJECTNAME})
+-				set_target_properties(${PROJECTNAME} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
+-				set_target_properties(${PROJECTNAME} PROPERTIES BUILD_WITH_INSTALL_NAME_DIR TRUE)
+-				set_target_properties(${PROJECTNAME} PROPERTIES INSTALL_NAME_DIR "@executable_path/../lib")
+-			endif (APPLE)
+ 		endif ()
+ 	endif (MYGUI_STATIC)
+ 	mygui_install_target(${PROJECTNAME} "")

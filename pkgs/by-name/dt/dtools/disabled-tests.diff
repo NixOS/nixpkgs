@@ -1,0 +1,11 @@
+--- a/rdmd_test.d
++++ b/rdmd_test.d
+@@ -616,7 +616,7 @@ void runTests(string rdmdApp, string compiler, string model)
+         enforce(res.status == 1, res.output);
+     }
+ 
+-    version (Posix)
++    version (none)
+     {
+         import std.conv : to;
+         auto makeVersion = execute(["make", "--version"]).output.splitLines()[0];

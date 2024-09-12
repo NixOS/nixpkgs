@@ -1,0 +1,17 @@
+diff --git a/HSH/ShellEquivs.hs b/HSH/ShellEquivs.hs
+index f9287e8..b132737 100644
+--- a/HSH/ShellEquivs.hs
++++ b/HSH/ShellEquivs.hs
+@@ -223,9 +223,9 @@ catToFIFO fp ichan =
+        return (ChanString "")
+ 
+ fifoOpen :: FilePath -> IO Handle
+-fifoOpen fp = 
+-    do fd <- throwErrnoPathIf (< 0) "HSH fifoOpen" fp $ 
+-             openFd fp WriteOnly Nothing defaultFileFlags
++fifoOpen fp =
++    do fd <- throwErrnoPathIf (< 0) "HSH fifoOpen" fp $
++             openFd fp WriteOnly defaultFileFlags
+        fdToHandle fd
+ 
+ #endif

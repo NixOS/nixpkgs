@@ -1,0 +1,71 @@
+diff --git a/cmake/modules/AddClang.cmake b/cmake/modules/AddClang.cmake
+index 75b0080f6..c895b884c 100644
+--- a/cmake/modules/AddClang.cmake
++++ b/cmake/modules/AddClang.cmake
+@@ -119,8 +119,8 @@ macro(add_clang_library name)
+         install(TARGETS ${lib}
+           COMPONENT ${lib}
+           ${export_to_clangtargets}
+-          LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-          ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++          LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
++          ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
+           RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+         if (NOT LLVM_ENABLE_IDE)
+diff --git a/lib/Headers/CMakeLists.txt b/lib/Headers/CMakeLists.txt
+index e6ae4e19e..5ef01aea2 100644
+--- a/lib/Headers/CMakeLists.txt
++++ b/lib/Headers/CMakeLists.txt
+@@ -337,6 +337,7 @@ set(llvm_libc_wrapper_files
+ 
+ include(GetClangResourceDir)
+ get_clang_resource_dir(output_dir PREFIX ${LLVM_LIBRARY_OUTPUT_INTDIR}/.. SUBDIR include)
++set(header_install_dir ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/clang/${CLANG_VERSION_MAJOR}/include)
+ set(out_files)
+ set(generated_files)
+ 
+diff --git a/tools/libclang/CMakeLists.txt b/tools/libclang/CMakeLists.txt
+index b5b6d2807..6b592d255 100644
+--- a/tools/libclang/CMakeLists.txt
++++ b/tools/libclang/CMakeLists.txt
+@@ -246,7 +246,7 @@ foreach(PythonVersion ${CLANG_PYTHON_BINDINGS_VERSIONS})
+           COMPONENT
+             libclang-python-bindings
+           DESTINATION
+-            "lib${LLVM_LIBDIR_SUFFIX}/python${PythonVersion}/site-packages")
++            "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/python${PythonVersion}/site-packages")
+ endforeach()
+ if(NOT LLVM_ENABLE_IDE)
+   add_custom_target(libclang-python-bindings)
+diff --git a/tools/scan-build-py/CMakeLists.txt b/tools/scan-build-py/CMakeLists.txt
+index 3aca22c0b..3115353e3 100644
+--- a/tools/scan-build-py/CMakeLists.txt
++++ b/tools/scan-build-py/CMakeLists.txt
+@@ -88,7 +88,7 @@ foreach(lib ${LibScanbuild})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/${lib})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/${lib})
+   install(FILES lib/libscanbuild/${lib}
+-          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libscanbuild
++          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libscanbuild"
+           COMPONENT scan-build-py)
+ endforeach()
+ 
+@@ -106,7 +106,7 @@ foreach(resource ${LibScanbuildResources})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/resources/${resource})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/resources/${resource})
+   install(FILES lib/libscanbuild/resources/${resource}
+-          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libscanbuild/resources
++          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libscanbuild/resources"
+           COMPONENT scan-build-py)
+ endforeach()
+ 
+@@ -122,7 +122,7 @@ foreach(lib ${LibEar})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libear/${lib})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libear/${lib})
+   install(FILES lib/libear/${lib}
+-          DESTINATION lib${CLANG_LIBDIR_SUFFIX}/libear
++          DESTINATION "${CMAKE_INSTALL_LIBDIR}/libear"
+           COMPONENT scan-build-py)
+ endforeach()
+ 
