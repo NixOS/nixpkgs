@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, installShellFiles
-, lrzsz
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  lrzsz,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
