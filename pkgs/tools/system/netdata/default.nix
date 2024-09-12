@@ -2,13 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  CoreFoundation,
-  IOKit,
   bash,
   buildGoModule,
   cmake,
   cups,
   curl,
+  darwin,
   freeipmi,
   go,
   google-cloud-cpp,
@@ -30,6 +29,7 @@
   ninja,
   nixosTests,
   openssl,
+  overrideSDK,
   pkg-config,
   protobuf,
   snappy,
@@ -42,14 +42,17 @@
   withDBengine ? true,
   withDebug ? false,
   withEbpf ? false,
-  withIpmi ? (!stdenv.isDarwin),
-  withNetfilter ? (!stdenv.isDarwin),
-  withNetworkViewer ? (!stdenv.isDarwin),
+  withIpmi ? (stdenv.isLinux),
+  withNetfilter ? (stdenv.isLinux),
+  withNetworkViewer ? (stdenv.isLinux),
   withSsl ? true,
-  withSystemdJournal ? (!stdenv.isDarwin),
+  withSystemdJournal ? (stdenv.isLinux),
   zlib,
 }:
-stdenv.mkDerivation (finalAttrs: {
+let
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   version = "1.47.0";
   pname = "netdata";
 
@@ -92,16 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
       libuv
       zlib
       libyaml
-      lm_sensors
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      CoreFoundation
-      IOKit
-      libossp_uuid
-    ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreFoundation
+        IOKit
+        libossp_uuid
+      ]
+    )
+    ++ lib.optionals (stdenv.isLinux) [
       libcap
       libuuid
+      lm_sensors
     ]
     ++ lib.optionals withCups [ cups ]
     ++ lib.optionals withDBengine [ lz4 ]
@@ -147,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Relocate one folder above.
       mv $out/usr/* $out/
     ''
-    + lib.optionalString (!stdenv.isDarwin) ''
+    + lib.optionalString (stdenv.isLinux) ''
       # rename this plugin so netdata will look for setuid wrapper
       mv $out/libexec/netdata/plugins.d/apps.plugin \
          $out/libexec/netdata/plugins.d/apps.plugin.org
@@ -177,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''}
     '';
 
-  preConfigure = lib.optionalString (!stdenv.isDarwin) ''
+  preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH=$TMPDIR/go
     export GOSUMDB=off
@@ -268,7 +274,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
+    broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
