@@ -1,28 +1,37 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , cmake
 
 , arpa2cm
 , doxygen
 , e2fsprogs
 , graphviz
+, libsodium
 , lmdb
 , openssl
 , pkg-config
 , ragel
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arpa2common";
-  version = "2.2.18";
+  version = "2.6.2";
 
   src = fetchFromGitLab {
     owner = "arpa2";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-UpAVyDXCe07ZwjD307t6G9f/Nny4QYXxGxft1KsiYYg=";
+    repo = "arpa2common";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eWfWaO6URCK2FWQ+NYAoeCONkovgsVDPSRQVCGFnW3s=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/arpa2/arpa2common/-/commit/13ea82df60b87a5367db00a8c6f3502e8ecb7298.patch";
+      hash = "sha256-V9Dhr6PeArqXnuXmFuDjcirlGl7xovq7VQZsrbbMFSk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -34,15 +43,14 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     e2fsprogs
+    libsodium
     lmdb
     openssl
     ragel
   ];
 
-  # the project uses single argument `printf` throughout the program
-  hardeningDisable = [ "format" ];
-
   meta = {
+    changelog = "https://gitlab.com/arpa2/arpa2common/-/blob/v${finalAttrs.version}/CHANGES";
     description =
       "ARPA2 ID and ACL libraries and other core data structures for ARPA2";
     longDescription = ''
@@ -57,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fufexan ];
     platforms = lib.platforms.linux;
   };
-}
+})
