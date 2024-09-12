@@ -123,7 +123,7 @@ in {
       };
       # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
       script = let
-        statusCommand = "${lib.getExe cfg.package} status --json | ${lib.getExe pkgs.jq} -r '.BackendState'";
+        statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
       in ''
         while [[ "$(${statusCommand})" == "NoState" ]]; do
           sleep 0.5
