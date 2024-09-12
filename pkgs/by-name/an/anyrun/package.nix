@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];
+    maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "anyrun";
   };
 }
