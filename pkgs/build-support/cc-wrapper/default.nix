@@ -739,7 +739,7 @@ stdenvNoCC.mkDerivation {
 
     # for substitution in utils.bash
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
-    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    expandResponseParams = lib.optionalString (expand-response-params != "") (lib.getExe expand-response-params);
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
