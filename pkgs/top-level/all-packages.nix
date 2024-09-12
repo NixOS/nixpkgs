@@ -32589,10 +32589,6 @@ with pkgs;
 
   picard = callPackage ../applications/audio/picard { };
 
-  picocom = callPackage ../tools/misc/picocom {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-
   picoloop = callPackage ../applications/audio/picoloop { };
 
   picosnitch = callPackage ../tools/networking/picosnitch { };
