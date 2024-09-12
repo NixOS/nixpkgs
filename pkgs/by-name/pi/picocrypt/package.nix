@@ -15,18 +15,18 @@
 
 buildGoModule rec {
   pname = "picocrypt";
-  version = "1.42";
+  version = "1.43";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ehsjt3zCtJFBJ0l707uRtEfDC3M99mb9HFcNlH1btVE=";
+    hash = "sha256-xxlmerEGujBvghC+OpMW0gkDl7zPOW4r6cM7T6qOc6A=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-S5iR0eeR+nqxNzE3+KDN1Yw7nmycN0IhhMZjIdVb6WQ=";
+  vendorHash = "sha256-QeNFXmWeA/hkYdFzJoHj61bo/DmGWakdhFRLtSYG7+Y=";
 
   ldflags = [
     "-s"
