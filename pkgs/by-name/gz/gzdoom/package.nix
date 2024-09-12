@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, SDL2
-, bzip2
-, cmake
-, fluidsynth
-, game-music-emu
-, gtk3
-, imagemagick
-, libGL
-, libjpeg
-, libsndfile
-, libvpx
-, libwebp
-, mpg123
-, ninja
-, openal
-, pkg-config
-, vulkan-loader
-, zlib
-, zmusic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  SDL2,
+  bzip2,
+  cmake,
+  fluidsynth,
+  game-music-emu,
+  gtk3,
+  imagemagick,
+  libGL,
+  libjpeg,
+  libsndfile,
+  libvpx,
+  libwebp,
+  mpg123,
+  ninja,
+  openal,
+  pkg-config,
+  vulkan-loader,
+  zlib,
+  zmusic,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-taie1Iod3pXvuxxBC7AArmtndkIV0Di9mtJoPvPkioo=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -102,7 +106,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ZDoom/gzdoom";
     description = "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine";
     mainProgram = "gzdoom";
@@ -110,8 +114,11 @@ stdenv.mkDerivation rec {
       GZDoom is a feature centric port for all DOOM engine games, based on
       ZDoom, adding an OpenGL renderer and powerful scripting capabilities.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ azahi lassulus ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      azahi
+      lassulus
+    ];
   };
 }
