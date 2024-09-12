@@ -51,6 +51,26 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
     })
+    (fetchpatch {
+      name = "CVE-2024-6781.patch";
+      url = "https://github.com/kovidgoyal/calibre/commit/bcd0ab12c41a887f8290a9b56e46c3a29038d9c4.patch";
+      hash = "sha256-HZdbkKZYGYJ5pjv0ZNFNyT0gkeNPcMXKLEYGr6uzGAw=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-6782.patch";
+      url = "https://github.com/kovidgoyal/calibre/commit/38a1bf50d8cd22052ae59c513816706c6445d5e9.patch";
+      hash = "sha256-0E5RdzXAwenV15BqSHJxRTh3Ay8Vh1Z9AloqCHHrB50=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-7008.patch";
+      url = "https://github.com/kovidgoyal/calibre/commit/863abac24e7bc3e5ca0b3307362ff1953ba53fe0.patch";
+      hash = "sha256-0dV34AJRwQYE02bDdnA4o/fsy1q4vR7H5krBHyeAeKY=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-7009.patch";
+      url = "https://github.com/kovidgoyal/calibre/commit/d56574285e8859d3d715eb7829784ee74337b7d7.patch";
+      hash = "sha256-LFi68mIweF/2C/YNSrUiLwrq4++GSWxTmgVK1ktf3V4=";
+    })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
