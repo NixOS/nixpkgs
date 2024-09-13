@@ -4463,6 +4463,10 @@ with pkgs;
 
   cz-cli = callPackage ../applications/version-management/cz-cli { };
 
+  czkawka-full = czkawka.wrapper.override {
+    extraPackages = [ ffmpeg ];
+  };
+
   comma = callPackage ../tools/package-management/comma { };
 
   commitizen = with python3Packages; toPythonApplication commitizen;
