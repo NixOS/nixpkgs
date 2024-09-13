@@ -1,8 +1,9 @@
 {
   lib,
+  aiodns,
   aiofiles,
-  aiohttp,
   aiohttp-socks,
+  aiohttp,
   aresponses,
   babel,
   buildPythonPackage,
@@ -22,6 +23,7 @@
   pythonOlder,
   pytz,
   redis,
+  uvloop,
 }:
 
 buildPythonPackage rec {
@@ -40,31 +42,37 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-
-  pythonRelaxDeps = [ "pydantic" ];
-
   dependencies = [
     aiofiles
     aiohttp
-    babel
     certifi
     magic-filter
     pydantic
   ];
 
+  optional-dependencies = {
+    fast = [
+      aiodns
+      uvloop
+    ];
+    mongo = [
+      motor
+      pymongo
+    ];
+    redis = [ redis ];
+    proxy = [ aiohttp-socks ];
+    i18n = [ babel ];
+  };
+
   nativeCheckInputs = [
-    aiohttp-socks
     aresponses
-    motor
     pycryptodomex
-    pymongo
     pytest-aiohttp
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
     pytz
-    redis
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"
