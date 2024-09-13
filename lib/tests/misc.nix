@@ -36,6 +36,7 @@ let
     cartesianProduct
     cli
     collect
+    collect'
     composeExtensions
     composeManyExtensions
     concatLines
@@ -319,6 +320,58 @@ runTests {
       [
         1
         1
+      ]
+    ];
+  };
+
+  testCollect' = {
+    expr = [
+      (collect' (x: x ? special) {
+        a.b.c.special = true;
+        x.y.z.special = false;
+      })
+      (collect' (x: x == 1) {
+        a = 1;
+        b = 2;
+        c = 3;
+        d.inner = 1;
+      })
+    ];
+    expected = [
+      [
+        {
+          path = [
+            "a"
+            "b"
+            "c"
+          ];
+          value = {
+            special = true;
+          };
+        }
+        {
+          path = [
+            "x"
+            "y"
+            "z"
+          ];
+          value = {
+            special = false;
+          };
+        }
+      ]
+      [
+        {
+          path = [ "a" ];
+          value = 1;
+        }
+        {
+          path = [
+            "d"
+            "inner"
+          ];
+          value = 1;
+        }
       ]
     ];
   };
