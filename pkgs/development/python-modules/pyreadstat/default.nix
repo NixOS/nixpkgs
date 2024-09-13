@@ -9,13 +9,14 @@
   python,
   pythonOlder,
   readstat,
+  setuptools,
   zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pyreadstat";
   version = "1.2.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,11 +27,14 @@ buildPythonPackage rec {
     hash = "sha256-XuLFLpZbaCj/MHq0+l6GoNqR5nAldAlEJhoO5ioWYTA=";
   };
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     readstat
     pandas
   ];
