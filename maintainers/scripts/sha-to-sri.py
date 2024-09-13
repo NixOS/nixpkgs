@@ -173,17 +173,18 @@ def atomicFileUpdate(target: Path):
     raised, `new` (atomically) replaces the `target`, otherwise it is deleted.
     """
     # That's mostly copied from noto-emoji.py, should DRY it out
-    from tempfile import mkstemp
-
-    fd, _p = mkstemp(
-        dir = target.parent,
-        prefix = target.name,
-    )
-    tmpPath = Path(_p)
+    from tempfile import NamedTemporaryFile
 
     try:
         with target.open() as original:
-            with tmpPath.open("w") as new:
+            with NamedTemporaryFile(
+                dir = target.parent,
+                prefix = target.stem,
+                suffix = target.suffix,
+                delete = False,
+                mode="w",  # otherwise the file would be opened in binary mode by default
+            ) as new:
+                tmpPath = Path(new.name)
                 yield (original, new)
 
         tmpPath.replace(target)
