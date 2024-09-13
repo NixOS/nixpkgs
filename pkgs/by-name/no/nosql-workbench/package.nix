@@ -8,22 +8,22 @@
 }:
 let
   pname = "nosql-workbench";
-  version = "3.11.0";
+  version = "3.13.0";
 
   src =
     fetchurl
       {
         x86_64-darwin = {
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-mac-x64-${version}.dmg";
-          hash = "sha256-KM3aDDsQGZwUKU/or0eOoP8okAOPH7q8KL46RwfqhzM=";
+          hash = "sha256-Dof1F1LTD478wh7jTR5zwFmbrvyCOWVO/C1QXTebi3c=";
         };
         aarch64-darwin = {
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-mac-arm64-${version}.dmg";
-          hash = "sha256-LzHiCMrDOWDuMNkkojLgKn+UG7x76wSAz0BapyWkAzU=";
+          hash = "sha256-QD0F6onP3GhMRIzNifx/RZkxPIS/GMtnF4zro5ygucg=";
         };
         x86_64-linux = {
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-linux-${version}.AppImage";
-          hash = "sha256-cDOSbhAEFBHvAluxTxqVpva1GJSlFhiozzRfuM4MK5c=";
+          hash = "sha256-ewlaaaWxPHxaOdAMbkHChzbxAB5MNdZS/p8ROD/SvcQ=";
         };
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
@@ -86,14 +86,15 @@ else
     extraInstallCommands =
       let
         appimageContents = appimageTools.extract { inherit pname version src; };
+        internal_filename = "@amznnosql-workbench";
       in
       ''
         # Install XDG Desktop file and its icon
-        install -Dm444 ${appimageContents}/nosql-workbench.desktop -t $out/share/applications
-        install -Dm444 ${appimageContents}/nosql-workbench.png -t $out/share/pixmaps
+        install -Dm444 ${appimageContents}/${internal_filename}.desktop -t $out/share/applications
+        install -Dm444 ${appimageContents}/${internal_filename}.png -t $out/share/pixmaps
 
         # Replace wrong exec statement in XDG Desktop file
-        substituteInPlace $out/share/applications/nosql-workbench.desktop \
-            --replace 'Exec=AppRun --no-sandbox %U' 'Exec=nosql-workbench'
+        substituteInPlace $out/share/applications/${internal_filename}.desktop \
+            --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=nosql-workbench'
       '';
   }
