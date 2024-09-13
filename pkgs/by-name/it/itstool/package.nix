@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, buildPackages
-, python3
-, versionCheckHook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildPackages,
+  python3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
