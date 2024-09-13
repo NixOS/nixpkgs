@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-qKshTgHcOpthUnaQU5VjfzkSmMhNd2UfDL8LEILdLdQ=";
   };
 
+  patches = [
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/libndp/0001-Patch-libndp.c.patch?id=00406a9c697d88f531962cb63e5343488a959b93";
+      hash = "sha256-1ZcXgZv3mYtt5NaK4rUMnScWVajlWQ+anzBDS5IfgJI=";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
