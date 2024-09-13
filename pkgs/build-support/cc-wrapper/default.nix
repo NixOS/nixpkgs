@@ -39,18 +39,8 @@
   # no trouble finding its own libraries.
   else if (cc.passthru.isFromBootstrapFiles or false) then false
 
-  # Add these flags when wrapping `xgcc` (the first compiler that nixpkgs builds)
-  else if (cc.passthru.isXgcc or false) then true
-
-  # Add these flags when wrapping `stdenv.cc`
-  else if (cc.stdenv.cc.cc.passthru.isXgcc or false) then true
-
-  # Do not add these flags in any other situation.  This is `false` mainly to
-  # prevent these flags from being added when wrapping *old* versions of gcc
-  # (e.g. `gcc6Stdenv`), since they will cause the old gcc to get `-B` and
-  # `-L` flags pointing at the new gcc's libstdc++ headers.  Example failure:
-  # https://hydra.nixos.org/build/213125495
-  else false
+  # Otherwise, add these flags.
+  else true
 
 # the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
 , gccForLibs ? if useCcForLibs then cc else null
