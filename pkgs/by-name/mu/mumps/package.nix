@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ [
       "LSCOTCHDIR=${scotch}/lib"
-      "ISCOTCH=-I${scotch}/include"
+      "ISCOTCH=-I${scotch.dev}/include"
       "LMETISDIR=${metis}/lib"
       "IMETIS=-I${metis}/include"
       "allshared"
