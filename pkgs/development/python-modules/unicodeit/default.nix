@@ -52,7 +52,7 @@ buildPythonPackage rec {
     description = "Converts LaTeX tags to unicode";
     mainProgram = "unicodeit";
     homepage = "https://github.com/svenkreiss/unicodeit";
-    licenses = with lib.licenses; [
+    license = with lib.licenses; [
       lppl13c
       mit
     ];
