@@ -18,7 +18,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-C8aY23e6iWANbhCRQYNHx+3fomVO+7qdxj+qfv+K3JM=";
   };
 
-  propagatedBuildInputs = [ zigpy ];
+  dependencies = [ zigpy ];
 
   dontBuild = true;
 

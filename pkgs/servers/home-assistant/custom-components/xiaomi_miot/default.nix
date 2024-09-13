@@ -21,7 +21,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-wR5N6a+g4TE9cRv1k4zExCWiui7ZHwK54j0oUxnhcR0=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     hap-python
     micloud
     pyqrcode

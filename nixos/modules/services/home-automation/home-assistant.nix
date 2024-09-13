@@ -1,8 +1,41 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{ config, lib, pkgs, utils, ... }:
 
 let
+  inherit (lib)
+    any
+    attrByPath
+    attrValues
+    concatMap
+    converge
+    elem
+    escapeShellArg
+    escapeShellArgs
+    filter
+    filterAttrsRecursive
+    hasAttrByPath
+    isAttrs
+    isDerivation
+    isList
+    literalExpression
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optionals
+    optionalString
+    recursiveUpdate
+    singleton
+    splitString
+    types
+    unique
+  ;
+
+  inherit (utils)
+    escapeSystemdExecArgs
+  ;
+
   cfg = config.services.home-assistant;
   format = pkgs.formats.yaml {};
 
@@ -11,7 +44,7 @@ let
   # options shown in settings.
   # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
   # https://www.home-assistant.io/docs/configuration/secrets/
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) (lib.recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
+  filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ null ])) (recursiveUpdate lovelaceResourceConfig (cfg.config or {}));
   configFile = pkgs.runCommandLocal "configuration.yaml" { } ''
     cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
@@ -38,7 +71,7 @@ let
     if isDerivation config then
       [ ]
     else if isAttrs config then
-      optional (config ? platform) config.platform
+      optionals (config ? platform) [ config.platform ]
       ++ concatMap usedPlatforms (attrValues config)
     else if isList config then
       concatMap usedPlatforms config
@@ -60,24 +93,24 @@ let
   package = (cfg.package.override (oldArgs: {
     # Respect overrides that already exist in the passed package and
     # concat it with values passed via the module.
-    extraComponents = oldArgs.extraComponents or [] ++ extraComponents;
+    extraComponents = oldArgs.integrations or [] ++ integrations;
     extraPackages = ps: (oldArgs.extraPackages or (_: []) ps)
-      ++ (cfg.extraPackages ps)
-      ++ (lib.concatMap (component: component.propagatedBuildInputs or []) cfg.customComponents);
+      ++ (cfg.extraPythonPackages ps)
+      ++ (concatMap (component: component.propagatedBuildInputs or []) cfg.integrationPackages);
   }));
 
   # Create a directory that holds all lovelace modules
-  customLovelaceModulesDir = pkgs.buildEnv {
+  lovelaceResourcesDirectory = pkgs.buildEnv {
     name = "home-assistant-custom-lovelace-modules";
-    paths = cfg.customLovelaceModules;
+    paths = cfg.lovelaceResourcePackages;
   };
 
   # Create parts of the lovelace config that reference lovelave modules as resources
-  customLovelaceModulesResources = {
-    lovelace.resources = map (card: {
-      url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
+  lovelaceResourceConfig = {
+    lovelace.resources = map (resource: {
+      url = "/local/nixos-lovelace-modules/${resource.entrypoint or (resource.pname + ".js")}?${resource.version}";
       type = "module";
-    }) cfg.customLovelaceModules;
+    }) cfg.lovelaceResourcePackages;
   };
 in {
   imports = [
@@ -85,17 +118,32 @@ in {
     (mkRemovedOptionModule [ "services" "home-assistant" "applyDefaultConfig" ] "The default config was migrated into services.home-assistant.config")
     (mkRemovedOptionModule [ "services" "home-assistant" "autoExtraComponents" ] "Components are now parsed from services.home-assistant.config unconditionally")
     (mkRenamedOptionModule [ "services" "home-assistant" "port" ] [ "services" "home-assistant" "config" "http" "server_port" ])
+
+    # Migrations in NixOS 24.11
+    (mkRenamedOptionModule [ "services" "home-assistant" "extraPackages" ] [ "services" "home-assistant" "extraPythonPackages" ])
+    (mkRenamedOptionModule [ "services" "home-assistant" "extraComponents" ] [ "services" "home-assistant" "integrations" ])
+    (mkRenamedOptionModule [ "services" "home-assistant" "customComponents" ] [ "services" "home-assistant" "integrationPackages" ])
+    (mkRenamedOptionModule [ "services" "home-assistant" "customLovelaceModules" ] [ "services" "home-assistant" "lovelaceResourcePackages" ])
   ];
 
   meta = {
     buildDocsInSandbox = false;
-    maintainers = teams.home-assistant.members;
+    maintainers = lib.teams.home-assistant.members;
   };
 
   options.services.home-assistant = {
     # Running home-assistant on NixOS is considered an installation method that is unsupported by the upstream project.
     # https://github.com/home-assistant/architecture/blob/master/adr/0012-define-supported-installation-method.md#decision
-    enable = mkEnableOption "Home Assistant. Please note that this installation method is unsupported upstream";
+    enable = mkEnableOption "Home Assistant. Check the [wiki](https://wiki.nixos.org/wiki/Home_Assistant) to get started!";
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "--debug" ];
+      description = ''
+        Extra arguments to pass to the hass executable.
+      '';
+    };
 
     configDir = mkOption {
       default = "/var/lib/hass";
@@ -105,9 +153,12 @@ in {
 
     defaultIntegrations = mkOption {
       type = types.listOf (types.enum availableComponents);
-      # https://github.com/home-assistant/core/blob/dev/homeassistant/bootstrap.py#L109
+      # https://github.com/home-assistant/core/blob/2024.8.3/homeassistant/bootstrap.py#L178
       default = [
+        # core functionality
+        "analytics"
         "application_credentials"
+        "backup"
         "frontend"
         "hardware"
         "logger"
@@ -132,46 +183,43 @@ in {
         "input_text"
         "schedule"
         "timer"
-
-        # non-supervisor
-        "backup"
       ];
       readOnly = true;
       description = ''
-        List of integrations set are always set up, unless in recovery mode.
+        List of integrations that are always set up, unless in recovery mode.
       '';
     };
 
-    extraComponents = mkOption {
+    integrations = mkOption {
       type = types.listOf (types.enum availableComponents);
       default = [
         # List of components required to complete the onboarding
-        "default_config"
+        # homeassistant/components/onboarding/__init__.py
+        "google_translate"
         "met"
-        "esphome"
+        "radio_browser"
+        "shopping_list"
+        "analytics"
       ] ++ optionals pkgs.stdenv.hostPlatform.isAarch [
-        # Use the platform as an indicator that we might be running on a RaspberryPi and include
-        # relevant components
         "rpi_power"
       ];
-      example = literalExpression ''
-        [
-          "analytics"
-          "default_config"
-          "esphome"
-          "my"
-          "shopping_list"
-          "wled"
-        ]
-      '';
+      example = [
+        "analytics"
+        "default_config"
+        "esphome"
+        "my"
+        "shopping_list"
+        "wled"
+      ];
       description = ''
-        List of [components](https://www.home-assistant.io/integrations/) that have their dependencies included in the package.
+        List of [built-in integrations](https://www.home-assistant.io/integrations/) for which dependencies will be provided.
 
-        The component name can be found in the URL, for example `https://www.home-assistant.io/integrations/ffmpeg/` would map to `ffmpeg`.
+        Its names can be found in the documentation URL, for example `https://www.home-assistant.io/integrations/ffmpeg/`
+        would map to `ffmpeg`.
       '';
     };
 
-    extraPackages = mkOption {
+    extraPythonPackages = mkOption {
       type = types.functionTo (types.listOf types.package);
       default = _: [];
       defaultText = literalExpression ''
@@ -184,16 +232,15 @@ in {
         ];
       '';
       description = ''
-        List of packages to add to propagatedBuildInputs.
+        List of additional libraries to provide in the Python environment.
 
-        A popular example is `python3Packages.psycopg2`
-        for PostgreSQL support in the recorder component.
+        A popular example is `python3Packages.psycopg2` for PostgreSQL support in the recorder component.
       '';
     };
 
-    customComponents = mkOption {
+    integrationPackages = mkOption {
       type = types.listOf (
-        types.addCheck types.package (p: p.isHomeAssistantComponent or false) // {
+        types.addCheck types.package (pkg: pkg.isHomeAssistantComponent or false) // {
           name = "home-assistant-component";
           description = "package that is a Home Assistant component";
         }
@@ -205,13 +252,13 @@ in {
         ];
       '';
       description = ''
-        List of custom component packages to install.
+        List of community-maintained integration packages to install.
 
         Available components can be found below `pkgs.home-assistant-custom-components`.
       '';
     };
 
-    customLovelaceModules = mkOption {
+    lovelaceResourcePackages = mkOption {
       type = types.listOf types.package;
       default = [];
       example = literalExpression ''
@@ -221,12 +268,15 @@ in {
         ];
       '';
       description = ''
-        List of custom lovelace card packages to load as lovelace resources.
+        List of lovelace module packages (usually for cards/widgets) to load as lovelace resources.
 
-        Available cards can be found below `pkgs.home-assistant-custom-lovelace-modules`.
+        Available resource packages can be found below `pkgs.home-assistant-custom-lovelace-modules`.
 
         ::: {.note}
-        Automatic loading only works with lovelace in `yaml` mode.
+        Automatic loading only works with lovelace in `yaml` mode. In `storage` mode resources need to be configured
+        from the "Manage resources" section that appears in the burger menu when editing dashboards.
+
+        The base url for resources is `/local/nixos-lovelace-modules/` followed by the `.js` entrypoint of the card.
         :::
       '';
     };
@@ -356,7 +406,7 @@ in {
             themes = "!include_dir_merge_named themes";
           };
           http = {};
-          feedreader.urls = [ "https://nixos.org/blogs.xml" ];
+          feedreader.urls = [ "https://lobste.rs/t/nix.rss" ];
         }
       '';
       description = ''
@@ -437,7 +487,7 @@ in {
           extraPackages = python3Packages: with python3Packages; [
             psycopg2
           ];
-          extraComponents = [
+          integrations = [
             "default_config"
             "esphome"
             "met"
@@ -467,12 +517,12 @@ in {
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
 
     # symlink the configuration to /etc/home-assistant
-    environment.etc = lib.mkMerge [
-      (lib.mkIf (cfg.config != null && !cfg.configWritable) {
+    environment.etc = mkMerge [
+      (mkIf (cfg.config != null && !cfg.configWritable) {
         "home-assistant/configuration.yaml".source = configFile;
       })
 
-      (lib.mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
+      (mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
         "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
       })
     ];
@@ -487,8 +537,8 @@ in {
         "mysql.service"
         "postgresql.service"
       ];
-      reloadTriggers = lib.optional (cfg.config != null) configFile
-      ++ lib.optional (cfg.lovelaceConfig != null) lovelaceConfigFile;
+      reloadTriggers = optionals (cfg.config != null) [ configFile ]
+      ++ optionals (cfg.lovelaceConfig != null) [ lovelaceConfigFile ];
 
       preStart = let
         copyConfig = if cfg.configWritable then ''
@@ -503,13 +553,13 @@ in {
         '' else ''
           ln -fs /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
         '';
-        copyCustomLovelaceModules = if cfg.customLovelaceModules != [] then ''
+        copyLovelaceResources = if cfg.lovelaceResourcePackages != [] then ''
           mkdir -p "${cfg.configDir}/www"
-          ln -fns ${customLovelaceModulesDir} "${cfg.configDir}/www/nixos-lovelace-modules"
+          ln -fns ${lovelaceResourcesDirectory} "${cfg.configDir}/www/nixos-lovelace-modules"
         '' else ''
           rm -f "${cfg.configDir}/www/nixos-lovelace-modules"
         '';
-        copyCustomComponents = ''
+        copyIntegrationPackages = ''
           mkdir -p "${cfg.configDir}/custom_components"
 
           # remove components symlinked in from below the /nix/store
@@ -521,7 +571,7 @@ in {
           done
 
           # recreate symlinks for desired components
-          declare -a components=(${escapeShellArgs cfg.customComponents})
+          declare -a components=(${escapeShellArgs cfg.integrationPackages})
           for component in "''${components[@]}"; do
             readarray -t manifests < <(find "$component" -name manifest.json)
             readarray -t paths < <(dirname "''${manifests[@]}")
@@ -531,26 +581,26 @@ in {
       in
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig) +
-        copyCustomLovelaceModules +
-        copyCustomComponents
+        copyLovelaceResources +
+        copyIntegrationPackages
       ;
       environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
-        capabilities = lib.unique ([
+        capabilities = unique ([
           # Empty string first, so we will never accidentally have an empty capability bounding set
           # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
           ""
-        ] ++ lib.optionals (builtins.any useComponent componentsUsingBluetooth) [
+        ] ++ optionals (any useComponent componentsUsingBluetooth) [
           # Required for interaction with hci devices and bluetooth sockets, identified by bluetooth-adapters dependency
           # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
           "CAP_NET_ADMIN"
           "CAP_NET_RAW"
-        ] ++ lib.optionals (useComponent "emulated_hue") [
+        ] ++ optionals (useComponent "emulated_hue") [
           # Alexa looks for the service on port 80
           # https://www.home-assistant.io/integrations/emulated_hue
           "CAP_NET_BIND_SERVICE"
-        ] ++ lib.optionals (useComponent "nmap_tracker") [
+        ] ++ optionals (useComponent "nmap_tracker") [
           # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
           "CAP_NET_ADMIN"
           "CAP_NET_BIND_SERVICE"
@@ -578,12 +628,14 @@ in {
           "inkbird"
           "improv_ble"
           "keymitt_ble"
-          "leaone-ble"
+          "ld2410_ble"
+          "leaone"
           "led_ble"
           "medcom_ble"
           "melnor"
           "moat"
           "mopeka"
+          "motionblinds_ble"
           "oralb"
           "private_ble_device"
           "qingping"
@@ -617,25 +669,34 @@ in {
           # mostly the ones using config flows already.
           "acer_projector"
           "alarmdecoder"
+          "aurora_abb_powerone"
           "blackbird"
+          "bryant_evolution"
+          "crownstone"
           "deconz"
           "dsmr"
           "edl21"
           "elkm1"
           "elv"
           "enocean"
+          "homeassistant_hardware"
+          "homeassistant_yellow"
           "firmata"
           "flexit"
           "gpsd"
           "insteon"
           "kwb"
           "lacrosse"
+          "landisgyr_heat_meter"
           "modbus"
           "modem_callerid"
           "mysensors"
           "nad"
           "numato"
+          "nut"
+          "opentherm_gw"
           "otbr"
+          "rainforst_raven"
           "rflink"
           "rfxtrx"
           "scsgate"
@@ -651,12 +712,21 @@ in {
           "zwave_js"
         ];
       in {
-        ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecStart = escapeSystemdExecArgs ([
+          (lib.getExe package)
+          "--config" cfg.configDir
+        ] ++ cfg.extraArgs);
+        ExecReload = (escapeSystemdExecArgs [
+          (lib.getExe' pkgs.coreutils "kill")
+          "-HUP"
+        ]) + " $MAINPID";
         User = "hass";
         Group = "hass";
         WorkingDirectory = cfg.configDir;
         Restart = "on-failure";
+
+        # Signal handling
+        # homeassistant/helpers/signal.py
         RestartForceExitStatus = "100";
         SuccessExitStatus = "100";
         KillSignal = "SIGINT";

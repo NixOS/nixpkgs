@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-6NrRuBjpulT66pVUfW9ujULL5HSzfgyic1pKEBRupNA=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyemvue
   ];
 

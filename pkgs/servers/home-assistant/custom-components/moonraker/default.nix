@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-DufryUG4+tT77ErD6IzEkClnNJ4Rzz0ojkCZuZzhAlU=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     moonraker-api
   ];
 

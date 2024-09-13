@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-k5pCgPM5xjVfWjOcr0UDFzYl/8z7yUwgYdBmC3+2F5k=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     ulid-transform
   ];
 
