@@ -208,7 +208,7 @@ let
     chmod u+w -R lib64/
 
     # symlink 32-bit ld-linux.so
-    ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
+    ln -Lsf ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
   setupLibDirs = if isTargetBuild
