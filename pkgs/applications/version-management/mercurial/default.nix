@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
+, fetchpatch
 , re2Support ? true
 # depends on rust-cpython which won't support python312
 # https://github.com/dgrunwald/rust-cpython/commit/e815555629e557be084813045ca1ddebc2f76ef9
@@ -29,6 +30,14 @@ let
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
       hash = "sha256-911qSnWCOht9cTpJZ+yi9Zb0ZuWPxrwG1yZCky/X4wc=";
     };
+
+    patches = lib.optionals (!python3Packages.isPy311) [ # avoid rebuild on 3.11
+      (fetchpatch {
+        name = "circular-import.patch";
+        url = "https://foss.heptapod.net/mercurial/mercurial-devel/-/commit/63ede7a43a3731fecc7e5b535144c6bd59911284.diff";
+        hash = "sha256-qoqg1QCHhfzTXmp0sfJvsH2SCP+KRjuIy+TJZFHqAQw=";
+      })
+    ];
 
     format = "other";
 
