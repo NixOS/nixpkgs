@@ -10,7 +10,7 @@
   perl,
   xorriso,
   xz,
-  syslinux ? null,
+  syslinux,
   embedScript ? null,
   additionalTargets ? { },
   additionalOptions ? [ ],
@@ -46,7 +46,7 @@ let
     };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
   version = "1.21.1-unstable-2024-08-15";
 
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     xorriso
     xz
   ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   strictDeps = true;
@@ -69,17 +70,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-Zf2ZblKUyKPo0YdzQFeCEAnYkvWDsmuTS9htvSybpXo=";
   };
 
+  # Calling syslinux on a FAT image isn't going to work on Aarch64.
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     substituteInPlace src/util/genfsimg --replace "	syslinux " "	true "
-  ''; # calling syslinux on a FAT image isn't going to work
+  '';
 
-  # not possible due to assembler code
+  # Hardening is not possible due to assembler code.
   hardeningDisable = [
     "pic"
     "stackprotector"
   ];
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags = [
     "ECHO_E_BIN_ECHO=echo"
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   configurePhase =
     ''
       runHook preConfigure
-      for opt in ${lib.escapeShellArgs enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
+      for opt in ${lib.escapeShellArgs finalAttrs.enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
       substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
     ''
     + lib.optionalString stdenv.hostPlatform.isx86 ''
@@ -134,10 +134,11 @@ stdenv.mkDerivation rec {
     tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Network boot firmware";
     homepage = "https://ipxe.org/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sigmasquadron ];
   };
-}
+})
