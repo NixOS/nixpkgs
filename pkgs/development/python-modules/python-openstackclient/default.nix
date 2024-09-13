@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1HDjWYySnZI/12j9+Gb1G9NKkb+xfrcMoTY/q7aL0uA=";
+    hash = "sha256-nv/CmcVpQiC65Fd3jmzZsjrqG8O/zQTjoE+NhjhaBVQ=";
   };
 
   build-system = [
