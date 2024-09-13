@@ -336,9 +336,6 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
 
-# environment.noXlibs option aka NoX
-/nixos/modules/config/no-x-libs.nix  @SuperSandro2000
-
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid
 /pkgs/development/compilers/ocaml   @ulrikstrid
