@@ -1219,12 +1219,16 @@ _defaultUnpack() {
                 # disregard the error code from the xz invocation. Otherwise,
                 # it can happen that tar exits earlier, causing xz to fail
                 # from a SIGPIPE.
-                (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn"; true) | tar xf - --mode=+w --warning=no-timestamp
+                #
+                # keep-old-files will cause tar to fail if it would overwrite files with the same name but
+                # different cases on case insensitive filesystems (darwin) preventing cross-platform
+                # package hash mismatches
+                (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn"; true) | tar xf - --keep-old-files --mode=+w --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf "$fn" --mode=+w --warning=no-timestamp
+                tar xf "$fn" --keep-old-files --mode=+w --warning=no-timestamp
                 ;;
             *)
                 return 1
