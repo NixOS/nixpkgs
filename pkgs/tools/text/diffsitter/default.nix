@@ -4,6 +4,8 @@
 , makeWrapper
 , rustPlatform
 , tree-sitter
+, gitUpdater
+, versionCheckHook
 }:
 
 let
@@ -53,6 +55,11 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   postInstall = ''
     # completions are not yet implemented
     # so we can safely remove this without installing the completions
@@ -70,6 +77,8 @@ rustPlatform.buildRustPackage rec {
   #     tests::diff_hunks_snapshot::_medium_rust_rs_true_expects
   #     tests::diff_hunks_snapshot::_short_python_py_true_expects
   #     tests::diff_hunks_snapshot::_short_rust_rs_true_expects
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/afnanenayet/diffsitter";

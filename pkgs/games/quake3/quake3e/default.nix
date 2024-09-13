@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "Quake3e";
-  version = "2022-04-01-dev";
+  version = "2024-09-02-dev";
 
   src = fetchFromGitHub {
     owner = "ec-";
     repo = pname;
-    rev = "c6cec00b858aa5955eb1d6eb65b9bfd41fd869cb";
-    sha256 = "0qd13fndbhgkkmhxbprpzmj2l2v9ihacxagpdqi9sg9nrzvahr9h";
+    rev = "b6e7ce4f78711e1c9d2924044a9a9d8a9db7020f";
+    sha256 = "sha256-tQgrHiP+QhBzcUnHRwzaDe38Th0uDt450fra8O3Vjqc=";
   };
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     description = "Improved Quake III Arena engine";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pmiddend ];
+    maintainers = with maintainers; [ pmiddend alx ];
   };
 }

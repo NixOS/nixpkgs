@@ -327,42 +327,70 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 # Conventions
 
-## Package naming
-
 The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _should not_, _recommended_, _may_, and _optional_ in this section are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119). Only _emphasized_ words are to be interpreted in this way.
+
+## Package naming
 
 In Nixpkgs, there are generally three different names associated with a package:
 
 - The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
-- The variable name used for the instantiated package in `all-packages.nix`, and when passing it as a dependency to other functions. Typically this is called the _package attribute name_. This is what Nix expression authors see. It can also be used when installing using `nix-env -iA`.
+- The attribute name used for the package in the [`pkgs/by-name` structure](./pkgs/by-name/README.md) or in [`all-packages.nix`](./pkgs/top-level/all-packages.nix), and when passing it as a dependency in recipes.
 
 - The filename for (the directory containing) the Nix expression.
 
-Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
+Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the attribute name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
 
-There are a few naming guidelines:
+Follow these guidelines:
 
-- The `pname` attribute _should_ be identical to the upstream package name.
+- For the `pname` attribute:
 
-- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer"` instead of `"MPlayer"`.
+  - It _should_ be identical to the upstream package name.
 
-- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"` or `"0-unstable-1970-01-01"`.
+  - It _must not_ contain uppercase letters.
 
-- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+    Example: Use `"mplayer"` instead of `"MPlayer"`
 
-Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+- For the package attribute name:
 
-- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning / tagging schema - then the latest upstream version in the above schema should be `0`.
+  - It _must_ be a valid identifier in Nix.
 
-Example: Given a project that has no tags / released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
+  - If the `pname` starts with a digit, the attribute name _should_ be prefixed with an underscore. Otherwise the attribute name _should not_ be prefixed with an underline.
 
-- Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
+    Example: The corresponding attribute name for `0ad` should be `_0ad`.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [versioning][versioning].
+  - New attribute names _should_ be the same as the value in `pname`.
+
+    Hyphenated names _should not_ be converted to [snake case](https://en.wikipedia.org/wiki/Snake_case) or [camel case](https://en.wikipedia.org/wiki/Camel_case).
+    This was done historically, but is not necessary any more.
+    [The Nix language allows dashes in identifiers since 2012](https://github.com/NixOS/nix/commit/95c74eae269b2b9e4bc514581b5caa1d80b54acc).
+
+  - If there are multiple versions of a package, this _should_ be reflected in the attribute names in `all-packages.nix`.
+
+    Example: `json-c_0_9` and `json-c_0_11`
+
+    If there is an obvious “default” version, make an extra attribute.
+
+    Example: `json-c = json-c_0_9;`
+
+    See also [versioning][versioning].
 
 ## Versioning
 [versioning]: #versioning
+
+These are the guidelines the `version` attribute of a package:
+
+- It _must_ start with a digit. This is required for backwards-compatibility with [how `nix-env` parses derivation names](https://nix.dev/manual/nix/latest/command-ref/nix-env#selectors).
+
+  Example: `"0.3.1rc2"` or `"0-unstable-1970-01-01"`
+
+- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+
+  Example: Given a project had its latest releases `2.2` in November 2021 and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+
+- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning or tagging scheme - then the latest upstream version in the above schema should be `0`.
+
+  Example: Given a project that has no tags or released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
 
 Because every version of a package in Nixpkgs creates a potential maintenance burden, old versions of a package should not be kept unless there is a good reason to do so. For instance, Nixpkgs contains several versions of GCC because other packages don’t build with the latest version of GCC. Other examples are having both the latest stable and latest pre-release version of a package, or to keep several major releases of an application that differ significantly in functionality.
 
