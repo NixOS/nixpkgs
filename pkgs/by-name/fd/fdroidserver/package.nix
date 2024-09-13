@@ -1,38 +1,17 @@
 {
   lib,
   fetchFromGitLab,
+  python3Packages,
+  python3,
   fetchPypi,
   apksigner,
-  buildPythonApplication,
-  python3,
   installShellFiles,
-  androguard,
-  babel,
-  clint,
-  defusedxml,
-  gitpython,
-  libcloud,
-  mwclient,
-  oscrypto,
-  paramiko,
-  pillow,
-  platformdirs,
-  pyasn1,
-  pyasn1-modules,
-  pycountry,
-  python-vagrant,
-  pyyaml,
-  qrcode,
-  requests,
-  ruamel-yaml,
-  sdkmanager,
-  yamllint,
 }:
 
 let
   version = "2.3a2";
 in
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "fdroidserver";
   inherit version;
 
@@ -69,9 +48,9 @@ buildPythonApplication {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [ babel ];
+  build-system = with python3Packages; [ babel ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     androguard
     platformdirs
     clint
