@@ -434,8 +434,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    # the current apple sdk is too old (currently 11_0) and fails to build "metal" on x86_64-darwin
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
+    broken = stdenv.isDarwin; # fails due to too-old SDK, using newer SDK fails to compile
     maintainers = with lib.maintainers; [
       amarshall
       veprbl
