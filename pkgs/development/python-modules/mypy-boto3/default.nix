@@ -454,8 +454,8 @@ rec {
       "sha256-0Xe77fz+lA+nuUGK+PjU0EgWeQ7AJ9Smsb/4yK1tow0=";
 
   mypy-boto3-ecr =
-    buildMypyBoto3Package "ecr" "1.35.0"
-      "sha256-GIZIas40aqqmPlDh1yKLz4XGicL7kqHsYwdB1owx2rU=";
+    buildMypyBoto3Package "ecr" "1.35.17"
+      "sha256-puWH6dq/wpO0t2PFGeG7hibi0Jru3ELyOmqrjvCxves=";
 
   mypy-boto3-ecr-public =
     buildMypyBoto3Package "ecr-public" "1.35.0"
