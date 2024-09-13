@@ -1,6 +1,8 @@
 { config, lib, ... }:
 
 {
+  meta.maintainers = [ lib.maintainers.SuperSandro2000 ];
+
   options = {
     environment.disableGraphicsPackages = lib.mkOption {
       type = lib.types.bool;
