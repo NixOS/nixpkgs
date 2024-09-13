@@ -18228,8 +18228,6 @@ with pkgs;
 
   iozone = callPackage ../development/tools/misc/iozone { };
 
-  itstool = callPackage ../development/tools/misc/itstool { };
-
   jacoco = callPackage ../development/tools/analysis/jacoco { };
 
   jake = callPackage ../development/tools/jake { };
