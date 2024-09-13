@@ -255,7 +255,7 @@ let
                   if lib.isPath nugetDeps && !lib.isStorePath nugetDepsFile then
                     toString nugetDepsFile
                   else
-                    ''$(mktemp -t "${finalAttrs.pname ? finalAttrs.finalPackage.name}-deps-XXXXXX.nix")'';
+                    ''$(mktemp -t "${finalAttrs.pname or finalAttrs.finalPackage.name}-deps-XXXXXX.nix")'';
                 nugetToNix = (nuget-to-nix.override { inherit dotnet-sdk; });
               };
 

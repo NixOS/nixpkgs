@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-weather";
-  version = "0.0.3";
+  version = "0.0.4";
 
   # fetch from GitHub and not upstream forgejo because cafkafk doesn't want to
   # pay for bandwidth
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage rec {
     owner = "cafkafk";
     repo = "nix-weather";
     rev = "v${version}";
-    hash = "sha256-deVgDYYIv5SyKrkPAfPgbmQ/n4hYSrK2dohaiR5O0QE=";
+    hash = "sha256-15FUA4fszbAVXop3IyOHfxroyTt9/SkWZsSTUh9RtwY=";
   };
 
-  cargoHash = "sha256-QJybGxqOJid1D6FTy7lvrakkB/Ss3P3JnXtU1UlGlW0=";
+  cargoHash = "sha256-vMeljXNWfFRyeQ4ZQ/Qe1vcW5bg5Y14aEH5HgEwOX3Q=";
   cargoExtraArgs = "-p nix-weather";
 
   nativeBuildInputs = [ pkg-config ];
