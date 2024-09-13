@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libxcb
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, libX11, libxcb
 , libXrandr, wayland, moltenvk, vulkan-headers, addDriverRunpath
 , testers }:
 
@@ -13,7 +13,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-z26xvp7bKaOQAXF+/Sk24Syuw3N9QXc6sk2vlQwceJ8=";
   };
 
-  patches = [ ./fix-pkgconfig.patch ];
+  patches = [ ./fix-pkgconfig.patch ]
+    ++ lib.optionals stdenv.is32bit [
+      # Backport patch to support 64-bit inodes on 32-bit systems
+      # FIXME: remove in next update
+      (fetchpatch {
+        url = "https://github.com/KhronosGroup/Vulkan-Loader/commit/ecd88b5c6b1e4c072c55c8652d76513d74c5ad4e.patch";
+        hash = "sha256-Ea+v+RfmVl8fRbkr2ETM3/7R4vp+jw7hvTq2hnw4V/0=";
+      })
+    ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ vulkan-headers ]
