@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "47.beta";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ArBDhRTwgU3eVUFxnoQ7aCiB1x2a/UT/bZf9iPB7mDE=";
+    hash = "sha256-WJOLpnOy92m197ibmFSj1V2/NUH+1eYOCOFGWVEV95E=";
   };
 
   patches = [
