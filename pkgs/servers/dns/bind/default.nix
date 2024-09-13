@@ -9,6 +9,7 @@
 , libtool
 , libxml2
 , openssl
+, liburcu
 , libuv
 , nghttp2
 , jemalloc
@@ -25,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.28";
+  version = "9.20.1";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
+    hash = "sha256-/m3f90khQQ0ztitXI6wjkS6NUBOO9m16MNwsQhEprrA=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ perl pkg-config ];
-  buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
+  buildInputs = [ libidn2 libtool libxml2 openssl libuv liburcu nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
 
+    mkdir $out/etc
     cat <<EOF >$out/etc/rndc.conf
     include "/etc/bind/rndc.key";
     options {
