@@ -2,19 +2,21 @@
 , buildGoModule
 , fetchFromGitHub
 , git
+, nix-update-script
 }:
+
 buildGoModule {
   pname = "zoekt";
-  version = "unstable-2022-11-09";
+  version = "0-unstable-2024-09-05";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "zoekt";
-    rev = "c4b18d3b44da94b3e7c9c94467d68c029666bb86";
-    hash = "sha256-QtwOiBxBeFkhRfH3R2fP72b05Hc4+zt9njqCNVcprZ4=";
+    rev = "35dda3e212b7d7fb0df43dcbd88eb7a7b49ad9d8";
+    hash = "sha256-YdInCAq7h7iC1sfMekLgxqu3plUHr5Ku6FxyPKluQzw=";
   };
 
-  vendorHash = "sha256-DiAqFJ8E5V0/eHztm92WVrf1XGPXmmOaVXaWHfQMn2k=";
+  vendorHash = "sha256-GPeMRL5zWVjJVYpFPnB211Gfm/IaqisP1s6RNaLvN6M=";
 
   nativeCheckInputs = [
     git
@@ -24,6 +26,10 @@ buildGoModule {
     export HOME=`mktemp -d`
     git config --global --replace-all protocol.file.allow always
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version" "branch" ];
+  };
 
   meta = {
     description = "Fast trigram based code search";
