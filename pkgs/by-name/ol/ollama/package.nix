@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   buildEnv,
   linkFarm,
   overrideCC,
@@ -51,28 +50,6 @@ let
   };
 
   vendorHash = "sha256-hSxcREAujhvzHVNwnRTfhi0MKI3s8HNavER2VLz6SYk=";
-
-  # ollama's patches of llama.cpp's example server
-  # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
-  # each update, these patches should be synchronized with the contents of `ollama/llm/patches/`
-  llamacppPatches = [
-    (preparePatch "01-load-progress.diff" "sha256-UTmnBS5hQjIL3eXDZc8RBDNJunLlkqJWH20LpXNiGRQ=")
-    (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
-    (preparePatch "03-load_exception.diff" "sha256-NJkT/k8Mf8HcEMb0XkaLmyUNKV3T+384JRPnmwDI/sk=")
-    (preparePatch "04-metal.diff" "sha256-bPBCfoT3EjZPjWKfCzh0pnCUbM/fGTj37yOaQr+QxQ4=")
-    (preparePatch "05-default-pretokenizer.diff" "sha256-mxqHnDbiy8yfKFUYryNTj/xay/lx9KDiZAiekFSkxr8=")
-    (preparePatch "06-embeddings.diff" "sha256-+4yAEAX1JJenOksG2OxDCwiLEoLj1glJQLIgV08BI5Q=")
-    (preparePatch "07-clip-unicode.diff" "sha256-1qMJoXhDewxsqPbmi+/7xILQfGaybZDyXc5eH0winL8=")
-  ];
-
-  preparePatch =
-    patch: hash:
-    fetchpatch {
-      url = "file://${src}/llm/patches/${patch}";
-      inherit hash;
-      stripLen = 1;
-      extraPrefix = "llm/llama.cpp/";
-    };
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
@@ -174,13 +151,25 @@ goBuild (
       # disable uses of `git` in the `go generate` script
       # ollama's build script assumes the source is a git repo, but nix removes the git directory
       # this also disables necessary patches contained in `ollama/llm/patches/`
-      # those patches are added to `llamacppPatches`, and reapplied here in the patch phase
+      # those patches are applied in `postPatch`
       ./disable-git.patch
-    ] ++ llamacppPatches;
+    ];
+
     postPatch = ''
       # replace inaccurate version number with actual release version
       substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
+
+      # apply llama.cpp patches
+      for cur in llm/patches/*; do patch -p1 -d llm/llama.cpp < $cur; done
     '';
+
+    overrideModAttrs = (
+      finalAttrs: prevAttrs: {
+        # don't run llama.cpp build in the module fetch phase
+        preBuild = "";
+      }
+    );
+
     preBuild = ''
       # disable uses of `git`, since nix removes the git directory
       export OLLAMA_SKIP_PATCHING=true
