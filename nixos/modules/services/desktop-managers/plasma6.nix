@@ -149,6 +149,7 @@ in {
         krdp
         kaccounts-integration
         kaccounts-providers
+        kio-gdrive # google drive interface for KIO
       ] ++ lib.optionals config.services.flatpak.enable [
         # Since PackageKit Nix support is not there yet,
         # only install discover if flatpak is enabled.
