@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-657l7M7euUGXXKTrQyB/kVA4miyePr310enhkaSBJss=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     bitarray
     eth-abi
     eth-keyfile
