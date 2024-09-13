@@ -170,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
       "-DWITH_CYCLES_OSL=OFF"
       "-DWITH_FFTW3=ON"
+      "-DWITH_HYDRA=${if openUsdSupport then "ON" else "OFF"}"
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
       "-DWITH_JACK=${if jackaudioSupport then "ON" else "OFF"}"
@@ -177,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
       "-DWITH_OPENCOLORIO=ON"
+      "-DWITH_OPENIMAGEDENOISE=${if openImageDenoiseSupport then "ON" else "OFF"}"
       "-DWITH_OPENSUBDIV=ON"
       "-DWITH_OPENVDB=ON"
       "-DWITH_PULSEAUDIO=OFF"
@@ -284,7 +286,6 @@ stdenv.mkDerivation (finalAttrs: {
           libXxf86vm
           openal
           openxr-loader
-          pyPkgsOpenusd
         ]
       else
         [
@@ -300,6 +301,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
     )
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+    ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ]
     ++ lib.optionals waylandSupport [
       dbus
       libdecor'
