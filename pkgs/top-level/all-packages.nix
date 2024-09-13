@@ -13031,8 +13031,6 @@ with pkgs;
 
   teip = callPackage ../tools/text/teip { };
 
-  telegraf = callPackage ../servers/monitoring/telegraf { };
-
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   }) teleport_14 teleport_15 teleport_16 teleport;
