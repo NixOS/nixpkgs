@@ -31,6 +31,7 @@
   tomli,
 
   # check phase
+  cython_0,
   defusedxml,
   filelock,
   html5lib,
@@ -94,6 +95,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    cython_0
     defusedxml
     filelock
     html5lib
@@ -121,8 +123,6 @@ buildPythonPackage rec {
       "test_class_alias_having_doccomment"
       "test_class_alias_for_imported_object_having_doccomment"
       "test_decorators"
-      # requires cython_0, but fails miserably on 3.11
-      "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
     ]
