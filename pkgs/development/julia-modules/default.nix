@@ -45,7 +45,7 @@ let
 
   # Start by wrapping Julia so it has access to Python and any other extra libs.
   # Also, prevent various packages (CondaPkg.jl, PythonCall.jl) from trying to do network calls.
-  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { buildInputs = [makeWrapper]; inherit makeWrapperArgs; } ''
+  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { nativeBuildInputs = [makeWrapper]; inherit makeWrapperArgs; } ''
     mkdir -p $out/bin
     makeWrapper ${julia}/bin/julia $out/bin/julia \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLibs}" \
@@ -163,7 +163,7 @@ let
 in
 
 runCommand "julia-${julia.version}-env" {
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [makeWrapper];
 
   inherit julia;
   inherit juliaWrapped;

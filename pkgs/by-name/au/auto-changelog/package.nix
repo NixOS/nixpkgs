@@ -10,18 +10,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "auto-changelog";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "cookpete";
     repo = "auto-changelog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qgJ/TVyViMhISt/EfCWV7XWQLXKTeZalGHFG905Ma5I=";
+    hash = "sha256-ticQpDOQieLaWXfavDKIH0jSenRimp5QYeJy42BjpKw=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-rP/Xt0txwfEUmGZ0CyHXSEG9zSMtv8wr5M2Na+6PbyQ=";
+    hash = "sha256-NGQbzogQi0XbeGd7fYNyw0i9Yo9j91CfeTdO7nhq4Yw=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-## for updating to swig4, see
+## for updating to SWIG 4, see
 ## https://github.com/GeraldWodni/swig/pull/6
 (swig.overrideAttrs (old: {
   version = "3.0.9-forth";
