@@ -127,6 +127,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
+  pytestFlagsArray = [
+    # Specifically use `tests/`, otherwise a benchmark is picked up because it
+    # has a function called `test`.
+    "tests/"
+  ];
+
   pythonImportsCheck = [ "tokenizers" ];
 
   disabledTests = [
