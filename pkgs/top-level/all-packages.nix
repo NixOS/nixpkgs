@@ -35100,8 +35100,6 @@ with pkgs;
 
   eternity = callPackage ../games/doom-ports/eternity-engine { };
 
-  gzdoom = callPackage ../games/doom-ports/gzdoom { };
-
   odamex = callPackage ../games/doom-ports/odamex { };
 
   prboom-plus = callPackage ../games/doom-ports/prboom-plus { };
