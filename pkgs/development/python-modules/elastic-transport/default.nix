@@ -77,6 +77,7 @@ buildPythonPackage rec {
     "test_debug_logging_no_body"
     "test_httpbin"
     "test_sniffed_nodes_added_to_pool"
+    "test_async_transport_httpbin"
   ];
 
   meta = with lib; {
