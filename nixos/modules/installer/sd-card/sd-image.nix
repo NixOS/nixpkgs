@@ -150,6 +150,15 @@ in
         Whether to configure the sd image to expand it's partition on boot.
       '';
     };
+
+    extraRpiFirmwareConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Extra options that will be appended to the <literal>/boot/firmware/config.txt</literal> file.
+        For possible values, see: https://www.raspberrypi.org/documentation/configuration/config-txt/
+      '';
+    };
   };
 
   config = {
