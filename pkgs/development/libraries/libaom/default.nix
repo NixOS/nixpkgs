@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
+{ lib, stdenv, fetchurl, fetchzip, yasm, perl, cmake, pkg-config, python3
 , enableVmaf ? true, libvmaf
 , gitUpdater
 
@@ -21,7 +21,15 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  patches = [ ./outputs.patch ];
+  patches = [
+    ./outputs.patch
+
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";
+      hash = "sha256-6+u7GTxZcSNJgN7D+s+XAVwbMnULufkTcQ0s7l+Ydl0=";
+    })
+  ];
 
   nativeBuildInputs = [
     yasm perl cmake pkg-config python3
