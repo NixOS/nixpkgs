@@ -1326,8 +1326,8 @@ rec {
       "sha256-wIirZ3Ueg3xdtAWT1su3BQXI5W4OBPsyoCQeebsigSs=";
 
   mypy-boto3-storagegateway =
-    buildMypyBoto3Package "storagegateway" "1.35.0"
-      "sha256-tH0BLxs8nnocJzB/cPtq/fBuak7LOzqfTVL4v6R2yAA=";
+    buildMypyBoto3Package "storagegateway" "1.35.18"
+      "sha256-RiAqxt45cMOkbGjWVWufiqZcCKQm++RE3FOdZ5BFkuE=";
 
   mypy-boto3-sts =
     buildMypyBoto3Package "sts" "1.35.0"
