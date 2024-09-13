@@ -59,8 +59,7 @@ class Nix32(Encoding):
 
     def decode(self, s: str):
         assert len(s) == self.length
-        out = [0 for _ in range(self.n)]
-        # TODO: Do better than a list of byte-sized ints
+        out = bytearray(self.n)
 
         for n, c in enumerate(reversed(s)):
             digit = self.inverted[c]
