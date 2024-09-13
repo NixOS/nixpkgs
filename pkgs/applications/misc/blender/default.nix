@@ -84,6 +84,10 @@
 }:
 
 let
+  embreeSupport = (!stdenv.isAarch64 && stdenv.isLinux) || stdenv.isDarwin;
+  openImageDenoiseSupport = (!stdenv.isAarch64 && stdenv.isLinux) || stdenv.isDarwin;
+  openUsdSupport = !stdenv.isDarwin;
+
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override { withOsl = false; };
 
@@ -193,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
       "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    ++ lib.optionals (!embreeSupport) [
       "-DWITH_CYCLES_EMBREE=OFF"
     ]
     ++ lib.optionals stdenv.isDarwin [
@@ -269,10 +273,8 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       zstd
     ]
-    ++ lib.optionals (!stdenv.isAarch64 && stdenv.isLinux) [
-      embree
-      (openimagedenoise.override { inherit cudaSupport; })
-    ]
+    ++ lib.optional embreeSupport embree
+    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
     ++ (
       if (!stdenv.isDarwin) then
         [
@@ -296,9 +298,7 @@ stdenv.mkDerivation (finalAttrs: {
           OpenGL
           SDL
           brotli
-          embree
           llvmPackages.openmp
-          (openimagedenoise.override { inherit cudaSupport; })
           sse2neon
         ]
     )
@@ -325,7 +325,7 @@ stdenv.mkDerivation (finalAttrs: {
       ps.requests
       ps.zstandard
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [ pyPkgsOpenusd ];
+    ++ lib.optional openUsdSupport [ pyPkgsOpenusd ];
 
   blenderExecutable =
     placeholder "out"
