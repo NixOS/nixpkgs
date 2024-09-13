@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.13.1";
+  version = "1.14.0";
 
   outputs = [
     "out"
@@ -31,13 +31,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "zO1F6Ykro1wxuaEdYqnhVC5d/Wj3+zfDNbp0SfIM1hU=";
+    sha256 = "ZOodjp7cHCW0WpIOgNr2dVnRhm/81/hDL+z+ptD+iJc=";
   };
-
-  patches = [
-    # https://gitlab.gnome.org/GNOME/gspell/-/merge_requests/10
-    ./0001-Darwin-build-fix.patch
-  ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
