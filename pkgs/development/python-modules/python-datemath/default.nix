@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-datemath";
-  version = "3.0.1";
+  version = "3.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "nickmaccarthy";
     repo = "python-datemath";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BL+F2oHM49QiwV1/rjXz3wLp+EaTfmc5tAdlsGKq8ag=";
+    hash = "sha256-VwdY6Gmbmoy7EKZjUlWj56uSiE0OdegPiQv+rmigkq8=";
   };
 
   build-system = [ setuptools ];
