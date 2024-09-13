@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     postgresql
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
   postPatch = ''
     patchShebangs \
