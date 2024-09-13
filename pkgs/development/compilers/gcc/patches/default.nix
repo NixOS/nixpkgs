@@ -34,7 +34,6 @@ let
   atLeast8  = lib.versionAtLeast version  "8";
   atLeast7  = lib.versionAtLeast version  "7";
   atLeast6  = lib.versionAtLeast version  "6";
-  atLeast49 = lib.versionAtLeast version  "4.9";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
@@ -44,7 +43,6 @@ let
   is8  = majorVersion == "8";
   is7  = majorVersion == "7";
   is6  = majorVersion == "6";
-  is49 = majorVersion == "4" && lib.versions.minor version == "9";
   inherit (lib) optionals optional;
 in
 
@@ -239,8 +237,7 @@ in
 
 ## gcc 8.0 and older ##############################################################################
 
-# for 49 this is applied later
-++ optional (atLeast49 && !is49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
+++ optional (!atLeast9) ./libsanitizer-no-cyclades-9.patch
 ++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
 
 # Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
@@ -280,8 +277,8 @@ in
 ## gcc 6.0 and older ##############################################################################
 
 ++ optional (is6 && langGo) ./gogcc-workaround-glibc-2.36.patch
-++ optional (is49 || is6) ./9/fix-struct-redefinition-on-glibc-2.36.patch
-++ optional (is49 || (is6 && !stdenv.targetPlatform.isRedox)) ./use-source-date-epoch.patch
+++ optional is6 ./9/fix-struct-redefinition-on-glibc-2.36.patch
+++ optional (is6 && !stdenv.targetPlatform.isRedox) ./use-source-date-epoch.patch
 ++ optional (is6 && !stdenv.targetPlatform.isRedox) ./6/0001-Fix-build-for-glibc-2.31.patch
 ++ optionals (is6 && langAda) [
   ./gnat-cflags.patch
@@ -297,51 +294,7 @@ in
 # defaults to the impure, system location and causes the build to fail.
 ++ optional (is6 && hostPlatform.isDarwin) ./6/libstdc++-disable-flat_namespace.patch
 
-## gcc 4.9 and older ##############################################################################
+## gcc 5.0 and older ##############################################################################
 
 ++ optional (!atLeast6) ./parallel-bconfig.patch
-++ optionals (is49) [
-  (./. + "/${lib.versions.major version}.${lib.versions.minor version}/parallel-strsignal.patch")
-  (./. + "/${lib.versions.major version}.${lib.versions.minor version}/libsanitizer.patch")
-  (fetchpatch {
-    name = "avoid-ustat-glibc-2.28.patch";
-    url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
-    sha256 = "0b32sb4psv5lq0ij9fwhi1b4pjbwdjnv24nqprsk14dsc6xmi1g0";
-  })
-  # has to be applied after "avoid-ustat-glibc-2.28.patch"
-  ./libsanitizer-no-cyclades-9.patch
-  # glibc-2.26
-  ./struct-ucontext.patch
-  ./struct-sigaltstack-4.9.patch
-]
-# Retpoline patches pulled from the branch hjl/indirect/gcc-4_9-branch (by H.J. Lu, the author of GCC upstream retpoline commits)
-++ optionals is49
-  (builtins.map ({commit, sha256}: fetchpatch {url = "https://github.com/hjl-tools/gcc/commit/${commit}.patch"; inherit sha256;})
-  [{ commit = "e623d21608e96ecd6b65f0d06312117d20488a38"; sha256 = "1ix8i4d2r3ygbv7npmsdj790rhxqrnfwcqzv48b090r9c3ij8ay3"; }
-   { commit = "2015a09e332309f12de1dadfe179afa6a29368b8"; sha256 = "0xcfs0cbb63llj2gbcdrvxim79ax4k4aswn0a3yjavxsj71s1n91"; }
-   { commit = "6b11591f4494f705e8746e7d58b7f423191f4e92"; sha256 = "0aydyhsm2ig0khgbp27am7vq7liyqrq6kfhfi2ki0ij0ab1hfbga"; }
-   { commit = "203c7d9c3e9cb0f88816b481ef8e7e87b3ecc373"; sha256 = "0wqn16y7wy5kg8ngfcni5qdwfphl01axczibbk49bxclwnzvldqa"; }
-   { commit = "f039c6f284b2c9ce97c8353d6034978795c4872e"; sha256 = "13fkgdb17lpyxfksz1zanxhgpsm0jrss9w61nbl7an4im22hz7ci"; }
-   { commit = "ed42606bdab1c5d9e5ad828cd6fe1a0557f193b7"; sha256 = "0gdnn8v3p03imj3qga2mzdhpgbmjcklkxdl97jvz5xia2ikzknxm"; }
-   { commit = "5278e062ef292fd2fbf987d25389785f4c5c0f99"; sha256 = "0j81x758wf8v7j4rx5wc1cy7yhkvhlhv3wmnarwakxiwsspq0vrs"; }
-   { commit = "76f1ffbbb6cd9f6ecde6c82cd16e20a27242e890"; sha256 = "1py56y6gp7fjf4f8bbsfwh5bs1gnmlqda1ycsmnwlzfm0cshdp0c"; }
-   { commit = "4ca48b2b688b135c0390f54ea9077ef10aedd52c"; sha256 = "15r019pzr3k0lpgyvdc92c8fayw8b5lrzncna4bqmamcsdz7vsaw"; }
-   { commit = "98c7bf9ddc80db965d69d61521b1c7a1cec32d9a"; sha256 = "1d7pfdv1q23nf0wadw7jbp6d6r7pnzjpbyxgbdfv7j1vr9l1bp60"; }
-   { commit = "3dc76b53ad896494ca62550a7a752fecbca3f7a2"; sha256 = "0jvdzfpvfdmklfcjwqblwq1i22iqis7ljpvm7adra5d7zf2xk7xz"; }
-   { commit = "1e961ed49b18e176c7457f53df2433421387c23b"; sha256 = "04dnqqs4qsvz4g8cq6db5id41kzys7hzhcaycwmc9rpqygs2ajwz"; }
-   { commit = "e137c72d099f9b3b47f4cc718aa11eab14df1a9c"; sha256 = "1ms0dmz74yf6kwgjfs4d2fhj8y6mcp2n184r3jk44wx2xc24vgb2"; }])
 
-++ optional (is49 && !atLeast6) [
-  # gcc-11 compatibility
-  (fetchpatch {
-    name = "gcc4-char-reload.patch";
-    url = "https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=d57c99458933a21fdf94f508191f145ad8d5ec58";
-    includes = [ "gcc/reload.h" ];
-    sha256 = "sha256-66AMP7/ajunGKAN5WJz/yPn42URZ2KN51yPrFdsxEuM=";
-  })
-]
-
-
-## gcc 4.8 only ##############################################################################
-
-++ optional (!atLeast49 && hostPlatform.isDarwin) ./gfortran-darwin-NXConstStr.patch
