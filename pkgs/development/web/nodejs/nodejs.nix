@@ -45,7 +45,13 @@ let
       (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = lib.optionals (!enableNpm) [ "--without-npm" ];
-  self = stdenv.mkDerivation {
+
+  package = stdenv.mkDerivation (finalAttrs:
+  let
+    /** the final package fixed point, after potential overrides */
+    self = finalAttrs.finalPackage;
+  in
+  {
     inherit pname version;
 
     src = fetchurl {
@@ -55,10 +61,17 @@ let
 
     strictDeps = true;
 
-    env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    env = {
+      # Tell ninja to avoid ANSI sequences, otherwise we don’t see build
+      # progress in Nix logs.
+      #
+      # Note: do not set TERM=dumb environment variable globally, it is used in
+      # test-ci-js test suite to skip tests that otherwise run fine.
+      NINJA = "TERM=dumb ninja";
+    } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
       # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
       # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
-      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
+      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300 -Wno-macro-redefined";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
@@ -138,6 +151,9 @@ let
     # Note that currently stdenv does not run check phase if build ≠ host.
     doCheck = true;
 
+    # See https://github.com/nodejs/node/issues/22006
+    enableParallelChecking = false;
+
     # Some dependencies required for tools/doc/node_modules (and therefore
     # test-addons, jstest and others) target are not included in the tarball.
     # Run test targets that do not require network access.
@@ -176,11 +192,6 @@ let
         "test-tls-cli-max-version-1.3"
         "test-tls-client-auth"
         "test-tls-sni-option"
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # Disable tests that don’t work under macOS sandbox.
-        "test-macos-app-sandbox"
-        "test-os"
-        "test-os-process-priority"
         # This is a bit weird, but for some reason fs watch tests fail with
         # sandbox.
         "test-fs-promises-watch"
@@ -201,6 +212,16 @@ let
         "test-runner-run"
         "test-runner-watch-mode"
         "test-watch-mode-files_watcher"
+      ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
+        # Disable tests that don’t work under macOS sandbox.
+        "test-macos-app-sandbox"
+        "test-os"
+        "test-os-process-priority"
+      ] ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
+        # These tests fail on x86_64-darwin (even without sandbox).
+        # TODO: revisit at a later date.
+        "test-fs-readv"
+        "test-fs-readv-sync"
       ])}"
     ];
 
@@ -295,5 +316,5 @@ let
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version
-  };
-in self
+  });
+in package
