@@ -312,7 +312,7 @@ index d5a0823..2ae03f8 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index b09ded8..5fe1996 100644
+index 4c10de7..6c0ab5e 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
 @@ -744,7 +744,18 @@ gpg_ctx_get_executable_name (void)
