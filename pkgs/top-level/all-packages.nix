@@ -7436,10 +7436,6 @@ with pkgs;
 
   zeekscript = callPackage ../tools/security/zeekscript { };
 
-  zoekt = callPackage ../tools/text/zoekt {
-    buildGoModule = buildGo121Module;
-  };
-
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
   zotero-translation-server = callPackage ../tools/misc/zotero-translation-server { };
@@ -13028,8 +13024,6 @@ with pkgs;
   teehee = callPackage ../applications/editors/teehee { };
 
   teip = callPackage ../tools/text/teip { };
-
-  telegraf = callPackage ../servers/monitoring/telegraf { };
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
