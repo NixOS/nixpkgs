@@ -167,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_CODEC_SNDFILE=ON"
       "-DWITH_CPU_CHECK=OFF"
       "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
+      "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
       "-DWITH_CYCLES_OSL=OFF"
       "-DWITH_FFTW3=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
@@ -185,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_SDL=OFF"
       "-DWITH_STRICT_BUILD_OPTIONS=ON"
       "-DWITH_TBB=ON"
-      "-DWITH_USD=ON"
+      "-DWITH_USD=${if openUsdSupport then "ON" else "OFF"}"
 
       # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
       "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
@@ -197,13 +198,9 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
       "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
     ]
-    ++ lib.optionals (!embreeSupport) [
-      "-DWITH_CYCLES_EMBREE=OFF"
-    ]
     ++ lib.optionals stdenv.isDarwin [
       "-DLIBDIR=/does-not-exist"
       "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
-      "-DWITH_USD=OFF" # currently fails on darwin
     ]
     ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
     ++ lib.optionals cudaSupport [
