@@ -185,6 +185,13 @@ self: super: {
   http-api-data = doJailbreak super.http-api-data;
   tasty-discover = doJailbreak super.tasty-discover;
 
+  # Out of date test data: https://github.com/ocharles/weeder/issues/176
+  weeder = appendPatch (pkgs.fetchpatch {
+    name = "weeder-2.9.0-test-fix-expected.patch";
+    url = "https://github.com/ocharles/weeder/commit/56028d0c80fe89d4f2ae25275aedb72714fec7da.patch";
+    sha256 = "10zkvclyir3zf21v41zdsvg68vrkq89n64kv9k54742am2i4aygf";
+  }) super.weeder;
+
   # Allow aeson == 2.1.*
   # https://github.com/hdgarrood/aeson-better-errors/issues/23
   aeson-better-errors = lib.pipe super.aeson-better-errors [
