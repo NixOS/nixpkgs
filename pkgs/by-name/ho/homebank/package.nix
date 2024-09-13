@@ -5,12 +5,13 @@ stdenv.mkDerivation rec {
   pname = "homebank";
   version = "5.8.3";
   src = fetchurl {
-    url = "https://www.gethomebank.org/public/sources/homebank-${version}.tar.gz";
+    url =
+      "https://www.gethomebank.org/public/sources/homebank-${version}.tar.gz";
     hash = "sha256-5Ag9UjAdxT5R6cYV6VT7ktaVHqd0kzQoLCpfS5q5xMI=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
-  buildInputs = [ gtk3 libofx libsoup_3 adwaita-icon-theme];
+  buildInputs = [ gtk3 libofx libsoup_3 adwaita-icon-theme ];
 
   meta = with lib; {
     description = "Free, easy, personal accounting for everyone";
