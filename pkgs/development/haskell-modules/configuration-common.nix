@@ -1464,6 +1464,11 @@ self: super: {
     '';
   }) super.hledger-flow;
 
+  # xmonad-contrib >= 0.18.1 for latest XMonad
+  xmonad-contrib_0_18_1 = super.xmonad-contrib_0_18_1.override {
+    xmonad = self.xmonad_0_18_0;
+  };
+
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
     # https://github.com/timbod7/haskell-chart/issues/233
