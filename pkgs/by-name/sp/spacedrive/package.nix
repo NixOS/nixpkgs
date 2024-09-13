@@ -17,22 +17,22 @@
 
 let
   pname = "spacedrive";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
-          hash = "sha256-9E7h03zJtH8b6khDcbBsB46iVWwl48s+GJuBMOmEre4=";
+          hash = "sha256-W0nFNmBgrypTj1Y6r6vstdL0UUaP9jTOH5RgAirwxsY=";
         };
         x86_64-darwin = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
-          hash = "sha256-h+B7tc6jXJUFNEMhG6ZNch+grtgUeAzfa37BDoZ6M8Q=";
+          hash = "sha256-iX7aUs2k1fjOoDxkgXbePEYXYKFK3rGFlN9b0+gz378=";
         };
         x86_64-linux = {
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
-          hash = "sha256-E1mOODG4YzBc0TPZJmKgrt/c5hp5LwzLaYPl+J5dnkg=";
+          hash = "sha256-SbuL96xNEOPZ3Z5jd0gfJtNkUoEjO4W+P7K9mvyNmHA=";
         };
       }
       .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");

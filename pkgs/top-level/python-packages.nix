@@ -443,6 +443,8 @@ self: super: with self; {
 
   aiostream = callPackage ../development/python-modules/aiostream { };
 
+  aiostreammagic = callPackage ../development/python-modules/aiostreammagic { };
+
   aioswitcher = callPackage ../development/python-modules/aioswitcher { };
 
   aiosyncthing = callPackage ../development/python-modules/aiosyncthing { };

@@ -2,7 +2,7 @@
   toPythonModule,
   python,
   lttng-tools,
-  swig4,
+  swig,
 }:
 
 toPythonModule (
@@ -15,7 +15,7 @@ toPythonModule (
     {
       pname = "lttng";
 
-      nativeBuildInputs = nativeBuildInputs ++ [ swig4 ];
+      nativeBuildInputs = nativeBuildInputs ++ [ swig ];
 
       configureFlags = configureFlags ++ [
         "--enable-python-bindings"

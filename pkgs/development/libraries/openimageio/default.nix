@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   version = "2.5.15.0";
 
   src = fetchFromGitHub {
-    owner = "OpenImageIO";
-    repo = "oiio";
+    owner = "AcademySoftwareFoundation";
+    repo = "OpenImageIO";
     rev = "v${version}";
     hash = "sha256-jtX6IDR/yFn10hf+FxM0s4St9XYxhQ1UlMAsNzOxuio=";
   };
