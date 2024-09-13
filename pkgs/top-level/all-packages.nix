@@ -6754,16 +6754,6 @@ with pkgs;
 
   clolcat = callPackage ../tools/misc/clolcat { };
 
-  cloog = callPackage ../development/libraries/cloog {
-    isl = isl_0_14;
-  };
-
-  cloog_0_18_0 = callPackage ../development/libraries/cloog/0.18.0.nix {
-    isl = isl_0_11;
-  };
-
-  cloogppl = callPackage ../development/libraries/cloog-ppl { };
-
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
   cloudlist = callPackage ../tools/security/cloudlist { };
