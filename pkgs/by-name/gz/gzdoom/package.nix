@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, SDL2
-, bzip2
-, cmake
-, fluidsynth
-, game-music-emu
-, gtk3
-, imagemagick
-, libGL
-, libjpeg
-, libsndfile
-, libvpx
-, libwebp
-, mpg123
-, ninja
-, openal
-, pkg-config
-, vulkan-loader
-, zlib
-, zmusic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  SDL2,
+  bzip2,
+  cmake,
+  fluidsynth,
+  game-music-emu,
+  gtk3,
+  imagemagick,
+  libGL,
+  libjpeg,
+  libsndfile,
+  libvpx,
+  libwebp,
+  mpg123,
+  ninja,
+  openal,
+  pkg-config,
+  vulkan-loader,
+  zlib,
+  zmusic,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-taie1Iod3pXvuxxBC7AArmtndkIV0Di9mtJoPvPkioo=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -68,9 +72,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/updaterevision/UpdateRevision.cmake \
-      --replace "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
-      --replace "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
-      --replace "ret_var(Hash)" "ret_var(\"${src.rev}\")"
+      --replace-fail "ret_var(Tag)" "ret_var(\"${src.rev}\")" \
+      --replace-fail "ret_var(Timestamp)" "ret_var(\"1970-00-00 00:00:00 +0000\")" \
+      --replace-fail "ret_var(Hash)" "ret_var(\"${src.rev}\")" \
+      --replace-fail "<unknown version>" "${src.rev}"
   '';
 
   cmakeFlags = [
@@ -91,16 +96,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/bin/gzdoom $out/share/games/doom/gzdoom
-    makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom
+    makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
 
     for size in 16 24 32 48 64 128; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -background none -resize "$size"x"$size" $src/src/win32/icon1.ico -flatten \
-        $out/share/icons/hicolor/"$size"x"$size"/apps/gzdoom.png
+      magick $src/src/win32/icon1.ico -background none -resize "$size"x"$size" -flatten \
+       $out/share/icons/hicolor/"$size"x"$size"/apps/gzdoom.png
     done;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ZDoom/gzdoom";
     description = "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine";
     mainProgram = "gzdoom";
@@ -108,8 +114,12 @@ stdenv.mkDerivation rec {
       GZDoom is a feature centric port for all DOOM engine games, based on
       ZDoom, adding an OpenGL renderer and powerful scripting capabilities.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ azahi lassulus ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      azahi
+      lassulus
+      Gliczy
+    ];
   };
 }

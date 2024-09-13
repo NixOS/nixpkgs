@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchzip
+, fetchurl
+, patchelf
 , wrapGAppsHook3
 , cairo
 , dbus
@@ -18,25 +20,39 @@
 , libglvnd
 , libuuid
 , libxcb
+, harfbuzz
+, libsoup_3
+, webkitgtk_4_1
+, zenity
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.0.11";
+  version = "1.1.0";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-GQeYR232zoHLIt1AzznD7rp6u4zMiAdj1+0OfXfT6AQ=";
+    hash = "sha256-863xmWC9AuNFTmmBTZVDSchgbqXuk14t1r6B6MeLU74=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    (patchelf.overrideAttrs (old: {
+      version = "0.11";
+      src = fetchurl {
+        url = "https://nixos.org/releases/patchelf/patchelf-0.11/patchelf-0.11.tar.bz2";
+        sha256 = "16ms3ijcihb88j3x6cl8cbvhia72afmfcphczb9cfwr0gbc22chx";
+      };
+    }))
+  ];
 
   sourceRoot = ".";
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
@@ -48,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-preFixup = let
+  preFixup = let
     libPath = lib.makeLibraryPath [
       cairo
       dbus
@@ -65,7 +81,13 @@ preFixup = let
       libglvnd
       libuuid
       libxcb
+      harfbuzz        # libWebView.so
+      libsoup_3       # libWebView.so
+      webkitgtk_4_1   # libWebView.so
       stdenv.cc.cc.lib
+    ];
+    binPath = lib.makeBinPath [
+      zenity          # File selection dialog
     ];
   in ''
     chmod +x $out/lib/*.so
@@ -94,6 +116,10 @@ preFixup = let
     ln -s $out/lib/libcairo.so $out/lib/libcairo.so.2
     rm $out/lib/libgit2.so
     ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
+
+    gappsWrapperArgs+=(
+      --prefix PATH : ${binPath}
+    )
   '';
 
   meta = {
