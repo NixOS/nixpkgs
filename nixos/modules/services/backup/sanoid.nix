@@ -11,6 +11,21 @@ let
     };
 
   commonOptions = {
+    frequent_period = mkOption {
+      description = ''
+        Period in minutes for frequent snapshots,
+        <varname>services.sanoid.interval</varname> should be less than or equal to this
+      '';
+      type = with types; nullOr (ints.between 1 59);
+      default = null;
+    };
+
+    frequently = mkOption {
+      description = "Number of frequent snapshots.";
+      type = with types; nullOr ints.unsigned;
+      default = null;
+    };
+
     hourly = mkOption {
       description = "Number of hourly snapshots.";
       type = with types; nullOr ints.unsigned;
