@@ -63,12 +63,15 @@ let
 
   addEntangled = origOverrideAttrs: f:
     origOverrideAttrs (
-      lib.composeExtensions f (self: super: {
-        passthru = super.passthru // {
-          entangled = super.passthru.entangled.overrideAttrs f;
-          overrideAttrs = addEntangled self.overrideAttrs;
-        };
-      })
+      lib.composeManyExtensions [
+        f
+        (self: super: {
+          passthru = super.passthru // {
+            entangled = super.passthru.entangled.overrideAttrs f;
+            overrideAttrs = addEntangled self.overrideAttrs;
+          };
+        })
+      ]
     );
 
   entangle = pkg1: pkg2: pkg1.overrideAttrs (self: super: {

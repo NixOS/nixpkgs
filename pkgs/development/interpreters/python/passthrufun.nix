@@ -51,18 +51,18 @@
       optionalExtensions = cond: as: lib.optionals cond as;
       pythonExtension = import ../../../top-level/python-packages.nix;
       python2Extension = import ../../../top-level/python2-packages.nix;
-      extensions = lib.composeManyExtensions ([
+      extensions = [
         hooks
         pythonExtension
       ] ++ (optionalExtensions (!self.isPy3k) [
         python2Extension
       ]) ++ pythonPackagesExtensions ++ [
         overrides
-      ]);
+      ];
       aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
     in makeScopeWithSplicing' {
       inherit otherSplices keep;
-      f = lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun;
+      f = lib.extends (lib.composeManyExtensions ([aliases] ++ extensions)) pythonPackagesFun;
     }) {
       overrides = packageOverrides;
       python = self;
