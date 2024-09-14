@@ -4,18 +4,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
   version = "2024a";
 
-  srcs = [
-    (fetchurl {
-      url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-DQQ0RZrL0gWaeo2h8zBKhKhlkfbtacYkj/+lArbt/+M=";
-    })
-    (fetchurl {
-      url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-gAcolK3/WkWPHRQ+FuTKHYsqEiycU5naSCy2jLpqH/g=";
-    })
-  ];
-
-  sourceRoot = ".";
+  src = (fetchurl {
+    url = "https://data.iana.org/time-zones/releases/tzdb-${finalAttrs.version}.tar.lz";
+    hash = "sha256-URr2tGf0Cx7JrDaE0XAXk69HDz4p3fuXuCvkOOhgGno=";
+  });
 
   patches = lib.optionals stdenv.hostPlatform.isWindows [
     ./0001-Add-exe-extension-for-MS-Windows-binaries.patch
