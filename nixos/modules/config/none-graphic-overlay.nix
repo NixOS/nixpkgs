@@ -24,7 +24,14 @@
     (lib.mkRemovedOptionModule [ "environment" "noXlibs" ] "This option got renamed to environment.disableGraphicsPackages. Please make sure to properly read the description of the option if you want to continue to use it.")
   ];
 
-  config = lib.mkIf config.environment.noneGraphicOverlay {
+  config = lib.mkIf config.environment.disableGraphicsPackages {
+    assertions = [
+      {
+        assertion = !config.services.graphical-desktop.enable && !config.services.xserver.enable;
+        message = "environment.disableGraphicsPackages requires that no graphical desktop is being used! Please unset this option.";
+      }
+    ];
+
     programs.ssh.setXAuthLocation = false;
     security.pam.services.su.forwardXAuth = lib.mkForce false;
 
