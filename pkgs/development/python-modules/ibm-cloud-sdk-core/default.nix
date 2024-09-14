@@ -7,7 +7,6 @@
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   responses,
   setuptools,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "requests" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     pyjwt
