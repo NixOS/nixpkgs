@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "aiohttp_client_cache";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B2b/9O2gVJjHUlN0pYeBDcwsy3slaAnd5SroeQqEU+s=";
+    hash = "sha256-MuY60hAkD4Ik8+Encv5TrBAs8kx88Y3bhqy7n9+eS28=";
   };
   nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [
