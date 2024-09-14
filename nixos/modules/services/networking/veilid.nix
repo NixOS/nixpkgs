@@ -2,7 +2,7 @@
 with lib;
 let
   cfg = config.services.veilid;
-  dataDir = "/var/lib/veilid";
+  dataDir = "/var/db/veilid-server";
 
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "veilid.yaml" cfg.settings;
