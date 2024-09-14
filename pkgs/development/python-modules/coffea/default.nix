@@ -38,6 +38,7 @@
   distributed,
   pyinstrument,
   pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -90,6 +91,7 @@ buildPythonPackage rec {
     distributed
     pyinstrument
     pytestCheckHook
+    pytest-xdist
   ];
 
   pythonImportsCheck = [ "coffea" ];
