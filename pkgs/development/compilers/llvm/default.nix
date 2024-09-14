@@ -14,7 +14,12 @@
   bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
   bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
   llvmVersions ? { },
-}:
+  # Allows passthrough to packages via newScope in ./common/default.nix.
+  # This makes it possible to do
+  # `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+  # an llvmPackages whose packages are overridden in an internally consistent way.
+  ...
+}@packageSetArgs:
 let
   versions = {
     "13.0.1".officialRelease.sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k";
@@ -53,25 +58,29 @@ let
     in
     lib.nameValuePair attrName (
       recurseIntoAttrs (
-        callPackage ./common {
-          inherit (stdenvAdapters) overrideCC;
-          buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
-          targetLlvmLibraries =
-            targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
-          targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
-          stdenv =
-            if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
-              gcc12Stdenv
-            else
-              stdenv; # does not build with gcc13
-          inherit bootBintoolsNoLibc bootBintools;
-          inherit
-            officialRelease
-            gitRelease
-            monorepoSrc
-            version
-            ;
-        }
+        callPackage ./common (
+          {
+            inherit (stdenvAdapters) overrideCC;
+            buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
+            targetLlvmLibraries =
+              targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
+            targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
+            inherit
+              officialRelease
+              gitRelease
+              monorepoSrc
+              version
+              ;
+          }
+          // packageSetArgs # Allow overrides.
+          // {
+            stdenv =
+              if (lib.versions.major release_version == "13" && stdenv.cc.cc.isGNU or false) then
+                gcc12Stdenv
+              else
+                stdenv; # does not build with gcc13
+          }
+        )
       )
     );
 
