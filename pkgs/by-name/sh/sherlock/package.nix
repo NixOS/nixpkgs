@@ -64,7 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     jsonschema
     openpyxl
     stem
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "stem" ];
