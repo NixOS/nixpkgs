@@ -10,6 +10,7 @@ automake.section.md
 autopatchelf.section.md
 bmake.section.md
 breakpoint.section.md
+cernlib.section.md
 cmake.section.md
 gdk-pixbuf.section.md
 ghc.section.md

@@ -45,7 +45,7 @@ self: let
       });
     };
 
-    super = removeAttrs imported [ "dash" ];
+    super = imported;
 
     overrides = {
       # upstream issue: Wrong type argument: arrayp, nil
