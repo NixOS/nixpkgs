@@ -167,6 +167,7 @@ in
       enable = true;
       additionalModules = with pkgs.nginxModules; [
         develkit
+        rtmp
         secure-token
         set-misc
         vod
