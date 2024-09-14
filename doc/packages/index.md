@@ -12,6 +12,7 @@ emacs.section.md
 firefox.section.md
 fish.section.md
 fuse.section.md
+geant4.section.md
 ibus.section.md
 kakoune.section.md
 krita.section.md
