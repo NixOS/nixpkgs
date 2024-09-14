@@ -8,6 +8,7 @@
 , fetchpatch
 , fetchurl
 , neovimUtils
+, nix-update-script
 , substituteAll
 , # Language dependencies
   fetchYarnDeps
@@ -153,6 +154,66 @@
   autosave-nvim = super.autosave-nvim.overrideAttrs {
     dependencies = with super; [ plenary-nvim ];
   };
+
+  avante-nvim = let
+    version = "0.0.2";
+    src = fetchFromGitHub {
+      owner = "yetone";
+      repo = "avante.nvim";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-p0ILVK1nADMFQ2FCVgWKouoEr+Fenf62p+RMgeRCx7E=";
+    };
+    avante-libs = rustPlatform.buildRustPackage {
+      pname = "avante-libs";
+      inherit version src;
+
+      nativeBuildInputs = [ pkg-config ];
+
+      buildInputs = [ openssl ];
+
+      buildFeatures = let
+        luaVersion = luaPackages.lua.version;
+        major = lib.versions.major luaVersion;
+        minor = lib.versions.minor luaVersion;
+      in [ "lua${major}${minor}" ];
+
+      cargoLock = {
+        lockFile = ./avante-nvim/Cargo.lock;
+        outputHashes = {
+          "mlua-0.10.0-beta.1" = "sha256-ZEZFATVldwj0pmlmi0s5VT0eABA15qKhgjmganrhGBY=";
+        };
+      };
+    };
+  in
+    buildVimPlugin {
+      pname = "avante.nvim";
+      inherit version src;
+
+      dependencies = with super; [
+        dressing-nvim
+        nui-nvim
+        plenary-nvim
+      ];
+
+      postInstall = let
+        ext = stdenv.hostPlatform.extensions.sharedLibrary;
+      in ''
+        mkdir $out/build
+        cp ${avante-libs}/lib/libavante_templates.${ext} $out/build/avante_templates.${ext}
+        cp ${avante-libs}/lib/libavante_tokenizers.${ext} $out/build/avante_tokenizers.${ext}
+      '';
+
+      doInstallCheck = true;
+      nvimRequireCheck = "avante";
+
+      passthru.updateScript = nix-update-script { };
+
+      meta = {
+        homepage = "https://github.com/yetone/avante.nvim/";
+        changelog = "https://github.com/yetone/avante.nvim/releases/tag/v${version}";
+        maintainers = with lib.maintainers; [ GaetanLepage ];
+      };
+    };
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
