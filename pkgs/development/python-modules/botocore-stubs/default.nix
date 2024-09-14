@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  setuptools,
   pythonOlder,
   types-awscrt,
   typing-extensions,
@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "botocore-stubs";
-  version = "1.34.162";
+  version = "1.35.19";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "botocore_stubs";
     inherit version;
-    hash = "sha256-PhBupD4iY/H4ByaCNYYhFUHQ5Da2pgjvCyJAtipT8iw=";
+    hash = "sha256-/5Xq04vK9hSw8kxCIFRBzwSoy+IsdLxz8ossCmoFVuA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     types-awscrt
     typing-extensions
   ];
