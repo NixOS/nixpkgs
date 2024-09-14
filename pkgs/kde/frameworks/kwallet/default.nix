@@ -1,10 +1,11 @@
 {
   mkKdeDerivation,
   libgcrypt,
+  kcrash,
   kdoctools,
 }:
 mkKdeDerivation {
   pname = "kwallet";
 
-  extraBuildInputs = [libgcrypt kdoctools];
+  extraBuildInputs = [libgcrypt kcrash kdoctools];
 }
