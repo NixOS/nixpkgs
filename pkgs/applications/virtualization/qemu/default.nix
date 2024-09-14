@@ -3,20 +3,20 @@
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson
 , sigtool
 , makeWrapper, removeReferencesTo
-, attr, libcap, libcap_ng, socat, libslirp
+, attr, libcap, libcap_ng, socat, libslirp, audit
 , CoreServices, Cocoa, Hypervisor, Kernel, rez, setfile, vmnet
 , guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !minimal, numactl
 , seccompSupport ? stdenv.isLinux && !minimal, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !minimal
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, libpulseaudio
-, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, pipewire
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, SDL2, SDL2_image
-, jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !minimal, gtk3, gettext, vte, wrapGAppsHook3
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
+, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal && !stdenv.hostPlatform.isStatic, pipewire
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal && !stdenv.hostPlatform.isStatic, SDL2, SDL2_image
+, jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal && !stdenv.hostPlatform.isStatic, libjack2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !minimal && !stdenv.hostPlatform.isStatic, gtk3, gettext, vte, wrapGAppsHook3
 , vncSupport ? !nixosTestRunner && !minimal, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner && !minimal, libcacard
-, spiceSupport ? true && !nixosTestRunner && !minimal, spice, spice-protocol
+, smartcardSupport ? !nixosTestRunner && !minimal && !stdenv.hostPlatform.isStatic, libcacard
+, spiceSupport ? true && !nixosTestRunner && !minimal && !stdenv.hostPlatform.isStatic, spice, spice-protocol
 , ncursesSupport ? !nixosTestRunner && !minimal, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
@@ -29,7 +29,7 @@
 , smbdSupport ? false, samba
 , tpmSupport ? !minimal
 , uringSupport ? stdenv.isLinux && !userOnly, liburing
-, canokeySupport ? !minimal, canokey-qemu
+, canokeySupport ? !minimal && !stdenv.hostPlatform.isStatic, canokey-qemu
 , capstoneSupport ? !minimal, capstone
 , pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? !minimal || toolsOnly
@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gWtwIqi6fCrDDi4M+XPoJva8yFBTOWAyEsXt6OlNeDQ=";
   };
 
+  strictDeps = true;
+
   depsBuildBuild = [ buildPlatformStdenv.cc ]
     ++ lib.optionals hexagonSupport [ pkg-config ];
 
@@ -112,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals smartcardSupport [ libcacard ]
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.isLinux [ libcap_ng libcap attr ]
+    ++ lib.optionals stdenv.isLinux [ libcap_ng libcap attr audit ]
     ++ lib.optionals (stdenv.isLinux && !userOnly) [ libaio ]
     ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals cephSupport [ ceph ]
@@ -126,6 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals canokeySupport [ canokey-qemu ]
     ++ lib.optionals capstoneSupport [ capstone ]
     ++ lib.optionals (!userOnly) [ dtc ];
+
+  # a private dependency of PAM which is not linked explicitly in static builds
+  env.NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.isStatic && stdenv.isLinux) " -laudit ";
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
@@ -143,6 +148,10 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+
+    # qemu defined a crc32c function which clashes with one in libblkid when
+    # building statically
+    ./static_build_crc32c_duplicate_definition.patch
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
@@ -174,6 +183,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
+    # plugins are necessarily shared libraries
+    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-plugins"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
     ++ lib.optional spiceSupport "--enable-spice"
@@ -195,8 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional capstoneSupport "--enable-capstone"
     ++ lib.optional (!pluginsSupport) "--disable-plugins"
     ++ lib.optional (!enableBlobs) "--disable-install-blobs"
-    ++ lib.optional userOnly "--disable-system"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--static";
+    ++ lib.optional userOnly "--disable-system";
 
   dontWrapGApps = true;
 

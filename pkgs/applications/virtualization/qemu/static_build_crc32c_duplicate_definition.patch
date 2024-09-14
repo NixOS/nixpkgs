@@ -1,0 +1,117 @@
+commit 0ba0f342e2f3cb1d271d324d999d80d5c2834f2b
+Author: Guillaume Girol <symphorien+git@xlumurb.eu>
+Date:   Sun Aug 11 12:00:00 2024 +0000
+
+    rename crc32c to a less generic name
+    
+    when compiling qemu statically, this symbol clashes to one in libblkid.
+
+diff --git a/block/vhdx.c b/block/vhdx.c
+index 5aa1a13506..0dc9df217d 100644
+--- a/block/vhdx.c
++++ b/block/vhdx.c
+@@ -157,7 +157,7 @@ uint32_t vhdx_update_checksum(uint8_t *buf, size_t size, int crc_offset)
+     assert(size > (crc_offset + sizeof(crc)));
+ 
+     memset(buf + crc_offset, 0, sizeof(crc));
+-    crc =  crc32c(0xffffffff, buf, size);
++    crc =  qemu_crc32c(0xffffffff, buf, size);
+     crc = cpu_to_le32(crc);
+     memcpy(buf + crc_offset, &crc, sizeof(crc));
+ 
+@@ -176,7 +176,7 @@ uint32_t vhdx_checksum_calc(uint32_t crc, uint8_t *buf, size_t size,
+         memset(buf + crc_offset, 0, sizeof(crc_orig));
+     }
+ 
+-    crc_new = crc32c(crc, buf, size);
++    crc_new = qemu_crc32c(crc, buf, size);
+     if (crc_offset > 0) {
+         memcpy(buf + crc_offset, &crc_orig, sizeof(crc_orig));
+     }
+diff --git a/hw/net/net_rx_pkt.c b/hw/net/net_rx_pkt.c
+index 32e5f3f9cf..a53238e143 100644
+--- a/hw/net/net_rx_pkt.c
++++ b/hw/net/net_rx_pkt.c
+@@ -579,7 +579,7 @@ _net_rx_pkt_validate_sctp_sum(struct NetRxPkt *pkt)
+         return false;
+     }
+ 
+-    calculated = crc32c(0xffffffff,
++    calculated = qemu_crc32c(0xffffffff,
+                         (uint8_t *)vec->iov_base + off, vec->iov_len - off);
+     calculated = iov_crc32c(calculated ^ 0xffffffff, vec + 1, vec_len - 1);
+     valid = calculated == le32_to_cpu(original);
+diff --git a/include/qemu/crc32c.h b/include/qemu/crc32c.h
+index 88b4d2b3b3..b0f535c80e 100644
+--- a/include/qemu/crc32c.h
++++ b/include/qemu/crc32c.h
+@@ -29,7 +29,7 @@
+ #define QEMU_CRC32C_H
+ 
+ 
+-uint32_t crc32c(uint32_t crc, const uint8_t *data, unsigned int length);
++uint32_t qemu_crc32c(uint32_t crc, const uint8_t *data, unsigned int length);
+ uint32_t iov_crc32c(uint32_t crc, const struct iovec *iov, size_t iov_cnt);
+ 
+ #endif
+diff --git a/target/arm/helper.c b/target/arm/helper.c
+index 8fb4b474e8..cc5b2a8e99 100644
+--- a/target/arm/helper.c
++++ b/target/arm/helper.c
+@@ -12409,7 +12409,7 @@ uint32_t HELPER(crc32c)(uint32_t acc, uint32_t val, uint32_t bytes)
+     stl_le_p(buf, val);
+ 
+     /* Linux crc32c converts the output to one's complement.  */
+-    return crc32c(acc, buf, bytes) ^ 0xffffffff;
++    return qemu_crc32c(acc, buf, bytes) ^ 0xffffffff;
+ }
+ 
+ /*
+diff --git a/target/arm/tcg/helper-a64.c b/target/arm/tcg/helper-a64.c
+index c60d2a7ec9..d64912d4eb 100644
+--- a/target/arm/tcg/helper-a64.c
++++ b/target/arm/tcg/helper-a64.c
+@@ -514,7 +514,7 @@ uint64_t HELPER(crc32c_64)(uint64_t acc, uint64_t val, uint32_t bytes)
+     stq_le_p(buf, val);
+ 
+     /* Linux crc32c converts the output to one's complement.  */
+-    return crc32c(acc, buf, bytes) ^ 0xffffffff;
++    return qemu_crc32c(acc, buf, bytes) ^ 0xffffffff;
+ }
+ 
+ /*
+diff --git a/target/loongarch/tcg/op_helper.c b/target/loongarch/tcg/op_helper.c
+index fe79c62fa4..a90db6f4b9 100644
+--- a/target/loongarch/tcg/op_helper.c
++++ b/target/loongarch/tcg/op_helper.c
+@@ -77,7 +77,7 @@ target_ulong helper_crc32c(target_ulong val, target_ulong m, uint64_t sz)
+     target_ulong mask = ((sz * 8) == 64) ? -1ULL : ((1ULL << (sz * 8)) - 1);
+     m &= mask;
+     stq_le_p(buf, m);
+-    return (int32_t) (crc32c(val, buf, sz) ^ 0xffffffff);
++    return (int32_t) (qemu_crc32c(val, buf, sz) ^ 0xffffffff);
+ }
+ 
+ target_ulong helper_cpucfg(CPULoongArchState *env, target_ulong rj)
+diff --git a/util/crc32c.c b/util/crc32c.c
+index ea7f345de8..2780a5c698 100644
+--- a/util/crc32c.c
++++ b/util/crc32c.c
+@@ -105,7 +105,7 @@ static const uint32_t crc32c_table[256] = {
+ };
+ 
+ 
+-uint32_t crc32c(uint32_t crc, const uint8_t *data, unsigned int length)
++uint32_t qemu_crc32c(uint32_t crc, const uint8_t *data, unsigned int length)
+ {
+     while (length--) {
+         crc = crc32c_table[(crc ^ *data++) & 0xFFL] ^ (crc >> 8);
+@@ -116,7 +116,7 @@ uint32_t crc32c(uint32_t crc, const uint8_t *data, unsigned int length)
+ uint32_t iov_crc32c(uint32_t crc, const struct iovec *iov, size_t iov_cnt)
+ {
+     while (iov_cnt--) {
+-        crc = crc32c(crc, iov->iov_base, iov->iov_len) ^ 0xffffffff;
++        crc = qemu_crc32c(crc, iov->iov_base, iov->iov_len) ^ 0xffffffff;
+         iov++;
+     }
+     return crc ^ 0xffffffff;
