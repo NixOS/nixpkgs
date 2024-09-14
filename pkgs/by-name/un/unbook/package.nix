@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unbook";
-  version = "0.8.2";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ludios";
     repo = "unbook";
     rev = version;
-    hash = "sha256-THCPJ4zOKSXKZDa5DuqpBfBKZ96TdFEuDMVw/HmO7Eo=";
+    hash = "sha256-whWWh/jQ4RkGA3T1VCmt6zhpQQCzh2jASYg69IlfEeo=";
   };
 
-  cargoHash = "sha256-EbSayNz9cPmMDQOaOiyQAYmtlnb+4jzbffm1On0BBxI=";
+  cargoHash = "sha256-whmp4ST89TZuxQe9fnkW98A9t3rwpTdQCej49ZsDanE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
