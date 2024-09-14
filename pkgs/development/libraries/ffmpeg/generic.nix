@@ -11,64 +11,11 @@
   }
 
 , ffmpegVariant ? "small" # Decides which dependencies are enabled by default
-, withHeadlessDeps ? ffmpegVariant == "headless" || withSmallDeps
-, withSmallDeps ? ffmpegVariant == "small" || withFullDeps
-, withFullDeps ? ffmpegVariant == "full"
 
 , fetchgit
 , fetchpatch2
 
-
-/*
- *  Build options
- */
-, withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
-
-/*
- *  Program options
- */
-, buildFfmpeg ? withHeadlessDeps # Build ffmpeg executable
-, buildFfplay ? withSmallDeps # Build ffplay executable
-, buildFfprobe ? withHeadlessDeps # Build ffprobe executable
-, buildQtFaststart ? withFullDeps # Build qt-faststart executable # TODO
-, withBin ? buildFfmpeg || buildFfplay || buildFfprobe || buildQtFaststart # TODO
-/*
- *  Library options
- */
-, buildAvcodec ? withHeadlessDeps # Build avcodec library
-, buildAvdevice ? withHeadlessDeps # Build avdevice library
-, buildAvfilter ? withHeadlessDeps # Build avfilter library
-, buildAvformat ? withHeadlessDeps # Build avformat library
-# Deprecated but depended upon by some packages.
-# https://github.com/NixOS/nixpkgs/pull/211834#issuecomment-1417435991)
-, buildAvresample ? withHeadlessDeps && lib.versionOlder version "5" # Build avresample library
-, buildAvutil ? withHeadlessDeps # Build avutil library
-, buildPostproc ? withHeadlessDeps # Build postproc library
-, buildSwresample ? withHeadlessDeps # Build swresample library
-, buildSwscale ? withHeadlessDeps # Build swscale library
-, withLib ? buildAvcodec # TODO
-  || buildAvdevice
-  || buildAvfilter
-  || buildAvformat
-  || buildAvutil
-  || buildPostproc
-  || buildSwresample
-  || buildSwscale
-/*
- *  Documentation options
- */
-, withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc # TODO
-, withHtmlDoc ? withHeadlessDeps # HTML documentation pages
-, withManPages ? withHeadlessDeps # Man documentation pages
-, withPodDoc ? withHeadlessDeps # POD documentation pages
-, withTxtDoc ? withHeadlessDeps # Text documentation pages
-# Whether a "doc" output will be produced. Note that withManPages does not produce
-# a "doc" output because its files go to "man".
-, withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc) # TODO
-
-/*
- *  External libraries options
- */
+  #  Feature inputs
 , alsa-lib
 , avisynthplus
 , bzip2
@@ -356,18 +303,33 @@ let
             };
 
             network = { };
-            pixelutils = { };
+            pixelutils = {
+              description = "Pixel utils in libavutil";
+            };
 
             # Program flags
-            ffmpeg = { };
-            ffplay = { variant = small; };
-            ffprobe = { };
+            ffmpeg = {
+              description = "Build ffmpeg executable";
+            };
+            ffplay = {
+              variant = small;
+              description = "Build ffplay executable";
+            };
+            ffprobe = {
+              description = "Build ffprobe executable";
+            };
+            qt-faststart = {
+              description = "Build qt-faststart executable";
+              flags = [ ]; # Does not have a flag, needs its dir to be passed to make manually
+            };
 
             # Library flags
             avcodec = { };
             avdevice = { };
             avfilter = { };
             avformat = { };
+            # Deprecated but depended upon by some packages.
+            # https://github.com/NixOS/nixpkgs/pull/211834#issuecomment-1417435991
             avresample = {
               # Ffmpeg > 4 doesn't know about the flag anymore
               versionMax = "5";
@@ -379,7 +341,9 @@ let
             swscale = { };
 
             # Documentation flags
-            doc = { };
+            doc = {
+              gate = with enable; htmlpages || manpages || podpages || txtpages;
+            };
             htmlpages = { };
             manpages = { };
             podpages = { };
@@ -937,63 +901,45 @@ let
   };
   inherit (eval) config;
   inherit (config) features;
+  enable = lib.mapAttrs (n: v: v.enable) features;
 
-  # Feature flags
-  withCuda = features.cuda.enable;
-  withCudaLLVM = features.cuda-llvm.enable;
-  withCuvid = features.cuvid.enable;
-  withNvcodec = features.nvcodec.enable;
-  withFrei0r = features.frei0r.enable;
-  withMfx = features.mfx.enable;
-  withNvdec = features.nvdec.enable;
-  withNvenc = features.nvenc.enable;
-  withVpl = features.vpl.enable;
-  withVulkan = features.vulkan.enable;
-  withGPL = features.gpl.enable;
-  withVersion3 = features.version3.enable;
-  withGPLv3 = features.gplv3.enable;
-  withUnfree = features.unfree.enable;
+  withLib =
+    with enable;
+      avcodec
+      || avdevice
+      || avfilter
+      || avformat
+      || avutil
+      || postproc
+      || swresample
+      || swscale;
+  withBin = with enable; ffmpeg || ffplay || ffprobe || qt-faststart;
+  # Whether a "doc" output will be produced. Note that manpages does not produce
+  # a "doc" output because its files go to "man".
+  withDoc = with enable; doc && (htmlpages || podpages || txtpages);
 in
 
 assert builtins.hasAttr ffmpegVariant variants;
 
-/*
- *  Licensing dependencies
- */
-assert withGPLv3 -> withGPL && withVersion3;
+# Licensing dependencies
+assert with enable; gplv3 -> gpl && version3;
 
-/*
- *  Build dependencies
- */
-assert withPixelutils -> buildAvutil;
-assert !(withMfx && withVpl); # incompatible features
-/*
- *  Program dependencies
- */
-assert buildFfmpeg -> buildAvcodec
-                     && buildAvfilter
-                     && buildAvformat
-                     && (buildSwresample || buildAvresample);
-assert buildFfplay -> buildAvcodec
-                     && buildAvformat
-                     && buildSwscale
-                     && (buildSwresample || buildAvresample);
-assert buildFfprobe -> buildAvcodec && buildAvformat;
-/*
- *  Library dependencies
- */
-assert buildAvcodec -> buildAvutil; # configure flag since 0.6
-assert buildAvdevice -> buildAvformat
-                       && buildAvcodec
-                       && buildAvutil; # configure flag since 0.6
-assert buildAvformat -> buildAvcodec && buildAvutil; # configure flag since 0.6
-assert buildPostproc -> buildAvutil;
-assert buildSwscale -> buildAvutil;
+# Build dependencies
+assert with enable; pixelutils -> avutil;
+assert with enable; !(mfx && vpl); # incompatible features
+# Program dependencies
+assert with enable; ffmpeg -> avcodec && avfilter && avformat && (swresample || avresample);
+assert with enable; ffplay -> avcodec && avformat && swscale && (swresample || avresample);
+assert with enable; ffprobe -> avcodec && avformat;
+# Library dependencies
+assert with enable; avcodec -> avutil; # configure flag since 0.6
+assert with enable; avdevice -> avformat && avcodec && avutil; # configure flag since 0.6
+assert with enable; avformat -> avcodec && avutil; # configure flag since 0.6
+assert with enable; postproc -> avutil;
+assert with enable; swscale -> avutil;
 
-/*
- *  External Library dependencies
- */
-assert (withCuda || withCuvid || withNvdec  || withNvenc) -> withNvcodec;
+# External Library dependencies
+assert with enable; (cuda || cuvid || nvdec || nvenc) -> nvcodec;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpeg" + (optionalString (ffmpegVariant != "small") "-${ffmpegVariant}");
@@ -1002,7 +948,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString withFrei0r ''
+  '' + lib.optionalString enable.frei0r ''
     substituteInPlace libavfilter/vf_frei0r.c \
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
     substituteInPlace doc/filters.texi \
@@ -1077,7 +1023,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals withLib [
     "--libdir=${placeholder "lib"}/lib"
     "--incdir=${placeholder "dev"}/include"
-  ] ++ optionals withManPages [
+  ] ++ optionals enable.manpages [
     "--mandir=${placeholder "man"}/share/man"
   ] ++ optionals withDoc [
     "--docdir=${placeholder "doc"}/share/doc/ffmpeg"
@@ -1107,7 +1053,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
-  ++ optionals withCudaLLVM [ clang ];
+  ++ optionals enable.cuda-llvm [ clang ];
 
   buildInputs = lib.pipe eval.config.features [
     (lib.filterAttrs (n: v: v.enable && lib.versionAtLeast version v.version && lib.versionOlder version v.versionMax))
@@ -1116,7 +1062,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildFlags = [ "all" ]
-    ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
+    ++ optional enable.qt-faststart "tools/qt-faststart"; # Build qt-faststart executable
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
@@ -1124,15 +1070,15 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = let
     ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     libsToLink = [ ]
-      ++ optional buildAvcodec "libavcodec"
-      ++ optional buildAvdevice "libavdevice"
-      ++ optional buildAvfilter "libavfilter"
-      ++ optional buildAvformat "libavformat"
-      ++ optional buildAvresample "libavresample"
-      ++ optional buildAvutil "libavutil"
-      ++ optional buildPostproc "libpostproc"
-      ++ optional buildSwresample "libswresample"
-      ++ optional buildSwscale "libswscale"
+      ++ optional enable.avcodec "libavcodec"
+      ++ optional enable.avdevice "libavdevice"
+      ++ optional enable.avfilter "libavfilter"
+      ++ optional enable.avformat "libavformat"
+      ++ optional enable.avresample "libavresample"
+      ++ optional enable.avutil "libavutil"
+      ++ optional enable.postproc "libpostproc"
+      ++ optional enable.swresample "libswresample"
+      ++ optional enable.swscale "libswscale"
     ;
   in ''
     ${ldLibraryPathEnv}="${lib.concatStringsSep ":" libsToLink}" make check -j$NIX_BUILD_CORES
@@ -1141,11 +1087,11 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = optionals withBin [ "bin" ] # The first output is the one that gets symlinked by default!
     ++ optionals withLib [ "lib" "dev" ]
     ++ optionals withDoc [ "doc" ]
-    ++ optionals withManPages [ "man" ]
+    ++ optionals enable.manpages [ "man" ]
     ++ [ "data" "out" ] # We need an "out" output because we get an error otherwise. It's just an empty dir.
   ;
 
-  postInstall = optionalString buildQtFaststart ''
+  postInstall = optionalString enable.qt-faststart ''
     install -D tools/qt-faststart -t $bin/bin
   '';
 
@@ -1156,7 +1102,7 @@ stdenv.mkDerivation (finalAttrs: {
     addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
   ''
   # https://trac.ffmpeg.org/ticket/10809
-  + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''
+  + optionalString (versionAtLeast version "5.0" && enable.vulkan && !stdenv.hostPlatform.isMinGW) ''
     patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
@@ -1166,7 +1112,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.variants = variants;
   passthru.eval = eval;
 
-  meta = with lib; {
+  meta = {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
     changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
@@ -1177,26 +1123,30 @@ stdenv.mkDerivation (finalAttrs: {
       No matter if they were designed by some standards committee, the community or
       a corporation.
     '';
-    license = with licenses; [ lgpl21Plus ]
-      ++ optional withGPL gpl2Plus
-      ++ optional withVersion3 lgpl3Plus
-      ++ optional withGPLv3 gpl3Plus
-      ++ optional withUnfree unfreeRedistributable
-      ++ optional (withGPL && withUnfree) unfree;
+    license =
+      let
+        l = lib.licenses;
+      in
+      [ l.lgpl21Plus ]
+      ++ optional enable.gpl l.gpl2Plus
+      ++ optional enable.version3 l.lgpl3Plus
+      ++ optional enable.gplv3 l.gpl3Plus
+      ++ optional enable.unfree l.unfreeRedistributable
+      ++ optional (enable.gpl && enable.unfree) l.unfree;
     pkgConfigModules = [ ]
-      ++ optional buildAvcodec "libavcodec"
-      ++ optional buildAvdevice "libavdevice"
-      ++ optional buildAvfilter "libavfilter"
-      ++ optional buildAvformat "libavformat"
-      ++ optional buildAvresample "libavresample"
-      ++ optional buildAvutil "libavutil"
-      ++ optional buildPostproc "libpostproc"
-      ++ optional buildSwresample "libswresample"
-      ++ optional buildSwscale "libswscale";
-    platforms = platforms.all;
+      ++ optional enable.avcodec "libavcodec"
+      ++ optional enable.avdevice "libavdevice"
+      ++ optional enable.avfilter "libavfilter"
+      ++ optional enable.avformat "libavformat"
+      ++ optional enable.avresample "libavresample"
+      ++ optional enable.avutil "libavutil"
+      ++ optional enable.postproc "libpostproc"
+      ++ optional enable.swresample "libswresample"
+      ++ optional enable.swscale "libswscale";
+    platforms = lib.platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-    maintainers = with maintainers; [ atemu arthsmn jopejoe1 ];
+    maintainers = with lib.maintainers; [ atemu arthsmn jopejoe1 ];
     mainProgram = "ffmpeg";
   };
 })
