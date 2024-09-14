@@ -2,34 +2,47 @@
   lib,
   stdenv,
   buildPythonPackage,
-  rustPlatform,
   fetchFromGitHub,
-  darwin,
-  libiconv,
+  rustPlatform,
+
+  # nativeBuildInputs
   pkg-config,
+
+  # buildInputs
+  libiconv,
   protobuf,
+  darwin,
+
+  # dependencies
   numpy,
   pyarrow,
+
+  # optional-dependencies
+  torch,
+
+  # tests
+  duckdb,
   ml-dtypes,
   pandas,
   pillow,
   polars,
   pytestCheckHook,
-  torch,
   tqdm,
+
+  # passthru
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bB+6q3kkSxY8i5xf4wumREHizUGWWOZ8Tr5Gt10CVAs=";
+    hash = "sha256-E+29CbVNbzmrQnBZt0860IvL4xYZqzE+uzSuKDwgxzg=";
   };
 
   buildAndTestSubdir = "python";
@@ -74,6 +87,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
+    duckdb
     ml-dtypes
     pandas
     pillow
@@ -86,12 +100,6 @@ buildPythonPackage rec {
     cd python/python/tests
   '';
 
-  disabledTests = [
-    # Error during planning: Invalid function 'invert'.
-    "test_polar_scan"
-    "test_simple_predicates"
-  ];
-
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--generate-lockfile"
@@ -103,6 +111,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for Lance columnar format";
     homepage = "https://github.com/lancedb/lance";
+    changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

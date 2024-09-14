@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     mainProgram = "cheese";
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

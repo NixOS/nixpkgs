@@ -5025,8 +5025,6 @@ with pkgs;
 
   fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
 
-  fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
-
   fedimint = callPackage ../by-name/fe/fedimint/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -19841,8 +19839,6 @@ with pkgs;
   };
 
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
-
-  vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
 
   vmmlib = callPackage ../development/libraries/vmmlib {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
