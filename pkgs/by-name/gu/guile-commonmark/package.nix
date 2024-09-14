@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  guile,
+  pkg-config,
+  stdenv,
+  texinfo,
 }:
 
 stdenv.mkDerivation {
@@ -20,25 +21,25 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
     texinfo # for makeinfo
   ];
-  buildInputs = [
-    guile
-  ];
+
+  buildInputs = [ guile ];
+
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # https://github.com/OrangeShark/guile-commonmark/issues/20
   doCheck = false;
 
-  makeFlags = [
-    "GUILE_AUTO_COMPILE=0"
-  ];
+  strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/OrangeShark/guile-commonmark";
     description = "Implementation of CommonMark for Guile";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = guile.meta.platforms;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (guile.meta) platforms;
   };
 }
