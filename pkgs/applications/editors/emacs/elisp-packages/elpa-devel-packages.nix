@@ -50,9 +50,6 @@ self: let
     commonOverrides = import ./elpa-common-overrides.nix pkgs;
 
     overrides = self: super: {
-      pq = super.pq.overrideAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.postgresql ];
-      });
     };
 
     elpaDevelPackages =

@@ -20,6 +20,10 @@ in
       '';
   });
 
+  pq = super.pq.overrideAttrs (old: {
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.postgresql ];
+  });
+
   # native compilation for tests/seq-tests.el never ends
   # delete tests/seq-tests.el to workaround this
   seq = super.seq.overrideAttrs (old: {
