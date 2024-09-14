@@ -19222,8 +19222,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  coeurl = callPackage ../development/libraries/coeurl { };
-
   coercer = callPackage ../tools/security/coercer { };
 
   cogl = callPackage ../development/libraries/cogl {
