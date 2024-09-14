@@ -125,5 +125,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
+    # test_indices.py ...sss.Fatal Python error: Fatal Python error: Illegal instructionIllegal instruction
+    # File "/nix/store/wiiccrs0vd1qbh4j6ki9p40xmamsjix3-python3.12-pylance-0.17.0/lib/python3.12/site-packages/lance/indices.py", line 237 in train_ivf
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
