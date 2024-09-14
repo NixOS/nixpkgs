@@ -1,0 +1,29 @@
+From 37e19f7df340f95714416fc7581a8fed1e184148 Mon Sep 17 00:00:00 2001
+From: Rebecca Kelly <bk@ancilla.ca>
+Date: Tue, 24 Oct 2023 17:04:03 -0400
+Subject: [PATCH] Add metadataSources to build.gradle
+
+This fixes a build error on some platforms where it can't find the stuff
+in repo/ because some of it is missing POM files.
+---
+ build.gradle | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/build.gradle b/build.gradle
+index c12d39555..b663f645a 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -28,6 +28,10 @@ allprojects {
+     repositories {
+         maven {
+             url "$rootDir/repo"
++            metadataSources {
++              mavenPom()
++              artifact()
++            }
+         }
+     }
+ }
+-- 
+2.40.1
+
