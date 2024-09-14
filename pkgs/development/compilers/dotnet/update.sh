@@ -264,7 +264,11 @@ sdk_packages () {
         local newpkgs=()
         local pkg
         for pkg in "${pkgs[@]}"; do
-            [[ "$pkg" = *Microsoft.NETCore.DotNetHost* ]] || newpkgs+=("$pkg")
+            case "$pkg" in
+                *Microsoft.NETCore.DotNetHost*);;
+                Microsoft.NETCore.App.Runtime.Mono.*);;
+                *) newpkgs+=("$pkg");;
+            esac
         done
         pkgs=("${newpkgs[@]}")
     fi
