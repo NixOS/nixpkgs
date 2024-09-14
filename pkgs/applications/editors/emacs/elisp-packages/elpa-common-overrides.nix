@@ -6,6 +6,11 @@ let
   libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
 in
 {
+  cl-lib = null; # builtin
+  cl-print = null; # builtin
+  tle = null; # builtin
+  advice = null; # builtin
+
   # TODO delete this when we get upstream fix https://debbugs.gnu.org/cgi/bugreport.cgi?bug=73241
   eglot = super.eglot.overrideAttrs (old: {
     postInstall =

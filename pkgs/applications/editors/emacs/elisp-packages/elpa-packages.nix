@@ -56,10 +56,6 @@ self: let
         then markBroken super.org-transclusion
         else super.org-transclusion;
       rcirc-menu = markBroken super.rcirc-menu; # Missing file header
-      cl-lib = null; # builtin
-      cl-print = null; # builtin
-      tle = null; # builtin
-      advice = null; # builtin
       # Compilation instructions for the Ada executables:
       # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
