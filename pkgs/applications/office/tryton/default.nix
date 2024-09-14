@@ -56,6 +56,12 @@ python3Packages.buildPythonApplication rec {
     pango
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   strictDeps = false;
 
   pythonImportsCheck = [ "tryton" ];
