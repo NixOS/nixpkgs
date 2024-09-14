@@ -175,7 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
         // lib.optionalAttrs fortranSupport {
           "fort" = [
             "gfortran"
-            "${targetPackages.gfortran}/bin/${targetPackages.gfortran.targetPrefix}gfortran"
+            "${targetPackages.gfortran or gfortran}/bin/${
+              targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
+            }gfortran"
           ];
         };
       # The -wrapper-data.txt files that are not symlinks, need to be iterated as
@@ -238,11 +240,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup =
     lib.optionalString (lib.elem "man" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
     ''
     + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
       remove-references-to -t "''${!outputDev}" $out/bin/mpirun
-      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
 
       # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
       wrapProgram "''${!outputDev}/bin/opal_wrapper" \
