@@ -28,18 +28,15 @@
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     rev = "refs/tags/python-v${version}";
-    hash = "sha256-LDxq49aFxUmRAw8tQvFxnExtU0IKKqMbxIBuY95cBHU=";
+    hash = "sha256-6E20WgyoEALdxmiOfgq89dCkqovvIMzc/wy+kvjDWwU=";
   };
-
-  # ratelimiter only support up to python310 and it has been removed from nixpkgs
-  patches = [ ./remove-ratelimiter.patch ];
 
   buildAndTestSubdir = "python";
 
@@ -69,8 +66,6 @@ buildPythonPackage rec {
         SystemConfiguration
       ]
     );
-
-  pythonRemoveDeps = [ "ratelimiter" ];
 
   dependencies = [
     attrs
@@ -104,6 +99,10 @@ buildPythonPackage rec {
   disabledTests = [
     # require tantivy which is not packaged in nixpkgs
     "test_basic"
+
+    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
+    # https://github.com/lancedb/lancedb/issues/1539
+    "test_polars"
   ];
 
   disabledTestPaths = [
