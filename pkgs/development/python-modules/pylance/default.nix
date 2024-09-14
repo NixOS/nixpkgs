@@ -100,6 +100,17 @@ buildPythonPackage rec {
     cd python/python/tests
   '';
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
+    "test_convert_int_tensors"
+    "test_ground_truth"
+    "test_index_cast_centroids"
+    "test_index_with_no_centroid_movement"
+    "test_iter_filter"
+    "test_iter_over_dataset_fixed_shape_tensor"
+    "test_iter_over_dataset_fixed_size_lists"
+  ];
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--generate-lockfile"
