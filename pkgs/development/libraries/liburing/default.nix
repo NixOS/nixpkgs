@@ -53,6 +53,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
+    # test uses error.h, which is not provided by musl
+    substituteInPlace test/Makefile --replace-fail init-mem.c ""
+    rm test/init-mem.c
+  '';
+
   meta = with lib; {
     description = "Userspace library for the Linux io_uring API";
     homepage = "https://github.com/axboe/liburing";
