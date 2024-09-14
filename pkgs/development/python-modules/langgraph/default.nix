@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -35,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.19";
+  version = "0.2.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-qJIZAHftIKyWK0A/MjilalmmB8b8E7JtLnFn156hE08=";
+    hash = "sha256-1Ch2V85omAKnXK9rMihNtyjIoOvmVUm8Dbdo5GBoik4=";
   };
 
   postgresqlTestSetupPost = ''
@@ -60,6 +61,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "langgraph" ];
+
+  # postgresql doesn't play nicely with the darwin sandbox:
+  # FATAL:  could not create shared memory segment: Operation not permitted
+  doCheck = !stdenv.isDarwin;
 
   nativeCheckInputs = [
     aiosqlite
