@@ -7900,6 +7900,8 @@ self: super: with self; {
 
   mitogen = callPackage ../development/python-modules/mitogen { };
 
+  mixbox = callPackage ../development/python-modules/mixbox { };
+
   mixins = callPackage ../development/python-modules/mixins { };
 
   mixpanel = callPackage ../development/python-modules/mixpanel { };
