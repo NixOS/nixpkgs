@@ -808,6 +808,8 @@ self: super: with self; {
 
   arviz = callPackage ../development/python-modules/arviz { };
 
+  arxiv = callPackage ../development/python-modules/arxiv { };
+
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
   asana = callPackage ../development/python-modules/asana { };
@@ -5878,6 +5880,8 @@ self: super: with self; {
 
   htmldate = callPackage ../development/python-modules/htmldate { };
 
+  htmldocx = callPackage ../development/python-modules/htmldocx { };
+
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
@@ -10001,6 +10005,8 @@ self: super: with self; {
   periodictable = callPackage ../development/python-modules/periodictable { };
 
   periodiq = callPackage ../development/python-modules/periodiq { };
+
+  permchain = callPackage ../development/python-modules/permchain { };
 
   permissionedforms = callPackage ../development/python-modules/permissionedforms { };
 
@@ -15484,6 +15490,8 @@ self: super: with self; {
   taskw-ng = callPackage ../development/python-modules/taskw-ng { };
 
   tatsu = callPackage ../development/python-modules/tatsu { };
+
+  tavily-python = callPackage ../development/python-modules/tavily-python { };
 
   taxi = callPackage ../development/python-modules/taxi { };
 
