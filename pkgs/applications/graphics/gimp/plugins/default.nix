@@ -99,6 +99,7 @@ in
     installTargets = [ "install-admin" ];
 
     meta = with lib; {
+      broken = gimp.majorVersion != "2.0";
       description = "Batch Image Manipulation Plugin for GIMP";
       homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
       license = licenses.gpl2Plus;
@@ -147,6 +148,7 @@ in
     };
 
     meta = with lib; {
+      broken = gimp.majorVersion != "2.0";
       description = "GIMP Animation Package";
       homepage = "https://www.gimp.org";
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
@@ -171,6 +173,7 @@ in
     '';
 
     meta = {
+      broken = gimp.majorVersion != "2.0";
       description = "Gimp plug-in for the farbfeld image format";
       homepage = "https://github.com/ids1024/gimp-farbfeld";
       license = lib.licenses.mit;
@@ -209,6 +212,7 @@ in
     '';
 
     meta = with lib; {
+      broken = gimp.majorVersion != "2.0";
       description = "GIMP plug-in to do the fourier transform";
       homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
       license = with licenses; [ gpl3Plus ];
@@ -238,7 +242,7 @@ in
     };
 
     meta = {
-      broken = !gimp.python2Support;
+      broken = gimp.majorVersion != "2.0";
     };
   };
 
@@ -256,6 +260,10 @@ in
       ninja
       gettext
     ];
+
+    meta = {
+      broken = gimp.majorVersion != "2.0";
+    };
   };
 
   waveletSharpen = pluginDerivation {
@@ -279,6 +287,10 @@ in
     };
 
     installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
+
+    meta = {
+      broken = gimp.majorVersion != "2.0";
+    };
   };
 
   lqrPlugin = pluginDerivation rec {
@@ -303,6 +315,10 @@ in
         sha256 = "EdjZWM6U1bhUmsOnLA8iJ4SFKuAXHIfNPzxZqel+JrY=";
       })
     ];
+
+    meta = {
+      broken = gimp.majorVersion != "2.0";
+    };
   };
 
   gmic = pkgs.gmic-qt.override {
@@ -327,6 +343,7 @@ in
     ";
 
     meta = {
+      broken = gimp.majorVersion != "2.0";
       description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
       homepage = "http://lensfun.sebastiankraft.net/";

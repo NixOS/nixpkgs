@@ -1,18 +1,23 @@
 { stdenv
 , lib
 , fetchurl
+, fetchFromGitHub
 , substituteAll
-, autoreconfHook
+, meson
+, ninja
 , pkg-config
-, intltool
 , babl
+, cfitsio
 , gegl
-, gtk2
+, gtk3
 , glib
 , gdk-pixbuf
+, graphviz
 , isocodes
 , pango
 , cairo
+, libarchive
+, luajit
 , freetype
 , fontconfig
 , lcms
@@ -30,39 +35,67 @@
 , ghostscript
 , aalib
 , shared-mime-info
+, python3
 , libexif
 , gettext
-, makeWrapper
-, gtk-doc
+, wrapGAppsHook3
+, libxslt
+, gobject-introspection
+, vala
+, gi-docgen
+, perl
+, appstream-glib
+, desktop-file-utils
 , xorg
 , glib-networking
+, json-glib
 , libmypaint
 , gexiv2
 , harfbuzz
 , mypaint-brushes1
 , libwebp
 , libheif
+, gjs
 , libgudev
 , openexr
+, xvfb-run
+, dbus
+, adwaita-icon-theme
+, hicolor-icon-theme
+, alsa-lib
 , desktopToDarwinBundle
 , AppKit
 , Cocoa
-, gtk-mac-integration-gtk2
-, withPython ? false
-, python2
+, gtk-mac-integration-gtk3
+, unstableGitUpdater
 }:
 
 let
-  python = python2.withPackages (pp: [ pp.pygtk ]);
+  python = python3.withPackages (pp: with pp; [
+    pygobject3
+  ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.10.38";
+  version = "2.99.18-unstable-2024-08-22";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
-    url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-UKhF7sEciDH+hmFweVD1uERuNfMO37ms+Y+FwRM/hW4=";
+  # src = fetchurl {
+  #   url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
+  #   sha256 = "sha256-UKhF7sEciDH+hmFweVD1uERuNfMO37ms+Y+FwRM/hW4=";
+  # };
+
+  # We should not use fetchFromGitLab because the build system
+  # will complain and mark the build as unsupported when it cannot find
+  # .git directory but downloading the whole repo is jus too much.
+  src = fetchFromGitHub rec {
+    name = "gimp-dev-${rev}"; # to make sure the hash is updated
+    owner = "GNOME";
+    repo = "gimp";
+    rev = "c57bf3c6bd58d1647f8ce21419de755d6afd01be";
+    hash = "sha256-GtOHHMBR75t+bMW/mCMdKYROoFBzsO1LTPRWYNWXnY8=";
+    # For gimp-data containing assets.
+    fetchSubmodules = true;
   };
 
   patches = [
@@ -75,28 +108,52 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # Use absolute paths instead of relying on PATH
     # to make sure plug-ins are loaded by the correct interpreter.
-    ./hardcode-plugin-interpreters.patch
+    (substituteAll {
+      src = ./hardcode-plugin-interpreters.patch;
+      python_interpreter = python.interpreter;
+    })
+
+    # D-Bus configuration is not available in the build sandbox
+    # so we need to pick up the one from the package.
+    (substituteAll {
+      src = ./tests-dbus-conf.patch;
+      session_conf = "${dbus.out}/share/dbus-1/session.conf";
+    })
   ];
 
   nativeBuildInputs = [
-    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
+    meson
+    ninja
     pkg-config
-    intltool
     gettext
-    makeWrapper
-    gtk-doc
+    wrapGAppsHook3
+    libxslt # for xsltproc
+    gobject-introspection
+    perl
+    vala
+
+    # for docs
+    gi-docgen
+
+    # for tests
+    desktop-file-utils
+    xvfb-run
+    dbus
   ] ++ lib.optionals stdenv.isDarwin [
     desktopToDarwinBundle
   ];
 
   buildInputs = [
+    appstream-glib # for library
     babl
+    cfitsio
     gegl
-    gtk2
+    gtk3
     glib
     gdk-pixbuf
     pango
     cairo
+    libarchive
     gexiv2
     harfbuzz
     isocodes
@@ -118,23 +175,35 @@ in stdenv.mkDerivation (finalAttrs: {
     ghostscript
     aalib
     shared-mime-info
+    json-glib
     libwebp
     libheif
+    python
     libexif
     xorg.libXpm
+    xorg.libXmu
     glib-networking
     libmypaint
     mypaint-brushes1
+
+    # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
+    adwaita-icon-theme
+
+    # for Lua plug-ins
+    (luajit.withPackages (pp: [
+      pp.lgi
+    ]))
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    alsa-lib
+
+    # for JavaScript plug-ins
+    gjs
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
-    gtk-mac-integration-gtk2
+    gtk-mac-integration-gtk3
   ] ++ lib.optionals stdenv.isLinux [
     libgudev
-  ] ++ lib.optionals withPython [
-    python
-    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
-    python2.pkgs.pygtk
   ];
 
   # needed by gimp-2.0.pc
@@ -142,51 +211,114 @@ in stdenv.mkDerivation (finalAttrs: {
     gegl
   ];
 
-  configureFlags = [
-    "--without-webkit" # old version is required
-    "--disable-check-update"
-    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/run/current-system/sw/share/color/icc"
-    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
-    "--libdir=\${exec_prefix}/lib"
-  ] ++ lib.optionals (!withPython) [
-    "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
+  mesonFlags = [
+    "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "-Dicc-directory=/run/current-system/sw/share/color/icc"
+    "-Dcheck-update=no"
+    # Requires neweer appstreamcli and not necessary
+    "-Dappdata-test=disabled"
+    # Not yet packaged.
+    "-Dilbm=disabled"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dalsa=disabled"
+    "-Djavascript=false"
   ];
 
-  enableParallelBuilding = true;
-
+  # on Linux, unable to find icons
   doCheck = true;
 
   env = {
+    # The check runs before glib-networking is registered
+    GIO_EXTRA_MODULES = "${glib-networking}/lib/gio/modules";
+
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
     # Check if librsvg was built with --disable-pixbuf-loader.
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
   };
 
-  preConfigure = ''
-    # The check runs before glib-networking is registered
-    export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
+  postPatch = ''
+    patchShebangs \
+      app/tests/create_test_env.sh \
+      tools/gimp-mkenums
+
+    # Bypass the need for downloading git archive.
+    substitute app/git-version.h.in git-version.h \
+      --subst-var-by GIMP_GIT_VERSION "GIMP_2.99.?-g${builtins.substring 0 10 finalAttrs.src.rev}" \
+      --subst-var-by GIMP_GIT_VERSION_ABBREV "${builtins.substring 0 10 finalAttrs.src.rev}" \
+      --subst-var-by GIMP_GIT_LAST_COMMIT_YEAR "${builtins.head (builtins.match ".+\-unstable-([0-9]{4})-[0-9]{2}-[0-9]{2}" finalAttrs.version)}"
+
+    # Patch plug-ins so that they work in the build sandbox where /usr/bin/env is not available.
+    # Ideally, we would remove the shebang to force the plug-in to find Python using interp file
+    # but that does not appear to work.
+    grep --files-with-matches --recursive --null '#!/usr/bin/env python3' plug-ins/python |
+        while IFS= read -r -d "" plugin; do
+            substituteInPlace "$plugin" --replace-fail '#!/usr/bin/env python3' '#!${python.interpreter}'
+        done
+  '';
+
+  preBuild = ''
+    # in-build-gimp.sh used for generating splash image requires this
+    export HOME="$(mktemp -d)"
+
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When building docs, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p "$out/lib"
+    ln -s "$PWD/libgimp/libgimp-3.0.so.0" "$out/lib/libgimp-3.0.so.0"
+    ln -s "$PWD/libgimpbase/libgimpbase-3.0.so.0" "$out/lib/libgimpbase-3.0.so.0"
+    ln -s "$PWD/libgimpcolor/libgimpcolor-3.0.so.0" "$out/lib/libgimpcolor-3.0.so.0"
+    ln -s "$PWD/libgimpconfig/libgimpconfig-3.0.so.0" "$out/lib/libgimpconfig-3.0.so.0"
+    ln -s "$PWD/libgimpmath/libgimpmath-3.0.so.0" "$out/lib/libgimpmath-3.0.so.0"
+    ln -s "$PWD/libgimpmodule/libgimpmodule-3.0.so.0" "$out/lib/libgimpmodule-3.0.so.0"
+  '';
+
+  preCheck = ''
+    # Avoid “Error retrieving accessibility bus address”
+    export NO_AT_BRIDGE=1
+    # Fix storing recent file list in tests
+    export HOME="$TMPDIR"
+    export XDG_DATA_DIRS="${glib.getSchemaDataDirPath gtk3}:$XDG_DATA_DIRS"
+    # Gtk:ERROR:../gtk/gtkiconhelper.c:495:ensure_surface_for_gicon: assertion failed (error == NULL): Icon 'image-missing' not present in theme Default (gtk-icon-theme-error-quark, 0)
+    export XDG_DATA_DIRS="${adwaita-icon-theme}/share:$XDG_DATA_DIRS"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    meson test --timeout-multiplier 4 --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [
+      # for dot for gegl:introspect (Debug » Show Image Graph, hidden by default on stable release)
+      graphviz
+    ]}:$out/bin")
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/gimp-${lib.versions.majorMinor finalAttrs.version} \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    majorVersion = "${lib.versions.major finalAttrs.version}.0";
+    majorVersion = "2.99";
     targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
     targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
     targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
     targetScriptDir = "${finalAttrs.passthru.targetDataDir}/scripts";
 
     # probably its a good idea to use the same gtk in plugins ?
-    gtk = gtk2;
+    gtk = gtk3;
 
-    python2Support = withPython;
+    updateScript = unstableGitUpdater {
+      tagConverter = "sed s/GIMP_//;s/_/./g";
+    };
   };
 
   meta = with lib; {
