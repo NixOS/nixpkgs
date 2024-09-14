@@ -2255,6 +2255,12 @@
     github = "Baitinq";
     githubId = 30861839;
   };
+  baksa = {
+    email = "baksa@pm.me";
+    name = "Kryštof Baksa";
+    github = "Golbinex";
+    githubId = 62813600;
+  };
   balodja = {
     email = "balodja@gmail.com";
     github = "balodja";

@@ -1,24 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  pytestCheckHook,
-  pytest-cov-stub,
+
+  # dependencies
   babel,
   commonmark,
   htmltools,
   importlib-metadata,
   importlib-resources,
-  ipykernel,
-  ipython,
   numpy,
   typing-extensions,
+
+  # tests
+  ipykernel,
+  ipython,
   pandas,
   polars,
   pyarrow,
+  pytestCheckHook,
+  pytest-cov-stub,
   requests,
   syrupy,
 }:
@@ -27,8 +32,6 @@ buildPythonPackage rec {
   pname = "great-tables";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "posit-dev";
@@ -75,6 +78,8 @@ buildPythonPackage rec {
     "test_save_image_file"
     "test_save_non_png"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library for rendering and formatting dataframes";
