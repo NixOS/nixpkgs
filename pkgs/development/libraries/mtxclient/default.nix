@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Client API library for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz pstn ];
+    maintainers = with maintainers; [ fpletz pstn rnhmjoj ];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:
     # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
