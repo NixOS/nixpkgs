@@ -1209,7 +1209,7 @@ _defaultUnpack() {
     else
 
         case "$fn" in
-            *.tar.xz | *.tar.lzma | *.txz)
+            *.tar.xz | *.tar.lz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
                 # Additionally, we have multiple different xz binaries with different feature sets in different
                 # stages. The XZ_OPT env var is only used by the full "XZ utils" implementation, which supports
