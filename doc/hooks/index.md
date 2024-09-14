@@ -15,6 +15,7 @@ cmake.section.md
 gdk-pixbuf.section.md
 ghc.section.md
 gnome.section.md
+haredo.section.md
 installShellFiles.section.md
 libiconv.section.md
 libxml2.section.md
