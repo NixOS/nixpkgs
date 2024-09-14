@@ -2767,6 +2767,8 @@ self: super: with self; {
 
   cxxheaderparser = callPackage ../development/python-modules/cxxheaderparser { };
 
+  cybox = callPackage ../development/python-modules/cybox { };
+
   cycler = callPackage ../development/python-modules/cycler { };
 
   cyclonedx-python-lib = callPackage ../development/python-modules/cyclonedx-python-lib { };
