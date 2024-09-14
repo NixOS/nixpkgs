@@ -35,7 +35,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.3.2";
+  version = "8.3.3";
 
   pyproject = true;
 
@@ -43,7 +43,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-JlmVnSpbMjMpJBXyRxF/LqJ+0e5fty6BK+sCPJ2Uw9I=";
+    hash = "sha256-xE+5nYvXawl9HjeBI9ogwyYAVCj/sPoMCVfEeZL5vN4=";
   };
 
   patches = [
