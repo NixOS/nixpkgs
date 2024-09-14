@@ -35042,8 +35042,6 @@ with pkgs;
 
   gamepad-tool = callPackage ../games/gamepad-tool { };
 
-  gnome-hexgl = callPackage ../games/gnome-hexgl { };
-
   gotypist = callPackage ../games/gotypist { };
 
   heroic-unwrapped = callPackage ../games/heroic {
