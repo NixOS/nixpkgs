@@ -30312,8 +30312,6 @@ with pkgs;
 
   glowing-bear = callPackage ../applications/networking/irc/glowing-bear { };
 
-  gmtk = callPackage ../development/libraries/gmtk { };
-
   gmu = callPackage ../applications/audio/gmu { };
 
   gnaural = callPackage ../applications/audio/gnaural { };
