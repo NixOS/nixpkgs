@@ -5,6 +5,7 @@
   unzip,
   makeWrapper,
   jre_headless,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/maestro --prefix PATH : "${lib.makeBinPath [ jre_headless ]}"
+  '';
+
+  passthru.updateScript = writeScript "update-maestro" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    set -o errexit -o nounset -o pipefail
+
+    NEW_VERSION=$(curl --silent https://api.github.com/repos/mobile-dev-inc/maestro/releases | jq 'first(.[].tag_name | ltrimstr("cli-") | select(contains("dev.") | not))' --raw-output)
+
+    update-source-version "maestro" "$NEW_VERSION" --print-changes
   '';
 
   meta = with lib; {
