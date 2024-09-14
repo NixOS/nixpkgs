@@ -31589,8 +31589,6 @@ with pkgs;
 
   ngt = callPackage ../development/libraries/ngt { };
 
-  nheko = qt6Packages.callPackage ../applications/networking/instant-messengers/nheko { };
-
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
