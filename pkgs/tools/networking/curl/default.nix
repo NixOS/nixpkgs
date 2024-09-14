@@ -66,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://curl.se/docs/CVE-2024-6197.html
     ./0001-x509asn1-remove-superfluous-free.patch
+  ] ++ lib.optionals gnutlsSupport [
+    # https://curl.se/docs/CVE-2024-8096.html
+    ./CVE-2024-8096.patch
   ];
 
   postPatch = ''

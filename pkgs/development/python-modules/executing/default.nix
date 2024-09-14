@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
   pythonOlder,
 
@@ -29,6 +30,13 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-PBvfkv9GQ5Vj5I5SygtmHXtqqHMJ4XgNV1/I+lSU0/U=";
   };
+
+  patches = lib.optionals (pythonAtLeast "3.12") [
+    (fetchpatch { # https://github.com/alexmojaki/executing/pull/83
+      url = "https://github.com/alexmojaki/executing/commit/230ef110f004a8cecf03e983561f26a5fecede8f.diff";
+      hash = "sha256-McMUIbOWozoDDQSfrJqcxBjuAZ/rrHePfqp5+AVUKI4=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
