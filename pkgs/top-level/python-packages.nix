@@ -12846,6 +12846,8 @@ self: super: with self; {
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
 
+  python-watcherclient = callPackage ../development/python-modules/python-watcherclient { };
+
   python-whois = callPackage ../development/python-modules/python-whois { };
 
   python-wifi = callPackage ../development/python-modules/python-wifi { };
@@ -12856,7 +12858,11 @@ self: super: with self; {
 
   python-xz = callPackage ../development/python-modules/python-xz { };
 
+  python-zaqarclient = callPackage ../development/python-modules/python-zaqarclient { };
+
   python-zbar = callPackage ../development/python-modules/python-zbar { };
+
+  python-zunclient = callPackage ../development/python-modules/python-zunclient { };
 
   pythran = callPackage ../development/python-modules/pythran {
     inherit (pkgs.llvmPackages) openmp;
