@@ -564,6 +564,7 @@ mapAliases ({
   gnatcoll-xref     = gnatPackages.gnatcoll-xref; # Added 2024-02-25
   gnatcoll-db2ada   = gnatPackages.gnatcoll-db2ada; # Added 2024-02-25
   gnatinspect = gnatPackages.gnatinspect; # Added 2024-02-25
+  gnome-dictionary = throw "'gnome-dictionary' has been removed as it has been archived upstream. Consider using 'wordbook' instead"; # Added 2024-09-14
   gnome-firmware-updater = gnome-firmware; # added 2022-04-14
   gnome-hexgl = throw "'gnome-hexgl' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   gnome-passwordsafe = gnome-secrets; # added 2022-01-30
