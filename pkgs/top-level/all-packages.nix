@@ -31595,10 +31595,6 @@ with pkgs;
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
-  mhwaveedit = callPackage ../applications/audio/mhwaveedit {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
   mid2key = callPackage ../applications/audio/mid2key { };

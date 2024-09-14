@@ -984,6 +984,7 @@ mapAliases ({
   mdt = md-tui; # Added 2024-09-03
   meme = meme-image-generator; # Added 2021-04-21
   mess = throw "'mess' has been renamed to/replaced by 'mame'"; # Converted to throw 2023-09-10
+  mhwaveedit = throw "'mkwaveedit' has been removed due to lack of maintenance upstream. Consider using 'audacity' or 'tenacity' instead";
   microcodeAmd = microcode-amd; # Added 2024-09-08
   microcodeIntel = microcode-intel; # Added 2024-09-08
   microsoft_gsl = microsoft-gsl; # Added 2023-05-26
