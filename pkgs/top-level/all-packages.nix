@@ -30353,8 +30353,6 @@ with pkgs;
 
   gqview = callPackage ../applications/graphics/gqview { };
 
-  gmpc = callPackage ../applications/audio/gmpc { };
-
   gnomecast = callPackage ../applications/video/gnomecast { };
 
   gnome-recipes = callPackage ../applications/misc/gnome-recipes { };
