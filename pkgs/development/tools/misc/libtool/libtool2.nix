@@ -19,7 +19,7 @@
 # `or` is because when cross-compiling `pkgsHostTarget.targetPackages.stdenv` will only have `cc`
 
 let
-  mkDerivation = if stdenv.hostPlatform.isDarwin then stdenv.mkDerivation else pkgsHostTarget.targetPackages.stdenv.mkDerivation or pkgsHostTarget.stdenv.mkDerivation;
+  mkDerivation = if (stdenv.buildPlatform != stdenv.hostPlatform) then pkgsHostTarget.targetPackages.stdenv.mkDerivation or pkgsHostTarget.stdenv.mkDerivation else stdenv.mkDerivation;
 in
 
 mkDerivation rec {
