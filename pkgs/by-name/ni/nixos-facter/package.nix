@@ -66,5 +66,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.brianmcgee ];
     mainProgram = "nixos-facter";
+    platforms = lib.platforms.linux;
   };
 }
