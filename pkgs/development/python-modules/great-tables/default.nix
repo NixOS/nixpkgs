@@ -79,6 +79,8 @@ buildPythonPackage rec {
     "test_save_non_png"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Library for rendering and formatting dataframes";
     homepage = "https://github.com/posit-dev/great-tables";
