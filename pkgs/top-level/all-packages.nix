@@ -30316,8 +30316,6 @@ with pkgs;
 
   gnaural = callPackage ../applications/audio/gnaural { };
 
-  gnome_mplayer = callPackage ../applications/video/gnome-mplayer { };
-
   gnumeric = callPackage ../applications/office/gnumeric { };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
