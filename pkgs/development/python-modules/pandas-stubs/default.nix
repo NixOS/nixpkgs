@@ -24,6 +24,7 @@
   pandas,
   pyarrow,
   pyreadstat,
+  python-calamine,
   scipy,
   sqlalchemy,
   tables,
@@ -35,16 +36,16 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.2.2.240603";
+  version = "2.2.2.240909";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wJ7lN1+BGNqhwgPLmmpb3foX6rIEy3R62rOvu0mr8xs=";
+    hash = "sha256-Dt2a4l5WAOizUeaDa80CRuvyPT9mWfFz+zGZMm3vQP4=";
   };
 
   build-system = [ poetry-core ];
@@ -73,9 +74,7 @@ buildPythonPackage rec {
     typing-extensions
     xarray
     xlsxwriter
-
-    # missing dependencies in nixpkgs
-    # python-calamine
+    python-calamine
   ];
 
   disabledTests =
@@ -83,10 +82,12 @@ buildPythonPackage rec {
       # Missing dependencies, error and warning checks
       "test_all_read_without_lxml_dtype_backend" # pyarrow.orc
       "test_orc" # pyarrow.orc
-      "test_read_excel" # python-calamine
       "test_plotting" # UserWarning: No artists with labels found to put in legend.
       "test_spss" # FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
       "test_show_version"
+      # FutureWarning: In the future `np.bool` will be defined as the corresponding...
+      "test_timedelta_cmp"
+      "test_timestamp_cmp"
     ]
     ++ lib.optionals stdenv.isDarwin [
       "test_clipboard" # FileNotFoundError: [Errno 2] No such file or directory: 'pbcopy'

@@ -1,0 +1,86 @@
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-cov-stub,
+  babel,
+  commonmark,
+  htmltools,
+  importlib-metadata,
+  importlib-resources,
+  ipykernel,
+  ipython,
+  numpy,
+  typing-extensions,
+  pandas,
+  polars,
+  pyarrow,
+  requests,
+  syrupy,
+}:
+
+buildPythonPackage rec {
+  pname = "great-tables";
+  version = "0.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
+
+  src = fetchFromGitHub {
+    owner = "posit-dev";
+    repo = "great-tables";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ccS//fSFa6sytKv0izRxIdnHoNICr7P90Eo+v62RmVA=";
+  };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    babel
+    commonmark
+    htmltools
+    importlib-metadata
+    importlib-resources
+    numpy
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [ "great_tables" ];
+
+  nativeCheckInputs = [
+    ipykernel
+    ipython
+    pandas
+    polars
+    pyarrow
+    pytestCheckHook
+    pytest-cov-stub
+    requests
+    syrupy
+  ];
+
+  disabledTestPaths = [
+    "tests/test_shiny.py" # requires `shiny` python package, not in Nixpkgs
+  ];
+
+  disabledTests = [
+    # require selenium with chrome driver:
+    "test_save_image_file"
+    "test_save_non_png"
+  ];
+
+  meta = {
+    description = "Library for rendering and formatting dataframes";
+    homepage = "https://github.com/posit-dev/great-tables";
+    changelog = "https://github.com/posit-dev/great-tables/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+  };
+}
