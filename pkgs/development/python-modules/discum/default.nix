@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonRelaxDepsHook,
   brotli,
   colorama,
   filetype,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     brotli
