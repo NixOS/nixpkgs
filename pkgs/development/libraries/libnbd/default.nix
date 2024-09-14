@@ -9,6 +9,8 @@
 , fuse
 , fuse3
 , gnutls
+, ubdsrv
+, liburing
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +34,8 @@ stdenv.mkDerivation rec {
     fuse3
     gnutls
     libxml2
-  ];
+  ]
+  ++ lib.optionals stdenv.isLinux [ ubdsrv liburing ];
 
   configureFlags = lib.optionals buildPythonBindings [ "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}" ];
 
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
       - Shell (nbdsh) for command line and scripting.
     '';
     license = with licenses; lgpl21Plus;
-    maintainers = with maintainers; [ AndersonTorres humancalico ];
+    maintainers = with maintainers; [ AndersonTorres humancalico lx ];
     platforms = with platforms; linux;
   };
 }
