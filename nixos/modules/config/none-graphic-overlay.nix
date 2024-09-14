@@ -1,22 +1,30 @@
-# This module gets rid of all dependencies on X11 client libraries
-# (including fontconfig).
 { config, lib, ... }:
+
 {
   options = {
-    environment.noXlibs = lib.mkOption {
+    environment.disableGraphicsPackages = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = ''
-        Switch off the options in the default configuration that
-        require X11 libraries. This includes client-side font
-        configuration and SSH forwarding of X11 authentication
-        in. Thus, you probably do not want to enable this option if
-        you want to run X11 programs on this machine via SSH.
+        This is an advanced option that switches off options in the default configuration that require GUI libraries
+        and adds overlays to remove such dependencies in some packages.
+        This includes client-side font configuration and SSH forwarding of X11 authentication.
+        Thus, you do *not* want to enable this option on a graphical system or if you want to run X11 programs via SSH.
+
+        ::: {.warning}
+        The added overlays cause package rebuilds due to cache misses.
+        Also some packages might fail to build due to the added overlays.
+        When enabling this option you should be able to recognize such build failures and act on them accordingly.
+        :::
       '';
     };
   };
 
-  config = lib.mkIf config.environment.noXlibs {
+  imports = [
+    (lib.mkRemovedOptionModule [ "environment" "noXlibs" ] "This option got renamed to environment.disableGraphicsPackages. Please make sure to properly read the description of the option if you want to continue to use it.")
+  ];
+
+  config = lib.mkIf config.environment.noneGraphicOverlay {
     programs.ssh.setXAuthLocation = false;
     security.pam.services.su.forwardXAuth = lib.mkForce false;
 

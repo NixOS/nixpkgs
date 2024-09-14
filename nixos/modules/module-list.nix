@@ -20,7 +20,7 @@
   ./config/nix-channel.nix
   ./config/nix-flakes.nix
   ./config/nix-remote-build.nix
-  ./config/no-x-libs.nix
+  ./config/none-graphic-overlay.nix
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
