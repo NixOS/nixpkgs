@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "epicstore-api";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SD4RK";
     repo = "epicstore_api";
     rev = "refs/tags/v_${version}";
-    hash = "sha256-AF2yNb06GShdaMS74pGFdHeM4U6ULdMCPzCyh8gSck0=";
+    hash = "sha256-9Gh9bsNgZx/SinKr7t1dvqrOUP+z4Gs8BFMLYtboFmg=";
   };
 
   build-system = [ setuptools ];
