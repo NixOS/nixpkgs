@@ -1676,6 +1676,7 @@ mapAliases ({
   xmlada = gnatPackages.xmlada; # Added 2024-02-25
   xmr-stak = throw "xmr-stak has been removed from nixpkgs because it was broken"; # Added 2024-07-15
   xonsh-unwrapped = python3Packages.xonsh; # Added 2024-06-18
+  xprite-editor = throw "'xprite-editor' has been removed due to lack of maintenance upstream. Consider using 'pablodraw' or 'aseprite' instead"; # Added 2024-09-14
   xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = xvfb-run; # Added 2021-05-07
