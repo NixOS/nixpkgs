@@ -438,7 +438,6 @@ rec {
     ''
     ```
     :::
-
   */
   writeDashBin = name: writeDash "/bin/${name}";
 
@@ -472,7 +471,6 @@ rec {
     ''
     ```
     :::
-
   */
   writeFish =
     name: argsOrScript:
@@ -521,7 +519,6 @@ rec {
     ''
     ```
     :::
-
   */
   writeFishBin = name: writeFish "/bin/${name}";
 
@@ -718,7 +715,6 @@ rec {
     writeLua takes a name an attributeset with libraries and some lua source code and
     returns an executable (should also work with luajit)
 
-
     # Examples
     :::{.example}
     ## `pkgs.writers.writeLua` usage example
@@ -773,7 +769,6 @@ rec {
     writeJS takes a name an attributeset with libraries and some JavaScript sourcecode and
     returns an executable
 
-
     # Inputs
 
     `name`
@@ -787,7 +782,6 @@ rec {
     `content`
 
     : 3\. Function argument
-
 
     # Examples
     :::{.example}
@@ -853,7 +847,6 @@ rec {
     writePerl takes a name an attributeset with libraries and some perl sourcecode and
     returns an executable
 
-
     # Examples
     :::{.example}
     ## `pkgs.writers.writePerl` usage example
@@ -889,7 +882,6 @@ rec {
     makePythonWriter takes python and compatible pythonPackages and produces python script writer,
     which validates the script with flake8 at build time. If any libraries are specified,
     python.withPackages is used as interpreter, otherwise the "bare" python is used.
-
 
     # Inputs
 
@@ -950,7 +942,6 @@ rec {
     writePyPy2 takes a name an attributeset with libraries and some pypy2 sourcecode and
     returns an executable
 
-
     # Examples
     :::{.example}
     ## `pkgs.writers.writePyPy2` usage example
@@ -979,7 +970,6 @@ rec {
     writePython3 takes a name an attributeset with libraries and some python3 sourcecode and
     returns an executable
 
-
     # Examples
     :::{.example}
     ## `pkgs.writers.writePython3` usage example
@@ -1005,7 +995,6 @@ rec {
   /**
     writePyPy3 takes a name an attributeset with libraries and some pypy3 sourcecode and
     returns an executable
-
 
     # Examples
     :::{.example}
