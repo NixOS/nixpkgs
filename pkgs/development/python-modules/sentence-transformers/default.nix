@@ -13,14 +13,17 @@
   setuptools,
   tokenizers,
   torch,
-  torchvision,
   tqdm,
   transformers,
+  # test dependencies
+  accelerate,
+  datasets,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "2.7.0";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +32,7 @@ buildPythonPackage rec {
     owner = "UKPLab";
     repo = "sentence-transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xER+WHprW83KWJ0bom+lTn0HNU7PgGROnp/QLG1uUcw=";
+    hash = "sha256-Kp0B3+1zK45KypCaxH02U/JdzTBGwFAoxtmzek94QNI=";
   };
 
   build-system = [ setuptools ];
@@ -43,12 +46,16 @@ buildPythonPackage rec {
     sentencepiece
     tokenizers
     torch
-    torchvision
     tqdm
     transformers
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    accelerate
+    datasets
+    pytest-cov
+  ];
 
   pythonImportsCheck = [ "sentence_transformers" ];
 
@@ -70,6 +77,11 @@ buildPythonPackage rec {
     "tests/test_cross_encoder.py"
     "tests/test_train_stsb.py"
   ];
+
+  # Sentence-transformer needs a writable hf_home cache
+  postInstall = ''
+    export HF_HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Multilingual Sentence & Image Embeddings with BERT";
