@@ -8441,8 +8441,6 @@ with pkgs;
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
-  gtkperf = callPackage ../development/tools/misc/gtkperf { };
-
   gtkradiant = callPackage ../applications/misc/gtkradiant { };
 
   gtk-frdp = callPackage ../development/libraries/gtk-frdp { };
