@@ -58,12 +58,15 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pystardust/ani-cli";
     description = "Cli tool to browse and play anime";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ skykanin diniamo ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      skykanin
+      diniamo
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "ani-cli";
   };
 }
