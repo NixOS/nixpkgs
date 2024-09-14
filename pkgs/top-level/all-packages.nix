@@ -12141,8 +12141,6 @@ with pkgs;
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
 
-  rpi-imager = libsForQt5.callPackage ../tools/misc/rpi-imager { };
-
   rpiboot = callPackage ../development/misc/rpiboot { };
 
   rpm = callPackage ../tools/package-management/rpm {
