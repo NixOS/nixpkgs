@@ -55,16 +55,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.1.10";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S42is3wqjBvYgysQ6yDUAn7ZEy9xJBmQD/emYAQfCkw=";
+    hash = "sha256-JrmjQjKpL9di66z4IYTcWhNBL0CgalqOhQgVDpkh6b0=";
   };
 
-  cargoHash = "sha256-ILX3xrcz3tMnl7mUrwUAXv9ffaZKjSoSf8cZVQB10zk=";
+  cargoHash = "sha256-KWdkpQY1F0RU3JViFrXEp+JW6xdaofEmp2SlAkzPMPU=";
 
   nativeBuildInputs = [
     ncurses
@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tornax otavio oluceps ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
     mainProgram = "rio";
     # ---- corcovado/src/sys/unix/eventedfd.rs - sys::unix::eventedfd::EventedFd (line 31) stdout ----
     # Test executable failed (exit status: 101).

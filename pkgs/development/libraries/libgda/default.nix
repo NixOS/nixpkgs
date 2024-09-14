@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     "--enable-system-sqlite=${if stdenv.isDarwin then "no" else "yes"}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
   enableParallelBuilding = true;
 

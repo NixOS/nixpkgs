@@ -1,46 +1,50 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, rust-jemalloc-sys
-, zlib
-, stdenv
-, darwin
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  rust-jemalloc-sys,
+  zlib,
+  stdenv,
+  darwin,
+  git,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "biome";
-  version = "1.8.3";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "cli/v${version}";
-    hash = "sha256-6/RYuaR4HBXLI7eKysyRcSOxONFlChpQuhzWHAlx2CM=";
+    hash = "sha256-AVw7yhC/f5JkFw2sQZ5YgzeXXjoJ8BfGgsS5sRVV/wE=";
   };
 
-  cargoHash = "sha256-ytGbiDamxkTCPjNTBMsW1YjK+qMZfktGG5mVUVdKV5I=";
+  cargoHash = "sha256-Vz6GCDGdC2IUtBK5X/t/Q5LODFUSlUxPBTCIjgdw3XU=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    libgit2
-    rust-jemalloc-sys
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      libgit2
+      rust-jemalloc-sys
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   nativeCheckInputs = [
     git
   ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags = cargoBuildFlags ++
+  cargoTestFlags =
+    cargoBuildFlags
+    ++
     # skip a broken test from v1.7.3 release
     # this will be removed on the next version
     [ "-- --skip=diagnostics::test::termination_diagnostic_size" ];
@@ -58,12 +62,15 @@ rustPlatform.buildRustPackage rec {
     unset BIOME_VERSION
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolchain of the web";
     homepage = "https://biomejs.dev/";
     changelog = "https://github.com/biomejs/biome/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      figsoda
+      isabelroses
+    ];
     mainProgram = "biome";
   };
 }
