@@ -97,6 +97,24 @@ in
     };
   });
 
+  plz = super.plz.overrideAttrs (old: {
+    dontUnpack = false;
+    postPatch =
+      old.postPatch or ""
+      + "\n"
+      + ''
+        substituteInPlace plz.el \
+          --replace-fail 'plz-curl-program "curl"' 'plz-curl-program "${lib.getExe pkgs.curl}"'
+      '';
+    preInstall =
+      old.preInstall or ""
+      + "\n"
+      + ''
+        tar -cf "$ename-$version.tar" --transform "s,^,$ename-$version/," * .[!.]*
+        src="$ename-$version.tar"
+      '';
+  });
+
   pq = super.pq.overrideAttrs (old: {
     buildInputs = old.buildInputs or [ ] ++ [ pkgs.postgresql ];
   });
