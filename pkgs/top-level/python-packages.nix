@@ -5816,9 +5816,7 @@ self: super: with self; {
 
   humanize = callPackage ../development/python-modules/humanize { };
 
-  humann = callPackage ../development/python-modules/humann { };
-
-  humann-unwrapped = callPackage ../development/python-modules/humann {
+  humann = callPackage ../development/python-modules/humann {
     humann-db = null;
   };
 

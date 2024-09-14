@@ -27718,6 +27718,10 @@ with pkgs;
 
   humanity-icon-theme = callPackage ../data/icons/humanity-icon-theme { };
 
+  humann = python3Packages.humann.override {
+    inherit humann-db;
+  };
+
   hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
