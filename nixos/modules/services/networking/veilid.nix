@@ -5,40 +5,66 @@ let
   dataDir = "/var/db/veilid-server";
 
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "veilid.yaml" cfg.settings;
+  configFile = settingsFormat.generate "veilid-server.conf" cfg.settings;
 in {
   config = mkIf cfg.enable {
     networking.firewall = mkIf cfg.openFirewall {
-        allowedTCPPorts = [ 5150 ];
-        allowedUDPPorts = [ 5150 ];
+      allowedTCPPorts = [ 5150 ];
+      allowedUDPPorts = [ 5150 ];
     };
 
+    # Based on https://gitlab.com/veilid/veilid/-/blob/main/package/systemd/veilid-server.service?ref_type=heads
     systemd.services.veilid = {
       enable = true;
-      description = "Veilid Network Service";
-      after = [ "network-pre.target" ];
-      wants = [ "network.target" ];
-      before = [ "network.target" ];
+      description = "Veilid Headless Node";
+      wants = [ "network-online.target" ];
+      before = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
-      environment = { HOME = dataDir; };
+      environment = { RUST_BACKTRACE = "1"; };
       serviceConfig = {
-        User = "veilid";
-        Restart = "always";
-        StateDirectory = "veilid";
-        RuntimeDirectory = "veilid";
         ExecStart = "${pkgs.veilid}/bin/veilid-server -c ${configFile}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
+        KillSignal = "SIGQUIT";
+        TimeoutStopSec = 5;
+        WorkingDirectory = "/";
+        User = "veilid";
+        Group = "veilid";
+        UMask = "0002";
+
+        CapabilityBoundingSet = "";
+        SystemCallFilter = [ "@system-service" ];
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectHome = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = dataDir;
+
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        LockPersonality = true;
+        RestrictSUIDSGID = true;
       };
     };
-    users.users.veilid = { isSystemUser = true; };
-
-    users.users.veilid.group = "veilid";
+    users.users.veilid = {
+      isSystemUser = true;
+      group = "veilid";
+      home = dataDir;
+      createHome = true;
+    };
     users.groups.veilid = { };
 
-    environment = {
-      etc."veilid/veilid-server.conf".source = configFile;
-      systemPackages = [ pkgs.veilid ];
-    };
+    environment = { systemPackages = [ pkgs.veilid ]; };
+    services.veilid.settings = { };
   };
 
   options.services.veilid = {
@@ -79,6 +105,7 @@ in {
               level = mkOption {
                 type = types.str;
                 default = "info";
+                example = "debug";
                 description =
                   "The minimum priority of system events to be logged.";
               };
@@ -92,6 +119,7 @@ in {
               level = mkOption {
                 type = types.str;
                 default = "info";
+                example = "debug";
                 description =
                   "The minimum priority of terminal events to be logged.";
               };
@@ -105,6 +133,7 @@ in {
               level = mkOption {
                 type = types.str;
                 default = "info";
+                example = "debug";
                 description =
                   "The minimum priority of api events to be logged.";
               };
@@ -115,6 +144,7 @@ in {
               disable = mkOption {
                 type = types.listOf types.str;
                 default = [ ];
+                example = [ "APPM" ];
                 description =
                   "A list of capabilities to disable (for example, DHTV to say you cannot store DHT information).";
               };
@@ -156,12 +186,16 @@ in {
               };
             };
             network = {
-            routing_table = {
+              routing_table = {
                 bootstrap = mkOption {
                   type = types.listOf types.str;
-                default = [ "bootstrap.veilid.net" ];
+                  default = [ "bootstrap.veilid.net" ];
                   description =
                     "Host name of existing well-known Veilid bootstrap servers for the network to connect to.";
+                };
+                node_id = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
                 };
               };
               dht = {
@@ -174,13 +208,13 @@ in {
               };
               upnp = mkOption {
                 type = types.bool;
-                  default = true;
+                default = true;
                 description =
                   "Should the app try to improve its incoming network connectivity using UPnP?";
               };
               detect_address_changes = mkOption {
                 type = types.bool;
-                  default = true;
+                default = true;
                 description =
                   "Should veilid-core detect and notify on network address changes?";
               };
