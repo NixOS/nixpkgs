@@ -112,7 +112,7 @@ lib.recurseIntoAttrs {
       assert isComposable "pkgsExtraHardening";
       assert isComposable "pkgsLLVM";
       assert isComposable "pkgsArocc";
-      # TODO: unexpected argument 'bintools'
+      # TODO: unexpected argument 'bintools' - uncomment once https://github.com/NixOS/nixpkgs/pull/331011 is done
       # assert isComposable "pkgsZig";
       assert isComposable "pkgsMusl";
       assert isComposable "pkgsStatic";
