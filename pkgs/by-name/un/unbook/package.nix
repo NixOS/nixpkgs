@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   calibre,
+  gitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/unbook --prefix PATH : ${lib.makeBinPath [ calibre ]}
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Ebook to self-contained-HTML converter";
