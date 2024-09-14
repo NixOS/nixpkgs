@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khoj";
-  version = "1.20.2";
+  version = "1.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "debanjum";
     repo = "khoj";
     rev = "refs/tags/${version}";
-    hash = "sha256-llVn9OR2EZvZsA0sRRSRqpqF3E67FkslQZeorya4hBA=";
+    hash = "sha256-TZZ8f+ZZrulZ4DvKCkdmgET989c8Nkny5HwHFz42Gt8=";
   };
 
   env = {
@@ -28,60 +28,74 @@ python3.pkgs.buildPythonApplication rec {
     hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    beautifulsoup4
-    dateparser
-    defusedxml
-    fastapi
-    python-multipart
-    jinja2
-    openai
-    tiktoken
-    tenacity
-    magika
-    pillow
-    pydantic
-    pyyaml
-    rich
-    schedule
-    sentence-transformers
-    einops
-    transformers
-    torch
-    uvicorn
-    aiohttp
-    langchain
-    langchain-openai
-    langchain-community
-    requests
-    # Tenacity is duplicated in the upstream pyproject.toml file
-    anyio
-    pymupdf
-    django
-    authlib
-    # llama-cpp-python
-    itsdangerous
-    httpx
-    pgvector
-    psycopg2
-    lxml
-    tzdata
-    rapidocr-onnxruntime
-    openai-whisper
-    django-phonenumber-field
-    phonenumbers
-    markdownify
-    markdown-it-py
-    websockets
-    psutil
-    huggingface-hub
-    apscheduler
-    pytz
-    cron-descriptor
-    # django_appscheduler
-    anthropic
-    docx2txt
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    "django-apscheduler"
+    "llama-cpp-python"
+    "pymupdf"
+    "sentence-transformers"
+    "psycopg2-binary"
   ];
+
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      beautifulsoup4
+      dateparser
+      defusedxml
+      fastapi
+      python-multipart
+      jinja2
+      openai
+      tiktoken
+      tenacity
+      magika
+      pillow
+      pydantic
+      pyyaml
+      rich
+      schedule
+      # sentence-transformers
+      einops
+      transformers
+      torch
+      uvicorn
+      aiohttp
+      langchain
+      langchain-openai
+      langchain-community
+      requests
+      # Tenacity is duplicated in the upstream pyproject.toml file
+      anyio
+      # pymupdf # broken
+      django_5
+      authlib
+      # llama-cpp-python # not yet packaged
+      itsdangerous
+      httpx
+      pgvector
+      psycopg2
+      lxml
+      tzdata
+      rapidocr-onnxruntime
+      openai-whisper
+      django-phonenumber-field
+      phonenumbers
+      markdownify
+      markdown-it-py
+      websockets
+      psutil
+      huggingface-hub
+      apscheduler
+      pytz
+      cron-descriptor
+      # django_appscheduler # not yet packaged
+      anthropic
+      docx2txt
+      google-generativeai
+    ]
+    ++ python3.pkgs.pydantic.optional-dependencies.email;
 
   nativeCheckInputs =
     with python3.pkgs;
