@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://zsync.moria.org.uk/download/zsync-${version}.tar.bz2";
-    sha256 = "1wjslvfy76szf0mgg2i9y9q30858xyjn6v2acc24zal76d1m778b";
+    hash = "sha256-C51TQzOHqk8EY0psY6XvqCAwcPIpivcqcF+b492mWvI=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isClang {

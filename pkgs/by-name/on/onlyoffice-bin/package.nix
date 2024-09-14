@@ -69,7 +69,7 @@ let
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      sha256 = "sha256-hS1+gLN17sP3EFud3fQXRWeFiQbrumBONLjqXEl89Js=";
+      hash = "sha256-hS1+gLN17sP3EFud3fQXRWeFiQbrumBONLjqXEl89Js=";
     };
 
     nativeBuildInputs = [

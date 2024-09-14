@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    sha256 = "sha256-EmW3i0qi7P48AftCz7tqI2Wtvdy3cpyR57+s42dYwt8=";
+    hash = "sha256-EmW3i0qi7P48AftCz7tqI2Wtvdy3cpyR57+s42dYwt8=";
   };
 
   patches = [

@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "power-profiles-daemon";
     rev = finalAttrs.version;
-    sha256 = "sha256-NzaneS/Za73HSK2abBZNmP+ZPbhIG+JXfBTPHm2vBeU=";
+    hash = "sha256-NzaneS/Za73HSK2abBZNmP+ZPbhIG+JXfBTPHm2vBeU=";
   };
 
   nativeBuildInputs =

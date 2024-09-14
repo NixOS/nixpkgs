@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kamranahmedse";
     repo = "git-standup";
     rev = finalAttrs.version;
-    sha256 = "1xnn0jjha56v7l2vj45zzxncl6m5x2hq6nkffgc1bcikhp1pidn7";
+    hash = "sha256-x7Z4w4UzshXYc25ag6HopRrKbP+/ELkFPdsUBaUE1vY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

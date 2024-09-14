@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${version}";
-    sha256 = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
+    hash = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
   };
 
   vendorHash = "sha256-XAm2VfX1nHWTuAV2COEn8qrqPNv0xbaWgTYCpjrEfMw=";

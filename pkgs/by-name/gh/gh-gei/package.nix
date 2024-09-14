@@ -11,7 +11,7 @@ buildDotnetModule rec {
     owner = "github";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-F1sxT9wh/K6VP7n1SlmmvmHlcgxDJw6Rht2hPIiRFjE=";
+    hash = "sha256-F1sxT9wh/K6VP7n1SlmmvmHlcgxDJw6Rht2hPIiRFjE=";
   };
 
   projectFile = "src/gei/gei.csproj";

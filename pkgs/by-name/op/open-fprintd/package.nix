@@ -8,7 +8,7 @@ python3Packages.buildPythonPackage rec {
     owner = "uunicorn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
+    hash = "sha256-uVFuwtsmR/9epoqot3lJ/5v5OuJjuRjL7FJF7oXNDzU=";
   };
 
   nativeBuildInputs = [ wrapGAppsNoGuiHook gobject-introspection ];

@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     owner = "alebastr";
     repo = "sway-systemd";
     rev = "v${version}";
-    sha256 = "sha256-wznYE1/lVJtvf5Nq96gbPYisxc2gWLahVydwcH1vwoQ=";
+    hash = "sha256-wznYE1/lVJtvf5Nq96gbPYisxc2gWLahVydwcH1vwoQ=";
   };
   format = "other";
 

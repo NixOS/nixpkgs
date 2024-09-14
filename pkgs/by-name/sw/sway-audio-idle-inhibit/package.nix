@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "ErikReider";
     repo = "SwayAudioIdleInhibit";
     rev = "c850bc4812216d03e05083c69aa05326a7fab9c7";
-    sha256 = "sha256-MKzyF5xY0uJ/UWewr8VFrK0y7ekvcWpMv/u9CHG14gs=";
+    hash = "sha256-MKzyF5xY0uJ/UWewr8VFrK0y7ekvcWpMv/u9CHG14gs=";
   };
 
   nativeBuildInputs = [

@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "TjTh8XWTS9hJqEvZX6Nb8G6EEuAt8loDbC8RNdUz8oE=";
+    hash = "sha256-TjTh8XWTS9hJqEvZX6Nb8G6EEuAt8loDbC8RNdUz8oE=";
   };
 
   patches = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
-      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
+      hash = "sha256-/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
 
     # Remove support for window shading.
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/BuddiesOfBudgie/magpie/issues/9
     (fetchpatch {
       url = "https://github.com/BuddiesOfBudgie/magpie/commit/4177c466375462ca8ed8fdb60913df4422f19144.patch";
-      sha256 = "NVx40WDnlUL050D529KVohvNBdVrheXxmJ73U3+KSeQ=";
+      hash = "sha256-NVx40WDnlUL050D529KVohvNBdVrheXxmJ73U3+KSeQ=";
     })
   ];
 

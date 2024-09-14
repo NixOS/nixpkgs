@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "nghttp2";
     repo = "nghttp2-asio";
     rev = "e877868abe06a83ed0a6ac6e245c07f6f20866b5";
-    sha256 = "sha256-XQXRHLz0kvaIQq1nbqkJnETHR51FXMB1P9F/hQeZh6A=";
+    hash = "sha256-XQXRHLz0kvaIQq1nbqkJnETHR51FXMB1P9F/hQeZh6A=";
   };
 
   nativeBuildInputs = [

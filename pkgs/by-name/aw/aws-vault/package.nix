@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "99designs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Qs4vxFgehWQYYECBGBSU8YI/BHLwOQUO5wBlNEUzD7c=";
+    hash = "sha256-Qs4vxFgehWQYYECBGBSU8YI/BHLwOQUO5wBlNEUzD7c=";
   };
 
   vendorHash = "sha256-4bJKDEZlO0DzEzTQ7m+SQuzhe+wKmL6wLueqgSz/46s=";
