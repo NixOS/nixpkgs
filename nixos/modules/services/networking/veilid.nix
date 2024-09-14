@@ -8,11 +8,9 @@ let
   configFile = settingsFormat.generate "veilid.yaml" cfg.settings;
 in {
   config = mkIf cfg.enable {
-    networking = {
-      firewall = {
+    networking.firewall = mkIf cfg.openFirewall {
         allowedTCPPorts = [ 5150 ];
         allowedUDPPorts = [ 5150 ];
-      };
     };
 
     systemd.services.veilid = {
@@ -45,6 +43,11 @@ in {
 
   options.services.veilid = {
     enable = mkEnableOption "Veilid Headless Node";
+    openFirewall = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to open firewall on ports 5150/tcp, 5150/udp";
+    };
     settings = mkOption {
       description = ''
         Build veilid-server.conf with nix expression.
