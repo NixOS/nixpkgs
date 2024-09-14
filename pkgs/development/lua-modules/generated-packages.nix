@@ -2512,6 +2512,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+lze = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "lze";
+  version = "0.1.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lze-0.1.1-1.rockspec";
+    sha256 = "0rih9kgx846qhp1fmsqlnp8y08kv4hp8gl9dwykz4zr0zljy94j3";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/BirdeeHub/lze/archive/v0.1.1.zip";
+    sha256 = "1s6n61jabsv94s37xd5g0y7fxhficc4rwsklgsmzajravpgy60a8";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/BirdeeHub/lze";
+    description = "A lazy-loading library for neovim, inspired by, but different from, nvim-neorocks/lz.n";
+    maintainers = with lib.maintainers; [ birdee ];
+    license.fullName = "GPL-2+";
+  };
+}) {};
+
 lzn-auto-require = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, lz-n }:
 buildLuarocksPackage {
   pname = "lzn-auto-require";

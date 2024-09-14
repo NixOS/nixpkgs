@@ -543,6 +543,17 @@ in
       '';
   });
 
+  lze  = prev.lze.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+    '';
+  });
+
   neotest  = prev.neotest.overrideAttrs(oa: {
     doCheck = true;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
