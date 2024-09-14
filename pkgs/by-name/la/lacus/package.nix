@@ -16,6 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "gunicorn"
     "psutil"
     "redis"
   ];
