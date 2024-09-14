@@ -5,7 +5,7 @@
   charset-normalizer,
   dateparser,
   faust-cchardet,
-  fetchPypi,
+  fetchFromGitHub,
   lxml,
   pytestCheckHook,
   python-dateutil,
@@ -16,14 +16,16 @@
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yvFobPdcYd0fBh7eXXpG51mxXV+Zh82OE8jEI3URJj0=";
+  src = fetchFromGitHub {
+    owner = "adbar";
+    repo = "htmldate";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sddPlVaYenR8sQG/ronkYIcVH5nyQzcjF8rfeMr5I78=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +36,7 @@ buildPythonPackage rec {
     lxml
     python-dateutil
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.7") [ backports-datetime-fromisoformat ];
+  ];
 
   passthru.optional-dependencies = {
     speed =
@@ -55,11 +57,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # disable tests that require an internet connection
   disabledTests = [
+    # Tests that require an internet connection
     "test_input"
     "test_cli"
     "test_download"
+    "test_readme_examples"
   ];
 
   pythonImportsCheck = [ "htmldate" ];
