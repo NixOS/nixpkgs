@@ -144,6 +144,8 @@
 let
   inherit (lib) optional optionals optionalString versionOlder versionAtLeast;
   variants = lib.genAttrs [ "headless" "small" "full" ] lib.id;
+  inherit (variants) headless small full;
+
   module =
     {
       config,
@@ -161,12 +163,15 @@ let
             headless = ffmpegVariant == variants.headless || checks.small;
           };
         in checks.${flagVariant} or false;
+
+      # Represents a feature flag for ffmpeg. Each feature flag controls which
+      # packages should be added to buildInputs and which configureFlags should
+      # be set to enable the feature. It also offers easy controls to
+      # enable/disable features by default depending on the variant, version and
+      # custom logic.
       ffmpegFlag = lib.types.submodule ({ config, name, ... }: {
         options = {
           enable = lib.mkEnableOption "Whether to enable ${name} support in ffmpeg." // lib.mkOption {
-            # TODO this works but doesn't allow for convenient overrides yet. You
-            # can easily override enable = true but it will still be gated behind
-            # the variant check.
             default = isInVariant config.variant && config.gate;
           };
           packages = lib.mkOption {
@@ -239,14 +244,17 @@ let
           };
 
           internal = lib.mkEnableOption "" // lib.mkOption {
-            description = "Whether this flag is internal and does not have a corresponding configureFlag";
+            description = ''
+              Whether this flag is an internal ffmpeg derivation implementation
+              detail and does not have a corresponding upstream configureFlag.
+            '';
           };
         };
       });
 
       mkFfmpegOption = name: default: lib.mkOption {
         type = ffmpegFlag;
-        inherit default; # Default done via ffmpegFlag type
+        inherit default; # Detailed defaults are implemented in the ffmpegFlag type
         description =
           let
             hasDescription = default.description or null != null;
@@ -255,8 +263,7 @@ let
             "Control ${name} support in ffmpeg${additionalDescription}.";
       };
 
-      inherit (variants) headless small full;
-
+      # This is the source of truth for the default set of features activated in ffmpeg
       featureOptions = config:
         let
           enable = lib.mapAttrs (n: v: v.enable) config;
@@ -272,15 +279,15 @@ let
               internal = true;
             };
             unfree = {
-              enable = false;
+              gate = false;
               flags = [ "nonfree" ];
             };
             #  Build flags
             static = { gate = stdenv.hostPlatform.isStatic; };
             shared = { gate = !stdenv.hostPlatform.isStatic; };
             pic = { };
-            thumb = { enable = false; };
-            small = { enable = false; };
+            thumb = { gate = false; };
+            small = { gate = false; };
             runtime-cpudetect = { };
             gray = { variant = full; };
             swscale-alpha = { }; # TODO same as swscale?
@@ -303,7 +310,7 @@ let
             };
             os2threads = {
               # We don't support OS/2
-              enable = false;
+              gate = false;
             };
 
             network = { };
@@ -373,10 +380,10 @@ let
             };
 
             # Developer flags
-            debug = { enable = false; };
+            debug = { gate = false; };
             optimizations = { };
-            extra-warnings = { enable = false; };
-            stripping = { enable = false; };
+            extra-warnings = { gate = false; };
+            stripping = { gate = false; };
 
             # Feature flags
             alsa = { packages = { inherit alsa-lib; }; };
@@ -927,7 +934,10 @@ let
   enable = lib.mapAttrs (n: v: v.enable) features;
 in
 
-assert builtins.hasAttr ffmpegVariant variants;
+# Assertions to help the user reach a sane config
+
+# General
+assert builtins.hasAttr ffmpegVariant variants; # We must know the ffmpeg variant
 
 # Licensing dependencies
 assert with enable; gplv3 -> gpl && version3;
