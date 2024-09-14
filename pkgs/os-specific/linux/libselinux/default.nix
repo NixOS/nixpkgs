@@ -80,11 +80,6 @@ stdenv.mkDerivation (rec {
     "PYTHON_SETUP_ARGS=--no-build-isolation"
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace src/procattr.c \
-      --replace "#include <unistd.h>" ""
-  '';
-
   preInstall = lib.optionalString enablePython ''
     mkdir -p $py/${python3.sitePackages}/selinux
   '';
