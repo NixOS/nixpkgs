@@ -27,6 +27,7 @@
 
   # tests
   freezegun,
+  httpx,
   lark,
   pandas,
   pytest-asyncio,
@@ -41,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.2.16";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain==${version}";
-    hash = "sha256-8n5eImRXOG/3tN/59Gd2/GpoGpt7P2ABj0T4pJi6xrk=";
+    hash = "sha256-2dHsZWn1MN/gLnUdYp84gbtWkvB0j0iieij4W9tzPzY=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -75,6 +76,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    httpx
     lark
     pandas
     pytest-asyncio
