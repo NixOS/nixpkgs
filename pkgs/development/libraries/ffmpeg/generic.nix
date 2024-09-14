@@ -932,6 +932,19 @@ let
   inherit (eval) config;
   inherit (config) features;
   enable = lib.mapAttrs (n: v: v.enable) features;
+
+  # All library .so files that this ffmpeg exposes
+  exposedLibNames = lib.concatMap (name: lib.optional (builtins.getAttr name enable) "lib${name}") [
+    "avcodec"
+    "avdevice"
+    "avfilter"
+    "avformat"
+    "avresample"
+    "avutil"
+    "postproc"
+    "swresample"
+    "swscale"
+  ];
 in
 
 # Assertions to help the user reach a sane config
@@ -1085,22 +1098,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   # Fails with SIGABRT otherwise FIXME: Why?
-  checkPhase = let
-    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-    libsToLink = [ ]
-      ++ optional enable.avcodec "libavcodec"
-      ++ optional enable.avdevice "libavdevice"
-      ++ optional enable.avfilter "libavfilter"
-      ++ optional enable.avformat "libavformat"
-      ++ optional enable.avresample "libavresample"
-      ++ optional enable.avutil "libavutil"
-      ++ optional enable.postproc "libpostproc"
-      ++ optional enable.swresample "libswresample"
-      ++ optional enable.swscale "libswscale"
-    ;
-  in ''
-    ${ldLibraryPathEnv}="${lib.concatStringsSep ":" libsToLink}" make check -j$NIX_BUILD_CORES
-  '';
+  checkFlags =
+    let
+      ldEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    in
+    "${ldEnvVar}=${lib.concatStringsSep ":" exposedLibNames}";
 
   outputs = optionals enable.bin-output [ "bin" ] # The first output is the one that gets symlinked by default!
     ++ optionals enable.lib-output [ "lib" "dev" ]
@@ -1151,16 +1153,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ optional enable.gplv3 l.gpl3Plus
       ++ optional enable.unfree l.unfreeRedistributable
       ++ optional (enable.gpl && enable.unfree) l.unfree;
-    pkgConfigModules = [ ]
-      ++ optional enable.avcodec "libavcodec"
-      ++ optional enable.avdevice "libavdevice"
-      ++ optional enable.avfilter "libavfilter"
-      ++ optional enable.avformat "libavformat"
-      ++ optional enable.avresample "libavresample"
-      ++ optional enable.avutil "libavutil"
-      ++ optional enable.postproc "libpostproc"
-      ++ optional enable.swresample "libswresample"
-      ++ optional enable.swscale "libswscale";
+    pkgConfigModules = exposedLibNames;
     platforms = lib.platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
