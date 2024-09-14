@@ -200,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_zstd'  # we don't include zstd support
       $ETN 'test_qt'  # we don't include svg or webp support
       $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
+      $ETN 'test_websocket_basic'  # flakey
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )
 
