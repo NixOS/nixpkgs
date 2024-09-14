@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # dependencies
@@ -29,19 +28,17 @@
 
 let
   pname = "torchmetrics";
-  version = "1.4.1";
+  version = "1.4.2";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NOxj1vVY9ynCS/Pf6V+ONNx50jjKqfkhzYbc60Sf4Qw=";
+    hash = "sha256-YieIz99QFnuW3hTtNFgxhkNnSXGsTG2qqYhRCyvZo7Q=";
   };
 
   dependencies = [

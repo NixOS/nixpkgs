@@ -48,7 +48,6 @@ with pkgs;
           sets = lib.pipe gccTests ([
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
             # Broken
-            (filterAttrs (n: _: n != "gcc49Stdenv"))
             (filterAttrs (n: _: n != "gccMultiStdenv"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
             # fails with things like
