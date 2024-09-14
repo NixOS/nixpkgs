@@ -9792,8 +9792,6 @@ with pkgs;
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
-  l3afpad = callPackage ../applications/editors/l3afpad { };
-
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
 
   leanify = callPackage ../tools/misc/leanify { };
