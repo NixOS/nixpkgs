@@ -72,6 +72,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
     license = licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
   };
 }
