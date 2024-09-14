@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "nwtime";
     repo = "linuxptp";
     rev = "v${version}";
-    hash = "sha256-FFBbbmVPP74p/OkqNXXgynBS/NcuPoYs3OCof11NZOI=";
+    hash = "sha256-w1buo+D8Mnd6ytMhQYhvCDqt+RejlNSN/iVjrDR+Khk=";
   };
 
   outputs = [ "out" "man" ];
