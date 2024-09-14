@@ -1129,7 +1129,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-  passthru.variants = variants;
   passthru.eval = eval;
 
   meta = {
