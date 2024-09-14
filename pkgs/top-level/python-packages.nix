@@ -10221,6 +10221,8 @@ self: super: with self; {
 
   pywebcopy = callPackage ../development/python-modules/pywebcopy { };
 
+  python-calamine = callPackage ../development/python-modules/python-calamine { };
+
   python-can = callPackage ../development/python-modules/python-can { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
