@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "1.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     repo = "wagtail-localize";
@@ -30,9 +30,9 @@ buildPythonPackage rec {
     hash = "sha256-khGzJj7LBxz5WPU8l20CmQjC9p5umk6spSyMMHBBguc=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     wagtail
     polib
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     google-cloud-translate
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     google = [ google-cloud-translate ];
   };
 
