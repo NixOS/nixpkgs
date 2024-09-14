@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch2
 , glib
 , flex
 , bison
@@ -41,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.80.1";
+  version = "1.82.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -50,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-od98Qk4VvaGrY5wA6QUbmt9c6hqeUS+KYDtTzRmbxtg=";
+    hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
   };
 
   patches = [
@@ -60,11 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
-    })
-    (fetchpatch2 {
-      name = "setuptools-74.0-compat.patch";
-      url = "https://github.com/GNOME/gobject-introspection/commit/a2139dba59eac283a7f543ed737f038deebddc19.patch";
-      hash = "sha256-n++wpQuJhAEYtcu8LZDC4+Tx1MYuFIMysFgrvz68jWU=";
     })
   ] ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
