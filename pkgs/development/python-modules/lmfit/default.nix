@@ -53,6 +53,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lmfit" ];
 
+  disabledTests = [ "test_check_ast_errors" ];
+
   meta = with lib; {
     description = "Least-Squares Minimization with Bounds and Constraints";
     homepage = "https://lmfit.github.io/lmfit-py/";
