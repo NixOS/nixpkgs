@@ -7,12 +7,12 @@
   jre_headless,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maestro";
   version = "1.37.9";
 
   src = fetchurl {
-    url = "https://github.com/mobile-dev-inc/maestro/releases/download/cli-${version}/maestro.zip";
+    url = "https://github.com/mobile-dev-inc/maestro/releases/download/cli-${finalAttrs.version}/maestro.zip";
     hash = "sha256-bWZuD2+v6molwW1ef2a3djBnVfYscBjILLGXeeSUmoU=";
   };
 
@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
     homepage = "https://maestro.mobile.dev/";
     license = licenses.asl20;
     platforms = lib.platforms.all;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     changelog = "https://github.com/mobile-dev-inc/maestro/blob/main/CHANGELOG.md";
     maintainers = with maintainers; [ SubhrajyotiSen ];
+    mainProgram = "maestro";
   };
-}
+})
