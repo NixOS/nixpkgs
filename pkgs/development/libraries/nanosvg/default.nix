@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, unstableGitUpdater }:
 
 stdenv.mkDerivation {
   pname = "nanosvg";
@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     description = "Simple stupid SVG parser";
     homepage = "https://github.com/memononen/nanosvg";
@@ -20,4 +22,3 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 }
-
