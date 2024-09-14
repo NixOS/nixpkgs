@@ -218,7 +218,7 @@ let
 
           flags = lib.mkOption {
             type = with lib.types; listOf str;
-            default = [ (config.flagPrefix + name) ];
+            default = lib.optionals (!config.internal) [ (config.flagPrefix + name) ];
             description = ''
               Flags to be passed to the configure script for this feature.
             '';
@@ -236,6 +236,10 @@ let
             type = with lib.types; nullOr str;
             default = null;
             readOnly = true;
+          };
+
+          internal = lib.mkEnableOption "" // lib.mkOption {
+            description = "Whether this flag is internal and does not have a corresponding configureFlag";
           };
         };
       });
@@ -265,7 +269,7 @@ let
             };
             gplv3 = {
               gate = enable.gpl && enable.version3;
-              flags = [ ]; # internal
+              internal = true;
             };
             unfree = {
               enable = false;
@@ -290,7 +294,7 @@ let
             hardcoded-tables = { };
             safe-bitstream-reader = { };
 
-            multithread = { flags = [ ]; };
+            multithread = { internal = true; };
             pthreads = {
               gate = enable.multithread && stdenv.hostPlatform.isUnix;
             };
@@ -320,7 +324,11 @@ let
             };
             qt-faststart = {
               description = "Build qt-faststart executable";
-              flags = [ ]; # Does not have a flag, needs its dir to be passed to make manually
+              internal = true; # Does not have a flag, needs its dir to be passed to make manually
+            };
+            bin-output = {
+              gate = with enable; ffmpeg || ffplay || ffprobe || qt-faststart;
+              internal = true;
             };
 
             # Library flags
@@ -333,6 +341,12 @@ let
             avresample = {
               # Ffmpeg > 4 doesn't know about the flag anymore
               versionMax = "5";
+            };
+            lib-output = {
+              gate =
+                with enable;
+                avcodec || avdevice || avfilter || avformat || avutil || postproc || swresample || swscale;
+              internal = true;
             };
 
             avutil = { };
@@ -348,6 +362,15 @@ let
             manpages = { };
             podpages = { };
             txtpages = { };
+            doc-output = {
+              gate = with enable; doc && (htmlpages || podpages || txtpages);
+              description = ''
+                Whether a "doc" output will be produced. Note that
+                {option}`manpages` does not produce a "doc" output because its
+                files go to "man".
+              '';
+              internal = true;
+            };
 
             # Developer flags
             debug = { enable = false; };
@@ -902,21 +925,6 @@ let
   inherit (eval) config;
   inherit (config) features;
   enable = lib.mapAttrs (n: v: v.enable) features;
-
-  withLib =
-    with enable;
-      avcodec
-      || avdevice
-      || avfilter
-      || avformat
-      || avutil
-      || postproc
-      || swresample
-      || swscale;
-  withBin = with enable; ffmpeg || ffplay || ffprobe || qt-faststart;
-  # Whether a "doc" output will be produced. Note that manpages does not produce
-  # a "doc" output because its files go to "man".
-  withDoc = with enable; doc && (htmlpages || podpages || txtpages);
 in
 
 assert builtins.hasAttr ffmpegVariant variants;
@@ -1018,14 +1026,14 @@ stdenv.mkDerivation (finalAttrs: {
     "--pkg-config=${buildPackages.pkg-config.targetPrefix}pkg-config"
 
     "--datadir=${placeholder "data"}/share/ffmpeg"
-  ] ++ optionals withBin [
+  ] ++ optionals enable.bin-output [
     "--bindir=${placeholder "bin"}/bin"
-  ] ++ optionals withLib [
+  ] ++ optionals enable.lib-output [
     "--libdir=${placeholder "lib"}/lib"
     "--incdir=${placeholder "dev"}/include"
   ] ++ optionals enable.manpages [
     "--mandir=${placeholder "man"}/share/man"
-  ] ++ optionals withDoc [
+  ] ++ optionals enable.doc-output [
     "--docdir=${placeholder "doc"}/share/doc/ffmpeg"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
@@ -1084,9 +1092,9 @@ stdenv.mkDerivation (finalAttrs: {
     ${ldLibraryPathEnv}="${lib.concatStringsSep ":" libsToLink}" make check -j$NIX_BUILD_CORES
   '';
 
-  outputs = optionals withBin [ "bin" ] # The first output is the one that gets symlinked by default!
-    ++ optionals withLib [ "lib" "dev" ]
-    ++ optionals withDoc [ "doc" ]
+  outputs = optionals enable.bin-output [ "bin" ] # The first output is the one that gets symlinked by default!
+    ++ optionals enable.lib-output [ "lib" "dev" ]
+    ++ optionals enable.doc-output [ "doc" ]
     ++ optionals enable.manpages [ "man" ]
     ++ [ "data" "out" ] # We need an "out" output because we get an error otherwise. It's just an empty dir.
   ;
@@ -1097,7 +1105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
-  postFixup = optionalString (stdenv.isLinux && withLib) ''
+  postFixup = optionalString (stdenv.isLinux && enable.lib-output) ''
     addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
     addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
   ''
