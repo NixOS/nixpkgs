@@ -16,7 +16,9 @@
 # compiler is available during the configure, because otherwise libtool will
 # attempt to call the x86 compiler when it is used to cross-compile something.
 
-pkgsHostTarget.targetPackages.stdenv.mkDerivation rec {
+# `or` is because when cross-compiling `pkgsHostTarget.targetPackages.stdenv` will only have `cc`
+
+(pkgsHostTarget.targetPackages.stdenv.mkDerivation or pkgsHostTarget.stdenv.mkDerivation) rec {
   pname = "libtool";
   version = "2.4.7";
 
@@ -77,7 +79,5 @@ pkgsHostTarget.targetPackages.stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "libtool";
-    # Actually cross-compiling libtool is broken
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }
