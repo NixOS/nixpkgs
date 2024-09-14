@@ -6,7 +6,7 @@
 , nodejs
 , electron
 , fetchFromGitHub
-, gitUpdater
+, nix-update-script
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -103,9 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
