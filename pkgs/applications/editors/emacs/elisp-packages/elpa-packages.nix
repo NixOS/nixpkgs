@@ -47,7 +47,7 @@ self: let
 
     super = imported;
 
-    commonOverrides = import ./elpa-common-overrides.nix pkgs;
+    commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
 
     overrides = self: super: {
       # upstream issue: Wrong type argument: arrayp, nil
@@ -56,45 +56,6 @@ self: let
         then markBroken super.org-transclusion
         else super.org-transclusion;
       rcirc-menu = markBroken super.rcirc-menu; # Missing file header
-      # Compilation instructions for the Ada executables:
-      # https://www.nongnu.org/ada-mode/
-      ada-mode = super.ada-mode.overrideAttrs (old: {
-        # actually unpack source of ada-mode and wisi
-        # which are both needed to compile the tools
-        # we need at runtime
-        dontUnpack = false;
-        srcs = [
-          super.ada-mode.src
-          self.wisi.src
-        ];
-
-        sourceRoot = "ada-mode-${self.ada-mode.version}";
-
-        nativeBuildInputs = old.nativeBuildInputs ++ [
-          buildPackages.gnat
-          buildPackages.gprbuild
-          buildPackages.dos2unix
-          buildPackages.re2c
-        ];
-
-        buildInputs = old.buildInputs ++ [
-          pkgs.gnatPackages.gnatcoll-xref
-        ];
-
-        buildPhase = ''
-          runHook preBuild
-          ./build.sh -j$NIX_BUILD_CORES
-          runHook postBuild
-        '';
-
-        postInstall = (old.postInstall or "") + "\n" + ''
-          ./install.sh "$out"
-        '';
-
-        meta = old.meta // {
-          maintainers = [ lib.maintainers.sternenseemann ];
-        };
-      });
 
       jinx = super.jinx.overrideAttrs (old: let
         libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;

@@ -1,4 +1,4 @@
-pkgs:
+pkgs: lib: buildPackages:
 
 self: super:
 
@@ -10,6 +10,49 @@ in
   cl-print = null; # builtin
   tle = null; # builtin
   advice = null; # builtin
+
+  # Compilation instructions for the Ada executables:
+  # https://www.nongnu.org/ada-mode/
+  ada-mode = super.ada-mode.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      # actually unpack source of ada-mode and wisi
+      # which are both needed to compile the tools
+      # we need at runtime
+      dontUnpack = false;
+      srcs = [
+        super.ada-mode.src
+        self.wisi.src
+      ];
+
+      sourceRoot = "ada-mode-${finalAttrs.version}";
+
+      nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ] ++ [
+        buildPackages.gnat
+        buildPackages.gprbuild
+        buildPackages.dos2unix
+        buildPackages.re2c
+      ];
+
+      buildInputs = previousAttrs.buildInputs or [ ] ++ [ pkgs.gnatPackages.gnatcoll-xref ];
+
+      buildPhase = ''
+        runHook preBuild
+        ./build.sh -j$NIX_BUILD_CORES
+        runHook postBuild
+      '';
+
+      postInstall =
+        previousAttrs.postInstall or ""
+        + "\n"
+        + ''
+          ./install.sh "$out"
+        '';
+
+      meta = previousAttrs.meta // {
+        maintainers = [ lib.maintainers.sternenseemann ];
+      };
+    }
+  );
 
   # TODO delete this when we get upstream fix https://debbugs.gnu.org/cgi/bugreport.cgi?bug=73241
   eglot = super.eglot.overrideAttrs (old: {

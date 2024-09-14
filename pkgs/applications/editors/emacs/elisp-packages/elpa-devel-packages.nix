@@ -47,7 +47,7 @@ self: let
 
     super = imported;
 
-    commonOverrides = import ./elpa-common-overrides.nix pkgs;
+    commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
 
     overrides = self: super: {
     };
