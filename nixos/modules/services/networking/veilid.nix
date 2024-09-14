@@ -1,4 +1,5 @@
 { config, pkgs, lib, ... }:
+with lib;
 let
   cfg = config.services.veilid;
   dataDir = "/var/lib/veilid";
@@ -6,7 +7,7 @@ let
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "veilid.yaml" cfg.settings;
 in {
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     networking = {
       firewall = {
         allowedTCPPorts = [ 5150 ];
@@ -43,565 +44,149 @@ in {
   };
 
   options.services.veilid = {
-    enable = lib.mkEnableOption "veilid";
-    settings = lib.mkOption {
-
-      type = lib.types.attrsOf (lib.types.submodule {
+    enable = mkEnableOption "Veilid Headless Node";
+    settings = mkOption {
+      description = ''
+        Build veilid-server.conf with nix expression.
+        Check [Configuration Keys](https://veilid.gitlab.io/developer-book/admin/config.html#configuration-keys).
+      '';
+      type = types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
-          daemon = {
-            enabled = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-            };
-            pid_file = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-            };
-            chroot = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-            };
-            working_directory = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-            };
-            user = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-            };
-            group = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-            };
-            stdout_file = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-            };
-            stderr_file = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-            };
-          };
           client_api = {
-            ipc_enabled = lib.mkOption {
-              type = lib.types.bool;
+            ipc_enabled = mkOption {
+              type = types.bool;
               default = true;
+              description =
+                "veilid-server will respond to Python and other JSON client requests.";
             };
-            ipc_directory = lib.mkOption {
-              type = lib.types.str;
-              default =
-                "/home/${config.users.users.veilid.name}/.local/share/veilid/ipc";
+            ipc_directory = mkOption {
+              type = types.str;
+              default = "${dataDir}/ipc";
             };
-            network_enabled = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-            };
-            listen_address = lib.mkOption {
-              type = lib.types.str;
-              default = "localhost:5959";
-            };
-          };
-          auto_attach = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
           };
           logging = {
             system = {
-              enabled = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
+              enabled = mkOption {
+                type = types.bool;
+                default = true;
+                description = "Events of type 'system' will be logged.";
               };
-              level = lib.mkOption {
-                type = lib.types.str;
+              level = mkOption {
+                type = types.str;
                 default = "info";
-              };
-              ignore_log_targets = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
+                description =
+                  "The minimum priority of system events to be logged.";
               };
             };
             terminal = {
-              enabled = lib.mkOption {
-                type = lib.types.bool;
+              enabled = mkOption {
+                type = types.bool;
                 default = false;
+                description = "Events of type 'terminal' will be logged.";
               };
-              level = lib.mkOption {
-                type = lib.types.str;
+              level = mkOption {
+                type = types.str;
                 default = "info";
-              };
-              ignore_log_targets = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-              };
-            };
-            file = {
-              enabled = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-              };
-              path = lib.mkOption {
-                type = lib.types.str;
-                default = "";
-              };
-              append = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-              };
-              level = lib.mkOption {
-                type = lib.types.str;
-                default = "info";
-              };
-              ignore_log_targets = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
+                description =
+                  "The minimum priority of terminal events to be logged.";
               };
             };
             api = {
-              enabled = lib.mkOption {
-                type = lib.types.bool;
+              enabled = mkOption {
+                type = types.bool;
                 default = false;
+                description = "Events of type 'api' will be logged.";
               };
-              level = lib.mkOption {
-                type = lib.types.str;
+              level = mkOption {
+                type = types.str;
                 default = "info";
+                description =
+                  "The minimum priority of api events to be logged.";
               };
-              ignore_log_targets = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-              };
-            };
-            otlp = {
-              enabled = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-              };
-              level = lib.mkOption {
-                type = lib.types.str;
-                default = "trace";
-              };
-              grpc_endpoint = lib.mkOption {
-                type = lib.types.str;
-                default = "localhost:4317";
-              };
-              ignore_log_targets = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-              };
-            };
-            console = {
-              enabled = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-              };
-            };
-          };
-          testing = {
-            subnode_index = lib.mkOption {
-              type = lib.types.number;
-              default = 0;
             };
           };
           core = {
             capabilities = {
-              disable = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
+              disable = mkOption {
+                type = types.listOf types.str;
                 default = [ ];
+                description =
+                  "A list of capabilities to disable (for example, DHTV to say you cannot store DHT information).";
               };
             };
             protected_store = {
-              allow_insecure_fallback = lib.mkOption {
-                type = lib.types.bool;
+              allow_insecure_fallback = mkOption {
+                type = types.bool;
                 default = true;
+                description =
+                  "If we can't use system-provided secure storage, should we proceed anyway?";
               };
-              always_use_insecure_storage = lib.mkOption {
-                type = lib.types.bool;
+              always_use_insecure_storage = mkOption {
+                type = types.bool;
                 default = true;
+                description =
+                  "Should we bypass any attempt to use system-provided secure storage?";
               };
-              directory = lib.mkOption {
-                type = lib.types.str;
-                default =
-                  "/home/${config.users.users.veilid.name}/.local/share/veilid/protected_store";
-              };
-              delete = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-              };
-              device_encryption_key_password = lib.mkOption {
-                type = lib.types.str;
-                default =
-                  "/home/${config.users.users.veilid.name}/.local/share/veilid/protected_store";
-              };
-              new_device_encryption_key_password = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
+              directory = mkOption {
+                type = types.str;
+                default = "${dataDir}/protected_store";
+                description =
+                  "The filesystem directory to store your protected store in.";
               };
             };
             table_store = {
-              directory = lib.mkOption {
-                type = lib.types.str;
-                default =
-                  "/home/${config.users.users.veilid.name}/.local/share/veilid/table_store";
-              };
-              delete = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
+              directory = mkOption {
+                type = types.str;
+                default = "${dataDir}/table_store";
+                description =
+                  "The filesystem directory to store your table store within.";
               };
             };
             block_store = {
-              directory = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default =
-                  "/home/${config.users.users.veilid.name}/.local/share/veilid/block_store";
-              };
-              delete = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
+              directory = mkOption {
+                type = types.nullOr types.str;
+                default = "${dataDir}/block_store";
+                description =
+                  "The filesystem directory to store blocks for the block store.";
               };
             };
             network = {
-              connection_initial_timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 2000;
-              };
-              connection_inactivity_timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 60000;
-              };
-              max_connections_per_ip4 = lib.mkOption {
-                type = lib.types.number;
-                default = 32;
-              };
-              max_connections_per_ip6_prefix = lib.mkOption {
-                type = lib.types.number;
-                default = 32;
-              };
-              max_connections_per_ip6_prefix_size = lib.mkOption {
-                type = lib.types.number;
-                default = 56;
-              };
-              max_connection_frequency_per_min = lib.mkOption {
-                type = lib.types.number;
-                default = 128;
-              };
-              client_allowlist_timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 300000;
-              };
-              reverse_connection_receipt_time_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 5000;
-              };
-              network_key_password = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-              };
-            };
             routing_table = {
-              node_id = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-              };
-              node_id_secret = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-              };
-              bootstrap = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
+                bootstrap = mkOption {
+                  type = types.listOf types.str;
                 default = [ "bootstrap.veilid.net" ];
+                  description =
+                    "Host name of existing well-known Veilid bootstrap servers for the network to connect to.";
+                };
               };
-              limit_over_attached = lib.mkOption {
-                type = lib.types.number;
-                default = 64;
+              dht = {
+                min_peer_count = mkOption {
+                  type = types.number;
+                  default = 20;
+                  description =
+                    "Minimum number of nodes to keep in the peer table.";
+                };
               };
-              limit_fully_attached = lib.mkOption {
-                type = lib.types.number;
-                default = 32;
-              };
-              limit_attached_strong = lib.mkOption {
-                type = lib.types.number;
-                default = 32;
-              };
-              limit_attached_good = lib.mkOption {
-                type = lib.types.number;
-                default = 8;
-              };
-              limit_attached_weak = lib.mkOption {
-                type = lib.types.number;
-                default = 4;
-              };
-            };
-            rpc = {
-              concurrency = lib.mkOption {
-                type = lib.types.number;
-                default = 0;
-              };
-              queue_size = lib.mkOption {
-                type = lib.types.number;
-                default = 1024;
-              };
-              max_timestamp_behind_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 10000;
-              };
-              max_timestamp_ahead_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 10000;
-              };
-              timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 5000;
-              };
-              max_route_hop_count = lib.mkOption {
-                type = lib.types.number;
-                default = 4;
-              };
-              default_route_hop_count = lib.mkOption {
-                type = lib.types.number;
-                default = 1;
-              };
-            };
-            dht = {
-              max_find_node_count = lib.mkOption {
-                type = lib.types.number;
-                default = 20;
-              };
-              resolve_node_timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 10000;
-              };
-              resolve_node_count = lib.mkOption {
-                type = lib.types.number;
-                default = 1;
-              };
-              resolve_node_fanout = lib.mkOption {
-                type = lib.types.number;
-                default = 4;
-              };
-              get_value_timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 10000;
-              };
-              get_value_count = lib.mkOption {
-                type = lib.types.number;
-                default = 3;
-              };
-              get_value_fanout = lib.mkOption {
-                type = lib.types.number;
-                default = 4;
-              };
-              set_value_timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 10000;
-              };
-              set_value_count = lib.mkOption {
-                type = lib.types.number;
-                default = 5;
-              };
-              set_value_fanout = lib.mkOption {
-                type = lib.types.number;
-                default = 4;
-              };
-              min_peer_count = lib.mkOption {
-                type = lib.types.number;
-                default = 20;
-              };
-              min_peer_refresh_time_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 60000;
-              };
-              validate_dial_info_receipt_time_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 2000;
-              };
-              local_subkey_cache_size = lib.mkOption {
-                type = lib.types.number;
-                default = 128;
-              };
-              local_max_subkey_cache_memory_mb = lib.mkOption {
-                type = lib.types.number;
-                default = 256;
-              };
-              remote_subkey_cache_size = lib.mkOption {
-                type = lib.types.number;
-                default = 1024;
-              };
-              remote_max_records = lib.mkOption {
-                type = lib.types.number;
-                default = 65536;
-              };
-              remote_max_subkey_cache_memory_mb = lib.mkOption {
-                type = lib.types.number;
-                default = 2552;
-              };
-              remote_max_storage_space_mb = lib.mkOption {
-                type = lib.types.number;
-                default = 10000;
-              };
-              public_watch_limit = lib.mkOption {
-                type = lib.types.number;
-                default = 32;
-              };
-              member_watch_limit = lib.mkOption {
-                type = lib.types.number;
-                default = 8;
-              };
-              max_watch_expiration_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 600000;
-              };
-            };
-            upnp = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-            };
-            detect_address_changes = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-            };
-            restricted_nat_retries = lib.mkOption {
-              type = lib.types.number;
-              default = 0;
-            };
-            tls = {
-              certificate_path = lib.mkOption {
-                type = lib.types.str;
-                default =
-                  "/home/${config.users.users.veilid.name}/.local/share/veilid/protected_store";
-              };
-              private_key_path = lib.mkOption {
-                type = lib.types.str;
-                default =
-                  "/home/${config.users.users.veilid.name}/.local/share/veilid/protected_store";
-              };
-              connection_initial_timeout_ms = lib.mkOption {
-                type = lib.types.number;
-                default = 2000;
-              };
-            };
-            application = {
-              https = {
-                enabled = lib.mkOption {
-                  type = lib.types.bool;
+              upnp = mkOption {
+                type = types.bool;
                   default = true;
-                };
-                listen_address = lib.mkOption {
-                  type = lib.types.str;
-                  default = ":433";
-                };
-
-                path = lib.mkOption {
-                  type = lib.types.str;
-                  default = "app";
-                };
-                url = lib.mkOption {
-                  type = lib.types.nullOr lib.types.str;
-                  default = null;
-                };
+                description =
+                  "Should the app try to improve its incoming network connectivity using UPnP?";
               };
-            };
-            protocol = {
-              udp = {
-                enabled = lib.mkOption {
-                  type = lib.types.bool;
+              detect_address_changes = mkOption {
+                type = types.bool;
                   default = true;
-                };
-                socket_pool_size = lib.mkOption {
-                  type = lib.types.number;
-                  default = 0;
-                };
-                listen_address = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                };
-                public_address = lib.mkOption {
-                  type = lib.types.nullOr lib.types.str;
-                  default = null;
-                };
-              };
-              tcp = {
-                connect = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                };
-                listen = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                };
-                max_connections = lib.mkOption {
-                  type = lib.types.number;
-                  default = 32;
-                };
-                listen_address = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                };
-                public_address = lib.mkOption {
-                  type = lib.types.nullOr lib.types.str;
-                  default = null;
-                };
-              };
-              ws = {
-                connect = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                };
-                listen = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                };
-                max_connections = lib.mkOption {
-                  type = lib.types.number;
-                  default = 32;
-                };
-                listen_address = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                };
-
-                path = lib.mkOption {
-                  type = lib.types.str;
-                  default = "ws";
-                };
-                url = lib.mkOption {
-                  type = lib.types.nullOr lib.types.str;
-                  default = null;
-                };
-              };
-              wss = {
-                connect = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                };
-                listen = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                };
-                max_connections = lib.mkOption {
-                  type = lib.types.number;
-                  default = 32;
-                };
-                listen_address = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                };
-
-                path = lib.mkOption {
-                  type = lib.types.str;
-                  default = "ws";
-                };
-                url = lib.mkOption {
-                  type = lib.types.nullOr lib.types.str;
-                  default = null;
-                };
+                description =
+                  "Should veilid-core detect and notify on network address changes?";
               };
             };
           };
         };
-      });
+      };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ figboy9 ];
+  meta.maintainers = with maintainers; [ figboy9 ];
 }
