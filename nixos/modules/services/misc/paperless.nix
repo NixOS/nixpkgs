@@ -235,7 +235,7 @@ in
 
     systemd.slices.system-paperless = {
       description = "Paperless slice";
-      documentation = [ "https://paperless.readthedocs.io" ];
+      documentation = [ "https://docs.paperless-ngx.com" ];
     };
 
     systemd.tmpfiles.settings."10-paperless" = let
