@@ -18,7 +18,11 @@
 
 # `or` is because when cross-compiling `pkgsHostTarget.targetPackages.stdenv` will only have `cc`
 
-(pkgsHostTarget.targetPackages.stdenv.mkDerivation or pkgsHostTarget.stdenv.mkDerivation) rec {
+let
+  mkDerivation = if stdenv.hostPlatform.isDarwin then stdenv.mkDerivation else pkgsHostTarget.targetPackages.stdenv.mkDerivation or pkgsHostTarget.stdenv.mkDerivation;
+in
+
+mkDerivation rec {
   pname = "libtool";
   version = "2.4.7";
 
