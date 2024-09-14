@@ -140,7 +140,7 @@ in
     buildPhase =
       old.buildPhase or ""
       + ''
-        $CXX -shared -o xapian-lite${libExt} xapian-lite.cc $NIX_CFLAGS_COMPILE -lxapian
+        $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
       '';
     postInstall =
       old.postInstall or ""
