@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preCheck = ''
+    # https://github.com/dfandrich/gpscorrelate/issues/29
+    rm tests/data/test005.*
+  '';
+
   installTargets = [ "install" "install-po" "install-desktop-file" ];
 
   meta = with lib; {
