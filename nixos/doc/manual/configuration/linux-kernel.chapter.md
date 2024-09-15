@@ -134,7 +134,7 @@ It's a common issue that the latest stable version of ZFS doesn't support the la
 available Linux kernel. It is recommended to use the latest available LTS that's compatible
 with ZFS. Usually this is the default kernel provided by nixpkgs (i.e. `pkgs.linuxPackages`).
 
-Alternatively, it's possible to pin the system to the latest available kernel
+Alternatively, it's possible to pin the system to the latest available vanilla kernel
 version _that is supported by ZFS_ like this:
 
 ```nix
