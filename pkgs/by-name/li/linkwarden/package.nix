@@ -29,7 +29,10 @@ let
       rev = "refs/tags/v${version}";
       hash = "sha256-J93vfpvg8pYt+cw2jpt33JLNTA3LFxdvPmVEeLs177Q=";
     };
-    patches = [ ./patches/0001.executable.diff ];
+    patches = [
+      ./patches/0001.executable.diff
+      ./patches/0002.disable-ssl.patch
+    ];
     pkgConfig = {
       bcrypt = {
         nativeBuildInputs = [

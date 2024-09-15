@@ -1,0 +1,11 @@
+--- a/playwright.config.ts	2024-09-15 14:18:10.927734210 -0700
++++ b/playwright.config.ts	2024-09-15 14:34:16.799689511 -0700
+@@ -25,6 +25,8 @@
+ 
+     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+     trace: "on-first-retry",
++
++    ignoreHTTPSErrors: true,
+   },
+ 
+   /* Configure projects for major browsers */
