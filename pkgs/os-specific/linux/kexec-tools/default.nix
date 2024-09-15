@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "http://horms.net/projects/kexec/kexec-tools";
     description = "Tools related to the kexec Linux feature";
