@@ -33605,8 +33605,6 @@ with pkgs;
 
   thokr = callPackage ../applications/misc/thokr { };
 
-  thonny = callPackage ../applications/editors/thonny { };
-
   betterbird-unwrapped = callPackage ../applications/networking/mailreaders/betterbird { };
   betterbird = wrapThunderbird betterbird-unwrapped {
     desktopName = "Betterbird";
