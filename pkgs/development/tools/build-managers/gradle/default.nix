@@ -198,9 +198,10 @@ rec {
   };
 
   wrapGradle = {
-      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook
+      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook, nix-update-script
     }:
     gradle-unwrapped:
+    updateAttrPath:
     lib.makeOverridable (args:
     let
       gradle = gradle-unwrapped.override args;
@@ -228,6 +229,11 @@ rec {
         fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
         inherit (gradle) jdk tests;
         unwrapped = gradle;
+      } // lib.optionalAttrs (updateAttrPath != null) {
+        updateScript = nix-update-script {
+          attrPath = updateAttrPath;
+          extraArgs = [ "--url=https://github.com/gradle/gradle" ];
+        };
       };
 
       meta = gradle.meta // {
