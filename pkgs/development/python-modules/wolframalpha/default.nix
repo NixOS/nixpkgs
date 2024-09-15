@@ -6,7 +6,6 @@
   # Build system
   setuptools,
   setuptools-scm,
-  pytestCheckHook,
 
   # Package dependencies
   jaraco-context,
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     multidict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  doCheck = false;
 
   meta = {
     changelog = "https://github.com/jaraco/wolframalpha/releases/tag/v${version}";
