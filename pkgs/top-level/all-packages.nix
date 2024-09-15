@@ -29839,8 +29839,6 @@ with pkgs;
 
   vcal = callPackage ../applications/misc/vcal { };
 
-  gcolor2 = callPackage ../applications/graphics/gcolor2 { };
-
   gcolor3 = callPackage ../applications/graphics/gcolor3 { };
 
   get_iplayer = callPackage ../applications/misc/get_iplayer { };
