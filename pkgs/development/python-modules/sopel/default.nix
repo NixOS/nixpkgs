@@ -15,6 +15,7 @@
   sqlalchemy,
   xmltodict,
   importlib-metadata,
+  packaging
 }:
 
 buildPythonPackage rec {
