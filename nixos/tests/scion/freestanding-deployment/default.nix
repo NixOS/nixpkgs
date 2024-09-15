@@ -131,25 +131,35 @@ in
       addresses="42-ffaa:1:1 42-ffaa:1:2 42-ffaa:1:3 42-ffaa:1:4 42-ffaa:1:5"
       timeout=100
       wait_for_all() {
+        ret=0
         for as in "$@"
         do
           scion showpaths $as --no-probe > /dev/null
-          return 1
+          ret=$?
+          if [ "$ret" -ne "0" ]; then
+            break
+          fi
         done
-        return 0
+        return $ret
       }
       ping_all() {
+        ret=0
         for as in "$@"
         do
           scion ping "$as,127.0.0.1" -c 3
+          ret=$?
+          if [ "$ret" -ne "0" ]; then
+            break
+          fi
         done
-        return 0
+        return $ret
       }
       for i in $(seq 0 $timeout); do
-        wait_for_all $addresses && exit 0
-        ping_all $addresses && exit 0
         sleep 1
+        wait_for_all $addresses || continue
+        ping_all $addresses && exit 0
       done
+      exit 1
     '';
   in
   ''
