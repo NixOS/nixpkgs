@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "tere";
-  version = "1.5.1-unstable-2024-04-01";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mgunyho";
     repo = "tere";
-    rev = "659422ecb2810f91446a71e52b82524d4f1755d8";
-    sha256 = "sha256-CH8gcfkjSAknG6kKHp0aODcrjEJjzHbgeVaE/PK1zRA=";
+    rev = "5adf1176e8c12c073ad244cac7773a7808ed2021";
+    sha256 = "sha256-oY4oeSttM8LLXLirYq/B7Nzajkg4Pw26uig5gZxqU3s=";
   };
 
-  cargoHash = "sha256-GtGWuvYdxP3dgGekoXYaM+lnZJBgJX1UIWe0EH+/52M=";
+  cargoHash = "sha256-UWZWm6wDiQqUNcWV1nDUWXVhWgqoVUCDWz09cRkiPKg=";
 
   nativeBuildInputs = [
     # ncurses provides the tput command needed for integration tests
