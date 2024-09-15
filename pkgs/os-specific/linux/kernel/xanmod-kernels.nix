@@ -7,8 +7,8 @@ let
   # kernel config in the xanmod version commit
   variants = {
     lts = {
-      version = "6.6.50";
-      hash = "sha256-NaAJMsOlN1T/KfE2lbQdeoS/B9l2YdVMDdmrN9HygHw=";
+      version = "6.6.51";
+      hash = "sha256-dNUTePfL6cAA0EmEG/D36dNJUobDRBHR5+BYrLIYot4=";
     };
     main = {
       version = "6.10.9";
