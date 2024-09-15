@@ -1,11 +1,8 @@
 { elpaBuild, mu }:
 
-let
+elpaBuild {
   pname = "mu4e";
   version = mu.mu4e.version;
-in
-elpaBuild {
-  inherit pname version;
 
   src = mu.mu4e;
 
@@ -17,7 +14,7 @@ elpaBuild {
   # "(elisp) Multi-file Packages" for elpaBuild to install
   postUnpack = ''
     pushd mu-*-mu4e
-    local content_directory=${pname}-${version}
+    local content_directory=$pname-$version
     mkdir $content_directory
     cp --verbose share/emacs/site-lisp/mu4e/*.el $content_directory/
     rm --verbose --force $content_directory/mu4e-autoloads.el
