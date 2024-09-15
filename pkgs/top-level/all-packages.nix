@@ -19359,8 +19359,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
 
-  ayatana-ido = callPackage ../development/libraries/ayatana-ido { };
-
   ayatana-webmail = callPackage ../applications/networking/mailreaders/ayatana-webmail { };
 
   azmq = callPackage ../development/libraries/azmq { };
@@ -21535,8 +21533,6 @@ with pkgs;
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   libindicator = callPackage ../development/libraries/libindicator { };
-
-  libayatana-indicator = callPackage ../development/libraries/libayatana-indicator { };
 
   libinotify-kqueue = callPackage ../development/libraries/libinotify-kqueue { };
 
