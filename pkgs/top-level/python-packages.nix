@@ -5081,6 +5081,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  gmqtt = callPackage ../development/python-modules/gmqtt { };
+
   gntp = callPackage ../development/python-modules/gntp { };
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };

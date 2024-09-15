@@ -1,4 +1,4 @@
-pkgs:
+pkgs: lib: buildPackages:
 
 self: super:
 
@@ -6,6 +6,54 @@ let
   libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
 in
 {
+  cl-lib = null; # builtin
+  cl-print = null; # builtin
+  tle = null; # builtin
+  advice = null; # builtin
+
+  # Compilation instructions for the Ada executables:
+  # https://www.nongnu.org/ada-mode/
+  ada-mode = super.ada-mode.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      # actually unpack source of ada-mode and wisi
+      # which are both needed to compile the tools
+      # we need at runtime
+      dontUnpack = false;
+      srcs = [
+        super.ada-mode.src
+        self.wisi.src
+      ];
+
+      sourceRoot = "ada-mode-${finalAttrs.version}";
+
+      nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ] ++ [
+        buildPackages.gnat
+        buildPackages.gprbuild
+        buildPackages.dos2unix
+        buildPackages.re2c
+      ];
+
+      buildInputs = previousAttrs.buildInputs or [ ] ++ [ pkgs.gnatPackages.gnatcoll-xref ];
+
+      buildPhase = ''
+        runHook preBuild
+        ./build.sh -j$NIX_BUILD_CORES
+        runHook postBuild
+      '';
+
+      postInstall =
+        previousAttrs.postInstall or ""
+        + "\n"
+        + ''
+          ./install.sh "$out"
+        '';
+
+      meta = previousAttrs.meta // {
+        maintainers = [ lib.maintainers.sternenseemann ];
+      };
+    }
+  );
+
   # TODO delete this when we get upstream fix https://debbugs.gnu.org/cgi/bugreport.cgi?bug=73241
   eglot = super.eglot.overrideAttrs (old: {
     postInstall =
@@ -18,6 +66,57 @@ in
         install-info $info_file dir
         popd
       '';
+  });
+
+  jinx = super.jinx.overrideAttrs (old: {
+    dontUnpack = false;
+
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.pkg-config ];
+
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.enchant2 ];
+
+    postBuild =
+      old.postBuild or ""
+      + "\n"
+      + ''
+        NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+        $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
+      '';
+
+    postInstall =
+      old.postInstall or ""
+      + "\n"
+      + ''
+        outd=$out/share/emacs/site-lisp/elpa/jinx-*
+        install -m444 -t $outd jinx-mod${libExt}
+        rm $outd/jinx-mod.c $outd/emacs-module.h
+      '';
+
+    meta = old.meta // {
+      maintainers = [ lib.maintainers.DamienCassou ];
+    };
+  });
+
+  plz = super.plz.overrideAttrs (old: {
+    dontUnpack = false;
+    postPatch =
+      old.postPatch or ""
+      + "\n"
+      + ''
+        substituteInPlace plz.el \
+          --replace-fail 'plz-curl-program "curl"' 'plz-curl-program "${lib.getExe pkgs.curl}"'
+      '';
+    preInstall =
+      old.preInstall or ""
+      + "\n"
+      + ''
+        tar -cf "$ename-$version.tar" --transform "s,^,$ename-$version/," * .[!.]*
+        src="$ename-$version.tar"
+      '';
+  });
+
+  pq = super.pq.overrideAttrs (old: {
+    buildInputs = old.buildInputs or [ ] ++ [ pkgs.postgresql ];
   });
 
   # native compilation for tests/seq-tests.el never ends
@@ -41,7 +140,7 @@ in
     buildPhase =
       old.buildPhase or ""
       + ''
-        $CXX -shared -o xapian-lite${libExt} xapian-lite.cc $NIX_CFLAGS_COMPILE -lxapian
+        $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
       '';
     postInstall =
       old.postInstall or ""
