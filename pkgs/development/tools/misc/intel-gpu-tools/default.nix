@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 
 # build time
 , bison
@@ -51,6 +52,14 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-t6DeFmIgTomMNwE53n5JicnvuCd/QfpNYWCdwPwc30E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "basename.patch";
+      url = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/604dec781ef283885f65968358bd9ae88c5193c3.patch";
+      hash = "sha256-zU6U9uuTDvuADVYmT9sMYA85Xgtvqgy378LvWFDVEJw=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison

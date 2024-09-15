@@ -6,8 +6,6 @@
 with lib;
 
 {
-  environment.noXlibs = mkDefault true;
-
   documentation.enable = mkDefault false;
 
   documentation.doc.enable = mkDefault false;

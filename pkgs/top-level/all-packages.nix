@@ -4226,8 +4226,7 @@ with pkgs;
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
-  bozohttpd = callPackage ../servers/http/bozohttpd { };
-  bozohttpd-minimal = callPackage ../servers/http/bozohttpd { minimal = true; };
+  bozohttpd-minimal = bozohttpd.override { minimal = true; };
 
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
@@ -5024,8 +5023,6 @@ with pkgs;
   fd = callPackage ../tools/misc/fd { };
 
   fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
-
-  fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
   fedimint = callPackage ../by-name/fe/fedimint/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
@@ -12140,8 +12137,6 @@ with pkgs;
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
-
-  rpi-imager = libsForQt5.callPackage ../tools/misc/rpi-imager { };
 
   rpiboot = callPackage ../development/misc/rpiboot { };
 
@@ -19844,8 +19839,6 @@ with pkgs;
 
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
-  vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
-
   vmmlib = callPackage ../development/libraries/vmmlib {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   };
@@ -22916,6 +22909,8 @@ with pkgs;
   mistralclient = with python311Packages; toPythonApplication python-mistralclient;
   swiftclient = with python311Packages; toPythonApplication python-swiftclient;
   troveclient = with python311Packages; toPythonApplication python-troveclient;
+  watcherclient = with python311Packages; toPythonApplication python-watcherclient;
+  zunclient = with python311Packages; toPythonApplication python-zunclient;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
@@ -39533,8 +39528,6 @@ with pkgs;
   ldid = callPackage ../development/tools/ldid {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-
-  ldid-procursus = callPackage ../development/tools/ldid-procursus { };
 
   xcolor = callPackage ../tools/graphics/xcolor { };
 

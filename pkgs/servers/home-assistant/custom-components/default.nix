@@ -38,6 +38,8 @@
 
   mass = callPackage ./mass { };
 
+  midea_ac = callPackage ./midea_ac { };
+
   midea_ac_lan = callPackage ./midea_ac_lan {};
 
   midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};

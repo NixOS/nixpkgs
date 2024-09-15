@@ -5358,6 +5358,8 @@ self: super: with self; {
 
   greatfet = callPackage ../development/python-modules/greatfet { };
 
+  great-tables = callPackage ../development/python-modules/great-tables { };
+
   greeclimate = callPackage ../development/python-modules/greeclimate { };
 
   green = callPackage ../development/python-modules/green { };
@@ -8163,6 +8165,8 @@ self: super: with self; {
 
   msldap = callPackage ../development/python-modules/msldap { };
 
+  msmart-ng = callPackage ../development/python-modules/msmart-ng { };
+
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
 
   msprime = callPackage ../development/python-modules/msprime { };
@@ -10218,6 +10222,8 @@ self: super: with self; {
   pytlv = callPackage ../development/python-modules/pytlv { };
 
   pywebcopy = callPackage ../development/python-modules/pywebcopy { };
+
+  python-calamine = callPackage ../development/python-modules/python-calamine { };
 
   python-can = callPackage ../development/python-modules/python-can { };
 
@@ -12846,6 +12852,8 @@ self: super: with self; {
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
 
+  python-watcherclient = callPackage ../development/python-modules/python-watcherclient { };
+
   python-whois = callPackage ../development/python-modules/python-whois { };
 
   python-wifi = callPackage ../development/python-modules/python-wifi { };
@@ -12856,7 +12864,11 @@ self: super: with self; {
 
   python-xz = callPackage ../development/python-modules/python-xz { };
 
+  python-zaqarclient = callPackage ../development/python-modules/python-zaqarclient { };
+
   python-zbar = callPackage ../development/python-modules/python-zbar { };
+
+  python-zunclient = callPackage ../development/python-modules/python-zunclient { };
 
   pythran = callPackage ../development/python-modules/pythran {
     inherit (pkgs.llvmPackages) openmp;
@@ -15796,6 +15808,8 @@ self: super: with self; {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  ts1-signatures = callPackage ../development/python-modules/ts1-signatures { };
+
   tsfresh = callPackage ../development/python-modules/tsfresh { };
 
   tsid = toPythonModule (pkgs.tsid.override {
@@ -16802,6 +16816,8 @@ self: super: with self; {
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
   unicodedata2 = callPackage ../development/python-modules/unicodedata2 { };
+
+  unicodeit = callPackage ../development/python-modules/unicodeit { };
 
   unicode-rbnf = callPackage ../development/python-modules/unicode-rbnf { };
 

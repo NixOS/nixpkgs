@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flitter";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";
     rev = "v${version}";
-    sha256 = "sha256-XyHUUuENnGmIUlfYl7+NuSP115+sZfjXtd4bEIZQpf8=";
+    sha256 = "sha256-CjWixIiQFBoS+m8hPLqz0UR/EbQWgx8eKf3Y9kkgQew=";
   };
 
-  cargoHash = "sha256-ydYBHC/LxdYGA1+eYLTSZdkOhAgkw99J9JVT5micgdg=";
+  cargoHash = "sha256-jkIdlvMYNopp8syZpIiAiekALUrRWWRKFFHYyMYRMg4=";
 
   nativeBuildInputs = [
     pkg-config
