@@ -30,35 +30,13 @@ in
 
 { lib, pkgs }: variant: self:
 let
-  dontConfigure = pkg:
-    pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        dontConfigure = true;
-      });
-    });
-
-  markBroken = pkg:
-    pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        meta = (drv.meta or { }) // { broken = true; };
-      });
-    });
-
-  externalSrc = pkg: epkg:
-    pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        inherit (epkg) src version;
-
-        propagatedUserEnvPkgs = [ epkg ];
-      });
-    });
-
-  buildWithGit = pkg: pkg.overrideAttrs (attrs: {
-    nativeBuildInputs =
-      (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
-  });
-
-  fix-rtags = pkg: dontConfigure (externalSrc pkg pkgs.rtags);
+  inherit (import ./lib-override-helper.nix pkgs)
+    buildWithGit
+    dontConfigure
+    externalSrc
+    fix-rtags
+    markBroken
+    ;
 
   generateMelpa = lib.makeOverridable ({ archiveJson ? defaultArchive
                                        }:

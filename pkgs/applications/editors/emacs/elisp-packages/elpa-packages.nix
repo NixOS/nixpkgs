@@ -26,11 +26,9 @@ formats commits for you.
 
 self: let
 
-  markBroken = pkg: pkg.override {
-    elpaBuild = args: self.elpaBuild (args // {
-      meta = (args.meta or {}) // { broken = true; };
-    });
-  };
+  inherit (import ./lib-override-helper.nix pkgs)
+    markBroken
+    ;
 
   # Use custom elpa url fetcher with fallback/uncompress
   fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
