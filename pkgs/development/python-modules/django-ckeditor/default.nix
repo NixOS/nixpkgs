@@ -14,21 +14,21 @@
 
 buildPythonPackage rec {
   pname = "django-ckeditor";
-  version = "6.7";
-  format = "pyproject";
+  version = "6.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django-ckeditor";
-    repo = pname;
+    repo = "django-ckeditor";
     rev = "refs/tags/${version}";
-    hash = "sha256-mZQ5s3YbumYmT0zRWPFIvzt2TbtDLvVcJjZVAwn31E8=";
+    hash = "sha256-tPwWXQAKoHPpZDZ+fnEoOA29at6gUXBw6CcPdireTr8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-js-asset
     pillow

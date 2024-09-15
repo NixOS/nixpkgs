@@ -6755,16 +6755,6 @@ with pkgs;
 
   clolcat = callPackage ../tools/misc/clolcat { };
 
-  cloog = callPackage ../development/libraries/cloog {
-    isl = isl_0_14;
-  };
-
-  cloog_0_18_0 = callPackage ../development/libraries/cloog/0.18.0.nix {
-    isl = isl_0_11;
-  };
-
-  cloogppl = callPackage ../development/libraries/cloog-ppl { };
-
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
   cloudlist = callPackage ../tools/security/cloudlist { };
@@ -8952,8 +8942,6 @@ with pkgs;
   ised = callPackage ../tools/misc/ised { };
 
   isl = isl_0_20;
-  isl_0_11 = callPackage ../development/libraries/isl/0.11.1.nix { };
-  isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
   isl_0_17 = callPackage ../development/libraries/isl/0.17.1.nix { };
   isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
   isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
@@ -14909,7 +14897,6 @@ with pkgs;
       extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
     };
 
-  gcc6Stdenv = overrideCC gccStdenv buildPackages.gcc6;
   gcc7Stdenv = overrideCC gccStdenv buildPackages.gcc7;
   gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
@@ -15003,7 +14990,7 @@ with pkgs;
   };
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
-    gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13 gcc14;
+    gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13 gcc14;
 
   gcc_latest = gcc14;
 
@@ -15016,18 +15003,6 @@ with pkgs;
     langJit = true;
     enableLTO = false;
   };
-
-  gcj = gcj6;
-  gcj6 = wrapCC (gcc6.cc.override {
-    name = "gcj";
-    langJava = true;
-    langFortran = false;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkg-config perl;
-    inherit (gnome2) libart_lgpl;
-  });
 
   gnat = gnat12; # When changing this, update also gnatPackages
 
@@ -25762,7 +25737,9 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale { };
+  tailscale = callPackage ../servers/tailscale {
+    buildGoModule = buildGo123Module;
+  };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 

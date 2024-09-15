@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.2.38";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-3nRirzQe5KCVoeJ29fYelYuOD6r4adJof4NXreyfrzY=";
+    hash = "sha256-BCqrJuy7R2jT3QmTvYwn8gHX7bc6Tq8HArK+F3PjBhw=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -102,6 +102,12 @@ buildPythonPackage rec {
       # Compares with machine-specific timings
       "test_rate_limit_invoke"
       "test_rate_limit_stream"
+      # flaky: assert (1726352133.7419367 - 1726352132.2697523) < 1
+      "test_benchmark_model"
+
+      # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+      "test_chat_prompt_template_variable_names"
+      "test_create_model_v2"
     ]
     ++ lib.optionals stdenv.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.
