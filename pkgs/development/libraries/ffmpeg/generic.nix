@@ -169,7 +169,7 @@ let
       # be set to enable the feature. It also offers easy controls to
       # enable/disable features by default depending on the variant, version and
       # custom logic.
-      ffmpegFlag = lib.types.submodule ({ config, name, ... }: {
+      ffmpegFlag = default: lib.types.submodule ({ config, name, ... }: {
         options = {
           enable = lib.mkEnableOption "Whether to enable ${name} support in ffmpeg." // lib.mkOption {
             default = isInVariant config.variant && config.gate;
@@ -250,11 +250,16 @@ let
             '';
           };
         };
+
+        # Default is passed as the submodule's config in order to merge with
+        # user-supplied values rather than being overridden entirely.
+        # https://github.com/NixOS/nixpkgs/pull/312432#discussion_r1759740858
+        config = default;
       });
 
       mkFfmpegOption = name: default: lib.mkOption {
-        type = ffmpegFlag;
-        inherit default; # Detailed defaults are implemented in the ffmpegFlag type
+        type = ffmpegFlag default;
+        default = { };
         description =
           let
             hasDescription = default.description or null != null;
