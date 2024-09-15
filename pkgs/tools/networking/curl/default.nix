@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     # fixes https://github.com/curl/curl/issues/14344
     # https://github.com/curl/curl/pull/14390
     ./fix-sigpipe-leak.patch
+  ] ++ lib.optionals gnutlsSupport [
+    # https://curl.se/docs/CVE-2024-8096.html
+    ./CVE-2024-8096.patch
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
