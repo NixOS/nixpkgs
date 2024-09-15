@@ -188,6 +188,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     ln -s $out/2s2h/2s2h.elf $out/bin/2s2h
     install -Dm644 ../mm/linux/2s2hIcon.png $out/share/pixmaps/2s2h.png
+
+    install -Dm644 -t $out/share/licenses/${finalAttrs.pname} ../LICENSE
+    install -Dm644 -t $out/share/licenses/${finalAttrs.pname}/OTRExporter ../OTRExporter/LICENSE
+    install -Dm644 -t $out/share/licenses/${finalAttrs.pname}/SDL_GameControllerDB ${gamecontrollerdb}/LICENSE
+    install -Dm644 -t $out/share/licenses/${finalAttrs.pname}/ZAPDTR ../ZAPDTR/LICENSE
+    install -Dm644 -t $out/share/licenses/${finalAttrs.pname}/libgfxd ${libgfxd}/LICENSE
+    install -Dm644 -t $out/share/licenses/${finalAttrs.pname}/libultraship ../libultraship/LICENSE
+    install -Dm644 -t $out/share/licenses/${finalAttrs.pname}/thread_pool ${thread_pool}/LICENSE.txt
   '';
 
   postFixup = ''
@@ -213,12 +221,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ qubitnano ];
     license = with lib.licenses; [
-      # OTRExporter, OTRGui, ZAPDTR, libultraship
+      # OTRExporter, ZAPDTR, libultraship, libgfxd, thread_pool
       mit
       # 2 Ship 2 Harkinian
       cc0
       # Reverse engineering
       unfree
     ];
+    hydraPlatforms = [ ];
   };
 })
