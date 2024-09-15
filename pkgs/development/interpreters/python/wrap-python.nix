@@ -9,7 +9,7 @@ makePythonHook {
       substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;
       substitutions.python = python.pythonOnBuildForHost;
-      substitutions.pythonHost = python.__spliced.targetTarget or python;
+      substitutions.pythonHost = python.__spliced.hostHost or python;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be
