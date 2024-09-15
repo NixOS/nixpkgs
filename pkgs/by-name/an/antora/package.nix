@@ -1,7 +1,7 @@
 {
-  lib,
   buildNpmPackage,
   fetchFromGitLab,
+  lib,
 }:
 
 buildNpmPackage rec {
@@ -30,9 +30,9 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Modular documentation site generator. Designed for users of Asciidoctor";
-    mainProgram = "antora";
     homepage = "https://antora.org";
     license = licenses.mpl20;
+    mainProgram = "antora";
     maintainers = [ maintainers.ehllie ];
   };
 }
