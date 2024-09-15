@@ -3,7 +3,7 @@ let
   cfg = config.services.samba;
 
   settingsFormat = pkgs.formats.ini {
-    listToValue = lib.concatMapStringsSep " " (generators.mkValueStringDefault { });
+    listToValue = lib.concatMapStringsSep " " (lib.generators.mkValueStringDefault { });
   };
   # Ensure the global section is always first
   globalConfigFile = settingsFormat.generate "smb-global.conf" { global = cfg.settings.global; };
