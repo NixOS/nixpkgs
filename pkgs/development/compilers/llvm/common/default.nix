@@ -192,6 +192,21 @@ let
                   path = ../12;
                 }
               ];
+              "compiler-rt/armv6-scudo-libatomic.patch" = [
+                {
+                  after = "19";
+                  path = ../19;
+                }
+                {
+                  after = "15";
+                  before = "19";
+                  path = ../15;
+                }
+                {
+                  before = "15";
+                  path = ../14;
+                }
+              ];
               "compiler-rt/armv7l.patch" = [
                 {
                   before = "15";
@@ -935,10 +950,10 @@ let
           lib.optional (lib.versionOlder metadata.release_version "18")
             # Prevent a compilation error on darwin
             (metadata.getVersionFile "compiler-rt/darwin-targetconditionals.patch")
-        ++
-          lib.optional (lib.versionAtLeast metadata.release_version "15")
-            # See: https://github.com/NixOS/nixpkgs/pull/186575
-            ./compiler-rt/darwin-plistbuddy-workaround.patch
+        ++ lib.optionals (lib.versionAtLeast metadata.release_version "15") [
+          # See: https://github.com/NixOS/nixpkgs/pull/186575
+          ./compiler-rt/darwin-plistbuddy-workaround.patch
+        ]
         ++
           lib.optional (lib.versions.major metadata.release_version == "15")
             # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
@@ -949,9 +964,15 @@ let
           # Fix build on armv6l
           ./compiler-rt/armv6-mcr-dmb.patch
           ./compiler-rt/armv6-sync-ops-no-thumb.patch
-          ./compiler-rt/armv6-no-ldrexd-strexd.patch
+        ]
+        ++ lib.optionals (lib.versionOlder metadata.release_version "18") [
+          # Fix build on armv6l
           ./compiler-rt/armv6-scudo-no-yield.patch
-          ./compiler-rt/armv6-scudo-libatomic.patch
+        ]
+        ++ [
+          # Fix build on armv6l
+          ./compiler-rt/armv6-no-ldrexd-strexd.patch
+          (metadata.getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
         ]
         ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (fetchpatch {
           url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
