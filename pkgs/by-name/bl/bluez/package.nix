@@ -11,7 +11,7 @@
 , json_c
 , libical
 , pkg-config
-, python3
+, python3Packages
 , readline
 , systemdMinimal
 , udev
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     json_c
     libical
-    python3
+    python3Packages.python
     readline
     udev
   ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     docutils
     pkg-config
-    python3.pkgs.wrapPython
+    python3Packages.wrapPython
   ];
 
   outputs = [ "out" "dev" ]
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isx86_64;
 
   postInstall = let
-    pythonPath = with python3.pkgs; [
+    pythonPath = with python3Packages; [
       dbus-python
       pygobject3
     ];
