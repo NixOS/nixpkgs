@@ -2,8 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  buildPackages,
-  python3,
+  python3Packages,
   versionCheckHook,
 }:
 
@@ -19,13 +18,13 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    buildPackages.python3
-    buildPackages.python3.pkgs.libxml2
-    python3.pkgs.wrapPython
+    python3Packages.python
+    python3Packages.libxml2
+    python3Packages.wrapPython
   ];
 
   pythonPath = [
-    python3.pkgs.libxml2
+    python3Packages.libxml2
   ];
 
   postFixup = ''
