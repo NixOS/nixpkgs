@@ -193,6 +193,9 @@ in
     # Wait for scion-control.service on all instances
     wait_for_unit("scion-control.service")
 
+    # Ensure cert is valid against TRC
+    succeed("scion-pki certificate verify --trc /etc/scion/certs/*.trc /etc/scion/crypto/as/*.pem >&2")
+
     # Execute pingAll command on all instances
     succeed("${pingAll} >&2")
 
