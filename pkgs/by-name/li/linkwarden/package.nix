@@ -105,6 +105,7 @@ let
             EOF
             cp -r --no-preserve=mode ${linkwarden} $out
             ln -s "${dataStoragePath}" $out/data
+            ln -s "${dataStoragePath}/images" $out/.next/cache/images
             chmod a+x \
               $out/node_modules/prisma/build/index.js \
               $out/node_modules/.bin/playwright \
