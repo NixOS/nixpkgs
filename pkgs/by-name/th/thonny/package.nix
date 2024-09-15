@@ -37,7 +37,7 @@ buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     with python3.pkgs;
     (
       [
@@ -56,10 +56,6 @@ buildPythonApplication rec {
       ]
     );
 
-  preInstall = ''
-    export HOME=$(mktemp -d)
-  '';
-
   preFixup = ''
     wrapProgram "$out/bin/thonny" \
        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3.pkgs.jedi})
@@ -72,7 +68,7 @@ buildPythonApplication rec {
   # Tests need a DISPLAY
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python IDE for beginners";
     longDescription = ''
       Thonny is a Python IDE for beginners. It supports different ways
@@ -81,9 +77,9 @@ buildPythonApplication rec {
       for explaining the concepts of references and heap.
     '';
     homepage = "https://www.thonny.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.unix;
     mainProgram = "thonny";
   };
 }
