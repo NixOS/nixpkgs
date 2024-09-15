@@ -75,7 +75,7 @@ rec {
       h =
         let _h = attrsToList (intersectAttrs (genAttrs hNames (const {})) args); in
         if _h == [] then
-          throw "fetcher called without `hash`"
+          throwIf required "fetcher called without `hash`" null
         else if tail _h != [] then
           throw "fetcher called with mutually-incompatible arguments: ${concatMapStringsSep ", " (a: a.name) _h}"
         else
@@ -85,10 +85,10 @@ rec {
       if args ? "outputHash" then
         args
       else
-        removeAttrs args hNames // {
+        removeAttrs args hNames // (optionalAttrs (h != null) {
           outputHash = h.value;
           outputHashAlgo = if h.name == "hash" then null else h.name;
-        }
+        })
   ;
 
   /**
@@ -148,12 +148,13 @@ rec {
     let
       hAttrs = genAttrs ([ "hash" ] ++ hashTypes) (const {});
       fArgs = functionArgs fetcher;
+      required = !fArgs.outputHash;
     in
     # The o.g. fetcher must *only* accept outputHash and outputHashAlgo
-    assert !fArgs.outputHash && !fArgs.outputHashAlgo;
+    assert fArgs ? outputHash && fArgs ? outputHashAlgo;
     assert intersectAttrs fArgs hAttrs == {};
 
     setFunctionArgs
-      (args: fetcher (normalizeHash { inherit hashTypes; } args))
-      (removeAttrs fArgs [ "outputHash" "outputHashAlgo" ] // { hash = false; });
+      (args: fetcher (normalizeHash { inherit hashTypes required; } args))
+      (removeAttrs fArgs [ "outputHash" "outputHashAlgo" ] // { hash = !required; });
 }
