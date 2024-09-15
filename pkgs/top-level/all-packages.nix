@@ -15663,7 +15663,9 @@ with pkgs;
 
   pest-ide-tools = callPackage ../development/tools/misc/pest-ide-tools { };
 
-  ravedude = callPackage ../development/tools/rust/ravedude { };
+  ravedude = callPackage ../development/tools/rust/ravedude {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   ra-multiplex = callPackage ../development/tools/rust/ra-multiplex {};
 
