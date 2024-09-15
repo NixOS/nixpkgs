@@ -55,10 +55,21 @@ let
           were removed. Please use, respectively, {rescanIntervalS,fsWatcherEnabled,fsWatcherDelayS} instead.
         ''
         {
-          devices = map (
-            device:
-            if builtins.isString device then { deviceId = cfg.settings.devices.${device}.id; } else device
-          ) folder.devices;
+          devices =
+            let
+              folderDevices = folder.devices;
+            in
+            if builtins.isList folderDevices then
+              map (
+                device:
+                if builtins.isString device then { deviceId = cfg.settings.devices.${device}.id; } else device
+              ) folderDevices
+            else if builtins.isAttrs folderDevices then
+              mapAttrsToList (
+                deviceName: deviceValue: deviceValue // { deviceId = cfg.settings.devices.${deviceName}.id; }
+              ) folderDevices
+            else
+              throw "Invalid type for devices in folder '${folderName}'; expected list or attrset.";
         }
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
@@ -502,11 +513,35 @@ in
                       };
 
                       devices = mkOption {
-                        type = types.listOf types.str;
+                        type = types.oneOf [
+                          (types.listOf types.str)
+                          (types.attrsOf (
+                            types.submodule (
+                              { name, ... }:
+                              {
+                                freeformType = settingsFormat.type;
+                                options = {
+                                  encryptionPassword = mkOption {
+                                    type = types.nullOr types.str;
+                                    default = null;
+                                    description = ''
+                                      Path to encryption password. If set, the file will be read during
+                                      service activation, without being embedded in derivation.
+                                    '';
+                                  };
+                                };
+                              }
+                            )
+                          ))
+                        ];
                         default = [ ];
                         description = ''
                           The devices this folder should be shared with. Each device must
                           be defined in the [devices](#opt-services.syncthing.settings.devices) option.
+
+                          Either a list of strings, or an attribute set, where keys are defined in the
+                          [devices](#opt-services.syncthing.settings.devices) option, and values are
+                          device configurations.
                         '';
                       };
 
