@@ -15,6 +15,7 @@
   sqlalchemy,
   xmltodict,
   importlib-metadata,
+  packaging,
 }:
 
 buildPythonPackage rec {
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     sqlalchemy
     xmltodict
     importlib-metadata
+    packaging
   ];
 
   pythonRemoveDeps = [ "sopel-help" ];
@@ -78,5 +80,6 @@ buildPythonPackage rec {
     homepage = "https://sopel.chat";
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
+    mainProgram = "sopel";
   };
 }
