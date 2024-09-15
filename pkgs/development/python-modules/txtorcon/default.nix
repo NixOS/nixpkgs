@@ -6,11 +6,11 @@
   cryptography,
   fetchPypi,
   geoip,
-  incremental,
   lsof,
   mock,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   twisted,
   zope-interface,
 }:
@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "txtorcon";
   version = "24.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-vv4ZE42cjFMHtu5tT+RG0MIB/9HMQErrJl7ZAwmXitA=";
   };
 
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
-    incremental
     twisted
     automat
     zope-interface
@@ -44,6 +44,8 @@ buildPythonPackage rec {
   ];
 
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  pythonImportsCheck = [ "txtorcon" ];
 
   meta = with lib; {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
