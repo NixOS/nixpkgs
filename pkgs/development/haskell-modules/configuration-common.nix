@@ -2273,6 +2273,13 @@ self: super: {
   # Too strict bound on hspec (<2.11)
   utf8-light = doJailbreak super.utf8-light;
 
+  # Fails to build in pkgsStatic with:
+  #  Preprocessing test suite 'hashable-tests' for hashable-1.4.4.0..
+  #  Mmap.hsc: In function ‘_hsc2hs_test13’:
+  #  Mmap.hsc:54:20: error: storage size of ‘test_array’ isn’t constant
+  #  compilation failed
+  hashable = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.hashable;
+
   large-hashable = lib.pipe (super.large-hashable.override {
     # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
     utf8-light = null;
