@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goldendict-ng";
-  version = "24.05.05";
+  version = "24.09.0";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    rev = "v${finalAttrs.version}-LiXia.ecd1138c";
-    hash = "sha256-C/0FUFLE3R+tZyCL88BiSFOHPTanILD/fIIQ/OQBSfk=";
+    rev = "v${finalAttrs.version}-Release.316ec900";
+    hash = "sha256-LriKJLjqEuD0v8yjoE35O+V6oUX2jhWGFguqlXaDlQA=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook3 ];
@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtwebengine
     qt5compat
     qtmultimedia
-    qtspeech
     qtwayland
     libvorbis
     tomlplusplus
