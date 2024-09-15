@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://lore.kernel.org/netdev/20240712191209.31324-2-contact@hacktivis.me/raw";
       hash = "sha256-X5BYSZBxcvdjtX1069a1GfcpdoVd0loSAe4xTpbCipA=";
     })
+    (fetchurl {
+      name = "musl-basename.patch";
+      url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
+      hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
+    })
   ];
 
   postPatch = ''
