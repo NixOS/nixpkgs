@@ -3,10 +3,10 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  
+
   pytestCheckHook,
 
-  # Package dependencies 
+  # Package dependencies
   jaraco-context,
   more-itertools,
   xmltodict,
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     httpx
     multidict
   ];
-  
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/wolframalpha";
     description = "Python Client built against the Wolfram|Alpha v2.0 API.";
     license = lib.licenses.mit;
-  }
+  };
 
 }
