@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   python,
+  setuptools,
   cffi,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pymunk";
   version = "6.5.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-AV6upaZcnbKmQm9tTItRB6LpckappjdHvMH/awn/KeE=";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ cffi ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
