@@ -239,6 +239,8 @@ self: super: with self; {
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
+  aiohasupervisor = callPackage ../development/python-modules/aiohasupervisor { };
+
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
