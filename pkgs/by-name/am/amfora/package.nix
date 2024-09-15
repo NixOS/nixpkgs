@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "makeworld-the-better-one";
     repo = "amfora";
     rev = "v${version}";
-    sha256 = "sha256-KOuKgxH3n4rdF+oj/TwEcRqX1sn4A9e23FNwQMhMVO4=";
+    hash = "sha256-KOuKgxH3n4rdF+oj/TwEcRqX1sn4A9e23FNwQMhMVO4=";
   };
 
   vendorHash = "sha256-T/hnlQMDOZV+QGl7xp29sBGfb4VXcXqN6PDoBFdpp4M=";

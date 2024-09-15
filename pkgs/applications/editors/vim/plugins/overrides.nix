@@ -876,6 +876,10 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  git-worktree-nvim = super.git-worktree-nvim.overrideAttrs {
+    dependencies = with super; [ plenary-nvim ];
+  };
+
   guard-nvim = super.guard-nvim.overrideAttrs {
     dependencies = with self; [ guard-collection ];
   };

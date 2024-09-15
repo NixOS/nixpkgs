@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "p-ranav";
         repo = "argparse";
         rev = "45664c4e9f05ff287731a9ff8b724d0c89fb6e77";
-        sha256 = "sha256-qLD9zD6hbItDn6ZHHWBXrAWhySvqcs40xA5+C/5Fkhw=";
+        hash = "sha256-qLD9zD6hbItDn6ZHHWBXrAWhySvqcs40xA5+C/5Fkhw=";
       };
       curlpp_src = curlpp.src;
       doctest_src = doctest;
@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "muttleyxd";
         repo = "pugixml";
         rev = "simple-build-for-a3ul";
-        sha256 = "sha256-FpREdz6DbhnLDGOuQY9rU17SSd6ngA4WfO0kGHqGJPM=";
+        hash = "sha256-FpREdz6DbhnLDGOuQY9rU17SSd6ngA4WfO0kGHqGJPM=";
       };
       spdlog_src = spdlog;
       steamworkssdk_src = fetchurl {
         url = "https://github.com/julianxhokaxhiu/SteamworksSDKCI/releases/download/1.53/SteamworksSDK-v1.53.0_x64.zip";
-        sha256 = "sha256-6PQGaPsaxBg/MHVWw2ynYW6LaNSrE9Rd9Q9ZLKFGPFA=";
+        hash = "sha256-6PQGaPsaxBg/MHVWw2ynYW6LaNSrE9Rd9Q9ZLKFGPFA=";
       };
       trompeloeil_src = trompeloeil;
     })

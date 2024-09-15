@@ -27,7 +27,7 @@ let
     owner  = "YosysHQ";
     repo   = "nextpnr-tests";
     rev    = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
-    sha256 = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
+    hash = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
     name   = "nextpnr-tests";
   };
 in

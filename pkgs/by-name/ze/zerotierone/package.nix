@@ -23,7 +23,7 @@ let
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
+    hash = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
   };
 
 in stdenv.mkDerivation {

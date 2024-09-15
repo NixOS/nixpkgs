@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rafaelrc7";
     repo = "wayland-pipewire-idle-inhibit";
     rev = "v${version}";
-    sha256 = "sha256-2akYbnQnJ0wb51S3bwrm3/EiZydxbwkfuSfsiTvtNz8=";
+    hash = "sha256-2akYbnQnJ0wb51S3bwrm3/EiZydxbwkfuSfsiTvtNz8=";
   };
 
   cargoHash = "sha256-C4cispJN2OQRBQiW+H36B8ETNn1oukgdELRVk7V7BQU=";

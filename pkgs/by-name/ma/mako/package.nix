@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "emersion";
     repo = "mako";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
+    hash = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
   };
 
   strictDeps = true;

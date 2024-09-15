@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "adurbin";
     repo = pname;
     rev = "18949fdc4dedb1da3f51ee83a582b112fb9f2c71";
-    sha256 = "0vymnah44d5bzsjhfmxkcrlrikkp0db22k7a1s8bknz7glk9fldn";
+    hash = "sha256-tlGXJn3n27mQDupMIVYDd86YaWazVwel/qs0QqCy1W8=";
   };
 
   makeFlags = [

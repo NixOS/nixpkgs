@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
+    hash = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)

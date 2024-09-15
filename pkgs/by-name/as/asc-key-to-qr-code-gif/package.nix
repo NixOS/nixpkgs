@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
     owner = "yishilin14";
     repo = "asc-key-to-qr-code-gif";
     rev = "5d36a1bada8646ae0f61b04356e62ba5ef10a1aa";
-    sha256 = "sha256-DwxYgBsioL86WM6KBFJ+DuSJo3/1pwD1Fl156XD98RY=";
+    hash = "sha256-DwxYgBsioL86WM6KBFJ+DuSJo3/1pwD1Fl156XD98RY=";
   };
 
   dontBuild = true;

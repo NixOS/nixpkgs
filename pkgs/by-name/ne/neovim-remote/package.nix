@@ -13,7 +13,7 @@ with python3.pkgs; buildPythonApplication rec {
     owner = "mhinz";
     repo = "neovim-remote";
     rev = "v${version}";
-    sha256 = "0lbz4w8hgxsw4k1pxafrl3rhydrvi5jc6vnsmkvnhh6l6rxlmvmq";
+    hash = "sha256-uO5KezbUQGj3rNpuw2SJOzcP86DZqX7DJFz3BxEnf1E=";
   };
 
   patches = [

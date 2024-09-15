@@ -23,14 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gnuradio";
     repo = "volk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-XvX6emv30bSB29EFm6aC+j8NGOxWqHCNv0Hxtdrq/jc=";
+    hash = "sha256-XvX6emv30bSB29EFm6aC+j8NGOxWqHCNv0Hxtdrq/jc=";
     fetchSubmodules = true;
   };
 
   patches = [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/e83a55ef196d4283be438c052295b2fc44f3df5b/science/volk/files/patch-cpu_features-add-support-for-ARM64.diff";
-      sha256 = "sha256-MNUntVvKZC4zuQsxGQCItaUaaQ1d31re2qjyPFbySmI=";
+      hash = "sha256-MNUntVvKZC4zuQsxGQCItaUaaQ1d31re2qjyPFbySmI=";
       extraPrefix = "";
     })
   ];

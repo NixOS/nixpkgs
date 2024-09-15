@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/eog/${lib.versions.major version}/eog-${version}.tar.xz";
-    sha256 = "sha256-tQ8yHHCsZK97yqW0Rg3GdbPKYP2tOFYW86x7dw4GZv4=";
+    hash = "sha256-tQ8yHHCsZK97yqW0Rg3GdbPKYP2tOFYW86x7dw4GZv4=";
   };
 
   patches = [

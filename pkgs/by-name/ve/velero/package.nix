@@ -9,7 +9,7 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "velero";
     rev = "v${version}";
-    sha256 = "sha256-rXWBTPM3dCGON1DvpCOsA4C4mAuVDqV9YbrvP5yDCa0=";
+    hash = "sha256-rXWBTPM3dCGON1DvpCOsA4C4mAuVDqV9YbrvP5yDCa0=";
   };
 
   ldflags = [

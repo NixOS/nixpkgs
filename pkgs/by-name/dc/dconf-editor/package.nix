@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/dconf-editor/${lib.versions.major version}/dconf-editor-${version}.tar.xz";
-    sha256 = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
+    hash = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
   };
 
   patches = [

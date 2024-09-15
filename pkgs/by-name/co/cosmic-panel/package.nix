@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     owner = "pop-os";
     repo = "cosmic-panel";
     rev = "f07cccbd2dc15ede5aeb7646c61c6f62cb32db0c";
-    sha256 = "sha256-uUq+xElZMcG5SWzha9/8COaenycII5aiXmm7sXGgjXE=";
+    hash = "sha256-uUq+xElZMcG5SWzha9/8COaenycII5aiXmm7sXGgjXE=";
   };
 
   cargoLock = {

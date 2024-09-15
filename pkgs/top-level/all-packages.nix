@@ -25050,7 +25050,6 @@ with pkgs;
 
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
-  matterbridge = callPackage ../servers/matterbridge { };
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
@@ -32763,8 +32762,6 @@ with pkgs;
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
-  qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
-
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
   qimgv = libsForQt5.callPackage ../applications/graphics/qimgv { };
@@ -33605,8 +33602,6 @@ with pkgs;
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
   thokr = callPackage ../applications/misc/thokr { };
-
-  thonny = callPackage ../applications/editors/thonny { };
 
   betterbird-unwrapped = callPackage ../applications/networking/mailreaders/betterbird { };
   betterbird = wrapThunderbird betterbird-unwrapped {

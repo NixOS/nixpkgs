@@ -538,6 +538,8 @@ in {
 
     trelay = callPackage ../os-specific/linux/trelay { };
 
+    universal-pidff = callPackage ../os-specific/linux/universal-pidff { };
+
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };

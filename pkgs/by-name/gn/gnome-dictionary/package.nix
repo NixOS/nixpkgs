@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-dictionary/${lib.versions.major version}/gnome-dictionary-${version}.tar.xz";
-    sha256 = "1d8dhcfys788vv27v34i3s3x3jdvdi2kqn2a5p8c937a9hm0qr9f";
+    hash = "sha256-LmUMKkzqjMTQLUpYPEVsu8nRhx6RjH3E3ggd7R2DDbU=";
   };
 
   patches = [
@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
     # We need to explicitly depend on the generated files.
     (fetchpatch {
       url = "https://gitlab.gnome.org/Archive/gnome-dictionary/-/commit/87c026cfe4acbcfc62d15950f88a71d8d9678c7e.patch";
-      sha256 = "tKesWeOK3OqOxrXm4dZvCZHHdTD7AQbYDjtYDCsLd3A=";
+      hash = "sha256-tKesWeOK3OqOxrXm4dZvCZHHdTD7AQbYDjtYDCsLd3A=";
     })
     # Fix build with meson 0.61, can be removed on next bump
     # data/appdata/meson.build:3:5: ERROR: Function does not take positional arguments.
     (fetchpatch {
       url = "https://gitlab.gnome.org/Archive/gnome-dictionary/-/commit/cf3f8a67cd6f3059c555ed9cf0f5fba10abb7f68.patch";
-      sha256 = "cIRM6ACqsnEo2JWYvr6EBye5o0BudugZMShCe1U5hz8=";
+      hash = "sha256-cIRM6ACqsnEo2JWYvr6EBye5o0BudugZMShCe1U5hz8=";
     })
   ];
 

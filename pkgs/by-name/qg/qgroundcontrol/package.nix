@@ -1,14 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, qtbase, qtcharts, qtlocation, qtserialport
-, qtsvg, qtquickcontrols2, qtgraphicaleffects, qtspeech, qtx11extras, qmake
-, qttools, gst_all_1, wayland, pkg-config, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  libsForQt5,
+  gst_all_1,
+  wayland,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
   version = "4.4.2";
 
-  propagatedBuildInputs = [
-    qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
-    qtgraphicaleffects qtspeech qtx11extras
+  propagatedBuildInputs = with libsForQt5; [
+    qtbase
+    qtcharts
+    qtlocation
+    qtserialport
+    qtsvg
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtspeech
+    qtx11extras
   ];
 
   gstInputs = with gst_all_1; [
@@ -21,7 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
-  nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ (with libsForQt5; [
+      qmake
+      qttools
+      wrapQtAppsHook
+    ]);
 
   preConfigure = ''
     mkdir build
@@ -65,18 +85,22 @@ stdenv.mkDerivation rec {
   # TODO: package mavlink so we can build from a normal source tarball
   src = fetchFromGitHub {
     owner = "mavlink";
-    repo = pname;
+    repo = "qgroundcontrol";
     rev = "v${version}";
     hash = "sha256-2Bc4uC/2e+PTsvFZ4RjnTzkOiBO9vsYHeLPkcwpDRrg=";
     fetchSubmodules = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
-    homepage = "http://qgroundcontrol.com/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ lopsided98 pandapip1 ];
+    homepage = "https://qgroundcontrol.com/";
+    changelog = "https://github.com/mavlink/qgroundcontrol/blob/master/ChangeLog.md";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      lopsided98
+      pandapip1
+    ];
     mainProgram = "QGroundControl";
   };
 }
