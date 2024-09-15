@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "x42";
     repo = "harvid";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-p0W+rKHH/iuGOcRjl6b4s6jQYkm7bqWCz849SDI/7fQ=";
+    hash = "sha256-p0W+rKHH/iuGOcRjl6b4s6jQYkm7bqWCz849SDI/7fQ=";
   };
 
   nativeBuildInputs =

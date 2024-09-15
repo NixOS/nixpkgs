@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "TokTok";
     repo   = "toxic";
     rev    = "v${version}";
-    sha256 = "sha256-+nOjlQED2pbYwGV6IGeKK1pymBSrDVWCWKjZ42vib7E=";
+    hash = "sha256-+nOjlQED2pbYwGV6IGeKK1pymBSrDVWCWKjZ42vib7E=";
   };
 
   makeFlags = [ "PREFIX=$(out)"];

@@ -46,7 +46,7 @@ let
       name = "expected";
       url = "https://gitlab.com/cardboardwm/expected";
       rev = "0ee13cb2b058809aa9708c45ca18d494e72a759e";
-      sha256 = "sha256-gYr4/pjuLlr3k6Jcrg2/SzJLtbgyA+ZN2oMHkHXANDo=";
+      hash = "sha256-gYr4/pjuLlr3k6Jcrg2/SzJLtbgyA+ZN2oMHkHXANDo=";
     };
 
     # wlroots.wrap
@@ -54,7 +54,7 @@ let
       name = "wlroots";
       url = "https://github.com/swaywm/wlroots";
       rev = "0.12.0";
-      sha256 = "sha256-1rE3D+kQprjcjobc95/mQkUa5y1noY0MdoYJ/SpFQwY=";
+      hash = "sha256-1rE3D+kQprjcjobc95/mQkUa5y1noY0MdoYJ/SpFQwY=";
     };
 
     # the source itself

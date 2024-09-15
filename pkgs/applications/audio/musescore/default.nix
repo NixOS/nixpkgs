@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, wrapGAppsHook3
 , wrapQtAppsHook
 , pkg-config
 , ninja
@@ -95,7 +96,14 @@ in stdenv'.mkDerivation (finalAttrs: {
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
+    wrapGAppsHook3
     wrapQtAppsHook
     cmake
     qttools

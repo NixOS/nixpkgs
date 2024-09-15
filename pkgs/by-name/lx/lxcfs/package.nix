@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "lxc";
     repo = "lxcfs";
     rev = "v${version}";
-    sha256 = "sha256-kJ9QaNI8v03E0//UyU6fsav1YGOlKGMxsbE8Pr1Dtic=";
+    hash = "sha256-kJ9QaNI8v03E0//UyU6fsav1YGOlKGMxsbE8Pr1Dtic=";
   };
 
   patches = [

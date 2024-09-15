@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     # https://github.com/OpenOrienteering/mapper/pull/1907
     (fetchpatch {
       url = "https://github.com/OpenOrienteering/mapper/commit/bc52aa567e90a58d6963b44d5ae1909f3f841508.patch";
-      sha256 = "1bkckapzccn6k0ri6bgrr0nhis9498fnwj7b32s2ysym8zcg0355";
+      hash = "sha256-pQzw2EfVay+0GOtIbh1KJOkILcj5LRMzmMYy9q+abK4=";
     })
   ];
 

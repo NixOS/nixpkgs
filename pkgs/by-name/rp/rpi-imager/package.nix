@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "raspberrypi";
     repo = "rpi-imager";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-JrotKMyAgQO3Y5RsFAar9N5/wDpWiBcy8RfvBWDiJMs=";
+    hash = "sha256-JrotKMyAgQO3Y5RsFAar9N5/wDpWiBcy8RfvBWDiJMs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

@@ -9,7 +9,7 @@ appimageTools.wrapType2 rec {
 
   src = fetchurl {
     url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";
-    sha256 = "sha256-OOP1l7J2BgO3nOPSipxfwfN/lOUsl80UzYMBosyBHrM=";
+    hash = "sha256-OOP1l7J2BgO3nOPSipxfwfN/lOUsl80UzYMBosyBHrM=";
   };
 
   meta = with lib; {

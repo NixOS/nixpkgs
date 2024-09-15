@@ -14,19 +14,26 @@
   pytestCheckHook,
   python,
   libiconv,
+  semver,
+  opencv4,
 }:
 
 buildPythonPackage {
   pname = "rerun-sdk";
-  inherit (rerun) version;
   pyproject = true;
 
-  inherit (rerun) src;
-  inherit (rerun) cargoDeps;
+  inherit (rerun)
+    src
+    version
+    cargoDeps
+    cargoPatches
+    patches
+    ;
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    rerun
   ];
 
   buildInputs =
@@ -44,6 +51,8 @@ buildPythonPackage {
     pillow
     pyarrow
     typing-extensions
+    semver
+    opencv4
   ];
 
   buildAndTestSubdir = "rerun_py";

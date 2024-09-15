@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.freeradius;
@@ -18,7 +15,7 @@ let
 
     serviceConfig = {
         ExecStart = "${pkgs.freeradius}/bin/radiusd -f -d ${cfg.configDir} -l stdout" +
-                    optionalString cfg.debug " -xx";
+                    lib.optionalString cfg.debug " -xx";
         ExecReload = [
           "${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout"
           "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
@@ -33,18 +30,18 @@ let
   };
 
   freeradiusConfig = {
-    enable = mkEnableOption "the freeradius server";
+    enable = lib.mkEnableOption "the freeradius server";
 
-    configDir = mkOption {
-      type = types.path;
+    configDir = lib.mkOption {
+      type = lib.types.path;
       default = "/etc/raddb";
       description = ''
         The path of the freeradius server configuration directory.
       '';
     };
 
-    debug = mkOption {
-      type = types.bool;
+    debug = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable debug logging for freeradius (-xx
@@ -68,7 +65,7 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
 
     users = {
       users.radius = {
@@ -79,7 +76,7 @@ in
     };
 
     systemd.services.freeradius = freeradiusService cfg;
-    warnings = optional cfg.debug "Freeradius debug logging is enabled. This will log passwords in plaintext to the journal!";
+    warnings = lib.optional cfg.debug "Freeradius debug logging is enabled. This will log passwords in plaintext to the journal!";
 
   };
 

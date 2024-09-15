@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
+    hash = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''

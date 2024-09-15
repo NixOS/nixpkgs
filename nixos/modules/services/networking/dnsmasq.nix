@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.dnsmasq;
   dnsmasq = cfg.package;
@@ -9,14 +6,14 @@ let
 
   # True values are just put as `name` instead of `name=true`, and false values
   # are turned to comments (false values are expected to be overrides e.g.
-  # mkForce)
+  # lib.mkForce)
   formatKeyValue =
     name: value:
     if value == true
     then name
     else if value == false
     then "# setting `${name}` explicitly set to false"
-    else generators.mkKeyValueDefault { } "=" name value;
+    else lib.generators.mkKeyValueDefault { } "=" name value;
 
   settingsFormat = pkgs.formats.keyValue {
     mkKeyValue = formatKeyValue;
@@ -36,7 +33,7 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule [ "services" "dnsmasq" "servers" ] [ "services" "dnsmasq" "settings" "server" ])
+    (lib.mkRenamedOptionModule [ "services" "dnsmasq" "servers" ] [ "services" "dnsmasq" "settings" "server" ])
   ];
 
   ###### interface
@@ -45,18 +42,18 @@ in
 
     services.dnsmasq = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to run dnsmasq.
         '';
       };
 
-      package = mkPackageOption pkgs "dnsmasq" {};
+      package = lib.mkPackageOption pkgs "dnsmasq" {};
 
-      resolveLocalQueries = mkOption {
-        type = types.bool;
+      resolveLocalQueries = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
@@ -64,21 +61,21 @@ in
         '';
       };
 
-      alwaysKeepRunning = mkOption {
-        type = types.bool;
+      alwaysKeepRunning = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If enabled, systemd will always respawn dnsmasq even if shut down manually. The default, disabled, will only restart it on error.
         '';
       };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
 
           freeformType = settingsFormat.type;
 
-          options.server = mkOption {
-            type = types.listOf types.str;
+          options.server = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             example = [ "8.8.8.8" "8.8.4.4" ];
             description = ''
@@ -99,7 +96,7 @@ in
                 resolv-file = optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf";
               }
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             domain-needed = true;
             dhcp-range = [ "192.168.0.2,192.168.0.254" ];
@@ -107,8 +104,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration directives that should be added to
@@ -125,18 +122,18 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     warnings = lib.optional (cfg.extraConfig != "") "Text based config is deprecated, dnsmasq now supports `services.dnsmasq.settings` for an attribute-set based config";
 
     services.dnsmasq.settings = {
-      dhcp-leasefile = mkDefault "${stateDir}/dnsmasq.leases";
-      conf-file = mkDefault (optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
-      resolv-file = mkDefault (optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
+      dhcp-leasefile = lib.mkDefault "${stateDir}/dnsmasq.leases";
+      conf-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
+      resolv-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
     };
 
     networking.nameservers =
-      optional cfg.resolveLocalQueries "127.0.0.1";
+      lib.optional cfg.resolveLocalQueries "127.0.0.1";
 
     services.dbus.packages = [ dnsmasq ];
 
@@ -147,8 +144,8 @@ in
     };
     users.groups.dnsmasq = {};
 
-    networking.resolvconf = mkIf cfg.resolveLocalQueries {
-      useLocalResolver = mkDefault true;
+    networking.resolvconf = lib.mkIf cfg.resolveLocalQueries {
+      useLocalResolver = lib.mkDefault true;
 
       extraConfig = ''
         dnsmasq_conf=/etc/dnsmasq-conf.conf

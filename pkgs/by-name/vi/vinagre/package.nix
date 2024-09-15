@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vinagre/${lib.versions.majorMinor version}/vinagre-${version}.tar.xz";
-    sha256 = "cd1cdbacca25c8d1debf847455155ee798c3e67a20903df8b228d4ece5505e82";
+    hash = "sha256-zRzbrMolyNHev4R0VRVe55jD5nogkD34sijU7OVQXoI=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fno-common.patch";
       url = "https://gitlab.gnome.org/Archive/vinagre/-/commit/c51662cf4338516773d64776c3c92796917ff2bd.diff";
-      sha256 = "0zn8cd93hjdz6rw2d7gfl1ghzkc9h0x40k9l0jx3n5qfwdq4sir8";
+      hash = "sha256-KEdNcOMOFzu6BDRNQDqAic0PX6DunSZ4Nr9JOFJjyH4=";
     })
   ];
 

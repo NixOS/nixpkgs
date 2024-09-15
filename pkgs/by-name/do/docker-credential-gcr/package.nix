@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BnYh+MFTj76AWf0GfjzjQ/g/ACgCOLOLVfCSPssvfUY=";
+    hash = "sha256-BnYh+MFTj76AWf0GfjzjQ/g/ACgCOLOLVfCSPssvfUY=";
   };
 
   postPatch = ''

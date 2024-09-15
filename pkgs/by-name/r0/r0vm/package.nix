@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "risc0";
     repo = "risc0";
     rev = "v${version}";
-    sha256 = "sha256-jtROtI5/4W2pNvn1ZYR/wQAZmECTr7YxuZGu2Ns9paw=";
+    hash = "sha256-jtROtI5/4W2pNvn1ZYR/wQAZmECTr7YxuZGu2Ns9paw=";
   };
 
   buildAndTestSubdir = "risc0/r0vm";
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
       recursionZkr = fetchurl {
         name = "recursion_zkr.zip";
         url = "https://risc0-artifacts.s3.us-west-2.amazonaws.com/zkr/${sha256Hash}.zip";
-        sha256 = "sha256-ToSWRp4e+gDvs2MNJhq/NF5rKQX7ZLTzope+iOvfg9I=";
+        hash = "sha256-ToSWRp4e+gDvs2MNJhq/NF5rKQX7ZLTzope+iOvfg9I=";
       };
     in
     ''

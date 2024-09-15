@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "dfandrich";
     repo = "gpscorrelate";
     rev = version;
-    sha256 = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
+    hash = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
   };
 
   nativeBuildInputs = [

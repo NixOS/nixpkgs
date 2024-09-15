@@ -25,7 +25,7 @@ buildDotnetModule rec {
     owner = "Ryujinx";
     repo = "Ryujinx";
     rev = "ca59c3f4998e2d1beb3b0d0214611e3332238557";
-    sha256 = "09npfx6w12lnr454r9x6xc2aypfp216cjsks8wr3c1zq858krcd4";
+    hash = "sha256-pLE8UUH4BzYyR3pqyUwQ112vBOump0wKyZaKwE131yY=";
   };
 
   enableParallelBuilding = false;
