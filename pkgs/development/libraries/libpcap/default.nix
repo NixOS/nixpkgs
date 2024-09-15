@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit ettercap nmap ostinato tcpreplay vde2 wireshark;
     inherit (python3.pkgs) pcapy-ng scapy;
