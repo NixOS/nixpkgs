@@ -4556,6 +4556,12 @@
     githubId = 24708079;
     name = "Dan Eads";
   };
+  danerieber = {
+    email = "danerieber@gmail.com";
+    github = "danerieber";
+    githubId = 6487079;
+    name = "Dane Rieber";
+  };
   danid3v = {
     email = "sch220233@spengergasse.at";
     github = "DaniD3v";
@@ -17233,6 +17239,12 @@
     github = "raboof";
     githubId = 131856;
     name = "Arnout Engelen";
+  };
+  racci = {
+    name = "James Draycott";
+    email = "me@racci.dev";
+    github = "DaRacci";
+    githubId = 90304606;
   };
   raehik = {
     email = "thefirstmuffinman@gmail.com";
