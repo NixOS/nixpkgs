@@ -16,6 +16,7 @@
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
 , libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
+, devExtraCmakeFlags ? []
 }:
 
 # external cxxabi is not supported on Darwin as the build will not link libcxx
@@ -103,7 +104,8 @@ let
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
   ] ++ cxxCMakeFlags
-    ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags;
+    ++ lib.optionals (cxxabi == null) cxxabiCMakeFlags
+    ++ devExtraCmakeFlags;
 
 in
 

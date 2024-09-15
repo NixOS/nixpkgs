@@ -23,6 +23,7 @@
 , monorepoSrc ? null
 , patches ? [ ]
 , enableManpages ? false
+, devExtraCmakeFlags ? [ ]
 , ...
 }:
 
@@ -142,7 +143,7 @@ stdenv.mkDerivation (rec {
   ]) ++ lib.optionals doCheck [
     "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   doCheck = false;
   doInstallCheck = lib.versionOlder release_version "15";

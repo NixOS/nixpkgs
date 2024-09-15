@@ -40,6 +40,7 @@
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? lib.versionAtLeast release_version "14"
 , enableTerminfo ? true
+, devExtraCmakeFlags ? []
 }:
 
 let
@@ -399,7 +400,7 @@ stdenv.mkDerivation (rec {
         nativeInstallFlags
       ])
     )
-  ];
+  ] ++ devExtraCmakeFlags;
 
   postInstall = ''
     mkdir -p $python/share
