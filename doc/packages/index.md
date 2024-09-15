@@ -17,6 +17,7 @@ ibus.section.md
 kakoune.section.md
 krita.section.md
 linux.section.md
+lhapdf.section.md
 locales.section.md
 etc-files.section.md
 nginx.section.md

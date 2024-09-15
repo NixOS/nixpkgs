@@ -1,26 +1,24 @@
-{ lib
-, stdenvNoCC
-, rustPlatform
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, nodejs
-, pnpm
-, cacert
-, esbuild
-, jq
-, moreutils
-, perl
-, pkg-config
-, glib
-, webkitgtk
-, libayatana-appindicator
-, cairo
-, openssl
+{
+  lib,
+  stdenvNoCC,
+  rustPlatform,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  nodejs,
+  pnpm,
+  esbuild,
+  perl,
+  pkg-config,
+  glib,
+  webkitgtk,
+  libayatana-appindicator,
+  cairo,
+  openssl,
 }:
 
 let
-  version = "4.11.0";
+  version = "4.99.2";
   geph-meta = with lib; {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://geph.io";
@@ -37,10 +35,10 @@ in
       owner = "geph-official";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-6zii8WxJp++yqTkxejNDta7IW+SG0uPgmnWqX5Oa9PU=";
+      hash = "sha256-aZFm4+oUQungCPbxs7j1J8hLcCYoIodIEQEiQfjoLUw=";
     };
 
-    cargoHash = "sha256-WI525ufJxuepRZHyx8tO4K+7WZuM/NlTVNqVMJH6avg=";
+    cargoHash = "sha256-ypnjVoscGqVifkjzFh2KE+3EVFWIiyahTNTil3nu/+s=";
 
     nativeBuildInputs = [ perl ];
 
@@ -56,8 +54,8 @@ in
     src = fetchFromGitHub {
       owner = "geph-official";
       repo = "gephgui-pkg";
-      rev = "3a6d2fa85603e9ac3d5d6286685d8a8ca792a508";
-      hash = "sha256-SE1TwYvR3+zwdPxlanq4hovmJsOdCJQzWfSJ6sSyJ5k=";
+      rev = "3b045e21b8c587c26f9d5f0f2b4bdf0a34bfee80";
+      hash = "sha256-p+AxAOznUsG45Ibm1kczapfmbK+aeex2js463eqZ8gY=";
       fetchSubmodules = true;
     };
 
@@ -96,18 +94,25 @@ in
         openssl
       ];
 
-      ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
-        buildGoModule = args: buildGoModule (args // rec {
-          version = "0.15.10";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-      })}";
+      ESBUILD_BINARY_PATH = "${lib.getExe (
+        esbuild.override {
+          buildGoModule =
+            args:
+            buildGoModule (
+              args
+              // rec {
+                version = "0.15.10";
+                src = fetchFromGitHub {
+                  owner = "evanw";
+                  repo = "esbuild";
+                  rev = "v${version}";
+                  hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
+                };
+                vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+              }
+            );
+        }
+      )}";
 
       pnpmRoot = "gephgui";
 

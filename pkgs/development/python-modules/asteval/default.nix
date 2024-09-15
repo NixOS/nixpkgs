@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "lmfit";
     repo = "asteval";
     rev = "refs/tags/${version}";
-    hash = "sha256-TIMyfX8bpzey0hw0lBMcdZVnc07j9PFVjn4YbX4oW/8=";
+    hash = "sha256-CAjj5vlXCfelH7nyE/tS44ThCQrCwrNETyjXEVbfmiA=";
   };
 
   postPatch = ''
