@@ -5,7 +5,7 @@
   installShellFiles,
   stdenv,
   darwin,
-  rust-jemalloc-sys,
+  rust-jemalloc-sys-unprefixed,
   ruff-lsp,
   nix-update-script,
   testers,
@@ -31,17 +31,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  # Revert the change made in https://github.com/astral-sh/ruff/pull/13299
-  # It was causing linking issues: https://github.com/NixOS/nixpkgs/pull/341674#issuecomment-2351172084
-  postPatch = ''
-    substituteInPlace crates/ruff_benchmark/Cargo.toml \
-      --replace-fail '"unprefixed_malloc_on_supported_platforms"' ' '
-  '';
-
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
-    rust-jemalloc-sys
+    rust-jemalloc-sys-unprefixed
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
