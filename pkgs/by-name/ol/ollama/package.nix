@@ -141,6 +141,7 @@ goBuild (
     buildInputs =
       lib.optionals enableRocm (rocmLibs ++ [ libdrm ])
       ++ lib.optionals enableCuda [
+        cudaToolkit
         cudaPackages.cuda_cudart
         cudaPackages.cuda_cccl
         cudaPackages.libcublas
