@@ -8431,8 +8431,6 @@ with pkgs;
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
-  gtkperf = callPackage ../development/tools/misc/gtkperf { };
-
   gtkradiant = callPackage ../applications/misc/gtkradiant { };
 
   gtk-frdp = callPackage ../development/libraries/gtk-frdp { };
@@ -9781,8 +9779,6 @@ with pkgs;
   ldns = callPackage ../development/libraries/ldns { };
 
   leafpad = callPackage ../applications/editors/leafpad { };
-
-  l3afpad = callPackage ../applications/editors/l3afpad { };
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
 
@@ -11671,10 +11667,6 @@ with pkgs;
   psutils = callPackage ../tools/typesetting/psutils { };
 
   psudohash = callPackage ../tools/security/psudohash { };
-
-  psensor = callPackage ../tools/system/psensor {
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-  };
 
   pubs = callPackage ../tools/misc/pubs { };
 
@@ -14217,10 +14209,6 @@ with pkgs;
 
   xidlehook = callPackage ../tools/X11/xidlehook {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  xprite-editor = callPackage ../tools/misc/xprite-editor {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
   xq-xml = callPackage ../tools/text/xml/xq { };
@@ -28805,10 +28793,6 @@ with pkgs;
 
   armcord = callPackage ../applications/networking/instant-messengers/armcord { };
 
-  aumix = callPackage ../applications/audio/aumix {
-    gtkGUI = false;
-  };
-
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
   ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
@@ -30285,13 +30269,9 @@ with pkgs;
 
   glowing-bear = callPackage ../applications/networking/irc/glowing-bear { };
 
-  gmtk = callPackage ../development/libraries/gmtk { };
-
   gmu = callPackage ../applications/audio/gmu { };
 
   gnaural = callPackage ../applications/audio/gnaural { };
-
-  gnome_mplayer = callPackage ../applications/video/gnome-mplayer { };
 
   gnumeric = callPackage ../applications/office/gnumeric { };
 
@@ -30335,10 +30315,6 @@ with pkgs;
   gigedit = callPackage ../applications/audio/gigedit { };
 
   gqview = callPackage ../applications/graphics/gqview { };
-
-  gmpc = callPackage ../applications/audio/gmpc { };
-
-  gmtp = callPackage ../applications/misc/gmtp { };
 
   gnomecast = callPackage ../applications/video/gnomecast { };
 
@@ -31590,10 +31566,6 @@ with pkgs;
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
-  mhwaveedit = callPackage ../applications/audio/mhwaveedit {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
   mid2key = callPackage ../applications/audio/mid2key { };
@@ -31749,8 +31721,6 @@ with pkgs;
   easytag = callPackage ../applications/audio/easytag { };
 
   mp3gain = callPackage ../applications/audio/mp3gain { };
-
-  mp3info = callPackage ../applications/audio/mp3info { };
 
   mp3splt = callPackage ../applications/audio/mp3splt { };
 
@@ -35014,8 +34984,6 @@ with pkgs;
     fteqcc;
 
   gamepad-tool = callPackage ../games/gamepad-tool { };
-
-  gnome-hexgl = callPackage ../games/gnome-hexgl { };
 
   gotypist = callPackage ../games/gotypist { };
 
