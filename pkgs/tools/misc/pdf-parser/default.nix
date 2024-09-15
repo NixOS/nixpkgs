@@ -7,16 +7,26 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdf-parser";
-  version = "0.7.4";
+  version = "0.7.9";
+  pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdf-parser_V${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-sIprS2vp7z+rmtZn69yea0EmC3WftNfRVoxQLzj3acg=";
+    hash = "sha256-1mFThtTe1LKkM/MML44RgskGv3FZborNVBsTqSKanks=";
   };
 
-  format = "other";
+  postPatch = ''
+    # quote regular expressions correctly
+    substituteInPlace pdf-parser.py \
+      --replace-fail \
+        "re.sub('" \
+        "re.sub(r'" \
+      --replace-fail \
+        "re.match('" \
+        "re.match(r'"
+  '';
 
   installPhase = ''
     install -Dm555 pdf-parser.py $out/bin/pdf-parser.py
@@ -24,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     substituteInPlace $out/bin/pdf-parser.py \
-      --replace '/usr/bin/python' '${python3Packages.python}/bin/python'
+      --replace-fail '/usr/bin/python' '${python3Packages.python}/bin/python'
   '';
 
   passthru.updateScript = writeScript "update-pdf-parser" ''
