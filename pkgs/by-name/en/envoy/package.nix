@@ -25,16 +25,16 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.31.0";
-    rev = "7b8baff1758f0a584dcc3cb657b5032000bcb3d7";
-    hash = "sha256-pKERyXABcpMpKMRRvqJavp2jYGXTxwFLDPERqDT6jnY=";
+    version = "1.31.1";
+    rev = "1f44388cee449c9dae8ae34c0b4f09036bcbf560";
+    hash = "sha256-XvlF3hMS2PH87HgFwKoFzxHDYgRjZmxn02L1aLwYOrY=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-33yu2oxP2zgKs01qn6RIyZx6zHJ1NuCNxolgk0/uWpM=";
-      aarch64-linux = "sha256-ox7CJPqNbwucMDORQvx8SFs4oXR/WKixwJ6uK+l4NJc=";
+      x86_64-linux = "sha256-9KXZdSvRfi5mWOSotG//+ljsx64I4bYwzbeQFuCIwDE=";
+      aarch64-linux = "sha256-knrCfUYUL+bYuHSNrNeX3SwoGDf2rLYNXuukEmj4BjA=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
