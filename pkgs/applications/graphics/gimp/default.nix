@@ -42,6 +42,7 @@
 , mypaint-brushes1
 , libwebp
 , libheif
+, libxslt
 , libgudev
 , openexr
 , desktopToDarwinBundle
@@ -85,6 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     makeWrapper
     gtk-doc
+    libxslt
   ] ++ lib.optionals stdenv.isDarwin [
     desktopToDarwinBundle
   ];
