@@ -21,7 +21,7 @@ in
 
 buildPythonPackage rec {
   pname = "polars";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-qJTBGGRxMAirgygm7Ke60olO5sTZboZ80JkYI0LZSMk=";
+    hash = "sha256-vbligrFrCd7BiPV8n1iRIlurPNirJKOiD4/P5qEpirg=";
   };
 
   # Cargo.lock file is sometimes behind actual release which throws an error,
@@ -97,6 +97,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pola-rs/polars";
     changelog = "https://github.com/pola-rs/polars/releases/tag/py-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [
+      happysalada
+      coastalwhite
+    ];
   };
 }
