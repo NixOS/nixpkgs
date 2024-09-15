@@ -31,10 +31,11 @@ let
 
   # This would get fetched at build time otherwise, see:
   # https://github.com/HarbourMasters/2ship2harkinian/blob/1.0.2/mm/CMakeLists.txt#L708
-  gamecontrollerdb = fetchurl {
-    name = "gamecontrollerdb.txt";
-    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/b1759cf84028aab89caa1c395e198c340b8dfd89/gamecontrollerdb.txt";
-    hash = "sha256-7C5EkqBIhLGNJuhi3832y0ffW5Ep7iuTYXb1bL5h2Js=";
+  gamecontrollerdb = fetchFromGitHub {
+    owner = "mdqinc";
+    repo = "SDL_GameControllerDB";
+    rev = "cfc2bffe0ad29fea2bec7a0f4cb19dead5703ea8";
+    hash = "sha256-BEN0/q+7iLVmPpOO3i80nuLYpr7KiHd2ONxKmDIJuWU=";
   };
 
   # 2ship needs a specific imgui version
@@ -172,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-    cp ${gamecontrollerdb} ${gamecontrollerdb.name}
+    cp ${gamecontrollerdb}/gamecontrollerdb.txt gamecontrollerdb.txt
     pushd ../OTRExporter
     python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../mm/assets/xml --custom-assets-path ../mm/assets/custom --custom-otr-file 2ship.o2r --port-ver ${finalAttrs.version}
     popd
