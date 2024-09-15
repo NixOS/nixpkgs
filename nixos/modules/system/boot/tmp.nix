@@ -16,7 +16,8 @@ in
     boot.tmp = {
       cleanOnBoot = mkOption {
         type = types.bool;
-        default = false;
+        default = lib.versionAtLeast config.system.stateVersion "24.11";
+        defaultText = literalExpression "`true` if stateVersion is at least 24.11";
         description = ''
           Whether to delete all files in {file}`/tmp` during boot.
         '';
