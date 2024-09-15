@@ -15,12 +15,12 @@ let
 in
   mkYarnPackage rec {
     pname = "draupnir";
-    version = "2.0.0-beta.4";
+    version = "2.0.0-beta.6";
     src = fetchFromGitHub {
       owner = "the-draupnir-project";
       repo = "Draupnir";
       rev = "v${version}";
-      hash = "sha256-ZbAst3XaTdJxCPsgPc8cAqN0lo6vOvFphqBDjduQ/to=";
+      hash = "sha256-s1LWXVwY+7LD7cJtZW7mBLsdpB499zS/nDsJ7qaQDfg=";
     };
 
     nativeBuildInputs = [
@@ -45,6 +45,8 @@ in
       echo "Adding version.txt..."
       mkdir -p deps/draupnir/
       echo "${version}-nix" > deps/draupnir/version.txt
+
+      sed -i 's/corepack //g' deps/draupnir/package.json
     '';
 
     buildPhase = ''
