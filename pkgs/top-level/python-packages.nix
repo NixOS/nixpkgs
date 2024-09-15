@@ -17313,6 +17313,8 @@ self: super: with self; {
 
   weconnect-mqtt = callPackage ../development/python-modules/weconnect-mqtt { };
 
+  weheat =  callPackage ../development/python-modules/weheat { };
+
   werkzeug = callPackage ../development/python-modules/werkzeug { };
 
   west = callPackage ../development/python-modules/west { };
