@@ -2767,6 +2767,8 @@ self: super: with self; {
 
   cxxheaderparser = callPackage ../development/python-modules/cxxheaderparser { };
 
+  cybox = callPackage ../development/python-modules/cybox { };
+
   cycler = callPackage ../development/python-modules/cycler { };
 
   cyclonedx-python-lib = callPackage ../development/python-modules/cyclonedx-python-lib { };
@@ -7476,6 +7478,8 @@ self: super: with self; {
 
   macropy = callPackage ../development/python-modules/macropy { };
 
+  maec = callPackage ../development/python-modules/maec { };
+
   maestral = callPackage ../development/python-modules/maestral { };
 
   magic = callPackage ../development/python-modules/magic { };
@@ -7903,6 +7907,8 @@ self: super: with self; {
   mitmproxy-rs = callPackage ../development/python-modules/mitmproxy-rs { };
 
   mitogen = callPackage ../development/python-modules/mitogen { };
+
+  mixbox = callPackage ../development/python-modules/mixbox { };
 
   mixins = callPackage ../development/python-modules/mixins { };
 
@@ -14908,6 +14914,8 @@ self: super: with self; {
 
   stix2-patterns = callPackage ../development/python-modules/stix2-patterns { };
 
+  stix2-validator = callPackage ../development/python-modules/stix2-validator { };
+
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
   stone = callPackage ../development/python-modules/stone { };
@@ -15159,6 +15167,8 @@ self: super: with self; {
   tatsu = callPackage ../development/python-modules/tatsu { };
 
   taxi = callPackage ../development/python-modules/taxi { };
+
+  taxii2-client = callPackage ../development/python-modules/taxii2-client { };
 
   tbats = callPackage ../development/python-modules/tbats { };
 
