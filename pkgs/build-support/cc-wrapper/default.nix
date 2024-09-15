@@ -152,8 +152,8 @@ let
         x86-64-v4 = versionAtLeast ccVersion "11.0";
 
         # Intel
-        skylake        = versionAtLeast ccVersion "6.0";
-        skylake-avx512 = versionAtLeast ccVersion "6.0";
+        skylake        = true;
+        skylake-avx512 = true;
         cannonlake     = versionAtLeast ccVersion "8.0";
         icelake-client = versionAtLeast ccVersion "8.0";
         icelake-server = versionAtLeast ccVersion "8.0";
@@ -164,7 +164,7 @@ let
         alderlake      = versionAtLeast ccVersion "12.0";
 
         # AMD
-        znver1         = versionAtLeast ccVersion "6.0";
+        znver1         = true;
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
         znver4         = versionAtLeast ccVersion "13.0";
@@ -202,9 +202,9 @@ let
     else if targetPlatform.isAarch64 then
       (if isGNU then
         {
-          cortex-a53              = versionAtLeast ccVersion "4.8";  # gcc 8c075f
-          cortex-a72              = versionAtLeast ccVersion "5.1";  # gcc d8f70d
-          "cortex-a72.cortex-a53" = versionAtLeast ccVersion "5.1";  # gcc d8f70d
+          cortex-a53              = true;
+          cortex-a72              = true;
+          "cortex-a72.cortex-a53" = true;
         }.${tune} or false
        else if isClang then
          {

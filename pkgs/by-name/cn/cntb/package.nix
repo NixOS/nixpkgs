@@ -9,7 +9,13 @@
     owner = "contabo";
     repo = "cntb";
     rev = "v${version}";
-    hash = "sha256-clDIrZdvEy4oO0ZvqDNLJbr4Ij8D5dcyZPxey6zLV6Q=";
+    hash = "sha256-5JOO9tWMjy81wSB9Vq/gBYZ0xfrhES0dm/cTqXP8HiI";
+    # docs contains two files with the same name but different cases,
+    # this leads to a different hash on case insensitive filesystems (e.g. darwin)
+    # https://github.com/contabo/cntb/issues/34
+    postFetch = ''
+      rm -rf $out/openapi/docs
+    '';
   };
 
   subPackages = [ "." ];
