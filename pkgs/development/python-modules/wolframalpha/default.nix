@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   dependencies = [
