@@ -34,7 +34,7 @@
 (defn get-access-token
   "GitHub access token lookup"
   []
-  (or (System/getenv "ACCESS_TOKEN")
+  (or (System/getenv "GITHUB_TOKEN")
       (try
         (slurp (fs/file (fs/home) ".config/nix/maintainer-activity-access-token"))
         (catch Exception e nil))
@@ -46,7 +46,7 @@
              first)
         (catch Exception e nil))
       (do (.println System/err "Please set GitHub Access Token
-  - ACCESS_TOKEN=<token>
+  - GITHUB_TOKEN=<token>
   - ~/.config/nix/maintainer-activity-access-token <token>
   - ~/.config/nix/nix.conf access-tokens = github.com=<token>
 ")
