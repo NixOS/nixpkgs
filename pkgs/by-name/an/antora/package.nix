@@ -2,6 +2,7 @@
   buildNpmPackage,
   fetchFromGitLab,
   lib,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -27,6 +28,8 @@ buildNpmPackage rec {
     mkdir -p $out/bin
     ln -s $out/lib/node_modules/antora-build/packages/cli/bin/antora $out/bin/antora
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Modular documentation site generator. Designed for users of Asciidoctor";
