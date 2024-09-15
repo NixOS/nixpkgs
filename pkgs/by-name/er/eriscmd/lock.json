@@ -1,0 +1,112 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "base32"
+      ],
+      "path": "/nix/store/qcnchjsak3hyn4c6r0zd6qvm7j8y1747-source",
+      "ref": "0.1.3",
+      "rev": "f541038fbe49fdb118cc2002d29824b9fc4bfd61",
+      "sha256": "16gh1ifp9hslsg0is0v1ya7rxqfhq5hjqzc3pfdqvcgibp5ybh06",
+      "srcDir": "",
+      "url": "https://github.com/OpenSystemsLab/base32.nim/archive/f541038fbe49fdb118cc2002d29824b9fc4bfd61.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "cbor"
+      ],
+      "path": "/nix/store/70cqa9s36dqnmsf179cn9psj77jhqi1l-source",
+      "ref": "20230619",
+      "rev": "a4a1affd45ba90bea24e08733ae2bd02fe058166",
+      "sha256": "005ib6im97x9pdbg6p0fy58zpdwdbkpmilxa8nhrrb1hnpjzz90p",
+      "srcDir": "src",
+      "url": "https://git.sr.ht/~ehmry/nim_cbor/archive/a4a1affd45ba90bea24e08733ae2bd02fe058166.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "coap"
+      ],
+      "path": "/nix/store/pqj933cnw7r7hp46jrpjlwh1yr0jvckp-source",
+      "ref": "20230331",
+      "rev": "a134213b51a8d250684f2ba26802ffa97fae4ffb",
+      "sha256": "1wbix6d8l26nj7m3xinh4m2f27n4ma0yzs3x5lpann2ha0y51k8b",
+      "srcDir": "src",
+      "url": "https://codeberg.org/eris/nim-coap/archive/a134213b51a8d250684f2ba26802ffa97fae4ffb.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "configparser"
+      ],
+      "path": "/nix/store/4zl5v7i6cj3f9sayvsjcx2h20lqwr9a6-source",
+      "ref": "newSection",
+      "rev": "695f1285d63f1954c25eb1f42798d90fa7bcbe14",
+      "sha256": "0b0pb5i0kir130ia2zf8zcgdz8awms161i6p83ri3nbgibbjnr37",
+      "srcDir": "src",
+      "url": "https://github.com/ehmry/nim-configparser/archive/695f1285d63f1954c25eb1f42798d90fa7bcbe14.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "freedesktop_org"
+      ],
+      "path": "/nix/store/98wncmx58cfnhv3y96lzwm22zvyk9b1h-source",
+      "ref": "20230210",
+      "rev": "fb04d0862aca4be2edcc0eafa94b1840030231c8",
+      "sha256": "0wj5m09x1pr36gv8p5r72p6l3wwl01y8scpnlzx7q0h5ij6jaj6s",
+      "srcDir": "src",
+      "url": "https://git.sr.ht/~ehmry/freedesktop_org/archive/fb04d0862aca4be2edcc0eafa94b1840030231c8.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "getdns"
+      ],
+      "path": "/nix/store/x9xmn7w4k6jg8nv5bnx148ibhnsfh362-source",
+      "ref": "20221222",
+      "rev": "c73cbe288d9f9480586b8fa87f6d794ffb6a6ce6",
+      "sha256": "1sbgx2x51szr22i72n7c8jglnfmr8m7y7ga0v85d58fwadiv7g6b",
+      "srcDir": "src",
+      "url": "https://git.sr.ht/~ehmry/getdns-nim/archive/c73cbe288d9f9480586b8fa87f6d794ffb6a6ce6.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "illwill"
+      ],
+      "path": "/nix/store/3lmm3z36qn4gz7bfa209zv0pqrpm3di9-source",
+      "ref": "v0.3.2",
+      "rev": "1d12cb36ab7b76c31d2d25fa421013ecb382e625",
+      "sha256": "0f9yncl5gbdja18mrqf5ixrdgrh95k0khda923dm1jd1x1b7ar8z",
+      "srcDir": "",
+      "url": "https://github.com/johnnovak/illwill/archive/1d12cb36ab7b76c31d2d25fa421013ecb382e625.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "taps"
+      ],
+      "path": "/nix/store/did1li0xk9qih80pvxqhjc4np3ijlfjj-source",
+      "ref": "20230331",
+      "rev": "4f9c9972d74eb39c662b43ed79d761e109bf00f1",
+      "sha256": "12qsizmisr1q0q4x37c5q6gmnqb5mp0bid7s3jlcsjvhc4jw2q57",
+      "srcDir": "src",
+      "url": "https://git.sr.ht/~ehmry/nim_taps/archive/4f9c9972d74eb39c662b43ed79d761e109bf00f1.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "tkrzw"
+      ],
+      "path": "/nix/store/4x9wxyli4dy719svg1zaww0c0b3xckp0-source",
+      "ref": "20220922",
+      "rev": "efd87edb7b063182c1a1fa018006a87b515d589b",
+      "sha256": "1h0sdvai4gkkz48xfh67wa1xz2k8bkkba8q6snnbllmhmywd9apb",
+      "srcDir": "src",
+      "url": "https://git.sr.ht/~ehmry/nim-tkrzw/archive/efd87edb7b063182c1a1fa018006a87b515d589b.tar.gz"
+    }
+  ]
+}

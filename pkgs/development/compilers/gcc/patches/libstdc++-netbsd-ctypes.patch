@@ -1,0 +1,141 @@
+diff --git a/libstdc++-v3/config/os/bsd/netbsd/ctype_base.h b/libstdc++-v3/config/os/bsd/netbsd/ctype_base.h
+index ff3ec893974..21eccf9fde1 100644
+--- a/libstdc++-v3/config/os/bsd/netbsd/ctype_base.h
++++ b/libstdc++-v3/config/os/bsd/netbsd/ctype_base.h
+@@ -38,40 +38,46 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+   /// @brief  Base class for ctype.
+   struct ctype_base
+   {
+-    // Non-standard typedefs.
+-    typedef const unsigned char*	__to_type;
+ 
+     // NB: Offsets into ctype<char>::_M_table force a particular size
+     // on the mask type. Because of this, we don't use an enum.
+-    typedef unsigned char      	mask;
+ 
+ #ifndef _CTYPE_U
+-    static const mask upper    	= _U;
+-    static const mask lower 	= _L;
+-    static const mask alpha 	= _U | _L;
+-    static const mask digit 	= _N;
+-    static const mask xdigit 	= _N | _X;
+-    static const mask space 	= _S;
+-    static const mask print 	= _P | _U | _L | _N | _B;
+-    static const mask graph 	= _P | _U | _L | _N;
+-    static const mask cntrl 	= _C;
+-    static const mask punct 	= _P;
+-    static const mask alnum 	= _U | _L | _N;
++    // Non-standard typedefs.
++    typedef const unsigned char*	__to_type;
++
++    typedef unsigned char	mask;
++
++    static const mask upper	= _U;
++    static const mask lower	= _L;
++    static const mask alpha	= _U | _L;
++    static const mask digit	= _N;
++    static const mask xdigit	= _N | _X;
++    static const mask space	= _S;
++    static const mask print	= _P | _U | _L | _N | _B;
++    static const mask graph	= _P | _U | _L | _N;
++    static const mask cntrl	= _C;
++    static const mask punct	= _P;
++    static const mask alnum	= _U | _L | _N;
+ #else
+-    static const mask upper    	= _CTYPE_U;
+-    static const mask lower 	= _CTYPE_L;
+-    static const mask alpha 	= _CTYPE_U | _CTYPE_L;
+-    static const mask digit 	= _CTYPE_N;
+-    static const mask xdigit 	= _CTYPE_N | _CTYPE_X;
+-    static const mask space 	= _CTYPE_S;
+-    static const mask print 	= _CTYPE_P | _CTYPE_U | _CTYPE_L | _CTYPE_N | _CTYPE_B;
+-    static const mask graph 	= _CTYPE_P | _CTYPE_U | _CTYPE_L | _CTYPE_N;
+-    static const mask cntrl 	= _CTYPE_C;
+-    static const mask punct 	= _CTYPE_P;
+-    static const mask alnum 	= _CTYPE_U | _CTYPE_L | _CTYPE_N;
++    typedef const unsigned short*	__to_type;
++
++    typedef unsigned short	mask;
++
++    static const mask upper	= _CTYPE_U;
++    static const mask lower	= _CTYPE_L;
++    static const mask alpha	= _CTYPE_A;
++    static const mask digit	= _CTYPE_D;
++    static const mask xdigit	= _CTYPE_X;
++    static const mask space	= _CTYPE_S;
++    static const mask print	= _CTYPE_R;
++    static const mask graph	= _CTYPE_G;
++    static const mask cntrl	= _CTYPE_C;
++    static const mask punct	= _CTYPE_P;
++    static const mask alnum	= _CTYPE_A | _CTYPE_D;
+ #endif
+ #if __cplusplus >= 201103L
+-    static const mask blank 	= space;
++    static const mask blank	= space;
+ #endif
+   };
+ 
+diff --git a/libstdc++-v3/config/os/bsd/netbsd/ctype_configure_char.cc b/libstdc++-v3/config/os/bsd/netbsd/ctype_configure_char.cc
+index ed3b7cd0d6a..33358e8f5d8 100644
+--- a/libstdc++-v3/config/os/bsd/netbsd/ctype_configure_char.cc
++++ b/libstdc++-v3/config/os/bsd/netbsd/ctype_configure_char.cc
+@@ -38,11 +38,9 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 
+ // Information as gleaned from /usr/include/ctype.h
+ 
+-  extern "C" const u_int8_t _C_ctype_[];
+-
+   const ctype_base::mask*
+   ctype<char>::classic_table() throw()
+-  { return _C_ctype_ + 1; }
++  { return _C_ctype_tab_ + 1; }
+ 
+   ctype<char>::ctype(__c_locale, const mask* __table, bool __del,
+ 		     size_t __refs)
+@@ -69,14 +67,14 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 
+   char
+   ctype<char>::do_toupper(char __c) const
+-  { return ::toupper((int) __c); }
++  { return ::toupper((int)(unsigned char) __c); }
+ 
+   const char*
+   ctype<char>::do_toupper(char* __low, const char* __high) const
+   {
+     while (__low < __high)
+       {
+-	*__low = ::toupper((int) *__low);
++	*__low = ::toupper((int)(unsigned char) *__low);
+ 	++__low;
+       }
+     return __high;
+@@ -84,14 +82,14 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 
+   char
+   ctype<char>::do_tolower(char __c) const
+-  { return ::tolower((int) __c); }
++  { return ::tolower((int)(unsigned char) __c); }
+ 
+   const char*
+   ctype<char>::do_tolower(char* __low, const char* __high) const
+   {
+     while (__low < __high)
+       {
+-	*__low = ::tolower((int) *__low);
++	*__low = ::tolower((int)(unsigned char) *__low);
+ 	++__low;
+       }
+     return __high;
+diff --git a/libstdc++-v3/config/os/bsd/netbsd/ctype_inline.h b/libstdc++-v3/config/os/bsd/netbsd/ctype_inline.h
+index ace1120fba2..3234ce17c70 100644
+--- a/libstdc++-v3/config/os/bsd/netbsd/ctype_inline.h
++++ b/libstdc++-v3/config/os/bsd/netbsd/ctype_inline.h
+@@ -48,7 +48,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+   is(const char* __low, const char* __high, mask* __vec) const
+   {
+     while (__low < __high)
+-      *__vec++ = _M_table[*__low++];
++      *__vec++ = _M_table[(unsigned char)*__low++];
+     return __high;
+   }
+ 

@@ -1,0 +1,108 @@
+diff --git a/UnixBench/Run b/UnixBench/Run
+index 34d2c72..130b56e 100755
+--- a/UnixBench/Run
++++ b/UnixBench/Run
+@@ -81,23 +81,23 @@ my $longIterCount = 10;
+ my $shortIterCount = 3;
+ 
+ # C compiler to use in compilation tests.
+-my $cCompiler = 'gcc';
++my $cCompiler = 'cc -w';
+ 
+ # Establish full paths to directories.  These need to be full pathnames
+ # (or do they, any more?).  They can be set in env.
+ # variable names are the first parameter to getDir() below.
+ 
+ # Directory where the test programs live.
+-my $BINDIR = getDir('UB_BINDIR', $FindBin::Bin . "/pgms");
++my $BINDIR = getDir('UB_BINDIR', '@out@/libexec/pgms');
+ 
+ # Temp directory, for temp files.
+-my $TMPDIR = getDir('UB_TMPDIR', $FindBin::Bin . "/tmp");
++my $TMPDIR = getDir('UB_TMPDIR', "$ENV{'PWD'}/unixbench/temp");
+ 
+ # Directory to put results in.
+-my $RESULTDIR = getDir('UB_RESULTDIR', $FindBin::Bin . "/results");
++my $RESULTDIR = getDir('UB_RESULTDIR', "$ENV{'PWD'}/unixbench/results");
+ 
+ # Directory where the tests are executed.
+-my $TESTDIR = getDir('UB_TESTDIR', $FindBin::Bin . "/testdir");
++my $TESTDIR = getDir('UB_TESTDIR', '@out@/share/testdir');
+ 
+ 
+ ############################################################################
+@@ -330,19 +330,19 @@ my $testParams = {
+         "logmsg" => "Shell Scripts (1 concurrent)",
+         "cat"    => 'system',
+         "prog" => "${BINDIR}/looper",
+-        "options" => "60 \"${BINDIR}/multi.sh\" 1",
++        "options" => "60 \"${BINDIR}/multi.sh\" 1 ${TMPDIR} ${TESTDIR}",
+     },
+     "shell8" => {
+         "logmsg" => "Shell Scripts (8 concurrent)",
+         "cat"    => 'system',
+         "prog" => "${BINDIR}/looper",
+-        "options" => "60 \"${BINDIR}/multi.sh\" 8",
++        "options" => "60 \"${BINDIR}/multi.sh\" 8 ${TMPDIR} ${TESTDIR}",
+     },
+     "shell16" => {
+         "logmsg" => "Shell Scripts (16 concurrent)",
+         "cat"    => 'system',
+         "prog" => "${BINDIR}/looper",
+-        "options" => "60 \"${BINDIR}/multi.sh\" 16",
++        "options" => "60 \"${BINDIR}/multi.sh\" 16 ${TMPDIR} ${TESTDIR}",
+     },
+ 
+     ##########################
+@@ -434,7 +434,7 @@ my $testParams = {
+         "logmsg" => "C Compiler Throughput ($cCompiler)",
+         "cat"    => 'misc',
+         "prog" => "${BINDIR}/looper",
+-        "options" => "60 $cCompiler cctest.c",
++        "options" => "60 $cCompiler $TESTDIR/cctest.c -o $TMPDIR/cctest",
+     },
+     "arithoh" => {
+         "logmsg" => "Arithoh",
+@@ -873,16 +873,6 @@ sub preChecks {
+     # Set the language.
+     $ENV{'LANG'} = $language;
+ 
+-    # Check that the required files are in the proper places.
+-    my $make = $ENV{MAKE} || "make";
+-    system("$make check");
+-    if ($? != 0) {
+-        system("$make all");
+-        if ($? != 0) {
+-            abortRun("\"$make all\" failed");
+-        }
+-    }
+-
+     # Create a script to kill this run.
+     system("echo \"kill -9 $$\" > \"${TMPDIR}/kill_run\"");
+     chmod(0755, $TMPDIR . "/kill_run");
+@@ -923,7 +913,10 @@ sub parseArgs {
+                 $params->{'copies'} = [ ];
+             }
+             push(@{$params->{'copies'}}, shift(@words));
+-        } else {
++        } elsif ($word eq "--help" || $word eq "-h") {
++	    print "Run: please see ubench(1) for available options\n";
++	    exit 0;
++	}else {
+             die("Run: unknown option $word\n");
+         }
+     }
+diff --git a/UnixBench/pgms/multi.sh b/UnixBench/pgms/multi.sh
+index 72e8716..d2f5f48 100755
+--- a/UnixBench/pgms/multi.sh
++++ b/UnixBench/pgms/multi.sh
+@@ -15,7 +15,8 @@
+ ###############################################################################
+ ID="@(#)multi.sh:3.4 -- 5/15/91 19:30:24";
+ instance=1
+-sort_src=sort.src
++sort_src=$3/sort.src
++cd $2
+ work_factor=${MULTI_SH_WORK_FACTOR:-1}
+ if [ $work_factor -gt 1 ]; then
+ 	inputs=

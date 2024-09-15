@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4aee99fb..0bb28897 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,7 +19,7 @@ ELSE ()
+     MESSAGE (FATAL_ERROR "Invalid PYTHON_DESIRED value: " ${PYTHON_DESIRED})
+ ENDIF()
+
+-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from sysconfig import get_path; stdout.write(get_path('purelib'))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
++SET(PYTHON_INSTALL_DIR "@PYTHON_INSTALL_DIR@")
+ MESSAGE(STATUS "Python install dir is ${PYTHON_INSTALL_DIR}")
+
+ ADD_SUBDIRECTORY (dnf)

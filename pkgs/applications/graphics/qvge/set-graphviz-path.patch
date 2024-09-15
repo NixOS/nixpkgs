@@ -1,0 +1,13 @@
+diff --git i/commonui/CNodeEditorUIController.cpp w/commonui/CNodeEditorUIController.cpp
+index 7dacd48..64983e4 100644
+--- i/commonui/CNodeEditorUIController.cpp
++++ w/commonui/CNodeEditorUIController.cpp
+@@ -123,7 +123,7 @@ CNodeEditorUIController::CNodeEditorUIController(CMainWindow *parent) :
+ 	QString pathToGraphviz = QCoreApplication::applicationDirPath() + "/../tools/graphviz";
+ 	m_optionsData.graphvizPath = QFileInfo(pathToGraphviz).absoluteFilePath();
+ #else
+-	m_optionsData.graphvizPath = "";
++	m_optionsData.graphvizPath = "@graphviz@/bin";
+ #endif
+ 	m_gvController->setPathToGraphviz(m_optionsData.graphvizPath);
+ 

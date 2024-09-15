@@ -1,0 +1,17 @@
+diff --git a/aw-server/src/endpoints/mod.rs b/aw-server/src/endpoints/mod.rs
+index a080d2a..0411d1e 100644
+--- a/aw-server/src/endpoints/mod.rs
++++ b/aw-server/src/endpoints/mod.rs
+@@ -76,11 +76,10 @@ async fn root_favicon(state: &State<ServerState>) -> Option<NamedFile> {
+ fn server_info(config: &State<AWConfig>, state: &State<ServerState>) -> Json<Info> {
+     #[allow(clippy::or_fun_call)]
+     let hostname = gethostname().into_string().unwrap_or("unknown".to_string());
+-    const VERSION: Option<&'static str> = option_env!("CARGO_PKG_VERSION");
+
+     Json(Info {
+         hostname,
+-        version: format!("v{} (rust)", VERSION.unwrap_or("(unknown)")),
++        version: String::from("@version@ (rust)"),
+         testing: config.testing,
+         device_id: state.device_id.clone(),
+     })

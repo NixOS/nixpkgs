@@ -1,0 +1,38 @@
+diff --git a/src/main.rs b/src/main.rs
+index 357a33b..7073497 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1,4 +1,4 @@
+-use std::env;
++use std::path::PathBuf;
+ 
+ mod devices;
+ 
+@@ -8,12 +8,23 @@ fn main() -> Result<(), std::io::Error> {
+         configs: vec![]
+     };
+ 
+-    let mut config_path = env::current_exe()?;
+-    config_path.pop();
+-    config_path.push("uni-sync.json");
++    let mut config_path = PathBuf::from("/etc/uni-sync/uni-sync.json");
+ 
+     if !config_path.exists() {
+-        std::fs::write(&config_path, serde_json::to_string_pretty(&configs).unwrap())?;
++        match std::fs::create_dir_all(config_path.parent().unwrap()) {
++            Ok(result) => result,
++            Err(_) => {
++                println!("Please run uni-sync with elevated permissions.");
++                std::process::exit(0);
++            }
++        };
++        match std::fs::write(&config_path, serde_json::to_string_pretty(&configs).unwrap()) {
++            Ok(result) => result,
++            Err(_) => {
++                println!("Please run uni-sync with elevated permissions.");
++                std::process::exit(0);
++            }
++        };
+     }
+ 
+     let config_content = std::fs::read_to_string(&config_path).unwrap();

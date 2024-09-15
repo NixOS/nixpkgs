@@ -1,0 +1,17 @@
+--- a/utils/cfhq2xa.C
++++ b/utils/cfhq2xa.C
+@@ -182,10 +182,10 @@ static inline bool Diff (pixel w1, pixel w2)
+   pixel YUV1 = RGBAtoYUVA (w1);
+   pixel YUV2 = RGBAtoYUVA (w2);
+
+-  return ((abs (((YUV1 >> Rshift) & Cmask) - ((YUV2 >> Rshift) & Cmask)) > trY) ||
+-          (abs (((YUV1 >> Gshift) & Cmask) - ((YUV2 >> Gshift) & Cmask)) > trU) ||
+-          (abs (((YUV1 >> Bshift) & Cmask) - ((YUV2 >> Bshift) & Cmask)) > trV) ||
+-          (abs (((YUV1 >> Ashift) & Cmask) - ((YUV2 >> Ashift) & Cmask)) > trA) );
++  return ((abs ((signed int)((YUV1 >> Rshift) & Cmask) - (signed int)((YUV2 >> Rshift) & Cmask)) > trY) ||
++          (abs ((signed int)((YUV1 >> Gshift) & Cmask) - (signed int)((YUV2 >> Gshift) & Cmask)) > trU) ||
++          (abs ((signed int)((YUV1 >> Bshift) & Cmask) - (signed int)((YUV2 >> Bshift) & Cmask)) > trV) ||
++          (abs ((signed int)((YUV1 >> Ashift) & Cmask) - (signed int)((YUV2 >> Ashift) & Cmask)) > trA) );
+ }
+
+ static void

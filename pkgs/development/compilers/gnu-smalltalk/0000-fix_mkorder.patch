@@ -1,0 +1,21 @@
+--- a/packages/gtk/mkorder.awk
++++ b/packages/gtk/mkorder.awk
+@@ -33,6 +33,9 @@
+     paths[1] = "."
+     n_paths = 1
+     n_prefixes = split(_prefixes, prefixes)
++
++	ignored_files = [ "glib/gwin32.h" ]
++
+     split(_libs, libs)
+     split(_files, files)
+     for (i = 1; (i in libs); i++)
+@@ -60,7 +63,7 @@
+
+ function process_file(name, file) {
+     file = find_file(name)
+-    if (file in processed)
++    if ((name in ignored_files) or (file in processed))
+ 	return
+     processed[file] = 1
+     if (file == "")

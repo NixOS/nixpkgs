@@ -1,0 +1,14 @@
+diff -Naur lua-compat-5.2/c-api/compat-5.2.h lua-compat-5.2-patched/c-api/compat-5.2.h
+--- lua-compat-5.2/c-api/compat-5.2.h	2015-02-19 09:23:42.000000000 +1100
++++ lua-compat-5.2-patched/c-api/compat-5.2.h	2019-06-17 17:58:13.585361793 +1000
+@@ -146,8 +146,10 @@
+ #define lua_pushglobaltable(L) \
+   lua_pushvalue(L, LUA_GLOBALSINDEX)
+ 
++#if !defined(luaL_newlib)
+ #define luaL_newlib(L, l) \
+   (lua_newtable((L)),luaL_setfuncs((L), (l), 0))
++#endif
+ 
+ void luaL_checkversion (lua_State *L);
+ 

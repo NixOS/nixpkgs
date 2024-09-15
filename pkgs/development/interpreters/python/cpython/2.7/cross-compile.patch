@@ -1,0 +1,32 @@
+--- ./setup.py.orig	2018-04-29 15:47:33.000000000 -0700
++++ ./setup.py	2018-11-11 09:41:58.097682221 -0800
+@@ -458,8 +458,6 @@
+         if not cross_compiling:
+             add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
+             add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+-        if cross_compiling:
+-            self.add_gcc_paths()
+         self.add_multiarch_paths()
+ 
+         # Add paths specified in the environment variables LDFLAGS and
+@@ -517,7 +515,10 @@
+         # be assumed that no additional -I,-L directives are needed.
+         inc_dirs = self.compiler.include_dirs[:]
+         lib_dirs = self.compiler.library_dirs[:]
+-        if not cross_compiling:
++        if cross_compiling:
++            inc_dirs = []
++            lib_dirs = []
++        else:
+             for d in (
+                 '/usr/include',
+                 ):
+@@ -582,6 +584,8 @@ class PyBuildExt(build_ext):
+         # Some modules that are normally always on:
+         #exts.append( Extension('_weakref', ['_weakref.c']) )
+ 
++        self.compiler.library_dirs = lib_dirs + [ '.' ]
++
+         # array objects
+         exts.append( Extension('array', ['arraymodule.c']) )
+ 

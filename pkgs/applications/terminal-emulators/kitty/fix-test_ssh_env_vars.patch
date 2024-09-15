@@ -1,0 +1,13 @@
+diff --git a/kitty_tests/ssh.py b/kitty_tests/ssh.py
+index 7b3bdbeb..710aeceb 100644
+--- a/kitty_tests/ssh.py
++++ b/kitty_tests/ssh.py
+@@ -272,8 +272,6 @@ def check_bootstrap(self, sh, home_dir, login_shell='', SHELL_INTEGRATION_VALUE=
+ 
+             def check_untar_or_fail():
+                 q = pty.screen_contents()
+-                if 'bzip2' in q:
+-                    raise ValueError('Untarring failed with screen contents:\n' + q)
+                 return 'UNTAR_DONE' in q
+             pty.wait_till(check_untar_or_fail)
+             self.assertTrue(os.path.exists(os.path.join(home_dir, '.terminfo/kitty.terminfo')))

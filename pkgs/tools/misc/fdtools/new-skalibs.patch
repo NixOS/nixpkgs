@@ -1,0 +1,223 @@
+diff -Naur misc/fdtools-2020.05.04/src/check_exit_exec.c misc-new/fdtools-2020.05.04/src/check_exit_exec.c
+--- misc/fdtools-2020.05.04/src/check_exit_exec.c	2015-03-16 04:55:56.000000000 +0100
++++ misc-new/fdtools-2020.05.04/src/check_exit_exec.c	2021-01-22 10:50:25.529955213 +0100
+@@ -2,6 +2,7 @@
+ #include <unistd.h>
+ #include <errno.h>
+ 
++#include <skalibs/exec.h>
+ #include <skalibs/stddjb.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+@@ -14,7 +15,7 @@
+ 
+   if (str_equal(arg, ":")) {
+     ++argv;
+-    pathexec0((char const**)argv);
++    mexec0((char const**)argv);
+     DIE1(exec, argv[0]);
+   }
+ }
+diff -Naur misc/fdtools-2020.05.04/src/grabconsole.c misc-new/fdtools-2020.05.04/src/grabconsole.c
+--- misc/fdtools-2020.05.04/src/grabconsole.c	2020-04-24 06:01:22.000000000 +0200
++++ misc-new/fdtools-2020.05.04/src/grabconsole.c	2021-01-22 10:43:27.887754936 +0100
+@@ -4,6 +4,7 @@
+ #include <errno.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+@@ -26,6 +27,6 @@
+   if (fd_grabconsole(fd)!=0) DIE0(tioccons);
+ 
+   argv+=2;
+-  pathexec0((char const**)argv);
++  mexec0((char const**)argv);
+   DIE1(exec, argv[0]);
+ }
+diff -Naur misc/fdtools-2020.05.04/src/pipecycle.c misc-new/fdtools-2020.05.04/src/pipecycle.c
+--- misc/fdtools-2020.05.04/src/pipecycle.c	2015-03-16 04:55:56.000000000 +0100
++++ misc-new/fdtools-2020.05.04/src/pipecycle.c	2021-01-22 10:47:58.033220790 +0100
+@@ -4,6 +4,7 @@
+ #include <unistd.h>
+ #include <signal.h>
+ 
++#include <skalibs/exec.h>
+ #include <skalibs/stddjb.h>
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+@@ -56,7 +57,7 @@
+       if (fd_shuffle(2, current, wanted)!=0) DIE0(dup);
+     }
+     read(start[0], &j, 1);
+-    pathexec(args);
++    mexec(args);
+     DIE1(exec, args[0]);
+   }
+ 
+diff -Naur misc/fdtools-2020.05.04/src/recvfd.c misc-new/fdtools-2020.05.04/src/recvfd.c
+--- misc/fdtools-2020.05.04/src/recvfd.c	2020-04-28 09:35:05.000000000 +0200
++++ misc-new/fdtools-2020.05.04/src/recvfd.c	2021-01-22 10:47:14.180994779 +0100
+@@ -7,6 +7,7 @@
+ #include <limits.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+ #include "fdtools.h"
+@@ -69,9 +70,9 @@
+       named_fd=duped;
+     }
+     buf[int_fmt(buf, named_fd)]='\0';
+-    if (pathexec_env(argv[i]+1, buf)==0) DIE0(alloc);
++    if (env_mexec(argv[i]+1, buf)==0) DIE0(alloc);
+   }
+   argv+=nfds+1;
+-  pathexec0((char const**)argv);
++  mexec0((char const**)argv);
+   DIE1(exec, argv[0]);
+ }
+diff -Naur misc/fdtools-2020.05.04/src/sendfd.c misc-new/fdtools-2020.05.04/src/sendfd.c
+--- misc/fdtools-2020.05.04/src/sendfd.c	2015-03-16 06:48:39.000000000 +0100
++++ misc-new/fdtools-2020.05.04/src/sendfd.c	2021-01-22 10:43:07.207634214 +0100
+@@ -7,6 +7,7 @@
+ #include <limits.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+ #include "fdtools.h"
+@@ -40,6 +41,6 @@
+   argv+=nfds;
+   if (*argv==NULL) _exit(0);
+   ++argv;
+-  pathexec0((char const**)argv);
++  mexec0((char const**)argv);
+   DIE1(exec, argv[0]);
+ }
+diff -Naur misc/fdtools-2020.05.04/src/setstate.c misc-new/fdtools-2020.05.04/src/setstate.c
+--- misc/fdtools-2020.05.04/src/setstate.c	2020-05-04 10:04:21.000000000 +0200
++++ misc-new/fdtools-2020.05.04/src/setstate.c	2021-01-22 10:45:05.084304318 +0100
+@@ -8,6 +8,7 @@
+ #include <errno.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/intattr.h"
+ #include "prjlibs-c/diewarn.h"
+@@ -167,6 +168,6 @@
+   }
+ 
+   argv+=2;
+-  pathexec_run(argv[0], (char const**)argv, (char const**)environ);
++  mexec_ae(argv[0], (char const**)argv, (char const**)environ);
+   DIE1(exec, argv[0]);
+ }
+diff -Naur misc/fdtools-2020.05.04/src/statfile.c misc-new/fdtools-2020.05.04/src/statfile.c
+--- misc/fdtools-2020.05.04/src/statfile.c	2015-03-22 00:33:44.000000000 +0100
++++ misc-new/fdtools-2020.05.04/src/statfile.c	2021-01-22 10:48:23.673351183 +0100
+@@ -6,6 +6,7 @@
+ #include <errno.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/warn.h"
+@@ -15,7 +16,7 @@
+ char const* PROG="statfile";
+ 
+ static void set(char const* const var, char const* const val) {
+-  if (pathexec_env(var, val)==0) DIE0(alloc);
++  if (env_mexec(var, val)==0) DIE0(alloc);
+ }
+ 
+ static void set64n(char const* const var, time_t t, unsigned int nsec) {
+@@ -178,6 +179,6 @@
+   }
+ 
+   argv+=3;
+-  pathexec((char const**)argv);
++  mexec((char const**)argv);
+   DIE1(exec, argv[0]);
+ }
+diff -Naur misc/fdtools-2020.05.04/src/vc-get-linux.c misc-new/fdtools-2020.05.04/src/vc-get-linux.c
+--- misc/fdtools-2020.05.04/src/vc-get-linux.c	2020-04-28 07:04:49.000000000 +0200
++++ misc-new/fdtools-2020.05.04/src/vc-get-linux.c	2021-01-22 10:47:34.649100757 +0100
+@@ -10,6 +10,7 @@
+ #include <sys/sysmacros.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+@@ -38,7 +39,7 @@
+       errno=0;
+       if (ioctl(fd, VT_OPENQRY, &vtnum)<0 || vtnum==-1) DIE0(vt_qry);
+       bufnum[ulong_fmt(bufnum, vtnum)]='\0';
+-      if (pathexec_env("TTY", buf)==0) DIE0(alloc);
++      if (env_mexec("TTY", buf)==0) DIE0(alloc);
+     }
+     fd_close(fd);
+ 
+@@ -50,12 +51,12 @@
+       if (fstat(fd, &statbuf)!=0) DIE1(stat, buf);
+       buf[ulong_fmt(buf, minor(statbuf.st_rdev))]='\0';
+     }
+-    if (pathexec_env("VCNUM", buf)==0) DIE0(alloc);
++    if (env_mexec("VCNUM", buf)==0) DIE0(alloc);
+ 
+     buf[ulong_fmt(buf, fd)]='\0';
+-    if (pathexec_env("VCFD", buf)==0) DIE0(alloc);
++    if (env_mexec("VCFD", buf)==0) DIE0(alloc);
+   }
+ 
+-  pathexec((char const**)argv+2);
++  mexec((char const**)argv+2);
+   DIE1(exec, argv[2]);
+ }
+diff -Naur misc/fdtools-2020.05.04/src/vc-lock-linux.c misc-new/fdtools-2020.05.04/src/vc-lock-linux.c
+--- misc/fdtools-2020.05.04/src/vc-lock-linux.c	2015-03-20 05:59:42.000000000 +0100
++++ misc-new/fdtools-2020.05.04/src/vc-lock-linux.c	2021-01-22 10:48:36.857417751 +0100
+@@ -8,6 +8,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/vt.h>
+ 
++#include <skalibs/exec.h>
+ #include <skalibs/stddjb.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+@@ -79,7 +80,7 @@
+       WARN0(fork);
+     } else if (pid==0) {
+       sigprocmask(SIG_SETMASK, &old_set, NULLP);
+-      pathexec((char const**)argv);
++      mexec((char const**)argv);
+       DIE1(exec, *argv);
+     } else {
+       int status;
+diff -Naur misc/fdtools-2020.05.04/src/vc-switch-linux.c misc-new/fdtools-2020.05.04/src/vc-switch-linux.c
+--- misc/fdtools-2020.05.04/src/vc-switch-linux.c	2020-04-28 07:14:04.000000000 +0200
++++ misc-new/fdtools-2020.05.04/src/vc-switch-linux.c	2021-01-22 10:42:41.259480648 +0100
+@@ -10,6 +10,7 @@
+ #include <sys/sysmacros.h>
+ 
+ #include <skalibs/stddjb.h>
++#include <skalibs/exec.h>
+ #include "prjlibs-c/constants.h"
+ #include "prjlibs-c/diewarn.h"
+ #include "prjlibs-c/types.h"
+@@ -36,6 +37,6 @@
+   if (ioctl(fd, VT_ACTIVATE, ttyno)<0) DIE0(vt_act);
+   if (!scan) fd_close(fd);
+ 
+-  pathexec0((char const**)argv+3);
++  mexec0((char const**)argv+3);
+   DIE1(exec, argv[3]);
+ }

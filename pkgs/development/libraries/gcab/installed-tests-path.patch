@@ -1,0 +1,21 @@
+diff --git a/meson_options.txt b/meson_options.txt
+index c1b1da1..9b76022 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -4,3 +4,4 @@
+ option('vapi', type : 'boolean', value : true, description: 'generate Vala bindings (requires introspection)')
+ option('tests', type : 'boolean', value : true, description : 'enable tests')
+ option('installed_tests', type : 'boolean', value : false, description : 'install tests for "as-installed" testing')
++option('installed_test_prefix', type: 'string', value: '', description: 'Prefix for installed tests')
+diff --git a/tests/meson.build b/tests/meson.build
+index 1e46e2a..aa780d0 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -1,5 +1,5 @@
+-installed_tests_metadir = join_paths(get_option('datadir'), 'installed-tests', 'libgcab-1.0')
+-installed_tests_execdir = join_paths(get_option('libexecdir'), 'installed-tests', 'libgcab-1.0')
++installed_tests_metadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', 'libgcab-1.0')
++installed_tests_execdir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', 'libgcab-1.0')
+ installed_tests_enabled = get_option('installed_tests')
+ installed_tests_template_tap = files('template-tap.test.in')
+ abs_installed_tests_execdir = join_paths(get_option('prefix'), installed_tests_execdir)

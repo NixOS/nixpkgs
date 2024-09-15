@@ -1,0 +1,37 @@
+--- a/src/frontc/clexer.mll
++++ b/src/frontc/clexer.mll
+@@ -134,9 +134,11 @@ let init_lexicon _ =
+       (* WW: see /usr/include/sys/cdefs.h for why __signed and __volatile
+        * are accepted GCC-isms *)
+       ("_Bool", fun loc -> BOOL loc);
++      ("_Complex", fun loc -> COMPLEX loc);
+       ("char", fun loc -> CHAR loc);
+       ("int", fun loc -> INT loc);
+       ("float", fun loc -> FLOAT loc);
++      ("__float128", fun loc -> FLOAT128 loc);
+       ("double", fun loc -> DOUBLE loc);
+       ("void", fun loc -> VOID loc);
+       ("enum", fun loc -> ENUM loc);
+--- a/src/frontc/cparser.mly
++++ b/src/frontc/cparser.mly
+@@ -269,6 +269,8 @@ let oblivState (s:statement): statement =
+ %token<Cabs.cabsloc> VOLATILE EXTERN STATIC CONST RESTRICT AUTO REGISTER FROZEN
+ %token<Cabs.cabsloc> THREAD
+ 
++%token<Cabs.cabsloc> COMPLEX FLOAT128
++
+ %token<Cabs.cabsloc> SIZEOF ALIGNOF
+ 
+ %token EQ PLUS_EQ MINUS_EQ STAR_EQ SLASH_EQ PERCENT_EQ
+@@ -1002,7 +1004,11 @@ type_spec:   /* ISO 6.7.2 */
+ |   LONG            { Tlong, $1 }
+ |   INT64           { Tint64, $1 }
+ |   FLOAT           { Tfloat, $1 }
++|   FLOAT128        { Tfloat, $1 }
+ |   DOUBLE          { Tdouble, $1 }
++|   COMPLEX FLOAT   { Tfloat, $2 }
++|   COMPLEX FLOAT128{ Tfloat, $2 }
++|   COMPLEX DOUBLE  { Tdouble, $2 }
+ |   SIGNED          { Tsigned, $1 }
+ |   UNSIGNED        { Tunsigned, $1 }
+ |   STRUCT                 id_or_typename

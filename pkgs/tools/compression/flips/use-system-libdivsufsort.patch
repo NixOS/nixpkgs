@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index b3d5aeb..a5acc08 100644
+--- a/Makefile
++++ b/Makefile
+@@ -83,9 +83,7 @@ endif
+ 
+ MOREFLAGS := $(CFLAGS_$(TARGET))
+ 
+-DIVSUF := $(SRCDIR)/libdivsufsort-2.0.1
+-SOURCES += $(DIVSUF)/lib/divsufsort.c $(DIVSUF)/lib/sssort.c $(DIVSUF)/lib/trsort.c
+-MOREFLAGS += -I$(DIVSUF)/include -DHAVE_CONFIG_H -D__STDC_FORMAT_MACROS
++MOREFLAGS += -ldivsufsort
+ 
+ ifeq ($(TARGET),gtk)
+   CFLAGS_G += -fopenmp

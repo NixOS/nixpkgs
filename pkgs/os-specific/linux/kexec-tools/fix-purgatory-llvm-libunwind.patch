@@ -1,0 +1,11 @@
+--- a/purgatory/Makefile	2024-06-06 23:59:33.089005832 -0700
++++ b/purgatory/Makefile	2024-06-06 23:59:56.761169892 -0700
+@@ -62,7 +62,7 @@
+ $(PURGATORY): LDFLAGS=$($(ARCH)_PURGATORY_EXTRA_CFLAGS)\
+ 			-Wl,--no-undefined -nostartfiles -nostdlib \
+ 			-nodefaultlibs -e purgatory_start -r \
+-			-Wl,-Map=$(PURGATORY_MAP)
++			-Wl,-Map=$(PURGATORY_MAP) -static
+ 
+ $(PURGATORY): $(PURGATORY_OBJS)
+ 	$(MKDIR) -p $(@D)

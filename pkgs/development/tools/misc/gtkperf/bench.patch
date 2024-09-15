@@ -1,0 +1,60 @@
+--- gtkperf/src/callbacks.c	2005-10-30 11:33:42.000000000 +0000
++++ gtkperf-patched/src/callbacks.c	2008-05-23 23:41:17.000000000 +0100
+@@ -219,6 +219,13 @@
+ }
+
+
++void
++on_cmdline_test(char *optarg)
++{
++	appdata->test_type = atoi(optarg);
++}
++
++
+ /* Initialize appdata */
+ void
+ setup_appdata(AppData * appdata_in)
+@@ -398,7 +405,7 @@
+ 	appdata->pixbuf_drawing = gdk_pixbuf_new_from_file (filename, NULL);
+
+ 	gtk_combo_box_set_active (GTK_COMBO_BOX (appdata->combobox_testtype),
+-				  0);
++				  appdata->test_type);
+
+ 	/* create end mark to info textview */
+ 	GtkTextIter iter;
+--- gtkperf/src/callbacks.h	2005-10-30 10:21:23.000000000 +0000
++++ gtkperf-patched/src/callbacks.h	2008-05-23 23:22:30.000000000 +0100
+@@ -13,6 +13,7 @@
+ void on_cmdline_run_all ();
+ void on_cmdline_help () ;
+ void on_cmdline_count (char *optarg) ;
++void on_cmdline_test (char *optarg) ;
+ void on_window_main_show (AppData * data);
+
+ gboolean
+--- gtkperf/src/main.c	2005-10-30 11:26:42.000000000 +0000
++++ gtkperf-patched/src/main.c	2008-05-23 23:44:02.000000000 +0100
+@@ -65,9 +65,10 @@
+ 			{"help", 0, 0, 0},
+ 			{"automatic", 0, 0, 0},
+ 			{"count", 1, 0, 0},
++			{"test", 1, 0, 0},
+ 			{0, 0, 0, 0}
+ 		};
+-		c = getopt_long (argc, argv, "hac:",
++		c = getopt_long (argc, argv, "hac:t:",
+ 			long_options, &option_index);
+ 		if (c == -1)
+ 			break;
+@@ -104,6 +105,10 @@
+ 				on_cmdline_count(optarg);
+ 				break;
+
++			case 't':
++				on_cmdline_test(optarg);
++				break;
++
+ 			default:
+ 			case 'h':
+ 				on_cmdline_help ();
