@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "2024.001p";
+  version = "2024.001q";
 
   format = "other";
 
   src = let
     src-tarball = requireFile {
       name = "rcu-d${version}-source.tar.gz";
-      hash = "sha256-FtdPcv2JA/fJeD2jG/kadPhhDSbfH2QLjjvLdUZJpZQ=";
+      hash = "sha256-Ywk28gJBMSSQL6jEcHE8h253KOsXIGwVOag6PBWs8kg=";
       url = "http://www.davisr.me/projects/rcu/";
     };
   in runCommand "${src-tarball.name}-unpacked" {} ''
