@@ -2,6 +2,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   isPy27,
+  setuptools,
   cython,
   portaudio,
   cffi,
@@ -24,10 +25,16 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ portaudio ];
-  nativeBuildInputs = [ cython ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  buildInputs = [ portaudio ];
+
+  nativeBuildInputs = [
+    cython
+    cffi
+  ];
+
+  dependencies = [
     cffi
     pa-ringbuffer
     sounddevice
