@@ -65,11 +65,12 @@
                          (io/reader (io/file graphql-path
                                              "repos.edn")))))
 
-(def interesting-repo?
+(defn interesting-repo? [nixpkgs-only]
   (into #{}
         (map repo-map)
-        #_["nix" "nixpkgs"] ; to scope down which repos to look at
-        (keys repo-map)))
+        (if nixpkgs-only
+          ["nixpkgs"]           ; to scope down which repos to look at
+          (keys repo-map))))
 
 ;; # low-level access: graphql
 
@@ -213,9 +214,10 @@
 
 (defn latest-issue-comment-for
   "Find latest issue comment for user within NixOS"
-  [login]
+  [login nixpkgs-only]
   (-> (issue-comments login)
-      (->> (filter (comp interesting-repo? :id :repository)))
+      (->> (filter (comp (interesting-repo? nixpkgs-only)
+                         :id :repository)))
       first
       (dissoc :repository)))
 
@@ -368,13 +370,20 @@ query Main($after:String,$pageSize:Int!) {
   {:user {:require true
           :desc "A GitHub user to operate on"}})
 
+(def issue-comments-spec
+  {:nixpkgs-only {:require false
+                  :coerce :boolean
+                  :desc "Whether to only look at nixpkgs or all nixos repositories"}})
+
 (declare help-dispatch)
 (def table
   [{:cmds ["gh" "latest-issue-comment-for"]
-    :spec user-spec
+    :spec (merge user-spec
+                 issue-comments-spec)
     :error-fn exit-error
     :fn #(assoc % :entry latest-issue-comment-for
-                :eargs [(-> % :opts :user)] )
+                :eargs [(-> % :opts :user)
+                        (-> % :opts :nixpkgs-only)] )
     :args->opts [:user]}
    {:cmds ["gh" "latest-contributions-for"]
     :spec user-spec
