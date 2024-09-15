@@ -34,7 +34,7 @@ let
 
   freenet_ext = fetchurl {
     url = "https://github.com/freenet/fred/releases/download/build01495/freenet-ext.jar";
-    sha256 = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
+    hash = "sha256-MvKz1r7t9UE36i+aPr72dmbXafCWawjNF/19tZuk158=";
   };
 
   seednodes = fetchFromGitHub {
@@ -53,7 +53,7 @@ let
     # https://github.com/freenet/fred/pull/827
     (fetchpatch {
       url = "https://github.com/freenet/fred/commit/8991303493f2c0d9933f645337f0a7a5a979e70a.patch";
-      sha256 = "sha256-T1zymxRTADVhhwp2TyB+BC/J4gZsT/CUuMrT4COlpTY=";
+      hash = "sha256-T1zymxRTADVhhwp2TyB+BC/J4gZsT/CUuMrT4COlpTY=";
     })
   ];
 

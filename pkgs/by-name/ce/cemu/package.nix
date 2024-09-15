@@ -44,7 +44,7 @@ let
       owner = "ocornut";
       repo = "imgui";
       rev = "v${version}";
-      sha256 = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+      hash = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
     };
   };
 in stdenv.mkDerivation (finalAttrs: {

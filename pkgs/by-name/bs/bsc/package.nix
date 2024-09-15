@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "IlyaGrebnov";
     repo = "libbsc";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-reGg5xvoZBbNFFYPPyT2P1LA7oSCUIm9NIDjXyvkP9Q=";
+    hash = "sha256-reGg5xvoZBbNFFYPPyT2P1LA7oSCUIm9NIDjXyvkP9Q=";
   };
 
   enableParallelBuilding = true;

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Novik";
     repo = "ruTorrent";
     rev = "v${version}";
-    sha256 = "Hkh2fWaZpJLxUYaojR97XVQWXTRzmFkQe4xKsmY1E8M=";
+    hash = "sha256-Hkh2fWaZpJLxUYaojR97XVQWXTRzmFkQe4xKsmY1E8M=";
   };
 
   installPhase = ''

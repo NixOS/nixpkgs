@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-2048/${lib.versions.majorMinor finalAttrs.version}/gnome-2048-${finalAttrs.version}.tar.xz";
-    sha256 = "0s5fg4z5in1h39fcr69j1qc5ynmg7a8mfprk3mc3c0csq3snfwz2";
+    hash = "sha256-4nNn9cCaATZYHTNfV5E6r1pfGA4ymcxcGjDYWD55rmg=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/gnome-2048/-/merge_requests/21
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-2048/-/commit/194e22699f7166a016cd39ba26dd719aeecfc868.patch";
-      sha256 = "Qpn/OJJwblRm5Pi453aU2HwbrNjsf+ftmSnns/5qZ9E=";
+      hash = "sha256-Qpn/OJJwblRm5Pi453aU2HwbrNjsf+ftmSnns/5qZ9E=";
     })
   ];
 

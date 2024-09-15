@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "dzaima";
     repo = "BQN";
     rev = "v${version}";
-    sha256 = "sha256-AUfT7l7zr/pyG63wX8FMej8RUg7tXC1aroCrunjyw/8=";
+    hash = "sha256-AUfT7l7zr/pyG63wX8FMej8RUg7tXC1aroCrunjyw/8=";
   };
 
   nativeBuildInputs = [

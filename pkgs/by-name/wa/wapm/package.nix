@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "wasmerio";
     repo = "wapm-cli";
     rev = "v${version}";
-    sha256 = "sha256-T7YEe8xg5iwI/npisW0m+6FLi+eaAQVgYNe6TvMlhAs=";
+    hash = "sha256-T7YEe8xg5iwI/npisW0m+6FLi+eaAQVgYNe6TvMlhAs=";
   };
 
   cargoHash = "sha256-r4123NJ+nxNOVIg6svWr636xbxOJQ7tp76JoAi2m9p8=";

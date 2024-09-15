@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/geary/${lib.versions.major version}/geary-${version}.tar.xz";
-    sha256 = "r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
+    hash = "sha256-r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
   };
 
   nativeBuildInputs = [

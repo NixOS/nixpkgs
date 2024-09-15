@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "sanjuuni";
     rev = version;
-    sha256 = "sha256-wJRPD4OWOTPiyDr9dYseRA7BI942HPfHONVJGTc/+wU=";
+    hash = "sha256-wJRPD4OWOTPiyDr9dYseRA7BI942HPfHONVJGTc/+wU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

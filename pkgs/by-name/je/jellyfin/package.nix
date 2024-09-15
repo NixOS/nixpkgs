@@ -19,7 +19,7 @@ buildDotnetModule rec {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "sha256-gZJIsNKXwhUUVgJh8vXuGSu9DEyrVY8NuIeyZHHQKN4=";
+    hash = "sha256-gZJIsNKXwhUUVgJh8vXuGSu9DEyrVY8NuIeyZHHQKN4=";
   };
 
   propagatedBuildInputs = [ sqlite ];

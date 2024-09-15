@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor version}/gnome-tetravex-${version}.tar.xz";
-    sha256 = "06wihvqp2p52zd2dnknsc3rii69qib4a30yp15h558xrg44z3k8z";
+    hash = "sha256-H83xCXm5o1JgCdeDociKOJkY82DaTttE+6JccfGGkRs=";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # Taken from https://gitlab.gnome.org/GNOME/gnome-tetravex/-/merge_requests/20
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-tetravex/-/commit/80912d06f5e588f6aca966fa516103275e58d94e.patch";
-      sha256 = "2+nFw5sJzbInibKaq3J10Ufbl3CnZWlgnUtzRTZ5G0I=";
+      hash = "sha256-2+nFw5sJzbInibKaq3J10Ufbl3CnZWlgnUtzRTZ5G0I=";
     })
   ];
 

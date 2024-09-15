@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "contentauth";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f1Ec2dJGVjk9Jp5nmcVYwTyIlmnZmERj1pV9weVO3lI=";
+    hash = "sha256-f1Ec2dJGVjk9Jp5nmcVYwTyIlmnZmERj1pV9weVO3lI=";
   };
 
   cargoHash = "sha256-wUGOabFTKLCEmg4zNPUklK3YddIIM4N3pev2TtlVthM=";
