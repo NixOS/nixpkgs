@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "3.0.2";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-a+7Gff3Z1V17uaywoUE+nLVeVprB50Gslarcle/NPB8=";
+    hash = "sha256-b1HP5JCtQFA0+GIkMswb8o3k9zbD5sLrLR7yz8UivLk=";
   };
 
-  vendorHash = "sha256-QoZzEq1aC7cjY/RVp5Z5HhSuTFf2BSYQnfg0jSaeTJU=";
+  vendorHash = "sha256-qOM66jiSjAU5e6eGrM8kgJxWJzxwgHpLadx5pTjNFOs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,17 +39,21 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/stateful/runme/internal/version.BuildDate=1970-01-01T00:00:00Z"
-    "-X=github.com/stateful/runme/internal/version.BuildVersion=${version}"
-    "-X=github.com/stateful/runme/internal/version.Commit=${src.rev}"
+    "-X=github.com/stateful/runme/v3/internal/version.BuildDate=1970-01-01T00:00:00Z"
+    "-X=github.com/stateful/runme/v3/internal/version.BuildVersion=${version}"
+    "-X=github.com/stateful/runme/v3/internal/version.Commit=${src.rev}"
   ];
+
+  # checkFlags = [
+  #   "-ldflags=-X=github.com/stateful/runme/v3/internal/version.BuildVersion=${version}"
+  # ];
 
   # tests fail to access /etc/bashrc on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \
-      --replace /bin/bash "${runtimeShell}"
+      --replace-fail /bin/bash "${runtimeShell}"
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
