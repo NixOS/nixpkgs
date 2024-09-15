@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "wolframalpha";
   version = "5.1.3";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
