@@ -164,4 +164,10 @@ let
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-cudaPackages
+# We want to warn users about the upcoming deprecation of old CUDA
+# versions, without breaking Nixpkgs CI with evaluation warnings. This
+# gross hack ensures that the warning only triggers if aliases are
+# enabled, which is true by default, but not for ofborg.
+lib.warnIf (cudaPackages.cudaOlder "12.0" && config.allowAliases)
+  "CUDA versions older than 12.0 will be removed in Nixpkgs 25.05; see the 24.11 release notes for more information"
+  cudaPackages
