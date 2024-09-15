@@ -1695,7 +1695,9 @@
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
   {
-    documentation.nixos.extraModules =
-      [ ./virtualisation/qemu-vm.nix ./image/repart.nix ];
+    documentation.nixos.extraModules = [
+      ./virtualisation/qemu-vm.nix
+      ./image/repart.nix
+    ];
   }
 ]
