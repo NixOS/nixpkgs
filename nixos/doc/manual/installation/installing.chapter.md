@@ -515,18 +515,19 @@ Use the following commands:
     menu. This allows you to easily roll back to a previous
     configuration if something goes wrong.
 
-    You should log in and change the `root` password with `passwd`.
-
-    You'll probably want to create some user accounts as well, which can
-    be done with `useradd`:
+    As mentioned in `configuration.nix` you must set passwords for declared
+    users using `passwd`. To do this, open a virtual console (press
+    `Ctrl+Alt+{F1-F6}`), then log in as `root` and set passwords:
 
     ```ShellSession
-    $ useradd -c 'Eelco Dolstra' -m eelco
-    $ passwd eelco
+    # passwd <username>
     ```
 
-    You may also want to install some software. This will be covered in
-    [](#sec-package-management).
+    Now go back to the graphical session manager, it is usually on virtual
+    console 7, press `Ctrl+Alt+F7`.
+
+    You may also want to add other users or install some software. This will be
+    covered in [](#sec-user-management) and [](#sec-package-management).
 
 ### Installation summary {#sec-installation-manual-summary}
 []{#sec-installation-summary} <!-- legacy anchor -->
