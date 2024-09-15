@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
+  setuptools,
   cffi,
   brotli,
 }:
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "brotlicffi";
   version = "1.1.0.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -20,11 +21,14 @@ buildPythonPackage rec {
     sha256 = "sha256-oW4y1WBJ7+4XwNwwSSR0qUqN03cZYXUYQ6EAwce9dzI=";
   };
 
+  build-system = [
+    setuptools
+    cffi
+  ];
+
   buildInputs = [ brotli ];
 
-  propagatedNativeBuildInputs = [ cffi ];
-
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ];
 
   preBuild = ''
     export USE_SHARED_BROTLI=1
