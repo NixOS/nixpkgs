@@ -128,9 +128,73 @@ let
               # don't exist in the array given. That's why we use here `POST`, and
               # only if s.override == true then we DELETE the relevant folders
               # afterwards.
-              (map (new_cfg: ''
-                curl -d ${lib.escapeShellArg (builtins.toJSON new_cfg)} -X POST ${s.baseAddress}
-              ''))
+              (map (
+                new_cfg:
+                let
+                  isSecret = attr: value: builtins.isString value && attr == "encryptionPassword";
+
+                  resolveSecrets =
+                    attr: value:
+                    if builtins.isAttrs value then
+                      # Attribute set: process each attribute
+                      builtins.mapAttrs (name: val: resolveSecrets name val) value
+                    else if builtins.isList value then
+                      # List: process each element
+                      map (item: resolveSecrets "" item) value
+                    else if isSecret attr value then
+                      # String that looks like a path: replace with placeholder
+                      let
+                        varName = "secret_${builtins.hashString "sha256" value}";
+                      in
+                      "\${${varName}}"
+                    else
+                      # Other types: return as is
+                      value;
+
+                  # Function to collect all file paths from the configuration
+                  collectPaths =
+                    attr: value:
+                    if builtins.isAttrs value then
+                      concatMap (name: collectPaths name value.${name}) (builtins.attrNames value)
+                    else if builtins.isList value then
+                      concatMap (name: collectPaths "" name) value
+                    else if isSecret attr value then
+                      [ value ]
+                    else
+                      [ ];
+
+                  # Function to generate variable assignments for the secrets
+                  generateSecretVars =
+                    paths:
+                    concatStringsSep "\n" (
+                      map (
+                        path:
+                        let
+                          varName = "secret_${builtins.hashString "sha256" path}";
+                        in
+                        ''
+                          if [ ! -r ${path} ]; then
+                            echo "${path} does not exist"
+                            exit 1
+                          fi
+                          ${varName}=$(<${path})
+                        ''
+                      ) paths
+                    );
+
+                  resolved_cfg = resolveSecrets "" new_cfg;
+                  secretPaths = collectPaths "" new_cfg;
+                  secretVarsScript = generateSecretVars secretPaths;
+
+                  jsonString = builtins.toJSON resolved_cfg;
+                  escapedJson = builtins.replaceStrings [ "\"" ] [ "\\\"" ] jsonString;
+                in
+                ''
+                  ${secretVarsScript}
+
+                  curl -d "${escapedJson}" -X POST ${s.baseAddress}
+                ''
+              ))
               (lib.concatStringsSep "\n")
             ]
             /*
