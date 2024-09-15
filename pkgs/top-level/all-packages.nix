@@ -32704,7 +32704,9 @@ with pkgs;
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
-  pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
+  pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps {
+    abseil-cpp = abseil-cpp_202401;
+  };
 
   pwdsafety = callPackage ../tools/security/pwdsafety { };
 
