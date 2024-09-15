@@ -59,7 +59,7 @@ in
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
     };
     secret = mkOption {
@@ -75,13 +75,13 @@ in
     settings = mkOption {
       type = types.attrs;
       default = { };
-      description = lib.mdDoc "Environment variables to pass to linkwarden. See [documentation](https://docs.linkwarden.app/self-hosting/environment-variables)";
+      description = "Environment variables to pass to linkwarden. See [documentation](https://docs.linkwarden.app/self-hosting/environment-variables)";
     };
     settingsFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/linkwarden.env";
-      description = lib.mdDoc ''
+      description = ''
         Environment variables to pass to linkwarden. Use this to pass secrets and other sensitive data. See [documentation](https://docs.linkwarden.app/self-hosting/environment-variables)
       '';
     };
