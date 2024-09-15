@@ -32,8 +32,6 @@ let
   atLeast10 = lib.versionAtLeast version "10";
   atLeast9  = lib.versionAtLeast version  "9";
   atLeast8  = lib.versionAtLeast version  "8";
-  atLeast7  = lib.versionAtLeast version  "7";
-  atLeast6  = lib.versionAtLeast version  "6";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
@@ -42,7 +40,6 @@ let
   is9  = majorVersion == "9";
   is8  = majorVersion == "8";
   is7  = majorVersion == "7";
-  is6  = majorVersion == "6";
   inherit (lib) optionals optional;
 in
 
@@ -57,7 +54,7 @@ in
 ## 1. Patches relevant to gcc>=12 on every platform ####################################
 
 []
-++ optional (atLeast6 && !atLeast12) ./fix-bug-80431.patch
+++ optional (!atLeast12) ./fix-bug-80431.patch
 ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
   [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
@@ -72,7 +69,7 @@ in
 )
 ++ optional (atLeast12 && langAda) ./gnat-cflags-11.patch
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
-++ optional atLeast7 ./ppc-musl.patch
+++ [ ./ppc-musl.patch ]
 ++ optional (atLeast9 && langD) ./libphobos.patch
 
 
@@ -177,14 +174,13 @@ in
   "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
   "8" = [ ../patches/8/AvailabilityInternal.h-fixincludes.patch ];
   "7" = [ ../patches/7/AvailabilityInternal.h-fixincludes.patch ];
-  "6" = [ ../patches/6/AvailabilityInternal.h-fixincludes.patch ];
 }.${majorVersion} or [])
 
 
 ## Windows
 
 # Obtain latest patch with ../update-mcfgthread-patches.sh
-++ optional (atLeast6 && !atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
+++ optional (!atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
   (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
 
 
@@ -228,7 +224,7 @@ in
 ## gcc 9.0 and older ##############################################################################
 
 ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
-++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
+++ optional (!atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
 
 # Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
 # which is not supported by the clang integrated assembler used by default on Darwin.
@@ -266,35 +262,8 @@ in
   (./. + "/${majorVersion}/gcc8-asan-glibc-2.34.patch")
   (./. + "/${majorVersion}/0001-Fix-build-for-glibc-2.31.patch")
 ]
-++ optional ((is6 || is7) && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
+++ optional (is7 && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
   url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
   sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
 })
-++ optional ((is6 || is7 || is8) && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
-
-
-
-## gcc 6.0 and older ##############################################################################
-
-++ optional (is6 && langGo) ./gogcc-workaround-glibc-2.36.patch
-++ optional is6 ./9/fix-struct-redefinition-on-glibc-2.36.patch
-++ optional (is6 && !stdenv.targetPlatform.isRedox) ./use-source-date-epoch.patch
-++ optional (is6 && !stdenv.targetPlatform.isRedox) ./6/0001-Fix-build-for-glibc-2.31.patch
-++ optionals (is6 && langAda) [
-  ./gnat-cflags.patch
-  ./6/gnat-glibc234.patch
-]
-
-# The clang-based assembler used in darwin.binutils (LLVM >11) does not support piping input.
-# Fortunately, it does not exhibit the problem GCC has with the cctools assembler.
-# This patch can be dropped should darwin.binutils ever implement support.
-++ optional (!atLeast7 && hostPlatform.isDarwin && lib.versionAtLeast (lib.getVersion stdenv.cc) "12") ./4.9/darwin-clang-as.patch
-
-# Building libstdc++ with flat namespaces results in trying to link CoreFoundation, which
-# defaults to the impure, system location and causes the build to fail.
-++ optional (is6 && hostPlatform.isDarwin) ./6/libstdc++-disable-flat_namespace.patch
-
-## gcc 5.0 and older ##############################################################################
-
-++ optional (!atLeast6) ./parallel-bconfig.patch
-
+++ optional ((is7 || is8) && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
