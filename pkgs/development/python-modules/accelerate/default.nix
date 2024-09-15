@@ -104,6 +104,12 @@ buildPythonPackage rec {
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
       # RuntimeError: torch_shm_manager: execl failed: Permission denied
       "CheckpointTest"
+      "test_accelerate_test" # RuntimeError: 'accelerate-launch
+      "test_init_trackers" # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'"
+      "test_log" # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'"
+      "test_log_with_tensor" # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'"
+      "test_init_trackers" # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'"
+      "test_log" # AttributeError: module 'torch.distributed' has no attribute 'is_initialized"
     ];
 
   disabledTestPaths = lib.optionals (!(stdenv.isLinux && stdenv.isx86_64)) [
