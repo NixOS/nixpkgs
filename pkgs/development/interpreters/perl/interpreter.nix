@@ -62,12 +62,8 @@ stdenv.mkDerivation (rec {
 
   disallowedReferences = [ stdenv.cc ];
 
-  patches =
-    # Enable TLS/SSL verification in HTTP::Tiny by default
-    lib.optional (lib.versionOlder version "5.38.0") ./http-tiny-verify-ssl-by-default.patch
-
+  patches = []
     # Do not look in /usr etc. for dependencies.
-    ++ lib.optional (lib.versionOlder version "5.38.0") ./no-sys-dirs-5.31.patch
     ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
     ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
 
