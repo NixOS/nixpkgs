@@ -26,7 +26,7 @@
 , eggUnpackHook
 , eggBuildHook
 , eggInstallHook
-}:
+}@things:
 
 let
   inherit (builtins) unsafeGetAttrPos;
@@ -324,7 +324,7 @@ let
 
     outputs = outputs ++ optional withDistOutput "dist";
 
-    inherit passthru;
+    passthru = { inherit things; } // passthru;
 
     meta = {
       # default to python's platforms
