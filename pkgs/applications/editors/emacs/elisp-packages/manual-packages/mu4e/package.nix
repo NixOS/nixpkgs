@@ -24,7 +24,7 @@ elpaBuild {
 
   ignoreCompilationError = false;
 
-  meta = mu.meta // {
+  meta = removeAttrs mu.meta [ "mainProgram" ] // {
     description = "Full-featured e-mail client";
   };
 }
