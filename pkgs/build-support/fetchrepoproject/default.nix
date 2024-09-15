@@ -1,6 +1,6 @@
 { lib, stdenvNoCC, gitRepo, cacert, copyPathsToStore }:
 
-{ name, manifest, rev ? "HEAD", sha256
+{ name, manifest, rev ? "HEAD", sha256 ? null, hash ? null
 # Optional parameters:
 , repoRepoURL ? "", repoRepoRev ? "", referenceDir ? "", manifestName ? ""
 , localManifests ? [], createMirror ? false, useArchive ? false
@@ -8,6 +8,7 @@
 
 assert repoRepoRev != "" -> repoRepoURL != "";
 assert createMirror -> !useArchive;
+assert lib.assertMsg ((sha256 != null) != (hash != null)) "exactly one of `sha256` or `hash` must be set";
 
 let
   inherit (lib)
@@ -34,14 +35,21 @@ let
 
   local_manifests = copyPathsToStore localManifests;
 
+  h = if hash != null then {
+    outputHash = hash;
+    outputHashAlgo = null;
+  } else {
+    outputHash = sha256;
+    outputHashAlgo = "sha256";
+  };
+
 in stdenvNoCC.mkDerivation {
   inherit name;
 
   inherit cacert manifest rev repoRepoURL repoRepoRev referenceDir; # TODO
 
-  outputHashAlgo = "sha256";
+  inherit (h) outputHash outputHashAlgo;
   outputHashMode = "recursive";
-  outputHash = sha256;
 
   preferLocalBuild = true;
   enableParallelBuilding = true;
