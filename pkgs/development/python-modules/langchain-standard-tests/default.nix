@@ -1,10 +1,19 @@
 {
   lib,
   buildPythonPackage,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   httpx,
   langchain-core,
+  syrupy,
+
+  # buildInputs
   pytest,
+
+  # tests
   numpy,
   pytest-asyncio,
   pytestCheckHook,
@@ -23,8 +32,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    langchain-core
     httpx
+    langchain-core
+    syrupy
   ];
 
   buildInputs = [ pytest ];

@@ -1,37 +1,40 @@
 {
   lib,
   stdenv,
-  anthropic,
-  attr,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  orjson,
+  pydantic,
+  requests,
+
+  # tests
+  anthropic,
   dataclasses-json,
   fastapi,
-  fetchFromGitHub,
   freezegun,
   httpx,
   instructor,
-  orjson,
-  poetry-core,
-  pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  requests,
   uvicorn,
+  attr,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.99";
+  version = "0.1.120";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aN5HiQAXX7ZlVBzkit4DAw+7KQHI3ck1DLvBPDSKVhM=";
+    hash = "sha256-K8QIlyQnaTKCBoRCsTQ26KovIIw8uK6HBynEplrB6wI=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -89,12 +92,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "langsmith";
   };
 }
