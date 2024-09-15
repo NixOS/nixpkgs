@@ -1,4 +1,8 @@
-{ elpaBuild, mu }:
+{
+  lib,
+  elpaBuild,
+  mu,
+}:
 
 elpaBuild {
   pname = "mu4e";
@@ -26,5 +30,6 @@ elpaBuild {
 
   meta = removeAttrs mu.meta [ "mainProgram" ] // {
     description = "Full-featured e-mail client";
+    maintainers = mu.meta.maintainers ++ (with lib.maintainers; [ linj ]);
   };
 }
