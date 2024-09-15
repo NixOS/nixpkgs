@@ -25,6 +25,7 @@
   pytestCheckHook,
   pytest-cov-stub,
   requests,
+  shiny,
   syrupy,
 }:
 
@@ -66,11 +67,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     requests
+    shiny
     syrupy
-  ];
-
-  disabledTestPaths = [
-    "tests/test_shiny.py" # requires `shiny` python package, not in Nixpkgs
   ];
 
   disabledTests = [
