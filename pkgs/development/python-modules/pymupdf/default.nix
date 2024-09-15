@@ -187,12 +187,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fitz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ teto ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = lib.platforms.unix;
+    # ImportError: cannot import name '_mupdf' from partially initialized module 'mupdf'
+    # (most likely due to a circular import)
+    broken = true;
   };
 }
