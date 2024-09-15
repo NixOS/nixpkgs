@@ -9,6 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "waypaper";
   version = "2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
@@ -22,13 +23,16 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ python3.pkgs.setuptools ];
+
+  dependencies = [
     python3.pkgs.pygobject3
     python3.pkgs.platformdirs
     python3.pkgs.importlib-metadata
     python3.pkgs.pillow
-    killall
   ];
+
+  propagatedBuildInputs = [ killall ];
 
   # has no tests
   doCheck = false;
