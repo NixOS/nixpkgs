@@ -186,7 +186,7 @@ in
         '';
       };
 
-      lib.filterForward = lib.mkOption {
+      filterForward = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
@@ -263,7 +263,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.lib.filterForward -> config.networking.nftables.enable;
+        assertion = cfg.filterForward -> config.networking.nftables.enable;
         message = "filterForward only works with the nftables based firewall";
       }
       {
