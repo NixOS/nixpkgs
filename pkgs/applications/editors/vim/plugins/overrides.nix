@@ -541,7 +541,7 @@
       # Note: the destination should be generator.so, even on darwin
       # https://github.com/mistricky/codesnap.nvim/blob/main/scripts/build_generator.sh
       postInstall = let
-        extension = if stdenv.isDarwin then "dylib" else "so";
+        extension = stdenv.hostPlatform.extensions.sharedLibrary;
       in ''
         rm -r $out/lua/*.so
         cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
