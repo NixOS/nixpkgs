@@ -40,7 +40,12 @@ buildNpmPackage rec {
     homepage = "https://antora.org";
     license = licenses.mpl20;
     mainProgram = "antora";
-    maintainers = [ maintainers.ehllie ];
+
+    maintainers = with maintainers; [
+      ehllie
+      naho
+    ];
+
     platforms = lib.platforms.all;
   };
 }
