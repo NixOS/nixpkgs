@@ -1,12 +1,19 @@
-{ lib, python3Packages, fetchzip }:
+{
+  lib,
+  python3Packages,
+  fetchzip,
+  writeScript,
+}:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "pdf-parser";
   version = "0.7.4";
 
   src = fetchzip {
-    url = "https://didierstevens.com/files/software/pdf-parser_V0_7_4.zip";
-    sha256 = "1j39yww2yl4cav8xgd4zfl5jchbbkvffnrynkamkzvz9dd5np2mh";
+    url = "https://didierstevens.com/files/software/pdf-parser_V${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }.zip";
+    hash = "sha256-sIprS2vp7z+rmtZn69yea0EmC3WftNfRVoxQLzj3acg=";
   };
 
   format = "other";
@@ -20,16 +27,28 @@ python3Packages.buildPythonApplication {
       --replace '/usr/bin/python' '${python3Packages.python}/bin/python'
   '';
 
-  meta = with lib; {
+  passthru.updateScript = writeScript "update-pdf-parser" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl pcre2
+
+    set -eu -o pipefail
+
+    version="$(curl -s https://blog.didierstevens.com/programs/pdf-tools/ |
+      pcre2grep -O '$1.$2.$3' '\bpdf-parser_V(\d+)_(\d+)_(\d+)\.zip\b.*')"
+
+    update-source-version "$UPDATE_NIX_ATTR_PATH" "$version"
+  '';
+
+  meta = {
     description = "Parse a PDF document";
     longDescription = ''
       This tool will parse a PDF document to identify the fundamental elements used in the analyzed file.
       It will not render a PDF document.
     '';
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
-    license = licenses.publicDomain;
-    maintainers = [ maintainers.lightdiscord ];
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.lightdiscord ];
+    platforms = lib.platforms.all;
     mainProgram = "pdf-parser.py";
   };
 }
