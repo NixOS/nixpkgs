@@ -2,8 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
 
+  # Build system
+  setuptools,
+  setuptools-scm,
   pytestCheckHook,
 
   # Package dependencies
