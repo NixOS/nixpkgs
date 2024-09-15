@@ -4133,8 +4133,6 @@ with pkgs;
 
   bfetch = callPackage ../tools/misc/bfetch { };
 
-  bless = callPackage ../applications/editors/bless { };
-
   blink = darwin.apple_sdk_11_0.callPackage ../applications/emulators/blink { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
