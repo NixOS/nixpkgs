@@ -1,12 +1,9 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.samba;
 
   settingsFormat = pkgs.formats.ini {
-    listToValue = lib.concatMapStringsSep " " (generators.mkValueStringDefault { });
+    listToValue = lib.concatMapStringsSep " " (lib.generators.mkValueStringDefault { });
   };
   # Ensure the global section is always first
   globalConfigFile = settingsFormat.generate "smb-global.conf" { global = cfg.settings.global; };
@@ -23,8 +20,8 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
-    (mkRemovedOptionModule [ "services" "samba" "syncPasswordsByPam" ] "This option has been removed by upstream, see https://bugzilla.samba.org/show_bug.cgi?id=10669#c10")
+    (lib.mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
+    (lib.mkRemovedOptionModule [ "services" "samba" "syncPasswordsByPam" ] "This option has been removed by upstream, see https://bugzilla.samba.org/show_bug.cgi?id=10669#c10")
 
     (lib.mkRemovedOptionModule [ "services" "samba" "configText" ] ''
       Use services.samba.settings instead.
@@ -166,7 +163,7 @@ in
 
   ###### implementation
 
-  config = mkMerge
+  config = lib.mkMerge
     [ { assertions =
           [ { assertion = cfg.nsswins -> cfg.winbindd.enable;
               message   = "If services.samba.nsswins is enabled, then services.samba.winbindd.enable must also be enabled";
@@ -177,8 +174,8 @@ in
       (lib.mkIf cfg.enable {
         environment.etc."samba/smb.conf".source = configFile;
 
-        system.nssModules = optional cfg.nsswins cfg.package;
-        system.nssDatabases.hosts = optional cfg.nsswins "wins";
+        system.nssModules = lib.optional cfg.nsswins cfg.package;
+        system.nssDatabases.hosts = lib.optional cfg.nsswins "wins";
 
         systemd = {
           slices.system-samba = {
@@ -210,8 +207,8 @@ in
           setuid = true;
         };
 
-        networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
-        networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
+        networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ 139 445 ];
+        networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ 137 138 ];
       })
 
       (lib.mkIf (cfg.enable && cfg.nmbd.enable) {
