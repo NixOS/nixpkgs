@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # fiddle with the terminal.
   doCheck = false;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
   gl_cv_func_fstatat_zero_flag="yes";

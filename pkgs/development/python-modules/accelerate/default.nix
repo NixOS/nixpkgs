@@ -4,35 +4,40 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
+
+  # buildInputs
   llvmPackages,
-  pytest7CheckHook,
+
+  # build-system
   setuptools,
+
+  # dependencies
   numpy,
   packaging,
   psutil,
   pyyaml,
   safetensors,
   torch,
-  config,
-  cudatoolkit,
+
+  # tests
   evaluate,
   parameterized,
+  pytest7CheckHook,
   transformers,
+  config,
+  cudatoolkit,
 }:
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.34.0";
+  version = "0.34.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MyV1GKxD43QSzS8jea8amt8Xe1h0Xm0WdtUNGkYHfvw=";
+    hash = "sha256-4kDNLta6gGev16A4hNOArTpoD8p6LMRwqwHS/DZjtz0=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -101,6 +106,14 @@ buildPythonPackage rec {
       # requires ptxas from cudatoolkit, which is unfree
       "test_dynamo_extract_model"
     ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      # RuntimeError: 'accelerate-launch /nix/store/a7vhm7b74a7bmxc35j26s9iy1zfaqjs...
+      "test_accelerate_test"
+      "test_init_trackers"
+      "test_init_trackers"
+      "test_log"
+      "test_log_with_tensor"
+    ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
       # RuntimeError: torch_shm_manager: execl failed: Permission denied
       "CheckpointTest"
@@ -118,12 +131,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://huggingface.co/docs/accelerate";
     description = "Simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision";
     changelog = "https://github.com/huggingface/accelerate/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "accelerate";
   };
 }

@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 source "https://rubygems.org"
 
-gem "metasploit-framework", git: "https://github.com/rapid7/metasploit-framework", ref: "refs/tags/6.4.25"
+gem "metasploit-framework", git: "https://github.com/rapid7/metasploit-framework", ref: "refs/tags/6.4.26"
