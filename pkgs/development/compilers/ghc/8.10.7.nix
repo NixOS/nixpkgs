@@ -228,7 +228,7 @@ let
         else pkgsHostTarget;
     in
       {
-        inherit (basePackageSet) gmp;
+        inherit (basePackageSet) gmp ncurses;
         # dynamic inherits are not possible in Nix
         libffi = basePackageSet.${libffi_name};
       };
@@ -394,6 +394,9 @@ stdenv.mkDerivation (rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
+  ] ++ lib.optionals enableTerminfo [
+    "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
+    "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"
   ] ++ lib.optionals (args.${libffi_name} != null) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetLibs.libffi.dev}/include"

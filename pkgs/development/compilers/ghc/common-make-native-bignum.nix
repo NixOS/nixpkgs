@@ -225,7 +225,8 @@ let
     inherit
       (if hostPlatform != targetPlatform then targetPackages else pkgsHostTarget)
       gmp
-      libffi;
+      libffi
+      ncurses;
   };
 
 in
@@ -407,6 +408,9 @@ stdenv.mkDerivation (rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
+  ] ++ lib.optionals enableTerminfo [
+    "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
+    "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"
   ] ++ lib.optionals (libffi != null) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetLibs.libffi.dev}/include"
