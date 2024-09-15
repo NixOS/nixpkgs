@@ -362,7 +362,8 @@ let
       (if hostPlatform != targetPlatform then targetPackages else pkgsHostTarget)
       elfutils
       gmp
-      libffi;
+      libffi
+      ncurses;
   };
 
   # Our Cabal compiler name
@@ -492,6 +493,9 @@ stdenv.mkDerivation ({
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
+  ] ++ lib.optionals enableTerminfo [
+    "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
+    "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"
   ] ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetLibs.libffi.dev}/include"
