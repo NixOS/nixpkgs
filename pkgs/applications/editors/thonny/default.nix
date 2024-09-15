@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems, desktopToDarwinBundle }:
 
 with python3.pkgs;
 
@@ -13,7 +13,8 @@ buildPythonApplication rec {
     hash = "sha256-/ms2RESnV3bsJpK1zYYLHNUu1FtA6PntaseTbKMfUMc=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [ copyDesktopItems ]
+    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   desktopItems = [ (makeDesktopItem {
     name = "Thonny";
@@ -24,7 +25,7 @@ buildPythonApplication rec {
     categories  = [ "Development" "IDE" ];
   }) ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; ([
     jedi
     pyserial
     tkinter
@@ -34,8 +35,9 @@ buildPythonApplication rec {
     pyperclip
     asttokens
     send2trash
+  ] ++ lib.optionals stdenv.isLinux [
     dbus-next
-  ];
+  ]);
 
   preInstall = ''
     export HOME=$(mktemp -d)
