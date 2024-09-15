@@ -496,9 +496,7 @@ Use the following commands:
     Retype new password: ***
     ```
 
-    If you have a user account declared in your `configuration.nix`
-    and plan to log in using this user, you should set a password
-    before rebooting, e.g. for the `alice` user:
+    If you have a user account declared in your `configuration.nix` and plan to log in using this user, set a password before rebooting, e.g. for the `alice` user:
 
     ```ShellSession
     # nixos-enter --root /mnt -c 'passwd alice'
@@ -523,14 +521,13 @@ Use the following commands:
     menu. This allows you to easily roll back to a previous
     configuration if something goes wrong.
 
-    Use your declared user account to log in. If you didn’t
-    declare one, you should still be able to log in using
-    the `root` user.
+    Use your declared user account to log in.
+    If you didn’t declare one, you should still be able to log in using the `root` user.
 
-    Note that some graphical display managers like SDDM do not
-    allow `root` login by default so you might
-    need to switch to TTY. Head to [](#sec-user-management)
-    for more info regarding declaring user accounts.
+    ::: {.note}
+    Some graphical display managers such as SDDM do not allow `root` login by default, so you might need to switch to TTY.
+    Refer to [](#sec-user-management) for details on declaring user accounts.
+    :::
 
     You may also want to install some software. This will be covered in
     [](#sec-package-management).
