@@ -93,6 +93,7 @@ in {
             ipc_directory = mkOption {
               type = types.str;
               default = "${dataDir}/ipc";
+              description = "IPC directory where file sockets are stored.";
             };
           };
           logging = {
@@ -196,6 +197,8 @@ in {
                 node_id = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
                   default = null;
+                  description =
+                    "Base64-encoded public key for the node, used as the node's ID.";
                 };
               };
               dht = {
