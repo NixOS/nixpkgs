@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   isPy27,
+  setuptools,
   cffi,
   numpy,
   portaudio,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "sounddevice";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
   disabled = isPy27;
 
   src = fetchPypi {
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-DelSd2VLPUA9nBXe08bO3zB+myfMnOe9mVookdDJVa8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cffi
     numpy
     portaudio
