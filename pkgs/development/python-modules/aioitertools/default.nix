@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aioitertools";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QsaLjdOmnCv38iM7999LtYtVe8pSUqwC7VGHu8Z9aDE=";
+    hash = "sha256-wqkFW0+7dwX1YbnYYFPor10QzIRdIsMgCMQ0kLLY3Ws=";
   };
 
   nativeBuildInputs = [ flit-core ];
