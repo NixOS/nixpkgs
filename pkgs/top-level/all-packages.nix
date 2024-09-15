@@ -18122,10 +18122,10 @@ with pkgs;
   gradle_8-unwrapped = callPackage gradle-packages.gradle_8 { };
   gradle-unwrapped = gradle_8-unwrapped;
 
-  gradle_6 = wrapGradle gradle_6-unwrapped;
-  gradle_7 = wrapGradle gradle_7-unwrapped;
-  gradle_8 = wrapGradle gradle_8-unwrapped;
-  gradle = wrapGradle gradle-unwrapped;
+  gradle_6 = wrapGradle gradle_6-unwrapped null;
+  gradle_7 = wrapGradle gradle_7-unwrapped null;
+  gradle_8 = wrapGradle gradle_8-unwrapped null;
+  gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
 
   grcov = callPackage ../development/tools/misc/grcov { };
 
