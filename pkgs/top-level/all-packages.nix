@@ -17692,10 +17692,10 @@ with pkgs;
   gradle_8-unwrapped = callPackage gradle-packages.gradle_8 { };
   gradle-unwrapped = gradle_8-unwrapped;
 
-  gradle_6 = wrapGradle gradle_6-unwrapped;
-  gradle_7 = wrapGradle gradle_7-unwrapped;
-  gradle_8 = wrapGradle gradle_8-unwrapped;
-  gradle = wrapGradle gradle-unwrapped;
+  gradle_6 = wrapGradle gradle_6-unwrapped null;
+  gradle_7 = wrapGradle gradle_7-unwrapped null;
+  gradle_8 = wrapGradle gradle_8-unwrapped null;
+  gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
