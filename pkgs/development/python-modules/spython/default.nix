@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
+      --replace-fail '"pytest-runner"' ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streamlined singularity python client (spython) for singularity";
-    mainProgram = "spython";
     homepage = "https://github.com/singularityhub/singularity-cli";
     changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "spython";
   };
 }
