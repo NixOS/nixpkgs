@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with lib;
 let
   cfg = config.services.veilid;
@@ -6,7 +11,8 @@ let
 
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "veilid-server.conf" cfg.settings;
-in {
+in
+{
   config = mkIf cfg.enable {
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ 5150 ];
@@ -21,7 +27,9 @@ in {
       before = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
-      environment = { RUST_BACKTRACE = "1"; };
+      environment = {
+        RUST_BACKTRACE = "1";
+      };
       serviceConfig = {
         ExecStart = "${pkgs.veilid}/bin/veilid-server -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
@@ -63,7 +71,9 @@ in {
     };
     users.groups.veilid = { };
 
-    environment = { systemPackages = [ pkgs.veilid ]; };
+    environment = {
+      systemPackages = [ pkgs.veilid ];
+    };
     services.veilid.settings = { };
   };
 
@@ -87,8 +97,7 @@ in {
             ipc_enabled = mkOption {
               type = types.bool;
               default = true;
-              description =
-                "veilid-server will respond to Python and other JSON client requests.";
+              description = "veilid-server will respond to Python and other JSON client requests.";
             };
             ipc_directory = mkOption {
               type = types.str;
@@ -107,8 +116,7 @@ in {
                 type = types.str;
                 default = "info";
                 example = "debug";
-                description =
-                  "The minimum priority of system events to be logged.";
+                description = "The minimum priority of system events to be logged.";
               };
             };
             terminal = {
@@ -121,8 +129,7 @@ in {
                 type = types.str;
                 default = "info";
                 example = "debug";
-                description =
-                  "The minimum priority of terminal events to be logged.";
+                description = "The minimum priority of terminal events to be logged.";
               };
             };
             api = {
@@ -135,8 +142,7 @@ in {
                 type = types.str;
                 default = "info";
                 example = "debug";
-                description =
-                  "The minimum priority of api events to be logged.";
+                description = "The minimum priority of api events to be logged.";
               };
             };
           };
@@ -146,44 +152,38 @@ in {
                 type = types.listOf types.str;
                 default = [ ];
                 example = [ "APPM" ];
-                description =
-                  "A list of capabilities to disable (for example, DHTV to say you cannot store DHT information).";
+                description = "A list of capabilities to disable (for example, DHTV to say you cannot store DHT information).";
               };
             };
             protected_store = {
               allow_insecure_fallback = mkOption {
                 type = types.bool;
                 default = true;
-                description =
-                  "If we can't use system-provided secure storage, should we proceed anyway?";
+                description = "If we can't use system-provided secure storage, should we proceed anyway?";
               };
               always_use_insecure_storage = mkOption {
                 type = types.bool;
                 default = true;
-                description =
-                  "Should we bypass any attempt to use system-provided secure storage?";
+                description = "Should we bypass any attempt to use system-provided secure storage?";
               };
               directory = mkOption {
                 type = types.str;
                 default = "${dataDir}/protected_store";
-                description =
-                  "The filesystem directory to store your protected store in.";
+                description = "The filesystem directory to store your protected store in.";
               };
             };
             table_store = {
               directory = mkOption {
                 type = types.str;
                 default = "${dataDir}/table_store";
-                description =
-                  "The filesystem directory to store your table store within.";
+                description = "The filesystem directory to store your table store within.";
               };
             };
             block_store = {
               directory = mkOption {
                 type = types.nullOr types.str;
                 default = "${dataDir}/block_store";
-                description =
-                  "The filesystem directory to store blocks for the block store.";
+                description = "The filesystem directory to store blocks for the block store.";
               };
             };
             network = {
@@ -191,35 +191,30 @@ in {
                 bootstrap = mkOption {
                   type = types.listOf types.str;
                   default = [ "bootstrap.veilid.net" ];
-                  description =
-                    "Host name of existing well-known Veilid bootstrap servers for the network to connect to.";
+                  description = "Host name of existing well-known Veilid bootstrap servers for the network to connect to.";
                 };
                 node_id = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
                   default = null;
-                  description =
-                    "Base64-encoded public key for the node, used as the node's ID.";
+                  description = "Base64-encoded public key for the node, used as the node's ID.";
                 };
               };
               dht = {
                 min_peer_count = mkOption {
                   type = types.number;
                   default = 20;
-                  description =
-                    "Minimum number of nodes to keep in the peer table.";
+                  description = "Minimum number of nodes to keep in the peer table.";
                 };
               };
               upnp = mkOption {
                 type = types.bool;
                 default = true;
-                description =
-                  "Should the app try to improve its incoming network connectivity using UPnP?";
+                description = "Should the app try to improve its incoming network connectivity using UPnP?";
               };
               detect_address_changes = mkOption {
                 type = types.bool;
                 default = true;
-                description =
-                  "Should veilid-core detect and notify on network address changes?";
+                description = "Should veilid-core detect and notify on network address changes?";
               };
             };
           };
