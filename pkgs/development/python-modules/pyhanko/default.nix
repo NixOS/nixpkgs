@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   aiohttp,
   asn1crypto,
   buildPythonPackage,
@@ -122,5 +123,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = [ ];
+    # Most tests fail with:
+    # OSError: One or more parameters passed to a function were not valid.
+    broken = stdenv.isDarwin;
   };
 }
