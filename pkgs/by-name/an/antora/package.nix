@@ -1,5 +1,6 @@
 {
   buildNpmPackage,
+  callPackage,
   fetchFromGitLab,
   lib,
   nix-update-script,
@@ -29,7 +30,10 @@ buildNpmPackage rec {
     ln -s $out/lib/node_modules/antora-build/packages/cli/bin/antora $out/bin/antora
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.run = callPackage ./test { };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Modular documentation site generator. Designed for users of Asciidoctor";
