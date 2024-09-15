@@ -2,10 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
   hatchling,
+
+  # pydantic
   pydantic,
   python-dotenv,
+
+  # tests
   pytestCheckHook,
   pytest-examples,
   pytest-mock,
@@ -14,16 +19,14 @@
 let
   self = buildPythonPackage rec {
     pname = "pydantic-settings";
-    version = "2.3.4";
+    version = "2.5.2";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-settings";
       rev = "refs/tags/v${version}";
-      hash = "sha256-tLF7LvsXryhbThaNl6koM0bGM8EOaA+aH2fGqzR8GKE=";
+      hash = "sha256-VkvkF7tJfFknYCXz7tq1578ebW79Ovx1tOFO8o8wK/I=";
     };
 
     build-system = [ hatchling ];
@@ -57,10 +60,11 @@ let
       pytest = self.overridePythonAttrs { doCheck = true; };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Settings management using pydantic";
       homepage = "https://github.com/pydantic/pydantic-settings";
-      license = licenses.mit;
+      changelog = "https://github.com/pydantic/pydantic-settings/tree/v${version}";
+      license = lib.licenses.mit;
       broken = lib.versionOlder pydantic.version "2.0.0";
       maintainers = [ ];
     };
