@@ -31,7 +31,10 @@ buildPythonPackage rec {
   meta = {
     description = "Permchain";
     homepage = "https://pypi.org/project/permchain";
-    license = with lib.licenses; [ elastic20 mit ];
-    maintainers = with lib.maintainers; [ ];
+    license = with lib.licenses; [
+      elastic20
+      mit
+    ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }
