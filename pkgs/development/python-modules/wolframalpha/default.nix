@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "";
+    hash = "sha256-ViJu/soPVazsXhfdL2U3oXjQv0/uxN8GFRZeKWi7Sbg=";
   };
 
   build-system = [
