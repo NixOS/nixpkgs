@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "47.beta";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/gnome-calculator-${version}.tar.xz";
-    hash = "sha256-2M8oR/GmVxoEwJUhDBg4H84Y9kq+9zTNey1C9b8Sqis=";
+    hash = "sha256-3s2yMoO12+70CVG2nq99S4DAw4gN2wGGP58PFVT4mYs=";
   };
 
   nativeBuildInputs = [
