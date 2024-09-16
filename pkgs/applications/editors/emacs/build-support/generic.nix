@@ -90,6 +90,7 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
       | xargs --verbose -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
           "emacs \
              --batch \
+             --eval '(setq native-comp-eln-load-path (cdr native-comp-eln-load-path))' \
              --eval '(setq large-file-warning-threshold nil)' \
              --eval '(setq byte-compile-error-on-warn ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"})' \
              -f batch-native-compile {} \
