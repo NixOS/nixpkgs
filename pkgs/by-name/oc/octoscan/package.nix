@@ -25,6 +25,7 @@ buildGoModule rec {
   meta = {
     description = "Static vulnerability scanner for GitHub action workflows";
     homepage = "https://github.com/synacktiv/octoscan";
+    changelog = "https://github.com/synacktiv/octoscan/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "octoscan";
