@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.77.91";
+  version = "0.78.0";
 
   outputs = [ "out" "dev" ]
     ++ lib.optional (gtkVersion != null) "devdoc";
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "vte";
     rev = finalAttrs.version;
-    hash = "sha256-pyK6tDD9S3asIvJXAifJshu2AOW915q/eUxx3+RbPo8=";
+    hash = "sha256-Ql4q30Q4OEyH63SMbpMVyT/ZySeH/5b+5vo+Xv2HGdQ=";
   };
 
   patches = [
