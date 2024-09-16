@@ -241,6 +241,7 @@ let
             type = with lib.types; nullOr str;
             default = null;
             readOnly = true;
+            internal = true;
           };
 
           internal = lib.mkEnableOption "" // lib.mkOption {
