@@ -99,9 +99,8 @@ finalAttrs: prevAttrs: {
     cudnn =
       let
         desiredName = mkVersionedPackageName "cudnn" package.cudnnVersion;
-        desiredIsAvailable = final ? desiredName;
       in
-      if package.cudnnVersion == null || !desiredIsAvailable then final.cudnn else final.${desiredName};
+      if package.cudnnVersion == null || (final ? desiredName) then final.cudnn else final.${desiredName};
   };
 
   meta = prevAttrs.meta // {
