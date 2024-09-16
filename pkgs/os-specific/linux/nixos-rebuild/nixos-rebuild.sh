@@ -367,6 +367,10 @@ if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; t
     exit 1
 fi
 
+#
+### Preparation
+#
+
 # See cleanup function below
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
@@ -386,47 +390,6 @@ cleanup() {
 trap cleanup EXIT
 
 SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
-
-# Only run shell scripts from the Nixpkgs tree if the action is
-# "switch", "boot", or "test". With other actions (such as "build"),
-# the user may reasonably expect that no code from the Nixpkgs tree is
-# executed, so it's safe to run nixos-rebuild against a potentially
-# untrusted tree.
-canRun=
-if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
-    canRun=1
-fi
-
-# If ‘--upgrade’ or `--upgrade-all` is given,
-# run ‘nix-channel --update nixos’.
-if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
-    # If --upgrade-all is passed, or there are other channels that
-    # contain a file called ".update-on-nixos-rebuild", update them as
-    # well. Also upgrade the nixos channel.
-
-    for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
-        channel_name=$(basename "$channelpath")
-
-        if [[ "$channel_name" == "nixos" ]]; then
-            runCmd nix-channel --update "$channel_name"
-        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
-            runCmd nix-channel --update "$channel_name"
-        elif [[ -n $upgrade_all ]] ; then
-            runCmd nix-channel --update "$channel_name"
-        fi
-    done
-fi
-
-# Make sure that we use the Nix package we depend on, not something
-# else from the PATH for nix-{env,instantiate,build}.  This is
-# important, because NixOS defaults the architecture of the rebuilt
-# system to the architecture of the nix-* binaries used.  So if on an
-# amd64 system the user has an i686 Nix package in her PATH, then we
-# would silently downgrade the whole system to be i686 NixOS on the
-# next reboot.
-if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
-    export PATH=@nix@/bin:$PATH
-fi
 
 # Use /etc/nixos/flake.nix if it exists. It can be a symlink to the
 # actual flake.
@@ -450,6 +413,51 @@ if [[ -n $flake ]]; then
     else
         flakeAttr="nixosConfigurations.\"$flakeAttr\""
     fi
+fi
+
+# Only run shell scripts from the Nixpkgs tree if the action is
+# "switch", "boot", or "test". With other actions (such as "build"),
+# the user may reasonably expect that no code from the Nixpkgs tree is
+# executed, so it's safe to run nixos-rebuild against a potentially
+# untrusted tree.
+canRun=
+if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
+    canRun=1
+fi
+
+# Make sure that we use the Nix package we depend on, not something
+# else from the PATH for nix-{env,instantiate,build}.  This is
+# important, because NixOS defaults the architecture of the rebuilt
+# system to the architecture of the nix-* binaries used.  So if on an
+# amd64 system the user has an i686 Nix package in her PATH, then we
+# would silently downgrade the whole system to be i686 NixOS on the
+# next reboot.
+if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
+    export PATH=@nix@/bin:$PATH
+fi
+
+#
+### Perform action
+#
+
+# If ‘--upgrade’ or `--upgrade-all` is given,
+# run ‘nix-channel --update nixos’.
+if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
+    # If --upgrade-all is passed, or there are other channels that
+    # contain a file called ".update-on-nixos-rebuild", update them as
+    # well. Also upgrade the nixos channel.
+
+    for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
+        channel_name=$(basename "$channelpath")
+
+        if [[ "$channel_name" == "nixos" ]]; then
+            runCmd nix-channel --update "$channel_name"
+        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
+            runCmd nix-channel --update "$channel_name"
+        elif [[ -n $upgrade_all ]] ; then
+            runCmd nix-channel --update "$channel_name"
+        fi
+    done
 fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
