@@ -22937,6 +22937,8 @@ with pkgs;
 
   paperkey = callPackage ../tools/security/paperkey { };
 
+  parallel-hashmap = callPackage ../development/libraries/parallel-hashmap { };
+
   parsero = callPackage ../tools/security/parsero { };
 
   pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
