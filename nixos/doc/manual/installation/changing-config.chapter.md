@@ -5,7 +5,7 @@ configuration of your machine. Whenever you've [changed
 something](#ch-configuration) in that file, you should do
 
 ```ShellSession
-# nixos-rebuild switch
+$ nixos-rebuild switch --use-remote-sudo
 ```
 
 to build the new configuration, make it the default configuration for
@@ -26,7 +26,7 @@ from a root shell or by prefixing them with `sudo -i`.
 You can also do
 
 ```ShellSession
-# nixos-rebuild test
+$ nixos-rebuild test --use-remote-sudo
 ```
 
 to build the configuration and switch the running system to it, but
@@ -37,7 +37,7 @@ configuration.
 There is also
 
 ```ShellSession
-# nixos-rebuild boot
+$ nixos-rebuild boot --use-remote-sudo
 ```
 
 to build the configuration and make it the boot default, but not switch
@@ -47,7 +47,7 @@ You can make your configuration show up in a different submenu of the
 GRUB 2 boot screen by giving it a different *profile name*, e.g.
 
 ```ShellSession
-# nixos-rebuild switch -p test
+$ nixos-rebuild switch -p test --use-remote-sudo
 ```
 
 which causes the new configuration (and previous ones created using
@@ -58,7 +58,7 @@ configurations.
 A repl, or read-eval-print loop, is also available. You can inspect your configuration and use the Nix language with
 
 ```ShellSession
-# nixos-rebuild repl
+$ nixos-rebuild repl
 ```
 
 Your configuration is loaded into the `config` variable. Use tab for autocompletion, use the `:r` command to reload the configuration files. See `:?` or [`nix repl` in the Nix manual](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-repl.html) to learn more.
