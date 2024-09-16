@@ -38,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "lib" "dev" ];
 
   postPatch = lib.optionalString installExperimentalTools ''
-    sed -i "s/install : false/install : true/g" tools/meson.build
+    substituteInPlace tools/meson.build \
+      --replace-fail "install : false" "install : true"
   '';
 
   nativeBuildInputs = [ meson ninja go-md2man pkg-config ];
