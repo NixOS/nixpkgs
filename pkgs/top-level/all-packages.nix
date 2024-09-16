@@ -23820,8 +23820,6 @@ with pkgs;
 
   toml11 = callPackage ../development/libraries/toml11 { };
 
-  tomlplusplus = callPackage ../development/libraries/tomlplusplus { };
-
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
