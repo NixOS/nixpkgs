@@ -35,6 +35,10 @@ HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with: nix run nixpkgs#luarocks-packages-updater
 You can customize the generated packages in pkgs/development/lua-modules/overrides.nix
 */
+{{ stdenv, lib, fetchurl, fetchgit, callPackage, ... }}:
+final: prev:
+{{
+
 """.format(
     GENERATED_NIXFILE=GENERATED_NIXFILE
 )
@@ -72,14 +76,23 @@ class LuaPlugin:
 # rename Editor to LangUpdate/ EcosystemUpdater
 class LuaEditor(pluginupdate.Editor):
 
+    # @property
+    def __init__(self, *args, **kwargs):
+        self.header = HEADER
+        super().__init__(*args, **kwargs)
+        print("name")
+        print(self.name)
+
     def create_parser(self):
         parser = super().create_parser()
         parser.set_defaults(proc=1)
         return parser
 
-    def get_current_plugins(self):
+    def get_current_plugins(self, nixpkgs):
         return []
 
+    # config: FetchConfig,
+    # _,
     def load_plugin_spec(self, input_file) -> List[LuaPlugin]:
         luaPackages = []
         csvfilename = input_file
@@ -100,15 +113,9 @@ class LuaEditor(pluginupdate.Editor):
 
     def generate_nix(self, results: List[Tuple[LuaPlugin, str]], outfilename: str):
         with tempfile.NamedTemporaryFile("w+") as f:
-            f.write(HEADER)
-            header2 = textwrap.dedent(
-                """
-                { stdenv, lib, fetchurl, fetchgit, callPackage, ... }:
-                final: prev:
-                {
-            """
-            )
-            f.write(header2)
+            f.write(self.header)
+            print("RESULTS")
+            print(results)
             for plugin, nix_expr in results:
                 f.write(f"{plugin.normalized_name} = {nix_expr}")
             f.write(FOOTER)
@@ -124,16 +131,60 @@ class LuaEditor(pluginupdate.Editor):
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
-        _prefetch = generate_pkg_nix
+    def generate_pkg_nix(plug: LuaPlugin) -> Tuple[LuaPlugin, str]:
+        """
+        Generate nix expression for a luarocks package
+        Our cache key associates "p.name-p.version" to its rockspec
+        """
+        log.debug("Generating nix expression for %s", plug.name)
 
-        def update() -> dict:
+        cmd = ["luarocks", "nix"]
+
+        if plug.maintainers:
+            cmd.append(f"--maintainers={plug.maintainers}")
+
+        if plug.rockspec != "":
+            if plug.ref or plug.version:
+                msg = (
+                    "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s"
+                    % plug.name
+                )
+                log.warning(msg)
+
+            log.debug("Updating from rockspec %s", plug.rockspec)
+            cmd.append(plug.rockspec)
+
+        # update the plugin from luarocks
+        else:
+            cmd.append(plug.name)
+            if plug.version and plug.version != "src":
+                cmd.append(plug.version)
+
+        if plug.server != "src" and plug.server:
+            cmd.append(f"--only-server={plug.server}")
+
+        if plug.luaversion:
+            cmd.append(f"--lua-version={plug.luaversion}")
+            luaver = plug.luaversion.replace('.', '')
+            if luaver := os.getenv(f"LUA_{luaver}"):
+                cmd.append(f"--lua-dir={luaver}")
+
+        log.debug("running %s", " ".join(cmd))
+
+        output = subprocess.check_output(cmd, text=True)
+        output = "callPackage(" + output.strip() + ") {};\n\n"
+        return (plug, output)
+
+    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+        # _prefetch = self.generate_pkg_nix
+
+        def _update() -> dict:
             plugin_specs = self.load_plugin_spec(input_file)
             sorted_plugin_specs = sorted(plugin_specs, key=lambda v: v.name.lower())
 
             try:
                 pool = Pool(processes=config.proc)
-                results = pool.map(_prefetch, sorted_plugin_specs)
+                results = pool.map(self.generate_pkg_nix, sorted_plugin_specs)
             finally:
                 pass
 
@@ -142,7 +193,7 @@ class LuaEditor(pluginupdate.Editor):
             redirects = {}
             return redirects
 
-        return update
+        return _update
 
     def rewrite_input(self, input_file: str, *args, **kwargs):
         # vim plugin reads the file before update but that shouldn't be our case
@@ -158,50 +209,6 @@ class LuaEditor(pluginupdate.Editor):
         #         luaPackages.append(plugin)
         pass
 
-
-def generate_pkg_nix(plug: LuaPlugin):
-    """
-    Generate nix expression for a luarocks package
-    Our cache key associates "p.name-p.version" to its rockspec
-    """
-    log.debug("Generating nix expression for %s", plug.name)
-
-    cmd = ["luarocks", "nix"]
-
-    if plug.maintainers:
-        cmd.append(f"--maintainers={plug.maintainers}")
-
-    if plug.rockspec != "":
-        if plug.ref or plug.version:
-            msg = (
-                "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s"
-                % plug.name
-            )
-            log.warning(msg)
-
-        log.debug("Updating from rockspec %s", plug.rockspec)
-        cmd.append(plug.rockspec)
-
-    # update the plugin from luarocks
-    else:
-        cmd.append(plug.name)
-        if plug.version and plug.version != "src":
-            cmd.append(plug.version)
-
-    if plug.server != "src" and plug.server:
-        cmd.append(f"--only-server={plug.server}")
-
-    if plug.luaversion:
-        cmd.append(f"--lua-version={plug.luaversion}")
-        luaver = plug.luaversion.replace('.', '')
-        if luaver := os.getenv(f"LUA_{luaver}"):
-            cmd.append(f"--lua-dir={luaver}")
-
-    log.debug("running %s", " ".join(cmd))
-
-    output = subprocess.check_output(cmd, text=True)
-    output = "callPackage(" + output.strip() + ") {};\n\n"
-    return (plug, output)
 
 
 def main():

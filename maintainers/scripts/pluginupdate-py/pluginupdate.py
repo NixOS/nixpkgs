@@ -426,6 +426,8 @@ class Editor:
         raise NotImplementedError()
 
     def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+        log.debug("Calling get update")
+
         cache: Cache = Cache(self.get_current_plugins(self.nixpkgs), self.cache_file)
         _prefetch = functools.partial(prefetch, cache=cache)
 

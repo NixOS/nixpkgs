@@ -1,4 +1,3 @@
 name,rockspec,ref,server,version,luaversion,maintainers
 gitsigns.nvim,https://raw.githubusercontent.com/lewis6991/gitsigns.nvim/main/gitsigns.nvim-scm-1.rockspec,,,,5.1,
 haskell-tools.nvim,,,,,,mrcjkb
-

@@ -2,6 +2,8 @@
 { callPackage, config, lib, vimUtils, vim, darwin, llvmPackages
 , neovim-unwrapped
 , neovimUtils
+, neovim
+, luaPackages
 }:
 
 let
@@ -20,8 +22,10 @@ let
 
   # neovim plugins that are generated via the
   # pkgs/applications/editors/neovim/generated-plugins.nix
-  neovimPlugins =  callPackage ../../teto/neovim/generated-plugins.nix {
+  neovimPlugins =  callPackage ../../neovim/generated-plugins.nix {
     inherit buildVimPlugin;
+    # callPackage = neovim.lua.pkgs.callPackage;
+    callPackage = neovim.passthru.unwrapped.lua.pkgs.callPackage;
     inherit (neovimUtils) buildNeovimPlugin;
   };
 
@@ -42,7 +46,10 @@ let
   extensible-self = lib.makeExtensible
     (extends aliases
       (extends overrides
-        (extends plugins initialPackages)
+        # plugins
+        (extends neovimPlugins
+          (extends plugins initialPackages)
+        )
       )
     );
 in

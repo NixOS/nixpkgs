@@ -7,6 +7,10 @@ name = "neovim-plugins-updater"
 version = "0.0.1"
 description = """Module to update luarocks-based neovim plugins"""
 
+dependencies = [
+ "luarocks-packages-updater"
+]
+
 [project.urls]
 Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/lu/neovim-plugins-updater"
 
