@@ -22594,6 +22594,9 @@ with pkgs;
     pythonPackages = python3Packages;
     # TODO(@connorbaker): OpenCV 4.9 only supports up to CUDA 12.3.
     cudaPackages = cudaPackages_12_3;
+    # TODO: LTO does not work.
+    # https://github.com/NixOS/nixpkgs/issues/343123
+    enableLto = false;
   };
 
   opencv4WithoutCuda = opencv4.override {

@@ -46,7 +46,7 @@
 , cudaPackages ? {}
 , nvidia-optical-flow-sdk
 
-, enableLto ? false # TODO: Investigate LTO build failures
+, enableLto ? true
 , enableUnfree ? false
 , enableIpp ? false
 , enablePython ? false
