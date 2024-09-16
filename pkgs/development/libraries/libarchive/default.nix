@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , acl
 , attr
 , autoreconfHook
@@ -41,6 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   outputs = [ "out" "lib" "dev" ];
+
+  patches = [
+    # https://github.com/libarchive/libarchive/pull/2268
+    (fetchpatch {
+      name = "libarchive-fix-pkg-config.patch";
+      url = "https://github.com/libarchive/libarchive/commit/f83fbe078b087e6d29c448227a6becba666685ba.patch";
+      hash = "sha256-C374cKQTn+tjgaLSWkFi8jjm3MNWGT9t89D6g52z2n4=";
+    })
+  ];
 
   postPatch = let
     skipTestPaths = [
