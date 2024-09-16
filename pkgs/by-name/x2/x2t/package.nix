@@ -1,5 +1,6 @@
 { 
   stdenv,
+  lib,
   fetchFromGitHub,
   pkg-config,
   libxml2,
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace \
       Common/3dParty/icu/icu.pri \
-      --replace-fail "ICU_MAJOR_VER = 58" "ICU_MAJOR_VER = 74"
+      --replace-fail "ICU_MAJOR_VER = 58" "ICU_MAJOR_VER = ${lib.versions.major icu.version}"
 
     # https://github.com/ONLYOFFICE/core/pull/1637
     # (but not as patch because line endings)
