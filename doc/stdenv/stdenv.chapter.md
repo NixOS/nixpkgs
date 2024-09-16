@@ -1136,6 +1136,12 @@ Example removing all references to the compiler in the output:
 }
 ```
 
+### `runHook` \<hook\> {#fun-runHook}
+
+Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
+
+For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
+
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
 Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
