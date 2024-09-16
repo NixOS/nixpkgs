@@ -29,7 +29,10 @@ buildPythonPackage rec {
 
   buildInputs = [ portaudio ];
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    cffi
+  ];
 
   dependencies = [
     cffi
