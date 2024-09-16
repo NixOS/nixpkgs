@@ -4044,6 +4044,13 @@
     email = "jupiter@m.rdis.dev";
     name = "Scott Little";
   };
+  coderofsalvation = {
+    github = "coderofsalvation";
+    githubId = 180068;
+    email = "leonvankammen@gmail.com";
+    matrix = "@sqz:matrix.org";
+    name = "Leon van Kammen";
+  };
   codifryed = {
     email = "gb@guyboldon.com";
     name = "Guy Boldon";
