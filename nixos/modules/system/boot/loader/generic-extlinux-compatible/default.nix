@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   blCfg = config.boot.loader;
   dtCfg = config.hardware.deviceTree;
@@ -17,9 +14,9 @@ in
 {
   options = {
     boot.loader.generic-extlinux-compatible = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to generate an extlinux-compatible configuration file
           under `/boot/extlinux.conf`.  For instance,
@@ -30,9 +27,9 @@ in
         '';
       };
 
-      useGenerationDeviceTree = mkOption {
+      useGenerationDeviceTree = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to generate Device Tree-related directives in the
           extlinux configuration.
@@ -45,17 +42,17 @@ in
         '';
       };
 
-      configurationLimit = mkOption {
+      configurationLimit = lib.mkOption {
         default = 20;
         example = 10;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Maximum number of configurations in the boot menu.
         '';
       };
 
-      populateCmd = mkOption {
-        type = types.str;
+      populateCmd = lib.mkOption {
+        type = lib.types.str;
         readOnly = true;
         description = ''
           Contains the builder command used to populate an image,
@@ -73,7 +70,7 @@ in
       + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
       + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
   in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       system.build.installBootLoader = "${builder} ${builderArgs} -c";
       system.boot.loader.id = "generic-extlinux-compatible";
 

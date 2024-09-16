@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.selfoss;
 
@@ -30,18 +29,18 @@ in
   {
     options = {
       services.selfoss = {
-        enable = mkEnableOption "selfoss";
+        enable = lib.mkEnableOption "selfoss";
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "nginx";
           description = ''
             User account under which both the service and the web-application run.
           '';
         };
 
-        pool = mkOption {
-          type = types.str;
+        pool = lib.mkOption {
+          type = lib.types.str;
           default = "${poolName}";
           description = ''
             Name of existing phpfpm pool that is used to run web-application.
@@ -51,32 +50,32 @@ in
         };
 
       database = {
-        type = mkOption {
-          type = types.enum ["pgsql" "mysql" "sqlite"];
+        type = lib.mkOption {
+          type = lib.types.enum ["pgsql" "mysql" "sqlite"];
           default = "sqlite";
           description = ''
             Database to store feeds. Supported are sqlite, pgsql and mysql.
           '';
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
           description = ''
             Host of the database (has no effect if type is "sqlite").
           '';
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "tt_rss";
           description = ''
             Name of the existing database (has no effect if type is "sqlite").
           '';
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "tt_rss";
           description = ''
             The database user. The user must exist and has access to
@@ -84,16 +83,16 @@ in
           '';
         };
 
-        password = mkOption {
-          type = types.nullOr types.str;
+        password = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
             The database user's password (has no effect if type is "sqlite").
           '';
         };
 
-        port = mkOption {
-          type = types.nullOr types.int;
+        port = lib.mkOption {
+          type = lib.types.nullOr lib.types.int;
           default = null;
           description = ''
             The database's port. If not set, the default ports will be
@@ -102,8 +101,8 @@ in
           '';
         };
       };
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration added to config.ini
@@ -112,11 +111,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
+  config = lib.mkIf cfg.enable {
+    services.phpfpm.pools = lib.mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         user = "nginx";
-        settings = mapAttrs (name: mkDefault) {
+        settings = lib.mapAttrs (name: lib.mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";
           "listen.mode" = "0600";

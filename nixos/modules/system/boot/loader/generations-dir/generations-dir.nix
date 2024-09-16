@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   generationsDirBuilder = pkgs.substituteAll {
@@ -19,9 +16,9 @@ in
 
     boot.loader.generationsDir = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to create symlinks to the system generations under
           `/boot`.  When enabled,
@@ -38,9 +35,9 @@ in
         '';
       };
 
-      copyKernels = mkOption {
+      copyKernels = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
@@ -52,7 +49,7 @@ in
   };
 
 
-  config = mkIf config.boot.loader.generationsDir.enable {
+  config = lib.mkIf config.boot.loader.generationsDir.enable {
 
     system.build.installBootLoader = generationsDirBuilder;
     system.boot.loader.id = "generationsDir";

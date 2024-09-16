@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   dmcfg = config.services.xserver.displayManager;
@@ -11,15 +8,15 @@ let
 in
 {
   meta = with lib; {
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    maintainers = with lib.maintainers; [ ] ++ lib.teams.pantheon.members;
   };
 
   options = {
 
     services.xserver.displayManager.lightdm.greeters.pantheon = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable elementary-greeter as the lightdm greeter.
@@ -30,11 +27,11 @@ in
 
   };
 
-  config = mkIf (ldmcfg.enable && cfg.enable) {
+  config = lib.mkIf (ldmcfg.enable && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
-    services.xserver.displayManager.lightdm.greeter = mkDefault {
+    services.xserver.displayManager.lightdm.greeter = lib.mkDefault {
       package = pkgs.pantheon.elementary-greeter.xgreeters;
       name = "io.elementary.greeter";
     };

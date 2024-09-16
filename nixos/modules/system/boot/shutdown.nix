@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
 
   # This unit saves the value of the system clock to the hardware

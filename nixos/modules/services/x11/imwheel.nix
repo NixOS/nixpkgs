@@ -1,15 +1,14 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.xserver.imwheel;
 in
   {
     options = {
       services.xserver.imwheel = {
-        enable = mkEnableOption "IMWheel service";
+        enable = lib.mkEnableOption "IMWheel service";
 
-        extraOptions = mkOption {
-          type = types.listOf types.str;
+        extraOptions = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ "--buttons=45" ];
           example = [ "--debug" ];
           description = ''
@@ -18,10 +17,10 @@ in
           '';
         };
 
-        rules = mkOption {
-          type = types.attrsOf types.str;
+        rules = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
           default = {};
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               ".*" = '''
                 None,      Up,   Button4, 8
@@ -44,12 +43,12 @@ in
       };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
       environment.systemPackages = [ pkgs.imwheel ];
 
       environment.etc."X11/imwheel/imwheelrc".source =
-        pkgs.writeText "imwheelrc" (concatStringsSep "\n\n"
-          (mapAttrsToList
+        pkgs.writeText "imwheelrc" (lib.concatStringsSep "\n\n"
+          (lib.mapAttrsToList
             (rule: conf: "\"${rule}\"\n${conf}") cfg.rules
           ));
 
@@ -58,7 +57,7 @@ in
         wantedBy = [ "graphical-session.target" ];
         partOf = [ "graphical-session.target" ];
         serviceConfig = {
-          ExecStart = "${pkgs.imwheel}/bin/imwheel " + escapeShellArgs ([
+          ExecStart = "${pkgs.imwheel}/bin/imwheel " + lib.escapeShellArgs ([
             "--detach"
             "--kill"
           ] ++ cfg.extraOptions);

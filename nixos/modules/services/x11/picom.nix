@@ -1,78 +1,75 @@
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.picom;
   opt = options.services.picom;
 
-  pairOf = x: with types;
-    addCheck (listOf x) (y: length y == 2)
+  pairOf = x: with lib.types;
+    addCheck (listOf x) (y: lib.length y == 2)
     // { description = "pair of ${x.description}"; };
 
-  mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
+  mkDefaultAttrs = lib.mapAttrs (n: v: lib.mkDefault v);
 
   # Basically a tinkered lib.generators.mkKeyValueDefault
   # It either serializes a top-level definition "key: { values };"
   # or an expression "key = { values };"
   mkAttrsString = top:
-    mapAttrsToList (k: v:
-      let sep = if (top && isAttrs v) then ":" else "=";
-      in "${escape [ sep ] k}${sep}${mkValueString v};");
+    lib.mapAttrsToList (k: v:
+      let sep = if (top && lib.isAttrs v) then ":" else "=";
+      in "${lib.escape [ sep ] k}${sep}${mkValueString v};");
 
   # This serializes a Nix expression to the libconfig format.
   mkValueString = v:
-         if types.bool.check  v then boolToString v
-    else if types.int.check   v then toString v
-    else if types.float.check v then toString v
-    else if types.str.check   v then "\"${escape [ "\"" ] v}\""
-    else if builtins.isList   v then "[ ${concatMapStringsSep " , " mkValueString v} ]"
-    else if types.attrs.check v then "{ ${concatStringsSep " " (mkAttrsString false v) } }"
+         if lib.types.bool.check  v then lib.boolToString v
+    else if lib.types.int.check   v then toString v
+    else if lib.types.float.check v then toString v
+    else if lib.types.str.check   v then "\"${lib.escape [ "\"" ] v}\""
+    else if builtins.isList   v then "[ ${lib.concatMapStringsSep " , " mkValueString v} ]"
+    else if lib.types.attrs.check v then "{ ${lib.concatStringsSep " " (mkAttrsString false v) } }"
     else throw ''
                  invalid expression used in option services.picom.settings:
                  ${v}
                '';
 
-  toConf = attrs: concatStringsSep "\n" (mkAttrsString true cfg.settings);
+  toConf = attrs: lib.concatStringsSep "\n" (mkAttrsString true cfg.settings);
 
   configFile = pkgs.writeText "picom.conf" (toConf cfg.settings);
 
 in {
 
   imports = [
-    (mkAliasOptionModuleMD [ "services" "compton" ] [ "services" "picom" ])
-    (mkRemovedOptionModule [ "services" "picom" "refreshRate" ] ''
+    (lib.mkAliasOptionModuleMD [ "services" "compton" ] [ "services" "picom" ])
+    (lib.mkRemovedOptionModule [ "services" "picom" "refreshRate" ] ''
       This option corresponds to `refresh-rate`, which has been unused
       since picom v6 and was subsequently removed by upstream.
       See https://github.com/yshui/picom/commit/bcbc410
     '')
-    (mkRemovedOptionModule [ "services" "picom" "experimentalBackends" ] ''
+    (lib.mkRemovedOptionModule [ "services" "picom" "experimentalBackends" ] ''
       This option was removed by upstream since picom v10.
     '')
   ];
 
   options.services.picom = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether or not to enable Picom as the X.org composite manager.
       '';
     };
 
-    package = mkPackageOption pkgs "picom" { };
+    package = lib.mkPackageOption pkgs "picom" { };
 
-    fade = mkOption {
-      type = types.bool;
+    fade = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Fade windows in and out.
       '';
     };
 
-    fadeDelta = mkOption {
-      type = types.ints.positive;
+    fadeDelta = lib.mkOption {
+      type = lib.types.ints.positive;
       default = 10;
       example = 5;
       description = ''
@@ -80,8 +77,8 @@ in {
       '';
     };
 
-    fadeSteps = mkOption {
-      type = pairOf (types.numbers.between 0.01 1);
+    fadeSteps = lib.mkOption {
+      type = pairOf (lib.types.numbers.between 0.01 1);
       default = [ 0.028 0.03 ];
       example = [ 0.04 0.04 ];
       description = ''
@@ -89,8 +86,8 @@ in {
       '';
     };
 
-    fadeExclude = mkOption {
-      type = types.listOf types.str;
+    fadeExclude = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [
         "window_type *= 'menu'"
@@ -103,16 +100,16 @@ in {
       '';
     };
 
-    shadow = mkOption {
-      type = types.bool;
+    shadow = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Draw window shadows.
       '';
     };
 
-    shadowOffsets = mkOption {
-      type = pairOf types.int;
+    shadowOffsets = lib.mkOption {
+      type = pairOf lib.types.int;
       default = [ (-15) (-15) ];
       example = [ (-10) (-15) ];
       description = ''
@@ -120,8 +117,8 @@ in {
       '';
     };
 
-    shadowOpacity = mkOption {
-      type = types.numbers.between 0 1;
+    shadowOpacity = lib.mkOption {
+      type = lib.types.numbers.between 0 1;
       default = 0.75;
       example = 0.8;
       description = ''
@@ -129,8 +126,8 @@ in {
       '';
     };
 
-    shadowExclude = mkOption {
-      type = types.listOf types.str;
+    shadowExclude = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [
         "window_type *= 'menu'"
@@ -143,8 +140,8 @@ in {
       '';
     };
 
-    activeOpacity = mkOption {
-      type = types.numbers.between 0 1;
+    activeOpacity = lib.mkOption {
+      type = lib.types.numbers.between 0 1;
       default = 1.0;
       example = 0.8;
       description = ''
@@ -152,8 +149,8 @@ in {
       '';
     };
 
-    inactiveOpacity = mkOption {
-      type = types.numbers.between 0.1 1;
+    inactiveOpacity = lib.mkOption {
+      type = lib.types.numbers.between 0.1 1;
       default = 1.0;
       example = 0.8;
       description = ''
@@ -161,8 +158,8 @@ in {
       '';
     };
 
-    menuOpacity = mkOption {
-      type = types.numbers.between 0 1;
+    menuOpacity = lib.mkOption {
+      type = lib.types.numbers.between 0 1;
       default = 1.0;
       example = 0.8;
       description = ''
@@ -170,13 +167,13 @@ in {
       '';
     };
 
-    wintypes = mkOption {
-      type = types.attrs;
+    wintypes = lib.mkOption {
+      type = lib.types.attrs;
       default = {
         popup_menu = { opacity = cfg.menuOpacity; };
         dropdown_menu = { opacity = cfg.menuOpacity; };
       };
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         {
           popup_menu = { opacity = config.${opt.menuOpacity}; };
           dropdown_menu = { opacity = config.${opt.menuOpacity}; };
@@ -188,8 +185,8 @@ in {
       '';
     };
 
-    opacityRules = mkOption {
-      type = types.listOf types.str;
+    opacityRules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [
         "95:class_g = 'URxvt' && !_NET_WM_STATE@:32a"
@@ -200,26 +197,26 @@ in {
       '';
     };
 
-    backend = mkOption {
-      type = types.enum [ "egl" "glx" "xrender" "xr_glx_hybrid" ];
+    backend = lib.mkOption {
+      type = lib.types.enum [ "egl" "glx" "xrender" "xr_glx_hybrid" ];
       default = "xrender";
       description = ''
         Backend to use: `egl`, `glx`, `xrender` or `xr_glx_hybrid`.
       '';
     };
 
-    vSync = mkOption {
-      type = with types; either bool
+    vSync = lib.mkOption {
+      type = with lib.types; either bool
         (enum [ "none" "drm" "opengl" "opengl-oml" "opengl-swc" "opengl-mswc" ]);
       default = false;
       apply = x:
         let
           res = x != "none";
           msg = "The type of services.picom.vSync has changed to bool:"
-                + " interpreting ${x} as ${boolToString res}";
+                + " interpreting ${x} as ${lib.boolToString res}";
         in
-          if isBool x then x
-          else warn msg res;
+          if lib.isBool x then x
+          else lib.warn msg res;
 
       description = ''
         Enable vertical synchronization. Chooses the best method
@@ -228,7 +225,7 @@ in {
       '';
     };
 
-    settings = with types;
+    settings = with lib.types;
     let
       scalar = oneOf [ bool int float str ]
         // { description = "scalar types"; };
@@ -245,10 +242,10 @@ in {
              '';
            };
 
-    in mkOption {
+    in lib.mkOption {
       type = topLevel;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         blur =
           { method = "gaussian";
             size = 10;
@@ -263,19 +260,19 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.picom.settings = mkDefaultAttrs {
       # fading
       fading           = cfg.fade;
       fade-delta       = cfg.fadeDelta;
-      fade-in-step     = elemAt cfg.fadeSteps 0;
-      fade-out-step    = elemAt cfg.fadeSteps 1;
+      fade-in-step     = lib.elemAt cfg.fadeSteps 0;
+      fade-out-step    = lib.elemAt cfg.fadeSteps 1;
       fade-exclude     = cfg.fadeExclude;
 
       # shadows
       shadow           = cfg.shadow;
-      shadow-offset-x  = elemAt cfg.shadowOffsets 0;
-      shadow-offset-y  = elemAt cfg.shadowOffsets 1;
+      shadow-offset-x  = lib.elemAt cfg.shadowOffsets 0;
+      shadow-offset-y  = lib.elemAt cfg.shadowOffsets 1;
       shadow-opacity   = cfg.shadowOpacity;
       shadow-exclude   = cfg.shadowExclude;
 
@@ -298,12 +295,12 @@ in {
       partOf = [ "graphical-session.target" ];
 
       # Temporarily fixes corrupt colours with Mesa 18
-      environment = mkIf (cfg.backend == "glx") {
+      environment = lib.mkIf (cfg.backend == "glx") {
         allow_rgb10_configs = "false";
       };
 
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} --config ${configFile}";
+        ExecStart = "${lib.getExe cfg.package} --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };

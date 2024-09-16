@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.systemd.tmpfiles;
   initrdCfg = config.boot.initrd.systemd.tmpfiles;
@@ -25,9 +22,9 @@ let
       };
     };
     default = {};
-    type = types.attrsOf (types.attrsOf (types.attrsOf (types.submodule ({ name, config, ... }: {
-      options.type = mkOption {
-        type = types.str;
+    type = lib.types.attrsOf (lib.types.attrsOf (lib.types.attrsOf (lib.types.submodule ({ name, config, ... }: {
+      options.type = lib.mkOption{
+        type = lib.types.str;
         default = name;
         example = "d";
         description = ''
@@ -41,16 +38,16 @@ let
           <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
         '';
       };
-      options.mode = mkOption {
-        type = types.str;
+      options.mode = lib.mkOption{
+        type = lib.types.str;
         default = "-";
         example = "0755";
         description = ''
           The file access mode to use when creating this file or directory.
         '';
       };
-      options.user = mkOption {
-        type = types.str;
+      options.user = lib.mkOption{
+        type = lib.types.str;
         default = "-";
         example = "root";
         description = ''
@@ -62,8 +59,8 @@ let
           invokes systemd-tmpfiles is used.
         '';
       };
-      options.group = mkOption {
-        type = types.str;
+      options.group = lib.mkOption{
+        type = lib.types.str;
         default = "-";
         example = "root";
         description = ''
@@ -75,8 +72,8 @@ let
           invokes systemd-tmpfiles is used.
         '';
       };
-      options.age = mkOption {
-        type = types.str;
+      options.age = lib.mkOption{
+        type = lib.types.str;
         default = "-";
         example = "10d";
         description = ''
@@ -88,8 +85,8 @@ let
           If set to `"-"` no automatic clean-up is done.
         '';
       };
-      options.argument = mkOption {
-        type = types.str;
+      options.argument = lib.mkOption{
+        type = lib.types.str;
         default = "";
         example = "";
         description = ''
@@ -109,18 +106,18 @@ let
   '';
 
   # generates a list of tmpfiles.d rules from the attrs (paths) under tmpfiles.settings.<name>
-  pathsToRules = mapAttrsToList (path: types:
-    concatStrings (
-      mapAttrsToList (_type: settingsEntryToRule path) types
+  pathsToRules = lib.mapAttrsToList (path: types:
+    lib.concatStrings (
+      lib.mapAttrsToList (_type: settingsEntryToRule path) types
     )
   );
 
-  mkRuleFileContent = paths: concatStrings (pathsToRules paths);
+  mkRuleFileContent = paths: lib.concatStrings (pathsToRules paths);
 in
 {
   options = {
-    systemd.tmpfiles.rules = mkOption {
-      type = types.listOf types.str;
+    systemd.tmpfiles.rules = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "d /tmp 1777 root root 10d" ];
       description = ''
@@ -131,9 +128,9 @@ in
       '';
     };
 
-    systemd.tmpfiles.settings = mkOption settingsOption;
+    systemd.tmpfiles.settings = lib.mkOption settingsOption;
 
-    boot.initrd.systemd.tmpfiles.settings = mkOption (settingsOption // {
+    boot.initrd.systemd.tmpfiles.settings = lib.mkOption (settingsOption // {
       description = ''
         Similar to {option}`systemd.tmpfiles.settings` but the rules are
         only applied by systemd-tmpfiles before `initrd-switch-root.target`.
@@ -142,11 +139,11 @@ in
       '';
     });
 
-    systemd.tmpfiles.packages = mkOption {
-      type = types.listOf types.package;
+    systemd.tmpfiles.packages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [];
-      example = literalExpression "[ pkgs.lvm2 ]";
-      apply = map getLib;
+      example = lib.literalExpression "[ pkgs.lvm2 ]";
+      apply = map lib.getLib;
       description = ''
         List of packages containing {command}`systemd-tmpfiles` rules.
 
@@ -169,12 +166,12 @@ in
           path != null && lib.hasPrefix "/etc/tmpfiles.d/" path
         ) (map (path: path.target) config.boot.initrd.systemd.storePaths);
       in
-      lib.optional (lib.length paths > 0) (lib.concatStringsSep " " [
+      lib.optional (lib.length paths > 0) (lib.lib.concatStringsSep " " [
         "Files inside /etc/tmpfiles.d in the initrd need to be created with"
         "boot.initrd.systemd.tmpfiles.settings."
         "Creating them by hand using boot.initrd.systemd.contents or"
         "boot.initrd.systemd.storePaths will lead to errors in the future."
-        "Found these problematic files: ${lib.concatStringsSep ", " paths}"
+        "Found these problematic files: ${lib.lib.concatStringsSep ", " paths}"
       ]);
 
     systemd.additionalUpstreamSystemUnits = [
@@ -237,8 +234,8 @@ in
               exit 1
             )
           done
-        '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
-          rm -f $out/${removePrefix "tmpfiles.d/" name}
+        '' + lib.concatMapStrings (name: lib.optionalString (lib.hasPrefix "tmpfiles.d/" name) ''
+          rm -f $out/${lib.removePrefix "tmpfiles.d/" name}
         '') config.system.build.etc.passthru.targets;
       }) + "/*";
       "mtab" = {
@@ -273,10 +270,10 @@ in
           # This file is created automatically and should not be modified.
           # Please change the option ‘systemd.tmpfiles.rules’ instead.
 
-          ${concatStringsSep "\n" cfg.rules}
+          ${lib.lib.concatStringsSep "\n" cfg.rules}
         '';
       })
-    ] ++ (mapAttrsToList (name: paths:
+    ] ++ (lib.lib.mapAttrsToList (name: paths:
       pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (mkRuleFileContent paths)
     ) cfg.settings);
 
@@ -339,9 +336,9 @@ in
 
       };
 
-      contents."/etc/tmpfiles.d" = mkIf (initrdCfg.settings != { }) {
+      contents."/etc/tmpfiles.d" = lib.mkIf (initrdCfg.settings != { }) {
         source = pkgs.linkFarm "initrd-tmpfiles.d" (
-          mapAttrsToList
+          lib.mapAttrsToList
             (name: paths: {
               name = "${name}.conf";
               path = pkgs.writeText "${name}.conf" (mkRuleFileContent paths);

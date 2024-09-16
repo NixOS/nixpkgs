@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.resolved;
 
@@ -9,12 +7,12 @@ let
 
   resolvedConf = ''
     [Resolve]
-    ${optionalString (config.networking.nameservers != [])
-      "DNS=${concatStringsSep " " config.networking.nameservers}"}
-    ${optionalString (cfg.fallbackDns != null)
-      "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-    ${optionalString (cfg.domains != [])
-      "Domains=${concatStringsSep " " cfg.domains}"}
+    ${lib.optionalString (config.networking.nameservers != [])
+      "DNS=${lib.concatStringsSep " " config.networking.nameservers}"}
+    ${lib.optionalString (cfg.fallbackDns != null)
+      "FallbackDNS=${lib.concatStringsSep " " cfg.fallbackDns}"}
+    ${lib.optionalString (cfg.domains != [])
+      "Domains=${lib.concatStringsSep " " cfg.domains}"}
     LLMNR=${cfg.llmnr}
     DNSSEC=${cfg.dnssec}
     DNSOverTLS=${cfg.dnsovertls}
@@ -26,9 +24,9 @@ in
 
   options = {
 
-    services.resolved.enable = mkOption {
+    services.resolved.enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
 
@@ -36,10 +34,10 @@ in
       '';
     };
 
-    services.resolved.fallbackDns = mkOption {
+    services.resolved.fallbackDns = lib.mkOption {
       default = null;
       example = [ "8.8.8.8" "2001:4860:4860::8844" ];
-      type = types.nullOr (types.listOf types.str);
+      type = lib.types.nullOr (lib.types.listOf lib.types.str);
       description = ''
         A list of IPv4 and IPv6 addresses to use as the fallback DNS servers.
         If this option is null, a compiled-in list of DNS servers is used instead.
@@ -47,11 +45,11 @@ in
       '';
     };
 
-    services.resolved.domains = mkOption {
+    services.resolved.domains = lib.mkOption {
       default = config.networking.search;
-      defaultText = literalExpression "config.networking.search";
+      defaultText = lib.literalExpression "config.networking.search";
       example = [ "example.com" ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       description = ''
         A list of domains. These domains are used as search suffixes
         when resolving single-label host names (domain names which
@@ -65,10 +63,10 @@ in
       '';
     };
 
-    services.resolved.llmnr = mkOption {
+    services.resolved.llmnr = lib.mkOption {
       default = "true";
       example = "false";
-      type = types.enum [ "true" "resolve" "false" ];
+      type = lib.types.enum [ "true" "resolve" "false" ];
       description = ''
         Controls Link-Local Multicast Name Resolution support
         (RFC 4795) on the local host.
@@ -80,10 +78,10 @@ in
       '';
     };
 
-    services.resolved.dnssec = mkOption {
+    services.resolved.dnssec = lib.mkOption {
       default = "false";
       example = "true";
-      type = types.enum [ "true" "allow-downgrade" "false" ];
+      type = lib.types.enum [ "true" "allow-downgrade" "false" ];
       description = ''
         If set to
         - `"true"`:
@@ -109,10 +107,10 @@ in
       '';
     };
 
-    services.resolved.dnsovertls = mkOption {
+    services.resolved.dnsovertls = lib.mkOption {
       default = "false";
       example = "true";
-      type = types.enum [ "true" "opportunistic" "false" ];
+      type = lib.types.enum [ "true" "opportunistic" "false" ];
       description = ''
         If set to
         - `"true"`:
@@ -132,15 +130,15 @@ in
       '';
     };
 
-    services.resolved.extraConfig = mkOption {
+    services.resolved.extraConfig = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Extra config to append to resolved.conf.
       '';
     };
 
-    boot.initrd.services.resolved.enable = mkOption {
+    boot.initrd.services.resolved.enable = lib.mkOption {
       default = config.boot.initrd.systemd.network.enable;
       defaultText = "config.boot.initrd.systemd.network.enable";
       description = ''
@@ -151,8 +149,8 @@ in
 
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
 
       assertions = [
         { assertion = !config.networking.useHostResolvConf;
@@ -164,8 +162,8 @@ in
 
       # add resolve to nss hosts database if enabled and nscd enabled
       # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
-      # added with order 501 to allow modules to go before with mkBefore
-      system.nssDatabases.hosts = (mkOrder 501 ["resolve [!UNAVAIL=return]"]);
+      # added with order 501 to allow modules to go before with lib.mkBefore
+      system.nssDatabases.hosts = (lib.mkOrder 501 ["resolve [!UNAVAIL=return]"]);
 
       systemd.additionalUpstreamSystemUnits = [
         "systemd-resolved.service"
@@ -183,7 +181,7 @@ in
         # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
         # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
         "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
-      } // optionalAttrs dnsmasqResolve {
+      } // lib.optionalAttrs dnsmasqResolve {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
       };
 
@@ -194,7 +192,7 @@ in
 
     })
 
-    (mkIf config.boot.initrd.services.resolved.enable {
+    (lib.mkIf config.boot.initrd.services.resolved.enable {
 
       assertions = [
         {

@@ -1,15 +1,12 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.nimdow;
 in
 {
   options = {
-    services.xserver.windowManager.nimdow.enable = mkEnableOption "nimdow";
-    services.xserver.windowManager.nimdow.package = mkOption {
-      type = types.package;
+    services.xserver.windowManager.nimdow.enable = lib.mkEnableOption "nimdow";
+    services.xserver.windowManager.nimdow.package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.nimdow;
       defaultText = "pkgs.nimdow";
       description = "nimdow package to use";
@@ -17,8 +14,8 @@ in
   };
 
 
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "nimdow";
       start = ''
         ${cfg.package}/bin/nimdow &

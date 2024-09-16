@@ -1,12 +1,9 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.confluence;
 
-  pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
+  pkg = cfg.package.override (lib.optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
   });
 
@@ -29,63 +26,63 @@ in
 {
   options = {
     services.confluence = {
-      enable = mkEnableOption "Atlassian Confluence service";
+      enable = lib.mkEnableOption "Atlassian Confluence service";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "confluence";
         description = "User which runs confluence.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "confluence";
         description = "Group which runs confluence.";
       };
 
-      home = mkOption {
-        type = types.str;
+      home = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/confluence";
         description = "Home directory of the confluence instance.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Address to listen on.";
       };
 
-      listenPort = mkOption {
-        type = types.port;
+      listenPort = lib.mkOption {
+        type = lib.types.port;
         default = 8090;
         description = "Port to listen on.";
       };
 
-      catalinaOptions = mkOption {
-        type = types.listOf types.str;
+      catalinaOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "-Xms1024m" "-Xmx2048m" "-Dconfluence.disable.peopledirectory.all=true" ];
         description = "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
-        enable = mkEnableOption "proxy support";
+        enable = lib.mkEnableOption "proxy support";
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           example = "confluence.example.com";
           description = "Virtual hostname at the proxy";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 443;
           example = 80;
           description = "Port used at the proxy";
         };
 
-        scheme = mkOption {
-          type = types.str;
+        scheme = lib.mkOption {
+          type = lib.types.str;
           default = "https";
           example = "http";
           description = "Protocol used at the proxy.";
@@ -93,34 +90,34 @@ in
       };
 
       sso = {
-        enable = mkEnableOption "SSO with Atlassian Crowd";
+        enable = lib.mkEnableOption "SSO with Atlassian Crowd";
 
-        crowd = mkOption {
-          type = types.str;
+        crowd = lib.mkOption {
+          type = lib.types.str;
           example = "http://localhost:8095/crowd";
           description = "Crowd Base URL without trailing slash";
         };
 
-        applicationName = mkOption {
-          type = types.str;
+        applicationName = lib.mkOption {
+          type = lib.types.str;
           example = "jira";
           description = "Exact name of this Confluence instance in Crowd";
         };
 
-        applicationPassword = mkOption {
-          type = types.nullOr types.str;
+        applicationPassword = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = "Application password of this Confluence instance in Crowd";
         };
 
-        applicationPasswordFile = mkOption {
-          type = types.nullOr types.str;
+        applicationPasswordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           description = "Path to the application password for Crowd of Confluence.";
         };
 
-        validationInterval = mkOption {
-          type = types.int;
+        validationInterval = lib.mkOption {
+          type = lib.types.int;
           default = 2;
           example = 0;
           description = ''
@@ -133,9 +130,9 @@ in
         };
       };
 
-      package = mkPackageOption pkgs "atlassian-confluence" { };
+      package = lib.mkPackageOption pkgs "atlassian-confluence" { };
 
-      jrePackage = mkPackageOption pkgs "oraclejre8" {
+      jrePackage = lib.mkPackageOption pkgs "oraclejre8" {
         extraDescription = ''
         ::: {.note }
         Atlassian only supports the Oracle JRE (JRASERVER-46152).
@@ -145,7 +142,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
@@ -157,7 +154,7 @@ in
       }
     ];
 
-    warnings = mkIf (cfg.sso.enable && cfg.sso.applicationPassword != null) [
+    warnings = lib.mkIf (cfg.sso.enable && cfg.sso.applicationPassword != null) [
       "Using `services.confluence.sso.applicationPassword` is deprecated! Use `applicationPasswordFile` instead!"
     ];
 
@@ -186,8 +183,8 @@ in
       environment = {
         CONF_USER = cfg.user;
         JAVA_HOME = "${cfg.jrePackage}";
-        CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
-        JAVA_OPTS = mkIf cfg.sso.enable "-Dcrowd.properties=${cfg.home}/crowd.properties";
+        CATALINA_OPTS = lib.concatStringsSep " " cfg.catalinaOptions;
+        JAVA_OPTS = lib.mkIf cfg.sso.enable "-Dcrowd.properties=${cfg.home}/crowd.properties";
       };
 
       preStart = ''
@@ -199,9 +196,9 @@ in
         '') + ''
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
 
-        ${optionalString cfg.sso.enable ''
+        ${lib.optionalString cfg.sso.enable ''
           install -m660 ${crowdProperties} ${cfg.home}/crowd.properties
-          ${optionalString (cfg.sso.applicationPasswordFile != null) ''
+          ${lib.optionalString (cfg.sso.applicationPasswordFile != null) ''
             ${pkgs.replace-secret}/bin/replace-secret \
               '@NIXOS_CONFLUENCE_CROWD_SSO_PWD@' \
               ${cfg.sso.applicationPasswordFile} \

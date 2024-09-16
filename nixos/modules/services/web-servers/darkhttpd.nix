@@ -1,32 +1,29 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.darkhttpd;
 
-  args = concatStringsSep " " ([
+  args = lib.concatStringsSep " " ([
     cfg.rootDir
     "--port ${toString cfg.port}"
     "--addr ${cfg.address}"
   ] ++ cfg.extraArgs
-    ++ optional cfg.hideServerId             "--no-server-id"
-    ++ optional config.networking.enableIPv6 "--ipv6");
+    ++ lib.optional cfg.hideServerId             "--no-server-id"
+    ++ lib.optional config.networking.enableIPv6 "--ipv6");
 
 in {
-  options.services.darkhttpd = with types; {
-    enable = mkEnableOption "DarkHTTPd web server";
+  options.services.darkhttpd = with lib.types; {
+    enable = lib.mkEnableOption "DarkHTTPd web server";
 
-    port = mkOption {
+    port = lib.mkOption {
       default = 80;
-      type = types.port;
+      type = lib.types.port;
       description = ''
         Port to listen on.
         Pass 0 to let the system choose any free port for you.
       '';
     };
 
-    address = mkOption {
+    address = lib.mkOption {
       default = "127.0.0.1";
       type = str;
       description = ''
@@ -35,14 +32,14 @@ in {
       '';
     };
 
-    rootDir = mkOption {
+    rootDir = lib.mkOption {
       type = path;
       description = ''
         Path from which to serve files.
       '';
     };
 
-    hideServerId = mkOption {
+    hideServerId = lib.mkOption {
       type = bool;
       default = true;
       description = ''
@@ -50,7 +47,7 @@ in {
       '';
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
       default = [];
       description = ''
@@ -59,7 +56,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.darkhttpd = {
       description = "Dark HTTPd";
       wants = [ "network.target" ];

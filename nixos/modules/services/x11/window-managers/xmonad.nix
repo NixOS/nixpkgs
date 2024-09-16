@@ -1,13 +1,11 @@
 {pkgs, lib, config, ...}:
-
-with lib;
 let
   inherit (lib) mkOption mkIf optionals literalExpression optionalString;
   cfg = config.services.xserver.windowManager.xmonad;
 
   ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
   packages = self: cfg.extraPackages self ++
-                   optionals cfg.enableContribAndExtras
+                   lib.optionals cfg.enableContribAndExtras
                    [ self.xmonad-contrib self.xmonad-extras ];
 
   xmonad-vanilla = pkgs.xmonad-with-packages.override {
@@ -29,7 +27,7 @@ let
       } (''
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
-      '' + optionalString cfg.enableConfiguredRecompile ''
+      '' + lib.optionalString cfg.enableConfiguredRecompile ''
           --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
       '' + ''
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
@@ -37,17 +35,17 @@ let
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in {
-  meta.maintainers = with maintainers; [ lassulus xaverdh ivanbrennan slotThe ];
+  meta.maintainers = with lib.maintainers; [ lassulus xaverdh ivanbrennan slotThe ];
 
   options = {
     services.xserver.windowManager.xmonad = {
-      enable = mkEnableOption "xmonad";
+      enable = lib.mkEnableOption "xmonad";
 
-      haskellPackages = mkOption {
+      haskellPackages = lib.mkOption {
         default = pkgs.haskellPackages;
-        defaultText = literalExpression "pkgs.haskellPackages";
-        example = literalExpression "pkgs.haskell.packages.ghc810";
-        type = types.attrs;
+        defaultText = lib.literalExpression "pkgs.haskellPackages";
+        example = lib.literalExpression "pkgs.haskell.packages.ghc810";
+        type = lib.types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
@@ -56,11 +54,11 @@ in {
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.functionTo (types.listOf types.package);
+      extraPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = self: [];
-        defaultText = literalExpression "self: []";
-        example = literalExpression ''
+        defaultText = lib.literalExpression "self: []";
+        example = lib.literalExpression ''
           haskellPackages: [
             haskellPackages.xmonad-contrib
             haskellPackages.monad-logger
@@ -73,13 +71,13 @@ in {
         '';
       };
 
-      enableContribAndExtras = mkOption {
+      enableContribAndExtras = lib.mkOption {
         default = false;
         type = lib.types.bool;
         description = "Enable xmonad-{contrib,extras} in Xmonad.";
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = null;
         type = with lib.types; nullOr (either path str);
         description = ''
@@ -159,7 +157,7 @@ in {
         '';
       };
 
-      enableConfiguredRecompile = mkOption {
+      enableConfiguredRecompile = lib.mkOption {
         default = false;
         type = lib.types.bool;
         description = ''
@@ -169,7 +167,7 @@ in {
         '';
       };
 
-      xmonadCliArgs = mkOption {
+      xmonadCliArgs = lib.mkOption {
         default = [];
         type = with lib.types; listOf str;
         description = ''
@@ -177,7 +175,7 @@ in {
         '';
       };
 
-      ghcArgs = mkOption {
+      ghcArgs = lib.mkOption {
         default = [];
         type = with lib.types; listOf str;
         description = ''
@@ -188,7 +186,7 @@ in {
 
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver.windowManager = {
       session = [{
         name = "xmonad";

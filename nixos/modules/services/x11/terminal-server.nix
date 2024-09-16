@@ -4,11 +4,7 @@
 # checks to see if a X server is already running for that user.  If
 # not, a X server (Xvfb) is started for that user.  The Xvfb instances
 # persist across VNC sessions.
-
 { lib, pkgs, ... }:
-
-with lib;
-
 {
 
   config = {

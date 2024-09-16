@@ -1,7 +1,4 @@
 { lib, pkgs, config, ... }:
-
-with lib;
-
 let
   cfg = config.services.wiki-js;
 
@@ -10,10 +7,10 @@ let
   configFile = format.generate "wiki-js.yml" cfg.settings;
 in {
   options.services.wiki-js = {
-    enable = mkEnableOption "wiki-js";
+    enable = lib.mkEnableOption "wiki-js";
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/root/wiki-js.env";
       description = ''
@@ -21,39 +18,39 @@ in {
       '';
     };
 
-    stateDirectoryName = mkOption {
+    stateDirectoryName = lib.mkOption {
       default = "wiki-js";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Name of the directory in {file}`/var/lib`.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = {};
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
-          port = mkOption {
-            type = types.port;
+          port = lib.mkOption {
+            type = lib.types.port;
             default = 3000;
             description = ''
               TCP port the process should listen to.
             '';
           };
 
-          bindIP = mkOption {
+          bindIP = lib.mkOption {
             default = "0.0.0.0";
-            type = types.str;
+            type = lib.types.str;
             description = ''
               IPs the service should listen to.
             '';
           };
 
           db = {
-            type = mkOption {
+            type = lib.mkOption {
               default = "postgres";
-              type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
+              type = lib.types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
               description = ''
                 Database driver to use for persistence. Please note that `sqlite`
                 is currently not supported as the build process for it is currently not implemented
@@ -61,31 +58,31 @@ in {
                 production use.
               '';
             };
-            host = mkOption {
-              type = types.str;
+            host = lib.mkOption {
+              type = lib.types.str;
               example = "/run/postgresql";
               description = ''
                 Hostname or socket-path to connect to.
               '';
             };
-            db = mkOption {
+            db = lib.mkOption {
               default = "wiki";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 Name of the database to use.
               '';
             };
           };
 
-          logLevel = mkOption {
+          logLevel = lib.mkOption {
             default = "info";
-            type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
+            type = lib.types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
             description = ''
               Define how much detail is supposed to be logged at runtime.
             '';
           };
 
-          offline = mkEnableOption "offline mode" // {
+          offline = lib.mkEnableOption "offline mode" // {
             description = ''
               Disable latest file updates and enable
               [sideloading](https://docs.requarks.io/install/sideload).
@@ -106,7 +103,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.wiki-js.settings.dataPath = "/var/lib/${cfg.stateDirectoryName}";
     systemd.services.wiki-js = {
       description = "A modern and powerful wiki app built on Node.js";
@@ -128,7 +125,7 @@ in {
       '';
 
       serviceConfig = {
-        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = cfg.stateDirectoryName;
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
@@ -138,5 +135,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ ma27 ];
 }

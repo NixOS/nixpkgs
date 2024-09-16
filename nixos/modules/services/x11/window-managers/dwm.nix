@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.xserver.windowManager.dwm;
@@ -14,8 +11,8 @@ in
 
   options = {
     services.xserver.windowManager.dwm = {
-      enable = mkEnableOption "dwm";
-      package = mkPackageOption pkgs "dwm" {
+      enable = lib.mkEnableOption "dwm";
+      package = lib.mkPackageOption pkgs "dwm" {
         example = ''
           pkgs.dwm.overrideAttrs (oldAttrs: rec {
             patches = [
@@ -33,9 +30,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
+    services.xserver.windowManager.session = lib.singleton
       { name = "dwm";
         start =
           ''

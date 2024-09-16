@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.uwsgi;
 
@@ -21,12 +18,12 @@ let
   buildCfg = name: c:
     let
       plugins' =
-        if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [])
+        if lib.any (n: !lib.any (m: m == n) cfg.plugins) (c.plugins or [])
         then throw "`plugins` attribute in uWSGI configuration contains plugins not in config.services.uwsgi.plugins"
         else c.plugins or cfg.plugins;
-      plugins = unique plugins';
+      plugins = lib.unique plugins';
 
-      hasPython = v: filter (n: n == "python${v}") plugins != [];
+      hasPython = v: lib.filter (n: n == "python${v}") plugins != [];
       hasPython2 = hasPython "2";
       hasPython3 = hasPython "3";
 
@@ -45,21 +42,21 @@ let
             then {
               inherit plugins;
             } // removeAttrs c [ "type" "pythonPackages" ]
-              // optionalAttrs (python != null) {
+              // lib.optionalAttrs (python != null) {
                 pyhome = "${pythonEnv}";
                 env =
                   # Argh, uwsgi expects list of key-values there instead of a dictionary.
-                  let envs = partition (hasPrefix "PATH=") (c.env or []);
-                      oldPaths = map (x: substring (stringLength "PATH=") (stringLength x) x) envs.right;
+                  let envs = lib.partition (lib.hasPrefix "PATH=") (c.env or []);
+                      oldPaths = map (x: lib.substring (lib.stringLength "PATH=") (lib.stringLength x) x) envs.right;
                       paths = oldPaths ++ [ "${pythonEnv}/bin" ];
-                  in [ "PATH=${concatStringsSep ":" paths}" ] ++ envs.wrong;
+                  in [ "PATH=${lib.concatStringsSep ":" paths}" ] ++ envs.wrong;
               }
           else if isEmperor
             then {
               emperor = if builtins.typeOf c.vassals != "set" then c.vassals
                         else pkgs.buildEnv {
                           name = "vassals";
-                          paths = mapAttrsToList buildCfg c.vassals;
+                          paths = lib.mapAttrsToList buildCfg c.vassals;
                         };
             } // removeAttrs c [ "type" "vassals" ]
           else throw "`type` attribute in uWSGI configuration should be either 'normal' or 'emperor'";
@@ -72,25 +69,25 @@ in {
   options = {
     services.uwsgi = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable uWSGI";
       };
 
-      runDir = mkOption {
-        type = types.path;
+      runDir = lib.mkOption {
+        type = lib.types.path;
         default = "/run/uwsgi";
         description = "Where uWSGI communication sockets can live";
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         internal = true;
       };
 
-      instance = mkOption {
-        type =  with types; let
+      instance = lib.mkOption {
+        type =  with lib.types; let
           valueType = nullOr (oneOf [
             bool
             int
@@ -98,11 +95,11 @@ in {
             str
             (lazyAttrsOf valueType)
             (listOf valueType)
-            (mkOptionType {
+            (lib.mkOptionType {
               name = "function";
               description = "function";
               check = x: isFunction x;
-              merge = mergeOneOption;
+              merge = lib.mergeOneOption;
             })
           ]) // {
             description = "Json value or lambda";
@@ -112,7 +109,7 @@ in {
         default = {
           type = "normal";
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             type = "emperor";
             vassals = {
@@ -139,29 +136,29 @@ in {
         '';
       };
 
-      plugins = mkOption {
-        type = types.listOf types.str;
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         description = "Plugins used with uWSGI";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "uwsgi";
         description = "User account under which uWSGI runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "uwsgi";
         description = "Group account under which uWSGI runs.";
       };
 
-      capabilities = mkOption {
-        type = types.listOf types.str;
-        apply = caps: caps ++ optionals isEmperor imperialPowers;
+      capabilities = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        apply = caps: caps ++ lib.optionals isEmperor imperialPowers;
         default = [ ];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             "CAP_NET_BIND_SERVICE" # bind on ports <1024
             "CAP_NET_RAW"          # open raw sockets
@@ -186,8 +183,8 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = optional (cfg.runDir != "/run/uwsgi") ''
+  config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = lib.optional (cfg.runDir != "/run/uwsgi") ''
       d ${cfg.runDir} 775 ${cfg.user} ${cfg.group}
     '';
 
@@ -204,23 +201,23 @@ in {
         KillSignal = "SIGQUIT";
         AmbientCapabilities = cfg.capabilities;
         CapabilityBoundingSet = cfg.capabilities;
-        RuntimeDirectory = mkIf (cfg.runDir == "/run/uwsgi") "uwsgi";
+        RuntimeDirectory = lib.mkIf (cfg.runDir == "/run/uwsgi") "uwsgi";
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "uwsgi") {
+    users.users = lib.optionalAttrs (cfg.user == "uwsgi") {
       uwsgi = {
         group = cfg.group;
         uid = config.ids.uids.uwsgi;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "uwsgi") {
+    users.groups = lib.optionalAttrs (cfg.group == "uwsgi") {
       uwsgi.gid = config.ids.gids.uwsgi;
     };
 
     services.uwsgi.package = pkgs.uwsgi.override {
-      plugins = unique cfg.plugins;
+      plugins = lib.unique cfg.plugins;
     };
   };
 }
