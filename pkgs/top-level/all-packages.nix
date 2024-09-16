@@ -7019,8 +7019,6 @@ with pkgs;
 
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy { };
 
-  dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
-
   dnscontrol = callPackage ../applications/networking/dnscontrol { };
 
   dnsenum = callPackage ../tools/security/dnsenum { };
