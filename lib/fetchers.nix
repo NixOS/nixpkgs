@@ -66,29 +66,32 @@ rec {
   normalizeHash = {
     hashTypes ? [ "sha256" ],
     required ? true,
-  }: args:
-    with builtins; with lib;
+  }:
     let
       hNames = [ "hash" ] ++ hashTypes;
-
-      # The argument hash, as a {name, value} pair
-      h =
-        let _h = attrsToList (intersectAttrs (genAttrs hNames (const {})) args); in
-        if _h == [] then
-          throwIf required "fetcher called without `hash`" null
-        else if tail _h != [] then
-          throw "fetcher called with mutually-incompatible arguments: ${concatMapStringsSep ", " (a: a.name) _h}"
-        else
-          head _h
-      ;
+      hAttrs = genAttrs hNames (const {});
     in
-      if args ? "outputHash" then
-        args
-      else
-        removeAttrs args hNames // (optionalAttrs (h != null) {
-          outputHash = h.value;
-          outputHashAlgo = if h.name == "hash" then null else h.name;
-        })
+    with builtins; with lib;
+      args:
+        if args ? "outputHash" then
+          args
+        else
+          let
+            # The argument hash, as a {name, value} pair
+            h =
+              let _h = attrsToList (intersectAttrs hAttrs args); in
+              if _h == [] then
+                throwIf required "fetcher called without `hash`" null
+              else if tail _h != [] then
+                throw "fetcher called with mutually-incompatible arguments: ${concatMapStringsSep ", " (a: a.name) _h}"
+              else
+                head _h
+            ;
+          in
+            removeAttrs args hNames // (optionalAttrs (h != null) {
+              outputHash = h.value;
+              outputHashAlgo = if h.name == "hash" then null else h.name;
+            })
   ;
 
   /**
@@ -148,13 +151,17 @@ rec {
     let
       hAttrs = genAttrs ([ "hash" ] ++ hashTypes) (const {});
       fArgs = functionArgs fetcher;
-      required = !fArgs.outputHash;
+
+      normalize = normalizeHash {
+        inherit hashTypes;
+        required = !fArgs.outputHash;
+      };
     in
     # The o.g. fetcher must *only* accept outputHash and outputHashAlgo
     assert fArgs ? outputHash && fArgs ? outputHashAlgo;
     assert intersectAttrs fArgs hAttrs == {};
 
     setFunctionArgs
-      (args: fetcher (normalizeHash { inherit hashTypes required; } args))
-      (removeAttrs fArgs [ "outputHash" "outputHashAlgo" ] // { hash = !required; });
+      (args: fetcher (normalize args))
+      (removeAttrs fArgs [ "outputHash" "outputHashAlgo" ] // { hash = fArgs.outputHash; });
 }
