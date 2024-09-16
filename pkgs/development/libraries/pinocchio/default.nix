@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ] ++ lib.optionals pythonSupport [
     python3Packages.python
+    python3Packages.pythonImportsCheckHook
   ];
 
   propagatedBuildInputs = [
@@ -91,12 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-
-  # pythonImportsCheck, but in stdenv.mkDerivation
-  postInstall = lib.optionalString pythonSupport ''
-    PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
-    python -c "import pinocchio"
-  '';
+  pythonImportsCheck = [ "pinocchio" ];
 
   meta = {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
