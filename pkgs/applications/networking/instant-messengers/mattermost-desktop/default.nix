@@ -67,6 +67,6 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = [ maintainers.joko ];
+    maintainers = with maintainers; [ joko yayayayaka ];
   };
 }
