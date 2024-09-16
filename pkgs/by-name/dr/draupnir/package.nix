@@ -3,7 +3,10 @@
 , makeWrapper
 , nodejs
 , matrix-sdk-crypto-nodejs
+, python3
 , sqlite
+, srcOnly
+, removeReferencesTo
 , mkYarnPackage
 , fetchYarnDeps
 , nixosTests
@@ -12,6 +15,7 @@
 # docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix
 let
   hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
+  nodeSources = srcOnly nodejs;
 in
   mkYarnPackage rec {
     pname = "draupnir";
@@ -37,11 +41,30 @@ in
     yarnLock = src + "/yarn.lock";
     packageJSON = ./package.json;
 
+    pkgConfig = {
+      "@matrix-org/matrix-sdk-crypto-nodejs" = {
+        postInstall = ''
+          # replace with the built package
+          cd ..
+          rm -r matrix-sdk-crypto-nodejs
+          ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/* ./
+        '';
+      };
+
+      better-sqlite3 = {
+        nativeBuildInputs = [ python3 ];
+        postInstall = ''
+          # build native sqlite bindings
+          npm run build-release --offline --nodedir="${nodeSources}"
+          find build -type f -exec \
+            ${removeReferencesTo}/bin/remove-references-to \
+            -t "${nodeSources}" {} \;
+       '';
+      };
+    };
+
     #prebuild phase
     preBuild = ''
-      # copy built modules to package...
-      echo "Copying built matrix-sdk-crypto-nodejs modules to package..."
-      cp -a ${matrix-sdk-crypto-nodejs}/lib/node_modules/* node_modules/
       echo "Adding version.txt..."
       mkdir -p deps/draupnir/
       echo "${version}-nix" > deps/draupnir/version.txt
