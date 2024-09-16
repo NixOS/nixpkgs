@@ -26,7 +26,7 @@ let
         threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
         isl = if       stdenv.isDarwin then null
               else if    atLeast "9"   then isl_0_20
-              else    /* atLeast "7" */     isl_0_17;
+              else    /* atLeast "8" */     isl_0_17;
       } // lib.optionalAttrs (!(atLeast "9")) {
         # gcc 10 is too strict to cross compile gcc <= 8
         stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc9Stdenv else stdenv;

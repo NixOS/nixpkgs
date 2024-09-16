@@ -39,7 +39,6 @@ let
   is10 = majorVersion == "10";
   is9  = majorVersion == "9";
   is8  = majorVersion == "8";
-  is7  = majorVersion == "7";
   inherit (lib) optionals optional;
 in
 
@@ -173,7 +172,6 @@ in
 ++ optionals (stdenv.isDarwin) ({
   "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
   "8" = [ ../patches/8/AvailabilityInternal.h-fixincludes.patch ];
-  "7" = [ ../patches/7/AvailabilityInternal.h-fixincludes.patch ];
 }.${majorVersion} or [])
 
 
@@ -234,7 +232,7 @@ in
 ## gcc 8.0 and older ##############################################################################
 
 ++ optional (!atLeast9) ./libsanitizer-no-cyclades-9.patch
-++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+++ optional (is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
 
 # Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
 # which is not supported by the clang integrated assembler used by default on Darwin.
@@ -244,26 +242,4 @@ in
 # avr-gcc8 is maintained for the `qmk` package
 # https://github.com/osx-cross/homebrew-avr/blob/main/Formula/avr-gcc%408.rb#L69
 ++ optional (is8 && targetPlatform.isAvr && hostPlatform.isDarwin && hostPlatform.isAarch64) ./8/avr-gcc-8-darwin.patch
-
-
-## gcc 7.0 and older ##############################################################################
-
-++ optional (is7 && hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
-  url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
-  sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
-})
-++ optionals (is7) [
-  # https://gcc.gnu.org/ml/gcc-patches/2018-02/msg00633.html
-  (./. + "/${majorVersion}/riscv-pthread-reentrant.patch")
-  # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
-  (./. + "/${majorVersion}/riscv-no-relax.patch")
-  # Fix for asan w/glibc-2.34. Although there's no upstream backport to v7,
-  # the patch from gcc 8 seems to work perfectly fine.
-  (./. + "/${majorVersion}/gcc8-asan-glibc-2.34.patch")
-  (./. + "/${majorVersion}/0001-Fix-build-for-glibc-2.31.patch")
-]
-++ optional (is7 && targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
-  url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
-  sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
-})
-++ optional ((is7 || is8) && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
+++ optional (is8 && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch

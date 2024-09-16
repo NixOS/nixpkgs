@@ -14885,7 +14885,6 @@ with pkgs;
       extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
     };
 
-  gcc7Stdenv = overrideCC gccStdenv buildPackages.gcc7;
   gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
   gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
@@ -14978,7 +14977,13 @@ with pkgs;
   };
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
-    gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13 gcc14;
+    gcc8
+    gcc9
+    gcc10
+    gcc11
+    gcc12
+    gcc13
+    gcc14;
 
   gcc_latest = gcc14;
 
