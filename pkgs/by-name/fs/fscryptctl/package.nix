@@ -5,14 +5,14 @@
   pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fscryptctl";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscryptctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5suEdSpX8alDkSnSnyiIjUmZq98eK0ZPVAtDKhOs65c=";
   };
 
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
       As fscryptctl is intended for advanced users, you should read the kernel
       documentation for filesystem encryption before using fscryptctl.
     '';
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     changelog = "https://github.com/google/fscryptctl/blob/master/NEWS.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ primeos ];
   };
-}
+})
