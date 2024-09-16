@@ -25,13 +25,13 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
+    hash = "sha256-gXxxlAEuzMCvFu5oSQayNW191XAC/YKvldItYEFxvNM=";
   };
 
   patches = [
