@@ -320,6 +320,7 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
+    # NOTE: device labels should be honored over UUIDs, since UUIDs can change on reinstall (e.g. when porting config from a VM).
     foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-label/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*")) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
