@@ -22937,6 +22937,11 @@ with pkgs;
 
   paperkey = callPackage ../tools/security/paperkey { };
 
+  paros = callPackage ../tools/security/paros {
+    jdk = jdk8;
+    jre = jre8;
+  };
+
   parsero = callPackage ../tools/security/parsero { };
 
   pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
