@@ -46,14 +46,14 @@
 stdenv.mkDerivation (finalAttrs: {
   # LAMMPS has weird versioning convention. Updates should go smoothly with:
   # nix-update --commit lammps --version-regex 'stable_(.*)'
-  version = "2Aug2023_update3";
+  version = "29Aug2024";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${finalAttrs.version}";
-    hash = "sha256-jx0hkiYxQlnE2sa4WTvluEgphF//sNbK91VGAQJMwjw=";
+    hash = "sha256-UySWbJPubl318IA2MeTrz3Ya+9YyVOeR/Fs4aYI1R2o=";
   };
   preConfigure = ''
     cd cmake
@@ -75,8 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit extraBuildInputs;
   };
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ]
-  ++ (builtins.map (p: "-DPKG_${p}=ON") (builtins.attrNames (lib.filterAttrs (n: v: v) packages)))
+  ++ (lib.mapAttrsToList (n: v: lib.cmakeBool "PKG_${n}" v) packages)
   ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags)
   ;
 
@@ -99,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/vim-plugins/lammps $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Classical Molecular Dynamics simulation code";
     longDescription = ''
       LAMMPS is a classical molecular dynamics simulation code designed to
@@ -109,13 +110,16 @@ stdenv.mkDerivation (finalAttrs: {
       under the terms of the GNU Public License (GPL).
       '';
     homepage = "https://www.lammps.org";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     # compiling lammps with 64 bit support blas and lapack might cause runtime
     # segfaults. In anycase both blas and lapack should have the same #bits
     # support.
     broken = (blas.isILP64 && lapack.isILP64);
-    maintainers = [ maintainers.costrouc maintainers.doronbehar ];
+    maintainers = with lib.maintainers; [
+      costrouc
+      doronbehar
+    ];
     mainProgram = "lmp";
   };
 })

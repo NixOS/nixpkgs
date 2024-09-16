@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "udocker";
-  version = "1.3.16";
+  version = "1.3.17";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "udocker";
     rev = "refs/tags/${version}";
-    hash = "sha256-PUbNFvKaF41egGMypdkmVFCt1bWmTCWR5iQNOt/L4+Y=";
+    hash = "sha256-P49fkLvdCm/Eco+nD3SGM04PRQatBzq9CHlayueQetk=";
   };
 
   # crun patchelf proot runc fakechroot

@@ -1,21 +1,18 @@
 { pkgs ? import ../../.. {} }:
   let
-    inherit (pkgs) runCommand lib;
+    inherit (pkgs) runCommand closureInfo;
     # splicing doesn't seem to work right here
-    inherit (pkgs.buildPackages) nix rsync;
+    inherit (pkgs.buildPackages) dumpnar rsync;
     pack-all =
       packCmd: name: pkgs: fixups:
       (runCommand name {
-        requiredSystemFeatures = [ "recursive-nix" ];
-        nativeBuildInputs = [ nix rsync ];
+        nativeBuildInputs = [ rsync dumpnar ];
       } ''
         base=$PWD
-        requisites="$(nix-store --query --requisites ${lib.concatStringsSep " " pkgs} | tac)"
-
-        rm -f $base/nix-support/propagated-build-inputs
+        requisites="$(cat ${closureInfo { rootPaths = pkgs; }}/store-paths)"
         for f in $requisites; do
           cd $f
-          rsync --chmod="+w" -av . $base
+          rsync --safe-links --chmod="+w" -av . $base
         done
         cd $base
 
@@ -28,14 +25,14 @@
             cat $f >>"$base/nix-support/$f"
           done
         done
+        rm -f $base/nix-support/propagated-build-inputs
         cd $base
 
         ${fixups}
 
-        rm .nix-socket
         ${packCmd}
       '');
-    nar-all = pack-all "nix-store --dump . | xz -9 -e -T $NIX_BUILD_CORES >$out";
+    nar-all = pack-all "dumpnar . | xz -9 -e -T $NIX_BUILD_CORES >$out";
     tar-all = pack-all "XZ_OPT=\"-9 -e -T $NIX_BUILD_CORES\" tar cJf $out --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 .";
     coreutils-big = pkgs.coreutils.override { singleBinary = false; };
     mkdir = runCommand "mkdir" { coreutils = coreutils-big; } ''

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "2.2.2";
+  version = "2.2.3";
 in
 buildGoModule {
   pname = "go-toml";
@@ -14,10 +14,10 @@ buildGoModule {
     owner = "pelletier";
     repo = "go-toml";
     rev = "v${version}";
-    sha256 = "sha256-Z17977v2qMdf/e6iHEuRyCuC//HeFF8tkLt2P8Z/NT4=";
+    sha256 = "sha256-+l89SvJ/4SxVItys1ROLOv2hZ5euU1MF21Yn0siQHUM=";
   };
 
-  vendorHash = "sha256-4t/ft3XTfc7yrsFVMSfjdCur8QULho3NI2ym6gqjexI=";
+  vendorHash = "sha256-YkOcpzn5AKFMDWUYbKY8DzGMiIMSyaDfexFmXv5HNQI=";
 
   excludedPackages = [
     "cmd/gotoml-test-decoder"

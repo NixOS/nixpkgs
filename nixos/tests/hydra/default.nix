@@ -11,7 +11,7 @@ let
   inherit (import ./common.nix { inherit system; }) baseConfig;
 
   hydraPkgs = {
-    inherit (pkgs) hydra_unstable;
+    inherit (pkgs) hydra;
   };
 
   makeHydraTest = with pkgs.lib; name: package: makeTest {

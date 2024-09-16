@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "qdldl";
-  version = "0.1.7.post3";
+  version = "0.1.7.post4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WbOqK6IkyvI3StJArXmmlbxHdjnGTjFkzvTyyZyHzx0=";
+    hash = "sha256-DBY7mvuSxLadRGOHsdQpUJRDiwQexOhRAnG2xP8fhv0=";
   };
 
   dontUseCmakeConfigure = true;

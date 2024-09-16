@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "https://photoqt.org/previewqt";
     changelog = "https://gitlab.com/lspies/previewqt/-/blob/v${version}/CHANGELOG";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "previewqt";
     platforms = lib.platforms.linux;
   };

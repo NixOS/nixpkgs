@@ -1,20 +1,17 @@
 { config, lib, pkgs, utils, ... }:
-
-with lib;
-
 let
   cfg = config.services.logind;
 
-  logindHandlerType = types.enum [
+  logindHandlerType = lib.types.enum [
     "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
     "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
   ];
 in
 {
   options.services.logind = {
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       example = "IdleAction=lock";
       description = ''
         Extra config options for systemd-logind.
@@ -23,9 +20,9 @@ in
       '';
     };
 
-    killUserProcesses = mkOption {
+    killUserProcesses = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Specifies whether the processes of a user should be killed
         when the user logs out.  If true, the scope unit corresponding
@@ -39,7 +36,7 @@ in
       '';
     };
 
-    powerKey = mkOption {
+    powerKey = lib.mkOption {
       default = "poweroff";
       example = "ignore";
       type = logindHandlerType;
@@ -49,7 +46,7 @@ in
       '';
     };
 
-    powerKeyLongPress = mkOption {
+    powerKeyLongPress = lib.mkOption {
       default = "ignore";
       example = "reboot";
       type = logindHandlerType;
@@ -59,7 +56,7 @@ in
       '';
     };
 
-    rebootKey = mkOption {
+    rebootKey = lib.mkOption {
       default = "reboot";
       example = "ignore";
       type = logindHandlerType;
@@ -69,7 +66,7 @@ in
       '';
     };
 
-    rebootKeyLongPress = mkOption {
+    rebootKeyLongPress = lib.mkOption {
       default = "poweroff";
       example = "ignore";
       type = logindHandlerType;
@@ -79,7 +76,7 @@ in
       '';
     };
 
-    suspendKey = mkOption {
+    suspendKey = lib.mkOption {
       default = "suspend";
       example = "ignore";
       type = logindHandlerType;
@@ -89,7 +86,7 @@ in
       '';
     };
 
-    suspendKeyLongPress = mkOption {
+    suspendKeyLongPress = lib.mkOption {
       default = "hibernate";
       example = "ignore";
       type = logindHandlerType;
@@ -99,7 +96,7 @@ in
       '';
     };
 
-    hibernateKey = mkOption {
+    hibernateKey = lib.mkOption {
       default = "hibernate";
       example = "ignore";
       type = logindHandlerType;
@@ -109,7 +106,7 @@ in
       '';
     };
 
-    hibernateKeyLongPress = mkOption {
+    hibernateKeyLongPress = lib.mkOption {
       default = "ignore";
       example = "suspend";
       type = logindHandlerType;
@@ -119,7 +116,7 @@ in
       '';
     };
 
-    lidSwitch = mkOption {
+    lidSwitch = lib.mkOption {
       default = "suspend";
       example = "ignore";
       type = logindHandlerType;
@@ -129,9 +126,9 @@ in
       '';
     };
 
-    lidSwitchExternalPower = mkOption {
+    lidSwitchExternalPower = lib.mkOption {
       default = cfg.lidSwitch;
-      defaultText = literalExpression "services.logind.lidSwitch";
+      defaultText = lib.literalExpression "services.logind.lidSwitch";
       example = "ignore";
       type = logindHandlerType;
 
@@ -142,7 +139,7 @@ in
       '';
     };
 
-    lidSwitchDocked = mkOption {
+    lidSwitchDocked = lib.mkOption {
       default = "ignore";
       example = "suspend";
       type = logindHandlerType;
@@ -159,11 +156,11 @@ in
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
-    ] ++ optionals config.systemd.package.withImportd [
+    ] ++ lib.optionals config.systemd.package.withImportd [
       "dbus-org.freedesktop.import1.service"
-    ] ++ optionals config.systemd.package.withMachined [
+    ] ++ lib.optionals config.systemd.package.withMachined [
       "dbus-org.freedesktop.machine1.service"
-    ] ++ optionals config.systemd.package.withPortabled [
+    ] ++ lib.optionals config.systemd.package.withPortabled [
       "dbus-org.freedesktop.portable1.service"
     ] ++ [
       "dbus-org.freedesktop.login1.service"

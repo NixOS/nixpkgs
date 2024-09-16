@@ -4,22 +4,29 @@
   python3,
 }:
 
+let
+  appthreat-vulnerability-db = (
+    python3.pkgs.appthreat-vulnerability-db.overrideAttrs (oldAttrs: rec {
+      version = "5.7.3";
+      src = oldAttrs.src.override {
+        rev = "refs/tags/v${version}";
+        hash = "sha256-MrlgBUx3T2G46Pnah3obe5b4yKDzsAFVC/B7AHM0kZY=";
+      };
+    })
+  );
+
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.3.4";
+  version = "5.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5iMhl3Wcxwgq4Wr0TUcAuRnb2+y8DHBugnnkpcZfSAM=";
+    hash = "sha256-m0vDsCetOSfScu1eprrGaDJ1VuXxuNFBitK8N5GtfSQ=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail " --cov-append --cov-report term --cov depscan" ""
-  '';
 
   build-system = with python3.pkgs; [ setuptools ];
 
@@ -40,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     httpretty
+    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -5,8 +5,9 @@
   runCommand,
   vmTools,
   writeClosure,
-  writers,
+  writeDirectReferencesToFile,
   writeScript,
+  writeStringReferencesToFile,
   # Native build inputs
   buildPackages,
   e2fsprogs,
@@ -69,10 +70,16 @@ lib.makeExtensible (final: {
         set -e
         ${runAsRoot}
       '';
-      runScriptFile = writers.writeBash "run-script.sh" ''
+      runScriptFile = writeScript "run-script.sh" ''
+        #!/bin/sh
         set -e
         ${runScript}
       '';
+      runScriptReferences =
+        if builtins ? getContext then
+          lib.splitString "\n" (writeStringReferencesToFile runScriptFile.text).text
+        else
+          [ (writeDirectReferencesToFile runScriptFile) ];
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.sif"
           {
@@ -82,13 +89,7 @@ lib.makeExtensible (final: {
               util-linux
             ];
             strictDeps = true;
-            layerClosure = writeClosure (
-              [
-                bashInteractive
-                runScriptFile
-              ]
-              ++ contents
-            );
+            layerClosure = writeClosure ([ bashInteractive ] ++ runScriptReferences ++ contents);
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";
@@ -134,12 +135,14 @@ lib.makeExtensible (final: {
               done
             done
 
-            # Create runScript and link shell
+            # Link /bin/sh
             if [ ! -e bin/sh ]; then
               ln -s ${lib.getExe bashInteractive} bin/sh
             fi
             mkdir -p .singularity.d
-            ln -s ${runScriptFile} .singularity.d/runscript
+
+            # Create runscript
+            cp "${runScriptFile}" .singularity.d/runscript
 
             # Fill out .singularity.d
             mkdir -p .singularity.d/env

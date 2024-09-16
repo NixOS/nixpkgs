@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.1.1";
+  version = "2.2.3";
   providers = {
     airplay = [
     ];
@@ -27,8 +27,9 @@
     fully_kiosk = ps: with ps; [
       python-fullykiosk
     ];
-    hass = [
-    ]; # missing hass-client
+    hass = ps: with ps; [
+      hass-client
+    ];
     hass_players = [
     ];
     jellyfin = ps: with ps; [
@@ -61,7 +62,10 @@
     ];
     soundcloud = [
     ]; # missing soundcloudpy
-    spotify = [
+    spotify = ps: with ps; [
+      pkce
+    ];
+    template_player_provider = [
     ];
     test = [
     ];

@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
     owner = "modrinth";
     repo = "theseus";
     rev = "v${modrinth-app-unwrapped.version}";
-    sha256 = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
+    hash = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
   };
 
   cargoLock = {
@@ -187,7 +187,7 @@ rustPlatform.buildRustPackage {
       unfreeRedistributable
     ];
     maintainers = with lib.maintainers; [ getchoo ];
-    platforms = with lib; platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # this builds on architectures like aarch64, but the launcher itself does not support them yet
     broken = !stdenv.isx86_64;
   };

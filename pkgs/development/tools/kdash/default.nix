@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kdash";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "kdash-rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XY6aBqLHbif3RsytNm7JnDXspICJuhS7SJ+ApwTeqX4=";
+    sha256 = "sha256-IpF5uXRxHBmfWkBBJjNvDsyQG5nzFjKbCmmGpG3howo=";
   };
 
   nativeBuildInputs = [ perl python3 pkg-config ];
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl xorg.xcbutil ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
-  cargoHash = "sha256-ODQf+Fvil+oBJcM38h1HdrcgtJw0b65f5auLuZtUgik=";
+  cargoHash = "sha256-jm0UCKDy6TrogMPavB86lvk8yKZXubTGGbApk+oP2RQ=";
 
   meta = with lib; {
     description = "Simple and fast dashboard for Kubernetes";

@@ -27,7 +27,7 @@ let
     owner  = "YosysHQ";
     repo   = "nextpnr-tests";
     rev    = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
-    sha256 = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
+    hash = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
     name   = "nextpnr-tests";
   };
 in
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
-      "-DARCH=generic;ice40;ecp5;gowin"
+      "-DARCH=generic;ice40;ecp5;gowin;himbaechel"
       "-DBUILD_TESTS=ON"
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDBS=OFF"
+      "-DHIMBAECHEL_GOWIN_DEVICES=all"
     ]
     ++ (lib.optional enableGui "-DBUILD_GUI=ON")
     ++ (lib.optional (enableGui && stdenv.isDarwin)
@@ -80,6 +81,7 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/nextpnr-ice40
     wrapQtApp $out/bin/nextpnr-ecp5
     wrapQtApp $out/bin/nextpnr-gowin
+    wrapQtApp $out/bin/nextpnr-himbaechel
   '';
 
   strictDeps = true;

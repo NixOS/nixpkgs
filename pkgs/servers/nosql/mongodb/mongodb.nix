@@ -13,7 +13,6 @@
 , openldap
 , openssl
 , libpcap
-, python311Packages
 , curl
 , Security
 , CoreFoundation
@@ -28,15 +27,17 @@
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
 , avxSupport ? stdenv.hostPlatform.avxSupport
+, passthru ? {}
 }:
 
 let
-  scons = buildPackages.scons.override{ python3Packages = python311Packages; };
+  scons = buildPackages.scons;
   python = scons.python.withPackages (ps: with ps; [
     pyyaml
     cheetah3
     psutil
     setuptools
+    distutils
   ] ++ lib.optionals (lib.versionAtLeast version "6.0") [
     packaging
     pymongo
@@ -59,7 +60,7 @@ let
   inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
-  inherit version;
+  inherit version passthru;
   pname = "mongodb";
 
   src = fetchFromGitHub {

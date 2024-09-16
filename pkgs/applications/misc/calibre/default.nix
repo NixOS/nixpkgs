@@ -186,6 +186,29 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
+  doInstallCheck = true;
+  installCheckInputs = with python3Packages; [
+    fonttools
+    psutil
+  ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ETN='--exclude-test-name'
+    EXCLUDED_FLAGS=(
+      $ETN 'test_7z'  # we don't include 7z support
+      $ETN 'test_zstd'  # we don't include zstd support
+      $ETN 'test_qt'  # we don't include svg or webp support
+      $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
+      $ETN 'test_websocket_basic'  # flakey
+      ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
+    )
+
+    python setup.py test ''${EXCLUDED_FLAGS[@]}
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     homepage = "https://calibre-ebook.com";
     description = "Comprehensive e-book software";

@@ -31,45 +31,26 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , zlib
 , rsync
-, fetchpatch
 , withCockpit ? true
 , withAsan ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-12JCd2R00L0T5EPUNO/Aw2HRID+z2krNQ09RSX9Qkj8=";
+    hash = "sha256-+FTCzEyQY71TCkj8HMnSkrnQtxjHxOmtYhfZEAYOLis=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-32bit.patch";
-      url = "https://github.com/389ds/389-ds-base/commit/1fe029c495cc9f069c989cfbb09d449a078c56e2.patch";
-      hash = "sha256-b0HSaDjuEUKERIXKg8np+lZDdZNmrCTAXybJzF+0hq0=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-2199.patch";
-      url = "https://git.rockylinux.org/staging/rpms/389-ds-base/-/raw/dae373bd6b4e7d6f35a096e6f27be1c3bf1e48ac/SOURCES/0004-CVE-2024-2199.patch";
-      hash = "sha256-grANphTafCoa9NQy+FowwPhGQnvuCbfGnSpQ1Wp69Vg=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-3657.patch";
-      url = "https://git.rockylinux.org/staging/rpms/389-ds-base/-/raw/dae373bd6b4e7d6f35a096e6f27be1c3bf1e48ac/SOURCES/0005-CVE-2024-3657.patch";
-      hash = "sha256-CuiCXQp3PMiYERzFk7oH3T91yQ1dP/gtLNWF0eqGAQ4=";
-    })
-  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/src";
     name = "${pname}-${version}";
-    hash = "sha256-fE3bJROwti9Ru0jhCiWhXcuQdxXTqzN9yOd2nlhKABI=";
+    hash = "sha256-2Ng268tfbMRU3Uyo5ljSS/HxPnw1abvGjcczo25HyVk=";
   };
 
   nativeBuildInputs = [

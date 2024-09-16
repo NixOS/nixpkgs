@@ -47,18 +47,20 @@ in
       environment = lib.mapAttrs (_: toString) cfg.environment;
 
       # following https://github.com/Stirling-Tools/Stirling-PDF#locally
-      path = with pkgs; [
-        unpaper
-        libreoffice
-        ocrmypdf
-        poppler_utils
-        unoconv
-        opencv
-        pngquant
-        tesseract
-        python3Packages.weasyprint
-        calibre
-      ];
+      path =
+        with pkgs;
+        [
+          unpaper
+          libreoffice
+          ocrmypdf
+          poppler_utils
+          unoconv
+          opencv
+          pngquant
+          tesseract
+          python3Packages.weasyprint
+        ]
+        ++ lib.optional (cfg.environment.INSTALL_BOOK_AND_ADVANCED_HTML_OPS or "false" == "true") calibre;
 
       wantedBy = [ "multi-user.target" ];
 

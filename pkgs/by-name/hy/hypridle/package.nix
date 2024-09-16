@@ -5,6 +5,7 @@
 , cmake
 , wayland
 , wayland-protocols
+, wayland-scanner
 , hyprlang
 , sdbus-cpp
 , systemd
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

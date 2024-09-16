@@ -20,15 +20,15 @@
 , jq
 }:
 let
-  py3 = python3.withPackages (p: [ p.mako ]);
+  py3 = python3.withPackages (p: [ p.distutils p.mako ]);
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "24.05";
+  version = "24.08";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    hash = "sha256-FD7JFM80wrruqBWjYnJHZh2f2GZJ6XDQmUQ0XetnWBg=";
+    hash = "sha256-u4dkVcdduTBuRE615mPx66U8OFZSeMdL2fNJNoHbVxc=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool

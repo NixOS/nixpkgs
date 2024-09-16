@@ -2,11 +2,15 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gnome,
   sassc,
   gnome-themes-extra,
   gtk-engine-murrine,
-  colorVariants ? [] # default: install all icons
+  unstableGitUpdater,
+  colorVariants ? [ ],
+  sizeVariants ? [ ],
+  themeVariants ? [ ],
+  tweakVariants ? [ ],
+  iconVariants ? [ ],
 }:
 
 let
@@ -15,45 +19,102 @@ let
     "dark"
     "light"
   ];
-
+  sizeVariantList = [
+    "compact"
+    "standard"
+  ];
+  themeVariantList = [
+    "default"
+    "green"
+    "grey"
+    "orange"
+    "pink"
+    "purple"
+    "red"
+    "teal"
+    "yellow"
+    "all"
+  ];
+  tweakVariantList = [
+    "nord"
+    "carbon"
+    "black"
+    "float"
+    "outline"
+    "macos"
+  ];
+  iconVariantList = [
+    "Duskfox"
+    "Duskfox-Alt"
+    "Duskfox-Alt-2"
+    "Duskfox-Alt-3"
+  ];
 in
-lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib.checkListOfEnum
+  "${pname}: sizeVariants"
+  sizeVariantList
+  sizeVariants
+  lib.checkListOfEnum
+  "${pname}: themeVariants"
+  themeVariantList
+  themeVariants
+  lib.checkListOfEnum
+  "${pname}: tweakVariants"
+  tweakVariantList
+  tweakVariants
+  lib.checkListOfEnum
+  "${pname}: iconVariants"
+  iconVariantList
+  iconVariants
 
-stdenvNoCC.mkDerivation {
-  inherit pname;
-  version = "0-unstable-2024-06-27";
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname;
+    version = "0-unstable-2024-07-22";
 
-  src = fetchFromGitHub {
-    owner = "Fausto-Korpsvart";
-    repo = "Nightfox-GTK-Theme";
-    rev = "ef4e6e1fa3efe2a5d838d61191776abfe4d87766";
-    hash = "sha256-RsDEHauz9jQs1rqsoKbL/s0Vst3GzJXyGsE3uFtLjCY=";
-  };
+    src = fetchFromGitHub {
+      owner = "Fausto-Korpsvart";
+      repo = "Nightfox-GTK-Theme";
+      rev = "1ef2f7092526658a24312bde230a5746b49b7d95";
+      hash = "sha256-Rnm0C8mmO54u5ntovIKnu2AdpdnjsQFABvlRPG5+cdo=";
+    };
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  nativeBuildInputs = [ gnome.gnome-shell sassc ];
-  buildInputs = [ gnome-themes-extra ];
+    nativeBuildInputs = [ sassc ];
+    buildInputs = [ gnome-themes-extra ];
 
-  dontBuild = true;
+    dontBuild = true;
 
-  postPatch = ''
-    patchShebangs themes/install.sh
-  '';
+    passthru.updateScript = unstableGitUpdater { };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/themes
-    cd themes
-    ./install.sh -n Nightfox -c ${lib.concatStringsSep " " (if colorVariants != [] then colorVariants else colorVariantList)} --tweaks macos -d "$out/share/themes"
-    runHook postInstall
-  '';
+    postPatch = ''
+      patchShebangs themes/install.sh
+    '';
 
-  meta = with lib; {
-    description = "GTK theme based on the Nightfox colour palette";
-    homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-  };
-}
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/themes
+      cd themes
+      ./install.sh -n Nightfox \
+      ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
+      ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
+      ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
+      ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
+      -d "$out/share/themes"
+      cd ../icons
+      ${lib.optionalString (iconVariants != [ ]) ''
+        mkdir -p $out/share/icons
+        cp -a ${toString (map (v: "${v}") iconVariants)} $out/share/icons/
+      ''}
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "GTK theme based on the Nightfox colour palette";
+      homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ d3vil0p3r ];
+    };
+  }

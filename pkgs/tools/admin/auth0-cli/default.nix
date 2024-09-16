@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "auth0";
     repo = "auth0-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C4zKWMrWGrnamlcugrOUUUdCUwYDgiD6XKdBQ3bBWFI=";
+    hash = "sha256-x53mS/nLRuxwDzYSwTtS+35OoDkO9ULTrdV7N43IQ/I=";
   };
 
-  vendorHash = "sha256-VeH7EDMNrdJSWHioz2O29NiGtC59IdWYww3WoABO4LY=";
+  vendorHash = "sha256-p739VSwemwEh5siP9qChNQY76NHp7MsG3xAiBPZSvcs=";
 
   ldflags = [
     "-s"

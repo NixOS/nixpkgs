@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "24.07";
+  version = "24.08";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
-      free = "sha256-D41Sf437WYRQMdVW7hwcnZI0UG67IJsTTMfxlpkk36M=";
-      unfree = "sha256-iKCs893IFG0I6a2kpUe0qiuCX+YUxIgMIBRykc9XYjA=";
+      free = "sha256-2lv2Z4rrjmawD6aI8TmrACgo62StD720WQWOa0/u7KE=";
+      unfree = "sha256-f6hibHeTlF6RRnFiC7tOZ/A+IQdjhIrxYq6JrDVhnYI=";
     }.${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
     # remove the unRAR related code from the src drv
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
-    maintainers = with lib.maintainers; [ anna328p eclairevoyant jk peterhoeg ];
+    maintainers = with lib.maintainers; [ anna328p jk peterhoeg ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
   };

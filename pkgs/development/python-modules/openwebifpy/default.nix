@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "4.2.6";
+  version = "4.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-znMTbKQlklzOKMmlsPiM1JJ1VMB4HK5uMXoBay2Ow4A=";
+    hash = "sha256-MoTSfoO6km3jAaF9oIDxhxhMI8jqZAyPD6yBYcYxhd4=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -22,13 +22,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.319.0";
+  version = "2.319.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-02vIMuaeU5CsdwmJzUdfa6BFKewsKGFsEWKza3CqRtQ=";
+    hash = "sha256-cXOYW4py2RRJVUKrQBGf6LHNyc1sJ/bMR4hJxtDv3PU=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -318,7 +318,7 @@ buildDotnetModule rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse zimbatm ];
+    maintainers = with maintainers; [ veehaitch kfollesdal aanderse zimbatm ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

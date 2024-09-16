@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   defaultUserGroup = "usbmux";
@@ -14,8 +11,8 @@ in
 {
   options.services.usbmuxd = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable the usbmuxd ("USB multiplexing daemon") service. This daemon is
@@ -25,35 +22,35 @@ in
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = defaultUserGroup;
       description = ''
         The user usbmuxd should use to run after startup.
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = defaultUserGroup;
       description = ''
         The group usbmuxd should use to run after startup.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
+    package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.usbmuxd;
-      defaultText = literalExpression "pkgs.usbmuxd";
+      defaultText = lib.literalExpression "pkgs.usbmuxd";
       description = "Which package to use for the usbmuxd daemon.";
       relatedPackages = [ "usbmuxd" "usbmuxd2" ];
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == defaultUserGroup) {
+    users.users = lib.optionalAttrs (cfg.user == defaultUserGroup) {
       ${cfg.user} = {
         description = "usbmuxd user";
         group = cfg.group;
@@ -61,7 +58,7 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == defaultUserGroup) {
+    users.groups = lib.optionalAttrs (cfg.group == defaultUserGroup) {
       ${cfg.group} = { };
     };
 

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   rustPlatform,
   asciidoctor,
   installShellFiles,
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   pname = "qrtool";
   version = "0.11.4";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";

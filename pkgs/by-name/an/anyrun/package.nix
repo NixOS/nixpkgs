@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/${pname}/examples/
+    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];
+    maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "anyrun";
   };
 }

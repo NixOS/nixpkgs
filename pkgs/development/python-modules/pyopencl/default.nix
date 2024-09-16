@@ -6,50 +6,47 @@
 
   # build-system
   cmake,
-  scikit-build-core,
-  pathspec,
-  ninja,
   nanobind,
+  ninja,
+  numpy,
+  scikit-build-core,
+
+  # buildInputs
+  opencl-headers,
+  pybind11,
+  darwin,
+  ocl-icd,
 
   # dependencies
-  appdirs,
-  cffi,
-  darwin,
-  decorator,
-  mako,
-  numpy,
-  ocl-icd,
-  oldest-supported-numpy,
-  opencl-headers,
   platformdirs,
-  pybind11,
-  pytestCheckHook,
   pytools,
-  six,
+
+  # tests
+  pytestCheckHook,
 }:
 
 let
-  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+  os-specific-buildInputs =
+    if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.2.6";
-  format = "pyproject";
+  version = "2024.2.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pyopencl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nP7ZAGeRXrjqDRWlc2SDP1hk1fseGeu9Zx0lOp9Pchs=";
+    fetchSubmodules = true;
+    hash = "sha256-VeaEDYnGfMYf9/WqMIZ9g4KounD48eWF3Romt79RMEQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     nanobind
     ninja
     numpy
-    oldest-supported-numpy
-    pathspec
     scikit-build-core
   ];
 
@@ -60,32 +57,41 @@ buildPythonPackage rec {
     pybind11
   ] ++ os-specific-buildInputs;
 
-  propagatedBuildInputs = [
-    appdirs
-    cffi
-    decorator
-    mako
+  dependencies = [
     numpy
     platformdirs
     pytools
-    six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preBuild = ''
+  preCheck = ''
     export HOME=$(mktemp -d)
-    rm -rf pyopencl
+
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
   '';
 
-  # gcc: error: pygpu_language_opencl.cpp: No such file or directory
+  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
+  # tests are all the tests that are available.
   doCheck = false;
 
-  pythonImportsCheck = [ "pyopencl" ];
+  pythonImportsCheck = [
+    "pyopencl"
+    "pyopencl.array"
+    "pyopencl.cltypes"
+    "pyopencl.compyte"
+    "pyopencl.elementwise"
+    "pyopencl.tools"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    license = licenses.mit;
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    # ld: symbol(s) not found for architecture arm64
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

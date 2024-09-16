@@ -655,6 +655,7 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "hass";
         Group = "hass";
+        WorkingDirectory = cfg.configDir;
         Restart = "on-failure";
         RestartForceExitStatus = "100";
         SuccessExitStatus = "100";

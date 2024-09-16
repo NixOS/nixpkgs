@@ -15,7 +15,6 @@ stdenv.mkDerivation {
   };
 
   separateDebugInfo = true;
-
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ imagemagick pkg-config wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ];

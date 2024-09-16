@@ -32,12 +32,12 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "path.py" "path"
+    substituteInPlace setup.py --replace-fail "path.py" "path"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dnspython
     eventlet
     kombu

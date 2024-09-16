@@ -10,19 +10,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pbQkMSwISwK2+Ywev7avKBMvwB5dcZgX+kmeeMh+BLc=";
+    pname = "google_cloud_access_context_manager";
+    inherit version;
+    hash = "sha256-O/rGqO4ub5UQWo7s9OGJCxp5Y3AuuMZV/s8CVX00joo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;

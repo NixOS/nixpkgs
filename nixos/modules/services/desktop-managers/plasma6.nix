@@ -245,6 +245,9 @@ in {
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
     services.pipewire.enable = mkDefault true;
 
+    # Enable screen reader by default
+    services.orca.enable = mkDefault true;
+
     services.displayManager = {
       sessionPackages = [kdePackages.plasma-workspace];
       defaultSession = mkDefault "plasma";

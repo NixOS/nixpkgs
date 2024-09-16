@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "sshesame";
-  version = "0.0.38";
+  version = "0.0.39";
 
   src = fetchFromGitHub {
     owner = "jaksi";
     repo = "sshesame";
     rev = "v${version}";
-    hash = "sha256-CSoDUfbYSf+V7jHVqXGhLc6Mrluy+XbZKCs6IA8reIw=";
+    hash = "sha256-h0qvi90gbWm4LCL3FeipW8BKkbuUt0xGMTjaaeYadnE=";
   };
 
-  vendorHash = "sha256-tfxqr1yDXE+ACCfAtZ0xePpB/xktfwJe/xPU8qAVz54=";
+  vendorHash = "sha256-1v+cNMr2jpLPfxusPsgnFN31DwuNntXuq3sDNpWL0Rg=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -33,7 +33,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jaksi/sshesame";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "sshesame";
   };
 }

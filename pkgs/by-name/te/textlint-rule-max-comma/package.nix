@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Textlint rule is that limit maximum comma(,) count of sentence";
     homepage = "https://github.com/textlint-rule/textlint-rule-max-comma";
-    changelog = "https://github.com/textlint-rule/textlint-rule-max-comma/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-max-comma/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;

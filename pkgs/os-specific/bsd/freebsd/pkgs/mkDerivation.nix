@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  stdenvNoLibs,
+  stdenvNoLibc,
   overrideCC,
   buildPackages,
   stdenvNoLibcxx ? overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx,
@@ -28,7 +28,7 @@ lib.makeOverridable (
       if attrs.noCC or false then
         stdenvNoCC
       else if attrs.noLibc or false then
-        stdenvNoLibs
+        stdenvNoLibc
       else if attrs.noLibcxx or false then
         stdenvNoLibcxx
       else
@@ -73,17 +73,14 @@ lib.makeOverridable (
 
       strictDeps = true;
 
-      meta =
-        with lib;
-        {
-          maintainers = with maintainers; [
-            rhelmot
-            artemist
-          ];
-          platforms = platforms.unix;
-          license = licenses.bsd2;
-        }
-        // attrs.meta or { };
+      meta = {
+        maintainers = with lib.maintainers; [
+          rhelmot
+          artemist
+        ];
+        platforms = lib.platforms.unix;
+        license = lib.licenses.bsd2;
+      } // attrs.meta or { };
     }
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?

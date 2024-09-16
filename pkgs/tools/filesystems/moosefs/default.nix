@@ -5,17 +5,18 @@
 , pkg-config
 , libpcap
 , zlib
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
-  version = "3.0.117";
+  version = "3.0.118";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6zBMAi9ruPPlcnpdgqwl35QZ5u4MyFPUa70yvGTkHpo=";
+    sha256 = "sha256-Sm32VwKlE0V5HZj+VXr66gYKS+fcU1+UVQELiZ64DpU=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) moosefs; };
 
   meta = with lib; {
     homepage = "https://moosefs.com";

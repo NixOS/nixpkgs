@@ -28,20 +28,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntopng";
-  version = "6.0";
+  version = "6.2";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "ntopng";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-zLtJ4x1eWtvnd60iNuNkMOX8LinZMEJHSt/Y0FVQ8vw=";
+    hash = "sha256-8PG18mOV/6EcBpKt9kLyI40OLDnpnc2b4IUu9JbK/Co=";
     fetchSubmodules = true;
   };
-
-  patches = lib.optional (!lib.versionOlder rrdtool.version "1.9.0") (fetchpatch {
-    url = "https://github.com/ntop/ntopng/commit/5069aa4a6259bd0830a33f2ece980612dba5ace9.patch";
-    hash = "sha256-CnYzSE39J7pC2wHxp7Xst6g5pzQbpNUynJUVrTrtuOg=";
-  });
 
   preConfigure = ''
     substituteInPlace Makefile.in \

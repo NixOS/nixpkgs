@@ -6,12 +6,12 @@
   "channel": "stable",
   "engineHashes": {
     "aarch64-linux": {
-      "aarch64-linux": "sha256-UBiHps5QoTAtSBuh3HBoAlztWZ/TpqvJI9JaIF2tLWs=",
-      "x86_64-linux": "sha256-UBiHps5QoTAtSBuh3HBoAlztWZ/TpqvJI9JaIF2tLWs="
+      "aarch64-linux": "sha256-Rgz097BWYOBnjfq/J/c3Mj4H289Jdydd9Nq4OKcf/38=",
+      "x86_64-linux": "sha256-Rgz097BWYOBnjfq/J/c3Mj4H289Jdydd9Nq4OKcf/38="
     },
     "x86_64-linux": {
-      "aarch64-linux": "sha256-j7hvd/166zZXTVE46jULE+PzVLqHXhBnaZpYCS9TwpI=",
-      "x86_64-linux": "sha256-j7hvd/166zZXTVE46jULE+PzVLqHXhBnaZpYCS9TwpI="
+      "aarch64-linux": "sha256-vzeVvck3cEtK90rG89qW1SNhnTFXBsTdV8mVjiMl3BE=",
+      "x86_64-linux": "sha256-vzeVvck3cEtK90rG89qW1SNhnTFXBsTdV8mVjiMl3BE="
     }
   },
   "dartVersion": "3.3.2",

@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.pantalaimon-headless;
 
@@ -12,7 +10,7 @@ let
       Notifications = false;
     };
 
-    ${name} = (recursiveUpdate
+    ${name} = (lib.recursiveUpdate
       {
         Homeserver = instanceConfig.homeserver;
         ListenAddress = instanceConfig.listenAddress;
@@ -28,7 +26,7 @@ let
   };
 
   mkPantalaimonService = name: instanceConfig:
-    nameValuePair "pantalaimon-${name}" {
+    lib.nameValuePair "pantalaimon-${name}" {
       description = "pantalaimon instance ${name} - E2EE aware proxy daemon for matrix clients";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
@@ -48,9 +46,9 @@ let
     };
 in
 {
-  options.services.pantalaimon-headless.instances = mkOption {
+  options.services.pantalaimon-headless.instances = lib.mkOption {
     default = { };
-    type = types.attrsOf (types.submodule (import ./pantalaimon-options.nix));
+    type = lib.types.attrsOf (lib.types.submodule (import ./pantalaimon-options.nix));
     description = ''
       Declarative instance config.
 
@@ -59,12 +57,12 @@ in
     '';
   };
 
-  config = mkIf (config.services.pantalaimon-headless.instances != { })
+  config = lib.mkIf (config.services.pantalaimon-headless.instances != { })
     {
-      systemd.services = mapAttrs' mkPantalaimonService config.services.pantalaimon-headless.instances;
+      systemd.services = lib.mapAttrs' mkPantalaimonService config.services.pantalaimon-headless.instances;
     };
 
   meta = {
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

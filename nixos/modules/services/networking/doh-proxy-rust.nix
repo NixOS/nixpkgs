@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.doh-proxy-rust;
@@ -10,10 +7,10 @@ in {
 
   options.services.doh-proxy-rust = {
 
-    enable = mkEnableOption "doh-proxy-rust";
+    enable = lib.mkEnableOption "doh-proxy-rust";
 
-    flags = mkOption {
-      type = types.listOf types.str;
+    flags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [ "--server-address=9.9.9.9:53" ];
       description = ''
@@ -24,13 +21,13 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.doh-proxy-rust = {
       description = "doh-proxy-rust";
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.doh-proxy-rust}/bin/doh-proxy ${escapeShellArgs cfg.flags}";
+        ExecStart = "${pkgs.doh-proxy-rust}/bin/doh-proxy ${lib.escapeShellArgs cfg.flags}";
         Restart = "always";
         RestartSec = 10;
         DynamicUser = true;
@@ -55,6 +52,6 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ stephank ];
+  meta.maintainers = with lib.maintainers; [ stephank ];
 
 }

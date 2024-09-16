@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "zhanhb";
     repo = "cidr-merger";
     rev = "v${version}";
-    sha256 = "sha256-Kb+89VP7JhBrTE4MM3H/dqoIBgDLnVhKqkgHdymYCgk=";
+    hash = "sha256-Kb+89VP7JhBrTE4MM3H/dqoIBgDLnVhKqkgHdymYCgk=";
   };
 
   vendorHash = "sha256-cPri384AX/FdfNtzt3xj4bF+/izSa4sZuAohK0R/7H4=";

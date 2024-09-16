@@ -1,42 +1,49 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
+  distro,
   fetchPypi,
+  packaging,
+  parsley,
+  pbr,
+  setuptools,
 }:
-python3Packages.buildPythonPackage rec {
+
+buildPythonPackage rec {
   pname = "bindep";
   version = "2.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-rLLyWbzh/RUIhzR5YJu95bmq5Qg3hHamjWtqGQAufi8=";
   };
 
-  buildInputs = with python3Packages; [
+  env.PBR_VERSION = version;
+
+  build-system = [
     distro
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = [
     parsley
     pbr
     packaging
     distro
   ];
 
-  patchPhase = ''
-    # Setting the pbr version will skip any version checking logic
-    # This is required because pbr thinks it gets it's own version from git tags
-    # See https://docs.openstack.org/pbr/latest/user/packagers.html
-    export PBR_VERSION=5.11.1
-  '';
+  # Checks moved to 'passthru.tests' to workaround infinite recursion
+  doCheck = false;
+
+  pythonImportsCheck = [ "bindep" ];
 
   meta = with lib; {
     description = "Bindep is a tool for checking the presence of binary packages needed to use an application / library";
     homepage = "https://docs.opendev.org/opendev/bindep/latest/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ melkor333 ];
+    mainProgram = "bindep";
+    maintainers = teams.openstack.members;
   };
 }

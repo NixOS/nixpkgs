@@ -92,14 +92,14 @@ maven.buildMavenPackage rec {
           LATEST_TAG=$(curl https://api.github.com/repos/${src.owner}/${src.repo}/tags | \
             jq -r '[.[] | select(.name | test("^[0-9]"))] | sort_by(.name | split(".") |
             map(tonumber)) | reverse | .[0].name')
-          update-source-version ${pname} "$LATEST_TAG"
+          update-source-version sonarlint-ls "$LATEST_TAG"
           sed -i '0,/mvnHash *= *"[^"]*"/{s/mvnHash = "[^"]*"/mvnHash = ""/}' ${pkgFile}
 
           echo -e "\nFetching all mvn dependencies to calculate the mvnHash. This may take a while ..."
-          nix-build -A ${pname}.fetchedMavenDeps 2> ${pname}-stderr.log || true
+          nix-build -A sonarlint-ls.fetchedMavenDeps 2> sonarlint-ls-stderr.log || true
 
-          NEW_MVN_HASH=$(grep "got:" ${pname}-stderr.log | awk '{print ''$2}')
-          rm ${pname}-stderr.log
+          NEW_MVN_HASH=$(grep "got:" sonarlint-ls-stderr.log | awk '{print ''$2}')
+          rm sonarlint-ls-stderr.log
           # escaping double quotes looks ugly but is needed for variable substitution
           # use # instead of / as separator because the sha256 might contain the / character
           sed -i "0,/mvnHash *= *\"[^\"]*\"/{s#mvnHash = \"[^\"]*\"#mvnHash = \"$NEW_MVN_HASH\"#}" ${pkgFile}

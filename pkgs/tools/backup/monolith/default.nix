@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
-  checkFlagsArray = [ "--skip=tests::cli" ];
+  checkFlags = [ "--skip=tests::cli" ];
 
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";

@@ -21,7 +21,7 @@
       platforms = lib.platforms.all;
       homepage = "https://github.com/bats-core/bats-assert";
       license = lib.licenses.cc0;
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ brokenpip3 ];
     };
   });
 
@@ -47,18 +47,18 @@
       platforms = lib.platforms.all;
       homepage = "https://github.com/bats-core/bats-file";
       license = lib.licenses.cc0;
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ brokenpip3 ];
     };
   });
 
   bats-detik = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-detik";
-    version = "1.3.0";
+    version = "1.3.2";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-detik";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-cbWNZ9a/Q9reJLQxUyTdqfLykOJcJKnoKB123ao8/xM=";
+      hash = "sha256-f8PN+VsUdUXrR9JiQgVuYDy2QgOtaxE8tkkxOUF0uC4=";
     };
     dontBuild = true;
     installPhase = ''
@@ -98,7 +98,7 @@
       platforms = lib.platforms.all;
       homepage = "https://github.com/bats-core/bats-support";
       license = lib.licenses.cc0;
-      maintainers = [ ];
+      maintainers = with lib.maintainers; [ brokenpip3 ];
     };
   });
 }

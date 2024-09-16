@@ -1,16 +1,13 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.goeland;
   tomlFormat = pkgs.formats.toml { };
 in
 {
   options.services.goeland = {
-    enable = mkEnableOption "goeland, an alternative to rss2email";
+    enable = lib.mkEnableOption "goeland, an alternative to rss2email";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Configuration of goeland.
         See the [example config file](https://github.com/slurdge/goeland/blob/master/cmd/asset/config.default.toml) for the available options.
@@ -18,14 +15,14 @@ in
       default = { };
       type = tomlFormat.type;
     };
-    schedule = mkOption {
-      type = types.str;
+    schedule = lib.mkOption {
+      type = lib.types.str;
       default = "12h";
       example = "Mon, 00:00:00";
       description = "How often to run goeland, in systemd time format.";
     };
-    stateDir = mkOption {
-      type = types.path;
+    stateDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/goeland";
       description = ''
         The data directory for goeland where the database will reside if using the unseen filter.
@@ -36,17 +33,17 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.goeland.settings.database = "${cfg.stateDir}/goeland.db";
 
     systemd.services.goeland = {
-      serviceConfig = let confFile = tomlFormat.generate "config.toml" cfg.settings; in mkMerge [
+      serviceConfig = let confFile = tomlFormat.generate "config.toml" cfg.settings; in lib.mkMerge [
         {
           ExecStart = "${pkgs.goeland}/bin/goeland run -c ${confFile}";
           User = "goeland";
           Group = "goeland";
         }
-        (mkIf (cfg.stateDir == "/var/lib/goeland") {
+        (lib.mkIf (cfg.stateDir == "/var/lib/goeland") {
           StateDirectory = "goeland";
           StateDirectoryMode = "0750";
         })
@@ -61,7 +58,7 @@ in
     };
     users.groups.goeland = { };
 
-    warnings = optionals (hasAttr "password" cfg.settings.email) [
+    warnings = lib.optionals (lib.hasAttr "password" cfg.settings.email) [
       ''
         It is not recommended to set the "services.goeland.settings.email.password"
         option as it will be in cleartext in the Nix store.
@@ -70,5 +67,5 @@ in
     ];
   };
 
-  meta.maintainers = with maintainers; [ sweenu ];
+  meta.maintainers = with lib.maintainers; [ sweenu ];
 }

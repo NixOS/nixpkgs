@@ -14,7 +14,7 @@
 
 let
   pname = "localsend";
-  version = "1.15.0";
+  version = "1.15.4";
 
   linux = flutter313.buildFlutterApplication rec {
     inherit pname version;
@@ -23,7 +23,7 @@ let
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-u/vPVuY2YX+LQGzqiohtaYcUu7lEmGkcsWDMBIaXKok=";
+      hash = "sha256-kfqLYe15NIRH12+AastWkLBk4L0MKEV5XZ/klE+pK7g=";
     };
 
     sourceRoot = "${src.name}/app";
@@ -75,7 +75,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-45IV2rDaL5tAOLLqPrMHHHFJaiFqmDyTyro6RilI0Zo=";
+      hash = "sha256-ZU2aXZNKo01TnXNH0e+r0l4J5HIILmGam3T4+6GaeA4=";
     };
 
     nativeBuildInputs = [

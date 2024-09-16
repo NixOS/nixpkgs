@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests, olm }:
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.all;
+    inherit (olm.meta) knownVulnerabilities;
   };
 }

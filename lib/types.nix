@@ -219,7 +219,7 @@ rec {
     else "(${t.description})";
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # nixos/doc/manual/development/option-types.section.md!
   types = rec {
 
     raw = mkOptionType {
@@ -1035,7 +1035,7 @@ rec {
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
-        typeMerge = t1: t2: null;
+        typeMerge = t: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;

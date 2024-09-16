@@ -18,13 +18,13 @@
 # See: https://github.com/Shizcow/dmenu-rs#plugins
 stdenv.mkDerivation rec {
   pname = "dmenu-rs";
-  version = "5.5.3";
+  version = "5.5.4";
 
   src = fetchFromGitHub {
     owner = "Shizcow";
     repo = "dmenu-rs";
     rev = version;
-    hash = "sha256-05Ia+GHeL8PzOwR7H+NEVhKJVMPhlIaQLwGfvwOAl0g=";
+    hash = "sha256-LdbTvuq1IbzWEoASscIh3j3VAHm+W3UekJNiMHTxSQI=";
   };
 
   nativeBuildInputs = [

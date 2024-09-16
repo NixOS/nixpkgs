@@ -1,34 +1,41 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   writeText,
-  xcbuild,
   python,
   buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
   cython,
   gfortran,
   meson-python,
   nukeReferences,
-  pkg-config,
   pythran,
-  wheel,
+  pkg-config,
   setuptools,
-  hypothesis,
-  pytest7CheckHook,
-  pytest-xdist,
-  numpy,
-  pybind11,
-  pooch,
-  xsimd,
+  xcbuild,
+
+  # buildInputs
   # Upstream has support for using Darwin's Accelerate package. However this
   # requires a Darwin user to work on a nice way to do that via an override.
   # See:
   # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L194-L211
   blas,
   lapack,
+  pybind11,
+  pooch,
+  xsimd,
+
+  # dependencies
+  numpy,
+
+  # tests
+  hypothesis,
+  pytest7CheckHook,
+  pytest-xdist,
 
   # Reverse dependency
   sage,
@@ -58,7 +65,7 @@ let
   # Additional cross compilation related properties that scipy reads in scipy/meson.build
   crossFileScipy = writeText "cross-file-scipy.conf" ''
     [properties]
-    numpy-include-dir = '${numpy}/${python.sitePackages}/numpy/core/include'
+    numpy-include-dir = '${numpy.coreIncludeDir}'
     pythran-include-dir = '${pythran}/${python.sitePackages}/pythran'
     host-python-path = '${python.interpreter}'
     host-python-version = '${python.pythonVersion}'
@@ -66,12 +73,12 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
-    repo = pname;
-    rev = "v${version}";
+    repo = "scipy";
+    rev = "refs/tags/v${version}";
     hash = srcHash;
     fetchSubmodules = true;
   };
@@ -95,22 +102,23 @@ buildPythonPackage {
       --replace-fail "pybind11>=2.12.0,<2.13.0" "pybind11>=2.12.0" \
   '';
 
-  nativeBuildInputs = [
-    cython
-    gfortran
-    meson-python
-    nukeReferences
-    pythran
-    pkg-config
-    wheel
-    setuptools
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Minimal version required according to:
-    # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L185-L188
-    (xcbuild.override {
-      sdkVer = "13.3";
-    })
-  ];
+  build-system =
+    [
+      cython
+      gfortran
+      meson-python
+      nukeReferences
+      pythran
+      pkg-config
+      setuptools
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Minimal version required according to:
+      # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L185-L188
+      (xcbuild.override {
+        sdkVer = "13.3";
+      })
+    ];
 
   buildInputs = [
     blas
@@ -120,7 +128,7 @@ buildPythonPackage {
     xsimd
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -211,12 +219,12 @@ buildPythonPackage {
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scipy/scipy/releases/tag/v${version}";
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

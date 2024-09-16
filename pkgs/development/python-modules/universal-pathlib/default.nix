@@ -10,23 +10,23 @@
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
-  version = "0.2.2";
-  format = "pyproject";
+  version = "0.2.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "universal_pathlib";
     inherit version;
-    hash = "sha256-a8IVVIeSrV2zVTcIscGbr9ni+hZn3JJe1ATJXlKuLxM=";
+    hash = "sha256-VXChH9iMrRu8YiCz5yP92K38XF4AhlIJ6IrwP/SqFUs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ fsspec ];
+  dependencies = [ fsspec ];
 
   pythonImportsCheck = [ "upath" ];
 

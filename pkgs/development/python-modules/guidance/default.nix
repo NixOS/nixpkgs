@@ -97,7 +97,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.rev}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

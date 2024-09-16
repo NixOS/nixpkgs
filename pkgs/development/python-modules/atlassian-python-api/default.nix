@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "3.41.14";
+  version = "3.41.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "atlassian-api";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-cXVHGEOvEuSH19mub9u6kjK3epetN3IeXlHxwiBzTPY=";
+    hash = "sha256-DnsDulCbkilfD51r8x/L3RJXTDclAi4gYNktfuQC0w8=";
   };
 
   propagatedBuildInputs = [

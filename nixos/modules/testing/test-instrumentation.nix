@@ -162,6 +162,7 @@ in
 
     boot.kernelParams = [
       "console=${qemu-common.qemuSerialDevice}"
+      "console=tty0"
       # Panic if an error occurs in stage 1 (rather than waiting for
       # user intervention).
       "panic=1" "boot.panic_on_fail"
@@ -180,6 +181,7 @@ in
     services.journald.extraConfig =
       ''
         ForwardToConsole=yes
+        TTYPath=/dev/${qemu-common.qemuSerialDevice}
         MaxLevelConsole=debug
       '';
 

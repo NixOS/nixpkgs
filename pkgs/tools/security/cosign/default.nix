@@ -13,13 +13,13 @@
 }:
 buildGoModule rec {
   pname = "cosign";
-  version = "2.2.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-csFFB1VYwd009fL4QHDK9jmCmwFJ45CVutLVzluG1NU=";
+    hash = "sha256-wTtHdPrGTzDSqkgKMROs772y3mc0X2jMguDZOAL6Ypw=";
   };
 
   buildInputs =
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorHash = "sha256-LYdbHpucF/lUzMu0m5y0Gt3A/8ISUs9oLM79mTF/REM=";
+  vendorHash = "sha256-7HaDsLZsO7QIFiUBE4kH1av97EE+zwphPRusFfpMxUc=";
 
   subPackages = [
     "cmd/cosign"
@@ -51,11 +51,12 @@ buildGoModule rec {
 
     rm pkg/cosign/ctlog_test.go # Require network access
     rm pkg/cosign/tlog_test.go # Require network access
+    rm cmd/cosign/cli/verify/verify_test.go # Require network access
     rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
     rm cmd/cosign/cli/verify/verify_blob_test.go # Require network access
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cosign \
       --bash <($out/bin/cosign completion bash) \
       --fish <($out/bin/cosign completion fish) \

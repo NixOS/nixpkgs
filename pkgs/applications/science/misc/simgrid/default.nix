@@ -12,10 +12,6 @@
 , withoutBin ? false
 }:
 
-let
-  optionOnOff = option: if option then "on" else "off";
-in
-
 stdenv.mkDerivation rec {
   pname = "simgrid";
   version = "3.35";
@@ -42,31 +38,32 @@ stdenv.mkDerivation rec {
 
   # "Release" does not work. non-debug mode is Debug compiled with optimization
   cmakeBuildType = "Debug";
-  cmakeFlags = [
-    "-Denable_documentation=${optionOnOff buildDocumentation}"
-    "-Denable_java=${optionOnOff buildJavaBindings}"
-    "-Denable_python=${optionOnOff buildPythonBindings}"
-    "-DSIMGRID_PYTHON_LIBDIR=./" # prevents CMake to install in ${python3} dir
-    "-Denable_msg=${optionOnOff buildJavaBindings}"
-    "-Denable_fortran=${optionOnOff fortranSupport}"
-    "-Denable_model-checking=${optionOnOff modelCheckingSupport}"
-    "-Denable_ns3=off"
-    "-Denable_lua=off"
-    "-Denable_lib_in_jar=off"
-    "-Denable_maintainer_mode=off"
-    "-Denable_mallocators=on"
-    "-Denable_debug=on"
-    "-Denable_smpi=on"
-    "-Dminimal-bindings=${optionOnOff minimalBindings}"
-    "-Denable_smpi_ISP_testsuite=${optionOnOff moreTests}"
-    "-Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}"
-    "-Denable_compile_warnings=off"
-    "-Denable_compile_optimizations=${optionOnOff optimize}"
-    "-Denable_lto=${optionOnOff optimize}"
 
+  cmakeFlags = [
+    (lib.cmakeBool "enable_documentation" buildDocumentation)
+    (lib.cmakeBool "enable_java" buildJavaBindings)
+    (lib.cmakeBool "enable_python" buildPythonBindings)
+    (lib.cmakeFeature "SIMGRID_PYTHON_LIBDIR" "./") # prevents CMake to install in ${python3} dir
+    (lib.cmakeBool "enable_msg" buildJavaBindings)
+    (lib.cmakeBool "enable_fortran" fortranSupport)
+    (lib.cmakeBool "enable_model-checking" modelCheckingSupport)
+    (lib.cmakeBool "enable_ns3" false)
+    (lib.cmakeBool "enable_lua" false)
+    (lib.cmakeBool "enable_lib_in_jar" false)
+    (lib.cmakeBool "enable_maintainer_mode" false)
+    (lib.cmakeBool "enable_mallocators" true)
+    (lib.cmakeBool "enable_debug" true)
+    (lib.cmakeBool "enable_smpi" true)
+    (lib.cmakeBool "minimal-bindings" minimalBindings)
+    (lib.cmakeBool "enable_smpi_ISP_testsuite" moreTests)
+    (lib.cmakeBool "enable_smpi_MPICH3_testsuite" moreTests)
+    (lib.cmakeBool "enable_compile_warnings" false)
+    (lib.cmakeBool "enable_compile_optimizations" optimize)
+    (lib.cmakeBool "enable_lto" optimize)
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" optimize)
   ];
+
   makeFlags = lib.optional debug "VERBOSE=1";
 
   # needed to run tests and to ensure correct shabangs in output scripts

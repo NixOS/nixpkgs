@@ -40,8 +40,9 @@ let
     exec ${cfg.package}/bin/paperless-ngx "$@"
   '';
 
-  # Secure the services
   defaultServiceConfig = {
+    Slice = "system-paperless.slice";
+    # Secure the services
     ReadWritePaths = [
       cfg.consumptionDir
       cfg.dataDir
@@ -84,7 +85,7 @@ let
   };
 in
 {
-  meta.maintainers = with maintainers; [ erikarvstedt Flakebi leona ];
+  meta.maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
 
   imports = [
     (mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
@@ -231,6 +232,11 @@ in
 
   config = mkIf cfg.enable {
     services.redis.servers.paperless.enable = mkIf enableRedis true;
+
+    systemd.slices.system-paperless = {
+      description = "Paperless slice";
+      documentation = [ "https://docs.paperless-ngx.com" ];
+    };
 
     systemd.tmpfiles.settings."10-paperless" = let
       defaultRule = {

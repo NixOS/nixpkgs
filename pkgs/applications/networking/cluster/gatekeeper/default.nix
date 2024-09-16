@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gatekeeper";
-  version = "3.16.3";
+  version = "3.17.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
     rev = "v${version}";
-    hash = "sha256-G/ELuaUSlyeNcN6v1/xubF+VjvltdLKYmwlYWKzQiuw=";
+    hash = "sha256-Tu4p0kY0UdU0++zLpj+6A5ky5OXEEN5iivHbiyvghw4=";
   };
 
   vendorHash = null;

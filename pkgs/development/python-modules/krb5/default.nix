@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cython,
   fetchPypi,
@@ -42,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jborean93/pykrb5";
     license = licenses.mit;
     maintainers = teams.deshaw.members;
+    broken = stdenv.isDarwin; # TODO: figure out how to build on Darwin
   };
 }

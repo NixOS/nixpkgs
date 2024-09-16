@@ -1548,7 +1548,7 @@ dependencies = [
 
 [[package]]
 name = "ruff-api"
-version = "0.0.7"
+version = "0.0.8"
 dependencies = [
  "glob",
  "pyo3",

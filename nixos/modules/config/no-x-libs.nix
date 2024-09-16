@@ -1,14 +1,10 @@
 # This module gets rid of all dependencies on X11 client libraries
 # (including fontconfig).
-
 { config, lib, ... }:
-
-with lib;
-
 {
   options = {
-    environment.noXlibs = mkOption {
-      type = types.bool;
+    environment.noXlibs = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Switch off the options in the default configuration that
@@ -20,13 +16,13 @@ with lib;
     };
   };
 
-  config = mkIf config.environment.noXlibs {
+  config = lib.mkIf config.environment.noXlibs {
     programs.ssh.setXAuthLocation = false;
     security.pam.services.su.forwardXAuth = lib.mkForce false;
 
     fonts.fontconfig.enable = false;
 
-    nixpkgs.overlays = singleton (const (super: {
+    nixpkgs.overlays = lib.singleton (lib.const (super: {
       beam = super.beam_nox;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
@@ -81,7 +77,7 @@ with lib;
       ];
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
-      qt5 = super.qt5.overrideScope (const (super': {
+      qt5 = super.qt5.overrideScope (lib.const (super': {
         qtbase = super'.qtbase.override { withGtk3 = false; withQttranslation = false; };
       }));
       stoken = super.stoken.override { withGTK3 = false; };

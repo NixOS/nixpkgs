@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, qtbase
-, qtsvg
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  dtkwidget,
+  qtbase,
+  qtsvg,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {

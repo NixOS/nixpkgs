@@ -4,17 +4,18 @@
 , fetchFromGitHub
 , bash
 , nix
+, nixos-install-tools
 , coreutils
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "disko";
-  version = "1.6.1";
+  version = "1.7.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "disko";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5CNvkH0Nf7yMwgKhjUNg/lUK40C7DXB4zKOuA2jVO90=";
+    hash = "sha256-tqoAO8oT6zEUDXte98cvA1saU9+1dLJQe3pMKLXv8ps=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bash ];
@@ -26,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for i in disko disko-install; do
       sed -e "s|libexec_dir=\".*\"|libexec_dir=\"$out/share/disko\"|" "$i" > "$out/bin/$i"
       chmod 755 "$out/bin/$i"
-      wrapProgram "$out/bin/$i" --prefix PATH : ${lib.makeBinPath [ nix coreutils ]}
+      wrapProgram "$out/bin/$i" --prefix PATH : ${lib.makeBinPath [ nix coreutils nixos-install-tools ]}
     done
     runHook postInstall
   '';

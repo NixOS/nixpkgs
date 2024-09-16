@@ -9,7 +9,7 @@
   scdoc,
   curl,
   glib,
-  libgpiod_1,
+  libgpiod,
   libgudev,
   libusb1,
   modemmanager,
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eg25-manager";
-  version = "0.4.6";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "mobian1";
     repo = "eg25-manager";
     rev = finalAttrs.version;
-    hash = "sha256-2JsdwK1ZOr7ljNHyuUMzVCpl+HV0C5sA5LAOkmELqag=";
+    hash = "sha256-hOOYrEM+W7nHc6AQMYg6XQj4dgkLoBQe9S1F65TWPUI=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     glib
-    libgpiod_1 # Tracking issue for compatibility with libgpiod 2.0: https://gitlab.com/mobian1/eg25-manager/-/issues/45
+    libgpiod
     libgudev
     libusb1
     modemmanager

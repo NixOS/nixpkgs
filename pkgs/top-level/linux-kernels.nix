@@ -194,6 +194,14 @@ in {
       ];
     };
 
+    linux_6_11 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.11";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -213,31 +221,46 @@ in {
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
     zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
 
-    linux_zen = (zenKernels {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    }).zen;
-
-    linux_lqx = (zenKernels {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    }).lqx;
-
-    # This contains the variants of the XanMod kernel
-    xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix {
+    linux_zen = zenKernels {
+      variant = "zen";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
     };
 
-    linux_xanmod = xanmodKernels.lts;
-    linux_xanmod_stable = xanmodKernels.main;
-    linux_xanmod_latest = xanmodKernels.main;
+    linux_lqx = zenKernels {
+      variant = "lqx";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
+    # This contains the variants of the XanMod kernel
+    xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
+
+    linux_xanmod = xanmodKernels {
+      variant = "lts";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+    linux_xanmod_stable = xanmodKernels {
+      variant = "main";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+    linux_xanmod_latest = xanmodKernels {
+      variant = "main";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
@@ -373,8 +396,6 @@ in {
     asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors {};
 
     ena = callPackage ../os-specific/linux/ena {};
-
-    kvdo = callPackage ../os-specific/linux/kvdo {};
 
     lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
 
@@ -525,6 +546,8 @@ in {
 
     trelay = callPackage ../os-specific/linux/trelay { };
 
+    universal-pidff = callPackage ../os-specific/linux/universal-pidff { };
+
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
@@ -590,6 +613,8 @@ in {
 
     drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
 
+    nullfs = callPackage ../os-specific/linux/nullfs { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
@@ -598,6 +623,7 @@ in {
     vm-tools = self.mm-tools;
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
+    kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
@@ -611,6 +637,7 @@ in {
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_10 = recurseIntoAttrs (packagesFor kernels.linux_6_10);
+    linux_6_11 = recurseIntoAttrs (packagesFor kernels.linux_6_11);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
@@ -679,7 +706,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_10;
+    linux_latest = packages.linux_6_11;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;

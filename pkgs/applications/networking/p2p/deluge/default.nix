@@ -8,6 +8,7 @@
 , gobject-introspection
 , librsvg
 , wrapGAppsHook3
+, nixosTests
 }:
 
 let
@@ -86,6 +87,8 @@ let
           substituteInPlace $f --replace /usr/bin $out/bin
         done
       '';
+
+      passthru.tests = { inherit (nixosTests) deluge; };
 
       meta = with lib; {
         description = "Torrent client";

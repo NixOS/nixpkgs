@@ -58,7 +58,7 @@ in mkDerivation rec {
     sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 
-  nativeBuildInputs = with lib; [
+  nativeBuildInputs = [
     autoreconfHook
     curl
     git

@@ -15,6 +15,7 @@
   nix-update-script,
   nixosTests,
   rocksdb_8_11,
+  callPackage,
 }:
 
 let
@@ -25,7 +26,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.9.1";
+  version = "0.9.4";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -35,11 +36,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7a2Vrrjo4Qd62dneQr3Xl2+HVUIfLa9AnGXEt2RWWZY=";
+    hash = "sha256-GDi7kRwI0GujQBJXItQpYZT1I1Hz3DUMyTixJ/lQySY=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-sAma3T9X9N8UjJ4leePIa6gvqpKW2QkpzYaIAFWLeVc=";
+  cargoHash = "sha256-7gJi6sykmKRuZZ8svXWlktHnwr78zaE2jxVIt+sZPHg=";
 
   patches = [
     # Remove "PermissionsStartOnly" from systemd service files,
@@ -61,13 +62,18 @@ rustPlatform.buildRustPackage {
     bzip2
     openssl
     sqlite
-    foundationdb
     zstd
+  ] ++ lib.optionals stdenv.isLinux [
+    foundationdb
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  # skip defaults on darwin because foundationdb is not available
+  buildNoDefaultFeatures = stdenv.isDarwin;
+  buildFeatures = lib.optional (stdenv.isDarwin) [ "sqlite" "postgres" "mysql" "rocks" "elastic" "s3" "redis" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -139,6 +145,7 @@ rustPlatform.buildRustPackage {
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   passthru = {
+    webadmin = callPackage ./webadmin.nix { };
     update-script = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };

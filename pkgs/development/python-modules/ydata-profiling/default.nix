@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.8.3";
+  version = "4.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,13 +36,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-tMwhoVnn65EvZK5NBvh/G36W8tH7I9qaL+NTK3IZVdI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uB8E7qp1xohAdcIIt1T2DxwSu93XhJoI8/qn54fSvGY=";
   };
 
   preBuild = ''
     echo ${version} > VERSION
   '';
+
+  pythonRelaxDeps = [
+    "scipy"
+  ];
 
   propagatedBuildInputs = [
     dacite

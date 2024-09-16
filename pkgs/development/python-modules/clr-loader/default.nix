@@ -38,8 +38,7 @@ buildPythonPackage {
 
   buildInputs = [
     dotnetCorePackages.sdk_6_0.packages
-    dotnet-build.nugetDeps
-  ];
+  ] ++ dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/recutils/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/recutils/recutils-${version}.tar.gz";
     hash = "sha256-YwFZKwAgwUtFZ1fvXUNNSfYCe45fOkmdEzYvIFxIbg4=";
   };
 

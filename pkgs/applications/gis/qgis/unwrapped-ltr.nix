@@ -78,14 +78,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.9";
+  version = "3.34.10";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-4ZgCvg3VSa1LJQ8yr45nY4ZI7tyVVdW7WPK/jwBI+HU=";
+    hash = "sha256-E2Ak14h1kWdGq+JNbCeh5YJkr/S9g/0HD834MtgACSA=";
   };
 
   passthru = {
@@ -173,9 +173,11 @@ in mkDerivation rec {
     # the path at build time using GRASS_PREFIX.
     # Using wrapGAppsHook also prevents file dialogs from crashing the program
     # on non-NixOS.
-    wrapProgram $out/bin/qgis \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ grass ]}
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        "''${gappsWrapperArgs[@]}" \
+        --prefix PATH : ${lib.makeBinPath [ grass ]}
+    done
   '';
 
   meta = with lib; {

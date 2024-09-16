@@ -5,7 +5,7 @@
   setuptools,
   importlib-metadata,
   numpy,
-  rpyc4,
+  rpyc,
   scipy,
   appdirs,
   callPackage,
@@ -29,12 +29,14 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "importlib-metadata" ];
+
+  dependencies = [
     importlib-metadata
     numpy
-    rpyc4
+    rpyc
     scipy
     appdirs
   ];

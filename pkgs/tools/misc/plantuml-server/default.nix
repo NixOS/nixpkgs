@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, nixosTests }:
 
 let
-  version = "1.2024.6";
+  version = "1.2024.7";
 in
 stdenv.mkDerivation rec {
   pname = "plantuml-server";
   inherit version;
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml-server/releases/download/v${version}/plantuml-v${version}.war";
-    sha256 = "sha256-5+2Qut9c/UrwfiJXMm2Ix+ABCDCM65L1jpJdamjZ4k4=";
+    sha256 = "sha256-9YTclV+FoiNbcpeNtlbbozqjB1BN9EJn03CzyHDbC+8=";
   };
 
   dontUnpack = true;

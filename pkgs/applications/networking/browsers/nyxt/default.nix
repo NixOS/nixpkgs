@@ -1,55 +1,103 @@
-{ stdenv, lib, sbclPackages
-, makeWrapper, wrapGAppsHook3, gst_all_1
-, glib, gdk-pixbuf, cairo
-, mailcap, pango, gtk3
-, glib-networking, gsettings-desktop-schemas
-, xclip, wl-clipboard, notify-osd, enchant
+{ stdenv
+, lib
+, testers
+, wrapGAppsHook3
+, fetchzip
+, sbcl
+, pkg-config
+, libfixposix
+, gobject-introspection
+, gsettings-desktop-schemas
+, glib-networking
+, notify-osd
+, gtk3
+, glib
+, gdk-pixbuf
+, cairo
+, pango
+, webkitgtk
+, openssl
+, gstreamer
+, gst-libav
+, gst-plugins-base
+, gst-plugins-good
+, gst-plugins-bad
+, gst-plugins-ugly
+, xdg-utils
+, xclip
+, wl-clipboard
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nyxt";
-  inherit (sbclPackages.nyxt) version;
+  version = "3.11.8";
 
-  src = sbclPackages.nyxt;
+  src = fetchzip {
+    url = "https://github.com/atlas-engineer/nyxt/releases/download/${finalAttrs.version}/nyxt-${finalAttrs.version}-source-with-submodules.tar.xz";
+    hash = "sha256-mLf2dvnXYUwPEB3QkoB/O3m/e96t6ISUZNfh+y1ArX4=";
+    stripRoot = false;
+  };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
-  gstBuildInputs = with gst_all_1; [
-    gstreamer gst-libav
+  # for sbcl 2.4.3
+  postPatch = ''
+    substituteInPlace _build/cl-gobject-introspection/src/init.lisp \
+       --replace-warn sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
+    substituteInPlace _build/fset/Code/port.lisp \
+       --replace-warn sb-ext::once-only sb-int:once-only
+  '';
+
+  nativeBuildInputs = [ wrapGAppsHook3 ];
+
+  buildInputs = [
+    sbcl
+    # for groveller
+    pkg-config libfixposix
+    # for gappsWrapper
+    gobject-introspection
+    gsettings-desktop-schemas
+    glib-networking
+    notify-osd
+    gtk3
+    gstreamer
+    gst-libav
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
   ];
-  buildInputs = [
-    glib gdk-pixbuf cairo
-    mailcap pango gtk3
-    glib-networking gsettings-desktop-schemas
-    notify-osd enchant
-  ] ++ gstBuildInputs;
 
-  GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstBuildInputs;
+  # for cffi
+  LD_LIBRARY_PATH = lib.makeLibraryPath [
+    glib
+    gobject-introspection
+    gdk-pixbuf
+    cairo
+    pango
+    gtk3
+    webkitgtk
+    openssl
+    libfixposix
+  ];
 
-  # The executable is already built in sbclPackages.nyxt, buildPhase tries to build using the makefile which we ignore
-  dontBuild = true;
-
-  dontWrapGApps = true;
-  installPhase = ''
-    mkdir -p $out/share/applications/
-    sed "s/VERSION/$version/" $src/assets/nyxt.desktop > $out/share/applications/nyxt.desktop
-    for i in 16 32 128 256 512; do
-      mkdir -p "$out/share/icons/hicolor/''${i}x''${i}/apps/"
-      cp -f $src/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
-    done
-
-    mkdir -p $out/bin && makeWrapper $src/bin/nyxt $out/bin/nyxt \
-      --prefix PATH : ${lib.makeBinPath [ xclip wl-clipboard ]} \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${GST_PLUGIN_SYSTEM_PATH_1_0}" \
-      --argv0 nyxt "''${gappsWrapperArgs[@]}"
+  postConfigure = ''
+    export CL_SOURCE_REGISTRY="$(pwd)/_build//"
+    export ASDF_OUTPUT_TRANSLATIONS="$(pwd):$(pwd)"
+    export PREFIX="$out"
+    export NYXT_VERSION="$version"
   '';
 
-  checkPhase = ''
-    $out/bin/nyxt -h
+  # don't refresh from git
+  makeFlags = [ "all" "NYXT_SUBMODULES=false" ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ xdg-utils xclip wl-clipboard ]}")
   '';
+
+  # prevent corrupting core in exe
+  dontStrip = true;
+
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
@@ -59,4 +107,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lewo dariof4 ];
     platforms = platforms.all;
   };
-}
+})

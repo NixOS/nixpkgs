@@ -339,6 +339,41 @@ once to get a derivation hash, and again to produce the final fixed output deriv
 
 :::
 
+## `runCommand` {#tester-runCommand}
+
+`runCommand :: { name, script, stdenv ? stdenvNoCC, hash ? "...", ... } -> Derivation`
+
+This is a wrapper around `pkgs.runCommandWith`, which
+- produces a fixed-output derivation, enabling the command(s) to access the network ;
+- salts the derivation's name based on its inputs, ensuring the command is re-run whenever the inputs changes.
+
+It accepts the following attributes:
+- the derivation's `name` ;
+- the `script` to be executed ;
+- `stdenv`, the environment to use, defaulting to `stdenvNoCC` ;
+- the derivation's output `hash`, defaulting to the empty file's.
+  The derivation's `outputHashMode` is set by default to recursive, so the `script` can output a directory as well.
+
+All other attributes are passed through to [`mkDerivation`](#sec-using-stdenv),
+including `nativeBuildInputs` to specify dependencies available to the `script`.
+
+:::{.example #ex-tester-runCommand-nix}
+
+# Run a command with network access
+
+```nix
+testers.runCommand {
+  name = "access-the-internet";
+  command = ''
+    curl -o /dev/null https://example.com
+    touch $out
+  '';
+  nativeBuildInputs = with pkgs; [ cacert curl ];
+}
+```
+
+:::
+
 ## `runNixOSTest` {#tester-runNixOSTest}
 
 A helper function that behaves exactly like the NixOS `runTest`, except it also assigns this Nixpkgs package set as the `pkgs` of the test and makes the `nixpkgs.*` options read-only.

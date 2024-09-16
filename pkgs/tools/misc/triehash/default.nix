@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "julian-klode";
-    repo = pname;
+    repo = "triehash";
     rev = "debian/0.3-3";
     hash = "sha256-LxVcYj2WKHbhNu5x/DFkxQPOYrVkNvwiE/qcODq52Lc=";
   };
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin $out/share/doc/${pname}/ $out/share/${pname}/
+    install -d $out/bin $out/share/doc/triehash/ $out/share/triehash/
     install triehash.pl $out/bin/triehash
-    install README.md $out/share/doc/${pname}/
-    cp -r tests/ $out/share/${pname}/tests/
+    install README.md $out/share/doc/triehash/
+    cp -r tests/ $out/share/triehash/tests/
 
     runHook postInstall
   '';

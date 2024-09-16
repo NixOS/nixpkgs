@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.21.3";
+  version = "6.22.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    hash = "sha256-1lIrxJ1Y5YRoXbZn77Msah5lSVW71gDczYUlXQjf01s=";
+    hash = "sha256-kFjUAOs92xExCV/ph81TFvgRXC6ZRi1m0G51c4JmeMA=";
   };
 
   patches = [

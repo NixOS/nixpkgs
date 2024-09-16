@@ -15,8 +15,10 @@ stdenv.mkDerivation {
     sha256 = "1hvzglsmp75xiqqb0k75qjz4jwi8kl3fhn8zfsz53hhhqmbw6wkr";
   };
 
+  __structuredAttrs = true;
+
   preConfigure = "patchShebangs autogen.sh && ./autogen.sh";
-  configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
+  configureFlags = ["CFLAGS=-include ${zlib.dev}/include/zlib.h"];
 
   nativeBuildInputs = [
     autoconf automake gettext intltool libtool pkg-config

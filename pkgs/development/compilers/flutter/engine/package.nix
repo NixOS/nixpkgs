@@ -258,7 +258,9 @@ stdenv.mkDerivation (finalAttrs: {
       "--linux-cpu ${constants.alt-arch}"
     ]
     ++ lib.optional (!isOptimized) "--unoptimized"
-    ++ lib.optional (runtimeMode == "debug") "--no-stripped";
+    ++ lib.optional (runtimeMode == "debug") "--no-stripped"
+    ++ lib.optional finalAttrs.doCheck "--enable-unittests"
+    ++ lib.optional (!finalAttrs.doCheck) "--no-enable-unittests";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
   configurePhase =
@@ -305,10 +307,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     rm -rf $out/out/$outName/{obj,gen,exe.unstripped,lib.unstripped,zip_archives}
-    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,display_list_rendertests,flutter_tester,toolchain.ninja}
+    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
     find $out/out/$outName -name '*_unittests' -delete
     find $out/out/$outName -name '*_benchmarks' -delete
-
+  '' + lib.optionalString (finalAttrs.doCheck) ''
+    rm $out/out/$outName/{display_list_rendertests,flutter_tester}
+  '' + ''
     runHook postInstall
   '';
 

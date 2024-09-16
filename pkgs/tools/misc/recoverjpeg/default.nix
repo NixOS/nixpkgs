@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.6.3";
 
   src = fetchurl {
-    url = "https://www.rfc1149.net/download/recoverjpeg/${pname}-${version}.tar.gz";
+    url = "https://www.rfc1149.net/download/recoverjpeg/recoverjpeg-${version}.tar.gz";
     sha256 = "009jgxi8lvdp00dwfj0n4x5yqrf64x00xdkpxpwgl2v8wcqn56fv";
   };
 

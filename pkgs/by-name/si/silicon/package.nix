@@ -17,6 +17,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "silicon";
+  # Remove `postPatch` hack below when updating.
   version = "0.5.2";
 
   src = fetchFromGitHub {
@@ -32,6 +33,11 @@ rustPlatform.buildRustPackage rec {
       "pathfinder_simd-0.5.2" = "sha256-b9RuxtTRKJ9Bnh0AWkoInRVrK/a3KV/2DCbXhN63yF0=";
     };
   };
+
+  postPatch = ''
+    # Fix build with Rust 1.80; remove when fixed upstream
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   buildInputs = [ expat freetype fira-code fontconfig harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]

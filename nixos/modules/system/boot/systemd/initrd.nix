@@ -67,8 +67,6 @@ let
     "systemd-poweroff.service"
     "systemd-reboot.service"
     "systemd-sysctl.service"
-    "systemd-tmpfiles-setup-dev.service"
-    "systemd-tmpfiles-setup.service"
     "timers.target"
     "tpm2.target"
     "umount.target"
@@ -103,8 +101,17 @@ let
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
     paths = map getBin cfg.initrdBin;
-    pathsToLink = ["/bin"];
-    postBuild = concatStringsSep "\n" (mapAttrsToList (n: v: "ln -sf '${v}' $out/bin/'${n}'") cfg.extraBin);
+    pathsToLink = ["/bin" "/sbin"];
+
+    # Make sure sbin and bin have the same contents, and add extraBin
+    postBuild = ''
+      find $out/bin -maxdepth 1 -type l -print0 | xargs --null cp --no-dereference --no-clobber -t $out/sbin/
+      find $out/sbin -maxdepth 1 -type l -print0 | xargs --null cp --no-dereference --no-clobber -t $out/bin/
+      ${concatStringsSep "\n" (mapAttrsToList (n: v: ''
+        ln -sf '${v}' $out/bin/'${n}'
+        ln -sf '${v}' $out/sbin/'${n}'
+      '') cfg.extraBin)}
+    '';
   };
 
   initialRamdisk = pkgs.makeInitrdNG {
@@ -226,8 +233,8 @@ in {
     emergencyAccess = mkOption {
       type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
       description = ''
-        Set to true for unauthenticated emergency access, and false for
-        no emergency access.
+        Set to true for unauthenticated emergency access, and false or
+        null for no emergency access.
 
         Can also be set to a hashed super user password to allow
         authenticated access to the emergency mode.
@@ -408,7 +415,7 @@ in {
         fsck = "${cfg.package.util-linux}/bin/fsck";
       };
 
-      managerEnvironment.PATH = "/bin";
+      managerEnvironment.PATH = "/bin:/sbin";
 
       contents = {
         "/tmp/.keep".text = "systemd requires the /tmp mount point in the initrd cpio archive";
@@ -417,7 +424,7 @@ in {
 
         "/etc/systemd/system.conf".text = ''
           [Manager]
-          DefaultEnvironment=PATH=/bin
+          DefaultEnvironment=PATH=/bin:/sbin
           ${cfg.extraConfig}
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
@@ -429,12 +436,17 @@ in {
         # We can use either ! or * to lock the root account in the
         # console, but some software like OpenSSH won't even allow you
         # to log in with an SSH key if you use ! so we use * instead
-        "/etc/shadow".text = "root:${if isBool cfg.emergencyAccess then optionalString (!cfg.emergencyAccess) "*" else cfg.emergencyAccess}:::::::";
+        "/etc/shadow".text = let
+          ea = cfg.emergencyAccess;
+          access = ea != null && !(isBool ea && !ea);
+          passwd = if isString ea then ea else "";
+        in
+          "root:${if access then passwd else "*"}:::::::";
 
         "/bin".source = "${initrdBinEnv}/bin";
-        "/sbin".source = "${initrdBinEnv}/bin";
+        "/sbin".source = "${initrdBinEnv}/sbin";
 
-        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /bin/modprobe";
+        "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
         "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
           ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
@@ -509,8 +521,6 @@ in {
                      (v: let n = escapeSystemdPath v.where;
                          in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
-      # make sure all the /dev nodes are set up
-      services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
 
       services.initrd-nixos-activation = {
         after = [ "initrd-fs.target" ];

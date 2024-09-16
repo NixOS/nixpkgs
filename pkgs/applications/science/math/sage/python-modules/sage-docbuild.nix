@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , sage-src
+, furo
 , jupyter-sphinx
 , sphinx
 , sphinx-copybutton
@@ -13,6 +14,7 @@ buildPythonPackage rec {
   src = sage-src;
 
   propagatedBuildInputs = [
+    furo
     jupyter-sphinx
     sphinx
     sphinx-copybutton

@@ -12,19 +12,21 @@
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.1.2";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-chroma==${version}";
-    hash = "sha256-PQ3bepiAqzWhQdKofQSzQKxRrwI6dxBfSNV91462aJE=";
+    hash = "sha256-pU7H8OYXa+JjdkSO36xESPI6r3xA+9cFXxeJnfpYuHc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "chromadb" ];
 
   dependencies = [
     langchain-core

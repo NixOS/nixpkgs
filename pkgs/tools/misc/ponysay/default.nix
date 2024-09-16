@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   inherit python3;
 
   installPhase = ''
+    runHook preInstall
+
     find -type f -name "*.py" | xargs sed -i "s@/usr/bin/env python3@$python3/bin/python3@g"
     substituteInPlace setup.py --replace \
         "fileout.write(('#!/usr/bin/env %s\n' % env).encode('utf-8'))" \
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
     python3 setup.py --prefix=$out --freedom=partial install \
         --with-shared-cache=$out/share/ponysay \
         --with-bash
+
+    runHook postInstall
   '';
 
   meta = with lib; {

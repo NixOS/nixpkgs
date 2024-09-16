@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";
-  version = "1.0.3";
+  version = "1.2.0";
   pyproject = true;
 
   # no tests included in PyPI tarball
@@ -17,21 +17,8 @@ python3Packages.buildPythonApplication rec {
     owner = "egh";
     repo = "ledger-autosync";
     rev = "v${version}";
-    hash = "sha256-IuOlVJEjNqRPfV4q/Zy3UQe5iMwDlnSV356FrTsmflg=";
+    hash = "sha256-bbFjDdxYr85OPjdvY3JYtCe/8Epwi+8JN60PKVKbqe0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "drop-distutils.patch";
-      url = "https://github.com/egh/ledger-autosync/commit/b7a2a185b9c3b17764322dcc80153410d12e6a5f.patch";
-      hash = "sha256-qKuTpsNFuS00yRAH4VGpMA249ml0BGZsGVb75WrBWEo=";
-    })
-    (fetchpatch2 {
-      name = "drop-imp.patch";
-      url = "https://github.com/egh/ledger-autosync/commit/453d92ad279e6c90fadf835d1c39189a1179eb17.patch";
-      hash = "sha256-mncMvdWldAnVDy1+bJ+oyDOrUb14v9LrBRz/CYrtYbc=";
-    })
-  ];
 
   build-system = with python3Packages; [ poetry-core ];
 
@@ -45,13 +32,6 @@ python3Packages.buildPythonApplication rec {
     ledger
     python3Packages.ledger
     python3Packages.pytestCheckHook
-  ];
-
-  # Disable some non-passing tests:
-  # https://github.com/egh/ledger-autosync/issues/127
-  disabledTests = [
-    "test_payee_match"
-    "test_args_only"
   ];
 
   meta = with lib; {

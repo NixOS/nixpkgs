@@ -10,6 +10,7 @@
   build,
   hatchling,
   pydantic,
+  pytest-cov-stub,
   pytest-mock,
   setuptools,
   git,
@@ -18,22 +19,15 @@
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "3.1.1";
+  version = "3.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sLpYblrwi4fb4zVAgpEKHQUCw2IC1JbhrmDvO0HuKcE=";
+    hash = "sha256-Tbg+2Z9WsH2DlAvuNEXKRsoSDRO2swTNtftE5apO3sA=";
   };
-
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace "--cov=versioningit" "" \
-      --replace "--cov-config=tox.ini" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
 
   nativeBuildInputs = [ hatchling ];
 
@@ -47,6 +41,7 @@ buildPythonPackage rec {
     build
     hatchling
     pydantic
+    pytest-cov-stub
     pytest-mock
     setuptools
     git

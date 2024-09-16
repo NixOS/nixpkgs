@@ -10,7 +10,7 @@ let
       owner = "zimbatm";
       repo = "shab";
       rev = "v${version}";
-      sha256 = "02lf1s6plhhcfyj9xha44wij9jbphb1x5q55xj3b5bx2ji2jsvji";
+      hash = "sha256-UW4tRZSir7KG7KXg0sOCd8kkIydEwZ6kdwxCeo0Ojgo=";
     };
 
     postPatch = ''

@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromSourcehut, fetchpatch
-, wayland, pixman, pkg-config, wayland-scanner
+{ lib
+, stdenv
+, fetchFromSourcehut
+, fetchpatch
+, wayland
+, pixman
+, pkg-config
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {

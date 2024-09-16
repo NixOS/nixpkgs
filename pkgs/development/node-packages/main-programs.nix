@@ -48,7 +48,6 @@
   purty = "purty";
   pscid = "pscid";
   remod-cli = "remod";
-  teck-programmer = "teck-firmware-upgrade";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }

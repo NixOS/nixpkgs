@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, less, more, installShellFiles, testers, jira-cli-go, nix-update-script }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, less, more, installShellFiles, testers, jira-cli-go, nix-update-script }:
 
 buildGoModule rec {
   pname = "jira-cli-go";
@@ -34,9 +34,10 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd jira \
       --bash <($out/bin/jira completion bash) \
+      --fish <($out/bin/jira completion fish) \
       --zsh <($out/bin/jira completion zsh)
 
     $out/bin/jira man --generate --output man

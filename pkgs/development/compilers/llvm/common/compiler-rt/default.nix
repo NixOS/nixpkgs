@@ -39,6 +39,7 @@ let
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic && lib.versionAtLeast release_version "16";
   inherit (stdenv.hostPlatform) isMusl isAarch64;
+  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic;
 
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
@@ -94,7 +95,7 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
   ] ++ lib.optionals (useLLVM && haveLibc) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=ON"
-  ] ++ lib.optionals (!haveLibc || bareMetal || isMusl || isDarwinStatic) [
+  ] ++ lib.optionals (noSanitizers) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
   ] ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
@@ -131,6 +132,8 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
   ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-DSANITIZER_MIN_OSX_VERSION=10.10"
+  ]  ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+    "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
   ];
 
   outputs = [ "out" "dev" ];

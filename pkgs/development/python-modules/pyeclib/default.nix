@@ -2,31 +2,40 @@
   lib,
   stdenv,
   buildPythonPackage,
+  distutils,
   fetchFromGitHub,
   liberasurecode,
+  pytestCheckHook,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "unstable-2022-03-11";
-  format = "setuptools";
+  version = "1.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
-    rev = "b50040969a03f7566ffcb468336e875d21486113";
-    hash = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pa3majZ68+DQGtgGCpZVRshof+w9jvpxreo4dkckLXk=";
   };
 
   postPatch = ''
     # patch dlopen call
     substituteInPlace src/c/pyeclib_c/pyeclib_c.c \
-      --replace "liberasurecode.so" "${liberasurecode}/lib/liberasurecode.so"
+      --replace-fail "liberasurecode.so" "${liberasurecode}/lib/liberasurecode.so"
+
     # python's platform.platform() doesn't return "Darwin" (anymore?)
     substituteInPlace setup.py \
-      --replace '"Darwin"' '"macOS"'
+      --replace-fail '"Darwin"' '"macOS"'
   '';
+
+  build-system = [
+    distutils
+    setuptools
+  ];
 
   preBuild =
     let
@@ -37,9 +46,12 @@ buildPythonPackage rec {
       export ${ldLibraryPathEnvName}="${lib.makeLibraryPath [ liberasurecode ]}"
     '';
 
-  buildInputs = [ liberasurecode ];
+  dependencies = [ liberasurecode ];
 
-  nativeCheckInputs = [ six ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    six
+  ];
 
   pythonImportsCheck = [ "pyeclib" ];
 

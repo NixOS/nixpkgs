@@ -30,7 +30,7 @@
   #sundials,
   superscs,
   spral,
-  swig4,
+  swig,
   tinyxml-2,
   withUnfree ? false,
 }:
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       #sundials
       superscs
       spral
-      swig4
+      swig
       tinyxml-2
     ]
     ++ lib.optionals withUnfree [

@@ -23,7 +23,7 @@ let
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
+    hash = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
   };
 
 in stdenv.mkDerivation {
@@ -44,7 +44,10 @@ in stdenv.mkDerivation {
     })
     ./0001-darwin-disable-link-time-optimization.patch
   ];
-  postPatch = "cp ${./Cargo.lock} Cargo.lock";
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+    cp ${./Cargo.lock} rustybits/Cargo.lock
+  '';
 
 
   preConfigure = ''

@@ -20,19 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "resources";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-uzZCczayJ5C0TZznA2wjGNYF3nB6fh/rrBKvv9s3J5g=";
+    hash = "sha256-RYpPg9dEasHkXF2eHpeCze5j0FC1+9/J0e2lRw8AdKc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "resources-${finalAttrs.version}";
-    hash = "sha256-a0VdSNy8E7qen+6yFXuQBmYnDD/DMUgrZqJK6BJja60=";
+    hash = "sha256-zliLpmunlxRsWv9N8AswVoRqcNy5PuI5NzNjaXyTiGk=";
   };
 
   nativeBuildInputs = [

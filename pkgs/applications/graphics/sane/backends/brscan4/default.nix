@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb-compat-0_1 }:
 let
-  myPatchElf = file: with lib; ''
+  myPatchElf = file: ''
     patchelf --set-interpreter \
-      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${lib.optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
 
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  installPhase = with lib; ''
+  installPhase = ''
     runHook preInstall
     PATH_TO_BRSCAN4="opt/brother/scanner/brscan4"
     mkdir -p $out/$PATH_TO_BRSCAN4
     cp -rp $PATH_TO_BRSCAN4/* $out/$PATH_TO_BRSCAN4
     mkdir -p $out/lib/sane
-    cp -rp usr/lib${optionalString stdenv.is64bit "64"}/sane/* $out/lib/sane
+    cp -rp usr/lib${lib.optionalString stdenv.is64bit "64"}/sane/* $out/lib/sane
 
     # Symbolic links were absolute. Fix them so that they point to $out.
     pushd "$out/lib/sane" > /dev/null

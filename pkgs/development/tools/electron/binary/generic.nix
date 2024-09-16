@@ -37,12 +37,13 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [ travisbhartwell manveru ];
+    maintainers = with maintainers; [ yayayayaka teutat3s ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = optional (versionOlder version "29.0.0") "Electron version ${version} is EOL";
+    # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
+    knownVulnerabilities = optional (versionOlder version "30.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -106,7 +107,7 @@ let
     ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libGL vulkan-loader ]
   );
 
-  linux = {
+  linux = finalAttrs: {
     buildInputs = [ glib gtk3 ];
 
     nativeBuildInputs = [
@@ -141,9 +142,11 @@ let
       rm "$out/libexec/electron/libvulkan.so.1"
       ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
+
+    passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
   };
 
-  darwin = {
+  darwin = finalAttrs: {
     nativeBuildInputs = [
       makeWrapper
       unzip
@@ -156,9 +159,12 @@ let
       mkdir -p $out/bin
       makeWrapper $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
     '';
+
+    passthru.dist = finalAttrs.finalPackage + "/Applications";
   };
 in
-  stdenv.mkDerivation (
-    (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
+  stdenv.mkDerivation (finalAttrs:
+    lib.recursiveUpdate
+      (common stdenv.hostPlatform)
+      ((if stdenv.isDarwin then darwin else linux) finalAttrs)
   )

@@ -25,18 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-7FLGmmndrFqSl4oC8QFIYNlFJPr+xbiZG5ZRt4vx8+s=";
   };
 
-  postPatch = ''
-    # https://github.com/osohotwateriot/apyosohotwaterapi/pull/3
-    substituteInPlace requirements.txt \
-      --replace "pre-commit" ""
-  '';
+  # https://github.com/osohotwateriot/apyosohotwaterapi/pull/3
+  pythonRemoveDeps = [ "pre-commit" ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     unasync
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     loguru
     numpy

@@ -129,6 +129,9 @@ self: super: builtins.intersectAttrs super {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
+  # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
+  streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
+
   threadscope = enableSeparateBinOutput super.threadscope;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
@@ -314,7 +317,7 @@ self: super: builtins.intersectAttrs super {
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
   # Doesn't declare boost dependency
-  nix-serve-ng = overrideSrc {
+  nix-serve-ng = (overrideSrc {
     version = "1.0.0-unstable-2023-12-18";
     src = pkgs.fetchFromGitHub {
       repo = "nix-serve-ng";
@@ -322,7 +325,9 @@ self: super: builtins.intersectAttrs super {
       rev = "21e65cb4c62b5c9e3acc11c3c5e8197248fa46a4";
       hash = "sha256-qseX+/8drgwxOb1I3LKqBYMkmyeI5d5gmHqbZccR660=";
     };
-  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
+  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng)).override {
+      nix = pkgs.nixVersions.nix_2_18;
+  };
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -683,9 +688,6 @@ self: super: builtins.intersectAttrs super {
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
-  # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend pkgs.opencv3 super.opencv-extra;
-
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
@@ -849,6 +851,7 @@ self: super: builtins.intersectAttrs super {
   http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
   pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
+  pantry_0_10_0 = dontCheck super.pantry_0_10_0;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -1351,6 +1354,9 @@ self: super: builtins.intersectAttrs super {
 
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
 
+  feedback = self.generateOptparseApplicativeCompletions [ "feedback" ]
+    (enableSeparateBinOutput super.feedback);
+
   # Sydtest has a brittle test suite that will only work with the exact
   # versions that it ships with.
   sydtest = dontCheck super.sydtest;
@@ -1361,10 +1367,12 @@ self: super: builtins.intersectAttrs super {
     }) super)
       gi-javascriptcore
       gi-webkit2webextension
-      gi-gtk_4_0_8
+      gi-gtk_4_0_9
       gi-gdk_4_0_8
       gi-gsk
       gi-adwaita
+      sdl2-ttf
+      sdl2
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
@@ -1414,4 +1422,13 @@ self: super: builtins.intersectAttrs super {
   kmonad = enableSeparateBinOutput super.kmonad;
 
   xmobar = enableSeparateBinOutput super.xmobar;
+
+  # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
+  doctest = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [
+      # These tests require cabal-install
+      "--skip=/Cabal.Options"
+      "--skip=/Cabal.Paths/paths"
+    ];
+  }) super.doctest;
 }

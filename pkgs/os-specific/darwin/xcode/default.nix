@@ -38,6 +38,7 @@ let requireXcode = version: sha256:
       description = "Apple's XCode SDK";
       license = licenses.unfree;
       platforms = platforms.darwin ++ platforms.linux;
+      sourceProvenance = [ sourceTypes.binaryNativeCode ];
     };
 
   in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });
@@ -83,5 +84,8 @@ in lib.makeExtensible (self: {
   xcode_14_1 = requireXcode "14.1" "sha256-QJGAUVIhuDYyzDNttBPv5lIGOfvkYqdOFSUAr5tlkfs=";
   xcode_15 = requireXcode "15" "sha256-ffqISt2Ayccln5BArKIjSdzbEgoSoNwq8TPLGysAE0c=";
   xcode_15_1 = requireXcode "15.1" "sha256-0djqoSamU87rCpjo50Un3cFg9wKf+pSczRko6uumGM0=";
+  xcode_15_2 = requireXcode "15.2" "sha256-9B/4Tdyb3QGAzm579QGn5Iq/hA2hscD8OcoSJ5BFFXs=";
+  xcode_15_3 = requireXcode "15.3" "sha256-FyVA8EEPCI12Z4sJ4RQRZlMMpFmi7S8VYLcyvad3swM=";
+  xcode_15_4 = requireXcode "15.4" "sha256-yeo+sf6bBIJy9/1sQiMuPEMPniwGXMB6/FXXL0UrI5U=";
   xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3")}";
 })

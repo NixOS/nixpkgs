@@ -2,7 +2,7 @@
   image,
   invisible-watermark,
   opencv4,
-  python3,
+  python,
   runCommand,
   stdenvNoCC,
 }:
@@ -13,12 +13,10 @@ let
   message = "fnörd1";
   method = "dwtDct";
 
-  pythonWithPackages = python3.withPackages (
-    pp: with pp; [
-      invisible-watermark
-      opencv4
-    ]
-  );
+  pythonWithPackages = python.withPackages (_: [
+    invisible-watermark
+    opencv4
+  ]);
   pythonInterpreter = pythonWithPackages.interpreter;
 
   encode = stdenvNoCC.mkDerivation {

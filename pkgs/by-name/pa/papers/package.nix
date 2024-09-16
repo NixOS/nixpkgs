@@ -111,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
+      --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"

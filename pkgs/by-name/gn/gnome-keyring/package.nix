@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/gnome-keyring-${version}.tar.xz";
     hash = "sha256-vybJZriot/MoXsyLs+RnucIPlTW5TcRRycVZ3c/2GSU=";
   };
 

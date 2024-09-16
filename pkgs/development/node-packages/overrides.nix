@@ -88,10 +88,6 @@ final: prev: {
     nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs.psc-package final.pulp ];
   });
 
-  intelephense = prev.intelephense.override (oldAttrs: {
-    meta = oldAttrs.meta // { license = lib.licenses.unfree; };
-  });
-
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
@@ -214,7 +210,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==";
+        sha512 = "sha512-EV6+ovTsEXCPAp58g2dD68LxoP/wK5pRvgy0J/HxPGB009omFPv3Yet0HiaqvrIrgPTBuC6wCH1LTOY91EO5hQ==";
       };
     };
     esbuild-linux-arm64 = {
@@ -223,7 +219,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==";
+        sha512 = "sha512-/93bf2yxencYDnItMYV/v116zff6UyTjo4EtEQjUBeGiVpMmffDNUyD9UN2zV+V3LRV3/on4xdZ26NKzn6754g==";
       };
     };
     esbuild-darwin-x64 = {
@@ -232,7 +228,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-tBcXp9KNphnNH0dfhv8KYkZhjc+H3XBkF5DKtswJblV7KlT9EI2+jeA8DgBjp908WEuYll6pF+UStUCfEpdysA==";
+        sha512 = "sha512-aClqdgTDVPSEGgoCS8QDG37Gu8yc9lTHNAQlsztQ6ENetKEO//b8y31MMu2ZaPbn4kVsIABzVLXYLhCGekGDqw==";
       };
     };
     esbuild-darwin-arm64 = {
@@ -241,7 +237,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-4J6IRT+10J3aJH3l1yzEg9y3wkTDgDk7TSDFX+wKFiWjqWp/iCfLIYzGyasx9l0SAFPT1HwSCR+0w/h1ES/MjA==";
+        sha512 = "sha512-YsS2e3Wtgnw7Wq53XXBLcV6JhRsEq8hkfg91ESVadIrzr9wO6jJDMZnCQbHm1Guc5t/CdDiFSSfWP58FNuvT3Q==";
       };
     };
   in{
@@ -267,33 +263,6 @@ final: prev: {
       license = lib.licenses.mit;
     };
   });
-
-  # To update prisma, please first update prisma-engines to the latest
-  # version. Then change the correct hash to this package. The PR should hold
-  # two commits: one for the engines and the other one for the node package.
-  prisma = prev.prisma.override rec {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-
-    inherit (pkgs.prisma-engines) version;
-
-    src = fetchurl {
-      url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-TlwKCuDQRFM6+Hhx9eFCfXbtLZq6RwBTIFCWzE4D8N8=";
-    };
-    postInstall = with pkgs; ''
-      wrapProgram "$out/bin/prisma" \
-        --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-        --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
-        --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
-        --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
-    '';
-
-    passthru.tests = {
-      simple-execution = pkgs.callPackage ./package-tests/prisma.nix {
-        inherit (final) prisma;
-      };
-    };
-  };
 
   pulp = prev.pulp.override {
     # tries to install purescript
@@ -331,12 +300,6 @@ final: prev: {
       };
     };
   };
-
-  teck-programmer = prev.teck-programmer.override ({ meta, ... }: {
-    nativeBuildInputs = [ final.node-gyp-build ];
-    buildInputs = [ pkgs.libusb1 ];
-    meta = meta // { license = lib.licenses.gpl3Plus; };
-  });
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
     nativeBuildInputs = [ pkgs.node-pre-gyp ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     bash-completion
   ];
 
-  buildInputs = with lib; [
+  buildInputs = [
     gsl
     popt
     upower
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     geoclue2
     libconfig
     libmodule
-  ] ++ optional withGeoclue geoclue2
-    ++ optional withUpower upower;
+  ] ++ lib.optional withGeoclue geoclue2
+    ++ lib.optional withUpower upower;
 
   cmakeFlags = [
     "-DSESSION_BUS_DIR=${placeholder "out"}/share/dbus-1/services"

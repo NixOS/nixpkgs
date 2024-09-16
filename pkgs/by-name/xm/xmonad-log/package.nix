@@ -8,7 +8,7 @@ buildGoModule {
     owner = "xintron";
     repo = "xmonad-log";
     rev = "70c76d59c22cf5f412467cd42fa9ff34eeb2bd1b";
-    sha256 = "sha256-hDYb3mSX2+FX/2uazCKPXmNj0avDlutwSMjST7wLBVY=";
+    hash = "sha256-hDYb3mSX2+FX/2uazCKPXmNj0avDlutwSMjST7wLBVY=";
   };
 
   vendorHash = "sha256-58zK6t3rb+19ilaQaNgsMVFQBYKPIV40ww8klrGbpnw=";

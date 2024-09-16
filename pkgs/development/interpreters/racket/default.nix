@@ -65,7 +65,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.13"; # always change at once with ./minimal.nix
+  version = "8.14"; # always change at once with ./minimal.nix
 
   src =
     (lib.makeOverridable (
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ))
       {
         name = "${pname}-${version}";
-        hash = "sha256-AB4EkgRAtlic9i1Wd9GMwv9q6Puvd+Y7iozyCJBoX7w=";
+        hash = "sha256-qrjMDbM27S04KAPHCK1VqV/FKkQ2yRL2FvfEnUhFriw=";
       };
 
   FONTCONFIG_FILE = fontsConf;

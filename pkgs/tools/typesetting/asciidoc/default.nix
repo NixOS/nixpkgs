@@ -138,20 +138,20 @@ in python3.pkgs.buildPythonApplication rec {
   ];
 
   # install filters early, so their shebangs are patched too
-  postPatch = with lib; ''
+  postPatch = ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
-  '' + optionalString _enableDitaaFilter ''
+  '' + lib.optionalString _enableDitaaFilter ''
     echo "Extracting ditaa filter"
     unzip -d "$out/etc/asciidoc/filters/ditaa" "${ditaaFilterSrc}"
     sed -i -e "s|java -jar|${jre}/bin/java -jar|" \
         "$out/etc/asciidoc/filters/ditaa/ditaa2img.py"
-  '' + optionalString _enableMscgenFilter ''
+  '' + lib.optionalString _enableMscgenFilter ''
     echo "Extracting mscgen filter"
     unzip -d "$out/etc/asciidoc/filters/mscgen" "${mscgenFilterSrc}"
     sed -i -e "s|filter-wrapper.py mscgen|filter-wrapper.py ${mscgen}/bin/mscgen|" \
         "$out/etc/asciidoc/filters/mscgen/mscgen-filter.conf"
-  '' + optionalString _enableDiagFilter ''
+  '' + lib.optionalString _enableDiagFilter ''
     echo "Extracting diag filter"
     unzip -d "$out/etc/asciidoc/filters/diag" "${diagFilterSrc}"
     sed -i \
@@ -161,12 +161,12 @@ in python3.pkgs.buildPythonApplication rec {
         -e "s|filter='nwdiag|filter=\'${nwdiag}/bin/nwdiag|" \
         -e "s|filter='packetdiag|filter=\'${nwdiag}/bin/packetdiag|" \
         "$out/etc/asciidoc/filters/diag/diag-filter.conf"
-  '' + optionalString _enableQrcodeFilter ''
+  '' + lib.optionalString _enableQrcodeFilter ''
     echo "Extracting qrcode filter"
     unzip -d "$out/etc/asciidoc/filters/qrcode" "${qrcodeFilterSrc}"
     sed -i -e "s|systemcmd('qrencode|systemcmd('${qrencode}/bin/qrencode|" \
         "$out/etc/asciidoc/filters/qrcode/qrcode2img.py"
-  '' + optionalString _enableMatplotlibFilter ''
+  '' + lib.optionalString _enableMatplotlibFilter ''
     echo "Extracting mpl (matplotlib) filter"
     mkdir -p "$out/etc/asciidoc/filters/mpl"
     tar xvf "${matplotlibFilterSrc}" -C "$out/etc/asciidoc/filters/mpl" --strip-components=1
@@ -177,7 +177,7 @@ in python3.pkgs.buildPythonApplication rec {
     numpy_path="$(toPythonPath ${numpy})"
     sed -i "/^import.*sys/asys.path.append(\"$matplotlib_path\"); sys.path.append(\"$numpy_path\");" \
         "$out/etc/asciidoc/filters/mpl/mplw.py"
-  '' + optionalString _enableAafigureFilter ''
+  '' + lib.optionalString _enableAafigureFilter ''
     echo "Extracting aafigure filter"
     unzip -d "$out/etc/asciidoc/filters/aafigure" "${aafigureFilterSrc}"
     # Add aafigure to sys.path (and it needs recursive-pth-loader)
@@ -185,10 +185,10 @@ in python3.pkgs.buildPythonApplication rec {
     aafigure_path="$(toPythonPath ${aafigure})"
     sed -i "/^import.*sys/asys.path.append(\"$pth_loader_path\"); sys.path.append(\"$aafigure_path\"); import sitecustomize" \
         "$out/etc/asciidoc/filters/aafigure/aafig2img.py"
-  '' + optionalString _enableDeckjsBackend ''
+  '' + lib.optionalString _enableDeckjsBackend ''
     echo "Extracting deckjs backend"
     unzip -d "$out/etc/asciidoc/backends/deckjs" "${deckjsBackendSrc}"
-  '' + optionalString _enableOdfBackend ''
+  '' + lib.optionalString _enableOdfBackend ''
     echo "Extracting odf backend (odt + odp)"
     unzip -d "$out/etc/asciidoc/backends/odt" "${odtBackendSrc}"
     unzip -d "$out/etc/asciidoc/backends/odp" "${odpBackendSrc}"
@@ -228,7 +228,7 @@ in python3.pkgs.buildPythonApplication rec {
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
-        ${optionalString enableJava ''-e "s|^FOP =.*|FOP = '${fop}/bin/fop'|"''} \
+        ${lib.optionalString enableJava ''-e "s|^FOP =.*|FOP = '${fop}/bin/fop'|"''} \
         -e "s|^W3M =.*|W3M = '${w3m}/bin/w3m'|" \
         -e "s|^LYNX =.*|LYNX = '${lynx}/bin/lynx'|" \
         -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
@@ -274,7 +274,7 @@ in python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Text-based document generation system";
     longDescription = ''
       AsciiDoc is a text document format for writing notes, documentation,
@@ -286,13 +286,12 @@ in python3.pkgs.buildPythonApplication rec {
       the backend output markups (which can be almost any type of SGML/XML
       markup) can be customized and extended by the user.
     '';
-    sourceProvenance = with sourceTypes; [
-      fromSource
-    ] ++ lib.optional _enableDitaaFilter binaryBytecode;
+    sourceProvenance = [ lib.sourceTypes.fromSource ]
+      ++ lib.optional _enableDitaaFilter lib.sourceTypes.binaryBytecode;
     homepage = "https://asciidoc-py.github.io/";
     changelog = "https://github.com/asciidoc-py/asciidoc-py/blob/${version}/CHANGELOG.adoc";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor dotlambda ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor dotlambda ];
   };
 }

@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, udisks2-qt5
-, util-linux
-, libnl
-, glib
-, pcre
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  udisks2-qt5,
+  util-linux,
+  libnl,
+  glib,
+  pcre,
 }:
 
 stdenv.mkDerivation rec {

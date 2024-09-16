@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     # for lib/cups/filter/kyofilter_pre_H
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
-    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
+    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/cups-kyocera-3500-4500/copyright
   '';
 
   meta = with lib; {

@@ -26,6 +26,7 @@
 
 , wayland
 , wayland-protocols
+, wayland-scanner
 
 , pipewire
 , pulseaudio
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-client-cmake-move-X11-config-directives-to-displayse.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wayland-scanner ];
 
   buildInputs = [ libX11 libGL freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
     ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr libXdmcp ]

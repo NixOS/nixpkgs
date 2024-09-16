@@ -1,4 +1,5 @@
 { stdenv
+, buildPackages
 , edid-decode
 , fetchFromGitHub
 , meson
@@ -12,6 +13,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , glm
 , gbenchmark
@@ -30,8 +32,8 @@
 , lcms
 , lib
 , makeBinaryWrapper
-, patchelfUnstable
 , nix-update-script
+, writeShellScriptBin
 , enableExecutable ? true
 , enableWsi ? true
 }:
@@ -45,14 +47,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.29";
+  version = "3.15.9";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-q3HEbFqUeNczKYUlou+quxawCTjpM5JNLrML84tZVYE=";
+    hash = "sha256-+BRinPyh8t9HboT0uXPEu+sSJz9qCZshlfzDfZDA41Q=";
   };
 
   patches = [
@@ -90,12 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
+    wayland-scanner
     # For `libdisplay-info`
     python3
     hwdata
     edid-decode
     # For OpenVR
     cmake
+
+    # calls git describe to encode its own version into the build
+    (writeShellScriptBin "git" "echo ${finalAttrs.version}")
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
@@ -138,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString enableExecutable ''
     # using patchelf unstable because the stable version corrupts the binary
-    ${lib.getExe patchelfUnstable} $out/bin/gamescope \
+    ${lib.getExe buildPackages.patchelfUnstable} $out/bin/gamescope \
       --add-rpath ${vulkan-loader}/lib --add-needed libvulkan.so.1
 
     # --debug-layers flag expects these in the path

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
     mainProgram = "minecraft-server";
   };
 }

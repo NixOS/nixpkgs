@@ -256,7 +256,11 @@ in
         live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
-            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+            # Use the legacy nvidia-container-runtime wrapper to allow
+            # the `--runtime=nvidia` approach to expose
+            # GPU's. Starting with Docker > 25, CDI can be used
+            # instead, removing the need for runtime wrappers.
+            path = lib.getExe' pkgs.nvidia-docker "nvidia-container-runtime.legacy";
           };
         };
       };

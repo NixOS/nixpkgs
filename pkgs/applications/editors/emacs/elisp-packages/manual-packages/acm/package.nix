@@ -15,6 +15,8 @@ melpaBuild {
 
   files = ''("acm/*.el" "acm/icons")'';
 
+  ignoreCompilationError = false;
+
   meta = {
     description = "Asynchronous Completion Menu";
     homepage = "https://github.com/manateelazycat/lsp-bridge";

@@ -5,13 +5,13 @@ rustPlatform.buildRustPackage {
 
   # Latest stable version 0.1.0 has an ssh:// git URL in Cargo.lock,
   # so use unstable for now
-  version = "unstable-2023-11-14";
+  version = "0.1.0-unstable-2024-06-14";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "framework-system";
-    rev = "491a587342a5d79366a25d803b7065169314279c";
-    hash = "sha256-qDtW4DvY19enCfkOBRaako9ngAkmSreoNWlL4QE2FAk=";
+    rev = "705805ce3fd9acf23ae4e310227ca62b7d686a69";
+    hash = "sha256-crMA0jdCGNDvwTzYXiDpz+1O2Tk84j5cLcQAaplCDFs=";
   };
 
   cargoLock = {

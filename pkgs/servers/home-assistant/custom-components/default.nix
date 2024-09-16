@@ -12,6 +12,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  dwd = callPackage ./dwd { };
+
   elevenlabs_tts = callPackage ./elevenlabs_tts {};
 
   emporia_vue = callPackage ./emporia_vue {};
@@ -19,6 +21,8 @@
   epex_spot = callPackage ./epex_spot {};
 
   frigate = callPackage ./frigate {};
+
+  garmin_connect = callPackage ./garmin_connect {};
 
   govee-lan = callPackage ./govee-lan {};
 
@@ -33,6 +37,8 @@
   localtuya = callPackage ./localtuya {};
 
   mass = callPackage ./mass { };
+
+  midea_ac = callPackage ./midea_ac { };
 
   midea_ac_lan = callPackage ./midea_ac_lan {};
 
@@ -55,6 +61,10 @@
   smartir = callPackage ./smartir {};
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
+
+  solis-sensor = callPackage ./solis-sensor {};
+
+  somweb = callPackage ./somweb {};
 
   spook = callPackage ./spook {};
 

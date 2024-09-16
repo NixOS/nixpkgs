@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
 
-  # bin/psl-make-dafsa brings a large runtime closure through python3
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [ "out" "dev" ]
+    # bin/psl-make-dafsa brings a large runtime closure through python3
+    ++ lib.optional (!stdenv.hostPlatform.isStatic) "bin";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -40,14 +41,13 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-    python3
-  ];
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) python3;
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     patchShebangs src/psl-make-dafsa
   '';
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
       the domain in a user interface or sorting domain lists by site.
     '';
     homepage = "https://rockdaboot.github.io/libpsl/";
-    changelog = "https://raw.githubusercontent.com/rockdaboot/${pname}/${pname}-${version}/NEWS";
+    changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/libpsl-${version}/NEWS";
     license = licenses.mit;
     maintainers = [ maintainers.c0bw3b ];
     mainProgram = "psl";

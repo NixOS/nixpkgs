@@ -2,24 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
+  setuptools,
   libGL,
   libX11,
 }:
 
 buildPythonPackage rec {
   pname = "glcontext";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moderngl";
-    repo = pname;
+    repo = "glcontext";
     rev = "refs/tags/${version}";
-    hash = "sha256-ld+INKIGDZA2Y+sTxDPY7MI1nru6x+FeixngaJQzKkg=";
+    hash = "sha256-GC2sb6xQjg99xLcXSynLOOyyqNwCHZwZqrs9RZh99pY=";
   };
 
-  disabled = !isPy3k;
+  build-system = [ setuptools ];
 
   buildInputs = [
     libGL
@@ -28,11 +28,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace glcontext/x11.cpp \
-      --replace '"libGL.so"' '"${libGL}/lib/libGL.so"' \
-      --replace '"libX11.so"' '"${libX11}/lib/libX11.so"'
+      --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
+      --replace-fail '"libX11.so"' '"${libX11}/lib/libX11.so"'
     substituteInPlace glcontext/egl.cpp \
-      --replace '"libGL.so"' '"${libGL}/lib/libGL.so"' \
-      --replace '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
+      --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
+      --replace-fail '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
   '';
 
   # Tests fail because they try to open display. See

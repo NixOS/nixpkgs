@@ -38,7 +38,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace-fail "==" ">="
     substituteInPlace pytest.ini \
-      --replace ' -m "not premium"' ""
+      --replace-fail ' -m "not premium"' ""
   '';
 
   build-system = [

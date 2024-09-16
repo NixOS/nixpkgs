@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "terminal-parrot";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jmhobbs";
     repo = "terminal-parrot";
     rev = version;
-    hash = "sha256-Qhy5nCbuC9MmegXA48LFCDk4Lm1T5MBmcXfeHzTJm6w=";
+    hash = "sha256-LI67DDcK3M084r9JPx8NcBWthaiBOCEL4lQJhuUJSok=";
   };
 
-  vendorHash = "sha256-DJEoJjItusN1LTOOX1Ep+frF03yF/QmB/L66gSG0VOE=";
+  vendorHash = "sha256-EhnmOpT+rx4RVpmqgEQ4qO+Uca1W9uhx4fcExXG9LOI=";
 
   doCheck = false;
 

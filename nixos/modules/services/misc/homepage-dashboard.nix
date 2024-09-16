@@ -222,6 +222,7 @@ in
 
         environment = {
           HOMEPAGE_CONFIG_DIR = configDir;
+          HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
           PORT = toString cfg.listenPort;
           LOG_TARGETS = lib.mkIf managedConfig "stdout";
         };
@@ -231,6 +232,7 @@ in
           DynamicUser = true;
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           StateDirectory = lib.mkIf (!managedConfig) "homepage-dashboard";
+          CacheDirectory = "homepage-dashboard";
           ExecStart = lib.getExe cfg.package;
           Restart = "on-failure";
         };

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "tactikauan";
     repo = "thcrap-steam-proton-wrapper";
     rev = "2b636c3f5f1ce1b9b41f731aa9397aa68d2ce66b";
-    sha256 = "sha256-J2O8F75NMdsxSaNVr8zLf+vLEJE6CHqWQIIscuuJZ3o=";
+    hash = "sha256-J2O8F75NMdsxSaNVr8zLf+vLEJE6CHqWQIIscuuJZ3o=";
   };
 
   buildInputs = [ subversion ];

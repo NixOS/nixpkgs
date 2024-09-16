@@ -26,18 +26,15 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  # make sure an official release has been published on
-  # https://github.com/nextcloud-releases/desktop/releases and re-check the
-  # hash afterwards
-  version = "3.13.2";
+  version = "3.13.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "nextcloud";
+    owner = "nextcloud-releases";
     repo = "desktop";
     rev = "v${version}";
-    hash = "sha256-hZjmAdh9QQ2bAIYL3K7scl59kz9Wxnv9f6rKMeuKb7U=";
+    hash = "sha256-anQwIqWtHdKFfUuCekiyrdg9xzxcs5bVJ0VDMtyVfw8=";
   };
 
   patches = [

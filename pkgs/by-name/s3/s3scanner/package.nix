@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "s3scanner";
-  version = "3.0.4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "sa7mon";
     repo = "s3scanner";
     rev = "v${version}";
-    hash = "sha256-f1r5ubH7iLKuuEhs4MPNY779FjyASW1xOXtMtXvF/CY=";
+    hash = "sha256-yQymMtXQam/PMNZMBeKWtDtdrFikjvE/Nh5K61NUaYI=";
   };
 
   ldflags = [ "-s -w" ];
 
-  vendorHash = "sha256-3Y1izt6xLg7aNJNqIEXROxR3IGAIIeptHlnoYEcuLew=";
+  vendorHash = "sha256-Y7eIvZIUtp+sOENiaG/eliZEl41qTHN2k3vJCXsjlIw=";
 
   # Requires networking
   doCheck = false;

@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   bambu-studio,
-  opencv2,
+  opencv,
 }:
 bambu-studio.overrideAttrs (
   finalAttrs: previousAttrs: {
@@ -28,7 +28,7 @@ bambu-studio.overrideAttrs (
     buildInputs =
       previousAttrs.buildInputs
       ++ [
-        opencv2
+        opencv
       ];
 
     preFixup = ''

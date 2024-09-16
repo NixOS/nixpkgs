@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.9.0";
+  version = "3.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-XhTRnQ2wsCD2jiiRFHDagmMB26lZ8Oj+tscgVypN0+c=";
+    hash = "sha256-k+jQj/EajjjvvXZJd8c/3vtaGrQJedbYSDIzel0Sp44=";
   };
 
   pythonRelaxDeps = [ "packaging" ];

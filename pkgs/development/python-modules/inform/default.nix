@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.30";
+  version = "1.31";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "inform";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Yx9ZdmrFApJ6zBiC8Q++hlATVqjriJLS2KsqC0IBCk=";
+    hash = "sha256-o7yH7jCNn9gbcr7NMJVaYQOJ7hvwaY2ur1FyEP40Cco=";
   };
 
   nativeBuildInputs = [ flit-core ];

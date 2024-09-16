@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     mpfr
     ppl
   ] ++ (with ocamlPackages; [
-    angstrom
     apron
     yojson
   ]);
 
   propagatedBuildInputs = with ocamlPackages; [
+    angstrom
     batteries
     menhirLib
     zarith

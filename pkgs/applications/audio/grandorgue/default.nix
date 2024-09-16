@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.14.2-1";
+  version = "3.15.1-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
-    repo = pname;
+    repo = "grandorgue";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-FHM8fFUga9poGhojKBTF4gsJ6L4XEksueVxfMbngvks=";
+    hash = "sha256-5uAA878OBc04PkUgCwoRtc6lIASivq3YcfFffTae6uM=";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}
     mv $out/GrandOrgue.app $out/Applications/
-    for lib in $out/Applications/GrandOrgue.app/Contents/MacOS/lib*; do
+    for lib in $out/Applications/GrandOrgue.app/Contents/Frameworks/lib*; do
       ln -s $lib $out/lib/
     done
     makeWrapper $out/{Applications/GrandOrgue.app/Contents/MacOS,bin}/GrandOrgue

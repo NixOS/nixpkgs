@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.11.4.1474";
+  version = "1.12.0.1479";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sNFDXvrHMrFgLrBHmbv3DKOXuNu6u1OqcmlqZNX/EAg=";
+    hash = "sha256-KlFcRXVd8e3zeP36+zgCUcdzbeLbFffb5V7XKV8NKWw=";
   };
 
   nativeBuildInputs = [

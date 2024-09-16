@@ -73,6 +73,9 @@ OK_MISSING_BY_PACKAGE = {
     "kwin": {
         "display-info",  # newer versions identify as libdisplay-info
     },
+    "libksysguard": {
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
     "mlt": {
         "Qt5",  # intentionally disabled
         "SWIG",
@@ -87,6 +90,9 @@ OK_MISSING_BY_PACKAGE = {
     },
     "powerdevil": {
         "DDCUtil",  # cursed, intentionally disabled
+    },
+    "print-manager": {
+        "PackageKitQt6",  # used for auto-installing drivers which does not work for obvious reasons
     },
     "pulseaudio-qt": {
         "Qt6Qml",  # tests only

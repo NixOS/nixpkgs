@@ -141,7 +141,7 @@ in {
   authelia = handleTest ./authelia.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
-  ayatana-indicators = handleTest ./ayatana-indicators.nix {};
+  ayatana-indicators = runTest ./ayatana-indicators.nix;
   babeld = handleTest ./babeld.nix {};
   bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
@@ -188,10 +188,12 @@ in {
   ceph-multi-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix {};
   ceph-single-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix {};
   ceph-single-node-bluestore = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node-bluestore.nix {};
+  ceph-single-node-bluestore-dmcrypt = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node-bluestore-dmcrypt.nix {};
   certmgr = handleTest ./certmgr.nix {};
   cfssl = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cfssl.nix {};
   cgit = handleTest ./cgit.nix {};
   charliecloud = handleTest ./charliecloud.nix {};
+  chromadb = runTest ./chromadb.nix;
   chromium = (handleTestOn ["aarch64-linux" "x86_64-linux"] ./chromium.nix {}).stable or {};
   chrony = handleTestOn ["aarch64-linux" "x86_64-linux"] ./chrony.nix {};
   chrony-ptp = handleTestOn ["aarch64-linux" "x86_64-linux"] ./chrony-ptp.nix {};
@@ -325,6 +327,7 @@ in {
   filesender = handleTest ./filesender.nix {};
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = handleTest ./firefly-iii.nix {};
+  firefly-iii-data-importer = handleTest ./firefly-iii-data-importer.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
   firefox-beta = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-beta; };
   firefox-devedition = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-devedition; };
@@ -361,6 +364,7 @@ in {
   ft2-clone = handleTest ./ft2-clone.nix {};
   legit = handleTest ./legit.nix {};
   mimir = handleTest ./mimir.nix {};
+  gancio = handleTest ./gancio.nix {};
   garage = handleTest ./garage {};
   gemstash = handleTest ./gemstash.nix {};
   geoserver = runTest ./geoserver.nix;
@@ -421,6 +425,7 @@ in {
   hddfancontrol = handleTest ./hddfancontrol.nix {};
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
+  homebox = handleTest ./homebox.nix {};
   homepage-dashboard = handleTest ./homepage-dashboard.nix {};
   honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
@@ -439,7 +444,6 @@ in {
   hibernate-systemd-stage-1 = handleTestOn ["x86_64-linux"] ./hibernate.nix { systemdStage1 = true; };
   hitch = handleTest ./hitch {};
   hledger-web = handleTest ./hledger-web.nix {};
-  hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   hockeypuck = handleTest ./hockeypuck.nix { };
   home-assistant = handleTest ./home-assistant.nix {};
   hostname = handleTest ./hostname.nix {};
@@ -536,6 +540,7 @@ in {
   loki = handleTest ./loki.nix {};
   luks = handleTest ./luks.nix {};
   lvm2 = handleTest ./lvm2 {};
+  lxc = handleTest ./lxc {};
   lxd = pkgs.recurseIntoAttrs (handleTest ./lxd { inherit handleTestOn; });
   lxd-image-server = handleTest ./lxd-image-server.nix {};
   #logstash = handleTest ./logstash.nix {};
@@ -543,7 +548,9 @@ in {
   lomiri-calculator-app = runTest ./lomiri-calculator-app.nix;
   lomiri-camera-app = runTest ./lomiri-camera-app.nix;
   lomiri-clock-app = runTest ./lomiri-clock-app.nix;
+  lomiri-docviewer-app = runTest ./lomiri-docviewer-app.nix;
   lomiri-filemanager-app = runTest ./lomiri-filemanager-app.nix;
+  lomiri-gallery-app = runTest ./lomiri-gallery-app.nix;
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};
   lorri = handleTest ./lorri/default.nix {};
   ly = handleTest ./ly.nix {};
@@ -563,7 +570,7 @@ in {
   mate-wayland = handleTest ./mate-wayland.nix {};
   matter-server = handleTest ./matter-server.nix {};
   matomo = handleTest ./matomo.nix {};
-  matrix-appservice-irc = handleTest ./matrix/appservice-irc.nix {};
+  matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
   matrix-conduit = handleTest ./matrix/conduit.nix {};
   matrix-synapse = handleTest ./matrix/synapse.nix {};
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix {};
@@ -677,6 +684,7 @@ in {
   nix-config = handleTest ./nix-config.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
   nix-misc = handleTest ./nix/misc.nix {};
+  nix-upgrade = handleTest ./nix/upgrade.nix {inherit (pkgs) nixVersions;};
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = handleTest ./nix-serve.nix {};
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
@@ -700,6 +708,7 @@ in {
   ntfy-sh = handleTest ./ntfy-sh.nix {};
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix {};
   ntpd-rs = handleTest ./ntpd-rs.nix {};
+  nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
   nvmetcfg = handleTest ./nvmetcfg.nix {};
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
@@ -769,6 +778,7 @@ in {
   php84 = handleTest ./php { php = pkgs.php84; };
   phylactery = handleTest ./web-apps/phylactery.nix {};
   pict-rs = handleTest ./pict-rs.nix {};
+  pingvin-share = handleTest ./pingvin-share.nix {} ;
   pinnwand = handleTest ./pinnwand.nix {};
   plantuml-server = handleTest ./plantuml-server.nix {};
   plasma-bigscreen = handleTest ./plasma-bigscreen.nix {};
@@ -825,7 +835,7 @@ in {
   qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
-  qtile = handleTestOn ["x86_64-linux" "aarch64-linux"] ./qtile.nix {};
+  qtile = handleTestOn ["x86_64-linux" "aarch64-linux"] ./qtile/default.nix {};
   quake3 = handleTest ./quake3.nix {};
   quicktun = handleTest ./quicktun.nix {};
   quickwit = handleTest ./quickwit.nix {};
@@ -1051,6 +1061,11 @@ in {
   uptime-kuma = handleTest ./uptime-kuma.nix {};
   urn-timer = handleTest ./urn-timer.nix {};
   usbguard = handleTest ./usbguard.nix {};
+  userborn = runTest ./userborn.nix;
+  userborn-mutable-users = runTest ./userborn-mutable-users.nix;
+  userborn-immutable-users = runTest ./userborn-immutable-users.nix;
+  userborn-mutable-etc = runTest ./userborn-mutable-etc.nix;
+  userborn-immutable-etc = runTest ./userborn-immutable-etc.nix;
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   user-expiry = runTest ./user-expiry.nix;
   user-home-mode = handleTest ./user-home-mode.nix {};
@@ -1086,7 +1101,7 @@ in {
   without-nix = handleTest ./without-nix.nix {};
   wmderland = handleTest ./wmderland.nix {};
   workout-tracker = handleTest ./workout-tracker.nix {};
-  wpa_supplicant = handleTest ./wpa_supplicant.nix {};
+  wpa_supplicant = import ./wpa_supplicant.nix { inherit pkgs runTest; };
   wordpress = handleTest ./wordpress.nix {};
   wrappers = handleTest ./wrappers.nix {};
   writefreely = handleTest ./web-apps/writefreely.nix {};

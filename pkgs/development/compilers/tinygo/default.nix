@@ -28,17 +28,24 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    hash = "sha256-zoXruGoWitx6kietF3HKTYCtUrXp5SOrf2FEGgVPzkQ=";
+    hash = "sha256-YqjMk7EF/fyOhsMLcG56FGHfOZSdaFhUbiiHk+SXajY=";
     fetchSubmodules = true;
+    # The public hydra server on `hydra.nixos.org` is configured with
+    # `max_output_size` of 3GB. The purpose of this `postFetch` step
+    # is to stay below that limit and save 4.1GiB and 428MiB in output
+    # size respectively. These folders are not referenced in tinygo.
+    postFetch = ''
+      rm -r $out/lib/cmsis-svd/data/{SiliconLabs,Freescale}
+    '';
   };
 
-  vendorHash = "sha256-rJ8AfJkIpxDkk+9Tf7ORnn7ueJB1kjJUBiLMDV5tias=";
+  vendorHash = "sha256-cTqrvh0w3KQg3P1lCfAez0kqAMBJHQbqS3sx8uqGvEs=";
 
   patches = [
     ./0001-GNUmakefile.patch

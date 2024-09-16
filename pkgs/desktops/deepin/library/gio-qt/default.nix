@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, glibmm
-, doxygen
-, qttools
-, qtbase
-, buildDocs ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  glibmm,
+  doxygen,
+  qttools,
+  qtbase,
+  buildDocs ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,11 +30,16 @@ stdenv.mkDerivation rec {
       --replace "include(qt6.cmake)" " "
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    wrapQtAppsHook
-  ] ++ lib.optionals buildDocs [ doxygen qttools.dev ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      wrapQtAppsHook
+    ]
+    ++ lib.optionals buildDocs [
+      doxygen
+      qttools.dev
+    ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"

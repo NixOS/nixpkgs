@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   version = "20200313";
 
   src = fetchurl {
-    url = "https://www.mirbsd.org/MirOS/dist/mir/rs/${pname}-${version}.tar.gz";
-    sha256 = "0gxwlfk7bzivpp2260w2r6gkyl7vdi05cggn1fijfnp8kzf1b4li";
+    url = "https://www.mirbsd.org/MirOS/dist/mir/rs/rs-${version}.tar.gz";
+    hash = "sha256-kZIV3J/oWiejC/Y9VkBs+1A/n8mCAyPEvTv+daajvD8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

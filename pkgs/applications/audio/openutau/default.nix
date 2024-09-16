@@ -5,9 +5,6 @@
 , dotnetCorePackages
 , dbus
 , fontconfig
-, libICE
-, libSM
-, libX11
 , portaudio
 }:
 
@@ -32,10 +29,6 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     dbus
-    fontconfig
-    libICE
-    libSM
-    libX11
     portaudio
   ];
 

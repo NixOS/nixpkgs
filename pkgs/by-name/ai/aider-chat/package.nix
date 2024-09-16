@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.50.0";
+  version = "0.56.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "aider-chat";
@@ -22,11 +22,13 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "paul-gauthier";
     repo = "aider";
-    rev = "v${version}";
-    hash = "sha256-hRUxzljtgLGEDwHf6UtQzGQM8CgiRtgNLlVoKa2jU3o=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-e0Fqj67vYt41Zbr1FN2fuLp6cHRius8RtacBHLgB9dM=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  pythonRelaxDeps = true;
+
+  build-system = with python3.pkgs; [ setuptools-scm ];
 
   dependencies =
     with python3.pkgs;
@@ -41,6 +43,7 @@ python3.pkgs.buildPythonApplication {
       gitpython
       grep-ast
       importlib-resources
+      json5
       jsonschema
       jiter
       litellm
@@ -48,9 +51,11 @@ python3.pkgs.buildPythonApplication {
       numpy
       packaging
       pathspec
+      pexpect
       pillow
       playwright
       prompt-toolkit
+      ptyprocess
       pypager
       pypandoc
       pyperclip
@@ -70,32 +75,29 @@ python3.pkgs.buildPythonApplication {
 
   buildInputs = [ portaudio ];
 
-  pythonRelaxDeps = true;
-
   nativeCheckInputs = (with python3.pkgs; [ pytestCheckHook ]) ++ [ gitMinimal ];
 
   disabledTestPaths = [
-    # requires network
+    # Tests require network access
     "tests/scrape/test_scrape.py"
-
     # Expected 'mock' to have been called once
     "tests/help/test_help.py"
   ];
 
   disabledTests =
     [
-      # requires network
+      # Tests require network
       "test_urls"
       "test_get_commit_message_with_custom_prompt"
-
       # FileNotFoundError
       "test_get_commit_message"
-
       # Expected 'launch_gui' to have been called once
       "test_browser_flag_imports_streamlit"
+      # AttributeError
+      "test_simple_send_with_retries"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fails on darwin
+      # Tests fails on darwin
       "test_dark_mode_sets_code_theme"
       "test_default_env_file_sets_automatic_variable"
     ];
@@ -107,8 +109,9 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "AI pair programming in your terminal";
     homepage = "https://github.com/paul-gauthier/aider";
+    changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
     license = lib.licenses.asl20;
-    mainProgram = "aider";
     maintainers = with lib.maintainers; [ taha-yassine ];
+    mainProgram = "aider";
   };
 }

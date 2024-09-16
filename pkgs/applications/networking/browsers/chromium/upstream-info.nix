@@ -1,37 +1,37 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-z+08R1CYi53edNEDSvJ303+hc/pqiFvVhUkD+g4q6tE=";
+      hash_darwin = "sha256-UtBJZG+pRdqwxWsvuxYrRJsmFdMEa5h6lWXt39cPxF0=";
       hash_darwin_aarch64 =
-        "sha256-q60NWIka3QzLsWg3X/+qTWby6UTf7wvjCDdZWlUjzPA=";
-      hash_linux = "sha256-6E6LaQCx+2Xd/vjjaiQR3vJgkP7L4MRkA7Bb0jTrakc=";
-      version = "127.0.6533.119";
+        "sha256-2HFrIwc8Jzlg6/eKkJqfd8kwS8c6powU2RnpBGMSBak=";
+      hash_linux = "sha256-8EEJL0A/t0VabaKHEHC2WHwygUo+PCsKeU09SqRzkVE=";
+      version = "128.0.6613.137";
     };
     deps = {
       gn = {
-        hash = "sha256-vzZu/Mo4/xATSD9KgKcRuBKVg9CoRZC9i0PEajYr4UM=";
-        rev = "b3a0bff47dd81073bfe67a402971bad92e4f2423";
+        hash = "sha256-BiMGbML5aNUt4JzzVqSszBj+8BMlEc92csNugo5qjUk=";
+        rev = "b2afae122eeb6ce09c52d63f67dc53fc517dbdc8";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-06-06";
+        version = "2024-06-11";
       };
     };
-    hash = "sha256-LuUDEpYCJLR/X+zjsF26aum4/Wfu2MNowofPu8iRVxI=";
-    version = "127.0.6533.119";
+    hash = "sha256-/q+Z1a1EFZRQvC3pmuDbzJWzSSYkI7bfgUAaJRBaj00=";
+    version = "128.0.6613.137";
   };
   ungoogled-chromium = {
     deps = {
       gn = {
-        hash = "sha256-vzZu/Mo4/xATSD9KgKcRuBKVg9CoRZC9i0PEajYr4UM=";
-        rev = "b3a0bff47dd81073bfe67a402971bad92e4f2423";
+        hash = "sha256-BiMGbML5aNUt4JzzVqSszBj+8BMlEc92csNugo5qjUk=";
+        rev = "b2afae122eeb6ce09c52d63f67dc53fc517dbdc8";
         url = "https://gn.googlesource.com/gn";
-        version = "2024-06-06";
+        version = "2024-06-11";
       };
       ungoogled-patches = {
-        hash = "sha256-m1H/7JsSF7Akm5eBlPB/F4mAdFjUPtOQIUoXup09w40=";
-        rev = "127.0.6533.119-1";
+        hash = "sha256-o/cEVLD64qYd/VIbmN/FCFbu7LgQsZdWkyxIns7/bRs=";
+        rev = "128.0.6613.137-1";
       };
     };
-    hash = "sha256-LuUDEpYCJLR/X+zjsF26aum4/Wfu2MNowofPu8iRVxI=";
-    version = "127.0.6533.119";
+    hash = "sha256-/q+Z1a1EFZRQvC3pmuDbzJWzSSYkI7bfgUAaJRBaj00=";
+    version = "128.0.6613.137";
   };
 }

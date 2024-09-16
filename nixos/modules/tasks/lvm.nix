@@ -87,9 +87,14 @@ in {
       environment.systemPackages = [ pkgs.thin-provisioning-tools ];
     })
     (mkIf cfg.boot.vdo.enable {
+      assertions = [{
+        assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.9";
+        message = "boot.vdo.enable requires at least kernel version 6.9";
+      }];
+
       boot = {
         initrd = {
-          kernelModules = [ "kvdo" ];
+          kernelModules = [ "dm-vdo" ];
 
           systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.vdo ];
 
@@ -98,16 +103,15 @@ in {
               copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
             done
             substituteInPlace $out/bin/vdorecover --replace "${pkgs.bash}/bin/bash" "/bin/sh"
-            substituteInPlace $out/bin/adaptLVMVDO.sh --replace "${pkgs.bash}/bin/bash" "/bin/sh"
+            substituteInPlace $out/bin/adaptlvm --replace "${pkgs.bash}/bin/bash" "/bin/sh"
           '';
 
           extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)''
-            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptLVMVDO|vdorecover)' | while read BIN; do
+            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptlvm|vdorecover)' | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';
         };
-        extraModulePackages = [ config.boot.kernelPackages.kvdo ];
       };
 
       services.lvm.package = mkOverride 999 pkgs.lvm2_vdo;  # this overrides mkDefault

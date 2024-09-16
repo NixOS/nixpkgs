@@ -14,13 +14,13 @@
 , makeWrapper }:
 
 let
-  version = "2024.6.1";
+  version = "2024.6.4";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-SMupiJGJbkBn33JP4WLF3IsBdt3SN3JvZg/EYlz443g=";
+    hash = "sha256-QwK/auMLCJEHHtyexFnO+adCq/u0fezHQ90fXW9J4c4=";
   };
 
   meta = with lib; {
@@ -87,7 +87,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-v9oD8qV5UDJeZn4GZDEPlVM/jGVSeTqdIUDJl6tYXZw=";
+    npmDepsHash = "sha256-8TzB3ylZzVLePD86of8E/lGgIQCciWMQF9m1Iqv9ZTY=";
 
     postPatch = ''
       cd web
@@ -383,7 +383,7 @@ let
 
     CGO_ENABLED = 0;
 
-    vendorHash = "sha256-hxtyXyCfVemsjYQeo//gd68x4QO/4Vcww8i2ocsUVW8=";
+    vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik

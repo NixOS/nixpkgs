@@ -50,17 +50,18 @@
 , moltenvk
 , OpenGL
 , VideoToolbox
+, xcbuild
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2407";
+  version = "2409";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-8W4KyIj+rhDkWnQogjpzlEJVo3HJenfpWKimSyMGN7c=";
+    hash = "sha256-x4ZtV/5bwUjcmdYneG7n7uFVyPmYj0sD8TXEqsqbUFU=";
     fetchSubmodules = true;
   };
 
@@ -70,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     wrapQtAppsHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild # for plutil
   ];
 
   buildInputs = [

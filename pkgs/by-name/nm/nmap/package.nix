@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
+    hash = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -m 444 -D nselib/data/passwords.lst $out/share/wordlists/nmap.lst
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change liblinear.so.5 ${liblinear.out}/lib/liblinear.5.dylib $out/bin/nmap
   '';
 
   makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [

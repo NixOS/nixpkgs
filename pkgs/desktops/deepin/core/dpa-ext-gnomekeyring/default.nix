@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, dde-polkit-agent
-, qt5integration
-, libsecret
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  dtkwidget,
+  dde-polkit-agent,
+  qt5integration,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {

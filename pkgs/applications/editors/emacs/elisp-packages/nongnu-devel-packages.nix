@@ -10,7 +10,11 @@
   3. Run `git commit -m "nongnu-devel-packages $(date -Idate)" -- nongnu-devel-generated.nix`
 */
 
-{ lib, buildPackages }:
+{
+  lib,
+  pkgs,
+  buildPackages,
+}:
 
 self:
 let
@@ -35,10 +39,15 @@ let
 
       super = imported;
 
-      overrides = { };
+      commonOverrides = import ./nongnu-common-overrides.nix pkgs;
+
+      overrides = self: super: { };
 
     in
-    super // overrides
+    let
+      super' = super // (commonOverrides self super);
+    in
+    super' // (overrides self super')
   );
 
 in

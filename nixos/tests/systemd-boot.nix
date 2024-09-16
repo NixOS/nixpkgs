@@ -13,6 +13,7 @@ let
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
+    system.switch.enable = true;
   };
 
   commonXbootldr = { config, lib, pkgs, ... }:
@@ -200,7 +201,7 @@ in
       )
     '' + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
       machine.succeed(
-          "grep 'devicetree .*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+          r"grep 'devicetree /EFI/nixos/[a-z0-9]\{32\}.*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
       )
     '';
   };
@@ -269,9 +270,9 @@ in
     '';
   };
 
-  memtest86 = makeTest {
+  memtest86 = with pkgs.lib; optionalAttrs (meta.availableOn { inherit system; } pkgs.memtest86plus) (makeTest {
     name = "systemd-boot-memtest86";
-    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+    meta.maintainers = with maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -282,7 +283,7 @@ in
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
-  };
+  });
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";

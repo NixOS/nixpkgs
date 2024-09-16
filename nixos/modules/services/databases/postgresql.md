@@ -362,3 +362,7 @@ postgresql.withJIT.pname
 ```
 
 evaluates to `"foobar"`.
+
+## Notable differences to upstream {#module-services-postgres-upstream-deviation}
+
+- To avoid circular dependencies between default and -dev outputs, the output of the `pg_config` system view has been removed.

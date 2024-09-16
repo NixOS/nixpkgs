@@ -9,11 +9,11 @@
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "2.4.0.32175";
+  version = "2.4.1.32573";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    hash = "sha256-+EKl8o+S5nwV3u+RrhxuOm/6dLH6zRSvFnyaZRO8xc0=";
+    hash = "sha256-6sfO9tDIdp/xuNtqZ7UXqzP1SuLd6ZAF7lMTlaF3Z80=";
     stripRoot = false;
   };
 
@@ -22,7 +22,7 @@ let
       nativeBuildInputs = [ appimageTools.appimage-exec ];
     }
     ''
-      appimage-exec.sh -x $out ${src}/${pname}-${version}/${pname}
+      appimage-exec.sh -x $out ${src}/jetbrains-toolbox-${version}/jetbrains-toolbox
 
       # JetBrains ship a broken desktop file. Despite registering a custom
       # scheme handler for jetbrains:// URLs, they never mark the command as
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-    makeWrapper ${appimage}/bin/${pname} $out/bin/${pname} \
+    makeWrapper ${appimage}/bin/jetbrains-toolbox $out/bin/jetbrains-toolbox \
       --append-flags "--update-failed" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
 

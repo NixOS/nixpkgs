@@ -20,13 +20,13 @@
 
 let self = python3.pkgs.buildPythonApplication rec {
   pname = "duplicity";
-  version = "2.2.3";
+  version = "3.0.2";
 
   src = fetchFromGitLab {
     owner = "duplicity";
     repo = "duplicity";
     rev = "rel.${version}";
-    hash = "sha256-4IwKqXlG7jh1siuPT5pVgiYB+KlmCzF6+OMPT3I3yTQ=";
+    hash = "sha256-qY6J0t6mgrbEojlKxpVFfsVhffjrAxc8R9Z/Klrp7wE=";
   };
 
   patches = [
@@ -147,6 +147,7 @@ let self = python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
+    changelog = "https://gitlab.com/duplicity/duplicity/-/blob/${src.rev}/CHANGELOG.md";
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;

@@ -1,11 +1,8 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.deepin.members;
+    maintainers = lib.teams.deepin.members;
   };
 
   ###### interface
@@ -14,7 +11,7 @@ with lib;
 
     services.deepin.app-services = {
 
-      enable = mkEnableOption "service collection of DDE applications, including dconfig-center";
+      enable = lib.mkEnableOption "service collection of DDE applications, including dconfig-center";
 
     };
 
@@ -23,7 +20,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.deepin.app-services.enable {
+  config = lib.mkIf config.services.deepin.app-services.enable {
 
     users.groups.dde-dconfig-daemon = { };
     users.users.dde-dconfig-daemon = {

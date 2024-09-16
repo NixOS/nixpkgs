@@ -10,7 +10,7 @@
   ddcutil,
   glib,
   hwdata,
-  imagemagick_light,
+  imagemagick,
   libXrandr,
   libdrm,
   libglvnd,
@@ -47,13 +47,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.21.2";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-wh8k/+2Wj5XhYvBD+s7IHLGi7v7gxn6rxLHlZTvw+Rk=";
+    hash = "sha256-MnN+XZTiIjXGVM6rF5J7sDTndLijGCdgsBF8oYzRHqY=";
   };
 
   outputs = [
@@ -71,7 +71,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs =
     [
       chafa
-      imagemagick_light
+      imagemagick
       pcre
       pcre2
       sqlite
@@ -167,7 +167,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Like neofetch, but much faster because written in C";
+    description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     changelog = "https://github.com/fastfetch-cli/fastfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

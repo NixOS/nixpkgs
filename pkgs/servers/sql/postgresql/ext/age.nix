@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       echo -e "include Makefile\nfiles:\n\t@echo \$(REGRESS)" > Makefile.regress
       REGRESS_TESTS=$(make -f Makefile.regress files)
 
-      ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+      ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
         --inputdir=./ \
         --bindir='${postgresqlAge}/bin' \
         --encoding=UTF-8 \

@@ -48,6 +48,7 @@ in
         type = lib.types.package;
 
         # `yabar-stable` segfaults under certain conditions.
+        # remember to update yabar.passthru.tests if nixos switches back to it!
         apply = x: if x == pkgs.yabar-unstable then x else lib.flip lib.warn x ''
           It's not recommended to use `yabar' with `programs.yabar', the (old) stable release
           tends to segfault under certain circumstances:

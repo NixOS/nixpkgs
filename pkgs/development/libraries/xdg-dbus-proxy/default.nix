@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-dbus-proxy";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchurl {
     url = "https://github.com/flatpak/xdg-dbus-proxy/releases/download/${finalAttrs.version}/xdg-dbus-proxy-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Bh3Pr4oGUOX9nVQy3+iL2nSeoNB53BNjBL/s+84GYfs=";
+    hash = "sha256-Exv1n858fufsvF2RBtZ1D09Ze/5gmWZXMkD35JUpc6E=";
   };
 
   nativeBuildInputs = [

@@ -8,7 +8,7 @@ stdenv.mkDerivation (attrs: {
     owner = "mono";
     repo = "linux-packaging-nuget";
     rev = "upstream/${attrs.version}.bin";
-    sha256 = "sha256-9/dSeVshHbpYIgGE/8OzrB4towrWVB3UxDi8Esmbu7Y=";
+    hash = "sha256-9/dSeVshHbpYIgGE/8OzrB4towrWVB3UxDi8Esmbu7Y=";
   };
 
   nativeBuildInputs = [

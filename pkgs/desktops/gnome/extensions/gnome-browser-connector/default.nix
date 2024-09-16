@@ -4,6 +4,7 @@
 , ninja
 , python3
 , gnome
+, gnome-shell
 , wrapGAppsNoGuiHook
 , gobject-introspection
 }:
@@ -30,7 +31,7 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gnome.gnome-shell
+    gnome-shell
   ];
 
   pythonPath = [

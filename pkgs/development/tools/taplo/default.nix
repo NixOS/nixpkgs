@@ -4,21 +4,21 @@
 , pkg-config
 , openssl
 , stdenv
-, Security
+, darwin
 , withLsp ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo";
-  version = "0.9.0";
+  version = "0.9.3";
 
   src = fetchCrate {
     inherit version;
     pname = "taplo-cli";
-    hash = "sha256-vvb00a6rppx9kKx+pzObT/hW/IsG6RyYFEDp9M5gvqc=";
+    hash = "sha256-dNGQbaIfFmgXh2AOcaE74BTz7/jaiBgU7Y1pkg1rV7U=";
   };
 
-  cargoHash = "sha256-oT7U9htu7J22MqLZb+YXohlB1CVGxHGQvHJu18PeLf8=";
+  cargoHash = "sha256-iucjewjRCunKxKCqeZwf7bdEo7+aN9hfWPwUAJhaSq0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   buildFeatures = lib.optional withLsp "lsp";

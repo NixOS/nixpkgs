@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "bol-van";
     repo = "zapret";
     rev = "9cf72b7c68f6a7c80dfddc6c1cf6d6db32718376";
-    sha256 = "sha256-8cqKCNYLLkZXlwrybKUPG6fLd7gmf8zV9tjWoTxAwIY=";
+    hash = "sha256-8cqKCNYLLkZXlwrybKUPG6fLd7gmf8zV9tjWoTxAwIY=";
   };
 
   buildInputs = [ libcap zlib libnetfilter_queue libnfnetlink ];

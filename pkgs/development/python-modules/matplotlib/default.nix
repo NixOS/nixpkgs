@@ -89,7 +89,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.9.0";
+  version = "3.9.1";
   pname = "matplotlib";
   pyproject = true;
 
@@ -97,14 +97,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5tKepsGeNLMPt9iLcIH4aaAwFPZv4G1izHfVpuqI7Xo=";
+    hash = "sha256-3gaxm425XdM9DcF8kmx8nr7Z9XIHS2+sT2UGimgU0BA=";
   };
-
-  patches = lib.optionals stdenv.isDarwin [
-    # Don't crash when running in Darwin sandbox
-    # Submitted upstream: https://github.com/matplotlib/matplotlib/pull/28498
-    ./darwin-sandbox-crash.patch
-  ];
 
   env.XDG_RUNTIME_DIR = "/tmp";
 

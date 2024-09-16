@@ -18,7 +18,7 @@
   autoAddDriverRunpath,
 }:
 let
-  version = "1.1.3";
+  version = "1.1.4";
   torch = python3.pkgs.torch.override { inherit cudaSupport; };
   # Using a normal stdenv with cuda torch gives
   # ld: /nix/store/k1l7y96gv0nc685cg7i3g43i4icmddzk-python3.11-torch-2.2.1-lib/lib/libc10.so: undefined reference to `std::ios_base_library_init()@GLIBCXX_3.4.32'
@@ -32,7 +32,7 @@ stdenv'.mkDerivation {
     owner = "pierotofy";
     repo = "OpenSplat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2NcKb2SWU/vNsnd2KhdU85J60fJPuc44ZxIle/1UT6g=";
+    hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
   };
 
   nativeBuildInputs = [

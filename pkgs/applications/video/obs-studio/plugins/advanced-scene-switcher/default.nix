@@ -1,35 +1,36 @@
-{ lib
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
 
-, cmake
-, ninja
+  cmake,
+  ninja,
 
-, alsa-lib
-, asio
-, curl
-, nlohmann_json
-, obs-studio
-, opencv
-, procps
-, qtbase
-, stdenv
-, tesseract
-, websocketpp
-, xorg
+  alsa-lib,
+  asio,
+  curl,
+  nlohmann_json,
+  obs-studio,
+  opencv,
+  procps,
+  qtbase,
+  stdenv,
+  tesseract,
+  websocketpp,
+  xorg,
 
-, httplib
-, libremidi
+  httplib,
+  libremidi,
 }:
 
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.27.0";
+  version = "1.27.2";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-RdXqiFMlpKTmedF+VBzROx0qTKDOdkQ3hO4Xj0vIq2A=";
+    hash = "sha256-7IciHCe2KemKNJpD9QcYK4AtxHlYuWaPsBCcVuPVvgA=";
   };
 
   nativeBuildInputs = [

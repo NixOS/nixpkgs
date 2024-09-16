@@ -135,6 +135,8 @@ in
       default = "freshrss";
       description = ''
         Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+        You may need to configure the virtualhost further through services.nginx.virtualHosts.<virtualhost>,
+        for example to enable SSL.
       '';
     };
 

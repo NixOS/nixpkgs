@@ -8,6 +8,7 @@
 , pkg-config
 , sqlite
 , util-linux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -62,6 +63,8 @@ stdenv.mkDerivation rec {
   #   collect2: error: ld returned 1 exit status
   #   make[4]: *** [Makefile:634: solanum] Error 1
   enableParallelInstalling = false;
+
+  passthru.tests = { inherit (nixosTests) solanum; };
 
   meta = with lib; {
     description = "IRCd for unified networks";

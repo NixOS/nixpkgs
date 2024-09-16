@@ -1,29 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, testers
-, gofumpt
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  gofumpt,
 }:
 
 buildGoModule rec {
   pname = "gofumpt";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-94aaLqoalFredkxaSPgJEnFtKw7GmkkL5N+I8ws9zxY=";
+    hash = "sha256-mJM0uKztX0OUQvynnxeKL9yft7X/Eh28ERg8SbZC5Ws=";
   };
 
-  vendorHash = "sha256-q8+Blzab9TLTRY2/KncIlVp53+K6YWzg1D0SS7FPM9I=";
+  vendorHash = "sha256-kJysyxROvB0eMAHbvNF+VXatEicn4ln2Vqkzp7GDWAQ=";
 
   CGO_ENABLED = "0";
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.version=v${version}"
   ];
 
@@ -45,7 +45,10 @@ buildGoModule rec {
     homepage = "https://github.com/mvdan/gofumpt";
     changelog = "https://github.com/mvdan/gofumpt/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rvolosatovs katexochen ];
+    maintainers = with maintainers; [
+      rvolosatovs
+      katexochen
+    ];
     mainProgram = "gofumpt";
   };
 }

@@ -64,6 +64,7 @@ in stdenv.mkDerivation rec {
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
+            --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
             --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 

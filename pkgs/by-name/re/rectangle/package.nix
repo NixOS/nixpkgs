@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rectangle";
-  version = "0.81";
+  version = "0.82";
 
   src = fetchurl {
     url = "https://github.com/rxhanson/Rectangle/releases/download/v${version}/Rectangle${version}.dmg";
-    hash = "sha256-oZZz6bsgG+4leQNq2C+nLaAO/Yk+OkS6BnlMQHjlK9E=";
+    hash = "sha256-Uwo98Mf7Ce6vbRRoNSsxtJh1zS5/p8Sicd/vcjczmVk=";
   };
 
   sourceRoot = ".";

@@ -19,6 +19,12 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         timeout = "5s";
         data_format = "influx";
       };
+      inputs.ping = {
+        urls = ["127.0.0.1"];
+        count = 4;
+        interval = "10s";
+        timeout = 1.0;
+      };
       outputs.file.files = ["/tmp/metrics.out"];
       outputs.file.data_format = "influx";
     };
@@ -29,5 +35,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     machine.wait_for_unit("telegraf.service")
     machine.wait_until_succeeds("grep -q example /tmp/metrics.out")
+    machine.wait_until_succeeds("grep -q ping /tmp/metrics.out")
   '';
 })

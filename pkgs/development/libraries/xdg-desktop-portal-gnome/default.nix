@@ -1,22 +1,23 @@
 { stdenv
 , lib
 , fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
 , fontconfig
 , glib
+, gnome
+, gnome-desktop
 , gsettings-desktop-schemas
 , gtk4
 , libadwaita
-, gnome-desktop
-, xdg-desktop-portal
-, wayland
-, gnome
 , libjxl
 , librsvg
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-scanner
 , webp-pixbuf-loader
+, wrapGAppsHook4
+, xdg-desktop-portal
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
     wrapGAppsHook4
   ];
 

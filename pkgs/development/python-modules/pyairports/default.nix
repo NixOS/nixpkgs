@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportChecks = [ "pyairports" ];
+  pythonImportsCheck = [ "pyairports" ];
 
   meta = with lib; {
     description = "pyairports is a package which enables airport lookup by 3-letter IATA code.";

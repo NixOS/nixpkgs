@@ -5,6 +5,7 @@
   fetchFromGitHub,
   setuptools,
   glfw,
+  mesa,
   moderngl,
   numpy,
   pillow,
@@ -70,7 +71,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/moderngl/moderngl-window/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     broken = stdenv.isDarwin;
   };
 }

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "sha256-wGg7WPj61yx7zMBIdH9ls18BnD1R713U5Vgc/kL9qYs=";
+    hash = "sha256-wGg7WPj61yx7zMBIdH9ls18BnD1R713U5Vgc/kL9qYs=";
   };
 
   dontUnpack = true;

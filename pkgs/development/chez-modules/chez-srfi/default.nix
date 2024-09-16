@@ -1,25 +1,19 @@
 { stdenv, lib, fetchFromGitHub, chez }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "chez-srfi";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-srfi";
-    rev = "5770486c2a85d0e3dd4ac62a97918e7c394ea507";
-    sha256 = "sha256-8icdkbYmpTpossirFoulUhJY/8Jo+2eeaMwDftbZh+g=";
+    rev = "v${version}";
+    sha256 = "sha256-yBhRNfoEt1LOn3/zd/yOWwfErN/qG/tQZnDRqEf8j/0=";
   };
 
   buildInputs = [ chez ];
 
-  buildPhase = ''
-    make PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
-
-  installPhase = ''
-    make install PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
+  makeFlags = [ "CHEZ=${lib.getExe chez}" "PREFIX=$(out)" ];
 
   doCheck = false;
 

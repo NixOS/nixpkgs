@@ -5,7 +5,7 @@
 , macaddr, macaddr-cstruct, fmt
 , lwt, lwt-dllist, logs, duration, randomconv, ethernet
 , alcotest, mirage-flow, mirage-vnetif, pcap-format
-, mirage-clock-unix, arp, ipaddr-cstruct, mirage-random-test
+, mirage-clock-unix, arp, ipaddr-cstruct, mirage-crypto-rng
 , lru, metrics
 , withFreestanding ? false
 , ocaml-freestanding
@@ -13,11 +13,11 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-NrTBVr4WcCukxteBotqLoUYrIjcNFVcOERYFbL8CUjM=";
+    hash = "sha256-hrpdkvkHi93GUxL2O19M40/SVw12VDOyOiJquE11qcA=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [
     alcotest
-    mirage-random-test
+    mirage-crypto-rng
     mirage-flow
     mirage-vnetif
     pcap-format

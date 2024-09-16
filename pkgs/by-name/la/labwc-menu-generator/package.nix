@@ -1,24 +1,27 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, meson
+, ninja
 , glib
-, perl
 , pkg-config
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-menu-generator";
-  version = "0-unstable-2024-05-27";
+  version = "0.1.0-unstable-2024-07-09";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-menu-generator";
-    rev = "efed0194947c45123287ea057c5fdb13894854cd";
-    hash = "sha256-ZmuntI3NfIYkM2Fxt3J4pKOOilzgphF240mCer3cJ6c=";
+    rev = "a2b3e8e46068d82e97168772e7c194d6b6e03e3d";
+    hash = "sha256-Y5gBaTgVu3OzZQwGDNLsmQkfS0txBm/vD0MG5av2Gv0=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
   ];
 
@@ -26,19 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  nativeCheckInputs = [
-    perl
-  ];
-
   doCheck = true;
 
   strictDeps = true;
-
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 labwc-menu-generator -t $out/bin
-    runHook postInstall
-  '';
 
   passthru.updateScript = unstableGitUpdater { };
 

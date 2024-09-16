@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.17.0-unstable-2024-08-12";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "dandavison";
-    repo = pname;
-    rev = "a01141b72001f4c630d77cf5274267d7638851e4";
-    hash = "sha256-My51pQw5a2Y2VTu39MmnjGfmCavg8pFqOmOntUildS0=";
+    repo = "delta";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fJSKGa935kwLG8WYmT9Ncg2ozpSNMzUJx0WLo1gtVAA=";
   };
 
-  cargoHash = "sha256-Rlc3Bc6Jh89KLLEWBWQB5GjoeIuHnwIVZN/MVFMjY24=";
+  cargoHash = "sha256-DIWzRVTADfAZdFckhh2lIfOD13h7GP3KIOQHf/oBHgc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,7 +50,9 @@ rustPlatform.buildRustPackage rec {
   dontUseCargoParallelTests = true;
 
   checkFlags = lib.optionals stdenv.isDarwin [
-    "--skip=test_diff_same_non_empty_file"
+    # This test tries to read /etc/passwd, which fails with the sandbox
+    # enabled on Darwin
+    "--skip=test_diff_real_files"
   ];
 
   meta = with lib; {

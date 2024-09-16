@@ -13,7 +13,7 @@
 , SDL2_gfx
 , SDL2_mixer
 , SDL2_net, SDL2_ttf
-, ffmpeg_4
+, ffmpeg_7
 , sqlite
 , zlib
 , libX11
@@ -25,18 +25,18 @@ let
   sharedLibs = [
     pcre portaudio freetype
     SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg_4
+    sqlite lua zlib libX11 libGLU libGL ffmpeg_7
   ];
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2024.5.1";
+  version = "2024.8.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    hash = "sha256-HtvKy3uQwIO2BiLUqIcv9crf9Ngq0dmYOm6E8Gm2EHs=";
+    hash = "sha256-eji8lMrZbKAMYTqUk9d8tBIKkH083fbh4s01M0mPLpM=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -45,30 +45,10 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/config.inc.in \
       --subst-var-by libpcre_LIBNAME libpcre.so.1
-
-    # ultrastardx binds to libffmpeg (and sublibs), specifying a very restrictive
-    # upper bounds on the minor versions of .so files.
-    # We can assume ffmpeg_4 won’t break any major ABI compatibility, since it's
-    # effectively EOL
-    sed \
-      -e 's/^  LIBAVCODEC_MAX_VERSION_MINOR.*$/  LIBAVCODEC_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/avcodec.pas
-    sed \
-      -e 's/^  LIBAVFORMAT_MAX_VERSION_MINOR.*$/  LIBAVFORMAT_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/avformat.pas
-    sed \
-      -e 's/^  LIBAVUTIL_MAX_VERSION_MINOR.*$/  LIBAVUTIL_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/avutil.pas
-    sed \
-      -e 's/^  LIBSWRESAMPLE_MAX_VERSION_MINOR.*$/  LIBSWRESAMPLE_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/swresample.pas
-    sed \
-      -e 's/^  LIBSWSCALE_MAX_VERSION_MINOR.*$/  LIBSWSCALE_MAX_VERSION_MINOR = 1000;/' \
-      -i src/lib/ffmpeg-4.0/swscale.pas
   '';
 
-  preBuild = with lib;
-    let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
+  preBuild =
+    let items = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
     in ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';

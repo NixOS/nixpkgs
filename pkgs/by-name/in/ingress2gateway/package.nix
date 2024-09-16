@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "ingress2gateway";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+ImMpO1qRkXYLy+MDloKSoDCmMmJSBorgDjzaeSCBdY=";
+    hash = "sha256-xAoJREGktbSNGYdrmPuYG2G+xaQ+kReSSA1JBgWaPVY=";
   };
 
-  vendorHash = "sha256-IEU9cfYCkrQagxzJT6jPz2nRCz1BAaiGvkEPhNRQr4E=";
+  vendorHash = "sha256-T6I8uYUaubcc1dfDu6PbQ9bDDLqGuLGXWnCZhdvkycE=";
 
   ldflags = [ "-s" "-w" ];
 

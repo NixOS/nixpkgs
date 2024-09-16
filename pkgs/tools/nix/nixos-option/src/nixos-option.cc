@@ -465,7 +465,7 @@ void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr
             v.print(ctx.state.symbols, out.ostream);
         }
     } catch (ThrownError & e) {
-        if (e.msg() == "The option `" + path + "' is used but not defined.") {
+        if (e.msg() == "The option `" + path + "' was accessed but has no value defined. Try setting the option.") {
             // 93% of errors are this, and just letting this message through would be
             // misleading.  These values may or may not actually be "used" in the
             // config.  The thing throwing the error message assumes that if anything

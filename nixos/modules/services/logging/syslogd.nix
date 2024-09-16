@@ -1,13 +1,10 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.syslogd;
 
   syslogConf = pkgs.writeText "syslog.conf" ''
-    ${optionalString (cfg.tty != "") "kern.warning;*.err;authpriv.none /dev/${cfg.tty}"}
+    ${lib.optionalString (cfg.tty != "") "kern.warning;*.err;authpriv.none /dev/${cfg.tty}"}
     ${cfg.defaultConfig}
     ${cfg.extraConfig}
   '';
@@ -36,8 +33,8 @@ in
 
     services.syslogd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable syslogd.  Note that systemd also logs
@@ -45,8 +42,8 @@ in
         '';
       };
 
-      tty = mkOption {
-        type = types.str;
+      tty = lib.mkOption {
+        type = lib.types.str;
         default = "tty10";
         description = ''
           The tty device on which syslogd will print important log
@@ -54,8 +51,8 @@ in
         '';
       };
 
-      defaultConfig = mkOption {
-        type = types.lines;
+      defaultConfig = lib.mkOption {
+        type = lib.types.lines;
         default = defaultConf;
         description = ''
           The default {file}`syslog.conf` file configures a
@@ -64,16 +61,16 @@ in
         '';
       };
 
-      enableNetworkInput = mkOption {
-        type = types.bool;
+      enableNetworkInput = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Accept logging through UDP. Option -r of syslogd(8).
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "news.* -/var/log/news";
         description = ''
@@ -82,8 +79,8 @@ in
         '';
       };
 
-      extraParams = mkOption {
-        type = types.listOf types.str;
+      extraParams = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "-m 0" ];
         description = ''
@@ -98,7 +95,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions =
       [ { assertion = !config.services.rsyslogd.enable;
@@ -108,7 +105,7 @@ in
 
     environment.systemPackages = [ pkgs.sysklogd ];
 
-    services.syslogd.extraParams = optional cfg.enableNetworkInput "-r";
+    services.syslogd.extraParams = lib.optional cfg.enableNetworkInput "-r";
 
     # FIXME: restarting syslog seems to break journal logging.
     systemd.services.syslog =

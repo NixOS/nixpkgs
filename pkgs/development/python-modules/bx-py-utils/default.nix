@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "95";
+  version = "98";
 
   disabled = pythonOlder "3.10";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OClJjttOb21NnukOapEtXn/XNw9p6SUe3MY68FR9GWc=";
+    hash = "sha256-VJ4510HLTqdRfeUEe2srT8+W9AaRpi+Mm6srZOOp0fc=";
   };
 
   postPatch = ''
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     description = "Various Python utility functions";
     mainProgram = "publish";
     homepage = "https://github.com/boxine/bx_py_utils";
-    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.rev}";
+    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

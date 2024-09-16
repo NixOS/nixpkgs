@@ -4,6 +4,8 @@ tmp=$(mktemp -d)
 trap 'chmod -R +w "$tmp" && rm -fr "$tmp"' EXIT
 
 HOME=$tmp/.home
+export TMPDIR="$tmp/.tmp"
+mkdir "$HOME" "$TMPDIR"
 cd "$tmp"
 
 phases="

@@ -1,30 +1,28 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.jellyseerr;
 in
 {
-  meta.maintainers = [ maintainers.camillemndn ];
+  meta.maintainers = [ lib.maintainers.camillemndn ];
 
   options.services.jellyseerr = {
-    enable = mkEnableOption ''Jellyseerr, a requests manager for Jellyfin'';
-    package = mkPackageOption pkgs "jellyseerr" { };
+    enable = lib.mkEnableOption ''Jellyseerr, a requests manager for Jellyfin'';
+    package = lib.mkPackageOption pkgs "jellyseerr" { };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''Open port in the firewall for the Jellyseerr web interface.'';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5055;
       description = ''The port which the Jellyseerr web UI should listen to.'';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.jellyseerr = {
       description = "Jellyseerr, a requests manager for Jellyfin";
       after = [ "network.target" ];
@@ -56,7 +54,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

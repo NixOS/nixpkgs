@@ -58,7 +58,7 @@ subprocess.check_call(
         "--out",
         depot_tools_checkout.name,
         "--rev",
-        "7a69b031d58081d51c9e8e89557b343bba8518b1",
+        "452fe3be37f78fbecefa1b4b0d359531bcd70d0d"
     ]
 )
 sys.path.append(depot_tools_checkout.name)
@@ -104,15 +104,15 @@ class Repo:
         )
 
         deps_file = self.get_file("DEPS")
-        evaluated = gclient_eval.Parse(deps_file, filename="DEPS")
+        evaluated = gclient_eval.Parse(deps_file, vars_override=repo_vars, filename="DEPS")
 
-        repo_vars = dict(evaluated["vars"]) | repo_vars
+        repo_vars = dict(evaluated.get("vars", {})) | repo_vars
 
         prefix = f"{path}/" if evaluated.get("use_relative_paths", False) else ""
 
         self.deps = {
             prefix + dep_name: repo_from_dep(dep)
-            for dep_name, dep in evaluated["deps"].items()
+            for dep_name, dep in evaluated.get("deps", {}).items()
             if (
                 gclient_eval.EvaluateCondition(dep["condition"], repo_vars)
                 if "condition" in dep
@@ -467,8 +467,14 @@ def get_electron_info(major_version: str) -> Tuple[str, str, GitHubRepo]:
     electron_repo: GitHubRepo = GitHubRepo("electron", "electron", rev)
     electron_repo.get_deps(
         {
-            f"checkout_{platform}": platform == "linux"
+            **{
+            f"checkout_{platform}": platform == "linux" or platform == "x64" or platform == "arm64" or platform == "arm"
             for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
+            },
+            **{
+            f"checkout_{arch}": True
+            for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64"]
+            },
         },
         "src/electron",
     )

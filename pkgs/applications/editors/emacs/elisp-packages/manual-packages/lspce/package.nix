@@ -24,6 +24,8 @@ melpaBuild {
   # to compile lspce.el, it needs lspce-module.so
   files = ''(:defaults "${lib.getLib lspce-module}/lib/lspce-module.*")'';
 
+  ignoreCompilationError = false;
+
   passthru = {
     inherit lspce-module;
     updateScript = nix-update-script {

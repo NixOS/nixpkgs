@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   boolToStr = value: if value then "on" else "off";
   cfg = config.vmware;
@@ -17,35 +14,35 @@ let
 in {
   options = {
     vmware = {
-      baseImageSize = mkOption {
-        type = with types; either (enum [ "auto" ]) int;
+      baseImageSize = lib.mkOption {
+        type = with lib.types; either (enum [ "auto" ]) int;
         default = "auto";
         example = 2048;
         description = ''
           The size of the VMWare base image in MiB.
         '';
       };
-      vmDerivationName = mkOption {
-        type = types.str;
+      vmDerivationName = lib.mkOption {
+        type = lib.types.str;
         default = "nixos-vmware-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
         description = ''
           The name of the derivation for the VMWare appliance.
         '';
       };
-      vmFileName = mkOption {
-        type = types.str;
+      vmFileName = lib.mkOption {
+        type = lib.types.str;
         default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.vmdk";
         description = ''
           The file name of the VMWare appliance.
         '';
       };
-      vmSubformat = mkOption {
-        type = types.enum subformats;
+      vmSubformat = lib.mkOption {
+        type = lib.types.enum subformats;
         default = "monolithicSparse";
         description = "Specifies which VMDK subformat to use.";
       };
-      vmCompat6 = mkOption {
-        type = types.bool;
+      vmCompat6 = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         example = true;
         description = "Create a VMDK version 6 image (instead of version 4).";

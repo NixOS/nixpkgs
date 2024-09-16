@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.2.11";
+  version = "2.2.12";
 
   disabled = pythonOlder "3.8";
 
@@ -24,18 +24,18 @@ buildPythonPackage rec {
     owner = "pbs";
     repo = "pycaption";
     rev = "refs/tags/${version}";
-    hash = "sha256-ae3aldx/8nRnqut7py2KmqETQuAUt2wpDwFA/30UiGg=";
+    hash = "sha256-vdSoqNWEubK0np14EiI/hRbrEx0722qg6Ggcpmhz8FM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     lxml
     cssutils
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     transcript = [ nltk ];
   };
 

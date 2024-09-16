@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dualsensectl";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = "dualsensectl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+OSp9M0A0J4nm7ViDXG63yrUZuZxR7gyckwSCdy3qm0=";
+    hash = "sha256-Wu3TcnHoMZELC7I2PlE8z00+CycgpNd6SiZd5MjYD+I=";
   };
 
   postPatch = ''

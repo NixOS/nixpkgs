@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
     hash = "sha256-GzaoOdscjYmAZuGb54uZWTCgovKohvFJ5PZOF1XwZPc=";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "evolution-data-server-${version}"} \
       --subst-var-by GDS ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
-    ln -s $out/lib/${pname}/*.dylib $out/lib/
+    ln -s $out/lib/evolution-data-server/*.dylib $out/lib/
   '';
 
   passthru = {

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.5.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/ink/ink-${version}.tar.gz";
     sha256 = "1fk0b8vic04a3i3vmq73hbk7mzbi57s8ks6ighn3mvr6m2v8yc9d";
   };
 

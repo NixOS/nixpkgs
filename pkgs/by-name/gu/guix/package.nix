@@ -29,6 +29,7 @@
 , bzip2
 , libgcrypt
 , sqlite
+, nixosTests
 
 , stateDir ? "/var"
 , storeDir ? "/gnu/store"
@@ -133,6 +134,10 @@ stdenv.mkDerivation rec {
         --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
     done
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) guix;
+  };
 
   meta = with lib; {
     description = "Functional package manager with a Scheme interface";

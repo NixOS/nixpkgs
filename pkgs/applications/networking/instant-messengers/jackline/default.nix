@@ -4,15 +4,15 @@ with ocamlPackages;
 
 buildDunePackage rec {
   pname = "jackline";
-  version = "unstable-2023-03-09";
+  version = "unstable-2024-02-28";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner  = "hannesm";
     repo   = "jackline";
-    rev    = "a7acd19bd8141b842ac69b05146d9a63e729230d";
-    hash = "sha256-AhiFfZkDit9tnGenETc3A1hHqWN+csiS2bVjsGNaHf8=";
+    rev  = "31b90275a5f848cfc8c4f5b75e7d1933bec37852";
+    hash = "sha256-G2jjsc/i9Qgo0TP+ZE4gB/1cjuZ9l8R7e59K2DGD5GY=";
   };
 
   nativeBuildInpts = [
@@ -23,6 +23,7 @@ buildDunePackage rec {
   buildInputs = [
     erm_xmpp
     tls
+    tls-lwt
     mirage-crypto-pk
     x509
     domain-name

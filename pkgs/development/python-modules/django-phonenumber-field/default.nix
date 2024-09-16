@@ -4,8 +4,9 @@
   buildPythonPackage,
   django,
   djangorestframework,
-  fetchPypi,
+  fetchFromGitHub,
   phonenumbers,
+  phonenumberslite,
   python,
   pythonOlder,
   setuptools-scm,
@@ -13,19 +14,25 @@
 
 buildPythonPackage rec {
   pname = "django-phonenumber-field";
-  version = "7.3.0";
-  format = "pyproject";
+  version = "8.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+c2z3ghfmcJJMoKTo7k9Tl+kQMDI47mesND1R0hil5c=";
+  src = fetchFromGitHub {
+    owner = "stefanfoulis";
+    repo = "django-phonenumber-field";
+    rev = "refs/tags/${version}";
+    hash = "sha256-l+BAh7QYGN0AgDHICvlQnBYAcpEn8acu+JBmoo85kF0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ django ] ++ passthru.optional-dependencies.phonenumbers;
+  # Upstream doesn't put phonenumbers in dependencies but the package doesn't
+  # make sense without either of the two optional dependencies. Since, in
+  # Nixpkgs, phonenumberslite depends on phonenumbers, add the latter
+  # unconditionally.
+  dependencies = [ django ] ++ optional-dependencies.phonenumbers;
 
   nativeCheckInputs = [
     babel
@@ -38,8 +45,9 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings tests.settings
   '';
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     phonenumbers = [ phonenumbers ];
+    phonenumberslite = [ phonenumberslite ];
   };
 
   meta = with lib; {

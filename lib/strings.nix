@@ -408,7 +408,6 @@ rec {
       start ? false,
       end ? false,
     }:
-    s:
     let
       # Define our own whitespace character class instead of using
       # `[:space:]`, which is not well-defined.
@@ -425,12 +424,14 @@ rec {
           "(.*[^${chars}])[${chars}]*"
         else
           "(.*)";
-
+    in
+    s:
+    let
       # If the string was empty or entirely whitespace,
       # then the regex may not match and `res` will be `null`.
       res = match regex s;
     in
-      optionalString (res != null) (head res);
+    optionalString (res != null) (head res);
 
   /**
     Construct a Unix-style, colon-separated search path consisting of
@@ -1026,7 +1027,8 @@ rec {
     replaceStrings (builtins.attrNames toEscape) (lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape);
 
   /**
-    Quote `string` to be used safely within the Bourne shell.
+    Quote `string` to be used safely within the Bourne shell if it has any
+    special characters.
 
 
     # Inputs
@@ -1051,10 +1053,17 @@ rec {
 
     :::
   */
-  escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
+  escapeShellArg = arg:
+    let
+      string = toString arg;
+    in
+      if match "[[:alnum:],._+:@%/-]+" string == null
+      then "'${replaceStrings ["'"] ["'\\''"] string}'"
+      else string;
 
   /**
-    Quote all arguments to be safely passed to the Bourne shell.
+    Quote all arguments that have special characters to be safely passed to the
+    Bourne shell.
 
     # Inputs
 
@@ -1073,7 +1082,7 @@ rec {
 
     ```nix
     escapeShellArgs ["one" "two three" "four'five"]
-    => "'one' 'two three' 'four'\\''five'"
+    => "one 'two three' 'four'\\''five'"
     ```
 
     :::

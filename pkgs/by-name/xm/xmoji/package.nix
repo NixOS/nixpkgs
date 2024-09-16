@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilimage
   ];
 
-  makeFlagsArray = [ "prefix=${placeholder "out"}" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = {
     description = "Plain X11 emoji keyboard";

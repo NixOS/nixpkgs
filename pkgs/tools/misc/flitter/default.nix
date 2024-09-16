@@ -1,54 +1,31 @@
 { lib
-, ocamlPackages
+, stdenv
+, rustPlatform
 , fetchFromGitHub
-, makeWrapper
-, python3
+, pkg-config
+, xorg
 }:
 
-ocamlPackages.buildDunePackage {
+rustPlatform.buildRustPackage rec {
   pname = "flitter";
-  # request to tag releases: https://github.com/alexozer/flitter/issues/34
-  version = "unstable-2020-10-05";
-
-  duneVersion = "3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";
-    rev = "666c5483bc93efa6d01e0b7a927461269f8e14de";
-    sha256 = "1k3m7bjq5yrrq7vhnbdykni65dsqhq6knnv9wvwq3svb3n07z4w3";
+    rev = "v${version}";
+    sha256 = "sha256-CjWixIiQFBoS+m8hPLqz0UR/EbQWgx8eKf3Y9kkgQew=";
   };
 
-  # compatibility with core >= 0.15
-  patches = [ ./flitter.patch ];
-
-  # https://github.com/alexozer/flitter/issues/28
-  postPatch = ''
-    for f in src/*.ml; do
-      substituteInPlace "$f" \
-        --replace 'Unix.gettimeofday' 'Caml_unix.gettimeofday' \
-        --replace 'Core_kernel' 'Core' \
-        --replace 'sexp_option' 'option[@sexp.option]' \
-        --replace 'sexp_list' 'list[@sexp.list]'
-    done
-  '';
+  cargoHash = "sha256-jkIdlvMYNopp8syZpIiAiekALUrRWWRKFFHYyMYRMg4=";
 
   nativeBuildInputs = [
-    makeWrapper
+    pkg-config
   ];
 
-  buildInputs = with ocamlPackages; [
-    core_unix
-    lwt_ppx
-    sexp_pretty
-    color
-    notty
+  buildInputs = [
+    xorg.libX11
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/flitter \
-      --prefix PATH : "${python3.withPackages (pp: [ pp.pynput ])}/bin"
-  '';
 
   meta = with lib; {
     description = "Livesplit-inspired speedrunning split timer for Linux/macOS terminal";
@@ -57,5 +34,6 @@ ocamlPackages.buildDunePackage {
     homepage = "https://github.com/alexozer/flitter";
     platforms = platforms.unix;
     mainProgram = "flitter";
+    broken = stdenv.isDarwin;
   };
 }

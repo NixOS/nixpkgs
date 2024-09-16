@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
   cfg = config.services.dante;
   confFile = pkgs.writeText "dante-sockd.conf" ''
@@ -14,15 +12,15 @@ in
 
 {
   meta = {
-    maintainers = with maintainers; [ arobyn ];
+    maintainers = with lib.maintainers; [ arobyn ];
   };
 
   options = {
     services.dante = {
-      enable = mkEnableOption "Dante SOCKS proxy";
+      enable = lib.mkEnableOption "Dante SOCKS proxy";
 
-      config = mkOption {
-        type        = types.lines;
+      config = lib.mkOption {
+        type        = lib.types.lines;
         description = ''
           Contents of Dante's configuration file.
           NOTE: user.privileged, user.unprivileged and logoutput are set by the service.
@@ -31,7 +29,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       { assertion   = cfg.config != "";
         message     = "please provide Dante configuration file contents";

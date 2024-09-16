@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
     pkgConfigModules = [ "libxml-2.0" ];
   };
 })

@@ -7,13 +7,12 @@
   pytestCheckHook,
   numpy,
   opencv4,
-  tomli,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.13";
+  version = "0.0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albucore";
     rev = "refs/tags/${version}";
-    hash = "sha256-TqEOey6PxVesk1Xs9YvnFto8LrSVsfTMq+MqP/mwYCA=";
+    hash = "sha256-6c6QiChP3SLTEj1SKlb/AcjQbLX4L9Fdlxem70cxiXM=";
   };
 
   pythonRemoveDeps = [ "opencv-python" ];
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     opencv4
-    tomli
     typing-extensions
   ];
 

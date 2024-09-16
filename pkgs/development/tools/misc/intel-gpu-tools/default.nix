@@ -43,22 +43,21 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gpu-tools";
-  version = "1.27.1";
+  version = "1.29";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "drm";
     repo = "igt-gpu-tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7Z9Y7uUjtjdQbB+xV/fvO18xB18VV7fBZqw1fI7U0jQ=";
+    hash = "sha256-t6DeFmIgTomMNwE53n5JicnvuCd/QfpNYWCdwPwc30E=";
   };
 
   patches = [
-    # fixes pkgsMusl.intel-gpu-tools
-    # https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/issues/138
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/111918317d06598fe1459dbe139923404f3f4b9d/srcpkgs/igt-gpu-tools/patches/musl.patch";
-      hash = "sha256-cvtwZg7js7O/Ww7puBTfVzLRji2bHTyV91+PvpH8qrg=";
+      name = "basename.patch";
+      url = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/604dec781ef283885f65968358bd9ae88c5193c3.patch";
+      hash = "sha256-zU6U9uuTDvuADVYmT9sMYA85Xgtvqgy378LvWFDVEJw=";
     })
   ];
 
@@ -102,7 +101,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    patchShebangs tests man
+    patchShebangs lib man scripts tests
   '';
 
   hardeningDisable = [ "bindnow" ];

@@ -9,8 +9,8 @@ mkDerivation {
   pname = "nixfmt";
   version = "0.6.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/a707c70ab6fed71032ac55bb1029306a50a80d34.tar.gz";
-    sha256 = "1v5hch8j1w1bvn2r4xz4ym60ykgsc074y28vpin9qraagv06x8sm";
+    url = "https://github.com/nixos/nixfmt/archive/14be7e665024f1a8c31d748b22f5e215856d3479.tar.gz";
+    sha256 = "017a1069sy4bhc2wchgd5hl6c106spf0zq5dcg65mf4flba1xs0j";
   };
   isLibrary = true;
   isExecutable = true;

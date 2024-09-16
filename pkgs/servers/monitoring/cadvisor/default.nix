@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "cadvisor";
@@ -21,6 +21,8 @@ buildGoModule rec {
     mv $out/bin/{cmd,cadvisor}
     rm $out/bin/example
   '';
+
+  passthru.tests = { inherit (nixosTests) cadvisor; };
 
   meta = with lib; {
     description = "Analyzes resource usage and performance characteristics of running docker containers";

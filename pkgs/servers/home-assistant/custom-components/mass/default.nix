@@ -6,24 +6,21 @@
 , music-assistant
 , pytestCheckHook
 , pytest-asyncio
+, pytest-cov-stub
 , pytest-homeassistant-custom-component
 }:
 
 buildHomeAssistantComponent rec {
   owner = "music-assistant";
   domain = "mass";
-  version = "2024.6.2";
+  version = "2024.8.1";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "hass-music-assistant";
     rev = version;
-    hash = "sha256-Wvc+vUYkUJmS4U34Sh/sDCVXmQA0AtEqIT8MNXd++3M=";
+    hash = "sha256-lrJx2wsVY0aJ+iVBxbZryC6QRvaXdxjBsTma/4ptl4o=";
   };
-
-  postPatch = ''
-    sed -i "s/--cov//" pyproject.toml
-  '';
 
   dependencies = [
     async-timeout
@@ -35,6 +32,7 @@ buildHomeAssistantComponent rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
     pytest-homeassistant-custom-component
   ];
 

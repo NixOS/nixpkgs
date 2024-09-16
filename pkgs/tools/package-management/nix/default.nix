@@ -185,8 +185,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_24 = (common {
-    version = "2.24.2";
-    hash = "sha256-ne4/57E2hOeBIc4yIJkm5JDIPtAaRvkDPkKj7pJ5fhg=";
+    version = "2.24.6";
+    hash = "sha256-kgq3B+olx62bzGD5C6ighdAoDweLq+AebxVHcDnKH4w=";
     self_attribute_name = "nix_2_24";
   }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
     # Fix the following error with the default x86_64-darwin SDK:
@@ -200,13 +200,13 @@ in lib.makeExtensible (self: ({
   });
 
   git = (common rec {
-    version = "2.24.0";
-    suffix = "pre20240723_${lib.substring 0 8 src.rev}";
+    version = "2.25.0";
+    suffix = "pre20240910_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "fb450de20ec8df558f9f7f167d748acf7cabe151";
-      hash = "sha256-xjN65yaPGwmly+Fdo6lVHL67+0IG+Cnxv7hNgYgoTGk=";
+      rev = "b9d3cdfbd2b873cf34600b262247d77109dfd905";
+      hash = "sha256-7zH8TU5g3Bsg6ES0O8RcTm6JGYOMuDCGlSI3AQKbKy8=";
     };
     self_attribute_name = "git";
   }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {

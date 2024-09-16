@@ -64,6 +64,8 @@ let
 
     b0 = callPackage ../development/ocaml-modules/b0 { };
 
+    backoff = callPackage ../development/ocaml-modules/backoff { };
+
     bap = janeStreet_0_15.bap;
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -224,8 +226,6 @@ let
     cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
-
-    cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
 
     cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
@@ -1117,8 +1117,6 @@ let
 
     mirage-bootvar-xen = callPackage ../development/ocaml-modules/mirage-bootvar-xen { };
 
-    mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
-
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-solo5 = callPackage ../development/ocaml-modules/mirage-clock/solo5.nix { };
@@ -1126,8 +1124,6 @@ let
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
 
     mirage-console = callPackage ../development/ocaml-modules/mirage-console { };
-
-    mirage-console-unix = callPackage ../development/ocaml-modules/mirage-console/unix.nix { };
 
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
@@ -1204,6 +1200,10 @@ let
     msat = callPackage ../development/ocaml-modules/msat { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
+
+    multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
+
+    multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
@@ -1783,6 +1783,8 @@ let
     terminal = callPackage ../development/ocaml-modules/terminal { };
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
+
+    terml = callPackage ../development/ocaml-modules/terml { };
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 

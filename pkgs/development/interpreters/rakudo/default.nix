@@ -4,6 +4,7 @@ stdenv.mkDerivation rec {
   pname = "rakudo";
   version = "2024.06";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";

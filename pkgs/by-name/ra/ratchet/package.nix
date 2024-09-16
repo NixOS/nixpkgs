@@ -35,7 +35,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${package_url}/internal/version.name=${pname}"
+      "-X ${package_url}/internal/version.name=ratchet"
       "-X ${package_url}/internal/version.version=${version}"
       "-X ${package_url}/internal/version.commit=${src.rev}"
     ];

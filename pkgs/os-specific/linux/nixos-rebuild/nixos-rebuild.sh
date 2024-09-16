@@ -588,7 +588,7 @@ if [ "$action" = repl ]; then
     if [[ -z $buildingAttribute ]]; then
         exec nix repl --file $buildFile $attr "${extraBuildFlags[@]}"
     elif [[ -z $flake ]]; then
-        exec nix repl '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
+        exec nix repl --file '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
     else
         if [[ -n "${lockFlags[0]}" ]]; then
             # nix repl itself does not support locking flags
@@ -725,8 +725,7 @@ EOF
                     .nixosVersion, .kernelVersion, .configurationRevision,
                     (.specialisations | join(" "))
                 ] | @tsv' |
-                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation" |
-                ${PAGER:cat}
+                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation"
         else
             jq --slurp .
         fi

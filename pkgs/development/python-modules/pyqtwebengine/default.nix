@@ -12,6 +12,7 @@
   pyqt5,
   sip,
   pyqt-builder,
+  mesa,
 }:
 
 let
@@ -20,7 +21,7 @@ in
 buildPythonPackage (
   rec {
     pname = "pyqtwebengine";
-    version = "5.15.6";
+    version = "5.15.7";
     format = "pyproject";
 
     disabled = isPy27;
@@ -28,7 +29,7 @@ buildPythonPackage (
     src = fetchPypi {
       pname = "PyQtWebEngine";
       inherit version;
-      hash = "sha256-riQe8qYceCk5xYtSwq6lOtmbMPOTTINY1eCm67P9ByE=";
+      hash = "sha256-8SGsbkovlqwolhm8/Df2Tmg2LySjRlU/XWxC76Qiik0=";
     };
 
     postPatch = ''
@@ -98,7 +99,7 @@ buildPythonPackage (
       description = "Python bindings for Qt5";
       homepage = "http://www.riverbankcomputing.co.uk";
       license = lib.licenses.gpl3;
-      hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms lib.platforms.mesaPlatforms;
+      hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms mesa.meta.platforms;
     };
   }
   // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {

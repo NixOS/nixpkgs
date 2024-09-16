@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "atac";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "Julien-cpsn";
     repo = "ATAC";
     rev = "v${version}";
-    hash = "sha256-PTslXzgZCzmy45zI2omv4Ef5h4gJdfWcK5ko7ulHnXo=";
+    hash = "sha256-FSZGpV+dREwjst84TT1aBm/H+VqkjI8XDPo3usJ7UeI=";
   };
 
-  cargoHash = "sha256-ZQyj2+gsZnayWD29dYZDh1zYTstaQluzzF7pXf0yoY4=";
+  cargoHash = "sha256-sNgtqvFiwHSYMDf0379i8Yl9NrkCRVLo/ogjbHFgKBY=";
 
   nativeBuildInputs = [
     pkg-config

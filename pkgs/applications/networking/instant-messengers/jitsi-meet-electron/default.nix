@@ -16,18 +16,16 @@
 
 let
   inherit (darwin.apple_sdk.frameworks) Carbon CoreFoundation ApplicationServices OpenGL;
-
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2024.3.0";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-BGN+t9Caw5n/NN1E5Oi/ruMLjoVh0jUlpzYR6vodHbw=";
+    hash = "sha256-jnt+aHkCnIj4GGFbAk6AlVhg0rvzFhGCELAaYMCZx88=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +48,7 @@ buildNpmPackage rec {
     OpenGL
   ];
 
-  npmDepsHash = "sha256-KanG8y+tYzswCCXjSkOlk+p9XKaouP2Z7IhsD5bDtRk=";
+  npmDepsHash = "sha256-zmnxNJdalspZib1PGZN0YBIauJ+gaxs6Iir94cPRNtU=";
 
   makeCacheWritable = true;
 
@@ -70,7 +68,7 @@ buildNpmPackage rec {
   '';
 
   postBuild = ''
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     # npmRebuild is needed because robotjs won't be built on darwin otherwise

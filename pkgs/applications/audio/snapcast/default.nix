@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "sha256-XxpiLojs1TI3qM7yXS+OPcHKo6pLcfJ+Eop7GjQ4HQw=";
+    hash = "sha256-FWOGBXYWLHHZhvC5/BpkDd70ZupzALZ3ks3qTcrtwKQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

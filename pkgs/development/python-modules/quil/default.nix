@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.10.0";
+  version = "0.11.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,13 +22,13 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "quil-rs";
     rev = "quil-py/v${version}";
-    hash = "sha256-GJ39pvIqYs2bMGAHJL8OgB0OfmIpo/k3FxorYvdOvhI=";
+    hash = "sha256-I8LV7lqJP2xc8eVxMbixeHMRYiTpmpSahfA3WWRjoHA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-VvnjdCFrpo/rDLNJrHpZoV+E+fQGgNW/nBOvMG91sHQ=";
+    hash = "sha256-U9AVJ4i9E0TeG5cPxdx9hJcMKkZvUXcRfZF7VkM7ddI=";
   };
 
   buildAndTestSubdir = "quil-py";
@@ -42,7 +42,12 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  pythonImportsCheck = [ "numpy" ];
+  pythonImportsCheck = [
+    "quil.expression"
+    "quil.instructions"
+    "quil.program"
+    "quil.validation"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

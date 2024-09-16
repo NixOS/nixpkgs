@@ -33,23 +33,26 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.37.0";
+  version = "1.38.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rj73KLoh504FEi43BOivZEp727WCLigbja9KCkh2GHk=";
+    hash = "sha256-xL82s++HFJntRZRXSDRYMRP5Pwd90wNdUW0pV4byrWM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "tenacity"
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     altair
     blinker
     cachetools

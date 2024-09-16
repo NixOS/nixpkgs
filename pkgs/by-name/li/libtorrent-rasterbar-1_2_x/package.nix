@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "05qm8mcyxsnb6zb8nckln1gkk8ncwzfhsz7d7p3fhx6gdsc8j71b";
+    hash = "sha256-KxyJmG7PdOjGPe18Dd3nzKI5X7B0MovWN8vq7llFFRc=";
   };
 
   enableParallelBuilding = true;

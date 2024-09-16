@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    hash = "sha256-EqMDW/JvVfceMQalGl+o17dEVy35imOSCpz/h2p9zOQ=";
+    hash = "sha256-oxjngKw5prPWxGlxOC+W7d6Xzki442HrgOY0Fe1Batg=";
   };
 
   patches = [

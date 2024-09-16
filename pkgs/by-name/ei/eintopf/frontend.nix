@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/backstage";
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-Z/Pkk/qCWwr99g11DjEgnisPfxOhfD8+OCn6otxJtfI=";
+    yarnLock = "${finalAttrs.src}/backstage/yarn.lock";
+    hash = "sha256-7Br2FBhLZf7Cuul5n55EHfqyW8GbujB+yZ/RK6f7I4M=";
   };
 
   nativeBuildInputs = [

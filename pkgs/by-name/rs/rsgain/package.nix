@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       owner = "complexlogic";
       repo = "rsgain";
       rev = "v${version}";
-      sha256 = "sha256-kTvIMsRI99U2ovkN5pC4OUS/bJWpRYSuRcvObvQRnbQ=";
+      hash = "sha256-kTvIMsRI99U2ovkN5pC4OUS/bJWpRYSuRcvObvQRnbQ=";
     };
 
     cmakeFlags = ["-DCMAKE_BUILD_TYPE='Release'"];

@@ -48,8 +48,8 @@ rustPlatform.buildRustPackage {
     # Remove test binaries (e.g. `empty-argv`, `corrupted-envp`) and only retain `tracexec`
     find "$out/bin" -type f \! -name tracexec -print0 | xargs -0 rm -v
 
-    install -Dm644 LICENSE -t "$out/share/licenses/${pname}/"
-    install -Dm644 THIRD_PARTY_LICENSES.HTML -t "$out/share/licenses/${pname}/"
+    install -Dm644 LICENSE -t "$out/share/licenses/tracexec/"
+    install -Dm644 THIRD_PARTY_LICENSES.HTML -t "$out/share/licenses/tracexec/"
   '';
 
   passthru.updateScript = nix-update-script { };

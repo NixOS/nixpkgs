@@ -1,56 +1,53 @@
 { lib, pkgs, config, ... }:
-
-with lib;
-
 let
   cfg = config.services.zfs.autoReplication;
-  recursive = optionalString cfg.recursive " --recursive";
-  followDelete = optionalString cfg.followDelete " --follow-delete";
+  recursive = lib.optionalString cfg.recursive " --recursive";
+  followDelete = lib.optionalString cfg.followDelete " --follow-delete";
 in {
   options = {
     services.zfs.autoReplication = {
-      enable = mkEnableOption "ZFS snapshot replication";
+      enable = lib.mkEnableOption "ZFS snapshot replication";
 
-      followDelete = mkOption {
+      followDelete = lib.mkOption {
         description = "Remove remote snapshots that don't have a local correspondent.";
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      host = mkOption {
+      host = lib.mkOption {
         description = "Remote host where snapshots should be sent. `lz4` is expected to be installed on this host.";
         example = "example.com";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      identityFilePath = mkOption {
+      identityFilePath = lib.mkOption {
         description = "Path to SSH key used to login to host.";
         example = "/home/username/.ssh/id_rsa";
-        type = types.path;
+        type = lib.types.path;
       };
 
-      localFilesystem = mkOption {
+      localFilesystem = lib.mkOption {
         description = "Local ZFS filesystem from which snapshots should be sent.  Defaults to the attribute name.";
         example = "pool/file/path";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      remoteFilesystem = mkOption {
+      remoteFilesystem = lib.mkOption {
         description = "Remote ZFS filesystem where snapshots should be sent.";
         example = "pool/file/path";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      recursive = mkOption {
+      recursive = lib.mkOption {
         description = "Recursively discover snapshots to send.";
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      username = mkOption {
+      username = lib.mkOption {
         description = "Username used by SSH to login to remote host.";
         example = "username";
-        type = types.str;
+        type = lib.types.str;
       };
     };
   };
@@ -73,7 +70,7 @@ in {
         "https://github.com/alunduil/zfs-replicate"
       ];
       restartIfChanged = false;
-      serviceConfig.ExecStart = "${pkgs.zfs-replicate}/bin/zfs-replicate${recursive} -l ${escapeShellArg cfg.username} -i ${escapeShellArg cfg.identityFilePath}${followDelete} ${escapeShellArg cfg.host} ${escapeShellArg cfg.remoteFilesystem} ${escapeShellArg cfg.localFilesystem}";
+      serviceConfig.ExecStart = "${pkgs.zfs-replicate}/bin/zfs-replicate${recursive} -l ${lib.escapeShellArg cfg.username} -i ${lib.escapeShellArg cfg.identityFilePath}${followDelete} ${lib.escapeShellArg cfg.host} ${lib.escapeShellArg cfg.remoteFilesystem} ${lib.escapeShellArg cfg.localFilesystem}";
       wantedBy = [
         "zfs-snapshot-daily.service"
         "zfs-snapshot-frequent.service"

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   yarnBuildScript = "electron-builder";
   yarnBuildFlags = [
     "--dir"
-    "-c.electronDist=${electron}/libexec/electron"
+    "-c.electronDist=${electron.dist}"
     "-c.electronVersion=${electron.version}"
   ];
 

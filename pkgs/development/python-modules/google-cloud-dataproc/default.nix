@@ -16,19 +16,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.10.0";
+  version = "5.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HjIv6DujcvnUPYgdr9z97VDaqpoZe6ReOA1vI7pQSWA=";
+    pname = "google_cloud_dataproc";
+    inherit version;
+    hash = "sha256-6jiAOYf9eBjRMyQ9tvR3EWfnqk1MfYIUTm98Plnfkhg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     libcst
