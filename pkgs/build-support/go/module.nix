@@ -63,20 +63,6 @@ let
   GO111MODULE = "on";
   GOTOOLCHAIN = "local";
 
-  toExtension =
-    overlay0:
-    if lib.isFunction overlay0 then
-      final: prev:
-      if lib.isFunction (overlay0 prev) then
-        # `overlay0` is `final: prev: { ... }`
-        overlay0 final prev
-      else
-        # `overlay0` is `prev: { ... }`
-        overlay0 prev
-    else
-      # `overlay0` is `{ ... }`
-      final: prev: overlay0;
-
 in
 (stdenv.mkDerivation (finalAttrs:
   args
@@ -333,7 +319,7 @@ in
       # Canonicallize `overrideModAttrs` as an attribute overlay.
       # `passthru.overrideModAttrs` will be overridden
       # when users want to override `goModules`.
-      overrideModAttrs = toExtension overrideModAttrs;
+      overrideModAttrs = lib.toExtension overrideModAttrs;
     } // passthru;
 
     meta = {

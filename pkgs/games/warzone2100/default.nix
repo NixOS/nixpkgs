@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version  = "4.5.2";
+  version  = "4.5.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-J8IJH2/A2OO7YP9moWOM77qDW7TdZ40MLVv/y0xDAms=";
+    hash = "sha256-7tSfLkVth9nbGSwn1uNWeFrHx5ac+jaO3Gk9Bb+hLIk=";
   };
 
   buildInputs = [

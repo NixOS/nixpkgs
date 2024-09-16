@@ -23,6 +23,6 @@ buildGo123Module {
     description = "Allows users to use a GitOps flow for managing Tailscale ACLs";
     license = licenses.bsd3;
     mainProgram = "gitops-pusher";
-    maintainers = with maintainers; [ xanderio ];
+    maintainers = teams.cyberus.members;
   };
 }
