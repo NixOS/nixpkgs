@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
   ];
 
-  propagatedBuildInputs = [ libGL ];
+  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ]
