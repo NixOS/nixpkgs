@@ -52,6 +52,7 @@ in
     server.succeed("scp ${sshOpts} /tmp/tmate.conf client:/tmp/tmate.conf")
 
     client.wait_for_file("/tmp/tmate.conf")
+    client.wait_until_tty_matches("1", "login:")
     client.send_chars("root\n")
     client.sleep(2)
     client.send_chars("tmate -f /tmp/tmate.conf\n")
@@ -62,7 +63,8 @@ in
     client.wait_for_file("/tmp/ssh_command")
     ssh_cmd = client.succeed("cat /tmp/ssh_command")
 
-    client2.succeed("mkdir -p ~/.ssh; ssh-keyscan -p 2223 server > ~/.ssh/known_hosts")
+    client2.succeed("mkdir -p ~/.ssh; ssh-keyscan -4 -p 2223 server > ~/.ssh/known_hosts")
+    client2.wait_until_tty_matches("1", "login:")
     client2.send_chars("root\n")
     client2.sleep(2)
     client2.send_chars(ssh_cmd.strip() + "\n")
