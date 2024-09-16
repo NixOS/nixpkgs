@@ -312,7 +312,7 @@ in
 
     systemd.services = lib.mapAttrs'
       (name: c:
-        lib.nameValuePair "syncoid-${lib.escapeUnitName name}" (lib.mkMerge [
+        lib.nameValuePair "syncoid-${escapeUnitName name}" (lib.mkMerge [
           {
             description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
             after = [ "zfs.target" ];
@@ -376,15 +376,15 @@ in
               RestrictNamespaces = true;
               RestrictRealtime = true;
               RestrictSUIDSGID = true;
-              RootDirectory = "/run/syncoid/${lib.escapeUnitName name}";
+              RootDirectory = "/run/syncoid/${escapeUnitName name}";
               RootDirectoryStartOnly = true;
               BindPaths = [ "/dev/zfs" ];
               BindReadOnlyPaths = [ builtins.storeDir "/etc" "/run" "/bin/sh" ];
               # Avoid useless mounting of RootDirectory= in the own RootDirectory= of ExecStart='s mount namespace.
-              InaccessiblePaths = [ "-+/run/syncoid/${lib.escapeUnitName name}" ];
+              InaccessiblePaths = [ "-+/run/syncoid/${escapeUnitName name}" ];
               MountAPIVFS = true;
               # Create RootDirectory= in the host's mount namespace.
-              RuntimeDirectory = [ "syncoid/${lib.escapeUnitName name}" ];
+              RuntimeDirectory = [ "syncoid/${escapeUnitName name}" ];
               RuntimeDirectoryMode = "700";
               SystemCallFilter = [
                 "@system-service"
