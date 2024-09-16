@@ -25010,8 +25010,6 @@ with pkgs;
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
 
-  mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
-
   memcached = callPackage ../servers/memcached { };
 
   merecat = callPackage ../servers/http/merecat { };
