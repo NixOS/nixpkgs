@@ -1,6 +1,11 @@
 # snippets that can be shared by multiple fetchers (pkgs/build-support)
 { lib }:
-rec {
+let
+  commonH = hashTypes: rec {
+      hNames = [ "hash" ] ++ hashTypes;
+      hAttrs = lib.genAttrs hNames (lib.const {});
+  };
+in rec {
 
   proxyImpureEnvVars = [
     # We borrow these environment variables from the caller to allow
@@ -68,11 +73,10 @@ rec {
     required ? true,
   }:
     let
-      inherit (lib) concatMapStringsSep const head tail throwIf;
-      inherit (lib.attrsets) attrsToList genAttrs intersectAttrs removeAttrs optionalAttrs;
+      inherit (lib) concatMapStringsSep head tail throwIf;
+      inherit (lib.attrsets) attrsToList intersectAttrs removeAttrs optionalAttrs;
 
-      hNames = [ "hash" ] ++ hashTypes;
-      hAttrs = genAttrs hNames (const {});
+      inherit (commonH hashTypes) hAttrs hNames;
     in
       args:
         if args ? "outputHash" then
@@ -153,7 +157,7 @@ rec {
       inherit (lib.attrsets) genAttrs intersectAttrs removeAttrs;
       inherit (lib.trivial) const functionArgs setFunctionArgs;
 
-      hAttrs = genAttrs ([ "hash" ] ++ hashTypes) (const {});
+      inherit (commonH hashTypes) hAttrs;
       fArgs = functionArgs fetcher;
 
       normalize = normalizeHash {
