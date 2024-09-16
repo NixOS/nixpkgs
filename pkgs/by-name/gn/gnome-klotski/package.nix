@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-klotski/${lib.versions.majorMinor version}/gnome-klotski-${version}.tar.xz";
-    sha256 = "1qm01hdd5yp8chig62bj10912vclbdvywwczs84sfg4zci2phqwi";
+    hash = "sha256-kWN4RWSfPKcJ0p9x7ndblG0REghyCfMiZOj60hoMoOI=";
   };
 
   nativeBuildInputs = [

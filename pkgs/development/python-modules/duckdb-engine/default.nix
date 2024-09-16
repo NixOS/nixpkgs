@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.13.1";
+  version = "0.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6aVVs3ii8pJOSaLx0maoFmiMvbUh/LOdizmPSpqPiM4=";
+    hash = "sha256-zao8kzzQbnjwJqjHyqDkgmXa3E9nlBH2W0wh7Kjk/qw=";
   };
 
   nativeBuildInputs = [ poetry-core ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "indigo-dc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SjpCD/x93kYB5759e/D0btLO48d6g4SkEUAX7PYfm2w=";
+    hash = "sha256-SjpCD/x93kYB5759e/D0btLO48d6g4SkEUAX7PYfm2w=";
   };
 
   nativeBuildInputs = [

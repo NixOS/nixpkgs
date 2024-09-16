@@ -26,11 +26,9 @@ formats commits for you.
 
 self: let
 
-  markBroken = pkg: pkg.override {
-    elpaBuild = args: self.elpaBuild (args // {
-      meta = (args.meta or {}) // { broken = true; };
-    });
-  };
+  inherit (import ./lib-override-helper.nix pkgs)
+    markBroken
+    ;
 
   # Use custom elpa url fetcher with fallback/uncompress
   fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
@@ -47,12 +45,9 @@ self: let
 
     super = imported;
 
-    commonOverrides = import ./elpa-common-overrides.nix pkgs;
+    commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
 
     overrides = self: super: {
-      pq = super.pq.overrideAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.postgresql ];
-      });
     };
 
     elpaDevelPackages =

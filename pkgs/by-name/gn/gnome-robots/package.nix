@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-robots/${lib.versions.major version}/gnome-robots-${version}.tar.xz";
-    sha256 = "04fbykj576dq1h6cycgfhh8wd6yxmlsqykvj188sbwahay42zgvg";
+    hash = "sha256-b78viFdQ8aURCnJPjzWt3ZvGEYTuMc8MDLiZU+T0yxE=";
   };
 
   nativeBuildInputs = [

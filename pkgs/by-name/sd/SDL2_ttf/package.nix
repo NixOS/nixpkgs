@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-1Iy9HOR1ueF4IGvzty1Wtm2E1E9krAWAMyg5YjTWdyM=";
+    hash = "sha256-1Iy9HOR1ueF4IGvzty1Wtm2E1E9krAWAMyg5YjTWdyM=";
   };
 
   nativeBuildInputs = [

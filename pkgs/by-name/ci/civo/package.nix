@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "civo";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-2UWEQZRbtPArYK7Kr0eHtF8+XWXl06v86nAb8nka50g=";
+    hash = "sha256-2UWEQZRbtPArYK7Kr0eHtF8+XWXl06v86nAb8nka50g=";
   };
 
   vendorHash = "sha256-ZnomzHbsNKWwAsRjOjESKSdR+KgSiMMlG0xq33qpzX0=";

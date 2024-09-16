@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "pop-os";
     repo = "launcher";
     rev = version;
-    sha256 = "sha256-BQAO9IodZxGgV8iBmUaOF0yDbAMVDFslKCqlh3pBnb0=";
+    hash = "sha256-BQAO9IodZxGgV8iBmUaOF0yDbAMVDFslKCqlh3pBnb0=";
   };
 
   postPatch = ''

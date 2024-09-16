@@ -1,32 +1,29 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.restic.server;
 in
 {
-  meta.maintainers = [ maintainers.bachp ];
+  meta.maintainers = [ lib.maintainers.bachp ];
 
   options.services.restic.server = {
-    enable = mkEnableOption "Restic REST Server";
+    enable = lib.mkEnableOption "Restic REST Server";
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       default = "8000";
       example = "127.0.0.1:8080";
-      type = types.str;
+      type = lib.types.str;
       description = "Listen on a specific IP address and port or unix socket.";
     };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       default = "/var/lib/restic";
-      type = types.path;
+      type = lib.types.path;
       description = "The directory for storing the restic repository.";
     };
 
-    appendOnly = mkOption {
+    appendOnly = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Enable append only mode.
         This mode allows creation of new backups but prevents deletion and modification of existing backups.
@@ -34,33 +31,33 @@ in
       '';
     };
 
-    privateRepos = mkOption {
+    privateRepos = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Enable private repos.
         Grants access only when a subdirectory with the same name as the user is specified in the repository URL.
       '';
     };
 
-    prometheus = mkOption {
+    prometheus = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Enable Prometheus metrics at /metrics.";
     };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       description = ''
         Extra commandline options to pass to Restic REST server.
       '';
     };
 
-    package = mkPackageOption pkgs "restic-rest-server" { };
+    package = lib.mkPackageOption pkgs "restic-rest-server" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [{
       assertion = lib.substring 0 1 cfg.listenAddress != ":";
       message = "The restic-rest-server now uses systemd socket activation, which expects only the Port number: services.restic.server.listenAddress = \"${lib.substring 1 6 cfg.listenAddress}\";";
@@ -75,10 +72,10 @@ in
         ExecStart = ''
           ${cfg.package}/bin/rest-server \
           --path ${cfg.dataDir} \
-          ${optionalString cfg.appendOnly "--append-only"} \
-          ${optionalString cfg.privateRepos "--private-repos"} \
-          ${optionalString cfg.prometheus "--prometheus"} \
-          ${escapeShellArgs cfg.extraFlags} \
+          ${lib.optionalString cfg.appendOnly "--append-only"} \
+          ${lib.optionalString cfg.privateRepos "--private-repos"} \
+          ${lib.optionalString cfg.prometheus "--prometheus"} \
+          ${lib.escapeShellArgs cfg.extraFlags} \
         '';
         Type = "simple";
         User = "restic";
@@ -119,7 +116,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.tmpfiles.rules = mkIf cfg.privateRepos [
+    systemd.tmpfiles.rules = lib.mkIf cfg.privateRepos [
         "f ${cfg.dataDir}/.htpasswd 0700 restic restic -"
     ];
 

@@ -95,7 +95,7 @@ let
           {
             name = "license.tar.gz";
             url = "https://www.uniontech.com";
-            sha256 = "53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69";
+            hash = "sha256-U3YAecGltY8vo9Xv/h7TUjlZCyiIQdgSIp705VstvWk=";
           } else uosLicense;
 
     installPhase = ''
