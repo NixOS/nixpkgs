@@ -849,8 +849,8 @@ in {
   qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-store = runTest ./qemu-vm-store.nix;
-  qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
-  qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
+  qgis = handleTest ./qgis.nix { package = pkgs.qgis; };
+  qgis-ltr = handleTest ./qgis.nix { package = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
   qtile = handleTestOn ["x86_64-linux" "aarch64-linux"] ./qtile/default.nix {};
   quake3 = handleTest ./quake3.nix {};

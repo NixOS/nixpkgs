@@ -7,6 +7,7 @@
 , wrapQtAppsHook
 
 , withGrass
+, withServer
 , withWebKit
 
 , bison
@@ -155,7 +156,10 @@ in mkDerivation rec {
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+    ++ lib.optional withServer [
+    "-DWITH_SERVER=True"
+    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+  ] ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
