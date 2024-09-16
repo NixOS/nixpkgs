@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.18.2";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-/LmSc1AKNZ/VZ2rkUsOvwqpJmPgb6dThTtOu44BriQs=";
+    hash = "sha256-gptZld9BIQaujg9fGAgKD7wXjKeL5quXnSGOKn25jn8=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Universal wayland session manager";
     homepage = "https://github.com/Vladimir-csp/uwsm";
+    changelog = "https://github.com/Vladimir-csp/uwsm/releases/tag/v${finalAttrs.version}";
     mainProgram = "uwsm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
