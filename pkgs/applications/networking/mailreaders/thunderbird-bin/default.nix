@@ -3,48 +3,10 @@
 # To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
 #
 #     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-bin-unwrapped
-{ lib, stdenv, fetchurl, config, wrapGAppsHook3
+{ lib, stdenv, fetchurl, config, wrapGAppsHook3, autoPatchelfHook
 , alsa-lib
-, atk
-, cairo
 , curl
-, cups
-, dbus-glib
-, dbus
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gtk2
 , gtk3
-, libkrb5
-, libX11
-, libXScrnSaver
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrender
-, libXrandr
-, libXt
-, libXtst
-, libcanberra
-, libnotify
-, adwaita-icon-theme
-, libGLU, libGL
-, nspr
-, nss_latest
-, pango
-, pipewire
-, pciutils
-, heimdal
-, libpulseaudio
-, systemd
 , writeScript
 , writeText
 , xidel
@@ -52,10 +14,9 @@
 , gnused
 , gnugrep
 , gnupg
-, ffmpeg
 , runtimeShell
-, mesa # thunderbird wants gbm for drm+dmabuf
 , systemLocale ? config.i18n.defaultLocale or "en_US"
+, patchelfUnstable  # have to use patchelfUnstable to support --no-clobber-old-sections
 , generated
 }:
 
@@ -86,83 +47,30 @@ let
     else lib.replaceStrings ["_"] ["-"] systemLocale;
 
   source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
+
+  pname = "thunderbird-bin";
 in
 
 stdenv.mkDerivation {
-  pname = "thunderbird-bin";
-  inherit version;
+  inherit pname version;
 
   src = fetchurl {
     url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
     inherit (source) sha256;
   };
 
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsa-lib
-      atk
-      cairo
-      curl
-      cups
-      dbus-glib
-      dbus
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      glibc
-      gtk2
-      gtk3
-      libkrb5
-      mesa
-      libX11
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libxcb
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXinerama
-      libXrender
-      libXrandr
-      libXt
-      libXtst
-      libcanberra
-      libnotify
-      libGLU libGL
-      nspr
-      nss_latest
-      pango
-      pipewire
-      pciutils
-      heimdal
-      libpulseaudio
-      systemd
-      ffmpeg
-    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
-
-  inherit gtk3;
-
-  nativeBuildInputs = [ wrapGAppsHook3 ];
-
-  buildInputs = [ gtk3 adwaita-icon-theme ];
-
-  # "strip" after "patchelf" may break binaries.
-  # See: https://github.com/NixOS/patchelf/issues/10
-  dontStrip = true;
-  dontPatchELF = true;
+  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook patchelfUnstable ];
+  buildInputs = [
+    alsa-lib
+  ];
+  # Thunderbird uses "relrhack" to manually process relocations from a fixed offset
+  patchelfFlags = [ "--no-clobber-old-sections" ];
 
   patchPhase = ''
     # Don't download updates from Mozilla directly
     echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';
 
-  # See "Note on GPG support" in `../thunderbird/default.nix` for explanations
-  # on adding `gnupg` and `gpgme` into PATH/LD_LIBRARY_PATH.
   installPhase =
     ''
       mkdir -p "$prefix/usr/lib/thunderbird-bin-${version}"
@@ -170,21 +78,6 @@ stdenv.mkDerivation {
 
       mkdir -p "$out/bin"
       ln -s "$prefix/usr/lib/thunderbird-bin-${version}/thunderbird" "$out/bin/"
-
-      for executable in \
-        thunderbird thunderbird-bin plugin-container \
-        updater crashreporter webapprt-stub \
-        glxtest vaapitest
-      do
-        if [ -e "$out/usr/lib/thunderbird-bin-${version}/$executable" ]; then
-          patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-            "$out/usr/lib/thunderbird-bin-${version}/$executable"
-        fi
-      done
-
-      find . -executable -type f -exec \
-        patchelf --set-rpath "$libPath" \
-          "$out/usr/lib/thunderbird-bin-${version}/{}" \;
 
       # wrapThunderbird expects "$out/lib" instead of "$out/usr/lib"
       ln -s "$out/usr/lib" "$out/lib"
@@ -197,16 +90,18 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit lib writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
-    pname = "thunderbird-bin";
+    inherit pname lib writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    versionSuffix = "esr";
   };
 
   passthru = {
     binaryName = "thunderbird";
+    gssSupport = true;
+    gtk3 = gtk3;
   };
 
   meta = with lib; {
