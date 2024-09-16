@@ -17975,5 +17975,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  tailwind-tools-nvim = buildVimPlugin {
+    pname = "tailwind-tools.nvim";
+    version = "2024-09-15";
+    src = fetchFromGitHub {
+      owner = "luckasRanarison";
+      repo = "tailwind-tools.nvim";
+      rev = "41e901e7b4470082b5388b8385249632642c2510";
+      hash = "sha256-eDog1SXn1qS9ZjeG5709BU2qxzOUqa6V+gbBkW1xbqw=";
+    };
+    meta.homepage = "https://github.com/luckasRanarison/tailwind-tools.nvim";
+  };
+
 
 }
