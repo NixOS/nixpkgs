@@ -63,7 +63,7 @@ stdenv.mkDerivation {
 
   # Fix 6.10.0 holding pkg-config completely wrong.
   # Patches from perf-tools-next, should be in 6.11 or hopefully backported.
-  patches = lib.optionals (lib.versionAtLeast kernel.version "6.10") [
+  patches = lib.optionals (lib.versions.majorMinor kernel.version == "6.10") [
     (fetchpatch {
       url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=0f0e1f44569061e3dc590cd0b8cb74d8fd53706b";
       hash = "sha256-9u/zhbsDgwOr4T4k9td/WJYRuSHIfbtfS+oNx8nbOlM=";
