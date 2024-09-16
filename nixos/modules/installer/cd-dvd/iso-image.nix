@@ -722,7 +722,7 @@ in
     "/nix/.ro-store" = lib.mkImageMediaOverride
       { fsType = "squashfs";
         device = "/iso/nix-store.squashfs";
-        options = [ "loop" ];
+        options = [ "loop" "threads=multi" ];
         neededForBoot = true;
       };
 

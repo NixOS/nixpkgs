@@ -10,12 +10,12 @@
   wayland,
   wayland-scanner,
   wayland-protocols,
-  zig_0_12,
+  zig_0_13,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-U8xJucLpmeLdmSUc+AVSH/mlv6UOXsxotJPTMK7lnkA=";
+    hash = "sha256-i1Nd39666xrkzi7r08ZRIXJXvK9wmzb8zdmvmWEQaHE=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     scdoc
     wayland-scanner
-    zig_0_12.hook
+    zig_0_13.hook
   ];
 
   buildInputs = [

@@ -22,7 +22,7 @@ melpaBuild {
 
   meta = {
     inherit (gn.meta) homepage license;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ rennsax ];
     description = "Major mode for editing GN files; taken from GN sources";
   };
 }
