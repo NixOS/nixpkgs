@@ -1,21 +1,28 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pandoc,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fscryptctl";
-  version = "1.0.0";
-
-  goPackagePath = "github.com/google/fscrypt";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscryptctl";
-    rev = "v${version}";
-    sha256 = "1hwj726mm0yhlcf6523n07h0yq1rvkv4km64h3ydpjcrcxklhw6l";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5suEdSpX8alDkSnSnyiIjUmZq98eK0ZPVAtDKhOs65c=";
   };
+
+  nativeBuildInputs = [ pandoc ];
+
+  strictDeps = true;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small C tool for Linux filesystem encryption";
     mainProgram = "fscryptctl";
     longDescription = ''
@@ -32,10 +39,10 @@ stdenv.mkDerivation rec {
       As fscryptctl is intended for advanced users, you should read the kernel
       documentation for filesystem encryption before using fscryptctl.
     '';
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/google/fscryptctl/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/google/fscryptctl/blob/master/NEWS.md";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ primeos ];
   };
-}
+})

@@ -222,14 +222,6 @@ in stdenv.mkDerivation rec {
       -r '//Target[@Name="UnpackTarballs"]/Move' -v Copy \
       eng/init-source-only.proj
 
-    # AOT is currently broken in binary SDKs, and the resulting executable is
-    # unable to find ICU
-    xmlstarlet ed \
-      --inplace \
-      -s //Project -t elem -n PropertyGroup \
-      -s \$prev -t elem -n NativeAotSupported -v false \
-      src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.props
-
     # error: _FORTIFY_SOURCE requires compiling with optimization (-O) [-Werror,-W#warnings]
     substituteInPlace \
       src/runtime/src/coreclr/ilasm/CMakeLists.txt \
@@ -442,6 +434,8 @@ in stdenv.mkDerivation rec {
   passthru = {
     inherit releaseManifest buildRid targetRid;
     icu = _icu;
+    # ilcompiler is currently broken: https://github.com/dotnet/source-build/issues/1215
+    hasILCompiler = lib.versionAtLeast version "9";
   };
 
   meta = with lib; {

@@ -4,6 +4,7 @@
 , gtk2
 , gtk3
 , lib
+, makeShellWrapper
 , mesa
 , nss
 , stdenv
@@ -39,7 +40,7 @@ in stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook3 unzip ];
+  nativeBuildInputs = [ autoPatchelfHook (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) unzip makeShellWrapper];
 
   buildInputs = with xorg; [
     libXScrnSaver
@@ -67,9 +68,14 @@ in stdenv.mkDerivation rec {
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
     # Cypress now looks for binary_state.json in bin
     echo '{"verified": true}' > $out/binary_state.json
-    ln -s $out/opt/cypress/Cypress $out/bin/Cypress
-
+    ln -s $out/opt/cypress/Cypress $out/bin/cypress
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # exit with 1 after 25.05
+    makeWrapper $out/opt/cypress/Cypress $out/bin/Cypress \
+      --run 'echo "Warning: Use the lowercase cypress executable instead of the capitalized one."'
   '';
 
   passthru = {
