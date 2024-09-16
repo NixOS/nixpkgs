@@ -1949,16 +1949,6 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
-  caffe = toPythonModule (pkgs.caffe.override {
-    pythonSupport = true;
-    inherit (self) python numpy boost;
-  });
-
-  caffeWithCuda = toPythonModule (pkgs.caffeWithCuda.override {
-    pythonSupport = true;
-    inherit (self) python numpy boost;
-  });
-
   caio = callPackage ../development/python-modules/caio { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi { };
@@ -2722,14 +2712,7 @@ self: super: with self; {
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
-  cupy = callPackage ../development/python-modules/cupy {
-    # cupy 12.2.0 possibly incompatible with cutensor 2.0 that comes with cudaPackages_12
-    cudaPackages = pkgs.cudaPackages_11.overrideScope (cu-fi: _: {
-      # CuDNN 9 is not supported:
-      # https://github.com/cupy/cupy/issues/8215
-      cudnn = cu-fi.cudnn_8_9;
-    });
-  };
+  cupy = callPackage ../development/python-modules/cupy { cudaPackages = pkgs.cudaPackages_12_4; };
 
   curio = callPackage ../development/python-modules/curio { };
 
@@ -6322,6 +6305,8 @@ self: super: with self; {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     inherit (pkgs.config) cudaSupport;
+    # NOTE: Most recently supported version of CUDA is 12.2.
+    cudaPackages = pkgs.cudaPackages_12_2;
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {

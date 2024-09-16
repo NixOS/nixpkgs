@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     onnxruntime
-    opencv4
+    (lib.getOutput "cxxdev" opencv4)
     openhmd
     openvr
     orc

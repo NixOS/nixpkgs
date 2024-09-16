@@ -40,7 +40,7 @@ in
     };
 
     nativeBuildInputs = [cmake pkg-config ninja copyDesktopItems];
-    buildInputs = [qtbase qttools opencv4 procps eigen libXdmcp libevdev aruco];
+    buildInputs = [qtbase qttools (lib.getOutput "cxxdev" opencv4) procps eigen libXdmcp libevdev aruco];
 
     env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
     dontWrapQtApps = true;

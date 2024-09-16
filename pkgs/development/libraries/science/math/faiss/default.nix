@@ -12,39 +12,34 @@
   blas,
   swig,
   autoAddDriverRunpath,
-  optLevel ?
-    let
-      optLevels =
-        lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
-        ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
-        ++ [ "generic" ];
-    in
-    # Choose the maximum available optimization level
-    builtins.head optLevels,
+  optLevel ? null,
   faiss, # To run demos in the tests
   runCommand,
 }@inputs:
 
 let
+  inherit (cudaPackages) flags;
+
+  stdenv = builtins.throw "Use effectiveStdenv instead of stdenv in this derivation.";
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+
+  optLevel = builtins.throw "Use effectiveOptLevel instead of optLevel in this derivation.";
+  effectiveOptLevel =
+    if inputs.optLevel or null != null then
+      inputs.optLevel
+    else
+      let
+        optLevels =
+          lib.optionals effectiveStdenv.hostPlatform.avx2Support [ "avx2" ]
+          ++ lib.optionals effectiveStdenv.hostPlatform.sse4_1Support [ "sse4" ]
+          ++ [ "generic" ];
+      in
+      # Choose the maximum available optimization level
+      builtins.head optLevels;
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "faiss";
   version = "1.8.0";
-
-  inherit (cudaPackages) flags backendStdenv;
-
-  stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
-
-  cudaComponents = with cudaPackages; [
-    cuda_cudart # cuda_runtime.h
-    libcublas
-    libcurand
-    cuda_cccl
-
-    # cuda_profiler_api.h
-    (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
-  ];
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   outputs = [
     "out"
@@ -53,8 +48,8 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nS8nhkNGGb2oAJKfr/MIAZjAwMxBGbNd16/CkEtv67I=";
   };
 
@@ -86,14 +81,24 @@ stdenv.mkDerivation {
       swig
     ]
     ++ lib.optionals pythonSupport [ pythonPackages.numpy ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport cudaComponents;
+    ++ lib.optionals effectiveStdenv.cc.isClang [ llvmPackages.openmp ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+      cudaPackages.libcublas
+      cudaPackages.libcurand # <curand_kernel.h>
+    ]
+    ++ lib.optionals (cudaSupport && cudaPackages ? cuda_profiler_api) [
+      cudaPackages.cuda_profiler_api # cuda_profiler_api.h
+    ]
+    ++ lib.optionals (cudaSupport && !(cudaPackages ? cuda_profiler_api)) [
+      cudaPackages.cuda_nvprof # cuda_profiler_api.h
+    ];
 
   cmakeFlags =
     [
       (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
       (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
-      (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)
+      (lib.cmakeFeature "FAISS_OPT_LEVEL" effectiveOptLevel)
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
@@ -131,7 +136,7 @@ stdenv.mkDerivation {
 
     tests = {
       runDemos =
-        runCommand "${pname}-run-demos" { buildInputs = [ faiss.demos ]; }
+        runCommand "${finalAttrs.pname}-run-demos" { buildInputs = [ faiss.demos ]; }
           # There are more demos, we run just the one that documentation mentions
           ''
             demo_ivfpq_indexing && touch $out
@@ -151,4 +156,4 @@ stdenv.mkDerivation {
     # error: use of undeclared identifier 'SWIGTYPE_p_long'
     broken = stdenv.isDarwin;
   };
-}
+})

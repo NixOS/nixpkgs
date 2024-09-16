@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ opencv4 ];
+  buildInputs = [ (lib.getOutput "cxxdev" opencv4) ];
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
 

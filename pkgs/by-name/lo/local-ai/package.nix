@@ -84,6 +84,7 @@ let
     buildInputs = [ ]
       ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_cublas [ cuda_cudart libcublas ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
     nativeBuildInputs = [ cmake ]
@@ -330,8 +331,15 @@ let
     };
     buildFlags = [ "libstablediffusion.a" ];
     dontUseCmakeConfigure = true;
+    # Borrow from the CUDA setup hook to set the CMake flags needed by the Makefile
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace-fail \
+          'cmake ' \
+          'cmake -DCUDA_TOOLKIT_ROOT_DIR="$(CUDAToolkit_ROOT)" '
+    '';
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ opencv ];
+    buildInputs = [ (lib.getOutput "cxxdev" opencv) ];
     env.NIX_CFLAGS_COMPILE = " -isystem ${opencv}/include/opencv4";
     installPhase = ''
       mkdir $out
@@ -451,7 +459,7 @@ let
       touch backend-assets/grpc/* backend-assets/util/* sources/**/lib*.a
     '';
 
-    buildInputs = [ ]
+    buildInputs = [ (lib.getOutput "cxxdev" opencv) ]
       ++ lib.optionals with_cublas [ cuda_cudart libcublas libcufft ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ]
@@ -486,7 +494,6 @@ let
       "VERSION=v${version}"
       "BUILD_TYPE=${BUILD_TYPE}"
     ]
-    ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
     ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
 
     buildPhase = ''

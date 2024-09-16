@@ -93,7 +93,7 @@ let
     strings
     trivial
     ;
-  inherit (cudaPackages) cudaFlags cudnn nccl;
+  inherit (cudaPackages) flags cudnn nccl;
 
   rocmPackages = rocmPackages_5;
 
@@ -130,8 +130,8 @@ let
   #   lists.subtractLists a b = b - a
 
   # For CUDA
-  supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
-  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
+  supportedCudaCapabilities = lists.intersectLists flags.cudaCapabilities supportedTorchCudaCapabilities;
+  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities flags.cudaCapabilities;
 
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
@@ -448,13 +448,10 @@ buildPythonPackage rec {
       pybind11
       removeReferencesTo
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        autoAddDriverRunpath
-        cuda_nvcc
-      ]
-    )
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+    ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs =
@@ -481,7 +478,8 @@ buildPythonPackage rec {
       ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
       ++ lists.optionals useSystemNccl [
         # Some platforms do not support NCCL (i.e., Jetson)
-        nccl # Provides nccl.h AND a static copy of NCCL!
+        (lib.getDev nccl)
+        (lib.getOutput "static" nccl)
       ]
       ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
         cuda_nvprof # <cuda_profiler_api.h>

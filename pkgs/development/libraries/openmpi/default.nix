@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
-    (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
+    (lib.withFeatureAs cudaSupport "cuda" (lib.getOutput "include" cudaPackages.cuda_cudart))
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))

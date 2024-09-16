@@ -1,4 +1,5 @@
-{ lib
+{ config
+, lib
 , boost
 , breakpad
 , ceres-solver
@@ -17,31 +18,38 @@
 , pkg-config
 , stdenv
 , vcg
-, zstd
-}:
+}@inputs:
 
 let
-  boostWithZstd = boost.overrideAttrs (old: {
-    buildInputs = old.buildInputs ++ [ zstd ];
-  });
+  inherit (opencv.cudaPackages)
+    backendStdenv
+    libcurand
+    ;
+  stdenv = builtins.throw "Don't use stdenv directly; use effectiveStdenv instead";
+  effectiveStdenv = if config.cudaSupport then backendStdenv else inputs.stdenv;
 in
-stdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
   version = "2.2.0";
   pname = "openmvs";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
     fetchSubmodules = true;
   };
 
-  # SSE is enabled by default
-  cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = [
+    # SSE is enabled by default
+    (lib.cmakeBool "OpenMVS_USE_SSE" effectiveStdenv.isx86_64)
+    (lib.cmakeBool "OpenMVS_USE_CUDA" config.cudaSupport)
+  ] ++ lib.optionals config.cudaSupport [
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "-E;PipelineTest")
+  ];
 
   buildInputs = [
-    boostWithZstd
+    boost
     breakpad
     ceres-solver
     cgal
@@ -52,10 +60,10 @@ stdenv.mkDerivation rec {
     libpng
     libtiff
     mpfr
-    opencv
+    (lib.getOutput "cxxdev" opencv)
     openmp
     vcg
-  ];
+  ] ++ lib.optionals config.cudaSupport [ libcurand ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -66,11 +74,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ctest
-    runHook postCheck
-  '';
 
   meta = {
     description = "Open Multi-View Stereo reconstruction library";
@@ -79,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bouk ];
   };
-}
+})

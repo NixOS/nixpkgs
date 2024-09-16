@@ -10,6 +10,7 @@
   numpy,
   protobuf,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   six,
   typing-extensions,
@@ -20,7 +21,8 @@ buildPythonPackage rec {
   version = "7.8.1.post1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # Uses NumPy's distutils, which are removed in Python 3.12.
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "chainer";
@@ -57,6 +59,9 @@ buildPythonPackage rec {
     "cupy"
     "ideep"
   ];
+
+  # The checks require access to the GPU.
+  doCheck = config.cudaSupport;
 
   pythonImportsCheck = [ "chainer" ];
 
