@@ -6,11 +6,11 @@
   gitUpdater,
   nixosTests,
   cmake,
-  content-hub,
   exiv2,
   imagemagick,
   libglvnd,
   libmediainfo,
+  lomiri-content-hub,
   lomiri-thumbnailer,
   lomiri-ui-extras,
   lomiri-ui-toolkit,
@@ -88,6 +88,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/90a79972741ee0c5dc734dba6c42afeb3ee6a699.patch";
       hash = "sha256-YAmH0he5/rZYKWFyPzUFAKJuHhUTxB3q8zbLL7Spz/c=";
     })
+
+    # Remove when version >= 3.1.0
+    (fetchpatch {
+      name = "0101-lomiri-gallery-app-Updated-content-hub-peer-name.patch";
+      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/9a3376760ea6825d9915262264f98d7faf94bf81.patch";
+      hash = "sha256-aKRtKUNDhQNJPW5MkohXw1lTnKvZwz4LnRMqp2pKMpU=";
+    })
+    (fetchpatch {
+      name = "0102-lomiri-gallery-app-lomiri-content-hub-rename.patch";
+      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/cb6eb0ffdf8d67de97572450447df277ce56a226.patch";
+      hash = "sha256-32QNWmZU1DmXeGkwYUH4g4nPMkYId9k6IdOKm+KfSuE=";
+    })
   ];
 
   postPatch = ''
@@ -130,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
 
     # QML
-    content-hub
+    lomiri-content-hub
     lomiri-thumbnailer
     lomiri-ui-extras
     lomiri-ui-toolkit
@@ -164,9 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Link splash to splash dir
     mkdir -p $out/share/lomiri-app-launch/splash
     ln -s $out/share/{lomiri-gallery-app/lomiri-gallery-app-splash.svg,lomiri-app-launch/splash/lomiri-gallery-app.svg}
-
-    # Old name
-    mv $out/share/content-hub/peers/{,lomiri-}gallery-app
   '';
 
   passthru = {

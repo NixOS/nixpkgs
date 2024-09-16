@@ -6,10 +6,10 @@
   gitUpdater,
   nixosTests,
   cmake,
-  content-hub,
   geonames,
   gettext,
   libusermetrics,
+  lomiri-content-hub,
   lomiri-sounds,
   lomiri-ui-toolkit,
   makeWrapper,
@@ -124,8 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
 
     # QML
-    content-hub
     libusermetrics
+    lomiri-content-hub
     lomiri-ui-toolkit
     qtdeclarative
     qtmultimedia
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
       export QML2_IMPORT_PATH=${
         listToQtVar qtbase.qtQmlPrefix (
           [
-            content-hub
+            lomiri-content-hub
             lomiri-ui-toolkit
             qtmultimedia
             u1db-qt
