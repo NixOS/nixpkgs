@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, wrapGAppsNoGuiHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , pkg-config
 , ninja
@@ -110,14 +110,15 @@ in stdenv'.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    # Just to make it not crash when looking up Gschemas when opening external
-    # files
-    wrapGAppsNoGuiHook
     wrapQtAppsHook
     cmake
     qttools
     pkg-config
     ninja
+  ] ++ lib.optionals stdenv.isLinux [
+    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+    wrapGAppsHook3
   ];
 
   buildInputs = [
