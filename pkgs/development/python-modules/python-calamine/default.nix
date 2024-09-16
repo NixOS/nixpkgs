@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   cargo,
@@ -9,6 +10,7 @@
   rustc,
   packaging,
   rustPlatform,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +46,13 @@ buildPythonPackage rec {
     rustc
   ];
 
-  dependencies = [ packaging ];
+  dependencies =
+    [
+      packaging
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+    ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
