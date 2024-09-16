@@ -72,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Please try revert the change that introduced this comment when updating SDL.
   ] ++ lib.optional stdenv.isDarwin "--disable-x11-shared"
     ++ lib.optional (!x11Support) "--without-x"
-    ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
+    ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
+    ++ lib.optional stdenv.hostPlatform.isMusl "CFLAGS=-DICONV_INBUF_NONCONST";
 
   patches = [
     ./find-headers.patch
