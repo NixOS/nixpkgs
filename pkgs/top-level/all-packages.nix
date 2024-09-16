@@ -32029,7 +32029,7 @@ with pkgs;
 
   yambar-hyprland-wses = callPackage ../applications/misc/yambar-hyprland-wses { };
 
-  polyphone = libsForQt5.callPackage ../applications/audio/polyphone { };
+  polyphone = qt6.callPackage ../applications/audio/polyphone { };
 
   psi-notify = callPackage ../applications/misc/psi-notify { };
 
