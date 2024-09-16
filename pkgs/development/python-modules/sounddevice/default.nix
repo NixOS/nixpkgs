@@ -30,6 +30,8 @@ buildPythonPackage rec {
     portaudio
   ];
 
+  nativeBuildInputs = [ cffi ];
+
   # No tests included nor upstream available.
   doCheck = false;
 
