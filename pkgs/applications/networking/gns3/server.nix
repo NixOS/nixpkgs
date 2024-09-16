@@ -6,10 +6,10 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, pkgsStatic
 , stdenv
 , nixosTests
 , testers
+, busybox-static
 , util-linux
 , gns3-server
 }:
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication {
 
   # GNS3 2.3.26 requires a static BusyBox for the Docker integration
   prePatch = ''
-    cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
+    cp ${busybox-static}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
   propagatedBuildInputs = with python3Packages; [
