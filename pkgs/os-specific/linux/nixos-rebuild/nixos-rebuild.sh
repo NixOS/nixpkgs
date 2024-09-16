@@ -349,6 +349,24 @@ nixFlakeBuild() {
     fi
 }
 
+#
+### Validation section
+#
+
+if [ -z "$action" ]; then showSyntax; fi
+
+# Verify that user is not trying to use attribute building and flake
+# at the same time
+if [[ -z $buildingAttribute && -n $flake ]]; then
+    log "error: '--flake' cannot be used with '--file' or '--attr'"
+    exit 1
+fi
+
+if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
+    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
+    exit 1
+fi
+
 # See cleanup function below
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
@@ -369,8 +387,6 @@ trap cleanup EXIT
 
 SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
-if [ -z "$action" ]; then showSyntax; fi
-
 # Only run shell scripts from the Nixpkgs tree if the action is
 # "switch", "boot", or "test". With other actions (such as "build"),
 # the user may reasonably expect that no code from the Nixpkgs tree is
@@ -379,13 +395,6 @@ if [ -z "$action" ]; then showSyntax; fi
 canRun=
 if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
     canRun=1
-fi
-
-# Verify that user is not trying to use attribute building and flake
-# at the same time
-if [[ -z $buildingAttribute && -n $flake ]]; then
-    log "error: '--flake' cannot be used with '--file' or '--attr'"
-    exit 1
 fi
 
 # If ‘--upgrade’ or `--upgrade-all` is given,
@@ -441,11 +450,6 @@ if [[ -n $flake ]]; then
     else
         flakeAttr="nixosConfigurations.\"$flakeAttr\""
     fi
-fi
-
-if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
-    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
-    exit 1
 fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
