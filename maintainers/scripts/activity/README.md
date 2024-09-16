@@ -12,7 +12,7 @@ standardized way to interact with inactive maintainers.
 - Create a personal access token https://github.com/settings/tokens with capabilities
   - `public_repo`
   - `read:org`
-- Save to `~/.config/nix/maintainer-activity-access-token` or as a [regular nix access token](https://nix.dev/manual/nix/2.18/command-ref/conf-file#conf-access-tokens)
+- Save to `~/.config/nixpkgs/maintainer-activity-access-token` or as a [regular nix access token](https://nix.dev/manual/nix/2.18/command-ref/conf-file#conf-access-tokens)
 
 ### Environment
 
