@@ -7776,6 +7776,11 @@
     name = "Emilia";
     keys = [ { fingerprint = "F772 3569 4B43 B599 73C2  A931 1EFB E941 B89B B810"; } ];
   };
+  emilio-barradas = {
+    github = "EmilioBarradas";
+    githubId = 16023547;
+    name = "Emilio Barradas";
+  };
   emilioziniades = {
     email = "emilioziniades@protonmail.com";
     github = "emilioziniades";
