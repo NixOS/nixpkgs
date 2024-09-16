@@ -73,6 +73,7 @@ buildPythonPackage rec {
       # torch._dynamo.exc.BackendCompilerFailed
       # Requires a more recent version of triton
       # Re-enable when https://github.com/NixOS/nixpkgs/pull/328247 is merged
+      "test_functional"
       "test_linear"
       "test_seq"
       "test_seq_lmbda"
