@@ -1,0 +1,13 @@
+diff --git a/Uniscan/Configure.pm b/Uniscan/Configure.pm
+index a12bf41..2c27142 100755
+--- a/Uniscan/Configure.pm
++++ b/Uniscan/Configure.pm
+@@ -18,7 +18,7 @@
+ 		my $self = shift;
+ 		my %conf = ( );
+ 		my $C;
+-		open($C, "<", $self->conffile) or die("ERROR: Could not open ". $self->conffile ." for read: $!\n");
++		open($C, "<", $self->conffile) or die("Couldn't find a configuration file in the current directory!\nCopy the example from @out@/share/uniscan/uniscan.conf\n\nERROR: Could not open ". $self->conffile ." for read: $!\n");
+ 		while(<$C>) {
+ 			my $line = $_;
+ 			chomp $line;
