@@ -7,9 +7,9 @@
   gitUpdater,
   nixosTests,
   cmake,
-  content-hub,
   gettext,
   libreoffice-unwrapped,
+  lomiri-content-hub,
   lomiri-ui-toolkit,
   pkg-config,
   poppler,
@@ -84,11 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-KdHyKXM0hMMIFkuDn5JZJOEuitWAXT2QQOuR+1AolP0=";
     })
 
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-docviewer-app/-/merge_requests/77 merged & in release
+    # Remove when version > 3.0.4
     (fetchpatch {
       name = "1051-lomiri-docviewer-app-Install-content-hub-lomiri-url-dispatcher-files.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-docviewer-app/-/commit/98f5ab9d51ba05e8c3ed1991c0b67d3922b5ba90.patch";
-      hash = "sha256-JA26ga1CNOdbis87lSzqbUbs94Oc1vlxraXZxx3dsu8=";
+      url = "https://gitlab.com/ubports/development/apps/lomiri-docviewer-app/-/commit/d6731f6d00050b42d561d63ae91751761f7fd278.patch";
+      hash = "sha256-EFuQ+pMI8fwYM0lgapi/XeAagFbXUzLWzAx0bPkEdzA=";
     })
   ];
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtdeclarative
 
     # QML
-    content-hub
+    lomiri-content-hub
     lomiri-ui-toolkit
     qtsystems
   ];
