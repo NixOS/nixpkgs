@@ -41,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # allow package:// uri use in examples
     export ROS_PACKAGE_PATH=${example-robot-data}/share
+
+    # silence matplotlib warning
+    export MPLCONFIGDIR=$(mktemp -d)
   '';
 
   # CMAKE_BUILD_TYPE defaults to Release in this package,
