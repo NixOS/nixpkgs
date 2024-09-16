@@ -3,6 +3,8 @@
 
 set -e
 
+export PATH=@path@:$PATH
+
 # Re-exec ourselves in a private mount namespace so that our bind
 # mounts get cleaned up automatically.
 if [ -z "$NIXOS_ENTER_REEXEC" ]; then
