@@ -357,7 +357,10 @@ in {
   freshrss-none-auth = handleTest ./freshrss-none-auth.nix {};
   frigate = handleTest ./frigate.nix {};
   frp = handleTest ./frp.nix {};
-  frr = handleTest ./frr.nix {};
+  frr-bfd = handleTest ./frr/bfd.nix {};
+  frr-bgp = handleTest ./frr/bgp.nix {};
+  frr-isis = handleTest ./frr/isis.nix {};
+  frr-ospf = handleTest ./frr/ospf.nix {};
   fsck = handleTest ./fsck.nix {};
   fsck-systemd-stage-1 = handleTest ./fsck.nix { systemdStage1 = true; };
   ft2-clone = handleTest ./ft2-clone.nix {};
