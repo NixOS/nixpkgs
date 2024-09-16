@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "villain";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "t3l3machus";
     repo = "Villain";
     rev = "v${version}";
-    hash = "sha256-8MOpbyw4HEJMcv84bNkNLBSZfEmIm3RDSUi0s62t9ko=";
+    hash = "sha256-7qZ91WEzQg9k9V/FlREW4YLlEnloeVkisDO8q/+bheo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
