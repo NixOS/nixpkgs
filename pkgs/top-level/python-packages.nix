@@ -5375,6 +5375,8 @@ self: super: with self; {
 
   greynoise = callPackage ../development/python-modules/greynoise { };
 
+  groq = callPackage ../development/python-modules/groq { };
+
   growattserver = callPackage ../development/python-modules/growattserver { };
 
   gridnet = callPackage ../development/python-modules/gridnet { };
