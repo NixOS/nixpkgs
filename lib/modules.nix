@@ -1106,14 +1106,13 @@ let
         visible = false;
         apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config.assertions =
-        let opt = getAttrFromPath optionName options; in [{
-          assertion = !opt.isDefined;
-          message = ''
-            The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
-            ${replacementInstructions}
-          '';
-        }];
+      config.assertions = setAttrByPath (optionName ++ [ "removed" ]) (let opt = getAttrFromPath optionName options; in {
+        assertion = !opt.isDefined;
+        message = ''
+          The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
+          ${replacementInstructions}
+        '';
+      });
     };
 
   /* Return a module that causes a warning to be shown if the
@@ -1194,14 +1193,15 @@ let
       })) from);
 
       config = {
-        warnings = filter (x: x != "") (map (f:
-          let val = getAttrFromPath f config;
-              opt = getAttrFromPath f options;
-          in
-          optionalString
-            (val != "_mkMergedOptionModule")
-            "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
-        ) from);
+        warnings = foldl' recursiveUpdate {} (map (path: setAttrByPath (path ++ ["mergedOption"]) {
+          condition = (getAttrFromPath path config) != "_mkMergedOptionModule";
+          message = let
+            opt = getAttrFromPath path options;
+          in ''
+            The option `${showOption path}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type.
+            Please read `${showOption to}' documentation and update your configuration accordingly.
+          '';
+        }) from);
       } // setAttrByPath to (mkMerge
              (optional
                (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from)
@@ -1357,8 +1357,10 @@ let
       });
       config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
-          warnings = optional (warn && fromOpt.isDefined)
-            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          warnings = setAttrByPath (from ++ [ "aliased" ]) {
+            condition = warn && fromOpt.isDefined;
+            message = "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          };
         })
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
