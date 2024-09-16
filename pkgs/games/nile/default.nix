@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "1.1.1";
+  version = "1.1.2";
 in
 buildPythonApplication {
   pname = "nile";
@@ -24,7 +24,7 @@ buildPythonApplication {
     owner = "imLinguin";
     repo = "nile";
     rev = "v${version}";
-    hash = "sha256-wZdiUJH4sGYJqJ7Ssjl+30MiUbXupLzbSpiOU1M/3Fg=";
+    hash = "sha256-/C4b8wPKWHGgiheuAN7AvU+KcD5aj5i6KzgFSdTIkNI=";
   };
 
   disabled = pythonOlder "3.8";
