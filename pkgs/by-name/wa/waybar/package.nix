@@ -68,6 +68,7 @@
   nix-update-script,
   testers,
   waybar,
+  fetchpatch,
 }:
 
 let
@@ -81,13 +82,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-/JW3WnRLpfz8j+9Zc9YkK63i8DjHrKwv9PWKIMz3MVI=";
+    hash = "sha256-3lc0voMU5RS+mEtxKuRayq/uJO09X7byq6Rm5NZohq8=";
   };
 
   postUnpack = lib.optional cavaSupport ''
@@ -96,6 +97,14 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
     popd
   '';
+
+  patches = [
+    # NOTE: Fixes an upstream bug from 0.11.0 release. Remove with next version
+    (fetchpatch {
+      url = "https://github.com/Alexays/Waybar/commit/0d02f6877d88551ea2be0cd151c1e6354e208b1c.patch";
+      hash = "sha256-wpdK6AY+14jt85dOQy6xkh8tNGDN2F9GA9zOfAuOaIc=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
