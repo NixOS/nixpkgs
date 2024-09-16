@@ -8,9 +8,10 @@ something](#ch-configuration) in that file, you should do
 $ nixos-rebuild switch --use-remote-sudo
 ```
 
-to build the new configuration, make it the default configuration for
-booting, and try to realise the configuration in the running system
-(e.g., by restarting system services).
+to build the new configuration as your current user, and as the root user,
+make it the default configuration for booting. `switch` will also try to
+realise the configuration in the running system (e.g., by restarting system
+services).
 
 ::: {.warning}
 This command doesn't start/stop [user services](#opt-systemd.user.services)
@@ -19,8 +20,17 @@ user services.
 :::
 
 ::: {.warning}
-These commands must be executed as root, so you should either run them
-from a root shell or by prefixing them with `sudo -i`.
+Applying a configuration is an action that must be done by the root user, so the
+`switch`, `boot` and `test` commands should be ran with the `--use-remote-sudo`
+flag. Despite its odd name, this flag runs the activation script with elevated
+permissions, regardless of whether or not the target system is remote, without
+affecting the other stages of the `nixos-rebuild` call. This allows unprivileged
+users to rebuild the system and only elevate their permissions when necessary.
+
+Alternatively, one can run the whole command as root while preserving user
+environment variables by prefixing the command with `sudo -E`. However, this
+method may create root-owned files in `$HOME/.cache` if Nix decides to use the
+cache during evaluation.
 :::
 
 You can also do
