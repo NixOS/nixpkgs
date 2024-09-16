@@ -86,7 +86,7 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
     source ${./emacs-funcs.sh}
     addEmacsVars "$out"
 
-    find $out/share/emacs -type f -name '*.el' -print0 \
+    find $out/share/emacs -type f -name '*.el' -not -name ".dir-locals.el" -print0 \
       | xargs --verbose -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
           "emacs \
              --batch \
