@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minetest";
-  version = "5.9.0";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "minetest";
     rev = finalAttrs.version;
-    hash = "sha256-cxbiuoD1J3WFoveUgxeR/XXdE7MMR0UEDFleDiaxnsA=";
+    hash = "sha256-0WTDhFt7GDzN4AK8U17iLkjeSMK+gOWZRq46HBTeO3w=";
   };
 
   cmakeFlags = [
