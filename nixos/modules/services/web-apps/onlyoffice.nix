@@ -26,6 +26,8 @@ in
 
     package = lib.mkPackageOption pkgs "onlyoffice-documentserver" { };
 
+    x2t = lib.mkPackageOption pkgs "x2t" { };
+
     port = lib.mkOption {
       type = lib.types.port;
       default = 8000;
@@ -250,7 +252,7 @@ in
 
             chmod u+w /run/onlyoffice/config/production-linux.json
             jq '
-              .FileConverter.converter.x2tPath = "${pkgs.x2t}/bin/x2t"
+              .FileConverter.converter.x2tPath = "${cfg.x2t}/bin/x2t"
               ' /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
 
             if psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
