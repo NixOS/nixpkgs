@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   fetchFromGitHub,
   nix,
   nix-prefetch-git,
@@ -39,6 +40,10 @@ python3Packages.buildPythonApplication rec {
 
     runHook postCheck
   '';
+
+  passthru = {
+    nix-update-script = callPackage ./nix-update-script.nix { };
+  };
 
   meta = {
     homepage = "https://github.com/Mic92/nix-update/";
