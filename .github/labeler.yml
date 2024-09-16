@@ -270,6 +270,12 @@
     - changed-files:
       - any-glob-to-any-file:
         - .github/**/*
+        - CONTRIBUTING.md
+        - pkgs/README.md
+        - nixos/README.md
+        - maintainers/README.md
+        - lib/README.md
+        - doc/README.md
 
 "6.topic: printing":
   - any:
