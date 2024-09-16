@@ -301,6 +301,17 @@ To manually create a backport pull request, follow [the standard pull request pr
 - When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request.
   This way maintainers can keep track of missing backports easier.
 
+## How to request review of pull requests
+[pr-review-request]: #how-to-request-review-of-pull-requests
+
+Due to the large number of pull requests that need to be handled, some of them may be overlooked by the reviewer, may not receive feedback after completing the requested changes, or may be ignored by committers and remain unmerged for a long time. You can remedy this situation but notifying reviewers and committers through the following channels:
+
+- [NixOS Discourse: PRs ready for review](https://discourse.nixos.org/t/prs-ready-for-review/3032) for pull requests not yet receiving any reviews, already approved or made requested changes.
+
+- [Matrix Room: Nixpkgs Review Requests](https://matrix.to/#/#review-requests:nixos.org) for pull requests that have been waiting for more than a week in the above situations.
+
+Before requesting a review, please double check that your pull request fits contribution guidelines, has no conflicts with the base branch and passes CI check (except `ofborg-build` which takes longer). Note that if you are unable to complete the above requirements yourself and need help, you can state this in your review request.
+
 ## How to review pull requests
 [pr-review]: #how-to-review-pull-requests
 
@@ -309,7 +320,7 @@ To manually create a backport pull request, follow [the standard pull request pr
 
 The Nixpkgs project receives a fairly high number of contributions via GitHub pull requests. Reviewing and approving these is an important task and a way to contribute to the project.
 
-The high change rate of Nixpkgs makes any pull request that remains open for too long subject to conflicts that will require extra work from the submitter or the merger. Reviewing pull requests in a timely manner and being responsive to the comments is the key to avoid this issue. GitHub provides sort filters that can be used to see the [most recently](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) and the [least recently](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc) updated pull requests. We highly encourage looking at [this list of ready to merge, unreviewed pull requests](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+review%3Anone+status%3Asuccess+-label%3A%222.status%3A+work-in-progress%22+no%3Aproject+no%3Aassignee+no%3Amilestone).
+The high change rate of Nixpkgs makes any pull request that remains open for too long subject to conflicts that will require extra work from the submitter or the merger. Reviewing pull requests in a timely manner and being responsive to the comments is the key to avoid this issue. GitHub provides sort filters that can be used to see the [most recently](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc) and the [least recently](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-asc) updated pull requests. We highly encourage looking at [the review request channels mentioned above][pr-review-request].
 
 When reviewing a pull request, please always be nice and polite. Controversial changes can lead to controversial opinions, but it is important to respect every community member and their work.
 
