@@ -88,6 +88,8 @@ in stdenv'.mkDerivation (finalAttrs: {
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
     "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    # Don't build unit tests unless we are going to run them.
+    (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   qtWrapperArgs = [
