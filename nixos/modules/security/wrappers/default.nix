@@ -245,15 +245,18 @@ in
   };
 
   ###### implementation
-  config = lib.mkIf config.security.enableWrappers {
-
-    assertions = lib.mapAttrsToList (name: opts: {
-      assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
-      message = ''
-        The security.wrappers.${name} wrapper is not valid:
-            setuid/setgid and capabilities are mutually exclusive.
-      '';
-    }) wrappers;
+  config = {
+    assertions.security.wrappers = lib.flip lib.mapAttrs wrappers (
+      name: opts: {
+        setuidSetgidCapabilitiesAreMutuallyExclusive = {
+          assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
+          message = ''
+            The security.wrappers.${name} wrapper is not valid:
+                setuid/setgid and capabilities are mutually exclusive.
+          '';
+        };
+      }
+    );
 
     security.wrappers =
       let
