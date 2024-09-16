@@ -65,6 +65,11 @@ in stdenv'.mkDerivation (finalAttrs: {
       url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
       hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
     })
+    (fetchpatch {
+      name = "fix-crash-accessing-uninitialized-properties.patch";
+      url = "https://github.com/musescore/MuseScore/pull/24714.patch";
+      hash = "sha256-ErrCU/U+wyfD7R8kiZTifGIeuCAdKi1q7uxYsoE/OLA=";
+    })
   ];
 
   cmakeFlags = [
