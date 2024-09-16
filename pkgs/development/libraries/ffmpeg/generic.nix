@@ -171,7 +171,7 @@ let
       # custom logic.
       ffmpegFlag = default: lib.types.submodule ({ config, name, ... }: {
         options = {
-          enable = lib.mkEnableOption "Whether to enable ${name} support in ffmpeg." // lib.mkOption {
+          enable = lib.mkEnableOption "Whether to enable ${name} support in ffmpeg" // lib.mkOption {
             default = isInVariant config.variant && config.gate;
           };
           packages = lib.mkOption {
@@ -266,7 +266,7 @@ let
             hasDescription = default.description or null != null;
             additionalDescription = lib.optionalString hasDescription ": ${default.description}";
           in
-            "Control ${name} support in ffmpeg${additionalDescription}.";
+            "Control `${name}` support in ffmpeg${additionalDescription}.";
       };
 
       # This is the source of truth for the default set of features activated in ffmpeg
