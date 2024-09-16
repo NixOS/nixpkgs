@@ -79,6 +79,13 @@ buildPythonPackage rec {
 
     # https://github.com/twisted/twisted/security/advisories/GHSA-c8m8-j448-xjx7
     ./CVE-2024-41810.patch
+  ] ++ lib.optionals python.isPy312 [
+    (fetchpatch {
+      name = "python-3.12.6.patch";
+      url = "https://github.com/twisted/twisted/commit/3422f7988e3d42e6e5184acd65f103fd28750648.patch";
+      excludes = [ ".github/workflows/test.yaml" ];
+      hash = "sha256-/UmrHdWaApytkEDZiISjPGzpWv/Yxe/xjvr9GOjMPmQ=";
+    })
   ];
 
   __darwinAllowLocalNetworking = true;
