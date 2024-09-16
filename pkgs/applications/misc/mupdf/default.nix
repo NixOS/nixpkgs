@@ -212,5 +212,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
     mainProgram = "mupdf";
+    # ImportError: cannot import name '_mupdf' from partially initialized module 'mupdf'
+    # (most likely due to a circular import)
+    broken = enablePython;
   };
 }
