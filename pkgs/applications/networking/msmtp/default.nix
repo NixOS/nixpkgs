@@ -20,6 +20,8 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , withScripts ? true
+, binlore
+, msmtp
 }:
 
 let
@@ -62,6 +64,15 @@ let
       install -Dm444 -t $out/share/doc/msmtp doc/*.example
       ln -s msmtp $out/bin/sendmail
     '';
+
+    passthru = let
+      outOverrideScript = ''
+        execer cannot bin/msmtp
+      '';
+    in {
+      inherit outOverrideScript;
+      binlore.out = binlore.synthesize binaries outOverrideScript;
+    };
   };
 
   scripts = resholve.mkDerivation {
@@ -109,7 +120,6 @@ let
           which
         ] ++ optionals withSystemd [ systemd ];
         execer = [
-          "cannot:${getBin binaries}/bin/msmtp"
           "cannot:${getBin netcat-gnu}/bin/nc"
         ] ++ optionals withSystemd [
           "cannot:${getBin systemd}/bin/systemd-cat"
@@ -135,5 +145,8 @@ if withScripts then
     name = "msmtp-${version}";
     inherit version meta;
     paths = [ binaries scripts ];
-    passthru = { inherit binaries scripts; };
+    passthru = {
+      inherit binaries scripts;
+      binlore.out = binlore.synthesize msmtp binaries.outOverrideScript;
+    };
   } else binaries
