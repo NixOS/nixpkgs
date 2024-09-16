@@ -555,7 +555,6 @@ in
             `openFirewall' is set to `true'!
           '';
         }))
-        ++ config.services.prometheus.exporters.assertions;
         warnings = [
           (mkIf
             (

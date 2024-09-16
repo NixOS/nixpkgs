@@ -74,8 +74,9 @@ let
     }
   );
 
-  # Handle assertions and warnings
-  baseSystemAssertWarn = lib.asserts.checkAssertWarn config.assertions config.warnings baseSystem;
+  baseSystemAssertWarn =
+    lib.asserts.checkAssertWarn config.assertions.__flattened config.warnings.__flattened
+      baseSystem;
 
   # Replace runtime dependencies
   system =

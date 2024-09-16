@@ -1722,7 +1722,6 @@ in
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
   config = {
-
     warnings =
       (concatMap (i: i.warnings) interfaces)
       ++ (lib.optional (config.systemd.network.enable && cfg.useDHCP && !cfg.useNetworkd) ''
