@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchurl
-, fetchpatch
+, fetchFromGitHub
 , openssl
 }:
 let
@@ -12,28 +11,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ibm-sw-tpm2";
-  version = "1682";
+  version = "1682-unstable-2024-08-02";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ibmswtpm2/ibmtpm${version}.tar.gz";
-    hash = "sha256-PLZC+HGheyPVCwRuX5X0ScIodBX8HnrrS9u4kg28s48=";
+  src = fetchFromGitHub {
+    owner = "kgoldman";
+    repo = "ibmswtpm2";
+    rev = "rev183-2024-08-02";
+    hash = "sha256-D2GAkiePBow2iixYMOOeJrnh5hk2lO07dV++lK4X8qE=";
   };
-
-  patches = [
-    # Backport openssl-3.1 from development branch.
-    # Can be removed with next release.
-    (fetchpatch {
-      name = "openssl-3.1.patch";
-      url = "https://github.com/kgoldman/ibmswtpm2/commit/15501bf4973d334ca9420fa2fb0f0fe1800871e0.patch";
-      includes = [ "TpmToOsslMath.h" ];
-      stripLen = 1;
-      hash = "sha256-8TwyZVy8pQwq5Fl8cy9xJWtdckwL+QK0+DL5EHDLYUY=";
-    })
-  ];
 
   buildInputs = [ openssl ];
 
-  sourceRoot = "src";
+  sourceRoot = "${src.name}/src";
 
   inherit makefile;
 
