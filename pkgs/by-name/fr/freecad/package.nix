@@ -1,5 +1,6 @@
 { lib
 , cmake
+, yaml-cpp
 , coin3d
 , doxygen
 , eigen
@@ -61,13 +62,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "0.21.2";
+  version = "1.0rc1";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-OX4s9rbGsAhH7tLJkUJYyq2A2vCdkq/73iqYo9adogs=";
+    hash = "sha256-CQWLYGgcz/up1SVc2V7nOX0deGBSEEs2RwbA7pr5kc4=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -78,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     wrapQtAppsHook
     wrapGAppsHook3
+    yaml-cpp
   ];
 
   buildInputs =
