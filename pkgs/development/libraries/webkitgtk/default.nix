@@ -29,11 +29,13 @@
 , libepoxy
 , libjxl
 , at-spi2-core
+, cairo
 , libxml2
 , libsoup
 , libsecret
 , libxslt
 , harfbuzz
+, libsysprof-capture
 , libpthreadstubs
 , nettle
 , libtasn1
@@ -50,6 +52,8 @@
 , libmanette
 , geoclue2
 , flite
+, fontconfig
+, freetype
 , openssl
 , sqlite
 , gst-plugins-base
@@ -73,7 +77,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.44.3";
+  version = "2.46.0";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -84,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3ILQQuysqYGkhSNXwG5SNXQzGc8QqUzTatQbl4g6C1Q=";
+    hash = "sha256-1NQzBA8ZAVFWDFC96ECFAIn4e61P76nr20quhWo99Do=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
@@ -124,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     at-spi2-core
+    cairo # required even when using skia
     enchant2
     libavif
     libepoxy
@@ -141,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
     lcms2
     libpthreadstubs
+    libsysprof-capture
     libtasn1
     libwebp
     libxkbcommon
@@ -151,6 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
     p11-kit
     sqlite
     woff2
+  ] ++ lib.optionals stdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+    freetype
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libedit
     readline
