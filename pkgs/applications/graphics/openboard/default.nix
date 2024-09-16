@@ -55,6 +55,11 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace-fail '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
       --replace-fail '-lquazip5' '-lquazip1-qt5' \
       --replace-fail '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+
+    substituteInPlace resources/etc/OpenBoard.config \
+      --replace-fail 'EnableAutomaticSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'EnableSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'HideCheckForSoftwareUpdate=false' 'HideCheckForSoftwareUpdate=true'
   '';
 
   nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];
