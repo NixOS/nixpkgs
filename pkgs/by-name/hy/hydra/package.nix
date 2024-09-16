@@ -44,6 +44,7 @@
 , glibcLocales
 , fetchFromGitHub
 , nixosTests
+, unstableGitUpdater
 }:
 
 let
@@ -232,6 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra;
+    updateScript = unstableGitUpdater {};
   };
 
   meta = with lib; {
