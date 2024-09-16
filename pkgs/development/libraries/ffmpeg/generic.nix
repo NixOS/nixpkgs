@@ -392,7 +392,10 @@ let
           stripping = { gate = false; };
 
           # Feature flags
-          alsa = { packages = { inherit alsa-lib; }; };
+          alsa = {
+            gate = stdenv.isLinux;
+            packages = { inherit alsa-lib; };
+          };
           aom = {
             variant = full;
             packages = { inherit libaom; };
