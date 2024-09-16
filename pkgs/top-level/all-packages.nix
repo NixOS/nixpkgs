@@ -2051,15 +2051,12 @@ with pkgs;
 
   writedisk = callPackage ../tools/misc/writedisk { };
 
-  x2t =
-    let openssl_with_md2 = openssl.override {
-        enableMD2 = true;
-        static = true;
-      };
-    in
-      callPackage ../by-name/x2/x2t/package.nix {
-        openssl = openssl_with_md2;
-      };
+  x2t = callPackage ../by-name/x2/x2t/package.nix {
+    openssl = openssl.override {
+      enableMD2 = true;
+      static = true;
+    };
+  };
 
   xcd = callPackage ../tools/misc/xcd { };
 
