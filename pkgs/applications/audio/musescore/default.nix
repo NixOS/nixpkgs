@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, wrapGAppsHook3
+, wrapGAppsNoGuiHook
 , wrapQtAppsHook
 , pkg-config
 , ninja
@@ -103,7 +103,9 @@ in stdenv'.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    # Just to make it not crash when looking up Gschemas when opening external
+    # files
+    wrapGAppsNoGuiHook
     wrapQtAppsHook
     cmake
     qttools
