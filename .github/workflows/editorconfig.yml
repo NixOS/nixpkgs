@@ -29,7 +29,7 @@ jobs:
       with:
         # pull_request_target checks out the base branch by default
         ref: refs/pull/${{ github.event.pull_request.number }}/merge
-    - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
+    - uses: cachix/install-nix-action@3715ab1a11cac9e991980d7b4a28d80c7ebdd8f9 # v27
       with:
         # nixpkgs commit is pinned so that it doesn't break
         # editorconfig-checker 2.4.0
