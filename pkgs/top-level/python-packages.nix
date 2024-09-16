@@ -4999,6 +4999,8 @@ self: super: with self; {
 
   gfsubsets = callPackage ../development/python-modules/gfsubsets { };
 
+  gget = callPackage ../development/python-modules/gget { };
+
   gguf = callPackage ../development/python-modules/gguf { };
 
   ghapi = callPackage ../development/python-modules/ghapi { };
