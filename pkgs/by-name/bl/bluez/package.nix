@@ -31,9 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gw/tGRXF03W43g9eb0X83qDcxf9f+z0x227Q8A1zxeM=";
   };
 
-  # Disable one failing test with musl libc, also seen by alpine
-  # https://github.com/bluez/bluez/issues/726
-  patches = lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
+  patches = [
+    # Upstream fix is wrong:
+    # https://github.com/bluez/bluez/issues/843#issuecomment-2352696535
+    (fetchurl {
+      name = "basename.patch";
+      url = "https://github.com/void-linux/void-packages/raw/187b45d47d93b6857a95cae10c2132d76e4955fc/srcpkgs/bluez/patches/basename.patch";
+      hash = "sha256-Jb4u7rxIShDp1yUgaQVDJo2HJfZBzRoVlcDEWxooFgk=";
+    })
+  ] ++ lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
+    # Disable one failing test with musl libc, also seen by alpine
+    # https://github.com/bluez/bluez/issues/726
     (fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/main/bluez/disable_aics_unit_testcases.patch?id=8e96f7faf01a45f0ad8449c1cd825db63a8dfd48";
       hash = "sha256-1PJkipqBO3qxxOqRFQKfpWlne1kzTCgtnTFYI1cFQt4=";
