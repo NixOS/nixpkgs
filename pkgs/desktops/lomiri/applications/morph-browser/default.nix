@@ -5,10 +5,10 @@
 , gitUpdater
 , nixosTests
 , cmake
-, content-hub
 , gettext
 , libapparmor
 , lomiri-action-api
+, lomiri-content-hub
 , lomiri-ui-extras
 , lomiri-ui-toolkit
 , pkg-config
@@ -50,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/morph-browser/-/commit/0527a1e01fb27c62f5e0011274f73bad400e9691.patch";
       hash = "sha256-zx/pP72uNqAi8TZR4bKeONuqcJyK/vGtPglTA+5R5no=";
     })
+
+    # Remove when https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/580 merged & in release
+    (fetchpatch {
+      name = "0003-morph-browser-lomiri-content-hub-rename.patch";
+      url = "https://gitlab.com/ubports/development/core/morph-browser/-/commit/29e5031a1fd0aa69587724b25772ae78d6d2bd7d.patch";
+      hash = "sha256-nxOaiRSKi+Nb0JLopi0UNvpnctjkPkjhaHLAWPHRfQA=";
+    })
   ];
 
   postPatch = ''
@@ -84,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     qtwebengine
 
     # QML
-    content-hub
     lomiri-action-api
+    lomiri-content-hub
     lomiri-ui-extras
     lomiri-ui-toolkit
     qqc2-suru-style

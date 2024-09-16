@@ -7,8 +7,8 @@
   nixosTests,
   biometryd,
   cmake,
-  content-hub,
   gettext,
+  lomiri-content-hub,
   lomiri-thumbnailer,
   lomiri-ui-extras,
   lomiri-ui-toolkit,
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # QML
     biometryd
-    content-hub
+    lomiri-content-hub
     lomiri-thumbnailer
     lomiri-ui-extras
     lomiri-ui-toolkit
@@ -119,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # Some misc files don't get installed to the correct paths for us
-    mkdir -p $out/share/{content-hub/peers,icons/hicolor/scalable/apps,lomiri-app-launch/splash}
-    ln -s $out/share/lomiri-filemanager-app/content-hub.json $out/share/content-hub/peers/lomiri-filemanager-app
+    mkdir -p $out/share/{lomiri-content-hub/peers,icons/hicolor/scalable/apps,lomiri-app-launch/splash}
+    ln -s $out/share/lomiri-filemanager-app/content-hub.json $out/share/lomiri-content-hub/peers/lomiri-filemanager-app
     ln -s $out/share/lomiri-filemanager-app/filemanager.svg $out/share/icons/hicolor/scalable/apps/lomiri-filemanager-app.svg
     ln -s $out/share/lomiri-filemanager-app/splash.svg $out/share/lomiri-app-launch/splash/lomiri-filemanager-app.svg
   '';
