@@ -909,7 +909,7 @@ Writing manifest to image destination
 {
   imageName = "nixos/nix";
   imageDigest = "sha256:498fa2d7f2b5cb3891a4edf20f3a8f8496e70865099ba72540494cd3e2942634";
-  sha256 = "1q6cf2pdrasa34zz0jw7pbs6lvv52rq2aibgxccbwcagwkg2qj1q";
+  hash = "sha256-OEgs3uRPMb4Y629FJXAWZW9q9LqHS/A/GUqr3K5wzOA=";
   finalImageName = "nixos/nix";
   finalImageTag = "latest";
 }
