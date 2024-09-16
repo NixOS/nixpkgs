@@ -1,0 +1,14 @@
+diff --git a/steam/client/cdn.py b/steam/client/cdn.py
+index dbd09ab..3762653 100644
+--- a/steam/client/cdn.py
++++ b/steam/client/cdn.py
+@@ -836,6 +836,9 @@ class CDNClient(object):
+             else:
+                 manifest_gid = depot_info.get('manifests', {}).get(branch)
+ 
++            if type(manifest_gid) == dict:
++                manifest_gid = manifest_gid.get('gid')
++
+             if manifest_gid is not None:
+                 tasks.append(
+                     self.gpool.spawn(
