@@ -171,3 +171,6 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
+
+# mattermost-desktop: format with nixfmt-rfc-style (#342267)
+1f9377543b1568f056d5bd9f88399c8583512bf3
