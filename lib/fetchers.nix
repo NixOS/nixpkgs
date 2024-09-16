@@ -68,10 +68,12 @@ rec {
     required ? true,
   }:
     let
+      inherit (lib) concatMapStringsSep const head tail throwIf;
+      inherit (lib.attrsets) attrsToList genAttrs intersectAttrs removeAttrs optionalAttrs;
+
       hNames = [ "hash" ] ++ hashTypes;
       hAttrs = genAttrs hNames (const {});
     in
-    with builtins; with lib;
       args:
         if args ? "outputHash" then
           args
@@ -147,8 +149,10 @@ rec {
   withNormalizedHash = {
     hashTypes ? [ "sha256" ]
   }: fetcher:
-    with builtins; with lib;
     let
+      inherit (lib.attrsets) genAttrs intersectAttrs removeAttrs;
+      inherit (lib.trivial) const functionArgs setFunctionArgs;
+
       hAttrs = genAttrs ([ "hash" ] ++ hashTypes) (const {});
       fArgs = functionArgs fetcher;
 
