@@ -218,7 +218,7 @@ in
       type = str;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubelet";
+    kubeconfig = top.lib.mkKubeConfigOptions "Kubelet" null;
 
     manifests = mkOption {
       description = "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";

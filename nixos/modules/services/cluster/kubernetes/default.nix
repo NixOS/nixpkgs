@@ -75,29 +75,30 @@ let
 
   secret = name: "${cfg.secretsPath}/${name}.pem";
 
-  mkKubeConfigOptions = prefix: {
+  mkKubeConfigOptions = prefix: follows: {
     server = mkOption {
       description = "${prefix} kube-apiserver server address.";
       type = types.str;
+      default = if follows != null then follows.server else "";
     };
 
     caFile = mkOption {
       description = "${prefix} certificate authority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
-      default = cfg.caFile;
+      default = if follows != null then follows.caFile else cfg.caFile;
       defaultText = literalExpression "config.${opt.caFile}";
     };
 
     certFile = mkOption {
       description = "${prefix} client certificate file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
-      default = null;
+      default = if follows != null then follows.certFile else null;
     };
 
     keyFile = mkOption {
       description = "${prefix} client key file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
-      default = null;
+      default = if follows != null then follows.keyFile else null;
     };
   };
 in {
@@ -124,7 +125,7 @@ in {
 
     package = mkPackageOption pkgs "kubernetes" { };
 
-    kubeconfig = mkKubeConfigOptions "Default kubeconfig";
+    kubeconfig = mkKubeConfigOptions "Default kubeconfig" null;
 
     apiserverAddress = mkOption {
       description = ''

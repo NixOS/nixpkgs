@@ -43,7 +43,7 @@ in
       type = str;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy";
+    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy" null;
 
     verbosity = mkOption {
       description = ''
