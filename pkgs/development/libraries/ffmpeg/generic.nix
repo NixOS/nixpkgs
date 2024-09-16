@@ -336,6 +336,7 @@ let
             description = "Build ffprobe executable";
           };
           qt-faststart = {
+            variant = full;
             description = "Build qt-faststart executable";
             internal = true; # Does not have a flag, needs its dir to be passed to make manually
           };
