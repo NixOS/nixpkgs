@@ -60,11 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
       "uuctl" = uuctlSupport;
       "man-pages" = true;
     })
+    (lib.mesonOption "python-bin" python.interpreter)
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   postInstall =
     let
@@ -84,6 +81,15 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $out/bin/fumon ${wrapperArgs}
       ''}
     '';
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Universal wayland session manager";
