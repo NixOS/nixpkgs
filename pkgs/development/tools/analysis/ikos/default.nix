@@ -1,6 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, boost, tbb
-, gmp, llvm, clang, sqlite, python3
-, ocamlPackages, mpfr, ppl, doxygen, graphviz
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  tbb,
+  gmp,
+  llvm,
+  clang,
+  sqlite,
+  python3,
+  ocamlPackages,
+  mpfr,
+  ppl,
+  doxygen,
+  graphviz,
 }:
 
 let
@@ -11,7 +26,7 @@ let
     installer
     wrapPython
     pygments
-  ;
+    ;
 in
 
 stdenv.mkDerivation rec {
@@ -26,20 +41,39 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-  # Fix build with GCC 13
-  # https://github.com/NASA-SW-VnV/ikos/pull/262
-  (fetchpatch {
-    name = "gcc-13.patch";
-    url = "https://github.com/NASA-SW-VnV/ikos/commit/73c816641fb9780f0d3b5e448510363a3cf21ce2.patch";
-    hash = "sha256-bkeSAtxrL+z+6QNiGOWSg7kN8XiZqMxlJiu5Dquhca0=";
-  })
-  # Fix an error in ikos-view; Pygments>=2.12 no longer passes outfile to wrap.
-  ./formatter-wrap.patch
+    # Fix build with GCC 13
+    # https://github.com/NASA-SW-VnV/ikos/pull/262
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/NASA-SW-VnV/ikos/commit/73c816641fb9780f0d3b5e448510363a3cf21ce2.patch";
+      hash = "sha256-bkeSAtxrL+z+6QNiGOWSg7kN8XiZqMxlJiu5Dquhca0=";
+    })
+    # Fix an error in ikos-view; Pygments>=2.12 no longer passes outfile to wrap.
+    ./formatter-wrap.patch
   ];
 
-  nativeBuildInputs = [ cmake setuptools wheel build installer wrapPython ];
-  buildInputs = [ boost tbb gmp clang llvm sqlite python3
-                  ocamlPackages.apron mpfr ppl doxygen graphviz ];
+  nativeBuildInputs = [
+    cmake
+    setuptools
+    wheel
+    build
+    installer
+    wrapPython
+  ];
+  buildInputs = [
+    boost
+    tbb
+    gmp
+    clang
+    llvm
+    sqlite
+    python3
+    ocamlPackages.apron
+    mpfr
+    ppl
+    doxygen
+    graphviz
+  ];
   propagatedBuildInputs = [
     pygments
   ];
