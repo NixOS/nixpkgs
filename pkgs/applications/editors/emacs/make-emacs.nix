@@ -212,12 +212,12 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals srcRepo [
     autoreconfHook
     texinfo
-  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook3;
+  ] ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
 
   buildInputs = [
     gettext
     gnutls
-    harfbuzz.dev
+    (lib.getDev harfbuzz)
     jansson
     libxml2
     ncurses
