@@ -15529,6 +15529,12 @@
     githubId = 39134647;
     name = "Oliver Koss";
   };
+  oliver-ni = {
+    email = "nixos@oliver.ni";
+    github = "oliver-ni";
+    githubId = 20295134;
+    name = "Oliver Ni";
+  };
   ollieB = {
     github = "oliverbunting";
     githubId = 1237862;
