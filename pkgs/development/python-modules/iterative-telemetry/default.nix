@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "iterative-telemtry";
-  version = "0.0.8";
+  version = "0.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "telemetry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-jD1AyQTdz/NfTRpvEuTE/gUfgNIhNlnimuCks5ImhwA=";
+    hash = "sha256-bcGniytjlN3JFPeMQYjyIP8Ruty9/dnzp9neclbdsfU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
