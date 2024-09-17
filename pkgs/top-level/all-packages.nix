@@ -34135,7 +34135,6 @@ with pkgs;
   xkbmon = callPackage ../applications/misc/xkbmon { };
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
-  win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
 
   xfig = callPackage ../applications/graphics/xfig { };
 

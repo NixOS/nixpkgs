@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 let
   # Upstream versioned download links are broken
@@ -44,13 +48,15 @@ stdenvNoCC.mkDerivation {
   pname = "win-pvdrivers";
   version = "unstable-2023-08-17";
 
-  srcs = map ({hash, url}: fetchurl {
-    inherit hash url;
-    # Wait & retry up to 3 times as archive.org can closes connection
-    # when an HTTP client makes too many requests
-    curlOpts = "--retry 3 --retry-delay 5";
-  }) files;
-
+  srcs = map (
+    { hash, url }:
+    fetchurl {
+      inherit hash url;
+      # Wait & retry up to 3 times as archive.org can closes connection
+      # when an HTTP client makes too many requests
+      curlOpts = "--retry 3 --retry-delay 5";
+    }
+  ) files;
 
   unpackPhase = ''
     runHook preUnpack
