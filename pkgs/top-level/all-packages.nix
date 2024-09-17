@@ -25525,8 +25525,6 @@ with pkgs;
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
-  thanos = callPackage ../servers/monitoring/thanos { };
-
   trafficserver = callPackage ../servers/http/trafficserver { };
 
   inherit (callPackages ../servers/http/tomcat { })
