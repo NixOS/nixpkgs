@@ -3091,7 +3091,7 @@ with pkgs;
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = callPackage ../tools/misc/asciinema { };
+  asciinema = asciinema_2;
 
   asciiquarium = callPackage ../applications/misc/asciiquarium { };
 
