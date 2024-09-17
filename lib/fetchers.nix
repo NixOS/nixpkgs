@@ -5,6 +5,12 @@ let
       hNames = [ "hash" ] ++ hashTypes;
       hAttrs = lib.genAttrs hNames (lib.const {});
   };
+
+  fakeH = {
+    hash = lib.fakeHash;
+    sha256 = lib.fakeSha256;
+    sha512 = lib.fakeSha512;
+  };
 in rec {
 
   proxyImpureEnvVars = [
@@ -23,12 +29,15 @@ in rec {
     Converts an attrset containing one of `hash`, `sha256` or `sha512`,
     into one containing `outputHash{,Algo}` as accepted by `mkDerivation`.
 
+    An appropriate “fake hash” is substituted when the hash value is `""`,
+    as is the [convention for fetchers](#sec-pkgs-fetchers-updating-source-hashes-fakehash-method).
+
     All other attributes in the set remain as-is.
 
     # Example
 
     ```nix
-    normalizeHash { } { hash = lib.fakeHash; foo = "bar"; }
+    normalizeHash { } { hash = ""; foo = "bar"; }
     =>
     {
       outputHash = lib.fakeHash;
@@ -95,8 +104,12 @@ in rec {
             ;
           in
             removeAttrs args hNames // (optionalAttrs (h != null) {
-              outputHash = h.value;
               outputHashAlgo = if h.name == "hash" then null else h.name;
+              outputHash =
+                if h.value == "" then
+                  fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}")
+                else
+                  h.value;
             })
   ;
 
