@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, casadi
-, cmake
-, boost
-, eigen
-, example-robot-data
-, casadiSupport ? true
-, collisionSupport ? true
-, console-bridge
-, jrl-cmakemodules
-, hpp-fcl
-, urdfdom
-, pythonSupport ? false
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  casadi,
+  cmake,
+  boost,
+  eigen,
+  example-robot-data,
+  casadiSupport ? true,
+  collisionSupport ? true,
+  console-bridge,
+  jrl-cmakemodules,
+  hpp-fcl,
+  urdfdom,
+  pythonSupport ? false,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,32 +56,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals pythonSupport [
-    python3Packages.python
-    python3Packages.pythonImportsCheckHook
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
 
-  propagatedBuildInputs = [
-    console-bridge
-    jrl-cmakemodules
-    urdfdom
-  ] ++ lib.optionals (!pythonSupport) [
-    boost
-    eigen
-  ] ++ lib.optionals (!pythonSupport && collisionSupport) [
-    hpp-fcl
-  ] ++ lib.optionals pythonSupport [
-    python3Packages.boost
-    python3Packages.eigenpy
-  ] ++ lib.optionals (pythonSupport && collisionSupport) [
-    python3Packages.hpp-fcl
-  ] ++ lib.optionals (!pythonSupport && casadiSupport) [
-    casadi
-  ] ++ lib.optionals (pythonSupport && casadiSupport) [
-    python3Packages.casadi
-  ];
+  propagatedBuildInputs =
+    [
+      console-bridge
+      jrl-cmakemodules
+      urdfdom
+    ]
+    ++ lib.optionals (!pythonSupport) [
+      boost
+      eigen
+    ]
+    ++ lib.optionals (!pythonSupport && collisionSupport) [ hpp-fcl ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.boost
+      python3Packages.eigenpy
+    ]
+    ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.hpp-fcl ]
+    ++ lib.optionals (!pythonSupport && casadiSupport) [ casadi ]
+    ++ lib.optionals (pythonSupport && casadiSupport) [ python3Packages.casadi ];
 
   checkInputs = lib.optionals (pythonSupport && casadiSupport) [ python3Packages.matplotlib ];
 
@@ -98,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
     homepage = "https://github.com/stack-of-tasks/pinocchio";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nim65s wegank ];
+    maintainers = with lib.maintainers; [
+      nim65s
+      wegank
+    ];
     platforms = lib.platforms.unix;
   };
 })
