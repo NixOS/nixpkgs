@@ -4,6 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
 
+  # buildInputs
+  libiconv,
+
   # build-system
   cargo,
   poetry-core,
@@ -38,6 +41,8 @@ buildPythonPackage rec {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
+
+  buildInputs = [ libiconv ];
 
   build-system = [
     cargo
