@@ -82,6 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
+    # Not having this causes curl’s `configure` script to fail with static builds on Darwin because
+    # some of curl’s propagated inputs need libiconv.
+    NIX_LDFLAGS = "-liconv";
+  };
+
   nativeBuildInputs = [ pkg-config perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
