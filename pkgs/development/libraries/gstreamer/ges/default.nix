@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
+
+    # Hack for https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3800
+    substituteInPlace ges/ges-frame-composition-meta.c \
+      --replace-fail "GstFrameCompositionApi" "GESFrameCompositionApi"
   '';
 
   meta = with lib; {
