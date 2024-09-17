@@ -3082,8 +3082,6 @@ with pkgs;
 
   asciinema = callPackage ../tools/misc/asciinema { };
 
-  asciinema-scenario = callPackage ../tools/misc/asciinema-scenario { };
-
   asciiquarium = callPackage ../applications/misc/asciiquarium { };
 
   ashuffle = callPackage ../applications/audio/ashuffle { };
