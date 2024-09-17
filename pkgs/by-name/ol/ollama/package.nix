@@ -114,117 +114,118 @@ let
     if enableCuda then buildGoModule.override { stdenv = overrideCC stdenv gcc12; } else buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
-goBuild (
-  (lib.optionalAttrs enableRocm {
-    ROCM_PATH = rocmPath;
-    CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
-  })
-  // (lib.optionalAttrs enableCuda { CUDA_LIB_DIR = "${cudaToolkit}/lib"; })
-  // {
-    inherit
-      pname
-      version
-      src
-      vendorHash
-      ;
+goBuild {
+  inherit
+    pname
+    version
+    src
+    vendorHash
+    ;
 
-    nativeBuildInputs =
-      [ cmake ]
-      ++ lib.optionals enableRocm [ rocmPackages.llvm.bintools ]
-      ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
-      ++ lib.optionals (enableRocm || enableCuda) [
-        makeWrapper
-        autoAddDriverRunpath
-      ]
-      ++ lib.optionals stdenv.isDarwin metalFrameworks;
+  env =
+    lib.optionalAttrs enableRocm {
+      ROCM_PATH = rocmPath;
+      CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
+    }
+    // lib.optionalAttrs enableCuda { CUDA_LIB_DIR = "${cudaToolkit}/lib"; };
 
-    buildInputs =
-      lib.optionals enableRocm (rocmLibs ++ [ libdrm ])
-      ++ lib.optionals enableCuda [
-        cudaToolkit
-        cudaPackages.cuda_cudart
-        cudaPackages.cuda_cccl
-        cudaPackages.libcublas
-      ]
-      ++ lib.optionals stdenv.isDarwin metalFrameworks;
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals enableRocm [ rocmPackages.llvm.bintools ]
+    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
+    ++ lib.optionals (enableRocm || enableCuda) [
+      makeWrapper
+      autoAddDriverRunpath
+    ]
+    ++ lib.optionals stdenv.isDarwin metalFrameworks;
 
-    patches = [
-      # disable uses of `git` in the `go generate` script
-      # ollama's build script assumes the source is a git repo, but nix removes the git directory
-      # this also disables necessary patches contained in `ollama/llm/patches/`
-      # those patches are applied in `postPatch`
-      ./disable-git.patch
-    ];
+  buildInputs =
+    lib.optionals enableRocm (rocmLibs ++ [ libdrm ])
+    ++ lib.optionals enableCuda [
+      cudaToolkit
+      cudaPackages.cuda_cudart
+      cudaPackages.cuda_cccl
+      cudaPackages.libcublas
+    ]
+    ++ lib.optionals stdenv.isDarwin metalFrameworks;
 
-    postPatch = ''
-      # replace inaccurate version number with actual release version
-      substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
+  patches = [
+    # disable uses of `git` in the `go generate` script
+    # ollama's build script assumes the source is a git repo, but nix removes the git directory
+    # this also disables necessary patches contained in `ollama/llm/patches/`
+    # those patches are applied in `postPatch`
+    ./disable-git.patch
+  ];
 
-      # apply llama.cpp patches
-      for cur in llm/patches/*; do patch -p1 -d llm/llama.cpp < $cur; done
+  postPatch = ''
+    # replace inaccurate version number with actual release version
+    substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
+
+    # apply llama.cpp patches
+    for cur in llm/patches/*; do patch -p1 -d llm/llama.cpp < $cur; done
+  '';
+
+  overrideModAttrs = (
+    finalAttrs: prevAttrs: {
+      # don't run llama.cpp build in the module fetch phase
+      preBuild = "";
+    }
+  );
+
+  preBuild = ''
+    # disable uses of `git`, since nix removes the git directory
+    export OLLAMA_SKIP_PATCHING=true
+    # build llama.cpp libraries for ollama
+    go generate ./...
+  '';
+
+  postFixup =
+    ''
+      # the app doesn't appear functional at the moment, so hide it
+      mv "$out/bin/app" "$out/bin/.ollama-app"
+    ''
+    + lib.optionalString (enableRocm || enableCuda) ''
+      # expose runtime libraries necessary to use the gpu
+      wrapProgram "$out/bin/ollama" ${wrapperArgs}
     '';
 
-    overrideModAttrs = (
-      finalAttrs: prevAttrs: {
-        # don't run llama.cpp build in the module fetch phase
-        preBuild = "";
-      }
-    );
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/ollama/ollama/version.Version=${version}"
+    "-X=github.com/ollama/ollama/server.mode=release"
+  ];
 
-    preBuild = ''
-      # disable uses of `git`, since nix removes the git directory
-      export OLLAMA_SKIP_PATCHING=true
-      # build llama.cpp libraries for ollama
-      go generate ./...
-    '';
-    postFixup =
-      ''
-        # the app doesn't appear functional at the moment, so hide it
-        mv "$out/bin/app" "$out/bin/.ollama-app"
-      ''
-      + lib.optionalString (enableRocm || enableCuda) ''
-        # expose runtime libraries necessary to use the gpu
-        wrapProgram "$out/bin/ollama" ${wrapperArgs}
-      '';
-
-    ldflags = [
-      "-s"
-      "-w"
-      "-X=github.com/ollama/ollama/version.Version=${version}"
-      "-X=github.com/ollama/ollama/server.mode=release"
-    ];
-
-    passthru.tests =
-      {
-        inherit ollama;
-        version = testers.testVersion {
-          inherit version;
-          package = ollama;
-        };
-      }
-      // lib.optionalAttrs stdenv.isLinux {
-        inherit ollama-rocm ollama-cuda;
-        service = nixosTests.ollama;
-        service-cuda = nixosTests.ollama-cuda;
-        service-rocm = nixosTests.ollama-rocm;
+  passthru.tests =
+    {
+      inherit ollama;
+      version = testers.testVersion {
+        inherit version;
+        package = ollama;
       };
-
-    meta = {
-      description =
-        "Get up and running with large language models locally"
-        + lib.optionalString rocmRequested ", using ROCm for AMD GPU acceleration"
-        + lib.optionalString cudaRequested ", using CUDA for NVIDIA GPU acceleration";
-      homepage = "https://github.com/ollama/ollama";
-      changelog = "https://github.com/ollama/ollama/releases/tag/v${version}";
-      license = licenses.mit;
-      platforms = if (rocmRequested || cudaRequested) then platforms.linux else platforms.unix;
-      mainProgram = "ollama";
-      maintainers = with maintainers; [
-        abysssol
-        dit7ya
-        elohmeier
-        roydubnium
-      ];
+    }
+    // lib.optionalAttrs stdenv.isLinux {
+      inherit ollama-rocm ollama-cuda;
+      service = nixosTests.ollama;
+      service-cuda = nixosTests.ollama-cuda;
+      service-rocm = nixosTests.ollama-rocm;
     };
-  }
-)
+
+  meta = {
+    description =
+      "Get up and running with large language models locally"
+      + lib.optionalString rocmRequested ", using ROCm for AMD GPU acceleration"
+      + lib.optionalString cudaRequested ", using CUDA for NVIDIA GPU acceleration";
+    homepage = "https://github.com/ollama/ollama";
+    changelog = "https://github.com/ollama/ollama/releases/tag/v${version}";
+    license = licenses.mit;
+    platforms = if (rocmRequested || cudaRequested) then platforms.linux else platforms.unix;
+    mainProgram = "ollama";
+    maintainers = with maintainers; [
+      abysssol
+      dit7ya
+      elohmeier
+      roydubnium
+    ];
+  };
+}
