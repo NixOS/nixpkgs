@@ -8,11 +8,11 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
 
   pname = "nautilus-typeahead";
-  pkgver = "46.1"; # base nautilus version for the AUR patch, not necessary the same as nixpkgs `nautilus.version`
+  pkgver = "46.2"; # base nautilus version for the AUR patch, not necessary the same as nixpkgs `nautilus.version`
   pkgrel = "1"; # revision number for the AUR package
   version = "${finalAttrs.pkgver}-${finalAttrs.pkgrel}";
-  rev = "f5f593bf36c41756a29d5112a10cf7ec70b8eafb";
-  outputHash = "sha256-bOPW7wRbEk+GMg29AKEGdlTyiYXg3r/tzTTYBkkK1r8=";
+  rev = "840ff0c85188a15fd7e5e726a2ad2bb5531add83";
+  outputHash = "sha256-Ov+9VpS4AHUpWqhApQhLUwKko0yMWEBghHGSFQYouaw=";
 
   name = "${finalAttrs.pname}-${finalAttrs.version}.patch";
 
