@@ -25,4 +25,14 @@ rec {
         broken = true;
       };
     });
+
+  mkHome =
+    pkg:
+    pkg.overrideAttrs (previousAttrs: {
+      preInstall =
+        ''
+          HOME=$(mktemp -d)
+        ''
+        + previousAttrs.preInstall or "";
+    });
 }
