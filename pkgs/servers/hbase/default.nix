@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, jdk8_headless
 , jdk11_headless
 , nixosTests
 }:

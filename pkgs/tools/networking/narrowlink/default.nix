@@ -1,8 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, openssl
 , stdenv
 , darwin
 }:
