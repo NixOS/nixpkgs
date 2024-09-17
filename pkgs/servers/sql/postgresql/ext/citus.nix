@@ -4,9 +4,10 @@
 , fetchFromGitHub
 , lz4
 , postgresql
+, buildPostgresExtension
 }:
 
-stdenv.mkDerivation rec {
+buildPostgresExtension rec {
   pname = "citus";
   version = "12.1.2";
 
@@ -20,22 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     lz4
-    postgresql
   ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/lib src/backend/columnar/citus_columnar${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension src/backend/columnar/build/sql/*.sql
-    install -D -t $out/share/postgresql/extension src/backend/columnar/*.control
-
-    install -D -t $out/lib src/backend/distributed/citus${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension src/backend/distributed/build/sql/*.sql
-    install -D -t $out/share/postgresql/extension src/backend/distributed/*.control
-
-    runHook postInstall
-  '';
 
   meta = with lib; {
     # "Our soft policy for Postgres version compatibility is to support Citus'

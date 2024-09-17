@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libkrb5, openssl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, libkrb5, openssl, postgresql, buildPostgresExtension }:
 
 let
   source = {
@@ -24,7 +24,7 @@ let
     };
   }.${lib.versions.major postgresql.version} or (throw "Source for pgaudit is not available for ${postgresql.version}");
 in
-stdenv.mkDerivation {
+buildPostgresExtension {
   pname = "pgaudit";
   inherit (source) version;
 
@@ -35,15 +35,9 @@ stdenv.mkDerivation {
     hash = source.hash;
   };
 
-  buildInputs = [ libkrb5 openssl postgresql ];
+  buildInputs = [ libkrb5 openssl ];
 
   makeFlags = [ "USE_PGXS=1" ];
-
-  installPhase = ''
-    install -D -t $out/lib pgaudit${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-  '';
 
   meta = with lib; {
     description = "Open Source PostgreSQL Audit Logging";
