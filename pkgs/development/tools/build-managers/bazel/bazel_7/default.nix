@@ -100,33 +100,40 @@ let
       unzip
       which
       zip
-      runJdk
       makeWrapper
     ];
 
   # Bootstrap an existing Bazel so we can vendor deps with vendor mode
-  bazel_bootstrap = stdenv.mkDerivation rec {
-    name = "bazel_bootstrap";
+  bazelBootstrap = stdenv.mkDerivation rec {
+    name = "bazelBootstrap";
 
-    src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
-      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
-      hash = "sha256-05fHtz47OilpOVYawB17VRVEDpycfYTIHBmwYCOyPjI=";
-    } else if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
-      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
-      hash = "sha256-olrlIia/oXWleXp12E+LGXv+F1m4/S4jj/t7p2/xGdM=";
-    } else if stdenv.hostPlatform.system == "x86_64-darwin" then fetchurl {
-      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-darwin-x86_64";
-      hash = "sha256-e5RRZTrhzoTMk2NRRl9m2K5+h1/+5mJNW2vF8h0uftc=";
-    } else fetchurl { # stdenv.hostPlatform.system == "aarch64-darwin"
-        url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-darwin-arm64";
-        hash = "sha256-ciNBdqm+cIrNR1Wu2wt+wGGb6m9i9aE8LhRqL4BJ0Y4=";
-    };
+    src =
+      if stdenv.hostPlatform.system == "x86_64-linux" then
+        fetchurl {
+          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
+          hash = "sha256-05fHtz47OilpOVYawB17VRVEDpycfYTIHBmwYCOyPjI=";
+        }
+      else if stdenv.hostPlatform.system == "aarch64-linux" then
+        fetchurl {
+          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
+          hash = "sha256-olrlIia/oXWleXp12E+LGXv+F1m4/S4jj/t7p2/xGdM=";
+        }
+      else if stdenv.hostPlatform.system == "x86_64-darwin" then
+        fetchurl {
+          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
+          hash = "sha256-e5RRZTrhzoTMk2NRRl9m2K5+h1/+5mJNW2vF8h0uftc=";
+        }
+      else
+        fetchurl {
+          # stdenv.hostPlatform.system == "aarch64-darwin"
+          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
+          hash = "sha256-mB+CpHC60TSTIrb1HJxv+gqikdqxAU+sQRVDwS5mHf8=";
+        };
 
     nativeBuildInputs = defaultShellUtils;
     buildInputs = [
       stdenv.cc.cc
-      autoPatchelfHook
-    ];
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
     dontUnpack = true;
     dontPatch = true;
@@ -151,7 +158,7 @@ let
 
   bazelFhs = buildFHSEnv {
     name = "bazel";
-    targetPkgs = _: [ bazel_bootstrap ];
+    targetPkgs = _: [ bazelBootstrap ];
     runScript = "bazel";
   };
 
@@ -159,76 +166,90 @@ let
   # See https://bazel.build/versions/7.3.0/external/vendor for details.
   # Note that it may be possible to vendor less than the full set of deps in
   # the future, as this is approximately 16GB.
-  bazelDeps = stdenv.mkDerivation {
-    name = "bazelDeps";
-    inherit src version;
-    sourceRoot = ".";
-    patches = [
-      # The repo rule that creates a manifest of the bazel source for testing
-      # the cli is not reproducible. This patch ensures that it is by sorting
-      # the results in the repo rule rather than the downstream genrule.
-      ./test_source_sort.patch
-    ];
-    patchFlags = [
-      "--no-backup-if-mismatch"
-      "-p1"
-    ];
-    nativeBuildInputs = [
-      unzip
-      bazelFhs
-    ];
-    configurePhase = ''
-      runHook preConfigure
+  bazelDeps =
+    let
+      bazelForDeps = if stdenv.hostPlatform.isDarwin then bazelBootstrap else bazelFhs;
+    in
+    stdenv.mkDerivation {
+      name = "bazelDeps";
+      inherit src version;
+      sourceRoot = ".";
+      patches = [
+        # The repo rule that creates a manifest of the bazel source for testing
+        # the cli is not reproducible. This patch ensures that it is by sorting
+        # the results in the repo rule rather than the downstream genrule.
+        ./test_source_sort.patch
+      ];
+      patchFlags = [
+        "--no-backup-if-mismatch"
+        "-p1"
+      ];
+      nativeBuildInputs = [
+        unzip
+        runJdk
+        bazelForDeps
+      ];
+      configurePhase = ''
+        runHook preConfigure
 
-      mkdir bazel_src
-      shopt -s dotglob extglob
-      mv !(bazel_src) bazel_src
-      mkdir vendor_dir
+        mkdir bazel_src
+        shopt -s dotglob extglob
+        mv !(bazel_src) bazel_src
+        mkdir vendor_dir
 
-      runHook postConfigure
-    '';
-    dontFixup = true;
-    buildPhase = ''
-      runHook preBuild
-      export HOME=$TMP
-      (cd bazel_src; ${bazelFhs}/bin/bazel --server_javabase=${runJdk} mod deps --curses=no;
-      ${bazelFhs}/bin/bazel --server_javabase=${runJdk} vendor \
-      --curses=no \
-      --vendor_dir ../vendor_dir \
-      --verbose_failures \
-      --experimental_strict_java_deps=off \
-      --strict_proto_deps=off \
-      --tool_java_runtime_version=local_jdk_21 \
-      --java_runtime_version=local_jdk_21 \
-      --tool_java_language_version=21 \
-      --java_language_version=21)
+        runHook postConfigure
+      '';
+      dontFixup = true;
+      buildPhase = ''
+        runHook preBuild
+        export HOME=$TMP
+        (cd bazel_src; ${bazelForDeps}/bin/bazel --server_javabase=${runJdk} mod deps --curses=no;
+        ${bazelForDeps}/bin/bazel --server_javabase=${runJdk} vendor src:bazel_nojdk \
+        --curses=no \
+        --vendor_dir ../vendor_dir \
+        --verbose_failures \
+        --experimental_strict_java_deps=off \
+        --strict_proto_deps=off \
+        --tool_java_runtime_version=local_jdk_21 \
+        --java_runtime_version=local_jdk_21 \
+        --tool_java_language_version=21 \
+        --java_language_version=21)
 
-      # Some post-fetch fixup is necessary, because the deps come with some
-      # baggage that is not reproducible. Luckily, this baggage does not factor
-      # into the final product, so removing it is enough.
+        # Some post-fetch fixup is necessary, because the deps come with some
+        # baggage that is not reproducible. Luckily, this baggage does not factor
+        # into the final product, so removing it is enough.
 
-      # the GOCACHE is poisonous!
-      rm -rf vendor_dir/gazelle~~non_module_deps~bazel_gazelle_go_repository_cache/gocache
+        # the GOCACHE is poisonous!
+        rm -rf vendor_dir/gazelle~~non_module_deps~bazel_gazelle_go_repository_cache/gocache
 
-      # as is the go versions file (changes when new versions show up)
-      rm -f vendor_dir/rules_go~~go_sdk~go_default_sdk/versions.json
+        # as is the go versions file (changes when new versions show up)
+        rm -f vendor_dir/rules_go~~go_sdk~go_default_sdk/versions.json
 
-      # and so are .pyc files
-      find vendor_dir -name "*.pyc" -type f -delete
+        # and so are .pyc files
+        find vendor_dir -name "*.pyc" -type f -delete
 
-      runHook postBuild
-    '';
+        runHook postBuild
+      '';
 
-    installPhase = ''
-      mkdir -p $out/vendor_dir
-      cp -r --reflink=auto vendor_dir/* $out/vendor_dir
-    '';
+      installPhase = ''
+        mkdir -p $out/vendor_dir
+        cp -r --reflink=auto vendor_dir/* $out/vendor_dir
+      '';
 
-    outputHashMode = "recursive";
-    outputHash = "sha256-GjktM25K4OPrww1o9jB38h0FwJrcJo7TR0x0owZV9I0=";
-    outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+      outputHash =
+        if stdenv.hostPlatform.system == "x86_64-linux" then
+          "sha256-GjktM25K4OPrww1o9jB38h0FwJrcJo7TR0x0owZV9I0="
+        else if stdenv.hostPlatform.system == "aarch64-linux" then
+          "sha256-T7vVWLlRzhaWneKMgMdgjUpBwRuGZ9ZFtD2AQvH9krI="
+        else if stdenv.hostPlatform.system == "aarch64-darwin" then
+          "sha256-zv39lLMwfOr0MfK8dZ0alEwXpWdf97XEc6ciAoO4OK0="
+        else
+          # x86_64-darwin
+          lib.fakeSha256;
+      outputHashAlgo = "sha256";
 
-  };
+    };
 
   defaultShellPath = lib.makeBinPath defaultShellUtils;
 
@@ -647,6 +668,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell} -e
     exit 1
     EOF
+
     chmod +x tools/bazel
 
     # first call should fail if tools/bazel is used
@@ -701,6 +723,6 @@ stdenv.mkDerivation rec {
     # tests = callPackage ./tests.nix { inherit Foundation bazelDeps bazel_self; };
 
     # For ease of debugging
-    inherit bazelDeps bazelFhs;
+    inherit bazelDeps bazelFhs bazelBootstrap;
   };
 }
