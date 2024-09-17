@@ -22,6 +22,12 @@ in
       nautilus-python
       nautilus-open-any-terminal
     ];
+
+    environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${pkgs.nautilus-python}/lib/nautilus/extensions-4";
+    environment.pathsToLink = [
+      "/share/nautilus-python/extensions"
+    ];
+
     programs.dconf = lib.optionalAttrs (cfg.terminal != null) {
       enable = true;
       profiles.user.databases = [{

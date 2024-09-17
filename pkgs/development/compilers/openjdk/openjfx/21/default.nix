@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchFromGitHub, writeText
 , openjdk21_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
-, libXxf86vm, glib, alsa-lib, ffmpeg_6, python3, ruby
+, libXxf86vm, glib, alsa-lib, ffmpeg_7, python3, ruby
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -25,7 +25,11 @@ in stdenv.mkDerivation {
     hash = "sha256-7z0GIbkQwG9mXY9dssaicqaKpMo3FkNEpyAvkswoQQ4=";
   };
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_6 ];
+  patches = [
+    ../backport-ffmpeg-7-support-jfx21.patch
+  ];
+
+  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_7 ];
   nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
 
   dontUseCmakeConfigure = true;

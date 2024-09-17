@@ -11,14 +11,14 @@
 
 buildPythonPackage {
   pname = "nodriver";
-  version = "0.36";
+  version = "0.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultrafunkamsterdam";
     repo = "nodriver";
-    rev = "e630abfc5dce2023966a61cec739348b18bd465d";
-    hash = "sha256-pUWvHcsEPbRob5DDXBFOzqonSWigNPnPUHIu9omzYII=";
+    rev = "1bb6003c7f0db4d3ec05fdf3fc8c8e0804260103";
+    hash = "sha256-8q+9RX9ugrT6/fjlTSIecVcR6lPdZwg7nF+cSTSLlEc=";
   };
 
   disabled = pythonOlder "3.9";

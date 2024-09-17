@@ -54,19 +54,21 @@ in
     }
   );
 
-  # TODO delete this when we get upstream fix https://debbugs.gnu.org/cgi/bugreport.cgi?bug=73241
-  eglot = super.eglot.overrideAttrs (old: {
-    postInstall =
-      old.postInstall or ""
-      + ''
-        local info_file=eglot.info
-        pushd $out/share/emacs/site-lisp/elpa/eglot-*
-        # specify output info file to override the one defined in eglot.texi
-        makeinfo --output=$info_file eglot.texi
-        install-info $info_file dir
-        popd
-      '';
-  });
+  eglot = super.eglot.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      postInstall =
+        previousAttrs.postInstall or ""
+        # old versions do not include an info manual
+        + lib.optionalString (lib.versionAtLeast "1.17.0.20240829.5352" finalAttrs.version) ''
+          local info_file=eglot.info
+          pushd $out/share/emacs/site-lisp/elpa/eglot-*
+          # specify output info file to override the one defined in eglot.texi
+          makeinfo --output=$info_file eglot.texi
+          install-info $info_file dir
+          popd
+        '';
+    }
+  );
 
   jinx = super.jinx.overrideAttrs (old: {
     dontUnpack = false;

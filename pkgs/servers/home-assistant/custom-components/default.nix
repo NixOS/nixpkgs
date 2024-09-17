@@ -10,6 +10,8 @@
 
   awtrix = callPackage ./awtrix {};
 
+  average = callPackage ./average {};
+
   better_thermostat = callPackage ./better_thermostat {};
 
   dwd = callPackage ./dwd { };
