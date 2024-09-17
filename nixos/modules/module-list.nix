@@ -1340,6 +1340,7 @@
   ./services/video/photonvision.nix
   ./services/video/replay-sorcery.nix
   ./services/video/mediamtx.nix
+  ./services/video/moq-relay.nix
   ./services/video/unifi-video.nix
   ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
