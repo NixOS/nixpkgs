@@ -1,22 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  rustc,
-  packaging,
   rustPlatform,
+
+  # buildInputs
+  libiconv,
+
+  # build-system
+  cargo,
+  poetry-core,
+  rustc,
+
+  # dependencies
+  packaging,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-calamine";
   version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dimastbk";
@@ -35,6 +41,8 @@ buildPythonPackage rec {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
+
+  buildInputs = [ libiconv ];
 
   build-system = [
     cargo
