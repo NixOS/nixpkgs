@@ -72,8 +72,7 @@ let
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
         { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
         { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
-        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; } //
-        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
+        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; };
     in
     lib.mapAttrs build (grammars);
 

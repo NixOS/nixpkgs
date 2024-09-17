@@ -17,13 +17,13 @@ let
 
   throwSystem = throw "Unsupported system: ${system}";
 
-  version = "1.46.0";
+  version = "1.47.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-pNvjWyedKsac7WffOXZjsxGVlUSkmXqSGHvivF9ek4g=";
+    hash = "sha256-cKjVDy1wFo8NlF8v+8YBuQUF2OUYjCmv27uhEoVUrno=";
   };
 
   babel-bundle = buildNpmPackage {
@@ -40,7 +40,7 @@ let
     pname = "expect-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/expect";
-    npmDepsHash = "sha256-jNrFQ6BcMsVdEyB2ATFH4wRNb12v4w1kXo6rVv6rzAw=";
+    npmDepsHash = "sha256-qnFx/AQZtmxNFrrabfOpsWy6I64DFJf3sWrJzL1wfU4=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -60,7 +60,7 @@ let
     pname = "utils-bundle-core";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/utils";
-    npmDepsHash = "sha256-lh57Xvrqt0YDenBvahoUuQNW6GdRUiBBkA3TLmnz9WE=";
+    npmDepsHash = "sha256-aktxEDQKxsDcInyjDKDuIu4zwtrAH0lRda/mP1IayPA=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -82,7 +82,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-8wc/QfABTIVrzQxM9aCyXGkLaothOBVLteH8SiPanZU=";
+    npmDepsHash = "sha256-FaDTJmIiaaOCvq6tARfiWX5IBTTNOJ/iVkRsO4D8aqc=";
 
     nativeBuildInputs = [ cacert ];
 

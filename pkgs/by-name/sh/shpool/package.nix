@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shpool";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "shell-pool";
     repo = "shpool";
     rev = "v${version}";
-    hash = "sha256-4d194y9scjXi5wpTRP66apApXl2R9N3ACAVXkXHfQDM=";
+    hash = "sha256-0ykGGzYL29SxxT0etTaBHooIE8NEUJeTIr/6vTBgY0Q=";
   };
 
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin/shpool' "$out/bin/shpool"
   '';
 
-  cargoHash = "sha256-lkwgjrEaLuTY0sDSxa+wbT9LX09aCDp1wDUqNQE07Xw=";
+  cargoHash = "sha256-cuLscDki8Y68qtEZh7xDaLp5B6MyTkPWTQX5gHNtULQ=";
 
   buildInputs = [
     linux-pam
