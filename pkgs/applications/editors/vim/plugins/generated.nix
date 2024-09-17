@@ -11765,6 +11765,18 @@ final: prev:
     meta.homepage = "https://github.com/jgdavey/tslime.vim/";
   };
 
+  tssorter-nvim = buildVimPlugin {
+    pname = "tssorter.nvim";
+    version = "2024-08-16";
+    src = fetchFromGitHub {
+      owner = "mtrajano";
+      repo = "tssorter.nvim";
+      rev = "74fa4102cb3272dcc8fd5696fd3240358f19c090";
+      sha256 = "1y64w5aggh0k5xf0y8xsjbkzinn8gx2qhhqlww89k43dblq07pa4";
+    };
+    meta.homepage = "https://github.com/mtrajano/tssorter.nvim/";
+  };
+
   tsuquyomi = buildVimPlugin {
     pname = "tsuquyomi";
     version = "2023-10-03";

@@ -1801,6 +1801,10 @@
     nvimRequireCheck = "todo-comments";
   };
 
+  tssorter-nvim = super.tssorter-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter ];
+  };
+
   tup =
     let
       # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim
