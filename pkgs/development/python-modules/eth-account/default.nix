@@ -2,33 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  # dependencies
   bitarray,
+  ckzg,
   eth-abi,
   eth-keyfile,
   eth-keys,
   eth-rlp,
   eth-utils,
-  websockets,
   hexbytes,
-  pythonOlder,
   rlp,
+  websockets,
+  # nativeCheckInputs
+  hypothesis,
+  pydantic,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "eth-account";
-  version = "0.9.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "0.13.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-account";
-    rev = "v${version}";
-    hash = "sha256-Ps/vzJv0W1+wy1mSJaqRNNU6CoCMchReHIocB9kPrGs=";
+    tag = "v${version}";
+    hash = "sha256-Y55WCgWJd2AaDNKbyBe9oi1soT19RdUjQWy5884Pcq8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bitarray
+    ckzg
     eth-abi
     eth-keyfile
     eth-keys
@@ -39,15 +48,29 @@ buildPythonPackage rec {
     websockets
   ];
 
-  # require buildinga npm project
-  doCheck = false;
+  nativeCheckInputs = [
+    hypothesis
+    pydantic
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  disabledTests = [
+    # requires local nodejs install
+    "test_messages_where_all_3_sigs_match"
+    "test_messages_where_eth_account_matches_ethers_but_not_metamask"
+    "test_messages_where_eth_account_matches_metamask_but_not_ethers"
+    # disable flaky fuzzing test
+    "test_compatibility"
+  ];
 
   pythonImportsCheck = [ "eth_account" ];
 
-  meta = with lib; {
+  meta = {
     description = "Account abstraction library for web3.py";
     homepage = "https://github.com/ethereum/eth-account";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/ethereum/eth-account/blob/v${version}/docs/release_notes.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
   };
 }
