@@ -141,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       ericsagnes
       lovesegfault
       techknowlogick
+      kiike
     ];
     platforms = platforms.all;
   };
