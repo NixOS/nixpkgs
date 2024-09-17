@@ -270,6 +270,11 @@ in {
           bb.packages.ghc928
         else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
           bb.packages.ghc928
+        else if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isLinux then
+          # For unknown reasons, compiling with a bindist GHC causes the final
+          # GHC's rpaths to contain the boot compiler on aarch64-linux / GHC 9.6.*.
+          # Note: Unclear if this is due to host or build aarch64-linux.
+          bb.packages.ghc928
         else
           bb.packages.ghc924Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -287,6 +292,11 @@ in {
         if stdenv.buildPlatform.isAarch32 then
           bb.packages.ghc928
         else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          bb.packages.ghc928
+        else if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isLinux then
+          # For unknown reasons, compiling with a bindist GHC causes the final
+          # GHC's rpaths to contain the boot compiler on aarch64-linux / GHC 9.6.*.
+          # Note: Unclear if this is due to host or build aarch64-linux.
           bb.packages.ghc928
         else
           bb.packages.ghc924Binary;
@@ -306,6 +316,11 @@ in {
           bb.packages.ghc928
         else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
           bb.packages.ghc928
+        else if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isLinux then
+          # For unknown reasons, compiling with a bindist GHC causes the final
+          # GHC's rpaths to contain the boot compiler on aarch64-linux / GHC 9.6.*.
+          # Note: Unclear if this is due to host or build aarch64-linux.
+          bb.packages.ghc928
         else
           bb.packages.ghc924Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -323,6 +338,11 @@ in {
         if stdenv.buildPlatform.isAarch32 then
           bb.packages.ghc928
         else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+          bb.packages.ghc928
+        else if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isLinux then
+          # For unknown reasons, compiling with a bindist GHC causes the final
+          # GHC's rpaths to contain the boot compiler on aarch64-linux / GHC 9.6.*.
+          # Note: Unclear if this is due to host or build aarch64-linux.
           bb.packages.ghc928
         else
           bb.packages.ghc924Binary;
