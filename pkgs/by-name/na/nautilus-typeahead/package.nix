@@ -10,6 +10,7 @@ nautilus.overrideAttrs (
     patches ? [ ],
     passthru ? { },
     meta ? { },
+    version ? "",
     ...
   }:
   {
@@ -18,6 +19,16 @@ nautilus.overrideAttrs (
       updateScript = ./update.sh;
       typeaheadPatch = (callPackage ./patch.nix { });
     };
+
+    version =
+      let
+        inherit (finalAttrs.passthru.typeaheadPatch) pkgver;
+      in
+      lib.warnIf (pkgver != version) ''
+        ${finalAttrs.pname}: Nautilus version for the AUR patch "${pkgver}"
+        is not the same as Nixpkgs Nautilus version "${version}"!
+        This may lead to patch failures.
+      '' version;
 
     patches = [ finalAttrs.passthru.typeaheadPatch ] ++ patches;
 
