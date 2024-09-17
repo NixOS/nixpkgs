@@ -36556,12 +36556,6 @@ with pkgs;
 
   dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic { };
 
-  lammps-mpi = lowPrio (lammps.override {
-    extraBuildInputs = [
-      mpi
-    ];
-  });
-
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
     fftw = fftwSinglePrec;
