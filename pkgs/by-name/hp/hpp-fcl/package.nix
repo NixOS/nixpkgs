@@ -31,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     doxygen
-  ] ++ lib.optionals pythonSupport [ python3Packages.numpy ];
+  ] ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.pythonImportsCheckHook
+  ];
 
   propagatedBuildInputs =
     [
@@ -56,11 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  # pythonImportsCheck, but in stdenv.mkDerivation
-  postInstall = lib.optionalString pythonSupport ''
-    PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
-    python -c "import hppfcl"
-  '';
+  pythonImportsCheck = [ "hppfcl" ];
 
   outputs = [
     "dev"
