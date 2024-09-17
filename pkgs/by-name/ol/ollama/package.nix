@@ -79,13 +79,16 @@ let
     paths = rocmLibs ++ [ rocmClang ];
   };
 
+  cudaLibs = [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+    cudaPackages.cuda_cccl
+  ];
   cudaToolkit = buildEnv {
     name = "cuda-merged";
-    paths = [
-      (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
-      (lib.getLib cudaPackages.cuda_cudart)
+    paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
-      (lib.getLib cudaPackages.libcublas)
+      (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
   };
 
@@ -107,6 +110,9 @@ let
     ++ lib.optionals enableRocm [
       "--suffix LD_LIBRARY_PATH : '${rocmPath}/lib'"
       "--set-default HIP_PATH '${rocmPath}'"
+    ]
+    ++ lib.optionals enableCuda [
+      "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib cudaLibs)}'"
     ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
@@ -141,12 +147,7 @@ goBuild {
 
   buildInputs =
     lib.optionals enableRocm (rocmLibs ++ [ libdrm ])
-    ++ lib.optionals enableCuda [
-      cudaToolkit
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-      cudaPackages.libcublas
-    ]
+    ++ lib.optionals enableCuda cudaLibs
     ++ lib.optionals stdenv.isDarwin metalFrameworks;
 
   patches = [
