@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  nixosTests,
   testers,
   cmake,
   pkg-config,
@@ -185,7 +186,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    } // lib.optionalAttrs (!pinned) { inherit (nixosTests) miriway miracle-wm; };
     providedSessions = lib.optionals (lib.strings.versionOlder version "2.16.0") [
       # More of an example than a fully functioning shell, some notes for the adventurous:
       # - ~/.config/miral-shell.config is one possible user config location,
