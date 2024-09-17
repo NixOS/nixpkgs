@@ -4268,6 +4268,8 @@ self: super: with self; {
 
   eth-rlp = callPackage ../development/python-modules/eth-rlp { };
 
+  eth-tester = callPackage ../development/python-modules/eth-tester { };
+
   eth-typing = callPackage ../development/python-modules/eth-typing { };
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
