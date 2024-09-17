@@ -25554,8 +25554,6 @@ with pkgs;
     matomo_5
     matomo-beta;
 
-  axis2 = callPackage ../servers/http/tomcat/axis2 { };
-
   inherit (callPackages ../servers/unifi { })
     unifi7
     unifi8;
