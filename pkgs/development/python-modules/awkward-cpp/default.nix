@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   cmake,
   ninja,
@@ -12,15 +11,13 @@
 
 buildPythonPackage rec {
   pname = "awkward-cpp";
-  version = "37";
+  version = "38";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "awkward_cpp";
     inherit version;
-    hash = "sha256-bf9fzkr8rbSSu/fLIJCFctmb3DKqK+qGgbrPtpsqqG0=";
+    hash = "sha256-l0SVah14fD0hXqE8WqG2EQnIk/Ad0e/i2mj1jt6K0Vs=";
   };
 
   build-system = [
