@@ -318,10 +318,21 @@ let
               lib.cli.toGNUCommandLineShell { } (
                 lib.recursiveUpdate {
                   restrict-to = map hostPortToString restrictTo;
-                  tls-certificate =
-                    if useACMEHost != null then "${certConfig.directory}/fullchain.pem" else "${tlsCertificate}";
-                  tls-private-key = if useACMEHost != null then "${certConfig.directory}/key.pem" else "${tlsKey}";
                   websocket-ping-frequency-sec = websocketPingInterval;
+                  tls-certificate =
+                    if !enableHTTPS then
+                      null
+                    else if useACMEHost != null then
+                      "${certConfig.directory}/fullchain.pem"
+                    else
+                      "${tlsCertificate}";
+                  tls-private-key =
+                    if !enableHTTPS then
+                      null
+                    else if useACMEHost != null then
+                      "${certConfig.directory}/key.pem"
+                    else
+                      "${tlsKey}";
                 } extraArgs
               )
             } \
@@ -475,6 +486,7 @@ in
 
   meta.maintainers = with lib.maintainers; [
     alyaeanyx
+    raylas
     rvdp
     neverbehave
   ];
