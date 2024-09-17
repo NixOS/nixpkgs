@@ -11,6 +11,7 @@
 , wayland
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
+, autoAddDriverRunpath
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -56,12 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     wayland
   ] ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl
-        cuda_cudart
-        libcublas
-      ]);
+    with cudaPackages;
+    [
+      cuda_cccl
+      cuda_cudart
+      libcublas
+    ]
+  );
 
   cmakeFlags = [
     "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
