@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     doxygen
     graphviz
-  ];
+  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
   propagatedBuildInputs = [
     cereal_1_3_2
     eigen
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
 
   doCheck = true;
+  pythonImportsCheck = [ "proxsuite" ];
 
   meta = {
     description = "The Advanced Proximal Optimization Toolbox";
