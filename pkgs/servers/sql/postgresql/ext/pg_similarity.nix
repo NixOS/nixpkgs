@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, postgresql, unstableGitUpdater }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, postgresql, unstableGitUpdater, buildPostgresqlExtension }:
 
-stdenv.mkDerivation {
+buildPostgresqlExtension {
   pname = "pg_similarity";
   version = "1.0-unstable-2021-01-12";
 
@@ -21,14 +21,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ postgresql ];
-
   makeFlags = [ "USE_PGXS=1" ];
-
-  installPhase = ''
-    install -D pg_similarity${postgresql.dlSuffix} -t $out/lib/
-    install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
-  '';
 
   passthru.updateScript = unstableGitUpdater {};
 
