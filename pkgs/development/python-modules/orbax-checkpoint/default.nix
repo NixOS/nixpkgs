@@ -91,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
-    changelog = "https://github.com/google/orbax/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/google/orbax/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
