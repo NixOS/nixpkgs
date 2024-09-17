@@ -1,22 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  rustc,
-  packaging,
   rustPlatform,
+
+  # build-system
+  cargo,
+  poetry-core,
+  rustc,
+
+  # dependencies
+  packaging,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-calamine";
   version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dimastbk";
