@@ -10843,6 +10843,8 @@ self: super: with self; {
 
   pyunpack = callPackage ../development/python-modules/pyunpack { };
 
+  pyunormalize = callPackage ../development/python-modules/pyunormalize { };
+
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
