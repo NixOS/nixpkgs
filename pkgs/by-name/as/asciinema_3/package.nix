@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   rustPlatform,
+  testers,
 }:
 
 let
@@ -30,6 +31,13 @@ let
     ];
 
     strictDeps = true;
+
+    passthru = {
+      tests.version = testers.testVersion {
+        package = self;
+        command = "asciinema --version";
+      };
+    };
 
     meta = {
       homepage = "https://asciinema.org/";
