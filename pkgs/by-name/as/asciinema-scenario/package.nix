@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
