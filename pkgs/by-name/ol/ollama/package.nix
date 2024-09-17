@@ -161,8 +161,10 @@ goBuild {
     # replace inaccurate version number with actual release version
     substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
 
-    # apply llama.cpp patches
-    for cur in llm/patches/*; do patch -p1 -d llm/llama.cpp < $cur; done
+    # apply ollama's patches to `llama.cpp` submodule
+    for diff in llm/patches/*; do
+      patch -p1 -d llm/llama.cpp < $diff
+    done
   '';
 
   overrideModAttrs = (
