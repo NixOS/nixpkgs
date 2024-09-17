@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/stack-of-tasks/eiquadprog/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 })
