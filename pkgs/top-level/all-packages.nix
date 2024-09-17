@@ -8040,8 +8040,6 @@ with pkgs;
 
   gnu-cim = callPackage ../development/compilers/gnu-cim { };
 
-  gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
-
   gnuclad = callPackage ../applications/graphics/gnuclad { };
 
   gnufdisk = callPackage ../tools/system/fdisk {
