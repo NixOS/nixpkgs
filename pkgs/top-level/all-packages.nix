@@ -8918,8 +8918,6 @@ with pkgs;
     jdk_headless = jdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  jira-cli-go = callPackage ../development/tools/jira-cli-go { };
-
   jirafeau = callPackage ../servers/web-apps/jirafeau { };
 
   jitterentropy = callPackage ../development/libraries/jitterentropy { };
