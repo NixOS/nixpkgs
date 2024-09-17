@@ -1,5 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "agg";
   version = "1.4.3";
@@ -8,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "asciinema";
     repo = "agg";
     rev = "v${version}";
-    sha256 = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
+    hash = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
   };
 
   cargoLock = {
@@ -22,12 +25,14 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  meta = with lib; {
-    description = "Command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";
+  strictDeps = true;
+
+  meta = {
     homepage = "https://github.com/asciinema/agg";
+    description = "Command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";
     changelog = "https://github.com/asciinema/agg/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
     mainProgram = "agg";
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }
