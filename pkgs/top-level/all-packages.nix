@@ -25154,8 +25154,6 @@ with pkgs;
 
   munin = callPackage ../servers/monitoring/munin { };
 
-  nagios = callPackage ../servers/monitoring/nagios { };
-
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
 
   inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { })
