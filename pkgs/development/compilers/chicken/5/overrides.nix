@@ -216,7 +216,6 @@ in
   iup = broken;
   kiwi = broken;
   lmdb-ht = broken;
-  lsp-server = broken;
   mpi = broken;
   pyffi = broken;
   qt-light = broken;
@@ -225,7 +224,6 @@ in
   svn-client = broken;
   system = broken;
   tokyocabinet = broken;
-  transducers = broken;
   webview = broken;
 
   # mark broken darwin

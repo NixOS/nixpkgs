@@ -1,42 +1,54 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, protobuf
-, rdkafka
-, oniguruma
-, zstd
-, rust-jemalloc-sys
-, rust-jemalloc-sys-unprefixed
-, Security
-, libiconv
-, coreutils
-, CoreServices
-, SystemConfiguration
-, tzdata
-, cmake
-, perl
-, git
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  protobuf,
+  rdkafka,
+  oniguruma,
+  zstd,
+  rust-jemalloc-sys,
+  rust-jemalloc-sys-unprefixed,
+  Security,
+  libiconv,
+  coreutils,
+  CoreServices,
+  SystemConfiguration,
+  tzdata,
+  cmake,
+  perl,
+  git,
   # nix has a problem with the `?` in the feature list
   # enabling kafka will produce a vector with no features at all
-, enableKafka ? false
+  enableKafka ? false,
   # TODO investigate adding various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "sources-dnstap" "transforms" "component-validation-runner" ]
+  features ? (
+    [
+      "api"
+      "api-client"
+      "enrichment-tables"
+      "sinks"
+      "sources"
+      "sources-dnstap"
+      "transforms"
+      "component-validation-runner"
+    ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
-, nixosTests
-, nix-update-script
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix"
+  ),
+  nixosTests,
+  nix-update-script,
 }:
 
 let
   pname = "vector";
-  version = "0.40.1";
+  version = "0.41.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -45,27 +57,54 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-1vFDFdO9E5mUAUfEdg9Ec5ptq2Kp7HpqNz5+9CMn30U=";
+    hash = "sha256-E6AVjxwXMDonqsAMcCpaZBEPCi9bVXUygG4PUOLh+ck=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "greptime-proto-0.1.0" = "sha256-Q8xr6qN6SAGGK0W96WuNRdQ5/8iNlruqzhXD6xq3Ua8=";
-      "greptimedb-client-0.1.0" = "sha256-evL8Q2Ikct9s0r4DWTgSP/8g4XTishuJHmwRoCfQFbU=";
-      "heim-0.1.0-rc.1" = "sha256-TFgLR5zb/oqceVOH4mIOvFFY/HMOLSo8VI5Eh9KP60E=";
+      "greptime-proto-0.1.0" = "sha256-QT3PZnHJoVghuRCGoZIH6L8jnX7Wn9eSuQqHIyrUY4E=";
+      "greptimedb-ingester-0.1.0" = "sha256-1M9yWXDZ6U9JTVyXQg9ZcSSGJp7GXtaCfQHdtjhw6FY=";
+      "heim-0.1.0-rc.1" = "sha256-pMraYKr6srTQqEzoBx9gGHHlJ7nMKwj50ftimQAkfL0=";
       "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
       "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
-      "tokio-util-0.7.8" = "sha256-HCvtfohOoa1ZjD4s7QLDbIV4fe/MVBKtgM1QQX7gGKQ=";
+      "tokio-util-0.7.11" = "sha256-oV9fSPjLMY1KbcbDP2WTVjF/N0qlQBPDIYHOp3aNCTY=";
       "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
     };
   };
 
-  nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    perl
+    git
+    rustPlatform.bindgenHook
+  ];
   buildInputs =
-    [ oniguruma openssl protobuf rdkafka zstd ]
+    [
+      oniguruma
+      openssl
+      protobuf
+      rdkafka
+      zstd
+    ]
     ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
-    ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
+    ++ lib.optionals stdenv.isDarwin [
+      rust-jemalloc-sys
+      Security
+      libiconv
+      coreutils
+      CoreServices
+      SystemConfiguration
+    ];
+
+  # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
+  # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
+  # TODO remove when upgrading Vector
+  RUSTFLAGS = "--allow unexpected_cfgs";
+
+  # Without this, we get SIGSEGV failure
+  RUST_MIN_STACK = 33554432;
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -75,7 +114,7 @@ rustPlatform.buildRustPackage {
   TZDIR = "${tzdata}/share/zoneinfo";
 
   # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING=1;
+  CARGO_FEATURE_DYNAMIC_LINKING = 1;
 
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
@@ -115,12 +154,14 @@ rustPlatform.buildRustPackage {
   # transforms-geoip is patched out of Cargo.toml for now - unless explicitly asked for.
   postPatch = ''
     substituteInPlace ./src/dns.rs \
-      --replace "#[tokio::test]" ""
+      --replace-fail "#[tokio::test]" ""
   '';
 
   passthru = {
     inherit features;
-    tests = { inherit (nixosTests) vector; };
+    tests = {
+      inherit (nixosTests) vector;
+    };
     updateScript = nix-update-script { };
   };
 
@@ -128,7 +169,10 @@ rustPlatform.buildRustPackage {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ thoughtpolice happysalada ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      happysalada
+    ];
     platforms = with platforms; all;
     mainProgram = "vector";
   };

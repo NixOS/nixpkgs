@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.78.0";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-P/yhN1DdUWuQ4UtqRtvJxdjgTAh2IAs5oS0zxFLunuU=";
+    hash = "sha256-jIbSKT/jRWVyN2LH6Ih0VFc5QKICR7cYONzGpZ9bJvM=";
   };
 
   sourceRoot = "${src.name}/libs/labelbox";
@@ -99,7 +99,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

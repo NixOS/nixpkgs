@@ -42,6 +42,7 @@
 , mypaint-brushes1
 , libwebp
 , libheif
+, libxslt
 , libgudev
 , openexr
 , desktopToDarwinBundle
@@ -76,6 +77,14 @@ in stdenv.mkDerivation (finalAttrs: {
     # Use absolute paths instead of relying on PATH
     # to make sure plug-ins are loaded by the correct interpreter.
     ./hardcode-plugin-interpreters.patch
+
+    # GIMP queries libheif.pc for builtin encoder/decoder support to determine if AVIF/HEIC files are supported
+    # (see https://gitlab.gnome.org/GNOME/gimp/-/blob/a8b1173ca441283971ee48f4778e2ffd1cca7284/configure.ac?page=2#L1846-1852)
+    # These variables have been removed since libheif 1.18.0
+    # (see https://github.com/strukturag/libheif/commit/cf0d89c6e0809427427583290547a7757428cf5a)
+    # This has already been fixed for the upcoming GIMP 3, but the fix has not been backported to 2.x yet
+    # (see https://gitlab.gnome.org/GNOME/gimp/-/issues/9080)
+    ./force-enable-libheif.patch
   ];
 
   nativeBuildInputs = [
@@ -85,6 +94,7 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     makeWrapper
     gtk-doc
+    libxslt
   ] ++ lib.optionals stdenv.isDarwin [
     desktopToDarwinBundle
   ];
