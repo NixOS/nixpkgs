@@ -75,6 +75,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  env.COMPOSER_MIRROR_PATH_REPOS = "1";
+
   postInstall = ''
     mv $out/share/php/firefly-iii/* $out/
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
