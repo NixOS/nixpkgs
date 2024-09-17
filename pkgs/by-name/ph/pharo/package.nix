@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pharo";
-  version = "10.0.9-de76067";
+  version = "10.3.1-6cdb1e5";
 
   src = fetchzip {
     # It is necessary to download from there instead of from the repository because that archive
     # also contains artifacts necessary for the bootstrapping.
     url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-${finalAttrs.version}-Linux-x86_64-c-src.zip";
-    hash = "sha256-INeQGYCxBu7DvFmlDRXO0K2nhxcd9K9Xwp55iNdlvhk=";
+    hash = "sha256-Oskbo0ZMh2Wr8uY9BjA54AhFVDEuzs4AN8cpO02gdfY=";
   };
 
   strictDeps = true;
