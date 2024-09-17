@@ -21,7 +21,7 @@ let
       hash = "sha256-JXls4EgMDAWtd736nXS2lYTUv9QIjRpkCTimxNtMN7Q=";
     };
 
-    nativeBuildInputs = [ python3Packages.setuptools ];
+    build-system = [ python3Packages.setuptools ];
 
     makeWrapperArgs = [
       "--prefix"
