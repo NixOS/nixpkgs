@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "iterative-telemtry";
   version = "0.0.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -26,9 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-bcGniytjlN3JFPeMQYjyIP8Ruty9/dnzp9neclbdsfU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     appdirs
     filelock
