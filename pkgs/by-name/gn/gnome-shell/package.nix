@@ -4,6 +4,7 @@
   substituteAll,
   lib,
   stdenv,
+  docutils,
   meson,
   ninja,
   pkg-config,
@@ -70,7 +71,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "47.beta";
+  version = "47.0";
 
   outputs = [
     "out"
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-0v4/sK7xLouEWrNpSDUiYmkxkUCfFcR6lC5vyJ8jSIk=";
+    hash = "sha256-eiB3DGKQrWmpqCyEl8sn4b+GPzh9sl6Y5ULk9sXwbe0=";
   };
 
   patches = [
@@ -112,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    docutils # for rst2man
     meson
     ninja
     pkg-config
