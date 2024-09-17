@@ -7,13 +7,12 @@ let
   };
 
   gypPatches = callPackage ./gyp-patches.nix { } ++ [
-    ./gyp-patches-v22-import-sys.patch
   ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.8.0";
-  sha256 = "f130e82176d1ee0702d99afc1995d0061bf8ed357c38834a32a08c9ef74f1ac7";
+  version = "22.9.0";
+  sha256 = "a55aeb368dee93432f610127cf94ce682aac07b93dcbbaadd856df122c9239df";
   patches = [
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
