@@ -8,7 +8,6 @@
 , gtk4
 , glib
 , libxml2
-, gnome-desktop
 , libadwaita
 , fribidi
 , wrapGAppsHook4
@@ -18,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-font-viewer";
-  version = "47.alpha";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/gnome-font-viewer-${version}.tar.xz";
-    hash = "sha256-UwXF71TXQqPWQUQ6tVE+LJj5FeL7Cvx8XzJtIApGHy8=";
+    hash = "sha256-uOWgQuCyQbDHyuQ/dNoNX4jmQjAXqR/rhudhfttAgO0=";
   };
 
   doCheck = true;
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     glib
-    gnome-desktop
     harfbuzz
     libadwaita
     fribidi
