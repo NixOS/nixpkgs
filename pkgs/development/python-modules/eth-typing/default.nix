@@ -1,40 +1,48 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
-  pytestCheckHook,
-  typing-extensions,
+  fetchFromGitHub,
   setuptools,
+  # dependencies
+  typing-extensions,
+  # nativeCheckInputs
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "5.0.1";
+  version = "5.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-typing";
     tag = "v${version}";
-    hash = "sha256-WFTx5u85Gp+jQPWS3BTk1Pky07C2fVAzwrG/c3hSRzM=";
+    hash = "sha256-IOWd6WFPAYO+VZwlMilRVHtudEjHt5p8Xu4WloFB/ww=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
   pythonImportsCheck = [ "eth_typing" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # side-effect: runs pip online check and is blocked by sandbox
+    "test_install_local_wheel"
+  ];
+
+  meta = {
     description = "Common type annotations for Ethereum Python packages";
     homepage = "https://github.com/ethereum/eth-typing";
     changelog = "https://github.com/ethereum/eth-typing/blob/v${version}/docs/release_notes.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
   };
 }
