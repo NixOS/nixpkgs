@@ -5828,6 +5828,10 @@ with pkgs;
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks { };
 
+  moq-relay = callPackage ../by-name/mo/moq-relay/package.nix {
+    inherit libressl pkg-config;
+  };
+
   mp3blaster = callPackage ../applications/audio/mp3blaster { };
 
   mp3cat = callPackage ../tools/audio/mp3cat { };
