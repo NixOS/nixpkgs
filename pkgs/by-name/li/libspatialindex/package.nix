@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fixDarwinDylibNames }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fixDarwinDylibNames,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspatialindex";
@@ -35,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change "@rpath/libspatialindex.7.dylib" "$out/lib/libspatialindex.7.dylib" $out/lib/libspatialindex_c.dylib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible spatial index library in C++";
     homepage = "https://libspatialindex.org";
-    license = licenses.mit;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.geospatial.members;
+    platforms = lib.platforms.unix;
   };
 })
