@@ -26619,8 +26619,6 @@ with pkgs;
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
 
-  powertop = callPackage ../os-specific/linux/powertop { };
-
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
 
   procps = if stdenv.isLinux
