@@ -40,7 +40,6 @@ makeScopeWithSplicing' {
     attrs = {
       inherit libsForQt5;
       inherit (pkgs) config lib fetchurl;
-      gconf = pkgs.gnome2.GConf;
       inherit (pkgs) gsettings-desktop-schemas;
     };
   in (lib.makeOverridable mkPlasma5 attrs);
