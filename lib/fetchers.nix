@@ -2,8 +2,8 @@
 { lib }:
 let
   commonH = hashTypes: rec {
-      hNames = [ "hash" ] ++ hashTypes;
-      hAttrs = lib.genAttrs hNames (lib.const {});
+      hashNames = [ "hash" ] ++ hashTypes;
+      hashSet = lib.genAttrs hashNames (lib.const {});
   };
 
   fakeH = {
@@ -85,7 +85,7 @@ in rec {
       inherit (lib) concatMapStringsSep head tail throwIf;
       inherit (lib.attrsets) attrsToList intersectAttrs removeAttrs optionalAttrs;
 
-      inherit (commonH hashTypes) hAttrs hNames;
+      inherit (commonH hashTypes) hashNames hashSet;
     in
       args:
         if args ? "outputHash" then
@@ -94,16 +94,17 @@ in rec {
           let
             # The argument hash, as a {name, value} pair
             h =
-              let _h = attrsToList (intersectAttrs hAttrs args); in
-              if _h == [] then
+              # All hashes passed in arguments (possibly 0 or >1) as a list of {name, value} pairs
+              let hashesAsNVPairs = attrsToList (intersectAttrs hashSet args); in
+              if hashesAsNVPairs == [] then
                 throwIf required "fetcher called without `hash`" null
-              else if tail _h != [] then
-                throw "fetcher called with mutually-incompatible arguments: ${concatMapStringsSep ", " (a: a.name) _h}"
+              else if tail hashesAsNVPairs != [] then
+                throw "fetcher called with mutually-incompatible arguments: ${concatMapStringsSep ", " (a: a.name) hashesAsNVPairs}"
               else
-                head _h
+                head hashesAsNVPairs
             ;
           in
-            removeAttrs args hNames // (optionalAttrs (h != null) {
+            removeAttrs args hashNames // (optionalAttrs (h != null) {
               outputHashAlgo = if h.name == "hash" then null else h.name;
               outputHash =
                 if h.value == "" then
@@ -170,7 +171,7 @@ in rec {
       inherit (lib.attrsets) genAttrs intersectAttrs removeAttrs;
       inherit (lib.trivial) const functionArgs setFunctionArgs;
 
-      inherit (commonH hashTypes) hAttrs;
+      inherit (commonH hashTypes) hashSet;
       fArgs = functionArgs fetcher;
 
       normalize = normalizeHash {
@@ -180,7 +181,7 @@ in rec {
     in
     # The o.g. fetcher must *only* accept outputHash and outputHashAlgo
     assert fArgs ? outputHash && fArgs ? outputHashAlgo;
-    assert intersectAttrs fArgs hAttrs == {};
+    assert intersectAttrs fArgs hashSet == {};
 
     setFunctionArgs
       (args: fetcher (normalize args))
