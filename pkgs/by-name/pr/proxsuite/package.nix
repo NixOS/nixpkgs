@@ -84,5 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Simple-Robotics/proxsuite";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 })
