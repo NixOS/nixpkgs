@@ -88,6 +88,7 @@ in {
   # Testing the test driver
   nixos-test-driver = {
     extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix {};
+    interactive-redeploy = pkgs.callPackage ./nixos-test-driver/interactive-redeploy.nix {};
     lib-extend = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nixos-test-driver/lib-extend.nix {};
     node-name = runTest ./nixos-test-driver/node-name.nix;
     busybox = runTest ./nixos-test-driver/busybox.nix;
