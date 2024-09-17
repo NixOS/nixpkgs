@@ -7,6 +7,8 @@
   cmake,
   doxygen,
   eigen,
+  fontconfig,
+  graphviz,
   jrl-cmakemodules,
   simde,
   matio,
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     doxygen
+    graphviz
   ];
   propagatedBuildInputs = [
     cereal_1_3_2
@@ -66,6 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.numpy
       python3Packages.scipy
     ];
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  # Fontconfig error: No writable cache directories
+  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
 
   doCheck = true;
 
