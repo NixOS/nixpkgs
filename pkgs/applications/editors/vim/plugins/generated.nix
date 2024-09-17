@@ -10198,12 +10198,12 @@ final: prev:
 
   sg-nvim = buildVimPlugin {
     pname = "sg.nvim";
-    version = "2024-09-09";
+    version = "2024-09-17";
     src = fetchFromGitHub {
       owner = "sourcegraph";
       repo = "sg.nvim";
-      rev = "a7e060428897d1f37f585cedc355d34e0b8e2a58";
-      sha256 = "1n8rg39gx2mcfw0fgyqnawg2b5cky8zchxigzmyng6n134fg5s42";
+      rev = "76c97d91f8d8818a4fcf14817fadd98412aa44c8";
+      sha256 = "sha256-MxFr59crdc9WlYwydM1dI1NU+5qB06xh+hFnNUuBc4c=";
     };
     meta.homepage = "https://github.com/sourcegraph/sg.nvim/";
   };

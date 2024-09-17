@@ -1524,7 +1524,7 @@
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-dqa5Rd3NeOSqv18F1QdkrWEypJ0bvVwIDwrMOyBVsDM=";
+        cargoHash = "sha256-7Bo0DSRqxA7kgNuyuWw24r3PsP92y9h98SHFtIhG+Gs=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1553,10 +1553,6 @@
         mkdir -p $out/target/debug
         ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
       '';
-
-      # Build fails with rust > 1.80
-      # https://github.com/sourcegraph/sg.nvim/issues/259
-      meta.broken = true;
     });
 
   skim = buildVimPlugin {
