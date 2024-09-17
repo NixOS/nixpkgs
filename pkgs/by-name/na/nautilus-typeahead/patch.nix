@@ -3,15 +3,16 @@
   stdenvNoCC,
   git,
   cacert,
-  nautilus,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
 
   pname = "nautilus-typeahead";
-  version = "46.1-1"; # labeled by the AUR package version
+  pkgver = "46.1"; # base nautilus version for the AUR patch, not necessary the same as nixpkgs `nautilus.version`
+  pkgrel = "1"; # revision number for the AUR package
+  version = "${finalAttrs.pkgver}-${finalAttrs.pkgrel}";
   rev = "f5f593bf36c41756a29d5112a10cf7ec70b8eafb";
-  outputHash = "sha256-z+JX8z/NCrGeizghYfLMpoXCoSjnUzRKjM7vVA1J/zM=";
+  outputHash = "sha256-bOPW7wRbEk+GMg29AKEGdlTyiYXg3r/tzTTYBkkK1r8=";
 
   name = "${finalAttrs.pname}-${finalAttrs.version}.patch";
 
@@ -29,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       https://gitlab.gnome.org/GNOME/nautilus.git
 
     git fetch --filter=blob:none --tags upstream
-    git format-patch "${nautilus.version}".."${finalAttrs.rev}" --output="$out"
+    git format-patch "${finalAttrs.pkgver}".."${finalAttrs.rev}" --no-signature --output="$out"
 
     set +x
   '';
@@ -37,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "AUR patch for the nautilus-typeahead package";
     homepage = "https://aur.archlinux.org/packages/nautilus-typeahead";
-    changelog = "https://gitlab.gnome.org/albertvaka/nautilus/-/compare/${nautilus.version}...${finalAttrs.rev}";
+    changelog = "https://gitlab.gnome.org/albertvaka/nautilus/-/compare/${finalAttrs.pkgver}...${finalAttrs.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ bryango ];
   };
