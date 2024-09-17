@@ -9115,6 +9115,8 @@ self: super: with self; {
 
   py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
 
+  py-evm = callPackage ../development/python-modules/py-evm { };
+
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
 
   py-machineid = callPackage ../development/python-modules/py-machineid { };
