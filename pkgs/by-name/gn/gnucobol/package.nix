@@ -19,7 +19,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnu-cobol";
+  pname = "gnucobol";
   version = "3.2";
 
   src = fetchurl {
@@ -107,8 +107,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Open-source COBOL compiler";
-    homepage = "https://sourceforge.net/projects/gnucobol/";
+    description = "Free/libre COBOL compiler";
+    homepage = "https://gnu.org/software/gnucobol/";
     license = with licenses; [ gpl3Only lgpl3Only ];
     maintainers = with maintainers; [ ericsagnes lovesegfault techknowlogick ];
     platforms = platforms.all;
