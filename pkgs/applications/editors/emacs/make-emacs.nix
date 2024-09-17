@@ -75,6 +75,8 @@
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
+# Emacs 30+ has native JSON support
+, withJansson ? lib.versionOlder version "30"
 , withMailutils ? true
 , withMotif ? false
 , withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
@@ -220,7 +222,9 @@ mkDerivation (finalAttrs: {
     gettext
     gnutls
     (lib.getDev harfbuzz)
+  ] ++ lib.optionals withJansson [
     jansson
+  ] ++ [
     libxml2
     ncurses
   ] ++ lib.optionals withAcl [
