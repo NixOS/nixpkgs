@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "overcommit";
@@ -11,9 +15,12 @@ bundlerApp {
 
   meta = with lib; {
     description = "Tool to manage and configure Git hooks";
-    homepage    = "https://github.com/sds/overcommit";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne anthonyroussel ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/sds/overcommit";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      Br1ght0ne
+      anthonyroussel
+    ];
+    platforms = platforms.unix;
   };
 }
