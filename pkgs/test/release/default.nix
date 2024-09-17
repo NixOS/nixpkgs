@@ -19,13 +19,13 @@ pkgs.runCommand "all-attrs-eval-under-tryEval" {
   src = with lib.fileset; toSource {
     root = pkgs-path;
     fileset = unions [
-      ./default.nix
-      ./doc
-      ./lib
-      ./maintainers
-      ./nixos
-      ./pkgs
-      ./.version
+      ../../../default.nix
+      ../../../doc
+      ../../../lib
+      ../../../maintainers
+      ../../../nixos
+      ../../../pkgs
+      ../../../.version
     ];
   };
 }
