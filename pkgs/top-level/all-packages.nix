@@ -19832,8 +19832,6 @@ with pkgs;
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
 
-  example-robot-data = callPackage ../development/libraries/example-robot-data { };
-
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
   expat = callPackage ../development/libraries/expat { };
