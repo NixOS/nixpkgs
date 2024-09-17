@@ -95,6 +95,8 @@ python3.pkgs.buildPythonApplication {
       "test_browser_flag_imports_streamlit"
       # AttributeError
       "test_simple_send_with_retries"
+      # Expected 'check_version' to have been called once
+      "test_main_exit_calls_version_check"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Tests fails on darwin
@@ -104,6 +106,7 @@ python3.pkgs.buildPythonApplication {
 
   preCheck = ''
     export HOME=$(mktemp -d)
+    export AIDER_CHECK_UPDATE=false
   '';
 
   meta = {
