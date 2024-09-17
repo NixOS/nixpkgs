@@ -22433,8 +22433,6 @@ with pkgs;
 
   mueval = callPackage ../development/tools/haskell/mueval { };
 
-  mujoco = callPackage ../applications/science/robotics/mujoco { };
-
   muparserx = callPackage ../development/libraries/muparserx { };
 
   mutest = callPackage ../development/libraries/mutest { };
