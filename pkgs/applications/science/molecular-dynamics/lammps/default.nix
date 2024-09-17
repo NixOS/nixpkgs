@@ -6,6 +6,7 @@
 , fftw
 , blas
 , lapack
+, python3
 , cmake
 , autoAddDriverRunpath
 , pkg-config
@@ -36,6 +37,7 @@
   ML-SNAP = true;
   SRD = true;
   REAXFF = true;
+  PYTHON = true;
 }
 # Extra cmakeFlags to add as "-D${attr}=${value}"
 , extraCmakeFlags ? {}
@@ -87,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     blas
     lapack
     gzip
-  ] ++ extraBuildInputs
+  ] ++ lib.optionals packages.PYTHON [ python3 ] ++ extraBuildInputs
   ;
 
   postInstall = ''
