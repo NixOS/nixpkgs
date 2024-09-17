@@ -46,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tigerbeetle.com/";
     description = "Financial accounting database designed to be distributed and fast";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danielsidhion ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ danielsidhion nwjsmith ];
     mainProgram = "tigerbeetle";
   };
 })
