@@ -1047,26 +1047,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                hash = "sha256-X6Oszc88F0ENABwX63uwxbJ4VPQOQzZbJA87znVg5d8=";
+                hash = "sha256-OriYeqklhJ63HO5e2xo0X7UQGSOzFxwcq855z+bbkk8=";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                hash = "sha256-NH3kGmNZpKofNplw+FRJFvV3m36HRuIqGR3zt6X5x60=";
+                hash = "sha256-EGsupf2+Kxo2zZOhAz9U+VtNwMLJzl8xOSfJ3LoMxWg=";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                hash = "sha256-hlFAMz17cl2/1CK7/dgrLktcPZYAcccIWIpkAVdwpkI=";
+                hash = "sha256-fMa5F5V4LewY086qJMFT4q9BNK6u4JAxpRlpI7PVicE=";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                hash = "sha256-oVkmdw0sHv5Y+ysT4zWW6qFDh/h4/TcgSAauh1KrE1c=";
+                hash = "sha256-8L/cbpfJeS42tUbr3/BLuEfsdgNu8WUcY+CmZg1s+fI=";
               };
             };
           in
           {
             name = "continue";
             publisher = "Continue";
-            version = "0.8.44";
+            version = "0.8.52";
           }
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
