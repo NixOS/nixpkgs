@@ -31,7 +31,7 @@ with python311.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace alot/settings/manager.py \
-      --replace /usr/share "$out/share"
+      --replace-fail /usr/share "$out/share"
   '';
 
   nativeBuildInputs = [
@@ -85,7 +85,7 @@ with python311.pkgs; buildPythonApplication rec {
       cp -r extra/themes $out/share/alot
 
       substituteInPlace extra/completion/alot-completion.zsh \
-        --replace "python3" "${completionPython.interpreter}"
+        --replace-fail "python3" "${completionPython.interpreter}"
       install -D extra/completion/alot-completion.zsh $out/share/zsh/site-functions/_alot
 
       sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
