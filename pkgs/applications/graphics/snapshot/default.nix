@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "47.beta";
+  version = "47.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-0GxnNFes1huSi4pPZKC7S587QrTAOuOehzd2jZPRRrw=";
+    hash = "sha256-YqfxDJAhui5J5+aOfrie9UDAnyx933fCBeVCydro/7E=";
   };
 
   nativeBuildInputs = [
