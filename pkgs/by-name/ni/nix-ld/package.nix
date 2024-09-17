@@ -6,13 +6,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage {
-  name = "nix-ld";
+rustPlatform.buildRustPackage rec {
+  pname = "nix-ld";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
-    rev = "2.0.0";
+    rev = version;
     hash = "sha256-rmSXQ4MYQe/OFDBRlqqw5kyp9b/aeEg0Fg9c167xofg=";
   };
 
