@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/humanoid-path-planner/hpp-fcl";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 })
