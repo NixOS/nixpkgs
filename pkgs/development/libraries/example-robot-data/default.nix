@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pinocchio
   ];
 
-  cmakeFlags = lib.optionals (!pythonSupport) [
-    "-DBUILD_PYTHON_INTERFACE=OFF"
+  cmakeFlags =  [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
   ];
 
   doCheck = true;
