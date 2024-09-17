@@ -5,17 +5,16 @@
   certifi,
   cffi,
   charset-normalizer,
+  cryptography,
   cython,
   fetchPypi,
   filelock,
   idna,
   keyring,
-  oscrypto,
   packaging,
   pandas,
   platformdirs,
   pyarrow,
-  pycryptodomex,
   pyjwt,
   pyopenssl,
   pythonOlder,
@@ -25,7 +24,6 @@
   sortedcontainers,
   tomlkit,
   typing-extensions,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -44,21 +42,18 @@ buildPythonPackage rec {
   build-system = [
     cython
     setuptools
-    wheel
   ];
-
 
   dependencies = [
     asn1crypto
     certifi
     cffi
     charset-normalizer
+    cryptography
     filelock
     idna
-    oscrypto
     packaging
     platformdirs
-    pycryptodomex
     pyjwt
     pyopenssl
     pytz
@@ -68,7 +63,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pandas = [
       pandas
       pyarrow
