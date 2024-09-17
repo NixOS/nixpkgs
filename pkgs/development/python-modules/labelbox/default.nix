@@ -99,7 +99,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };
