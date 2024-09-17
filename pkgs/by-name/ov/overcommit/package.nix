@@ -2,12 +2,20 @@
   lib,
   bundlerApp,
   bundlerUpdateScript,
+  git,
+  makeWrapper,
 }:
 
 bundlerApp {
   pname = "overcommit";
   gemdir = ./.;
   exes = [ "overcommit" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postBuild = ''
+    wrapProgram $out/bin/overcommit --prefix PATH : ${lib.makeBinPath [ git ]}
+  '';
 
   passthru = {
     updateScript = bundlerUpdateScript "overcommit";
