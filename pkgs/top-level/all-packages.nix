@@ -227,8 +227,6 @@ with pkgs;
 
   quickgui = callPackage ../applications/virtualization/quickgui { };
 
-  adcli = callPackage ../os-specific/linux/adcli { };
-
   alda = callPackage ../development/interpreters/alda { };
 
   align = callPackage ../tools/text/align { };

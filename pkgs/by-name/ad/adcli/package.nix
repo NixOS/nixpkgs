@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, openldap
-, libkrb5
-, libxslt
-, autoreconfHook
-, pkg-config
-, cyrus_sasl
-, util-linux
-, xmlto
-, docbook_xsl
-, docbook_xml_dtd_43
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  cyrus_sasl,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  fetchFromGitLab,
+  libkrb5,
+  libxslt,
+  openldap,
+  pkg-config,
+  util-linux,
+  xmlto,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,40 +21,40 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "realmd";
-    repo = pname;
+    repo = "adcli";
     rev = version;
-    sha256 = "sha256-dipNKlIdc1DpXLg/YJjUxZlNoMFy+rt8Y/+AfWFA4dE=";
+    hash = "sha256-dipNKlIdc1DpXLg/YJjUxZlNoMFy+rt8Y/+AfWFA4dE=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
     docbook_xsl
+    pkg-config
     util-linux
     xmlto
   ];
 
   buildInputs = [
-    openldap
+    cyrus_sasl
     libkrb5
     libxslt
-    cyrus_sasl
+    openldap
   ];
 
   configureFlags = [ "--disable-debug" ];
 
   postPatch = ''
     substituteInPlace tools/Makefile.am \
-      --replace 'sbin_PROGRAMS' 'bin_PROGRAMS'
+      --replace-fail 'sbin_PROGRAMS' 'bin_PROGRAMS'
 
     substituteInPlace doc/Makefile.am \
-        --replace 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl' \
-                  '${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl'
+      --replace-fail 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl' \
+                     '${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl'
 
     function patch_docbook() {
       substituteInPlace $1 \
-        --replace "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
-                  "${docbook_xml_dtd_43}/xml/dtd/docbook/docbookx.dtd"
+        --replace-fail "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
+                       "${docbook_xml_dtd_43}/xml/dtd/docbook/docbookx.dtd"
     }
     patch_docbook doc/adcli.xml
     patch_docbook doc/adcli-devel.xml
@@ -65,7 +66,10 @@ stdenv.mkDerivation rec {
     description = "Helper library and tools for Active Directory client operations";
     mainProgram = "adcli";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ SohamG anthonyroussel ];
+    maintainers = with maintainers; [
+      SohamG
+      anthonyroussel
+    ];
     platforms = platforms.linux;
   };
 }
