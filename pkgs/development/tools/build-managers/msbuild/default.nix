@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
+{ lib, stdenv, fetchurl, makeWrapper, glibcLocales, mono, unzip, dotnetCorePackages, roslyn }:
 
 let
 
@@ -9,23 +9,21 @@ let
     sha256 = "1wnzbdpk4s9bmawlh359ak2b8zi0sgx1qvcjnvfncr1wsck53v7q";
   };
 
-  deps = map (package: package.src)
-    (import ./deps.nix { inherit fetchurl; });
-
-  nuget-config = writeText "NuGet.config" ''
-    <?xml version="1.0" encoding="utf-8"?>
-    <configuration>
-      <packageSources>
-        <clear />
-      </packageSources>
-    </configuration>
-  '';
-
   inherit (stdenv.hostPlatform.extensions) sharedLibrary;
+
+  mkPackage = attrs: stdenv.mkDerivation (finalAttrs:
+    dotnetCorePackages.addNuGetDeps
+      {
+        nugetDeps = ./deps.nix;
+        overrideFetchAttrs = a: {
+          dontBuild = false;
+        };
+      }
+      attrs finalAttrs);
 
 in
 
-stdenv.mkDerivation rec {
+mkPackage rec {
   pname = "msbuild";
   version = "16.10.1+xamarinxplat.2021.05.26.14.00";
 
@@ -42,7 +40,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    nuget
     glibcLocales
   ];
 
@@ -64,18 +61,9 @@ stdenv.mkDerivation rec {
     mv LICENSE license.bak && mv license.bak license
   '';
 
+  linkNugetPackages = true;
+
   buildPhase = ''
-    unset NUGET_PACKAGES
-    # nuget would otherwise try to base itself in /homeless-shelter
-    export HOME=$(pwd)/fake-home
-
-    cp ${nuget-config} NuGet.config
-    nuget sources Add -Name nixos -Source $(pwd)/nixos
-
-    for package in ${toString deps}; do
-      nuget add $package -Source nixos
-    done
-
     mkdir -p artifacts
     unzip ${xplat} -d artifacts
     mv artifacts/msbuild artifacts/mono-msbuild
@@ -98,7 +86,7 @@ stdenv.mkDerivation rec {
 
     # DisableNerdbankVersioning https://gitter.im/Microsoft/msbuild/archives/2018/06/27?at=5b33dbc4ce3b0f268d489bfa
     # TODO there are some (many?) failing tests
-    ./eng/cibuild_bootstrapped_msbuild.sh --host_type mono --configuration Release --skip_tests /p:DisableNerdbankVersioning=true
+    NuGetPackageRoot="$NUGET_PACKAGES" ./eng/cibuild_bootstrapped_msbuild.sh --host_type mono --configuration Release --skip_tests /p:DisableNerdbankVersioning=true
     patchShebangs stage1/mono-msbuild/msbuild
   '';
 
