@@ -13,10 +13,10 @@
   ninja,
   gnome,
   cairo,
-  enchant,
   icu,
   itstool,
   libadwaita,
+  libspelling,
   editorconfig-core-c,
   libxml2,
   desktop-file-utils,
@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    enchant
     icu
     glib
     gsettings-desktop-schemas
     gtk4
     gtksourceview5
     libadwaita
+    libspelling
     editorconfig-core-c
   ];
 
