@@ -59,10 +59,11 @@ in {
             -m /_:package/_:metadata \
             -v _:id -nl \
             -v _:version -nl \
-            "$package"/*.nuspec \
-            | tr A-Z a-z | (
+            "$package"/*.nuspec | (
             read id
             read version
+            id=''${id,,}
+            version=''${version,,}
             mkdir -p "$packages"/share/nuget/packages/"$id"
             cp -r "$package" "$packages"/share/nuget/packages/"$id"/"$version"
             echo {} > "$packages"/share/nuget/packages/"$id"/"$version"/.nupkg.metadata
