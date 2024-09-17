@@ -24719,8 +24719,6 @@ with pkgs;
 
   munin = callPackage ../servers/monitoring/munin { };
 
-  nagios = callPackage ../servers/monitoring/nagios { };
-
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
 
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
