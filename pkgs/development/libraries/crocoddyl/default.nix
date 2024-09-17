@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ] ++ lib.optionals pythonSupport [
     python3Packages.python
+    python3Packages.pythonImportsCheckHook
   ];
 
   propagatedBuildInputs = lib.optionals (!pythonSupport) [
