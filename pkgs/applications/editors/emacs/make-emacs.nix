@@ -2,6 +2,7 @@
 , version
 , variant
 , src
+, templateNativeCompDriverOptionsPatch
 , patches ? _: [ ]
 , meta
 }:
@@ -138,6 +139,20 @@ let
     "${lib.getLib stdenv.cc.cc.lib.libgcc}/lib"
   ];
 
+  nativeCompilationPatch = substituteAll {
+    src = templateNativeCompDriverOptionsPatch;
+    backendPath = (lib.concatStringsSep " "
+      (builtins.map (x: ''"-B${x}"'') ([
+        # Paths necessary so the JIT compiler finds its libraries:
+        "${lib.getLib libgccjit}/lib"
+      ] ++ libGccJitLibraryPaths ++ [
+        # Executable paths necessary for compilation (ld, as):
+        "${lib.getBin stdenv.cc.cc}/bin"
+        "${lib.getBin stdenv.cc.bintools}/bin"
+        "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+      ])));
+  };
+
   inherit (if variant == "macport"
            then llvmPackages_14.stdenv
            else stdenv) mkDerivation;
@@ -154,25 +169,7 @@ mkDerivation (finalAttrs: {
 
   inherit src;
 
-  patches = patches fetchpatch ++ lib.optionals withNativeCompilation [
-    (substituteAll {
-      src = if lib.versionOlder finalAttrs.version "29"
-            then ./native-comp-driver-options-28.patch
-            else if lib.versionOlder finalAttrs.version "30"
-            then ./native-comp-driver-options.patch
-            else ./native-comp-driver-options-30.patch;
-      backendPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''"-B${x}"'') ([
-          # Paths necessary so the JIT compiler finds its libraries:
-          "${lib.getLib libgccjit}/lib"
-        ] ++ libGccJitLibraryPaths ++ [
-          # Executable paths necessary for compilation (ld, as):
-          "${lib.getBin stdenv.cc.cc}/bin"
-          "${lib.getBin stdenv.cc.bintools}/bin"
-          "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-        ])));
-    })
-  ];
+  patches = patches fetchpatch ++ lib.optionals withNativeCompilation [ nativeCompilationPatch ];
 
   postPatch = lib.concatStringsSep "\n" [
     (lib.optionalString srcRepo ''
