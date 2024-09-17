@@ -689,6 +689,8 @@ let
 
     httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
 
+    httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
+
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     ### I ###
