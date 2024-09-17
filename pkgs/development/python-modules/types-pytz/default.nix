@@ -15,7 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-RDO130pvxYe77UFxbYalul2DK0N45Qb0DTS8nIHfLCQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
