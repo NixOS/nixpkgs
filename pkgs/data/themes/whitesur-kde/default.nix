@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "whitesur-kde";
-  version = "2022-05-01-unstable-2024-08-26";
+  version = "2022-05-01-unstable-2024-09-10";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "whitesur-kde";
-    rev = "ead6fd7308b3cae1b4634d00ddc685f9a88c59a9";
-    hash = "sha256-1YDy+g8r6NIceV1ygJK+w24g4ehzsPFMSWoLkuiNosU=";
+    rev = "3d80dc97fd3008c4648937f8d7e39014f874a7eb";
+    hash = "sha256-jkK15evuYi1x+9MMERlp/F4O2AxQPHdrm4qBlzIPROM=";
   };
 
   # Propagate sddm theme dependencies to user env otherwise sddm does
