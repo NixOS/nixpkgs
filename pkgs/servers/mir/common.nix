@@ -12,6 +12,7 @@
   glib,
   glm,
   glog,
+  libapparmor,
   libdrm,
   libepoxy,
   libevdev,
@@ -58,28 +59,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit patches;
 
-  postPatch = ''
-    # Fix scripts that get run in tests
-    patchShebangs tools/detect_fd_leaks.bash tests/acceptance-tests/wayland-generator/test_wayland_generator.sh.in
+  postPatch =
+    ''
+      # Fix scripts that get run in tests
+      patchShebangs tools/detect_fd_leaks.bash tests/acceptance-tests/wayland-generator/test_wayland_generator.sh.in
 
-    # Fix LD_PRELOADing in tests
-    substituteInPlace \
-      cmake/MirCommon.cmake \
-      tests/umock-acceptance-tests/CMakeLists.txt \
-      tests/unit-tests/platforms/gbm-kms/kms/CMakeLists.txt \
-      tests/unit-tests/CMakeLists.txt \
-      --replace-warn 'LD_PRELOAD=liblttng-ust-fork.so' 'LD_PRELOAD=${lib.getLib lttng-ust}/lib/liblttng-ust-fork.so' \
-      --replace-warn 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
+      # Fix LD_PRELOADing in tests
+      substituteInPlace \
+        cmake/MirCommon.cmake \
+        tests/umock-acceptance-tests/CMakeLists.txt \
+        tests/unit-tests/platforms/gbm-kms/kms/CMakeLists.txt \
+        tests/unit-tests/CMakeLists.txt \
+        --replace-warn 'LD_PRELOAD=liblttng-ust-fork.so' 'LD_PRELOAD=${lib.getLib lttng-ust}/lib/liblttng-ust-fork.so' \
+        --replace-warn 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
 
-    # Fix Xwayland default
-    substituteInPlace src/miral/x11_support.cpp \
-      --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
+      # Fix Xwayland default
+      substituteInPlace src/miral/x11_support.cpp \
+        --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
+    ''
+    + lib.optionalString (lib.strings.versionOlder version "2.18.0") ''
 
-    # Fix paths for generating drm-formats
-    substituteInPlace src/platform/graphics/CMakeLists.txt \
-      --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
-      --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
-  '';
+      # Fix paths for generating drm-formats
+      substituteInPlace src/platform/graphics/CMakeLists.txt \
+        --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
+        --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
+    '';
 
   strictDeps = true;
 
@@ -127,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXcursor
     xorg.xorgproto
     xwayland
-  ];
+  ] ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [ libapparmor ];
 
   nativeCheckInputs = [
     dbus
