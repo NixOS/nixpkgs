@@ -577,4 +577,64 @@ rec {
     '') {};
   };
 
+  xml =
+    {
+      format ? "badgerfish",
+      withHeader ? true,
+    }:
+    if format == "badgerfish" then
+      {
+        type = let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            path
+            (attrsOf valueType)
+            (listOf valueType)
+          ]) // {
+            description = "XML value";
+          };
+        in valueType;
+
+        generate =
+          name: value:
+          pkgs.callPackage (
+            {
+              runCommand,
+              python3,
+              libxml2Python,
+            }:
+            runCommand name
+              {
+                nativeBuildInputs = [
+                  python3
+                  python3.pkgs.xmltodict
+                  libxml2Python
+                ];
+                value = builtins.toJSON value;
+                pythonGen = ''
+                  import json
+                  import os
+                  import xmltodict
+
+                  with open(os.environ["valuePath"], "r") as f:
+                      print(xmltodict.unparse(json.load(f), full_document=${toString withHeader}, pretty=True, indent=" " * 2))
+                '';
+                passAsFile = [
+                  "value"
+                  "pythonGen"
+                ];
+                preferLocalBuild = true;
+              }
+              ''
+                python3 "$pythonGenPath" > $out
+                xmllint $out > /dev/null
+              ''
+          ) { };
+      }
+    else
+      throw "pkgs.formats.xml: Unknown format: ${format}";
+
 }
