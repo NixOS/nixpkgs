@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-V4tdqcHfYRh9VoXUTPXM3SIOogJDJB14SLj5dSd7LzU=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ apispec ] ++ apispec.optional-dependencies.yaml;
+  dependencies = [ apispec ] ++ apispec.optional-dependencies.yaml;
 
   nativeCheckInputs = [
     aiohttp
