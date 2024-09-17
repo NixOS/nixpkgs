@@ -6,7 +6,7 @@
 , autoPatchelfHook
 , libcxx
 , libGL
-, gcc7
+, gcc
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     libcxx
     libGL
-    gcc7.cc.lib
+    gcc.cc.lib
   ];
 
   # yes, the below download function is an absolute mess.
