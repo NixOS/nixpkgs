@@ -1,17 +1,34 @@
-{ lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook3
-, buildPythonApplication, pycairo, pygobject3
-, gdk-pixbuf, gobject-introspection, gtk3, librsvg
-, alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
-, automake, autoconf, txt2man
+{
+  lib,
+  alsa-utils,
+  autoconf,
+  automake,
+  csound,
+  fetchurl,
+  gdk-pixbuf,
+  gettext,
+  gobject-introspection,
+  gtk3,
+  librsvg,
+  lilypond,
+  mpg123,
+  pkg-config,
+  python3Packages,
+  texinfo,
+  timidity,
+  txt2man,
+  vorbis-tools,
+  wrapGAppsHook3,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "solfege";
   version = "3.23.4";
+  format = "other";
 
   src = fetchurl {
     url = "https://alpha.gnu.org/gnu/solfege/solfege-${version}.tar.gz";
-    sha256 = "0sc17vf4xz6gy0s0z9ghi68yskikdmyb4gdaxx6imrm40734k8mp";
+    hash = "sha256-t6JJxgGk5hpN76o9snxtM07tkYnwpQ808M/8Ttw+gWk=";
   };
 
   patches = [
@@ -27,15 +44,14 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    automake
     autoconf
+    automake
     gdk-pixbuf
     gettext
+    gobject-introspection
     pkg-config
     texinfo
     txt2man
-
-    gobject-introspection
     wrapGAppsHook3
   ];
 
@@ -44,7 +60,7 @@ buildPythonApplication rec {
     librsvg
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pycairo
     pygobject3
   ];
@@ -59,7 +75,11 @@ buildPythonApplication rec {
            default.config
   '';
 
-  format = "other";
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   enableParallelBuilding = true;
 
@@ -68,7 +88,11 @@ buildPythonApplication rec {
     homepage = "https://www.gnu.org/software/solfege/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor orivej anthonyroussel ];
+    maintainers = with maintainers; [
+      bjornfor
+      orivej
+      anthonyroussel
+    ];
     mainProgram = "solfege";
   };
 }
