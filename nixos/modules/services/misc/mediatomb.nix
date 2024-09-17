@@ -36,7 +36,6 @@ let
         <transcode mimetype="video/x-flv" using="vlcmpeg" />
         <transcode mimetype="application/ogg" using="vlcmpeg" />
         <transcode mimetype="audio/ogg" using="ogg2mp3" />
-        <transcode mimetype="audio/x-flac" using="oggflac2raw"/>
       </mimetype-profile-mappings>
       <profiles>
         <profile name="ogg2mp3" enabled="no" type="external">
