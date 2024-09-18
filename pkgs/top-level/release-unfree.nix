@@ -1,5 +1,5 @@
 /*
-    NixOS unstable packages
+    Nixpkgs unfree packages
 
     This release file is currently not tested on hydra.nixos.org
     because it requires unfree software, but it is tested by
@@ -91,12 +91,12 @@ let
     (isUnfree pkg)
     && (isSource pkg)
     && (canSubstituteSrc pkg)
+    && (isNotCudaPackage attrPath)
     && (
-      if full then
-        true
-      else
-        # By default we also filter for these things
-        (isNotCudaPackage attrPath) && (isNotLinuxKernel attrPath)
+      full
+      ||
+        # We only build these heavy packages on releases
+        (isNotLinuxKernel attrPath)
     );
 
   packages = packagesWith "" cond pkgs;
