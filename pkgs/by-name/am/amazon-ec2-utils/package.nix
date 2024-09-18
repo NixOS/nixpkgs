@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bash
-, python3
-, installShellFiles
-, gawk
-, curl
+{
+  stdenv,
+  lib,
+  bash,
+  curl,
+  fetchFromGitHub,
+  gawk,
+  installShellFiles,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,20 +20,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-plTBh2LAXkYVSxN0IZJQuPr7QxD7+OAqHl/Zl8JPCmg=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = [
     bash
     python3
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
-
-  installPhase = ''
+  postInstall = ''
     install -Dm755 -t $out/bin/ ebsnvme-id
     install -Dm755 -t $out/bin/ ec2-metadata
     install -Dm755 -t $out/bin/ ec2nvme-nsid
@@ -48,14 +52,14 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for i in $out/etc/udev/rules.d/*.rules $out/lib/udev/rules.d/*.rules ; do
-      substituteInPlace "$i" \
-        --replace '/usr/sbin' "$out/bin" \
-        --replace '/bin/awk' '${gawk}/bin/awk'
-    done
+    substituteInPlace $out/lib/udev/rules.d/{51-ec2-hvm-devices,70-ec2-nvme-devices}.rules \
+      --replace-fail '/usr/sbin' "$out/bin"
+
+    substituteInPlace $out/lib/udev/rules.d/53-ec2-read-ahead-kb.rules \
+      --replace-fail '/bin/awk' '${gawk}/bin/awk'
 
     substituteInPlace "$out/bin/ec2-metadata" \
-      --replace 'curl' '${curl}/bin/curl'
+      --replace-fail 'curl' '${curl}/bin/curl'
   '';
 
   doInstallCheck = true;
@@ -73,6 +77,10 @@ stdenv.mkDerivation rec {
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
     homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ ketzacoatl thefloweringash anthonyroussel ];
+    maintainers = with maintainers; [
+      ketzacoatl
+      thefloweringash
+      anthonyroussel
+    ];
   };
 }

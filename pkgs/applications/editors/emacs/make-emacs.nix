@@ -75,6 +75,8 @@
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
+# Emacs 30+ has native JSON support
+, withJansson ? lib.versionOlder version "30"
 , withMailutils ? true
 , withMotif ? false
 , withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
@@ -157,7 +159,9 @@ mkDerivation (finalAttrs: {
     (substituteAll {
       src = if lib.versionOlder finalAttrs.version "29"
             then ./native-comp-driver-options-28.patch
-            else ./native-comp-driver-options.patch;
+            else if lib.versionOlder finalAttrs.version "30"
+            then ./native-comp-driver-options.patch
+            else ./native-comp-driver-options-30.patch;
       backendPath = (lib.concatStringsSep " "
         (builtins.map (x: ''"-B${x}"'') ([
           # Paths necessary so the JIT compiler finds its libraries:
@@ -212,13 +216,15 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals srcRepo [
     autoreconfHook
     texinfo
-  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook3;
+  ] ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
 
   buildInputs = [
     gettext
     gnutls
-    harfbuzz.dev
+    (lib.getDev harfbuzz)
+  ] ++ lib.optionals withJansson [
     jansson
+  ] ++ [
     libxml2
     ncurses
   ] ++ lib.optionals withAcl [

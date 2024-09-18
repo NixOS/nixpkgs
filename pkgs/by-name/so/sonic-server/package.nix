@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, nixosTests
-, testers
-, sonic-server
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
+  rustPlatform,
+  sonic-server,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,9 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-bH9u38gvH6QEySQ3XFXEHBiSqKKtB+kjcZRLjx4Z6XM=";
 
-  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  doCheck = false;
-
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
@@ -31,18 +29,21 @@ rustPlatform.buildRustPackage rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   postPatch = ''
-    substituteInPlace src/main.rs --replace "./config.cfg" "$out/etc/sonic/config.cfg"
+    substituteInPlace src/main.rs \
+      --replace-fail "./config.cfg" "$out/etc/sonic/config.cfg"
   '';
 
   postInstall = ''
     install -Dm444 -t $out/etc/sonic config.cfg
     install -Dm444 -t $out/lib/systemd/system debian/sonic.service
 
-    substituteInPlace \
-      $out/lib/systemd/system/sonic.service \
-      --replace /usr/bin/sonic $out/bin/sonic \
-      --replace /etc/sonic.cfg $out/etc/sonic/config.cfg
+    substituteInPlace $out/lib/systemd/system/sonic.service \
+      --replace-fail /usr/bin/sonic $out/bin/sonic \
+      --replace-fail /etc/sonic.cfg $out/etc/sonic/config.cfg
   '';
+
+  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
+  doCheck = false;
 
   passthru = {
     tests = {
@@ -62,6 +63,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     platforms = platforms.unix;
     mainProgram = "sonic";
-    maintainers = with maintainers; [ pleshevskiy anthonyroussel ];
+    maintainers = with maintainers; [
+      pleshevskiy
+      anthonyroussel
+    ];
   };
 }
