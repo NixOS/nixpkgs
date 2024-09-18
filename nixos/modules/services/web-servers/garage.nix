@@ -15,7 +15,7 @@ in
 {
   meta = {
     doc = ./garage.md;
-    maintainers = [ ];
+    maintainers = [ maintainers.mjm ];
   };
 
   options.services.garage = {
