@@ -29,7 +29,7 @@ curl --silent --fail --output ${VERSIONS_SCRIPT} \
         https://raw.githubusercontent.com/rancher/rke2/${RKE2_COMMIT}/scripts/version.sh
 
 set +eu
-DRONE_TAG=${LATEST_TAG_NAME} source ${VERSIONS_SCRIPT}
+GITHUB_ACTION_TAG=${LATEST_TAG_NAME} source ${VERSIONS_SCRIPT}
 set -eu
 
 KUBERNETES_CYCLES=$(echo ${KUBERNETES_VERSION} | grep -Eo "[0-9]+\.[0-9]+")
@@ -50,7 +50,7 @@ cat << EOF > "${WORKDIR}/${CHANNEL_NAME}/versions.nix"
   etcdVersion = "${ETCD_VERSION}";
   pauseVersion = "${PAUSE_VERSION}";
   ccmVersion = "${CCM_VERSION}";
-  dockerizedVersion = "${DOCKERIZED_VERSION}";
+  dockerizedVersion = "${LATEST_TAG_NAME/+/-}";
   golangVersion = "${VERSION_GOLANG}";
   eol = "${KUBERNETES_EOL}";
 }
