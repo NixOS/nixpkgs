@@ -1,12 +1,14 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
+  doxygen,
   example-robot-data,
+  fetchFromGitHub,
+  lib,
   pinocchio,
+  pkg-config,
   pythonSupport ? false,
   python3Packages,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,10 +22,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SVV9sleDXLm2QJmNgL25XLHC3y5bfKab4GSlE8jbT8w=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs =
-    [ cmake ]
+    [
+      cmake
+      doxygen
+      pkg-config
+    ]
     ++ lib.optionals pythonSupport [
       python3Packages.python
       python3Packages.pythonImportsCheckHook
@@ -39,9 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.pinocchio
     ];
 
-  cmakeFlags = lib.optionals (!pythonSupport) [
-    "-DBUILD_EXAMPLES=OFF"
-    "-DBUILD_PYTHON_INTERFACE=OFF"
+  cmakeFlags = [
+    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+    (lib.cmakeBool "BUILD_EXAMPLES" pythonSupport)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
   ];
 
   prePatch = ''
