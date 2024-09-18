@@ -1,20 +1,22 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  casadi,
-  cmake,
   boost,
-  eigen,
-  example-robot-data,
+  casadi,
   casadiSupport ? true,
+  cmake,
   collisionSupport ? true,
   console-bridge,
-  jrl-cmakemodules,
+  doxygen,
+  eigen,
+  example-robot-data,
+  fetchFromGitHub,
   hpp-fcl,
-  urdfdom,
+  jrl-cmakemodules,
+  lib,
+  pkg-config,
   pythonSupport ? false,
   python3Packages,
+  stdenv,
+  urdfdom,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-8V+n1TwFojXKOVkGG8k9aXVadt2NBFlZKba93L+NRNU=";
   };
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
   prePatch = lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
@@ -57,7 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs =
-    [ cmake ]
+    [
+      cmake
+      doxygen
+      pkg-config
+    ]
     ++ lib.optionals pythonSupport [
       python3Packages.python
       python3Packages.pythonImportsCheckHook
@@ -89,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
     (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
     (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
+    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
   ];
 
   doCheck = true;
