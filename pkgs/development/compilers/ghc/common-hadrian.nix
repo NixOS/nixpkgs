@@ -184,6 +184,15 @@
             hash = "sha256-MpvTmFFsNiPDoOp9BhZyWeapeibQ77zgEV+xzZ1UAXs=";
           })
         ]
+        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
+          # Fix unlit being installed under a different name than is used in the
+          # settings file: https://gitlab.haskell.org/ghc/ghc/-/issues/23317
+          (fetchpatch {
+            name = "ghc-9.6-fix-unlit-path.patch";
+            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8fde4ac84ec7b1ead238cb158bbef48555d12af9.patch";
+            hash = "sha256-3+CyRBpebEZi8YpS22SsdGQHqi0drR7cCKPtKbR3zyE=";
+          })
+        ]
         ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
           # Prevent the paths module from emitting symbols that we don't use
           # when building with separate outputs.
@@ -655,13 +664,6 @@ stdenv.mkDerivation ({
         then toolPath "clang" installCC
         else "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
       }"
-  ''
-  # Work around a GHC bug which causes unlit to be installed under a different
-  # name than is used in the settings file.
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23317
-  + lib.optionalString (lib.versionOlder version "9.8") ''
-    ghc-settings-edit "$settingsFile" \
-      "unlit command" "\$topdir/bin/${targetPrefix}unlit"
   ''
   + ''
 
