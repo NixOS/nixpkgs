@@ -6,6 +6,7 @@ import ./make-test-python.nix (
       # test is flaky on aarch64
       broken = pkgs.stdenv.hostPlatform.isAarch64;
       maintainers = [ lib.maintainers.devusb ];
+      timeout = 600;
     };
 
     nodes.sunshine =
@@ -58,20 +59,23 @@ import ./make-test-python.nix (
 
       # initiate pairing from moonlight
       moonlight.execute("moonlight pair sunshine --pin 1234 >&2 & disown")
-      moonlight.wait_for_console_text("Executing request")
+      moonlight.wait_for_console_text("Executing request.*pair")
 
       # respond to pairing request from sunshine
-      sunshine.succeed("curl --insecure -u sunshine:sunshine -d '{\"pin\": \"1234\"}' https://localhost:47990/api/pin")
+      sunshine.succeed("curl --fail --insecure -u sunshine:sunshine -d '{\"pin\": \"1234\"}' https://localhost:47990/api/pin")
 
-      # close moonlight once pairing complete
-      moonlight.send_key("kp_enter")
+      # wait until pairing is complete
+      moonlight.wait_for_console_text("Executing request.*phrase=pairchallenge")
 
+      # hide icewm panel
+      sunshine.send_key("ctrl-alt-h")
       # put words on the sunshine screen for moonlight to see
-      sunshine.execute("gxmessage 'hello world' -center -font 'sans 75' >&2 & disown")
+      sunshine.execute("gxmessage ' ABC' -center -font 'consolas 100' -fg '#FFFFFF' -bg '#000000' -borderless -geometry '2000x2000' -buttons \"\" >&2 & disown")
 
       # connect to sunshine from moonlight and look for the words
       moonlight.execute("moonlight --video-decoder software stream sunshine 'Desktop' >&2 & disown")
-      moonlight.wait_for_text("hello world")
+      moonlight.wait_for_console_text("Dropping window event during flush")
+      moonlight.wait_for_text("ABC")
     '';
   }
 )
