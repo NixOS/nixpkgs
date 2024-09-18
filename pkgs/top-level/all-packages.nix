@@ -10244,6 +10244,8 @@ with pkgs;
 
   mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
+  libgbm = callPackage ../development/libraries/mesa/gbm.nix {};
+
   ## End libGL/libGLU/Mesa stuff
 
   midivisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midivisualizer {
