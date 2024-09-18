@@ -28,13 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-  ] ++ lib.optionals pythonSupport [
-    python3Packages.numpy
-    python3Packages.pythonImportsCheckHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.numpy
+      python3Packages.pythonImportsCheckHook
+    ];
 
   propagatedBuildInputs =
     [
