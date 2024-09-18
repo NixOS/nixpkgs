@@ -435,6 +435,9 @@ in
 
     systemd.services.systemd-udevd =
       { restartTriggers = cfg.packages;
+        # partial fix for https://github.com/NixOS/nixpkgs/issues/334017
+        requiredBy = [ "sysinit-reactivation.target" ];
+        before = [ "sysinit-reactivation.target" ];
       };
 
   };
