@@ -7,6 +7,7 @@
   poco,
   ocl-icd,
   opencl-clhpp,
+  gitUpdater,
   callPackage,
 }:
 
@@ -38,8 +39,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    run-on-nixos-artwork = callPackage ./tests/run-on-nixos-artwork.nix { };
+  passthru = {
+    tests = {
+      run-on-nixos-artwork = callPackage ./tests/run-on-nixos-artwork.nix { };
+    };
+    updateScript = gitUpdater { };
   };
 
   meta = with lib; {
