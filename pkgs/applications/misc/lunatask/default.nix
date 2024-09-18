@@ -24,6 +24,8 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
+  passthru.updateScript = ./update.py;
+
   meta = with lib; {
     description = "All-in-one encrypted todo list, notebook, habit and mood tracker, pomodoro timer, and journaling app";
     longDescription = ''
@@ -31,6 +33,7 @@ appimageTools.wrapType2 rec {
     '';
     homepage = "https://lunatask.app";
     downloadPage = "https://lunatask.app/download";
+    changelog = "https://lunatask.app/releases/${version}";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ henkery ];
