@@ -11,6 +11,7 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
+, fetchpatch2
   # For tests
 , testers
 , runCommand
@@ -135,6 +136,12 @@ let
 
       "${src}/contrib/ffmpeg/A18-qsv-fix-decode-10bit-hdr.patch"
       "${src}/contrib/ffmpeg/A19-ffbuild-common-use-gzip-n-flag-for-cuda.patch"
+
+      (fetchpatch2 {
+        name = "fix_vulkan_av1.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e06ce6d2b45edac4a2df04f304e18d4727417d24";
+        hash = "sha256-73mlX1rdJrguw7OXaSItfHtI7gflDrFj+7SepVvvUIg=";
+      })
     ];
   });
 

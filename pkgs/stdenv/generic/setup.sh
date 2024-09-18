@@ -981,7 +981,13 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars" || true
+        # On darwin, install(1) cannot be called with /dev/stdin or fd from process substitution
+        # so first we create the file and then write to it
+        # See https://github.com/NixOS/nixpkgs/issues/335016
+        {
+            install -m 0600 /dev/null "$NIX_BUILD_TOP/env-vars" &&
+            export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars"
+        } || true
     fi
 }
 
