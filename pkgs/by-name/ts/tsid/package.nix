@@ -36,11 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  nativeBuildInputs = [
-    doxygen
-    cmake
-    pkg-config
-  ] ++ lib.optional pythonSupport python3Packages.python;
+  nativeBuildInputs =
+    [
+      doxygen
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
 
   propagatedBuildInputs =
     [
@@ -51,11 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!pythonSupport) pinocchio ++ lib.optional pythonSupport python3Packages.pinocchio;
 
   doCheck = true;
-  # pythonImportsCheck, but in stdenv.mkDerivation
-  postInstall = lib.optionalString pythonSupport ''
-    PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
-    python -c "import tsid"
-  '';
+  pythonImportsCheck = [ "tsid" ];
 
   meta = {
     description = "Efficient Task Space Inverse Dynamics (TSID) based on Pinocchio";
