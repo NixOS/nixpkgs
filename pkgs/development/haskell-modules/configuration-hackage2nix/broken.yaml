@@ -1224,7 +1224,6 @@ broken-packages:
   - dead-code-detection # failure in job https://hydra.nixos.org/build/233205957 at 2023-09-02
   - Deadpan-DDP # failure in job https://hydra.nixos.org/build/233221990 at 2023-09-02
   - dead-simple-json # failure in job https://hydra.nixos.org/build/233204301 at 2023-09-02
-  - dear-imgui # failure in job https://hydra.nixos.org/build/233238246 at 2023-09-02
   - debugger-hs # failure in job https://hydra.nixos.org/build/233206302 at 2023-09-02
   - debug-me # failure in job https://hydra.nixos.org/build/233213991 at 2023-09-02
   - debug-trace-file # failure in job https://hydra.nixos.org/build/233231840 at 2023-09-02
