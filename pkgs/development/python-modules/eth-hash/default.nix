@@ -1,41 +1,51 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
   pythonAtLeast,
   pythonOlder,
-  pytest,
-  safe-pysha3,
   pycryptodome,
+  pytest,
+  pytest-xdist,
+  safe-pysha3,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.5.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "0.7.0";
+
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-hash";
-    rev = "v${version}";
-    hash = "sha256-6UN+kvLjjAtkmLgUaovjZC/6n3FZtXCwyXZH7ijQObU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tFKq+WN8Z1BIAOIfaRtVt4+pnZ99FwHO8/pycmQx5Gg=";
   };
 
-  nativeCheckInputs =
-    [ pytest ]
-    ++ passthru.optional-dependencies.pycryptodome
-    # eth-hash can use either safe-pysha3 or pycryptodome;
-    # safe-pysha3 requires Python 3.9+ while pycryptodome does not.
-    # https://github.com/ethereum/eth-hash/issues/46#issuecomment-1314029211
-    ++ lib.optional (pythonAtLeast "3.9") passthru.optional-dependencies.pysha3;
+  build-system = [ setuptools ];
 
+  nativeCheckInputs =
+    [
+      pytest
+      pytest-xdist
+    ]
+    ++ passthru.optional-dependencies.pycryptodome
+    # safe-pysha3 is not available on pypy
+    ++ lib.optional (!isPyPy) passthru.optional-dependencies.pysha3;
+
+  # Backends need to be tested separatly and can not use hook
   checkPhase =
     ''
-      pytest tests/backends/pycryptodome/
+      runHook preCheck
+      pytest tests/core tests/backends/pycryptodome
     ''
-    + lib.optionalString (pythonAtLeast "3.9") ''
-      pytest tests/backends/pysha3/
+    + lib.optionalString (!isPyPy) ''
+      pytest tests/backends/pysha3
     '';
 
   passthru.optional-dependencies = {
@@ -43,10 +53,11 @@ buildPythonPackage rec {
     pysha3 = [ safe-pysha3 ];
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ethereum/eth-hash/blob/v${version}/docs/release_notes.rst";
     description = "Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.FlorianFranzen ];
   };
 }
