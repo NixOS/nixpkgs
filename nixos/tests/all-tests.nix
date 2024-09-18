@@ -651,7 +651,7 @@ in {
   nitter = handleTest ./nitter.nix {};
   nix-config = handleTest ./nix-config.nix {};
   nix-ld = handleTest ./nix-ld.nix {};
-  nix-serve = handleTest ./nix-serve.nix {};
+  nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
