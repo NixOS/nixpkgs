@@ -52,6 +52,4 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23392
-  gi-gtk = disableParallelBuilding super.gi-gtk;
 }

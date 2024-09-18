@@ -107,9 +107,6 @@ self: super: {
     package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;
 
-  # Avoid triggering an issue in ghc-9.6.2
-  gi-gtk = disableParallelBuilding super.gi-gtk;
-
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
 
