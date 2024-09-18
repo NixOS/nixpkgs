@@ -231,7 +231,7 @@ class Driver:
                                 machine.start_command = start_cmd
                 else:
                     self.logger.error(
-                        f"Skipping the update of {start_cmd.machine_name}, because there are mltiple machines with that name. This shouldn't be possible, and is an error in the testing framework."
+                        f"Skipping the update of {start_cmd.machine_name}, because there are multiple machines with that name. This shouldn't be possible, and is an error in the testing framework."
                     )
 
         with self.logger.nested("updating vlans"):
