@@ -13,10 +13,10 @@ in stdenv.mkDerivation rec {
   version = "8.0";
 
   src = fetchFromGitHub {
-    fetchSubmodules = true;
     owner = "matlo";
     repo = "GIMX";
     rev = "v${version}";
+    fetchSubmodules = true;
     hash = "sha256-BcFLdQgEAi6Sxyb5/P9YAIkmeXNZXrKcOa/6g817xQg=";
   };
 
