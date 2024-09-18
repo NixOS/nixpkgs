@@ -8832,8 +8832,6 @@ with pkgs;
 
   ipv6calc = callPackage ../tools/networking/ipv6calc { };
 
-  ipxe = callPackage ../tools/misc/ipxe { };
-
   irker = callPackage ../servers/irker { };
 
   iroh = callPackage ../applications/networking/iroh { };

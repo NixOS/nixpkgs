@@ -12,18 +12,21 @@
 , nixosTests
 , pkg-config
 , squashfsTools
+, stdenv
 , wimlib
 }:
 
 let
   bins = [
-    cdrkit
     coreutils
     debootstrap
     gnupg
     gnutar
-    hivex
     squashfsTools
+  ] ++ lib.optionals stdenv.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
     wimlib
   ];
 in

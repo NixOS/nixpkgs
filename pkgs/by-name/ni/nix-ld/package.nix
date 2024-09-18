@@ -6,17 +6,18 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage {
-  name = "nix-ld";
+rustPlatform.buildRustPackage rec {
+  pname = "nix-ld";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
-    rev = "2.0.0";
+    rev = version;
     hash = "sha256-rmSXQ4MYQe/OFDBRlqqw5kyp9b/aeEg0Fg9c167xofg=";
   };
 
-  cargoHash = "sha256-w6CQx9kOyBtM2nMwdFb+LtU4oHVEYrTNVmH1A6R5DHM=";
+  cargoHash = "sha256-BVulfs4zm3Iruq00H49QcxR3V+iZvePtLBTytdXfLP4=";
 
   hardeningDisable = [ "stackprotector" ];
 
