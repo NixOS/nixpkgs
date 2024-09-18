@@ -1,12 +1,12 @@
 {
   lib,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
   ...
 }:
-
-buildGoModule rec {
+let
   pname = "workout-tracker";
   version = "0.14.3";
 
@@ -17,7 +17,30 @@ buildGoModule rec {
     hash = "sha256-NGj3W6SYZauaAhMinPzsSXM8Dqy+B+am985JJjh6xTs=";
   };
 
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
+    inherit version src;
+    npmDepsHash = "sha256-YdgivSanl5IGspzPasHBMkDdaumwji/EfiwIrEbVO1E=";
+    dontNpmBuild = true;
+    postPatch = ''
+      rm Makefile
+    '';
+    installPhase = ''
+      runHook preInstall
+      cp -r . "$out"
+      runHook postInstall
+    '';
+  };
+in
+buildGoModule rec {
+  inherit pname version src;
+
   vendorHash = null;
+
+  postPatch = ''
+    ln -s ${assets}/node_modules ./node_modules
+    make build-dist
+  '';
 
   passthru.updateScript = nix-update-script { };
 
