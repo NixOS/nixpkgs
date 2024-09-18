@@ -35,6 +35,7 @@
 , libsecret
 , libxslt
 , harfbuzz
+, hyphen
 , libsysprof-capture
 , libpthreadstubs
 , nettle
@@ -137,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-bad
     gst-plugins-base
     harfbuzz
+    hyphen
     libGL
     libGLU
     mesa # for libEGL headers
@@ -206,7 +208,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_LIBHYPHEN=OFF"
       "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
