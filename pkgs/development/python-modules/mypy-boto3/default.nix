@@ -594,8 +594,8 @@ rec {
       "sha256-U0sYInE/1XsjwQCxmcYLVvmEQf4R6drtdSqTr0b+3OM=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.35.17"
-      "sha256-OAA5OwjH4oXVV908NXoiXS6M87LwDf1IIrPDTTRzo58=";
+    buildMypyBoto3Package "guardduty" "1.35.22"
+      "sha256-+Ro4QM8DwrDlbroFb6YV6fZGYPieHB0B5+EgdNrnIzQ=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.35.0"
