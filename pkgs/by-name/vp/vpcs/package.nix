@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, vpcs
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  vpcs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "vpcs";
-    rev = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-OKi4sC4fmKtkJkkpHZ6OfeIDaBafVrJXGXh1R6gLPFY=";
   };
 
@@ -26,22 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     install -D -m555 vpcs $out/bin/vpcs
     install -D -m444 ../man/vpcs.1 $out/share/man/man1/vpcs.1
-
-    runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = vpcs;
-      command = "vpcs -v";
-    };
+  passthru.tests.version = testers.testVersion {
+    package = vpcs;
+    command = "vpcs -v";
   };
 
   meta = with lib; {
