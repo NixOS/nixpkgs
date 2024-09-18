@@ -1,13 +1,19 @@
-{ lib
-, fetchFromGitHub
-, mkYarnPackage
-, buildGoModule
-, makeWrapper
-, v2ray
-, v2ray-geoip
-, v2ray-domain-list-community
-, symlinkJoin
-, fetchYarnDeps
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  symlinkJoin,
+
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+
+  makeWrapper,
+  v2ray,
+  v2ray-geoip,
+  v2ray-domain-list-community,
 }:
 let
   pname = "v2raya";
@@ -16,52 +22,44 @@ let
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-tXVyroQ2yXwLe+OulvVQYgfd9EcC87S0L8d7w5gLnMI=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
-  guiSrc = "${src}/gui";
 
-  web = mkYarnPackage {
-    inherit pname version;
+  web = stdenv.mkDerivation {
+    inherit pname version src;
 
-    src = guiSrc;
-    packageJSON = ./package.json;
+    sourceRoot = "${src.name}/gui";
 
     offlineCache = fetchYarnDeps {
-      yarnLock = "${guiSrc}/yarn.lock";
-      sha256 = "sha256-AZIYkW2u1l9IaDpR9xiKNpc0sGAarLKwHf5kGnzdpKw=";
+      yarnLock = "${src}/gui/yarn.lock";
+      hash = "sha256-AZIYkW2u1l9IaDpR9xiKNpc0sGAarLKwHf5kGnzdpKw=";
     };
 
-    buildPhase = ''
-      runHook preBuild
-      OUTPUT_DIR=$out yarn --offline build
-      runHook postBuild
-    '';
+    env.OUTPUT_DIR = placeholder "out";
 
-    configurePhase = ''
-      runHook preConfigure
-      cp -r $node_modules node_modules
-      chmod +w node_modules
-      runHook postConfigure
-    '';
-
-    distPhase = "true";
-
-    dontInstall = true;
-    dontFixup = true;
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
   };
 
   assetsDir = symlinkJoin {
     name = "assets";
-    paths = [ v2ray-geoip v2ray-domain-list-community ];
+    paths = [
+      v2ray-geoip
+      v2ray-domain-list-community
+    ];
   };
 
 in
 buildGoModule {
-  inherit pname version;
+  inherit pname version src;
 
-  src = "${src}/service";
+  sourceRoot = "${src.name}/service";
+
   vendorHash = "sha256-8MSNTKeN0N2/yaHnXsKmxzw9vRy+E5q60IpwLycqC2I=";
 
   ldflags = [
@@ -73,15 +71,16 @@ buildGoModule {
   subPackages = [ "." ];
 
   nativeBuildInputs = [ makeWrapper ];
+
   preBuild = ''
     cp -a ${web} server/router/web
   '';
 
   postInstall = ''
-    install -Dm 444 ${src}/install/universal/v2raya.desktop -t $out/share/applications
-    install -Dm 444 ${src}/install/universal/v2raya.png -t $out/share/icons/hicolor/512x512/apps
+    install -Dm 444 ../install/universal/v2raya.desktop -t $out/share/applications
+    install -Dm 444 ../install/universal/v2raya.png -t $out/share/icons/hicolor/512x512/apps
     substituteInPlace $out/share/applications/v2raya.desktop \
-      --replace 'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' 'Icon=v2raya'
+      --replace-fail 'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' 'Icon=v2raya'
 
     wrapProgram $out/bin/v2rayA \
       --prefix PATH ":" "${lib.makeBinPath [ v2ray ]}" \
