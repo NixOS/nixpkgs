@@ -884,9 +884,9 @@ in
     dependencies = with self; [ plenary-nvim ];
   };
 
-  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
-  };
+  # gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
+  #   dependencies = with self; [ plenary-nvim ];
+  # };
 
   git-worktree-nvim = super.git-worktree-nvim.overrideAttrs {
     dependencies = with super; [ plenary-nvim ];
