@@ -8,19 +8,15 @@
 , nixosTests
 }:
 
-let
-  rev = "e4675e38ab54942e351c7686e40fabec822120b9";
-  sha256 = "1wm24p6pkxl1d7hrvf4ph6mwzawvqi22c60z9xzndn5xfyr4v0yr";
-in
-
 stdenv.mkDerivation {
   pname = "nix-serve";
-  version = "0.2-${lib.substring 0 7 rev}";
+  version = "0-unstable-2024-09-18";
 
   src = fetchFromGitHub {
-    owner = "edolstra";
+    owner = "nix-community";
     repo = "nix-serve";
-    inherit rev sha256;
+    rev = "f2529a143bc6a41471e0374a983211552223aba8";
+    sha256 = "sha256-5fxrCEjx2ej0uvqDSFdQPD1LIpJ6jmbenjsX5SFiuuQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -41,9 +37,12 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/edolstra/nix-serve";
+    homepage = "https://github.com/nix-community/nix-serve";
     description = "Utility for sharing a Nix store as a binary cache";
-    maintainers = [ maintainers.eelco ];
+    maintainers = [
+      maintainers.eelco
+      maintainers.mic92
+    ];
     license = licenses.lgpl21;
     platforms = nix.meta.platforms;
     mainProgram = "nix-serve";
