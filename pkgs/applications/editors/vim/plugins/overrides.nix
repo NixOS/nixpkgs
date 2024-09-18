@@ -162,6 +162,17 @@
     ];
   };
 
+  aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
+    buildInputs = [ curl ];
+
+    patches = [
+      (substituteAll {
+        src = ./patches/aw-watcher-vim/program_paths.patch;
+        curl = lib.getExe curl;
+      })
+    ];
+  };
+
   barbecue-nvim = super.barbecue-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
