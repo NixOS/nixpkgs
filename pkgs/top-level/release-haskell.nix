@@ -327,7 +327,6 @@ let
         lambdabot
         lhs2tex
         madlang
-        mailctl
         matterhorn
         mkjson
         mueval
