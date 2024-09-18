@@ -171,7 +171,7 @@ mkDerivation (finalAttrs: {
 
   patches = patches fetchpatch ++ lib.optionals withNativeCompilation [ nativeCompilationPatch ];
 
-  postPatch = lib.concatStringsSep "\n" [
+  postPatch = lib.concatStringsSep "\n" ([
     (lib.optionalString srcRepo ''
       rm -fr .git
     '')
@@ -189,20 +189,20 @@ mkDerivation (finalAttrs: {
     # Reduce closure size by cleaning the environment of the emacs dumper
     ''
       substituteInPlace src/Makefile.in \
-        --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+        --replace-fail 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
     ''
 
     ''
       substituteInPlace lisp/international/mule-cmds.el \
-        --replace /usr/share/locale ${gettext}/share/locale
-
+        --replace-fail /usr/share/locale ${gettext}/share/locale
+    ''
+  ] ++ lib.optionals (lib.versionOlder version "29") [
+    ''
       for makefile_in in $(find . -name Makefile.in -print); do
-        substituteInPlace $makefile_in --replace /bin/pwd pwd
+        substituteInPlace $makefile_in --replace-fail /bin/pwd pwd
       done
     ''
-
-    ""
-  ];
+  ]);
 
   nativeBuildInputs = [
     makeWrapper
