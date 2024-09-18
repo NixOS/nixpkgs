@@ -162,6 +162,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
   };
 }
