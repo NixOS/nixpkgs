@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brlaser";
-  version = "6-unstable-2023-02-30";
+  version = "6.2.6";
 
   src = fetchFromGitHub {
-    owner = "pdewacht";
+    owner = "Owl-Maintain";
     repo = "brlaser";
-    rev = "2a49e3287c70c254e7e3ac9dabe9d6a07218c3fa";
-    sha256 = "sha256-1fvO9F7ifbYQHAy54mOx052XutfKXSK6iT/zj4Mhbww=";
+    rev = "0ee2128e220ab111c74205081e51020ad3d895e6";
+    sha256 = "sha256-+W84s3Nulj0kz2h1WE7/QGysVylKkN/xNqcNvrQz6D8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
            Brother MFC-L2710DW
            Lenovo M7605D
       '';
-    homepage = "https://github.com/pdewacht/brlaser";
+    homepage = "https://github.com/Owl-Maintain/brlaser";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ StijnDW ];
