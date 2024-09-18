@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.7";
+  version = "3.3.1";
 
   src =
     let
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     in
       {
         x86_64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          hash = "sha256-TFgO9ddz/Svi4QfugjTTejpV/m+xc1548cokzhVgwkw=";
+          url = "${base}/v${version}/ArmCord-${version}-linux-amd64.deb";
+          hash = "sha256-BFhgZNBHPERvJY9N4NpnlkGo2M0keencU4H4qlXl9mk=";
         };
         aarch64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          hash = "sha256-AJ4TSG3ry2P40vzK1fsaWgQ/O0z9r3z8+0uxSmddZKo=";
+          url = "${base}/v${version}/ArmCord-${version}-linux-arm64.deb";
+          hash = "sha256-PCODruXQW7iAZLKcNw672fs4OuCqDvMlvzRSNca8Tfo=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
