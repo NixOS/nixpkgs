@@ -2,9 +2,9 @@
 stdenv.mkDerivation {
 
   inherit (callPackage ./common-drv-attrs.nix {
-    version = "3.2.7";
+    version = "3.2.6";
     pname = "cdemu-daemon";
-    hash = "sha256-EKh2G6RA9Yq46BpTAqN2s6TpLJb8gwDuEpGiwdGcelc=";
+    hash = "sha256-puQE4+91xhRuNjVPZYgN/WO0uO8fVAOdxQWOGQ+FfY8=";
   }) pname version src meta;
 
   nativeBuildInputs = [ cmake pkg-config intltool ];
