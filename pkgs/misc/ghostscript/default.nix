@@ -61,11 +61,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.03.1";
+  version = "10.04.0";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha256-FXIS7clrjMxAlHXc4uSYM/tEJ/FQxFUlje2WMsEGq+4=";
+    hash = "sha256-Un7vC2zQTs8cjXoReWxppS00/+Nq/KhqQAcpovwByIc=";
   };
 
   patches = [
