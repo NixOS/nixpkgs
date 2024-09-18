@@ -16,6 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     defusedxml
     python-dateutil
     requests
+    xxhash
   ];
 
   installPhase = ''
