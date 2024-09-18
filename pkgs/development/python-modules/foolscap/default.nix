@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "23.3.0";
+  version = "24.9.0";
 
   pyproject = true;
   build-system = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Vu7oXC1brsgBwr2q59TAgx8j1AFRbi5mjRNIWZTbkUU=";
+    hash = "sha256-vWsAdUDbWQuG3e0oAtLq8rA4Ys2wg38fD/h+E1ViQQg=";
   };
 
   postPatch = ''
