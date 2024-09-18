@@ -59,6 +59,7 @@ let
   });
 
 in
+
 stdenv.mkDerivation rec {
   version = "1.24.8";
   pname = "mupdf";
@@ -103,7 +104,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
     ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
-    ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
+    ++ lib.optionals (enableCxx || enablePython) [ (python3.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ps.libclang ])) ]
     ++ lib.optionals (enablePython) [ which swig ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
 
@@ -118,6 +119,7 @@ stdenv.mkDerivation rec {
     )
     ++ lib.optionals enableOcr [ leptonica tesseract ]
   ;
+
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
@@ -170,7 +172,6 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-    cp ./build/shared-release/libmupdf${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib
   '' + (lib.optionalString (stdenv.isDarwin) ''
     for exe in $bin/bin/*; do
       install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
@@ -184,16 +185,18 @@ stdenv.mkDerivation rec {
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
   '') + (lib.optionalString (enableCxx) ''
     cp platform/c++/include/mupdf/*.h $out/include/mupdf
-    cp build/*/libmupdfcpp.so* $out/lib
+    cp build/*/libmupdfcpp.so $out/lib
   '') + (lib.optionalString (enablePython) (''
     mkdir -p $out/${python3.sitePackages}/mupdf
-    cp build/*/_mupdf.so $out/${python3.sitePackages}
+    cp build/*/_mupdf.so $out/${python3.sitePackages}/mupdf
     cp build/*/mupdf.py $out/${python3.sitePackages}/mupdf/__init__.py
   '' + lib.optionalString (stdenv.isDarwin) ''
-    install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/_mupdf.so
+    install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/mupdf/_mupdf.so
   ''));
 
   enableParallelBuilding = true;
+
+  env.USE_SONAME = "no";
 
   passthru = {
     tests = {
@@ -216,8 +219,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
     mainProgram = "mupdf";
-    # ImportError: cannot import name '_mupdf' from partially initialized module 'mupdf'
-    # (most likely due to a circular import)
-    broken = enablePython;
   };
 }
