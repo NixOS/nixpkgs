@@ -698,6 +698,7 @@
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
+  ./services/matrix/hookshot.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-meta.nix

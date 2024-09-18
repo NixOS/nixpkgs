@@ -9,6 +9,7 @@
   darwin,
   fastapi,
   fetchFromGitHub,
+  fetchpatch,
   grpcio,
   httpx,
   hypothesis,
@@ -68,6 +69,20 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-3FmnQEpknYNzI3WlQ3kc8qa4LFcn1zpxKDbkATU7/48=";
   };
+
+  patches = [
+    # Remove these on the next release
+    (fetchpatch {
+      name = "pydantic19-fastapi1.patch";
+      url = "https://github.com/chroma-core/chroma/commit/d62c13da29b7bff77bd7dee887123e3c57e2c19e.patch";
+      hash = "sha256-E3xmh9vQZH3NCfG6phvzM65NGwlcHmPgfU6FERKAJ60=";
+    })
+    (fetchpatch {
+      name = "no-union-types-pydantic1.patch";
+      url = "https://github.com/chroma-core/chroma/commit/2fd5b27903dffcf8bdfbb781a25bcecc17b27672.patch";
+      hash = "sha256-nmiA/lKZVrHKXumc+J4uVRiMwrnFrz2tgMpfcay5hhw=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "chroma-hnswlib"
