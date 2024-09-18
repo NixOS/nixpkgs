@@ -1,26 +1,32 @@
-{ lib, stdenv, fetchurl, libpng, netpbm }:
+{
+  lib,
+  fetchurl,
+  libpng,
+  netpbm,
+  stdenv,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sng";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sng/sng-${version}.tar.gz";
-    sha256 = "06a6ydvx9xb3vxvrzdrg3hq0rjwwj9ibr7fyyxjxq6qx1j3mb70i";
+    url = "mirror://sourceforge/sng/sng-${finalAttrs.version}.tar.gz";
+    hash = "sha256-EZxVhwwdG9xl996dvGKSnMsMMBwvt59332P11HfzRhk=";
   };
 
   buildInputs = [ libpng ];
 
-  configureFlags = [
-    "--with-rgbtxt=${netpbm.out}/share/netpbm/misc/rgb.txt"
-  ];
+  configureFlags = [ "--with-rgbtxt=${netpbm.out}/share/netpbm/misc/rgb.txt" ];
 
-  meta = with lib; {
-    description = "Minilanguage designed to represent the entire contents of a PNG file in an editable form";
+  strictDeps = true;
+
+  meta = {
     homepage = "https://sng.sourceforge.net/";
-    license = licenses.zlib;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
+    description = "Minilanguage designed to represent the entire contents of a PNG file in an editable form";
+    license = lib.licenses.zlib;
     mainProgram = "sng";
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.unix;
   };
-}
+})
