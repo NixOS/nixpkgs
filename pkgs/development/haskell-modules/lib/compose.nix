@@ -184,6 +184,13 @@ rec {
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
   markUnbroken = overrideCabal (drv: { broken = false; });
 
+  /* disableParallelBuilding drops the -j<n> option from the GHC
+     command line for the given package. This can be useful in rare
+     situations where parallel building of a package causes GHC to
+     fail for some reason.
+   */
+  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
+
   enableLibraryProfiling = overrideCabal (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = overrideCabal (drv: { enableLibraryProfiling = false; });
 

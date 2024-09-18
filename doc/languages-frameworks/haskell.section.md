@@ -1076,6 +1076,9 @@ benchmark component.
 `disableLibraryProfiling drv`
 : Sets the `enableLibraryProfiling` argument to `false` for `drv`.
 
+`disableParallelBuilding drv`
+: Sets the `enableParallelBuilding` argument to `false` for `drv`.
+
 #### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
 Some library functions depend on packages from the Haskell package sets. Thus they are
