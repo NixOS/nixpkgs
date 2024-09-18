@@ -1,5 +1,5 @@
 { lib
-, unstableGitUpdater
+, gitUpdater
 , buildPythonApplication
 , fetchFromGitHub
 , pythonOlder
@@ -10,19 +10,21 @@
 , zstandard
 , json5
 , platformdirs
-, cacert
 }:
 
-buildPythonApplication rec {
+let
+  version = "1.1.2";
+in
+buildPythonApplication {
   pname = "nile";
-  version = "1.1.1-unstable-2024-09-05";
+  inherit version;
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "nile";
-    rev = "aefa5dd9c3a5146669da22317c8e0e3c12665f64";
-    hash = "sha256-wZdiUJH4sGYJqJ7Ssjl+30MiUbXupLzbSpiOU1M/3Fg=";
+    rev = "v${version}";
+    hash = "sha256-/C4b8wPKWHGgiheuAN7AvU+KcD5aj5i6KzgFSdTIkNI=";
   };
 
   disabled = pythonOlder "3.8";
@@ -56,7 +58,7 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ aidalgol ];
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 }

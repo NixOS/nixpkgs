@@ -7,12 +7,8 @@
   writeShellScript,
   makeWrapper,
   dotnetCorePackages,
-  fetchNupkg,
-  nuget-to-nix,
   cacert,
-  unzip,
-  yq,
-  nix,
+  addNuGetDeps,
 }:
 let
   transformArgs =
@@ -109,39 +105,9 @@ let
         dotnetFixupHook
         ;
 
-      _nugetDeps =
-        if (nugetDeps != null) then
-          if lib.isDerivation nugetDeps then
-            [ nugetDeps ]
-          else if lib.isList nugetDeps then
-            nugetDeps
-          else
-            assert (lib.isPath nugetDeps);
-            callPackage nugetDeps { fetchNuGet = fetchNupkg; }
-        else
-          [ ];
-
-      nugetDepsFile = if lib.isPath nugetDeps then nugetDeps else null;
-
       inherit (dotnetCorePackages) systemToDotnetRid;
     in
-    # Not all args need to be passed through to mkDerivation
-    # TODO: We should probably filter out even more attrs
-    removeAttrs args [
-      "nugetDeps"
-      "installPath"
-      "executables"
-      "projectFile"
-      "projectReferences"
-      "runtimeDeps"
-      "runtimeId"
-      "disabledTests"
-      "testProjectFile"
-      "buildType"
-      "selfContainedBuild"
-      "useDotnet"
-      "useAppHost"
-    ]
+    args
     // {
       dotnetInstallPath = installPath;
       dotnetExecutables = executables;
@@ -167,6 +133,8 @@ let
         dotnetFlags
         packNupkg
         useDotnetFromEnv
+        nugetDeps
+        runtimeId
         ;
 
       nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
@@ -179,11 +147,14 @@ let
         cacert
         makeWrapper
         dotnet-sdk
-        unzip
-        yq
       ];
 
-      buildInputs = args.buildInputs or [ ] ++ [ dotnet-sdk.packages ] ++ _nugetDeps ++ projectReferences;
+      buildInputs =
+        args.buildInputs or [ ]
+        ++ [
+          dotnet-sdk.packages
+        ]
+        ++ projectReferences;
 
       # Parse the version attr into a format acceptable for the Version msbuild property
       # The actual version attr is saved in InformationalVersion, which accepts an arbitrary string
@@ -223,60 +194,45 @@ let
       # executables
       propagatedSandboxProfile = toString dotnet-runtime.__propagatedSandboxProfile;
 
-      passthru =
-        {
-          nugetDeps = _nugetDeps;
-        }
-        // lib.optionalAttrs (nugetDeps == null || lib.isPath nugetDeps) {
-          fetch-deps =
-            let
-              pkg = finalAttrs.finalPackage.overrideAttrs (
-                old:
-                {
-                  buildInputs = lib.subtractLists _nugetDeps old.buildInputs;
-                  keepNugetConfig = true;
-                }
-                // lib.optionalAttrs (runtimeId == null) {
-                  dotnetRuntimeIds = map (system: systemToDotnetRid system) platforms;
-                }
-              );
-
-              drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
-
-              innerScript = substituteAll {
-                src = ./fetch-deps.sh;
-                isExecutable = true;
-                defaultDepsFile =
-                  # Wire in the nugetDeps file such that running the script with no args
-                  # runs it agains the correct deps file by default.
-                  # Note that toString is necessary here as it results in the path at
-                  # eval time (i.e. to the file in your local Nixpkgs checkout) rather
-                  # than the Nix store path of the path after it's been imported.
-                  if lib.isPath nugetDeps && !lib.isStorePath nugetDepsFile then
-                    toString nugetDepsFile
-                  else
-                    ''$(mktemp -t "${finalAttrs.pname or finalAttrs.finalPackage.name}-deps-XXXXXX.nix")'';
-                nugetToNix = (nuget-to-nix.override { inherit dotnet-sdk; });
-              };
-
-            in
-            writeShellScript "${finalAttrs.finalPackage.name}-fetch-deps" ''
-              NIX_BUILD_SHELL="${runtimeShell}" exec ${nix}/bin/nix-shell \
-                --pure --run 'source "${innerScript}"' "${drv}"
-            '';
-        }
-        // args.passthru or { };
-
       meta = (args.meta or { }) // {
         inherit platforms;
       };
     };
+
 in
 fnOrAttrs:
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
-    args = if lib.isFunction fnOrAttrs then fnOrAttrs (args // finalAttrs) else fnOrAttrs;
+    args = if lib.isFunction fnOrAttrs then fnOrAttrs (args' // finalAttrs) else fnOrAttrs;
+    args' = transformArgs finalAttrs args;
+    inherit (args') nugetDeps runtimeId meta;
+    args'' = removeAttrs args' [
+      "nugetDeps"
+      "runtimeId"
+      "installPath"
+      "executables"
+      "projectFile"
+      "projectReferences"
+      "runtimeDeps"
+      "runtimeId"
+      "disabledTests"
+      "testProjectFile"
+      "buildType"
+      "selfContainedBuild"
+      "useDotnet"
+      "useAppHost"
+    ];
   in
-  transformArgs finalAttrs args
+  if nugetDeps != null then
+    addNuGetDeps {
+      inherit nugetDeps;
+      overrideFetchAttrs =
+        a:
+        lib.optionalAttrs ((args'.runtimeId or null) == null) {
+          dotnetRuntimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) meta.platforms;
+        };
+    } args'' finalAttrs
+  else
+    args''
 )

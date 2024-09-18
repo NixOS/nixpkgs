@@ -2,11 +2,8 @@
 
 lib.makeScope pkgs.newScope (self:
   let
-    gconf = pkgs.gnome2.GConf;
     inherit (self) callPackage;
     inheritedArgs = {
-      inherit gconf;
-
       inherit (pkgs.darwin) sigtool;
       inherit (pkgs.darwin.apple_sdk.frameworks)
         Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit

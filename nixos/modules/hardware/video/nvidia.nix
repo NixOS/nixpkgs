@@ -10,13 +10,15 @@ let
 
   cfg = config.hardware.nvidia;
 
+  useOpenModules = cfg.open == true;
+
   pCfg = cfg.prime;
   syncCfg = pCfg.sync;
   offloadCfg = pCfg.offload;
   reverseSyncCfg = pCfg.reverseSync;
   primeEnabled = syncCfg.enable || reverseSyncCfg.enable || offloadCfg.enable;
   busIDType = lib.types.strMatching "([[:print:]]+[\:\@][0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
-  ibtSupport = cfg.open || (nvidia_x11.ibtSupport or false);
+  ibtSupport = useOpenModules || (nvidia_x11.ibtSupport or false);
   settingsFormat = pkgs.formats.keyValue { };
 in
 {
@@ -257,17 +259,19 @@ in
       open = lib.mkOption {
         example = true;
         description = "Whether to enable the open source NVIDIA kernel module.";
-        type = lib.types.bool;
+        type = lib.types.nullOr lib.types.bool;
+        default = if lib.versionOlder nvidia_x11.version "560" then false else null;
         defaultText = lib.literalExpression ''
-          lib.mkIf (lib.versionOlder config.hardware.nvidia.package.version "560") false
+          if lib.versionOlder config.hardware.nvidia.package.version "560" then false else null
         '';
       };
 
       gsp.enable = lib.mkEnableOption ''
         the GPU System Processor (GSP) on the video card
       '' // {
+        default = useOpenModules || lib.versionAtLeast nvidia_x11.version "555";
         defaultText = lib.literalExpression ''
-          config.hardware.nvidia.open || lib.versionAtLeast config.hardware.nvidia.package.version "555"
+          config.hardware.nvidia.open == true || lib.versionAtLeast config.hardware.nvidia.package.version "555"
         '';
       };
     };
@@ -286,6 +290,13 @@ in
             {
               assertion = !(nvidiaEnabled && cfg.datacenter.enable);
               message = "You cannot configure both X11 and Data Center drivers at the same time.";
+            }
+            {
+              assertion = cfg.open != null;
+              message = ''
+                You must configure `hardware.nvidia.open` on NVIDIA driver versions >= 560.
+                It is suggested to use the open source kernel modules on Turing or later GPUs (RTX series, GTX 16xx), and the closed source modules otherwise.
+              '';
             }
           ];
           boot = {
@@ -318,9 +329,6 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
-
-          hardware.nvidia.open = lib.mkIf (lib.versionOlder nvidia_x11.version "560") (lib.mkDefault false);
-          hardware.nvidia.gsp.enable = lib.mkDefault (cfg.open || lib.versionAtLeast nvidia_x11.version "555");
         })
 
         # X11
@@ -384,12 +392,12 @@ in
             }
 
             {
-              assertion = cfg.open -> (cfg.package ? open);
+              assertion = useOpenModules -> (cfg.package ? open);
               message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver.";
             }
 
             {
-              assertion = cfg.open -> cfg.gsp.enable;
+              assertion = useOpenModules -> cfg.gsp.enable;
               message = "The GSP cannot be disabled when using the opensource kernel driver.";
             }
 
@@ -592,7 +600,7 @@ in
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
           boot = {
-            extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
             # nvidia-uvm is required by CUDA applications.
             kernelModules =
               lib.optionals config.services.xserver.enable [
@@ -603,14 +611,14 @@ in
               # With the open driver, nvidia-uvm does not automatically load as
               # a softdep of the nvidia module, so we explicitly load it for now.
               # See https://github.com/NixOS/nixpkgs/issues/334180
-              ++ lib.optionals (config.services.xserver.enable && cfg.open) [ "nvidia_uvm" ];
+              ++ lib.optionals (config.services.xserver.enable && useOpenModules) [ "nvidia_uvm" ];
 
             # If requested enable modesetting via kernel parameters.
             kernelParams =
               lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
               ++ lib.optional ((offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545") "nvidia-drm.fbdev=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-              ++ lib.optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
+              ++ lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
 
             # enable finegrained power management

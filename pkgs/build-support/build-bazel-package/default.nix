@@ -64,7 +64,7 @@ let
       ;
   };
   fBuildAttrs = fArgs // buildAttrs;
-  fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
+  fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "hash" "sha256" ];
   bazelCmd = { cmd, additionalFlags, targets, targetRunFlags ? [ ] }:
     lib.optionalString (targets != [ ]) ''
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
@@ -197,8 +197,10 @@ stdenv.mkDerivation (fBuildAttrs // {
     dontFixup = true;
     allowedRequisites = [];
 
-    outputHashAlgo = "sha256";
-    outputHash = fetchAttrs.sha256;
+    inherit (lib.fetchers.normalizeHash { hashTypes = [ "sha256" ]; } fetchAttrs)
+      outputHash
+      outputHashAlgo
+    ;
   });
 
   nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];

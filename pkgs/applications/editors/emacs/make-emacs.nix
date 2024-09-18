@@ -16,7 +16,6 @@
 , dbus
 , emacsPackagesFor
 , fetchpatch
-, gconf
 , gettext
 , giflib
 , glib-networking
@@ -73,7 +72,6 @@
 , withDbus ? stdenv.isLinux
 , withGTK2 ? false
 , withGTK3 ? withPgtk && !noGui
-, withGconf ? false
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
@@ -126,7 +124,6 @@ assert withAcl -> stdenv.isLinux;
 assert withAlsaLib -> stdenv.isLinux;
 assert withGTK2 -> !(withGTK3 || withPgtk);
 assert withGTK3 -> !withGTK2 || withPgtk;
-assert withGconf -> withX;
 assert withGpm -> stdenv.isLinux;
 assert withNS -> stdenv.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
@@ -224,8 +221,6 @@ mkDerivation (finalAttrs: {
     jansson
     libxml2
     ncurses
-  ] ++ lib.optionals withGconf [
-    gconf
   ] ++ lib.optionals withAcl [
     acl
   ] ++ lib.optionals withAlsaLib [

@@ -25,12 +25,12 @@ in
 
 localPython.pkgs.buildPythonApplication rec {
   pname = "aws-encryption-sdk-cli";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OCbt0OkDVfpzUIogbsKzaPAle2L6l6N3cmZoS2hEaSM=";
+    hash = "sha256-gORrscY+Bgmz2FrKdSBd56jP0yuEklytMeA3wr8tTZU=";
   };
 
   build-system = with localPython.pkgs; [
