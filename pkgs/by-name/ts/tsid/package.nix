@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   outputs = [
-    "doc"
     "out"
+    "doc"
   ];
 
   nativeBuildInputs =
