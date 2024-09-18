@@ -17903,8 +17903,8 @@ final: prev:
     meta.homepage = "https://github.com/shaunsingh/moonlight.nvim/";
   };
 
-  render-markdown = buildVimPlugin {
-    pname = "render-markdown";
+  render-markdown-nvim = buildVimPlugin {
+    pname = "render-markdown.nvim";
     version = "2024-09-09";
     src = fetchFromGitHub {
       owner = "MeanderingProgrammer";

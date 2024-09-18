@@ -8038,8 +8038,6 @@ with pkgs;
 
   gnu-cim = callPackage ../development/compilers/gnu-cim { };
 
-  gnu-cobol = callPackage ../development/compilers/gnu-cobol { };
-
   gnuclad = callPackage ../applications/graphics/gnuclad { };
 
   gnufdisk = callPackage ../tools/system/fdisk {
@@ -21603,8 +21601,6 @@ with pkgs;
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-
-  libmatroska = callPackage ../development/libraries/libmatroska { };
 
   libmd = callPackage ../development/libraries/libmd { };
 

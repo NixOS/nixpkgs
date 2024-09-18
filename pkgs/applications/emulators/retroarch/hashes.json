@@ -674,10 +674,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-prboom",
-            "rev": "2a96b2a22cf98bdd508b1efc31afceb78717f4ba",
-            "hash": "sha256-Pf6U9RTkMUsRl2mOU6ooFPhVu0G9MZQjJYKVQ9WneIE="
+            "rev": "0b43954c75760d00737120db9d5009813778c7ae",
+            "hash": "sha256-mb7hggdwOjWgKNykeOv+0IDYpKLHy9dJqA4+c/8R6Ss="
         },
-        "version": "unstable-2024-09-05"
+        "version": "unstable-2024-09-07"
     },
     "prosystem": {
         "fetcher": "fetchFromGitHub",
@@ -794,10 +794,10 @@
         "src": {
             "owner": "stella-emu",
             "repo": "stella",
-            "rev": "b1e297153b4e7013a28763253c425a6f4bf31f48",
-            "hash": "sha256-6LPoFX9m6Ads/pZJcMOrJlllluAoCyzyTT6Ngrr84YI="
+            "rev": "03c5d7f1cf3e325e0dc0b41b89ffc17a54834af8",
+            "hash": "sha256-i7EBcbyoLz6MSeDe2d+HRpaKhig0zZEMC7rQqQrpbvA="
         },
-        "version": "unstable-2024-09-01"
+        "version": "unstable-2024-09-09"
     },
     "stella2014": {
         "fetcher": "fetchFromGitHub",
