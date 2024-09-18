@@ -1,11 +1,17 @@
 /*
-    Nixpkgs unfree packages
+    Nixpkgs unfree packages.
 
-    This release file is currently not tested on hydra.nixos.org
-    because it requires unfree software, but it is tested by
-    <https://hydra.nix-community.org/jobset/nixpkgs/unfree>.
+    This release file MUST NOT be used by <https://hydra.nixos.org>. Please
+    check with your lawyers before using this file.
 
-    Cf. https://github.com/nix-community/infra/pull/1406
+    This file is used by the sister nix-community project. Our intent is to
+    test all the code paths of nixpkgs. To contact us, send an email to
+    <admin@nix-community.org>
+
+    See also:
+
+    * <https://hydra.nix-community.org/jobset/nixpkgs/unfree>
+    * <https://github.com/nix-community/infra/pull/1406>
 
     Test for example like this:
 
@@ -48,7 +54,7 @@ let
     lib.mapAttrs (
       name: value:
       let
-        attrPath = "${prefix}.${name}";
+        attrPath = if prefix == "" then name else "${prefix}.${name}";
         res = builtins.tryEval (
           if lib.isDerivation value then
             lib.optionals (cond attrPath value) (
@@ -91,12 +97,11 @@ let
     (isUnfree pkg)
     && (isSource pkg)
     && (canSubstituteSrc pkg)
-    && (isNotCudaPackage attrPath)
     && (
       full
       ||
         # We only build these heavy packages on releases
-        (isNotLinuxKernel attrPath)
+        ((isNotCudaPackage attrPath) && (isNotLinuxKernel attrPath))
     );
 
   packages = packagesWith "" cond pkgs;
