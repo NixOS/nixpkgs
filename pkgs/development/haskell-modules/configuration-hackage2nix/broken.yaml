@@ -5029,7 +5029,6 @@ broken-packages:
   - reflex-gloss # failure in job https://hydra.nixos.org/build/234457448 at 2023-09-13
   - reflex-jsx # failure in job https://hydra.nixos.org/build/233207137 at 2023-09-02
   - reflex-orphans # failure in job https://hydra.nixos.org/build/233249128 at 2023-09-02
-  - reflex-sdl2 # failure in job https://hydra.nixos.org/build/233233947 at 2023-09-02
   - reflex-test-host # failure in job https://hydra.nixos.org/build/233220665 at 2023-09-02
   - reflex-transformers # failure in job https://hydra.nixos.org/build/233243647 at 2023-09-02
   - ref-mtl # failure in job https://hydra.nixos.org/build/233260152 at 2023-09-02
