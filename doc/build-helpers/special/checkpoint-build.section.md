@@ -9,13 +9,17 @@ However, we can tell Nix explicitly what the previous build state was, by repres
 To change a normal derivation to a checkpoint based build, these steps must be taken:
   - apply `prepareCheckpointBuild` on the desired derivation, e.g.
 ```nix
-checkpointArtifacts = (pkgs.checkpointBuildTools.prepareCheckpointBuild pkgs.virtualbox);
+{
+  checkpointArtifacts = (pkgs.checkpointBuildTools.prepareCheckpointBuild pkgs.virtualbox);
+}
 ```
   - change something you want in the sources of the package, e.g. use a source override:
 ```nix
-changedVBox = pkgs.virtualbox.overrideAttrs (old: {
-  src = path/to/vbox/sources;
-});
+{
+  changedVBox = pkgs.virtualbox.overrideAttrs (old: {
+    src = path/to/vbox/sources;
+  });
+}
 ```
   - use `mkCheckpointBuild changedVBox checkpointArtifacts`
   - enjoy shorter build times

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
   nativeBuildInputs = [ pkg-config ];

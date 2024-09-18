@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, onnx
-, skl2onnx
-# native check inputs
-, pytestCheckHook
-, pandas
-, xgboost
-, onnxruntime
-, scikit-learn
-, pyspark
-, lightgbm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  onnx,
+  skl2onnx,
+  # native check inputs
+  pytestCheckHook,
+  pandas,
+  xgboost,
+  onnxruntime,
+  scikit-learn,
+  pyspark,
+  lightgbm,
 }:
 
 buildPythonPackage rec {

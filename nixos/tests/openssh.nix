@@ -1,11 +1,11 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 
 let inherit (import ./ssh-keys.nix pkgs)
-      snakeOilPrivateKey snakeOilPublicKey;
+      snakeOilPrivateKey snakeOilPublicKey snakeOilEd25519PrivateKey snakeOilEd25519PublicKey;
 in {
   name = "openssh";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ aszlig eelco ];
+    maintainers = [ aszlig ];
   };
 
   nodes = {
@@ -20,6 +20,19 @@ in {
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
+      };
+
+    server-allowed-users =
+      { ... }:
+
+      {
+        services.openssh = { enable = true; settings.AllowUsers = [ "alice" "bob" ]; };
+        users.groups = { alice = { }; bob = { }; carol = { }; };
+        users.users = {
+          alice = { isNormalUser = true; group = "alice"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          bob = { isNormalUser = true; group = "bob"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          carol = { isNormalUser = true; group = "carol"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+        };
       };
 
     server-lazy =
@@ -95,17 +108,48 @@ in {
         };
       };
 
-    server_allowedusers =
+    server-no-openssl =
       { ... }:
-
       {
-        services.openssh = { enable = true; settings.AllowUsers = [ "alice" "bob" ]; };
-        users.groups = { alice = { }; bob = { }; carol = { }; };
-        users.users = {
-          alice = { isNormalUser = true; group = "alice"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
-          bob = { isNormalUser = true; group = "bob"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
-          carol = { isNormalUser = true; group = "carol"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+        services.openssh = {
+          enable = true;
+          package = pkgs.opensshPackages.openssh.override {
+            linkOpenssl = false;
+          };
+          hostKeys = [
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
+          ];
+          settings = {
+            # Since this test is against an OpenSSH-without-OpenSSL,
+            # we have to override NixOS's defaults ciphers (which require OpenSSL)
+            # and instead set these to null, which will mean OpenSSH uses its defaults.
+            # Expectedly, OpenSSH's defaults don't require OpenSSL when it's compiled
+            # without OpenSSL.
+            Ciphers = null;
+            KexAlgorithms = null;
+            Macs = null;
+          };
         };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilEd25519PublicKey
+        ];
+      };
+
+    server-no-pam =
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          package = pkgs.opensshPackages.openssh.override {
+            withPAM = false;
+          };
+          settings = {
+            UsePAM = false;
+          };
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
       };
 
     client =
@@ -119,8 +163,11 @@ in {
     start_all()
 
     server.wait_for_unit("sshd", timeout=30)
+    server_allowed_users.wait_for_unit("sshd", timeout=30)
     server_localhost_only.wait_for_unit("sshd", timeout=30)
     server_match_rule.wait_for_unit("sshd", timeout=30)
+    server_no_openssl.wait_for_unit("sshd", timeout=30)
+    server_no_pam.wait_for_unit("sshd", timeout=30)
 
     server_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
@@ -166,8 +213,9 @@ in {
             "cat ${snakeOilPrivateKey} > privkey.snakeoil"
         )
         client.succeed("chmod 600 privkey.snakeoil")
+        # The final segment in this IP is allocated according to the alphabetical order of machines in this test.
         client.succeed(
-            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.4 true",
+            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
             timeout=30
         )
 
@@ -198,15 +246,35 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server-allowed-users true",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server-allowed-users true",
             timeout=30
         )
         client.fail(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server-allowed-users true",
+            timeout=30
+        )
+
+    with subtest("no-openssl"):
+        client.succeed(
+            "cat ${snakeOilEd25519PrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-openssl true",
+            timeout=30
+        )
+
+    with subtest("no-pam"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
             timeout=30
         )
   '';

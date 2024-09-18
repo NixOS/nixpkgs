@@ -13,14 +13,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-rbfCrq9AwjrynNSklR1un3BUGv0kblwIxy72lTjEDVc=";
+    hash = "sha256-+GPP8Mdoc3LsR2puNu3/pzKg4Umvjd7CxivkHC8YxgM=";
   };
 
-  cargoHash = "sha256-kBolewLzKGq3rmSeWlLMDqKb4QQfWf3J6DnXTB0SV54=";
+  cargoHash = "sha256-8sW4d9qb7psoHuftQweChTPt4upKPEXdnjHSZAPpBHE=";
+
+  # Note: bump `time` dependency to be able to build with rust 1.80, should be removed on the next
+  # release (see: https://github.com/NixOS/nixpkgs/issues/332957)
+  # Upstream PR: https://github.com/kbknapp/cargo-outdated/pull/398
+  cargoPatches = [ ./time.patch ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -33,7 +38,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cargo subcommand for displaying when Rust dependencies are out of date";
+    description = "Cargo subcommand for displaying when Rust dependencies are out of date";
+    mainProgram = "cargo-outdated";
     homepage = "https://github.com/kbknapp/cargo-outdated";
     changelog = "https://github.com/kbknapp/cargo-outdated/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

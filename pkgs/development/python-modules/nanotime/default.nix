@@ -1,23 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "nanotime";
   version = "0.5.2";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7cc231fc5f6db401b448d7ab51c96d0a4733f4b69fabe569a576f89ffdf966b";
+    hash = "sha256-x8wjH8X220AbRI16tRyW0KRzP0tp+r5Wmldvif/flms=";
   };
 
-  nativeCheckInputs = [ nose ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    nosetests
-  '';
-
-  # tests currently fail
+  # Tests currently failing
+  # https://github.com/jbenet/nanotime/issues/2
   doCheck = false;
+
+  pythonImportsCheck = [ "nanotime" ];
 
   meta = with lib; {
     description = "Provides a time object that keeps time as the number of nanoseconds since the UNIX epoch";

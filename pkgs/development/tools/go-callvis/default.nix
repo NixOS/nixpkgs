@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Visualize call graph of a Go program using Graphviz";
+    mainProgram = "go-callvis";
     homepage = "https://github.com/ofabry/go-callvis";
     license = licenses.mit;
     maintainers = with maintainers; [ meain ];

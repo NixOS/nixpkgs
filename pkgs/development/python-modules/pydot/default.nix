@@ -1,30 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, graphviz
-, python
-, pytestCheckHook
-, chardet
-, pythonOlder
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  graphviz,
+  pytestCheckHook,
+  chardet,
+  pythonOlder,
+  pyparsing,
 }:
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "1.4.2";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "248081a39bcb56784deb018977e428605c1c758f10897a339fce1dd728ff007d";
+    hash = "sha256-YCRq8hUSP6Bi8hzXkb5n3aI6bygN8J9okZ5jeh5PMjU=";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  propagatedBuildInputs = [ pyparsing ];
 
   nativeCheckInputs = [
     chardet
@@ -48,24 +46,19 @@ buildPythonPackage rec {
       --replace "path = os.path.join(test_dir, TESTS_DIR_1)" "path = os.path.join('test/', TESTS_DIR_1)"
   '';
 
-  pytestFlagsArray = [
-    "test/pydot_unittest.py"
-  ];
+  pytestFlagsArray = [ "test/pydot_unittest.py" ];
 
   disabledTests = [
-    "test_exception_msg"
-    # Hash mismatch
-    "test_my_regression_tests"
+    # broken, fixed after 2.0.0
+    "test_graph_with_shapefiles"
   ];
 
-  pythonImportsCheck = [
-    "pydot"
-  ];
+  pythonImportsCheck = [ "pydot" ];
 
   meta = with lib; {
     description = "Allows to create both directed and non directed graphs from Python";
     homepage = "https://github.com/erocarrera/pydot";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

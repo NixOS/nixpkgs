@@ -98,7 +98,7 @@ in mkYarnPackage rec {
   };
 
   meta = {
-    description = "A bridge between Matrix and Discord";
+    description = "Bridge between Matrix and Discord";
     homepage = "https://github.com/Half-Shot/matrix-appservice-discord";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pacien ];

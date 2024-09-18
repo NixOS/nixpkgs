@@ -1,39 +1,43 @@
-{ lib
-, aiohttp
-, apscheduler
-, azure-identity
-, azure-keyvault-secrets
-, backoff
-, buildPythonPackage
-, click
-, fastapi
-, fastapi-sso
-, fetchFromGitHub
-, google-cloud-kms
-, gunicorn
-, importlib-metadata
-, jinja2
-, openai
-, orjson
-, poetry-core
-, prisma
-, pyjwt
-, python-dotenv
-, python-multipart
-, pythonOlder
-, pyyaml
-, requests
-, resend
-, rq
-, streamlit
-, tiktoken
-, tokenizers
-, uvicorn
+{
+  lib,
+  aiohttp,
+  apscheduler,
+  azure-identity,
+  azure-keyvault-secrets,
+  backoff,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fastapi,
+  fastapi-sso,
+  fetchFromGitHub,
+  google-cloud-kms,
+  gunicorn,
+  importlib-metadata,
+  jinja2,
+  jsonschema,
+  openai,
+  orjson,
+  poetry-core,
+  prisma,
+  pydantic,
+  pyjwt,
+  pynacl,
+  python-dotenv,
+  python-multipart,
+  pythonOlder,
+  pyyaml,
+  requests,
+  resend,
+  rq,
+  tiktoken,
+  tokenizers,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.26.8";
+  version = "1.44.22";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,25 +46,21 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w2d33mYNgQ+S+000ZswyqXE8RxOUQaH89R7M6PHe020=";
+    hash = "sha256-0F972vEW6ebbbaJ6c0db3cDtFJIRUN81Gp0OMo0fgqY=";
   };
 
-  postPatch = ''
-    rm -rf dist
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     click
     importlib-metadata
     jinja2
+    jsonschema
     openai
-    requests
+    pydantic
     python-dotenv
+    requests
     tiktoken
     tokenizers
   ];
@@ -69,6 +69,7 @@ buildPythonPackage rec {
     proxy = [
       apscheduler
       backoff
+      cryptography
       fastapi
       fastapi-sso
       gunicorn
@@ -84,19 +85,19 @@ buildPythonPackage rec {
       azure-keyvault-secrets
       google-cloud-kms
       prisma
+      pynacl
       resend
-      streamlit
     ];
   };
 
-  # the import check phase fails trying to do a network request to openai
-  # pythonImportsCheck = [ "litellm" ];
+  pythonImportsCheck = [ "litellm" ];
 
-  # no tests
+  # access network
   doCheck = false;
 
   meta = with lib; {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
+    mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
     changelog = "https://github.com/BerriAI/litellm/releases/tag/v${version}";
     license = licenses.mit;

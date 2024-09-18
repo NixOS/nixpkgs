@@ -37,7 +37,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Siproxd SIP
           proxy/masquerading daemon.
         '';
@@ -46,20 +46,20 @@ in
       ifInbound = mkOption {
         type = types.str;
         example = "eth0";
-        description = lib.mdDoc "Local network interface";
+        description = "Local network interface";
       };
 
       ifOutbound = mkOption {
         type = types.str;
         example = "ppp0";
-        description = lib.mdDoc "Public network interface";
+        description = "Public network interface";
       };
 
       hostsAllowReg = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "192.168.1.0/24" "192.168.2.0/24" ];
-        description = lib.mdDoc ''
+        description = ''
           Access control list for incoming SIP registrations.
         '';
       };
@@ -68,7 +68,7 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = [ "123.45.0.0/16" "123.46.0.0/16" ];
-        description = lib.mdDoc ''
+        description = ''
           Access control list for incoming SIP traffic.
         '';
       };
@@ -77,7 +77,7 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = [ "10.0.0.0/8" "11.0.0.0/8" ];
-        description = lib.mdDoc ''
+        description = ''
           Access control list for denying incoming
           SIP registrations and traffic.
         '';
@@ -86,7 +86,7 @@ in
       sipListenPort = mkOption {
         type = types.int;
         default = 5060;
-        description = lib.mdDoc ''
+        description = ''
           Port to listen for incoming SIP messages.
         '';
       };
@@ -94,7 +94,7 @@ in
       rtpPortLow = mkOption {
         type = types.int;
         default = 7070;
-        description = lib.mdDoc ''
+        description = ''
          Bottom of UDP port range for incoming and outgoing RTP traffic
         '';
       };
@@ -102,7 +102,7 @@ in
       rtpPortHigh = mkOption {
         type = types.int;
         default = 7089;
-        description = lib.mdDoc ''
+        description = ''
          Top of UDP port range for incoming and outgoing RTP traffic
         '';
       };
@@ -110,7 +110,7 @@ in
       rtpTimeout = mkOption {
         type = types.int;
         default = 300;
-        description = lib.mdDoc ''
+        description = ''
           Timeout for an RTP stream. If for the specified
           number of seconds no data is relayed on an active
           stream, it is considered dead and will be killed.
@@ -120,7 +120,7 @@ in
       rtpDscp = mkOption {
         type = types.int;
         default = 46;
-        description = lib.mdDoc ''
+        description = ''
           DSCP (differentiated services) value to be assigned
           to RTP packets. Allows QOS aware routers to handle
           different types traffic with different priorities.
@@ -130,7 +130,7 @@ in
       sipDscp = mkOption {
         type = types.int;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           DSCP (differentiated services) value to be assigned
           to SIP packets. Allows QOS aware routers to handle
           different types traffic with different priorities.
@@ -140,7 +140,7 @@ in
       passwordFile = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Path to per-user password file.
         '';
       };
@@ -148,7 +148,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration to add to siproxd configuration.
         '';
       };

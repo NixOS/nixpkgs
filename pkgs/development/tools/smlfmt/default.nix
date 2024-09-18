@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, mlton }:
+{ lib, stdenv, fetchFromGitHub, mlton }:
 
 stdenv.mkDerivation rec {
   pname = "smlfmt";
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A custom parser/auto-formatter for Standard ML";
+    description = "Custom parser/auto-formatter for Standard ML";
+    mainProgram = "smlfmt";
     longDescription = ''
       A custom parser and code formatter for Standard ML, with helpful error messages.
 

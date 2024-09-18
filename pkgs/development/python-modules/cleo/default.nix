@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, crashtest
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonRelaxDepsHook
-, rapidfuzz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  crashtest,
+  poetry-core,
+  pytest-mock,
+  pytestCheckHook,
+  rapidfuzz,
 }:
 
 buildPythonPackage rec {
@@ -23,12 +23,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "rapidfuzz"
-  ];
+  pythonRelaxDeps = [ "rapidfuzz" ];
 
   propagatedBuildInputs = [
     crashtest

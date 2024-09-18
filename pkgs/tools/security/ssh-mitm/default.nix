@@ -1,18 +1,30 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  python3,
 }:
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.0";
+        version = "3.3.1";
         src = oldAttrs.src.override {
           inherit version;
-          hash = "sha256-aVD6ymgZrNMhnUrmlKI8eofuONCE9wwXJLDA27i3V2k=";
+          hash = "sha256-ajd3qWGshtvvN1xfW41QAUoaltD9fwVKQ7yIATSw/3c=";
         };
-        patches = [ ];
+        patches = [
+          (fetchpatch {
+            name = "Use-pytest-s-setup_method-in-pytest-8-the-nose-method-setup-is-deprecated.patch";
+            url = "https://github.com/paramiko/paramiko/pull/2349.diff";
+            hash = "sha256-4CTIZ9BmzRdh+HOwxSzfM9wkUGJOnndctK5swqqsIvU=";
+          })
+
+        ];
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.icecream ];
       });
     };
@@ -20,17 +32,23 @@ let
 in
 with py.pkgs;
 
+
 buildPythonApplication rec {
   pname = "ssh-mitm";
-  version = "3.0.2";
-  format = "setuptools";
+  version = "4.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ssh-mitm";
+    repo = "ssh-mitm";
     rev = "refs/tags/${version}";
-    hash = "sha256-koV7g6ZmrrXk60rrDP8BwrDZk3shiyJigQgNcb4BASE=";
+    hash = "sha256-Uf1B7oEZyNWj4TjrLvEfFdxsvsGeMLXFsSdxGLUV4ZU=";
   };
+
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   propagatedBuildInputs = [
     argcomplete
@@ -39,17 +57,25 @@ buildPythonApplication rec {
     paramiko
     pytz
     pyyaml
+    python-json-logger
     rich
+    tkinter
     setuptools
     sshpubkeys
-  ];
+    wrapt
+  ] ++ lib.optionals stdenv.isDarwin [ setuptools ];
+  # fix for darwin users
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Module has no tests
   doCheck = false;
+  # Install man page
+  postInstall = ''
+    installManPage man1/*
+  '';
 
-  pythonImportsCheck = [
-    "sshmitm"
-  ];
+  pythonImportsCheck = [ "sshmitm" ];
 
   meta = with lib; {
     description = "Tool for SSH security audits";

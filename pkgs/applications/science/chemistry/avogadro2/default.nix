@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, eigen, avogadrolibs, molequeue, hdf5
-, openbabel, qttools, wrapQtAppsHook
+, openbabel, qttools, wrapQtAppsHook, mesa
 }:
 
 let
@@ -41,9 +41,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Molecule editor and visualizer";
+    mainProgram = "avogadro2";
     maintainers = with maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadroapp";
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     license = licenses.bsd3;
   };
 }

@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leetcode-cli";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-y5zh93WPWSMDXqYangqrxav+sC0b0zpFIp6ZIew6KMo=";
+    hash = "sha256-Jc0akHj2DHbkF7sjslOwdeI1piW2gnhoalBz18lpQdQ=";
   };
 
-  cargoHash = "sha256-VktDiLsU+GOsa6ba9JJZGEPTavSKp+aSZm2dfhPEqMs=";
+  cargoHash = "sha256-t3u82bjO1Qv32TwpZNCaaEqOVajXIgM7VBNQ4UjMcl8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetcode \
       --bash <($out/bin/leetcode completions bash) \
       --fish <($out/bin/leetcode completions fish) \

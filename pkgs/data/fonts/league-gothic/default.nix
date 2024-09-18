@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A revival of an old classic, Alternate Gothic #1";
+    description = "Revival of an old classic, Alternate Gothic #1";
     longDescription = ''
       League Gothic is a revival of an old classic, and one of our favorite
       typefaces, Alternate Gothic #1. It was originally designed by Morris

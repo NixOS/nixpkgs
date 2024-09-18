@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Contextual content discovery tool";
+    mainProgram = "kiterunner";
     longDescription = ''
       Kiterunner is a tool that is capable of not only performing traditional
       content discovery at lightning fast speeds, but also bruteforcing routes

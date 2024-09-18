@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi
-, pythonOlder
-, pytestCheckHook, setuptools-scm, tempora  }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools-scm,
+  tempora,
+}:
 
 buildPythonPackage rec {
   pname = "portend";
@@ -11,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UlCjUsGclZ12fKyHi4Kdk+XcdiWlFDOZoqANxmKP+3I=";
+    hash = "sha256-UlCjUsGclZ12fKyHi4Kdk+XcdiWlFDOZoqANxmKP+3I=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -20,9 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "portend"
-  ];
+  pythonImportsCheck = [ "portend" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

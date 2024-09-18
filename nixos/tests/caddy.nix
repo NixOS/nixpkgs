@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "caddy";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ xfix Br1ght0ne ];
+    maintainers = [ Br1ght0ne ];
   };
 
   nodes = {

@@ -20,7 +20,7 @@
 , openssl
 , perlPackages
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , xxd
 
 # Netsurf-specific dependencies
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     xxd
   ]
-  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook;
+  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook3;
 
   buildInputs = [
     check
@@ -133,7 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
-    description = "A free, open source, small web browser";
+    description = "Free, open source, small web browser";
+    mainProgram = "netsurf-gtk3";
     longDescription = ''
       NetSurf is a free, open source web browser. It is written in C and
       released under the GNU Public Licence version 2. NetSurf has its own

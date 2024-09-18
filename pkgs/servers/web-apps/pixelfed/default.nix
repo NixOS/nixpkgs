@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , php
 , nixosTests
@@ -10,18 +9,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.11.12";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
-    repo = finalAttrs.pname;
+    repo = "pixelfed";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tHwNchnB5z21Q1I8qwKn2s5rfHFvMxRLAyPkUEhC6qQ=";
+    hash = "sha256-CKjqnxp7p2z/13zfp4HQ1OAmaoUtqBKS6HFm6TV8Jwg=";
   };
 
-  vendorHash = "sha256-nRCrmF1p+fZI+iyrM5I3bVCSwjQdn8BSW8Jj62lpn8E=";
-  # Needed because buzz/laravel-h-captcha is pinned to 1.0.4 in composer.json
-  composerStrictValidation = false;
+  vendorHash = "sha256-zjIjGkR9MCnjRho/ViqZ5EbS9MJ7OQ1kkg93jBssuZU=";
 
   postInstall = ''
     mv "$out/share/php/${finalAttrs.pname}"/* $out
@@ -42,10 +39,10 @@ php.buildComposerProject (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A federated image sharing platform";
+    description = "Federated image sharing platform";
     license = licenses.agpl3Only;
     homepage = "https://pixelfed.org/";
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = [ ];
     platforms = php.meta.platforms;
   };
 })

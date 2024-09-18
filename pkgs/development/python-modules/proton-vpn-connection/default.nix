@@ -1,46 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, proton-core
-, proton-vpn-killswitch
-, proton-vpn-logger
-, jinja2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  proton-core,
+  proton-vpn-killswitch,
+  proton-vpn-logger,
+  jinja2,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-connection";
-  version = "0.11.3";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-connection";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RuLnc/olI8S09WFG126N2xZgW4gf+DDpRstcelqMhs4=";
+    hash = "sha256-Ze/te0G0tDzyZPGVVqvuJlZoHWJqJ36LnHO+Cy5nxx8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     proton-core
     proton-vpn-killswitch
     proton-vpn-logger
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton.vpn.connection --cov-report html --cov-report term" ""
-  '';
-
   pythonImportsCheck = [ "proton.vpn.connection" ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [
@@ -62,10 +58,10 @@ buildPythonPackage rec {
     "test_ovpnconfig_with_malformed_server_and_credentials"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Defines the interface that VPN connection backends should implement";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-connection";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }

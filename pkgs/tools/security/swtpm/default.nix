@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swtpm";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-QKR5S7FlMFDw4+VpyRdqixMWyzLpQkf3QCUceQvsliU=";
+    hash = "sha256-48/BOzGPoKr/BGEXFo3FXWr6ZoPB+ixZIvv78g6L294=";
   };
 
   nativeBuildInputs = [
@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = [ maintainers.baloo ];
     mainProgram = "swtpm";
+    platforms = platforms.all;
   };
 })

@@ -42,6 +42,7 @@ python3Packages.buildPythonApplication rec {
   '';
   meta = {
     description = "CUPS driver for Ricoh Aficio SP 1000S and SP 1100S printers";
+    mainProgram = "rastertosag-gdi";
     downloadPage = "https://www.openprinting.org/download/printing/rastertosag-gdi/";
     homepage = "https://www.openprinting.org/driver/rastertosag-gdi/";
     license = lib.licenses.free;  # just "GPL", according to README

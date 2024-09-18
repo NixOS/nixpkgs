@@ -60,6 +60,7 @@
 , static ? stdenv.hostPlatform.isStatic
 , enableFramework ? false
 , noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
+, enableGIL ? true
 
 # pgo (not reproducible) + -fno-semantic-interposition
 # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -69,8 +70,7 @@
 , enableNoSemanticInterposition ? true
 
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
-# enabling LTO on *-darwin causes python3 to fail when linking.
-, enableLTO ? stdenv.is64bit && stdenv.isLinux
+, enableLTO ? stdenv.isDarwin || (stdenv.is64bit && stdenv.isLinux)
 
 # enable asserts to ensure the build remains reproducible
 , reproducibleBuild ? false
@@ -111,6 +111,7 @@ let
   inherit (lib)
     concatMapStringsSep
     concatStringsSep
+    enableFeature
     getDev
     getLib
     optionals
@@ -119,6 +120,9 @@ let
     versionOlder
   ;
 
+  # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
+  libxcrypt = if stdenv.hostPlatform.isFreeBSD then null else inputs.libxcrypt;
+
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
@@ -126,12 +130,13 @@ let
 
   passthru = let
     # When we override the interpreter we also need to override the spliced versions of the interpreter
-    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
+    # bluez is excluded manually to break an infinite recursion.
+    inputs' = lib.filterAttrs (n: v: n != "bluez" && n != "passthruFun" && ! lib.isDerivation v) inputs;
     override = attr: let python = attr.override (inputs' // { self = python; }); in python;
   in passthruFun rec {
     inherit self sourceVersion packageOverrides;
     implementation = "cpython";
-    libPrefix = "python${pythonVersion}";
+    libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
@@ -259,6 +264,7 @@ let
 
     multiarch =
       if isDarwin then "darwin"
+      else if isFreeBSD then ""
       else if isWindows then ""
       else "${multiarchCpu}-${machdep}-${pythonAbiName}";
 
@@ -301,10 +307,18 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.isFreeBSD) [
+    # Cross compilation only supports a limited number of "known good"
+    # configurations. If you're reading this and it's been a long time
+    # since this diff, consider submitting this patch upstream!
+    ./freebsd-cross.patch
+  ] ++ optionals (pythonOlder "3.13") [
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
     ./virtualenv-permissions.patch
+  ] ++ optionals (pythonAtLeast "3.13") [
+    ./3.13/virtualenv-permissions.patch
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
@@ -383,9 +397,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--without-ensurepip"
     "--with-system-expat"
-  ] ++ optionals (!(stdenv.isDarwin && pythonAtLeast "3.12")) [
-    #  ./Modules/_decimal/_decimal.c:4673:6: error: "No valid combination of CONFIG_64, CONFIG_32 and _PyHASH_BITS"
-    # https://hydra.nixos.org/build/248410479/nixlog/2/tail
     "--with-system-libmpdec"
   ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
@@ -399,8 +410,13 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "--enable-shared"
   ] ++ optionals enableFramework [
     "--enable-framework=${placeholder "out"}/Library/Frameworks"
+  ] ++ optionals (pythonAtLeast "3.13") [
+    (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
+  ] ++ optionals (stdenv.isDarwin && configd == null) [
+    # Make conditional on Darwin for now to avoid causing Linux rebuilds.
+    "py_cv_module__scproxy=n/a"
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (libxcrypt != null) [
@@ -436,9 +452,17 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "ac_cv_func_lchmod=no"
   ] ++ optionals static [
     "LDFLAGS=-static"
+    "MODULE_BUILDTYPE=static"
+  ] ++ optionals (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isMusl) [
+    # dlopen is a no-op in static musl builds, and since we build everything without -fPIC it's better not to pretend.
+    "ac_cv_func_dlopen=no"
   ];
 
-  preConfigure = optionalString (pythonOlder "3.12") ''
+  preConfigure = ''
+    # Attempt to purify some of the host info collection
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' config.guess
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' configure
+  '' + optionalString (pythonOlder "3.12") ''
     # Improve purity
     for path in /usr /sw /opt /pkg; do
       substituteInPlace ./setup.py --replace-warn $path /no-such-path
@@ -446,6 +470,12 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString stdenv.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
+    # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
+    sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
+  '' + optionalString (pythonAtLeast "3.11") ''
+    # Also override the auto-detection in `configure`.
+    substituteInPlace configure \
+      --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${if stdenv.isAarch64 then "uint128" else "x64"}'
   '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
@@ -469,10 +499,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
-      (placeholder "out") libxcrypt
-    ] ++ optionals tzdataSupport [
-      tzdata
-    ]);
+      (placeholder "out")
+    ] ++ lib.optional (libxcrypt != null) libxcrypt
+      ++ lib.optional tzdataSupport tzdata
+    );
   in lib.optionalString enableFramework ''
     for dir in include lib share; do
       ln -s $out/Library/Frameworks/Python.framework/Versions/Current/$dir $out/$dir
@@ -604,6 +634,14 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
       inherit src;
       name = "python${pythonVersion}-${version}-doc";
 
+      patches = optionals (pythonAtLeast "3.9" && pythonOlder "3.10") [
+        # https://github.com/python/cpython/issues/98366
+        (fetchpatch {
+          url = "https://github.com/python/cpython/commit/5612471501b05518287ed61c1abcb9ed38c03942.patch";
+          hash = "sha256-p41hJwAiyRgyVjCVQokMSpSFg/VDDrqkCSxsodVb6vY=";
+        })
+      ];
+
       dontConfigure = true;
 
       dontBuild = true;
@@ -628,13 +666,13 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.python.org";
     changelog = let
       majorMinor = versions.majorMinor version;
-      dashedVersion = replaceStrings [ "." "a" ] [ "-" "-alpha-" ] version;
+      dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
     in
       if sourceVersion.suffix == "" then
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
       else
         "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
-    description = "A high-level dynamically-typed programming language";
+    description = "High-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that
       is used in a wide variety of application domains. Some of its key
@@ -646,8 +684,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
-    maintainers = with maintainers; [ fridh ];
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
   };
 })

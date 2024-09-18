@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -37,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.isc;
     platforms = platforms.unix;
   };
-
 }

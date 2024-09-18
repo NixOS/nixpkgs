@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pyjwt
-, mock
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pyjwt,
+  mock,
+  python-dateutil,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "messagebird";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "messagebird";
     repo = "python-rest-api";
     rev = version;
-    hash = "sha256-2KVAxdHT5+Ie3ZRxXZhU0hLOtHWjIiJi+ferkYTlSn0=";
+    hash = "sha256-OiLhnmZ725VbyoOHvSf4nKQRA7JsxqcOv0VKBL6rUtU=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "messagebird"
-  ];
+  pythonImportsCheck = [ "messagebird" ];
 
   disabledTestPaths = [
     # ValueError: not enough values to unpack (expected 6, got 0)

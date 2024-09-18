@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "2.0.3";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calculator";
     rev = version;
-    sha256 = "sha256-VPxCW2lVA/nS2aJsjLgkuEM9wnAzyEr864XY8tfLQAY=";
+    sha256 = "sha256-QEs83hSv9Kupj2p/OTnuPZsC8tdm+IqgpeObBVrPRas=";
   };
 
   nativeBuildInputs = [

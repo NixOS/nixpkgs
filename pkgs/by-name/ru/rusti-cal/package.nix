@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Minimal command line calendar, similar to cal";
+    mainProgram = "rusti-cal";
     homepage = "https://github.com/arthurhenrique/rusti-cal";
     license = [ licenses.mit ];
     maintainers = [ maintainers.detegr ];

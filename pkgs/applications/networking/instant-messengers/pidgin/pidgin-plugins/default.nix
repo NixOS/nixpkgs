@@ -14,7 +14,8 @@ lib.makeScope newScope (self:
       plugins = [];
     };
 
-    pidginPackages = self;
+    # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing here.
+    pidginPackages = self // { pidginPackages = self.pidginPackages // { __attrsFailEvaluation = true; }; };
 
     pidgin-indicator = callPackage ./pidgin-indicator { };
 

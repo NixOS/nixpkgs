@@ -2,29 +2,30 @@
 , stdenv
 , fetchFromGitHub
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , nodejs-slim
 , matrix-sdk-crypto-nodejs
 , nixosTests
 , nix-update-script
+, yarn
 }:
 
 let
   pname = "matrix-appservice-irc";
-  version = "1.0.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-wUbWvCa9xvot73nXZjF3/RawM98ffBCW5YR2+ZKzmEo=";
+    hash = "sha256-LlcGcE3ik/xaiySyW5vfemGmukR7rlZrhfZOJwwfLDM=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     name = "${pname}-${version}-offline-cache";
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-P9u5sK9rIHWRE8kFMj05fVjv26jwsawvHBZgSn7j5BE=";
+    hash = "sha256-VUqi1OBuUeLbjDH0yBZDSkJBkaMWdzYddcHB5rikJwQ=";
   };
 
 in
@@ -34,9 +35,9 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs-slim
-    nodejs.pkgs.yarn
+    yarn
     nodejs.pkgs.node-gyp-build
   ];
 
@@ -83,7 +84,9 @@ stdenv.mkDerivation {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
+    changelog = "https://github.com/matrix-org/matrix-appservice-irc/releases/tag/${version}";
     description = "Node.js IRC bridge for Matrix";
+    mainProgram = "matrix-appservice-irc";
     maintainers = with maintainers; [ rhysmdnz ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;

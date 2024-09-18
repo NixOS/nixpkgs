@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fake-useragent
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, responses
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fake-useragent,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  responses,
+  simplejson,
 }:
 
 buildPythonPackage rec {
@@ -46,12 +47,11 @@ buildPythonPackage rec {
     "test_relog_after_session_down"
   ];
 
-  pythonImportsCheck = [
-    "pykeyatome"
-  ];
+  pythonImportsCheck = [ "pykeyatome" ];
 
   meta = with lib; {
     description = "Python module to get data from Atome Key";
+    mainProgram = "pykeyatome";
     homepage = "https://github.com/jugla/pyKeyAtome";
     changelog = "https://github.com/jugla/pyKeyAtome/releases/tag/V${version}";
     license = licenses.mit;

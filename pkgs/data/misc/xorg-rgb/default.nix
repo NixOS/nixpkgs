@@ -14,6 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "X11 colorname to RGB mapping database";
+    mainProgram = "showrgb";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

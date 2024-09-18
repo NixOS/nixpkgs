@@ -10,15 +10,15 @@ let
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-oZI2nvxvxOiv9F9c2AaP9hEBVd3kV4tjuEmvaR5V0Lc=";
-    arm64-linux_hash = "sha256-Pquc/b/VXJEi4N8uOfvg4X1083JaOdCXg2IPAGZAMV0=";
-    x64-osx_hash = "sha256-HHmx8bI4d+xmL63v/qmUIJDt+laoSs5Iqp+I7OzoU/k=";
-    arm64-osx_hash = "sha256-Us/ZEDlZ96/ybs8lxnl4bSFICwc9xJtXScA+hGEwfWk=";
+    x64-linux_hash = "sha256-byYFQ3QJVElVNSxYWOx0EWbreDKgFcaQFkXNkWt3TP8=";
+    arm64-linux_hash = "sha256-ekt8Kl3RL+bBoeehpCWH7qD4Zt+ni9WAOsI9Zw4ZVi0=";
+    x64-osx_hash = "sha256-0VtDl6jPsT25KV9uEvn/bDxOIouRXK32YFPv/ZBK4Qc=";
+    arm64-osx_hash = "sha256-8N9X4UYewouD16B/WOhIL1m8R6C7cdptDQQZIutLzXU=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "5.3.6.8612";
+  version = "5.9.1.9070";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Usenet/BitTorrent movie downloader";
+    description = "Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
     changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = licenses.gpl3Only;

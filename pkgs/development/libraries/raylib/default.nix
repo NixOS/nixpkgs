@@ -19,22 +19,25 @@
 , includeEverything ? true
 , raylib-games
 , darwin
+, autoPatchelfHook
 }:
 let
   inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "raylib";
-  version = "4.5.0";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = "raylib";
     rev = finalAttrs.version;
-    hash = "sha256-Uqqzq5shDp0AgSBT5waHBNUkEu0LRj70SNOlR5R2yAM=";
+    hash = "sha256-gEstNs3huQ1uikVXOW4uoYnIDr5l8O9jgZRTX1mkRww=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   buildInputs = [ glfw ]
     ++ lib.optionals stdenv.isLinux [ mesa libXi libXcursor libXrandr libXinerama ]
@@ -56,25 +59,26 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = [ raylib-games ];
 
   patches = [
-    # Patch version in CMakeList to 4.5.0
-    # Remove this when updating to a new revision
+    # Patch version in CMakeLists.txt to 5.0.0
+    # The library author doesn't use cmake, so when updating this package please
+    # check that the resulting library extension matches the package version
+    # and remove/update this patch
     (fetchpatch {
-      url = "https://github.com/raysan5/raylib/commit/0d4db7ad7f6fd442ed165ebf8ab8b3f4033b04e7.patch";
-      hash = "sha256-RGokbQAwJAZm2FU2VNwraE3xko8E+RLLFjUfDRXeKhA=";
+      url = "https://github.com/raysan5/raylib/commit/032cc497ca5aaca862dc926a93c2a45ed8017737.patch";
+      hash = "sha256-qsX5AwyQaGoRsbdszOO7tUF9dR+AkEFi4ebNkBVHNEY=";
     })
   ];
 
   # fix libasound.so/libpulse.so not being found
-  preFixup = ''
-    ${lib.optionalString alsaSupport "patchelf --add-needed ${alsa-lib}/lib/libasound.so $out/lib/libraylib.so.${finalAttrs.version}"}
-    ${lib.optionalString pulseSupport "patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libraylib.so.${finalAttrs.version}"}
-  '';
+  appendRunpaths = lib.optionals stdenv.isLinux [
+    (lib.makeLibraryPath (lib.optional alsaSupport alsa-lib ++ lib.optional pulseSupport libpulseaudio))
+  ];
 
   meta = with lib; {
-    description = "A simple and easy-to-use library to enjoy videogames programming";
+    description = "Simple and easy-to-use library to enjoy videogames programming";
     homepage = "https://www.raylib.com/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ adamlwgriffiths ];
+    maintainers = [ ];
     platforms = platforms.all;
     changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
   };

@@ -31,7 +31,7 @@ in
     '';
     dontUnpack = true;
     meta = with lib; {
-      description = "A large database of handwritten digits";
+      description = "Large database of handwritten digits";
       longDescription = ''
         The MNIST database (Modified National Institute of Standards and
         Technology database) is a large database of handwritten digits that is

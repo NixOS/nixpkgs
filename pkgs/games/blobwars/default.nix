@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Platform action game featuring a blob with lots of weapons";
+    mainProgram = "blobwars";
     homepage = "https://www.parallelrealities.co.uk/games/metalBlobSolid/";
     license = with licenses; [ gpl2Plus free ];
     maintainers = with maintainers; [ iblech ];

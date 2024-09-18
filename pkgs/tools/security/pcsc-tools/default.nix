@@ -6,9 +6,9 @@
 , gobject-introspection
 , makeWrapper
 , pkg-config
-, wrapGAppsHook
-, systemd
-, dbus
+, wrapGAppsHook3
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, dbusSupport ? stdenv.isLinux, dbus
 , pcsclite
 , PCSC
 , wget
@@ -16,34 +16,43 @@
 , perlPackages
 , testers
 , nix-update-script
+
+# gui does not cross compile properly
+, withGui ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
+
+assert systemdSupport -> dbusSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcsc-tools";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pcsc-tools";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-+cvgSNlSYSJ2Zr2iWk96AacyQ38ru9/RK8yeK3ceqCo=";
+    hash = "sha256-5a3sVcFEFzBkbRKUqlCPV7sL3O17G7hDVpxLpAWofdE=";
   };
 
   configureFlags = [
     "--datarootdir=${placeholder "out"}/share"
   ];
 
-  buildInputs = [ dbus perlPackages.perl pcsclite ]
-    ++ lib.optional stdenv.isDarwin PCSC
-    ++ lib.optional stdenv.isLinux systemd;
+  buildInputs = lib.optionals dbusSupport [
+    dbus
+  ] ++ [
+    perlPackages.perl pcsclite
+  ] ++ lib.optional stdenv.isDarwin PCSC
+    ++ lib.optional systemdSupport systemd;
 
   nativeBuildInputs = [
     autoconf-archive
     autoreconfHook
-    gobject-introspection
     makeWrapper
     pkg-config
-    wrapGAppsHook
+  ] ++ lib.optionals withGui [
+    gobject-introspection
+    wrapGAppsHook3
   ];
 
   preFixup = ''
@@ -54,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/scriptor \
       --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC libintl-perl ]}"
 
+  '' + lib.optionalString withGui ''
     wrapProgram $out/bin/gscriptor \
       ''${makeWrapperArgs[@]} \
       --set PERL5LIB "${with perlPackages; makePerlPath [
@@ -66,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
           Cairo
           CairoGObject
       ]}"
+  '' + ''
 
     wrapProgram $out/bin/ATR_analysis \
       --set PERL5LIB "${with perlPackages; makePerlPath [ ChipcardPCSC libintl-perl ]}"

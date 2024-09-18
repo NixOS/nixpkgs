@@ -1,11 +1,12 @@
-{ lib
-, pythonOlder
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, pyasn1
-, cryptography
-, pytestCheckHook
+{
+  lib,
+  pythonOlder,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pyasn1,
+  cryptography,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,18 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-47YiHNxmjyCOYHHUV3Zyhs3Att9HZtCXYfbN34ooTxU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyasn1
     cryptography
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/SecurityInnovation/PGPy";
@@ -44,6 +41,9 @@ buildPythonPackage rec {
       programs, conforming to the OpenPGP specification per RFC 4880.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu dotlambda ];
+    maintainers = with maintainers; [
+      eadwu
+      dotlambda
+    ];
   };
 }

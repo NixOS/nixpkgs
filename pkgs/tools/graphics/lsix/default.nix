@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lsix";
-  version = "1.8.2";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "hackerb9";
     repo = "lsix";
     rev = finalAttrs.version;
-    sha256 = "sha256-xlOlAfZonSo/RERt5WxPqMvppVrY5/Yhh7SgCCsYDQE=";
+    sha256 = "sha256-msTG7otjzksg/2XyPDy31LEb7uGXSgB8fzfHvad9nPA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

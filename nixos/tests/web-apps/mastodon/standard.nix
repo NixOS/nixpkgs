@@ -34,9 +34,6 @@ in
         pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
       };
 
-      # TODO remove once https://github.com/NixOS/nixpkgs/pull/266270 is resolved.
-      services.postgresql.package = pkgs.postgresql_14;
-
       services.mastodon = {
         enable = true;
         configureNginx = true;

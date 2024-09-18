@@ -43,10 +43,11 @@ python3.pkgs.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
-    description = "A cli todo application compatible with the todo.txt format";
+    description = "Cli todo application compatible with the todo.txt format";
+    mainProgram = "topydo";
     homepage = "https://github.com/topydo/topydo";
     changelog = "https://github.com/topydo/topydo/blob/${src.rev}/CHANGES.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

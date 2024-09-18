@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "pv-migrate";
-  version = "1.7.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xbg32ckxAUQkkN/yumHz4v1U4FvUcmx5ftd3+4zc3/c=";
+    sha256 = "sha256-QD/yacQOII1AS9VHB/2cTgoxLioyKYoROSizkHooX9w=";
   };
 
   subPackages = [ "cmd/pv-migrate" ];
 
-  vendorHash = "sha256-AqR9Gy8sAX4wrKGPnQUj33juBOfhUn0BR8OyJPiDrO0=";
+  vendorHash = "sha256-NXL7LaGSfiJW9lQrZyh5Iw1QvQ9T8omfafADm4PlGik=";
 
   ldflags = [
     "-s"
@@ -35,7 +35,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "CLI tool to easily migrate Kubernetes persistent volumes ";
+    description = "CLI tool to easily migrate Kubernetes persistent volumes";
+    mainProgram = "pv-migrate";
     homepage = "https://github.com/utkuozdemir/pv-migrate";
     changelog = "https://github.com/utkuozdemir/pv-migrate/releases/tag/${version}";
     license = licenses.afl20;

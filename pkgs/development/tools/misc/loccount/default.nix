@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Re-implementation of sloccount in Go";
+    mainProgram = "loccount";
     longDescription = ''
       loccount is a re-implementation of David A. Wheeler's sloccount tool
       in Go.  It is faster and handles more different languages. Because

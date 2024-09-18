@@ -7,13 +7,13 @@
 , nurl
 
 # optional
-, vimPlugins
-, neovim
+, neovim-unwrapped
 }:
 buildPythonApplication {
-  format = "other";
   pname = "vim-plugins-updater";
   version = "0.1";
+
+  format = "other";
 
   nativeBuildInputs = [
     makeWrapper
@@ -29,15 +29,17 @@ buildPythonApplication {
   installPhase = ''
     mkdir -p $out/bin $out/lib
     cp ${./update.py} $out/bin/vim-plugins-updater
-    cp ${./get-plugins.nix} $out/get-plugins.nix
-    cp ${./nvim-treesitter/update.py} $out/lib/treesitter.py
-    cp ${../../../../../maintainers/scripts/pluginupdate.py} $out/lib/pluginupdate.py
+    cp ${./get-plugins.nix} $out/bin/get-plugins.nix
 
     # wrap python scripts
     makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [
-      nix nix-prefetch-git neovim nurl ]}" --prefix PYTHONPATH : "$out/lib" )
+      nix nix-prefetch-git neovim-unwrapped nurl ]}" --prefix PYTHONPATH : "${./.}:${../../../../../maintainers/scripts}" )
     wrapPythonPrograms
   '';
+
+  shellHook = ''
+    export PYTHONPATH=pkgs/applications/editors/vim/plugins:maintainers/scripts:$PYTHONPATH
+    '';
 
   meta.mainProgram = "vim-plugins-updater";
 }

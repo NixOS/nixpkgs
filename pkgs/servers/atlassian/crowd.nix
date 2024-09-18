@@ -45,6 +45,6 @@ lib.warnIf (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is d
     description = "Single sign-on and identity management tool";
     homepage = "https://www.atlassian.com/software/crowd";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

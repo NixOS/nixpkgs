@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
+{ lib, fetchFromGitHub, buildDunePackage
 , camlp-streams, cppo, cryptokit, ocurl, yojson
 , ounit2
 }:

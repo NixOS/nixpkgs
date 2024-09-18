@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.9.5";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "https://download.osgeo.org/geos/geos-${finalAttrs.version}.tar.bz2";
     hash = "sha256-xsmu36iGT7RLp4kRQIRCOCv9BpDPLUCRrjgFyGN4kDY=";
   };
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
+    mainProgram = "geos-config";
     homepage = "https://trac.osgeo.org/geos";
     license = licenses.lgpl21Only;
     pkgConfigModules = [ "geos" ];

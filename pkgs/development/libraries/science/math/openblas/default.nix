@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
+{ lib, stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -114,6 +114,13 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    s390x-linux = {
+      BINARY = 64;
+      TARGET = setTarget "ZARCH_GENERIC";
+      DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = true;
+    };
   };
 in
 
@@ -142,7 +149,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.26";
+  version = "0.3.28";
 
   outputs = [ "out" "dev" ];
 
@@ -150,7 +157,7 @@ stdenv.mkDerivation rec {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    hash = "sha256-AA3+x3SXkcg3g7bROZYLpWAbxnRedmQBZPe+rBJKxJ8=";
+    hash = "sha256-430zG47FoBNojcPFsVC7FA43FhVPxrulxAW3Fs6CHo8=";
   };
 
   postPatch = ''
@@ -173,6 +180,10 @@ stdenv.mkDerivation rec {
     "strictoverflow"
     # don't interfere with dynamic target detection
     "relro" "bindnow"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # "__builtin_clear_padding not supported for variable length aggregates"
+    # in aarch64-specific code
+    "trivialautovarinit"
   ];
 
   nativeBuildInputs = [
@@ -255,7 +266,7 @@ EOF
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) numpy scipy;
+    inherit (python3.pkgs) numpy scipy scikit-learn;
     inherit ceres-solver giac octave opencv;
   };
 

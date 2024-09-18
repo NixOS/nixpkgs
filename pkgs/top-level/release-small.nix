@@ -7,12 +7,18 @@
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+let
+  release-lib = import ./release-lib.nix {
+    inherit supportedSystems nixpkgsArgs;
+  };
+
+  inherit (release-lib) all linux darwin mapTestOn unix;
+in
 
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs supportedSystems;
+    inherit nixpkgs;
     officialRelease = false;
   };
 
@@ -76,7 +82,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   libxml2 = all;
   libxslt = all;
   lout = linux;
-  lsh = linux;
   lsof = linux;
   ltrace = linux;
   lvm2 = linux;

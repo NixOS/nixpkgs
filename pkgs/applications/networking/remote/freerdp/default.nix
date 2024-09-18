@@ -76,13 +76,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.11.5";
+  version = "2.11.7";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    hash = "sha256-WyYBIiIQNDHydJqU3jWNItJU2/sYnRpGHCXE9Xhom5M=";
+    hash = "sha256-w+xyMNFmKylSheK0yAGl8J6MXly/HUjjAfR9Qq3s/kA=";
   };
 
   postPatch = ''
@@ -167,7 +167,6 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
-    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ]
   ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
@@ -199,14 +198,15 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Remote Desktop Protocol Client";
+    description = "Remote Desktop Protocol Client";
     longDescription = ''
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
     homepage = "https://www.freerdp.com/";
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg lheckemann ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };
 }

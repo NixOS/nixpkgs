@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Yp7uLoFEDkb0TztcDCeAkt+EHQRt56ncPqkBtd/zzzI=";
+    hash = "sha256-4Vb0C6k36VQwiruGj7lu6MjDEeTh84JSHw47YMbFb30=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoHash = "sha256-t6GVoMBCD0s36GhtqJu9Z2bwwq5P+beEObG+gSC+QUw=";
+  cargoHash = "sha256-G6Aqn+q48s8Qsoa1EMowtw5bnUnnYWhyGr4hNhVYNMo=";
 
   postInstall = ''
     installManPage man/man*/*
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fast cd command that learns your habits";
+    description = "Fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
     changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

@@ -5,13 +5,15 @@ You can also specify containers and their configuration in the host's
 shall be a container named `database` running PostgreSQL:
 
 ```nix
-containers.database =
-  { config =
-      { config, pkgs, ... }:
-      { services.postgresql.enable = true;
-      services.postgresql.package = pkgs.postgresql_14;
-      };
-  };
+{
+  containers.database =
+    { config =
+        { config, pkgs, ... }:
+        { services.postgresql.enable = true;
+        services.postgresql.package = pkgs.postgresql_14;
+        };
+    };
+}
 ```
 
 If you run `nixos-rebuild switch`, the container will be built. If the
@@ -25,11 +27,13 @@ cannot change the network configuration. You can give a container its
 own network as follows:
 
 ```nix
-containers.database = {
-  privateNetwork = true;
-  hostAddress = "192.168.100.10";
-  localAddress = "192.168.100.11";
-};
+{
+  containers.database = {
+    privateNetwork = true;
+    hostAddress = "192.168.100.10";
+    localAddress = "192.168.100.11";
+  };
+}
 ```
 
 This gives the container a private virtual Ethernet interface with IP

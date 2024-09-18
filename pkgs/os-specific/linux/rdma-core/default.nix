@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "50.0";
+  version = "53.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PJlbY7QR9b2eVaALpuq/67kRTc91HEhs9Wl7WXtSLmA=";
+    hash = "sha256-PHqHQ1xAsOLvT8os3EDk38zWfJp0qmcBw3TuuCvK2Ns=";
   };
 
   strictDeps = true;

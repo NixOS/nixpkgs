@@ -1,9 +1,37 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
-, defaultGemConfig, buildRubyGem
-, gitlabEnterprise ? false, callPackage, yarn
-, prefetch-yarn-deps, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
-, cargo, rustc, rustPlatform
+{ bundlerEnv
+, cacert
+, defaultGemConfig
+, fetchFromGitLab
+, fetchYarnDeps
+, fixup-yarn-lock
+, git
+, gitlabEnterprise ? false
+, lib
+, makeWrapper
+, nettools
+, nixosTests
+, nodejs
+, replace
+, ruby_3_2
+, stdenv
+, tzdata
+, yarn
+
+# gem dependencies:
+# gitlab-glfm-markdown
+, buildRubyGem, cargo, rustc, rustPlatform
+
+# gpgme
+, pkg-config
+
+# openssl
+, openssl
+
+# ruby-magic
+, file
+
+# static-holmes
+, icu, which, zlib
 }:
 
 let
@@ -19,7 +47,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_1;
+    ruby = ruby_3_2;
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
@@ -49,7 +77,7 @@ let
                 cp Cargo.lock $out
               '';
             };
-            hash = "sha256-I5w/roDgnRe5eyXo0wiRcoWPpXEtpL3kOl9eDg99t/w=";
+            hash = "sha256-VYjCYUikORuXx27OYWyumBxeHw9aj/S1wcr9vLIsXeo=";
           };
 
           dontBuild = false;
@@ -74,9 +102,17 @@ let
             find $out -type f -name .rustc_info.json -delete
           '';
         };
+
+        static_holmes = attrs: {
+          nativeBuildInputs = [
+            icu
+            which
+            zlib.dev
+          ];
+        };
       };
     groups = [
-      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
+      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos" "opentelemetry"
     ];
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
@@ -94,7 +130,7 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert prefetch-yarn-deps ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert fixup-yarn-lock ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
@@ -111,6 +147,8 @@ let
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
+
+    SKIP_YARN_INSTALL = 1;
 
     configurePhase = ''
       runHook preConfigure
@@ -142,11 +180,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
       runHook postBuild
     '';

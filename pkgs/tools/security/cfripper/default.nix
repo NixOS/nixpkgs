@@ -3,35 +3,31 @@
 , python3
 }:
 
-
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pydantic = self.pydantic_1;
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.4";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-heVFum+Eaofd9L0dNHqD9GgHP+ckGwJi+NfeFci+ESc=";
+    hash = "sha256-2yOATSCXqv28OE+GdF9F9Dhi3AIkxSe/YJ9ILLnd/nw=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pluggy~=0.13.1" "pluggy" \
-  '';
-
-  nativeBuildInputs = with python.pkgs; [
-    setuptools
+  pythonRelaxDeps = [
+    "pluggy"
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+  ];
+
+  dependencies = with python3.pkgs; [
     boto3
     cfn-flip
     click
@@ -42,7 +38,7 @@ in python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     moto
     pytestCheckHook
   ];
@@ -68,5 +64,6 @@ in python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/Skyscanner/cfripper/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cfripper";
   };
 }

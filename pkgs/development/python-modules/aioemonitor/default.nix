@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-raises
-, pytestCheckHook
-, pythonOlder
-, xmltodict
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-raises,
+  pytestCheckHook,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client for SiteSage Emonitor";
+    mainProgram = "my_example";
     homepage = "https://github.com/bdraco/aioemonitor";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];

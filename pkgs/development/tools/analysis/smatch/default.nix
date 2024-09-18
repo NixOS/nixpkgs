@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
   };
 
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [
+    "-Wno-incompatible-function-pointer-types"
+  ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ sqlite openssl ]
@@ -30,9 +34,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
   meta = with lib; {
-    description = "A semantic analysis tool for C";
+    description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

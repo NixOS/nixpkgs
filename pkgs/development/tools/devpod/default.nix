@@ -23,17 +23,18 @@
 
 let
   pname = "devpod";
-  version = "0.5.2";
+  version = "0.5.20";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xvZ9I8VL50yS6tEQizp7bebyZVTCW6y2VOSyVZDJy6M=";
+    sha256 = "sha256-8LbqrOKC1als3Xm6ZuU2AySwT0UWjLN2xh+/CvioYew=";
   };
 
   meta = with lib; {
     description = "Codespaces but open-source, client-only and unopinionated: Works with any IDE and lets you use any cloud, kubernetes or just localhost docker";
+    mainProgram = "devpod";
     homepage = "https://devpod.sh";
     license = licenses.mpl20;
     maintainers = with maintainers; [ maxbrunet ];
@@ -95,7 +96,7 @@ rec {
         dontInstall = true;
       };
 
-      rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+      rustTargetPlatformSpec = stdenv.hostPlatform.rust.rustcTarget;
     in
     rustPlatform.buildRustPackage {
       inherit version src;

@@ -14,7 +14,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "A lightweight library for dispatching and handling events, with a focus on metrics and instrumentation";
+    description = "Lightweight library for dispatching and handling events, with a focus on metrics and instrumentation";
     homepage = "https://github.com/leostera/telemetry";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

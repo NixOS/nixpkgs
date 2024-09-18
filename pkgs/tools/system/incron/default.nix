@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bash }:
+{ lib, stdenv, fetchFromGitHub, bash, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "incron";
@@ -27,10 +27,12 @@ stdenv.mkDerivation rec {
     cp incrond incrontab $out/bin/
   '';
 
+  passthru.tests = { inherit (nixosTests) incron; };
+
   meta = with lib; {
-    description = "A cron-like daemon which handles filesystem events";
+    description = "Cron-like daemon which handles filesystem events";
     homepage = "https://github.com/ar-/incron";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.aanderse ];
     platforms = platforms.linux;
   };

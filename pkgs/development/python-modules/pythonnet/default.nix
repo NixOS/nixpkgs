@@ -1,13 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, pycparser
-, psutil
-, dotnet-sdk
-, buildDotnetModule
-, clr-loader
-, setuptools
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  pycparser,
+  psutil,
+  dotnet-sdk,
+  buildDotnetModule,
+  clr-loader,
+  setuptools,
 }:
 
 let
@@ -36,6 +37,8 @@ buildPythonPackage {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
+  buildInputs = dotnet-build.nugetDeps;
+
   nativeBuildInputs = [
     setuptools
     dotnet-sdk
@@ -61,7 +64,7 @@ buildPythonPackage {
     dotnet restore \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
-      --source ${dotnet-build.nuget-source}
+      --source "$nugetSource"
   '';
 
   # Rerun this when updating to refresh Nuget dependencies
@@ -74,6 +77,9 @@ buildPythonPackage {
     license = licenses.mit;
     # <https://github.com/pythonnet/pythonnet/issues/898>
     badPlatforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ jraygauthier mdarocha ];
+    maintainers = with maintainers; [
+      jraygauthier
+      mdarocha
+    ];
   };
 }

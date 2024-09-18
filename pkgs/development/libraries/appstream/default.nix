@@ -4,8 +4,10 @@
 , fetchFromGitHub
 , meson
 , mesonEmulatorHook
+, appstream
 , ninja
 , pkg-config
+, cmake
 , gettext
 , xmlto
 , docbook-xsl-nons
@@ -23,6 +25,10 @@
 , gperf
 , vala
 , curl
+, cairo
+, gdk-pixbuf
+, pango
+, librsvg
 , systemd
 , nixosTests
 , testers
@@ -31,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.0.1";
+  version = "1.0.3";
 
   outputs = [ "out" "dev" "installedTests" ];
 
@@ -39,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ULqRHepWVuAluXsXJUoqxqJfrN168MGlwdVkoLLwSN0=";
+    sha256 = "sha256-pniZq+rR9wW86QqfRw4WZiBo1F16aSAb1J2RjI4aqE0=";
   };
 
   patches = [
@@ -63,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    cmake
     gettext
     libxslt
     xmlto
@@ -74,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     gperf
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+    appstream
   ];
 
   buildInputs = [
@@ -85,6 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxmlb
     libyaml
     curl
+    cairo
+    gdk-pixbuf
+    pango
+    librsvg
   ] ++ lib.optionals withSystemd [
     systemd
   ];
@@ -94,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddocs=false"
     "-Dvapi=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dcompose=true"
   ] ++ lib.optionals (!withSystemd) [
     "-Dsystemd=false"
   ];

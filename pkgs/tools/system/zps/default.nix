@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small utility for listing and reaping zombie processes on GNU/Linux";
+    description = "Small utility for listing and reaping zombie processes on GNU/Linux";
     homepage = "https://github.com/orhun/zps";
     changelog = "https://github.com/orhun/zps/releases/tag/${version}";
     license = licenses.gpl3Only;

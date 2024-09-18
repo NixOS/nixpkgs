@@ -1,40 +1,35 @@
 { lib
-, buildGo122Module
+, stdenv
+, buildGo123Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go_1_22
 , git
+, go_1_23
 , enumer
 , mockgen
 , nodejs
 , npmHooks
 , nix-update-script
 , nixosTests
-, stdenv
 }:
 
-let
-  buildGoModule = buildGo122Module;
-  go = go_1_22;
-in
-
-buildGoModule rec {
+buildGo123Module rec {
   pname = "evcc";
-  version = "0.124.4";
+  version = "0.130.9";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-sSR0aRSIUPph1YGfY6ihUffKiyauSbO7eUSVa3jaY6s=";
+    hash = "sha256-g3z2yqw/84OMui5mchfqVHoR/6LdwNHgeBodf1jUtj4=";
   };
 
-  vendorHash = "sha256-1ZSMI6mz8CkibP3KwWJ3I05BMoBu9r+Fn8vLLDTpVfA=";
+  vendorHash = "sha256-C2eoNmv0GSi5DV53aUwGcBOw6n2btU/HhniMyu21vLE=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-Uu1idwI3zRQmu2xBrbMcFBmJuO/z+N5+6eSRK+n1pg8=";
+    hash = "sha256-60F6j87T77JEt3ej4FVTc8rnnpZSGzomrQp8VPWjv6Q=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +40,7 @@ buildGoModule rec {
   overrideModAttrs = _: {
     nativeBuildInputs = [
       enumer
-      go
+      go_1_23
       git
       cacert
       mockgen
@@ -72,13 +67,16 @@ buildGoModule rec {
     make ui
   '';
 
-  doCheck = !stdenv.isDarwin; # tries to bind to local network, doesn't work in darwin sandbox
+  doCheck = !stdenv.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
-  preCheck = ''
-    # requires network access
-    rm meter/template_test.go
-    rm charger/template_test.go
-  '';
+  checkFlags = let
+    skippedTests = [
+      # network access
+      "TestOctopusConfigParse"
+      "TestTemplates"
+    ];
+  in
+  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     tests = {

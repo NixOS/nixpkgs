@@ -1,0 +1,34 @@
+diff --git a/guake/guake_app.py b/guake/guake_app.py
+index 48074db..d7d1371 100644
+--- a/guake/guake_app.py
++++ b/guake/guake_app.py
+@@ -109,12 +109,7 @@ class Guake(SimpleGladeApp):
+                 SCHEMA_DIR, Gio.SettingsSchemaSource.get_default(), False
+             )
+ 
+-        try:
+-            schema_source = load_schema()
+-        except GLib.Error:  # pylint: disable=catching-non-exception
+-            log.exception("Unable to load the GLib schema, try to compile it")
+-            try_to_compile_glib_schemas()
+-            schema_source = load_schema()
++        schema_source = load_schema()
+         self.settings = Settings(schema_source)
+         self.accel_group = None
+ 
+@@ -122,13 +117,8 @@ class Guake(SimpleGladeApp):
+             "schema-version" not in self.settings.general.keys()
+             or self.settings.general.get_string("schema-version") != guake_version()
+         ):
+-            log.exception("Schema from old guake version detected, regenerating schema")
+-            try:
+-                try_to_compile_glib_schemas()
+-            except subprocess.CalledProcessError:
+-                log.exception("Schema in non user-editable location, attempting to continue")
+-            schema_source = load_schema()
+-            self.settings = Settings(schema_source)
++            log.exception("Schema from old guake version detected")
++            # Kept for compatibility with other distros.
+             self.settings.general.set_string("schema-version", guake_version())
+ 
+         log.info("Language previously loaded from: %s", LOCALE_DIR)

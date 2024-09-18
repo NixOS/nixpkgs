@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage {
@@ -19,7 +20,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "A library that provides the `editor` module for programmatically";
+    description = "Library that provides the `editor` module for programmatically";
     homepage = "https://github.com/fmoo/python-editor";
     license = licenses.asl20;
   };

@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.torque.mom;
@@ -17,18 +14,18 @@ in
   options = {
 
     services.torque.mom = {
-      enable = mkEnableOption (lib.mdDoc "torque computing node");
+      enable = lib.mkEnableOption "torque computing node";
 
-      serverNode = mkOption {
-        type = types.str;
-        description = lib.mdDoc "Hostname running pbs server.";
+      serverNode = lib.mkOption {
+        type = lib.types.str;
+        description = "Hostname running pbs server.";
       };
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.torque ];
 
     systemd.services.torque-mom-init = {

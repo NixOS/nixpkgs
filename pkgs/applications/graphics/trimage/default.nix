@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
 
 , python3
 , installShellFiles
@@ -61,7 +60,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A cross-platform tool for optimizing PNG and JPG files";
+    description = "Cross-platform tool for optimizing PNG and JPG files";
     homepage = "https://github.com/Kilian/Trimage";
     license = lib.licenses.mit;
     mainProgram = "trimage";

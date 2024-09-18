@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "natscli";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "natscli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-40gKG47C8RvgPm3qJ5oNJP82efmCfrCSKVt+35jawlw=";
+    hash = "sha256-hLjiY4+01t1ZlP+N8qBG0YiDiw6VdTdeNkrwHwthrjk=";
   };
 
-  vendorHash = "sha256-d2JijN9OU/hQFU3Q2kEAWU0nRrPacfRWNIhEuLHjoIc=";
+  vendorHash = "sha256-T6VcyklwfRS012ZRzqxkahn9YYrQGky/znTqLIkAoK0=";
 
   meta = with lib; {
     description = "NATS Command Line Interface";

@@ -1,31 +1,29 @@
-{ lib
-, argcomplete
-, attrs
-, buildPythonPackage
-, docstring-parser
-, fetchFromGitHub
-, fsspec
-, jsonnet
-, jsonschema
-, omegaconf
-, pydantic
-, pytest-subtests
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, reconplogger
-, requests
-, responses
-, ruyaml
-, setuptools
-, types-pyyaml
-, types-requests
-, typeshed-client
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  docstring-parser,
+  fetchFromGitHub,
+  fsspec,
+  jsonnet,
+  jsonschema,
+  omegaconf,
+  pytest-subtests,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  reconplogger,
+  requests,
+  ruyaml,
+  setuptools,
+  types-pyyaml,
+  types-requests,
+  typeshed-client,
 }:
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.27.5";
+  version = "4.32.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -34,16 +32,12 @@ buildPythonPackage rec {
     owner = "omni-us";
     repo = "jsonargparse";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MSvgOF/5X78HSSRvv1TBmaYZgcUVMKGaHfzXu3lIGVY=";
+    hash = "sha256-DardzvEiydlsaOY60p2fNR6cGGvombSSUXCxHHFT7b0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  dependencies = [ pyyaml ];
 
   passthru.optional-dependencies = {
     all = [
@@ -57,35 +51,21 @@ buildPythonPackage rec {
       typeshed-client
       requests
     ];
-    argcomplete = [
-      argcomplete
-    ];
-    fsspec = [
-      fsspec
-    ];
+    argcomplete = [ argcomplete ];
+    fsspec = [ fsspec ];
     jsonnet = [
       jsonnet
       # jsonnet-binary
     ];
-    jsonschema = [
-      jsonschema
-    ];
-    omegaconf = [
-      omegaconf
-    ];
-    reconplogger = [
-      reconplogger
-    ];
-    ruyaml = [
-      ruyaml
-    ];
+    jsonschema = [ jsonschema ];
+    omegaconf = [ omegaconf ];
+    reconplogger = [ reconplogger ];
+    ruyaml = [ ruyaml ];
     signatures = [
       docstring-parser
       typeshed-client
     ];
-    urls = [
-      requests
-    ];
+    urls = [ requests ];
   };
 
   nativeCheckInputs = [
@@ -95,9 +75,7 @@ buildPythonPackage rec {
     types-requests
   ];
 
-  pythonImportsCheck = [
-    "jsonargparse"
-  ];
+  pythonImportsCheck = [ "jsonargparse" ];
 
   meta = with lib; {
     description = "Module to mplement minimal boilerplate CLIs derived from various sources";

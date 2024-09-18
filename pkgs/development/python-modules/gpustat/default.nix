@@ -1,14 +1,14 @@
-{ lib
-, blessed
-, buildPythonPackage
-, fetchPypi
-, mockito
-, nvidia-ml-py
-, psutil
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools-scm
+{
+  lib,
+  blessed,
+  buildPythonPackage,
+  fetchPypi,
+  mockito,
+  nvidia-ml-py,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -23,12 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-wY0+1VGPwWMAxC1pTevHCuuzvlXK6R8dtk1jtfqK+dg=";
   };
 
-  pythonRelaxDeps = [
-    "nvidia-ml-py"
-  ];
+  pythonRelaxDeps = [ "nvidia-ml-py" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -43,12 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "gpustat"
-  ];
+  pythonImportsCheck = [ "gpustat" ];
 
   meta = with lib; {
-    description = "A simple command-line utility for querying and monitoring GPU status";
+    description = "Simple command-line utility for querying and monitoring GPU status";
+    mainProgram = "gpustat";
     homepage = "https://github.com/wookayin/gpustat";
     changelog = "https://github.com/wookayin/gpustat/releases/tag/v${version}";
     license = licenses.mit;

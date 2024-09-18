@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast scan of the Internet";
+    mainProgram = "masscan";
     homepage = "https://github.com/robertdavidgraham/masscan";
     changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
     license = licenses.agpl3Only;

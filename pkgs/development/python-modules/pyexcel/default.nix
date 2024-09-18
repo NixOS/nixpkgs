@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, chardet
-, lml
-, pyexcel-io
-, texttable
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  chardet,
+  lml,
+  pyexcel-io,
+  texttable,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     texttable
   ];
 
-  pythonImportsCheck = [
-    "pyexcel"
-  ];
+  pythonImportsCheck = [ "pyexcel" ];
 
   # Tests depend on pyexcel-xls & co. causing circular dependency.
   # https://github.com/pyexcel/pyexcel/blob/dev/tests/requirements.txt
@@ -39,6 +38,6 @@ buildPythonPackage rec {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

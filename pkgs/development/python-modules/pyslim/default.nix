@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pythonOlder
-, msprime
-, numpy
-, tskit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pythonOlder,
+  msprime,
+  numpy,
+  tskit,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-valAhPEVZNv/IYe85a88SGE+2/9O1omvBywz/HeeRco=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     msprime
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Requires non-packaged software SLiM
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyslim"
-  ];
+  pythonImportsCheck = [ "pyslim" ];
 
   meta = with lib; {
     description = "Tools for dealing with tree sequences coming to and from SLiM";

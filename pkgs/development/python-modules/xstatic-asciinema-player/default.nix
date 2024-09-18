@@ -1,15 +1,17 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
-  pname = "XStatic-asciinema-player";
+  pname = "xstatic-asciinema-player";
   version = "2.6.1.1";
 
   src = fetchPypi {
-    inherit version pname;
-    sha256 = "sha256-yA6WC067St82Dm6StaCKdWrRBhmNemswetIO8iodfcw=";
+    pname = "XStatic-asciinema-player";
+    inherit version;
+    hash = "sha256-yA6WC067St82Dm6StaCKdWrRBhmNemswetIO8iodfcw=";
   };
 
   # no tests implemented

@@ -11,7 +11,6 @@ let
   '';
 
 in
-
 {
 
   ###### interface
@@ -19,15 +18,15 @@ in
   options.virtualisation.azure.agent = {
     enable = mkOption {
       default = false;
-      description = lib.mdDoc "Whether to enable the Windows Azure Linux Agent.";
+      description = "Whether to enable the Windows Azure Linux Agent.";
     };
     verboseLogging = mkOption {
       default = false;
-      description = lib.mdDoc "Whether to enable verbose logging.";
+      description = "Whether to enable verbose logging.";
     };
     mountResourceDisk = mkOption {
       default = true;
-      description = lib.mdDoc "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
+      description = "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
     };
   };
 
@@ -35,13 +34,9 @@ in
 
   config = lib.mkIf cfg.enable {
     assertions = [{
-      assertion = pkgs.stdenv.hostPlatform.isx86;
-      message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
-    }
-      {
-        assertion = config.networking.networkmanager.enable == false;
-        message = "Windows Azure Linux Agent is not compatible with NetworkManager";
-      }];
+      assertion = config.networking.networkmanager.enable == false;
+      message = "Windows Azure Linux Agent is not compatible with NetworkManager";
+    }];
 
     boot.initrd.kernelModules = [ "ata_piix" ];
     networking.firewall.allowedUDPPorts = [ 68 ];

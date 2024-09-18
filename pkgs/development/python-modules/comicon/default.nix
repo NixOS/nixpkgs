@@ -1,42 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, ebooklib
-, lxml
-, pillow
-, pypdf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  ebooklib,
+  lxml,
+  pillow,
+  pypdf,
+  python-slugify,
 }:
 
 buildPythonPackage rec {
   pname = "comicon";
-  version = "1.0.1";
+  version = "1.2.0";
   pyproject = true;
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "comicon";
-    rev = "v${version}";
-    hash = "sha256-e9YEr8IwttMlj6FOxk+/kw79qiF1N8/e2qusfw3WH00=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oiEzZRgyG/RQCo2zSTqwlOhkwz76lSImR0ZtSlIUp4Y=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "lxml"
-    "pillow"
-  ];
+  pythonRelaxDeps = [ "pypdf" ];
 
   propagatedBuildInputs = [
     ebooklib
     lxml
     pillow
     pypdf
+    python-slugify
   ];
+
+  doCheck = false; # test artifacts are not public
 
   pythonImportsCheck = [ "comicon" ];
 

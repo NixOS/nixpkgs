@@ -1,8 +1,8 @@
-{ lib, stdenv, buildGoModule, fetchFromGitea, mandoc, tup, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchFromGitea, nixosTests }:
 
 buildGoModule rec {
   pname = "eris-go";
-  version = "20240128";
+  version = "20240826";
   outputs = [ "out" "man" ];
 
   src = fetchFromGitea {
@@ -10,18 +10,11 @@ buildGoModule rec {
     owner = "eris";
     repo = "eris-go";
     rev = version;
-    hash = "sha256-mS5PMrp6rBR8ehlpDAZaTQL8vhFSpcztMaQF5zjozxc=";
+    hash = "sha256-qw3HdHtyMuWqwkuGzVzQ8bXnXlJJPDpiYrQZb0lIYj8=";
   };
 
-  vendorHash = "sha256-pA/fz7JpDwdTRFfLDY0M6p9TeBOK68byhy/0Cw53p4M=";
+  vendorHash = "sha256-TnB4BSO2Yb9AtcHgdEgNrFHAQJ7u4IzmhLdcSjbZ7SA=";
 
-  nativeBuildInputs = [ mandoc tup ];
-
-  postConfigure = ''
-    rm -f *.md
-    tupConfigure
-  '';
-  postBuild = "tupBuild";
   postInstall = ''
     install -D *.1.gz -t $man/share/man/man1
   '';
@@ -35,7 +28,6 @@ buildGoModule rec {
     homepage = "https://codeberg.org/eris/eris-go";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ehmry ];
-    broken = stdenv.isDarwin;
     mainProgram = "eris-go";
   };
 }

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkcrack";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "https://www.unix-ag.uni-kl.de/~conrad/krypto/pkcrack/pkcrack-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TS3Bk/+kNCrC7TpjEf33cK5qB3Eiaz70U9yo0D5DiVo=";
+    hash = "sha256-j0n6OHlio3oUyavVSQFnIaY0JREFv0uDfMcvC61BPTg=";
   };
   sourceRoot = "pkcrack-${finalAttrs.version}/src";
 

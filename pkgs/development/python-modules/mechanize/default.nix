@@ -1,39 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, html5lib
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  html5lib,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mechanize";
-  version = "0.4.9";
+  version = "0.4.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aaXtsJYvkh6LEINzaMIkLYrQSfC5H/aZzn9gG/xDFSE=";
+    hash = "sha256-HeqUf5vn6gq2EPe7xKTja0XWv9/O6imtPTiaiKGVfd8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    html5lib
-  ];
+  dependencies = [ html5lib ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mechanize"
-  ];
+  pythonImportsCheck = [ "mechanize" ];
 
   disabledTestPaths = [
     # Tests require network access
@@ -52,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-mechanize/mechanize";
     changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

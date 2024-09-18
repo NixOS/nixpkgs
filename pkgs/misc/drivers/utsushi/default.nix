@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     owner = "utsushi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
+    hash = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
   };
 
   patches = [
@@ -106,6 +106,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SANE utsushi backend for some Epson scanners";
+    mainProgram = "utsushi";
     longDescription = ''
       ImageScanV3 (aka utsushi) scanner driver. Non-free plugins are not
       included, so no network support. To use the SANE backend, in

@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, runCommand
-, glib
-, gtk3
-, dde-dock
-, startdde
-, dde-session-shell
-, dde-file-manager
-, deepin-desktop-schemas
-, deepin-movie-reborn
-, deepin-system-monitor
-, gsettings-desktop-schemas
-, extraGSettingsOverrides ? ""
-, extraGSettingsOverridePackages ? [ ]
+{
+  lib,
+  runCommand,
+  glib,
+  gtk3,
+  dde-grand-search,
+  startdde,
+  dde-session-shell,
+  dde-file-manager,
+  dde-tray-loader,
+  deepin-desktop-schemas,
+  deepin-movie-reborn,
+  deepin-system-monitor,
+  gsettings-desktop-schemas,
+  extraGSettingsOverrides ? "",
+  extraGSettingsOverridePackages ? [ ],
 }:
 
 let
   gsettingsOverridePackages = [
-    dde-dock
+    dde-grand-search
     startdde
     dde-session-shell
     dde-file-manager
+    dde-tray-loader
     deepin-desktop-schemas
     deepin-movie-reborn
     deepin-system-monitor
@@ -28,8 +30,6 @@ let
   ] ++ extraGSettingsOverridePackages;
 
 in
-with lib;
-
 # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
 runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
 ''
@@ -38,7 +38,7 @@ runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
 
     mkdir -p $schema_dir
 
-    ${concatMapStringsSep "\n" (pkg: "cp -rf \"${glib.getSchemaPath pkg}\"/*.xml \"$schema_dir\"") gsettingsOverridePackages}
+    ${lib.concatMapStringsSep "\n" (pkg: "cp -rf \"${glib.getSchemaPath pkg}\"/*.xml \"$schema_dir\"") gsettingsOverridePackages}
 
     chmod -R a+w "$data_dir"
 

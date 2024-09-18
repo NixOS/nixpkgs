@@ -1,10 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-xqtV60saQNINPMpOnZRSDnicedPSPBUQwPSE5zJGrTo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Requires libasan to be accessible
   doCheck = false;
 
-  pythonImportsCheck = [
-    "msgspec"
-  ];
+  pythonImportsCheck = [ "msgspec" ];
 
   meta = with lib; {
     description = "Module to handle JSON/MessagePack";

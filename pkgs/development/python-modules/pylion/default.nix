@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromBitbucket
-, h5py
-, termcolor
-, pexpect
-, jinja2
-, sphinxHook
-, sphinx-rtd-theme
+{
+  lib,
+  buildPythonPackage,
+  fetchFromBitbucket,
+  h5py,
+  termcolor,
+  pexpect,
+  jinja2,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
 buildPythonPackage {
@@ -47,7 +48,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A LAMMPS wrapper for molecular dynamics simulations of trapped ions";
+    description = "LAMMPS wrapper for molecular dynamics simulations of trapped ions";
     homepage = "https://bitbucket.org/dtrypogeorgos/pylion";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://berrywm.org/";
-    description = "A healthy, bite-sized window manager";
+    description = "Healthy, bite-sized window manager";
     longDescription = ''
       berry is a healthy, bite-sized window manager written in C for unix
       systems. Its main features include:

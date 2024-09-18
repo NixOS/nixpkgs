@@ -1,50 +1,52 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, scipy
-, numpy
-, pyqt5
-, pyopengl
-, qt5
-, pytestCheckHook
-, freefont_ttf
-, makeFontsConf
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scipy,
+  numpy,
+  pyqt6,
+  pyopengl,
+  qt6,
+  pytestCheckHook,
+  freefont_ttf,
+  makeFontsConf,
+  setuptools,
 }:
 
 let
-  fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.13.3";
+  version = "0.13.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
     rev = "refs/tags/pyqtgraph-${version}";
-    hash = "sha256-kFTNhv8pgIRSJX0ePmp1I0+MGfCaW8b86baIYZ2bZQM=";
+    hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
-    pyqt5
     scipy
     pyopengl
+  ];
+  buildInputs = [
+    # Not propagating it so that every consumer of this package will be able to
+    # use any of the upstream supported Qt Library, See:
+    # https://pyqtgraph.readthedocs.io/en/pyqtgraph-0.13.7/getting_started/how_to_use.html#pyqt-and-pyside
+    pyqt6
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
-    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_PLUGIN_PATH="${lib.getBin qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
     export FONTCONFIG_FILE=${fontsConf}
@@ -55,23 +57,24 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  disabledTests = lib.optionals (!stdenv.hostPlatform.isx86) [
-    # small precision-related differences on other architectures,
-    # upstream doesn't consider it serious.
-    # https://github.com/pyqtgraph/pyqtgraph/issues/2110
-    "test_PolyLineROI"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # https://github.com/pyqtgraph/pyqtgraph/issues/2645
-    "test_rescaleData"
-  ];
+  disabledTests =
+    lib.optionals (!stdenv.hostPlatform.isx86) [
+      # small precision-related differences on other architectures,
+      # upstream doesn't consider it serious.
+      # https://github.com/pyqtgraph/pyqtgraph/issues/2110
+      "test_PolyLineROI"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # https://github.com/pyqtgraph/pyqtgraph/issues/2645
+      "test_rescaleData"
+    ];
 
-  meta = with lib; {
+  meta = {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "https://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ koral doronbehar ];
   };
-
 }

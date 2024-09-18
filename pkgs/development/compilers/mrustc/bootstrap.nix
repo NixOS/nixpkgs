@@ -3,7 +3,6 @@
 , mrustc
 , mrustc-minicargo
 , llvm_12
-, llvmPackages_12
 , libffi
 , cmake
 , python3
@@ -134,7 +133,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A minimal build of Rust";
+    description = "Minimal build of Rust";
     longDescription = ''
       A minimal build of Rust, built from source using mrustc.
       This is useful for bootstrapping the main Rust compiler without

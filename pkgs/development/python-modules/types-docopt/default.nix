@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "docopt-stubs"
-  ];
+  pythonImportsCheck = [ "docopt-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for docopt";

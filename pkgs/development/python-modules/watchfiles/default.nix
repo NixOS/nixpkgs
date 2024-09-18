@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, anyio
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, rustPlatform
-, rustc
-, pythonOlder
-, dirty-equals
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, CoreServices
-, libiconv
+{
+  lib,
+  stdenv,
+  anyio,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  rustPlatform,
+  rustc,
+  pythonOlder,
+  dirty-equals,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  CoreServices,
+  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,13 +27,13 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/qNgkPF5N8jzSV3M0YFWvQngZ4Hf4WM/GBS1LtgFbWM=";
+    hash = "sha256-TtRSRgtMOqsnhdvsic3lg33xlA+r/DcYHlzewSOu/44=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-sqHTW1+E7Fp33KW6IYlNa77AYc2iCfaSoBRXzrhEKr8=";
+    hash = "sha256-n9yN/VRNQWCxh+BoliIMkKqJC51inpB9DQ9WtqR4oA0=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  propagatedBuildInputs = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -76,12 +75,11 @@ buildPythonPackage rec {
     "test_awatch_interrupt_raise"
   ];
 
-  pythonImportsCheck = [
-    "watchfiles"
-  ];
+  pythonImportsCheck = [ "watchfiles" ];
 
   meta = with lib; {
     description = "File watching and code reload";
+    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

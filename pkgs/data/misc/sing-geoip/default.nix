@@ -8,26 +8,32 @@
 let
   generator = buildGoModule rec {
     pname = "sing-geoip";
-    version = "20230512";
+    version = "20240312";
 
     src = fetchFromGitHub {
       owner = "SagerNet";
       repo = pname;
       rev = "refs/tags/${version}";
-      hash = "sha256-Zm+5N/37hoHpH/TLNJrHeaBXI8G1jEpM1jz6Um8edNE=";
+      hash = "sha256-nIrbiECK25GyuPEFqMvPdZUShC2JC1NI60Y10SsoWyY=";
     };
 
-    vendorHash = "sha256-ejXAdsJwXhqet+Ca+pDLWwu0gex79VcIxW6rmhRnbTQ=";
+    vendorHash = "sha256-WH0eMg06qCiVcy4H+vBtYrmLMA2KJRCPGXiEnatW+LU=";
+
+    postPatch = ''
+      sed -i -e '/func main()/,/^}/d' main.go
+      cat ${./main.go} >> main.go
+    '';
 
     meta = with lib; {
       description = "GeoIP data for sing-box";
       homepage = "https://github.com/SagerNet/sing-geoip";
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ linsui ];
+      mainProgram = "sing-geoip";
     };
   };
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   inherit (generator) pname;
   inherit (dbip-country-lite) version;
 
@@ -38,8 +44,7 @@ stdenvNoCC.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ${pname} ${dbip-country-lite.mmdb} geoip.db
-    ${pname} ${dbip-country-lite.mmdb} geoip-cn.db cn
+    sing-geoip ${dbip-country-lite.mmdb}
 
     runHook postBuild
   '';
@@ -49,6 +54,7 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm644 geoip.db $out/share/sing-box/geoip.db
     install -Dm644 geoip-cn.db $out/share/sing-box/geoip-cn.db
+    install -Dm644 rule-set/* -t $out/share/sing-box/rule-set
 
     runHook postInstall
   '';

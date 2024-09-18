@@ -108,6 +108,11 @@ rec {
      of test suites listed in the package description file.
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
+  /* The dontCheckIf variant sets doCheck = false if the condition
+     applies. In any other case the previously set/default value is used.
+     This prevents accidentally re-enabling tests in a later override.
+     */
+  dontCheckIf = condition: if condition then dontCheck else lib.id;
 
   /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
@@ -285,9 +290,9 @@ rec {
   /* link executables statically against haskell libs to reduce
      closure size
    */
-  justStaticExecutables = overrideCabal (drv: {
+ justStaticExecutables = overrideCabal (drv: {
     enableSharedExecutables = false;
-    enableLibraryProfiling = false;
+    enableLibraryProfiling = drv.enableExecutableProfiling or false;
     isLibrary = false;
     doHaddock = false;
     postFixup = drv.postFixup or "" + ''
@@ -295,6 +300,7 @@ rec {
       # Remove every directory which could have links to other store paths.
       rm -rf $out/lib $out/nix-support $out/share/doc
     '';
+    disallowGhcReference = true;
   });
 
   /* Build a source distribution tarball instead of using the source files
@@ -339,14 +345,14 @@ rec {
     , ignorePackages     ? []
     } : drv :
       overrideCabal (_drv: {
-        postBuild = with lib;
-          let args = concatStringsSep " " (
-                       optional ignoreEmptyImports "--ignore-empty-imports" ++
-                       optional ignoreMainModule   "--ignore-main-module" ++
+        postBuild =
+          let args = lib.concatStringsSep " " (
+                       lib.optional ignoreEmptyImports "--ignore-empty-imports" ++
+                       lib.optional ignoreMainModule   "--ignore-main-module" ++
                        map (pkg: "--ignore-package ${pkg}") ignorePackages
                      );
           in "${pkgs.haskellPackages.packunused}/bin/packunused" +
-             optionalString (args != "") " ${args}";
+             lib.optionalString (args != "") " ${args}";
       }) (appendConfigureFlag "--ghc-option=-ddump-minimal-imports" drv);
 
   buildStackProject = pkgs.callPackage ../generic-stack-builder.nix { };
@@ -398,7 +404,7 @@ rec {
 
   # Some information about which phases should be run.
   controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+                  { doCheck ? !isCross
                   , doBenchmark ? false
                   , ...
                   }: { inherit doCheck doBenchmark; };

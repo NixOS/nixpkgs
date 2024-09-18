@@ -27,16 +27,16 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libresprite";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "LibreSprite";
     repo = "LibreSprite";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-d8GmVHYomDb74iSeEhJEVTHvbiVXggXg7xSqIKCUSzY=";
+    hash = "sha256-d8GmVHYomDb74iSeEhJEVTHvbiVXggXg7xSqIKCUSzY=";
   };
 
   # Backport GCC 13 build fix
@@ -118,4 +118,4 @@ stdenv.mkDerivation rec {
     # https://github.com/LibreSprite/LibreSprite/issues/308
     broken = stdenv.isDarwin;
   };
-}
+})

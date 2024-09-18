@@ -7,25 +7,25 @@
 let
   # make install will use dconf to find desktop background file uri.
   # consider adding an args to allow specify pictures manually.
-  # https://github.com/daniruiz/flat-remix-gnome/blob/20231026/Makefile#L38
+  # https://github.com/daniruiz/flat-remix-gnome/blob/20240721/Makefile#L38
   fake-dconf = writeScriptBin "dconf" "echo -n";
 in
 stdenv.mkDerivation rec {
   pname = "flat-remix-gnome";
-  version = "20231026";
+  version = "20240721";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = pname;
     rev = version;
-    hash = "sha256-sKQOq0GMslkzND2ayL5M6XIxJv8t0yj6XCP3poA6wRc=";
+    hash = "sha256-eWZ5gwu/ovtnXZEFlUfaHfpQ7O4oInMnu0PQZpK/c9U=";
   };
 
   nativeBuildInputs = [ glib fake-dconf ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   # make install will back up this file, it will fail if the file doesn't exist.
-  # https://github.com/daniruiz/flat-remix-gnome/blob/20231026/Makefile#L56
+  # https://github.com/daniruiz/flat-remix-gnome/blob/20240721/Makefile#L56
   preInstall = ''
     mkdir -p $out/share/gnome-shell/
     touch $out/share/gnome-shell/gnome-shell-theme.gresource
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GNOME Shell theme inspired by material design.";
+    description = "GNOME Shell theme inspired by material design";
     homepage = "https://drasite.com/flat-remix-gnome";
     license = licenses.cc-by-sa-40;
     platforms = platforms.linux;

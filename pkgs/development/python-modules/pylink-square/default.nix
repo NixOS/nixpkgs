@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, mock
-, psutil
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  mock,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,10 +21,12 @@ buildPythonPackage rec {
     owner = "square";
     repo = "pylink";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rcM7gvUUfXN5pL9uIihzmOCXA7NKjiMt2GaQaGJxD9M=";
+    hash = "sha256-4tdtyb0AjsAmFOPdkxbbro8PH3akC5uihN59lgijhkc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     psutil
     six
   ];
@@ -33,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pylink"
-  ];
+  pythonImportsCheck = [ "pylink" ];
 
   disabledTests = [
     # AttributeError: 'called_once_with' is not a valid assertion

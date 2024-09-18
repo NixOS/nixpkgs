@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A legible monospace font that looks like Comic Sans";
+    description = "Legible monospace font that looks like Comic Sans";
     longDescription = ''
       A legible monospace font... the very typeface you’ve been trained to
       recognize since childhood. This font is a fork of Shannon Miwa’s Comic

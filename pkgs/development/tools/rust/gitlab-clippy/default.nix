@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitLab
 , rustPlatform
 }:
@@ -12,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     owner = "dlalic";
     repo = pname;
     rev = version;
-    sha256 = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
+    hash = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
   };
-  cargoSha256 = "sha256-ztPbI+ncMNMKnIxUksxgz8GHQpLZ7SVWdC4QJWh18Wk=";
+  cargoHash = "sha256-ztPbI+ncMNMKnIxUksxgz8GHQpLZ7SVWdC4QJWh18Wk=";
 
   # TODO re-add theses tests once they get fixed in upstream
   checkFlags = [
@@ -25,6 +24,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://gitlab.com/dlalic/gitlab-clippy";
     description = "Convert clippy warnings into GitLab Code Quality report";
+    mainProgram = "gitlab-clippy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wucke13 ];
   };

@@ -1,5 +1,5 @@
 # Version can be selected with the 'version' argument, see generic.nix.
-{ lib, fetchurl, buildDunePackage, ocaml, csexp, sexplib0, callPackage, ... }@args:
+{ lib, buildDunePackage, ocaml, csexp, sexplib0, callPackage, ... }@args:
 
 let
   # for compat with ocaml-lsp
@@ -21,6 +21,6 @@ in buildDunePackage rec {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code (RPC mode)";
     license = licenses.mit;
-    maintainers = with maintainers; [ Zimmi48 marsam Julow ];
+    maintainers = with maintainers; [ Zimmi48 Julow ];
   };
 }

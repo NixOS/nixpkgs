@@ -1,11 +1,15 @@
-{ stdenv, lib, fetchurl, fetchpatch, fixDarwinDylibNames, testers, buildPackages }:
+{ stdenv, lib, fetchurl, fetchpatch, fixDarwinDylibNames, testers, buildPackages, updateAutotoolsGnuConfigScriptsHook }:
 
 let
   make-icu = (import ./make-icu.nix) {
-    inherit stdenv lib buildPackages fetchurl fixDarwinDylibNames testers;
+    inherit stdenv lib buildPackages fetchurl fixDarwinDylibNames testers updateAutotoolsGnuConfigScriptsHook;
   };
 in
 {
+  icu75 = make-icu {
+    version = "75.1";
+    hash = "sha256-y5aN8+TS6H6LEcSaXQHHh70TuVRSgPxmQvgmUnYYyu8=";
+  };
   icu74 = make-icu {
     version = "74.2";
     hash = "sha256-aNsIIhKpbW9T411g9H04uWLp+dIHp0z6x4Apro/14Iw=";
@@ -29,10 +33,6 @@ in
   icu69 = make-icu {
     version = "69.1";
     hash = "sha256-TLp7es0dPELES7DBS+ZjcJjH+vKzMM6Ha8XzuRXQl0U=";
-  };
-  icu68 = make-icu {
-    version = "68.2";
-    hash = "sha256-x5GT3uOQeiGZuClqk7UsXLdDMsJvPRZyaUh2gNR51iU=";
   };
   icu67 = make-icu {
     version = "67.1";
@@ -61,17 +61,5 @@ in
   icu60 = make-icu {
     version = "60.2";
     hash = "sha256-8HPqjzW5JtcLsz5ld1CKpkKosxaoA/Eb4grzhIEdtBg=";
-  };
-  icu58 = make-icu {
-    version = "58.2";
-    hash = "sha256-KwpEEBU6myDeDiDH2LZgSacq7yRLU2g9DXUhNxaD2gw=";
-    patches = [
-      (fetchurl {
-        url = "http://bugs.icu-project.org/trac/changeset/39484?format=diff";
-        name = "icu-changeset-39484.diff";
-        sha256 = "0hxhpgydalyxacaaxlmaddc1sjwh65rsnpmg0j414mnblq74vmm8";
-      })
-    ];
-    patchFlags = [ "-p4" ];
   };
 }

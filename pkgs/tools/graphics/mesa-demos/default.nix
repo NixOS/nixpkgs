@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, freeglut
+, libglut
 , libGL
 , libGLU
 , libX11
@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
-  strictDeps = true;
-
   depsBuildBuild = [
     pkg-config
   ];
@@ -43,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    freeglut
+    libglut
     libX11
     libXext
     libGL
@@ -54,14 +52,13 @@ stdenv.mkDerivation rec {
     vulkan-loader
     libxkbcommon
     libdecor
-  ] ++ lib.optional (mesa ? osmesa) mesa.osmesa;
+  ];
 
   mesonFlags = [
     "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"
-    "-Dlibdrm=${if mesa.libdrm == null then "disabled" else "enabled"}"
-    "-Dosmesa=${if mesa ? osmesa then "enabled" else "disabled"}"
-    "-Dwayland=${if wayland.withLibraries then "enabled" else "disabled"}"
-    "-Dwith-system-data-files=true"
+    (lib.mesonEnable "libdrm" (stdenv.isLinux))
+    (lib.mesonEnable "osmesa" false)
+    (lib.mesonEnable "wayland" (lib.meta.availableOn stdenv.hostPlatform wayland))
   ];
 
   meta = with lib; {

@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Linux version of the ProcDump Sysinternals tool";
+    description = "Linux version of the ProcDump Sysinternals tool";
+    mainProgram = "procdump";
     homepage = "https://github.com/Microsoft/ProcDump-for-Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ c0bw3b ];

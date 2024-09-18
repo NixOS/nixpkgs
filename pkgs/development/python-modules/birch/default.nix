@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, strct
-, pytestCheckHook
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  strct,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -30,23 +32,14 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace  \
-        "--cov" \
-        "#--cov"
-
     # configure correct version, which fails due to missing .git
     substituteInPlace versioneer.py birch/_version.py \
-      --replace '"0+unknown"' '"${version}"'
+      --replace-fail '"0+unknown"' '"${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    strct
-  ];
+  dependencies = [ strct ];
 
   pythonImportsCheck = [
     "birch"
@@ -57,13 +50,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pyyaml
   ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';
-
 
   meta = with lib; {
     description = "Simple hierarchical configuration for Python packages";

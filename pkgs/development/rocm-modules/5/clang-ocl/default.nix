@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "OpenCL compilation with clang compiler";
+    mainProgram = "clang-ocl";
     homepage = "https://github.com/ROCm/clang-ocl";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;

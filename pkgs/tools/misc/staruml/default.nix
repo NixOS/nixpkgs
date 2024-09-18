@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl
-, dpkg, wrapGAppsHook
+, dpkg, wrapGAppsHook3
 , hicolor-icon-theme
 , gtk3, glib, systemd
 , xorg, nss, nspr
@@ -24,15 +24,15 @@ let
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.0.1";
+  version = "6.2.2";
   pname = "staruml";
 
   src = fetchurl {
       url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
-      sha256 = "sha256-LxulOfYjdJrDjRL661S0W9slIXvhLc+kXZN6e3TfXVs=";
+      sha256 = "sha256-1zxrT7phXeQYNbWHWMyPuHiUglrPSMPP0bfAcfvt8dM=";
     };
 
-  nativeBuildInputs = [ wrapGAppsHook dpkg ];
+  nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
   buildInputs = [ glib hicolor-icon-theme ];
 
   unpackPhase = ''
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A sophisticated software modeler";
+    description = "Sophisticated software modeler";
     homepage = "https://staruml.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

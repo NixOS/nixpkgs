@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with lib; {
-    description = "A high-level dynamically typed programming language";
+    description = "High-level dynamically typed programming language";
     homepage = "https://nekovm.org";
     license = [
       # list based on https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE

@@ -1,22 +1,23 @@
-{ lib
-, argcomplete
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, hatchling
-, importlib-metadata
-, jinja2
-, packaging
-, pytestCheckHook
-, pythonOlder
-, tox
-, typing-extensions
-, virtualenv
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  hatchling,
+  importlib-metadata,
+  jinja2,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  tox,
+  typing-extensions,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2023.04.22";
+  version = "2024.04.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,31 +26,34 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WuyNp3jxIktI72zbk+1CK8xflTKrYE5evn/gVdMx+cQ=";
+    hash = "sha256-PagZR2IdS1gS/ukl4b0Al9sdEsFnFwP8oy0eOGKJHMs=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    argcomplete
-    colorlog
-    packaging
-    virtualenv
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      argcomplete
+      colorlog
+      packaging
+      virtualenv
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jinja2
     tox
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "nox"
+  pythonImportsCheck = [ "nox" ];
+
+  disabledTests = [
+    # our conda is not available on 3.11
+    "test__create_venv_options"
   ];
 
   disabledTestPaths = [
@@ -62,6 +66,9 @@ buildPythonPackage rec {
     homepage = "https://nox.thea.codes/";
     changelog = "https://github.com/wntrblm/nox/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar fab ];
+    maintainers = with maintainers; [
+      doronbehar
+      fab
+    ];
   };
 }

@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast regular expression grep for source code with incremental index updates";
+    mainProgram = "qgrep";
     homepage = "https://github.com/zeux/qgrep";
     license = licenses.mit;
     maintainers = [ maintainers.yrashk ];

@@ -1,20 +1,28 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.6.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-a/gjphldS17W2OWUXpo+bayqaxINVLI7B27wlicT4Ks=";
+    hash = "sha256-INLXVruiaK5yv5old0NOWFcg9y13M6Dm7bBMmcPFY1I=";
   };
 
-  cargoHash = "sha256-i8CrS0WlqlyXmI1waYrbiSFifAn5vqRW0YeQ1Izu0XE=";
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    IOKit
+  ]);
+
+  cargoHash = "sha256-JXDM97uGuGh3qHK3Gh8Nd/YSZq/Kcj81PpufJJMqQQI=";
+
+  RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
     # this test also sets setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
@@ -28,5 +36,7 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     mainProgram = "rcp";
     maintainers = with maintainers; [ wykurz ];
+    # = note: Undefined symbols for architecture x86_64: "_utimensat"
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

@@ -1,0 +1,34 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a407271b4..593628e0f 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -310,7 +310,7 @@ if(GCC)
+     endif()
+     check_cxx_compiler_flag(-mstackrealign CC_HAS_STACK_REALIGN) 
+     if (CC_HAS_STACK_REALIGN)
+-        add_definitions(-mstackrealign)
++        add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-mstackrealign>)
+     endif()
+     # Disable exceptions. Reduce executable size, increase compability.
+     check_cxx_compiler_flag(-fno-exceptions CC_HAS_FNO_EXCEPTIONS_FLAG)
+@@ -545,7 +545,7 @@ if((MSVC_IDE OR XCODE OR GCC) AND ENABLE_ASSEMBLY)
+             list(APPEND ASM_OBJS ${ASM}.${SUFFIX})
+             add_custom_command(
+                 OUTPUT ${ASM}.${SUFFIX}
+-                COMMAND ${CMAKE_CXX_COMPILER}
++                COMMAND ${CMAKE_ASM_COMPILER}
+                 ARGS ${ARM_ARGS} -c ${ASM_SRC} -o ${ASM}.${SUFFIX}
+                 DEPENDS ${ASM_SRC})
+         endforeach()
+diff --git a/common/CMakeLists.txt b/common/CMakeLists.txt
+index 12b643ad5..876f3543d 100644
+--- a/common/CMakeLists.txt
++++ b/common/CMakeLists.txt
+@@ -16,6 +16,7 @@ endif(EXTRA_LIB)
+ if(ENABLE_ASSEMBLY)
+     set_source_files_properties(threading.cpp primitives.cpp pixel.cpp PROPERTIES COMPILE_FLAGS -DENABLE_ASSEMBLY=1)
+     list(APPEND VFLAGS "-DENABLE_ASSEMBLY=1")
++    enable_language(ASM)
+ endif(ENABLE_ASSEMBLY)
+ 
+ if(ENABLE_ASSEMBLY AND X86)

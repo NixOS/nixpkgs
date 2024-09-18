@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# tests
-, pytestCheckHook
-, pexpect
+  # tests
+  pytestCheckHook,
+  pexpect,
 }:
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "4.0.5";
+  version = "4.0.6";
   pyproject = true;
 
   # Don't use wheels on PyPI
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "magmax";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ru18lh+9tXtvttypnob0HNPKBiGF7E9HDL21l1AAGa8=";
+    hash = "sha256-XowLJ9YAHhP9nInFVYtoLEOmlWBRWQX259vwm9SVVZU=";
   };
 
   postPatch = ''
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace 'sys.platform.startswith("linux")' 'sys.platform.startswith(("darwin", "linux"))'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "readchar" ];
 

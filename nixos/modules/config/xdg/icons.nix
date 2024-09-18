@@ -1,23 +1,21 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 {
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   options = {
-    xdg.icons.enable = mkOption {
-      type = types.bool;
+    xdg.icons.enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
         [XDG Icon Theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
       '';
     };
   };
 
-  config = mkIf config.xdg.icons.enable {
+  config = lib.mkIf config.xdg.icons.enable {
     environment.pathsToLink = [
       "/share/icons"
       "/share/pixmaps"

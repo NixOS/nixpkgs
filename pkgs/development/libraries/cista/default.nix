@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cista";
-  version = "0.14";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "felixguendling";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E2B+dNFk0ssKhT9dULNFzpa8auRQ9Q0czuUjX6hxWPw=";
+    sha256 = "sha256-+DcxnckoXVSc+gXt21fxKkx4J1khLsQPuxYH9CBRrfE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -17,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://cista.rocks";
-    description = "A simple, high-performance, zero-copy C++ serialization & reflection library";
+    description = "Simple, high-performance, zero-copy C++ serialization & reflection library";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ maintainers.sigmanificient ];
     platforms = platforms.all;
   };
 }

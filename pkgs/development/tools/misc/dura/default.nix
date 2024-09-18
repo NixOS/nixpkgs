@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
   };
 
-  cargoSha256 = "sha256-XOtPtOEKZMJzNeBZBT3Mc/KOjMOcz71byIv/ftcRP48=";
+  cargoHash = "sha256-XOtPtOEKZMJzNeBZBT3Mc/KOjMOcz71byIv/ftcRP48=";
 
   cargoPatches = [
     ./Cargo.lock.patch
@@ -30,7 +30,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A background process that saves uncommitted changes on git";
+    description = "Background process that saves uncommitted changes on git";
+    mainProgram = "dura";
     longDescription = ''
       Dura is a background process that watches your Git repositories and
       commits your uncommitted changes without impacting HEAD, the current

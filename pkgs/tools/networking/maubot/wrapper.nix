@@ -64,7 +64,7 @@ let wrapper = { pythonPackages ? (_: [ ]), plugins ? (_: [ ]), baseConfig ? null
       };
     };
 
-    meta.priority = (unwrapped.meta.priority or 0) - 1;
+    meta.priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 in
 wrapper

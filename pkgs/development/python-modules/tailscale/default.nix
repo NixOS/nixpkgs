@@ -1,20 +1,21 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.6.0";
+  version = "0.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-tailscale";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wO6yMMU5fxk8GQ0e4ZCse2atlR4wrzulZOFXkVKAsmU=";
+    hash = "sha256-47n/BjTHkw0rT8xTHGZOMNwZTy0nDuoHsTJrRyr8qjc=";
   };
 
   postPatch = ''
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "tailscale"
-  ];
+  pythonImportsCheck = [ "tailscale" ];
 
   meta = with lib; {
     description = "Python client for the Tailscale API";

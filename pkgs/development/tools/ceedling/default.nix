@@ -8,7 +8,7 @@ bundlerApp {
   exes = [ "ceedling" ];
 
   meta = with lib; {
-    description = "A build system for C projects that is something of an extension around Ruby's Rake";
+    description = "Build system for C projects that is something of an extension around Ruby's Rake";
     homepage    = "http://www.throwtheswitch.org/ceedling";
     license     = licenses.mit;
     platforms   = platforms.unix;

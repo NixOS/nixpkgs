@@ -16,22 +16,21 @@
 , libXfixes
 , libpulseaudio
 , libva
-, ffmpeg_5
+, ffmpeg_6
 , libpng
 , libjpeg8
 , curl
 , vulkan-loader
-, gnome
-, zenity ? gnome.zenity
+, zenity
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "parsec-bin";
-  version = "150_91a";
+  version = "150_95";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20231209190803if_/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-/qugI7k0NYpq7p9l9auD2Pp+SFoFZ9jAZswpreVfgO4=";
+    url = "https://web.archive.org/web/20240725203323/https://builds.parsec.app/package/parsec-linux.deb";
+    sha256 = "sha256-9F56u+jYj2CClhbnGlLi65FxS1Vq00coxwu7mjVTY1w=";
   };
 
   unpackPhase = ''
@@ -58,7 +57,7 @@ stdenvNoCC.mkDerivation {
     alsa-lib
     libpulseaudio
     libva
-    ffmpeg_5
+    ffmpeg_6
     libpng
     libjpeg8
     curl

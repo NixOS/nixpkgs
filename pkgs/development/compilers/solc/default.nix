@@ -3,7 +3,6 @@
 , boost
 , cmake
 , coreutils
-, fetchpatch
 , jq
 , ncurses
 , python3

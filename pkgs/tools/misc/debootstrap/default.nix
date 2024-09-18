@@ -40,14 +40,14 @@ let binPath = lib.makeBinPath [
   ];
 in stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.131";
+  version = "1.0.137";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
-    repo = pname;
+    repo = "debootstrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-rwNcrS2GzVs0JYxeHcpLMG9FDwSpthNmZIemn95hC6g=";
+    hash = "sha256-l4vdojsrHAJsa8RwZezH3uI6pWJHK/PBs+YZCtnpXnQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

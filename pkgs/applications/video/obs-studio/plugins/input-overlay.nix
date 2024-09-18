@@ -8,25 +8,34 @@
 , xorg
 , libxkbcommon
 , libxkbfile
+, SDL2
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-input-overlay";
-  version = "5.0.0";
+  version = "5.0.5";
   src = fetchFromGitHub {
     owner = "univrsal";
     repo = "input-overlay";
     rev = "v${version}";
-    sha256 = "sha256-kpVAvQpBU8TxHAFcx/ok67++4MHh5saoRHJc5XpY4YQ=";
+    hash = "sha256-9HqEz+KnTt8MyhwqFWjalbl3H/DCzumckXMctCGhs3o=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    obs-studio libuiohook qtbase
+    obs-studio libuiohook qtbase SDL2
     xorg.libX11 xorg.libXau xorg.libXdmcp xorg.libXtst xorg.libXext
     xorg.libXi xorg.libXt xorg.libXinerama libxkbcommon libxkbfile
   ];
+
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-msse4.1"
+  ];
+
+  postUnpack = ''
+    sed -i '/set(CMAKE_CXX_FLAGS "-march=native")/d' 'source/CMakeLists.txt'
+  '';
 
   postInstall = ''
     mkdir $out/lib $out/share
@@ -38,7 +47,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "Show keyboard, gamepad and mouse input on stream ";
+    description = "Show keyboard, gamepad and mouse input on stream";
     homepage = "https://github.com/univrsal/input-overlay";
     maintainers = with maintainers; [ glittershark ];
     license = licenses.gpl2;

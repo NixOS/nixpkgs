@@ -1,20 +1,26 @@
-{ stdenv, lib, fetchurl, iosevka, unzip
+{ stdenv
+, lib
+, fetchurl
+, iosevka
+, unzip
 , variant ? ""
 }:
 
 let
-  name = if lib.hasPrefix "sgr" variant then variant
-    else "iosevka" + lib.optionalString (variant != "") "-" + variant;
+  name =
+    if lib.hasPrefix "SGr-" variant then variant
+    else "Iosevka" + variant;
 
   variantHashes = import ./variants.nix;
-  validVariants = map (lib.removePrefix "iosevka-")
-    (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
-in stdenv.mkDerivation rec {
+  validVariants = map (lib.removePrefix "Iosevka")
+    (builtins.attrNames (builtins.removeAttrs variantHashes [ "Iosevka" ]));
+in
+stdenv.mkDerivation rec {
   pname = "${name}-bin";
-  version = "27.3.5";
+  version = "31.4.0";
 
   src = fetchurl {
-    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-${name}-${version}.zip";
+    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/PkgTTC-${name}-${version}.zip";
     sha256 = variantHashes.${name} or (throw ''
       No such variant "${variant}" for package iosevka-bin.
       Valid variants are: ${lib.concatStringsSep ", " validVariants}.

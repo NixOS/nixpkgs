@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , testers
@@ -41,6 +40,7 @@ buildGoModule rec {
       A tool to watch and follow Kubernetes resources in CI/CD deployment
       pipelines
     '';
+    mainProgram = "kubedog";
     homepage = "https://github.com/werf/kubedog";
     changelog = "https://github.com/werf/kubedog/releases/tag/${src.rev}";
     license = licenses.asl20;

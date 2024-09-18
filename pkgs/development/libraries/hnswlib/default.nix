@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Header-only C++/python library for fast approximate nearest neighbors";
     homepage = "https://github.com/nmslib/hnswlib";
-    changelog = "https://github.com/nmslib/hnswlib/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/nmslib/hnswlib/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;

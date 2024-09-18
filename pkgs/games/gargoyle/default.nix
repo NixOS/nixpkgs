@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     homepage = "http://ccxvii.net/gargoyle/";
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";
+    mainProgram = "gargoyle";
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
   };

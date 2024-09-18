@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pillow }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pillow,
+}:
 
 buildPythonPackage rec {
   pname = "piexif";

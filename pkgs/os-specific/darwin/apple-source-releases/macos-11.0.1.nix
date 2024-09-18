@@ -27,7 +27,6 @@ file_cmds = applePackage' "file_cmds" "321.40.3" "macos-11.0.1" "0p077lnbcy8266m
 hfs = applePackage' "hfs" "556.41.1" "macos-11.0.1" "0a0s6b12b0q07wslfifna0bj51dml9v098i4crr2m1vivnx4xj75" {};
 libclosure = applePackage' "libclosure" "78" "macos-11.0.1" "0vf9n0k3m8dbprv1bf45zqg0g43bidy2i5z1v9a826bsf8lv7am7" {};
 libdispatch = applePackage' "libdispatch" "1271.40.12" "macos-11.0.1" "1ck5srcjapg18vqb8wl08gacs7ndc6xr067qjn3ngx39q1jdcywz" {};
-libiconv = applePackage' "libiconv" "59" "macos-11.0.1" "0lwa4brdwm4lvrdnxylzsn1yph4m7csgri2zkc4xb4xiisz32pwp" {};
 libmalloc = applePackage' "libmalloc" "317.40.8" "macos-11.0.1" "sha256-Tdhb0mq3w4Hwvp3xHB79Vr22hCOQK6h28HCsd7jvITI=" {};
 libplatform = applePackage' "libplatform" "254.40.4" "macos-11.0.1" "1qf3ri0yd8b1xjln1j1gyx7ks6k3a2jhd63blyvfby75y9s7flky" {};
 libpthread = applePackage' "libpthread" "454.40.3" "macos-11.0.1" "0zljbw8mpb80n1if65hhi9lkgwbgjr8vc9wvf7q1nl3mzyl35f8p" {};
@@ -40,7 +39,6 @@ objc4 = applePackage' "objc4" "818.2" "macos-11.0.1" "0m8mk1qd18wqjfn2jsq2lx6fxv
 ppp = applePackage' "ppp" "877.40.2" "macos-11.0.1" "06xznc77j45zzi12m4cmr3jj853qlc8dbmynbg1z6m9qf5phdbgk" {};
 removefile = applePackage' "removefile" "49.40.3" "macos-11.0.1" "0870ihxpmvj8ggaycwlismbgbw9768lz7w6mc9vxf8l6nlc43z4f" {};
 shell_cmds = applePackage' "shell_cmds" "216.40.4" "macos-11.0.1" "0wbysc9lwf1xgl686r3yn95rndcmqlp17zc1ig9gsl5fxyy5bghh" {};
-system_cmds = applePackage' "system_cmds" "880.40.5" "macos-11.0.1" "064yqf84ny0cjpqmzmnhz05faay6axb2r4i6knnyc8n21yiip5dc" {};
 text_cmds = applePackage' "text_cmds" "106" "macos-11.0.1" "17fn35m6i866zjrf8da6cq6crydp6vp4zq0aaab243rv1fx303yy" {};
 top = applePackage' "top" "129" "macos-11.0.1" "0d9pqmv3mwkfcv7c05hfvnvnn4rbsl92plr5hsazp854pshzqw2k" {};
 xnu = applePackage' "xnu" "7195.50.7.100.1" "macos-11.0.1" "11zjmpw11rcc6a0xlbwramra1rsr65s4ypnxwpajgbr2c657lipl" {};

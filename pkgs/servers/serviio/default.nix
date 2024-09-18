@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "serviio";
-  version = "2.2.1";
+  version = "2.4";
 
   src = fetchurl {
     url = "http://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
-    sha256 = "sha256-uRRWKMv4f2b1yIE9OnXDIZAmcoqw/8F0z1LOesQBsyQ=";
+    sha256 = "sha256-ssi2fKbAMizr5eLAMng+G25ui3v98zCNWzMg7uLgGas=";
   };
 
   installPhase = ''

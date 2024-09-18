@@ -164,7 +164,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject composerHooks mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository mkComposerVendor buildComposerProject buildComposerProject2 buildComposerWithPlugin composerHooks composerHooks2 mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -272,12 +272,11 @@ let
             # Don't record the configure flags since this causes unnecessary
             # runtime dependencies
             ''
-              for i in main/build-defs.h.in scripts/php-config.in; do
-                substituteInPlace $i \
-                  --replace '@CONFIGURE_COMMAND@' '(omitted)' \
-                  --replace '@CONFIGURE_OPTIONS@' "" \
-                  --replace '@PHP_LDFLAGS@' ""
-              done
+              substituteInPlace main/build-defs.h.in \
+                --replace-fail '@CONFIGURE_COMMAND@' '(omitted)'
+              substituteInPlace scripts/php-config.in \
+                --replace-fail '@CONFIGURE_OPTIONS@' "" \
+                --replace-fail '@PHP_LDFLAGS@' ""
 
               export EXTENSION_DIR=$out/lib/php/extensions
 
@@ -287,7 +286,7 @@ let
                 ./scripts/dev/genfiles
               fi
             '' + lib.optionalString stdenv.isDarwin ''
-              substituteInPlace configure --replace "-lstdc++" "-lc++"
+              substituteInPlace configure --replace-fail "-lstdc++" "-lc++"
             '';
 
           # When compiling PHP sources from Github, this file is missing and we
@@ -314,7 +313,11 @@ let
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
-          patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+          patches = lib.optionals (lib.versionOlder version "8.4")  [
+            ./fix-paths-php7.patch
+          ] ++ lib.optionals (lib.versionAtLeast version "8.4") [
+            ./fix-paths-php84.patch
+          ] ++ extraPatches;
 
           separateDebugInfo = true;
 
@@ -347,7 +350,7 @@ let
           };
 
           meta = with lib; {
-            description = "An HTML-embedded scripting language";
+            description = "HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
             mainProgram = "php";

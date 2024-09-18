@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, clikit
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  clikit,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -22,21 +23,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    clikit
-  ];
+  propagatedBuildInputs = [ clikit ];
 
   # sdist has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "xdg"
-  ];
+  pythonImportsCheck = [ "xdg" ];
 
   meta = with lib; {
     description = "XDG Base Directory Specification for Python";
     homepage = "https://github.com/srstevenson/xdg";
     license = licenses.isc;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

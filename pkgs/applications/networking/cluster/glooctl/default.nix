@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "glooctl";
-  version = "1.16.4";
+  version = "1.17.6";
 
   src = fetchFromGitHub {
     owner = "solo-io";
     repo = "gloo";
     rev = "v${version}";
-    hash = "sha256-gLm9PEcNg/YeAjT97W9jDOi4ECBrmp2ZAuUTkhZNxyw=";
+    hash = "sha256-uuT/3MU9qdtdCaELkwKCLdif9MqAt2gDnwjH1LrsF8U=";
   };
 
-  vendorHash = "sha256-GTd38gSlCKTjfLkAW/Tz22oQJ4FhZB+9vpN/8q4JSCo=";
+  vendorHash = "sha256-C8zzNMHA4tKIUncqUJRE3VZFJO8KEX8GbOcTvbOnmU0=";
 
   subPackages = [ "projects/gloo/cli/cmd" ];
 
@@ -25,9 +26,12 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/solo-io/gloo/pkg/version.Version=${version}"
   ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/glooctl
@@ -37,9 +41,11 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "glooctl is the unified CLI for Gloo";
+    description = "Unified CLI for Gloo, the feature-rich, Kubernetes-native, next-generation API gateway built on Envoy";
+    mainProgram = "glooctl";
     homepage = "https://docs.solo.io/gloo-edge/latest/reference/cli/glooctl/";
+    changelog = "https://github.com/solo-io/gloo/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

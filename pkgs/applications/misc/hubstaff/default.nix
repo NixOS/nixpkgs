@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
 , libXext , freetype, libXrender, fontconfig, libXft, libXinerama
 , libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl, writeShellScript, common-updater-scripts }:
+, curl, writeShellScript, common-updater-scripts, xmlstarlet }:
 
 let
-  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.13-269829b4/Hubstaff-1.6.13-269829b4.sh";
-  version = "1.6.13-269829b4";
-  sha256 = "0i05d8kivm09hqsc1z6vn7w0bbc3l9dawssqpqsm7kqdyaq0l304";
+  url = "https://app.hubstaff.com/download/8099-standard-linux-1-6-26-release";
+  version = "1.6.26-95441346";
+  sha256 = "sha256:0xxw2za1hmqff5y0vyrvccgldsgyb808dql548c2xqsc1qi9gbn9";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -36,9 +36,9 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    # TODO: handle 32-bit arch?
-    rm -r x86
-    rm -r x86_64/lib64
+    # remove files for 32-bit arch to skip building for this arch
+    # but add -f flag to not fail if files were not found (new versions dont provide 32-bit arch)
+    rm -rf x86 x86_64/lib64
 
     opt=$out/opt/hubstaff
     mkdir -p $out/bin $opt
@@ -55,16 +55,25 @@ stdenv.mkDerivation {
     ln -s $opt/data/resources $opt/x86_64/resources
   '';
 
+  # to test run:
+  # nix-shell maintainers/scripts/update.nix --argstr package hubstaff
+  # nix-build -A pkgs.hubstaff
   passthru.updateScript = writeShellScript "hubstaff-updater" ''
     set -eu -o pipefail
 
-    installation_script_url=$(curl --fail --head --location --silent --output /dev/null --write-out %{url_effective} https://app.hubstaff.com/download/linux)
+    # Create a temporary file
+    temp_file=$(mktemp)
 
-    version=$(echo "$installation_script_url" | sed -r 's/^https:\/\/hubstaff\-production\.s3\.amazonaws\.com\/downloads\/HubstaffClient\/Builds\/Release\/([^\/]+)\/Hubstaff.+$/\1/')
+    # Fetch the appcast.xml and save it to the temporary file
+    curl --silent --output "$temp_file" https://app.hubstaff.com/appcast.xml
+
+    # Extract the latest release URL for Linux using xmlstarlet
+    installation_script_url=$(${xmlstarlet}/bin/xmlstarlet sel -t -v '//enclosure[@sparkle:os="linux"]/@url' "$temp_file")
+    version=$(${xmlstarlet}/bin/xmlstarlet sel -t -v '//enclosure[@sparkle:os="linux"]/@sparkle:version' "$temp_file")
 
     sha256=$(nix-prefetch-url "$installation_script_url")
 
-    ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "$sha256" "$installation_script_url"
+    ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "sha256:$sha256" "$installation_script_url"
   '';
 
   meta = with lib; {

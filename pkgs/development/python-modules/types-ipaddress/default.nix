@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -13,9 +14,7 @@ buildPythonPackage rec {
     sha256 = "0h9q9pjvw1ap5k70ygp750d096jkzymxlhx87yh0pr9mb6zg6gd0";
   };
 
-  pythonImportsCheck = [
-    "ipaddress-python2-stubs"
-  ];
+  pythonImportsCheck = [ "ipaddress-python2-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for ipaddress";

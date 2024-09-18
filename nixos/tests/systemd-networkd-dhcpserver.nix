@@ -54,7 +54,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
             name = "eth1";
             networkConfig.Bridge = "br0";
             bridgeVLANs = [
-              { bridgeVLANConfig = { PVID = 2; EgressUntagged = 2; }; }
+              { PVID = 2; EgressUntagged = 2; }
             ];
           };
           "02-br0" = {
@@ -69,8 +69,8 @@ import ./make-test-python.nix ({pkgs, ...}: {
               PoolSize = 1;
             };
             bridgeVLANs = [
-              { bridgeVLANConfig = { PVID = 1; EgressUntagged = 1; }; }
-              { bridgeVLANConfig = { VLAN = 2; }; }
+              { PVID = 1; EgressUntagged = 1; }
+              { VLAN = 2; }
             ];
           };
           "02-vlan2" = {

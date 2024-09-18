@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jrsonnet";
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     ln -s $out/bin/jrsonnet $out/bin/jsonnet
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash zsh fish; do
       installShellCompletion --cmd jrsonnet \
         --$shell <($out/bin/jrsonnet --generate $shell /dev/null)

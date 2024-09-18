@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openfec";
-  version = "1.4.2.9";
+  version = "1.4.2.11";
 
   src = fetchzip {
     url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${version}.tar.gz";
-    hash = "sha256-A/U9Nh8tspRoT3bYePJLUrNa9jxiL0r2Xaf64wWbmVA=";
+    hash = "sha256-lBR8vz8whEdPVHAGVq9eRriKtmS5tUAvtoyXwO4AuEs=";
   };
 
   outputs = [ "out" "dev" ];
@@ -20,10 +20,13 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  cmakeFlags = [ "-DDEBUG:STRING=OFF" ];
+  cmakeFlags = [
+    "-DDEBUG:STRING=OFF"
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+  ];
 
   installPhase =
-    let so = stdenv.hostPlatform.extensions.sharedLibrary;
+    let so = stdenv.hostPlatform.extensions.library;
     in ''
       # This is pretty horrible but sadly there is not installation procedure
       # provided.

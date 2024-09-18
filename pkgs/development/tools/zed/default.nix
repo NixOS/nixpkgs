@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "zed";
-  version = "1.14.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "brimdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1k5qw/uWe5gtDUjDcMW54ezoXOBLt4T9lRmiOS06hz8=";
+    sha256 = "sha256-bafX3i6jEMqYB4YCpIX4z4SgQbJjryGmZ6pvqtVrk3A=";
   };
 
   vendorHash = "sha256-X1rE6/sgpB6jeTjLZJL/a7ghjRJYTXSQDHB4PmEFUmU=";
@@ -37,7 +37,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A novel data lake based on super-structured data";
+    description = "Novel data lake based on super-structured data";
     homepage = "https://zed.brimdata.io";
     changelog = "https://github.com/brimdata/zed/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;

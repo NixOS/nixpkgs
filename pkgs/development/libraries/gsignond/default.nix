@@ -52,9 +52,10 @@ unwrapped = stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "D-Bus service which performs user authentication on behalf of its clients";
+    mainProgram = "gsignond";
     homepage = "https://gitlab.com/accounts-sso/gsignond";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 };

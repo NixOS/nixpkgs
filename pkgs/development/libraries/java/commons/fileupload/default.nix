@@ -1,12 +1,12 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "1.4";
+  version = "1.5";
   pname = "commons-fileupload";
 
   src = fetchurl {
     url    = "mirror://apache/commons/fileupload/binaries/${pname}-${version}-bin.tar.gz";
-    sha256 = "1avfv4gljp7flra767yzas54vfb6az9s1nhxfjv48jj2x0llxxkx";
+    sha256 = "sha256-r7EGiih4qOCbjaL7Wg+plbe0m3CuFWXs/RmbfGLmj1g=";
   };
   installPhase = ''
     tar xf ${src}

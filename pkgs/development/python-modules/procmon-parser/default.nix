@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, construct
-, fetchFromGitHub
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  construct,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  pythonImportsCheck = [
-    "procmon_parser"
-  ];
+  pythonImportsCheck = [ "procmon_parser" ];
 
   meta = with lib; {
     description = "Parser to process monitor file formats";

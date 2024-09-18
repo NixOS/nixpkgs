@@ -39,14 +39,14 @@ in
   options = {
 
     services.aerospike = {
-      enable = mkEnableOption (lib.mdDoc "Aerospike server");
+      enable = mkEnableOption "Aerospike server";
 
       package = mkPackageOption pkgs "aerospike" { };
 
       workDir = mkOption {
         type = types.str;
         default = "/var/lib/aerospike";
-        description = lib.mdDoc "Location where Aerospike stores its files";
+        description = "Location where Aerospike stores its files";
       };
 
       networkConfig = mkOption {
@@ -75,7 +75,7 @@ in
             port 3003
           }
         '';
-        description = lib.mdDoc "network section of configuration file";
+        description = "network section of configuration file";
       };
 
       extraConfig = mkOption {
@@ -89,7 +89,7 @@ in
             storage-engine memory
           }
         '';
-        description = lib.mdDoc "Extra configuration";
+        description = "Extra configuration";
       };
     };
 

@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
+{
+  buildPythonPackage,
+  cirq-core,
+  requests,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_ionq" ];

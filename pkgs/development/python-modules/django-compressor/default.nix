@@ -1,32 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rcssmin
-, rjsmin
-, django-appconf
-, beautifulsoup4
-, brotli
-, pytestCheckHook
-, django-sekizai
-, pytest-django
-, csscompressor
-, calmjs
-, jinja2
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  calmjs,
+  django-appconf,
+  jinja2,
+  rcssmin,
+  rjsmin,
+
+  # tests
+  beautifulsoup4,
+  brotli,
+  csscompressor,
+  django-sekizai,
+  pytestCheckHook,
+  pytest-django,
+
 }:
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.4";
-  format = "setuptools";
+  version = "4.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "django_compressor";
     inherit version;
-    hash = "sha256-GwrMnPup9pvDjnxB2psNcKILyVWHtkP/75YJz0YGT2c=";
+    hash = "sha256-wdikii7k2LfyPEEeucl+LYjbGKGLocnoF41fW4NmqCI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "rcssmin"
+    "rjsmin"
+  ];
+
+  dependencies = [
     beautifulsoup4
     calmjs
     django-appconf
@@ -35,7 +52,9 @@ buildPythonPackage rec {
     rjsmin
   ];
 
-  checkInputs = [
+  env.DJANGO_SETTINGS_MODULE = "compressor.test_settings";
+
+  nativeCheckInputs = [
     beautifulsoup4
     brotli
     csscompressor
@@ -47,13 +66,9 @@ buildPythonPackage rec {
   # Getting error: compressor.exceptions.OfflineGenerationError: You have
   # offline compression enabled but key "..." is missing from offline manifest.
   # You may need to run "python manage.py compress"
-  disabledTestPaths = [
-    "compressor/tests/test_offline.py"
-  ];
+  disabledTestPaths = [ "compressor/tests/test_offline.py" ];
 
   pythonImportsCheck = [ "compressor" ];
-
-  DJANGO_SETTINGS_MODULE = "compressor.test_settings";
 
   meta = with lib; {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";

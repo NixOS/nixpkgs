@@ -44,12 +44,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ getconf ];
 
+  # append default installPhase with library install for haxe
+  postInstall = let
+    haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
+  in ''
+    mkdir -p "${haxelibPath}"
+    echo -n "${version}" > "${haxelibPath}/../.current"
+    cp -r other/haxelib/* "${haxelibPath}"
+  '';
+
   postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
   '';
 
   meta = with lib; {
-    description = "A virtual machine for Haxe";
+    description = "Virtual machine for Haxe";
+    mainProgram = "hl";
     homepage = "https://hashlink.haxe.org/";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

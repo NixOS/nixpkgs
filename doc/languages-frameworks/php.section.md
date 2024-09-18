@@ -97,7 +97,7 @@ let
   myPhp = php.withExtensions ({ all, ... }: with all; [ imagick opcache ]);
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
-};
+}
 ```
 
 ```nix
@@ -108,7 +108,7 @@ let
   };
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
-};
+}
 ```
 
 #### Example usage with `nix-shell` {#ssec-php-user-guide-installing-with-extensions-nix-shell}
@@ -149,7 +149,7 @@ php.override {
     extensions = prev.extensions // {
       mysqlnd = prev.extensions.mysqlnd.overrideAttrs (attrs: {
         patches = attrs.patches or [] ++ [
-          …
+          # ...
         ];
       });
     };
@@ -283,7 +283,10 @@ in {
   ];
 
   composerRepository = php.mkComposerRepository {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
+    composerNoDev = true;
+    composerNoPlugins = true;
+    composerNoScripts = true;
     # Specifying a custom composer.lock since it is not present in the sources.
     composerLock = ./composer.lock;
     # The composer vendor hash

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, fetchFromGitea
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  fetchFromGitea,
+  setuptools,
 }:
 
 buildPythonPackage rec {

@@ -43,11 +43,11 @@
 let
   unwrapped = stdenv.mkDerivation rec {
     pname = "pidgin";
-    version = "2.14.12";
+    version = "2.14.13";
 
     src = fetchurl {
       url = "mirror://sourceforge/pidgin/pidgin-${version}.tar.bz2";
-      sha256 = "sha256-KwUka+IIYF7buTrp7cB5WD1EniqXENttNI0X9ZAgpLc=";
+      sha256 = "sha256-EgBJ3I4X4JoqfSVq/yGR/4SRq7hAyMfrMZoWHi3xa6g=";
     };
 
     nativeBuildInputs = [ makeWrapper intltool ];
@@ -107,7 +107,8 @@ let
     ]
     ++ lib.optionals withCyrus_sasl [ "--enable-cyrus-sasl=yes" ]
     ++ lib.optionals withGnutls [ "--enable-gnutls=yes" "--enable-nss=no" ]
-    ++ lib.optionals stdenv.isDarwin [ "--disable-gtkspell" "--disable-vv" ];
+    ++ lib.optionals stdenv.isDarwin [ "--disable-gtkspell" "--disable-vv" ]
+    ++ lib.optionals stdenv.cc.isClang [ "CFLAGS=-Wno-error=int-conversion" ];
 
     enableParallelBuilding = true;
 
@@ -138,6 +139,7 @@ let
 
     meta = {
       description = "Multi-protocol instant messaging client";
+      mainProgram = "pidgin";
       homepage = "https://pidgin.im/";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;

@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Library for argument handling for MINC programs";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license   = licenses.gpl2Plus;
   };
 }

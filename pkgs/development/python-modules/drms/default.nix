@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pandas
-, six
-, astropy
-, oldest-supported-numpy
-, pytestCheckHook
-, pytest-doctestplus
-, pythonOlder
-, setuptools-scm
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pandas,
+  six,
+  astropy,
+  oldest-supported-numpy,
+  pytestCheckHook,
+  pytest-doctestplus,
+  pythonOlder,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -43,13 +44,9 @@ buildPythonPackage rec {
     pytest-doctestplus
   ];
 
-  disabledTests = [
-    "test_query_hexadecimal_strings"
-  ];
+  disabledTests = [ "test_query_hexadecimal_strings" ];
 
-  disabledTestPaths = [
-    "docs/tutorial.rst"
-  ];
+  disabledTestPaths = [ "docs/tutorial.rst" ];
 
   pythonImportsCheck = [ "drms" ];
 
@@ -57,6 +54,6 @@ buildPythonPackage rec {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

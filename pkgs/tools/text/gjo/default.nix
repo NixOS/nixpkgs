@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Small utility to create JSON objects";
+    mainProgram = "gjo";
     homepage = "https://github.com/skanehira/gjo";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

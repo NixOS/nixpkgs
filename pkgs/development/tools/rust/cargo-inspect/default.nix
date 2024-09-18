@@ -13,10 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "069i8ydrp1pssnjq7d6mydwr7xh2cmcpzpf8bzd6nfjr6xx1pipr";
+  cargoHash = "sha256-+cYbejdZOmvaX8jdf1llAvaTefPVtIOl1fqGm5tHMRk=";
 
   meta = with lib; {
     description = "See what Rust is doing behind the curtains";
+    mainProgram = "cargo-inspect";
     homepage = "https://github.com/mre/cargo-inspect";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ minijackson matthiasbeyer ];

@@ -1,6 +1,9 @@
 { lib, stdenv, fetchurl, findutils, fixDarwinDylibNames
+, updateAutotoolsGnuConfigScriptsHook
 , sslSupport ? true, openssl
 , fetchpatch
+
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +23,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = lib.optional (!sslSupport) "--disable-openssl";
+  configureFlags = lib.flatten [
+    (lib.optional (!sslSupport) "--disable-openssl")
+    (lib.optionals static ["--disable-shared" "--with-pic"])
+  ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
@@ -36,7 +42,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional sslSupport "openssl"
     ;
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optional sslSupport openssl
     ++ lib.optional stdenv.isCygwin findutils;
@@ -54,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Event notification library";
+    mainProgram = "event_rpcgen.py";
     longDescription = ''
       The libevent API provides a mechanism to execute a callback function
       when a specific event occurs on a file descriptor or after a timeout

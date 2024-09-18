@@ -1,4 +1,4 @@
-{ fetchpatch, playerctl, libxkbcommon, callPackage, attrs ? {} }:
+{ fetchpatch, playerctl, libxkbcommon, callPackage, nixosTests, attrs ? {} }:
 
 let
   pkg = callPackage ./build.nix ({
@@ -22,4 +22,11 @@ in pkg.overrideAttrs (o: {
       sha256 = "1q7nd66ai6nr2m6iqxn55gvbr4r5gjc00c8wyjc3riv31qcbqbhv";
     })
   ];
+
+  passthru = (o.passthru or {}) // {
+    tests = (o.passthru.tests or {}) // {
+      inherit (nixosTests) yabar;
+    };
+  };
+
 })

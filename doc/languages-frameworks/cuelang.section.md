@@ -26,7 +26,7 @@ Cuelang schemas are similar to JSON, here is a quick cheatsheet:
 Nixpkgs provides a `pkgs.writeCueValidator` helper, which will write a validation script based on the provided Cuelang schema.
 
 Here is an example:
-```
+```nix
 pkgs.writeCueValidator
   (pkgs.writeText "schema.cue" ''
     #Def1: {
@@ -42,7 +42,7 @@ pkgs.writeCueValidator
 `document` : match your input data against this fragment of structure or definition, e.g. you may use the same schema file but different documents based on the data you are validating.
 
 Another example, given the following `validator.nix` :
-```
+```nix
 { pkgs ? import <nixpkgs> {} }:
 let
   genericValidator = version:

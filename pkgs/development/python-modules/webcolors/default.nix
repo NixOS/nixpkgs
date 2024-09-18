@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, unittestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  unittestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,22 +19,21 @@ buildPythonPackage rec {
     hash = "sha256-wiW2dMg/qSO+k9I1MwzgMANz0CiFzvIyOIE7DVZoMEo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
-
-  pythonImportsCheck = [
-    "webcolors"
+  unittestFlagsArray = [
+    "-s"
+    "tests"
   ];
+
+  pythonImportsCheck = [ "webcolors" ];
 
   meta = with lib; {
     description = "Library for working with color names/values defined by the HTML and CSS specifications";
     homepage = "https://github.com/ubernostrum/webcolors";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

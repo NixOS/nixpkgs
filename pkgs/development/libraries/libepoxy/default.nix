@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Degl=${if (x11Support && !stdenv.isDarwin) then "yes" else "no"}"
     "-Dglx=${if x11Support then "yes" else "no"}"
-    "-Dtests=${lib.boolToString finalAttrs.doCheck}"
+    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dx11=${lib.boolToString x11Support}"
   ];
 
@@ -74,10 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library for handling OpenGL function pointer management";
+    description = "Library for handling OpenGL function pointer management";
     homepage = "https://github.com/anholt/libepoxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
     pkgConfigModules = [ "epoxy" ];
   };

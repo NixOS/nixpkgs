@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -17,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-1hZ7yAKTvkk20ho+QOqFEtspBvFztAtfmITs2uxhdmQ=";
   };
 
-  vendorHash = "sha256-d38s5sSvENIou+rlphXIrrOcGOdsvkNaMJlhiXVWN6c=";
+  vendorHash = "sha256-DFssAic2YtXNH1Jm6zCDv1yPNz3YUXaFLs7j7rNHhlE=";
 
   proxyVendor = true;
 
@@ -37,7 +36,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An application to control your Elgato Stream Deck on Linux";
+    description = "Application to control your Elgato Stream Deck on Linux";
+    mainProgram = "deckmaster";
     homepage = "https://github.com/muesli/deckmaster";
     changelog = "https://github.com/muesli/deckmaster/releases/tag/v${version}";
     license = licenses.mit;

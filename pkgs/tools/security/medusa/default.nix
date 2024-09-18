@@ -30,8 +30,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jmk-foofus/medusa";
-    description = "A speedy, parallel, and modular, login brute-forcer";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    description = "Speedy, parallel, and modular, login brute-forcer";
+    mainProgram = "medusa";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
   };
 }

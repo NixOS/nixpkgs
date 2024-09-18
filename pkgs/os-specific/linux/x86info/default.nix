@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       frequency, and identify the cache sizes and layout.
     '';
     platforms = [ "i686-linux" "x86_64-linux" ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/kernelslacker/x86info";
     maintainers = with lib.maintainers; [ jcumming ];
   };

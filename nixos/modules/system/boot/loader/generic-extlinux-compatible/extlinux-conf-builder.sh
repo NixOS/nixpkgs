@@ -141,7 +141,13 @@ if [ "$numGenerations" -gt 0 ]; then
             | sort -n -r \
             | head -n $numGenerations); do
         link=/nix/var/nix/profiles/system-$generation-link
-        addEntry $link $generation
+        addEntry $link "${generation}-default"
+        for specialisation in $(
+            ls /nix/var/nix/profiles/system-$generation-link/specialisation \
+            | sort -n -r); do
+            link=/nix/var/nix/profiles/system-$generation-link/specialisation/$specialisation
+            addEntry $link "${generation}-${specialisation}"
+        done
     done >> $tmpFile
 fi
 

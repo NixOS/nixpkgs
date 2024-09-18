@@ -78,14 +78,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gdal";
-  version = "3.8.4";
+  pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R9VLof13OXPbWGHOG1Q4WZWSPoF739C6WuNWxoIwKTw=";
+    hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
   };
 
   nativeBuildInputs = [
@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       json_c
       lerc
       xz
-      libxml2
+      (libxml2.override { enableHttp = true; })
       lz4
       openjpeg
       openssl
@@ -220,23 +220,24 @@ stdenv.mkDerivation (finalAttrs: {
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
-    # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
-    export BUILD_NAME=fedora
+    # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
+    export CI=1
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    pytest-benchmark
     pytest-env
     filelock
     lxml
+  ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
   ];
   disabledTestPaths = [
     # tests that attempt to make network requests
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
-
-    # disable benchmarks
-    "benchmark/*"
   ];
   disabledTests = [
     # tests that attempt to make network requests

@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, libgpg-error
-, gnupg
-, pkg-config
-, glib
-, pth
-, libassuan
-, which
-, ncurses
-, texinfo
-, buildPackages
-, qtbase ? null
-, pythonSupport ? false
-, swig2 ? null
-# only for passthru.tests
-, libsForQt5
-, qt6Packages
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  libgpg-error,
+  gnupg,
+  pkg-config,
+  glib,
+  pth,
+  libassuan,
+  which,
+  ncurses,
+  texinfo,
+  buildPackages,
+  qtbase ? null,
+  pythonSupport ? false,
+  swig ? null,
+  # only for passthru.tests
+  libsForQt5,
+  qt6Packages,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,11 @@ stdenv.mkDerivation rec {
   version = "1.23.2";
   pyproject = true;
 
-  outputs = [ "out" "dev" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+  ];
 
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
@@ -40,6 +45,9 @@ stdenv.mkDerivation rec {
     ./python-310-312-remove-distutils.patch
     # Fix a test after disallowing compressed signatures in gpg (PR #180336)
     ./test_t-verify_double-plaintext.patch
+    # Don't use deprecated LFS64 APIs (removed in musl 1.2.4)
+    # https://dev.gnupg.org/D600
+    ./LFS64.patch
   ];
 
   postPatch = ''
@@ -49,54 +57,50 @@ stdenv.mkDerivation rec {
       --replace-fail 'tmp="-unknown"' 'tmp=""'
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-    gnupg
-    pkg-config
-    texinfo
-  ] ++ lib.optionals pythonSupport [
-    python3.pythonOnBuildForHost
-    python3.pkgs.pip
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
-    ncurses
-    swig2
-    which
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      gnupg
+      pkg-config
+      texinfo
+    ]
+    ++ lib.optionals pythonSupport [
+      python3.pythonOnBuildForHost
+      python3.pkgs.pip
+      python3.pkgs.setuptools
+      python3.pkgs.wheel
+      ncurses
+      swig
+      which
+    ];
 
-  buildInputs = lib.optionals pythonSupport [
-    python3
-  ];
+  buildInputs = lib.optionals pythonSupport [ python3 ];
 
   propagatedBuildInputs = [
     glib
     libassuan
     libgpg-error
     pth
-  ] ++ lib.optionals (qtbase != null) [
-    qtbase
-  ];
+  ] ++ lib.optionals (qtbase != null) [ qtbase ];
 
-  nativeCheckInputs = [
-    which
-  ];
+  nativeCheckInputs = [ which ];
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   dontWrapQtApps = true;
 
-  configureFlags = [
-    "--enable-fixed-path=${gnupg}/bin"
-    "--with-libgpg-error-prefix=${libgpg-error.dev}"
-    "--with-libassuan-prefix=${libassuan.dev}"
-  ] ++ lib.optional pythonSupport "--enable-languages=python"
-  # Tests will try to communicate with gpg-agent instance via a UNIX socket
-  # which has a path length limit. Nix on darwin is using a build directory
-  # that already has quite a long path and the resulting socket path doesn't
-  # fit in the limit. https://github.com/NixOS/nix/pull/1085
-  ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
+  configureFlags =
+    [
+      "--enable-fixed-path=${gnupg}/bin"
+      "--with-libgpg-error-prefix=${libgpg-error.dev}"
+      "--with-libassuan-prefix=${libassuan.dev}"
+    ]
+    ++ lib.optional pythonSupport "--enable-languages=python"
+    # Tests will try to communicate with gpg-agent instance via a UNIX socket
+    # which has a path length limit. Nix on darwin is using a build directory
+    # that already has quite a long path and the resulting socket path doesn't
+    # fit in the limit. https://github.com/NixOS/nix/pull/1085
+    ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -113,7 +117,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkFlags = [ "-C" "tests" ];
+  checkFlags = [
+    "-C"
+    "tests"
+  ];
 
   passthru.tests = {
     python = python3.pkgs.gpgme;
@@ -131,7 +138,10 @@ stdenv.mkDerivation rec {
       encryption, decryption, signing, signature verification and key
       management.
     '';
-    license = with licenses; [ lgpl21Plus gpl3Plus ];
+    license = with licenses; [
+      lgpl21Plus
+      gpl3Plus
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
   };

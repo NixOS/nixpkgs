@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, numpy
-, six
-, scipy
-, pillow
-, pywavelets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  numpy,
+  six,
+  scipy,
+  pillow,
+  pywavelets,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A Python Perceptual Image Hashing Module";
+    description = "Python Perceptual Image Hashing Module";
+    mainProgram = "find_similar_images.py";
     homepage = "https://github.com/JohannesBuchner/imagehash";
     license = licenses.bsd2;
     maintainers = with maintainers; [ e1mo ];

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.0.6";
+  version = "4.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,30 +18,22 @@ buildPythonPackage rec {
     owner = "absperf";
     repo = "asyncinotify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RXx6i5dIB2oySVaLoHPRGD9VKgiO5OAXmrzVBq8Ad18=";
+    hash = "sha256-Pmv1BXmKUNjFE5h99GR0GmjYKYmTi8ECKAUCKwIAMzc=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "asyncinotify"
-  ];
+  pythonImportsCheck = [ "asyncinotify" ];
 
-  pytestFlagsArray = [
-    "test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
   meta = with lib; {
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";
     changelog = "https://github.com/absperf/asyncinotify/releases/tag/v${version}";
-    license = licenses.mit;
+    license = licenses.mpl20;
     maintainers = with maintainers; [ cynerd ];
   };
 }

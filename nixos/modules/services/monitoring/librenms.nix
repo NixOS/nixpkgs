@@ -2,7 +2,7 @@
 
 let
   cfg = config.services.librenms;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   configJson = settingsFormat.generate "librenms-config.json" cfg.settings;
 
   package = pkgs.librenms.override {
@@ -16,12 +16,13 @@ let
     upload_max_filesize = 100M
     date.timezone = "${config.time.timeZone}"
   '';
-  phpIni = pkgs.runCommand "php.ini" {
-    inherit (package) phpPackage;
-    inherit phpOptions;
-    preferLocalBuild = true;
-    passAsFile = [ "phpOptions" ];
-  } ''
+  phpIni = pkgs.runCommand "php.ini"
+    {
+      inherit (package) phpPackage;
+      inherit phpOptions;
+      preferLocalBuild = true;
+      passAsFile = [ "phpOptions" ];
+    } ''
     cat $phpPackage/etc/php.ini $phpOptionsPath > $out
   '';
 
@@ -31,13 +32,19 @@ let
     if [[ "$USER" != ${cfg.user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
     fi
-    $sudo ${package}/artisan $*
+    $sudo ${package}/artisan "$@"
   '';
 
   lnmsWrapper = pkgs.writeShellScriptBin "lnms" ''
     cd ${package}
-    exec ${package}/lnms $*
+    sudo=exec
+    if [[ "$USER" != ${cfg.user} ]]; then
+    sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
+    fi
+    $sudo ${package}/lnms "$@"
   '';
+
+
 
   configFile = pkgs.writeText "config.php" ''
     <?php
@@ -47,7 +54,8 @@ let
     ${lib.optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
 
-in {
+in
+{
   options.services.librenms = with lib; {
     enable = mkEnableOption "LibreNMS network monitoring system";
 
@@ -191,7 +199,8 @@ in {
     nginx = mkOption {
       type = types.submodule (
         recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+          { }
       );
       default = { };
       example = literalExpression ''
@@ -240,6 +249,7 @@ in {
         default = "localhost";
         description = ''
           Hostname or IP of the MySQL/MariaDB server.
+          Ignored if 'socket' is defined.
         '';
       };
 
@@ -248,6 +258,7 @@ in {
         default = 3306;
         description = ''
           Port of the MySQL/MariaDB server.
+          Ignored if 'socket' is defined.
         '';
       };
 
@@ -264,15 +275,28 @@ in {
         default = "librenms";
         description = ''
           Name of the user on the MySQL/MariaDB server.
+          Ignored if 'socket' is defined.
         '';
       };
 
       passwordFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
         example = "/run/secrets/mysql.pass";
         description = ''
           A file containing the password for the user of the MySQL/MariaDB server.
           Must be readable for the LibreNMS user.
+          Ignored if 'socket' is defined, mandatory otherwise.
+        '';
+      };
+
+      socket = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/run/mysqld/mysqld.sock";
+        description = ''
+          A unix socket to mysql, accessible by the librenms user.
+          Useful when mysql is on the localhost.
         '';
       };
     };
@@ -289,7 +313,7 @@ in {
     settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
-        options = {};
+        options = { };
       };
       description = ''
         Attrset of the LibreNMS configuration.
@@ -483,13 +507,15 @@ in {
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         User = cfg.user;
         Group = cfg.group;
-        ExecStartPre = lib.mkIf cfg.database.createLocally [ "!${pkgs.writeShellScript "librenms-db-init" ''
+        ExecStartPre = lib.mkIf cfg.database.createLocally [
+          "!${pkgs.writeShellScript "librenms-db-init" ''
           DB_PASSWORD=$(cat ${cfg.database.passwordFile} | tr -d '\n')
           echo "ALTER USER '${cfg.database.username}'@'localhost' IDENTIFIED BY '$DB_PASSWORD';" | ${pkgs.mariadb}/bin/mysql
           ${lib.optionalString cfg.useDistributedPollers ''
             echo "ALTER USER '${cfg.database.username}'@'%' IDENTIFIED BY '$DB_PASSWORD';" | ${pkgs.mariadb}/bin/mysql
           ''}
-        ''}"];
+        ''}"
+        ];
       };
       script = ''
         set -euo pipefail
@@ -516,13 +542,24 @@ in {
         ${lib.optionalString (cfg.useDistributedPollers || cfg.distributedPoller.enable) ''
           echo "CACHE_DRIVER=memcached" >> ${cfg.dataDir}/.env
         ''}
-        echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
-        echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
         echo "DB_DATABASE=${cfg.database.database}" >> ${cfg.dataDir}/.env
-        echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
-        echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
-        cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
-
+      ''
+      + (
+        if ! isNull cfg.database.socket
+        then ''
+          # use socket connection
+          echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
+        ''
+        else ''
+          # use TCP connection
+          echo "DB_HOST=${cfg.database.host}" >> ${cfg.dataDir}/.env
+          echo "DB_PORT=${toString cfg.database.port}" >> ${cfg.dataDir}/.env
+          echo "DB_USERNAME=${cfg.database.username}" >> ${cfg.dataDir}/.env
+          echo -n "DB_PASSWORD=" >> ${cfg.dataDir}/.env
+          cat ${cfg.database.passwordFile} >> ${cfg.dataDir}/.env
+        ''
+      )
+      + ''
         # clear cache after update
         OLD_VERSION=$(cat ${cfg.dataDir}/version)
         if [[ $OLD_VERSION != "${package.version}" ]]; then
@@ -560,29 +597,31 @@ in {
 
     services.cron = {
       enable = true;
-      systemCronJobs = let
-        env = "PHPRC=${phpIni}";
-      in [
-        # based on crontab provided by LibreNMS
-        "33 */6 * * * ${cfg.user} ${env} ${package}/cronic ${package}/discovery-wrapper.py 1"
-        "*/5 * * * * ${cfg.user} ${env} ${package}/discovery.php -h new >> /dev/null 2>&1"
+      systemCronJobs =
+        let
+          env = "PHPRC=${phpIni}";
+        in
+        [
+          # based on crontab provided by LibreNMS
+          "33 */6 * * * ${cfg.user} ${env} ${package}/cronic ${package}/discovery-wrapper.py 1"
+          "*/5 * * * * ${cfg.user} ${env} ${package}/discovery.php -h new >> /dev/null 2>&1"
 
-        "${if cfg.enableOneMinutePolling then "*" else "*/5"} * * * * ${cfg.user} ${env} ${package}/cronic ${package}/poller-wrapper.py ${toString cfg.pollerThreads}"
-        "* * * * * ${cfg.user} ${env} ${package}/alerts.php >> /dev/null 2>&1"
+          "${if cfg.enableOneMinutePolling then "*" else "*/5"} * * * * ${cfg.user} ${env} ${package}/cronic ${package}/poller-wrapper.py ${toString cfg.pollerThreads}"
+          "* * * * * ${cfg.user} ${env} ${package}/alerts.php >> /dev/null 2>&1"
 
-        "*/5 * * * * ${cfg.user} ${env} ${package}/poll-billing.php >> /dev/null 2>&1"
-        "01 * * * * ${cfg.user} ${env} ${package}/billing-calculate.php >> /dev/null 2>&1"
-        "*/5 * * * * ${cfg.user} ${env} ${package}/check-services.php >> /dev/null 2>&1"
+          "*/5 * * * * ${cfg.user} ${env} ${package}/poll-billing.php >> /dev/null 2>&1"
+          "01 * * * * ${cfg.user} ${env} ${package}/billing-calculate.php >> /dev/null 2>&1"
+          "*/5 * * * * ${cfg.user} ${env} ${package}/check-services.php >> /dev/null 2>&1"
 
-        # extra: fast ping
-        "* * * * * ${cfg.user} ${env} ${package}/ping.php >> /dev/null 2>&1"
+          # extra: fast ping
+          "* * * * * ${cfg.user} ${env} ${package}/ping.php >> /dev/null 2>&1"
 
-        # daily.sh tasks are split to exclude update
-        "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh cleanup >> /dev/null 2>&1"
-        "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh notifications >> /dev/null 2>&1"
-        "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh peeringdb >> /dev/null 2>&1"
-        "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh mac_oui >> /dev/null 2>&1"
-      ];
+          # daily.sh tasks are split to exclude update
+          "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh cleanup >> /dev/null 2>&1"
+          "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh notifications >> /dev/null 2>&1"
+          "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh peeringdb >> /dev/null 2>&1"
+          "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh mac_oui >> /dev/null 2>&1"
+        ];
     };
 
     security.wrappers = {

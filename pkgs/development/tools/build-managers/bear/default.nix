@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , pkg-config
@@ -80,6 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
+    mainProgram = "bear";
     longDescription = ''
       Note: the bear command is very useful to generate compilation commands
       e.g. for YouCompleteMe.  You just enter your development nix-shell
@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rizsotto/Bear";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ babariviere ];
+    maintainers = with maintainers; [ DieracDelta ];
   };
 }

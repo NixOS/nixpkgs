@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A minimalist init process designed for Docker";
+    description = "Minimalist init process designed for Docker";
     homepage = "https://github.com/nicolas-van/multirun";
     license = licenses.mit;
     maintainers = with maintainers; [ nickcao ];

@@ -9,7 +9,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "youplot";
 
   meta = with lib; {
-    description = "A command line tool that draws plots on the terminal";
+    description = "Command line tool that draws plots on the terminal";
     homepage    = "https://github.com/red-data-tools/YouPlot";
     mainProgram = "uplot";
     license     = licenses.mit;

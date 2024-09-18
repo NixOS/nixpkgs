@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, buildPackages
 , cargo
 , gettext
 , meson
@@ -18,22 +19,30 @@
 , Foundation
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-obfuscate";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Obfuscate";
-    rev = version;
-    hash = "sha256-aUhzact437V/bSsG2Ddu2mC03LbyXFg+hJiuGy5NQfQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-/Plvvn1tle8t/bsPcsamn5d81CqnyGCyGYPF6j6U5NI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-HUQvdCmzjdmuJGDLtC/86yzbRimLzx+XbW29f+Ua48w=";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-9lrxK2psdIPGsOC6p8T+3AGPrX6PjrK9mFirdJqBSMM=";
+  };
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Set the location to gettext to ensure the nixpkgs one on Darwin instead of the vendored one.
+    # The vendored gettext does not build with clang 16.
+    GETTEXT_BIN_DIR = "${lib.getBin buildPackages.gettext}/bin";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
   nativeBuildInputs = [
@@ -66,4 +75,4 @@ stdenv.mkDerivation rec {
     mainProgram = "obfuscate";
     maintainers = with maintainers; [ fgaz ];
   };
-}
+})

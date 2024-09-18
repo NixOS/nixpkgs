@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell, binlore, esh }:
 
 stdenv.mkDerivation rec {
   pname = "esh";
@@ -30,8 +30,17 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+  # working around a bug in file. Was fixed in
+  # file 5.41-5.43 but regressed in 5.44+
+  # see https://bugs.astron.com/view.php?id=276
+  # "can" verdict because of `-s SHELL` arg
+  passthru.binlore.out = binlore.synthesize esh ''
+    execer can bin/esh
+  '';
+
   meta = with lib; {
     description = "Simple templating engine based on shell";
+    mainProgram = "esh";
     homepage = "https://github.com/jirutka/esh";
     license = licenses.mit;
     maintainers = with maintainers; [ mnacamura ];

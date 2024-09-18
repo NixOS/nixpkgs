@@ -22,13 +22,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.7.7";
+  version = "3.7.10";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "sha256-h455isEmnRyoasXhh1UaA5PICcEEM8/C3IJf5yHRl5g=";
+    hash = "sha256-l3cKsR8HSdtFGw1S12xueQOu/U9ABlOxQQtbHBj2izs=";
   };
 
   buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl libxcrypt ];
@@ -50,19 +50,19 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   nativeCheckInputs = with python3.pkgs; [ passlib ];
-  checkPhase = with lib; let
+  checkPhase = let
     # these tests require network access so we need to skip them.
-    brokenTests = map escapeRegex [
+    brokenTests = map lib.escapeRegex [
       "Ice/udp" "Glacier2" "IceGrid/simple" "IceStorm" "IceDiscovery/simple"
 
       # FIXME: certificate expired, remove for next release?
       "IceSSL/configuration"
     ];
     # matches CONFIGS flag in makeFlagsArray
-    configFlag = optionalString cpp11 "--config=cpp11-shared";
+    configFlag = lib.optionalString cpp11 "--config=cpp11-shared";
   in ''
     runHook preCheck
-    ${python3.interpreter} ./cpp/allTests.py ${configFlag} --rfilter='${concatStringsSep "|" brokenTests}'
+    ${python3.interpreter} ./cpp/allTests.py ${configFlag} --rfilter='${lib.concatStringsSep "|" brokenTests}'
     runHook postCheck
   '';
 
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.zeroc.com/ice.html";
-    description = "The internet communications engine";
+    description = "Internet communications engine";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

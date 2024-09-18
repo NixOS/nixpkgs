@@ -1,32 +1,43 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, lxml, pycryptodomex, construct
-, argon2-cffi, python-dateutil
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  argon2-cffi,
+  construct,
+  lxml,
+  pycryptodomex,
+  pyotp,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname   = "pykeepass";
-  version = "4.0.6";
-
-  format = "setuptools";
+  pname = "pykeepass";
+  version = "4.1.0.post1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
-    rev = "v${version}";
-    hash = "sha256-832cTVzI/MFdwiw6xWzRG35z3iwqb5Qpf6W6XYBIFWs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-64is/XoRF/kojqd4jQIAQi1od8TRhiv9uR+WNIGvP2A=";
   };
 
-  propagatedBuildInputs = [
-    lxml pycryptodomex construct
-    argon2-cffi python-dateutil
+  build-system = [ setuptools ];
+
+  dependencies = [
+    argon2-cffi
+    construct
+    lxml
+    pycryptodomex
   ];
 
   propagatedNativeBuildInputs = [ argon2-cffi ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest tests.tests
-  '';
+  nativeCheckInputs = [
+    pyotp
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "pykeepass" ];
 

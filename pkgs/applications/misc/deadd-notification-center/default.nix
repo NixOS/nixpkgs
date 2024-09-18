@@ -55,7 +55,7 @@ in mkDerivation rec {
     echo "${systemd-service}" > $out/lib/systemd/user/deadd-notification-center.service
   '';
 
-  description = "A haskell-written notification center for users that like a desktop with style";
+  description = "Haskell-written notification center for users that like a desktop with style";
   homepage = "https://github.com/phuhl/linux_notification_center";
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ melkor333 sna ];

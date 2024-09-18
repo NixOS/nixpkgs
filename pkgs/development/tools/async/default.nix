@@ -11,10 +11,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "19ypflbayi5l0mb8yw7w0a4bq9a3w8nl9jsxapp9m3xggzmsvrxx";
   };
 
-  cargoSha256 = "0y2q46i838gha58p95vcv5r5i14il1kv86k35s30ncfibijgp0lc";
+  cargoHash = "sha256-jIL7ZFzRMQuGLmMatGegkYRYctlsl3RRUfChgaIhWHg=";
 
   meta = with lib; {
-    description = "A tool to parallelize shell commands";
+    description = "Tool to parallelize shell commands";
+    mainProgram = "async";
     longDescription = ''
       `async` is a tool to run shell commands in parallel and is designed to be
       able to quickly parallelize shell scripts with minimal changes. It was

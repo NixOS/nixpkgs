@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A steganographic image analyzer, solver and data extractor for challanges";
+    description = "Steganographic image analyzer, solver and data extractor for challanges";
     homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = {

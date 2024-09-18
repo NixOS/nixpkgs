@@ -6,7 +6,7 @@
 , which
 , frei0r
 , opencolorio
-, ffmpeg_4
+, ffmpeg_6
 , CoreFoundation
 , cmake
 , wrapQtAppsHook
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     owner = "olive-editor";
     repo = "olive";
     rev = "2036fffffd0e24b7458e724b9084ae99c9507c64";
-    sha256 = "sha256-qee9/WTvTy5jWLowvZJOwAjrqznRhJR+u9dYsnCN/Qs=";
+    hash = "sha256-qee9/WTvTy5jWLowvZJOwAjrqznRhJR+u9dYsnCN/Qs=";
   };
 
   cmakeFlags = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg_6
     frei0r
     opencolorio
     openimageio'

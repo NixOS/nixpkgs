@@ -6,7 +6,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tuxedo-rs";
-  version = "0.3.0";
+  version = "0.3.1";
 
   # NOTE: This src is shared with tailor-gui.
   # When updating, the tailor-gui.cargoDeps hash needs to be updated.
@@ -14,14 +14,14 @@ rustPlatform.buildRustPackage rec {
     owner = "AaronErhardt";
     repo = "tuxedo-rs";
     rev = "tailor-v${version}";
-    hash = "sha256-5F9Xo+tnmYqmFiKrKMe+EEqypmG9iIvwai5yuKCm00Y=";
+    hash = "sha256-+NzwUs8TZsA0us9hI1UmEKdiOo9IqTRmTOHs4xmC7MY=";
   };
 
 
   # Some of the tests are impure and rely on files in /etc/tailord
   doCheck = false;
 
-  cargoHash = "sha256-EPbh1elLOJKOrYLeBSaZ27zWGYFajiD60eFGEGaCJKw=";
+  cargoHash = "sha256-HtyCKQ0xDIXevgr4FAnVJcDI8G6vR9fLHFghe9+ADiU=";
 
   passthru.tests.version = testers.testVersion {
     package = tuxedo-rs;

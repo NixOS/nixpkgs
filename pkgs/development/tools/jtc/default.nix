@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "JSON manipulation and transformation tool";
+    mainProgram = "jtc";
     homepage = "https://github.com/ldn-softdev/jtc";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

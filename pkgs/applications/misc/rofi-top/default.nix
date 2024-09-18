@@ -8,7 +8,7 @@
 , libgtop
 , pkg-config
 , rofi-unwrapped
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A plugin for rofi that emulates top behaviour";
+    description = "Plugin for rofi that emulates top behaviour";
     homepage = "https://github.com/davatorium/rofi-top";
     license = licenses.mit;
     maintainers = with maintainers; [ aacebedo ];

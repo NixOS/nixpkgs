@@ -10,13 +10,13 @@ let
     options = {
       path = mkOption {
         type = str;
-        description = mdDoc ''
+        description = ''
           Path to the repository
         '';
       };
       label = mkOption {
         type = str;
-        description = mdDoc ''
+        description = ''
           Label to the repository
         '';
       };
@@ -26,18 +26,18 @@ let
     freeformType = settingsFormat.type;
     options = {
       source_directories = mkOption {
-        type = nullOr (listOf str);
-        default = null;
-        description = mdDoc ''
+        type = listOf str;
+        default = [];
+        description = ''
           List of source directories and files to backup. Globs and tildes are
           expanded. Do not backslash spaces in path names.
         '';
         example = [ "/home" "/etc" "/var/log/syslog*" "/home/user/path with spaces" ];
       };
       repositories = mkOption {
-        type = nullOr (listOf repository);
-        default = null;
-        description = mdDoc ''
+        type = listOf repository;
+        default = [];
+        description = ''
           A required list of local or remote repositories with paths and
           optional labels (which can be used with the --repository flag to
           select a repository). Tildes are expanded. Multiple repositories are
@@ -59,10 +59,10 @@ let
 in
 {
   options.services.borgmatic = {
-    enable = mkEnableOption (mdDoc "borgmatic");
+    enable = mkEnableOption "borgmatic";
 
     settings = mkOption {
-      description = mdDoc ''
+      description = ''
         See https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       default = null;
@@ -70,35 +70,48 @@ in
     };
 
     configurations = mkOption {
-      description = mdDoc ''
+      description = ''
         Set of borgmatic configurations, see https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       default = { };
       type = types.attrsOf cfgType;
     };
+
+    enableConfigCheck = mkEnableOption "checking all configurations during build time" // { default = true; };
   };
 
-  config = mkIf cfg.enable {
+  config =
+    let
+      configFiles =
+        (optionalAttrs (cfg.settings != null) { "borgmatic/config.yaml".source = cfgfile; }) //
+        mapAttrs'
+          (name: value: nameValuePair
+            "borgmatic.d/${name}.yaml"
+            { source = settingsFormat.generate "${name}.yaml" value; })
+          cfg.configurations;
+      borgmaticCheck = name: f: pkgs.runCommandCC "${name} validation" { } ''
+            ${pkgs.borgmatic}/bin/borgmatic -c ${f.source} config validate
+            touch $out
+          '';
+    in
+      mkIf cfg.enable {
 
-    warnings = []
-      ++ optional (cfg.settings != null && cfg.settings ? location)
-        "`services.borgmatic.settings.location` is deprecated, please move your options out of sections to the global scope"
-      ++ optional (catAttrs "location" (attrValues cfg.configurations) != [])
-        "`services.borgmatic.configurations.<name>.location` is deprecated, please move your options out of sections to the global scope"
-    ;
+        warnings = []
+          ++ optional (cfg.settings != null && cfg.settings ? location)
+            "`services.borgmatic.settings.location` is deprecated, please move your options out of sections to the global scope"
+          ++ optional (catAttrs "location" (attrValues cfg.configurations) != [])
+            "`services.borgmatic.configurations.<name>.location` is deprecated, please move your options out of sections to the global scope"
+        ;
 
-    environment.systemPackages = [ pkgs.borgmatic ];
+        environment.systemPackages = [ pkgs.borgmatic ];
 
-    environment.etc = (optionalAttrs (cfg.settings != null) { "borgmatic/config.yaml".source = cfgfile; }) //
-      mapAttrs'
-        (name: value: nameValuePair
-          "borgmatic.d/${name}.yaml"
-          { source = settingsFormat.generate "${name}.yaml" value; })
-        cfg.configurations;
+        environment.etc = configFiles;
 
-    systemd.packages = [ pkgs.borgmatic ];
+        systemd.packages = [ pkgs.borgmatic ];
 
-    # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
-    systemd.timers.borgmatic.wantedBy = [ "timers.target" ];
-  };
+        # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
+        systemd.timers.borgmatic.wantedBy = [ "timers.target" ];
+
+        system.checks = mkIf cfg.enableConfigCheck (mapAttrsToList borgmaticCheck configFiles);
+      };
 }

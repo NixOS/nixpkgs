@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cryptography
-, onetimepad
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cryptography,
+  onetimepad,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Lightweight and easy to use sqlite wrapper with built-in encryption system";
-    homepage = "Ghttps://github.com/harshnative/pysqlitecipher";
+    homepage = "https://github.com/harshnative/pysqlitecipher";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

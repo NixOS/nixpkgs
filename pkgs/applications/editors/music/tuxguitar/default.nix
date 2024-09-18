@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, swt, jre, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio }:
+{ lib, stdenv, fetchurl, swt, jre, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio, nixosTests }:
 
 let metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
   if stdenv.hostPlatform.system == "i686-linux" then
@@ -31,8 +31,10 @@ in stdenv.mkDerivation rec {
       --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
   '';
 
+  passthru.tests = { inherit (nixosTests) tuxguitar; };
+
   meta = with lib; {
-    description = "A multitrack guitar tablature editor";
+    description = "Multitrack guitar tablature editor";
     longDescription = ''
       TuxGuitar is a multitrack guitar tablature editor and player written
       in Java-SWT. It can open GuitarPro, PowerTab and TablEdit files.

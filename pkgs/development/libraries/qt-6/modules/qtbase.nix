@@ -3,10 +3,8 @@
 , src
 , patches ? [ ]
 , version
-, coreutils
 , bison
 , flex
-, gdb
 , gperf
 , lndir
 , perl
@@ -35,7 +33,6 @@
 , libdatrie
 , lttng-ust
 , libepoxy
-, libiconv
 , dbus
 , fontconfig
 , freetype
@@ -79,6 +76,8 @@
 , EventKit
 , GSS
 , MetalKit
+  # mingw
+, pkgsBuildBuild
   # optional dependencies
 , cups
 , libmysqlclient
@@ -89,20 +88,16 @@
   # options
 , libGLSupported ? stdenv.hostPlatform.isLinux
 , libGL
-, debug ? false
-, developerBuild ? false
 , qttranslations ? null
 }:
 
 let
-  debugSymbols = debug || developerBuild;
+  isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "qtbase";
 
   inherit src version;
-
-  debug = debugSymbols;
 
   propagatedBuildInputs = [
     libxml2
@@ -110,7 +105,6 @@ stdenv.mkDerivation rec {
     openssl
     sqlite
     zlib
-    unixODBC
     # Text rendering
     harfbuzz
     icu
@@ -119,14 +113,16 @@ stdenv.mkDerivation rec {
     libpng
     pcre2
     pcre
-    libproxy
     zstd
-    double-conversion
     libb2
     md4c
+    double-conversion
+  ] ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    libproxy
     dbus
     glib
     # unixODBC drivers
+    unixODBC
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
@@ -174,21 +170,25 @@ stdenv.mkDerivation rec {
     EventKit
     GSS
     MetalKit
-  ] ++ lib.optional libGLSupported libGL;
+  ] ++ lib.optionals libGLSupported [
+    libGL
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    vulkan-headers
+    vulkan-loader
+  ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
     at-spi2-core
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
     libinput
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     AppKit
     CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional developerBuild gdb
-  ++ lib.optional (cups != null) cups
-  ++ lib.optional (libmysqlclient != null) libmysqlclient
-  ++ lib.optional (postgresql != null) postgresql;
+  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
+  ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
+  ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
@@ -201,10 +201,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  # https://bugreports.qt.io/browse/QTBUG-97568
-  postPatch = ''
-    substituteInPlace src/corelib/CMakeLists.txt --replace-fail "/bin/ls" "${coreutils}/bin/ls"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
   '';
 
@@ -232,7 +229,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
-  ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
+  ] ++ lib.optionals isCrossBuild [
+    "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
+    "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
+  ]
+  ++ lib.optional (qttranslations != null && !isCrossBuild) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
   env.NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
@@ -249,17 +250,21 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
+  '' + lib.optionalString stdenv.isLinux ''
+
+    # FIXME: not sure why this isn't added automatically?
+    patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
   '';
 
-  dontStrip = debugSymbols;
+  dontWrapQtApps = true;
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao LunNova ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

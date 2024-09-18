@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, openssl, curl, postgresql, yajl }:
 
+
 stdenv.mkDerivation rec {
   pname = "kore";
   version = "4.2.3";
@@ -27,14 +28,19 @@ stdenv.mkDerivation rec {
     make platform.h
   '';
 
-  # added to fix build w/gcc7 and clang5
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
-    + lib.optionalString stdenv.cc.isClang " -Wno-error=unknown-warning-option";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error=deprecated-declarations"
+  ] ++ lib.optionals stdenv.cc.isGNU [
+    "-Wno-error=pointer-compare"
+    "-Wno-error=discarded-qualifiers"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=incompatible-pointer-types-discards-qualifiers"
+  ]);
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "An easy to use web application framework for C";
+    description = "Easy to use web application framework for C";
     homepage = "https://kore.io";
     license = licenses.isc;
     platforms = platforms.all;

@@ -4,19 +4,20 @@
 , rustPlatform
 , nix-update-script
 , polaris-web
+, fetchpatch
 , darwin
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "polaris";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
     rev = version;
-    hash = "sha256-YI2IBlZm+RIFcZgXYh9HdxVpSMjPN/s9oBXDrb2V3iE=";
+    hash = "sha256-UC66xRL9GyTPHJ3z0DD/yyI9GlyqelCaHHDyl79ptJg=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".
     # We're unable to simply patch it in the patch phase due to
@@ -30,9 +31,15 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoPatches = [
+    (fetchpatch { # https://github.com/agersant/polaris/pull/213
+      name = "bump-time-crate.patch";
+      url = "https://github.com/agersant/polaris/commit/f625c57d203bdd3f2d7fcd99ccce1032f04d9b91.patch";
+      hash = "sha256-ICScYbSv4sCMbfZN2thhZMXGPcDX89xIhZqBJpGOzrY=";
+    })
+  ];
+
+  cargoHash = "sha256-PnNLSL6YIpM6b3+oCh2eNRNPpCKyvnWEW7uNaYTKzAU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.Security
@@ -57,9 +64,7 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = nixosTests.polaris;
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Self-host your music collection, and access it from any computer and mobile device";

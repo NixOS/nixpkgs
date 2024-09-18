@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "merge3";
-  version = "0.0.14";
+  version = "0.0.15";
 
   format = "pyproject";
 
@@ -15,21 +16,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MEBumThvSmUoD7nEPmgYkPoqHYOcrCdZ0VbHzBYDAVk=";
+    hash = "sha256-0+rCE9hNVt/J45VSrIJGx4YKlAlk6+7YqL5EIvZJK68=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "merge3"
-  ];
+  pythonImportsCheck = [ "merge3" ];
 
   meta = with lib; {
     description = "Python implementation of 3-way merge";
+    mainProgram = "merge3";
     homepage = "https://github.com/breezy-team/merge3";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

@@ -14,6 +14,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Translate bash scripts to fish";
+    mainProgram = "babelfish";
     homepage = "https://github.com/bouk/babelfish";
     license = licenses.mit;
     maintainers = with maintainers; [ bouk kevingriffin ];

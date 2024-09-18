@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchFromGitHub, gerbilPackages, libxml2, ... }:
+{ pkgs, lib, fetchFromGitHub, libxml2, ... }:
 
 {
   pname = "gerbil-libxml";

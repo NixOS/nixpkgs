@@ -1,49 +1,49 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, setuptools
-, pythonOlder
-, fetchPypi
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  setuptools,
+  fetchPypi,
+  substituteAll,
 
-# build
-, autoPatchelfHook
-, attrdict
-, doxygen
-, pkg-config
-, python
-, sip
-, which
+  # build
+  autoPatchelfHook,
+  attrdict,
+  doxygen,
+  pkg-config,
+  python,
+  sip,
+  which,
+  buildPackages,
 
-# runtime
-, cairo
-, gst_all_1
-, gtk3
-, libGL
-, libGLU
-, libSM
-, libXinerama
-, libXtst
-, libXxf86vm
-, libglvnd
-, mesa
-, pango
-, SDL
-, webkitgtk
-, wxGTK
-, xorgproto
+  # runtime
+  cairo,
+  gst_all_1,
+  gtk3,
+  libGL,
+  libGLU,
+  libSM,
+  libXinerama,
+  libXtst,
+  libXxf86vm,
+  libglvnd,
+  mesa,
+  pango,
+  SDL,
+  webkitgtk,
+  wxGTK,
+  xorgproto,
 
-# propagates
-, numpy
-, pillow
-, six
+  # propagates
+  numpy,
+  pillow,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.1";
   format = "other";
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "wxPython";
@@ -60,6 +60,13 @@ buildPythonPackage rec {
     })
   ];
 
+  # https://github.com/wxWidgets/Phoenix/issues/2575
+  postPatch = ''
+    ln -s ${lib.getExe buildPackages.waf} bin/waf
+    substituteInPlace build.py \
+      --replace-fail "distutils.dep_util" "setuptools.modified"
+  '';
+
   nativeBuildInputs = [
     attrdict
     pkg-config
@@ -68,27 +75,27 @@ buildPythonPackage rec {
     sip
     which
     wxGTK
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    wxGTK
-    SDL
-  ] ++ lib.optionals stdenv.isLinux [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
-    libGL
-    libGLU
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
-    libglvnd
-    mesa
-    webkitgtk
-    xorgproto
-  ];
+  buildInputs =
+    [
+      wxGTK
+      SDL
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      libGL
+      libGLU
+      libSM
+      libXinerama
+      libXtst
+      libXxf86vm
+      libglvnd
+      mesa
+      webkitgtk
+      xorgproto
+    ];
 
   propagatedBuildInputs = [
     numpy
@@ -102,12 +109,12 @@ buildPythonPackage rec {
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
     export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
+    export WAF=$PWD/bin/waf
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
 
     runHook postBuild
   '';
-
 
   installPhase = ''
     runHook preInstall
@@ -125,7 +132,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
 
   meta = with lib; {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";

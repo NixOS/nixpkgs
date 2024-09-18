@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/${pname}/${pname}_${version}_amd64.deb";
+    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/msalsdk-dbusclient/msalsdk-dbusclient_${version}_amd64.deb";
     hash = "sha256-AVPrNxCjXGza2gGETP0YrlXeEgI6AjlrSVTtqKb2UBI=";
   };
 

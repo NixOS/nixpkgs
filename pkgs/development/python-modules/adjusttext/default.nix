@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, packaging
-, pythonOlder
-, scipy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  packaging,
+  pythonOlder,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "adjusttext";
-  version = "1.0.4";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Phlya";
     repo = "adjusttext";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Lhl6ykx5ynf+pBub5tBUaALm1w/88jbuSXPigE216NY=";
+    hash = "sha256-2EaFKvRdFPGnDlO8owjP1vCIY1hTQ3tep5oXV/JeU9M=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +38,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adjustText"
-  ];
+  pythonImportsCheck = [ "adjustText" ];
 
   meta = with lib; {
     description = "Iteratively adjust text position in matplotlib plots to minimize overlaps";

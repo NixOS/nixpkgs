@@ -5,7 +5,7 @@
 , pkg-config
 , portaudio
 , SDL2
-, ffmpeg_4
+, ffmpeg_7
 , udev
 , libusb1
 , libv4l
@@ -21,32 +21,32 @@
 # can be turned off if used as a library
 , useGtk ? true
 , gtk3 ? null
-, wrapGAppsHook ? null
+, wrapGAppsHook3 ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "2.0.6";
+  version = "2.1.0";
   pname = "guvcview";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.gz";
-    sha256 = "11byyfpkcik7wvf2qic77zjamfr2rhji97dpj1gy2fg1bvpiqf4m";
+    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.bz2";
+    hash = "sha256-PZPkyfq40aepveGm278E1s+dNHwTS1EotFhqHZC2PPs=";
   };
 
   nativeBuildInputs = [
     intltool
     pkg-config
   ]
-    ++ lib.optionals (useGtk) [ wrapGAppsHook ]
+    ++ lib.optionals (useGtk) [ wrapGAppsHook3 ]
     ++ lib.optionals (useQt) [ wrapQtAppsHook ]
   ;
 
   buildInputs = [
     SDL2
     alsa-lib
-    ffmpeg_4
+    ffmpeg_7
     libusb1
     libv4l
     portaudio
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
   ;
 
   meta = with lib; {
-    description = "A simple interface for devices supported by the linux UVC driver";
+    description = "Simple interface for devices supported by the linux UVC driver";
+    mainProgram = "guvcview";
     homepage = "https://guvcview.sourceforge.net";
     maintainers = [ maintainers.coconnor ];
     license = licenses.gpl3;

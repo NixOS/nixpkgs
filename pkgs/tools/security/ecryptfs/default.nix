@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, perl, util-linux, keyutils, nss, nspr, python2, pam, enablePython ? false
-, intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
+, intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "ecryptfs";
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
         --prefix PATH ":" "$out/bin"
     done
   '';
+
+  passthru.tests = { inherit (nixosTests) ecryptfs; };
 
   meta = with lib; {
     description = "Enterprise-class stacked cryptographic filesystem";

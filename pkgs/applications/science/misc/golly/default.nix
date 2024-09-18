@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
     wxGTK perl python3 zlib libGLU libGL libX11 SDL2
   ];
 
+  nativeBuildInputs = [
+    (python3.withPackages (ps: [ps.setuptools]))
+  ];
+
   setSourceRoot = ''
     sourceRoot=$(echo */gui-wx)
   '';

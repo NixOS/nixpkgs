@@ -1,5 +1,5 @@
 { lib, stdenv
-, addOpenGLRunpath
+, addDriverRunpath
 , config
 , cudaPackages ? {}
 , cudaSupport ? config.cudaSupport
@@ -21,13 +21,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-     # Select libstdc++ or libc++ based on stdenv
      # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
-  '' + lib.optionalString (stdenv.cc.libcxx != null) ''
-      --replace "-lstdc++" "-lc++ -l${stdenv.cc.libcxx.cxxabi.libName}" \
-  '' + ''
       --replace "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
       --replace "/usr/bin/ar" "ar" \
       --replace "/usr/bin/sed" "sed" \
@@ -37,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   buildInputs = [ opencl-headers xxHash ]
@@ -75,15 +71,16 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString cudaSupport ''
     for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
       isELF "$program" || continue
-      addOpenGLRunpath "$program"
+      addDriverRunpath "$program"
     done
   '';
 
   meta = with lib; {
     description = "Fast password cracker";
+    mainProgram = "hashcat";
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ felixalbrigtsen kierdavis zimbatm ];
+    maintainers = with maintainers; [ felixalbrigtsen zimbatm ];
   };
 }

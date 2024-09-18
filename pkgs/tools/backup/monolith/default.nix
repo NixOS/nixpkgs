@@ -25,10 +25,11 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
-  checkFlagsArray = [ "--skip=tests::cli" ];
+  checkFlags = [ "--skip=tests::cli" ];
 
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";
+    mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.unlicense;
     maintainers = with maintainers; [ Br1ght0ne ];

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zope-proxy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope-proxy,
 }:
 
 buildPythonPackage rec {
   pname = "zope.location";
-  version = "4.3";
+  version = "5.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fx7tyKIOw6isJxOaqQzyd/93dy6gMrVLaicBp5J7OsU=";
+    hash = "sha256-AW/qk0uX2tKwimTqfy+8PeVduwdMRh9m2HHHC/OqrqU=";
   };
 
   propagatedBuildInputs = [ zope-proxy ];
@@ -26,7 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.location/";
     description = "Zope Location";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
-
 }

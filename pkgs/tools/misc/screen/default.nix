@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , ncurses
 , libxcrypt
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "4.9.1";
 
   src = fetchurl {
-    url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/screen/screen-${version}.tar.gz";
     hash = "sha256-Js7z48QlccDUhK1vrxEMXBUJH7+HKwb6eqR2bHQFrGk=";
   };
 
@@ -39,8 +38,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";
-    description = "A window manager that multiplexes a physical terminal";
-    license = licenses.gpl2Plus;
+    description = "Window manager that multiplexes a physical terminal";
+    license = licenses.gpl3Plus;
 
     longDescription =
       '' GNU Screen is a full-screen window manager that multiplexes a physical
@@ -65,6 +64,6 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

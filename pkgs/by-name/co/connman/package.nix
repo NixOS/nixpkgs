@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , dbus
 , file
@@ -166,11 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.connman = nixosTests.connman;
 
   meta = {
-    description = "A daemon for managing internet connections";
+    description = "Daemon for managing internet connections";
     homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/about/";
     license = lib.licenses.gpl2Only;
     mainProgram = "connmanctl";
-    maintainers = with lib.maintainers; [ eclairevoyant AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

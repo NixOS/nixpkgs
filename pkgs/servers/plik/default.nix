@@ -15,7 +15,10 @@ in
 
   inherit (programs) plik plikd-unwrapped;
 
-  plikd = runCommand "plikd-${version}" { nativeBuildInputs = [ makeWrapper ]; } ''
+  plikd = runCommand "plikd-${version}" {
+    nativeBuildInputs = [ makeWrapper ];
+    inherit (programs.plikd-unwrapped) passthru;
+  } ''
     mkdir -p $out/libexec/plikd/{bin,webapp} $out/bin
     tar xf ${webapp} plik-${version}-linux-amd64/webapp/dist/
     mv plik-*/webapp/dist $out/libexec/plikd/webapp

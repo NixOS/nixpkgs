@@ -14,7 +14,6 @@
 , openssl
 , lua5_4
 , pcre2
-, systemd
 }:
 
 assert lib.assertOneOf "sslLibrary" sslLibrary [ "quictls" "openssl" "libressl" "wolfssl" ];
@@ -29,17 +28,16 @@ let
   sslPkg = sslPkgs.${sslLibrary};
 in stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "2.9.5";
+  version = "3.0.4";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MreFsSiDj0IYuNVGkMhsSHlNA/gXy7Yn+0h2n3nv1Zs=";
+    hash = "sha256-qr/ZitpyG7+2j3gFWGztA3P7TI1z4Y+qlAVaFsIJaTY";
   };
 
   buildInputs = [ sslPkg zlib libxcrypt ]
     ++ lib.optional useLua lua5_4
-    ++ lib.optional usePcre pcre2
-    ++ lib.optional stdenv.isLinux systemd;
+    ++ lib.optional usePcre pcre2;
 
   # TODO: make it work on bsd as well
   makeFlags = [

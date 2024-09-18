@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/PeterPawn/decoder";
     description = ''"secrets" decoding for FRITZ!OS devices'';
+    mainProgram = "decoder";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ Luflosi ];

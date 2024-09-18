@@ -1,41 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-cloud-core
-, google-cloud-iam
-, google-cloud-kms
-, google-cloud-testutils
-, google-resumable-media
-, mock
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-cloud-core,
+  google-cloud-iam,
+  google-cloud-kms,
+  google-cloud-testutils,
+  google-resumable-media,
+  mock,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.14.0";
+  version = "2.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LSP89ZtV57RTNnKcFIuxxGRGjGnV77ruMPcgHdkOuX4=";
+    hash = "sha256-STeKv/VO9la1Lcpe8PLrqaqD3CsscseHFLA6GpX+k4g=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "google-auth"
-  ];
+  pythonRelaxDeps = [ "google-auth" ];
 
   propagatedBuildInputs = [
     google-auth
@@ -45,9 +42,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    protobuf = [
-      protobuf
-    ];
+    protobuf = [ protobuf ];
   };
 
   nativeCheckInputs = [
@@ -72,6 +67,7 @@ buildPythonPackage rec {
     "test_open"
     "test_anonymous_client_access_to_public_bucket"
     "test_ctor_w_custom_endpoint_use_auth"
+    "test_ctor_w_api_endpoint_override"
   ];
 
   disabledTestPaths = [
@@ -91,15 +87,13 @@ buildPythonPackage rec {
     rm tests/conformance/test_conformance.py
   '';
 
-  pythonImportsCheck = [
-    "google.cloud.storage"
-  ];
+  pythonImportsCheck = [ "google.cloud.storage" ];
 
   meta = with lib; {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
     changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

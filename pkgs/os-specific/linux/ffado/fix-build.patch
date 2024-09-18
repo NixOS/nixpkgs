@@ -1,9 +1,14 @@
 From b0f2b20b23780dd2e67a01c15462070dd86c4ac1 Mon Sep 17 00:00:00 2001
 From: Jan Tojnar <jtojnar@gmail.com>
 Date: Sun, 3 Mar 2019 11:50:27 +0100
-Subject: [PATCH] Fix build on Nix
+Subject: [PATCH] build: Add datadir option for /usr/share
 
-We do not have global /usr.
+Hardcoded /usr/share does not work for platforms that do not have global /usr like Nix.
+Let’s introduce a new DATADIR option, that allows overriding the directory and use it for metainfodir.
+
+While at it, let’s also use it for SHAREDIR and MANDIR for consistency,
+following the GNU directory convention:
+https://www.gnu.org/prep/standards/html_node/Directory-Variables.html
 ---
  SConstruct | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -12,15 +17,48 @@ diff --git a/SConstruct b/SConstruct
 index 05755e4b..3fbdc1d8 100644
 --- a/SConstruct
 +++ b/SConstruct
-@@ -537,7 +537,7 @@ env['mandir'] = Template( env.destdir + env['MANDIR'] ).safe_substitute( env )
+@@ -49,9 +49,10 @@
+     PathVariable( "BINDIR", "Overwrite the directory where apps are installed to.", "$PREFIX/bin", PathVariable.PathAccept ),
+     PathVariable( "LIBDIR", "Overwrite the directory where libs are installed to.", "$PREFIX/lib", PathVariable.PathAccept ),
+     PathVariable( "INCLUDEDIR", "Overwrite the directory where headers are installed to.", "$PREFIX/include", PathVariable.PathAccept ),
+-    PathVariable( "SHAREDIR", "Overwrite the directory where misc shared files are installed to.", "$PREFIX/share/libffado", PathVariable.PathAccept ),
++    PathVariable( "DATADIR", "Overwrite the directory where platform-independent files are installed to.", "$PREFIX/share", PathVariable.PathAccept ),
++    PathVariable( "SHAREDIR", "Overwrite the directory where misc shared files are installed to.", "$DATADIR/libffado", PathVariable.PathAccept ),
+     PathVariable( "LIBDATADIR", "Location for architecture-dependent data.", "$LIBDIR/libffado", PathVariable.PathAccept ),
+-    PathVariable( "MANDIR", "Overwrite the directory where manpages are installed", "$PREFIX/man", PathVariable.PathAccept ),
++    PathVariable( "MANDIR", "Overwrite the directory where manpages are installed", "$DATADIR/man", PathVariable.PathAccept ),
+     PathVariable( "PYPKGDIR", "The directory where the python modules get installed.",
+         distutils.sysconfig.get_python_lib( prefix="$PREFIX" ), PathVariable.PathAccept ),
+     PathVariable( "UDEVDIR", "Overwrite the directory where udev rules are installed to.", "/lib/udev/rules.d/", PathVariable.PathAccept ),
+@@ -523,6 +524,7 @@
+ env['BINDIR'] = Template( env['BINDIR'] ).safe_substitute( env )
+ env['LIBDIR'] = Template( env['LIBDIR'] ).safe_substitute( env )
+ env['INCLUDEDIR'] = Template( env['INCLUDEDIR'] ).safe_substitute( env )
++env['DATADIR'] = Template( env['DATADIR'] ).safe_substitute( env )
+ env['SHAREDIR'] = Template( env['SHAREDIR'] ).safe_substitute( env )
+ env['LIBDATADIR'] = Template( env['LIBDATADIR'] ).safe_substitute( env )
+ env['UDEVDIR'] = Template( env['UDEVDIR'] ).safe_substitute( env )
+@@ -531,18 +533,21 @@
+ env['bindir'] = Template( env.destdir + env['BINDIR'] ).safe_substitute( env )
+ env['libdir'] = Template( env.destdir + env['LIBDIR'] ).safe_substitute( env )
+ env['includedir'] = Template( env.destdir + env['INCLUDEDIR'] ).safe_substitute( env )
++env['datadir'] = Template( env.destdir + env['DATADIR'] ).safe_substitute( env )
+ env['sharedir'] = Template( env.destdir + env['SHAREDIR'] ).safe_substitute( env )
+ env['libdatadir'] = Template( env.destdir + env['LIBDATADIR'] ).safe_substitute( env )
+ env['mandir'] = Template( env.destdir + env['MANDIR'] ).safe_substitute( env )
  env['pypkgdir'] = Template( env.destdir + env['PYPKGDIR'] ).safe_substitute( env )
  env['udevdir'] = Template( env.destdir + env['UDEVDIR'] ).safe_substitute( env )
  env['PYPKGDIR'] = Template( env['PYPKGDIR'] ).safe_substitute( env )
 -env['metainfodir'] = Template( env.destdir + "/usr/share/metainfo" ).safe_substitute( env )
-+env['metainfodir'] = Template( env.destdir + env['SHAREDIR'] + "/metainfo" ).safe_substitute( env )
- 
+-
++env['metainfodir'] = Template( env.destdir + env['DATADIR'] + "/metainfo" ).safe_substitute( env )
++
++env.Command( target=env['datadir'], source="", action=Mkdir( env['datadir'] ) )
  env.Command( target=env['sharedir'], source="", action=Mkdir( env['sharedir'] ) )
  
--- 
-2.19.2
-
+ env.Alias( "install", env['libdir'] )
+ env.Alias( "install", env['includedir'] )
++env.Alias( "install", env['datadir'] )
+ env.Alias( "install", env['sharedir'] )
+ env.Alias( "install", env['libdatadir'] )
+ env.Alias( "install", env['bindir'] )

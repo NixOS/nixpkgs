@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pet";
-  version = "0.6.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "knqyf263";
     repo = "pet";
     rev = "v${version}";
-    sha256 = "sha256-r0pXqivfPnG4srEDKeu5MXd+rrTARfOXolI4qZPlC6w=";
+    sha256 = "sha256-h6e7X93uU/rdTrCz5xJcNtpDbzcF/2Z186b4dHkp9jM=";
   };
 
-  vendorHash = "sha256-A3VHpSJc6NJz8ojg6iSnQlIXbf9m1JCzg9Vnoie0ffU=";
+  vendorHash = "sha256-hf2I5xHloqcXDlC8frxtCiQx2PlTmKmyd1mrzF2UdDo=";
 
   ldflags = [
     "-s" "-w" "-X=github.com/knqyf263/pet/cmd.version=${version}"
@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
+    mainProgram = "pet";
     homepage = "https://github.com/knqyf263/pet";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];

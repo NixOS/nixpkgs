@@ -7,12 +7,12 @@ let
 in
 {
   options.services.oxidized = {
-    enable = mkEnableOption (lib.mdDoc "the oxidized configuration backup service");
+    enable = mkEnableOption "the oxidized configuration backup service";
 
     user = mkOption {
       type = types.str;
       default = "oxidized";
-      description = lib.mdDoc ''
+      description = ''
         User under which the oxidized service runs.
       '';
     };
@@ -20,7 +20,7 @@ in
     group = mkOption {
       type = types.str;
       default = "oxidized";
-      description = lib.mdDoc ''
+      description = ''
         Group under which the oxidized service runs.
       '';
     };
@@ -28,7 +28,7 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/oxidized";
-      description = lib.mdDoc "State directory for the oxidized service.";
+      description = "State directory for the oxidized service.";
     };
 
     configFile = mkOption {
@@ -62,7 +62,7 @@ in
           # ... additional config
         ''';
       '';
-      description = lib.mdDoc ''
+      description = ''
         Path to the oxidized configuration file.
       '';
     };
@@ -76,7 +76,7 @@ in
           # ... additional hosts
         '''
       '';
-      description = lib.mdDoc ''
+      description = ''
         Path to the file/database which contains the targets for oxidized.
       '';
     };

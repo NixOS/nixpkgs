@@ -5,7 +5,7 @@ buildNpmPackage rec {
   version = "0.1.36";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@githubnext/${pname}/-/${pname}-${version}.tgz";
+    url = "https://registry.npmjs.org/@githubnext/github-copilot-cli/-/github-copilot-cli-${version}.tgz";
     hash = "sha256-7n+7sN61OrqMVGaKll85+HwX7iGG9M/UW5lf2Pd5sRU=";
   };
 
@@ -18,7 +18,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = with lib; {
-    description = "A CLI experience for letting GitHub Copilot help you on the command line";
+    description = "CLI experience for letting GitHub Copilot help you on the command line";
     homepage = "https://githubnext.com/projects/copilot-cli/";
     license = licenses.unfree; # upstream has no license
     maintainers = [ maintainers.malo ];

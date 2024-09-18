@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A library providing a framework for dockapps";
+    description = "Library providing a framework for dockapps";
     homepage = "https://www.dockapps.net/libdockapp";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];

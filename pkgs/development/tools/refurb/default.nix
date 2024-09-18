@@ -5,20 +5,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "refurb";
-  version = "1.28.0";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dosisod";
     repo = "refurb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b7Id2Oyjw3NZno56IMDIq7fn5u9+jn42nuae8ix90fM=";
+    hash = "sha256-6MchaqRKJPmvwiDyhCK4kFyIYl2B+2dGL8H8X2ES+VQ=";
   };
-
-  postPatch = ''
-    # remove --cov* options provided to pytest
-    sed -i '/^addopts = "--cov/d' pyproject.toml
-  '';
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
@@ -43,6 +38,7 @@ python3Packages.buildPythonApplication rec {
     pluggy
     py
     pyparsing
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -55,7 +51,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A tool for refurbishing and modernizing Python codebases";
+    description = "Tool for refurbishing and modernizing Python codebases";
+    mainProgram = "refurb";
     homepage = "https://github.com/dosisod/refurb";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ knl ];

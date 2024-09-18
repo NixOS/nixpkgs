@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zEmTGiBWCWioZIycoHkIWXYIXqltWaAbHhfLVa8P/kI=";
+    url = "mirror://sourceforge/enlightenment/imlib2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-liRGVldqPgpvWLeOUU3ckZYirGgGcRvCMYN+7mLB3jQ=";
   };
 
   buildInputs = [
@@ -96,6 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.imlib2;
     pkgConfigModules = [ "imlib2" ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

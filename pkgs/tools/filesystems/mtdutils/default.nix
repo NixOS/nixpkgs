@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
-  version = "2.1.6";
+  version = "2.2.0";
 
   src = fetchgit {
     url = "git://git.infradead.org/mtd-utils.git";
     rev = "v${version}";
-    sha256 = "sha256-NMYzUPt/91lv8f7E1ytX91SqwbBEOtHjCL54EcumcZA=";
+    hash = "sha256-uYXzZnVL5PkyDAntH8YsocwmQ8tf1f0Vl78SdE2B+Oc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib; [
-    (enableFeature doCheck "unit-tests")
-    (enableFeature doCheck "tests")
+  configureFlags = [
+    (lib.enableFeature doCheck "unit-tests")
+    (lib.enableFeature doCheck "tests")
   ];
 
   makeFlags = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://git.infradead.org/mtd-utils.git";
     license = licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with maintainers; [ viric ];
+    maintainers = with lib.maintainers; [ skeuchel ];
     platforms = with platforms; linux;
   };
 }

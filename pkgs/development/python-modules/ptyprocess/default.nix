@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, flit-core
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  flit-core,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,25 +26,23 @@ buildPythonPackage rec {
       url = "https://github.com/pexpect/ptyprocess/commit/40c1ccf3432a6787be1801ced721540e34c6cd87.patch";
       hash = "sha256-IemngBqBq3QRCmVscWtsuXHiFgvTOJIIB9SyAvsqHd0=";
     })
+    (fetchpatch {
+      url = "https://github.com/pexpect/ptyprocess/commit/a44312974bd9084aa568d2e18ce5b2a7e0e45983.patch";
+      hash = "sha256-DEO4FbzKNAXADYocSQhhwjQTGGu9V5pqd38u1sWhpOI=";
+    })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ptyprocess"
-  ];
+  pythonImportsCheck = [ "ptyprocess" ];
 
-  meta = with lib; {
+  meta = {
     description = "Run a subprocess in a pseudo terminal";
     homepage = "https://github.com/pexpect/ptyprocess";
     changelog = "https://github.com/pexpect/ptyprocess/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

@@ -17,8 +17,11 @@ let
       sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf automake ];
-    buildInputs = [popt avahi python3 gtk3 which procps libiberty_static];
+    nativeBuildInputs = [
+      pkg-config autoconf automake which
+      (python3.withPackages (p: [ p.setuptools ]))
+    ];
+    buildInputs = [ popt avahi gtk3 procps libiberty_static ];
     preConfigure =
     ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
@@ -72,7 +75,7 @@ let
     };
 
     meta = {
-      description = "A fast, free distributed C/C++ compiler";
+      description = "Fast, free distributed C/C++ compiler";
       homepage = "http://distcc.org";
       license = "GPL";
 

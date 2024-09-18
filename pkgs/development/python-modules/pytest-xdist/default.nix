@@ -1,46 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
-, filelock
-, execnet
-, pytest
-, psutil
-, setproctitle
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  filelock,
+  execnet,
+  pytest,
+  psutil,
+  setproctitle,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "3.5.0";
+  version = "3.6.1";
   disabled = pythonOlder "3.7";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-y7NvPWfgxHi6pX+k7ciEOIfg9s/ELWd1MKNtdHKzLYo=";
+    pname = "pytest_xdist";
+    inherit version;
+    hash = "sha256-6tFWpNsjHux2lzf1dmjvWKIISjSy5VxKj6INhhEHMA0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    execnet
-  ];
+  dependencies = [ execnet ];
 
   nativeCheckInputs = [
     filelock
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     psutil = [ psutil ];
     setproctitle = [ setproctitle ];
   };

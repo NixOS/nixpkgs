@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "darkhttpd";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "emikulic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G1lh3nHo2iU/dkiBykl5+DSIC2c6SCqqv42Bw0Frz3A=";
+    sha256 = "sha256-dcNoGU08tu950PlwSghoZwGSaSbP8NJ5qhWUi3bAtZY=";
   };
 
   enableParallelBuilding = true;
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small and secure static webserver";
+    mainProgram = "darkhttpd";
     homepage = "https://unix4lyfe.org/darkhttpd/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bobvanderlinden ];

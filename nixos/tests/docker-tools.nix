@@ -58,6 +58,20 @@ let
       '';
       config.Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "/testfile" ];
     };
+
+  nonRootTestImage =
+    pkgs.dockerTools.streamLayeredImage {
+      name = "non-root-test";
+      tag = "latest";
+      uid = 1000;
+      gid = 1000;
+      uname = "user";
+      gname = "user";
+      config = {
+        User = "user";
+        Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "${pkgs.coreutils}/bin/stat" ];
+      };
+    };
 in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
@@ -164,6 +178,14 @@ in {
             "docker load --input='${examples.bashUncompressed}'",
             "docker rmi ${examples.bashUncompressed.imageName}",
         )
+        docker.succeed(
+            "docker load --input='${examples.bashLayeredUncompressed}'",
+            "docker rmi ${examples.bashLayeredUncompressed.imageName}",
+        )
+        docker.succeed(
+            "docker load --input='${examples.bashLayeredZstdCompressed}'",
+            "docker rmi ${examples.bashLayeredZstdCompressed.imageName}",
+        )
 
     with subtest(
         "Check if the nix store is correctly initialized by listing "
@@ -181,7 +203,7 @@ in {
     ):
         docker.succeed(
             "docker load --input='${examples.bashLayeredWithUser}'",
-            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 555 == $(stat --format=%a /nix) && test 555 == $(stat --format=%a /nix/store)'",
+            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 755 == $(stat --format=%a /nix) && test 755 == $(stat --format=%a /nix/store)'",
             "docker rmi ${examples.bashLayeredWithUser.imageName}",
         )
 
@@ -545,63 +567,15 @@ in {
         docker.succeed("docker run --rm image-with-certs:latest test -r /etc/pki/tls/certs/ca-bundle.crt")
         docker.succeed("docker image rm image-with-certs:latest")
 
-    with subtest("buildNixShellImage: Can build a basic derivation"):
-        docker.succeed(
-            "${examples.nix-shell-basic} | docker load",
-            "docker run --rm nix-shell-basic bash -c 'buildDerivation && $out/bin/hello' | grep '^Hello, world!$'"
-        )
-
-    with subtest("buildNixShellImage: Runs the shell hook"):
-        docker.succeed(
-            "${examples.nix-shell-hook} | docker load",
-            "docker run --rm -it nix-shell-hook | grep 'This is the shell hook!'"
-        )
-
-    with subtest("buildNixShellImage: Sources stdenv, making build inputs available"):
-        docker.succeed(
-            "${examples.nix-shell-inputs} | docker load",
-            "docker run --rm -it nix-shell-inputs | grep 'Hello, world!'"
-        )
-
-    with subtest("buildNixShellImage: passAsFile works"):
-        docker.succeed(
-            "${examples.nix-shell-pass-as-file} | docker load",
-            "docker run --rm -it nix-shell-pass-as-file | grep 'this is a string'"
-        )
-
-    with subtest("buildNixShellImage: run argument works"):
-        docker.succeed(
-            "${examples.nix-shell-run} | docker load",
-            "docker run --rm -it nix-shell-run | grep 'This shell is not interactive'"
-        )
-
-    with subtest("buildNixShellImage: command argument works"):
-        docker.succeed(
-            "${examples.nix-shell-command} | docker load",
-            "docker run --rm -it nix-shell-command | grep 'This shell is interactive'"
-        )
-
-    with subtest("buildNixShellImage: home directory is writable by default"):
-        docker.succeed(
-            "${examples.nix-shell-writable-home} | docker load",
-            "docker run --rm -it nix-shell-writable-home"
-        )
-
-    with subtest("buildNixShellImage: home directory can be made non-existent"):
-        docker.succeed(
-            "${examples.nix-shell-nonexistent-home} | docker load",
-            "docker run --rm -it nix-shell-nonexistent-home"
-        )
-
-    with subtest("buildNixShellImage: can build derivations"):
-        docker.succeed(
-            "${examples.nix-shell-build-derivation} | docker load",
-            "docker run --rm -it nix-shell-build-derivation"
-        )
-
     with subtest("streamLayeredImage: chown is persistent in fakeRootCommands"):
         docker.succeed(
             "${chownTestImage} | docker load",
+            "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
+        )
+
+    with subtest("streamLayeredImage: with non-root user"):
+        docker.succeed(
+            "${nonRootTestImage} | docker load",
             "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
   '';

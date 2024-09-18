@@ -16,12 +16,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-HCP1OUWm/17e73TbinmDxYUi18/KXxppstyUSixjlSo=";
   };
 
-  cargoSha256 = "sha256-4r4NTq2rLnpmm/nwxJ9RoN2+JrUI6XKGfYFI78NY710=";
+  cargoHash = "sha256-4r4NTq2rLnpmm/nwxJ9RoN2+JrUI6XKGfYFI78NY710=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Lightning-fast linter for .env files. Written in Rust";
+    mainProgram = "dotenv-linter";
     homepage = "https://dotenv-linter.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ humancalico ];

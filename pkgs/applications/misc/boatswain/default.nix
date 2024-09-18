@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Control Elgato Stream Deck devices.";
+    description = "Control Elgato Stream Deck devices";
     homepage = "https://gitlab.gnome.org/World/boatswain";
     mainProgram = "boatswain";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, python3, cmake, jq, libX11, libXext, zlib }:
+{ lib, stdenv, fetchgit, python3, cmake, jq }:
 
 stdenv.mkDerivation rec {
   pname = "swiftshader";
@@ -7,7 +7,14 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://swiftshader.googlesource.com/SwiftShader";
     rev = "4e40d502c440cc59b25fa3a5fee0eadbab7442aa";
-    sha256 = "085bdqn80s7zw5h2pz6xff3j34hmkxb9wxzgjmzdr9c24zwp2k1c";
+    hash = "sha256-YtbTaOkFhVMKdu3jiRHQsPmoEu3KDzIQXLZ5HFBSmWI=";
+    # Remove 1GB of test files to get under Hydra output limit
+    postFetch = ''
+      rm -r $out/third_party/llvm-project/llvm/test
+      rm -r $out/third_party/json/test
+      rm -r $out/third_party/cppdap/third_party/json/test
+      rm -r $out/third_party/llvm-project/clang/test
+    '';
   };
 
   nativeBuildInputs = [ cmake python3 jq ];

@@ -34,6 +34,8 @@ in {
     gitlab = { ... }: {
       imports = [ common/user-account.nix ];
 
+      environment.systemPackages = with pkgs; [ git ];
+
       virtualisation.memorySize = 6144;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
@@ -89,6 +91,10 @@ in {
           dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
           jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
+
+        # reduce memory usage
+        sidekiq.concurrency = 1;
+        puma.workers = 2;
       };
     };
   };

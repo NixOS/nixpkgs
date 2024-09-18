@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , gmp
 , mpfr
@@ -24,16 +25,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ezEaAFA6hjiB64F32+uEMi8pOZ89fXLzsaTJuh1XlLQ=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/flintlib/flint/commit/e7d005c369754243cba32bd782ea2a5fc874fde5.diff";
+      hash = "sha256-IqEtYEpNVXfoTeerh/0ig+eDqUpAlGdBB3uO8ShYh3o=";
+    })
+  ];
+
+  nativeBuildInputs = [
     autoconf
     automake
     gettext
     libtool
   ];
 
+  propagatedBuildInputs = [
+    mpfr
+  ];
+
   buildInputs = [
     gmp
-    mpfr
   ] ++ lib.optionals withBlas [
     openblas
   ] ++ lib.optionals withNtl [

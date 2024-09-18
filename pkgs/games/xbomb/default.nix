@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.gedanken.org.uk/software/xbomb/";
     description = "Minesweeper for X11 with various grid sizes and shapes";
+    mainProgram = "xbomb";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

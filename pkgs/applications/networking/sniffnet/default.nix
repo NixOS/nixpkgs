@@ -3,28 +3,30 @@
 , fetchFromGitHub
 , pkg-config
 , libpcap
+, libxkbcommon
 , openssl
 , stdenv
 , alsa-lib
 , expat
 , fontconfig
 , vulkan-loader
+, wayland
 , xorg
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.2.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wIyPb1RxvjkGu3Gs69HyL1WuLZUIFWB8URJjkz3oar0=";
+    hash = "sha256-wepy56LOhliU6t0ZRPviEbZtsWNqrtUnpUXsEdkRDqI=";
   };
 
-  cargoHash = "sha256-iB8KL0ad+rI4HuZLgb7KqfrUBTQuKRWjqaa6BnHU5eg=";
+  cargoHash = "sha256-cV3WhidnH2CBlmHa3IVHTQfTuPdSHwwY0XhgNPyLDN4=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -62,7 +64,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/sniffnet \
-      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 libxkbcommon wayland ]}
   '';
 
   meta = with lib; {

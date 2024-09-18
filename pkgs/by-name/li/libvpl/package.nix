@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, substituteAll
+, addDriverRunpath
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = finalAttrs.pname;
+    repo = "libvpl";
     rev = "v${finalAttrs.version}";
     hash = "sha256-2yfJo4iwI/h0CJ+mJJ3cAyG5S7KksUibwJHebF3MR+E=";
   };
@@ -30,6 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
       "-DENABLE_X11=ON"
       "-DINSTALL_EXAMPLE_CODE=OFF"
       "-DBUILD_TOOLS=OFF"
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./opengl-driver-lib.patch;
+      inherit (addDriverRunpath) driverLink;
+    })
   ];
 
   meta = with lib; {

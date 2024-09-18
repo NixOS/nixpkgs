@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "cegui";
-  version = "unstable-2023-03-18";
+  version = "0-unstable-2023-03-18";
 
   src = fetchFromGitHub {
     owner = "paroj";
@@ -47,11 +47,18 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater {
     branch = "v0";
+    # The above branch is separate from the branch with the latest tags, so the updater doesn't pick them up
+    # This is what would be used to handle upstream's format, if it was able to see the tags
+    # tagConverter = writeShellScript "cegui-tag-converter.sh" ''
+    #   sed -e 's/^v//g' -e 's/-/./g'
+    # '';
+    hardcodeZeroVersion = true;
   };
 
   meta = with lib; {
     homepage = "http://cegui.org.uk/";
     description = "C++ Library for creating GUIs";
+    mainProgram = "CEGUISampleFramework-0.9999";
     license = licenses.mit;
     platforms = platforms.unix;
   };

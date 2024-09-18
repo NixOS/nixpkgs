@@ -5,5 +5,4 @@ graphical stuff. It's a very short file that enables
 [noXlibs](#opt-environment.noXlibs), sets
 [](#opt-i18n.supportedLocales) to
 only support the user-selected locale,
-[disables packages' documentation](#opt-documentation.enable),
-and [disables sound](#opt-sound.enable).
+and [disables packages' documentation](#opt-documentation.enable).

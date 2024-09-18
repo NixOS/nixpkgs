@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pythonAtLeast
-, flit-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  flit-core,
+  pytestCheckHook,
 }:
 
 let
@@ -29,18 +29,14 @@ buildPythonPackage {
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # remove coverage configuration
   preCheck = ''
     rm pytest.ini
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Sans-I/O implementation of SOCKS4, SOCKS4A, and SOCKS5";

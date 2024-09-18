@@ -6,14 +6,14 @@ in
 {
   options = {
     services.asusd = {
-      enable = lib.mkEnableOption (lib.mdDoc "the asusd service for ASUS ROG laptops");
+      enable = lib.mkEnableOption "the asusd service for ASUS ROG laptops";
 
       package = lib.mkPackageOption pkgs "asusctl" { };
 
       enableUserService = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Activate the asusd-user service.
         '';
       };
@@ -21,7 +21,7 @@ in
       animeConfig = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The content of /etc/asusd/anime.ron.
           See https://asus-linux.org/asusctl/#anime-control.
         '';
@@ -30,7 +30,7 @@ in
       asusdConfig = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The content of /etc/asusd/asusd.ron.
           See https://asus-linux.org/asusctl/.
         '';
@@ -39,7 +39,7 @@ in
       auraConfig = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The content of /etc/asusd/aura.ron.
           See https://asus-linux.org/asusctl/#led-keyboard-control.
         '';
@@ -48,7 +48,7 @@ in
       profileConfig = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The content of /etc/asusd/profile.ron.
           See https://asus-linux.org/asusctl/#profiles.
         '';
@@ -57,7 +57,7 @@ in
       fanCurvesConfig = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
           The content of /etc/asusd/fan_curves.ron.
           See https://asus-linux.org/asusctl/#fan-curves.
         '';
@@ -66,7 +66,7 @@ in
       userLedModesConfig = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The content of /etc/asusd/asusd-user-ledmodes.ron.
           See https://asus-linux.org/asusctl/#led-keyboard-control.
         '';

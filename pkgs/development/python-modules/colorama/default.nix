@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, hatchling, pytestCheckHook }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  hatchling,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "colorama";
@@ -21,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tartley/colorama";
     changelog = "https://github.com/tartley/colorama/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

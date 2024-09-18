@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, execnet }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  execnet,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-cache";

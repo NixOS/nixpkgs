@@ -6,19 +6,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "browsr";
-  version = "1.18.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ygqoz1rNQwhU1/8NsHwQsSCqQ8gYwHEaAuIaVMCtKKA=";
+    hash = "sha256-76OzJOunZRVSGalQiyX+TSukD8rRIFHxA713NqOn3PY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     pandas
     pillow
     pymupdf
+    pyperclip
     rich
     rich-click
     rich-pixels
@@ -56,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     "art"
     "pandas"
     "pymupdf"
+    "pyperclip"
     "rich-click"
     "rich-pixels"
     "rich"
@@ -75,12 +76,16 @@ python3.pkgs.buildPythonApplication rec {
     "test_github_screenshot"
     "test_github_screenshot_license"
     "test_textual_app_context_path_github"
+    "test_mkdocs_screenshot"
+    # Different output
+    "test_textual_app_context_path"
   ];
 
   meta = with lib; {
-    description = "A file explorer in your terminal";
+    description = "File explorer in your terminal";
+    mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
-    changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
+    changelog = "https://github.com/juftin/browsr/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

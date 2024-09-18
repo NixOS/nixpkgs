@@ -17,14 +17,12 @@
 , withMPI ? false
   # for doc
 , texliveMedium
-, pandoc
 , enableDocs ? true
   # for tests
 , bash
 , bc
 , openssh # required by MPI
 , perl
-, perlPackages
 , python3
 , enableTests ? true
 }:

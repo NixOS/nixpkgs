@@ -13,11 +13,11 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.10.0";
+    version = "6.11.1";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-      sha256 = "sha256-B5Sf+zM7h9BiFqDYrLS0JdqZi3dGy6H9gAaJIN3izeM=";
+      hash = "sha256-By9T43GLM1J63TkRi3kl05h1RflBorU1QHgYOrXQ9N0=";
       stripRoot = false;
     };
 
@@ -84,7 +84,7 @@ let
   };
   in
   buildFHSEnv {
-    inherit (package) pname meta;
+    inherit (package) pname version meta;
     runScript = "${package.outPath}/bin/stm32cubemx";
     targetPkgs = pkgs:
       with pkgs; [

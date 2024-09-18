@@ -1,14 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cronutils";
   version = "1.10";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -43,12 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-format-nonliteral"
   ]);
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     changelog = "https://github.com/google/cronutils/releases/tag/version%2F${finalAttrs.version}";
     description = "Utilities to assist running periodic batch processing jobs";
     homepage = "https://github.com/google/cronutils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ katexochen ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ katexochen ];
+    platforms = lib.platforms.all;
   };
 })

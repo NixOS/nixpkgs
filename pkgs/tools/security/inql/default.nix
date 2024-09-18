@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Security testing tool for GraphQL";
+    mainProgram = "inql";
     homepage = "https://github.com/doyensec/inql";
     changelog = "https://github.com/doyensec/inql/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

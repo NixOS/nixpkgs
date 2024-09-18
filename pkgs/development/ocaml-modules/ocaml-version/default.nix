@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "ocaml-version";
-  version = "3.6.2";
+  version = "3.6.8";
 
   src = fetchurl {
     url = "https://github.com/ocurrent/ocaml-version/releases/download/v${version}/ocaml-version-${version}.tbz";
-    hash = "sha256-XJ0xq71ZiR39phQIULXFDLHoj3HntxLI+v2gR0Bp/rI=";
+    hash = "sha256-mCIeXsvpea/iFuJkvearu6wr804qFPCcH4WOaUKYC9k=";
   };
 
   checkInputs = [ alcotest ];

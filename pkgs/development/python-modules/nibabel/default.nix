@@ -1,33 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, hatch-vcs
-, numpy
-, packaging
-, importlib-resources
-, pydicom
-, pillow
-, h5py
-, scipy
-, git
-, pytest-doctestplus
-, pytest-httpserver
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
+  numpy,
+  packaging,
+  importlib-resources,
+  pydicom,
+  pillow,
+  h5py,
+  scipy,
+  git,
+  pytest-doctestplus,
+  pytest-httpserver,
+  pytest-xdist,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "5.2.0";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Pfjxq5gdG9kvQzHVZVKNEmq5cX/b1M/mj0P80cK/P1I=";
+    hash = "sha256-tsgLLnKOS8K2XxFC2bjSKHqRAqi/hHfhFe8NgzRVmXU=";
   };
 
   nativeBuildInputs = [
@@ -38,28 +40,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     packaging
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   passthru.optional-dependencies = rec {
-    all = dicom
-      ++ dicomfs
-      ++ minc2
-      ++ spm
-      ++ zstd;
-    dicom = [
-      pydicom
-    ];
-    dicomfs = [
-      pillow
-    ] ++ dicom;
-    minc2 = [
-      h5py
-    ];
-    spm = [
-      scipy
-    ];
+    all = dicom ++ dicomfs ++ minc2 ++ spm ++ zstd;
+    dicom = [ pydicom ];
+    dicomfs = [ pillow ] ++ dicom;
+    minc2 = [ h5py ];
+    spm = [ scipy ];
     zstd = [
       # TODO: pyzstd
     ];
@@ -70,12 +58,17 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-httpserver
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ passthru.optional-dependencies.all;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # uses distutils
+    "nisext/tests/test_sexts.py"
+  ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nibabel";

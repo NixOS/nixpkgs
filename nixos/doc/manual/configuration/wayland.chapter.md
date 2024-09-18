@@ -9,7 +9,9 @@ a Wayland Compositor such as sway without separately enabling a Wayland
 server:
 
 ```nix
+{
 programs.sway.enable = true;
+}
 ```
 
 This installs the sway compositor along with some essential utilities.
@@ -19,7 +21,9 @@ If you are using a wlroots-based compositor, like sway, and want to be
 able to share your screen, you might want to activate this option:
 
 ```nix
-xdg.portal.wlr.enable = true;
+{
+  xdg.portal.wlr.enable = true;
+}
 ```
 
 and configure Pipewire using

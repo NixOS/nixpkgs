@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open-source minimalist computing technology";
+    description = "Open-source minimalist computing technology";
     longDescription = ''
       Minimacy is an open-source minimalist computation system based on the principle "Less is more".
       It is designed and programmed by Sylvain Huet.

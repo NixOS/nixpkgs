@@ -1,4 +1,4 @@
-From b10785c1be469319a09b10bc69db21159b0599ee Mon Sep 17 00:00:00 2001
+From e160a8cd4a704f4b7724df02b62394f677cc4198 Mon Sep 17 00:00:00 2001
 From: Sergei Trofimovich <siarheit@google.com>
 Date: Fri, 22 Sep 2023 22:41:49 +0100
 Subject: [PATCH] gcc/file-prefix-map.cc: always mangle __FILE__ into invalid
@@ -14,9 +14,8 @@ Typical examples are `nix` -> `nlohmann_json` and `pipewire` ->
 
 For this reason we want to remove the occurrences of hashes in the
 expansion of `__FILE__`. `nuke-references` does it by replacing hashes
-by `eeeeee...` but those paths are also used for debug symbols. It is
-handy to be able to invert the transformation to go back to the original
-store path for debuginfod servers. The chosen solution is to make the
+by `eeeeee...`. It is handy to be able to invert the transformation to
+go back to the original store path. The chosen solution is to make the
 hash uppercase:
 - it does not trigger runtime references (except for all digit hashes,
   which are unlikely enough)
@@ -42,23 +41,25 @@ Tested as:
     ...
 
 Mangled successfully.
+
+To reverse the effect of the mangle use new `NIX_GCC_DONT_MANGLE_PREFIX_MAP`
+environment variable. It should not normally be needed.
 --- a/gcc/file-prefix-map.cc
 +++ b/gcc/file-prefix-map.cc
-@@ -69,6 +69,9 @@ add_prefix_map (file_prefix_map *&maps, const char *arg, const char *opt)
-   maps = map;
- }
- 
-+/* Forward declaration for a $NIX_STORE remap hack below. */
-+static file_prefix_map *macro_prefix_maps; /* -fmacro-prefix-map  */
-+
- /* Perform user-specified mapping of filename prefixes.  Return the
-    GC-allocated new name corresponding to FILENAME or FILENAME if no
+@@ -74,7 +74,7 @@ add_prefix_map (file_prefix_map *&maps, const char *arg, const char *opt)
     remapping was performed.  */
-@@ -102,6 +105,30 @@ remap_filename (file_prefix_map *maps, const char *filename)
+ 
+ static const char *
+-remap_filename (file_prefix_map *maps, const char *filename)
++remap_filename (file_prefix_map *maps, const char *filename, bool mangle_nix_store = false)
+ {
+   file_prefix_map *map;
+   char *s;
+@@ -102,6 +102,30 @@ remap_filename (file_prefix_map *maps, const char *filename)
        break;
    if (!map)
      {
-+      if (maps == macro_prefix_maps)
++      if (mangle_nix_store && getenv("NIX_GCC_DONT_MANGLE_PREFIX_MAP") == NULL)
 +	{
 +	  /* Remap all fo $NIX_STORE/.{32} paths to uppercase
 +	   *
@@ -74,7 +75,7 @@ Mangled successfully.
 +	     {
 +		s = (char *) ggc_alloc_atomic (name_len + 1);
 +		memcpy(s, name, name_len + 1);
-+		for (int i = nix_store_len + 1; i < nix_store_len + 1 + 32; i++) {
++		for (size_t i = nix_store_len + 1; i < nix_store_len + 1 + 32; i++) {
 +		  s[i] = TOUPPER(s[i]);
 +		}
 +		if (realname != filename)
@@ -85,11 +86,12 @@ Mangled successfully.
        if (realname != filename)
  	free (const_cast <char *> (realname));
        return filename;
-@@ -124,7 +151,6 @@ remap_filename (file_prefix_map *maps, const char *filename)
-    ignore it in DW_AT_producer (gen_command_line_string in opts.cc).  */
+@@ -163,7 +187,7 @@ add_profile_prefix_map (const char *arg)
+ const char *
+ remap_macro_filename (const char *filename)
+ {
+-  return remap_filename (macro_prefix_maps, filename);
++  return remap_filename (macro_prefix_maps, filename, true);
+ }
  
- /* Linked lists of file_prefix_map structures.  */
--static file_prefix_map *macro_prefix_maps; /* -fmacro-prefix-map  */
- static file_prefix_map *debug_prefix_maps; /* -fdebug-prefix-map  */
- static file_prefix_map *profile_prefix_maps; /* -fprofile-prefix-map  */
- 
+ /* Remap using -fdebug-prefix-map.  Return the GC-allocated new name

@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "maxima";
-  version = "5.46.0";
+  version = "5.47.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-c5Dwa0jaZckDPosvYpuXi5AFZFSlQCLbfecOIiWqiwc=";
+    url = "mirror://sourceforge/maxima/maxima-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-kQQCGyT9U+jAOpg1CctC6TepJejAyFwzXXcJoU/UD3o=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/sagemath/sage/07d6c37d18811e2b377a9689790a7c5e24da16ba/build/pkgs/maxima/patches/undoing_true_false_printing_patch.patch";
       sha256 = "0fvi3rcjv6743sqsbgdzazy9jb6r1p1yq63zyj9fx42wd1hgf7yx";
     })
+
+    ./5.47.0-CVE-2024-34490.patch
   ];
 
   # The test suite is disabled since 5.42.2 because of the following issues:

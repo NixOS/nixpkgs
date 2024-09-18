@@ -4,7 +4,6 @@
 , makeWrapper
 , jdk8
 , python3
-, python310
 , coreutils
 , hadoop
 , RSupport ? true
@@ -63,20 +62,22 @@ let
     });
 in
 {
+  # A note on EOL and removing old versions:
+  # According to spark's versioning policy (https://spark.apache.org/versioning-policy.html),
+  # minor releases are generally maintained with bugfixes for 18 months. But it doesn't
+  # make sense to remove a given minor version the moment it crosses this threshold.
+  # For example, spark 3.3.0 was released on 2022-06-09. It would have to be removed on 2023-12-09 if
+  # we strictly adhere to the EOL timeline, despite 3.3.4 being released one day before (2023-12-08).
+  # A better policy is to keep these versions around, and clean up EOL versions just before
+  # a new NixOS release.
   spark_3_5 = spark rec {
     pname = "spark";
-    version = "3.5.0";
-    hash = "sha256-f+a4a23aOM0GCDoZlZ7WNXs0Olzyh3yMtO8ZmEoYvZ4=";
+    version = "3.5.1";
+    hash = "sha256-ez6Hm8Ss3nl4mxOHyh67ugYH81/thNRMCja6MQ+9Tpg=";
   };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.2";
-    hash = "sha256-qr0tRuzzEcarJznrQYkaQzGqI7tugp/XJpoZxL7tJwk=";
-  };
-  spark_3_3 = spark rec {
-    pname = "spark";
-    version = "3.3.3";
-    hash = "sha256-YtHxRYTwrwSle3UpFjRSwKcnLFj2m9/zLBENH/HVzuM=";
-    pysparkPython = python310;
+    version = "3.4.3";
+    hash = "sha256-ifeytk08oaEyiEawwWbUWWuoynGTJNvnrkOW/CjeaSk=";
   };
 }

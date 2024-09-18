@@ -1,7 +1,6 @@
 { lib
 , fetchurl
 , buildDunePackage
-, ocaml
 , decompress
 , stdlib-shims
 , alcotest

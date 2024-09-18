@@ -8,6 +8,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       # pyCA is incompatible with SQLAlchemy 2.0
       sqlalchemy = super.sqlalchemy_1_4;
@@ -73,10 +74,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A fully functional Opencast capture agent written in Python";
+    description = "Fully functional Opencast capture agent written in Python";
+    mainProgram = "pyca";
     homepage = "https://github.com/opencast/pyCA";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ pmiddend ];
   };
 }
-

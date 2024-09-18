@@ -1,10 +1,11 @@
-{ lib
-, bleak
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -25,21 +26,20 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    bleak
-  ];
+  propagatedBuildInputs = [ bleak ];
 
   # Module has no tests in PyPI releases
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyacaia_async"
-  ];
+  pythonImportsCheck = [ "pyacaia_async" ];
 
   meta = with lib; {
     description = "Module to interact with Acaia scales";
     homepage = "https://github.com/zweckj/pyacaia_async";
-    license = with licenses; [ gpl3Only mit ];
+    license = with licenses; [
+      gpl3Only
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

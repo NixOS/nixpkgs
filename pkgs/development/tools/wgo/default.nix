@@ -5,7 +5,7 @@
 
 let
   pname = "wgo";
-  version = "0.5.4";
+  version = "0.5.6d";
 in
 buildGoModule {
   inherit pname version;
@@ -14,7 +14,7 @@ buildGoModule {
     owner = "bokwoon95";
     repo = "wgo";
     rev = "v${version}";
-    hash = "sha256-MPmB6G5JCIEfFYchVmV8sS5Zfzfui9tClDI6RlLdP6U=";
+    hash = "sha256-PzBje046mS844zpU5X1eoRcULJH8sh49yf8lrxeA764=";
   };
 
   vendorHash = "sha256-w6UJxZToHbbQmuXkyqFzyssFcE+7uVNqOuIF/XKdEsU=";
@@ -31,8 +31,9 @@ buildGoModule {
 
   meta = with lib; {
     description = "Live reload for Go apps";
+    mainProgram = "wgo";
     homepage = "https://github.com/bokwoon95/wgo";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

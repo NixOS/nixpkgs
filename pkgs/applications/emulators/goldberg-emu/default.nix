@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "mr_goldberg";
     repo = "goldberg_emulator";
     rev = version;
-    sha256 = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
+    hash = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
   };
 
   # It attempts to install windows-only libraries which we never build
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lobby_connect";
     license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

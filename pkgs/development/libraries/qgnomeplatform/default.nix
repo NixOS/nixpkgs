@@ -10,7 +10,6 @@
 , gtk3
 , qtbase
 , qtwayland
-, pantheon
 , substituteAll
 , gsettings-desktop-schemas
 , useQt6 ? false
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = "https://github.com/FedoraQt/QGnomePlatform";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

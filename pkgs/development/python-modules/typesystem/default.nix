@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,14 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "typesystem"
-  ];
+  pythonImportsCheck = [ "typesystem" ];
 
   meta = with lib; {
-    description = "A type system library for Python";
+    description = "Type system library for Python";
     homepage = "https://github.com/encode/typesystem";
     license = licenses.bsd3;
-    maintainers =  with maintainers; [ ];
+    maintainers = [ ];
   };
 }

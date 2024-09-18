@@ -1,27 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  importlib-metadata,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
-  pname = "Chameleon";
-  version = "3.8.1";
+  pname = "chameleon";
+  version = "4.5.4";
+  pyproject = true;
 
-  # tests not included in pypi tarball
   src = fetchFromGitHub {
     owner = "malthe";
     repo = "chameleon";
-    rev = version;
-    sha256 = "0nf8x4w2vh1a31wdb86nnvlic9xmr23j3in1f6fq4z6mv2jkwa87";
+    rev = "refs/tags/${version}";
+    hash = "sha256-TbXx3reRpUqnMVDsr38FM1SLgARjqXAduO3k87U5TIg=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "chameleon" ];
 
   meta = with lib; {
-    homepage = "https://chameleon.readthedocs.io/";
+    changelog = "https://github.com/malthe/chameleon/blob/${version}/CHANGES.rst";
     description = "Fast HTML/XML Template Compiler";
+    downloadPage = "https://github.com/malthe/chameleon";
+    homepage = "https://chameleon.readthedocs.io";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

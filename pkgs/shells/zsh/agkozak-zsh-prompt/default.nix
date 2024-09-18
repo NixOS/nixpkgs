@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "agkozak-zsh-prompt";
-  version = "3.11.2";
+  version = "3.11.4";
 
   src = fetchFromGitHub {
     owner = "agkozak";
     repo = "agkozak-zsh-prompt";
     rev = "v${version}";
-    sha256 = "sha256-QDUI9EYflITttkX9Khij62ybBMYJwPfayqj+wr495mM=";
+    sha256 = "sha256-FC9LIZaS6fV20qq6cJC/xQvfsM3DHXatVleH7yBgoNg=";
   };
 
   strictDeps = true;
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fast, asynchronous Zsh prompt";
+    description = "Fast, asynchronous Zsh prompt";
     homepage = "https://github.com/agkozak/agkozak-zsh-prompt";
     license = licenses.mit;
     platforms = platforms.all;

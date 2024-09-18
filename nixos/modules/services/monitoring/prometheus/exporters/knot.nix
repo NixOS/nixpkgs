@@ -1,9 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.knot;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
 in {
   port = 9433;
   extraOpts = {
@@ -11,7 +15,7 @@ in {
       type = types.nullOr types.str;
       default = null;
       example = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
-      description = lib.mdDoc ''
+      description = ''
         Path to the library of `knot-dns`.
       '';
     };
@@ -19,7 +23,7 @@ in {
     knotSocketPath = mkOption {
       type = types.str;
       default = "/run/knot/knot.sock";
-      description = lib.mdDoc ''
+      description = ''
         Socket path of {manpage}`knotd(8)`.
       '';
     };
@@ -27,7 +31,7 @@ in {
     knotSocketTimeout = mkOption {
       type = types.ints.positive;
       default = 2000;
-      description = lib.mdDoc ''
+      description = ''
         Timeout in seconds.
       '';
     };

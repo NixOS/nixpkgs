@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A manual tiling window manager for X";
+    description = "Manual tiling window manager for X";
     homepage = "https://herbstluftwm.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;

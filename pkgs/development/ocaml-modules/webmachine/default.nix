@@ -26,7 +26,7 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/inhabitedtype/ocaml-webmachine";
     license = lib.licenses.bsd3;
-    description = "A REST toolkit for OCaml";
+    description = "REST toolkit for OCaml";
     maintainers = [ lib.maintainers.vbgl ];
   };
 

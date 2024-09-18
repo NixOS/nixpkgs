@@ -1,4 +1,4 @@
-{ pkgs, lib, build-asdf-system, ... }:
+{ pkgs, lib, stdenv, build-asdf-system, ... }:
 
 let
 
@@ -73,9 +73,20 @@ let
     lla = super.lla.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.openblas ];
     });
+    cffi = super.cffi.overrideLispAttrs (o: {
+      javaLibs = [
+        (pkgs.fetchMavenArtifact {
+          groupId = "net.java.dev.jna";
+          artifactId = "jna";
+          version = "5.9.0";
+          sha256 = "0qbis8acv04fi902qzak1mbagqaxcsv2zyp7b8y4shs5nj0cgz7a";
+        })
+      ];
+    });
     cffi-libffi = super.cffi-libffi.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.libffi ];
       nativeLibs = [ pkgs.libffi ];
+      patches = lib.optionals stdenv.isDarwin [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
     });
     cl-rabbit = super.cl-rabbit.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.rabbitmq-c ];
@@ -129,7 +140,7 @@ let
       nativeLibs = [ pkgs.libGLU ];
     });
     cl-glut = super.cl-glut.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.freeglut ];
+      nativeLibs = [ pkgs.libglut ];
     });
     cl-glfw = super.cl-glfw.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.glfw ];
@@ -239,9 +250,6 @@ let
     libusb-ffi = super.libusb-ffi.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libusb-compat-0_1 ];
     });
-    cl-fam = super.cl-fam.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.fam ];
-    });
     jpeg-turbo = super.jpeg-turbo.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libjpeg_turbo ];
     });
@@ -268,6 +276,9 @@ let
     });
     capstone = super.capstone.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.capstone ];
+    });
+    vk = super.vk.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.vulkan-loader ];
     });
   });
 

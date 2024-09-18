@@ -1,14 +1,12 @@
 { cmake
 , fetchFromGitHub
-, fetchgit
 , git
 , lib
 , libffi
-, llvmPackages_9
+, llvmPackages_13
 , makeWrapper
 , ncurses
 , python3
-, runCommand
 , zlib
 
 # *NOT* from LLVM 9!
@@ -28,52 +26,44 @@
 
 # Build with libc++ (LLVM) rather than stdlibc++ (GCC).
 # This is experimental and not all features work.
-, useLLVMLibcxx ? false
+, useLLVMLibcxx ? clangStdenv.isDarwin
 }:
 
 let
   stdenv = clangStdenv;
 
-  # The LLVM 9 headers have a couple bugs we need to patch
-  fixedLlvmDev = runCommand "llvm-dev-${llvmPackages_9.llvm.version}" { buildInputs = [git]; } ''
-    mkdir $out
-    cp -r ${llvmPackages_9.llvm.dev}/include $out
-    cd $out
-    chmod -R u+w include
-    git apply ${./fix-llvm-include.patch}
-  '';
+  # The patched clang lives in the LLVM megarepo
+  clangSrc = fetchFromGitHub {
+    owner = "root-project";
+    repo = "llvm-project";
+    # cling-llvm13 branch
+    rev = "3610201fbe0352a63efb5cb45f4ea4987702c735";
+    sha256 = "sha256-Cb7BvV7yobG+mkaYe7zD2KcnPvm8/vmVATNWssklXyk=";
+    sparseCheckout = ["clang"];
+  };
 
   unwrapped = stdenv.mkDerivation rec {
     pname = "cling-unwrapped";
-    version = "0.9";
+    version = "1.0";
 
-    src = fetchgit {
-      url = "http://root.cern/git/clang.git";
-      rev = "cling-v0.9";
-      sha256 = "sha256-ft1NUIclSiZ9lN3Z3DJCWA0U9q/K1M0TKkZr+PjsFYk=";
-    };
+    src = "${clangSrc}/clang";
 
     clingSrc = fetchFromGitHub {
       owner = "root-project";
       repo = "cling";
-      rev = "v0.9";
-      sha256 = "0wx3fi19wfjcph5kclf8108i436y79ddwakrcf0lgxnnxhdjyd29";
+      rev = "v${version}";
+      sha256 = "sha256-Ye8EINzt+dyNvUIRydACXzb/xEPLm0YSkz08Xxw3xp4=";
     };
 
     prePatch = ''
       echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
 
-      cp -r $clingSrc ./tools/cling
-      chmod -R a+w ./tools/cling
+      cp -r $clingSrc tools/cling
+      chmod -R a+w tools/cling
     '';
 
     patches = [
       ./no-clang-cpp.patch
-
-      # https://github.com/root-project/root/commit/286d96b12aad8688b9d8e4b3b5df843dcfb716a8
-      ./fix-llvm-dylib-usage.patch
-
-      ./force-install-cling-targets.patch
     ];
 
     nativeBuildInputs = [ python3 git cmake ];
@@ -82,12 +72,12 @@ let
     strictDeps = true;
 
     cmakeFlags = [
-      "-DLLVM_BINARY_DIR=${llvmPackages_9.llvm.out}"
-      "-DLLVM_CONFIG=${llvmPackages_9.llvm.dev}/bin/llvm-config"
-      "-DLLVM_LIBRARY_DIR=${llvmPackages_9.llvm.lib}/lib"
-      "-DLLVM_MAIN_INCLUDE_DIR=${fixedLlvmDev}/include"
-      "-DLLVM_TABLEGEN_EXE=${llvmPackages_9.llvm.out}/bin/llvm-tblgen"
-      "-DLLVM_TOOLS_BINARY_DIR=${llvmPackages_9.llvm.out}/bin"
+      "-DLLVM_BINARY_DIR=${llvmPackages_13.llvm.out}"
+      "-DLLVM_CONFIG=${llvmPackages_13.llvm.dev}/bin/llvm-config"
+      "-DLLVM_LIBRARY_DIR=${llvmPackages_13.llvm.lib}/lib"
+      "-DLLVM_MAIN_INCLUDE_DIR=${llvmPackages_13.llvm.dev}/include"
+      "-DLLVM_TABLEGEN_EXE=${llvmPackages_13.llvm.out}/bin/llvm-tblgen"
+      "-DLLVM_TOOLS_BINARY_DIR=${llvmPackages_13.llvm.out}/bin"
       "-DLLVM_BUILD_TOOLS=Off"
       "-DLLVM_TOOL_CLING_BUILD=ON"
 
@@ -115,7 +105,8 @@ let
     dontStrip = debug;
 
     meta = with lib; {
-      description = "The Interactive C++ Interpreter";
+      description = "Interactive C++ Interpreter";
+      mainProgram = "cling";
       homepage = "https://root.cern/cling/";
       license = with licenses; [ lgpl21 ncsa ];
       maintainers = with maintainers; [ thomasjm ];
@@ -125,12 +116,12 @@ let
 
   # Runtime flags for the C++ standard library
   cxxFlags = if useLLVMLibcxx then [
-    "-I" "${lib.getDev llvmPackages_9.libcxx}/include/c++/v1"
-    "-L" "${llvmPackages_9.libcxx}/lib"
-    "-l" "${llvmPackages_9.libcxx}/lib/libc++.so"
+    "-I" "${lib.getDev llvmPackages_13.libcxx}/include/c++/v1"
+    "-L" "${llvmPackages_13.libcxx}/lib"
+    "-l" "${llvmPackages_13.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] else [
     "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
-    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/x86_64-unknown-linux-gnu"
+    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
   ];
 
   # The flags passed to the wrapped cling should
@@ -148,7 +139,9 @@ let
     "-nostdinc"
     "-nostdinc++"
 
-    "-isystem" "${lib.getLib unwrapped}/lib/clang/9.0.1/include"
+    "-resource-dir" "${llvmPackages_13.llvm.lib}/lib"
+
+    "-isystem" "${lib.getLib unwrapped}/lib/clang/${llvmPackages_13.clang.version}/include"
   ]
   ++ cxxFlags
   ++ [
@@ -161,11 +154,41 @@ let
 
 in
 
-runCommand "cling-${unwrapped.version}" {
+stdenv.mkDerivation {
+  pname = "cling";
+  version = unwrapped.version;
+
   nativeBuildInputs = [ makeWrapper ];
   inherit unwrapped flags;
   inherit (unwrapped) meta;
-} ''
-  makeWrapper $unwrapped/bin/cling $out/bin/cling \
-    --add-flags "$flags"
-''
+
+  dontUnpack = true;
+  dontConfigure = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    makeWrapper $unwrapped/bin/cling $out/bin/cling \
+      --add-flags "$flags"
+
+    runHook postBuild
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    output=$($out/bin/cling <<EOF
+    #include <iostream>
+    std::cout << "hello world" << std::endl
+    EOF
+    )
+
+    echo "$output" | grep -q "Type C++ code and press enter to run it"
+    echo "$output" | grep -q "hello world"
+
+    runHook postCheck
+  '';
+
+  dontInstall = true;
+}

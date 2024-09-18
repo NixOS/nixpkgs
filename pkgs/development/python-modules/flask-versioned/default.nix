@@ -1,7 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, flask }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Versioned";
+  pname = "flask-versioned";
   version = "0.9.4-20101221";
 
   src = fetchFromGitHub {
@@ -17,7 +22,6 @@ buildPythonPackage rec {
     description = "Flask plugin to rewrite file paths to add version info";
     homepage = "https://github.com/pilt/flask-versioned";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
-

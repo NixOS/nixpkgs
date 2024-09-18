@@ -1,92 +1,45 @@
 { lib
 , fetchFromGitHub
-, buildNpmPackage
 , makeWrapper
 , electron
 , python3
 , stdenv
-, stdenvNoCC
 , copyDesktopItems
-, moreutils
-, cacert
-, jq
-, nodePackages
+, nodejs
+, pnpm
 , makeDesktopItem
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.1.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "th-ch";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6ZiftpdCwxCkJzcHryVrUKzM+mM1eQpdLNFl0Dja59Q=";
+    repo = "youtube-music";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-6aAaIugho8yHohEHp0HVkmzIOfhpkNYts6BOKPp9Wbw=";
   };
 
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit pname version src;
-
-  pnpmDeps = stdenvNoCC.mkDerivation {
-    pname = "${finalAttrs.pname}-pnpm-deps";
-    inherit (finalAttrs) src version ELECTRON_SKIP_BINARY_DOWNLOAD;
-
-    nativeBuildInputs = [ jq moreutils nodePackages.pnpm cacert ];
-
-    installPhase = ''
-      export HOME=$(mktemp -d)
-
-      pnpm config set store-dir $out
-      pnpm install --frozen-lockfile --ignore-script
-
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
-
-    dontBuild = true;
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = {
-      x86_64-linux = "sha256-Oy11V7FXfVhLUR9gX0sjQEFuVPFpbaVdT518oOSLcvA=";
-      aarch64-linux = "sha256-6nXemaGiQjp2stjjKItPJ62VcH5Q5pRf63qKtl2haXI=";
-      x86_64-darwin = "sha256-jSMAw+AMD63vqPckZjblw4EDngA4E8h0WlsZu3hUShY=";
-      aarch64-darwin = "sha256-zujXURpIcw7IOw63AW167h6cywYXydhHZMzA2apGZAs=";
-    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-lxqBmtHkyk4mnM/AJQmpyCmvhW2e96vZBkgtoREjEXY=";
   };
 
-  nativeBuildInputs =
-    [ makeWrapper python3 nodePackages.pnpm nodePackages.nodejs ]
+  nativeBuildInputs = [ makeWrapper python3 nodejs pnpm.configHook ]
     ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
 
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-    export STORE_PATH=$(mktemp -d)
-
-    cp -Tr "$pnpmDeps" "$STORE_PATH"
-    chmod -R +w "$STORE_PATH"
-
-    pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script
-    patchShebangs node_modules/{*,.*}
-  '';
-
   postBuild = lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
+    cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
   '' + ''
     pnpm build
     ./node_modules/.bin/electron-builder \
       --dir \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
   '';
 
@@ -134,8 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
+    changelog = "https://github.com/th-ch/youtube-music/blob/master/changelog.md#${lib.replaceStrings ["."] [""] finalAttrs.src.rev}";
     license = licenses.mit;
-    maintainers = [ maintainers.aacebedo ];
+    maintainers = with maintainers; [ aacebedo SuperSandro2000 ];
     mainProgram = "youtube-music";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

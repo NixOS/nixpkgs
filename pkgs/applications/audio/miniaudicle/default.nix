@@ -52,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "linux-${audioBackend}" ];
 
   meta = with lib; {
-    description = "A light-weight integrated development environment for the ChucK digital audio programming language";
+    description = "Light-weight integrated development environment for the ChucK digital audio programming language";
+    mainProgram = "miniAudicle";
     homepage = "https://audicle.cs.princeton.edu/mini/";
     downloadPage = "https://audicle.cs.princeton.edu/mini/linux/";
     license = licenses.gpl2Plus;

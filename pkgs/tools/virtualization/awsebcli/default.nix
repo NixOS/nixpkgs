@@ -1,4 +1,5 @@
 { lib, python3, fetchFromGitHub, glibcLocales, git }:
+
 let
   changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
     inherit version;
@@ -10,11 +11,15 @@ let
   localPython = python3.override {
     self = localPython;
     packageOverrides = self: super: {
-      cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
+      cement =
+        changeVersion super.cement.overridePythonAttrs "2.10.14"
+          "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
     };
   };
+
 in
-with localPython.pkgs; buildPythonApplication rec {
+
+localPython.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
   version = "3.20.10";
   format = "setuptools";
@@ -31,15 +36,14 @@ with localPython.pkgs; buildPythonApplication rec {
     substituteInPlace setup.py --replace "scripts=['bin/eb']," ""
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  nativeBuildInputs = with localPython.pkgs; [
   ];
 
   buildInputs = [
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with localPython.pkgs; [
     blessed
     botocore
     cement
@@ -64,7 +68,7 @@ with localPython.pkgs; buildPythonApplication rec {
     "termcolor"
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with localPython.pkgs; [
     pytestCheckHook
     pytest-socket
     mock
@@ -89,7 +93,7 @@ with localPython.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
-    description = "A command line interface for Elastic Beanstalk";
+    description = "Command line interface for Elastic Beanstalk";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
     maintainers = with maintainers; [ eqyiel kirillrdy ];
     license = licenses.asl20;

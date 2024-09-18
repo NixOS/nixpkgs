@@ -1,20 +1,27 @@
-{ buildNpmPackage, fetchFromGitHub, lib, stdenv, testers, snyk }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, stdenv
+, testers
+, snyk
+}:
 
 buildNpmPackage rec {
   pname = "snyk";
-  version = "1.1276.0";
+  version = "1.1293.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-l5Xx6z3NbtwdtKe8MmRWTJoKaEH3AZjHKXqoLv3rHfU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zCDxq+aP7StfgXTg6G/J4o5xjcKI4ak3N3Dh8cIUK8U=";
   };
 
-  npmDepsHash = "sha256-FJGxCEhBADH4c1khJaVFHL4e25Mq4PHrez+2NPFBx0w=";
+  npmDepsHash = "sha256-XPJoDhCncucFTv1B+YlMQxh3KkXleQGRvcSuYrXcL4g=";
 
   postPatch = ''
-    substituteInPlace package.json --replace '"version": "1.0.0-monorepo"' '"version": "${version}"'
+    substituteInPlace package.json \
+      --replace-fail '"version": "1.0.0-monorepo"' '"version": "${version}"'
   '';
 
   env.NIX_CFLAGS_COMPILE =
@@ -30,7 +37,9 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Scans and monitors projects for security vulnerabilities";
     homepage = "https://snyk.io";
+    changelog = "https://github.com/snyk/cli/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "snyk";
   };
 }

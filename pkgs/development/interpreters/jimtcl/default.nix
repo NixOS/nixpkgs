@@ -16,14 +16,14 @@
 , SDLSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jimtcl";
   version = "0.82";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
   };
 
@@ -71,10 +71,10 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ inetutils ];
 
   meta = {
-    description = "An open source small-footprint implementation of the Tcl programming language";
+    description = "Open source small-footprint implementation of the Tcl programming language";
     homepage = "http://jim.tcl.tk/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ dbohdan fgaz vrthra ];
+    maintainers = with lib.maintainers; [ dbohdan fgaz ];
   };
-}
+})

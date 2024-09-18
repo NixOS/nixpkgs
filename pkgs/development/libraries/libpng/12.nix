@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The official reference implementation for the PNG file format";
+    description = "Official reference implementation for the PNG file format";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng;
     maintainers = [ ];

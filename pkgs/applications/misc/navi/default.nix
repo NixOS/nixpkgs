@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
    ];
 
   meta = with lib; {
-    description = "An interactive cheatsheet tool for the command-line and application launchers";
+    description = "Interactive cheatsheet tool for the command-line and application launchers";
     homepage = "https://github.com/denisidoro/navi";
     license = licenses.asl20;
     platforms = platforms.unix;

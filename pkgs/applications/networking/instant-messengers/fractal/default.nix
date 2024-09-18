@@ -25,20 +25,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "6";
+  version = "8";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "GNOME";
+    owner = "World";
     repo = "fractal";
-    rev = version;
-    hash = "sha256-J4Jb7G5Rfou3N7mytetIdLl0dGY5dSvTjnu8aj4kWXQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-a77+lPH2eqWTLFrYfcBXSvbyyYC52zSo+Rh/diqKYx4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "matrix-sdk-0.6.2" = "sha256-CY0Ylrd3NkP1IevyQa351IS/+evG2GgrjPnR/ZDFR9Q=";
+      "matrix-sdk-0.7.1" = "sha256-ZlkxGXGrmZ8VQV7UY7A7BBfcqFCAB9Ep7l65irx4Dy8=";
+      "ruma-0.10.1" = "sha256-C/GJ0hDWJ9/grfjMuPSatJq2SrVkV0jxQlAAASkUWqg=";
     };
   };
 
@@ -83,7 +84,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ anselmschueler dtzWill ]);
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
     mainProgram = "fractal";
   };

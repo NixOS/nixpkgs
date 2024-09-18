@@ -1,4 +1,8 @@
-{ buildPecl, lib, libssh2 }:
+{
+  buildPecl,
+  lib,
+  libssh2,
+}:
 
 buildPecl rec {
   version = "1.3.1";

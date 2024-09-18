@@ -18,7 +18,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-BSb+8p5+RJMfcYc2+BuT4YbhCWCbcYOt9upesD11Ytw=";
+  vendorHash = "sha256-veduD0K3Onkqvyg9E5v854a6/8UIRQZEH098lUepRNU=";
 
   nativeCheckInputs = [
     swtpm
@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "TPM 2.0 plugin for age (This software is experimental, use it at your own risk)";
+    mainProgram = "age-plugin-tpm";
     homepage = "https://github.com/Foxboron/age-plugin-tpm";
     license = licenses.mit;
     platforms = platforms.linux;

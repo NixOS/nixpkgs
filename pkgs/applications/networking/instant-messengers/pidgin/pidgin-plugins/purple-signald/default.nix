@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "hoehermann";
     repo = "libpurple-signald";
     rev = "v${version}";
-    sha256 = "sha256-2LiHjVRBwdPbfravIVM+gvsh3Gq4bhjtRD6eWAbkWmc=";
+    hash = "sha256-2LiHjVRBwdPbfravIVM+gvsh3Gq4bhjtRD6eWAbkWmc=";
     fetchSubmodules = true;
   };
 

@@ -1,13 +1,13 @@
 diff --git a/src/test/CMakeLists.txt b/src/test/CMakeLists.txt
-index 44d9185d..8ffcd2b2 100644
+index 25f429da..918f56e9 100644
 --- a/src/test/CMakeLists.txt
 +++ b/src/test/CMakeLists.txt
-@@ -4,7 +4,7 @@
- # We require this to get object library link library support and
+@@ -5,7 +5,7 @@
  # combined python 2 + 3 support
  
--add_subdirectory(IexTest)
-+#add_subdirectory(IexTest)
- add_subdirectory(OpenEXRCoreTest)
- add_subdirectory(OpenEXRTest)
- add_subdirectory(OpenEXRUtilTest)
+ if (OPENEXR_TEST_LIBRARIES)
+-  add_subdirectory(IexTest)
++  #add_subdirectory(IexTest)
+   add_subdirectory(OpenEXRCoreTest)
+   add_subdirectory(OpenEXRTest)
+   add_subdirectory(OpenEXRUtilTest)

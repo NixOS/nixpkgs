@@ -46,7 +46,7 @@ autoconfigure a new Pantalaimon instance, which will connect to the homeserver
 set in [services.mjolnir.homeserverUrl](#opt-services.mjolnir.homeserverUrl) and Mjolnir itself
 will be configured to connect to the new Pantalaimon instance.
 
-```
+```nix
 {
   services.mjolnir = {
     enable = true;
@@ -78,7 +78,7 @@ uses across an entire homeserver.
 To use the Antispam Module, add `matrix-synapse-plugins.matrix-synapse-mjolnir-antispam`
 to the Synapse plugin list and enable the `mjolnir.Module` module.
 
-```
+```nix
 {
   services.matrix-synapse = {
     plugins = with pkgs; [

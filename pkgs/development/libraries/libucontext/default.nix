@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "ucontext implementation featuring glibc-compatible ABI";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = [ maintainers.yuka ];
+    maintainers = [ ];
   };
 }

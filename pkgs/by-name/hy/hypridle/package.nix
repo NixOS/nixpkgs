@@ -5,6 +5,7 @@
 , cmake
 , wayland
 , wayland-protocols
+, wayland-scanner
 , hyprlang
 , sdbus-cpp
 , systemd
@@ -12,18 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0x5R6v82nKBualYf+TxAduMsvG80EZAl7gofTIYtpf4=";
+    hash = "sha256-7Ft5WZTMIjXOGgRCf31DZBwK6RK8xkeKlD5vFXz3gII=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

@@ -1,21 +1,20 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, django
-, funcy
-, redis
-, six
-, pytestCheckHook
-, pytest-django
-, mock
-, dill
-, jinja2
-, before-after
-, pythonOlder
-, nettools
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  funcy,
+  redis,
+  six,
+  pytestCheckHook,
+  pytest-django,
+  mock,
+  dill,
+  jinja2,
+  before-after,
+  pythonOlder,
+  nettools,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-d6N8c9f6z8cpk2XtZqEr56SH3XRd2GwdM8ouv9OzKHg=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
   pythonRelaxDeps = [ "funcy" ];
 
   propagatedBuildInputs = [
@@ -71,7 +67,7 @@ buildPythonPackage rec {
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = with lib; {
-    description = "A slick ORM cache with automatic granular event-driven invalidation for Django";
+    description = "Slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
     changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
     license = licenses.bsd3;

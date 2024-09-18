@@ -1,54 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, graphviz
-, jupyter
-, matplotlib
-, networkx
-, opt-einsum
-, pandas
-, pillow
-, pyro-api
-, pythonOlder
-, torch
-, scikit-learn
-, seaborn
-, torchvision
-, tqdm
-, wget
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+  ipywidgets,
+  matplotlib,
+  notebook,
+  numpy,
+  opt-einsum,
+  pandas,
+  pillow,
+  pyro-api,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  seaborn,
+  setuptools,
+  torch,
+  torchvision,
+  tqdm,
+  wget,
 }:
 
 buildPythonPackage rec {
   pname = "pyro-ppl";
-  version = "1.8.6";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit version pname;
-    hash = "sha256-ANL03ailPmbZVRJNxuSektz1cM071waCUJHbdk2TzQc=";
+  src = fetchFromGitHub {
+    owner = "pyro-ppl";
+    repo = "pyro";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Dvbl/80EGoGWGhWYVIf/xjovUJG1+3WtpMH+lx1oB2E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    numpy
+    opt-einsum
     pyro-api
     torch
-    networkx
-    opt-einsum
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extras = [
+      notebook
+      ipywidgets
       graphviz
-      jupyter
-      # lap
       matplotlib
+      torchvision
       pandas
       pillow
       scikit-learn
       seaborn
-      torchvision
+      scipy
       # visdom
       wget
     ];
@@ -69,6 +78,9 @@ buildPythonPackage rec {
     homepage = "http://pyro.ai";
     changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ teh georgewhewell ];
+    maintainers = with maintainers; [
+      teh
+      georgewhewell
+    ];
   };
 }

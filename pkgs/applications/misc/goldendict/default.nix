@@ -2,7 +2,7 @@
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --replace "opencc.2" "opencc"
   '';
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo
@@ -44,15 +44,15 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withFFmpeg [ libao ffmpeg ]
     ++ lib.optional withZim zstd;
 
-  qmakeFlags = with lib; [
+  qmakeFlags = [
     "goldendict.pro"
-    (optional withCC "CONFIG+=chinese_conversion_support")
-    (optional (!withCC) "CONFIG+=no_chinese_conversion_support")
-    (optional (!withEpwing) "CONFIG+=no_epwing_support")
-    (optional (!withExtraTiff) "CONFIG+=no_extra_tiff_handler")
-    (optional (!withFFmpeg) "CONFIG+=no_ffmpeg_player")
-    (optional (!withMultimedia)"CONFIG+=no_qtmultimedia_player")
-    (optional withZim "CONFIG+=zim_support")
+    (lib.optional withCC "CONFIG+=chinese_conversion_support")
+    (lib.optional (!withCC) "CONFIG+=no_chinese_conversion_support")
+    (lib.optional (!withEpwing) "CONFIG+=no_epwing_support")
+    (lib.optional (!withExtraTiff) "CONFIG+=no_extra_tiff_handler")
+    (lib.optional (!withFFmpeg) "CONFIG+=no_ffmpeg_player")
+    (lib.optional (!withMultimedia)"CONFIG+=no_qtmultimedia_player")
+    (lib.optional withZim "CONFIG+=zim_support")
   ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://goldendict.org/";
-    description = "A feature-rich dictionary lookup program";
+    description = "Feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;
     mainProgram = "goldendict";
     maintainers = with maintainers; [ gebner astsmtl sikmir ];

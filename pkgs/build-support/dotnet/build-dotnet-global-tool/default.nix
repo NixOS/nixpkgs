@@ -1,10 +1,12 @@
-{ buildDotnetModule, emptyDirectory, mkNugetDeps, dotnet-sdk }:
+{ buildDotnetModule, emptyDirectory, fetchNupkg, dotnet-sdk }:
 
 { pname
 , version
   # Name of the nuget package to install, if different from pname
 , nugetName ? pname
   # Hash of the nuget package to install, will be given on first build
+  # nugetHash uses SRI hash and should be preferred
+, nugetHash ? ""
 , nugetSha256 ? ""
   # Additional nuget deps needed by the tool package
 , nugetDeps ? (_: [])
@@ -21,14 +23,17 @@ buildDotnetModule (args // {
 
   src = emptyDirectory;
 
-  nugetDeps = mkNugetDeps {
-    name = pname;
-    nugetDeps = { fetchNuGet }: [
-      (fetchNuGet { pname = nugetName; inherit version; sha256 = nugetSha256; })
-    ] ++ (nugetDeps fetchNuGet);
-  };
+  buildInputs = [
+    (fetchNupkg {
+      pname = nugetName;
+      inherit version;
+      sha256 = nugetSha256;
+      hash = nugetHash;
+      installable = true;
+    })
+  ];
 
-  projectFile = "";
+  dotnetGlobalTool = true;
 
   useDotnetFromEnv = true;
 

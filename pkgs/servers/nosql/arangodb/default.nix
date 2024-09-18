@@ -38,7 +38,7 @@ gcc10Stdenv.mkDerivation rec {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
+    hash = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
     fetchSubmodules = true;
   };
 
@@ -77,7 +77,7 @@ gcc10Stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.arangodb.com";
-    description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
+    description = "Native multi-model database with flexible data models for documents, graphs, and key-values";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ flosse jsoo1 ];

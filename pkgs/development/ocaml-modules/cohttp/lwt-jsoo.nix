@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , cohttp, cohttp-lwt, logs, lwt, js_of_ocaml, js_of_ocaml-ppx, js_of_ocaml-lwt
 , nodejs, lwt_ppx
 }:

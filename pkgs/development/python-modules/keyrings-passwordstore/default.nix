@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-, keyring
-, setuptools-scm
+  keyring,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -17,17 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-pylZw45FUtLHzUV4cDyl/nT8tCZwNj4Jf41MMlyskoU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    keyring
-  ];
+  nativeCheckInputs = [ keyring ];
 
-  pythonImportsCheck = [
-    "keyrings.passwordstore.backend"
-  ];
+  pythonImportsCheck = [ "keyrings.passwordstore.backend" ];
 
   meta = {
     license = lib.licenses.mit;

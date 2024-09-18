@@ -11,16 +11,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1479wv8h5l2b0cwp27vpybq50nyvszhjxmn76n2bz3fchr0lrcbp";
   };
 
-  cargoSha256 = "1kxjr4ymns95g6jz94107nqmd71m2xh8k19gcsy08650gjrn5cz3";
+  cargoHash = "sha256-47Nis3ygGAS8Zi+FiWAXNZxWsT0gkPSleSVpWz3Jss8=";
 
   doCheck = false;
 
   meta = with lib; {
-    description = "A command-line shell like fish, but POSIX compatible";
+    description = "Command-line shell like fish, but POSIX compatible";
+    mainProgram = "nsh";
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";
     license = [ licenses.cc0 /* or */ licenses.mit ];
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ cafkafk ];
   };
 
   passthru = {

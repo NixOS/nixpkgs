@@ -1,29 +1,49 @@
-{stdenv, fetchurl, apacheAnt, unzip, sharutils, lib, jdk}:
+{ lib
+, stdenv
+, fetchzip
+, ant
+, jdk8
+, sharutils
+, stripJavaArchivesHook
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freetts";
   version = "1.2.2";
-  src = fetchurl {
-    url = "mirror://sourceforge/freetts/${pname}-${version}-src.zip";
-    sha256 = "0mnikqhpf4f4jdr0irmibr8yy0dnffx1i257y22iamxi7a6by2r7";
+
+  src = fetchzip {
+    url = "mirror://sourceforge/freetts/freetts-${finalAttrs.version}-src.zip";
+    hash = "sha256-+bhM0ErEZVnmcz5CBqn/AeGaOhKnCjZzGeqgO/89wms=";
+    stripRoot = false;
   };
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ apacheAnt sharutils jdk ];
-  unpackPhase = ''
-    unzip $src -x META-INF/*
-  '';
+
+  nativeBuildInputs = [
+    ant
+    jdk8
+    sharutils
+    stripJavaArchivesHook
+  ];
+
+  sourceRoot = "${finalAttrs.src.name}/freetts-${finalAttrs.version}";
 
   buildPhase = ''
-    cd */lib
+    runHook preBuild
+
+    pushd lib
     sed -i -e "s/more/cat/" jsapi.sh
     echo y | sh jsapi.sh
-    cd ..
+    popd
+
     ln -s . src
     ant
+
+    runHook postBuild
   '';
+
   installPhase = ''
-    install -v -m755 -d $out/{lib,docs/{audio,images}}
-    install -v -m644 lib/*.jar $out/lib
+    runHook preInstall
+    install -Dm644 lib/*.jar -t $out/lib
+    runHook postInstall
   '';
 
   meta = {
@@ -32,8 +52,12 @@ stdenv.mkDerivation rec {
       Text to speech system based on Festival written in Java.
       Can be used in combination with KDE accessibility.
     '';
-    license = "GPL";
     homepage = "http://freetts.sourceforge.net";
-    maintainers = [ lib.maintainers.sander ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ sander ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # jsapi.jar is bundled in a self-extracting shell-script
+    ];
   };
-}
+})

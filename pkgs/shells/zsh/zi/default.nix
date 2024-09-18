@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/z-shell/zi";
-    description = "A Swiss Army Knife for Zsh - Unix Shell";
+    description = "Swiss Army Knife for Zsh - Unix Shell";
     license = licenses.mit;
     maintainers = with maintainers; [ sei40kr ];
   };

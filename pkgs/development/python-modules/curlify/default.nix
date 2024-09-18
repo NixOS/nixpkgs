@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+}:
 
 buildPythonPackage {
   pname = "curlify";
@@ -12,9 +17,7 @@ buildPythonPackage {
     hash = "sha256-yDHmH35TtQDJB0na1V98RtBuVHX5TmKC72hzzs1DQK8=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   meta = with lib; {
     description = "Convert python requests request object to cURL command";

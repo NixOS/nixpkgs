@@ -5,10 +5,10 @@
 
 let
   pname = "jan";
-  version = "0.4.6";
+  version = "0.5.3";
   src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-linux-x86_64-${version}.AppImage";
-    hash = "sha256-/FYaFyp028CeEFfrxNnj67/z7FoOwU0wC2V56mACD5Q=";
+    hash = "sha256-lfN5ant3oS7uschxyCxmiKNLJUJiqWVZLaJ8djqNKzQ=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -17,10 +17,9 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/jan-${version} $out/bin/jan
     install -Dm444 ${appimageContents}/jan.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/jan.desktop \
-      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=jan'
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=jan'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
@@ -30,7 +29,7 @@ appimageTools.wrapType2 {
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.agpl3Plus;
     mainProgram = "jan";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

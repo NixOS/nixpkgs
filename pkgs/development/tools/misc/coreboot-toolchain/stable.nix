@@ -1,4 +1,5 @@
-{ fetchurl }: [
+{ fetchurl }:
+[
   {
     name = "gmp-6.3.0.tar.xz";
     archive = fetchurl {
@@ -21,31 +22,31 @@
     };
   }
   {
-    name = "gcc-11.4.0.tar.xz";
+    name = "gcc-14.1.0.tar.xz";
     archive = fetchurl {
-      sha256 = "1ncd7akww0hl5kkmw1dj3qgqp3phdrr5dfnm7jia9s07n0ib4b9z";
-      url = "mirror://gnu/gcc/gcc-11.4.0/gcc-11.4.0.tar.xz";
+      sha256 = "0h3889kkfp9bzw8km9w1ssh5qjskg6yw02q8v3lkvzksk1acd0z2";
+      url = "mirror://gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz";
     };
   }
   {
-    name = "binutils-2.41.tar.xz";
+    name = "binutils-2.42.tar.xz";
     archive = fetchurl {
-      sha256 = "0l3l003dynq11ppr2h8p0cfc7zyky8ilfwg60sbfan9lwa4mg6mf";
-      url = "mirror://gnu/binutils/binutils-2.41.tar.xz";
+      sha256 = "0058hngi16793aja9ih623mfr98dcarmf549nw38nxzwslgx9r7n";
+      url = "mirror://gnu/binutils/binutils-2.42.tar.xz";
     };
   }
   {
-    name = "R06_28_23.tar.gz";
+    name = "acpica-unix-20230628.tar.gz";
     archive = fetchurl {
-      sha256 = "0cadxihshyrjplrx01vna13r1m2f6lj1klw7mh8pg2m0gjdpjj12";
-      url = "https://github.com/acpica/acpica/archive/refs/tags/R06_28_23.tar.gz";
+      sha256 = "1kjwzyfrmw0fhawjvpqib3l5jxdlcpj3vv92sb7ls8ixbrs6m1w6";
+      url = "https://downloadmirror.intel.com/783534/acpica-unix-20230628.tar.gz";
     };
   }
   {
-    name = "nasm-2.16.01.tar.bz2";
+    name = "nasm-2.16.03.tar.bz2";
     archive = fetchurl {
-      sha256 = "0bmv8xbzck7jim7fzm6jnwiahqkprbpz6wzhg53irm28w0pavdim";
-      url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.bz2";
+      sha256 = "0mwynbnn7c4ay4rpcsyp99j49sa6j3p8gk5pigwssqfdkcaxxwxy";
+      url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/nasm-2.16.03.tar.bz2";
     };
   }
 ]

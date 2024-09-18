@@ -1,4 +1,4 @@
-{ config, lib, pkgs, options }:
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.rtl_433;
@@ -12,15 +12,15 @@ in
         options = {
           name = lib.mkOption {
             type = str;
-            description = lib.mdDoc "Name to match.";
+            description = "Name to match.";
           };
           "${field}" = lib.mkOption {
             type = int;
-            description = lib.mdDoc description;
+            description = description;
           };
           location = lib.mkOption {
             type = str;
-            description = lib.mdDoc "Location to match.";
+            description = "Location to match.";
           };
         };
       });
@@ -30,7 +30,7 @@ in
       type = lib.types.str;
       default = "-C si";
       example = "-C si -R 19";
-      description = lib.mdDoc ''
+      description = ''
         Flags passed verbatim to rtl_433 binary.
         Having `-C si` (the default) is recommended since only Celsius temperatures are parsed.
       '';
@@ -41,7 +41,7 @@ in
       example = [
         { name = "Acurite"; channel = 6543; location = "Kitchen"; }
       ];
-      description = lib.mdDoc ''
+      description = ''
         List of channel matchers to export.
       '';
     };
@@ -51,7 +51,7 @@ in
       example = [
         { name = "Nexus"; id = 1; location = "Bedroom"; }
       ];
-      description = lib.mdDoc ''
+      description = ''
         List of ID matchers to export.
       '';
     };

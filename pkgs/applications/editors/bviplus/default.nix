@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://bviplus.sourceforge.net";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "bviplus";
   };
 }

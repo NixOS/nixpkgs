@@ -4,14 +4,12 @@
 , pkgs
 }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "skalibs";
-  version = "2.14.1.0";
-  sha256 = "24YTUWEngQ2N/thutCRaX/JCBPHhb6KOiqrTRtlqrug=";
+  version = "2.14.2.0";
+  sha256 = "sha256-3f7Fcw5bLxnQOB7Pf3lrOabkcyNr2grY03dqP+ewfkM=";
 
-  description = "A set of general-purpose C programming libraries";
+  description = "Set of general-purpose C programming libraries";
 
   outputs = [ "lib" "dev" "doc" "out" ];
 

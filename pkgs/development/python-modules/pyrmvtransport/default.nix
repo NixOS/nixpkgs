@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, flit
-, async-timeout
-, lxml
-, httpx
-, pytestCheckHook
-, pytest-asyncio
-, pytest-httpx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  flit,
+  async-timeout,
+  lxml,
+  httpx,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-httpx,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-nFxGEyO+wyRzPayjjv8WNIJ+XIWbVn0dyyjQKHiyr40=";
   };
 
-  nativeBuildInputs = [
-    flit
-  ];
+  nativeBuildInputs = [ flit ];
 
   propagatedBuildInputs = [
     async-timeout
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "RMVtransport"
-  ];
+  pythonImportsCheck = [ "RMVtransport" ];
 
   meta = with lib; {
     homepage = "https://github.com/cgtobi/PyRMVtransport";

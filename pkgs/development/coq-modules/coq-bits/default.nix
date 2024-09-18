@@ -15,7 +15,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ mathcomp.algebra ];
 
   meta = with lib; {
-    description = "A formalization of bitset operations in Coq";
+    description = "Formalization of bitset operations in Coq";
     license = licenses.asl20;
     maintainers = with maintainers; [ ptival ];
   };

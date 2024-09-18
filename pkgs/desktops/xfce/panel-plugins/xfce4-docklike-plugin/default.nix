@@ -31,7 +31,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-docklike-plugin/start";
-    description = "A modern, minimalist taskbar for Xfce";
+    description = "Modern, minimalist taskbar for Xfce";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ] ++ teams.xfce.members;

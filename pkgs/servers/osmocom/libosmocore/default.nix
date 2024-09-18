@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmocore";
-  version = "1.9.2";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    hash = "sha256-rbdn7MiB0tluHgdQz1XpcQsN5FU8eGhmetzXzFAiCLg=";
+    hash = "sha256-qP5vGBgPs5y3InE3qgkVHiZgH3AW3mNyLIixgARAVRc=";
   };
 
   postPatch = ''
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       mog
-      janik
     ];
   };
 }

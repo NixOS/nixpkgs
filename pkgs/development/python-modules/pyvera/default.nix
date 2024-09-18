@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-cov
-, pytest-asyncio
-, pytest-timeout
-, responses
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytest-asyncio,
+  pytest-timeout,
+  responses,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
-  version = "2.8.2";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
     rev = finalAttrs.version;
-    sha256 = "sha256-p714jUegeaN7o9Ytjpx/9zkcodbyVcSKiJe3VQ0mIys=";
+    sha256 = "sha256-AD5hbHnu5/gmhvk4Hzeqzvq3E/7w54ijxl9US5eATRY=";
   };
 
   nativeBuildInputs = [ bison cmake flex jq ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.minizinc.org/";
-    description = "A medium-level constraint modelling language";
+    description = "Medium-level constraint modelling language";
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
       language. It is high-level enough to express most

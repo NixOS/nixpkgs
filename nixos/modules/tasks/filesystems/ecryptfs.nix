@@ -4,7 +4,7 @@
 with lib;
 
 {
-  config = mkIf (any (fs: fs == "ecryptfs") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.ecryptfs or false) {
     system.fsPackages = [ pkgs.ecryptfs ];
     security.wrappers = {
       "mount.ecryptfs_private" =

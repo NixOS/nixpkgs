@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sslmate.com";
     maintainers = [ maintainers.domenkozar ];
     description = "Easy to buy, deploy, and manage your SSL certs";
+    mainProgram = "sslmate";
     platforms = platforms.unix;
     license = licenses.mit; # X11
   };

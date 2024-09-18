@@ -1,7 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, libxcrypt-legacy # TODO: switch to libxcrypt for NixOS 24.11 (cf. same note on nixos/modules/services/misc/portunus.nix)
+, libxcrypt
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -15,9 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-+pMMIutj+OWKZmOYH5NuA4a7aS5CD+33vAEC9bJmyfM=";
   };
 
-  buildInputs = [ libxcrypt-legacy ];
+  buildInputs = [ libxcrypt ];
 
   vendorHash = null;
+
+  passthru.tests = { inherit (nixosTests) portunus; };
 
   meta = with lib; {
     description = "Self-contained user/group management and authentication service";

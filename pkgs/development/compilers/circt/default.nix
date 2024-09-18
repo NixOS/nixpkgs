@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , ninja
 , lit
+, z3
 , gitUpdater
 , callPackage
 }:
@@ -17,18 +18,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.66.0";
+  version = "1.86.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    sha256 = "sha256-7O2YUZq0GBS2xvsXg0v55XZXAzqsbHjeKNgqMbNRT8E=";
+    hash = "sha256-xV7vu3zdWBXgnCCUN9ge1GZemo0prmpQrZ1np86i3jI=";
     fetchSubmodules = true;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  nativeBuildInputs = [ cmake ninja git pythonEnv ];
+  nativeBuildInputs = [ cmake ninja git pythonEnv z3 ];
   buildInputs = [ circt-llvm ];
 
   cmakeFlags = [
@@ -66,6 +67,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
+  # Copy circt-llvm's postFixup stage so that it can make all our dylib references
+  # absolute as well.
+  #
+  # We don't need `postPatch` because circt seems to be automatically inheriting
+  # the config somehow, presumably via. `-DMLIR_DIR`.
+  postFixup = circt-llvm.postFixup;
+
   postInstall = ''
     moveToOutput lib "$lib"
   '';
@@ -81,7 +89,7 @@ stdenv.mkDerivation rec {
     description = "Circuit IR compilers and tools";
     homepage = "https://circt.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sharzy pineapplehunter ];
+    maintainers = with lib.maintainers; [ sharzy pineapplehunter sequencer ];
     platforms = lib.platforms.all;
   };
 }

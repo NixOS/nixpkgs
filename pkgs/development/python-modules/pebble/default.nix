@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pebble";
-  version = "5.0.6";
+  version = "5.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,18 +17,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Pebble";
     inherit version;
-    hash = "sha256-5/fs/QEHq3zsnzu0EahWxNfVUiAtTpqLA46aZK4x/Yw=";
+    hash = "sha256-J4TBR3ZvBjiM6nhAhLFL7JP9uqeTgw8ZgxVaozCipuQ=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [
-    "pebble"
-  ];
+  pythonImportsCheck = [ "pebble" ];
 
   meta = with lib; {
     description = "API to manage threads and processes within an application";

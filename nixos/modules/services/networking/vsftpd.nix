@@ -27,7 +27,7 @@ let
       type = types.bool;
       name = nixosName;
       value = mkOption {
-        description = lib.mdDoc description;
+        description = description;
         inherit default;
         type = types.bool;
       };
@@ -150,19 +150,19 @@ in
 
     services.vsftpd = {
 
-      enable = mkEnableOption (lib.mdDoc "vsftpd");
+      enable = mkEnableOption "vsftpd";
 
       userlist = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = lib.mdDoc "See {option}`userlistFile`.";
+        description = "See {option}`userlistFile`.";
       };
 
       userlistFile = mkOption {
         type = types.path;
         default = pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist);
         defaultText = literalExpression ''pkgs.writeText "userlist" (concatMapStrings (x: "''${x}\n") cfg.userlist)'';
-        description = lib.mdDoc ''
+        description = ''
           Newline separated list of names to be allowed/denied if {option}`userlistEnable`
           is `true`. Meaning see {option}`userlistDeny`.
 
@@ -175,7 +175,7 @@ in
       enableVirtualUsers = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the `pam_userdb`-based
           virtual user system
         '';
@@ -185,7 +185,7 @@ in
         type = types.nullOr types.str;
         example = "/etc/vsftpd/userDb";
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Only applies if {option}`enableVirtualUsers` is true.
           Path pointing to the `pam_userdb` user
           database used by vsftpd to authenticate the virtual users.
@@ -219,7 +219,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "/var/www/$USER";
-        description = lib.mdDoc ''
+        description = ''
           This option represents a directory which vsftpd will try to
           change into after a local (i.e. non- anonymous) login.
 
@@ -230,7 +230,7 @@ in
       anonymousUserHome = mkOption {
         type = types.path;
         default = "/home/ftp/";
-        description = lib.mdDoc ''
+        description = ''
           Directory to consider the HOME of the anonymous user.
         '';
       };
@@ -238,27 +238,27 @@ in
       rsaCertFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "RSA certificate file.";
+        description = "RSA certificate file.";
       };
 
       rsaKeyFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "RSA private key file.";
+        description = "RSA private key file.";
       };
 
       anonymousUmask = mkOption {
         type = types.str;
         default = "077";
         example = "002";
-        description = lib.mdDoc "Anonymous write umask.";
+        description = "Anonymous write umask.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
         example = "ftpd_banner=Hello";
-        description = lib.mdDoc "Extra configuration to add at the bottom of the generated configuration file.";
+        description = "Extra configuration to add at the bottom of the generated configuration file.";
       };
 
     } // (listToAttrs (catAttrs "nixosOption" optionDescription));
@@ -278,7 +278,7 @@ in
       }
       {
         assertion = (cfg.enableVirtualUsers -> cfg.userDbPath != null)
-                 && (cfg.enableVirtualUsers -> cfg.localUsers != null);
+                 && (cfg.enableVirtualUsers -> cfg.localUsers);
         message = "vsftpd: If enableVirtualUsers is true, you need to setup both the userDbPath and localUsers options.";
       }];
 

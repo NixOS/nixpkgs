@@ -10,10 +10,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "1l6i91xb81p1li1j2jm0r2rx8dbzl2yh468cl3dw0lqpqy4i65hx";
+    hash = "sha256-HRYTiccXU8DboAwZAr2gfzXUs8igSiFDpOEGtHpI0dA=";
   };
 
-  cargoSha256 = "1rykc06lq3bkblsrj68rbil63yqdnvxkxlppq1w74wf0d6cwjc08";
+  cargoHash = "sha256-CDDJmWnAcXJ4wPfSPvu2DfthaFwZGZk1XXMNTA1g0+c=";
 
   meta = with lib; {
     description = "Lightweight selection tool for usage in screenshot scripts etc";

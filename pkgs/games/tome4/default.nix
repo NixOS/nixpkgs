@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tales of Maj'eyal (rogue-like game)";
+    mainProgram = "tome4";
     homepage = "https://te4.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libuninameslist";
-  version = "20230916";
+  version = "20240910";
 
   src = fetchFromGitHub {
     owner = "fontforge";
-    repo = pname;
+    repo = "libuninameslist";
     rev = version;
-    sha256 = "sha256-8mLXTvi4KbU4NiCPaJINTeFbnTAabGDg8ufpSHSqy0Y=";
+    hash = "sha256-Pi30c3To57AzY59i39JVG2IUkGnq7CEAQkqJ1f5AZhw=";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/fontforge/libuninameslist/";
-    description = "A Library of Unicode names and annotation data";
+    changelog = "https://github.com/fontforge/libuninameslist/blob/${version}/ChangeLog";
+    description = "Library of Unicode names and annotation data";
     license = licenses.bsd3;
     maintainers = with maintainers; [ erictapen ];
     platforms = platforms.all;

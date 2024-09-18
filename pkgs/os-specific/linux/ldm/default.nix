@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A lightweight device mounter, with libudev as only dependency";
+    description = "Lightweight device mounter, with libudev as only dependency";
+    mainProgram = "ldm";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };

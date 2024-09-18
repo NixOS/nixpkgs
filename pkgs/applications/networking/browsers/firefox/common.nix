@@ -50,7 +50,7 @@ in
 , rustPlatform
 , unzip
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # runtime
 , bzip2
@@ -62,8 +62,8 @@ in
 , glib
 , gnum4
 , gtk3
-, icu
 , icu72
+, icu73
 , libGL
 , libGLU
 , libevent
@@ -121,7 +121,7 @@ in
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
+, webrtcSupport ? !privacySupport
 
 # digital rights managemewnt
 
@@ -183,7 +183,7 @@ let
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" {} ''
     mkdir -p $out/lib/wasm32-wasi
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/* ${pkgsCross.wasi32.llvmPackages.libcxxabi}/lib/*; do
+    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/*; do
       ln -s $lib $out/lib/wasm32-wasi
     done
   '';
@@ -234,28 +234,24 @@ buildStdenv.mkDerivation {
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "122") [
-    # dbus cflags regression fix
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+  patches = lib.optionals (lib.versionAtLeast version "111") [ ./env_var_for_system_dir-ff111.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f1f5f98290b3";
-      hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
+      name = "cbindgen-0.27.0-compat.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
+      hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
-  ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
-  ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "120.0.1") [
+  ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch  ]
+  ++ lib.optionals (lib.versionOlder version "123") [
     (fetchpatch {
-      # Do not crash on systems without an expected statically assumed page size.
-      # https://phabricator.services.mozilla.com/D194458
-      name = "mozbz1866025.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
-      hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
+      name = "clang-18.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
+      hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
-    ./122.0-libvpx-mozbz1875201.patch
   ]
   ++ extraPatches;
 
@@ -289,7 +285,7 @@ buildStdenv.mkDerivation {
     rustc
     unzip
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
@@ -298,9 +294,6 @@ buildStdenv.mkDerivation {
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
   preConfigure = ''
-    # remove distributed configuration files
-    rm -f configure js/src/configure .mozconfig*
-
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
 
@@ -308,8 +301,8 @@ buildStdenv.mkDerivation {
     export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
 
     # Set predictable directories for build and state
-    export MOZ_OBJDIR=$(pwd)/mozobj
-    export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
+    export MOZ_OBJDIR=$(pwd)/objdir
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
 
     # Don't try to send libnotify notifications during build
     export MOZ_NOSPAM=1
@@ -353,7 +346,7 @@ buildStdenv.mkDerivation {
       # since the profiling build has not been installed to $out
       ''
         OLD_LDFLAGS="$LDFLAGS"
-        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+        LDFLAGS="-Wl,-rpath,$(pwd)/objdir/dist/${binaryName}"
       ''}
     fi
   '' + lib.optionalString googleAPISupport ''
@@ -477,7 +470,9 @@ buildStdenv.mkDerivation {
   ]
   # icu73 changed how it follows symlinks which breaks in the firefox sandbox
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
-  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+  # icu74 fails to build on 127 and older
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
+  ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
   ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
@@ -510,7 +505,7 @@ buildStdenv.mkDerivation {
   '';
 
   preBuild = ''
-    cd mozobj
+    cd objdir
   '';
 
   postBuild = ''
@@ -535,9 +530,9 @@ buildStdenv.mkDerivation {
   preInstall = lib.optionalString crashreporterSupport ''
     ./mach buildsymbols
     mkdir -p $symbols/
-    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+    cp objdir/dist/*.crashreporter-symbols.zip $symbols/
   '' + ''
-    cd mozobj
+    cd objdir
   '';
 
   postInstall = ''

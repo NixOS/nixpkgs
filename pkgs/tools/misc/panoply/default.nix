@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "panoply";
-  version = "5.3.2";
+  version = "5.5.1";
 
   src = fetchurl {
     url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
-    sha256 = "sha256-+B/k3MqoefD3AVSYuR006eYyNe+njsfiqwBtQ+1YIHA=";
+    sha256 = "sha256-FBlr4t2Dch5HXfoLIwhZueECv9zGIRlTbs7L+Ny7u5Y=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
     wrapProgram "$out/bin/panoply" --prefix PATH : "${jre}/bin"
 
-    runHook postHook
+    runHook postInstall
   '';
 
   meta = with lib; {

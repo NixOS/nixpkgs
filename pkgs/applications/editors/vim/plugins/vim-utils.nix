@@ -415,6 +415,7 @@ rec {
 
   toVimPlugin = drv:
     drv.overrideAttrs(oldAttrs: {
+      name = "vimplugin-${oldAttrs.name}";
       # dont move the "doc" folder since vim expects it
       forceShare = [ "man" "info" ];
 

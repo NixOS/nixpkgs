@@ -1,26 +1,29 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "google-cloud-sql-proxy";
-  version = "2.8.2";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "cloud-sql-proxy";
     rev = "v${version}";
-    hash = "sha256-ZCUBr7K7mGpV/oCS4X6cteUGRjMjqAAA3saPfZ6Vowk=";
+    hash = "sha256-nEbrNRrEXXvLYi1vIvukUaq+WQn2HlonaaMn57yIA3I=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-ScGfP5HdXkMlU2PQmlQxuRC7a+iadf3dOKpFFi2EaAY=";
+  vendorHash = "sha256-EI2PDVdS9JB8ACkRTsfCBLz4JEmHQ6hApFSSfSvD/cQ=";
 
-  preCheck = ''
-    buildFlagsArray+="-short"
-  '';
+  checkFlags = [
+    "-short"
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Utility for ensuring secure connections to Google Cloud SQL instances";

@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mAgm9lKdJXbCZ8ofVk1b7wRstH5UIVu1mO1sS5stCig=";
+    hash = "sha256-mAgm9lKdJXbCZ8ofVk1b7wRstH5UIVu1mO1sS5stCig=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://git.kernel.org/pub/scm/utils/patatt/patatt.git/about/";
     license = licenses.mit0;
     description = "Add cryptographic attestation to patches sent via email";
+    mainProgram = "patatt";
     longDescription = ''
       This utility allows an easy way to add end-to-end cryptographic
       attestation to patches sent via mail.  It does so by adapting the

@@ -20,7 +20,7 @@ buildFHSEnv {
     gamemode
     curl
     gawk
-    gnome.zenity
+    zenity
     plasma5Packages.kdialog
     mangohud
     nettools
@@ -78,6 +78,7 @@ buildFHSEnv {
     glib
     gnutls
     gtk3
+    icu
     lcms2
     libevdev
     libgcrypt

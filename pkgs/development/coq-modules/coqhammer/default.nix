@@ -1,3 +1,9 @@
+###################################################################
+#                                                                 #
+# /!\ This coqhammer package is deprecated in favor of coq-hammer #
+#                                                                 #
+###################################################################
+
 { lib, mkCoqDerivation, coq, version ? null }:
 
 mkCoqDerivation {

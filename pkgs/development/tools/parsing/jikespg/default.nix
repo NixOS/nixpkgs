@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
+    substituteInPlace Makefile --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc ${lib.optionalString stdenv.isDarwin "-std=c89"}"
   '';
 
   sourceRoot = "jikespg/src";
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://jikes.sourceforge.net/";
-    description = "The Jikes Parser Generator";
+    description = "Jikes Parser Generator";
+    mainProgram = "jikespg";
     platforms = platforms.all;
     license = licenses.ipl10;
     maintainers = with maintainers; [ pSub ];

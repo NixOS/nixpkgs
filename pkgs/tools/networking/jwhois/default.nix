@@ -1,22 +1,37 @@
-{lib, stdenv, lynx, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lynx,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jwhois";
   version = "4.0";
 
   src = fetchurl {
-    url = "mirror://gnu/jwhois/jwhois-${version}.tar.gz";
-    sha256 = "0knn7iaj5v0n6jpmldyv2yk4bcy9dn3kywmv63bwc5drh9kvi6zs";
+    url = "mirror://gnu/jwhois/jwhois-${finalAttrs.version}.tar.gz";
+    hash = "sha256-+pu4Z4K5FcbXMLtyP4dtybNFphfbN1qvNBbsIlU81k4=";
   };
 
-  postInstall = ''
-    ln -s jwhois $out/bin/whois
-    sed -i -e "s|/usr/bin/lynx|${lynx}/bin/lynx|g" $out/etc/jwhois.conf
+  patches = [
+    ./connect.patch
+    ./service-name.patch
+  ];
+
+  postPatch = ''
+    # avoids error on darwin where `-Werror=implicit-function-declaration` is set by default
+    sed 1i'void timeout_init();' -i src/jwhois.c
+
+    substituteInPlace example/jwhois.conf \
+        --replace-fail "/usr/bin/lynx" ${lib.getExe lynx}
   '';
 
-  patches = [ ./connect.patch ./service-name.patch ];
-
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
+
+  postInstall = ''
+    ln -s $out/bin/jwhois $out/bin/whois
+  '';
 
   # Work around error from <stdio.h> on aarch64-darwin:
   #     error: 'TARGET_OS_IPHONE' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
@@ -24,9 +39,9 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-undef-prefix";
 
   meta = {
-    description = "A client for the WHOIS protocol allowing you to query the owner of a domain name";
+    description = "Client for the WHOIS protocol allowing you to query the owner of a domain name";
     homepage = "https://www.gnu.org/software/jwhois/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
   };
-}
+})

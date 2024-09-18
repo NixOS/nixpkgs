@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 xorg.libXres xorg.libXext ncurses ];
 
   meta = with lib; {
-    description = "A 'top' like tool for monitoring X Client server resource usage";
+    description = "'top' like tool for monitoring X Client server resource usage";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xrestop";
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;

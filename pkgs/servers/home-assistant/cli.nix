@@ -1,6 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  installShellFiles,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -34,30 +37,28 @@ python3.pkgs.buildPythonApplication rec {
     tabulate
   ];
 
-  # TODO: Completion needs to be adapted after support for latest click was added
-  # $ source <(_HASS_CLI_COMPLETE=bash_source hass-cli) # for bash
-  # $ source <(_HASS_CLI_COMPLETE=zsh_source hass-cli)  # for zsh
-  # $ eval (_HASS_CLI_COMPLETE=fish_source hass-cli)    # for fish
-  #postInstall = ''
-  #  mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
-  #  $out/bin/hass-cli completion bash > "$out/share/bash-completion/completions/hass-cli"
-  #  $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
-  #'';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd hass-cli \
+      --bash <(_HASS_CLI_COMPLETE=bash_source $out/bin/hass-cli) \
+      --fish <(_HASS_CLI_COMPLETE=fish_source $out/bin/hass-cli) \
+      --zsh <(_HASS_CLI_COMPLETE=zsh_source $out/bin/hass-cli)
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "homeassistant_cli"
-  ];
+  pythonImportsCheck = [ "homeassistant_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for Home Assistant";
+    mainProgram = "hass-cli";
     homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli";
     changelog = "https://github.com/home-assistant-ecosystem/home-assistant-cli/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.home-assistant.members;
   };
 }

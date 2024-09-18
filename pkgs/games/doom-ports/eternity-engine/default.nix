@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
+    mainProgram = "eternity";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ MP2E ];
+    maintainers = [ ];
   };
 }

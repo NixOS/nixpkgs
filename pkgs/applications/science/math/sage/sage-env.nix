@@ -5,10 +5,12 @@
 , sage-docbuild
 , env-locations
 , gfortran
+, ninja
 , bash
 , coreutils
 , gnused
 , gnugrep
+, gawk
 , binutils
 , pythonEnv
 , python3
@@ -39,10 +41,9 @@
 , ecm
 , lcalc
 , rubiks
-, flintqs
 , blas
 , lapack
-, flint
+, flint3
 , gmp
 , mpfr
 , zlib
@@ -64,11 +65,13 @@ let
     "@sage-local@/build"
     pythonEnv
     gfortran # for inline fortran
+    ninja # for inline fortran via numpy.f2py
     stdenv.cc # for cython
     bash
     coreutils
     gnused
     gnugrep
+    gawk
     binutils.bintools
     pkg-config
     pari
@@ -93,7 +96,6 @@ let
     ecm
     lcalc
     rubiks
-    flintqs
     jdk # only needed for `jmol` which may be replaced in the future
     less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
   ]
@@ -155,7 +157,7 @@ writeTextFile rec {
     # cython needs to find these libraries, otherwise will fail with `ld: cannot find -lflint` or similar
     export LDFLAGS='${
       lib.concatStringsSep " " (map (pkg: "-L${pkg}/lib") [
-        flint
+        flint3
         gap
         glpk
         gmp
@@ -174,7 +176,7 @@ writeTextFile rec {
         singular
         gmp.dev
         glpk
-        flint
+        flint3
         gap
         mpfr.dev
       ])
@@ -186,7 +188,7 @@ writeTextFile rec {
     export SAGE_EXTCODE='${sagelib.src}/src/sage/ext_data'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular giac]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular giac gap]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 } // { # equivalent of `passthru`, which `writeTextFile` doesn't support
   lib = sagelib;

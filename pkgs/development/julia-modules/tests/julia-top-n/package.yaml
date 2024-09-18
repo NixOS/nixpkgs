@@ -11,6 +11,7 @@ dependencies:
 - filepath
 - optparse-applicative
 - sandwich
+- string-interpolate
 - text
 - unliftio
 - vector

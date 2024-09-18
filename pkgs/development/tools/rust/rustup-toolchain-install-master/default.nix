@@ -58,6 +58,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Install a rustc master toolchain usable from rustup";
+    mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
     license = licenses.mit;
     maintainers = with maintainers; [ davidtwco ];

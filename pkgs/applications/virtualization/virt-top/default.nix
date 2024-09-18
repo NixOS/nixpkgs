@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A top-like utility for showing stats of virtualized domains";
+    description = "Top-like utility for showing stats of virtualized domains";
     homepage = "https://people.redhat.com/~rjones/virt-top/";
     license = licenses.gpl2Only;
     maintainers = [ ];

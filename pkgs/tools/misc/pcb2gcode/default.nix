@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Command-line tool for isolation, routing and drilling of PCBs ";
+    description = "Command-line tool for isolation, routing and drilling of PCBs";
     longDescription = ''
       pcb2gcode is a command-line software for the isolation, routing and drilling of PCBs.
       It takes Gerber files as input and it outputs gcode files, suitable for the milling of PCBs.

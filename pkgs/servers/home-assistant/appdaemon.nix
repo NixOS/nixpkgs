@@ -18,7 +18,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -51,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
+    mainProgram = "appdaemon";
     homepage = "https://github.com/AppDaemon/appdaemon";
     changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
     license = licenses.mit;

@@ -44,37 +44,37 @@ in
       pgp-privkey = toString (pkgs.writeText "sourcehut.pgp-privkey" ''
         -----BEGIN PGP PRIVATE KEY BLOCK-----
 
-        lFgEYqDRORYJKwYBBAHaRw8BAQdAehGoy36FUx2OesYm07be2rtLyvR5Pb/ltstd
-        Gk7hYQoAAP9X4oPmxxrHN8LewBpWITdBomNqlHoiP7mI0nz/BOPJHxEktDZuaXhv
+        lFgEZrFBKRYJKwYBBAHaRw8BAQdAS1Ffiytk0h0z0jfaT3qyiDUV/plVIUwOg1Yr
+        AXP2YmsAAP0W6QMC3G2G41rzCGLeSHeGibor1+XuxvcwUpVdW7ge+BH/tDZuaXhv
         cy90ZXN0cy9zb3VyY2VodXQgPHJvb3QraHV0QHNvdXJjZWh1dC5sb2NhbGRvbWFp
-        bj6IlwQTFgoAPxYhBPqjgjnL8RHN4JnADNicgXaYm0jJBQJioNE5AhsDBQkDwmcA
-        BgsJCAcDCgUVCgkICwUWAwIBAAIeBQIXgAAKCRDYnIF2mJtIySVCAP9e2nHsVHSi
-        2B1YGZpVG7Xf36vxljmMkbroQy+0gBPwRwEAq+jaiQqlbGhQ7R/HMFcAxBIVsq8h
-        Aw1rngsUd0o3dAicXQRioNE5EgorBgEEAZdVAQUBAQdAXZV2Sd5ZNBVTBbTGavMv
-        D6ORrUh8z7TI/3CsxCE7+yADAQgHAAD/c1RU9xH+V/uI1fE7HIn/zL0LUPpsuce2
-        cH++g4u3kBgTOYh+BBgWCgAmFiEE+qOCOcvxEc3gmcAM2JyBdpibSMkFAmKg0TkC
-        GwwFCQPCZwAACgkQ2JyBdpibSMlKagD/cTre6p1m8QuJ7kwmCFRSz5tBzIuYMMgN
-        xtT7dmS91csA/35fWsOykSiFRojQ7ccCSUTHL7ApF2EbL968tP/D2hIG
-        =Hjoc
+        bj6IkwQTFgoAOxYhBMISh2Z08FCi969cq9R2wSP9QF2bBQJmsUEpAhsDBQsJCAcC
+        AiICBhUKCQgLAgQWAgMBAh4HAheAAAoJENR2wSP9QF2b4JMA+wQLdxVcod/ppyvH
+        QguGqqhkpk8KquCddOuFnQVAfHFWAQCK5putVk4mGzsoLTbOJCSGRC4pjEktZawQ
+        MTqJmnOuC5xdBGaxQSkSCisGAQQBl1UBBQEBB0Aed6UYJyighTY+KuPNQ439st3x
+        x04T1j58sx3AnKgYewMBCAcAAP9WLB79HO1zFRqTCnk7GIEWWogMFKVpazeBUNu9
+        h9rzCA2+iHgEGBYKACAWIQTCEodmdPBQovevXKvUdsEj/UBdmwUCZrFBKQIbDAAK
+        CRDUdsEj/UBdmwgJAQDVk/px/pSzqreSeDLzxlb6dOo+N1KcicsJ0akhSJUcvwD9
+        EPhpEDZu/UBKchAutOhWwz+y6pyoF4Vt7XG+jbJQtA4=
+        =KaQc
         -----END PGP PRIVATE KEY BLOCK-----
       '');
       pgp-pubkey = pkgs.writeText "sourcehut.pgp-pubkey" ''
         -----BEGIN PGP PUBLIC KEY BLOCK-----
 
-        mDMEYqDRORYJKwYBBAHaRw8BAQdAehGoy36FUx2OesYm07be2rtLyvR5Pb/ltstd
-        Gk7hYQq0Nm5peG9zL3Rlc3RzL3NvdXJjZWh1dCA8cm9vdCtodXRAc291cmNlaHV0
-        LmxvY2FsZG9tYWluPoiXBBMWCgA/FiEE+qOCOcvxEc3gmcAM2JyBdpibSMkFAmKg
-        0TkCGwMFCQPCZwAGCwkIBwMKBRUKCQgLBRYDAgEAAh4FAheAAAoJENicgXaYm0jJ
-        JUIA/17acexUdKLYHVgZmlUbtd/fq/GWOYyRuuhDL7SAE/BHAQCr6NqJCqVsaFDt
-        H8cwVwDEEhWyryEDDWueCxR3Sjd0CLg4BGKg0TkSCisGAQQBl1UBBQEBB0BdlXZJ
-        3lk0FVMFtMZq8y8Po5GtSHzPtMj/cKzEITv7IAMBCAeIfgQYFgoAJhYhBPqjgjnL
-        8RHN4JnADNicgXaYm0jJBQJioNE5AhsMBQkDwmcAAAoJENicgXaYm0jJSmoA/3E6
-        3uqdZvELie5MJghUUs+bQcyLmDDIDcbU+3ZkvdXLAP9+X1rDspEohUaI0O3HAklE
-        xy+wKRdhGy/evLT/w9oSBg==
-        =pJD7
+        mDMEZrFBKRYJKwYBBAHaRw8BAQdAS1Ffiytk0h0z0jfaT3qyiDUV/plVIUwOg1Yr
+        AXP2Ymu0Nm5peG9zL3Rlc3RzL3NvdXJjZWh1dCA8cm9vdCtodXRAc291cmNlaHV0
+        LmxvY2FsZG9tYWluPoiTBBMWCgA7FiEEwhKHZnTwUKL3r1yr1HbBI/1AXZsFAmax
+        QSkCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQ1HbBI/1AXZvgkwD7
+        BAt3FVyh3+mnK8dCC4aqqGSmTwqq4J1064WdBUB8cVYBAIrmm61WTiYbOygtNs4k
+        JIZELimMSS1lrBAxOomac64LuDgEZrFBKRIKKwYBBAGXVQEFAQEHQB53pRgnKKCF
+        Nj4q481Djf2y3fHHThPWPnyzHcCcqBh7AwEIB4h4BBgWCgAgFiEEwhKHZnTwUKL3
+        r1yr1HbBI/1AXZsFAmaxQSkCGwwACgkQ1HbBI/1AXZsICQEA1ZP6cf6Us6q3kngy
+        88ZW+nTqPjdSnInLCdGpIUiVHL8A/RD4aRA2bv1ASnIQLrToVsM/suqcqBeFbe1x
+        vo2yULQO
+        =luxZ
         -----END PGP PUBLIC KEY BLOCK-----
       '';
-      pgp-key-id = "0xFAA38239CBF111CDE099C00CD89C8176989B48C9";
+      pgp-key-id = "0xC212876674F050A2F7AF5CABD476C123FD405D9B";
     };
   };
 

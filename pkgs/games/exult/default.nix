@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://exult.info";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ azahi eelco ];
+    maintainers = with maintainers; [ azahi ];
   };
 }

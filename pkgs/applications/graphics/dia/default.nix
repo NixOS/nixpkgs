@@ -15,7 +15,7 @@
 , pkg-config
 , poppler
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
   # Building with docs are still failing in unstable-2023-09-28
 , withDocs ? false
 }:
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++
   lib.optionals withDocs [
     dblatex
@@ -68,6 +68,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Gnome Diagram drawing software";
+    mainProgram = "dia";
     homepage = "http://live.gnome.org/Dia";
     maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;

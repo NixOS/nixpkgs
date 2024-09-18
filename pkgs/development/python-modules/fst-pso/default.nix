@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, miniful
-, numpy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  miniful,
+  numpy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fstpso"
-  ];
+  pythonImportsCheck = [ "fstpso" ];
 
   meta = with lib; {
     description = "Fuzzy Self-Tuning PSO global optimization library";

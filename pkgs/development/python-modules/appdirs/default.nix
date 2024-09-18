@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A python module for determining appropriate platform-specific dirs";
+    description = "Python module for determining appropriate platform-specific dirs";
     homepage = "https://github.com/ActiveState/appdirs";
     license = lib.licenses.mit;
   };

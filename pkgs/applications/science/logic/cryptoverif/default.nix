@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, ocaml }:
+{ lib, stdenv, fetchurl, ocaml, writeScript }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cryptoverif";
-  version = "2.08pl1";
+  version = "2.10";
 
   src = fetchurl {
-    url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    hash = "sha256-rmORSZuhds9W2WpNgYf4AJM2jgEUPoJit4G64qLqj5w=";
+    url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${finalAttrs.version}.tar.gz";
+    hash = "sha256-Gg7PYMB5cYWk9+xuxxcFY9L9vynHX2xYyMDo/0DauPM=";
   };
 
   /* Fix up the frontend to load the 'default' cryptoverif library
@@ -40,11 +40,24 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = writeScript "update-cryptoverif" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl pcre2
+
+    set -eu -o pipefail
+
+    version="$(curl -s https://bblanche.gitlabpages.inria.fr/CryptoVerif/ |
+      pcre2grep -o1 '\bCryptoVerif version ([.[:alnum:]]+),')"
+
+    update-source-version "$UPDATE_NIX_ATTR_PATH" "$version"
+  '';
+
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
-    homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
+    mainProgram = "cryptoverif";
+    homepage    = "https://bblanche.gitlabpages.inria.fr/CryptoVerif/";
     license     = lib.licenses.cecill-b;
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

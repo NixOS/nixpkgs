@@ -35,6 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/abhinav/doc2go";
     changelog = "https://github.com/abhinav/doc2go/blob/${src.rev}/CHANGELOG.md";
     description = "Your Go project's documentation, to-go";
+    mainProgram = "doc2go";
     longDescription = ''
       doc2go is a command line tool that generates static HTML documentation
       from your Go code. It is a self-hosted static alternative to

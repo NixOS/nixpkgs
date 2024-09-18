@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://gopher.quux.org:70/devel/gopher";
-    description = "A ncurses gopher client";
+    description = "Ncurses gopher client";
     platforms = platforms.linux; # clang doesn't like local regex.h
     license = licenses.gpl2;
     maintainers = with maintainers; [ sternenseemann ];

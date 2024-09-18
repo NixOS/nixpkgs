@@ -7,7 +7,9 @@ Meilisearch is a lightweight, fast and powerful search engine. Think elastic sea
 the minimum to start meilisearch is
 
 ```nix
-services.meilisearch.enable = true;
+{
+  services.meilisearch.enable = true;
+}
 ```
 
 this will start the http server included with meilisearch on port 7700.

@@ -49,6 +49,7 @@
 , libmbim
 , libcbor
 , xz
+, nix-update-script
 , enableFlashrom ? false
 , enablePassim ? false
 }:
@@ -92,7 +93,7 @@ let
 
   test-firmware =
     let
-      version = "unstable-2022-04-02";
+      version = "0-unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
@@ -120,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.13";
+  version = "1.9.24";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -131,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-h2e9MFTb777xbNRlzKWXc5GUdu/BHSkJTaogEE5byjo=";
+    hash = "sha256-jAR/c8hedprteCj5wrjST4yo8TxJ4JmLbPXSwBO3gJs=";
   };
 
   patches = [
@@ -228,7 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_msr=disabled"
   ];
 
-  # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
+  # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
 
   doCheck = true;
@@ -325,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/bios-settings.d/README.md"
       "fwupd/fwupd.conf"
@@ -371,10 +373,11 @@ stdenv.mkDerivation (finalAttrs: {
       };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ rvdp ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    changelog = "https://github.com/fwupd/fwupd/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ rvdp ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 })

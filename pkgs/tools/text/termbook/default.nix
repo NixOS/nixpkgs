@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd termbook \
       --bash <($out/bin/termbook completions bash) \
       --fish <($out/bin/termbook completions fish) \
@@ -51,7 +51,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A runner for `mdbooks` to keep your documentation tested";
+    description = "Runner for `mdbooks` to keep your documentation tested";
+    mainProgram = "termbook";
     homepage = "https://github.com/Byron/termbook/";
     changelog = "https://github.com/Byron/termbook/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

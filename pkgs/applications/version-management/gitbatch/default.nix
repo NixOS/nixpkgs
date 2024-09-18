@@ -15,15 +15,18 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  nativeBuildInputs = [
+  nativeCheckInputs = [
     git # required by unit tests
   ];
 
   preCheck = ''
     HOME=$(mktemp -d)
-    # Disable tests requiring network access to gitlab.com
-    buildFlagsArray+=("-run" "[^(Test(Run|Start|(Fetch|Pull)With(Go|)Git))]")
   '';
+
+  checkFlags = [
+    # Disable tests requiring network access to gitlab.com
+    "-skip=Test(Run|Start|(Fetch|Pull)With(Go|)Git)"
+  ];
 
   meta = with lib; {
     description = "Running git UI commands";

@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# runtime
-, click
-, peewee
+  # runtime
+  click,
+  peewee,
 
-# tests
-, psycopg2
-, pytestCheckHook
+  # tests
+  psycopg2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.12.2";
+  version = "1.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,25 +27,21 @@ buildPythonPackage rec {
     owner = "klen";
     repo = "peewee_migrate";
     rev = "refs/tags/${version}";
-    hash = "sha256-jxM2cvlDsoiUlVoxdS3wpUKlwMveMraiR431A8kIdgI=";
+    hash = "sha256-sC63WH/4EmoQYfvl3HyBHDzT/jMZW/G7mTC138+ZHHU=";
   };
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     peewee
     click
   ];
 
-  pythonImportsCheck = [
-    "peewee_migrate"
-  ];
+  pythonImportsCheck = [ "peewee_migrate" ];
 
   nativeCheckInputs = [
     psycopg2

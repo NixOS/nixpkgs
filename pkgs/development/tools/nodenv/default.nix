@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nodenv";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "nodenv";
     repo = "nodenv";
     rev = "v${version}";
-    sha256 = "sha256-S7Uld7wiVJjwuvfupBodIAIOO2c/ywEmFfhEHVOCcCc=";
+    sha256 = "sha256-PGeZKL7qsffMAZIsCLB244Fuu48GyWw5Rh67ePu6h38=";
   };
 
   buildPhase = ''
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Manage multiple NodeJS versions";
+    mainProgram = "nodenv";
     homepage = "https://github.com/nodenv/nodenv/";
     changelog = "https://github.com/nodenv/nodenv/releases/tag/v${version}";
     license = licenses.mit;

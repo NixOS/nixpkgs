@@ -1,30 +1,28 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, asgiref
-, hatchling
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, opentelemetry-util-http
-, pytestCheckHook
+{
+  buildPythonPackage,
+  pythonOlder,
+  asgiref,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  opentelemetry-util-http,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-asgi";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-asgi";
 
-  format = "pyproject";
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     opentelemetry-instrumentation
     opentelemetry-api
@@ -36,6 +34,9 @@ buildPythonPackage {
     opentelemetry-test-utils
     pytestCheckHook
   ];
+
+  # Tests have issues starting with 0.47b0
+  doCheck = false;
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.asgi" ];
 

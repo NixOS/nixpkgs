@@ -1,32 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyvesync";
-  version = "2.1.10";
+  version = "2.1.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ddtTtTAUpvS8DN1vKVN+CjnmYp20xyxHydwOaDRjWzo=";
+    hash = "sha256-k9eAbHFFo5rFYTNVxN4qEFnW2zmXThr3Ki1lZtj9V/g=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Test are not available (not in PyPI tarball and there are no GitHub releases)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyvesync"
-  ];
+  pythonImportsCheck = [ "pyvesync" ];
 
   meta = with lib; {
     description = "Python library to manage Etekcity Devices and Levoit Air Purifier";

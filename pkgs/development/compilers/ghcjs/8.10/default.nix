@@ -17,7 +17,6 @@
 , gcc
 , lib
 , ghcjsDepOverrides ? (_:_:{})
-, haskell
 , linkFarm
 , buildPackages
 }:

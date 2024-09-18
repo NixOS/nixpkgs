@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-# build inputs
-, torch
-, torchvision
-, timm
-, pycocotools
-, omegaconf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  # build inputs
+  torch,
+  torchvision,
+  timm,
+  pycocotools,
+  omegaconf,
 }:
 let
   pname = "effdet";
@@ -35,7 +36,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "effdet" ];
 
   meta = {
-    description = "A PyTorch implementation of EfficientDet";
+    description = "PyTorch implementation of EfficientDet";
     homepage = "https://pypi.org/project/effdet";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];

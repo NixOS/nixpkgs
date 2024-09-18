@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, requests }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests }:
 
 buildKodiAddon rec {
   pname = "radioparadise";
@@ -6,7 +6,7 @@ buildKodiAddon rec {
   version = "2.0.0";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/script.radioparadise/script.radioparadise-${version}.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/script.radioparadise/script.radioparadise-${version}.zip";
     sha256 = "sha256-eRCP0XMQHmyDrZ8Y6RGFfxQ1r26/bWbE/PJz4PET7D8=";
   };
 

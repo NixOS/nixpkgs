@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchpatch, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , ncurses, termcap
 , curses-library ?
     if stdenv.hostPlatform.isWindows
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   propagatedBuildInputs = [ curses-library ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   patchFlags = [ "-p0" ];
 

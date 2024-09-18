@@ -25,15 +25,24 @@
 , enableSound ? true
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    getAttr
+    hasAttr
+    licenses
+    maintainers
+    optional
+    platforms
+    ;
+
   dfGame = versionToName dfVersion;
   dwarf-fortress =
     if hasAttr dfGame df-games
     then getAttr dfGame df-games
     else throw "Unknown Dwarf Fortress version: ${dfVersion}";
   dwarf-therapist = dwarf-fortress.dwarf-therapist;
+
+  mainProgram = if enableDFHack then "dfhack" else "dwarf-fortress";
 in
 buildEnv {
   name = "dwarf-fortress-full";
@@ -43,11 +52,12 @@ buildEnv {
         enableIntro enableTruetype enableFPS enableTextMode enableSound;
     })
   ]
-  ++ lib.optional enableDwarfTherapist dwarf-therapist
-  ++ lib.optional enableLegendsBrowser legends-browser;
+  ++ optional enableDwarfTherapist dwarf-therapist
+  ++ optional enableLegendsBrowser legends-browser;
 
-  meta = with lib; {
-    description = "An opinionated wrapper for Dwarf Fortress";
+  meta = {
+    inherit mainProgram;
+    description = "Opinionated wrapper for Dwarf Fortress";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.all;

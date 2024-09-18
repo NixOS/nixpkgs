@@ -1,54 +1,64 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.10.0";
+  version = "3.11.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
-    repo = pname;
+    repo = "barman";
     rev = "refs/tags/release/${version}";
-    hash = "sha256-NcDW1SLeP2BVH+TQp1M03Otg75axSFXfwQzlEJ1JOxo=";
+    hash = "sha256-X39XOv8HJdSjMjMMnmB7Gxjseg5k/LuKICTxapcHVsU=";
   };
 
-  patches = [
-    ./unwrap-subprocess.patch
+  patches = [ ./unwrap-subprocess.patch ];
+
+  build-system = with python3Packages; [
+    distutils
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    argcomplete
+    azure-identity
+    azure-mgmt-compute
+    azure-storage-blob
+    boto3
+    google-cloud-compute
+    google-cloud-storage
+    grpcio
+    psycopg2
+    python-dateutil
+    python-snappy
   ];
 
   nativeCheckInputs = with python3Packages; [
     mock
-    python-snappy
-    google-cloud-storage
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    argcomplete
-    azure-identity
-    azure-storage-blob
-    boto3
-    psycopg2
-    python-dateutil
-  ];
-
-  disabledTests = [
-    # Assertion error
-    "test_help_output"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # FsOperationFailed
-    "test_get_file_mode"
-  ];
+  disabledTests =
+    [
+      # Assertion error
+      "test_help_output"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # FsOperationFailed
+      "test_get_file_mode"
+    ];
 
   meta = with lib; {
-    homepage = "https://www.pgbarman.org/";
     description = "Backup and Recovery Manager for PostgreSQL";
+    homepage = "https://www.pgbarman.org/";
     changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
-    maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.unix;
   };
 }

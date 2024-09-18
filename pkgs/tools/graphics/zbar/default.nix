@@ -10,7 +10,7 @@
 , qtbase
 , qtx11extras
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , xmlto
 , docbook_xsl
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook_xsl
   ] ++ lib.optionals enableVideo [
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     qtbase
   ];
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
       EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5 and QR
       Code.
     '';
-    maintainers = with maintainers; [ delroth raskin ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.lgpl21;
     homepage = "https://github.com/mchehab/zbar";

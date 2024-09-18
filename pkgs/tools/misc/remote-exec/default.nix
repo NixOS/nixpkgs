@@ -8,6 +8,7 @@
 , toml
 , watchdog
 , pytestCheckHook
+, pytest-cov-stub
 , rsync
 }:
 
@@ -34,20 +35,15 @@ buildPythonApplication rec {
   # remove legacy endpoints, we use --multi now
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"mremote' '#"mremote'
+      --replace-fail '"mremote' '#"mremote'
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     pydantic
     toml
     watchdog
   ];
-
-  # disable pytest --cov
-  preCheck = ''
-    rm setup.cfg
-  '';
 
   doCheck = true;
 
@@ -57,6 +53,7 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [

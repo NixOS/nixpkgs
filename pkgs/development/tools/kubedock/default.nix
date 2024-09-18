@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubedock";
-  version = "0.15.3";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "joyrex2001";
     repo = "kubedock";
     rev = version;
-    hash = "sha256-klrjXL6Crqi74uwZTC0Sp/zMn0fHcA1m8jX3ehRKNHU=";
+    hash = "sha256-UfOFehpN9Qj4LKH61akSidikPytZS4QSFOUzDDw3OCI=";
   };
 
-  vendorHash = "sha256-me56QyJi77dP3geNecfO19SxFyuM2CqwmJRkwomsG1o=";
+  vendorHash = "sha256-qPBqKDn6NFa35+f+s2iCeHKdLI7ihK1DUMlq2mldNEI=";
 
   # config.Build not defined as it would break r-ryantm
   ldflags = [

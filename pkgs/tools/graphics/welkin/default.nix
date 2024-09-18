@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An RDF visualizer";
+    description = "RDF visualizer";
     maintainers = with lib.maintainers; [
       raskin
     ];
     hydraPlatforms = [];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = lib.licenses.free;
+    license = lib.licenses.bsd3;
     platforms = with lib.platforms; unix;
   };
 }

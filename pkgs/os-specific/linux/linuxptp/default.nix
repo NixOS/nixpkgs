@@ -1,17 +1,21 @@
-{ lib, stdenv, fetchurl, linuxHeaders } :
+{ lib, stdenv, fetchFromGitHub, linuxHeaders } :
 
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
-  version = "4.2";
+  version = "4.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/linuxptp/${pname}-${version}.tgz";
-    hash = "sha256-cOOOXSdk4CF0Q9pvFOiEb+QBpHIpOsE42EGcB6ZlRHo=";
+  src = fetchFromGitHub {
+    owner = "nwtime";
+    repo = "linuxptp";
+    rev = "v${version}";
+    hash = "sha256-w1buo+D8Mnd6ytMhQYhvCDqt+RejlNSN/iVjrDR+Khk=";
   };
 
+  outputs = [ "out" "man" ];
+
   postPatch = ''
-    substituteInPlace incdefs.sh --replace \
+    substituteInPlace incdefs.sh --replace-fail \
        '/usr/include/linux/' "${linuxHeaders}/include/linux/"
   '';
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
-    homepage = "https://linuxptp.sourceforge.net/";
+    homepage = "https://linuxptp.nwtime.org";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;

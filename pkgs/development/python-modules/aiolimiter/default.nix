@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, importlib-metadata
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  importlib-metadata,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-BpLh9utf2oJe+83rsIZeV5+MjbJ3aO5slMNVbUywQIo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -42,9 +39,7 @@ buildPythonPackage rec {
       --replace " --cov=aiolimiter --cov-config=tox.ini --cov-report term-missing" ""
   '';
 
-  pythonImportsCheck = [
-    "aiolimiter"
-  ];
+  pythonImportsCheck = [ "aiolimiter" ];
 
   meta = with lib; {
     description = "Implementation of a rate limiter for asyncio";

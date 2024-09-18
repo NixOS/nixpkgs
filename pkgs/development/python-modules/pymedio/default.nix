@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, cryptography
-, nibabel
-, numpy
-, pydicom
-, simpleitk
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  cryptography,
+  nibabel,
+  numpy,
+  pydicom,
+  simpleitk,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-x3CHoWASDrUoCXfj73NF+0Y/3Mb31dK2Lh+o4OD9ryk=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     simpleitk
   ];
 
-  pythonImportsCheck = [
-    "pymedio"
-  ];
+  pythonImportsCheck = [ "pymedio" ];
 
   meta = with lib; {
     description = "Read medical image files into Numpy arrays";

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# extra: websocket
-, websocket-client
+  # extra: websocket
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
   };
 
   passthru.optional-dependencies = {
-    websocket = [
-      websocket-client
-    ];
+    websocket = [ websocket-client ];
     # interactive_ui requires curses package
   };
 
@@ -30,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Remote control Samsung televisions via a TCP/IP connection";
+    mainProgram = "samsungctl";
     homepage = "https://github.com/Ape/samsungctl";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

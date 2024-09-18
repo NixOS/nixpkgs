@@ -1,38 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, poetry-core
-, pythonRelaxDepsHook
-, datetime
-, httplib2
-, icalendar
-, python-dateutil
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  poetry-core,
+  httplib2,
+  icalendar,
+  python-dateutil,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "icalevents";
-  version = "0.1.27";
+  version = "0.1.29";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = pname;
+    repo = "icalevents";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vSYQEJFBjXUF4WwEAtkLtcO3y/am00jGS+8Vj+JMMqQ=";
+    hash = "sha256-Bp+Wz88q65Gem8LyRz0A4xE5hIgOD+iZ7E1UlnfFiD4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    datetime
+  dependencies = [
     httplib2
     icalendar
     python-dateutil
@@ -40,15 +37,12 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "datetime"
     "httplib2"
     "icalendar"
     "pytz"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Makes HTTP calls

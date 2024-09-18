@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , glib
 , gobject-introspection
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     glib
     gobject-introspection
     gdk-pixbuf

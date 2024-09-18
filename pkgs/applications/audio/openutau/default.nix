@@ -5,25 +5,26 @@
 , dotnetCorePackages
 , dbus
 , fontconfig
-, libICE
-, libSM
-, libX11
 , portaudio
 }:
 
 buildDotnetModule rec {
   pname = "OpenUtau";
-  version = "0.1.327";
+  version = "0.1.529";
 
   src = fetchFromGitHub {
     owner = "stakira";
     repo = "OpenUtau";
     rev = "build/${version}";
-    hash = "sha256-Bss32Fk4yBEFqaIxT2dfdvWXz09sO6akiitDQBXoSvY=";
+    hash = "sha256-HE0KxPKU7tYZbYiCL8sm6I/NZiX0MJktt+5d6qB1A2E=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
+
+  # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [[...]/OpenUtau.Core.csproj]
+  # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: System.IO.IOException: The process cannot access the file '[...]/OpenUtau.Core.deps.json' because it is being used by another process. [[...]/OpenUtau.Core.csproj]
+  enableParallelBuilding = false;
 
   projectFile = "OpenUtau.sln";
   nugetDeps = ./deps.nix;
@@ -32,10 +33,6 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     dbus
-    fontconfig
-    libICE
-    libSM
-    libX11
     portaudio
   ];
 
@@ -83,7 +80,7 @@ buildDotnetModule rec {
       # worldline resampler binary - no source is available (hence "unfree") but usage of the binary is MIT
       unfreeRedistributable
     ];
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "OpenUtau";
   };

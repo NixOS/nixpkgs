@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   inherit monoDLLFixer;
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Attic/Hyena";
-    description = "A C# library which contains a hodge-podge of random stuff";
+    homepage = "https://gitlab.gnome.org/Archive/hyena";
+    description = "C# library which contains a hodge-podge of random stuff";
     longDescription = ''
       Hyena is a C# library used to make awesome applications. It contains a lot of random things,
       including useful data structures, a Sqlite-based db layer, cool widgets, a JSON library,

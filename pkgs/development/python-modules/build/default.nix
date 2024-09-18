@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, build
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, filelock
-, packaging
-, pyproject-hooks
-, pytest-mock
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tomli
-, wheel
+{
+  lib,
+  stdenv,
+  build,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  filelock,
+  packaging,
+  pyproject-hooks,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.0.3";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "build";
     rev = "refs/tags/${version}";
-    hash = "sha256-SGWpm+AGIfqKMpDfmz2aMYmcs+XVREbHIXSuU4R7U/k=";
+    hash = "sha256-G0g+1v19sQMUuQlZKGELZOwwX07i7TIdEdaYzr8bKtI=";
   };
 
   postPatch = ''
@@ -36,16 +37,12 @@ buildPythonPackage rec {
     sed -i '/importlib-metadata >= 4.6/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     packaging
     pyproject-hooks
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # We need to disable tests because this package is part of the bootstrap chain
   # and its test dependencies cannot be built yet when this is being built.
@@ -78,25 +75,25 @@ buildPythonPackage rec {
 
       __darwinAllowLocalNetworking = true;
 
-      disabledTests = [
-        # Tests often fail with StopIteration
-        "test_isolat"
-        "test_default_pip_is_never_too_old"
-        "test_build"
-        "test_with_get_requires"
-        "test_init"
-        "test_output"
-        "test_wheel_metadata"
-      ] ++ lib.optionals stdenv.isDarwin [
-        # Expects Apple's Python and its quirks
-        "test_can_get_venv_paths_with_conflicting_default_scheme"
-      ];
+      disabledTests =
+        [
+          # Tests often fail with StopIteration
+          "test_isolat"
+          "test_default_pip_is_never_too_old"
+          "test_build"
+          "test_with_get_requires"
+          "test_init"
+          "test_output"
+          "test_wheel_metadata"
+        ]
+        ++ lib.optionals stdenv.isDarwin [
+          # Expects Apple's Python and its quirks
+          "test_can_get_venv_paths_with_conflicting_default_scheme"
+        ];
     };
   };
 
-  pythonImportsCheck = [
-    "build"
-  ];
+  pythonImportsCheck = [ "build" ];
 
   meta = with lib; {
     mainProgram = "pyproject-build";

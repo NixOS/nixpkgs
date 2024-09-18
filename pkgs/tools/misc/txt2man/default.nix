@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mvertes";
     repo = "txt2man";
-    rev = "${pname}-${version}";
+    rev = "txt2man-${version}";
     hash = "sha256-Aqi5PNNaaM/tr9A/7vKeafYKYIs/kHbwHzE7+R/9r9s=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Convert flat ASCII text to man page format";
     homepage = "http://mvertes.free.fr/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
   };

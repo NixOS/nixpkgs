@@ -1,28 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, click
-, click-log
-, click-threading
-, requests-toolbelt
-, requests
-, atomicwrites
-, hypothesis
-, pytestCheckHook
-, pytest-subtesthack
-, setuptools
-, setuptools-scm
-, wheel
-, aiostream
-, aiohttp-oauthlib
-, aiohttp
-, pytest-asyncio
-, trustme
-, aioresponses
-, vdirsyncer
-, testers
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  click,
+  click-log,
+  click-threading,
+  requests-toolbelt,
+  requests,
+  atomicwrites,
+  hypothesis,
+  pytestCheckHook,
+  pytest-subtesthack,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  aiostream,
+  aiohttp-oauthlib,
+  aiohttp,
+  pytest-asyncio,
+  trustme,
+  aioresponses,
+  vdirsyncer,
+  testers,
 }:
 
 buildPythonPackage rec {
@@ -45,12 +45,9 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "aiostream"
-  ];
+  pythonRelaxDeps = [ "aiostream" ];
 
   propagatedBuildInputs = [
     atomicwrites
@@ -90,7 +87,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pimutils/vdirsyncer";
     changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ loewenheim ];
+    maintainers = [ ];
     mainProgram = "vdirsyncer";
   };
 }

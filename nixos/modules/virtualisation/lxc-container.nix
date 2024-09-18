@@ -60,6 +60,7 @@
     system.build.squashfs = pkgs.callPackage ../../lib/make-squashfs.nix {
       fileName = "nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}";
 
+      hydraBuildProduct = true;
       noStrip = true; # keep directory structure
       comp = "zstd -Xcompression-level 6";
 
@@ -74,7 +75,7 @@
       ];
     };
 
-    system.build.installBootLoader = pkgs.writeScript "install-lxd-sbin-init.sh" ''
+    system.build.installBootLoader = pkgs.writeScript "install-lxc-sbin-init.sh" ''
       #!${pkgs.runtimeShell}
       ${pkgs.coreutils}/bin/ln -fs "$1/${initScript}" /sbin/init
     '';

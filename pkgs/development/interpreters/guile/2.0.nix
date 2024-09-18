@@ -152,7 +152,7 @@ builder rec {
         processing.
       '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = with maintainers; [ ludo ];
     platforms = platforms.all;
   };
 }

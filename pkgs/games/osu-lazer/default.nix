@@ -5,6 +5,7 @@
 , dotnetCorePackages
 , makeDesktopItem
 , copyDesktopItems
+, makeWrapper
 , ffmpeg
 , alsa-lib
 , SDL2
@@ -17,13 +18,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.221.0";
+  version = "2024.906.2";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    hash = "sha256-isRGruIMU05/4WDI0jkgycmA0sxkBL4pu9fclTr8VtY=";
+    hash = "sha256-ykCO+q28IUJumt3nra1BUlwuXqLS1FYOqcDe2LPPGVY=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -32,7 +33,10 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   runtimeDeps = [
     ffmpeg
@@ -59,8 +63,11 @@ buildDotnetModule rec {
   fixupPhase = ''
     runHook preFixup
 
+    wrapProgram $out/bin/osu! \
+      --set OSU_EXTERNAL_UPDATE_PROVIDER 1
+
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu\!.png
+      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu!.png
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
@@ -74,10 +81,12 @@ buildDotnetModule rec {
     name = "osu";
     exec = "osu!";
     icon = "osu!";
-    comment = meta.description;
+    comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     type = "Application";
     categories = [ "Game" ];
   })];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
@@ -91,5 +100,4 @@ buildDotnetModule rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };
-  passthru.updateScript = ./update.sh;
 }

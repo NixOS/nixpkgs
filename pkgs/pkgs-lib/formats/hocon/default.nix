@@ -27,13 +27,9 @@ let
   '';
 in
 {
-  # https://github.com/lightbend/config/blob/main/HOCON.md
   format = {
     generator ? hocon-generator
     , validator ? hocon-validator
-    # `include classpath("")` is not implemented in pyhocon.
-    # In the case that you need this functionality,
-    # you will have to disable pyhocon validation.
     , doCheck ? true
   }: let
     hoconLib = {
@@ -70,10 +66,10 @@ in
           }
         else
           assert lib.assertMsg (lib.isAttrs value) ''
-            Value of invalid type provided to `hocon.lib.mkSubstition`: ${lib.typeOf value}
+            Value of invalid type provided to `hocon.lib.mkSubstitution`: ${lib.typeOf value}
           '';
           assert lib.assertMsg (value ? "value") ''
-            Argument to `hocon.lib.mkSubstition` is missing a `value`:
+            Argument to `hocon.lib.mkSubstitution` is missing a `value`:
             ${builtins.toJSON value}
           '';
           {
@@ -107,7 +103,7 @@ in
     generate = name: value:
       let
         # TODO: remove in 24.11
-        # Backwards compatability for generators in the following locations:
+        # Backwards compatibility for generators in the following locations:
         #  - nixos/modules/services/networking/jibri/default.nix (__hocon_envvar)
         #  - nixos/modules/services/networking/jicofo.nix (__hocon_envvar, __hocon_unquoted_string)
         #  - nixos/modules/services/networking/jitsi-videobridge.nix (__hocon_envvar)
@@ -153,6 +149,7 @@ in
           inherit name;
 
           dontUnpack = true;
+          preferLocalBuild = true;
 
           json = builtins.toJSON finalValue;
           passAsFile = [ "json" ];

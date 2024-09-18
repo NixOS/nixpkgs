@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Secure peer-to-peer VoIP server that uses the SIP protocol";
     homepage = "https://www.gnu.org/software/sipwitch/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
     broken = true; # Require libexosip2 < 5.0.0 which is vulnerable to CVE-2014-10375.
   };

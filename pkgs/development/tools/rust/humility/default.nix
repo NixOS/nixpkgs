@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Debugger for Hubris";
+    mainProgram = "humility";
     homepage = "https://github.com/oxidecomputer/humility";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ therishidesai ];

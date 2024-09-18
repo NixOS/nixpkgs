@@ -1,13 +1,12 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , srt
 , bc
 , pkg-config
 , perl
 , openssl
 , zlib
-, ffmpeg_4
+, ffmpeg_7
 , libvpx
 , libopus
 , libuuid
@@ -19,31 +18,34 @@
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.15.14";
+  version = "0.16.8";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-pLLnk0FXJ6gb0WSdWGEzJSEbKdOpjdWECIRzrHvi8HQ=";
+    sha256 = "sha256-f0kZTOI2XzhnXwWLJzWqUJmz3d7c9wGN/D5LC0nY/08=";
   };
 
-  sourceRoot = "${src.name}/src";
+  patches = [
+    # ffmpeg 7.0 Update: Use new channel layout
+    # https://github.com/AirenSoft/OvenMediaEngine/pull/1626
+    ./support-ffmpeg-7.patch
+  ];
+
   makeFlags = [ "release" "CONFIG_LIBRARY_PATHS=" "CONFIG_PKG_PATHS=" "GLOBAL_CC=$(CC)" "GLOBAL_CXX=$(CXX)" "GLOBAL_LD=$(CXX)" "SHELL=${stdenv.shell}" ];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl srt zlib ffmpeg_4 libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
+  buildInputs = [ openssl srt zlib ffmpeg_7 libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
 
   preBuild = ''
+    cd src
+
     patchShebangs core/colorg++
     patchShebangs core/colorgcc
     patchShebangs projects/main/update_git_info.sh
 
-    sed -i -e 's/const AVOutputFormat /AVOutputFormat /g' \
-      projects/modules/mpegts/mpegts_writer.cpp \
-      projects/modules/file/file_writer.cpp \
-      projects/modules/rtmp/rtmp_writer.cpp
     sed -i -e '/^CC =/d' -e '/^CXX =/d' -e '/^AR =/d' projects/third_party/pugixml-1.9/scripts/pugixml.make
   '';
 
@@ -57,6 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open-source streaming video service with sub-second latency";
+    mainProgram = "OvenMediaEngine";
     homepage    = "https://ovenmediaengine.com";
     license     = licenses.agpl3Only;
     maintainers = with maintainers; [ lukegb ];

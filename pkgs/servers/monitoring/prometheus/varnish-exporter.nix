@@ -25,6 +25,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";
     description = "Varnish exporter for Prometheus";
+    mainProgram = "prometheus_varnish_exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
   };

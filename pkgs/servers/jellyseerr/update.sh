@@ -1,39 +1,16 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix curl jq prefetch-yarn-deps nix-prefetch-github
+#!nix-shell -i bash -p curl jq common-updater-scripts nix prefetch-yarn-deps
 
-set -euo pipefail
+set -eu -o pipefail
 
-if [[ "$#" -gt 1 || "$1" == -* ]]; then
-  echo "Regenerates packaging data for jellyseerr."
-  echo "Usage: $0 [git release tag]"
-  exit 1
-fi
+version=${1:-$(curl -s https://api.github.com/repos/Fallenbagel/jellyseerr/releases/latest | jq --raw-output '.tag_name[1:]')}
+update-source-version jellyseerr $version
 
-tag="$1"
+nix_file=$(nix-instantiate --eval --strict -A "jellyseerr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+nix_dir=$(dirname $nix_file)
+cp $(nix-instantiate --eval --expr 'with import ./default.nix { }; "${jellyseerr.src}/package.json"' | sed 's/"//g') $nix_dir
 
-if [ -z "$tag" ]; then
-  tag="$(
-    curl "https://api.github.com/repos/Fallenbagel/jellyseerr/releases?per_page=1" |
-    jq -r '.[0].tag_name'
-  )"
-fi
-
-src="https://raw.githubusercontent.com/Fallenbagel/jellyseerr/$tag"
-src_hash=$(nix-prefetch-github Fallenbagel jellyseerr --rev ${tag} | jq -r .sha256)
-
-tmpdir=$(mktemp -d)
-trap 'rm -rf "$tmpdir"' EXIT
-
-pushd $tmpdir
-curl -O "$src/yarn.lock"
-yarn_sha256=$(prefetch-yarn-deps yarn.lock)
-popd
-
-curl -O "$src/package.json"
-cat > pin.json << EOF
-{
-  "version": "$(echo $tag | grep -P '(\d|\.)+' -o)",
-  "srcHash": "sha256-$src_hash",
-  "yarnSha256": "$yarn_sha256"
-}
-EOF
+old_yarn_hash=$(nix-instantiate --eval --strict -A "jellyseerr.offlineCache.outputHash" | tr -d '"' | sed -re 's|[+]|\\&|g')
+lock_file=$(nix-instantiate --eval --expr 'with import ./default.nix { }; "${jellyseerr.src}/yarn.lock"' | sed 's/"//g')
+new_yarn_hash=$(nix hash to-sri --type sha256 $(prefetch-yarn-deps $lock_file))
+sed -i "$nix_file" -re "s|\"$old_yarn_hash\"|\"$new_yarn_hash\"|"

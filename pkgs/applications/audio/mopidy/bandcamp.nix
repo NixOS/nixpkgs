@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   version = "1.1.5";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wg9zcOKfZQRhpyA1Cu5wvdwKpmrlcr2m9mrqBHgUXAQ=";
+    hash = "sha256-wg9zcOKfZQRhpyA1Cu5wvdwKpmrlcr2m9mrqBHgUXAQ=";
   };
 
   propagatedBuildInputs = with python3Packages; [ mopidy pykka ];

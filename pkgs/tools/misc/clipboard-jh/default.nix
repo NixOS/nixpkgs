@@ -5,6 +5,7 @@
 , libffi
 , pkg-config
 , wayland-protocols
+, wayland-scanner
 , wayland
 , xorg
 , darwin
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = lib.optionals stdenv.isLinux [

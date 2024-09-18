@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lief";
-  version = "0.13.2";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     rev = version;
-    sha256 = "sha256-lH4SqwPB2Jp/wUI2Cll67PQbHbwMqpNuLy/ei8roiHg=";
+    sha256 = "sha256-2W/p6p7YXqSNaVs8yPAnLQhbBVIQWEbUVnhx9edV5gI=";
   };
 
   outputs = [ "out" "py" ];
@@ -29,21 +29,26 @@ stdenv.mkDerivation rec {
 
   # Not a propagatedBuildInput because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
-  buildInputs = [
+  buildInputs = with python.pkgs; [
     python
+    build
+    pathspec
+    pip
+    pydantic
+    scikit-build-core
   ];
 
   env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
 
   postBuild = ''
     pushd ../api/python
-    ${pyEnv.interpreter} setup.py build --parallel=$NIX_BUILD_CORES
+    ${pyEnv.interpreter} -m build --no-isolation --wheel --skip-dependency-check --config-setting=--parallel=$NIX_BUILD_CORES
     popd
   '';
 
   postInstall = ''
     pushd ../api/python
-    ${pyEnv.interpreter} setup.py install --skip-build --root=/ --prefix=$py
+    ${pyEnv.interpreter} -m pip install --prefix $py dist/*.whl
     popd
   '';
 

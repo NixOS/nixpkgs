@@ -20,13 +20,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable svnserve to serve Subversion repositories through the SVN protocol.";
+        description = "Whether to enable svnserve to serve Subversion repositories through the SVN protocol.";
       };
 
       svnBaseDir = mkOption {
         type = types.str;
         default = "/repos";
-        description = lib.mdDoc "Base directory from which Subversion repositories are accessed.";
+        description = "Base directory from which Subversion repositories are accessed.";
       };
     };
 

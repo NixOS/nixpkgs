@@ -1,6 +1,6 @@
 { lib, stdenv, stdenvNoCC, dtc }:
 
-with lib; {
+{
   # Compile single Device Tree overlay source
   # file (.dts) into its compiled variant (.dtb)
   compileDTS = ({
@@ -28,11 +28,11 @@ with lib; {
     name = "device-tree-overlays";
     nativeBuildInputs = [ dtc ];
     buildCommand = let
-      overlays = toList overlays';
+      overlays = lib.toList overlays';
     in ''
       mkdir -p $out
       cd "${base}"
-      find . -type f -name '*.dtb' -print0 \
+      find -L . -type f -name '*.dtb' -print0 \
         | xargs -0 cp -v --no-preserve=mode --target-directory "$out" --parents
 
       for dtb in $(find "$out" -type f -name '*.dtb'); do
@@ -40,7 +40,7 @@ with lib; {
         # skip files without `compatible` string
         test -z "$dtbCompat" && continue
 
-        ${flip (concatMapStringsSep "\n") overlays (o: ''
+        ${lib.flip (lib.concatMapStringsSep "\n") overlays (o: ''
         overlayCompat="$(fdtget -t s "${o.dtboFile}" / compatible)"
 
         # skip incompatible and non-matching overlays

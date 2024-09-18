@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,14 +23,12 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
-  pythonImportsCheck = [
-    "pure_pcapy"
-  ];
+  pythonImportsCheck = [ "pure_pcapy" ];
 
   meta = with lib; {
     description = "Reimplementation of pcapy";
     homepage = "https://github.com/rcloran/pure-pcapy-3";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, llvmPackages
 , fetchurl
 , pkg-config
 , freetype
@@ -20,7 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ freetype ];
+  buildInputs = [ freetype ]
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false)
+      (llvmPackages.compiler-rt.override {
+        doFakeLibgcc = true;
+      });
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
   postPatch = ''
@@ -53,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An advanced font engine";
+    description = "Advanced font engine";
     homepage = "https://graphite.sil.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.raskin ];

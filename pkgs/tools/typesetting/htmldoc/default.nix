@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "htmldoc";
-  version = "1.9.17";
+  version = "1.9.18";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
     rev = "v${version}";
-    sha256 = "1qq45l1vxxa970cm0wjvgj0w88hd4vsisa85pf5i54yvfzf11sqw";
+    sha256 = "sha256-fibk58X0YtQ8vh8Lyqp9ZAsC79BjCptiqUA5t5Hiisg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://michaelrsweet.github.io/htmldoc";
     changelog   = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
     license     = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.unix;
 
     longDescription = ''

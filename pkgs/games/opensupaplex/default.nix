@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, testers
-, opensupaplex
-, SDL2
-, SDL2_mixer
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  testers,
+  opensupaplex,
+  SDL2,
+  SDL2_mixer,
 }:
 
 let
@@ -68,22 +69,27 @@ stdenv.mkDerivation rec {
     version = "v${version}";
   };
 
-  desktopItems = [(makeDesktopItem {
-    name = "opensupaplex";
-    exec = meta.mainProgram;
-    icon = "open-supaplex";
-    desktopName = "OpenSupaplex";
-    comment = meta.description;
-    categories = [ "Application" "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "opensupaplex";
+      exec = meta.mainProgram;
+      icon = "open-supaplex";
+      desktopName = "OpenSupaplex";
+      comment = meta.description;
+      categories = [
+        "Application"
+        "Game"
+      ];
+    })
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "A decompilation of Supaplex in C and SDL";
     homepage = "https://github.com/sergiou87/open-supaplex";
     changelog = "https://github.com/sergiou87/open-supaplex/blob/master/changelog/v${version}.txt";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.ivar ];
-    platforms = platforms.linux; # Many more are supported upstream, but only linux is tested.
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matteopacini ];
+    platforms = lib.platforms.linux; # Many more are supported upstream, but only linux is tested.
     mainProgram = "opensupaplex";
   };
 }

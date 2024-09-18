@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://gva.noekeon.org/blahtexml/";
-    description = "A TeX to MathML converter";
+    description = "TeX to MathML converter";
     longDescription = ''
       Blahtex is a program written in C++, which converts an equation given in
       a syntax close to TeX into MathML. It is designed by David Harvey and is

@@ -2,7 +2,7 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, callPackage
+, stdenv
 }:
 
 buildDotnetModule rec {
@@ -33,11 +33,14 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Dump certificates from PE files in different formats";
+    mainProgram = "CertDump";
     homepage = "https://github.com/secana/CertDump";
     longDescription = ''
       Cross-Platform tool to dump the signing certificate from a Portable Executable (PE) file.
     '';
     license = licenses.asl20;
     maintainers = [ maintainers.baloo ];
+    # net5 has no osx-arm64 target available
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

@@ -60,18 +60,18 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "1.23.6";
+  version = "1.24.8";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-rBHrhZ3UBEiOUVPNyWUbtDQeW6r007Pyfir8gvmq3Ck=";
+    hash = "sha256-pRjZvpds2yAG1FOC1/+xubjWS8P9PLc8picNdS+n9Eg=";
   };
 
-  patches = [ ./0001-Use-command-v-in-favor-of-which.patch
-              ./0002-Add-Darwin-deps.patch
-              ./0003-Fix-cpp-build.patch
-            ];
+  patches = [
+    ./0002-Add-Darwin-deps.patch
+    ./0003-Fix-cpp-build.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
@@ -166,20 +166,21 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
+    cp ./build/shared-release/libmupdf${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib
   '' + (lib.optionalString (stdenv.isDarwin) ''
     for exe in $bin/bin/*; do
       install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
     done
   '') + (lib.optionalString (enableX11 || enableGL) ''
     mkdir -p $bin/share/icons/hicolor/48x48/apps
-    cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
+    cp docs/logo/mupdf-icon-48.png $bin/share/icons/hicolor/48x48/apps
   '') + (if enableGL then ''
     ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
   '' else lib.optionalString (enableX11) ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
   '') + (lib.optionalString (enableCxx) ''
     cp platform/c++/include/mupdf/*.h $out/include/mupdf
-    cp build/*/libmupdfcpp.so $out/lib
+    cp build/*/libmupdfcpp.so* $out/lib
   '') + (lib.optionalString (enablePython) (''
     mkdir -p $out/${python3.sitePackages}/mupdf
     cp build/*/_mupdf.so $out/${python3.sitePackages}
@@ -208,8 +209,11 @@ stdenv.mkDerivation rec {
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     changelog = "https://git.ghostscript.com/?p=mupdf.git;a=blob_plain;f=CHANGES;hb=${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ vrthra fpletz lilyinstarlight ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
     mainProgram = "mupdf";
+    # ImportError: cannot import name '_mupdf' from partially initialized module 'mupdf'
+    # (most likely due to a circular import)
+    broken = enablePython;
   };
 }

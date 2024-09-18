@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Shell front end for the duplicity backup tool";
+    mainProgram = "duply";
     longDescription = ''
       Duply is a shell front end for the duplicity backup tool
       https://www.nongnu.org/duplicity. It greatly simplifies its usage by
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
       secure backups on non-trusted spaces are no child's play?
     '';
     homepage = "https://duply.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
     platforms = lib.platforms.unix;
   };

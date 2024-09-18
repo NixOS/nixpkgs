@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A high quality MPEG Audio Layer III (MP3) encoder";
+    description = "High quality MPEG Audio Layer III (MP3) encoder";
     homepage    = "http://lame.sourceforge.net";
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ codyopel ];

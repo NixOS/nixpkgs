@@ -1,37 +1,40 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchpatch
-, fetchPypi
-, numba
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fetchPypi,
+  numba,
+  numpy,
+  pytest7CheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.14.0";
-  format = "setuptools";
+  version = "0.15.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X1gno39s1vZzClQfmUyVxgo64jKeAfS6Ic7VM5rqAJg=";
+    hash = "sha256-1LHFfST/D2Ty/VtalbSbf7hO0geibX1Yzidk3MXHK4Q=";
   };
 
-  patches = [
-    # https://github.com/pydata/sparse/issues/594
-    (fetchpatch {
-      name = "fix-test.patch";
-      url = "https://github.com/pydata/sparse/commit/a55651d630efaea6fd2758d083c6d02333b0eebe.patch";
-      hash = "sha256-Vrx7MDlKtA8fOuFZenEkvgA70Hzm+p/4SPZuCvwtLuo=";
-    })
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "--cov-report term-missing --cov-report html --cov-report=xml --cov-report=term --cov sparse --cov-config .coveragerc --junitxml=junit/test-results.xml" ""
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numba
     numpy
     scipy
@@ -39,11 +42,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dask
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
-  pythonImportsCheck = [
-    "sparse"
+  pythonImportsCheck = [ "sparse" ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   meta = with lib; {
@@ -52,6 +58,6 @@ buildPythonPackage rec {
     changelog = "https://sparse.pydata.org/en/stable/changelog.html";
     downloadPage = "https://github.com/pydata/sparse/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

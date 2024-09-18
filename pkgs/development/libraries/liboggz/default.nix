@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://xiph.org/oggz/";
-    description = "A C library and tools for manipulating with Ogg files and streams";
+    description = "C library and tools for manipulating with Ogg files and streams";
     longDescription = ''
       Oggz comprises liboggz and the tool oggz, which provides commands to
       inspect, edit and validate Ogg files. The oggz-chop tool can also be used

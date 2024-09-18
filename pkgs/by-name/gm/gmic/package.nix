@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.3.1";
+  version = "3.4.2";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -34,15 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-HagGabJ1jkg5SkMlr0Y5rGFw64jPW8QLuR0I2idM1N0=";
+    hash = "sha256-oyhwdX/eWbb5i7j/Aw7ocJk3KrGdxfKJx+P4Hzemlw8=";
   };
 
   # TODO: build this from source
-  # Reference: src/Makefile, directive gmic_stdlib.h
+  # Reference: src/Makefile, directive gmic_stdlib_community.h
   gmic_stdlib = fetchurl {
-    name = "gmic_stdlib.h";
-    url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
-    hash = "sha256-7JzFU4HvAtC5Nz5vusKCnJ8VMuKfSi1yFmjj0Hh+vA4=";
+    name = "gmic_stdlib_community.h";
+    url = "https://gmic.eu/gmic_stdlib_community${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
+    hash = "sha256-quzQ0g6kmbJFygUOlKdTn9Fe9J7jhlLOiNal1kX3iHY=";
   };
 
   nativeBuildInputs = [
@@ -71,10 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib.h
-
-    # CMake build files were moved to subdirectory.
-    mv resources/CMakeLists.txt resources/cmake .
+    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
   ''
   + lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
@@ -102,11 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       for component in src gmic_stdlib; do
-          # The script will not perform an update when the version attribute is
-          # up to date from previous platform run; we need to clear it before
-          # each run
-          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
-          update-source-version "--source-key=$component" "gmic" $latestVersion
+          update-source-version "--source-key=$component" "gmic" $latestVersion --ignore-same-version
       done
     '';
   };
@@ -114,10 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gmic.eu/";
     description = "Open and full-featured framework for image processing";
+    mainProgram = "gmic";
     license = lib.licenses.cecill21;
     maintainers = [
       lib.maintainers.AndersonTorres
-      lib.maintainers.lilyinstarlight
     ];
     platforms = lib.platforms.unix;
   };

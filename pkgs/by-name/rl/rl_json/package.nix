@@ -5,15 +5,15 @@
 , tcl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rl_json";
-  version = "0.14";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "RubyLane";
     repo = "rl_json";
-    rev = version;
-    hash = "sha256-7xjZQ8F8czrkr7p2Xg1xAZRCsDpiWXHXVxPhG0f9PNg=";
+    rev = finalAttrs.version;
+    hash = "sha256-FkOsdOHPE75bSkKw3cdaech6jAv0f/RJ9tgRVzPSAdA=";
     fetchSubmodules = true;
   };
 
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
       values, and comparable in speed.
     '';
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    platforms = tcl.meta.platforms;
+    # From version 0.15.1: 'endian.h' file not found
+    broken = stdenv.isDarwin;
   };
-}
+})

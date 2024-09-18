@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/atheme/atheme.git";
     rev = "v${version}";
-    sha256 = "sha256-KAC1ZPNo4TqfVryKOYYef8cRWRgFmyEdvl1bgvpGNiM=";
+    hash = "sha256-KAC1ZPNo4TqfVryKOYYef8cRWRgFmyEdvl1bgvpGNiM=";
     leaveDotGit = true;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A set of services for IRC networks";
+    description = "Set of services for IRC networks";
     homepage = "https://atheme.github.io/";
     license = licenses.isc;
     platforms = platforms.unix;

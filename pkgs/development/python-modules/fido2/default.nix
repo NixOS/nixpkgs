@@ -1,49 +1,39 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, mock
-, poetry-core
-, pyfakefs
-, pythonOlder
-, six
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  poetry-core,
+  pyscard,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.1.2";
-  format = "pyproject";
+  version = "1.1.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YRDZExBvdhmSAbMtJisoV1YsxGuh0LnFH7zjDck2xXM=";
+    hash = "sha256-JhAPIm0SztYhymGYUozhft9nt430KHruEoX+481aqfw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    cryptography
-    six
-  ];
+  dependencies = [ cryptography ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-    mock
-    pyfakefs
-  ];
+  passthru.optional-dependencies = {
+    pcsc = [ pyscard ];
+  };
 
-  unittestFlagsArray = [
-    "-v"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "fido2"
-  ];
+  unittestFlagsArray = [ "-v" ];
+
+  pythonImportsCheck = [ "fido2" ];
 
   meta = with lib; {
     description = "Provides library functionality for FIDO 2.0, including communication with a device over USB";

@@ -24,7 +24,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/sandreas/tone";
-    description = "A cross platform utility to dump and modify audio metadata for a wide variety of formats";
+    description = "Cross platform utility to dump and modify audio metadata for a wide variety of formats";
     license = licenses.asl20;
     maintainers = [ maintainers.jvanbruegge ];
     platforms = platforms.linux;

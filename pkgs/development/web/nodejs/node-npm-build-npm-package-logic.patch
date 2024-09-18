@@ -49,7 +49,7 @@ index 1fa8b1f96..a026bb50d 100644
 +      if (process.env['NIX_NODEJS_BUILDNPMPACKAGE']) {
 +        const spawn = require('@npmcli/promise-spawn')
 +
-+        const npmWithNixFlags = (args, cmd) => spawn('bash', ['-c', 'npm ' + args + ` $npm${cmd}Flags "$\{npm${cmd}FlagsArray[@]}" $npmFlags "$\{npmFlagsArray[@]}"`], { cwd: dir, env: { ...process.env, _PACOTE_NO_PREPARE_: noPrepare.join('\n') } }, { message: `\`npm ${args}\` failed` })
++        const npmWithNixFlags = (args, cmd) => spawn('bash', ['-c', 'npm ' + args + ` $npm${cmd}Flags "$\{npm${cmd}FlagsArray[@]}" $npmFlags "$\{npmFlagsArray[@]}" || [ -n "$forceGitDeps" ]`], { cwd: dir, env: { ...process.env, _PACOTE_NO_PREPARE_: noPrepare.join('\n') } }, { message: `\`npm ${args}\` failed` })
 +        const patchShebangs = () => spawn('bash', ['-c', 'source $stdenv/setup; patchShebangs node_modules'], { cwd: dir })
 +
 +        // the DirFetcher will do its own preparation to run the prepare scripts
@@ -57,7 +57,7 @@ index 1fa8b1f96..a026bb50d 100644
 +        //
 +        // We ignore this.npmConfig to maintain an environment that's as close
 +        // to the rest of the build as possible.
-+        return spawn('bash', ['-c', '$prefetchNpmDeps --fixup-lockfile package-lock.json'], { cwd: dir })
++        return spawn('bash', ['-c', '$prefetchNpmDeps --fixup-lockfile package-lock.json || [ -n "$forceGitDeps" ]'], { cwd: dir })
 +        .then(() => npmWithNixFlags('ci --ignore-scripts', 'Install'))
 +        .then(patchShebangs)
 +        .then(() => npmWithNixFlags('rebuild', 'Rebuild'))

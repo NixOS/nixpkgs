@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, eigen, libGL, doxygen, spglib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, eigen, libGL, spglib
 , mmtf-cpp, glew, python3, libarchive, libmsym, msgpack, qttools, wrapQtAppsHook
 }:
 

@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , glib
 , gtk3
@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "themechanger";
-  version = "0.11.1";
+  version = "0.12.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "ALEX11BR";
     repo = "ThemeChanger";
     rev = "v${version}";
-    sha256 = "sha256-zSbh+mqCKquOyQASwVUW6hghmUc37nTuoa8pWCHM/a8=";
+    hash = "sha256-/quCi2srn9XlhJQKYNkOaZDHTwdciB9SAlF/RML0q+M=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
     gtk3
   ];
@@ -52,7 +52,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
-    description = "A theme changing utility for Linux";
+    description = "Theme changing utility for Linux";
+    mainProgram = "themechanger";
     longDescription = ''
       This app is a theme changing utility for Linux, BSDs, and whatnots.
       It lets the user change GTK 2/3/4, Kvantum, icon and cursor themes, edit GTK CSS with live preview, and set some related options.

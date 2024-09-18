@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildGoModule
 , buildNpmPackage
 , makeWrapper
@@ -10,7 +11,6 @@
 }:
 
 let
-  pname = "photofield-ui";
   version = "0.13.0";
 
   src = fetchFromGitHub {
@@ -35,11 +35,20 @@ let
   };
 in
 
-buildGoModule rec {
+buildGoModule {
   pname = "photofield";
   inherit version src;
 
-  vendorHash = "sha256-4JFP3vs/Z8iSKgcwfxpdnQpO9kTF68XQArFHYP8IoDQ=";
+  patches = [
+    # Needed for Go 1.22 build support
+    (fetchpatch {
+      name = "upgrade-pyroscope-go.patch";
+      url = "https://github.com/SmilyOrg/photofield/commit/681dcd48ab4113b0e99fe1a0d3638f0dfe985c05.patch";
+      hash = "sha256-JGb5KAI/SmR1kiiaPoSsAF7G4YWDFXj0K3Gjw0zA3Ro=";
+    })
+  ];
+
+  vendorHash = "sha256-BnImE4wK2MDO21N5tT9Q9w+NkDpdBCEqUwzuH/xb6fg=";
 
   preBuild = ''
     cp -r ${webui}/share/photofield-ui ui/dist

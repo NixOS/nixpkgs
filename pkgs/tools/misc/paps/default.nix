@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Pango to PostScript converter";
     homepage = "https://github.com/dov/paps";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "paps";
   };

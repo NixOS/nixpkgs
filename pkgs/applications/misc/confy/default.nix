@@ -11,7 +11,7 @@
 , pkg-config
 , python3
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs build-aux/meson/postinstall.py
   '';
 

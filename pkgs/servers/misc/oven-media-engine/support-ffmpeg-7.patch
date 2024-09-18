@@ -1,0 +1,829 @@
+From 6ca213328dc9f63cd9b39768b4c1d5953c71219c Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 19:25:57 +0200
+Subject: [PATCH 01/12] Update ffmpeg version to 7.0
+
+---
+ misc/prerequisites.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/misc/prerequisites.sh b/misc/prerequisites.sh
+index a647558d3..eb4505cdc 100755
+--- a/misc/prerequisites.sh
++++ b/misc/prerequisites.sh
+@@ -13,7 +13,7 @@ OPUS_VERSION=1.3.1
+ VPX_VERSION=1.11.0
+ FDKAAC_VERSION=2.0.2
+ NASM_VERSION=2.15.05
+-FFMPEG_VERSION=5.0.1
++FFMPEG_VERSION=7.0
+ JEMALLOC_VERSION=5.3.0
+ PCRE2_VERSION=10.39
+ OPENH264_VERSION=2.4.0
+
+From 80b015e5374a2e4aa3f850a6797ff066860caa3d Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 19:26:26 +0200
+Subject: [PATCH 02/12] ffmpeg Update: stream->codecpar->channel_layout to
+ ch_layout
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+```
+[ 17/505|  3%] [static] libapi_server.a: C++ projects/api_server/controllers/v1/vhosts/apps/output_profiles/output_profiles_controller.cpp => intermediates/RELEASE/objs/api_server/controllers/v1/vhosts/apps/output_profiles/output_profiles_controller.o
+In file included from projects/providers/multiplex/multiplex_stream.h:11,
+                 from projects/providers/multiplex/multiplex_application.h:16,
+                 from projects/api_server/controllers/v1/vhosts/apps/multiplex_channels/multiplex_channels_controller.cpp:13:
+projects/modules/ffmpeg/ffmpeg_conv.h: In static member function ‘static bool ffmpeg::Conv::ToMediaTrack(AVStream*, std::shared_ptr<MediaTrack>)’:
+projects/modules/ffmpeg/ffmpeg_conv.h:375:130: error: ‘AVCodecParameters’ {aka ‘struct AVCodecParameters’} has no member named ‘channel_layout’; did you mean ‘ch_layout’?
+  375 |                                         media_track->GetChannel().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(stream->codecpar->channel_layout));
+      |                                                                                                                                  ^~~~~~~~~~~~~~
+      |                                                                                                                                  ch_layout
+```
+---
+ src/projects/modules/ffmpeg/ffmpeg_conv.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/projects/modules/ffmpeg/ffmpeg_conv.h b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+index 115864a05..c7eb3da34 100644
+--- a/src/projects/modules/ffmpeg/ffmpeg_conv.h
++++ b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+@@ -373,7 +373,7 @@ namespace ffmpeg
+ 				case cmn::MediaType::Audio:
+ 					media_track->SetSampleRate(stream->codecpar->sample_rate);
+ 					media_track->GetSample().SetFormat(ffmpeg::Conv::ToAudioSampleFormat(stream->codecpar->format));
+-					media_track->GetChannel().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(stream->codecpar->channel_layout));
++					media_track->GetChannel().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(stream->codecpar->ch_layout));
+ 					break;
+ 				default:
+ 					break;
+
+From 29d3b3dbd7f3d0d05b71cb5f5f41f3396304b389 Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 19:26:26 +0200
+Subject: [PATCH 03/12] ffmpeg Update: Replace deprecated channel_layout with
+ ch_layout.u.mask
+
+```
+    /**
+     * Audio only. The channel layout bitmask. May be 0 if the channel layout is
+     * unknown or unspecified, otherwise the number of bits set must be equal to
+     * the channels field.
+     * @deprecated use ch_layout
+     */
+    attribute_deprecated
+    uint64_t channel_layout;
+```
+---
+ src/projects/modules/ffmpeg/ffmpeg_conv.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/projects/modules/ffmpeg/ffmpeg_conv.h b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+index c7eb3da34..1be2ccb90 100644
+--- a/src/projects/modules/ffmpeg/ffmpeg_conv.h
++++ b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+@@ -373,7 +373,7 @@ namespace ffmpeg
+ 				case cmn::MediaType::Audio:
+ 					media_track->SetSampleRate(stream->codecpar->sample_rate);
+ 					media_track->GetSample().SetFormat(ffmpeg::Conv::ToAudioSampleFormat(stream->codecpar->format));
+-					media_track->GetChannel().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(stream->codecpar->ch_layout));
++					media_track->GetChannel().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(stream->codecpar->ch_layout.u.mask));
+ 					break;
+ 				default:
+ 					break;
+@@ -493,7 +493,7 @@ namespace ffmpeg
+ 					media_frame->SetMediaType(media_type);
+ 					media_frame->SetBytesPerSample(::av_get_bytes_per_sample(static_cast<AVSampleFormat>(frame->format)));
+ 					media_frame->SetNbSamples(frame->nb_samples);
+-					media_frame->GetChannels().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(frame->channel_layout));
++					media_frame->GetChannels().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(frame->ch_layout.u.mask));
+ 					media_frame->SetSampleRate(frame->sample_rate);
+ 					media_frame->SetFormat(frame->format);
+ 					media_frame->SetDuration(frame->pkt_duration);
+
+From 86d3cd217e6b59ee6ab85400548ccc2697045f21 Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 19:46:33 +0200
+Subject: [PATCH 04/12] ffmpeg Update: Replace deprecated frame->pkt_duration
+ with duration
+
+```
+    /**
+     * duration of the corresponding packet, expressed in
+     * AVStream->time_base units, 0 if unknown.
+     * - encoding: unused
+     * - decoding: Read by user.
+     *
+     * @deprecated use duration instead
+     */
+    attribute_deprecated
+    int64_t pkt_duration;
+```
+---
+ src/projects/modules/ffmpeg/ffmpeg_conv.h                   | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_aac.cpp       | 6 +++---
+ src/projects/transcoder/codec/decoder/decoder_avc.cpp       | 4 ++--
+ .../transcoder/codec/decoder/decoder_avc_nilogan.cpp        | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp    | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_avc_qsv.cpp   | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp   | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_hevc.cpp      | 4 ++--
+ .../transcoder/codec/decoder/decoder_hevc_nilogan.cpp       | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp   | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_hevc_qsv.cpp  | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp  | 4 ++--
+ src/projects/transcoder/codec/decoder/decoder_mp3.cpp       | 6 +++---
+ src/projects/transcoder/codec/decoder/decoder_opus.cpp      | 6 +++---
+ src/projects/transcoder/codec/decoder/decoder_vp8.cpp       | 2 +-
+ 15 files changed, 32 insertions(+), 32 deletions(-)
+
+diff --git a/src/projects/modules/ffmpeg/ffmpeg_conv.h b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+index 1be2ccb90..06d4107c8 100644
+--- a/src/projects/modules/ffmpeg/ffmpeg_conv.h
++++ b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+@@ -478,7 +478,7 @@ namespace ffmpeg
+ 					media_frame->SetHeight(frame->height);
+ 					media_frame->SetFormat(frame->format);
+ 					media_frame->SetPts((frame->pts == AV_NOPTS_VALUE) ? -1LL : frame->pts);
+-					media_frame->SetDuration(frame->pkt_duration);
++					media_frame->SetDuration(frame->duration);
+ 
+ 					AVFrame* moved_frame = av_frame_alloc();
+ 					av_frame_move_ref(moved_frame, frame);
+@@ -496,7 +496,7 @@ namespace ffmpeg
+ 					media_frame->GetChannels().SetLayout(ffmpeg::Conv::ToAudioChannelLayout(frame->ch_layout.u.mask));
+ 					media_frame->SetSampleRate(frame->sample_rate);
+ 					media_frame->SetFormat(frame->format);
+-					media_frame->SetDuration(frame->pkt_duration);
++					media_frame->SetDuration(frame->duration);
+ 					media_frame->SetPts((frame->pts == AV_NOPTS_VALUE) ? -1LL : frame->pts);
+ 
+ 					AVFrame* moved_frame = av_frame_alloc();
+diff --git a/src/projects/transcoder/codec/decoder/decoder_aac.cpp b/src/projects/transcoder/codec/decoder/decoder_aac.cpp
+index c1302d50a..1fbefdae3 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_aac.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_aac.cpp
+@@ -215,16 +215,16 @@ void DecoderAAC::CodecThread()
+ 			}
+ 
+ 			// If there is no duration, the duration is calculated by timebase.
+-			if (_frame->pkt_duration <= 0LL)
++			if (_frame->duration <= 0LL)
+ 			{
+-				_frame->pkt_duration = ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Audio, GetRefTrack(), _frame);
++				_frame->duration = ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Audio, GetRefTrack(), _frame);
+ 			}
+ 
+ 
+ 			// If the decoded audio frame does not have a PTS, Increase frame duration time in PTS of previous frame
+ 			if(_frame->pts == AV_NOPTS_VALUE)
+ 			{
+-				_frame->pts = _last_pkt_pts + _frame->pkt_duration;
++				_frame->pts = _last_pkt_pts + _frame->duration;
+ 			}
+ 
+ 			auto output_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Audio, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc.cpp b/src/projects/transcoder/codec/decoder/decoder_avc.cpp
+index 1ec6f185e..b7339e71c 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc.cpp
+@@ -270,9 +270,9 @@ void DecoderAVC::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 				
+ 
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp b/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp
+index 50b829a93..7bb959102 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp
+@@ -292,9 +292,9 @@ void DecoderAVCxNILOGAN::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp b/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp
+index d6a444901..d5b82f2f6 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp
+@@ -271,9 +271,9 @@ void DecoderAVCxNV::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / (double) GetRefTrack()->GetTimeBase().GetExpr() );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / (double) GetRefTrack()->GetTimeBase().GetExpr() );
+ 				}
+ 
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc_qsv.cpp b/src/projects/transcoder/codec/decoder/decoder_avc_qsv.cpp
+index 541040a2d..595065866 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc_qsv.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc_qsv.cpp
+@@ -210,9 +210,9 @@ void DecoderAVCxQSV::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 				
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp b/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp
+index b4bc8b896..494c5f910 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp
+@@ -295,9 +295,9 @@ void DecoderAVCxXMA::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc.cpp
+index eea80b21b..0c58fec8c 100755
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc.cpp
+@@ -261,9 +261,9 @@ void DecoderHEVC::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 				
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc_nilogan.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc_nilogan.cpp
+index e5868db24..60a68ef87 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc_nilogan.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc_nilogan.cpp
+@@ -257,9 +257,9 @@ void DecoderHEVCxNILOGAN::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp
+index 76f7f5ed1..44fe91828 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp
+@@ -260,9 +260,9 @@ void DecoderHEVCxNV::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc_qsv.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc_qsv.cpp
+index c7ec0d137..c8531e0ba 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc_qsv.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc_qsv.cpp
+@@ -208,9 +208,9 @@ void DecoderHEVCxQSV::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 				
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp
+index 521dc12ef..1f971b4f6 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp
+@@ -295,9 +295,9 @@ void DecoderHEVCxXMA::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				if(_frame->pkt_duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
++				if(_frame->duration <= 0LL && _context->framerate.num > 0 && _context->framerate.den > 0)
+ 				{
+-					_frame->pkt_duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
++					_frame->duration = (int64_t)( ((double)_context->framerate.den / (double)_context->framerate.num) / ((double) GetRefTrack()->GetTimeBase().GetNum() / (double) GetRefTrack()->GetTimeBase().GetDen()) );
+ 				}
+ 
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_mp3.cpp b/src/projects/transcoder/codec/decoder/decoder_mp3.cpp
+index a53c2f831..c7301a1cf 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_mp3.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_mp3.cpp
+@@ -215,16 +215,16 @@ void DecoderMP3::CodecThread()
+ 			}
+ 
+ 			// If there is no duration, the duration is calculated by timebase.
+-			if (_frame->pkt_duration <= 0LL)
++			if (_frame->duration <= 0LL)
+ 			{
+-				_frame->pkt_duration = ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Audio, GetRefTrack(), _frame);
++				_frame->duration = ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Audio, GetRefTrack(), _frame);
+ 			}
+ 
+ 
+ 			// If the decoded audio frame does not have a PTS, Increase frame duration time in PTS of previous frame
+ 			if(_frame->pts == AV_NOPTS_VALUE)
+ 			{
+-				_frame->pts = _last_pkt_pts + _frame->pkt_duration;
++				_frame->pts = _last_pkt_pts + _frame->duration;
+ 			}
+ 
+ 			auto output_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Audio, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_opus.cpp b/src/projects/transcoder/codec/decoder/decoder_opus.cpp
+index 031db5f06..2d43143e9 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_opus.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_opus.cpp
+@@ -215,16 +215,16 @@ void DecoderOPUS::CodecThread()
+ 			}
+ 
+ 			// If there is no duration, the duration is calculated by timebase.
+-			if (_frame->pkt_duration <= 0LL)
++			if (_frame->duration <= 0LL)
+ 			{
+-				_frame->pkt_duration = ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Audio, GetRefTrack(), _frame);
++				_frame->duration = ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Audio, GetRefTrack(), _frame);
+ 			}
+ 
+ 
+ 			// If the decoded audio frame does not have a PTS, Increase frame duration time in PTS of previous frame
+ 			if(_frame->pts == AV_NOPTS_VALUE)
+ 			{
+-				_frame->pts = _last_pkt_pts + _frame->pkt_duration;
++				_frame->pts = _last_pkt_pts + _frame->duration;
+ 			}
+ 
+ 			auto output_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Audio, _frame);
+diff --git a/src/projects/transcoder/codec/decoder/decoder_vp8.cpp b/src/projects/transcoder/codec/decoder/decoder_vp8.cpp
+index c52edb977..616147a7a 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_vp8.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_vp8.cpp
+@@ -253,7 +253,7 @@ void DecoderVP8::CodecThread()
+ 				}
+ 
+ 				// If there is no duration, the duration is calculated by framerate and timebase.
+-				_frame->pkt_duration = (_frame->pkt_duration <= 0LL) ? ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Video, GetRefTrack()) : _frame->pkt_duration;
++				_frame->duration = (_frame->duration <= 0LL) ? ffmpeg::Conv::GetDurationPerFrame(cmn::MediaType::Video, GetRefTrack()) : _frame->duration;
+ 
+ 				auto decoded_frame = ffmpeg::Conv::ToMediaFrame(cmn::MediaType::Video, _frame);
+ 				::av_frame_unref(_frame);
+
+From f469e7e18344243248585b3b5478aba95454231e Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 20:26:32 +0200
+Subject: [PATCH 05/12] ffmpeg Update: Replace deprecated
+ av_get_channel_layout_string with av_get_channel_layout_describe
+
+```
+/**
+ * Return a description of a channel layout.
+ * If nb_channels is <= 0, it is guessed from the channel_layout.
+ *
+ * @param buf put here the string containing the channel layout
+ * @param buf_size size in bytes of the buffer
+ * @param nb_channels number of channels
+ * @param channel_layout channel layout bitset
+ * @deprecated use av_channel_layout_describe()
+ */
+attribute_deprecated
+void av_get_channel_layout_string(char *buf, int buf_size, int nb_channels, uint64_t channel_layout);
+```
+---
+ src/projects/modules/ffmpeg/ffmpeg_conv.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/projects/modules/ffmpeg/ffmpeg_conv.h b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+index 06d4107c8..05981c542 100644
+--- a/src/projects/modules/ffmpeg/ffmpeg_conv.h
++++ b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+@@ -701,11 +701,12 @@ namespace ffmpeg
+ 					}
+ 					else
+ 					{
+-						char channel_layout[16]{};
+-						::av_get_channel_layout_string(channel_layout, OV_COUNTOF(channel_layout), parameters->channels, parameters->channel_layout);
++						char channel_layout_buf[16]{};
++						
++						::av_channel_layout_describe(&parameters->ch_layout, channel_layout_buf, OV_COUNTOF(channel_layout_buf));
+ 
+ 						// 48000 Hz, stereo, fltp,
+-						message.AppendFormat("%d Hz, %s(%d), %s, ", parameters->sample_rate, channel_layout, parameters->channels, ::av_get_sample_fmt_name(static_cast<AVSampleFormat>(parameters->format)));
++						message.AppendFormat("%d Hz, %s(%d), %s, ", parameters->sample_rate, channel_layout_buf, parameters->channels, ::av_get_sample_fmt_name(static_cast<AVSampleFormat>(parameters->format)));
+ 					}
+ 
+ 					message.AppendFormat("%d kbps, ", (parameters->bit_rate / 1024));
+
+From a73e2efb2466d18fc15fdeccb0c5da031bcec643 Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 20:31:15 +0200
+Subject: [PATCH 06/12] ffmpeg Update: Replace deprecated channels with
+ ch_layout.nb_channels
+
+```
+    /**
+     * Audio only. The number of audio channels.
+     * @deprecated use ch_layout.nb_channels
+     */
+    attribute_deprecated
+    int      channels;
+```
+---
+ src/projects/modules/ffmpeg/ffmpeg_conv.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/projects/modules/ffmpeg/ffmpeg_conv.h b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+index 05981c542..7b199f08a 100644
+--- a/src/projects/modules/ffmpeg/ffmpeg_conv.h
++++ b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+@@ -702,11 +702,10 @@ namespace ffmpeg
+ 					else
+ 					{
+ 						char channel_layout_buf[16]{};
+-						
+ 						::av_channel_layout_describe(&parameters->ch_layout, channel_layout_buf, OV_COUNTOF(channel_layout_buf));
+ 
+ 						// 48000 Hz, stereo, fltp,
+-						message.AppendFormat("%d Hz, %s(%d), %s, ", parameters->sample_rate, channel_layout_buf, parameters->channels, ::av_get_sample_fmt_name(static_cast<AVSampleFormat>(parameters->format)));
++						message.AppendFormat("%d Hz, %s(%d), %s, ", parameters->sample_rate, channel_layout_buf, parameters->ch_layout.nb_channels, ::av_get_sample_fmt_name(static_cast<AVSampleFormat>(parameters->format)));
+ 					}
+ 
+ 					message.AppendFormat("%d kbps, ", (parameters->bit_rate / 1024));
+@@ -790,7 +789,7 @@ namespace ffmpeg
+ 				break;
+ 
+ 				case cmn::MediaType::Audio: {
+-					codecpar->channels 				= static_cast<int>(media_track->GetChannel().GetCounts());
++					codecpar->ch_layout.nb_channels	= static_cast<int>(media_track->GetChannel().GetCounts());
+ 					codecpar->channel_layout 		= ToAVChannelLayout(media_track->GetChannel().GetLayout());
+ 					codecpar->sample_rate 			= media_track->GetSample().GetRateNum();
+ 					codecpar->frame_size 			= (media_track->GetAudioSamplesPerFrame()!=0)?media_track->GetAudioSamplesPerFrame():1024;
+
+From f0334563e0aa1baf038c8c93111b2517e1a7f7be Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 20:49:52 +0200
+Subject: [PATCH 07/12] ffmpeg Update: Replace deprecated channel_layout with
+ ch_layout struct
+
+---
+ src/projects/modules/ffmpeg/ffmpeg_conv.h           | 13 +++++++++----
+ src/projects/modules/segment_writer/writer.cpp      |  8 ++++++--
+ .../transcoder/codec/encoder/encoder_aac.cpp        |  8 ++++++--
+ .../transcoder/codec/encoder/encoder_ffopus.cpp     | 10 +++++++---
+ src/projects/transcoder/filter/filter_resampler.cpp |  2 +-
+ 5 files changed, 29 insertions(+), 12 deletions(-)
+
+diff --git a/src/projects/modules/ffmpeg/ffmpeg_conv.h b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+index 7b199f08a..f67932f63 100644
+--- a/src/projects/modules/ffmpeg/ffmpeg_conv.h
++++ b/src/projects/modules/ffmpeg/ffmpeg_conv.h
+@@ -789,10 +789,15 @@ namespace ffmpeg
+ 				break;
+ 
+ 				case cmn::MediaType::Audio: {
+-					codecpar->ch_layout.nb_channels	= static_cast<int>(media_track->GetChannel().GetCounts());
+-					codecpar->channel_layout 		= ToAVChannelLayout(media_track->GetChannel().GetLayout());
+-					codecpar->sample_rate 			= media_track->GetSample().GetRateNum();
+-					codecpar->frame_size 			= (media_track->GetAudioSamplesPerFrame()!=0)?media_track->GetAudioSamplesPerFrame():1024;
++					uint64_t channel_layout = ToAVChannelLayout(media_track->GetChannel().GetLayout());
++					codecpar->ch_layout = {
++						.order = AVChannelOrder::AV_CHANNEL_ORDER_NATIVE,
++						.nb_channels = static_cast<int>(media_track->GetChannel().GetCounts()),
++						.u = {.mask = channel_layout}
++					};
++
++					codecpar->sample_rate	= media_track->GetSample().GetRateNum();
++					codecpar->frame_size 	= (media_track->GetAudioSamplesPerFrame()!=0)?media_track->GetAudioSamplesPerFrame():1024;
+ 				}
+ 				break;
+ 
+diff --git a/src/projects/modules/segment_writer/writer.cpp b/src/projects/modules/segment_writer/writer.cpp
+index 1fb8fd94d..6e2dc42b7 100644
+--- a/src/projects/modules/segment_writer/writer.cpp
++++ b/src/projects/modules/segment_writer/writer.cpp
+@@ -256,13 +256,17 @@ bool Writer::FillCodecParameters(const std::shared_ptr<const Track> &track, AVCo
+ 			codec_parameters->codec_type = AVMEDIA_TYPE_AUDIO;
+ 			codec_parameters->codec_id = AvCodecIdFromMediaCodecId(media_track->GetCodecId());
+ 			codec_parameters->bit_rate = media_track->GetBitrate();
+-			codec_parameters->channels = static_cast<int>(media_track->GetChannel().GetCounts());
+-			codec_parameters->channel_layout = AvChannelLayoutFromAudioChannelLayout(media_track->GetChannel().GetLayout());
+ 			codec_parameters->sample_rate = media_track->GetSample().GetRateNum();
+ 			codec_parameters->frame_size = 1024;
+ 			codec_parameters->format = static_cast<int>(media_track->GetSample().GetFormat());
+ 			codec_parameters->codec_tag = 0;
+ 
++			codec_parameters->ch_layout = {
++				.order = AVChannelOrder::AV_CHANNEL_ORDER_NATIVE,
++				.nb_channels = static_cast<int>(media_track->GetChannel().GetCounts()),
++				.u = {.mask = static_cast<uint64_t>(AvChannelLayoutFromAudioChannelLayout(media_track->GetChannel().GetLayout()))}
++			};
++
+ 			std::shared_ptr<ov::Data> extra_data = nullptr;
+ 			if (media_track->GetCodecId() == cmn::MediaCodecId::Aac)
+ 			{
+diff --git a/src/projects/transcoder/codec/encoder/encoder_aac.cpp b/src/projects/transcoder/codec/encoder/encoder_aac.cpp
+index 238de1541..91e5eefd3 100644
+--- a/src/projects/transcoder/codec/encoder/encoder_aac.cpp
++++ b/src/projects/transcoder/codec/encoder/encoder_aac.cpp
+@@ -15,8 +15,12 @@ bool EncoderAAC::SetCodecParams()
+ 	_codec_context->bit_rate = GetRefTrack()->GetBitrate();
+ 	_codec_context->sample_fmt = (AVSampleFormat)GetSupportedFormat();
+ 	_codec_context->sample_rate = GetRefTrack()->GetSampleRate();
+-	_codec_context->channel_layout = static_cast<uint64_t>(GetRefTrack()->GetChannel().GetLayout());
+-	_codec_context->channels = GetRefTrack()->GetChannel().GetCounts();
++
++	_codec_context->ch_layout = {
++		.order = AVChannelOrder::AV_CHANNEL_ORDER_NATIVE,
++		.nb_channels = static_cast<int>(GetRefTrack()->GetChannel().GetCounts()),
++		.u = {.mask = static_cast<uint64_t>(GetRefTrack()->GetChannel().GetLayout())}
++	};
+ 
+ 	_bitstream_format = cmn::BitstreamFormat::AAC_ADTS;
+ 	
+diff --git a/src/projects/transcoder/codec/encoder/encoder_ffopus.cpp b/src/projects/transcoder/codec/encoder/encoder_ffopus.cpp
+index c70021b18..3c0a53812 100644
+--- a/src/projects/transcoder/codec/encoder/encoder_ffopus.cpp
++++ b/src/projects/transcoder/codec/encoder/encoder_ffopus.cpp
+@@ -15,9 +15,13 @@ bool EncoderFFOPUS::SetCodecParams()
+ 	_codec_context->bit_rate = GetRefTrack()->GetBitrate();
+ 	_codec_context->sample_fmt = (AVSampleFormat)GetSupportedFormat();
+ 	_codec_context->sample_rate = GetRefTrack()->GetSampleRate();
+-	_codec_context->channel_layout = static_cast<uint64_t>(GetRefTrack()->GetChannel().GetLayout());
+-	_codec_context->channels = GetRefTrack()->GetChannel().GetCounts();
+-	
++
++	_codec_context->ch_layout = {
++		.order = AVChannelOrder::AV_CHANNEL_ORDER_NATIVE,
++		.nb_channels = static_cast<int>(GetRefTrack()->GetChannel().GetCounts()),
++		.u = {.mask = static_cast<uint64_t>(GetRefTrack()->GetChannel().GetLayout())}
++	};
++
+ 	// Support Frequency
+ 	// 4000 - OPUS_BANDWIDTH_NARROWBAND (8kHz) (2~8 kbps)
+ 	// 6000 - OPUS_BANDWIDTH_MEDIUMBAND (12kHz)
+diff --git a/src/projects/transcoder/filter/filter_resampler.cpp b/src/projects/transcoder/filter/filter_resampler.cpp
+index beda3b993..9bf3f33fd 100644
+--- a/src/projects/transcoder/filter/filter_resampler.cpp
++++ b/src/projects/transcoder/filter/filter_resampler.cpp
+@@ -248,7 +248,7 @@ void FilterResampler::WorkerThread()
+ 		if (ret < 0)
+ 		{
+ 			logte("An error occurred while feeding the audio filtergraph: pts: %lld, linesize: %d, srate: %d, layout: %d, channels: %d, format: %d, rq: %d",
+-				  _frame->pts, _frame->linesize[0], _frame->sample_rate, _frame->channel_layout, _frame->channels, _frame->format, _input_buffer.Size());
++				  _frame->pts, _frame->linesize[0], _frame->sample_rate, _frame->ch_layout.u.mask, _frame->ch_layout.nb_channels, _frame->format, _input_buffer.Size());
+ 
+ 			continue;
+ 		}
+
+From 555e779e02311a31dfd6a8ee7e65c21e1e0a3b8c Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 21:01:39 +0200
+Subject: [PATCH 08/12] ffmpeg Update: Drop depreacted avcodec_close and use
+ avcodec_free_context only
+
+---
+ src/projects/transcoder/codec/decoder/decoder_avc.cpp         | 1 -
+ src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp | 1 -
+ src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp      | 1 -
+ src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp     | 1 -
+ src/projects/transcoder/codec/decoder/decoder_hevc.cpp        | 1 -
+ src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp     | 1 -
+ src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp    | 1 -
+ src/projects/transcoder/codec/decoder/decoder_vp8.cpp         | 1 -
+ 8 files changed, 8 deletions(-)
+
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc.cpp b/src/projects/transcoder/codec/decoder/decoder_avc.cpp
+index b7339e71c..760f02622 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc.cpp
+@@ -92,7 +92,6 @@ bool DecoderAVC::InitCodec()
+ 
+ void DecoderAVC::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp b/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp
+index 7bb959102..7c6bbcd0d 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc_nilogan.cpp
+@@ -117,7 +117,6 @@ bool DecoderAVCxNILOGAN::InitCodec()
+ it seems that dynamic resolution is supported
+ void DecoderAVCxNILOGAN::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp b/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp
+index d5b82f2f6..83c3da39e 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc_nv.cpp
+@@ -99,7 +99,6 @@ bool DecoderAVCxNV::InitCodec()
+ 
+ void DecoderAVCxNV::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+diff --git a/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp b/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp
+index 494c5f910..22d8fdfe9 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_avc_xma.cpp
+@@ -111,7 +111,6 @@ bool DecoderAVCxXMA::InitCodec()
+ 
+ void DecoderAVCxXMA::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc.cpp
+index 0c58fec8c..88d0d5e6a 100755
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc.cpp
+@@ -84,7 +84,6 @@ bool DecoderHEVC::InitCodec()
+ 
+ void DecoderHEVC::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp
+index 44fe91828..36dab687d 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc_nv.cpp
+@@ -93,7 +93,6 @@ bool DecoderHEVCxNV::InitCodec()
+ 
+ void DecoderHEVCxNV::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+diff --git a/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp b/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp
+index 1f971b4f6..2c1e27a78 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_hevc_xma.cpp
+@@ -111,7 +111,6 @@ bool DecoderHEVCxXMA::InitCodec()
+ 
+ void DecoderHEVCxXMA::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+diff --git a/src/projects/transcoder/codec/decoder/decoder_vp8.cpp b/src/projects/transcoder/codec/decoder/decoder_vp8.cpp
+index 616147a7a..464b1c27d 100644
+--- a/src/projects/transcoder/codec/decoder/decoder_vp8.cpp
++++ b/src/projects/transcoder/codec/decoder/decoder_vp8.cpp
+@@ -83,7 +83,6 @@ bool DecoderVP8::InitCodec()
+ 
+ void DecoderVP8::UninitCodec()
+ {
+-	::avcodec_close(_context);
+ 	::avcodec_free_context(&_context);
+ 
+ 	_context = nullptr;
+
+From 9685274797362b8f3235464e1c4902465389dec9 Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 25 May 2024 22:19:24 +0200
+Subject: [PATCH 09/12] ffmpeg Update: Change buffer to const in OnWrite
+ function declaration
+
+---
+ src/projects/modules/segment_writer/writer.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/projects/modules/segment_writer/writer.h b/src/projects/modules/segment_writer/writer.h
+index ca06dcf37..c87b25b0d 100644
+--- a/src/projects/modules/segment_writer/writer.h
++++ b/src/projects/modules/segment_writer/writer.h
+@@ -120,7 +120,7 @@ class Writer
+ 	int DecideBufferSize() const;
+ 
+ 	int OnWrite(const uint8_t *buf, int buf_size);
+-	static int OnWrite(void *opaque, uint8_t *buf, int buf_size)
++	static int OnWrite(void *opaque, const uint8_t *buf, int buf_size)
+ 	{
+ 		return (static_cast<Writer *>(opaque))->OnWrite(buf, buf_size);
+ 	}
+
+From 70ec85fcfebc8a2969756f117687bca64abdbb77 Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 15 Jun 2024 15:54:07 +0200
+Subject: [PATCH 10/12] Drop unsupported ffmpeg v7 configuration flags
+
+Disabling lzo isn't allowed anymore https://github.com/FFmpeg/FFmpeg/commit/df272928ff8041f87b92f4cf8dbf12a28fe9cdf7
+
+Couldn't find commits for the other two. But I suspect they are now
+enabled by default.
+---
+ misc/prerequisites.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/misc/prerequisites.sh b/misc/prerequisites.sh
+index eb4505cdc..9766a50a6 100755
+--- a/misc/prerequisites.sh
++++ b/misc/prerequisites.sh
+@@ -316,8 +316,8 @@ install_ffmpeg()
+     --extra-ldflags="${ADDI_LDFLAGS} -L${PREFIX}/lib -Wl,-rpath,${PREFIX}/lib " \
+     --extra-libs=-ldl ${ADDI_EXTRA_LIBS} \
+     ${ADDI_LICENSE} \
+-    --disable-everything --disable-programs --disable-avdevice --disable-dwt --disable-lsp --disable-lzo --disable-faan --disable-pixelutils \
+-    --enable-shared --enable-zlib --enable-libopus --enable-libvpx --enable-libfdk_aac --enable-libopenh264 --enable-openssl --enable-network --enable-libsrt --enable-dct --enable-rdft  ${ADDI_LIBS} \
++    --disable-everything --disable-programs --disable-avdevice --disable-dwt --disable-lsp --disable-faan --disable-pixelutils \
++    --enable-shared --enable-zlib --enable-libopus --enable-libvpx --enable-libfdk_aac --enable-libopenh264 --enable-openssl --enable-network --enable-libsrt  ${ADDI_LIBS} \
+     ${ADDI_HWACCEL} \
+     --enable-ffmpeg \
+     --enable-encoder=libvpx_vp8,libopus,libfdk_aac,libopenh264,mjpeg,png${ADDI_ENCODER} \
+
+From ac60ded1c973593285177fe5757e82b6ea91be77 Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 15 Jun 2024 15:55:11 +0200
+Subject: [PATCH 11/12] Ignore the included uid in the jemalloc tar archive
+
+Otherwise this fails with `Cannot change ownership to uid 66878, gid
+100: Invalid argument`, at least with podman.
+---
+ misc/prerequisites.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/misc/prerequisites.sh b/misc/prerequisites.sh
+index 9766a50a6..5d11048a1 100755
+--- a/misc/prerequisites.sh
++++ b/misc/prerequisites.sh
+@@ -348,7 +348,7 @@ install_jemalloc()
+     (DIR=${TEMP_PATH}/jemalloc && \
+     mkdir -p ${DIR} && \
+     cd ${DIR} && \
+-    curl -sSLf https://github.com/jemalloc/jemalloc/releases/download/${JEMALLOC_VERSION}/jemalloc-${JEMALLOC_VERSION}.tar.bz2 | tar -jx --strip-components=1 && \
++    curl -sSLf https://github.com/jemalloc/jemalloc/releases/download/${JEMALLOC_VERSION}/jemalloc-${JEMALLOC_VERSION}.tar.bz2 | tar -jx --strip-components=1 --no-same-owner && \
+     ./configure --prefix="${PREFIX}" && \
+     make -j$(nproc) && \
+     sudo make install_include install_lib && \
+
+From 9b01f66afa8f45deee945baab4dbbef542a6618c Mon Sep 17 00:00:00 2001
+From: hashworks <mail@hashworks.net>
+Date: Sat, 6 Jul 2024 01:43:08 +0200
+Subject: [PATCH 12/12] ffmpeg Update: Replace deprecated frame->pkt_duration
+ with duration in transcoder context
+
+---
+ src/projects/transcoder/transcoder_context.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/projects/transcoder/transcoder_context.h b/src/projects/transcoder/transcoder_context.h
+index a34a635a9..a1e198e22 100644
+--- a/src/projects/transcoder/transcoder_context.h
++++ b/src/projects/transcoder/transcoder_context.h
+@@ -78,7 +78,7 @@ class MediaFrame
+ 
+ 		if (_priv_data)
+ 		{
+-			_priv_data->pkt_duration = duration;
++			_priv_data->duration = duration;
+ 		}
+ 	}
+ 

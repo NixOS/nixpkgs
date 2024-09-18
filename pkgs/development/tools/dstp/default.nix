@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Run common networking tests against your site";
+    mainProgram = "dstp";
     homepage = "https://github.com/ycd/dstp";
     license = licenses.mit;
     maintainers = with maintainers; [ jlesquembre ];

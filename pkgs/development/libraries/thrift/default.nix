@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     cmake
     flex
     pkg-config
+    python3
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [
@@ -54,6 +56,11 @@ stdenv.mkDerivation rec {
       --replace "'FastbinaryTest.py'," "" \
       --replace "'TestEof.py'," "" \
       --replace "'TestFrozen.py'," ""
+
+    # these functions are removed in Python3.12
+    substituteInPlace test/py/SerializationTest.py \
+      --replace-fail "assertEquals" "assertEqual" \
+      --replace-fail "assertNotEquals" "assertNotEqual"
   '';
 
   preConfigure = ''
@@ -131,6 +138,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for scalable cross-language services";
+    mainProgram = "thrift";
     homepage = "https://thrift.apache.org/";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;

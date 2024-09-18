@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Go assembler formatter";
+    mainProgram = "asmfmt";
     longDescription = ''
       This will format your assembler code in a similar way that gofmt formats
       your Go code.

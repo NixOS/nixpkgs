@@ -33,6 +33,11 @@
         url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/50943b1bd4f18d103c35233f0446ce7a31d1817e.patch";
         sha256 = "sha256-ANkAq6fr0VRjkS0ckvf/ddVB2mH4b2uJRTI4H8vPPes=";
       })
+      (fetchpatch {
+        name = "tests-Fix-dbusmock-AddDevice-calls-to-include-option";
+        url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/ae04fa989720279e5558c3b8ff9ebe1959b1cf36.patch";
+        sha256 = "sha256-jW5vlzrbZQ1gUDLBf7G50GnZfZxhlnL2Eu+9Bghdwdw=";
+      })
     ];
 
     postPatch = oldAttrs.postPatch or "" + ''

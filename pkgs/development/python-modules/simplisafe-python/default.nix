@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, aresponses
-, backoff
-, beautifulsoup4
-, buildPythonPackage
-, certifi
-, docutils
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pytz
-, types-pytz
-, voluptuous
-, websockets
+{
+  lib,
+  aiohttp,
+  aresponses,
+  backoff,
+  beautifulsoup4,
+  buildPythonPackage,
+  certifi,
+  docutils,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  types-pytz,
+  voluptuous,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -32,10 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-ewbR2FI0t2F8HF0ZL5omsclB9OPAjHygGLPtSkVlvgM=";
   };
 
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -69,9 +67,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "simplipy"
-  ];
+  pythonImportsCheck = [ "simplipy" ];
 
   __darwinAllowLocalNetworking = true;
 

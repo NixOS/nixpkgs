@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, pytestCheckHook
-, six
-, ssdeep
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+  ssdeep,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,27 +23,21 @@ buildPythonPackage rec {
     hash = "sha256-I5ci5BS+B3OE0xdLSahu3HCh99jjhnRHJFz830SvFpg=";
   };
 
-  buildInputs = [
-    ssdeep
-  ];
+  buildInputs = [ ssdeep ];
 
   propagatedBuildInputs = [
     cffi
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"pytest-runner"' ""
   '';
 
-  pythonImportsCheck = [
-    "ssdeep"
-  ];
+  pythonImportsCheck = [ "ssdeep" ];
 
   meta = with lib; {
     description = "Python wrapper for the ssdeep library";

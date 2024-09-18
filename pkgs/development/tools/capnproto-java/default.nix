@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, capnproto, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, capnproto, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "capnproto-java";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cap'n Proto codegen plugin for Java";
+    mainProgram = "capnpc-java";
     longDescription = "Only includes compiler plugin, the Java runtime/library that the generated code will link to must be built separately with Maven.";
     homepage = "https://dwrensha.github.io/capnproto-java/index.html";
     license = licenses.mit;

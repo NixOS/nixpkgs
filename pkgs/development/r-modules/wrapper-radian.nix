@@ -22,7 +22,7 @@ runCommand (radian.name + "-wrapper") {
     # To prevent builds on hydra
     hydraPlatforms = [ ];
     # prefer wrapper over the package
-    priority = (radian.meta.priority or 0) - 1;
+    priority = (radian.meta.priority or lib.meta.defaultPriority) - 1;
   };
 } (''
   makeWrapper "${radian}/bin/radian" "$out/bin/radian" \

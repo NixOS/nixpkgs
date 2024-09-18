@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, tls-client
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  tls-client,
 }:
 
 buildPythonPackage rec {
@@ -19,20 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-9SrptiheiM5s9YI6Ht68ahDGMFADWfBQgAWUBY3EEJ8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    tls-client
-  ];
+  propagatedBuildInputs = [ tls-client ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "OpenAIAuth"
-  ];
+  pythonImportsCheck = [ "OpenAIAuth" ];
 
   meta = with lib; {
     description = "Library for authenticating with the OpenAI API";

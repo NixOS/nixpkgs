@@ -14,7 +14,7 @@
 , fcitx5-gtk
 , ibus
 , uim #IME
-, wrapGAppsHook #color picker in mlconfig
+, wrapGAppsHook3 #color picker in mlconfig
 , gdk-pixbuf
 , gtk3
 , gtk ? gtk3
@@ -111,7 +111,7 @@ in stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoconf
   ] ++ lib.optionals enableTools.mlconfig [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk

@@ -17,8 +17,8 @@ let
   cross = import ../../../.. {
     system = hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
-      rustc.config = "${arch}-unknown-none";
-      rustc.platform = lib.importJSON target;
+      rust.rustcTarget = "${arch}-unknown-none";
+      rust.platform = lib.importJSON target;
     };
   };
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-hKk5pcop8rb5Q+IVchcl+XhMc3DCBBPn5P+AkAb9XxI=";
   };
 
-  cargoSha256 = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
+  cargoHash = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
 
   # lld: error: unknown argument '-Wl,--undefined=AUDITABLE_VERSION_INFO'
   # https://github.com/cloud-hypervisor/rust-hypervisor-firmware/issues/249
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/cloud-hypervisor/rust-hypervisor-firmware";
-    description = "A simple firmware that is designed to be launched from anything that supports loading ELF binaries and running them with the PVH booting standard";
+    description = "Simple firmware that is designed to be launched from anything that supports loading ELF binaries and running them with the PVH booting standard";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ astro ];
     platforms = [ "x86_64-none" ];

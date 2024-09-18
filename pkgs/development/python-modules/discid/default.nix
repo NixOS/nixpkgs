@@ -1,4 +1,10 @@
-{ lib, stdenv, libdiscid, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  stdenv,
+  libdiscid,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "discid";
@@ -11,7 +17,9 @@ buildPythonPackage rec {
   };
 
   patchPhase =
-    let extension = stdenv.hostPlatform.extensions.sharedLibrary; in
+    let
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
     ''
       substituteInPlace discid/libdiscid.py \
         --replace "_open_library(_LIB_NAME)" \
@@ -20,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python binding of libdiscid";
-    homepage    = "https://python-discid.readthedocs.org/";
-    license     = licenses.lgpl3Plus;
+    homepage = "https://python-discid.readthedocs.org/";
+    license = licenses.lgpl3Plus;
   };
 }

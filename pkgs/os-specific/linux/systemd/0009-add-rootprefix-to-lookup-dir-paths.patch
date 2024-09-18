@@ -12,10 +12,10 @@ files that I might have missed.
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/src/basic/constants.h b/src/basic/constants.h
-index 6bb5f3c281..678d13737d 100644
+index e70817c51f..859e673a67 100644
 --- a/src/basic/constants.h
 +++ b/src/basic/constants.h
-@@ -65,13 +65,15 @@
+@@ -62,13 +62,15 @@
          "/etc/" n "\0"                          \
          "/run/" n "\0"                          \
          "/usr/local/lib/" n "\0"                \
@@ -23,7 +23,7 @@ index 6bb5f3c281..678d13737d 100644
 +        "/usr/lib/" n "\0"                      \
 +        PREFIX "/lib/" n "\0"
  
- #define CONF_PATHS_USR(n)                       \
+ #define CONF_PATHS(n)                           \
          "/etc/" n,                              \
          "/run/" n,                              \
          "/usr/local/lib/" n,                    \
@@ -31,5 +31,5 @@ index 6bb5f3c281..678d13737d 100644
 +        "/usr/lib/" n,                          \
 +        PREFIX "/lib/" n
  
- #define CONF_PATHS(n)                           \
-         CONF_PATHS_USR(n)
+ #define CONF_PATHS_STRV(n)                      \
+         STRV_MAKE(CONF_PATHS(n))

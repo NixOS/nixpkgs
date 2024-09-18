@@ -15,7 +15,7 @@ mkCoqDerivation {
   enableParallelBuilding = false;
 
   meta = {
-    description = "A library for formalizing Haskell types and functions in Coq";
+    description = "Library for formalizing Haskell types and functions in Coq";
     maintainers = with lib.maintainers; [ jwiegley ];
   };
 }

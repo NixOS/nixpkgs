@@ -12,8 +12,6 @@
 , withDebug ? false
 }:
 
-with lib;
-
 let
   phpConfig = {
     embedSupport = true;
@@ -27,15 +25,16 @@ let
   php81-unit = php81.override phpConfig;
   php82-unit = php82.override phpConfig;
 
+  inherit (lib) optional optionals optionalString;
 in stdenv.mkDerivation rec {
-  version = "1.31.1";
+  version = "1.33.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6hecOCEC2MeJJieOOamEf8ytpEVAGs5mB0H16lJDciU=";
+    sha256 = "sha256-Q3RXhWI9+G7oUnHYtVK6WZ9s7eIkQ+yPmdqbjWyatTE=";
   };
 
   nativeBuildInputs = [ which ];
@@ -74,8 +73,9 @@ in stdenv.mkDerivation rec {
 
   passthru.tests.unit-php = nixosTests.unit-php;
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
+    mainProgram = "unitd";
     homepage    = "https://unit.nginx.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux;

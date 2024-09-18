@@ -1,4 +1,4 @@
-{ buildDunePackage, mirage-flow, fmt, lwt, logs, cstruct, mirage-clock }:
+{ buildDunePackage, mirage-flow, lwt, logs, cstruct, mirage-clock }:
 
 buildDunePackage {
   pname = "mirage-flow-combinators";

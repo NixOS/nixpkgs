@@ -1,6 +1,6 @@
 {
   # If you copy this example out of nixpkgs, use these lines instead of the next.
-  # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
+  # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
   /*nixpkgsSource ? (builtins.fetchTarball {
     name = "nixpkgs-20.09";
     url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
@@ -25,14 +25,14 @@ let
   # versions may be used in multiple places in this Nix expression.
   android = {
     versions = {
-      cmdLineToolsVersion = "11.0";
-      platformTools = "34.0.5";
+      cmdLineToolsVersion = "13.0";
+      platformTools = "35.0.1";
       buildTools = "34.0.0";
       ndk = [
-        "26.1.10909125"
+        "26.3.11579264"
       ];
       cmake = "3.6.4111459";
-      emulator = "34.1.9";
+      emulator = "35.1.4";
     };
 
     platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" ];

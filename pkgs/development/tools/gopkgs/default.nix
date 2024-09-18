@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = {
     description = "Tool to get list available Go packages";
+    mainProgram = "gopkgs";
     homepage = "https://github.com/uudashr/gopkgs";
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.mit;

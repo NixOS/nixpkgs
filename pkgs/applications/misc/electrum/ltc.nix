@@ -70,7 +70,6 @@ python3.pkgs.buildPythonApplication {
     pysocks
     qrcode
     requests
-    tlslite-ng
     certifi
     # plugins
     btchip-python
@@ -81,6 +80,26 @@ python3.pkgs.buildPythonApplication {
     pyqt5
     qdarkstyle
   ];
+
+  patches = [
+    # electrum-ltc attempts to pin to aiorpcX < 0.23, but nixpkgs
+    # has moved to newer versions.
+    #
+    # electrum-ltc hasn't been updated in some time, so we replicate
+    # the patch from electrum (BTC) and alter it to be usable with
+    # electrum-ltc.
+    #
+    # Similar to the BTC patch, we need to overwrite the symlink
+    # at electrum_ltc/electrum-ltc with the patched run_electrum
+    # in postPatch.
+    ./ltc-aiorpcX-version-bump.patch
+  ];
+
+  postPatch = ''
+    # copy the patched `/run_electrum` over `/electrum/electrum`
+    # so the aiorpcx compatibility patch is used
+    cp run_electrum electrum_ltc/electrum-ltc
+  '';
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -119,6 +138,11 @@ python3.pkgs.buildPythonApplication {
   disabledTests = [
     "test_loop"  # test tries to bind 127.0.0.1 causing permission error
     "test_is_ip_address"  # fails spuriously https://github.com/spesmilo/electrum/issues/7307
+    # electrum_ltc.lnutil.RemoteMisbehaving: received commitment_signed without pending changes
+    "test_reestablish_replay_messages_rev_then_sig"
+    "test_reestablish_replay_messages_sig_then_rev"
+    # stuck on hydra
+    "test_reestablish_with_old_state"
   ];
 
   postCheck = ''
@@ -127,6 +151,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     description = "Lightweight Litecoin Client";
+    mainProgram = "electrum-ltc";
     longDescription = ''
       Electrum-LTC is a simple, but powerful Litecoin wallet. A unique secret
       phrase (or “seed”) leaves intruders stranded and your peace of mind

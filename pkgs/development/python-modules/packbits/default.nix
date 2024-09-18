@@ -1,11 +1,7 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pyparsing
-, six
-, pytest
-, pretend
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 }:
 
 buildPythonPackage rec {

@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, absl-py
-, cloudpickle
-, dm-tree
-, jax
-, jaxlib
-, numpy
-, pytestCheckHook
-, toolz
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  absl-py,
+  cloudpickle,
+  dm-tree,
+  jax,
+  jaxlib,
+  numpy,
+  pytestCheckHook,
+  toolz,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.85";
-  format = "setuptools";
+  version = "0.1.86";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -24,10 +26,12 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = "chex";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7k/+2dNNbPBXtbabuOEVpAI7T1SuM4JDf074dmTg/vs=";
+    hash = "sha256-Z5Ns4fG5pC99I4xdGjDMKX6YZpTtd1y0TWcIOtr7dug=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     absl-py
     jaxlib
     jax
@@ -36,9 +40,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "chex"
-  ];
+  pythonImportsCheck = [ "chex" ];
 
   nativeCheckInputs = [
     cloudpickle
@@ -47,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Chex is a library of utilities for helping to write reliable JAX code.";
+    description = "Chex is a library of utilities for helping to write reliable JAX code";
     homepage = "https://github.com/deepmind/chex";
     changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
     license = licenses.asl20;

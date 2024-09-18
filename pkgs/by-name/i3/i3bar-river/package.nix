@@ -7,22 +7,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3bar-river";
-  version = "0.1.6";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "i3bar-river";
     rev = "v${version}";
-    hash = "sha256-wtyC8cGK408KZYpWniW2y4XI1ScTSBZJJlUt6b2Z5KA=";
+    hash = "sha256-CZdulSe4qPb9ZOyH26dMVCiv/Y2T/u8fLohK8VeS1Ao=";
   };
 
-  cargoHash = "sha256-PdSMDsV3yFy3kSNS6OBxFdrZsIn70gXOTd2AhyU4a9o=";
+  cargoHash = "sha256-K+fDdAWrAKLQSMIMtEavhk7gIHINmL2eJLBhDLc1Jtg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pango ];
 
   meta = with lib; {
-    description = "A port of i3bar for river";
+    description = "Port of i3bar for river";
     homepage = "https://github.com/MaxVerevkin/i3bar-river";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nicegamer7 ];

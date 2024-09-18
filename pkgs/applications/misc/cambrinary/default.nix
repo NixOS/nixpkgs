@@ -31,6 +31,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Cambridge dictionary in a terminal";
+    mainProgram = "cambrinary";
     homepage = "https://github.com/xueyuanl/cambrinary";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

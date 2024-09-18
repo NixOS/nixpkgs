@@ -1,6 +1,6 @@
 { lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
 , yarn, callPackage, ruby, writeShellScript
-, fetchYarnDeps, prefetch-yarn-deps
+, fetchYarnDeps, fixup-yarn-lock
 , brotli
 
   # Allow building a fork or custom version of Mastodon:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       hash = yarnHash;
     };
 
-    nativeBuildInputs = [ prefetch-yarn-deps nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
+    nativeBuildInputs = [ fixup-yarn-lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -42,9 +42,6 @@ stdenv.mkDerivation rec {
       runHook preBuild
 
       export HOME=$PWD
-      # This option is needed for openssl-3 compatibility
-      # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
-      export NODE_OPTIONS=--openssl-legacy-provider
       fixup-yarn-lock ~/yarn.lock
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress

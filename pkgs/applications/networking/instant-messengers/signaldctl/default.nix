@@ -32,7 +32,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A golang library for communicating with signald";
+    description = "Golang library for communicating with signald";
+    mainProgram = "signaldctl";
     homepage = "https://signald.org/signaldctl/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ colinsane ];

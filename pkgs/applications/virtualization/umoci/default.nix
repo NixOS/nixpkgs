@@ -3,7 +3,6 @@
 , buildGoModule
 , go-md2man
 , installShellFiles
-, bash
 }:
 
 buildGoModule rec {

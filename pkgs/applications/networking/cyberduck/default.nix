@@ -1,17 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cyberduck";
-  version = "8.6.0.39818";
+  version = "9.0.0.41777";
 
   src = fetchurl {
     url = "https://update.cyberduck.io/Cyberduck-${finalAttrs.version}.zip";
-    sha256 = "1iqq54n267lmmdlv8wmr9k461p49jindc1mn5wy742k08cqxc5ab";
+    hash = "sha256-oDTFkoX4uu+X5vLDHn+tGoNB/Pd9ncdFE8dGS6PT5wg=";
   };
-  dontUnpack = true;
+  sourceRoot = ".";
 
   nativeBuildInputs = [ unzip ];
 
@@ -19,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/Applications
-    unzip -d $out/Applications $src
+    cp -r Cyberduck.app $out/Applications
 
     runHook postInstall
   '';
@@ -29,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://cyberduck.io";
     license = licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.darwin;
   };
 })

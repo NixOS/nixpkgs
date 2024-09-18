@@ -1,34 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, setuptools
-, pytestCheckHook
-, pytest-django
-, django-crispy-forms
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  setuptools,
+  pytestCheckHook,
+  pytest-django,
+  django-crispy-forms,
 }:
 
 buildPythonPackage rec {
   pname = "django-crispy-bootstrap5";
-  version = "2023.10";
-  format = "pyproject";
+  version = "2024.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "crispy-bootstrap5";
     rev = "refs/tags/${version}";
-    hash = "sha256-AUMlLj3GmI+0vYw56Dw2+iF5s1l6GF+zV7PRD889ldg=";
+    hash = "sha256-ehcDwy53pZCqouvUm6qJG2FJzlFZaygTZxNYPOqH1q0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
-    setuptools
+    django-crispy-forms
   ];
 
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
-    django-crispy-forms
   ];
 
   pythonImportsCheck = [ "crispy_bootstrap5" ];
@@ -36,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bootstrap 5 template pack for django-crispy-forms";
     homepage = "https://github.com/django-crispy-forms/crispy-bootstrap5";
+    changelog = "https://github.com/django-crispy-forms/crispy-bootstrap5/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

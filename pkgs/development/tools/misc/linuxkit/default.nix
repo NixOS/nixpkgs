@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "linuxkit";
-  version = "1.0.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "linuxkit";
     repo = "linuxkit";
     rev = "v${version}";
-    sha256 = "sha256-8x9oJaYb/mN2TUaVrGOYi5/6TETD78jif0SwCSc0kyo=";
+    sha256 = "sha256-Od6ij4RUWWNN3pm6Yt8W7LkeHnrusikJi2pXw6axbhU=";
   };
 
   vendorHash = null;
@@ -52,7 +52,8 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A toolkit for building secure, portable and lean operating systems for containers";
+    description = "Toolkit for building secure, portable and lean operating systems for containers";
+    mainProgram = "linuxkit";
     license = licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = with maintainers; [ nicknovitski ];

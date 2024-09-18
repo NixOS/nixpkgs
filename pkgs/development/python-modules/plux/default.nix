@@ -1,47 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, setuptools
-, stevedore
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+  stevedore,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "plux";
-  version = "1.4.0";
-  format = "pyproject";
+  version = "1.11.0";
+  pyproject = true;
 
   # Tests are not available from PyPi
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "plux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AybMHkCUNJsL51XwiskkIltEtqZ27fGHrpyct8IUjmo=";
+    hash = "sha256-M4N3Ccuw95OcLsWQVtITv4QShBJKliTh5QIoqji8x9o=";
   };
 
-  patches = [
-    # https://github.com/localstack/plux/pull/8
-    (fetchpatch {
-      name = "remove-pytest-runner.patch";
-      url = "https://github.com/localstack/plux/commit/3cda22e51f43a86304d0dedd7e554b21aa82c8b0.patch";
-      hash = "sha256-ZFHUTkUYFSTgKbx+c74JQzre0la+hFW9gNOxOehvVoE=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
-    stevedore
-  ];
+  dependencies = [ stevedore ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   pythonImportsCheck = [ "plugin.core" ];
 
@@ -49,6 +40,6 @@ buildPythonPackage rec {
     description = "Dynamic code loading framework for building pluggable Python distributions";
     homepage = "https://github.com/localstack/plux";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

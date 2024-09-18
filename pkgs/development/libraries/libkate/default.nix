@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libogg libpng ];
 
   meta = with lib; {
-    description = "A library for encoding and decoding Kate streams";
+    description = "Library for encoding and decoding Kate streams";
     longDescription = ''
       This is libkate, the reference implementation of a codec for the Kate
       bitstream format. Kate is a karaoke and text codec meant for encapsulation

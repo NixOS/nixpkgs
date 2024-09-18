@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
     libdovi
   ];
 
-  mesonFlags = with lib; [
-    (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-    (mesonBool "demos" false) # Don't build and install the demo programs
-    (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
-    (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-  ] ++ optionals stdenv.isDarwin [
-    (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
+  mesonFlags = [
+    (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+    (lib.mesonBool "demos" false) # Don't build and install the demo programs
+    (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+    (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+  ] ++ lib.optionals stdenv.isDarwin [
+    (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   postPatch = ''
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ primeos tadeokondrak ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.all;
   };
 }

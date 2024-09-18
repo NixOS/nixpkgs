@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, googleapis-common-protos
-, grpcio
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  googleapis-common-protos,
+  grpcio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-pmwHDzOaXrgqXZiaxIn01CtiAG+XRBGr8BgzbG/F1uw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     grpcio
     googleapis-common-protos
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "google.iam"
@@ -47,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-grpc-google-iam-v1";
     changelog = "https://github.com/googleapis/python-grpc-google-iam-v1/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -19,9 +19,9 @@ in rustPlatform.buildRustPackage rec {
   version = src.version;
   src = passthru.mkSource sources.npins;
 
-  cargoSha256 = "sha256-eySVpmCVWBJfyAkTQv+LqojWMO/3r6kBYP1a4z+FYHY=";
+  cargoHash = "sha256-YwMypBl+P1ygf4zUbkZlq4zPrOzf+lPOz2FLg2/xI3k=";
 
-  buildInputs = lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
+  buildInputs = lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
   nativeBuildInputs = [ makeWrapper ];
 
   # (Almost) all tests require internet
@@ -33,6 +33,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple and convenient dependency pinning for Nix";
+    mainProgram = "npins";
     homepage = "https://github.com/andir/npins";
     license = licenses.eupl12;
     maintainers = with maintainers; [ piegames ];

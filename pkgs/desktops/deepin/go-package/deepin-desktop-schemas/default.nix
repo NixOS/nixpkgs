@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, glib
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  glib,
 }:
 
 buildGoModule rec {
   pname = "deepin-desktop-schemas";
-  version = "6.0.5";
+  version = "6.0.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-lvAY0CJ+EohMK16fwIkB7Jq7gTpMhDimPYs9b/IklA4=";
+    hash = "sha256-zheIZ3Z0vm0/0F9hFcdlYwhE3/PRunxUCT8KSe4T3wk=";
   };
 
   vendorHash = "sha256-q6ugetchJLv2JjZ9+nevUI0ptizh2V+6SByoY/eFJJQ=";

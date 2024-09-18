@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Nagios-Plugin that uses smartmontools to check disk health status and temperature";
+    description = "Nagios-Plugin that uses smartmontools to check disk health status and temperature";
+    mainProgram = "check_smartmon";
     homepage = "https://github.com/driehuis/Nagios_check_smartmon";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ mariaa144 ];

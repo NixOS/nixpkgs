@@ -12,10 +12,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.displayManager = {
         gdm.enable = true;
         gdm.debug = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
+      };
+
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
       };
 
       services.xserver.desktopManager.gnome.enable = true;
@@ -30,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
               # Eval API is now internal so Shell needs to run in unsafe mode.
               # TODO: improve test driver so that it supports openqa-like manipulation
               # that would allow us to drop this mess.
-              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+              "${pkgs.gnome-shell}/bin/gnome-shell --unsafe-mode"
             ];
           };
         };

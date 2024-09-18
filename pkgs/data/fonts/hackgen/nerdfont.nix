@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A composite font of Hack, GenJyuu-Gothic and nerd-fonts";
+    description = "Composite font of Hack, GenJyuu-Gothic and nerd-fonts";
     homepage = "https://github.com/yuru7/HackGen";
     license = licenses.ofl;
     platforms = platforms.all;

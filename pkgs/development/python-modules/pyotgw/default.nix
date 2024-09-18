@@ -1,38 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial-asyncio-fast,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.1.3";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mvn23";
-    repo = pname;
+    repo = "pyotgw";
     rev = "refs/tags/${version}";
-    hash = "sha256-XIwBGjvIulKLmYZIorKIJwoHTNOIYYX8US2Na8MZ2LA=";
+    hash = "sha256-SowM+glni1PGkM87JT9+QWTD4Tu9XmsfXg99GZzSCJM=";
   };
 
-  propagatedBuildInputs = [
-    pyserial-asyncio
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyserial-asyncio-fast ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyotgw"
-  ];
+  pythonImportsCheck = [ "pyotgw" ];
 
   meta = with lib; {
     description = "Python module to interact the OpenTherm Gateway";

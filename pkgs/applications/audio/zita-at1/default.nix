@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zita-at1";
-  version = "0.6.2";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0mxfn61zvhlq3r1mqipyqzjbanrfdkk8x4nxbz8nlbdk0bf3vfqr";
+    sha256 = "sha256-NSYTJmgOmL/CgGI/rBGQuqmccZEzvwYgchb7e4XqmmM=";
   };
 
   buildInputs = [

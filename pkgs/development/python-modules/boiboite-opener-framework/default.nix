@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, scapy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  scapy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "boiboite-opener-framework";
   version = "1.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,23 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-atKqHRX24UjF/9Dy0aYXAN+80nBJKCd07FmaR5Vl1q4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "scapy==2.5.0rc1" "scapy"
-  '';
+  pythonRelaxDeps = [ "scapy" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     scapy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bof"
-  ];
+  pythonImportsCheck = [ "bof" ];
 
   disabledTests = [
     # Tests are using netcat and cat to do UDP connections
@@ -75,5 +71,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Orange-Cyberdefense/bof/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

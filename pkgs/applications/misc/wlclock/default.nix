@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A digital analog clock for Wayland desktops";
+    description = "Digital analog clock for Wayland desktops";
     homepage = "https://git.sr.ht/~leon_plickat/wlclock";
     license = licenses.gpl3;
     maintainers = with maintainers; [ nomisiv ];

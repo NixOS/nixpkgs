@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/niXman/yas";
     description = "Yet Another Serialization";
     license = licenses.boost;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

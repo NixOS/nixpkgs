@@ -6,6 +6,7 @@
 , pkg-config
 , itstool
 , gettext
+, desktop-file-utils
 , wrapGAppsHook4
 , libxml2
 , libadwaita
@@ -22,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "45.3";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "MBAgTfXHpa4Cf1owsVRNaXfUF/Dku53il/CtGoAzGHM=";
+    hash = "sha256-tK8xhIkUkf2JwaBGVlIxAVbAfRVraiThwH86TPdXlWg=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     itstool
     gettext
+    desktop-file-utils
     wrapGAppsHook4
   ];
 
@@ -60,9 +62,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME translation making program";
-    homepage = "https://wiki.gnome.org/Apps/Gtranslator";
+    mainProgram = "gtranslator";
+    homepage = "https://gitlab.gnome.org/GNOME/gtranslator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ bobby285271 ];
     platforms = platforms.linux;
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vault-bin";
-  version = "1.15.5";
+  version = "1.17.5";
 
   src =
     let
@@ -15,17 +15,18 @@ stdenv.mkDerivation rec {
         x86_64-darwin = "darwin_amd64";
         aarch64-darwin = "darwin_arm64";
       };
-      sha256 = selectSystem {
-        x86_64-linux = "sha256-WchJdMn8PkCu3MydY6ssbXpMCaQBlDbyTQ1kF69KQ+0=";
-        aarch64-linux = "sha256-tjLyPC156q8y4RKB0+QVIxiXbkW6/qTytCC0WhOo8xU=";
-        i686-linux = "sha256-TSAhomxTIKSHE0BE1jiL9a15hpGRmF7clFbTwsrDxuk=";
-        x86_64-darwin = "sha256-vG3S84P7+zvQnIjohPHN3JefN4wM9uDdPqindnwlXpE=";
-        aarch64-darwin = "sha256-nQsKXD+1gGclUoZLlUpA6k9QuNv/NQ+roRa6kvXCIXQ=";
+      hash = selectSystem {
+        x86_64-linux = "sha256-rh0ZVmAbiOmZFCpiiX9ClAYmQKx084VKCjxvD9bbYAk=";
+        aarch64-linux = "sha256-DtriOEQCuSMMjzfJJpJAf7z+wGJSbzU3V/X+glTLkv8=";
+        i686-linux = "sha256-EPS3Sx2l0Gv4PWeqrnIEoNYUF4Or075vdhn71vKXQEw=";
+        x86_64-darwin = "sha256-pi/sD88haBxUx6dSUEUv6ugQO2K/lhg4ne7xbcVzg3M=";
+        aarch64-darwin = "sha256-6ZESO3m5FCRwTNh3xlWjWw6c9sjiAwV09YA/hQ5Py/o=";
       };
     in
     fetchzip {
       url = "https://releases.hashicorp.com/vault/${version}/vault_${version}_${suffix}.zip";
-      inherit sha256;
+      stripRoot=false;
+      inherit hash;
     };
 
   dontConfigure = true;
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update-bin.sh;
 
   meta = with lib; {
-    description = "A tool for managing secrets, this binary includes the UI";
+    description = "Tool for managing secrets, this binary includes the UI";
     homepage = "https://www.vaultproject.io";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;

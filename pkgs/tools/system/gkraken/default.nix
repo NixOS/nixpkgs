@@ -10,7 +10,7 @@
 , gtk3
 , libnotify
 , dbus
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     gtk3
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

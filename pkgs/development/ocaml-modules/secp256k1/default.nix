@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "secp256k1";
   version = "0.4.4";
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "dakk";

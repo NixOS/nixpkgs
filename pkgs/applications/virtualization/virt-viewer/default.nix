@@ -30,11 +30,8 @@
 , spice-protocol
 , spiceSupport ? true
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
-
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "virt-viewer";
   version = "11.0";
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -76,18 +73,18 @@ stdenv.mkDerivation rec {
     libvirt-glib
     libxml2
     vte
-  ] ++ optionals ovirtSupport [
+  ] ++ lib.optionals ovirtSupport [
     libgovirt
-  ] ++ optionals spiceSupport ([
+  ] ++ lib.optionals spiceSupport ([
     gdbm
     spice-gtk
     spice-protocol
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     libcap
   ]);
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
+  propagatedUserEnvPkgs = lib.optional spiceSupport spice-gtk;
 
   mesonFlags = [
     (lib.mesonEnable "ovirt" ovirtSupport)
@@ -99,8 +96,8 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/post_install.py
   '';
 
-  meta = {
-    description = "A viewer for remote virtual machines";
+  meta = with lib; {
+    description = "Viewer for remote virtual machines";
     maintainers = with maintainers; [ raskin atemu ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;

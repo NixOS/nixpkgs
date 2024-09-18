@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, addOpenGLRunpath
+, addDriverRunpath
 , fetchFromGitHub
 , pkg-config
 , elfutils
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
       libraryPath = lib.makeLibraryPath [ "$out" driverLink "${driverLink}-32" ];
     in
     ''

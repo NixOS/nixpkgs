@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
+{ lib, stdenv, fetchurl
 
   # test suite depends on dejagnu which cannot be used during bootstrapping
   # dejagnu also requires tcl which can't be built statically at the moment
@@ -11,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.4.4";
+  version = "3.4.6";
 
   src = fetchurl {
     url = with finalAttrs; "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1mxWrSWags8qnfxAizK/XaUjcVALhHRff7i2RXEt9nY=";
+    hash = "sha256-sN6p3yPIY6elDoJUQPPr/6vWXfFJcQjl1Dd0eEOJWk4=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -23,9 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
-    # Fix implicit function declarations (clang-16 build failure):
-    #     https://github.com/libffi/libffi/pull/764
-    ./fix-implicit-fun-decl.patch
   ];
 
   strictDeps = true;
@@ -62,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A foreign function call interface library";
+    description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
       interface to various calling conventions.  This allows a

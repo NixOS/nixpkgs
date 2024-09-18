@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Forward freedesktop.org Idle Inhibition Service calls to Xss";
+    mainProgram = "xssproxy";
     homepage = "https://github.com/vincentbernat/xssproxy";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ benley ];

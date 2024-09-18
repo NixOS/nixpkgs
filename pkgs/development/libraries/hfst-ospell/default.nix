@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/hfst/hfst-ospell/";
-    description = "HFST spell checker library and command line tool ";
+    description = "HFST spell checker library and command line tool";
     license = licenses.asl20;
     maintainers = with maintainers; [ lurkki ];
     platforms = platforms.unix;

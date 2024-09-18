@@ -1,29 +1,40 @@
 { lib
 , rustPlatform
 , fetchCrate
+, pkg-config
+, openssl
 , stdenv
-, Security
+, darwin
 , withLsp ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo";
-  version = "0.8.1";
+  version = "0.9.3";
 
   src = fetchCrate {
     inherit version;
     pname = "taplo-cli";
-    sha256 = "sha256-evNW6OA7rArj0TvOaQgktcQy0tWnel3ZL+ic78e6lOk=";
+    hash = "sha256-dNGQbaIfFmgXh2AOcaE74BTz7/jaiBgU7Y1pkg1rV7U=";
   };
 
-  cargoSha256 = "sha256-jeLjoqEieR96mUZQmQtv7P78lmOaF18ruVhZLi/TieQ=";
+  cargoHash = "sha256-iucjewjRCunKxKCqeZwf7bdEo7+aN9hfWPwUAJhaSq0=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   buildFeatures = lib.optional withLsp "lsp";
 
   meta = with lib; {
-    description = "A TOML toolkit written in Rust";
+    description = "TOML toolkit written in Rust";
     homepage = "https://taplo.tamasfe.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, wrapGAppsHook, autoreconfHook, bison, flex
+{ stdenv, lib, fetchurl, wrapGAppsHook3, autoreconfHook, bison, flex
 , curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
 
@@ -96,11 +96,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    hash = "sha256-fIqxcy10GX3wbWGmt+vHxYDs9ukuse9q5bAQdTPxrwc=";
+    hash = "sha256-ldwdiI65FvAoRn+gw8v0W6/2Z4eTt7+zX6u6Ap1YHOE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -123,7 +123,7 @@ in stdenv.mkDerivation rec {
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config bison flex wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config bison flex wrapGAppsHook3 ];
   propagatedBuildInputs = pythonPkgs;
 
   buildInputs =
@@ -152,7 +152,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The user-friendly, lightweight, and fast email client";
+    description = "User-friendly, lightweight, and fast email client";
+    mainProgram = "claws-mail";
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

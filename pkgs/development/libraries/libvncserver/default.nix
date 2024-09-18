@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , libjpeg
 , openssl
@@ -25,6 +24,11 @@ stdenv.mkDerivation rec {
     rev = "LibVNCServer-${version}";
     sha256 = "sha256-kqVZeCTp+Z6BtB6nzkwmtkJ4wtmjlSQBg05lD02cVvQ=";
   };
+
+  patches = [
+    # fix generated pkg-config files
+    ./pkgconfig.patch
+  ];
 
   nativeBuildInputs = [
     cmake

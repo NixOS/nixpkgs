@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Cycle-Accurate Nintendo 64 Emulator";
+    description = "Cycle-Accurate Nintendo 64 Emulator";
     license = licenses.bsd3;
     homepage = "https://github.com/n64dev/cen64";
     maintainers = [ maintainers._414owen ];

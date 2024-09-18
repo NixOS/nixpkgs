@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to test generated HTML output";
+    mainProgram = "htmltest";
     longDescription = ''
       htmltest runs your HTML output through a series of checks to ensure all your
       links, images, scripts references work, your alt tags are filled in, etc.

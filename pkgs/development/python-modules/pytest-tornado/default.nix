@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pytest
-, tornado
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pytest,
+  tornado,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ tornado ];
 
   meta = with lib; {
-    description = "A py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications.";
-    homepage =  "https://github.com/eugeniy/pytest-tornado";
+    description = "Py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications";
+    homepage = "https://github.com/eugeniy/pytest-tornado";
     license = licenses.asl20;
   };
 }

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "protoc-gen-connect-go";
-  version = "1.14.0";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-go";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lb0kMIcVOZz/8s7exsrv4I7PuF/mIzrZ6TSv4cii1UY=";
+    hash = "sha256-Ej8ya2sKtRVRQdMr63YpPbqzwtV0ZsqO+7xiif3gFr0=";
   };
 
-  vendorHash = "sha256-tiTdGoAuY+DxYvwI1glX7LqgwOI3hCfrgszV81cxkE0=";
+  vendorHash = "sha256-OKTRxExgJ2V3736fIVvQX3FEa44jGngwCi2D/uk0F58=";
 
   subPackages = [
     "cmd/protoc-gen-connect-go"
@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simple, reliable, interoperable, better gRPC";
+    mainProgram = "protoc-gen-connect-go";
     homepage = "https://github.com/connectrpc/connect-go";
     changelog = "https://github.com/connectrpc/connect-go/releases/tag/v${version}";
     license = licenses.asl20;

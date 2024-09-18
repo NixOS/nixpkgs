@@ -17,7 +17,6 @@
 , db
 , libedit
 , pam
-, krb5
 , libmicrohttpd
 , cjson
 
@@ -26,7 +25,7 @@
 , SystemConfiguration
 
 , curl
-, jdk
+, jdk_headless
 , unzip
 , which
 
@@ -83,12 +82,14 @@ stdenv.mkDerivation {
   doCheck = true;
   nativeCheckInputs = [
     curl
-    jdk
+    jdk_headless
     unzip
     which
   ];
 
   configureFlags = [
+    "--with-hdbdir=/var/lib/heimdal"
+
     "--with-libedit-include=${libedit.dev}/include"
     "--with-libedit-lib=${libedit}/lib"
     "--with-berkeley-db-include=${db.dev}/include"
@@ -170,7 +171,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.heimdal.software";
     changelog = "https://github.com/heimdal/heimdal/releases";
-    description = "An implementation of Kerberos 5 (and some more stuff)";
+    description = "Implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ h7x4 ];

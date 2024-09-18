@@ -9,7 +9,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enables Glasgow udev rules and ensures 'plugdev' group exists.
         This is a prerequisite to using Glasgow without being root.
       '';

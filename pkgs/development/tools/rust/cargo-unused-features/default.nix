@@ -3,7 +3,7 @@
 , fetchCrate
 , curl
 , pkg-config
-, libgit2_1_5
+, libgit2
 , openssl
 , stdenv
 , darwin
@@ -27,15 +27,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     curl
-    libgit2_1_5
+    libgit2
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
+
   meta = with lib; {
-    description = "A tool to find potential unused enabled feature flags and prune them";
+    description = "Tool to find potential unused enabled feature flags and prune them";
     homepage = "https://github.com/timonpost/cargo-unused-features";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda matthiasbeyer ];

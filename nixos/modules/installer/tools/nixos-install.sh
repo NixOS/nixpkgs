@@ -17,6 +17,9 @@ mountPoint=/mnt
 channelPath=
 system=
 verbosity=()
+attr=
+buildFile=
+buildingAttribute=1
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -41,6 +44,24 @@ while [ "$#" -gt 0 ]; do
           flakeFlags=(--experimental-features 'nix-command flakes')
           shift 1
           ;;
+        --file|-f)
+            if [ -z "$1" ]; then
+                log "$0: '$i' requires an argument"
+                exit 1
+            fi
+            buildFile="$1"
+            buildingAttribute=
+            shift 1
+            ;;
+        --attr|-A)
+            if [ -z "$1" ]; then
+                log "$0: '$i' requires an argument"
+                exit 1
+            fi
+            attr="$1"
+            buildingAttribute=
+            shift 1
+            ;;
         --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
           lockFlags+=("$i")
           ;;
@@ -101,17 +122,30 @@ while [[ "$checkPath" != "/" ]]; do
     checkPath="$(dirname "$checkPath")"
 done
 
-# Get the path of the NixOS configuration file.
-if [[ -z $NIXOS_CONFIG ]]; then
-    NIXOS_CONFIG=$mountPoint/etc/nixos/configuration.nix
-fi
-
-if [[ ${NIXOS_CONFIG:0:1} != / ]]; then
-    echo "$0: \$NIXOS_CONFIG is not an absolute path"
+# Verify that user is not trying to use attribute building and flake
+# at the same time
+if [[ -z $buildingAttribute && -n $flake ]]; then
+    echo "$0: '--flake' cannot be used with '--file' or '--attr'"
     exit 1
 fi
 
-if [[ -n $flake ]]; then
+# Get the path of the NixOS configuration file.
+if [[ -z $flake && -n $buildingAttribute ]]; then
+    if [[ -z $NIXOS_CONFIG ]]; then
+        NIXOS_CONFIG=$mountPoint/etc/nixos/configuration.nix
+    fi
+
+    if [[ ${NIXOS_CONFIG:0:1} != / ]]; then
+        echo "$0: \$NIXOS_CONFIG is not an absolute path"
+        exit 1
+    fi
+elif [[ -z $buildingAttribute ]]; then
+    if [[ -z $buildFile ]]; then
+        buildFile="$mountPoint/etc/nixos/default.nix"
+    elif [[ -d $buildFile ]]; then
+        buildFile="$buildFile/default.nix"
+    fi
+elif [[ -n $flake ]]; then
     if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
        flake="${BASH_REMATCH[1]}"
        flakeAttr="${BASH_REMATCH[2]}"
@@ -129,8 +163,13 @@ if [[ -n $flake ]]; then
     flake=$(nix "${flakeFlags[@]}" flake metadata --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
 fi
 
-if [[ ! -e $NIXOS_CONFIG && -z $system && -z $flake ]]; then
+if [[ ! -e $NIXOS_CONFIG && -z $system && -z $flake && -n $buildingAttribute ]]; then
     echo "configuration file $NIXOS_CONFIG doesn't exist"
+    exit 1
+fi
+
+if [[ ! -z $buildingAttribute && -e $buildFile && -z $system ]]; then
+    echo "configuration file $buildFile doesn't exist"
     exit 1
 fi
 
@@ -163,11 +202,20 @@ fi
 # Build the system configuration in the target filesystem.
 if [[ -z $system ]]; then
     outLink="$tmpdir/system"
-    if [[ -z $flake ]]; then
+    if [[ -z $flake && -n $buildingAttribute ]]; then
         echo "building the configuration in $NIXOS_CONFIG..."
         nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
             --extra-substituters "$sub" \
             '<nixpkgs/nixos>' -A system -I "nixos-config=$NIXOS_CONFIG" "${verbosity[@]}"
+    elif [[ -z $buildingAttribute ]]; then
+        if [[ -n $attr ]]; then
+            echo "building the configuration in $buildFile and attribute $attr..."
+        else
+            echo "building the configuration in $buildFile..."
+        fi
+        nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
+            --extra-substituters "$sub" \
+            "$buildFile" -A "${attr:+$attr.}config.system.build.toplevel" "${verbosity[@]}"
     else
         echo "building the flake in $flake..."
         nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
@@ -197,6 +245,7 @@ if [[ -z $noBootLoader ]]; then
     ln -sfn /proc/mounts "$mountPoint"/etc/mtab
     export mountPoint
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -c "$(cat <<'EOF'
+      set -e
       # Create a bind mount for each of the mount points inside the target file
       # system. This preserves the validity of their absolute paths after changing
       # the root with `nixos-enter`.

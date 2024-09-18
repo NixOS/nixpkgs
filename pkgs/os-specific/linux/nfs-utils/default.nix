@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
 , sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3, buildPackages, nixosTests, rpcsvc-proto
-, enablePython ? true
+, python3, buildPackages, nixosTests, rpcsvc-proto, openldap, libxml2
+, enablePython ? true, enableLdap ? true
 }:
 
 let
@@ -10,11 +10,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nfs-utils";
-  version = "2.6.2";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-UgCHPoHE1hDiRi/CYv4YE18tvni3l5+VrM0VmuZNUBE=";
+    hash = "sha256-iFyUioSli8pBSPRZWI+ac2nbtA3MRm8E5FXGsQ/Qqkg=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
-    libuuid keyutils libkrb5 tcp_wrappers
-  ] ++ lib.optional enablePython python3;
+    libuuid keyutils libkrb5 tcp_wrappers libxml2
+  ] ++ lib.optional enablePython python3
+    ++ lib.optional enableLdap  openldap;
 
   enableParallelBuilding = true;
 
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
       "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
       "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
-    ];
+    ] ++ lib.optional enableLdap "--with-ldap";
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     # http://openwall.com/lists/musl/2015/08/18/10
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
       substituteInPlace systemd/nfs-utils.service \
         --replace "/bin/true" "${coreutils}/bin/true"
 
-      substituteInPlace tools/nfsrahead/Makefile.in \
+      substituteInPlace tools/nfsrahead/Makefile.in systemd/Makefile.in \
         --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
       substituteInPlace utils/mount/Makefile.in \
@@ -124,7 +125,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://linux-nfs.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

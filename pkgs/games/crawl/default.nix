@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , which
 , sqlite
 , lua5_1
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crawl${lib.optionalString tileMode "-tiles"}";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    hash = "sha256-06tVEduk3Y2VDsoOuI4nGjN8p+wGZT7wEU80nBSg+UU=";
+    hash = "sha256-OHdFGSvDfpdachdnmvjhsUvuemBXINwls0Id7qwY9sA=";
   };
 
   # Patch hard-coded paths and remove force library builds

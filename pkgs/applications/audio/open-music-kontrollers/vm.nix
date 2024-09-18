@@ -6,5 +6,5 @@ callPackage ./generic.nix (args // rec {
 
   sha256 = "013gq7jn556nkk1nq6zzh9nmp3fb36jd7ndzvyq3qryw7khzkagc";
 
-  description = "A programmable virtual machine LV2 plugin";
+  description = "Programmable virtual machine LV2 plugin";
 })

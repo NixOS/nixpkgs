@@ -1,58 +1,48 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, valgrind
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
+{ lib, stdenv, fetchFromGitHub, cmake
+, valgrind, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lz4";
   version = "1.9.4";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-YiMCD3vvrG+oxBUghSrCmP2LAfAGZrEaKz0YoaQJhpI=";
-    rev = "v${version}";
-    repo = pname;
-    owner = pname;
+    repo = "lz4";
+    owner = "lz4";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YiMCD3vvrG+oxBUghSrCmP2LAfAGZrEaKz0YoaQJhpI=";
   };
 
-  patches = [
-    (fetchpatch { # https://github.com/lz4/lz4/pull/1162
-      name = "build-shared-no.patch";
-      url = "https://github.com/lz4/lz4/commit/851ef4b23c7cbf4ceb2ba1099666a8b5ec4fa195.patch";
-      sha256 = "sha256-P+/uz3m7EAmHgXF/1Vncc0uKKxNVq6HNIsElx0rGxpw=";
-    })
+  nativeBuildInputs = [
+    cmake
   ];
 
-  # TODO(@Ericson2314): Separate binaries and libraries
-  outputs = [ "bin" "out" "dev" ];
+  buildInputs = lib.optionals finalAttrs.finalPackage.doCheck [
+    valgrind
+  ];
 
-  buildInputs = lib.optional doCheck valgrind;
+  outputs = [ "dev" "lib" "man" "out" ];
 
-  enableParallelBuilding = true;
+  patches = [
+    ./0001-Create-a-unified-lz4-target.patch
+  ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "INCLUDEDIR=$(dev)/include"
-    "BUILD_STATIC=${if enableStatic then "yes" else "no"}"
-    "BUILD_SHARED=${if enableShared then "yes" else "no"}"
-    "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
-  ]
-    # TODO make full dictionary
-    ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
-    ++ lib.optional stdenv.hostPlatform.isLinux "TARGET_OS=Linux"
-    ;
+  cmakeDir = "../build/cmake";
+  cmakeBuildDir = "build-dist";
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
-  # TODO(@Ericson2314): Make resusable setup hook for this issue on Windows.
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isWindows ''
-      mv $out/bin/*.dll $out/lib
-      ln -s $out/lib/*.dll
-    ''
-    + ''
-      moveToOutput bin "$bin"
-    '';
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
+    };
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "liblz4" ];
+    };
+  };
 
   meta = with lib; {
     description = "Extremely fast compression algorithm";
@@ -66,5 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://lz4.github.io/lz4/";
     license = with licenses; [ bsd2 gpl2Plus ];
     platforms = platforms.all;
+    mainProgram = "lz4";
+    maintainers = [ maintainers.tobim ];
   };
-}
+})

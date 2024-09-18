@@ -29,6 +29,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line interface to IPMI-enabled devices";
+    mainProgram = "ipmitool";
     license = licenses.bsd3;
     homepage = "https://github.com/ipmitool/ipmitool";
     platforms = platforms.unix;

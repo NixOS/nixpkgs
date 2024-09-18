@@ -14,16 +14,17 @@
 , pkg-config
 , diffutils
 , glibc ? !stdenv.isDarwin
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.1";
+  version = "1.22.10";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-63XRO3Img+XS2F5Krb5DAw0LMhtxB+eJi754O03Lx8Q=";
+    hash = "sha256-D/9nQXwzgLo+odn72WHuCJDjipfWdim2ZdSLTI2VlgE=";
   };
 
   configureFlags = [
@@ -71,7 +72,8 @@ stdenv.mkDerivation rec {
        --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz zstd libmd ];
+  buildInputs = [ perl zlib bzip2 xz zstd libmd ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
   nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
 
   postInstall =
@@ -90,7 +92,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "The Debian package manager";
+    description = "Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -6,20 +6,19 @@
 , cmake
 , hwloc
 , gperftools
-, ninja
 , pkg-config
 , python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "hpx";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
     rev = "v${version}";
-    hash = "sha256-1gLDwgCqv+3+rOSG7a3fFsnjqfKpnPpWnBmrW+z+jWw=";
+    hash = "sha256-yrKG0n5BhrUNXjFWZRpb38/GYQlvMr0PSqUbhmZlgm0=";
   };
 
   propagatedBuildInputs = [ hwloc ];

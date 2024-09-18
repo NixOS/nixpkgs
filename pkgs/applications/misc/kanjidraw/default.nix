@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Handwritten kanji recognition";
+    mainProgram = "kanjidraw";
     longDescription = ''
       kanjidraw is a simple Python library + GUI for matching (the strokes of a)
       handwritten kanji against its database.

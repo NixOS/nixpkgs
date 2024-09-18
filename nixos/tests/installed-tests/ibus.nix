@@ -5,7 +5,10 @@ makeInstalledTest {
 
   testConfig = {
     i18n.supportedLocales = [ "all" ];
-    i18n.inputMethod.enabled = "ibus";
+    i18n.inputMethod = {
+      enable = true;
+      type = "ibus";
+    };
     systemd.user.services.ibus-daemon = {
       serviceConfig.ExecStart = "${pkgs.ibus}/bin/ibus-daemon --xim --verbose";
       wantedBy = [ "graphical-session.target" ];

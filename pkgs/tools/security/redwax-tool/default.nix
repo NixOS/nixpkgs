@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://redwax.eu/rt/";
     description = "Universal certificate conversion tool";
+    mainProgram = "redwax-tool";
     longDescription = ''
       Read certificates and keys from your chosen sources, filter the
       certificates and keys you're interested in, write those

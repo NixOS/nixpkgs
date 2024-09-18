@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, cargo
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, rustPlatform
-, rustc
-, setuptools-rust
-, libiconv
+{
+  lib,
+  stdenv,
+  cargo,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -46,6 +47,6 @@ buildPythonPackage rec {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

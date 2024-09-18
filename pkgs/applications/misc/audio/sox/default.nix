@@ -31,7 +31,7 @@
 , enableAMR ? false
 , amrnb
 , amrwb
-, enableLibpulseaudio ? stdenv.isLinux
+, enableLibpulseaudio ? stdenv.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
 , libpulseaudio
 }:
 

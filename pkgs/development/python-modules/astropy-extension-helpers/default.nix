@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, findutils
-, pytestCheckHook
-, pythonOlder
-, pip
-, setuptools
-, setuptools-scm
-, tomli
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  findutils,
+  pytestCheckHook,
+  pythonOlder,
+  pip,
+  setuptools,
+  setuptools-scm,
+  tomli,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    tomli
-  ];
+  propagatedBuildInputs = [ tomli ];
 
   nativeCheckInputs = [
     findutils
@@ -51,18 +50,14 @@ buildPythonPackage rec {
   ];
 
   # avoid import mismatch errors, as conftest.py is copied to build dir
-  pytestFlagsArray = [
-    "extension_helpers"
-  ];
+  pytestFlagsArray = [ "extension_helpers" ];
 
   disabledTests = [
     # https://github.com/astropy/extension-helpers/issues/43
     "test_write_if_different"
   ];
 
-  pythonImportsCheck = [
-    "extension_helpers"
-  ];
+  pythonImportsCheck = [ "extension_helpers" ];
 
   meta = with lib; {
     description = "Utilities for building and installing packages in the Astropy ecosystem";

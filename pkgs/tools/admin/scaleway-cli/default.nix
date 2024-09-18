@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "scaleway-cli";
-  version = "2.27.0";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
     rev = "v${version}";
-    sha256 = "sha256-brcsscNRftlpx73Q6lnbwvFiKoY6csERUUnAsiXwhF0=";
+    sha256 = "sha256-6mmjIrG81uaNfRAXW0YORZfviFwJd1QyORfvMucNWdI=";
   };
 
-  vendorHash = "sha256-GDV7BDZb0oHQUbA/Ojx6kzh9kBh0C5RbjYDDzX16LmQ=";
+  vendorHash = "sha256-PWjcQD64DEJylRdSUA55iCcKHMdyMh5PrfWnhZz3LOg=";
 
   ldflags = [
     "-w"

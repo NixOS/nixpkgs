@@ -14,14 +14,6 @@ stdenv.mkDerivation rec {
   };
 
   # MonitorControl.${version}.dmg is APFS formatted, unpack with 7zz
-  unpackCmd = ''
-    runHook preUnpack
-
-    7zz x $src
-
-    runHook postUnpack
-  '';
-
   nativeBuildInputs = [ _7zz ];
 
   sourceRoot = "MonitorControl.app";
@@ -32,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A macOS system extension to control brightness and volume of external displays with native OSD";
+    description = "MacOS system extension to control brightness and volume of external displays with native OSD";
     longDescription = "Controls your external display brightness and volume and shows native OSD. Use menulet sliders or the keyboard, including native Apple keys!";
     homepage = "https://github.com/MonitorControl/MonitorControl#readme";
     license = licenses.mit;

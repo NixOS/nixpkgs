@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ncurses, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "7.1.2";
+  version = "7.1.3";
   pname = "multitail";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = pname;
     rev = version;
-    sha256 = "sha256-00NZI/KFcgEAkvESnx0KQFW1GvX6FgZLA4Z1Fv2qi+E=";
+    sha256 = "sha256-4iAFxDAS3gthYPECzyFj0AKzIGwZ9hTJ96fCnQGLbXU=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

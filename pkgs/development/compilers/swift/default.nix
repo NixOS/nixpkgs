@@ -35,14 +35,6 @@ let
           # that can happen when a Swift application dynamically links different versions
           # of libc++ and libc++abi than libraries it links are using.
           inherit (llvmPackages) libcxx;
-          extraPackages = [
-            llvmPackages.libcxxabi
-            # Use the compiler-rt associated with clang, but use the libc++abi from the stdenv
-            # to avoid linking against two different versions (for the same reasons as above).
-            (swiftLlvmPackages.compiler-rt.override {
-              inherit (llvmPackages) libcxxabi;
-            })
-          ];
         }
       else
         swiftLlvmPackages.clang;
@@ -66,7 +58,7 @@ let
     xcbuild = xcodebuild;
 
     swift-unwrapped = callPackage ./compiler {
-      inherit (darwin) DarwinTools cctools sigtool;
+      inherit (darwin) DarwinTools sigtool;
       inherit (apple_sdk) MacOSX-SDK CLTools_Executables;
       inherit (apple_sdk.frameworks) CoreServices Foundation Combine;
     };
@@ -93,7 +85,7 @@ let
     };
 
     swiftpm = callPackage ./swiftpm {
-      inherit (darwin) DarwinTools cctools;
+      inherit (darwin) DarwinTools;
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
       swift = swiftNoSwiftDriver;
     };
@@ -115,6 +107,8 @@ let
     };
 
     swift-format = callPackage ./swift-format { };
+
+    swiftpm2nix = callPackage ./swiftpm2nix { };
 
   };
 

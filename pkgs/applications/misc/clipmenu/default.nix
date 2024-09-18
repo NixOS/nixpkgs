@@ -4,7 +4,6 @@
 , makeWrapper
 , clipnotify
 , coreutils
-, dmenu
 , gawk
 , util-linux
 , xdotool

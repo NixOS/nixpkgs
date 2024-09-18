@@ -1,7 +1,7 @@
 { lib
 , mkDerivation
 , extra-cmake-modules
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , kcoreaddons
 , kdeclarative
@@ -18,7 +18,7 @@ mkDerivation {
 
   nativeBuildInputs = [
     extra-cmake-modules
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -50,6 +50,7 @@ mkDerivation {
 
   meta = {
     description = "Youtube player powered by an invidious server";
+    mainProgram = "plasmatube";
     homepage = "https://invent.kde.org/plasma-mobile/plasmatube";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];

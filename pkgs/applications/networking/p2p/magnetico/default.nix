@@ -1,44 +1,38 @@
 { lib
-, fetchFromGitHub
-, nixosTests
+, stdenv
+, fetchFromGitea
 , buildGoModule
+, nixosTests
+, sqlite
 }:
 
 buildGoModule rec {
   pname = "magnetico";
-  version = "unstable-2022-08-10";
+  version = "0.12.1";
 
-  src = fetchFromGitHub {
-    owner  = "ireun";
+  src = fetchFromGitea {
+    domain = "maxwell.ydns.eu/git";
+    owner  = "rnhmjoj";
     repo   = "magnetico";
-    rev    = "828e230d3b3c0759d3274e27f5a7b70400f4d6ea";
-    sha256 = "sha256-V1pBzillWTk9iuHAhFztxYaq4uLL3U3HYvedGk6ffbk=";
+    rev    = "v${version}";
+    hash   = "sha256-cO5TVtQ1jdW1YkFtj35kmRfJG46/lXjXyz870NCPT0g=";
   };
 
-  vendorHash = "sha256-ngYkTtBEZSyYYnfBHi0VrotwKGvMOiowbrwigJnjsuU=";
+  vendorHash = "sha256-jIVMQtPCq9RYaYsH4LSZJFspH6TpCbgzHN0GX8cM/CI=";
 
-  buildPhase = ''
-    runHook preBuild
+  buildInputs = [ sqlite ];
 
-    make magneticow magneticod
+  tags = [ "fts5" "libsqlite3" ];
+  ldflags = [ "-s" "-w" ];
 
-    runHook postBuild
-  '';
-
-  checkPhase = ''
-    runHook preBuild
-
-    make test
-
-    runHook postBuild
-  '';
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   passthru.tests = { inherit (nixosTests) magnetico; };
 
   meta = with lib; {
     description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
-    homepage     = "https://github.com/boramalper/magnetico";
-    license      = licenses.agpl3;
+    homepage     = "https://maxwell.ydns.eu/git/rnhmjoj/magnetico";
+    license      = licenses.agpl3Only;
     badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };

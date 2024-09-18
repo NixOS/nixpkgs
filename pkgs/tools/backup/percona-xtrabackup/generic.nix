@@ -5,14 +5,14 @@
 , version, hash, fetchSubmodules ? false, extraPatches ? [], extraPostInstall ? "", ...
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "percona-xtrabackup";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
-    rev = "${pname}-${version}";
+    rev = "percona-xtrabackup-${finalAttrs.version}";
     inherit hash fetchSubmodules;
   };
 
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     rm -r "$out"/lib/plugin/debug
   '' + extraPostInstall;
 
+  passthru.mysqlVersion = lib.versions.majorMinor finalAttrs.version;
+
   meta = with lib; {
     description = "Non-blocking backup tool for MySQL";
     homepage = "http://www.percona.com/software/percona-xtrabackup";
@@ -54,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.flyingcircus.members ++ [ maintainers.izorkin ];
   };
-}
+})

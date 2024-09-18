@@ -1,17 +1,19 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiofiles,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aiocsv";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,13 +22,15 @@ buildPythonPackage rec {
     owner = "MKuranowski";
     repo = "aiocsv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5jMmT7XY+1VNbDNciZS6B/oQJFj4XmGvhDITKWHCuOQ=";
+    hash = "sha256-NnRLBXvQj25dSHc8ZnUaPT8Oiy2EyHLIb8IJPQliyPg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     aiofiles
@@ -38,9 +42,7 @@ buildPythonPackage rec {
     export CYTHONIZE=1
   '';
 
-  pythonImportsCheck = [
-    "aiocsv"
-  ];
+  pythonImportsCheck = [ "aiocsv" ];
 
   disabledTestPaths = [
     # Import issue

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://dl.katawa-shoujo.com/gold_${version}/%5b4ls%5d_katawa_shoujo_${version}-${srcDetails.urlSuffix}";
+    url = "https://cdn.fhs.sh/ks/bin/gold_${version}/%5b4ls%5d_katawa_shoujo_${version}-${srcDetails.urlSuffix}";
     inherit (srcDetails) hash;
   };
 

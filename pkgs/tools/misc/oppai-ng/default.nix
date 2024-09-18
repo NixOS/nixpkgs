@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Difficulty and pp calculator for osu!";
     homepage = "https://github.com/Francesco149/oppai-ng";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = [ ];
     mainProgram = "oppai";
     platforms = platforms.all;
   };

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-DAPFEL_VERSION=${version}";
 
   meta = with lib; {
-    description = "A PDF Evolution Library";
+    description = "PDF Evolution Library";
     homepage = "https://apfel.mi.infn.it/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ veprbl ];

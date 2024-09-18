@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Logger service for Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-logger/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

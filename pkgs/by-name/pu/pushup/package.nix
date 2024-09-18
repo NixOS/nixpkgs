@@ -26,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A web framework for Go";
+    description = "Web framework for Go";
     homepage = "https://pushup.adhoc.dev/";
     license = licenses.mit;
     changelog = "https://github.com/adhocteam/pushup/blob/${src.rev}/CHANGELOG.md";

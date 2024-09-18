@@ -22,6 +22,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "4chan browser in qt5";
+    mainProgram = "qtchan";
     homepage    = "https://github.com/siavash119/qtchan";
     license     = licenses.mit;
     maintainers = with maintainers; [ Madouura ];

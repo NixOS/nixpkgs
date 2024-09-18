@@ -9,7 +9,8 @@ One of the most common exporters is the
 [node exporter](https://github.com/prometheus/node_exporter),
 it provides hardware and OS metrics from the host it's
 running on. The exporter could be configured as follows:
-```
+```nix
+{
   services.prometheus.exporters.node = {
     enable = true;
     port = 9100;
@@ -23,6 +24,7 @@ running on. The exporter could be configured as follows:
     openFirewall = true;
     firewallFilter = "-i br0 -p tcp -m tcp --dport 9100";
   };
+}
 ```
 It should now serve all metrics from the collectors that are explicitly
 enabled and the ones that are
@@ -35,7 +37,8 @@ configuration see `man configuration.nix` or search through
 the [available options](https://nixos.org/nixos/options.html#prometheus.exporters).
 
 Prometheus can now be configured to consume the metrics produced by the exporter:
-```
+```nix
+{
     services.prometheus = {
       # ...
 
@@ -49,7 +52,8 @@ Prometheus can now be configured to consume the metrics produced by the exporter
       ];
 
       # ...
-    }
+    };
+}
 ```
 
 ## Adding a new exporter {#module-services-prometheus-exporters-new-exporter}
@@ -68,6 +72,7 @@ example:
       - `extraFlags`
       - `openFirewall`
       - `firewallFilter`
+      - `firewallRules`
       - `user`
       - `group`
   - As there is already a package available, the module can now be added. This
@@ -75,12 +80,9 @@ example:
     `nixos/modules/services/monitoring/prometheus/exporters/`
     directory, which will be called postfix.nix and contains all exporter
     specific options and configuration:
-    ```
+    ```nix
     # nixpkgs/nixos/modules/services/prometheus/exporters/postfix.nix
     { config, lib, pkgs, options }:
-
-    with lib;
-
     let
       # for convenience we define cfg here
       cfg = config.services.prometheus.exporters.postfix;
@@ -92,15 +94,15 @@ example:
       # (and optional overrides for default options).
       # Note that this attribute is optional.
       extraOpts = {
-        telemetryPath = mkOption {
-          type = types.str;
+        telemetryPath = lib.mkOption {
+          type = lib.types.str;
           default = "/metrics";
           description = ''
             Path under which to expose metrics.
           '';
         };
-        logfilePath = mkOption {
-          type = types.path;
+        logfilePath = lib.mkOption {
+          type = lib.types.path;
           default = /var/log/postfix_exporter_input.log;
           example = /var/log/mail.log;
           description = ''
@@ -108,8 +110,8 @@ example:
             This file will be truncated by this exporter!
           '';
         };
-        showqPath = mkOption {
-          type = types.path;
+        showqPath = lib.mkOption {
+          type = lib.types.path;
           default = /var/spool/postfix/public/showq;
           example = /var/lib/postfix/queue/public/showq;
           description = ''
@@ -131,7 +133,7 @@ example:
             ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
               --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
               --web.telemetry-path ${cfg.telemetryPath} \
-              ${concatStringsSep " \\\n  " cfg.extraFlags}
+              ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
           '';
         };
       };
@@ -148,10 +150,8 @@ example:
 Should an exporter option change at some point, it is possible to add
 information about the change to the exporter definition similar to
 `nixpkgs/nixos/modules/rename.nix`:
-```
+```nix
 { config, lib, pkgs, options }:
-
-with lib;
 
 let
   cfg = config.services.prometheus.exporters.nginx;
@@ -168,10 +168,10 @@ in
   };
   imports = [
     # 'services.prometheus.exporters.nginx.telemetryEndpoint' -> 'services.prometheus.exporters.nginx.telemetryPath'
-    (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
+    (lib.mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
 
     # removed option 'services.prometheus.exporters.nginx.insecure'
-    (mkRemovedOptionModule [ "insecure" ] ''
+    (lib.mkRemovedOptionModule [ "insecure" ] ''
       This option was replaced by 'prometheus.exporters.nginx.sslVerify' which defaults to true.
     '')
     ({ options.warnings = options.warnings; })

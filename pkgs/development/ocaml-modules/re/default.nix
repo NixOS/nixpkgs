@@ -13,7 +13,7 @@ let version_sha = if lib.versionAtLeast ocaml.version "4.08"
     };
 in
 
-buildDunePackage (rec {
+buildDunePackage rec {
   pname = "re";
   version = version_sha.version;
 
@@ -34,6 +34,4 @@ buildDunePackage (rec {
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
-  duneVersion = "1";
-})
+}

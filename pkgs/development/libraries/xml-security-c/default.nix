@@ -1,12 +1,26 @@
-{ lib, stdenv, fetchurl, xalanc, xercesc, openssl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  xalanc,
+  xercesc,
+  openssl,
+  darwin,
+}:
 
-stdenv.mkDerivation rec {
+let
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices SystemConfiguration;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "xml-security-c";
   version = "2.0.4";
 
-  src = fetchurl {
-    url = "mirror://apache/santuario/c-library/${pname}-${version}.tar.gz";
-    sha256 = "sha256-p42mcg9sK6FBANJCYTHg0z6sWi26XMEb3QSXS364kAM=";
+  src = fetchgit {
+    url = "https://git.shibboleth.net/git/cpp-xml-security";
+    rev = finalAttrs.version;
+    hash = "sha256-60A6LqUUGmoZMmIvhuZWjrZl6utp7WLhPe738oNd/AA=";
   };
 
   configureFlags = [
@@ -15,14 +29,28 @@ stdenv.mkDerivation rec {
     "--with-xalan"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xalanc xercesc openssl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs =
+    [
+      xalanc
+      xercesc
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      CoreServices
+      SystemConfiguration
+    ];
 
   meta = {
-    homepage = "https://santuario.apache.org/";
+    homepage = "https://shibboleth.atlassian.net/wiki/spaces/DEV/pages/3726671873/Santuario";
     description = "C++ Implementation of W3C security standards for XML";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.jagajaga ];
   };
-}
+})

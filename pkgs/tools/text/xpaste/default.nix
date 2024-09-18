@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Paste text into X windows that don't work with selections";
+    mainProgram = "xpaste";
     homepage = "https://github.com/ossobv/xpaste";
     license = licenses.gpl3;
     maintainers = with maintainers; [ gador ];

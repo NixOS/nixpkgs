@@ -1,34 +1,103 @@
-{ lib, stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools
-, iw, ethtool, pciutils, libnl, pkg-config, makeWrapper
-, autoreconfHook, usbutils }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, makeWrapper
+, autoreconfHook
+, pkg-config
+, openssl
+, libgcrypt
+, cmocka
+, expect
+, sqlite
+, pcre2
 
+  # Linux
+, libpcap
+, zlib
+, wirelesstools
+, iw
+, ethtool
+, pciutils
+, libnl
+, usbutils
+, tcpdump
+, hostapd
+, wpa_supplicant
+, screen
+
+  # Cygwin
+, libiconv
+
+  # options
+, enableExperimental ? true
+, useGcrypt ? false
+, enableAirolib ? true
+, enableRegex ? true
+, useAirpcap ? stdenv.isCygwin
+}:
+let
+  airpcap-sdk = fetchzip {
+    pname = "airpcap-sdk";
+    version = "4.1.1";
+    url = "https://support.riverbed.com/bin/support/download?sid=l3vk3eu649usgu3rj60uncjqqu";
+    hash = "sha256-kJhnUvhnF9F/kIJx9NcbRUfIXUSX/SRaO/SWNvdkVT8=";
+    stripRoot = false;
+    extension = "zip";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "aircrack-ng";
   version = "1.7";
 
-  src = fetchurl {
-    url = "https://download.aircrack-ng.org/aircrack-ng-${version}.tar.gz";
-    sha256 = "1hsq1gwmafka4bahs6rc8p98yi542h9a502h64bjlygpr3ih99q5";
+  src = fetchFromGitHub {
+    owner = "aircrack-ng";
+    repo = "aircrack-ng";
+    rev = version;
+    hash = "sha256-niQDwiqi5GtBW5HIn0endnqPb/MqllcjsjXw4pTyFKY=";
   };
 
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace lib/osdep/linux.c --replace-warn /usr/local/bin ${lib.escapeShellArg (lib.makeBinPath [
+      wirelesstools
+    ])}
+  '';
+
+  configureFlags = [
+    (lib.withFeature enableExperimental "experimental")
+    (lib.withFeature useGcrypt "gcrypt")
+    (lib.withFeatureAs useAirpcap "airpcap" airpcap-sdk)
+  ];
+
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
-  buildInputs = [ libpcap openssl zlib libnl iw ethtool pciutils ];
+  buildInputs =
+    lib.singleton (if useGcrypt then libgcrypt else openssl)
+    ++ lib.optionals stdenv.isLinux [ libpcap zlib libnl iw ethtool pciutils ]
+    ++ lib.optional (stdenv.isCygwin && stdenv.isClang) libiconv
+    ++ lib.optional enableAirolib sqlite
+    ++ lib.optional enableRegex pcre2
+    ++ lib.optional useAirpcap airpcap-sdk;
 
-  patchPhase = ''
-    sed -e 's@/usr/local/bin@'${wirelesstools}@ -i lib/osdep/linux.c
+  nativeCheckInputs = [ cmocka expect ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    wrapProgram "$out/bin/airmon-ng" --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath [
+      ethtool
+      iw
+      pciutils
+      usbutils
+    ])}
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/airmon-ng --prefix PATH : ${lib.makeBinPath [
-      ethtool iw pciutils usbutils
-    ]}
-  '';
+  installCheckTarget = "integration";
+  nativeInstallCheckInputs = [ cmocka expect ] ++ lib.optionals stdenv.isLinux [ tcpdump hostapd wpa_supplicant screen ];
 
-  meta = with lib; {
-    description = "Wireless encryption cracking tools";
-    homepage = "http://www.aircrack-ng.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+  meta = {
+    description = "WiFi security auditing tools suite";
+    homepage = "https://www.aircrack-ng.org/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ caralice ];
+    platforms = with lib.platforms; builtins.concatLists [ linux darwin cygwin netbsd openbsd freebsd illumos ];
+    changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${src.rev}/ChangeLog";
   };
 }

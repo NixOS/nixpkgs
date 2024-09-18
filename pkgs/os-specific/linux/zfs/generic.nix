@@ -1,7 +1,8 @@
 let
   genericBuild =
-  { pkgs, lib, stdenv, fetchFromGitHub, fetchpatch
+  { pkgs, lib, stdenv, fetchFromGitHub
   , autoreconfHook269, util-linux, nukeReferences, coreutils
+  , linuxKernel
   , perl
   , configFile ? "all"
 
@@ -27,10 +28,8 @@ let
   , kernelModuleAttribute
   , extraPatches ? []
   , rev ? "zfs-${version}"
-  , isUnstable ? false
-  , latestCompatibleLinuxPackages
   , kernelCompatible ? null
-  , maintainers ? (with lib.maintainers; [ amarshall adamcstephens ])
+  , maintainers ? (with lib.maintainers; [ amarshall ])
   , tests
   }@innerArgs:
 
@@ -183,9 +182,11 @@ let
       # Remove tests because they add a runtime dependency on gcc
       rm -rf $out/share/zfs/zfs-tests
 
-      # Add Bash completions.
-      install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
-      (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ${optionalString (lib.versionOlder version "2.2") ''
+        # Add Bash completions.
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+        (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ''}
     '';
 
     postFixup = let
@@ -199,7 +200,13 @@ let
     outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
     passthru = {
-      inherit enableMail latestCompatibleLinuxPackages kernelModuleAttribute;
+      inherit enableMail kernelModuleAttribute;
+      latestCompatibleLinuxPackages = lib.pipe linuxKernel.packages [
+        builtins.attrValues
+        (builtins.filter (kPkgs: (builtins.tryEval kPkgs).success && kPkgs ? kernel && kPkgs.kernel.pname == "linux" && kernelCompatible kPkgs.kernel))
+        (builtins.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)))
+        lib.last
+      ];
       # The corresponding userspace tools to this instantiation
       # of the ZFS package set.
       userspaceTools = genericBuild (outerArgs // {
@@ -234,9 +241,9 @@ let
 
       inherit maintainers;
       mainProgram = "zfs";
-      # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
-      # On NixOS set the option boot.zfs.enableUnstable.
-      broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
+      # If your Linux kernel version is not yet supported by zfs, try zfs_unstable.
+      # On NixOS set the option `boot.zfs.package = pkgs.zfs_unstable`.
+      broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
     };
   };
 in

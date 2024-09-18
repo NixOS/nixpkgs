@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.parallelrealities.co.uk/games/edgar";
-    description = "A 2D platform game with a persistent world";
+    description = "2D platform game with a persistent world";
     longDescription = ''
       When Edgar's father fails to return home after venturing out one dark and
       stormy night, Edgar fears the worst: he has been captured by the evil

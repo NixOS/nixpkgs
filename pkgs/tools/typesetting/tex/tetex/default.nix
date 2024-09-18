@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  env = {
+    CFLAGS = "-std=gnu89";
+    CXXFLAGS = "-std=c++03";
+  };
+
   configureFlags =
     [ "--disable-multiplatform" "--without-x11" "--without-xdvik"
       "--without-oxdvik" "--without-texinfo" "--without-texi2html"
@@ -47,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description  = "A full-featured (La)TeX distribution";
+    description  = "Full-featured (La)TeX distribution";
     homepage     = "http://www.tug.org/tetex/";
     maintainers  = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;

@@ -1,68 +1,59 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 
-# build dependencies
-, setuptools
-, setuptools-scm
+  # build dependencies
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, django
+  # dependencies
+  django,
+  packaging,
 
-# tests
-, elasticsearch
-, geopy
-, nose
-, pysolr
-, python-dateutil
-, requests
-, whoosh
+  # tests
+  elasticsearch,
+  geopy,
+  pysolr,
+  python-dateutil,
+  requests,
+  whoosh,
 }:
 
 buildPythonPackage rec {
   pname = "django-haystack";
-  version = "3.2.1";
+  version = "3.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l+MZeu/CJf5AW28XYAolNL+CfLTWdDEwwgvBoG9yk6Q=";
+    pname = "django_haystack";
+    inherit version;
+    hash = "sha256-487ta4AAYl2hTUCetNrGmJSQXirIrBj5v9tZMjygLqs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "geopy==" "geopy>="
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
+  propagatedBuildInputs = [ packaging ];
 
-  passthru.optional-dependencies = {
-    elasticsearch = [
-      elasticsearch
-    ];
+  optional-dependencies = {
+    elasticsearch = [ elasticsearch ];
   };
-
-  doCheck = lib.versionOlder django.version "4";
 
   nativeCheckInputs = [
     geopy
-    nose
     pysolr
     python-dateutil
     requests
     whoosh
-  ]
-  ++ passthru.optional-dependencies.elasticsearch;
+  ] ++ optional-dependencies.elasticsearch;
+
 
   checkPhase = ''
     runHook preCheck
@@ -74,6 +65,6 @@ buildPythonPackage rec {
     description = "Pluggable search for Django";
     homepage = "http://haystacksearch.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

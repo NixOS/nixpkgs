@@ -5,17 +5,18 @@
 , pkg-config
 , rustPlatform
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "feroxbuster";
-  version = "2.10.1";
+  version = "2.10.3";
 
   src = fetchFromGitHub {
     owner = "epi052";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-AFh/IeB88NYPsyUqzaN92GoDbAgl+HG87cIy+Ni06Q8=";
+    hash = "sha256-3cznGVpZISLD2TbsHYyYYUTD55NmgBdNJ44V4XfZ40k=";
   };
 
   # disable linker overrides on aarch64-linux
@@ -23,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  cargoHash = "sha256-Fu3qw3qRK3TZlzK1WcmI/GQ5TM1j+gbGoedwp18SolY=";
+  cargoHash = "sha256-hOIOcz7YyZbQNScsY0jdxGLZQnWRBsFOzmRdu8oWIN8=";
 
   OPENSSL_NO_VENDOR = true;
 
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     Security
+    SystemConfiguration
   ];
 
   # Tests require network access

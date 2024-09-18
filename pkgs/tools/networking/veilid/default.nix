@@ -6,31 +6,36 @@
 , rustPlatform
 , protobuf
 , capnproto
+, cmake
+, testers
+, veilid
+, gitUpdater
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.2.5";
+  version = "0.3.4";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jcSoZhAAoiKn3Jsov4Q0vunPRC+JwX8O0vYZDT5uO0I=";
+    hash = "sha256-nEJxiox2aoQBV83vlpiBB4In59+lfHF6/a8HqDYcFT4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "async-tls-0.12.0" = "sha256-SAirarvQKsYLftr3u29czQFBwVZgl2cSCUqC0/Qgye0=";
-      "cursive-0.20.0" = "sha256-jETyRRnzt7OMkTo4LRfeRr37oPJpn9R2soxkH7tzGy8=";
-      "cursive-flexi-logger-view-0.5.0" = "sha256-zFpfVFNZNNdNMdpJbaT4O2pMYccGEAGnvYzpRziMwfQ=";
+      "ansi-parser-0.9.1" = "sha256-Vdjt8QDstrfxYfklZ5vYPGhVNG1BVh4cpKGwvvsHlS4=";
+      "cursive-0.20.0" = "sha256-EGKO7JVN9hIqADKKC3mUHHOCSxMjPoXzYBZujzdgk3E=";
       "cursive_buffered_backend-0.6.1" = "sha256-+sTJnp570HupwaJxV2x+oKyLwNmqQ4HqOH2P1s9Hhw8=";
+      "cursive_table_view-0.14.0" = "sha256-haos82qtobMsFCP3sNRu5u1mki4bsjrV+eqFxUGIHqk=";
     };
   };
 
   nativeBuildInputs = [
     capnproto
+    cmake
     protobuf
   ];
 
@@ -40,6 +45,8 @@ rustPlatform.buildRustPackage rec {
     "--workspace"
   ];
 
+  RUSTFLAGS = "--cfg tokio_unstable";
+
   doCheck = false;
 
   outputs = [ "out" "lib" "dev" ];
@@ -48,8 +55,18 @@ rustPlatform.buildRustPackage rec {
     moveToOutput "lib" "$lib"
   '';
 
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      veilid-version = testers.testVersion {
+        package = veilid;
+      };
+    };
+  };
+
   meta = with lib; {
-    description = "An open-source, peer-to-peer, mobile-first, networked application framework";
+    description = "Open-source, peer-to-peer, mobile-first, networked application framework";
+    mainProgram = "veilid-server";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
     maintainers = with maintainers; [ bbigras qbit ];

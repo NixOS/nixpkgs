@@ -1,19 +1,19 @@
 { stdenv, lib, unzip, autoPatchelfHook
 , fetchurl, makeWrapper
 , alsa-lib, mesa, nss, nspr, systemd
-, makeDesktopItem, copyDesktopItems, wrapGAppsHook
+, makeDesktopItem, copyDesktopItems, wrapGAppsHook3
 , metaCommon
 }:
 
 let
   pname = "trilium-desktop";
-  version = "0.62.5";
+  version = "0.63.6";
 
   linuxSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  linuxSource.sha256 = "1f2f8nvj1gx9i797mck5aazgz821sjcs06538py9za4m532i66pj";
+  linuxSource.sha256 = "12kgq5x4f93hxz057zqhz0x1y0rxfxh90fv9fjjs3jrnk0by7f33";
 
   darwinSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "19zny4akf3hxqjqayiz4s47vdblbrn4kgwg3nykljv4lpqnqkyn3";
+  darwinSource.sha256 = "0ry512cn622av3nm8rnma2yvqc71rpzax639872ivvc5vm4rsc30";
 
   meta = metaCommon // {
     mainProgram = "trilium";
@@ -29,7 +29,7 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
       copyDesktopItems
     ];
 

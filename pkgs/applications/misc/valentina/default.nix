@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An open source sewing pattern drafting software";
+    description = "Open source sewing pattern drafting software";
     homepage = "https://smart-pattern.com.ua/";
     changelog = "https://gitlab.com/smart-pattern/valentina/-/blob/v${version}/ChangeLog.txt";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,4 @@
-{ pkgs
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
 , buildDotnetModule
@@ -12,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.2.1";
+  version = "3.15.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
-    repo = "${pname}";
+    repo = "pupdate";
     rev = "${version}";
-    hash = "sha256-jAZozcCHgKFTPCRktajrI77iH/GBbzhWa+QKZz1w62Y=";
+    hash = "sha256-oe5Z9psxyPhxwrGVJpq5yXzmCUh3ugBQ4NQ/eoCD9AA=";
   };
 
   buildInputs = [
@@ -43,11 +42,11 @@ buildDotnetModule rec {
   executables = [ "pupdate" ];
 
   dotnetFlags = [
-    "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+    "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system} -p:TrimMode=partial"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -55,7 +54,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/mattpannella/pupdate";
-    description = "Pupdate - A thing for updating your Analogue Pocket ";
+    description = "Pupdate - A thing for updating your Analogue Pocket";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-rintz ];

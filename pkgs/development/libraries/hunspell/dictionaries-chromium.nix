@@ -67,4 +67,13 @@ rec {
     dictFileName = "de-DE-3-0.bdic";
     shortDescription = "German (Germany)";
   };
+
+  /* FRENCH */
+
+  fr_FR = fr-fr;
+  fr-fr = mkDictFromChromium {
+    shortName = "fr-fr";
+    dictFileName = "fr-FR-3-0.bdic";
+    shortDescription = "French (France)";
+  };
 }

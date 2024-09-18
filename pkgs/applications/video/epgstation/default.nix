@@ -6,7 +6,6 @@
 , makeWrapper
 , bash
 , nodejs
-, gzip
 , python3
 }:
 

@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jmOgwESNALQt7ctmUY9JHgKq47tCwsW1ybynkX9236U=";
   };
 
+  patches = [
+    ../../6/mivisionx/0001-set-__STDC_CONSTANT_MACROS-to-make-rocAL-compile.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     rocm-cmake

@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A C library for reading and writing files containing sampled sound";
+    description = "C library for reading and writing files containing sampled sound";
     homepage    = "https://libsndfile.github.io/libsndfile/";
     changelog   = "https://github.com/libsndfile/libsndfile/releases/tag/${version}";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.all;
 
     longDescription = ''
       Libsndfile is a C library for reading and writing files containing

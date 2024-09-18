@@ -1,14 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, contexter
-, eventlet
-, mock
-, pytest-xdist
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  contexter,
+  eventlet,
+  mock,
+  pytest-xdist,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +26,6 @@ buildPythonPackage rec {
       --replace "--cov-report html" ""
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     contexter

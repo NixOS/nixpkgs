@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.bearssl.org/";
-    description = "An implementation of the SSL/TLS protocol written in C";
+    description = "Implementation of the SSL/TLS protocol written in C";
     longDescription = ''
       BearSSL is an implementation of the SSL/TLS protocol (RFC 5246)
       written in C. It aims at offering the following features:

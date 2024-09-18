@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  dtkwidget,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,16 +25,14 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    dtkwidget
-  ];
+  buildInputs = [ dtkwidget ];
 
   postPatch = ''
     substituteInPlace src/{booster-dtkwidget/CMakeLists.txt,booster-desktop/{CMakeLists.txt,desktop.conf},booster-generic/CMakeLists.txt} --replace "/usr" "$out"
   '';
 
   meta = with lib; {
-    description = "A daemon that helps to launch dtk applications faster";
+    description = "Daemon that helps to launch dtk applications faster";
     homepage = "https://github.com/linuxdeepin/deepin-turbo";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

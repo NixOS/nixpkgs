@@ -81,6 +81,9 @@ installPhase() {
         mkdir $i/lib/vdpau
         mv $i/lib/libvdpau* $i/lib/vdpau
 
+        # Compatibility with openssl 1.1, unused
+        rm -f $i/lib/libnvidia-pkcs11.so*
+
         # Install ICDs, make absolute paths.
         # Be careful not to modify any original files because this runs twice.
 
@@ -112,16 +115,17 @@ installPhase() {
 
         # EGL
         if [ "$useGLVND" = "1" ]; then
-            sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
-            sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
+            mkdir -p "$i/share/egl/egl_external_platform.d"
+            for icdname in $(find . -name '*_nvidia*.json')
+            do
+                cat "$icdname" | jq ".ICD.library_path |= \"$i/lib/\(.)\"" | tee "$i/share/egl/egl_external_platform.d/$icdname"
+            done
 
-            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/10_nvidia.json
-            install -Dm644 10_nvidia_wayland.json.fixed $i/share/egl/egl_external_platform.d/10_nvidia_wayland.json
+            # glvnd icd
+            mkdir -p "$i/share/glvnd/egl_vendor.d"
+            mv "$i/share/egl/egl_external_platform.d/10_nvidia.json" "$i/share/glvnd/egl_vendor.d/10_nvidia.json"
 
-            if [[ -f "15_nvidia_gbm.json" ]]; then
-              sed -E "s#(libnvidia-egl-gbm)#$i/lib/\\1#" 15_nvidia_gbm.json > 15_nvidia_gbm.json.fixed
-              install -Dm644 15_nvidia_gbm.json.fixed $i/share/egl/egl_external_platform.d/15_nvidia_gbm.json
-
+            if [[ -f "$i/share/egl/egl_external_platform.d/15_nvidia_gbm.json" ]]; then
               mkdir -p $i/lib/gbm
               ln -s $i/lib/libnvidia-allocator.so $i/lib/gbm/nvidia-drm_gbm.so
             fi
@@ -217,8 +221,10 @@ installPhase() {
                     --set-rpath $out/lib:$libPath $bin/bin/$i
             fi
         done
-        # FIXME: needs PATH and other fixes
-        # install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
+        substituteInPlace nvidia-bug-report.sh \
+          --replace /bin/grep grep \
+          --replace /bin/ls ls
+        install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
     fi
 
     runHook postInstall

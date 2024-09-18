@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, ctypes-foreign, result, SDL2, pkg-config
 , AudioToolbox, Cocoa, CoreAudio, CoreVideo, ForceFeedback }:
 
 if lib.versionOlder ocaml.version "4.03"
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ocaml findlib ocamlbuild topkg ];
   buildInputs = [ topkg ];
-  propagatedBuildInputs = [ SDL2 ctypes ]
+  propagatedBuildInputs = [ SDL2 ctypes ctypes-foreign ]
     ++ lib.optionals stdenv.isDarwin [ AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback ];
 
   preConfigure = ''

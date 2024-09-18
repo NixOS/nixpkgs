@@ -33,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubestack framework CLI";
+    mainProgram = "kbst";
     homepage = "https://www.kubestack.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ mtrsk ];

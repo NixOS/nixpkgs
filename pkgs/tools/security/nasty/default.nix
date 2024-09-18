@@ -22,13 +22,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Recover the passphrase of your PGP or GPG-key";
+    mainProgram = "nasty";
     longDescription = ''
     Nasty is a program that helps you to recover the passphrase of your PGP or GPG-key
     in case you forget or lost it. It is mostly a proof-of-concept: with a different implementation
     this program could be at least 100x faster.
     '';
     homepage = "http://www.vanheusden.com/nasty/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;
   };

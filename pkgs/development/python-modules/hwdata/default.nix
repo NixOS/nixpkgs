@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkgs
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgs,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,17 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-hmvxVF9LOkezXnJdbtbEJWhU4uvUJgxQHYeWUoiniF0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   patchPhase = ''
     substituteInPlace hwdata.py --replace "/usr/share/hwdata" "${pkgs.hwdata}/share/hwdata"
   '';
 
-  pythonImportsCheck = [
-    "hwdata"
-  ];
+  pythonImportsCheck = [ "hwdata" ];
 
   doCheck = false; # no tests
 

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,17 +21,13 @@ buildPythonPackage rec {
   };
 
   passthru.optional-dependencies = {
-    defusedxml = [
-      defusedxml
-    ];
+    defusedxml = [ defusedxml ];
   };
 
   # We don't want the nmap binary being present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "libnmap"
-  ];
+  pythonImportsCheck = [ "libnmap" ];
 
   meta = with lib; {
     description = "Library to run nmap scans, parse and diff scan results";

@@ -25,14 +25,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.9.0";
+  version = "1.12.1";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    sha256 = "sha256-NjMH99rmJYbCxDdc7e0iOFoslSrIuwIBxuHxADp0Ks4=";
+    hash = "sha256-+1kalFyhk2UL+iVzuFLDsSSTudrd4QpXw+3O4J+KsLc=";
   };
 
-  cargoHash = "sha256-AH35v61FgUQe9BwDgVnXwoVTSQduxeMbXWy4ga3WU3k=";
+  cargoHash = "sha256-cKbbsDb449WANGT+x8APhzs+hf5SR3RBsCBWDNceRMA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -Dm755 -t $out/bin bin/git-credential-rbw
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rbw \
       --bash <($out/bin/rbw gen-completions bash) \
       --fish <($out/bin/rbw gen-completions fish) \
@@ -76,6 +77,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/rbw";
     changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ albakham luc65r marsam ];
+    maintainers = with maintainers; [ albakham luc65r ];
+    mainProgram = "rbw";
   };
 }

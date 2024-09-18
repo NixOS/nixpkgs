@@ -24,7 +24,7 @@ buildGoModule rec {
    ];
 
   meta = with lib; {
-    description = "An alternative Yggdrasil network client";
+    description = "Alternative Yggdrasil network client";
     homepage = "https://github.com/popura-network/popura";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ urandom ];

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpkg";
-  version = "0.16.0";
+  version = "0.17.0";
 
   outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
-    hash = "sha256-sxzVidVL8dpoH82IevcwjcIWj4LQzliGv9zasTYqeok=";
+    hash = "sha256-Yw6wvTqO+VfCo91B2BUT0A8OIN0MVhGK1USYM7hgGMs=";
   };
 
   strictDeps = true;
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "build2 package dependency manager";
+    mainProgram = "bpkg";
     # https://build2.org/bpkg/doc/bpkg.xhtml
     longDescription = ''
       The build2 package dependency manager is used to manipulate build

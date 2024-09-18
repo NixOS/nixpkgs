@@ -6,7 +6,6 @@
 , stdenv
 , darwin
 , libusb1
-, udev
 , nix-update-script
 , testers
 , cyme
@@ -14,22 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "1.6.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-97sxK2zhUKBS238F9mNk8a2VbTVpvbDlN1yDas4Fls4=";
+    hash = "sha256-bmVgl6E+MdjzM4wfhKHdii+58srAStRTYU+IP/OTqdU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libudev-sys-0.1.4" = "sha256-7dUqPH8bQ/QSBIppxQbymwQ44Bvi1b6N2AMUylbyKK8=";
-      "libusb1-sys-0.6.4" = "sha256-Y3K3aEZnpLud/g4Tx+1HDEkNRKi5s4Fo0QSWya/L+L4=";
-    };
-  };
+  cargoHash = "sha256-dpdtjeejt+jfSlSN1NZeAWSMcDq8mOGAHTJlmBkp/4s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,11 +32,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libusb1
-  ] ++ lib.optionals stdenv.isLinux [
-    udev
   ];
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = [
+    # doctest that requires access outside sandbox
+    "--skip=udev::hwdb::get"
+  ] ++ lib.optionals stdenv.isDarwin [
     # system_profiler is not available in the sandbox
     "--skip=test_run"
   ];
@@ -57,7 +51,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";
-    description = "A modern cross-platform lsusb";
+    changelog = "https://github.com/tuna-f1sh/cyme/releases/tag/${src.rev}";
+    description = "Modern cross-platform lsusb";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ h7x4 ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;

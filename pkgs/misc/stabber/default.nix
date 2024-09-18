@@ -1,9 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
 , libmicrohttpd, darwin
 }:
-
-with lib;
-
 stdenv.mkDerivation {
   pname = "stabber-unstable";
   version = "2020-06-08";
@@ -28,8 +25,9 @@ stdenv.mkDerivation {
   buildInputs = [ glib expat libmicrohttpd ] ++
     lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  meta = {
+  meta = with lib; {
     description = "Stubbed XMPP Server";
+    mainProgram = "stabber";
     homepage = "https://github.com/profanity-im/stabber";
     license = licenses.gpl3;
     platforms = platforms.unix;

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, nmap
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  nmap,
+  python,
 }:
 
 buildPythonPackage rec {

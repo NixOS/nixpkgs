@@ -10,6 +10,10 @@
 , libint
 , libvori
 , libxc
+, dftd4
+, mctc-lib
+, mstore
+, multicharge
 , mpi
 , gsl
 , scalapack
@@ -54,15 +58,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2024.1";
+  version = "2024.3";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-6PB6wjdTOa55dXV7QIsjxI77hhc95WFEjNePfupBUJQ=";
+    hash = "sha256-TeVQ0wVUx6d4knwMi9z3LjQZ4ELE6s1TnvwfFz8jbYk=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Remove the build command line from the source.
+    # This avoids dependencies to .dev inputs
+    ./remove-compiler-options.patch
+  ];
 
   nativeBuildInputs = [ python3 which openssh makeWrapper pkg-config ]
     ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
@@ -74,7 +84,12 @@ stdenv.mkDerivation rec {
     libint
     libvori
     libxc
+    dftd4
+    mctc-lib
+    mstore
+    multicharge
     libxsmm
+    mpi
     spglib
     scalapack
     blas
@@ -101,7 +116,7 @@ stdenv.mkDerivation rec {
   ]
   ;
 
-  propagatedBuildInputs = [ mpi ];
+  propagatedBuildInputs = [ (lib.getBin mpi) ];
   propagatedUserEnvPkgs = [ mpi ];
 
   makeFlags = [
@@ -147,16 +162,20 @@ stdenv.mkDerivation rec {
                  -D__MPI_VERSION=3 -D__F2008 -D__LIBXSMM -D__SPGLIB \
                  -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"} \
                  -D__PLUMED2 -D__HDF5 -D__GSL -D__SIRIUS -D__LIBVDWXC -D__SPFFT -D__SPLA \
+                 -D__DFTD4 \
                  ${lib.strings.optionalString (gpuBackend == "cuda") "-D__OFFLOAD_CUDA -D__ACC -D__DBCSR_ACC -D__NO_OFFLOAD_PW"} \
                  ${lib.strings.optionalString (gpuBackend == "rocm") "-D__OFFLOAD_HIP -D__DBCSR_ACC -D__NO_OFFLOAD_PW"}
-    CFLAGS    = -fopenmp -I${lib.getDev hdf5-fortran}/include -I${lib.getDev gsl}/include
+    CFLAGS    = -fopenmp
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
-                 -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
+                   ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
+                 -I${lib.getDev libint}/include  \
                  -I${lib.getDev sirius}/include/sirius \
-                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -I${lib.getDev libxc}/include \
+                 -I${lib.getDev dftd4}/include/dftd4 \
+                 -I${lib.getDev libxsmm}/include \
                  -I${lib.getDev hdf5-fortran}/include \
                  -fallow-argument-mismatch
     LIBS       = -lfftw3 -lfftw3_threads \
@@ -167,6 +186,7 @@ stdenv.mkDerivation rec {
                  -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"} \
                  -lz -ldl ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
                  -lplumed -lhdf5_fortran -lhdf5_hl -lhdf5 -lgsl -lsirius -lspla -lspfft -lvdwxc \
+                 -ldftd4 -lmstore -lmulticharge -lmctc-lib \
                  ${lib.strings.optionalString (gpuBackend == "cuda") ''
                    -L${cudaPackages.cuda_cudart}/lib/stubs/ \
                    -lcudart -lnvrtc -lcuda -lcublas

@@ -17,7 +17,9 @@ in stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ python ];
 
-  doCheck = true;
+  # reptyr needs to do ptrace of a non-child process
+  # It can be neither used nor tested if the kernel is not told to allow this
+  doCheck = false;
 
   checkFlags = [
     "PYTHON_CMD=${python.interpreter}"
@@ -38,6 +40,7 @@ in stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.mit;
     description = "Reparent a running program to a new terminal";
+    mainProgram = "reptyr";
     homepage = "https://github.com/nelhage/reptyr";
   };
 }

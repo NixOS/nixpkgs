@@ -14,6 +14,7 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_42
+, nixosTests
 , withDocs ? true
 }:
 
@@ -73,10 +74,11 @@ stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };
+    tests = { inherit (nixosTests) dconf; };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/dconf";
+    homepage = "https://gitlab.gnome.org/GNOME/dconf";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

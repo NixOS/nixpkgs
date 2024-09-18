@@ -1,16 +1,16 @@
 { stdenv, lib, writeScript, qt5, fetchurl, autoPatchelfHook, dpkg, glibc, cpio, xar, undmg, gtk3, pango, libxcb }:
 let
   pname = "synology-drive-client";
-  baseUrl = "https://global.download.synology.com/download/Utility/SynologyDriveClient";
-  version = "3.3.0-15082";
-  buildNumber = with lib; last (splitString "-" version);
+  baseUrl = "https://global.synologydownload.com/download/Utility/SynologyDriveClient";
+  version = "3.5.1-16101";
+  buildNumber = lib.last (lib.splitString "-" version);
   meta = with lib; {
-    description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server.";
+    description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ jcouyang MoritzBoehme ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "synology-drive";
   };
   passthru.updateScript = writeScript "update-synology-drive-client" ''
@@ -29,8 +29,8 @@ let
     inherit pname version meta passthru;
 
     src = fetchurl {
-      url = "${baseUrl}/${version}/Ubuntu/Installer/x86_64/synology-drive-client-${buildNumber}.x86_64.deb";
-      sha256 = "sha256-ha3KRpEIT7w6pUVUwZV011W1F/v/hNq9f3ArfzU0ZGc=";
+      url = "${baseUrl}/${version}/Ubuntu/Installer/synology-drive-client-${buildNumber}.x86_64.deb";
+      sha256 = "sha256-VeS5bPcMM4JDCSH5GXkl4OgQjrPKaNDh5PfX28/zqaU=";
     };
 
     nativeBuildInputs = [ autoPatchelfHook dpkg ];
@@ -60,7 +60,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
-      sha256 = "sha256-dxmpB31ZjO1uAnAbY13OjVR81CCDLf9vJC20iZaPZJ4=";
+      sha256 = "sha256-VyhROpQCeVHNxxYgPUZdAlng15aJ1/IYadz30FThlsw=";
     };
 
     nativeBuildInputs = [ cpio xar undmg ];

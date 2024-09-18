@@ -4,7 +4,6 @@
 , boost
 , cgal
 , cmake
-, copyDesktopItems
 , gpp
 , mpfr
 , qtbase
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     wrapQtAppsHook
   ];
 
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ccoors/Valeronoi/";
-    description = "A WiFi mapping companion app for Valetudo";
+    description = "WiFi mapping companion app for Valetudo";
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nova-madeline maeve ];

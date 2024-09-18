@@ -4,6 +4,7 @@
 , bison
 , pam
 , libxcrypt
+, nixosTests
 
 , withPAM ? true
 , withTimestamp ? true
@@ -48,8 +49,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPAM pam
     ++ lib.optional (!withPAM) libxcrypt;
 
+  passthru.tests = { inherit (nixosTests) doas; };
+
   meta = with lib; {
     description = "Executes the given command as another user";
+    mainProgram = "doas";
     homepage = "https://github.com/Duncaen/OpenDoas";
     license = licenses.isc;
     platforms = platforms.linux;

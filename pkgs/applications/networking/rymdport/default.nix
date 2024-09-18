@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "rymdport";
-  version = "3.5.2";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "Jacalz";
     repo = "rymdport";
     rev = "v${version}";
-    hash = "sha256-LTCr1OFh+1QQhXFNl9SoLPqEY0ERlLlWfSxRKjyyqPk=";
+    hash = "sha256-PMCetU+E0Kl50K7sJB6UiHVouWPtfW8ALXFacxCvAhE=";
   };
 
-  vendorHash = "sha256-twXeLNWy/5wTaFb645mCeI5PzByEGj5aCWl6vO+qRLQ=";
+  vendorHash = "sha256-RsmwTRVjhEgKAT9aekSfkRuai2165KG7q5aFjAiLSPU=";
 
   nativeBuildInputs = [
     pkg-config

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cargo
-, libiconv
-, rustPlatform
-, rustc
-, sudachi-rs
-, setuptools-rust
-, pytestCheckHook
-, sudachidict-core
-, tokenizers
-, sudachipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cargo,
+  libiconv,
+  rustPlatform,
+  rustc,
+  sudachi-rs,
+  setuptools-rust,
+  pytestCheckHook,
+  sudachidict-core,
+  tokenizers,
+  sudachipy,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   preBuild = ''
     cd python
@@ -47,21 +46,17 @@ buildPythonPackage rec {
     tokenizers
   ];
 
-  pythonImportsCheck = [
-    "sudachipy"
-  ];
+  pythonImportsCheck = [ "sudachipy" ];
 
   passthru = {
     inherit (sudachi-rs) updateScript;
     tests = {
-      pytest = sudachipy.overridePythonAttrs (
-        _: {
-          doCheck = true;
-          # avoid catchConflicts of sudachipy
-          # we don't need to install this package since it is just a test
-          dontInstall = true;
-        }
-      );
+      pytest = sudachipy.overridePythonAttrs (_: {
+        doCheck = true;
+        # avoid catchConflicts of sudachipy
+        # we don't need to install this package since it is just a test
+        dontInstall = true;
+      });
     };
   };
 

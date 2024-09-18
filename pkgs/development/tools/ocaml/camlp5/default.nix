@@ -10,13 +10,13 @@ else
 let params =
   if lib.versionAtLeast ocaml.version "4.12" && !legacy
   then rec {
-    version = "8.02.01";
+    version = "8.03.00";
 
     src = fetchFromGitHub {
       owner = "camlp5";
       repo = "camlp5";
       rev = version;
-      hash = "sha256-qSA2559vqWLU+0ns7LPUGI2K5f8sfu+QQ0sCH8sR6To=";
+      hash = "sha256-hu/279gBvUc7Z4jM6EHiar6Wm4vjkGXl+7bxowj+vlM=";
     };
 
     nativeBuildInputs = [ makeWrapper ocaml findlib perl ];

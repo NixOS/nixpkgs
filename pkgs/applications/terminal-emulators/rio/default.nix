@@ -26,12 +26,16 @@
 
 , withWayland ? !stdenv.isDarwin
 , wayland
+
+, testers
+, rio
 }:
 let
   rlinkLibs = if stdenv.isDarwin then [
     darwin.libobjc
     darwin.apple_sdk_11_0.frameworks.AppKit
     darwin.apple_sdk_11_0.frameworks.AVFoundation
+    darwin.apple_sdk_11_0.frameworks.MetalKit
     darwin.apple_sdk_11_0.frameworks.Vision
   ] else [
     (lib.getLib gcc-unwrapped)
@@ -51,16 +55,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.34";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "v${version}";
-    hash = "sha256-UHA2j7NOPBl7qrCu5bWLHjpVgWxlydtj0F7lfAlQZXg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JrmjQjKpL9di66z4IYTcWhNBL0CgalqOhQgVDpkh6b0=";
   };
 
-  cargoHash = "sha256-xqLticREnGxsuo2d7d3VaFWbGJ5A1L7GvDwV7qQ61xs=";
+  cargoHash = "sha256-KWdkpQY1F0RU3JViFrXEp+JW6xdaofEmp2SlAkzPMPU=";
 
   nativeBuildInputs = [
     ncurses
@@ -107,16 +111,25 @@ rustPlatform.buildRustPackage rec {
       extraArgs = [ "--version-regex" "v([0-9.]+)" ];
     };
 
-    tests.test = nixosTests.terminal-emulators.rio;
+    tests = {
+      test = nixosTests.terminal-emulators.rio;
+      version = testers.testVersion { package = rio; };
+    };
   };
 
   meta = {
-    description = "A hardware-accelerated GPU terminal emulator powered by WebGPU";
+    description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
     homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tornax otavio oluceps ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
     mainProgram = "rio";
+    # ---- corcovado/src/sys/unix/eventedfd.rs - sys::unix::eventedfd::EventedFd (line 31) stdout ----
+    # Test executable failed (exit status: 101).
+    # stderr:
+    # thread 'main' panicked at corcovado/src/sys/unix/eventedfd.rs:24:16:
+    # called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+    broken = stdenv.isDarwin;
   };
 }

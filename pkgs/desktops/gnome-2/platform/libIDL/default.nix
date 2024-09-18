@@ -20,4 +20,5 @@ stdenv.mkDerivation rec {
     # the result was always ll https://lists.openembedded.org/g/openembedded-core/topic/85775262?p=%2C%2C%2C20%2C0%2C0%2C0%3A%3A%2C%2C%2C0%2C0%2C0%2C85775262
     "libIDL_cv_long_long_format=ll"
   ];
+  meta.mainProgram = "libIDL-config-2";
 }

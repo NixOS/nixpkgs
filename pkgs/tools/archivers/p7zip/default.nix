@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/p7zip-project/p7zip";
-    description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
+    description = "New p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
     license = with licenses;
       # p7zip code is largely lgpl2Plus
       # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3

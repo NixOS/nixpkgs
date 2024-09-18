@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "TypeScript as a configuration language";
+    mainProgram = "tyson";
     homepage = "https://github.com/jetpack-io/tyson";
     changelog = "https://github.com/jetpack-io/tyson/releases/tag/${src.rev}";
     license = licenses.asl20;

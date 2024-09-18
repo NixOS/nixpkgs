@@ -2,7 +2,7 @@
 , desktop-file-utils
 , fetchFromGitHub
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , gjs
 , glib-networking
 , gobject-introspection
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ninja
     nodejs
     pkg-config
-    prefetch-yarn-deps
+    fixup-yarn-lock
     wrapGAppsHook4
     yarn
   ];

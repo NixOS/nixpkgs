@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/${pname}"
-    cp README* LICENSE "$out/share/doc/${pname}"
+    mkdir -p "$out/share/doc/map"
+    cp README* LICENSE "$out/share/doc/map"
   '';
 
   doCheck = true;
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Map lines from stdin to commands";
+    mainProgram = "map";
     homepage = "https://github.com/soveran/map";
     license = licenses.bsd2;
     maintainers = with maintainers; [ pogobanane ];

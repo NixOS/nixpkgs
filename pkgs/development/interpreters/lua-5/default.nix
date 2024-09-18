@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
+{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, makeBinaryWrapper }:
 
 
 let
@@ -81,8 +81,8 @@ in
 rec {
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
-    version = "5.4.6";
-    hash = "sha256-fV6huctqoLWco93hxq3LV++DobqOVDLA7NBr9DmzrYg=";
+    version = "5.4.7";
+    hash = "sha256-n79eKO+GxphY9tPTTszDLpEcGii0Eg/z6EqqcM+/HjA=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 

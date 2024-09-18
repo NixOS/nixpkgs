@@ -55,6 +55,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command Line tool to keep track of your favourite YouTube channels without signing up for a Google account";
     homepage = "https://github.com/woefe/ytcc";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ marius851000 marsam ];
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

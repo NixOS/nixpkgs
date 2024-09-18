@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://blog.neil.brown.name/category/wiggle/";
     description = "Tool for applying patches with conflicts";
+    mainProgram = "wiggle";
     longDescription = ''
       Wiggle applies patches to a file in a similar manner to the patch(1)
       program. The distinctive difference is, however, that wiggle will

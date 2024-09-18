@@ -5,22 +5,26 @@
 
 buildGoModule rec {
   pname = "tfautomv";
-  version = "0.5.4";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "busser";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-irB0Kfd8eqIKq0ooJRxB0X4t2/1aFCNYRwaG6lAw3ic=";
+    hash = "sha256-qUeIbHJqxGkt2esMm4w6fM52ZE16jWnxugVXxqBh1Qc=";
   };
 
-  vendorHash = "sha256-Wc5hpiHL5I01IodcHX0IzeKfthkFS7SuUxmaxOU6WkA=";
+  # checks require unfree programs like terraform/terragrunt
+  doCheck = false;
+
+  vendorHash = "sha256-BZ8IhVPxZTPQXBotFBrxV3dfwvst0te8R84I/urq3gY=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/busser/tfautomv";
     description = "When refactoring a Terraform codebase, you often need to write moved blocks. This can be tedious. Let tfautomv do it for you";
+    mainProgram = "tfautomv";
     license = licenses.asl20;
     maintainers = with maintainers; [ qjoly ];
   };

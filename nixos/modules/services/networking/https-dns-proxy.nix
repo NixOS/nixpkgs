@@ -46,23 +46,23 @@ in
   ###### interface
 
   options.services.https-dns-proxy = {
-    enable = mkEnableOption (lib.mdDoc "https-dns-proxy daemon");
+    enable = mkEnableOption "https-dns-proxy daemon";
 
     address = mkOption {
-      description = lib.mdDoc "The address on which to listen";
+      description = "The address on which to listen";
       type = types.str;
       default = "127.0.0.1";
     };
 
     port = mkOption {
-      description = lib.mdDoc "The port on which to listen";
+      description = "The port on which to listen";
       type = types.port;
       default = 5053;
     };
 
     provider = {
       kind = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The upstream provider to use or custom in case you do not trust any of
           the predefined providers or just want to use your own.
 
@@ -80,18 +80,18 @@ in
       };
 
       ips = mkOption {
-        description = lib.mdDoc "The custom provider IPs";
+        description = "The custom provider IPs";
         type = types.listOf types.str;
       };
 
       url = mkOption {
-        description = lib.mdDoc "The custom provider URL";
+        description = "The custom provider URL";
         type = types.str;
       };
     };
 
     preferIPv4 = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         https_dns_proxy will by default use IPv6 and fail if it is not available.
         To play it safe, we choose IPv4.
       '';
@@ -100,7 +100,7 @@ in
     };
 
     extraArgs = mkOption {
-      description = lib.mdDoc "Additional arguments to pass to the process.";
+      description = "Additional arguments to pass to the process.";
       type = types.listOf types.str;
       default = [ "-v" ];
     };

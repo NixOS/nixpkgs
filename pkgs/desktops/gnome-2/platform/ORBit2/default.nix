@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage    = "https://developer-old.gnome.org/ORBit2/";
-    description = "A CORBA 2.4-compliant Object Request Broker";
+    description = "CORBA 2.4-compliant Object Request Broker";
     platforms   = platforms.unix;
     maintainers = with maintainers; [ lovek323 ];
 

@@ -1,8 +1,8 @@
-{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
+{ lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook3, which, more
 , file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
-, libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
+, libjpeg, libredirect, tzdata, cacert, systemd, libcxx, symlinkJoin
 , libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
 , libfaketime
 , libinput, libcap, libjson, libsecret, libcanberra-gtk3
@@ -22,6 +22,18 @@ let
       ln -sf $out/lib/libssl.so $out/lib/libssl.so.1.0.0
     '';
   };
+
+  opencv4' = symlinkJoin {
+    name = "opencv4-compat";
+    nativeBuildInputs = [ makeWrapper ];
+    paths = [ opencv4 ];
+    postBuild = ''
+      for so in ${opencv4}/lib/*.so; do
+        ln -s "$so" $out/lib/$(basename "$so").407
+      done
+    '';
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -60,7 +72,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     more
     which
-    wrapGAppsHook
+    wrapGAppsHook3
     libfaketime
   ];
 
@@ -84,7 +96,6 @@ stdenv.mkDerivation rec {
     libcap
     libcanberra-gtk3
     libcxx
-    libcxxabi
     libinput
     libjpeg
     libjson
@@ -98,7 +109,7 @@ stdenv.mkDerivation rec {
     mesa
     nspr
     nss
-    opencv4
+    opencv4'
     openssl'
     pango
     speex
@@ -139,7 +150,7 @@ stdenv.mkDerivation rec {
         ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
         --set ICAROOT "$ICAInstDir" \
         --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
         --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"
     '';
     wrapLink = program: ''
@@ -184,7 +195,7 @@ stdenv.mkDerivation rec {
 
     ${mkWrappers copyCert extraCerts}
 
-    # See https://developer-docs.citrix.com/projects/workspace-app-for-linux-oem-guide/en/latest/reference-information/#library-files
+    # See https://developer-docs.citrix.com/en-us/citrix-workspace-app-for-linux/citrix-workspace-app-for-linux-oem-reference-guide/reference-information/#library-files
     # Those files are fallbacks to support older libwekit.so and libjpeg.so
     rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
     rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
@@ -226,8 +237,8 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ michaeladler ];
+    platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
+    maintainers = [ ];
     inherit homepage;
   };
 }

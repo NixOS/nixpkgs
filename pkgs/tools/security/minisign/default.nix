@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsodium ];
 
   meta = with lib; {
-    description = "A simple tool for signing files and verifying signatures";
+    description = "Simple tool for signing files and verifying signatures";
     longDescription = ''
       minisign uses public key cryptography to help facilitate secure (but not
       necessarily private) file transfer, e.g., of software artefacts. minisign

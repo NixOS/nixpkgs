@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "A free implementation of the DVB Common Scrambling Algorithm with encryption and decryption capabilities";
+    description = "Free implementation of the DVB Common Scrambling Algorithm with encryption and decryption capabilities";
     homepage = "http://www.videolan.org/developers/libdvbcsa.html";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, bash
 , cmake
 , runCommandLocal
 , bison
@@ -20,8 +21,8 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.14.0";
-    hash = "sha256-t7m2y+DiZf0xum1vneXvoCyH767SKMOq4YzMIuZngR8=";
+    rev = "v0.19.0";
+    hash = "sha256-vOK7xfOR+aDpdGd8oOFLJc1Ct1S5BCJmLN6Ubn5wlkQ=";
   };
 
   inherit (llvmPackages_14) lld llvm;
@@ -31,16 +32,25 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.15610.11";
+  version = "1.0.17384.11";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    hash = "sha256-Fu1g5M2lpcnLw6aSHI5gx47VOfx+rIdIhBlwe/Dv8bk=";
+    hash = "sha256-O4uMaPauRv2aMgM2B7XdzCcjI5JghsjX5XbkeloLyck=";
   };
 
-  nativeBuildInputs = [ bison cmake flex (python3.withPackages (ps : with ps; [ mako ])) ];
+  postPatch = ''
+    substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
+      --replace-fail '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
+      --replace-fail '/@CMAKE_INSTALL_LIBDIR@' "/lib"
+
+    chmod +x IGC/Scripts/igc_create_linker_script.sh
+    patchShebangs --build IGC/Scripts/igc_create_linker_script.sh
+  '';
+
+  nativeBuildInputs = [ bash bison cmake flex (python3.withPackages (ps : with ps; [ mako pyyaml ])) ];
 
   buildInputs = [ lld llvm spirv-headers spirv-llvm-translator' spirv-tools ];
 
@@ -48,12 +58,6 @@ stdenv.mkDerivation rec {
 
   # testing is done via intel-compute-runtime
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace IGC/AdaptorOCL/igc-opencl.pc.in \
-      --replace '/@CMAKE_INSTALL_INCLUDEDIR@' "/include" \
-      --replace '/@CMAKE_INSTALL_LIBDIR@' "/lib"
-  '';
 
   # Handholding the braindead build script
   # cmake requires an absolute path
@@ -79,8 +83,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
+    homepage = "https://github.com/intel/intel-graphics-compiler";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${src.rev}";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ SuperSandro2000 ];

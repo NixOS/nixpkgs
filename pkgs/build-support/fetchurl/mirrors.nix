@@ -312,6 +312,12 @@
     "https://backpan.perl.org/"  # for old releases
   ];
 
+  # D DUB
+  dub = [
+    "https://code.dlang.org/packages/"
+    "https://codemirror.dlang.org/packages/"
+  ];
+
   # Haskell Hackage
   hackage = [
     "https://hackage.haskell.org/package/"

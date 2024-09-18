@@ -1,11 +1,11 @@
 { lib
-, stdenv
 , python3
 , runCommand
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       markdown-it-py = prev.markdown-it-py.overridePythonAttrs (_: {
         doCheck = false;
@@ -61,6 +61,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Renderer for NixOS manual and option docs";
+    mainProgram = "nixos-render-docs";
     license = licenses.mit;
     maintainers = [ ];
   };

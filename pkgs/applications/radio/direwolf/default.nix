@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";
+    description = "Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";
     homepage = "https://github.com/wb2osz/direwolf/";
     license = licenses.gpl2;
     platforms = platforms.unix;

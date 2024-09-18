@@ -1,5 +1,4 @@
-{ lib
-, rustPlatform
+{ rustPlatform
 , libdeltachat
 , perl
 , pkg-config

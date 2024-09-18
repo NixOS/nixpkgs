@@ -5,7 +5,7 @@
 , autoreconfHook
 , intltool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , enchant
 , gdk-pixbuf
 , glib
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     autoreconfHook
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -67,6 +67,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Utility for switching between keyboard layouts";
+    mainProgram = "xneur";
     homepage = "https://xneur.ru";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.raskin ];

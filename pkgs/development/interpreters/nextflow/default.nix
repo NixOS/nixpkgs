@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A DSL for data-driven computational pipelines";
+    description = "DSL for data-driven computational pipelines";
     longDescription = ''
       Nextflow is a bioinformatics workflow manager that enables the development of portable and reproducible workflows.
 

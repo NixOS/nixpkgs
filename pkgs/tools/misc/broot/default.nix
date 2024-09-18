@@ -13,21 +13,22 @@
 , xorg
 , zlib
 , buildPackages
-, withClipboard ? false
+, withClipboard ? !stdenv.isDarwin
+, withTrash ? !stdenv.isDarwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.34.0";
+  version = "1.44.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5CWcc55OunZwCTqODQnvPUnn5cJET83PfIyDyzmpOkA=";
+    hash = "sha256-0YZma3+Qk2P8lvVS7+Uma0YayuHxtK8lFTZXjTmPIuY=";
   };
 
-  cargoHash = "sha256-kNZPAU8QSR9hDwalvsRqRL4gaKTyvUA2gZ/bBB6/YDU=";
+  cargoHash = "sha256-QsUHJpSdI0Vz8hbK0Nqn3gxEpCkMGcj1R1CCgLIyEtE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
+  buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -88,7 +89,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
+    description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
     maintainers = with maintainers; [ dywedir ];

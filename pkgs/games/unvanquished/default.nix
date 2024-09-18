@@ -2,7 +2,6 @@
 , stdenv
 , fetchzip
 , fetchFromGitHub
-, fetchpatch
 , SDL2
 , buildFHSEnv
 , cmake
@@ -33,15 +32,15 @@
 }:
 
 let
-  version = "0.54.0";
-  binary-deps-version = "8";
+  version = "0.54.1";
+  binary-deps-version = "10";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-X2c6BHI4W6fOurLiBWIBZzJrZ+7RHMEwN8GJGz6e350=";
+    hash = "sha256-F8U9UBFCe0PcFYZ2DThQwhouO22jKyWb0/ABhprHXCU=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -51,7 +50,7 @@ let
 
     src = fetchzip {
       url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz ";
-      sha256 = "sha256-6r9j0HRMDC/7i8f4f5bBK4NmwsTpSChHrRWwz0ENAZo=";
+      sha256 = "sha256-5n8gRvTuke4e7EaZ/5G+dtCG6qmnawhtA1IXIFQPkzA=";
     };
 
     dontPatchELF = true;
@@ -119,7 +118,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-ua9Q5E5C4t8z/yNQp6qn1i9NNDAk4ohzvgpMbCBxb8Q=";
+    outputHash = "sha256-xb8gKQHSyscWM29r0BWK0YsALull9uYjX7e+l1DHFPg=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [ aria2 cacert ];
@@ -220,7 +219,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "https://unvanquished.net/";
     downloadPage = "https://unvanquished.net/download/";
-    description = "A fast paced, first person strategy game";
+    description = "Fast paced, first person strategy game";
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [

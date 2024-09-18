@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.networking.firewall;
@@ -10,42 +7,42 @@ let
     ports: lib.unique (builtins.sort builtins.lessThan ports);
 
   commonOptions = {
-    allowedTCPPorts = mkOption {
-      type = types.listOf types.port;
+    allowedTCPPorts = lib.mkOption {
+      type = lib.types.listOf lib.types.port;
       default = [ ];
       apply = canonicalizePortList;
       example = [ 22 80 ];
-      description = lib.mdDoc ''
+      description = ''
         List of TCP ports on which incoming connections are
         accepted.
       '';
     };
 
-    allowedTCPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.port);
+    allowedTCPPortRanges = lib.mkOption {
+      type = lib.types.listOf (lib.types.attrsOf lib.types.port);
       default = [ ];
       example = [{ from = 8999; to = 9003; }];
-      description = lib.mdDoc ''
+      description = ''
         A range of TCP ports on which incoming connections are
         accepted.
       '';
     };
 
-    allowedUDPPorts = mkOption {
-      type = types.listOf types.port;
+    allowedUDPPorts = lib.mkOption {
+      type = lib.types.listOf lib.types.port;
       default = [ ];
       apply = canonicalizePortList;
       example = [ 53 ];
-      description = lib.mdDoc ''
+      description = ''
         List of open UDP ports.
       '';
     };
 
-    allowedUDPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.port);
+    allowedUDPPortRanges = lib.mkOption {
+      type = lib.types.listOf (lib.types.attrsOf lib.types.port);
       default = [ ];
       example = [{ from = 60000; to = 61000; }];
-      description = lib.mdDoc ''
+      description = ''
         Range of open UDP ports.
       '';
     };
@@ -58,40 +55,40 @@ in
   options = {
 
     networking.firewall = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the firewall.  This is a simple stateful
           firewall that blocks connection attempts to unauthorised TCP
           or UDP ports on this machine.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default = if config.networking.nftables.enable then pkgs.nftables else pkgs.iptables;
-        defaultText = literalExpression ''if config.networking.nftables.enable then "pkgs.nftables" else "pkgs.iptables"'';
-        example = literalExpression "pkgs.iptables-legacy";
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression ''if config.networking.nftables.enable then "pkgs.nftables" else "pkgs.iptables"'';
+        example = lib.literalExpression "pkgs.iptables-legacy";
+        description = ''
           The package to use for running the firewall service.
         '';
       };
 
-      logRefusedConnections = mkOption {
-        type = types.bool;
+      logRefusedConnections = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to log rejected or dropped incoming connections.
           Note: The logs are found in the kernel logs, i.e. dmesg
           or journalctl -k.
         '';
       };
 
-      logRefusedPackets = mkOption {
-        type = types.bool;
+      logRefusedPackets = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to log all rejected or dropped incoming packets.
           This tends to give a lot of log messages, so it's mostly
           useful for debugging.
@@ -100,10 +97,10 @@ in
         '';
       };
 
-      logRefusedUnicastsOnly = mkOption {
-        type = types.bool;
+      logRefusedUnicastsOnly = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           If {option}`networking.firewall.logRefusedPackets`
           and this option are enabled, then only log packets
           specifically directed at this machine, i.e., not broadcasts
@@ -111,10 +108,10 @@ in
         '';
       };
 
-      rejectPackets = mkOption {
-        type = types.bool;
+      rejectPackets = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If set, refused packets are rejected rather than dropped
           (ignored).  This means that an ICMP "port unreachable" error
           message is sent back to the client (or a TCP RST packet in
@@ -123,21 +120,21 @@ in
         '';
       };
 
-      trustedInterfaces = mkOption {
-        type = types.listOf types.str;
+      trustedInterfaces = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "enp0s2" ];
-        description = lib.mdDoc ''
+        description = ''
           Traffic coming in from these interfaces will be accepted
           unconditionally.  Traffic from the loopback (lo) interface
           will always be accepted.
         '';
       };
 
-      allowPing = mkOption {
-        type = types.bool;
+      allowPing = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to respond to incoming ICMPv4 echo requests
           ("pings").  ICMPv6 pings are always allowed because the
           larger address space of IPv6 makes network scanning much
@@ -145,11 +142,11 @@ in
         '';
       };
 
-      pingLimit = mkOption {
-        type = types.nullOr (types.separatedString " ");
+      pingLimit = lib.mkOption {
+        type = lib.types.nullOr (lib.types.separatedString " ");
         default = null;
         example = "--limit 1/minute --limit-burst 5";
-        description = lib.mdDoc ''
+        description = ''
           If pings are allowed, this allows setting rate limits on them.
 
           For the iptables based firewall, it should be set like
@@ -160,12 +157,12 @@ in
         '';
       };
 
-      checkReversePath = mkOption {
-        type = types.either types.bool (types.enum [ "strict" "loose" ]);
+      checkReversePath = lib.mkOption {
+        type = lib.types.either lib.types.bool (lib.types.enum [ "strict" "loose" ]);
         default = true;
-        defaultText = literalMD "`true` except if the iptables based firewall is in use and the kernel lacks rpfilter support";
+        defaultText = lib.literalMD "`true` except if the iptables based firewall is in use and the kernel lacks rpfilter support";
         example = "loose";
-        description = lib.mdDoc ''
+        description = ''
           Performs a reverse path filter test on a packet.  If a reply
           to the packet would not be sent via the same interface that
           the packet arrived on, it is refused.
@@ -180,30 +177,30 @@ in
         '';
       };
 
-      logReversePathDrops = mkOption {
-        type = types.bool;
+      logReversePathDrops = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Logs dropped packets failing the reverse path filter test if
           the option networking.firewall.checkReversePath is enabled.
         '';
       };
 
-      filterForward = mkOption {
-        type = types.bool;
+      filterForward = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable filtering in IP forwarding.
 
           This option only works with the nftables based firewall.
         '';
       };
 
-      connectionTrackingModules = mkOption {
-        type = types.listOf types.str;
+      connectionTrackingModules = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
-        description = lib.mdDoc ''
+        description = ''
           List of connection-tracking helpers that are auto-loaded.
           The complete list of possible values is given in the example.
 
@@ -219,10 +216,10 @@ in
         '';
       };
 
-      autoLoadConntrackHelpers = mkOption {
-        type = types.bool;
+      autoLoadConntrackHelpers = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to auto-load connection-tracking helpers.
           See the description at networking.firewall.connectionTrackingModules
 
@@ -230,30 +227,30 @@ in
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
-        example = literalExpression "[ pkgs.ipset ]";
-        description = lib.mdDoc ''
+        example = lib.literalExpression "[ pkgs.ipset ]";
+        description = ''
           Additional packages to be included in the environment of the system
           as well as the path of networking.firewall.extraCommands.
         '';
       };
 
-      interfaces = mkOption {
+      interfaces = lib.mkOption {
         default = { };
-        type = with types; attrsOf (submodule [{ options = commonOptions; }]);
-        description = lib.mdDoc ''
+        type = with lib.types; attrsOf (submodule [{ options = commonOptions; }]);
+        description = ''
           Interface-specific open ports.
         '';
       };
 
-      allInterfaces = mkOption {
+      allInterfaces = lib.mkOption {
         internal = true;
         visible = false;
-        default = { default = mapAttrs (name: value: cfg.${name}) commonOptions; } // cfg.interfaces;
-        type = with types; attrsOf (submodule [{ options = commonOptions; }]);
-        description = lib.mdDoc ''
+        default = { default = lib.mapAttrs (name: value: cfg.${name}) commonOptions; } // cfg.interfaces;
+        type = with lib.types; attrsOf (submodule [{ options = commonOptions; }]);
+        description = ''
           All open ports.
         '';
       };
@@ -262,7 +259,7 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -279,9 +276,9 @@ in
 
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
 
-    boot.kernelModules = (optional cfg.autoLoadConntrackHelpers "nf_conntrack")
+    boot.kernelModules = (lib.optional cfg.autoLoadConntrackHelpers "nf_conntrack")
       ++ map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
-    boot.extraModprobeConfig = optionalString cfg.autoLoadConntrackHelpers ''
+    boot.extraModprobeConfig = lib.optionalString cfg.autoLoadConntrackHelpers ''
       options nf_conntrack nf_conntrack_helper=1
     '';
 

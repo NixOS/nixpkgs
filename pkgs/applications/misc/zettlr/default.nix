@@ -1,8 +1,8 @@
-{ callPackage, texliveMedium }:
+{ callPackage }:
 
-builtins.mapAttrs (pname: attrs: callPackage ./generic.nix (attrs // { inherit pname; inherit texliveMedium; })) {
+builtins.mapAttrs (pname: attrs: callPackage ./generic.nix (attrs // { inherit pname; })) {
   zettlr = {
-    version = "3.0.2";
-    hash = "sha256-xwBq+kLmTth15uLiYWJOhi/YSPZVJNO6JTrKFojSDXA=";
+    version = "3.2.0";
+    hash = "sha256-gttDGWFJ/VmOyqgOSKnCqqPtNTKJd1fmDpa0ZAX3xc8=";
   };
 }

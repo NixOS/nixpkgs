@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, biopython
-, docopt
-, flametree
-, numpy
-, proglog
-, pytestCheckHook
-, pythonOlder
-, python-codon-tables
-, primer3
-, genome-collector
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  biopython,
+  docopt,
+  flametree,
+  numpy,
+  proglog,
+  pytestCheckHook,
+  pythonOlder,
+  python-codon-tables,
+  primer3,
+  genome-collector,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
@@ -56,9 +57,7 @@ buildPythonPackage rec {
     "test_avoid_matches_with_phage"
   ];
 
-  pythonImportsCheck = [
-    "dnachisel"
-  ];
+  pythonImportsCheck = [ "dnachisel" ];
 
   meta = with lib; {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";

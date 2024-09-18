@@ -1,58 +1,56 @@
-{ callPackage
-
-}:
-
-# TODO(@oxij) on new Xen version: generalize this to generate [vanilla slim
-# light] for each ./<version>.nix.
-
+{ callPackage }:
+let
+  standard = {
+    meta = {
+      description = "Standard Xen";
+      longDescription = ''
+        Standard version of Xen. Uses forks of QEMU, SeaBIOS, OVMF and iPXE provided
+        by the Xen Project. This provides the vanilla Xen experince, but wastes space
+        and build time. A typical NixOS setup that runs lots of VMs will usually need
+        to build two different versions of QEMU when using this Xen derivation (one
+        fork and upstream).
+      '';
+    };
+  };
+  slim = {
+    meta = {
+      description = "Without Internal Components";
+      longDescription = ''
+        Slimmed-down version of Xen that reuses nixpkgs packages as much as possible.
+        Instead of using the Xen forks for various internal components, this version uses
+        `seabios`, `ovmf` and `ipxe` from nixpkgs. These components may ocasionally get
+        out of sync with the hypervisor itself, but this builds faster and uses less space
+        than the default derivation.
+      '';
+    };
+  };
+in
+# TODO: generalise this to automatically generate both Xen variants for each ./<version>/default.nix.
 rec {
-  xen_4_15-vanilla = callPackage ./4.15.nix {
-    meta = {
-      description = "vanilla";
-      longDescription = ''
-        Vanilla version of Xen. Uses forks of Qemu and Seabios bundled
-        with Xen. This gives vanilla experince, but wastes space and
-        build time: typical NixOS setup that runs lots of VMs will
-        build three different versions of Qemu when using this (two
-        forks and upstream).
-      '';
-    };
+  xen_4_19 = callPackage ./4.19/default.nix { inherit (standard) meta; };
+  xen_4_19-slim = xen_4_19.override {
+    withInternalQEMU = false;
+    withInternalSeaBIOS = false;
+    withInternalOVMF = false;
+    withInternalIPXE = false;
+    inherit (slim) meta;
   };
 
-  xen_4_15-slim = xen_4_15-vanilla.override {
-    withInternalQemu = false;
-    withInternalTraditionalQemu = true;
-    withInternalSeabios = false;
-    withSeabios = true;
-
-    meta = {
-      description = "slim";
-      longDescription = ''
-        Slimmed-down version of Xen that reuses nixpkgs packages as
-        much as possible. Different parts may get out of sync, but
-        this builds faster and uses less space than vanilla. Use with
-        `qemu_xen` from nixpkgs.
-      '';
-    };
+  xen_4_18 = callPackage ./4.18/default.nix { inherit (standard) meta; };
+  xen_4_18-slim = xen_4_18.override {
+    withInternalQEMU = false;
+    withInternalSeaBIOS = false;
+    withInternalOVMF = false;
+    withInternalIPXE = false;
+    inherit (slim) meta;
   };
 
-  xen_4_15-light = xen_4_15-vanilla.override {
-    withInternalQemu = false;
-    withInternalTraditionalQemu = false;
-    withInternalSeabios = false;
-    withSeabios = true;
-
-    meta = {
-      description = "light";
-      longDescription = ''
-        Slimmed-down version of Xen without `qemu-traditional` (you
-        don't need it if you don't know what it is). Use with
-        `qemu_xen-light` from nixpkgs.
-      '';
-    };
+  xen_4_17 = callPackage ./4.17/default.nix { inherit (standard) meta; };
+  xen_4_17-slim = xen_4_17.override {
+    withInternalQEMU = false;
+    withInternalSeaBIOS = false;
+    withInternalOVMF = false;
+    withInternalIPXE = false;
+    inherit (slim) meta;
   };
-
-  xen-vanilla = xen_4_15-vanilla;
-  xen-slim = xen_4_15-slim;
-  xen-light = xen_4_15-light;
 }

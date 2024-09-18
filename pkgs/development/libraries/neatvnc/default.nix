@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-S2LMD15MYd/t/Z8B1OQ0hVrZQLR6Gf4LB45mhmDwblg=";
+    hash = "sha256-2gPDcFcu1kGIDubguL38Z0K+k7WGFf7DX8yZteedcNg=";
   };
 
   strictDeps = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A VNC server library";
+    description = "VNC server library";
     longDescription = ''
       This is a liberally licensed VNC server library that's intended to be
       fast and neat. Goals:

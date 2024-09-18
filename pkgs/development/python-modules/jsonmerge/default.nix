@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonschema,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/avian2/jsonmerge";
     changelog = "https://github.com/avian2/jsonmerge/blob/jsonmerge-${version}/ChangeLog";
     license = licenses.mit;
-    maintainers = with maintainers; [ emily ];
+    maintainers = [ ];
   };
 }

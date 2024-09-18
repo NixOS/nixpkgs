@@ -165,9 +165,12 @@ in
       virtualisation.vlans = [ 1 ];
 
       networking.interfaces.eth1.ipv6 = {
-        addresses = [ { address = "2001:db8::8"; prefixLength = 96; } ];
-        routes    = [ { address = "64:ff9b::";   prefixLength = 96;
-                        via = "2001:db8::1"; } ];
+        addresses = lib.mkForce [ { address = "2001:db8::8"; prefixLength = 96; } ];
+        routes = lib.mkForce [ {
+          address = "64:ff9b::";
+          prefixLength = 96;
+          via = "2001:db8::1";
+        } ];
       };
     };
 
@@ -177,9 +180,12 @@ in
 
       virtualisation.vlans = [ 1 ];
       networking.interfaces.eth1.ipv6 = {
-        addresses = [ { address = "2001:db8::9"; prefixLength = 96; } ];
-        routes    = [ { address = "64:ff9b::";   prefixLength = 96;
-                        via = "2001:db8::1"; } ];
+        addresses = lib.mkForce [ { address = "2001:db8::9"; prefixLength = 96; } ];
+        routes    = lib.mkForce [ {
+          address = "64:ff9b::";
+          prefixLength = 96;
+          via = "2001:db8::1";
+        } ];
       };
     };
 

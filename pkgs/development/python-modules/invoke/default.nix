@@ -1,8 +1,9 @@
-{ lib
-, bash
-, buildPythonPackage
-, fetchPypi
-, stdenv
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  fetchPypi,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
   # errors with vendored libs
   doCheck = false;
 
-  pythonImportsCheck = [
-    "invoke"
-  ];
+  pythonImportsCheck = [ "invoke" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mkdir -p $out/share/{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
@@ -38,6 +37,6 @@ buildPythonPackage rec {
     description = "Pythonic task execution";
     homepage = "https://www.pyinvoke.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

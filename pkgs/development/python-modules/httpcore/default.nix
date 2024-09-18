@@ -1,29 +1,31 @@
-{ lib
-, anyio
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, hatchling
-, hatch-fancy-pypi-readme
-, h11
-, h2
-, pproxy
-, pytest-asyncio
-, pytest-httpbin
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, socksio
-, trio
-# for passthru.tests
-, httpx
-, httpx-socks
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  h11,
+  h2,
+  pproxy,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  socksio,
+  trio,
+  # for passthru.tests
+  httpx,
+  httpx-socks,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "1.0.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -31,7 +33,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "httpcore";
     rev = "refs/tags/${version}";
-    hash = "sha256-gjAScRBzAuNiTSxspX6vzwTAdBIwVQbaSLEUFV1QP+E=";
+    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
   };
 
   nativeBuildInputs = [
@@ -45,18 +47,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    asyncio = [
-      anyio
-    ];
-    http2 = [
-      h2
-    ];
-    socks = [
-      socksio
-    ];
-    trio = [
-      trio
-    ];
+    asyncio = [ anyio ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    trio = [ trio ];
   };
 
   nativeCheckInputs = [
@@ -67,19 +61,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "httpcore"
-  ];
+  pythonImportsCheck = [ "httpcore" ];
 
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit httpx httpx-socks;
+    inherit httpx httpx-socks respx;
   };
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
-    description = "A minimal low-level HTTP client";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];

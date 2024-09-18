@@ -1,13 +1,14 @@
-{ lib
-, attrs
-, boltons
-, buildPythonPackage
-, face
-, fetchPypi
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pyyaml
+{
+  lib,
+  attrs,
+  boltons,
+  buildPythonPackage,
+  face,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -43,20 +44,21 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTests = [
-    # Test is outdated (was made for PyYAML 3.x)
-    "test_main_yaml_target"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    "test_regular_error_stack"
-    "test_long_target_repr"
-  ];
+  disabledTests =
+    [
+      # Test is outdated (was made for PyYAML 3.x)
+      "test_main_yaml_target"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      "test_regular_error_stack"
+      "test_long_target_repr"
+    ];
 
-  pythonImportsCheck = [
-    "glom"
-  ];
+  pythonImportsCheck = [ "glom" ];
 
   meta = with lib; {
     description = "Restructuring data, the Python way";
+    mainProgram = "glom";
     longDescription = ''
       glom helps pull together objects from other objects in a
       declarative, dynamic, and downright simple way.

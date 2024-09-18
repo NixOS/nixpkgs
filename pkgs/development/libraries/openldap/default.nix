@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.7";
+  version = "2.6.8";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-zXdfYlyUTteKPaGKA7A7CO6nPIqryXtBuzNumhCVSTA=";
+    hash = "sha256-SJaTI+lOO+OwPGoTKULcun741UXyrTVAFwkBn2lsPE4=";
   };
 
   # TODO: separate "out" and "bin"
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.openldap.org/";
-    description = "An open source implementation of the Lightweight Directory Access Protocol";
+    description = "Open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
     maintainers = with maintainers; [ hexa ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;

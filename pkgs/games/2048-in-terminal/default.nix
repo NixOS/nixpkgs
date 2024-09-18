@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Animated console version of the 2048 game";
+    mainProgram = "2048-in-terminal";
     license = licenses.mit;
     platforms = platforms.unix;
   };

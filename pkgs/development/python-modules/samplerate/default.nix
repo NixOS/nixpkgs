@@ -1,46 +1,63 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cffi
-, numpy
-, libsamplerate
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  setuptools,
+  setuptools-scm,
+  pybind11,
+
+  # dependencies
+  cffi,
+  numpy,
+
+  # native dependencies
+  libsamplerate,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "samplerate";
-  version = "0.1.0";
-  format = "setuptools";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tuxu";
     repo = "python-samplerate";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lHZ9SVnKcsEsnKYXR/QocGbKPEoA7yCZxXvrNPeH1rA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/9NFJcn8R0DFjVhFAIYOtzZM90hjVIfsVXFlS0nHNhA=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'pytest-runner'" ""
-
-    substituteInPlace samplerate/lowlevel.py --replace \
-      "lib_filename = _find_library('samplerate')" \
-      'lib_filename = "${libsamplerate.out}/lib/libsamplerate${stdenv.hostPlatform.extensions.sharedLibrary}"'
+    # unvendor pybind11, libsamplerate
+    rm -r external
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "add_subdirectory(external)" "find_package(pybind11 REQUIRED)"
   '';
+
+  build-system = [
+    cmake
+    setuptools
+    setuptools-scm
+    pybind11
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [ libsamplerate ];
 
   propagatedBuildInputs = [
     cffi
     numpy
   ];
 
-  pythonImportsCheck = [
-    "samplerate"
-  ];
+  pythonImportsCheck = [ "samplerate" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -rf samplerate

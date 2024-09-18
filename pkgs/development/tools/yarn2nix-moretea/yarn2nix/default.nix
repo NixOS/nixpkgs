@@ -100,7 +100,7 @@ in rec {
       ) (builtins.attrNames pkgConfig);
 
       # build-time JSON generation to avoid IFD
-      # see https://nixos.wiki/wiki/Import_From_Derivation
+      # see https://wiki.nixos.org/wiki/Import_From_Derivation
       workspaceJSON = pkgs.runCommand "${name}-workspace-package.json"
         {
           nativeBuildInputs = [ pkgs.jq ];
@@ -398,25 +398,15 @@ in rec {
     });
 
   yarn2nix = mkYarnPackage {
-    src =
-      let
-        src = ./.;
-
-        mkFilter = { dirsToInclude, filesToInclude, root }: path: type:
-          let
-            inherit (lib) elem elemAt splitString;
-
-            subpath = elemAt (splitString "${toString root}/" path) 1;
-            spdir = elemAt (splitString "/" subpath) 0;
-          in elem spdir dirsToInclude ||
-            (type == "regular" && elem subpath filesToInclude);
-      in builtins.filterSource
-          (mkFilter {
-            dirsToInclude = ["bin" "lib"];
-            filesToInclude = ["package.json" "yarn.lock"];
-            root = src;
-          })
-          src;
+    src = lib.fileset.toSource {
+      root = ./.;
+      fileset = lib.fileset.unions [
+        ./bin
+        ./lib
+        ./package.json
+        ./yarn.lock
+      ];
+    };
 
     # yarn2nix is the only package that requires the yarnNix option.
     # All the other projects can auto-generate that file.

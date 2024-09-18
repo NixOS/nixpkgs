@@ -1,30 +1,32 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, rustPlatform
+  # build-system
+  rustPlatform,
 
-# native darwin dependencies
-, libiconv
-, Security
+  # native darwin dependencies
+  libiconv,
+  Security,
+  SystemConfiguration,
 
-# tests
-, pytestCheckHook
-, hypothesis
+  # tests
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "css-inline";
-  version = "0.10.1";
-  format = "pyproject";
+  version = "0.14.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
     rev = "python-v${version}";
-    hash = "sha256-oBAJv/hAz/itT2WakIw/1X1NvOHX108NoeS6V7k+aG8=";
+    hash = "sha256-+hX05y+ii2/wAbcc3SPK3ns4slUKFGqHURb3Z08yhVw=";
   };
 
   postPatch = ''
@@ -41,7 +43,7 @@ buildPythonPackage rec {
       ln -s ${./Cargo.lock} Cargo.lock
     '';
     name = "${pname}-${version}";
-    hash = "sha256-SFG1nsP4+I0zH8VeyL1eeaTx0tHNIvmx6M0cko0pqIA=";
+    hash = "sha256-ogzj8JxiFX2VWEeEnKACycd2Bud9VUpLuF4h35eUls0=";
   };
 
   nativeBuildInputs = [
@@ -52,16 +54,26 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
     Security
+    SystemConfiguration
   ];
 
-  pythonImportsCheck = [
-    "css_inline"
-  ];
+  pythonImportsCheck = [ "css_inline" ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
+
+  disabledTests =
+    [
+      # fails to connect to local server
+      "test_cache"
+      "test_remote_stylesheet"
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      # pyo3_runtime.PanicException: event loop thread panicked
+      "test_invalid_href"
+    ];
 
   meta = with lib; {
     description = "Inline CSS into style attributes";

@@ -22,6 +22,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Cross-platform multitrack audio recording and audio editing suite";
+    mainProgram = "traverso";
     homepage = "https://traverso-daw.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.all;
