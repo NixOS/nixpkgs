@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/stack-of-tasks/tsid";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 })
