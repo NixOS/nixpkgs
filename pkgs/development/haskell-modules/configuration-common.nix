@@ -2225,9 +2225,15 @@ self: super: {
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
 
-  # Too strict version bounds on haskell-gi
-  # https://github.com/owickstrom/gi-gtk-declarative/issues/100
-  gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
+  # 2024-09-18: Make compatible with haskell-gi 0.26.10
+  # https://github.com/owickstrom/gi-gtk-declarative/pull/118
+  gi-gtk-declarative = overrideCabal (drv: assert drv.version == "0.7.1"; {
+    jailbreak = true;
+    postPatch = ''
+      sed -i '1 i {-# LANGUAGE FlexibleContexts #-}' \
+        src/GI/Gtk/Declarative/Widget/Conversions.hs
+    '';
+  }) super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
   gi-gtk_4 = self.gi-gtk_4_0_9;
