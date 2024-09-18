@@ -4494,7 +4494,8 @@
       aiounifi
     ];
     "unifi_direct" = ps: with ps; [
-    ]; # missing inputs: unifi_ap
+      unifi-ap
+    ];
     "unifiled" = ps: with ps; [
       unifiled
     ];
