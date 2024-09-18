@@ -171,39 +171,6 @@ mkDerivation (finalAttrs: {
 
   patches = patches fetchpatch ++ lib.optionals withNativeCompilation [ nativeCompilationPatch ];
 
-  postPatch = lib.concatStringsSep "\n" ([
-    (lib.optionalString srcRepo ''
-      rm -fr .git
-    '')
-
-    # Add the name of the wrapped gvfsd
-    # This used to be carried as a patch but it often got out of sync with
-    # upstream and was hard to maintain for emacs-overlay.
-    (lib.concatStrings (map (fn: ''
-      sed -i 's#(${fn} "gvfs-fuse-daemon")#(${fn} "gvfs-fuse-daemon") (${fn} ".gvfsd-fuse-wrapped")#' lisp/net/tramp-gvfs.el
-    '') [
-      "tramp-compat-process-running-p"
-      "tramp-process-running-p"
-    ]))
-
-    # Reduce closure size by cleaning the environment of the emacs dumper
-    ''
-      substituteInPlace src/Makefile.in \
-        --replace-fail 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
-    ''
-
-    ''
-      substituteInPlace lisp/international/mule-cmds.el \
-        --replace-fail /usr/share/locale ${gettext}/share/locale
-    ''
-  ] ++ lib.optionals (lib.versionOlder version "29") [
-    ''
-      for makefile_in in $(find . -name Makefile.in -print); do
-        substituteInPlace $makefile_in --replace-fail /bin/pwd pwd
-      done
-    ''
-  ]);
-
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -311,8 +278,6 @@ mkDerivation (finalAttrs: {
     mailutils
   ];
 
-  hardeningDisable = [ "format" ];
-
   configureFlags = [
     (lib.enableFeature false "build-details") # for a (more) reproducible build
     (lib.withFeature true "modules")
@@ -364,9 +329,44 @@ mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-include ${./macport_noescape_noop.h}";
   };
 
-  enableParallelBuilding = true;
+  hardeningDisable = [ "format" ];
 
   installTargets = [ "tags" "install" ];
+
+  enableParallelBuilding = true;
+
+  postPatch = lib.concatStringsSep "\n" ([
+    (lib.optionalString srcRepo ''
+      rm -fr .git
+    '')
+
+    # Add the name of the wrapped gvfsd
+    # This used to be carried as a patch but it often got out of sync with
+    # upstream and was hard to maintain for emacs-overlay.
+    (lib.concatStrings (map (fn: ''
+      sed -i 's#(${fn} "gvfs-fuse-daemon")#(${fn} "gvfs-fuse-daemon") (${fn} ".gvfsd-fuse-wrapped")#' lisp/net/tramp-gvfs.el
+    '') [
+      "tramp-compat-process-running-p"
+      "tramp-process-running-p"
+    ]))
+
+    # Reduce closure size by cleaning the environment of the emacs dumper
+    ''
+      substituteInPlace src/Makefile.in \
+        --replace-fail 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+    ''
+
+    ''
+      substituteInPlace lisp/international/mule-cmds.el \
+        --replace-fail /usr/share/locale ${gettext}/share/locale
+    ''
+  ] ++ lib.optionals (lib.versionOlder version "29") [
+    ''
+      for makefile_in in $(find . -name Makefile.in -print); do
+        substituteInPlace $makefile_in --replace-fail /bin/pwd pwd
+      done
+    ''
+  ]);
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
