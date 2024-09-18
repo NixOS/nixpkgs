@@ -6496,7 +6496,6 @@ broken-packages:
   - visibility # failure in job https://hydra.nixos.org/build/233206672 at 2023-09-02
   - visual-prof # failure in job https://hydra.nixos.org/build/233250080 at 2023-09-02
   - vitrea # failure in job https://hydra.nixos.org/build/233252038 at 2023-09-02
-  - vivid # failure in job https://hydra.nixos.org/build/252716916 at 2024-03-16
   - vk-aws-route53 # failure in job https://hydra.nixos.org/build/233250126 at 2023-09-02
   - VKHS # failure in job https://hydra.nixos.org/build/233246557 at 2023-09-02
   - vowpal-utils # failure in job https://hydra.nixos.org/build/233251505 at 2023-09-02
