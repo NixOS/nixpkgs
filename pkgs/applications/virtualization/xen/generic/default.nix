@@ -120,7 +120,7 @@ let
     lib.attrsets.optionalAttrs withInternalQEMU {
       qemu = {
         src = fetchgit {
-          url = "https://xenbits.xen.org/git-http/qemu-xen.git";
+          url = "https://xenbits.xenproject.org/git-http/qemu-xen.git";
           fetchSubmodules = true;
           inherit (pkg.qemu) rev hash;
         };
@@ -131,7 +131,7 @@ let
     // lib.attrsets.optionalAttrs withInternalSeaBIOS {
       seaBIOS = {
         src = fetchgit {
-          url = "https://xenbits.xen.org/git-http/seabios.git";
+          url = "https://xenbits.xenproject.org/git-http/seabios.git";
           inherit (pkg.seaBIOS) rev hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [
@@ -143,7 +143,7 @@ let
     // lib.attrsets.optionalAttrs withInternalOVMF {
       ovmf = {
         src = fetchgit {
-          url = "https://xenbits.xen.org/git-http/ovmf.git";
+          url = "https://xenbits.xenproject.org/git-http/ovmf.git";
           fetchSubmodules = true;
           inherit (pkg.ovmf) rev hash;
         };
@@ -327,7 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Main Xen source.
   src = fetchgit {
-    url = "https://xenbits.xen.org/git-http/xen.git";
+    url = "https://xenbits.xenproject.org/git-http/xen.git";
     inherit (pkg.xen) rev hash;
   };
 

@@ -22,7 +22,7 @@ userInputFingerprint=${userInputFingerprint:-"23E3222C145F4475FA8060A783FE14C957
 
 # Clone xen.git.
 echo -e "Cloning \e[1;34mxen.git\e[0m..."
-git clone --quiet https://xenbits.xen.org/git-http/xen.git /tmp/xenUpdateScript/xen
+git clone --quiet https://xenbits.xenproject.org/git-http/xen.git /tmp/xenUpdateScript/xen
 cd /tmp/xenUpdateScript/xen
 
 # Get list of versions and branches.
@@ -68,22 +68,22 @@ for version in "${supportedVersions[@]}"; do
     # Use `nix-prefetch-git` to fetch `rev`s and `hash`es.
     echo "Pre-fetching sources and determining hashes..."
     echo -e -n "  \e[1;32mXen\e[0m..."
-    fetchXen=$(nix-prefetch-git --url https://xenbits.xen.org/git-http/xen.git --rev RELEASE-"$version" --quiet)
+    fetchXen=$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/xen.git --rev RELEASE-"$version" --quiet)
     finalVersion="$(echo "$fetchXen" | tr ', ' '\n ' | grep -ie rev | sed s/'  "rev": "'//g | sed s/'"'//g)"
     hash="$(echo "$fetchXen" | tr ', ' '\n ' | grep -ie hash | sed s/'  "hash": "'//g | sed s/'"'//g)"
     echo "done!"
     echo -e -n "  \e[1;36mQEMU\e[0m..."
-    fetchQEMU=$(nix-prefetch-git --url https://xenbits.xen.org/git-http/qemu-xen.git --rev "$qemuVersion" --quiet --fetch-submodules)
+    fetchQEMU=$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/qemu-xen.git --rev "$qemuVersion" --quiet --fetch-submodules)
     finalQEMUVersion="$(echo "$fetchQEMU" | tr ', ' '\n ' | grep -ie rev | sed s/'  "rev": "'//g | sed s/'"'//g)"
     qemuHash="$(echo "$fetchQEMU" | tr ', ' '\n ' | grep -ie hash | sed s/'  "hash": "'//g | sed s/'"'//g)"
     echo "done!"
     echo -e -n "  \e[1;36mSeaBIOS\e[0m..."
-    fetchSeaBIOS=$(nix-prefetch-git --url https://xenbits.xen.org/git-http/seabios.git --rev "$seaBIOSVersion" --quiet)
+    fetchSeaBIOS=$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/seabios.git --rev "$seaBIOSVersion" --quiet)
     finalSeaBIOSVersion="$(echo "$fetchSeaBIOS" | tr ', ' '\n ' | grep -ie rev | sed s/'  "rev": "'//g | sed s/'"'//g)"
     seaBIOSHash="$(echo "$fetchSeaBIOS" | tr ', ' '\n ' | grep -ie hash | sed s/'  "hash": "'//g | sed s/'"'//g)"
     echo "done!"
     echo -e -n "  \e[1;36mOVMF\e[0m..."
-    ovmfHash="$(nix-prefetch-git --url https://xenbits.xen.org/git-http/ovmf.git --rev "$ovmfVersion" --quiet --fetch-submodules | grep -ie hash | sed s/'  "hash": "'//g | sed s/'",'//g)"
+    ovmfHash="$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/ovmf.git --rev "$ovmfVersion" --quiet --fetch-submodules | grep -ie hash | sed s/'  "hash": "'//g | sed s/'",'//g)"
     echo "done!"
     echo -e -n "  \e[1;36miPXE\e[0m..."
     ipxeHash="$(nix-prefetch-git --url https://github.com/ipxe/ipxe.git --rev "$ipxeVersion" --quiet | grep -ie hash | sed s/'  "hash": "'//g | sed s/'",'//g)"
