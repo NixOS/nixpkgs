@@ -1,24 +1,30 @@
 { lib
-, pkg-config
 , buildGoModule
-, fetchFromGitHub
-, makeWrapper
+, callPackage
+, cdrkit
 , coreutils
+, debootstrap
+, fetchFromGitHub
 , gnupg
 , gnutar
-, squashfsTools
-, debootstrap
-, callPackage
+, hivex
+, makeWrapper
 , nixosTests
+, pkg-config
+, squashfsTools
+, wimlib
 }:
 
 let
   bins = [
+    cdrkit
     coreutils
+    debootstrap
     gnupg
     gnutar
+    hivex
     squashfsTools
-    debootstrap
+    wimlib
   ];
 in
 buildGoModule rec {

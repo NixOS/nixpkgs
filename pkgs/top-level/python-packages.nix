@@ -16862,6 +16862,8 @@ self: super: with self; {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  unifi-ap = callPackage ../development/python-modules/unifi-ap { };
+
   unifi-discovery = callPackage ../development/python-modules/unifi-discovery { };
 
   unify = callPackage ../development/python-modules/unify { };
