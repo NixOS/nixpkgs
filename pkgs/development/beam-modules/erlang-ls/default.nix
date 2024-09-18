@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
 , stdenv, writeScript, lib }:
 let
-  version = "0.52.0";
+  version = "0.54.0";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -16,6 +16,12 @@ let
           substituteInPlace rebar.config --replace ", warnings_as_errors" ""
           '';
       });
+      json_polyfill = super.json_polyfill.overrideAttrs (_: {
+        # don't attempt to remove beam file during build, as it won't exist for erlang >= 27
+        patchPhase = ''
+          substituteInPlace rebar.config.script --replace "{erlc_compile, \"rm \\\"\$REBAR_DEPS_DIR/json_polyfill/ebin/json.beam\\\"\"}" ""
+          '';
+      });
     });
   };
 in
@@ -24,7 +30,7 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    hash = "sha256-tV7M8y0R+BN5ATxM03K0/gtHgITI9KxtvA7o0ft8RuE=";
+    hash = "sha256-mJ5/djUfRfOvJ81VQU178DVOkLpqLgNKwFHer8khn4k=";
     rev = version;
   };
   releaseType = "escript";
