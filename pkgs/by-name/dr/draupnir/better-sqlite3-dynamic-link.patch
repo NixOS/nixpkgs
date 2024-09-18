@@ -1,0 +1,33 @@
+diff --git a/binding.gyp b/binding.gyp
+index f2a910e..3d77f44 100644
+--- a/binding.gyp
++++ b/binding.gyp
+@@ -3,15 +3,15 @@
+ # ===
+ 
+ {
+-  'includes': ['deps/common.gypi'],
+   'targets': [
+     {
+       'target_name': 'better_sqlite3',
+-      'dependencies': ['deps/sqlite3.gyp:sqlite3'],
+       'sources': ['src/better_sqlite3.cpp'],
+       'cflags_cc': ['-std=c++17'],
++      'ldflags': ['<!@(pkg-config sqlite3 --libs)'],
+       'xcode_settings': {
+         'OTHER_CPLUSPLUSFLAGS': ['-std=c++17', '-stdlib=libc++'],
++        'OTHER_LDFLAGS': ['<!@(pkg-config sqlite3 --libs)'],
+       },
+       'msvs_settings': {
+         'VCCLCompilerTool': {
+@@ -29,10 +29,5 @@
+         }],
+       ],
+     },
+-    {
+-      'target_name': 'test_extension',
+-      'dependencies': ['deps/sqlite3.gyp:sqlite3'],
+-      'conditions': [['sqlite3 == ""', { 'sources': ['deps/test_extension.c'] }]],
+-    },
+   ],
+ }

@@ -1,0 +1,32 @@
+diff --git a/package.json b/package.json
+index 0c73708..1bcb475 100644
+--- a/package.json
++++ b/package.json
+@@ -9,8 +9,6 @@
+   "private": true,
+   "scripts": {
+     "build": "tsc --project test/tsconfig.json && tsc > /dev/null 2>&1",
+-    "postbuild": "corepack yarn describe-version",
+-    "describe-version": "(git describe > version.txt.tmp && mv version.txt.tmp version.txt) || true && rm -f version.txt.tmp",
+     "remove-tests-from-lib": "rm -rf lib/test/ && cp -r lib/src/* lib/ && rm -rf lib/src/",
+     "lint": "corepack yarn eslint src test && corepack yarn prettier --check src test",
+     "start:dev": "corepack yarn build && node --async-stack-traces lib/index.js",
+@@ -75,14 +73,13 @@
+     "pg": "^8.8.0",
+     "shell-quote": "^1.7.3",
+     "ulidx": "^2.2.1",
+-    "yaml": "^2.3.2"
++    "yaml": "^2.3.2",
++    "@vector-im/matrix-bot-sdk": "npm:@vector-im/matrix-bot-sdk@^0.6.6-element.1"
+   },
+   "overrides": {
+-    "matrix-bot-sdk": "$@vector-im/matrix-bot-sdk",
+-    "@vector-im/matrix-bot-sdk": "npm:@vector-im/matrix-bot-sdk@^0.6.6-element.1"
++    "matrix-bot-sdk": "$@vector-im/matrix-bot-sdk"
+   },
+   "engines": {
+     "node": ">=18.0.0"
+-  },
+-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
++  }
+ }
