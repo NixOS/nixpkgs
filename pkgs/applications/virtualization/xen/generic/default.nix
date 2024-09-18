@@ -98,11 +98,13 @@ let
   ];
 
   # Inherit attributes from a versionDefinition.
-  inherit (versionDefinition) pname;
-  inherit (versionDefinition) branch;
-  inherit (versionDefinition) version;
-  inherit (versionDefinition) latest;
-  inherit (versionDefinition) pkg;
+  inherit (versionDefinition)
+    pname
+    branch
+    version
+    latest
+    pkg
+    ;
 
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.17";
@@ -120,8 +122,7 @@ let
         src = fetchgit {
           url = "https://xenbits.xen.org/git-http/qemu-xen.git";
           fetchSubmodules = true;
-          inherit (pkg.qemu) rev;
-          inherit (pkg.qemu) hash;
+          inherit (pkg.qemu) rev hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.qemu) pkg.qemu.patches;
         path = "tools/qemu-xen";
@@ -131,8 +132,7 @@ let
       seaBIOS = {
         src = fetchgit {
           url = "https://xenbits.xen.org/git-http/seabios.git";
-          inherit (pkg.seaBIOS) rev;
-          inherit (pkg.seaBIOS) hash;
+          inherit (pkg.seaBIOS) rev hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [
           "patches"
@@ -145,8 +145,7 @@ let
         src = fetchgit {
           url = "https://xenbits.xen.org/git-http/ovmf.git";
           fetchSubmodules = true;
-          inherit (pkg.ovmf) rev;
-          inherit (pkg.ovmf) hash;
+          inherit (pkg.ovmf) rev hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.ovmf) pkg.ovmf.patches;
         path = "tools/firmware/ovmf-dir-remote";
@@ -157,8 +156,7 @@ let
         src = fetchFromGitHub {
           owner = "ipxe";
           repo = "ipxe";
-          inherit (pkg.ipxe) rev;
-          inherit (pkg.ipxe) hash;
+          inherit (pkg.ipxe) rev hash;
         };
         patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.ipxe) pkg.ipxe.patches;
         path = "tools/firmware/etherboot/ipxe.git";
@@ -317,8 +315,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname;
-  inherit version;
+  inherit pname version;
 
   outputs = [
     "out" # TODO: Split $out in $bin for binaries and $lib for libraries.
@@ -331,8 +328,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Main Xen source.
   src = fetchgit {
     url = "https://xenbits.xen.org/git-http/xen.git";
-    inherit (pkg.xen) rev;
-    inherit (pkg.xen) hash;
+    inherit (pkg.xen) rev hash;
   };
 
   patches =
