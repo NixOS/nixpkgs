@@ -5,7 +5,6 @@ with haskellLib;
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
 
-  disableParallelBuilding = haskellLib.overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
