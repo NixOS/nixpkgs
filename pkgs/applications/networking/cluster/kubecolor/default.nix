@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kubecolor";
@@ -18,6 +18,14 @@ buildGoModule rec {
   subPackages = [
     "."
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd kubecolor \
+      --bash <($out/bin/kubecolor completion bash) \
+      --fish <($out/bin/kubecolor completion fish) \
+      --zsh <($out/bin/kubecolor completion zsh)
+  '';
 
   meta = with lib; {
     description = "Colorizes kubectl output";
