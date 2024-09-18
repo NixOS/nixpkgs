@@ -72,6 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       hash = "sha256-/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
+
+    # Add API replacing gsd-power's use of libgnome-rr
+    # https://github.com/BuddiesOfBudgie/magpie/pull/30
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/magpie/commit/86bd9a342f8bf52711874aec9c5476bb944238e4.patch";
+      hash = "sha256-m1EY79DVc5xruQ87IKU39gAVjGXQ2HUz+JXNNyrRpdE=";
+    })
   ];
 
   mesonFlags = [
