@@ -241,9 +241,11 @@ stdenv.mkDerivation (finalAttrs: {
       ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
       ./0017-meson.build-do-not-create-systemdstatedir.patch
       ./0018-Revert-bootctl-update-list-remove-all-instances-of-s.patch # https://github.com/systemd/systemd/issues/33392
+      ./0019-meson-Don-t-link-ssh-dropins.patch
+      ./0020-install-unit_file_exists_full-follow-symlinks.patch
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-      ./0019-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+      ./0021-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl (
       let
@@ -483,8 +485,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
 
       # SSH
-      # Disabled for now until someone makes this work.
-      (lib.mesonOption "sshconfdir" "no")
+      (lib.mesonOption "sshconfdir" "")
       (lib.mesonOption "sshdconfdir" "no")
 
       # Features
