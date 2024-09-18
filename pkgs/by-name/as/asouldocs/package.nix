@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  asouldocs,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "asouldocs";
@@ -12,6 +18,11 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-T/KLiSK6bxXGkmVJ5aGrfHTUfLs/ElGyWSoCL5kb/KU=";
+
+  passthru.tests.version = testers.testVersion {
+    package = asouldocs;
+    command = "asouldocs --version";
+  };
 
   meta = with lib; {
     description = "Web server for multi-language, real-time synchronization and searchable documentation";

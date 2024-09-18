@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, flex
-, pcsclite
-, pkg-config
-, libusb1
-, perl
-, zlib
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  gitUpdater,
+  libusb1,
+  pcsclite,
+  perl,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace src/Makefile.in --replace /bin/echo echo
+    substituteInPlace src/Makefile.in --replace-fail /bin/echo echo
   '';
 
   configureFlags = [
@@ -39,25 +40,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     flex
-    pkg-config
     perl
+    pkg-config
   ];
 
   buildInputs = [
-    pcsclite
     libusb1
+    pcsclite
     zlib
   ];
 
   postInstall = ''
     install -Dm 0444 -t $out/lib/udev/rules.d src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
-      --replace "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
+      --replace-fail "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
   '';
 
   # The resulting shared object ends up outside of the default paths which are
   # usually getting stripped.
-  stripDebugList = ["pcsc"];
+  stripDebugList = [ "pcsc" ];
 
   passthru.updateScript = gitUpdater {
     url = "https://salsa.debian.org/rousseau/CCID.git";
