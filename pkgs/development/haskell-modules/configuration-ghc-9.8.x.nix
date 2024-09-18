@@ -145,7 +145,4 @@ self: super: {
     sha256 = "sha256-umjwgdSKebJdRrXjwHhsi8HBqotx1vFibY9ttLkyT/0=";
   }) super.reflex;
 
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23392
-  gi-gtk = disableParallelBuilding super.gi-gtk;
-
 }
