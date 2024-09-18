@@ -11,6 +11,13 @@ let
   cfg = config.services.garage;
   toml = pkgs.formats.toml { };
   configFile = toml.generate "garage.toml" cfg.settings;
+
+  anyHasPrefix =
+    prefix: strOrList:
+    if isString strOrList then
+      hasPrefix prefix strOrList
+    else
+      any ({ path, ... }: hasPrefix prefix path) strOrList;
 in
 {
   meta = {
@@ -162,7 +169,7 @@ in
         ExecStart = "${cfg.package}/bin/garage server";
 
         StateDirectory = mkIf (
-          hasPrefix "/var/lib/garage" cfg.settings.data_dir
+          anyHasPrefix "/var/lib/garage" cfg.settings.data_dir
           || hasPrefix "/var/lib/garage" cfg.settings.metadata_dir
         ) "garage";
         DynamicUser = lib.mkDefault true;
