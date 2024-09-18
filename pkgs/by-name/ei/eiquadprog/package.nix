@@ -1,10 +1,12 @@
 {
   boost,
   cmake,
+  doxygen,
   eigen,
   fetchFromGitHub,
   jrl-cmakemodules,
   lib,
+  pkg-config,
   stdenv,
 }:
 
@@ -19,8 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VqRx06sCCZrnB+NWm6Z9OMKzjKQIydGgKQU6fMY7phk=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   nativeBuildInputs = [
     cmake
+    doxygen
+    pkg-config
     jrl-cmakemodules
   ];
   propagatedBuildInputs = [ eigen ];
