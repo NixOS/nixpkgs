@@ -90,11 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  patches = lib.optionals stdenv.isDarwin [
-    # Fix conversion of const char* to unsigned int.
-    ./clang-integer-conversion.patch
-  ];
-
   configureFlags = [
     "--with-blas"
     "--with-cairo-ldflags=-lfontconfig"
