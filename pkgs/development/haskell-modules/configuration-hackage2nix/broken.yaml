@@ -5025,7 +5025,6 @@ broken-packages:
   - reflex-external-ref # failure in job https://hydra.nixos.org/build/233215834 at 2023-09-02
   - reflex-gadt-api # failure in job https://hydra.nixos.org/build/260124380 at 2024-05-19
   - reflex-gi-gtk # failure in job https://hydra.nixos.org/build/253683412 at 2024-03-31
-  - reflex-gloss # failure in job https://hydra.nixos.org/build/234457448 at 2023-09-13
   - reflex-jsx # failure in job https://hydra.nixos.org/build/233207137 at 2023-09-02
   - reflex-orphans # failure in job https://hydra.nixos.org/build/233249128 at 2023-09-02
   - reflex-test-host # failure in job https://hydra.nixos.org/build/233220665 at 2023-09-02
