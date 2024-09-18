@@ -5,9 +5,9 @@
 stdenv.mkDerivation {
 
   inherit (callPackage ./common-drv-attrs.nix {
-    version = "3.2.7";
+    version = "3.2.9";
     pname = "libmirage";
-    hash = "sha256-+okkgNeVS8yoKSrQDy4It7PiPlTSiOsUoFxQ1FS9s9M=";
+    hash = "sha256-JBd+wHSZRyRW1SZsaAaRO2dNUFkpwRCr3s1f39KyWIs=";
   }) pname version src meta;
 
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "out"}/share/gir-1.0";
