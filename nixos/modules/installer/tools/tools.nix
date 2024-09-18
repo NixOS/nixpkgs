@@ -1,10 +1,6 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
@@ -29,7 +25,7 @@ let
     src = ./nixos-install.sh;
     inherit (pkgs) runtimeShell;
     nix = config.nix.package.out;
-    path = makeBinPath [
+    path = lib.makeBinPath [
       pkgs.jq
       nixos-enter
       pkgs.util-linuxMinimal
@@ -61,9 +57,9 @@ let
     inherit (config.system) configurationRevision;
     json = builtins.toJSON ({
       nixosVersion = config.system.nixos.version;
-    } // optionalAttrs (config.system.nixos.revision != null) {
+    } // lib.optionalAttrs (config.system.nixos.revision != null) {
       nixpkgsRevision = config.system.nixos.revision;
-    } // optionalAttrs (config.system.configurationRevision != null) {
+    } // lib.optionalAttrs (config.system.configurationRevision != null) {
       configurationRevision = config.system.configurationRevision;
     });
     manPage = ./manpages/nixos-version.8;
@@ -73,7 +69,7 @@ let
     name = "nixos-enter";
     src = ./nixos-enter.sh;
     inherit (pkgs) runtimeShell;
-    path = makeBinPath [
+    path = lib.makeBinPath [
       pkgs.util-linuxMinimal
     ];
     manPage = ./manpages/nixos-enter.8;
@@ -84,9 +80,9 @@ in
 {
 
   options.system.nixos-generate-config = {
-    configuration = mkOption {
+    configuration = lib.mkOption {
       internal = true;
-      type = types.str;
+      type = lib.types.str;
       description = ''
         The NixOS module that `nixos-generate-config`
         saves to `/etc/nixos/configuration.nix`.
@@ -100,9 +96,9 @@ in
       '';
     };
 
-    desktopConfiguration = mkOption {
+    desktopConfiguration = lib.mkOption {
       internal = true;
-      type = types.listOf types.lines;
+      type = lib.types.listOf lib.types.lines;
       default = [];
       description = ''
         Text to preseed the desktop configuration that `nixos-generate-config`
@@ -118,9 +114,9 @@ in
     };
   };
 
-  options.system.disableInstallerTools = mkOption {
+  options.system.disableInstallerTools = lib.mkOption {
     internal = true;
-    type = types.bool;
+    type = lib.types.bool;
     default = false;
     description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
@@ -132,7 +128,7 @@ in
 
   config = lib.mkMerge [ (lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
-    system.nixos-generate-config.configuration = mkDefault ''
+    system.nixos-generate-config.configuration = lib.mkDefault ''
       # Edit this configuration file to define what should be installed on
       # your system. Help is available in the configuration.nix(5) man page, on
       # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).

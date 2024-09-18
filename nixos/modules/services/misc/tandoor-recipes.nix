@@ -1,6 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
@@ -11,7 +9,7 @@ let
     DEBUG = "0";
     DEBUG_TOOLBAR = "0";
     MEDIA_ROOT = "/var/lib/tandoor-recipes";
-  } // optionalAttrs (config.time.timeZone != null) {
+  } // lib.optionalAttrs (config.time.timeZone != null) {
     TZ = config.time.timeZone;
   } // (
     lib.mapAttrs (_: toString) cfg.extraConfig
@@ -27,10 +25,10 @@ let
   '';
 in
 {
-  meta.maintainers = with maintainers; [ ambroisie ];
+  meta.maintainers = with lib.maintainers; [ ambroisie ];
 
   options.services.tandoor-recipes = {
-    enable = mkOption {
+    enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = ''
@@ -45,20 +43,20 @@ in
       '';
     };
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "Web interface address.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       description = "Web interface port.";
     };
 
-    extraConfig = mkOption {
-      type = types.attrs;
+    extraConfig = lib.mkOption {
+      type = lib.types.attrs;
       default = { };
       description = ''
         Extra tandoor recipes config options.
@@ -71,10 +69,10 @@ in
       };
     };
 
-    package = mkPackageOption pkgs "tandoor-recipes" { };
+    package = lib.mkPackageOption pkgs "tandoor-recipes" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.tandoor-recipes = {
       description = "Tandoor Recipes server";
 

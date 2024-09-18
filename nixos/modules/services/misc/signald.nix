@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.signald;
   dataDir = "/var/lib/signald";
@@ -8,36 +6,36 @@ let
 in
 {
   options.services.signald = {
-    enable = mkEnableOption "signald, the unofficial daemon for interacting with Signal";
+    enable = lib.mkEnableOption "signald, the unofficial daemon for interacting with Signal";
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
       description = "User under which signald runs.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
       description = "Group under which signald runs.";
     };
 
-    socketPath = mkOption {
-      type = types.str;
+    socketPath = lib.mkOption {
+      type = lib.types.str;
       default = "/run/signald/signald.sock";
       description = "Path to the signald socket";
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) {
+  config = lib.mkIf cfg.enable {
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == defaultUser) {
+    users.groups = lib.optionalAttrs (cfg.group == defaultUser) {
       ${defaultUser} = { };
     };
 

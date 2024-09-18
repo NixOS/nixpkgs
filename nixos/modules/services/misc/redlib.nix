@@ -1,42 +1,39 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.redlib;
 
-  args = concatStringsSep " " ([
+  args = lib.concatStringsSep " " ([
     "--port ${toString cfg.port}"
     "--address ${cfg.address}"
   ]);
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "libreddit" ] [ "services" "redlib" ])
+    (lib.mkRenamedOptionModule [ "services" "libreddit" ] [ "services" "redlib" ])
   ];
 
   options = {
     services.redlib = {
-      enable = mkEnableOption "Private front-end for Reddit";
+      enable = lib.mkEnableOption "Private front-end for Reddit";
 
-      package = mkPackageOption pkgs "redlib" { };
+      package = lib.mkPackageOption pkgs "redlib" { };
 
-      address = mkOption {
+      address = lib.mkOption {
         default = "0.0.0.0";
         example = "127.0.0.1";
-        type =  types.str;
+        type =  lib.types.str;
         description = "The address to listen on";
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 8080;
         example = 8000;
-        type = types.port;
+        type = lib.types.port;
         description = "The port to listen on";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the redlib web interface";
       };
@@ -44,7 +41,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.redlib = {
         description = "Private front-end for Reddit";
         wantedBy = [ "multi-user.target" ];
@@ -83,7 +80,7 @@ in
         };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

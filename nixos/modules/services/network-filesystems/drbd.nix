@@ -1,9 +1,5 @@
 # Support for DRBD, the Distributed Replicated Block Device.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let cfg = config.services.drbd; in
 
 {
@@ -12,18 +8,18 @@ let cfg = config.services.drbd; in
 
   options = {
 
-    services.drbd.enable = mkOption {
+    services.drbd.enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable support for DRBD, the Distributed Replicated
         Block Device.
       '';
     };
 
-    services.drbd.config = mkOption {
+    services.drbd.config = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Contents of the {file}`drbd.conf` configuration file.
       '';
@@ -34,7 +30,7 @@ let cfg = config.services.drbd; in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.drbd ];
 

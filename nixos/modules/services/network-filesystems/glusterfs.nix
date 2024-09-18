@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   inherit (pkgs) glusterfs rsync;
 
@@ -15,7 +12,7 @@ let
     rm -f /var/lib/glusterd/secure-access
   '';
 
-  restartTriggers = optionals (cfg.tlsSettings != null) [
+  restartTriggers = lib.optionals (cfg.tlsSettings != null) [
     config.environment.etc."ssl/glusterfs.pem".source
     config.environment.etc."ssl/glusterfs.key".source
     config.environment.etc."ssl/glusterfs.ca".source
@@ -33,16 +30,16 @@ in
 
     services.glusterfs = {
 
-      enable = mkEnableOption "GlusterFS Daemon";
+      enable = lib.mkEnableOption "GlusterFS Daemon";
 
-      logLevel = mkOption {
-        type = types.enum ["DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL" "TRACE" "NONE"];
+      logLevel = lib.mkOption {
+        type = lib.types.enum ["DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL" "TRACE" "NONE"];
         description = "Log level used by the GlusterFS daemon";
         default = "INFO";
       };
 
-      useRpcbind = mkOption {
-        type = types.bool;
+      useRpcbind = lib.mkOption {
+        type = lib.types.bool;
         description = ''
           Enable use of rpcbind. This is required for Gluster's NFS functionality.
 
@@ -54,14 +51,14 @@ in
         default = true;
       };
 
-      enableGlustereventsd = mkOption {
-        type = types.bool;
+      enableGlustereventsd = lib.mkOption {
+        type = lib.types.bool;
         description = "Whether to enable the GlusterFS Events Daemon";
         default = true;
       };
 
-      killMode = mkOption {
-        type = types.enum ["control-group" "process" "mixed" "none"];
+      killMode = lib.mkOption {
+        type = lib.types.enum ["control-group" "process" "mixed" "none"];
         description = ''
           The systemd KillMode to use for glusterd.
 
@@ -77,8 +74,8 @@ in
         default = "control-group";
       };
 
-      stopKillTimeout = mkOption {
-        type = types.str;
+      stopKillTimeout = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The systemd TimeoutStopSec to use.
 
@@ -92,13 +89,13 @@ in
         default = "5s";
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "Extra flags passed to the GlusterFS daemon";
         default = [];
       };
 
-      tlsSettings = mkOption {
+      tlsSettings = lib.mkOption {
         description = ''
           Make the server communicate via TLS.
           This means it will only connect to other gluster
@@ -110,20 +107,20 @@ in
           See also: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/SSL/
         '';
         default = null;
-        type = types.nullOr (types.submodule {
+        type = lib.types.nullOr (lib.types.submodule {
           options = {
-            tlsKeyPath = mkOption {
-              type = types.str;
+            tlsKeyPath = lib.mkOption {
+              type = lib.types.str;
               description = "Path to the private key used for TLS.";
             };
 
-            tlsPem = mkOption {
-              type = types.path;
+            tlsPem = lib.mkOption {
+              type = lib.types.path;
               description = "Path to the certificate used for TLS.";
             };
 
-            caCert = mkOption {
-              type = types.path;
+            caCert = lib.mkOption {
+              type = lib.types.path;
               description = "Path certificate authority used to sign the cluster certificates.";
             };
           };
@@ -134,12 +131,12 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.glusterfs ];
 
     services.rpcbind.enable = cfg.useRpcbind;
 
-    environment.etc = mkIf (cfg.tlsSettings != null) {
+    environment.etc = lib.mkIf (cfg.tlsSettings != null) {
       "ssl/glusterfs.pem".source = cfg.tlsSettings.tlsPem;
       "ssl/glusterfs.key".source = cfg.tlsSettings.tlsKeyPath;
       "ssl/glusterfs.ca".source = cfg.tlsSettings.caCert;
@@ -181,7 +178,7 @@ in
       };
     };
 
-    systemd.services.glustereventsd = mkIf cfg.enableGlustereventsd {
+    systemd.services.glustereventsd = lib.mkIf cfg.enableGlustereventsd {
       inherit restartTriggers;
 
       description = "Gluster Events Notifier";

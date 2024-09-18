@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.prowlarr;
 
@@ -9,19 +6,19 @@ in
 {
   options = {
     services.prowlarr = {
-      enable = mkEnableOption "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers";
+      enable = lib.mkEnableOption "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers";
 
-      package = mkPackageOption pkgs "prowlarr" { };
+      package = lib.mkPackageOption pkgs "prowlarr" { };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the Prowlarr web interface.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.prowlarr = {
       description = "Prowlarr";
       after = [ "network.target" ];
@@ -37,7 +34,7 @@ in
       environment.HOME = "/var/empty";
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 9696 ];
     };
   };

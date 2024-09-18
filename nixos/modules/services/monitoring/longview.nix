@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.longview;
 
@@ -13,16 +10,16 @@ in {
 
     services.longview = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If enabled, system metrics will be sent to Linode LongView.
         '';
       };
 
-      apiKey = mkOption {
-        type = types.str;
+      apiKey = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "01234567-89AB-CDEF-0123456789ABCDEF";
         description = ''
@@ -34,8 +31,8 @@ in {
         '';
       };
 
-      apiKeyFile = mkOption {
-        type = types.nullOr types.path;
+      apiKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/longview-api-key";
         description = ''
@@ -47,8 +44,8 @@ in {
         '';
       };
 
-      apacheStatusUrl = mkOption {
-        type = types.str;
+      apacheStatusUrl = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "http://127.0.0.1/server-status";
         description = ''
@@ -58,8 +55,8 @@ in {
         '';
       };
 
-      nginxStatusUrl = mkOption {
-        type = types.str;
+      nginxStatusUrl = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "http://127.0.0.1/nginx_status";
         description = ''
@@ -69,8 +66,8 @@ in {
         '';
       };
 
-      mysqlUser = mkOption {
-        type = types.str;
+      mysqlUser = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           The user for connecting to the MySQL database. If provided,
@@ -80,8 +77,8 @@ in {
         '';
       };
 
-      mysqlPassword = mkOption {
-        type = types.str;
+      mysqlPassword = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           The password corresponding to {option}`mysqlUser`.
@@ -90,8 +87,8 @@ in {
         '';
       };
 
-      mysqlPasswordFile = mkOption {
-        type = types.nullOr types.path;
+      mysqlPasswordFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/dbpassword";
         description = ''
@@ -103,7 +100,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.longview =
       { description = "Longview Metrics Collection";
         after = [ "network.target" ];
@@ -116,27 +113,27 @@ in {
         preStart = ''
           umask 077
           mkdir -p ${configsDir}
-        '' + (optionalString (cfg.apiKeyFile != null) ''
+        '' + (lib.optionalString (cfg.apiKeyFile != null) ''
           cp --no-preserve=all "${cfg.apiKeyFile}" ${runDir}/longview.key
-        '') + (optionalString (cfg.apacheStatusUrl != "") ''
+        '') + (lib.optionalString (cfg.apacheStatusUrl != "") ''
           cat > ${configsDir}/Apache.conf <<EOF
           location ${cfg.apacheStatusUrl}?auto
           EOF
-        '') + (optionalString (cfg.mysqlUser != "" && cfg.mysqlPasswordFile != null) ''
+        '') + (lib.optionalString (cfg.mysqlUser != "" && cfg.mysqlPasswordFile != null) ''
           cat > ${configsDir}/MySQL.conf <<EOF
           username ${cfg.mysqlUser}
           password `head -n1 "${cfg.mysqlPasswordFile}"`
           EOF
-        '') + (optionalString (cfg.nginxStatusUrl != "") ''
+        '') + (lib.optionalString (cfg.nginxStatusUrl != "") ''
           cat > ${configsDir}/Nginx.conf <<EOF
           location ${cfg.nginxStatusUrl}
           EOF
         '');
       };
 
-    warnings = let warn = k: optional (cfg.${k} != "")
+    warnings = let warn = k: lib.optional (cfg.${k} != "")
                  "config.services.longview.${k} is insecure. Use ${k}File instead.";
-               in concatMap warn [ "apiKey" "mysqlPassword" ];
+               in lib.concatMap warn [ "apiKey" "mysqlPassword" ];
 
     assertions = [
       { assertion = cfg.apiKeyFile != null;
@@ -145,14 +142,14 @@ in {
     ];
 
     # Create API key file if not configured.
-    services.longview.apiKeyFile = mkIf (cfg.apiKey != "")
-      (mkDefault (toString (pkgs.writeTextFile {
+    services.longview.apiKeyFile = lib.mkIf (cfg.apiKey != "")
+      (lib.mkDefault (toString (pkgs.writeTextFile {
         name = "longview.key";
         text = cfg.apiKey;
       })));
 
     # Create MySQL password file if not configured.
-    services.longview.mysqlPasswordFile = mkDefault (toString (pkgs.writeTextFile {
+    services.longview.mysqlPasswordFile = lib.mkDefault (toString (pkgs.writeTextFile {
       name = "mysql-password-file";
       text = cfg.mysqlPassword;
     }));

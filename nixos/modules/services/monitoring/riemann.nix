@@ -1,23 +1,20 @@
 { config, pkgs, lib, ... }:
-
 with pkgs;
-with lib;
-
 let
 
   cfg = config.services.riemann;
 
-  classpath = concatStringsSep ":" (
+  classpath = lib.concatStringsSep ":" (
     cfg.extraClasspathEntries ++ [ "${riemann}/share/java/riemann.jar" ]
   );
 
-  riemannConfig = concatStringsSep "\n" (
+  riemannConfig = lib.concatStringsSep "\n" (
     [cfg.config] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
   );
 
   launcher = writeScriptBin "riemann" ''
     #!/bin/sh
-    exec ${jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOpts} \
+    exec ${jdk}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOpts} \
       -cp ${classpath} \
       riemann.bin ${cfg.configFile}
   '';
@@ -27,17 +24,17 @@ in {
   options = {
 
     services.riemann = {
-      enable = mkEnableOption "Riemann network monitoring daemon";
+      enable = lib.mkEnableOption "Riemann network monitoring daemon";
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         description = ''
           Contents of the Riemann configuration file. For more complicated
           config you should use configFile.
         '';
       };
-      configFiles = mkOption {
-        type = with types; listOf path;
+      configFiles = lib.mkOption {
+        type = with lib.types; listOf path;
         default = [];
         description = ''
           Extra files containing Riemann configuration. These files will be
@@ -47,22 +44,22 @@ in {
           use configFile.
         '';
       };
-      configFile = mkOption {
-        type = types.str;
+      configFile = lib.mkOption {
+        type = lib.types.str;
         description = ''
           A Riemann config file. Any files in the same directory as this file
           will be added to the classpath by Riemann.
         '';
       };
-      extraClasspathEntries = mkOption {
-        type = with types; listOf str;
+      extraClasspathEntries = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [];
         description = ''
           Extra entries added to the Java classpath when running Riemann.
         '';
       };
-      extraJavaOpts = mkOption {
-        type = with types; listOf str;
+      extraJavaOpts = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [];
         description = ''
           Extra Java options used when launching Riemann.
@@ -71,7 +68,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.groups.riemann.gid = config.ids.gids.riemann;
 
@@ -81,7 +78,7 @@ in {
       group = "riemann";
     };
 
-    services.riemann.configFile = mkDefault (
+    services.riemann.configFile = lib.mkDefault (
       writeText "riemann-config.clj" riemannConfig
     );
 
