@@ -1,8 +1,11 @@
 {
+  blas,
   cmake,
   doxygen,
   example-robot-data,
   fetchFromGitHub,
+  ipopt,
+  lapack,
   lib,
   pinocchio,
   pkg-config,
@@ -41,13 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   propagatedBuildInputs =
-    lib.optionals (!pythonSupport) [
+    [
+      blas
+      ipopt
+      lapack
+    ]
+    ++ lib.optionals (!pythonSupport) [
       example-robot-data
       pinocchio
     ]
     ++ lib.optionals pythonSupport [
       python3Packages.example-robot-data
       python3Packages.pinocchio
+      python3Packages.scipy
     ];
 
   cmakeFlags = [
