@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python3, stdenv }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fedifetcher";
@@ -24,6 +24,14 @@ python3.pkgs.buildPythonApplication rec {
     install -vD find_posts.py $out/bin/fedifetcher
 
     runHook postInstall
+  '';
+
+  checkPhase = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    runHook preCheck
+
+    $out/bin/fedifetcher --help>/dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {
