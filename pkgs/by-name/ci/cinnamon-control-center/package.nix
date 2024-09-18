@@ -18,6 +18,7 @@
 , networkmanager
 , libgudev
 , libwacom
+, gnome
 , wrapGAppsHook3
 , tzdata
 , glibc

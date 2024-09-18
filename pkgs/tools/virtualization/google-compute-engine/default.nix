@@ -4,6 +4,7 @@
 , bash
 , bashInteractive
 , util-linux
+, boto
 , setuptools
 , distro
 }:
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ bash ];
-  propagatedBuildInputs = [ setuptools distro ];
+  propagatedBuildInputs = [ boto setuptools distro ];
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do

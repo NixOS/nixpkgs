@@ -121,16 +121,10 @@ in {
       serviceConfig = {
         Type = "oneshot";
       };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
-      script = let
-        statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
-      in ''
-        while [[ "$(${statusCommand})" == "NoState" ]]; do
-          sleep 0.5
-        done
-        status=$(${statusCommand})
-        if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-          ${lib.getExe cfg.package} up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
+      script = ''
+        status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
+        if [[ $status != Connected* ]]; then
+          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
         fi
       '';
     };
@@ -143,7 +137,7 @@ in {
         Type = "oneshot";
       };
       script = ''
-        ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
+        ${cfg.package}/bin/tailscale set ${escapeShellArgs cfg.extraSetFlags}
       '';
     };
 

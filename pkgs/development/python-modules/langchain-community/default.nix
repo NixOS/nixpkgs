@@ -91,7 +91,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   passthru = {
-    inherit (langchain-core) updateScript;
+    updateScript = langchain-core.updateScript;
   };
 
   __darwinAllowLocalNetworking = true;

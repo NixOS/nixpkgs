@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , expat
-, fmt_11
+, fmt
 , proj
 , bzip2
 , cli11
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "2.0.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-YtG/cwEyCIsNjoEhDikMoI/SUqx8fEtPuolpNkLGTlE=";
+    hash = "sha256-95B4WVaf3AwaC+S6dCJpUq/1J47rOZjWUBxmRqHCu4w=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cli11
     expat
-    fmt_11
+    fmt
     libosmium
     nlohmann_json
     opencv

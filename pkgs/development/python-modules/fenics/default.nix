@@ -8,6 +8,7 @@
   cmake,
   doxygen,
   eigen,
+  gtest,
   hdf5,
   lapack,
   mpi,

@@ -1,18 +1,18 @@
 { config, pkgs, lib, ... }:
 
+with lib;
 let
-  inherit (lib) mkOption types;
   cfg = config.services.nar-serve;
 in
 {
   meta = {
-    maintainers = with lib.maintainers; [ rizary zimbatm ];
+    maintainers = [ maintainers.rizary maintainers.zimbatm ];
   };
   options = {
     services.nar-serve = {
-      enable = lib.mkEnableOption "serving NAR file contents via HTTP";
+      enable = mkEnableOption "serving NAR file contents via HTTP";
 
-      package = lib.mkPackageOption pkgs "nar-serve" { };
+      package = mkPackageOption pkgs "nar-serve" { };
 
       port = mkOption {
         type = types.port;
@@ -48,7 +48,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     systemd.services.nar-serve = {
       description = "NAR server";
       after = [ "network.target" ];

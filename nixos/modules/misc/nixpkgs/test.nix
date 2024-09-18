@@ -16,11 +16,6 @@ let
     nixpkgs.hostPlatform = "aarch64-linux";
     nixpkgs.buildPlatform = "aarch64-linux";
   };
-  externalPkgsWithConfig = {
-    _file = "ext-pkgs-config.nix";
-    nixpkgs.pkgs = pkgs;
-    nixpkgs.config.allowUnfree = true;
-  };
   ambiguous = {
     _file = "ambiguous.nix";
     nixpkgs.hostPlatform = "aarch64-linux";
@@ -112,20 +107,6 @@ lib.recurseIntoAttrs {
 
           For a future proof system configuration, we recommend to remove
           the legacy definitions.
-        ''];
-    assert builtins.trace (lib.head (getErrors externalPkgsWithConfig))
-      getErrors externalPkgsWithConfig ==
-        [''
-          Your system configures nixpkgs with an externally created instance.
-          `nixpkgs.config` options should be passed when creating the instance instead.
-
-          Current value:
-          {
-            allowUnfree = true;
-          }
-
-          Defined in:
-            - ext-pkgs-config.nix
         ''];
     assert getErrors {
         nixpkgs.localSystem = pkgs.stdenv.hostPlatform;

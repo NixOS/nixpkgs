@@ -2,6 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , postgresql
+, openssl
+, zlib
+, readline
 , flex
 , curl
 , json_c

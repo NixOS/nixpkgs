@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  blis,
   buildPythonPackage,
   callPackage,
   catalogue,

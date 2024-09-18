@@ -1,5 +1,6 @@
 { lib
 , runCommandLocal
+, buildPlatform
 , xrootd
 }:
 

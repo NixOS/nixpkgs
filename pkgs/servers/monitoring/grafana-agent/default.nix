@@ -15,21 +15,21 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.43.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-0pwsZONhouGuypGTP64oJd3+nq8VMlyulb/WUJj0qGw=";
+    hash = "sha256-qSxm00zC1Ms9C5R077Zn5FKluEqFs8KYUPnDUaMvMs8=";
   };
 
-  vendorHash = "sha256-vz65gr56wj6PNiQwmfz1wg9SVmRUnrv7ZeWQkqdA4WI=";
+  vendorHash = "sha256-rC8iqCZ6tzXVCOHNqH+jAMDh2yTAR88zj45HcgJ2lSg=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/internal/web/ui/yarn.lock";
-    hash = "sha256-bnJL7W7VfJIrJKvRt9Q6kdEyjLH/IJoCi0TENxz7SUE=";
+    hash = "sha256-FvrfWcuKld242YfZ8CixF5GGFRp8iFWZ3Vkef3Kf4ag=";
   };
 
   ldflags = let

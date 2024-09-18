@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qt6integration";
-  version = "6.0.19";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-RVhAuEthrTE1QkRIKmBK4VM86frgAqLMJL31F11H8R8=";
+    hash = "sha256-7FGOnAAcwOonpMDDukj88s1b4WmLJNu7MZSW7f7P44g=";
   };
 
   nativeBuildInputs = [

@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-kTvIMsRI99U2ovkN5pC4OUS/bJWpRYSuRcvObvQRnbQ=";
     };
 
+    cmakeFlags = ["-DCMAKE_BUILD_TYPE='Release'"];
+
     nativeBuildInputs = [pkg-config cmake];
     buildInputs = [libebur128 taglib ffmpeg inih fmt zlib];
 

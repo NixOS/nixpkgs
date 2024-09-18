@@ -7,10 +7,7 @@
 mkKdeDerivation {
   pname = "syntax-highlighting";
 
-  extraBuildInputs = [ qtdeclarative ];
-  extraNativeBuildInputs = [
-    qttools
-    perl
-  ];
+  extraBuildInputs = [qtdeclarative];
+  extraNativeBuildInputs = [qttools perl];
   meta.mainProgram = "ksyntaxhighlighter6";
 }

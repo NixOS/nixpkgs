@@ -18,13 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pyfronius";
-    rev = "refs/tags/release-${version}";
+    rev = "release-${version}";
     hash = "sha256-7GtY/6uuLe7K9T7xMVt2ytpA6MKVWnyEoLtA5dSMiH4=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [ aiohttp ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -34,9 +34,7 @@ buildPythonPackage rec {
     description = "Python module to communicate with Fronius Symo";
     homepage = "https://github.com/nielstron/pyfronius";
     changelog = "https://github.com/nielstron/pyfronius/releases/tag/release-${version}";
-    license = licenses.mit;
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    # https://github.com/nielstron/pyfronius/issues/18
-    broken = versionAtLeast aiohttp.version "3.10.1";
   };
 }

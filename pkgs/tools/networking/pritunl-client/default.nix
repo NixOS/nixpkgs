@@ -16,12 +16,12 @@
 , openvpn
 , electron
 }: let
-  version = "1.3.4026.10";
+  version = "1.3.3785.81";
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-3P2MEQy9RE2dY7aRCGQl+kmVIaRZp6VvrcHQUzhiAEY=";
+    sha256 = "sha256-0tlWX9vHiFHewiisI8lwsQdHyEhntu+x415hfbymhIo=";
   };
 
   cli = buildGoModule {
@@ -29,7 +29,7 @@
     inherit version src;
 
     modRoot = "cli";
-    vendorHash = "sha256-wwPgyIo14zpA+oCJH0CQ4+7zyP+Itxbd6S0P7t01wBw=";
+    vendorHash = "sha256-1sAJbEZHagG6hnZBkb6EbQpSdNmTyTWfKpbektXSWYU=";
 
     postInstall = ''
       mv $out/bin/cli $out/bin/pritunl-client
@@ -41,7 +41,7 @@
     inherit version src;
 
     modRoot = "service";
-    vendorHash = "sha256-uy8+R4l3e4YAWMxWWbVHhkwxvbOsY5PF7fs1dVyMIAg=";
+    vendorHash = "sha256-QvuEQX1+sJOGB1AJNhnM3pVPxGmizDu8EN1yRspXjhU=";
 
     nativeBuildInputs = [ makeWrapper ];
 

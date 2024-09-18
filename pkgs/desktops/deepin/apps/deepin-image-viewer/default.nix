@@ -8,10 +8,15 @@
   qttools,
   wrapQtAppsHook,
   qt5platform-plugins,
+  qtbase,
   dtkwidget,
   dtkdeclarative,
   deepin-ocr-plugin-manager,
+  gio-qt,
+  udisks2-qt5,
+  image-editor,
   libraw,
+  libexif,
   freeimage,
 }:
 

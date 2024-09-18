@@ -6,8 +6,5 @@
 mkKdeDerivation {
   pname = "akonadi-mime";
 
-  extraNativeBuildInputs = [
-    shared-mime-info
-    libxslt
-  ];
+  extraNativeBuildInputs = [shared-mime-info libxslt];
 }

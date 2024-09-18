@@ -6,10 +6,10 @@
 
   config = lib.mkMerge [
     {
-      value = [ "a value" ];
+      value = [ null ];
     }
     {
-      value = [ "another value" ];
+      value = [ null ];
     }
   ];
 

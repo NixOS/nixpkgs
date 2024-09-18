@@ -36,7 +36,6 @@
 , languagetool
 , llvmPackages
 , meson
-, neovim-unwrapped
 , nim1
 , nodePackages
 , openscad
@@ -130,13 +129,10 @@
 , # hurl dependencies
   hurl
 , # must be lua51Packages
-  luajitPackages
-, aider-chat
+  luaPackages
+, luajitPackages
 ,
 }: self: super:
-let
-  luaPackages = neovim-unwrapped.lua.pkgs;
-in
 {
   alpha-nvim = super.alpha-nvim.overrideAttrs {
     dependencies = [
@@ -456,12 +452,12 @@ in
 
   codesnap-nvim =
     let
-      version = "1.6.1";
+      version = "1.6.0";
       src = fetchFromGitHub {
         owner = "mistricky";
         repo = "codesnap.nvim";
         rev = "refs/tags/v${version}";
-        hash = "sha256-OmSgrTYDtNb2plMyzjVvxGrfXB/lGKDpUQhpRqKfAMA=";
+        hash = "sha256-3z0poNmS6LOS7/qGTBhvz1Q9WpYC7Wu4rNvHsUXB5ZY=";
       };
       codesnap-lib = rustPlatform.buildRustPackage {
         pname = "codesnap-lib";
@@ -469,7 +465,7 @@ in
 
         sourceRoot = "${src.name}/generator";
 
-        cargoHash = "sha256-6n37n8oHIHrz3S1+40nuD0Ud3l0iNgXig1ZwrgsnYTI=";
+        cargoHash = "sha256-u0NvChN50LIxUhmsT4mvWs5xB/TwJkMabggFePA/b1E=";
 
         nativeBuildInputs = [
           pkg-config
@@ -919,7 +915,7 @@ in
     dependencies = with self; [ nvim-treesitter ];
   };
 
-  haskell-tools-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.haskell-tools-nvim; };
+  haskell-tools-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "haskell-tools-nvim"; };
 
   hex-nvim = super.hex-nvim.overrideAttrs {
     postPatch = ''
@@ -1062,7 +1058,7 @@ in
   };
 
   lsp-progress-nvim = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.lsp-progress-nvim;
+    luaAttr = "lsp-progress-nvim";
     nvimRequireCheck = "lsp-progress";
   };
 
@@ -1070,11 +1066,11 @@ in
     dependencies = with self; [ luaPackages.jsregexp ];
   };
 
-  lz-n = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.lz-n; };
+  lz-n = neovimUtils.buildNeovimPlugin { luaAttr = "lz-n"; };
 
-  lze = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.lze; };
+  lze = neovimUtils.buildNeovimPlugin { luaAttr = "lze"; };
 
-  lzn-auto-require = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.lzn-auto-require; };
+  lzn-auto-require = neovimUtils.buildNeovimPlugin { luaAttr = "lzn-auto-require"; };
 
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";
@@ -1150,7 +1146,7 @@ in
   };
 
   middleclass = neovimUtils.buildNeovimPlugin {
-    luaAttr = luaPackages.middleclass;
+    luaAttr = "middleclass";
     nvimRequireCheck = "middleclass";
   };
 
@@ -1239,7 +1235,9 @@ in
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neorg = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.neorg; };
+  neorg = super.neorg.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
 
   neotest = super.neotest.overrideAttrs {
     dependencies = with self; [ nvim-nio plenary-nvim ];
@@ -1496,15 +1494,6 @@ in
     '';
   };
 
-  aider-nvim = super.aider-nvim.overrideAttrs {
-    patches = [ ./patches/aider.nvim/fix-paths.patch ];
-
-    postPatch = ''
-      substituteInPlace lua/aider.lua --replace '@aider@' ${aider-chat}/bin/aider
-      substituteInPlace lua/helpers.lua --replace '@aider@' ${aider-chat}/bin/aider
-    '';
-  };
-
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter plenary-nvim ];
   };
@@ -1517,17 +1506,17 @@ in
     ];
   };
 
-  rocks-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rocks-nvim; };
+  rocks-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rocks-nvim"; };
 
-  rocks-config-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rocks-config-nvim; };
+  rocks-config-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rocks-config-nvim"; };
 
   roslyn-nvim = super.roslyn-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig ];
   };
 
-  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rtp-nvim; };
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rtp-nvim"; };
 
-  rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rustaceanvim; };
+  rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = "rustaceanvim"; };
 
   sg-nvim = super.sg-nvim.overrideAttrs (old:
     let
@@ -1719,11 +1708,6 @@ in
         description = "synctex support between vim/neovim and evince";
       };
     };
-
-  syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs {
-    dependencies = with self; [ nvim-treesitter ];
-    meta.maintainers = with lib.maintainers; [ callumio ];
-  };
 
   taskwarrior3 = buildVimPlugin {
     inherit (taskwarrior3) version pname;

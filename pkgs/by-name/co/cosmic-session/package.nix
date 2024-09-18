@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cosmic-session";
     maintainers = with maintainers; [
       a-kenji
-      nyabinary
+      nyanbinary
     ];
     platforms = platforms.linux;
   };

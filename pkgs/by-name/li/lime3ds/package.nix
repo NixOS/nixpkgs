@@ -7,6 +7,7 @@
 , doxygen
 , enet
 , fetchzip
+, fetchurl
 , fmt
 , ffmpeg-headless
 , gamemode
@@ -41,11 +42,11 @@
   inherit (lib) optional optionals cmakeBool optionalString getLib makeLibraryPath;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "lime3ds";
-  version = "2118";
+  version = "2117.1";
 
   src = fetchzip {
     url = "https://github.com/Lime3DS/Lime3DS/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Dt0YKWj+yLUic1F7uOxfWPYlPda3snTUPwFbn23i2rY=";
+    hash = "sha256-v6AHzbuk5n55nTDO0UndtmdhovfY4kngC5TJaNIV5S4=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +110,7 @@ in stdenv.mkDerivation (finalAttrs: {
   postInstall = let
     libs = makeLibraryPath [ vulkan-loader ];
   in optionalString enableSdl2Frontend ''
-    for binfile in lime3ds lime3ds-room
+    for binfile in lime3ds-gui lime3ds-cli lime3ds-room
     do
       wrapProgram "$out/bin/$binfile" \
         --prefix LD_LIBRARY_PATH : ${libs}
@@ -121,19 +122,17 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    (cmakeBool "LIME3DS_USE_PRECOMPILED_HEADERS" false)
+    (cmakeBool "CITRA_USE_PRECOMPILED_HEADERS" false)
+    (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "USE_SYSTEM_LIBS" true)
     (cmakeBool "DISABLE_SYSTEM_DYNARMIC" true)
     (cmakeBool "DISABLE_SYSTEM_GLSLANG" true)
     (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
     (cmakeBool "DISABLE_SYSTEM_VMA" true)
     (cmakeBool "DISABLE_SYSTEM_XBYAK" true)
-    (cmakeBool "ENABLE_QT" enableQt)
     (cmakeBool "ENABLE_SDL2_FRONTEND" enableSdl2Frontend)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
-  ] ++ optionals enableQt [
-    (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
   ];
 
   meta = {
@@ -141,7 +140,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Lime3DS/Lime3DS";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ arthsmn ];
-    mainProgram = "lime3ds";
+    mainProgram = if enableQt then "lime3ds-gui" else "lime3ds-cli";
     platforms = lib.platforms.linux;
   };
 })

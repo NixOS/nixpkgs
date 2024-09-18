@@ -12,7 +12,6 @@
 , python3
 , libcxx
 , enableShared ? !stdenv.hostPlatform.isStatic
-, devExtraCmakeFlags ? []
 }:
 let
   pname = "libunwind";
@@ -69,8 +68,7 @@ stdenv.mkDerivation (rec {
   ];
 
   cmakeFlags = lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
-    ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
-    ++ devExtraCmakeFlags;
+    ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 
   meta = llvm_meta // {
     # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst

@@ -4,43 +4,48 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  qttools,
+  wrapQtAppsHook,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
+  qtbase,
+  qtsvg,
   dde-qt-dbus-factory,
+  kcodecs,
+  syntax-highlighting,
   libchardet,
   libuchardet,
   libiconv,
-  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-editor";
-  version = "6.5.2";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-Z3fsnjo4Pcu1e8lKvWdWBhpoOFFy0dSrI2HehRYKJ0k=";
+    hash = "sha256-f6CJlSgsKU311ziXmm7Ado8tH+3dNRpWB1e4TewVf/8=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.qttools
-    libsForQt5.wrapQtAppsHook
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkwidget
     qt5integration
     qt5platform-plugins
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+    qtbase
+    qtsvg
     dde-qt-dbus-factory
-    libsForQt5.kcodecs
-    libsForQt5.syntax-highlighting
+    kcodecs
+    syntax-highlighting
     libchardet
     libuchardet
     libiconv

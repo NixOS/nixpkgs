@@ -36,9 +36,9 @@ buildPythonPackage rec {
     hash = "sha256-KgaDxHS0dAK6CT53L1qqx1aORMmkeaiXAUtGC82hiIQ=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     blinker
     brotli
     certifi
@@ -73,6 +73,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/wkeeling/selenium-wire/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    broken = versionAtLeast blinker.version "1.8";
   };
 }

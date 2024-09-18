@@ -4,11 +4,13 @@
   buildPythonPackage,
   isPyPy,
   fetchPypi,
+  fetchpatch2,
   setuptools,
   pytestCheckHook,
   libffi,
   pkg-config,
   pycparser,
+  pythonAtLeast,
 }:
 
 let

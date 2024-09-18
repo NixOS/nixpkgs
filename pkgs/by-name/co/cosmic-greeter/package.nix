@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage rec {
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
+    maintainers = with maintainers; [ nyanbinary ];
     platforms = platforms.linux;
   };
 }

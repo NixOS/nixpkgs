@@ -10,6 +10,8 @@
 , pcre
 , perlPackages
 , python3
+, xz
+, zlib
 , catch2
 # recommended dependencies
 , withHwloc ? true

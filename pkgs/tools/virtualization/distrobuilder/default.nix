@@ -1,33 +1,24 @@
 { lib
+, pkg-config
 , buildGoModule
-, callPackage
-, cdrkit
-, coreutils
-, debootstrap
 , fetchFromGitHub
+, makeWrapper
+, coreutils
 , gnupg
 , gnutar
-, hivex
-, makeWrapper
-, nixosTests
-, pkg-config
 , squashfsTools
-, stdenv
-, wimlib
+, debootstrap
+, callPackage
+, nixosTests
 }:
 
 let
   bins = [
     coreutils
-    debootstrap
     gnupg
     gnutar
     squashfsTools
-  ] ++ lib.optionals stdenv.isx86_64 [
-    # repack-windows deps
-    cdrkit
-    hivex
-    wimlib
+    debootstrap
   ];
 in
 buildGoModule rec {

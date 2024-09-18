@@ -12,6 +12,7 @@
   pyflakes,
   vulture,
   setuptools,
+  isort,
   pylint,
   pytestCheckHook,
 }:

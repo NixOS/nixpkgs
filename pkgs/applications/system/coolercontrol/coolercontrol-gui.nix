@@ -1,4 +1,5 @@
 { lib
+, buildNpmPackage
 , rustPlatform
 , dbus
 , freetype

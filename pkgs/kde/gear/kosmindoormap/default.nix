@@ -7,9 +7,6 @@
 mkKdeDerivation {
   pname = "kosmindoormap";
 
-  extraNativeBuildInputs = [
-    bison
-    flex
-  ];
-  extraBuildInputs = [ recastnavigation ];
+  extraNativeBuildInputs = [bison flex];
+  extraBuildInputs = [recastnavigation];
 }

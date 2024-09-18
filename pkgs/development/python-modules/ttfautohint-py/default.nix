@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ttfautohint" ];
 
   meta = {
-    description = "Python wrapper for ttfautohint, a free auto-hinter for TrueType fonts";
+    description = "Command line utility and Python library that merges two UFO source format fonts into a single file";
     homepage = "https://github.com/fonttools/ttfautohint-py";
     changelog = "https://github.com/fonttools/ttfautohint-py/releases/tag/v${version}";
     license = lib.licenses.mit;

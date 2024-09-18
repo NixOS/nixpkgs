@@ -7,19 +7,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "expecttest";
-  version = "0.2.1";
-  pyproject = true;
+  version = "0.1.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "pytorch";
-    repo = "expecttest";
-    rev = "683b09a352cc426851adc2e3a9f46e0ab25e4dee"; # no tags
-    hash = "sha256-e9/KxPN/w0mrFYgesRGqaiDQ6gor7BpX/5/B0NPtXLY=";
+    owner = "ezyang";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-BFM0jFWXfH72n9XuFtU9URW8LWGPVJncXniBV5547W4=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     hypothesis
@@ -32,7 +32,7 @@ buildPythonPackage {
     maintainers = [ lib.maintainers.SomeoneSerge ];
     license = lib.licenses.mit;
     description = ''EZ Yang "golden" tests (testing against a reference implementation)'';
-    homepage = "https://github.com/pytorch/expecttest";
+    homepage = "https://github.com/ezyang/expecttest";
     platforms = lib.platforms.unix;
   };
 }

@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     "--without-included-regex"
   ];
 
-  __darwinAllowLocalNetworking = true;
   doCheck = true;
   preCheck = ''
     patchShebangs tests fuzz

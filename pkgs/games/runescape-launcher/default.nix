@@ -8,6 +8,7 @@
 , gcc-unwrapped
 , glib
 , glibc
+, gnome2
 , gtk2-x11
 , libGL
 , libpulseaudio

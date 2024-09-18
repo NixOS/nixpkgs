@@ -1,41 +1,36 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  testers,
-  tigerbeetle,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zig_0_11
+, testers
+, tigerbeetle
+, nix-update-script
 }:
 let
-  platform =
-    if stdenvNoCC.hostPlatform.isDarwin then "universal-macos" else stdenvNoCC.hostPlatform.system;
-  hash = builtins.getAttr platform {
-    "universal-macos" = "sha256-VtKM+Fw1yy0KYvbtxerYykEbYv1hCc81ckfETH36vCU=";
-    "x86_64-linux" = "sha256-LtnLLWSOUtnp27swwCrRiA3NIKqrOD2MZylXKbLm2fw=";
-    "aarch64-linux" = "sha256-tmlizjB8BWtbQd75RoYvIsRxqEuj1V7Fx9LgArvphm4=";
-  };
+  # Read [these comments](pkgs/development/compilers/zig/hook.nix#L12-L30) on the default Zig flags, and the associated links. tigerbeetle stopped exposing the `-Doptimize` build flag, so we can't use the default Nixpkgs zig hook as-is. tigerbeetle only exposes a boolean `-Drelease` flag which we'll add in the tigerbeetle derivation in this file.
+  custom_zig_hook = zig_0_11.hook.overrideAttrs (previousAttrs: {
+    zig_default_flags = builtins.filter (flag: builtins.match "-Doptimize.*" flag == null) previousAttrs.zig_default_flags;
+  });
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tigerbeetle";
-  version = "0.16.2";
+  version = "0.15.3";
 
-  src = fetchzip {
-    url = "https://github.com/tigerbeetle/tigerbeetle/releases/download/${finalAttrs.version}/tigerbeetle-${platform}.zip";
-    inherit hash;
+  src = fetchFromGitHub {
+    owner = "tigerbeetle";
+    repo = "tigerbeetle";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-3+uCMoOnyvI//ltEaqTIXytUxxgJrfMnFly11WCh66Q=";
   };
 
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+  env.TIGERBEETLE_RELEASE = finalAttrs.version;
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ custom_zig_hook ];
 
-    mkdir -p $out/bin
-    cp $src/tigerbeetle $out/bin/tigerbeetle
-
-    runHook postInstall
-  '';
+  zigBuildFlags = [
+    "-Drelease"
+    "-Dgit-commit=0000000000000000000000000000000000000000"
+  ];
 
   passthru = {
     tests.version = testers.testVersion {
@@ -49,15 +44,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://tigerbeetle.com/";
     description = "Financial accounting database designed to be distributed and fast";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      danielsidhion
-      nwjsmith
-    ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ] ++ lib.platforms.darwin;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with lib.maintainers; [ danielsidhion ];
+    platforms = lib.platforms.linux;
     mainProgram = "tigerbeetle";
   };
 })

@@ -7,9 +7,5 @@
 mkKdeDerivation {
   pname = "kongress";
 
-  extraBuildInputs = [
-    kcontacts
-    qtsvg
-    qtlocation
-  ];
+  extraBuildInputs = [kcontacts qtsvg qtlocation];
 }

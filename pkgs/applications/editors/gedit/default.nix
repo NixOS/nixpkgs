@@ -4,6 +4,7 @@
 , mesonEmulatorHook
 , fetchurl
 , python3
+, python3Packages
 , pkg-config
 , gtk3
 , gtk-mac-integration
@@ -29,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "48.0";
+  version = "47.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
-    sha256 = "/g/vm3sHmRINuGrok6BgA2oTRFNS3tkWm6so04rPDoA=";
+    sha256 = "+kpZfjTHbUrJFDG1rm4ZHJbGsK8XAuCJmrNRme36G/o=";
   };
 
   patches = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
+    python3Packages.wrapPython
     vala
     wrapGAppsHook3
     gtk-doc
@@ -85,6 +87,16 @@ stdenv.mkDerivation rec {
   # Reliably fails to generate gedit-file-browser-enum-types.h in time
   enableParallelBuilding = false;
 
+  pythonPath = with python3Packages; [
+    # https://github.com/NixOS/nixpkgs/issues/298716
+    pycairo
+  ];
+
+  postFixup = ''
+    buildPythonPath "$pythonPath"
+    patchPythonScript $out/lib/gedit/plugins/snippets/document.py
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gedit";
@@ -92,7 +104,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/World/gedit/gedit";
+    homepage = "https://gedit-technology.github.io/apps/gedit/";
     description = "Former GNOME text editor";
     maintainers = with maintainers; [ bobby285271 ];
     license = licenses.gpl2Plus;

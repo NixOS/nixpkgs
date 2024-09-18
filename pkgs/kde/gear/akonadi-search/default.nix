@@ -29,8 +29,5 @@ mkKdeDerivation rec {
     rustc
   ];
 
-  extraBuildInputs = [
-    corrosion
-    xapian
-  ];
+  extraBuildInputs = [corrosion xapian];
 }

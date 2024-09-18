@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
+, substituteAll
 , pkg-config
 , meson
 , ninja

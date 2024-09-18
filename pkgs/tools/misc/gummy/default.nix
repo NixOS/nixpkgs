@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitea
+, substituteAll
 , testers
 , gummy
 , cmake

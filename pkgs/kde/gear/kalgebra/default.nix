@@ -8,10 +8,5 @@
 mkKdeDerivation {
   pname = "kalgebra";
 
-  extraBuildInputs = [
-    qtsvg
-    qtwebengine
-    ncurses
-    readline
-  ];
+  extraBuildInputs = [qtsvg qtwebengine ncurses readline];
 }

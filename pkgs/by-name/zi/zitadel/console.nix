@@ -5,6 +5,8 @@
 
 { mkYarnPackage
 , fetchYarnDeps
+, lib
+
 , grpc-gateway
 , protoc-gen-grpc-web
 , protoc-gen-js

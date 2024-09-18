@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , gettext
+, itstool
 , libxml2
 , glib
 , shared-mime-info

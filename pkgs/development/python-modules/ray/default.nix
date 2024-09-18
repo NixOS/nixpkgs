@@ -56,7 +56,7 @@
 
 let
   pname = "ray";
-  version = "2.36.1";
+  version = "2.35.0";
 in
 buildPythonPackage rec {
   inherit pname version;

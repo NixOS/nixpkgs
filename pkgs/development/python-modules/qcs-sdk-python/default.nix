@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  qcs-api-client-common,
   quil,
   rustPlatform,
   darwin,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.20.1";
+  version = "0.19.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,13 +26,13 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     rev = "python/v${version}";
-    hash = "sha256-OuFEygZWfNnhRDLeEY10gGYD9EF5LkPd+K3Uu8X0hwY=";
+    hash = "sha256-TyXUkuiYdz6Z6s96DD33QdEuI0ch4hRjUGWahEBpkX4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quil-rs-0.28.1" = "sha256-nyKLBL5Q51u2OTkpr9oKb0c5saWeW3wmZC3g7vxyeEQ=";
+      "quil-rs-0.27.1" = "sha256-w97kkdwRnVVfKNTIKypl3shFQJV5Rh/kF6jp7jCiyqw=";
     };
   };
 
@@ -44,10 +43,7 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  dependencies = [
-    qcs-api-client-common
-    quil
-  ];
+  dependencies = [ quil ];
 
   optional-dependencies = {
     tracing-opentelemetry = [ opentelemetry-api ];

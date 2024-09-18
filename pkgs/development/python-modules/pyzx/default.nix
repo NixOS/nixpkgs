@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  pythonRelaxDepsHook,
   pytestCheckHook,
   setuptools,
   ipywidgets,

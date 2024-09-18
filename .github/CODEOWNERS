@@ -162,7 +162,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @alyssais @RossComputerGuy
+/pkgs/development/compilers/llvm @RossComputerGuy
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -335,6 +335,9 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/node/build-npm-package      @winterqt
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
+
+# environment.noXlibs option aka NoX
+/nixos/modules/config/no-x-libs.nix  @SuperSandro2000
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid

@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
-
+with lib;
 let
-  inherit (lib) mkIf mkOption;
-  inherit (lib.types) nullOr path bool listOf str;
   keysPath = "/var/lib/yggdrasil/keys.json";
 
   cfg = config.services.yggdrasil;
@@ -13,14 +11,14 @@ let
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "yggdrasil" "config" ]
       [ "services" "yggdrasil" "settings" ])
   ];
 
-  options = {
+  options = with types; {
     services.yggdrasil = {
-      enable = lib.mkEnableOption "the yggdrasil system service";
+      enable = mkEnableOption "the yggdrasil system service";
 
       settings = mkOption {
         type = format.type;
@@ -75,7 +73,7 @@ in
       };
 
       group = mkOption {
-        type = nullOr str;
+        type = types.nullOr types.str;
         default = null;
         example = "wheel";
         description = "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
@@ -110,9 +108,9 @@ in
         '';
       };
 
-      package = lib.mkPackageOption pkgs "yggdrasil" { };
+      package = mkPackageOption pkgs "yggdrasil" { };
 
-      persistentKeys = lib.mkEnableOption ''
+      persistentKeys = mkEnableOption ''
         persistent keys. If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
         restarted. Keys are stored at ${keysPath}
@@ -234,6 +232,6 @@ in
   );
   meta = {
     doc = ./yggdrasil.md;
-    maintainers = with lib.maintainers; [ gazally ehmry nagy ];
+    maintainers = with lib.maintainers; [ gazally ehmry ];
   };
 }

@@ -1,16 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rosa, nix-update-script }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles, testers, rosa, nix-update-script }:
 
 buildGoModule rec {
   pname = "rosa";
-  version = "1.2.45";
+  version = "1.2.43";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-Yjsk2A5itmTtOYM5UxSzQXNrBV9m1C8eXM0QUDjX2cI=";
+    hash = "sha256-1/go7mL2uRzzV/iiTXsgZHGNW8EIONwEnb4jcMiKkv4=";
   };
   vendorHash = null;
+
+  patches = [
+    # https://github.com/openshift/rosa/pull/2326/
+    # TODO: remove on next version bump
+    (fetchpatch {
+      url = "https://github.com/openshift/rosa/commit/9ed236880f91f0e9514ba0a6f3be93ee115d1689.patch";
+      hash = "sha256-KNGqJRFyfzcDs336Lj/KwR1yd5M7zfehu7IO0z/KUtg=";
+    })
+  ];
 
   ldflags = [ "-s" "-w" ];
 

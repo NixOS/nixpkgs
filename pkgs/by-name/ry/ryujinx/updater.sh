@@ -1,6 +1,5 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl common-updater-scripts nix-prefetch-git jq
-# shellcheck shell=bash
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -69,10 +68,9 @@ cd ../../../..
 
 if [[ "${1-default}" != "--deps-only" ]]; then
     SHA="$(nix-prefetch-git https://github.com/ryujinx/ryujinx --rev "$COMMIT" --quiet | jq -r '.sha256')"
-    SRI=$(nix --experimental-features nix-command hash to-sri "sha256:$SHA")
-    update-source-version ryujinx "$NEW_VERSION" "$SRI" --rev="$COMMIT"
+    update-source-version ryujinx "$NEW_VERSION" "$SHA" --rev="$COMMIT"
 fi
 
 echo "building Nuget lockfile"
 
-eval "$(nix-build -A ryujinx.fetch-deps --no-out-link)"
+$(nix-build -A ryujinx.fetch-deps --no-out-link)

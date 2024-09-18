@@ -19,6 +19,7 @@
   preshed,
   pydantic,
   pytestCheckHook,
+  python,
   pythonOlder,
   setuptools,
   srsly,

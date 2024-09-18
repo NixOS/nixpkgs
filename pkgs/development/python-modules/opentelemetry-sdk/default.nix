@@ -6,6 +6,7 @@
   opentelemetry-api,
   opentelemetry-semantic-conventions,
   opentelemetry-test-utils,
+  setuptools,
   typing-extensions,
   pytestCheckHook,
 }:

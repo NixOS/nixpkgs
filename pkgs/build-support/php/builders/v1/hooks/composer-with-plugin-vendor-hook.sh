@@ -28,7 +28,7 @@ composerWithPluginConfigureHook() {
     cp -ar $src $out/src
 
     if [[ ! -f "$out/composer.lock" ]]; then
-        setComposerRootVersion
+        setComposeRootVersion
 
         composer \
             global \

@@ -9,15 +9,15 @@
 , wayland-protocols
 , wayland-scanner
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "sway-audio-idle-inhibit";
-  version = "0.1.2";
+  version = "unstable-2023-08-09";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayAudioIdleInhibit";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6bdIkNosp/mzH5SiyK6Mox/z8kuFk5RLMmcFZ2VIi0g=";
+    rev = "c850bc4812216d03e05083c69aa05326a7fab9c7";
+    hash = "sha256-MKzyF5xY0uJ/UWewr8VFrK0y7ekvcWpMv/u9CHG14gs=";
   };
 
   nativeBuildInputs = [
@@ -36,4 +36,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ rafaelrc ];
     mainProgram = "sway-audio-idle-inhibit";
   };
-})
+}
+

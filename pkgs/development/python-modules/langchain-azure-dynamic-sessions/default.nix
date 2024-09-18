@@ -23,6 +23,8 @@
   responses,
   syrupy,
   toml,
+
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -65,8 +67,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_azure_dynamic_sessions" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-azure-dynamic-sessions==(.*)"
+    ];
   };
 
   meta = {

@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "unifont_upper";
-  version = "16.0.01";
+  version = "15.1.05";
 
   src = fetchurl {
     url = "mirror://gnu/unifont/unifont-${version}/${pname}-${version}.otf";
-    hash = "sha256-5EUz6F3GlAMCOnA2xk0CplRUaLLACmewH/PiRtCRzsE=";
+    hash = "sha256-A/Z/+IMNUH/3Ir3ewf/U2xqkkpZDUDKO+dlnRYt+7U0=";
   };
 
   dontUnpack = true;

@@ -62,14 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/add_subdirectory(bridge-gui-tester)/d" CMakeLists.txt
   '';
 
-  cmakeFlags = [
-    "-DBRIDGE_APP_FULL_NAME=Proton Mail Bridge"
-    "-DBRIDGE_VENDOR=Proton AG"
-    "-DBRIDGE_REVISION=${finalAttrs.src.rev}"
-    "-DBRIDGE_TAG=${finalAttrs.version}"
-    "-DBRIDGE_BUILD_ENV=Nix"
-    "-DBRIDGE_APP_VERSION=${finalAttrs.version}"
-  ];
+  preConfigure = ''
+    cmakeFlagsArray+=(
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DBRIDGE_APP_FULL_NAME=Proton Mail Bridge"
+      "-DBRIDGE_VENDOR=Proton AG"
+      "-DBRIDGE_REVISION=${finalAttrs.src.rev}"
+      "-DBRIDGE_TAG=${finalAttrs.version}"
+      "-DBRIDGE_BUILD_ENV=Nix"
+      "-DBRIDGE_APP_VERSION=${finalAttrs.version}"
+    )
+  '';
 
   installPhase = ''
     runHook preInstall

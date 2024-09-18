@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "3.4.2";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0x8nk8F+kg5SSDQI4dOnv67ilyN4z2MZ5phPC3PW4WQ=";
+    hash = "sha256-ypyBBo00ZjYRvljn/eGaTxMViHzgoxq5IoNclWb7ghA=";
   };
 
   build-system = [ setuptools ];

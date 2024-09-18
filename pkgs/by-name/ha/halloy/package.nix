@@ -13,26 +13,25 @@
   vulkan-loader,
   wayland,
   xorg,
-  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.11";
+  version = "2024.8";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-kmdsC0SQoL5gppzBhnF0LfOFj14zeI3C6SdCBiVoKj0=";
+    hash = "sha256-OxxXjenZjP+3KrkxyXYxOXRFmrYm3deeiCuGrhpnF2I=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "dpi-0.1.1" = "sha256-25sOvEBhlIaekTeWvy3UhjPI1xrJbOQvw/OkTg12kQY=";
-      "glyphon-0.5.0" = "sha256-OGXLqiMjaZ7gR5ANkuCgkfn/I7c/4h9SRE6MZZMW3m4=";
-      "iced-0.13.0-dev" = "sha256-XQUaI16lGEMGFxqK3UNd8jQfUiBzomxlT/I+yeZncFo=";
+      "glyphon-0.5.0" = "sha256-+z2my51aUeK9txLZKVAyQcWJ6f2YDY1mjxfc8Xsqi8E=";
+      "iced-0.13.0-dev" = "sha256-eHlauEZibbuqK5mdkNP6gsy1z9qxqEDn/xfFw7W5TcY=";
     };
   };
 
@@ -44,7 +43,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
-      alsa-lib
       libxkbcommon
       openssl
       vulkan-loader

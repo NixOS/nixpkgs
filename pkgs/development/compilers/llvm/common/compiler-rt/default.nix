@@ -14,7 +14,6 @@
 , libllvm
 , libcxx
 , linuxHeaders
-, freebsd
 , libxcrypt
 
 # Some platforms have switched to using compiler-rt, but still want a
@@ -28,7 +27,6 @@
 # `libcompiler_rt` library, at least under certain configurations. Some
 # platforms stil expect this, however, so we symlink one into place.
 , forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
-, devExtraCmakeFlags ? []
 }:
 
 let
@@ -70,8 +68,7 @@ stdenv.mkDerivation ({
     ++ [ python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
+    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders;
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
@@ -135,9 +132,9 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
   ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-DSANITIZER_MIN_OSX_VERSION=10.10"
-  ] ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+  ]  ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
-  ] ++ devExtraCmakeFlags;
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -158,11 +155,12 @@ stdenv.mkDerivation ({
   '') + ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
-  '' + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
-    # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
-    # see description above for why we're nuking assert.h normally but that doesn't work here.
-    # instead, we add the freebsd.include dependency explicitly
+  '' + (if stdenv.hostPlatform.isFreeBSD then
+    # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
     ''
+    substituteInPlace lib/builtins/clear_cache.c lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
+      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
+    '' else ''
     substituteInPlace lib/builtins/clear_cache.c \
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \

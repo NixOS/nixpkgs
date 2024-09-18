@@ -6,6 +6,7 @@
 , yarn
 , makeBinaryWrapper
 , nodejs
+, node-gyp
 , python3
 , nixosTests
 }:

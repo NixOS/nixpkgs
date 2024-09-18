@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  snakemake,
   snakemake-interface-storage-plugins,
   snakemake-interface-common,
   sysrsync,

@@ -44,6 +44,7 @@
 , openjpeg
 , openssl
 , poppler
+, python3Packages
 , systemd
 , udev
 , util-linux

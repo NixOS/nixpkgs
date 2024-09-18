@@ -4,7 +4,7 @@
   fetchPypi,
   setuptools,
   pbr,
-  pytestCheckHook,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -14,21 +14,25 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-au0C3gPLok76vNYAswVAFAY0/AbPpgOCLVCNU2Hp95k=";
+    sha256 = "6aed02de03cba24efabcd600b30540140634fc06cfa603822d508d5361e9f799";
   };
-
-  patches = [ ./fix-tests.patch ];
 
   build-system = [
     pbr
     setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ nose ];
 
-  meta = {
+  checkPhase = ''
+    runHook preCheck
+    nosetests
+    runHook postcheck
+  '';
+
+  meta = with lib; {
     homepage = "https://launchpad.net/pylockfile";
     description = "Platform-independent advisory file locking capability for Python applications";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
 }

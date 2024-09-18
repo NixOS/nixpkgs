@@ -68,19 +68,9 @@ let
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = let inherit (config.system.replaceDependencies) replacements cutoffPackages; in
-    if replacements == [] then
-      # Avoid IFD if possible, by sidestepping replaceDependencies if no replacements are specified.
-      baseSystemAssertWarn
-    else
-      (pkgs.replaceDependencies.override {
-        replaceDirectDependencies = pkgs.replaceDirectDependencies.override {
-          nix = config.nix.package;
-        };
-      }) {
-        drv = baseSystemAssertWarn;
-        inherit replacements cutoffPackages;
-      };
+  system = foldr ({ oldDependency, newDependency }: drv:
+      pkgs.replaceDependency { inherit oldDependency newDependency drv; }
+    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
   systemWithBuildDeps = system.overrideAttrs (o: {
     systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
@@ -97,7 +87,6 @@ in
     (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
     (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
     (mkRenamedOptionModule [ "system" "forbiddenDependenciesRegex" ] [ "system" "forbiddenDependenciesRegexes" ])
-    (mkRenamedOptionModule [ "system" "replaceRuntimeDependencies" ] [ "system" "replaceDependencies" "replacements" ])
   ];
 
   options = {
@@ -216,47 +205,31 @@ in
       '';
     };
 
-    system.replaceDependencies = {
-      replacements = mkOption {
-        default = [];
-        example = lib.literalExpression "[ ({ oldDependency = pkgs.openssl; newDependency = pkgs.callPackage /path/to/openssl { }; }) ]";
-        type = types.listOf (types.submodule (
-          { ... }: {
-            imports = [
-              (mkRenamedOptionModule [ "original" ] [ "oldDependency" ])
-              (mkRenamedOptionModule [ "replacement" ] [ "newDependency" ])
-            ];
+    system.replaceRuntimeDependencies = mkOption {
+      default = [];
+      example = lib.literalExpression "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
+      type = types.listOf (types.submodule (
+        { ... }: {
+          options.original = mkOption {
+            type = types.package;
+            description = "The original package to override.";
+          };
 
-            options.oldDependency = mkOption {
-              type = types.package;
-              description = "The original package to override.";
-            };
-
-            options.newDependency = mkOption {
-              type = types.package;
-              description = "The replacement package.";
-            };
-          })
-        );
-        apply = map ({ oldDependency, newDependency, ... }: {
-          inherit oldDependency newDependency;
-        });
-        description = ''
-          List of packages to override without doing a full rebuild.
-          The original derivation and replacement derivation must have the same
-          name length, and ideally should have close-to-identical directory layout.
-        '';
-      };
-
-      cutoffPackages = mkOption {
-        default = [ config.system.build.initialRamdisk ];
-        defaultText = literalExpression "[ config.system.build.initialRamdisk ]";
-        type = types.listOf types.package;
-        description = ''
-          Packages to which no replacements should be applied.
-          The initrd is matched by default, because its structure renders the replacement process ineffective and prone to breakage.
-        '';
-      };
+          options.replacement = mkOption {
+            type = types.package;
+            description = "The replacement package.";
+          };
+        })
+      );
+      apply = map ({ original, replacement, ... }: {
+        oldDependency = original;
+        newDependency = replacement;
+      });
+      description = ''
+        List of packages to override without doing a full rebuild.
+        The original derivation and replacement derivation must have the same
+        name length, and ideally should have close-to-identical directory layout.
+      '';
     };
 
     system.name = mkOption {

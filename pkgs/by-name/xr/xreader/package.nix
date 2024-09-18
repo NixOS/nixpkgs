@@ -20,6 +20,7 @@
 , webkitgtk_4_1
 , nodePackages
 , ninja
+, gsettings-desktop-schemas
 , djvulibre
 , backends ? [ "pdf" "ps" /* "dvi" "t1lib" */ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
 }:

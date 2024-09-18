@@ -27,9 +27,6 @@
   officialRelease ? null,
   monorepoSrc ? null,
   version ? null,
-  # Allows passthrough to packages via newScope. This makes it possible to
-  # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
-  # an llvmPackages whose packages are overridden in an internally consistent way.
   ...
 }@args:
 

@@ -15,7 +15,6 @@
   importlib-resources,
   kubernetes,
   mmh3,
-  nixosTests,
   numpy,
   onnxruntime,
   openssl,
@@ -28,7 +27,6 @@
   pkg-config,
   posthog,
   protobuf,
-  psutil,
   pulsar-client,
   pydantic,
   pypika,
@@ -39,8 +37,8 @@
   requests,
   rustc,
   rustPlatform,
-  setuptools-scm,
   setuptools,
+  setuptools-scm,
   tenacity,
   tokenizers,
   tqdm,
@@ -48,11 +46,12 @@
   typing-extensions,
   uvicorn,
   zstd,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.7";
+  version = "0.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -61,13 +60,13 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-+wRauCRrTQsGTadA6Ps0fXcpAl6ajsJRjcVEhP2+2ss=";
+    hash = "sha256-e6ZctUFeq9hHXWaxGdVTiqFpwaU7A+EKn2EdQPI7DHE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Y2mkWGgS77sGOOL+S/pw/UmrKDRyO+ZbN2Msj35sIl8=";
+    hash = "sha256-3FmnQEpknYNzI3WlQ3kc8qa4LFcn1zpxKDbkATU7/48=";
   };
 
   pythonRelaxDeps = [
@@ -127,7 +126,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    psutil
     pytest-asyncio
     pytestCheckHook
   ];

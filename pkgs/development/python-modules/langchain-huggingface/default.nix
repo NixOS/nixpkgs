@@ -26,6 +26,8 @@
   responses,
   syrupy,
   toml,
+
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -71,8 +73,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-huggingface==(.*)"
+    ];
   };
 
   meta = {

@@ -4,6 +4,7 @@
 , cmake
 , pkg-config
 , wrapGAppsHook3
+, makeWrapper
 , pixman
 , libpthreadstubs
 , gtkmm3

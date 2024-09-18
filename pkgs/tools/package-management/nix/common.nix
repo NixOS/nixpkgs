@@ -263,6 +263,14 @@ self = stdenv.mkDerivation {
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
 
     tests = {
+      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
+      nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
+
+      # Basic smoke test that needs to pass when upgrading nix.
+      # Note that this test does only test the nixVersions.stable attribute.
+      misc = nixosTests.nix-misc.default;
+      upgrade = nixosTests.nix-upgrade;
+
       srcVersion = runCommand "nix-src-version" {
         inherit version;
       } ''
@@ -283,16 +291,6 @@ self = stdenv.mkDerivation {
         inherit lib pkgs;
         nix = self;
       };
-    } // lib.optionalAttrs stdenv.isLinux {
-      nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
-
-      # Basic smoke tests that needs to pass when upgrading nix.
-      # Note that this test does only test the nixVersions.stable attribute.
-      misc = nixosTests.nix-misc.default;
-      upgrade = nixosTests.nix-upgrade;
-      simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
-    } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
-      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
     };
   };
 

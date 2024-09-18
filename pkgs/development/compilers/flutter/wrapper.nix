@@ -18,6 +18,7 @@
 , extraCFlags ? [ ]
 , extraLinkerFlags ? [ ]
 , makeWrapper
+, runCommandLocal
 , writeShellScript
 , wrapGAppsHook3
 , git
@@ -38,6 +39,7 @@
 , cmake
 , ninja
 , clang
+, lndir
 , symlinkJoin
 }:
 
@@ -54,7 +56,7 @@ let
       };
     }));
 
-  cacheDir = symlinkJoin {
+  cacheDir = symlinkJoin rec {
     name = "flutter-cache-dir";
     paths = builtins.attrValues flutterPlatformArtifacts;
     postBuild = ''

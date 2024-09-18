@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "1.7.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ly0HkDFofdOgXOmlUW1za4u2INopiPs6B2kTC217/T0=";
+    hash = "sha256-hG8nHAuEHw/tjFnGKhSXwO+2l91OOnQUIAK05SvEquU=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm'.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-455MGicIaC9WSUiwsbhdXxc8Cs3oqaneyOrMDPWsABw=";
+    hash = "sha256-wF7G8rs1Fg7whEftQ554s4C2CixP5/1oFudR5yY07Rk=";
   };
 
   env = {
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Milkshiift/GoofCord";
     downloadPage = "https://github.com/Milkshiift/GoofCord";
     license = lib.licenses.osl3;
-    maintainers = with lib.maintainers; [ nyabinary ];
+    maintainers = with lib.maintainers; [ nyanbinary ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -1,41 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libcdio,
-  pkg-config,
-  libiconv,
-  IOKit,
-  DiskArbitration,
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libcdio, pkg-config,
+  libiconv, IOKit, DiskArbitration}:
 
 stdenv.mkDerivation rec {
   pname = "libcdio-paranoia";
-  version = "2.0.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "libcdio-paranoia";
     rev = "release-10.2+${version}";
-    hash = "sha256-n05PSVgh6z7BFPq4CjJa5DqCO7Huj8Bsg0x3HQPsbeI=";
+    hash = "sha256-kNGhhslp5noAVeho0kBVfyvb4kQpDY56nyL3a4aFgjE=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ];
-  buildInputs =
-    [ libcdio ]
-    ++ lib.optionals stdenv.isDarwin [
-      libiconv
-      IOKit
-      DiskArbitration
-    ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ libcdio ] ++
+    lib.optionals stdenv.isDarwin [ libiconv IOKit DiskArbitration ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin DiskArbitration;
 
-  configureFlags = lib.optionals stdenv.isDarwin [ "--disable-ld-version-script" ];
+  configureFlags = lib.optionals stdenv.isDarwin [
+    "--disable-ld-version-script"
+  ];
 
   meta = with lib; {
     description = "CD paranoia on top of libcdio";

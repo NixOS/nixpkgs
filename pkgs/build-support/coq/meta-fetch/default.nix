@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip }@args:
+{ lib, stdenv, fetchzip }@args:
 
 let
   lib = import ../extra-lib.nix {
@@ -28,16 +28,11 @@ let
 
   inherit (lib.strings) match split;
 
-  default-fetcher = {domain ? "github.com", owner ? "", repo, rev, name ? "source", sha256 ? null, artifact ? null, ...}@args:
-    let kind = switch-if [
-          { cond = artifact != null; out = {ext = "tbz"; fmt = "tbz"; fetchfun = fetchurl; }; }
-          { cond = args?sha256 ; out = {ext = "zip"; fmt = "zip"; fetchfun = fetchzip; }; }
-        ] {ext = "tar.gz"; fmt = "tarball"; fetchfun = builtins.fetchTarball; }; in
-    with kind; let
+  default-fetcher = {domain ? "github.com", owner ? "", repo, rev, name ? "source", sha256 ? null, ...}@args:
+    let ext = if args?sha256 then "zip" else "tar.gz";
+        fmt = if args?sha256 then "zip" else "tarball";
         pr  = match "^#(.*)$" rev;
         url = switch-if [
-          { cond = pr == null && (match "^github.*" domain) != null && artifact != null;
-            out = "https://github.com/${owner}/${repo}/releases/download/${rev}/${artifact}"; }
           { cond = pr == null && (match "^github.*" domain) != null;
             out = "https://${domain}/${owner}/${repo}/archive/${rev}.${ext}"; }
           { cond = pr != null && (match "^github.*" domain) != null;
@@ -47,7 +42,7 @@ let
           { cond = (match "(www.)?mpi-sws.org" domain) != null;
             out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";}
         ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
-        fetch = x: fetchfun (if args?sha256 then (x // { inherit sha256; }) else x);
+        fetch = x: if args?sha256 then fetchzip (x // { inherit sha256; }) else builtins.fetchTarball x;
     in fetch { inherit url ; };
 in
 {
@@ -55,10 +50,8 @@ in
   location,
   release ? {},
   releaseRev ? (v: v),
-  releaseArtifact ? (v: null)
 }:
-let
-    isVersion      = x: isString x && match "^/.*" x == null && release?${x};
+let isVersion      = x: isString x && match "^/.*" x == null && release?${x};
     shortVersion   = x: if (isString x && match "^/.*" x == null)
       then findFirst (v: versions.majorMinor v == x) null
         (sort versionAtLeast (attrNames release))
@@ -78,7 +71,7 @@ switch arg [
     in
       {
         version = rv.version or v;
-        src = rv.src or fetcher (location // { rev = releaseRev v; artifact = releaseArtifact v; } // rv);
+        src = rv.src or fetcher (location // { rev = releaseRev v; } // rv);
       };
     }
   { case = isString;

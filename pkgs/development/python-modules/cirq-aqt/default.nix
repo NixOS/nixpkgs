@@ -3,24 +3,21 @@
   cirq-core,
   requests,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-aqt";
-  pyproject = true;
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace-fail "requests~=2.18" "requests"
+      --replace "requests~=2.18" "requests"
   '';
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     cirq-core
     requests
   ];

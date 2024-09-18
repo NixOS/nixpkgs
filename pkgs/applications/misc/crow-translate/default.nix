@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchzip
 , cmake
 , extra-cmake-modules
 , qttools
@@ -12,24 +12,21 @@
 , wrapQtAppsHook
 , gst_all_1
 , testers
+, crow-translate
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "crow-translate";
-  version = "3.0.0";
+  version = "2.11.1";
 
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "office";
-    repo = "crow-translate";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-hdrhxbv44DlxoF1JU1d2auP/vR8a3IJI+hN7PhdPMaY=";
-    fetchSubmodules = true;
+  src = fetchzip {
+    url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}-source.tar.gz";
+    hash = "sha256-1rq1pF4tOaZNEaHflxlBuHta80EzD9m3O99geR1EPxE=";
   };
 
   postPatch = ''
-    substituteInPlace data/org.kde.CrowTranslate.desktop.in \
-      --subst-var-by QT_BIN_DIR ${lib.getBin qttools}/bin
+    substituteInPlace data/io.crow_translate.CrowTranslate.desktop \
+      --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
   '';
 
   nativeBuildInputs = [
@@ -57,15 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+    package = crow-translate;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
-    homepage = "https://invent.kde.org/office/crow-translate";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
-    platforms = lib.platforms.linux;
+    homepage = "https://crow-translate.github.io/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
     mainProgram = "crow";
   };
-})
+}

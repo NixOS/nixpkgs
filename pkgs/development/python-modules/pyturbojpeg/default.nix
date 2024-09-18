@@ -12,20 +12,20 @@
 
 buildPythonPackage rec {
   pname = "pyturbojpeg";
-  version = "1.7.7";
+  version = "1.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JPjGZGVMZH6sDNRdV6kWsCpEjLT2aMrTy+bI4mRbdpw=";
+    hash = "sha256-dRogPQcDKRgHDiP7fA8uRCV65cUheuF4ZQfKSd+TKd4=";
   };
 
   patches = [
     (substituteAll {
       src = ./lib-path.patch;
-      libturbojpeg = "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libturbojpeg = "${libjpeg_turbo.out}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 

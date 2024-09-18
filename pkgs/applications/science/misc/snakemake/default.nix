@@ -1,6 +1,8 @@
 { lib
 , fetchPypi
+, fetchpatch
 , python3
+, runtimeShell
 , stress
 }:
 

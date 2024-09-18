@@ -5,16 +5,15 @@
   unzip,
   makeWrapper,
   jre_headless,
-  writeScript,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "maestro";
-  version = "1.38.1";
+  version = "1.37.9";
 
   src = fetchurl {
-    url = "https://github.com/mobile-dev-inc/maestro/releases/download/cli-${finalAttrs.version}/maestro.zip";
-    hash = "sha256-AogEVg8R73x5Q/LxZamGbFacCqB8JZeERqyf+UPXBx0=";
+    url = "https://github.com/mobile-dev-inc/maestro/releases/download/cli-${version}/maestro.zip";
+    hash = "sha256-bWZuD2+v6molwW1ef2a3djBnVfYscBjILLGXeeSUmoU=";
   };
 
   dontUnpack = true;
@@ -34,24 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/maestro --prefix PATH : "${lib.makeBinPath [ jre_headless ]}"
   '';
 
-  passthru.updateScript = writeScript "update-maestro" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    set -o errexit -o nounset -o pipefail
-
-    NEW_VERSION=$(curl --silent https://api.github.com/repos/mobile-dev-inc/maestro/releases | jq 'first(.[].tag_name | ltrimstr("cli-") | select(contains("dev.") | not))' --raw-output)
-
-    update-source-version "maestro" "$NEW_VERSION" --print-changes
-  '';
-
   meta = with lib; {
     description = "Mobile UI Automation tool";
     homepage = "https://maestro.mobile.dev/";
     license = licenses.asl20;
     platforms = lib.platforms.all;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     changelog = "https://github.com/mobile-dev-inc/maestro/blob/main/CHANGELOG.md";
     maintainers = with maintainers; [ SubhrajyotiSen ];
-    mainProgram = "maestro";
   };
-})
+}

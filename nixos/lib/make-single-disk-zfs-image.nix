@@ -112,7 +112,7 @@ let
 
   tools = lib.makeBinPath (
     with pkgs; [
-      nixos-enter
+      config.system.build.nixos-enter
       config.system.build.nixos-install
       dosfstools
       e2fsprogs

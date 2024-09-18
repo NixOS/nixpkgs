@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
   meson,
   ninja,
   pkg-config,

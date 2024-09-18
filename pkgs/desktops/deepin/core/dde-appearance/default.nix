@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   wrapQtAppsHook,
+  qtbase,
   dtkgui,
   gsettings-qt,
   gtk3,

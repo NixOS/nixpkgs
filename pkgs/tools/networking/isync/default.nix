@@ -6,18 +6,22 @@
 , withCyrusSaslXoauth2 ? false, cyrus-sasl-xoauth2, makeWrapper
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "isync";
-  version = "1.5.0";
+  version = "1.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/isync/isync-${finalAttrs.version}.tar.gz";
-    hash = "sha256-oMgeEJOHvyedoWFFMQM5nneUav7PXFH5QTxedzVX940=";
+    url = "mirror://sourceforge/isync/${pname}-${version}.tar.gz";
+    sha256 = "1zq0wwvmqsl9y71546dr0aygzn9gjjfiw19hlcq87s929y4p6ckw";
   };
 
-  # Fixes "Fatal: buffer too small" error
-  # see https://sourceforge.net/p/isync/mailman/isync-devel/thread/87fsevvebj.fsf%40steelpick.2x.cz/
-  env.NIX_CFLAGS_COMPILE = "-DQPRINTF_BUFF=4000";
+  patches = [
+    # Fixes "Fatal: buffer too small" error
+    ./0001-Increase-imap_vprintf-buffer-size.patch
+    # Fix #202595: SSL error "Socket error: ... unexpected eof while reading"
+    # Source: https://sourceforge.net/p/isync/isync/ci/b6c36624f04cd388873785c0631df3f2f9ac4bf0/
+    ./work-around-unexpected-EOF-error-messages-at-end-of-SSL-connections.patch
+  ];
 
   nativeBuildInputs = [ pkg-config perl ]
     ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
@@ -44,4 +48,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ primeos ];
     mainProgram = "mbsync";
   };
-})
+}

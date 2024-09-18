@@ -10,6 +10,7 @@
   z3,
   aiger,
   btor2tools,
+  python3Packages,
   nix-update-script,
 }:
 

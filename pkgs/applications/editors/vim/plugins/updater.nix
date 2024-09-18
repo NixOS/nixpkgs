@@ -33,12 +33,12 @@ buildPythonApplication {
 
     # wrap python scripts
     makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [
-      nix nix-prefetch-git neovim-unwrapped nurl ]}" --prefix PYTHONPATH : "${./.}:${../../../../../maintainers/scripts/pluginupdate-py}" )
+      nix nix-prefetch-git neovim-unwrapped nurl ]}" --prefix PYTHONPATH : "${./.}:${../../../../../maintainers/scripts}" )
     wrapPythonPrograms
   '';
 
   shellHook = ''
-    export PYTHONPATH=pkgs/applications/editors/vim/plugins:maintainers/scripts/pluginupdate-py:$PYTHONPATH
+    export PYTHONPATH=pkgs/applications/editors/vim/plugins:maintainers/scripts:$PYTHONPATH
     '';
 
   meta.mainProgram = "vim-plugins-updater";

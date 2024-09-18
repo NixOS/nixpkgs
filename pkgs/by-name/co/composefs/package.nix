@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
+
 , meson
 , ninja
 , go-md2man

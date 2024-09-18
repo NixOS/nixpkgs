@@ -7,10 +7,6 @@
 mkKdeDerivation {
   pname = "kweather";
 
-  extraBuildInputs = [
-    qtsvg
-    qtcharts
-    kholidays
-  ];
+  extraBuildInputs = [qtsvg qtcharts kholidays];
   meta.mainProgram = "kweather";
 }

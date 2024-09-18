@@ -8,12 +8,6 @@
 mkKdeDerivation {
   pname = "kwindowsystem";
 
-  extraNativeBuildInputs = [
-    qttools
-    pkg-config
-  ];
-  extraBuildInputs = [
-    qtdeclarative
-    qtwayland
-  ];
+  extraNativeBuildInputs = [qttools pkg-config];
+  extraBuildInputs = [qtdeclarative qtwayland];
 }

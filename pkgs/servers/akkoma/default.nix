@@ -5,6 +5,7 @@
 , fetchFromGitLab
 , cmake
 , file
+, writeText
 , nixosTests
 , ...
 }:

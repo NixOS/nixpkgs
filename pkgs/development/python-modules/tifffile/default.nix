@@ -8,25 +8,22 @@
   numpy,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2024.9.20";
-  pyproject = true;
+  version = "2024.6.18";
+  format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P7874vmVpwUaiuBaS+cMlvwHifIu1vHEEEyXPPaKZAs=";
+    hash = "sha256-V+DSoDS8tih+oxVdhxZQjfrIZEOiV/ZQK1fuf4ozs7Y=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ numpy ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     dask

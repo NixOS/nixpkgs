@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+      "-DCMAKE_BUILD_TYPE=Release"
       "-DENABLE_DRI3=ON"
       "-DENABLE_DRM=ON"
       "-DENABLE_VA=ON"

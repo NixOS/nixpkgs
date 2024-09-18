@@ -1,5 +1,6 @@
 {
   runCommand,
+  pkg-config,
   gdk-pixbuf,
   lib,
   stdenv,

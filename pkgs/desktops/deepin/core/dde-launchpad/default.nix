@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-launchpad";
-  version = "1.0.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-kczdSd9+ZmMZQ2fWg3SRW+CS/aWktYLz/H+Ky81TwVM=";
+    hash = "sha256-MPOzKAgwhJa7pMO6EZ6vYyYgZSD/SbU/L0L1dkN9/po=";
   };
 
   nativeBuildInputs = [
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
-  meta = {
+  meta = with lib; {
     description = "'launcher' or 'start menu' component for DDE";
     mainProgram = "dde-launchpad";
     homepage = "https://github.com/linuxdeepin/dde-launchpad";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.deepin.members;
   };
 }

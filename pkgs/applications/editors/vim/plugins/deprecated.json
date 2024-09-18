@@ -7,6 +7,10 @@
         "date": "2021-12-07",
         "new": "cmp-tmux"
     },
+    "taskwarrior": {
+        "date": "2024-08-13",
+        "new": "taskwarrior3 or taskwarrior2"
+    },
     "fern-vim": {
         "date": "2024-05-12",
         "new": "vim-fern"
@@ -62,10 +66,6 @@
     "suda-vim": {
         "date": "2024-05-12",
         "new": "vim-suda"
-    },
-    "taskwarrior": {
-        "date": "2024-08-13",
-        "new": "taskwarrior3 or taskwarrior2"
     },
     "vim-fsharp": {
         "date": "2024-03-16",

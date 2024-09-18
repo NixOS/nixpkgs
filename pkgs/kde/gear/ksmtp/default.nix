@@ -6,8 +6,5 @@
 mkKdeDerivation {
   pname = "ksmtp";
 
-  extraBuildInputs = [
-    qt5compat
-    cyrus_sasl
-  ];
+  extraBuildInputs = [qt5compat cyrus_sasl];
 }

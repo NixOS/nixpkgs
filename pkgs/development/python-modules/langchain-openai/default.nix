@@ -24,6 +24,8 @@
   responses,
   syrupy,
   toml,
+
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -87,8 +89,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-openai==(.*)"
+    ];
   };
 
   meta = {

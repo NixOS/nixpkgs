@@ -3,6 +3,7 @@
   arrow,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   freezegun,
   pytestCheckHook,
   pythonOlder,

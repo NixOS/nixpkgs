@@ -1,17 +1,17 @@
 { lib, mkDerivation, fetchFromGitHub
 , python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl, libgit2
+, which, perl
 }:
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.29.6";
+  version = "0.28.12";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-gbbes8CPh+Z9wCeQaAaObZjQvBTMe06z8oR12i6e12M=";
+    hash = "sha256-QvEoXKJ9sH5WIarYPsYEWwoFwA/pZa2etegA+AD8rPo=";
   };
 
   postPatch = ''
@@ -31,7 +31,6 @@ mkDerivation rec {
     qtmultimedia
     qttools
     qtxmlpatterns
-    libgit2
   ];
 
   buildPhase = ''

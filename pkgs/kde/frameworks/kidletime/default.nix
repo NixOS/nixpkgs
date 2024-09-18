@@ -7,9 +7,6 @@
 mkKdeDerivation {
   pname = "kidletime";
 
-  extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [
-    qtwayland
-    xorg.libXScrnSaver
-  ];
+  extraNativeBuildInputs = [pkg-config];
+  extraBuildInputs = [qtwayland xorg.libXScrnSaver];
 }

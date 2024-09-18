@@ -12,7 +12,6 @@
       value.path = ./.;
       value.null = null;
       value.float = 0.1;
-      value.list = [1 "a" {x=null;}];
     }
     {
       value.int = 0;
@@ -21,7 +20,6 @@
       value.path = ./.;
       value.null = null;
       value.float = 0.1;
-      value.list = [1 "a" {x=null;}];
     }
   ];
 

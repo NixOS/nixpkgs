@@ -64,8 +64,6 @@
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
-  solax_modbus = callPackage ./solax_modbus {};
-
   solis-sensor = callPackage ./solis-sensor {};
 
   somweb = callPackage ./somweb {};

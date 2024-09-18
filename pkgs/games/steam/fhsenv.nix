@@ -299,7 +299,7 @@ in buildFHSEnv rec {
   '' + args.extraPreBwrapCmds or "";
 
   extraBwrapArgs = [
-    "--bind-try /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
+    "--bind /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
     "--bind-try /tmp/dumps /tmp/dumps"
   ] ++ args.extraBwrapArgs or [];
 
@@ -341,10 +341,6 @@ in buildFHSEnv rec {
       description = "Run commands in the same FHS environment that is used for Steam";
       mainProgram = "steam-run";
       name = "steam-run";
-      # steam-run itself is just a script that lives in nixpkgs (which is licensed under MIT).
-      # steam is a dependency and already unfree, so normal steam-run will not install without
-      # allowing unfree packages or appropriate `allowUnfreePredicate` rules.
-      license = lib.licenses.mit;
     };
   };
 }

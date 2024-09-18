@@ -182,8 +182,8 @@ rec {
       "sha256-scTtp5URLSljLwCJHu80+bUBL4LNW8zL+rOa9vBmPJE=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.35.22"
-      "sha256-1MB5ldBGqYDZMkYaEJ0nK+jM5q/TkcN3wllT1X8YnQc=";
+    buildMypyBoto3Package "ce" "1.35.0"
+      "sha256-/nhw7TUfQmFmcm94Omgkp6/zAFGlvZIPCb7hKAtMoEI=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.35.0"
@@ -266,8 +266,8 @@ rec {
       "sha256-NXttDVG1iAGoYefRXROKaXiQUnRXxiOcOUad7ZuA2xE=";
 
   mypy-boto3-codebuild =
-    buildMypyBoto3Package "codebuild" "1.35.21"
-      "sha256-sCIMOBe3VppVALMDc4BV3rK+RYlCbxK80YUKPnckvT8=";
+    buildMypyBoto3Package "codebuild" "1.35.5"
+      "sha256-AecAyPT6AQCpezwqoJHCPpORKCdsjCbHBL6i+PKIAis=";
 
   mypy-boto3-codecatalyst =
     buildMypyBoto3Package "codecatalyst" "1.35.0"
@@ -430,12 +430,12 @@ rec {
       "sha256-Fzdqwy9NA+R2ZYNuXcxTv5RlY9X1d609CZHbSQUp3Is=";
 
   mypy-boto3-ds =
-    buildMypyBoto3Package "ds" "1.35.22"
-      "sha256-OgK+ZM7wn7Elp6xzb1YnZtYP+eARgsP+BIYkQb+E4YE=";
+    buildMypyBoto3Package "ds" "1.35.0"
+      "sha256-B6fR0fPc1vTN+WtsHXyE8gbl87yVd/QdxmmLmtftlxQ=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.35.24"
-      "sha256-Vb+Jeh0ONUV57bBQAfS8T0crlFK63Z2ySHbDG98/cqE=";
+    buildMypyBoto3Package "dynamodb" "1.35.15"
+      "sha256-epE4c+VCicXTkuGGJu83lxFTDUBu2ndmy36NARTCy8E=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.35.0"
@@ -454,16 +454,16 @@ rec {
       "sha256-0Xe77fz+lA+nuUGK+PjU0EgWeQ7AJ9Smsb/4yK1tow0=";
 
   mypy-boto3-ecr =
-    buildMypyBoto3Package "ecr" "1.35.21"
-      "sha256-1+jCQIbOOyWeSsKicfw07U7/3pnHiZrH1kwto8/wrNc=";
+    buildMypyBoto3Package "ecr" "1.35.17"
+      "sha256-puWH6dq/wpO0t2PFGeG7hibi0Jru3ELyOmqrjvCxves=";
 
   mypy-boto3-ecr-public =
     buildMypyBoto3Package "ecr-public" "1.35.0"
       "sha256-KXtN44KAIDXjMgv3ICG8rXYfEjcZ85pQ+qdvN2Yiq3g=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.35.21"
-      "sha256-DSmCf9/TXUfoEYppEZOxAJOxuOCZK5p6GRIKWIa3aPQ=";
+    buildMypyBoto3Package "ecs" "1.35.2"
+      "sha256-DELGxyFD0U7IEoEXZebyuFuac94pVxWgU2OPK3aiKgA=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.35.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-RJEZBr3yU/lGEainrpidLsdYBvVOPMq3cIaIpsTAziQ=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.35.23"
-      "sha256-v0uU9EREtfyjbUazDMPPWod/qFITlQrWgnPJoghJXZk=";
+    buildMypyBoto3Package "glue" "1.35.18"
+      "sha256-NwWn0GsbAhUy5JEUO0LJsfP0jwlnSle5L4E87RpDz+U=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.35.0"
@@ -594,8 +594,8 @@ rec {
       "sha256-U0sYInE/1XsjwQCxmcYLVvmEQf4R6drtdSqTr0b+3OM=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.35.22"
-      "sha256-+Ro4QM8DwrDlbroFb6YV6fZGYPieHB0B5+EgdNrnIzQ=";
+    buildMypyBoto3Package "guardduty" "1.35.17"
+      "sha256-OAA5OwjH4oXVV908NXoiXS6M87LwDf1IIrPDTTRzo58=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.35.0"
@@ -770,8 +770,8 @@ rec {
       "sha256-d6dz+lqK8RJ4kwDvK8WYf5U3N9oic5s+4KJgW08/3oU=";
 
   mypy-boto3-lambda =
-    buildMypyBoto3Package "lambda" "1.35.23"
-      "sha256-I70ebuqU7cWYu+rAWqaUbNNiXdq9JZL/dm8++OiJxao=";
+    buildMypyBoto3Package "lambda" "1.35.3"
+      "sha256-LnjBKnuk0tnJm3X61YgE/ZmCDpVKtVfxTwmdbIWogqs=";
 
   mypy-boto3-lex-models =
     buildMypyBoto3Package "lex-models" "1.35.0"
@@ -862,12 +862,12 @@ rec {
       "sha256-v+a4wc62OnHXJv5BHy/oq88FRn3piimmenmAPAOZXOA=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.35.23"
-      "sha256-TvkVif/foJUzw1tPg8l2Y81neHUfxeZ9aDKtaIYKyRg=";
+    buildMypyBoto3Package "mediaconvert" "1.35.18"
+      "sha256-QyyTcFluG5S6CQFwxahz/a9zj40dqhiqyD+OuUn79/0=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.35.23"
-      "sha256-emjiDJ1sZylGgclL3E90nYBwqJgJq20fQx2Ug4e9UbQ=";
+    buildMypyBoto3Package "medialive" "1.35.20"
+      "sha256-/tGt9kyF1LtOzejqC9F4qStNZa67tXeUf9yxc6UXs6M=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.35.0"
@@ -942,8 +942,8 @@ rec {
       "sha256-J1tV2BTUW2Bu8ll+Yn0cJpUpMCCCkfqUEAnis/OJxrA=";
 
   mypy-boto3-neptune =
-    buildMypyBoto3Package "neptune" "1.35.24"
-      "sha256-2hgamfnf5SPWo8R15FWJHO37IC0y2oLDTHsb/oPjArE=";
+    buildMypyBoto3Package "neptune" "1.35.0"
+      "sha256-YCZMfLWkodIcSsbOmzR6GfR+kMFzcbondo9FyzQexBo=";
 
   mypy-boto3-neptunedata =
     buildMypyBoto3Package "neptunedata" "1.35.0"
@@ -1074,8 +1074,8 @@ rec {
       "sha256-mtpp+ro3b7tOrN4TrWr8BjLzaPo264ty8Sng6wtciMs=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.35.23"
-      "sha256-ljk8uB17CDpGT9TIAncsrZBGbI9UrPAPU3HQ9Cz2zYE=";
+    buildMypyBoto3Package "quicksight" "1.35.9"
+      "sha256-DDn++YB0SylR31Sv5bBcbghb5aa4b1vjsDMMVJy5gn0=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.35.0"
@@ -1086,8 +1086,8 @@ rec {
       "sha256-85yUjKQ8oiECUYHhmmYrDssyFSQb6itfIRY2iuwCZdo=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.35.22"
-      "sha256-moU0RLvQFknHPerOQcvXSZw+9CdZ/5Yeno4dZVoXfNo=";
+    buildMypyBoto3Package "rds" "1.35.20"
+      "sha256-sjAaaFf5Lvb2EXbjxBNoBskNLGRIXxddaVZ2zgkImbU=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.35.0"
@@ -1162,8 +1162,8 @@ rec {
       "sha256-RwPNNFntNChLqbr86wd1bwp6OqWvs3oj3V+4X71J3Hw=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.35.22"
-      "sha256-n2ThGW/+zCxqt77pXoSGkrX0ZKHfFCETYepru8IDg4c=";
+    buildMypyBoto3Package "s3" "1.35.16"
+      "sha256-WZVn4yfqq+TN0MImwHyshQQx0EgWarpJwqFiAx7EiTQ=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.35.12"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-P2Yg3qvcdAcjY+uwPg2DpTgT6ZXb1XYCOeu4bVfgFKI=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.35.24"
-      "sha256-VLhoJLXWsQIWK+N9KC2nNi2VDC5SUeN/FJJJLefWix8=";
+    buildMypyBoto3Package "sagemaker" "1.35.15"
+      "sha256-16P85xGM98ExA6Cphg2nTviTLu6CF/Hj3/sZ7P3OkJo=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.35.0"
@@ -1194,8 +1194,8 @@ rec {
       "sha256-ES0cThhoMFB4NKVTzThXATiicjq+MTRunsDCMC6YPbI=";
 
   mypy-boto3-sagemaker-metrics =
-    buildMypyBoto3Package "sagemaker-metrics" "1.35.24"
-      "sha256-WBwXrGv877AZv6wIxYGwFNTVofmcmTqv/hqXAcraDyQ=";
+    buildMypyBoto3Package "sagemaker-metrics" "1.35.0"
+      "sha256-zixUmBhFo3joSB0UUWRjNbbrpgt/21OyfOzDkn2Y7kg=";
 
   mypy-boto3-sagemaker-runtime =
     buildMypyBoto3Package "sagemaker-runtime" "1.35.15"
@@ -1294,8 +1294,8 @@ rec {
       "sha256-YXUvHCvy76OBX2TUPCW0o529vZ5HKuSKoY18bSp6brg=";
 
   mypy-boto3-ssm =
-    buildMypyBoto3Package "ssm" "1.35.21"
-      "sha256-XtVcdQn63aYVVxj+WXKbPasPi3b/HgN6h6v/ndJHX0k=";
+    buildMypyBoto3Package "ssm" "1.35.0"
+      "sha256-07yY7lzE2hSaTvIQCU+YWoTE1PenxJnsXGsEHfJ6EJc=";
 
   mypy-boto3-ssm-contacts =
     buildMypyBoto3Package "ssm-contacts" "1.35.0"
@@ -1426,12 +1426,12 @@ rec {
       "sha256-Om/TFPBZh3xr0inpGzCpvTNij9DTPq8dV1ikX8g4YtE=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.35.24"
-      "sha256-j7eEUDul3+bMWN80+gH+/gFBWqQHVQ2yN+YBx5VFZNM=";
+    buildMypyBoto3Package "workspaces" "1.35.8"
+      "sha256-fZ2uc54mRcpO/66YvK+com7nRPG61ldnM7tPAznUFk8=";
 
   mypy-boto3-workspaces-web =
-    buildMypyBoto3Package "workspaces-web" "1.35.23"
-      "sha256-/uATkqLhOOPKwegWRQOSRGeM2tmq+VbWY3t780IvSek=";
+    buildMypyBoto3Package "workspaces-web" "1.35.0"
+      "sha256-+96DquSZ2c+ijrO1ZBo6y4YohHsOQwGPCwvvxGnoO7A=";
 
   mypy-boto3-xray =
     buildMypyBoto3Package "xray" "1.35.0"

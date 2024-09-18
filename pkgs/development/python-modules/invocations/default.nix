@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  blessed,
+  blessings,
   fetchFromGitHub,
   invoke,
   pythonOlder,
@@ -10,11 +10,6 @@
   tabulate,
   tqdm,
   twine,
-  pytestCheckHook,
-  pytest-relaxed,
-  pytest-mock,
-  icecream,
-  pip,
 }:
 
 buildPythonPackage rec {
@@ -31,15 +26,13 @@ buildPythonPackage rec {
     hash = "sha256-JnhdcxhBNsYgDMcljtGKjOT1agujlao/66QifGuh6I0=";
   };
 
-  patches = [ ./replace-blessings-with-blessed.patch ];
-
   postPatch = ''
     substituteInPlace setup.py \
       --replace "semantic_version>=2.4,<2.7" "semantic_version"
   '';
 
   propagatedBuildInputs = [
-    blessed
+    blessings
     invoke
     releases
     semantic-version
@@ -48,26 +41,10 @@ buildPythonPackage rec {
     twine
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-relaxed
-    pytest-mock
-    icecream
-    pip
-  ];
+  # There's an error loading the test suite. See https://github.com/pyinvoke/invocations/issues/29.
+  doCheck = false;
 
   pythonImportsCheck = [ "invocations" ];
-
-  disabledTests = [
-    # invoke.exceptions.UnexpectedExit
-    "autodoc_"
-
-    # ValueError: Call either Version('1.2.3') or Version(major=1, ...)
-    "component_state_enums_contain_human_readable_values"
-    "load_version_"
-    "prepare_"
-    "status_"
-  ];
 
   meta = with lib; {
     description = "Common/best-practice Invoke tasks and collections";

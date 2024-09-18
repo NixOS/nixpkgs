@@ -2,7 +2,7 @@ declare version
 declare composerStrictValidation
 declare composerGlobal
 
-setComposerRootVersion() {
+setComposeRootVersion() {
     set +e # Disable exit on error
 
     if [[ -v version ]]; then
@@ -13,15 +13,8 @@ setComposerRootVersion() {
     set -e
 }
 
-setComposerEnvVariables() {
-    echo -e "\e[32mSetting some required environment variables for Composer...\e[0m"
-    export COMPOSER_MIRROR_PATH_REPOS=1
-    export COMPOSER_CACHE_DIR=/dev/null
-    export COMPOSER_HTACCESS_PROTECT=0
-}
-
 checkComposerValidate() {
-    setComposerRootVersion
+    setComposeRootVersion
 
     if [ "1" == "${composerGlobal-}" ]; then
       global="global";

@@ -2,7 +2,6 @@
   fetchFromGitHub,
   fetchPypi,
   lib,
-  stdenv,
   postgresql,
   postgresqlTestHook,
   python3,
@@ -28,14 +27,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.8.9";
+  version = "0.8.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     rev = "refs/tags/v${version}";
-    hash = "sha256-raN6Ef/Z/JbdJDMKBIaBL8nmvFwvuZFX4rfC0ZgWgKI=";
+    hash = "sha256-IO6M+HXAR3Gn0/71KwkaQr6sB0eCQzmnqHYgO+mzIZM=";
   };
 
   build-system = [
@@ -48,8 +47,6 @@ python.pkgs.buildPythonApplication rec {
     "gunicorn"
     "pyjwt"
     "pyopenssl"
-    "pytz"
-    "sqlalchemy"
   ];
 
   dependencies =
@@ -98,10 +95,8 @@ python.pkgs.buildPythonApplication rec {
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
-  doCheck = !stdenv.isDarwin; # tests are a bit flaky on darwin
-
   preCheck = ''
-    export TMP=$TMPDIR
+    export TMP=$(mktemp -d)
   '';
 
   meta = {
@@ -109,6 +104,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SamR1/FitTrackee";
     changelog = "https://github.com/SamR1/FitTrackee/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ traxys ];
   };
 }

@@ -28,15 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ] ++ lib.optionals pythonSupport [ python3Packages.numpy ];
 
   propagatedBuildInputs =
     [
@@ -61,7 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  pythonImportsCheck = [ "hppfcl" ];
+  # pythonImportsCheck, but in stdenv.mkDerivation
+  postInstall = lib.optionalString pythonSupport ''
+    PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
+    python -c "import hppfcl"
+  '';
 
   outputs = [
     "dev"
@@ -78,6 +77,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/humanoid-path-planner/hpp-fcl";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
-    platforms = lib.platforms.unix;
   };
 })

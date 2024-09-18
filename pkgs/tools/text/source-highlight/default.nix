@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchurl, boost, updateAutotoolsGnuConfigScriptsHook, llvmPackages }:
+{ lib, stdenv, fetchpatch, fetchurl, boost, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "source-highlight";
@@ -46,10 +46,7 @@ stdenv.mkDerivation rec {
   # necessary to build on FreeBSD native pending inclusion of
   # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-  buildInputs = [ boost ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (llvmPackages.compiler-rt.override {
-      doFakeLibgcc = true;
-    });
+  buildInputs = [ boost ];
 
   configureFlags = [
     "--with-boost=${boost.out}"
@@ -74,7 +71,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
-} // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
-  # Force linking to "libgcc" so tests pass
-  NIX_CFLAGS_COMPILE = "-lgcc";
 }

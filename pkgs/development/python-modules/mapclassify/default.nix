@@ -7,7 +7,6 @@
 
   geopandas,
   libpysal,
-  matplotlib,
   networkx,
   numpy,
   pandas,
@@ -18,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "mapclassify";
-  version = "2.8.0";
+  version = "2.6.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "mapclassify";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JrFKWkMUu8rjJJb1KK8+R9ANkLhTPf1EmWpzhfE7MAE=";
+    rev = "v${version}";
+    hash = "sha256-lb2Ui6zdx6MQBtBrL/Xj9k7cm6De8aLEuBLZDhPPDnE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -43,14 +42,10 @@ buildPythonPackage rec {
     pytestCheckHook
     geopandas
     libpysal
-    matplotlib
   ];
 
   # requires network access
-  disabledTestPaths = [
-    "mapclassify/tests/test_greedy.py"
-    "mapclassify/tests/test_rgba.py"
-  ];
+  disabledTestPaths = [ "mapclassify/tests/test_greedy.py" ];
 
   pythonImportsCheck = [ "mapclassify" ];
 

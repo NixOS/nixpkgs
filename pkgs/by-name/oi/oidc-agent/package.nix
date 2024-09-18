@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  webkitgtk,
-  libmicrohttpd,
-  libsecret,
-  qrencode,
-  libsodium,
-  pkg-config,
-  help2man,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, webkitgtk
+, libmicrohttpd
+, libsecret
+, qrencode
+, libsodium
+, pkg-config
+, help2man
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -40,23 +39,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "BIN_PATH=$(out)"
-    "PROMPT_BIN_PATH=$(out)"
-    "LIB_PATH=$(out)/lib"
-  ];
+  makeFlags = [ "PREFIX=$(out)" "BIN_PATH=$(out)" "LIB_PATH=$(out)/lib" ];
 
-  installTargets = [
-    "install_bin"
-    "install_lib"
-    "install_conf"
-  ];
+  installTargets = [ "install_bin" "install_lib" "install_conf" ];
 
   postFixup = ''
     # Override with patched binary to be used by help2man
     cp -r $out/bin/* bin
-    make install_man PREFIX=$out MAN_PATH=$out/share/man PROMPT_MAN_PATH=$out/share/man
+    make install_man PREFIX=$out
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -68,3 +58,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
   };
 }
+

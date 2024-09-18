@@ -17,11 +17,13 @@ mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
-      inherit mediainfo mlt glaxnimate;
-      ffmpeg = ffmpeg-full;
-    })
+    (
+      substituteAll {
+        src = ./dependency-paths.patch;
+        inherit mediainfo mlt glaxnimate;
+        ffmpeg = ffmpeg-full;
+      }
+    )
   ];
 
   extraNativeBuildInputs = [ shared-mime-info ];

@@ -6,9 +6,6 @@
 mkKdeDerivation {
   pname = "kget";
 
-  extraBuildInputs = [
-    qgpgme
-    libmms
-  ];
+  extraBuildInputs = [qgpgme libmms];
   meta.mainProgram = "kget";
 }

@@ -1,4 +1,5 @@
 { lib
+, findutils
 , stdenv
 , fetchurl
 , dpkg

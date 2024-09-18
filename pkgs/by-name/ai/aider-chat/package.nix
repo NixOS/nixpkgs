@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.57.0";
+  version = "0.56.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "aider-chat";
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication {
     owner = "paul-gauthier";
     repo = "aider";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ErDepSju8B4GochHKxL03aUfOLAiNfTaXBAllAZ144M=";
+    hash = "sha256-e0Fqj67vYt41Zbr1FN2fuLp6cHRius8RtacBHLgB9dM=";
   };
 
   pythonRelaxDeps = true;
@@ -60,7 +60,6 @@ python3.pkgs.buildPythonApplication {
       pypandoc
       pyperclip
       pyyaml
-      psutil
       rich
       scipy
       sounddevice

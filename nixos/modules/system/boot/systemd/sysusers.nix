@@ -68,10 +68,14 @@ in
         assertion = config.system.activationScripts.users == "";
         message = "system.activationScripts.users has to be empty to use systemd-sysusers";
       }
+      {
+        assertion = config.users.mutableUsers -> config.system.etc.overlay.enable;
+        message = "config.users.mutableUsers requires config.system.etc.overlay.enable.";
+      }
     ] ++ (lib.mapAttrsToList
-      (username: opts: {
+      (_username: opts: {
         assertion = !opts.isNormalUser;
-        message = "${username} is a normal user. systemd-sysusers doesn't create normal users, only system users.";
+        message = "systemd-sysusers doesn't create normal users. You can currently only use it to create system users.";
       })
       userCfg.users)
     ++ lib.mapAttrsToList

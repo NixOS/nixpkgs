@@ -1,6 +1,7 @@
 {
   lib,
   azure-storage-blob,
+  boto,
   buildPythonPackage,
   fetchpatch,
   fetchFromGitHub,
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    aws = [ boto ];
     azure = [ azure-storage-blob ];
   };
 

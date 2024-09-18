@@ -19,7 +19,6 @@
 , uri
 , alcotest-lwt
 , cstruct
-, httpaf
 }:
 
 buildDunePackage rec {
@@ -44,7 +43,6 @@ buildDunePackage rec {
     tls
     cstruct
     tcpip
-    httpaf
   ];
 
   doCheck = true;

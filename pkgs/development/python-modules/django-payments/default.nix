@@ -11,6 +11,7 @@
   requests,
   setuptools,
   setuptools-scm,
+  sphinx-rtd-theme,
   stripe,
   suds-community,
   xmltodict,

@@ -1,9 +1,4 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
-}:
+{ lib, pkgs, config, ... }:
 
 let
   cfg = config.programs.waybar;
@@ -16,9 +11,11 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    systemd = {
-      packages = [ cfg.package ];
-      user.services.waybar.wantedBy = [ "graphical-session.target" ];
+    systemd.user.services.waybar = {
+      description = "Waybar as systemd service";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      script = "${cfg.package}/bin/waybar";
     };
   };
 

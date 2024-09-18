@@ -165,10 +165,10 @@ let
 
             log = {
               level = mkOption {
-                type = types.enum [ "trace" "debug" "info" "warn" "error" ];
+                type = types.enum [ "info" "debug" "trace" ];
                 default = "debug";
                 example = "info";
-                description = "Level of verbosity for logs.";
+                description = "Level of verbosity for logs: info, debug, trace.";
               };
 
               format = mkOption {

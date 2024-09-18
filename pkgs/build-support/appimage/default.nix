@@ -205,8 +205,6 @@ rec {
       at-spi2-core
       pciutils # for FreeCAD
       pipewire # immersed-vr wayland support
-
-      libsecret # For bitwarden
     ];
   };
 }

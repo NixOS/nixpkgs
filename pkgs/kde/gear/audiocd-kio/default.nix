@@ -20,10 +20,5 @@ mkKdeDerivation {
     })
   ];
 
-  extraBuildInputs = [
-    cdparanoia
-    flac
-    libogg
-    libvorbis
-  ];
+  extraBuildInputs = [cdparanoia flac libogg libvorbis];
 }

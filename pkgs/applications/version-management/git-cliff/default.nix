@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-cliff";
-  version = "2.6.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
     rev = "v${version}";
-    hash = "sha256-GRvZ9jdooduFylTGgUQNjdnD2Aa+jT5faV0/c3GBpqw=";
+    hash = "sha256-d6IawXBumA5ZJiigMTx4IZgOFrH5bNrbRsNHfT4Ik3w=";
   };
 
-  cargoHash = "sha256-vgVTHTEKfjWJzxDQ5w0dwp9qxyN5sgbBseXHN25bx9o=";
+  cargoHash = "sha256-zXcVOE+yTD4SsVNTYhXnKy6et5en9jzYXPKPVnCOixI=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;

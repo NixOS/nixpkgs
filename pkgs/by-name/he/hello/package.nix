@@ -31,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     version = testers.testVersion { package = hello; };
+
+    invariant-under-noXlibs =
+      testers.testEqualDerivation
+        "hello must not be rebuilt when environment.noXlibs is set."
+        hello
+        (nixos { environment.noXlibs = true; }).pkgs.hello;
   };
 
   passthru.tests.run = callPackage ./test.nix { hello = finalAttrs.finalPackage; };

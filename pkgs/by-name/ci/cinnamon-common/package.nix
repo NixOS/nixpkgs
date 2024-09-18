@@ -18,6 +18,7 @@
 , gtk3
 , intltool
 , json-glib
+, callPackage
 , libstartup_notification
 , libXtst
 , libXdamage

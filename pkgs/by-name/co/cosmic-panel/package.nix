@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage {
     description = "Panel for the COSMIC Desktop Environment";
     mainProgram = "cosmic-panel";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyabinary ];
+    maintainers = with maintainers; [ qyliss nyanbinary ];
     platforms = platforms.linux;
   };
 }

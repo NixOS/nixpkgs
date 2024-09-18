@@ -147,10 +147,6 @@ in {
         spectacle
         ffmpegthumbs
         krdp
-      ] ++ lib.optionals config.services.flatpak.enable [
-        # Since PackageKit Nix support is not there yet,
-        # only install discover if flatpak is enabled.
-        discover
       ];
     in
       requiredPackages

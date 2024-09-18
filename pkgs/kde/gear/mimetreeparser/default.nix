@@ -7,9 +7,5 @@
 mkKdeDerivation {
   pname = "mimetreeparser";
 
-  extraBuildInputs = [
-    qt5compat
-    qtdeclarative
-    qgpgme
-  ];
+  extraBuildInputs = [qt5compat qtdeclarative qgpgme];
 }

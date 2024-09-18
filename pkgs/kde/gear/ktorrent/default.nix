@@ -7,9 +7,5 @@
 mkKdeDerivation {
   pname = "ktorrent";
 
-  extraBuildInputs = [
-    qtwebengine
-    taglib
-    libmaxminddb
-  ];
+  extraBuildInputs = [qtwebengine taglib libmaxminddb];
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-buildx";
-  version = "0.17.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
     rev = "v${version}";
-    hash = "sha256-KYPOeDI1g7hUwS7gvKiuOck/2MwvnawP1ZgDAfo4brA=";
+    hash = "sha256-s4VLuOLPNZGThnvr20EBddxKkreWf3B4D0RRx9OwJiw=";
   };
 
   doCheck = false;

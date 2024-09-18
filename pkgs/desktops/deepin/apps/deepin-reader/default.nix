@@ -17,6 +17,7 @@
   libspectre,
   openjpeg,
   djvulibre,
+  qtbase,
   gtest,
 }:
 

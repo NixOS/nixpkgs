@@ -1,8 +1,7 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchFromGitLab,
-  libgit2,
+{ lib
+, mkKdeDerivation
+, fetchFromGitLab
+, libgit2
 }:
 mkKdeDerivation rec {
   pname = "kup";

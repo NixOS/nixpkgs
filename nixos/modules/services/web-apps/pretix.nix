@@ -249,7 +249,7 @@ in
             };
 
             host = mkOption {
-              type = with types; nullOr str;
+              type = with types; nullOr path;
               default = if cfg.settings.database.backend == "postgresql" then "/run/postgresql" else null;
               defaultText = literalExpression ''
                 if config.services.pretix.settings..database.backend == "postgresql" then "/run/postgresql"

@@ -2,57 +2,45 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nh3,
-  pillow,
-  pytest-cov-stub,
+  html5lib,
   pytestCheckHook,
   pythonOlder,
   regex,
-  setuptools-scm,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "textile";
-  version = "4.0.3";
-  pyproject = true;
+  version = "4.0.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "textile";
+    owner = pname;
     repo = "python-textile";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KVDppsvX48loV9OJ70yqmQ5ZSypzcxrjH1j31DcyfM8=";
+    rev = version;
+    hash = "sha256-WwX7h07Bq8sNsViHwmfhrrqleXacmrIY4ZBBaP2kKnI=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
-
-  dependencies = [
-    nh3
+  propagatedBuildInputs = [
+    html5lib
     regex
   ];
 
-  optional-dependencies = {
-    imagesize = [ pillow ];
-  };
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytest-cov-stub
-    pytestCheckHook
-  ];
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov=textile --cov-report=html --cov-append --cov-report=term-missing" ""
+  '';
 
   pythonImportsCheck = [ "textile" ];
 
   meta = with lib; {
     description = "MOdule for generating web text";
+    mainProgram = "pytextile";
     homepage = "https://github.com/textile/python-textile";
-    changelog = "https://github.com/textile/python-textile/blob/${version}/CHANGELOG.textile";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "pytextile";
   };
 }

@@ -12,7 +12,6 @@
   python3,
   buildLlvmTools,
   patches ? [ ],
-  devExtraCmakeFlags ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,11 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  cmakeFlags =
-    lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.llvm}/bin/llvm-tblgen")
-    ]
-    ++ devExtraCmakeFlags;
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.llvm}/bin/llvm-tblgen")
+  ];
 
   postUnpack = ''
     chmod -R u+w -- $sourceRoot/..

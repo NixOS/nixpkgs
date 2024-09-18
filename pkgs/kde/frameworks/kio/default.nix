@@ -13,10 +13,5 @@ mkKdeDerivation {
     ./0001-Remove-impure-smbd-search-path.patch
   ];
 
-  extraBuildInputs = [
-    qt5compat
-    qttools
-    acl
-    attr
-  ];
+  extraBuildInputs = [qt5compat qttools acl attr];
 }

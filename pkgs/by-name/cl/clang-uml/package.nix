@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     yaml-cpp
   ];
 
-  cmakeBuildType = if debug then "Debug" else "Release";
+  cmakeFlags = if debug then [ "-DCMAKE_BUILD_TYPE=Debug" ] else [ ];
 
   clang = if enableLibcxx then llvmPackages.libcxxClang else llvmPackages.clang;
 

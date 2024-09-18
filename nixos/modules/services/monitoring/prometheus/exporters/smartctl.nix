@@ -58,7 +58,7 @@ in
       PrivateDevices = lib.mkForce false;
       ProtectProc = "invisible";
       ProcSubset = "pid";
-      SupplementaryGroups = [ "disk" "smartctl-exporter-access" ];
+      SupplementaryGroups = [ "disk" ];
       SystemCallFilter = [ "@system-service" "~@privileged" ];
     };
   };

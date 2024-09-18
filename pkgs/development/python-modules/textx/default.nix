@@ -3,9 +3,17 @@
   buildPythonPackage,
   python,
   fetchFromGitHub,
+  mkdocs,
+  twine,
   arpeggio,
   click,
+  future,
+  setuptools,
   callPackage,
+  gprof2dot,
+  html5lib,
+  jinja2,
+  psutil,
   flit-core,
 }:
 

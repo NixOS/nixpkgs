@@ -10,9 +10,9 @@
 , cmake
 , ninja
 , pkg-config
-, curl
 , libavif
 , libjxl
+, libtiff
 , libwebp
 , libxcrypt
 , python3
@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-09-21";
+  version = "0-unstable-2024-09-08";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "44f672bacf6779f6bbe5972d84e210f953f14598";
-    hash = "sha256-Qku6W1kETOXQh8Kxn0wabe0Xc4gkpxrGbDFwIik34eY=";
+    rev = "8d6f36f8d6c0aea0253df8c84746f8c99bf79b4d";
+    hash = "sha256-EB26SAh9eckpq/HrO8O+PivMMmLpFtCdCNkOJcLQvZw=";
   };
 
   postPatch = ''
@@ -134,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = with qt6Packages; [
-    curl
     ffmpeg
     libavif
     libjxl

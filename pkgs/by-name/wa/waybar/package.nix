@@ -179,14 +179,12 @@ stdenv.mkDerivation (finalAttrs: {
       "pulseaudio" = pulseSupport;
       "rfkill" = rfkillSupport;
       "sndio" = sndioSupport;
-      "systemd" = true;
+      "systemd" = false;
       "tests" = runTests;
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
     })
     ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
-
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   postPatch = ''
     substituteInPlace include/util/command.hpp \

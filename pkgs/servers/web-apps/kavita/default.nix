@@ -1,22 +1,23 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildDotnetModule,
-  buildNpmPackage,
-  dotnetCorePackages,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildDotnetModule
+, buildNpmPackage
+, dotnetCorePackages
+, nixosTests
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.8.3.2";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8ZE3zlWX8DxLYUFj3AA04cIJTUWYgnNM+5FZhGmlRz8=";
+    # commit immediately following the v${version} tag
+    # for correct version reporting
+    rev = "44c046176e54fa81e3420a1a40dcd9871e0a45f1";
+    hash = "sha256-cHX6nzajFqygdFF9y4KEAMv0tdNx9xFbpOoVNo8uafs=";
   };
 
   backend = buildDotnetModule {
@@ -48,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   };
 
-  frontend = buildNpmPackage {
+  frontend =  buildNpmPackage {
     pname = "kavita-frontend";
     inherit (finalAttrs) version src;
 
@@ -57,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-EB4B6BHiRi6A4nhj2dR+3q1MZKcfcYUuo4ls4WMJEUI=";
+    npmDepsHash = "sha256-H53lwRr43MQWBbwc8N0GikAOkN2N0CwyiY8eGHveNFc=";
   };
 
   dontBuild = true;
@@ -74,9 +75,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) kavita;
-    };
+    tests = { inherit (nixosTests) kavita; };
     updateScript = ./update.sh;
   };
 
@@ -86,10 +85,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kareadita/kavita/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      misterio77
-      nevivurn
-    ];
+    maintainers = with lib.maintainers; [ misterio77 nevivurn ];
     mainProgram = "kavita";
   };
 })

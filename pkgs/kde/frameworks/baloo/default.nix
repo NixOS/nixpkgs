@@ -11,8 +11,5 @@ mkKdeDerivation {
     substituteInPlace src/file/kde-baloo.service.in --replace-fail @KDE_INSTALL_FULL_BINDIR@/kde-systemd-start-condition /run/current-system/sw/bin/kde-systemd-start-condition
   '';
 
-  extraBuildInputs = [
-    qtdeclarative
-    lmdb
-  ];
+  extraBuildInputs = [qtdeclarative lmdb];
 }

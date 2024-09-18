@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, openssl
 , postgresql
 , postgresqlTestHook
+, readline
 , testers
 , zlib
 }:

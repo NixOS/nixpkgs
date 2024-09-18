@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, gzip
 , brotli
 }:
 

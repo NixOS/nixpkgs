@@ -2,6 +2,7 @@
 { lua
 , lib
 , makeSetupHook
+, findutils
 , runCommand
 }:
 

@@ -17,7 +17,6 @@
 , fixDarwinDylibNames
 , enableManpages ? false
 , clang-tools-extra_src ? null
-, devExtraCmakeFlags ? []
 }:
 
 let
@@ -70,9 +69,7 @@ let
       # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
       "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
       "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]) ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
-      "-DCLANG_DEFAULT_CXX_STDLIB=ON"
-    ] ++ devExtraCmakeFlags;
+    ]) ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "-DCLANG_DEFAULT_CXX_STDLIB=ON";
 
     postPatch = ''
       # Make sure clang passes the correct location of libLTO to ld64

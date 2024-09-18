@@ -2,8 +2,10 @@
 , writeText
 , nodePackages
 , python3
+, python3Packages
 , callPackage
 , neovimUtils
+, vimUtils
 , perl
 , lndir
 }:

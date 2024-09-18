@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "deck";
-  version = "1.40.1";
+  version = "1.39.6";
 
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
     rev = "v${version}";
-    hash = "sha256-wb7/g1g7gxKhZyK7GW+6aGwuD+Dkcdg2Zpc0JCxVPjM=";
+    hash = "sha256-IiwS+NsjXW4kVAaJnsI8HEAl2pPRQr3K2ZpC7n/VjU4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -21,7 +21,7 @@ buildGoModule rec {
   ];
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-8o3jXkhfRIGGPtw8ow+NyAYAuCJNrBlSyfdSI0pjvDQ=";
+  vendorHash = "sha256-wpTXuyeUIPg6WPzVyOIFadodlKHzr5DeDeHhDRKsYbY=";
 
   postInstall = ''
     installShellCompletion --cmd deck \

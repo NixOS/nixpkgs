@@ -4,6 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
+  cmake,
   pkg-config,
   python3,
 }:

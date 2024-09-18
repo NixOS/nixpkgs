@@ -2,7 +2,9 @@
 , stdenv
 , fetchzip
 , makeWrapper
+, jdk8
 , python3
+, coreutils
 , hadoop
 , RSupport ? true
 , R

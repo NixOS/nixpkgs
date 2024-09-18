@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-bg";
     description = "Applies Background for the COSMIC Desktop Environment";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyabinary ];
+    maintainers = with maintainers; [ nyanbinary ];
     platforms = platforms.linux;
     mainProgram = "cosmic-bg";
   };

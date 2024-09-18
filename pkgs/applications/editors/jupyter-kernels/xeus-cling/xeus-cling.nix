@@ -68,7 +68,9 @@ clangStdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeBuildType = if debug then "Debug" else "Release";
+  cmakeFlags = lib.optionals debug [
+    "-DCMAKE_BUILD_TYPE=Debug"
+  ];
 
   postPatch = ''
     substituteInPlace src/xmagics/executable.cpp \

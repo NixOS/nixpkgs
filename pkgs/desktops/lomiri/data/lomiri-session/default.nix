@@ -12,6 +12,7 @@
   lomiri,
   makeWrapper,
   pkg-config,
+  runtimeShell,
   systemd,
 }:
 

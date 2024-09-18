@@ -689,8 +689,6 @@ let
 
     httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
 
-    httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
-
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     ### I ###
@@ -1178,8 +1176,6 @@ let
     mirage-xen = callPackage ../development/ocaml-modules/mirage-xen { };
 
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
-
-    mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
 
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 

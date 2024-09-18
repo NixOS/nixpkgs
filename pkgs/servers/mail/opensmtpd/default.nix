@@ -6,6 +6,7 @@
 , pkgconf
 , libtool
 , bison
+, libasr
 , libevent
 , zlib
 , libressl

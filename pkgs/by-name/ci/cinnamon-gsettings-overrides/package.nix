@@ -1,5 +1,6 @@
 { lib
 , runCommand
+, nixos-artwork
 , glib
 , gnome-terminal
 , gtk3

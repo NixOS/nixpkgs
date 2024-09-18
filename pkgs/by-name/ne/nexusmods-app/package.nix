@@ -6,6 +6,7 @@
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
+  fontconfig,
   lib,
   runCommand,
   pname ? "nexusmods-app",

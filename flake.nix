@@ -64,7 +64,7 @@
               boot.loader.grub.enable = false;
               fileSystems."/".device = "nodev";
               # See https://search.nixos.org/options?show=system.stateVersion&query=stateversion
-              system.stateVersion = lib.trivial.release; # DON'T do this in real configs!
+              system.stateVersion = lib.versions.majorMinor lib.version; # DON'T do this in real configs!
             })
           ];
         }).config.system.build.toplevel;

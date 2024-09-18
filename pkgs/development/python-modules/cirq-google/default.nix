@@ -15,9 +15,11 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     cirq-core
     google-api-core
     protobuf

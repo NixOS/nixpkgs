@@ -1,19 +1,19 @@
 { lib
-, buildGo123Module
+, buildGoModule
 , fetchFromGitHub
 , clang
 , libpcap
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "pwru";
-  version = "1.0.8";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "pwru";
     rev = "v${version}";
-    hash = "sha256-HK8t+IaeFLuyqUTuVSShbO426uaFyZcr+jZyz0wo4jw=";
+    hash = "sha256-BjiFuM06YDlPyB578p2hweBay+4z0bOn7fUoxSvrDY8=";
   };
 
   vendorHash = null;

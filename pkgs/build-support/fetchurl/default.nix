@@ -164,8 +164,7 @@ stdenvNoCC.mkDerivation ((
   # New-style output content requirements.
   inherit (hash_) outputHashAlgo outputHash;
 
-  # Disable TLS verification only when we know the hash and no credentials are needed to access the ressource
-  SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash || netrcPhase != null)
+  SSL_CERT_FILE = if (hash_.outputHash == "" || hash_.outputHash == lib.fakeSha256 || hash_.outputHash == lib.fakeSha512 || hash_.outputHash == lib.fakeHash)
                   then "${cacert}/etc/ssl/certs/ca-bundle.crt"
                   else "/no-cert-file.crt";
 

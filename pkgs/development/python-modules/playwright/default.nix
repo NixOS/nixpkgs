@@ -12,7 +12,6 @@
   setuptools,
   setuptools-scm,
   playwright-driver,
-  nixosTests,
   nodejs,
 }:
 
@@ -94,14 +93,10 @@ buildPythonPackage rec {
 
   passthru = {
     inherit driver;
-    tests =
-      {
-        driver = playwright-driver;
-        browsers = playwright-driver.browsers;
-      }
-      // lib.optionalAttrs stdenv.isLinux {
-        inherit (nixosTests) playwright-python;
-      };
+    tests = {
+      driver = playwright-driver;
+      browsers = playwright-driver.browsers;
+    };
     updateScript = ./update.sh;
   };
 

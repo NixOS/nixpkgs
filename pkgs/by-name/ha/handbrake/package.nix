@@ -11,6 +11,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   # For tests
   testers,
   runCommand,

@@ -2,6 +2,7 @@
   lib,
   runCommand,
   glib,
+  gtk3,
   dde-grand-search,
   startdde,
   dde-session-shell,

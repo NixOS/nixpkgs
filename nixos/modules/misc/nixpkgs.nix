@@ -386,10 +386,7 @@ in
           `nixpkgs.config` options should be passed when creating the instance instead.
 
           Current value:
-          ${lib.generators.toPretty { multiline = true; } cfg.config}
-
-          Defined in:
-          ${lib.concatMapStringsSep "\n" (file: "  - ${file}") opt.config.files}
+          ${lib.generators.toPretty { multiline = true; } opt.config}
         '';
       }
     ];

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmsx";
-  version = "20_0";
+  version = "19.1";
 
   src = fetchFromGitHub {
     owner = "openMSX";
     repo = "openMSX";
     rev = "RELEASE_${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
-    hash = "sha256-iY+oZ7fHZnnEGunM4kOxOGH2Biqj2PfdLhbT8J4mYrA=";
+    hash = "sha256-5ULljLmEDGFp32rnrXKLfL6P3ad2STJUNngBuWlRCbc=";
     fetchSubmodules = true;
   };
 

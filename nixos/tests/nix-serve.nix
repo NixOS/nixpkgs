@@ -1,4 +1,4 @@
-{ config, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "nix-serve";
   nodes.machine = { pkgs, ... }: {
@@ -9,7 +9,7 @@
   };
   testScript = let
     pkgHash = builtins.head (
-      builtins.match "${builtins.storeDir}/([^-]+).+" (toString config.node.pkgs.hello)
+      builtins.match "${builtins.storeDir}/([^-]+).+" (toString pkgs.hello)
     );
   in ''
     start_all()
@@ -19,4 +19,4 @@
         "curl --fail -g http://0.0.0.0:5000/nar/${pkgHash}.nar -o /tmp/hello.nar"
     )
   '';
-}
+})

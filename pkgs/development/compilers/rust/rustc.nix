@@ -156,7 +156,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # Since fastCross only builds std, it doesn't make sense (and
     # doesn't work) to build a linker.
     "--disable-llvm-bitcode-linker"
-  ] ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
+  ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox && !(stdenv.targetPlatform.useLLVM or false)) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
     "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"

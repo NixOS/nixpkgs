@@ -6,14 +6,14 @@
 , gitUpdater
 }: python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";
-  version = "0.4.4";
+  version = "0.4.3";
   format = "other";
 
   src = fetchFromGitHub {
-    owner = "KlipperScreen";
+    owner = "jordanruthe";
     repo = "KlipperScreen";
     rev = "v${version}";
-    hash = "sha256-MxuUmkuEnfFC0iPwNUc0Wh8bIEl1J1FMgGEYMjHePZ8=";
+    hash = "sha256-6hMefH9VcNnWhKdQRs7cPVL86LEDRSLaxygmi15HdLI=";
   };
 
   nativeBuildInputs = [

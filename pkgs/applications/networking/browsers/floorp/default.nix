@@ -2,8 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildMozillaMach,
   nixosTests,
+  python311,
 }:
 
 (

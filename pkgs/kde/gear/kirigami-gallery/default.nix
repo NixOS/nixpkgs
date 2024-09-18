@@ -6,8 +6,5 @@
 mkKdeDerivation {
   pname = "kirigami-gallery";
 
-  extraNativeBuildInputs = [
-    qtsvg
-    qttools
-  ];
+  extraNativeBuildInputs = [qtsvg qttools];
 }

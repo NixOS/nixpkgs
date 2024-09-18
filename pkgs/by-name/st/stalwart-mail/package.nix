@@ -26,7 +26,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.10.0";
+  version = "0.9.4";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9qk7+LJntEmCIuxp0707OOHBVkywlAJA1QmWllR9ZHg=";
+    hash = "sha256-GDi7kRwI0GujQBJXItQpYZT1I1Hz3DUMyTixJ/lQySY=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-O1LuEHH5VD/6875Psfp5N/oWYlo1cuTlHzwcgG9RrpI=";
+  cargoHash = "sha256-7gJi6sykmKRuZZ8svXWlktHnwr78zaE2jxVIt+sZPHg=";
 
   patches = [
     # Remove "PermissionsStartOnly" from systemd service files,
@@ -140,10 +140,6 @@ rustPlatform.buildRustPackage {
     # thread 'smtp::queue::concurrent::concurrent_queue' panicked at tests/src/smtp/inbound/mod.rs:65:9:
     # assertion `left == right` failed
     "--skip=smtp::queue::concurrent::concurrent_queue"
-    # Failed to read system DNS config: io error: No such file or directory (os error 2)
-    "--skip=smtp::inbound::auth::auth"
-    # Failed to read system DNS config: io error: No such file or directory (os error 2)
-    "--skip=smtp::inbound::vrfy::vrfy_expn"
   ];
 
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);

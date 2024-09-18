@@ -60,7 +60,7 @@ in {
     systemd.user.services.cdemu-daemon.serviceConfig = {
       Type = "dbus";
       BusName = "net.sf.cdemu.CDEmuDaemon";
-      ExecStart = "${lib.getExe pkgs.cdemu-daemon} --config-file \"%h/.config/cdemu-daemon\"";
+      ExecStart = "${pkgs.cdemu-daemon}/bin/cdemu-daemon --config-file \"%h/.config/cdemu-daemon\"";
       Restart = "no";
     };
 

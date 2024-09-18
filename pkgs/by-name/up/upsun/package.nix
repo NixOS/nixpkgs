@@ -3,29 +3,34 @@
   lib,
   fetchurl,
   testers,
-  installShellFiles,
   upsun
 }:
 
-let versions = lib.importJSON ./versions.json;
-    arch = if stdenvNoCC.isx86_64 then "amd64"
-           else if stdenvNoCC.isAarch64 then "arm64"
-           else throw "Unsupported architecture";
-    os = if stdenvNoCC.isLinux then "linux"
-         else if stdenvNoCC.isDarwin then "darwin"
-         else throw "Unsupported os";
-    versionInfo = versions."${os}-${arch}";
-    inherit (versionInfo) hash url;
-
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "upsun";
-  inherit (versions) version;
+  version = "5.0.13";
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  # run ./update
-  src = fetchurl { inherit hash url; };
+  src =
+    {
+      x86_64-darwin = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/upsun_${finalAttrs.version}_darwin_all.tar.gz";
+        hash = "sha256-5JKXtAUnqrlufyNE05uZjEDfJv557auYPriTxvUbMJI=";
+      };
+      aarch64-darwin = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/upsun_${finalAttrs.version}_darwin_all.tar.gz";
+        hash = "sha256-5JKXtAUnqrlufyNE05uZjEDfJv557auYPriTxvUbMJI=";
+      };
+      x86_64-linux = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/upsun_${finalAttrs.version}_linux_amd64.tar.gz";
+        hash = "sha256-fjVL/sbO1wmaJ4qZpUMV/4Q4Jzf0p6qx0ElRdY5EUJU=";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/upsun_${finalAttrs.version}_linux_arm64.tar.gz";
+        hash = "sha256-MNlQkwsg5SuIQJBDy7yVtcda1odpaUZezCgrat6OW2Q=";
+      };
+    }
+    .${stdenvNoCC.system}
+      or (throw "${finalAttrs.pname}-${finalAttrs.version}: ${stdenvNoCC.system} is unsupported.");
 
   dontConfigure = true;
   dontBuild = true;
@@ -36,14 +41,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm755 upsun $out/bin/upsun
 
-    installShellCompletion completion/bash/upsun.bash \
-        completion/zsh/_upsun
-
     runHook postInstall
   '';
 
   passthru = {
-    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       inherit (finalAttrs) version;
       package = upsun;

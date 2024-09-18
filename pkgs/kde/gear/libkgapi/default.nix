@@ -6,8 +6,5 @@
 mkKdeDerivation {
   pname = "libkgapi";
 
-  extraBuildInputs = [
-    qttools
-    cyrus_sasl
-  ];
+  extraBuildInputs = [qttools cyrus_sasl];
 }

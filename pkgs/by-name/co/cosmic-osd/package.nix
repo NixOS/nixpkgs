@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     description = "OSD for the COSMIC Desktop Environment";
     mainProgram = "cosmic-osd";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
+    maintainers = with maintainers; [ nyanbinary ];
     platforms = platforms.linux;
   };
 }

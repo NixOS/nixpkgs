@@ -6,6 +6,7 @@
   cmake,
   freetype,
   gfortran,
+  gnused,
   openssl,
   libnsl,
   motif,

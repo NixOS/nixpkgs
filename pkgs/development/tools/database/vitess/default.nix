@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vitess";
-  version = "20.0.2";
+  version = "20.0.1";
 
   src = fetchFromGitHub {
     owner = "vitessio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-I+pz8bz/H1mg7cQnPiJZxYr1gyzajMLVqg8yHbBXYLc=";
+    hash = "sha256-OkVBV/Fj2OKxkxjVBdTAyiGETuLw7OvV0KInp533iM8=";
   };
 
   vendorHash = "sha256-ZDPDL7vJoPv5pIS5xhHAgLiZsiF2B85KNnqGQJPk1SQ=";

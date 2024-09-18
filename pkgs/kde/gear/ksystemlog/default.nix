@@ -7,10 +7,7 @@
 mkKdeDerivation {
   pname = "ksystemlog";
 
-  extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [
-    qt5compat
-    audit
-  ];
+  extraNativeBuildInputs = [pkg-config];
+  extraBuildInputs = [qt5compat audit];
   meta.mainProgram = "ksystemlog";
 }

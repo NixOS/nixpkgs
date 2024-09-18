@@ -5,7 +5,7 @@
 , faraday
 , base64
 , psq
-, httpun-types
+, httpaf
 , alcotest
 , yojson
 , hex
@@ -34,7 +34,7 @@ buildDunePackage rec {
     base64
     psq
     hpack
-    httpun-types
+    httpaf
   ];
 
   doCheck = true;

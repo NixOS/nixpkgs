@@ -6,8 +6,5 @@
 mkKdeDerivation {
   pname = "merkuro";
 
-  extraBuildInputs = [
-    qtsvg
-    libplasma
-  ];
+  extraBuildInputs = [qtsvg libplasma];
 }

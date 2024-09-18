@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , fetchpatch
+, substituteAll
 , pkg-config
 , gtk-doc
 , gobject-introspection
@@ -33,6 +34,7 @@
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
+, openssl
 , python3
 }:
 

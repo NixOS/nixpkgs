@@ -8,6 +8,7 @@
 , gtk3
 , libcanberra
 , libxslt
+, makeWrapper
 , meson
 , ninja
 , pkg-config

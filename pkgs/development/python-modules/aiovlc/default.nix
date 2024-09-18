@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "aiovlc";
-  version = "0.5.0";
+  version = "0.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiovlc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F66HGfbsve/jYyUEapUTVtLxaEIW63r3eNNk7mXOx5Y=";
+    hash = "sha256-lIcArNodNeC6Wtmsir6f0SwgHlafC3lh72mLU4UGBtg=";
   };
 
   build-system = [ poetry-core ];

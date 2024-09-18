@@ -2,7 +2,7 @@
 , lib
 , nixosTests
 , nix-update-script
-, buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , installShellFiles
 , pkg-config
@@ -29,15 +29,15 @@ let
       signal = "netbird-signal";
     };
 in
-buildGoModule rec {
+buildGo123Module rec {
   pname = "netbird";
-  version = "0.29.4";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     rev = "v${version}";
-    hash = "sha256-W71CE83r/RcPdBjzfT+FSh72UcKcTmIuagkrC1eaeNk=";
+    hash = "sha256-0KLx3kxXGriKZqyvcLRoz8y4y729ZQVuOKDkm8p2te4=";
   };
 
   vendorHash = "sha256-CD34U+Z8bUKN0Z4nxIVC+mYDp71Q8q1bmUypRDGgb3U=";
