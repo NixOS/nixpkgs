@@ -69,8 +69,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./0002-Add-Darwin-deps.patch
-    ./0003-Fix-cpp-build.patch
+    # Upstream makefile does not work with system deps on macOS by default, so
+    # we reuse the Linux section instead.
+    ./fix-darwin-system-deps.patch
+    # Upstream C++ wrap script only defines fixed-sized integers on macOS but
+    # this is required on aarch64-linux too.
+    ./fix-cpp-build.patch
   ];
 
   postPatch = ''
