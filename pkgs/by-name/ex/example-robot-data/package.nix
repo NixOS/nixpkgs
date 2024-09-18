@@ -1,11 +1,13 @@
 {
-  lib,
-  stdenv,
+  cmake,
+  doxygen,
   fetchFromGitHub,
   fetchpatch,
-  cmake,
+  lib,
+  pkg-config,
   pythonSupport ? false,
   python3Packages,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Heq+c8SSYNO8ksTv5FphRBRStlTakm9T66jlPXon5tI=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   strictDeps = true;
 
   patches = [
@@ -33,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs =
-    [ cmake ]
+    [
+      cmake
+      doxygen
+      pkg-config
+    ]
     ++ lib.optionals pythonSupport [
       python3Packages.python
       python3Packages.pythonImportsCheckHook
