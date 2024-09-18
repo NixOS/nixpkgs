@@ -86,6 +86,7 @@ python3.pkgs.buildPythonApplication rec {
     flask-cors
     fpdf2
     google-generativeai
+    googleapis-common-protos
     langchain
     langchain-chroma
     langchain-community
