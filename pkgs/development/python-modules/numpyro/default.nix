@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
 
   # build-system
@@ -23,14 +22,12 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.15.2";
+  version = "0.15.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-6G3TrDyQ5N2uuzLzzEus1czCtvg3M0wBorLo2vQZozE=";
+    hash = "sha256-9EXurmIA+IPXkNZc4p/yRfepY5usMyLZk+zPkcRAI7M=";
   };
 
   build-system = [ setuptools ];
