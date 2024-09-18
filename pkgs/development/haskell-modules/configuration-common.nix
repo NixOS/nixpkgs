@@ -2458,9 +2458,7 @@ self: super: {
   # See: https://gitlab.haskell.org/ghc/ghc/-/issues/17188
   #
   # Overwrite the build cores
-  raaz = overrideCabal (drv: {
-    enableParallelBuilding = false;
-  }) super.raaz;
+  raaz = disableParallelBuilding super.raaz;
 
   # https://github.com/andreymulik/sdp/issues/3
   sdp = disableLibraryProfiling super.sdp;

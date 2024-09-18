@@ -15,8 +15,6 @@ let
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 
-  # Workaround for a ghc-9.6 issue: https://gitlab.haskell.org/ghc/ghc/-/issues/23392
-  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
