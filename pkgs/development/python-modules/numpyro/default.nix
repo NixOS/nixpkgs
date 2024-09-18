@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -13,11 +13,19 @@
   numpy,
   tqdm,
 
-  # checks
+  # tests
+  # Our current version of tensorflow (2.13.0) is too old and doesn't support python>=3.12
+  # We remove optional test dependencies that require tensorflow and skip the corresponding tests to
+  # avoid introducing a useless incompatibility with python 3.12:
+  # dm-haiku,
+  # flax,
+  # tensorflow-probability,
   funsor,
+  graphviz,
+  optax,
+  pyro-api,
   pytestCheckHook,
-# TODO: uncomment when tensorflow-probability gets fixed.
-# , tensorflow-probability
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +33,11 @@ buildPythonPackage rec {
   version = "0.15.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version pname;
-    hash = "sha256-9EXurmIA+IPXkNZc4p/yRfepY5usMyLZk+zPkcRAI7M=";
+  src = fetchFromGitHub {
+    owner = "pyro-ppl";
+    repo = "numpyro";
+    rev = "refs/tags/${version}";
+    hash = "sha256-g+ep221hhLbCjQasKpiEAXkygI5A3Hglqo1tV8lv5eg=";
   };
 
   build-system = [ setuptools ];
@@ -41,9 +51,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    # dm-haiku
+    # flax
     funsor
+    graphviz
+    optax
+    pyro-api
     pytestCheckHook
-    # TODO: uncomment when tensorflow-probability gets fixed.
+    scikit-learn
     # tensorflow-probability
   ];
 
@@ -60,17 +75,45 @@ buildPythonPackage rec {
     "test_kl_dirichlet_dirichlet"
     "test_kl_univariate"
     "test_mean_var"
+
     # Tests want to download data
     "data_load"
     "test_jsb_chorales"
+
     # RuntimeWarning: overflow encountered in cast
     "test_zero_inflated_logits_probs_agree"
+
     # NameError: unbound axis name: _provenance
     "test_model_transformation"
+
+    # require dm-haiku
+    "test_flax_state_dropout_smoke"
+    "test_flax_module"
+    "test_random_module_mcmc"
+
+    # require flax
+    "test_haiku_state_dropout_smoke"
+    "test_haiku_module"
+    "test_random_module_mcmc"
+
+    # require tensorflow-probability
+    "test_modified_bessel_first_kind_vect"
+    "test_diag_spectral_density_periodic"
+    "test_kernel_approx_periodic"
+    "test_modified_bessel_first_kind_one_dim"
+    "test_modified_bessel_first_kind_vect"
+    "test_periodic_gp_one_dim_model"
+    "test_no_tracer_leak_at_lazy_property_sample"
   ];
 
-  # TODO: remove when tensorflow-probability gets fixed.
-  disabledTestPaths = [ "test/test_distributions.py" ];
+  disabledTestPaths = [
+    # require jaxns (unpackaged)
+    "test/contrib/test_nested_sampling.py"
+
+    # requires tensorflow-probability
+    "test/contrib/test_tfp.py"
+    "test/test_distributions.py"
+  ];
 
   meta = {
     description = "Library for probabilistic programming with NumPy";
