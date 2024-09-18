@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
       own Mastodon instance.
     '';
     homepage = "https://blog.thms.uk/fedifetcher";
+    changelog = "https://github.com/nanos/FediFetcher/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = teams.c3d2.members;
     mainProgram = "fedifetcher";
