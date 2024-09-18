@@ -18,15 +18,15 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-dB8reN5rTlY5czFH7BaRya7qBa6czAIH2NkFWZh81ek=";
-      x86_64-darwin = "sha256-tpUcduCPCbVVaYZZOhWdPlN6SW3LGZPWSO9bDStVDms=";
-      aarch64-darwin = "sha256-V8QGF3Dpuy9I6CqKsJRHBHRdaLhc4XKZkv/rI7zs+qQ=";
+      x86_64-linux = "sha256-IgdIYQffNj2L3NQvP/no7ax1FQQ/FMPOAuUwQUCK1Cs=";
+      x86_64-darwin = "sha256-h8TlNCRUFOGGffnoVshKXIjC+ZlhB76dGMLYvEQdspA=";
+      aarch64-darwin = "sha256-tzjYmyBTwCt1ibUgfEsjr6RsLCumaURerw8c79LdzsI=";
     }
     ."${stdenvNoCC.system}" or (throw "unsupported system ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bleep";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchzip {
     url = "https://github.com/oyvindberg/bleep/releases/download/v${finalAttrs.version}/bleep-${platform}.tar.gz";
