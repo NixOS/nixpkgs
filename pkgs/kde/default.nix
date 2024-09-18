@@ -63,6 +63,7 @@
       kirigami-addons = self.callPackage ./misc/kirigami-addons {};
       kio-extras-kf5 = self.callPackage ./misc/kio-extras-kf5 {};
       kio-fuse = self.callPackage ./misc/kio-fuse {};
+      klevernotes = self.callPackage ./misc/klevernotes {};
       ktextaddons = self.callPackage ./misc/ktextaddons {};
       kunifiedpush = self.callPackage ./misc/kunifiedpush {};
       kup = self.callPackage ./misc/kup {};
