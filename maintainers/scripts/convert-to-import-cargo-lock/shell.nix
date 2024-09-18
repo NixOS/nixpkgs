@@ -1,17 +1,4 @@
 {
-  pkgs ? import ../../.. { },
+  convert-to-import-cargo-lock ? import ./default.nix { },
 }:
-let
-  inherit (pkgs) lib stdenv mkShell;
-in
-mkShell {
-  packages =
-    with pkgs;
-    [
-      rustc
-      cargo
-      clippy
-      rustfmt
-    ]
-    ++ lib.optional stdenv.isDarwin pkgs.libiconv;
-}
+convert-to-import-cargo-lock.shell
