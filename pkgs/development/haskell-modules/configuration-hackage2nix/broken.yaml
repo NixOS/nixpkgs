@@ -4566,7 +4566,6 @@ broken-packages:
   - pipes-cereal # failure in job https://hydra.nixos.org/build/233195413 at 2023-09-02
   - pipes-core # failure in job https://hydra.nixos.org/build/233213024 at 2023-09-02
   - pipes-errors # failure in job https://hydra.nixos.org/build/233214912 at 2023-09-02
-  - pipes-extras # failure in job https://hydra.nixos.org/build/252732291 at 2024-03-16
   - pipes-interleave # failure in job https://hydra.nixos.org/build/233247428 at 2023-09-02
   - pipes-io # failure in job https://hydra.nixos.org/build/233243253 at 2023-09-02
   - pipes-kafka # failure in job https://hydra.nixos.org/build/252727228 at 2024-03-16

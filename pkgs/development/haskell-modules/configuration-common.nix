@@ -1919,6 +1919,9 @@ self: super: {
   # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/pull/17
   pipes-http = doJailbreak super.pipes-http;
 
+  # 2024-09-18: transformers <0.6  https://github.com/Gabriella439/Haskell-Pipes-Extras-Library/pull/19
+  pipes-extras = assert super.pipes-extras.version == "1.0.15"; doJailbreak super.pipes-extras;
+
   moto-postgresql = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
     (fetchpatch {
