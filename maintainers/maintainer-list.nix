@@ -21500,7 +21500,7 @@
     githubId = 332418;
   };
   tsandrini = {
-    email = "tomas.sandrini@seznam.cz";
+    email = "t@tsandrini.sh";
     name = "Tomáš Sandrini";
     github = "tsandrini";
     githubId = 21975189;
