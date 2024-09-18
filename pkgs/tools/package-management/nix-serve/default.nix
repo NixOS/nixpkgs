@@ -35,6 +35,9 @@ stdenv.mkDerivation {
                 --add-flags $out/libexec/nix-serve/nix-serve.psgi
   '';
 
+  /** The nix package that nix-serve got its nix perl bindings from. */
+  passthru.nix = nix;
+
   passthru.tests = {
     nix-serve = nixosTests.nix-serve;
     nix-serve-ssh = nixosTests.nix-serve-ssh;
