@@ -1,25 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libusb1
-, readline
-, libimobiledevice-glue
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+
+  autoreconfHook,
+  pkg-config,
+
+  libimobiledevice-glue,
+  libusb1,
+  readline,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libirecovery";
-  version = "1.2.1";
-
-  outputs = [ "out" "dev" ];
+  version = "1.2.1-unstable-2024-10-10";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = version;
+    repo = "libirecovery";
+    rev = "2fb767d784c01269a0ded5bacd5539aee3768c35";
     hash = "sha256-R+oBC7F4op0qoIk3d/WqS4MwzZY3WMAMIqlJfJb188Q=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -27,13 +34,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libimobiledevice-glue
     libusb1
     readline
-    libimobiledevice-glue
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   # Packager note: Not clear whether this needs a NixOS configuration,
@@ -45,16 +52,19 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    homepage = "https://github.com/libimobiledevice/libirecovery";
     description = "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
     longDescription = ''
       libirecovery is a cross-platform library which implements communication to
       iBoot/iBSS found on Apple's iOS devices via USB. A command-line utility is also
       provided.
     '';
-    homepage = "https://github.com/libimobiledevice/libirecovery";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ nh2 ];
-    mainProgram = "irecovery";
     platforms = platforms.unix;
+    maintainers = with maintainers; [
+      frontear
+      nh2
+    ];
+    mainProgram = "irecovery";
   };
-}
+})
