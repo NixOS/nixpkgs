@@ -6690,9 +6690,9 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { };
+    inherit mozc;
 
-    mozc-ut = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { dictionaries = [
+    mozc-ut = mozc.override { dictionaries = [
       mozcdic-ut-alt-cannadic
       mozcdic-ut-edict2
       mozcdic-ut-jawiki
