@@ -493,9 +493,12 @@ let
     # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
     #
     # Once Rust in the kernel has more users, we can reconsider enabling it by default.
-    rust = lib.optionalAttrs ((features.rust or false) && lib.versionAtLeast version "6.7") {
-      RUST = yes;
-      GCC_PLUGINS = no;
+    rust = lib.optionalAttrs ((features.rust or false)
+      &&  ((stdenv.isx86_64  && lib.versionAtLeast version "6.7")
+        || (stdenv.isAarch64 && lib.versionAtLeast version "6.9")
+        || (stdenv.isRiscV64 && lib.versionAtLeast version "6.10"))) {
+          RUST = yes;
+          GCC_PLUGINS = no;
     };
 
     sound = {
