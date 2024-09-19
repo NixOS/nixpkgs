@@ -64,16 +64,7 @@ let
     manPage = ./manpages/nixos-version.8;
   };
 
-  nixos-enter = makeProg {
-    name = "nixos-enter";
-    src = ./nixos-enter.sh;
-    inherit (pkgs) runtimeShell;
-    path = makeBinPath [
-      pkgs.util-linuxMinimal
-    ];
-    manPage = ./manpages/nixos-enter.8;
-  };
-
+  inherit (pkgs) nixos-enter;
 in
 
 {
