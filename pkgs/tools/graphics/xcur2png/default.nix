@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libpng,
   xorg,
@@ -21,6 +22,12 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/eworm-de/xcur2png/pull/3
     ./malloc.diff
+
+    # fix byte overflows due to off-by-one error
+    (fetchpatch {
+      url = "https://github.com/eworm-de/xcur2png/commit/aa035462d950fab35d322cb87fd2f0d702251e82.patch";
+      hash = "sha256-hlmJ/bcDSl1ADs0jp+JrAgAaMzielUSRVPad+plnSZg=";
+    })
   ];
 
   nativeBuildInputs = [
