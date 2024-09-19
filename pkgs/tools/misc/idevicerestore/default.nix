@@ -1,25 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, curl
-, libimobiledevice
-, libirecovery
-, libzip
-, libusbmuxd
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
 
-stdenv.mkDerivation rec {
+  autoreconfHook,
+  pkg-config,
+
+  curl,
+  libimobiledevice,
+  libirecovery,
+  libtatsu,
+  libusbmuxd,
+  libzip,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "idevicerestore";
-  version = "1.0.0+date=2023-05-23";
+  version = "1.0.0-unstable-2024-10-15";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "609f7f058487596597e8e742088119fdd46729df";
-    hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
+    repo = "idevicerestore";
+    rev = "151c680feb6a0775d1b979dbdfca2ac6fdfc8cad";
+    hash = "sha256-6a6bRW3nquzlxfA4yDEN3GAyn7JSPRwzKCGK6zLSrAE=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -30,15 +36,16 @@ stdenv.mkDerivation rec {
     curl
     libimobiledevice
     libirecovery
-    libzip
+    libtatsu
     libusbmuxd
+    libzip
     # Not listing other dependencies specified in
     # https://github.com/libimobiledevice/idevicerestore/blob/8a882038b2b1e022fbd19eaf8bea51006a373c06/README#L20
     # because they are inherited `libimobiledevice`.
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   meta = with lib; {
@@ -58,9 +65,12 @@ stdenv.mkDerivation rec {
 
       This will download and restore a device to the latest firmware available.
     '';
-    license = licenses.lgpl21Plus;
+    license = licenses.lgpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [
+      frontear
+      nh2
+    ];
     mainProgram = "idevicerestore";
   };
-}
+})
