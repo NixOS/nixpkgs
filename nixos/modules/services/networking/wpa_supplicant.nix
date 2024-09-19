@@ -50,6 +50,8 @@ let
     ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig);
 
+  configFile = pkgs.writeText "wpa_supplicant.conf" generatedConfig;
+
   # Creates a network block for wpa_supplicant.conf
   mkNetwork = opts:
   let
@@ -81,7 +83,7 @@ let
     let
       deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
       configStr = if cfg.allowAuxiliaryImperativeNetworks
-        then "-c /etc/wpa_supplicant.conf -I ${pkgs.writeText "wpa_supplicant.conf" generatedConfig}"
+        then "-c /etc/wpa_supplicant.conf -I ${configFile}"
         else "-c /etc/wpa_supplicant.conf";
     in {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
@@ -92,6 +94,7 @@ let
       requires = deviceUnit;
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
+      restartTriggers = [ configFile ];
 
       path = [ pkgs.wpa_supplicant ];
       # if `userControl.enable`, the supplicant automatically changes the permissions
@@ -517,7 +520,7 @@ in {
     hardware.wirelessRegulatoryDatabase = true;
 
     environment.etc."wpa_supplicant.conf" =
-      lib.mkIf (!cfg.allowAuxiliaryImperativeNetworks) { text = generatedConfig; };
+      lib.mkIf (!cfg.allowAuxiliaryImperativeNetworks) { source = configFile; };
 
     environment.systemPackages = [ pkgs.wpa_supplicant ];
     services.dbus.packages = optional cfg.dbusControlled pkgs.wpa_supplicant;
