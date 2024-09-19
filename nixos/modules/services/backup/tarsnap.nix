@@ -87,7 +87,7 @@ in
 
               cachedir = lib.mkOption {
                 type = lib.types.nullOr lib.types.path;
-                default = "/var/cache/tarsnap/${utils.lib.escapeSystemdPath config.keyfile}";
+                default = "/var/cache/tarsnap/${utils.escapeSystemdPath config.keyfile}";
                 defaultText = lib.literalExpression ''
                   "/var/cache/tarsnap/''${utils.escapeSystemdPath config.${options.keyfile}}"
                 '';
