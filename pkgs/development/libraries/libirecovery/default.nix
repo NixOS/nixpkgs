@@ -1,25 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libusb1
-, readline
-, libimobiledevice-glue
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+
+  autoreconfHook,
+  pkg-config,
+
+  libimobiledevice-glue,
+  libusb1,
+  readline,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libirecovery";
-  version = "1.2.0";
-
-  outputs = [ "out" "dev" ];
+  version = "1.2.0-unstable-2024-09-24";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = version;
-    hash = "sha256-3C66oNjIZA6Byf1Y2cVQUSLz6Css1y4xFZuQmo7QxMo=";
+    repo = "libirecovery";
+    rev = "d55c5f8742564a87f497a33324d12c873efa60c6";
+    hash = "sha256-YRFuI5UmRH4bC477+J+RNy2j36C6YznYzAsuPTHZC9c=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -27,13 +34,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libimobiledevice-glue
     libusb1
     readline
-    libimobiledevice-glue
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   # Packager note: Not clear whether this needs a NixOS configuration,
@@ -45,16 +52,19 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    homepage = "https://github.com/libimobiledevice/libirecovery";
     description = "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
     longDescription = ''
       libirecovery is a cross-platform library which implements communication to
       iBoot/iBSS found on Apple's iOS devices via USB. A command-line utility is also
       provided.
     '';
-    homepage = "https://github.com/libimobiledevice/libirecovery";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ nh2 ];
-    mainProgram = "irecovery";
     platforms = platforms.unix;
+    maintainers = with maintainers; [
+      frontear
+      nh2
+    ];
+    mainProgram = "irecovery";
   };
-}
+})
