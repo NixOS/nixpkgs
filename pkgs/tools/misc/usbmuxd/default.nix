@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libimobiledevice
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libimobiledevice,
+  libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbmuxd";
-  version = "1.1.1+date=2023-05-05";
+  version = "1.1.1-unstable-2024-09-15";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "01c94c77f59404924f1c46d99c4e5e0c7817281b";
-    hash = "sha256-WqbobkzlJ9g5fb9S2QPi3qdpCLx3pxtNlT7qDI63Zp4=";
+    repo = "usbmuxd";
+    rev = "0b1b233b57d581515978a09e5a4394bfa4ee4962";
+    hash = "";
   };
 
   nativeBuildInputs = [
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   configureFlags = [
@@ -49,9 +50,12 @@ stdenv.mkDerivation rec {
       a virtual network device. Multiple connections to different TCP ports can happen
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
-    license = licenses.gpl2Plus;
+    license = with licenses; [
+      gpl2
+      gpl3
+    ];
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = [ frontear ];
     mainProgram = "usbmuxd";
   };
-}
+})
