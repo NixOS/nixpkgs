@@ -5,6 +5,7 @@
   fetchpatch2,
   mock,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,12 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ "vdf" ];
+
+  # Use nix-update-script instead of the default python updater
+  # The python updater requires GitHub releases, but vdf only uses tags
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library for working with Valve's VDF text format";
