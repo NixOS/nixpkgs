@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "code2prompt";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "code2prompt";
     rev = "v${version}";
-    hash = "sha256-KZqh0Vq4Mn56PhUO1JUzVpNBAGOZqUAsj31Cj5K+Lyk=";
+    hash = "sha256-ESgSMkid92ojTcT/iPskz7S4dJQnigtxdj5IlS4xvhc=";
   };
 
   cargoLock = {
