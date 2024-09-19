@@ -5,19 +5,20 @@
   certifi,
   cffi,
   charset-normalizer,
+  cryptography,
   cython,
-  fetchPypi,
+  fetchFromGitHub,
   filelock,
   idna,
   keyring,
-  oscrypto,
   packaging,
   pandas,
   platformdirs,
   pyarrow,
-  pycryptodomex,
   pyjwt,
   pyopenssl,
+  pytest-xdist,
+  pytestCheckHook,
   pythonOlder,
   pytz,
   requests,
@@ -25,7 +26,6 @@
   sortedcontainers,
   tomlkit,
   typing-extensions,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -35,30 +35,28 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "snowflake_connector_python";
-    inherit version;
-    hash = "sha256-/ZvCqxv1OE0si2W8ALsEdVV9UvBHenESkzSqtT+Wef0=";
+  src = fetchFromGitHub {
+    owner = "snowflakedb";
+    repo = "snowflake-connector-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-A6QnKCROd1vJpFCTrLEoHVo43xojdjpgYS3qQm64gcY=";
   };
 
   build-system = [
     cython
     setuptools
-    wheel
   ];
-
 
   dependencies = [
     asn1crypto
     certifi
     cffi
     charset-normalizer
+    cryptography
     filelock
     idna
-    oscrypto
     packaging
     platformdirs
-    pycryptodomex
     pyjwt
     pyopenssl
     pytz
@@ -68,7 +66,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pandas = [
       pandas
       pyarrow
@@ -76,9 +74,35 @@ buildPythonPackage rec {
     secure-local-storage = [ keyring ];
   };
 
-  # Tests require encrypted secrets, see
-  # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
-  doCheck = false;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Tests require encrypted secrets, see
+    # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
+    "test/extras/simple_select1.py"
+    "test/integ"
+    # error getting schema from stream, error code: 0, error info: Expected to
+    # be able to read 19504 bytes for message body but got 19503
+    "test/unit/test_connection.py"
+    "test/unit/test_cursor.py"
+    "test/unit/test_error_arrow_stream.py"
+    "test/unit/test_ocsp.py"
+    "test/unit/test_retry_network.py"
+    "test/unit/test_s3_util.py"
+  ];
+
+  disabledTests = [
+    # Tests connect to the internet
+    "test_status_when_num_of_chunks_is_zero"
+    "test_test_socket_get_cert"
+  ];
 
   pythonImportsCheck = [
     "snowflake"
