@@ -35687,7 +35687,8 @@ with pkgs;
   steamback = python311.pkgs.callPackage ../tools/games/steamback { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
-    inherit winetricks steam-run yad;
+    steam-run = steam-run-free;
+    inherit winetricks yad;
   };
 
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
