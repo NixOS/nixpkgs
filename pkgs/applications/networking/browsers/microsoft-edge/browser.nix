@@ -29,6 +29,7 @@
 , gdk-pixbuf
 , mesa
 , alsa-lib
+, alsa-plugins
 , at-spi2-core
 , libuuid
 , systemd
@@ -178,7 +179,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram "$out/bin/${longName}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.pname}-${gtk3.version}" \
-      --set ALSA_PLUGIN_DIR ${prev.alsa-plugins}/lib/alsa-lib/ \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/ \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
   '';
