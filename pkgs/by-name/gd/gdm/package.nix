@@ -10,14 +10,14 @@
   glib,
   json-glib,
   itstool,
-  xorg,
   accountsservice,
   libX11,
+  libXdmcp,
+  libxcb,
   gnome,
   systemd,
   dconf,
   gtk3,
-  libcanberra-gtk3,
   pam,
   libgudev,
   libselinux,
@@ -44,7 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "47.alpha";
+  version = "47.0";
 
   outputs = [
     "out"
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-A1lcGdkSyPUOWYsDcGCXzBPLhT90NbfReJKMPvYOMag=";
+    hash = "sha256-xYWDJr+8yKzlgTUuK+RGItwOnlwoAchpD9Lu1QJgf4Q=";
   };
 
   mesonFlags = [
@@ -85,13 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     keyutils
     libX11
-    libcanberra-gtk3
+    libXdmcp
+    libxcb
     libgudev
     libselinux
     pam
     plymouth
     systemd
-    xorg.libXdmcp
   ];
 
   patches = [
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Upstream checks some common paths to find an `X` binary. We already know it.
     echo #!/bin/sh > build-aux/find-x-server.sh
-    echo "echo ${lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
+    echo "echo ${lib.getBin xorgserver}/bin/X" >> build-aux/find-x-server.sh
     patchShebangs build-aux/find-x-server.sh
 
     # Reverts https://gitlab.gnome.org/GNOME/gdm/-/commit/b0f802e36ff948a415bfd2bccaa268b6990515b7
