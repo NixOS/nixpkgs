@@ -337,9 +337,8 @@ checksum = "7a66a03ae7c801facd77a29370b4faec201768915ac14a721ba36f20bc9c209b"
 
 [[package]]
 name = "rust-ini"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d625ed57d8f49af6cfa514c42e1a71fadcff60eb0b1c517ff82fe41aa025b41"
+version = "0.21.1"
+source = "git+https://github.com/zonyitoo/rust-ini?rev=5748ae57a178216a920b88dfac1296618e967447#5748ae57a178216a920b88dfac1296618e967447"
 dependencies = [
  "cfg-if",
  "ordered-multimap",
