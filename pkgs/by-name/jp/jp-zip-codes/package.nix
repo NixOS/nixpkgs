@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation {
     description = "Zip files containing japanese zip codes";
     longDescription = "Zip files with japanese zip codes for japanese IME dictionaries";
     homepage = "https://github.com/musjj/jp-zip-codes";
-    license = lib.licenses.unlicense;
+    license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
     # this does not need to be separately built
