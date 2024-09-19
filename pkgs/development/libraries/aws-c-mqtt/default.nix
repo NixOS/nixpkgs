@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-mqtt";
-  version = "0.10.4";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-mqtt";
     rev = "v${version}";
-    hash = "sha256-i+ssZzHC8MPfyOaRqvjq0z7w772BJqIA6BwntW1fRek=";
+    hash = "sha256-sfkbfXTeti2gOAEc9kxrQzsjFNVamlOFaLUbC1FakYE=";
   };
 
   nativeBuildInputs = [
