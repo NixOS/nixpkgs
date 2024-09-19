@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  perl,
   stdenv,
   darwin,
 }:
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config perl ];
 
   buildInputs =
     [ openssl ]
