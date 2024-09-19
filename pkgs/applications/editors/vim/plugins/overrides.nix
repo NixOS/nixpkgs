@@ -1709,6 +1709,11 @@
       };
     };
 
+  syntax-tree-surfer = super.syntax-tree-surfer.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter ];
+    meta.maintainers = with lib.maintainers; [ callumio ];
+  };
+
   taskwarrior3 = buildVimPlugin {
     inherit (taskwarrior3) version pname;
     src = "${taskwarrior3.src}/scripts/vim";
