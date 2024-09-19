@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     # not need to know binutils' BINDIR at all. It's an absolute path
     # where libraries are stored.
     ./plugins-no-BINDIR.patch
-  ] ++ lib.optionals buildPlatform.isDarwin [
+  ] ++ lib.optionals hostPlatform.isDarwin [
     # Note: Conditional to avoid Linux rebuilds on staging-next. Remove the conditional with the next update.
     # ld64 needs `-undefined dynamic_lookup` to link `libctf-nobfd.dylib`, but the Darwin
     # version detection in `libtool.m4` fails to detect the Darwin version correctly.
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals targetPlatform.isVc4 [ flex ]
   ;
 
-  buildInputs = [ zlib gettext ] ++ lib.optionals buildPlatform.isDarwin [ CoreServices ];
+  buildInputs = [ zlib gettext ] ++ lib.optionals hostPlatform.isDarwin [ CoreServices ];
 
   inherit noSysDirs;
 
