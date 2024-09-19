@@ -11,9 +11,11 @@ This directory houses the sources files for the Nixpkgs reference manual.
 > We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
 > This also provides the benefit of using `:doc` in the `nix repl` to view reference documentation locally on the fly.
 
-For reference documentation prefer Markdown files and code comments in the source code if supported yet.
+For documentation only relevant for contributors, use Markdown files next to the source and regular code comments.
 
-> We'are actively soliciting feedback for missing support. If your case is not supported open an issue starting with `Doc:`
+> [!TIP]
+> Feedback for improving support for parsing and rendering doc-comments is highly appreciated.
+> [Open an issue](https://github.com/NixOS/nixpkgs/issues/new?labels=6.topic%3A+documentation&title=Doc%3A+) to request bugfixes or new features.
 
 Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
