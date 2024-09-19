@@ -14,6 +14,7 @@
 , libllvm
 , libcxx
 , linuxHeaders
+, freebsd
 , libxcrypt
 
 # Some platforms have switched to using compiler-rt, but still want a
@@ -68,7 +69,8 @@ stdenv.mkDerivation ({
     ++ [ python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders;
+    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
@@ -155,12 +157,11 @@ stdenv.mkDerivation ({
   '') + ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
-  '' + (if stdenv.hostPlatform.isFreeBSD then
-    # As per above, but in FreeBSD assert is a macro and simply allowing it to be implicitly declared causes Issues!!!!!
+  '' + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
+    # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
+    # see description above for why we're nuking assert.h normally but that doesn't work here.
+    # instead, we add the freebsd.include dependency explicitly
     ''
-    substituteInPlace lib/builtins/clear_cache.c lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \
-      --replace "#include <assert.h>" "#define assert(e) ((e)?(void)0:__assert(__FUNCTION__,__FILE__,__LINE__,#e))"
-    '' else ''
     substituteInPlace lib/builtins/clear_cache.c \
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast version "18") "/x86"}.c \

@@ -18295,8 +18295,6 @@ with pkgs;
 
   nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
 
-  nrfutil = callPackage ../development/tools/misc/nrfutil { };
-
   obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
 
   obuild = callPackage ../development/tools/ocaml/obuild { };
