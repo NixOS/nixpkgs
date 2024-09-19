@@ -35,30 +35,26 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ python3 ];
 
-  preConfigure =
-    if (dictionaries == [ ]) then
-      throw "merge-ut-dictionaries needs at least one dictionary"
-    else
-      ''
-        cd src
+  preConfigure = ''
+    cd src
 
-        substituteInPlace make.sh \
-          --replace-fail "git" "true #" \
-          --replace-fail "mv mozcdic-ut" "#"
+    substituteInPlace make.sh \
+      --replace-fail "git" "true #" \
+      --replace-fail "mv mozcdic-ut" "#"
 
-        substituteInPlace count_word_hits.py \
-          --replace-fail 'subprocess.run' "#" \
-          --replace-fail "jawiki-latest-all-titles-in-ns0.gz" "${jawiki-all-titles-in-ns0}/jawiki-all-titles-in-ns0.gz"
+    substituteInPlace count_word_hits.py \
+      --replace-fail 'subprocess.run' "#" \
+      --replace-fail "jawiki-latest-all-titles-in-ns0.gz" "${jawiki-all-titles-in-ns0}/jawiki-all-titles-in-ns0.gz"
 
-        substituteInPlace remove_duplicate_ut_entries.py \
-          --replace-fail "url =" 'url = "${ibus-engines.mozc.src}/src/data/dictionary_oss/id.def"#' \
-          --replace-fail "urllib.request.urlopen" "open" \
-          --replace-fail "read().decode()" "read()"
+    substituteInPlace remove_duplicate_ut_entries.py \
+      --replace-fail "url =" 'url = "${ibus-engines.mozc.src}/src/data/dictionary_oss/id.def"#' \
+      --replace-fail "urllib.request.urlopen" "open" \
+      --replace-fail "read().decode()" "read()"
 
-        for dir in ${lib.concatStringsSep " " dictionaries}; do
-          cp -v $dir/mozcdic-ut-*.txt.tar.bz2 .
-        done
-      '';
+    for dir in ${lib.concatStringsSep " " dictionaries}; do
+      cp -v $dir/mozcdic-ut-*.txt.tar.bz2 .
+    done
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -84,11 +80,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Mozc UT dictionaries are additional dictionaries for Mozc.";
     homepage = "https://github.com/utuhiro78/merge-ut-dictionaries";
-    license = with lib.licenses; [
-      cc-by-sa-40
-      bsd3
-      asl20
-    ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
     # this does not need to be separately built
