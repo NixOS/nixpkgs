@@ -1,41 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, avahi
-, bluez
-, boost
-, curl
-, eigen
-, fftwFloat
-, gettext
-, glib
-, glib-networking
-, glibmm
-, gperf
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, gtk3
-, gtkmm3
-, hicolor-icon-theme
-, intltool
-, ladspaH
-, libjack2
-, libsndfile
-, liblo
-, lilv
-, lrdf
-, lv2
-, pkg-config
-, python3
-, sassc
-, serd
-, sord
-, sratom
-, wafHook
-, wrapGAppsHook3
-, zita-convolver
-, zita-resampler
-, optimizationSupport ? false # Enable support for native CPU extensions
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  avahi,
+  bluez,
+  boost,
+  curl,
+  eigen,
+  fftwFloat,
+  gettext,
+  glib,
+  glib-networking,
+  glibmm,
+  gperf,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  gtk3,
+  gtkmm3,
+  hicolor-icon-theme,
+  intltool,
+  ladspaH,
+  libjack2,
+  libsndfile,
+  liblo,
+  lilv,
+  lrdf,
+  lv2,
+  pkg-config,
+  python3,
+  sassc,
+  serd,
+  sord,
+  sratom,
+  wafHook,
+  wrapGAppsHook3,
+  zita-convolver,
+  zita-resampler,
+  optimizationSupport ? false, # Enable support for native CPU extensions
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -111,7 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   meta = {
-    maintainers = with lib.maintainers; [ astsmtl lord-valen ];
+    maintainers = with lib.maintainers; [
+      astsmtl
+      lord-valen
+    ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     mainProgram = "guitarix";
