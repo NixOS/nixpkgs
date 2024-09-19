@@ -566,6 +566,12 @@ stdenv.mkDerivation ({
     ncurses
   ];
 
+  # Prevent stage0 ghc from leaking into the final result. This was an issue
+  # with GHC 9.6.
+  disallowedReferences = [
+    bootPkgs.ghc
+  ];
+
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
