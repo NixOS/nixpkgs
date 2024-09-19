@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.9.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "Module to interact with the Reolink IP camera API";
     homepage = "https://github.com/starkillerOG/reolink_aio";
     changelog = "https://github.com/starkillerOG/reolink_aio/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
