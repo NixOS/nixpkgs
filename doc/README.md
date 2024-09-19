@@ -2,10 +2,18 @@
 
 This directory houses the sources files for the Nixpkgs reference manual.
 
-Going forward, it should only contain [reference](https://nix.dev/contributing/documentation/diataxis#reference) documentation.
-For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
+> [!IMPORTANT]
+> We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
+>
+> Going forward, this folder should only contain **[reference](https://nix.dev/contributing/documentation/diataxis#reference) documentation**.
+> For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
+>
+> We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
+> This also provides the benefit of using `:doc` in the `nix repl` to view reference documentation locally on the fly.
 
-For documentation only relevant for contributors, use Markdown files and code comments in the source code.
+For reference documentation prefer Markdown files and code comments in the source code if supported yet.
+
+> We'are actively soliciting feedback for missing support. If your case is not supported open an issue starting with `Doc:`
 
 Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
