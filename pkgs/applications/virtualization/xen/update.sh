@@ -5,6 +5,9 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+#TODO: Use `jq` instead of `sed`.
+#TODO: Accept the small security drawback and make this script runnable by r-ryantm.
+
 # This script expects to be called in an interactive terminal somewhere inside Nixpkgs.
 echo "Preparing..."
 nixpkgs=$(git rev-parse --show-toplevel)
@@ -35,6 +38,8 @@ minSupportedBranch="$(grep "  minSupportedVersion = " "$xenPath"/generic/default
 supportedBranches=($(for version in "${branchList[@]}"; do if [ "$(printf '%s\n' "$minSupportedBranch" "$version" | sort -V | head -n1)" = "$minSupportedBranch" ]; then echo "$version"; fi; done))
 supportedVersions=($(for version in "${supportedBranches[@]}"; do echo "$versionList" | tr ' ' '\n' | grep "$version" | tail --lines=1; done))
 
+echo -e "\e[1mNOTE\e[0m: As we're also pre-fetching the submodules, QEMU and OVMF may take a very long time to fetch."
+
 # Main loop that installs every supportedVersion.
 for version in "${supportedVersions[@]}"; do
     echo -e "\n------------------------------------------------"
@@ -59,11 +64,13 @@ for version in "${supportedVersions[@]}"; do
     git switch --quiet --detach RELEASE-"$version"
 
     # Originally we told people to go check the Makefile themselves.
-    echo -e "\nDetermining source versions from Xen Makefiles..."
-    qemuVersion="$(grep -ie "QEMU_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"QEMU_UPSTREAM_REVISION ?= "//g)"
-    seaBIOSVersion="$(grep -ie "SEABIOS_UPSTREAM_REVISION ?= rel-" /tmp/xenUpdateScript/xen/Config.mk | sed s/"SEABIOS_UPSTREAM_REVISION ?= "//g)"
-    ovmfVersion="$(grep -ie "OVMF_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"OVMF_UPSTREAM_REVISION ?= "//g)"
-    ipxeVersion="$(grep -ie "IPXE_GIT_TAG :=" /tmp/xenUpdateScript/xen/tools/firmware/etherboot/Makefile | sed s/"IPXE_GIT_TAG := "//g)"
+    echo -e -n "\nDetermining source versions from Xen Makefiles..."
+    qemuVersion="$(grep "QEMU_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"QEMU_UPSTREAM_REVISION ?= "//g)"
+    seaBIOSVersion="$(grep "SEABIOS_UPSTREAM_REVISION ?= rel-" /tmp/xenUpdateScript/xen/Config.mk | sed s/"SEABIOS_UPSTREAM_REVISION ?= "//g)"
+    ovmfVersion="$(grep "OVMF_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"OVMF_UPSTREAM_REVISION ?= "//g)"
+    miniOSVersion="$(grep "MINIOS_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"MINIOS_UPSTREAM_REVISION ?= "//g)"
+    ipxeVersion="$(grep "IPXE_GIT_TAG :=" /tmp/xenUpdateScript/xen/tools/firmware/etherboot/Makefile | sed s/"IPXE_GIT_TAG := "//g)"
+    echo "done!"
 
     # Use `nix-prefetch-git` to fetch `rev`s and `hash`es.
     echo "Pre-fetching sources and determining hashes..."
@@ -126,7 +133,7 @@ for version in "${supportedVersions[@]}"; do
     upstreamPatches=${defaultPatchList[*]}
 
     # Write and format default.nix file.
-    echo -e "\nWriting updated \e[1;34mversionDefinition\e[0m..."
+    echo -e -n "\nWriting updated \e[1;34mversionDefinition\e[0m..."
     cat >"$branch"/default.nix <<EOF
 {
   lib,
@@ -181,9 +188,11 @@ callPackage (import ../generic/default.nix {
   };
 }) ({ ocamlPackages = ocaml-ng.ocamlPackages_$ocamlVersion; } // genericDefinition)
 EOF
+echo done!
 
-    echo "Formatting..."
+    echo -n "Formatting..."
     nixfmt "$branch"/default.nix
+    echo done!
 
     echo -e "\n\e[1;32mSuccessfully produced $branch/default.nix.\e[0m"
 done
