@@ -1,23 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, usbmuxd
-, libimobiledevice
-, libzip
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
 
-stdenv.mkDerivation rec {
+  autoreconfHook,
+  pkg-config,
+
+  libimobiledevice,
+  libzip,
+  usbmuxd,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "ideviceinstaller";
-  version = "1.1.1+date=2023-04-30";
+  version = "1.1.1-unstable-2024-05-18";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "71ec5eaa30d2780c2614b6b227a2229ea3aeb1e9";
-    hash = "sha256-YsQwAlt71vouYJzXl0P7b3fG/MfcwI947GtvN4g3/gM=";
+    repo = "ideviceinstaller";
+    rev = "1431d42b568ee78161a41ed02df0de60dc1439d6";
+    hash = "sha256-aXnh2ydukKILPhLv4eSu73IUEZhpin8abaw9e4UCTRk=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -25,9 +30,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    usbmuxd
     libimobiledevice
     libzip
+    usbmuxd
   ];
 
   # the package uses zip_get_num_entries, which is deprecated
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   meta = with lib; {
@@ -47,9 +52,12 @@ stdenv.mkDerivation rec {
       of an iOS device allowing to install, upgrade, uninstall, archive, restore
       and enumerate installed or archived apps.
     '';
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ aristid ];
+    maintainers = with maintainers; [
+      aristid
+      frontear
+    ];
     mainProgram = "ideviceinstaller";
   };
-}
+})
