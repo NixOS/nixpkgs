@@ -1,70 +1,64 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, openssl
-, libgcrypt
-, libplist
-, libtasn1
-, libusbmuxd
-, libimobiledevice-glue
-, SystemConfiguration
-, CoreFoundation
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  libgcrypt,
+  libplist,
+  libtasn1,
+  libtatsu,
+  libusbmuxd,
+  libimobiledevice-glue,
+  SystemConfiguration,
+  CoreFoundation,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libimobiledevice";
-  version = "1.3.0-unstable-2024-05-20";
+  version = "1.3.0-unstable-2024-09-16";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "9ccc52222c287b35e41625cc282fb882544676c6";
-    hash = "sha256-pNvtDGUlifp10V59Kah4q87TvLrcptrCJURHo+Y+hs4=";
+    repo = "libimobiledevice";
+    rev = "ed9703db1ee6d54e3801b618cee9524563d709e1";
+    hash = "sha256-fdUcEdqrZkiX1QEr9KdKAMJPzpJuboRRpXaQ3vYwspw=";
   };
 
-  patches = [
-    # Fix gcc-14 and clang-16 build:
-    #   https://github.com/libimobiledevice/libimobiledevice/pull/1569
-    (fetchpatch {
-      name = "fime.h.patch";
-      url = "https://github.com/libimobiledevice/libimobiledevice/commit/92256c2ae2422dac45d8648a63517598bdd89883.patch";
-      hash = "sha256-sB+wEFuXFoQnuf7ntWfvYuCgWfYbmlPL7EjW0L0F74o=";
-    })
+  outputs = [
+    "out"
+    "dev"
   ];
-
-  preAutoreconf = ''
-    export RELEASE_VERSION=${version}
-  '';
-
-  configureFlags = [ "--without-cython" ];
+  enableParallelBuilding = true;
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  propagatedBuildInputs = [
-    openssl
-    libgcrypt
-    libplist
-    libtasn1
-    libusbmuxd
-    libimobiledevice-glue
-  ] ++ lib.optionals stdenv.isDarwin [
-    SystemConfiguration
-    CoreFoundation
-  ];
+  propagatedBuildInputs =
+    [
+      openssl
+      libgcrypt
+      libplist
+      libtasn1
+      libtatsu
+      libusbmuxd
+      libimobiledevice-glue
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      SystemConfiguration
+      CoreFoundation
+    ];
 
+  configureFlags = [ "--without-cython" ];
 
-  outputs = [ "out" "dev" ];
-
-  enableParallelBuilding = true;
-
-  passthru.updateScript = unstableGitUpdater { };
+  preAutoreconf = ''
+    export RELEASE_VERSION=${finalAttrs.version}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
@@ -81,8 +75,14 @@ stdenv.mkDerivation rec {
       development since August 2007 with the goal to bring support for these
       devices to the Linux Desktop.
     '';
-    license = licenses.lgpl21Plus;
+    license = with licenses; [
+      lgpl21
+      gpl2
+    ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ RossComputerGuy ];
+    maintainers = with maintainers; [
+      frontear
+      RossComputerGuy
+    ];
   };
-}
+})
