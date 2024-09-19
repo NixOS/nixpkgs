@@ -12,6 +12,7 @@
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
 , multiArch ? false # Whether to include 32bit packages
+, includeClosures ? false # Whether to include closures of all packages
 , nativeBuildInputs ? []
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
@@ -171,6 +172,7 @@ let
           ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
       fi
     '';
+    inherit includeClosures;
   };
 
   staticUsrProfileMulti = buildEnv {
@@ -178,6 +180,7 @@ let
     paths = baseMultiPaths ++ multiPaths;
     extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
+    inherit includeClosures;
   };
 
   # setup library paths only for the targeted architecture
