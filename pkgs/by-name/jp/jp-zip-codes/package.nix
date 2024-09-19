@@ -9,6 +9,8 @@ stdenvNoCC.mkDerivation {
   pname = "jp-zip-code";
   version = "0-unstable-2024-08-01";
 
+  # This package uses a mirror as the source because the
+  # original provider uses the same URL for updated content.
   src = fetchFromGitHub {
     owner = "musjj";
     repo = "jp-zip-codes";
