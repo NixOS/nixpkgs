@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.1.0b0";
+  version = "0.1.0b1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ocvNDLZ6h4PincCHhZfKEsIvQH0LScAsY3zrfDsXWHI=";
+    hash = "sha256-INpyN5jdXOzTC6t18PvbkbDM7n4Y4rejb08UfyJyFSk=";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Client for Home Assistant Supervisor";
-    homepage = "https://pypi.org/project/aiohasupervisor/";
+    homepage = "https://github.com/home-assistant-libs/python-supervisor-client";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
