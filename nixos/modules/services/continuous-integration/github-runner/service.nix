@@ -19,7 +19,9 @@ with lib;
     ])
   );
 
-  config.systemd.services = flip mapAttrs' config.services.github-runners (name: cfg:
+  config.systemd.services =
+  let enabledRunners = filterAttrs (_: cfg: cfg.enable) config.services.github-runners;
+  in (flip mapAttrs' enabledRunners (name: cfg:
     let
       svcName = "github-runner-${name}";
       systemdDir = "github-runner/${name}";
@@ -296,5 +298,5 @@ with lib;
         cfg.serviceOverrides
       ];
     }
-  );
+  ));
 }
