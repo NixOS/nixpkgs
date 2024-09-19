@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "geoip2" ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.11") [
+    lib.optionals (pythonAtLeast "3.10") [
       # https://github.com/maxmind/GeoIP2-python/pull/136
       "TestAsyncClient"
     ]
