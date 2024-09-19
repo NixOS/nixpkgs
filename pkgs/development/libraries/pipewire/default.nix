@@ -75,7 +75,7 @@ assert ldacbtSupport -> bluezSupport;
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "pipewire";
-  version = "1.0.7";
+  version = "1.0.8";
 
   outputs = [
     "out"
@@ -91,7 +91,7 @@ stdenv.mkDerivation(finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-YzI+hkX1ZdeTfxuKaw5P9OYPtkWtUg9cNo32wLCgjNU=";
+    sha256 = "sha256-/b69DJRxzZjMPnM3gi/sMt+Ret+nWnr9i9y+trOeQGU=";
   };
 
   patches = [
