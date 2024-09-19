@@ -1,10 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pythonSupport ? false
-, python3Packages
+{
+  cmake,
+  doxygen,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  pkg-config,
+  pythonSupport ? false,
+  python3Packages,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Heq+c8SSYNO8ksTv5FphRBRStlTakm9T66jlPXon5tI=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   strictDeps = true;
 
   patches = [
@@ -31,34 +39,36 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals pythonSupport [
-    python3Packages.python
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+      pkg-config
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
 
-  buildInputs = lib.optionals pythonSupport [
-    python3Packages.pinocchio
-  ];
+  propagatedBuildInputs = lib.optionals pythonSupport [ python3Packages.pinocchio ];
 
-  cmakeFlags = lib.optionals (!pythonSupport) [
-    "-DBUILD_PYTHON_INTERFACE=OFF"
-  ];
+  cmakeFlags = [ (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport) ];
 
   doCheck = true;
   # The package expect to find an `example-robot-data/robots` folder somewhere
   # either in install prefix or in the sources
   # where it can find the meshes for unit tests
   preCheck = "ln -s source ../../${finalAttrs.pname}";
-  pythonImportsCheck = [
-    "example_robot_data"
-  ];
+  pythonImportsCheck = [ "example_robot_data" ];
 
   meta = with lib; {
     description = "Set of robot URDFs for benchmarking and developed examples";
     homepage = "https://github.com/Gepetto/example-robot-data";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nim65s wegank ];
+    maintainers = with maintainers; [
+      nim65s
+      wegank
+    ];
     platforms = platforms.unix;
   };
 })

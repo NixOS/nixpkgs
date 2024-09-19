@@ -19484,8 +19484,6 @@ with pkgs;
 
   croaring = callPackage ../development/libraries/croaring { };
 
-  crocoddyl = callPackage ../development/libraries/crocoddyl { };
-
   crossguid = callPackage ../development/libraries/crossguid { };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
@@ -19652,8 +19650,6 @@ with pkgs;
   };
 
   libesmtp = callPackage ../development/libraries/libesmtp { };
-
-  example-robot-data = callPackage ../development/libraries/example-robot-data { };
 
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
@@ -22775,8 +22771,6 @@ with pkgs;
   pico-sdk = callPackage ../development/libraries/pico-sdk { };
 
   pingvin-share =  callPackage ../servers/pingvin-share { };
-
-  pinocchio = callPackage ../development/libraries/pinocchio { };
 
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;
