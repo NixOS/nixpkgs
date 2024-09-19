@@ -108,6 +108,7 @@ let
 
   environment = lib.mkMerge [
     {
+      INCUS_EDK2_PATH = ovmf;
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_OVMF_PATH = ovmf;
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
