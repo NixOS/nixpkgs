@@ -29664,10 +29664,6 @@ with pkgs;
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  guitarix = callPackage ../applications/audio/guitarix {
-    fftw = fftwSinglePrec;
-  };
-
   gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
