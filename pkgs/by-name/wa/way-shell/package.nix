@@ -13,6 +13,7 @@
   pipewire,
   networkmanager,
   upower,
+  wayland-scanner,
   wayland-protocols,
   wireplumber,
   nix-update-script,
@@ -20,7 +21,6 @@
 let
   pname = "way-shell";
   version = "0.0.7";
-
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -44,6 +44,7 @@ stdenv.mkDerivation {
     glib
     pkg-config
     wrapGAppsHook4
+    wayland-scanner
   ];
 
   buildInputs = [
