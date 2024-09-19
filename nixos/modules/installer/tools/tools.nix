@@ -17,12 +17,7 @@ let
     '';
   });
 
-  nixos-build-vms = makeProg {
-    name = "nixos-build-vms";
-    src = ./nixos-build-vms/nixos-build-vms.sh;
-    inherit (pkgs) runtimeShell;
-    manPage = ./manpages/nixos-build-vms.8;
-  };
+  inherit (pkgs) nixos-build-vms;
 
   nixos-install = makeProg {
     name = "nixos-install";

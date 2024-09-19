@@ -1,5 +1,6 @@
 { system ? builtins.currentSystem
 , config ? {}
+, nixpkgs
 , networkExpr
 }:
 
@@ -9,9 +10,9 @@ let
     imports = [ module ];
   }) (import networkExpr);
 
-  pkgs = import ../../../../.. { inherit system config; };
+  pkgs = import nixpkgs { inherit system config; };
 
-  testing = import ../../../../lib/testing-python.nix {
+  testing = import "${pkgs.path}/nixos/lib/testing-python.nix" {
     inherit system pkgs;
   };
 
