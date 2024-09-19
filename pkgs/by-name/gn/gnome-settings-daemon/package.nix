@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-settings-daemon";
-  version = "47.beta";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major finalAttrs.version}/gnome-settings-daemon-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uY7RXPmWYNhIsIxZeth2n4w8JVnB4wvF5Burza/QOCo=";
+    hash = "sha256-8qrL5V+jjocIWD7sCmZRBJ5TfrUFo+0s4Lqk6bZCRtE=";
   };
 
   patches = [
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
-    for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl; do
+    for f in plugins/power/gsd-power-constants-update.pl; do
       chmod +x $f
       patchShebangs $f
     done
