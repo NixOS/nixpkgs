@@ -532,8 +532,10 @@ stdenv.mkDerivation (finalAttrs: {
       ${deployPrefetchedSourcesPatches}
     ''
     # Patch shebangs for QEMU and OVMF build scripts.
-    + ''
+    + lib.strings.optionalString withInternalQEMU ''
       patchShebangs --build tools/qemu-xen/scripts/tracetool.py
+    ''
+    + lib.strings.optionalString withInternalOVMF ''
       patchShebangs --build tools/firmware/ovmf-dir-remote/OvmfPkg/build.sh tools/firmware/ovmf-dir-remote/BaseTools/BinWrappers/PosixLike/{AmlToC,BrotliCompress,build,GenFfs,GenFv,GenFw,GenSec,LzmaCompress,TianoCompress,Trim,VfrCompile}
     '';
 
