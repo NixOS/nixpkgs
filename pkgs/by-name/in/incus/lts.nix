@@ -9,5 +9,5 @@ import ./generic.nix {
     ./0c37b7e3ec65b4d0e166e2127d9f1835320165b8.patch
   ];
   lts = true;
-  updateScriptArgs = "--lts=true --regex '6.0.*'";
+  updateScriptArgs = "--lts --regex '6.0.*'";
 }
