@@ -37,8 +37,6 @@ let
       "cryptsetup.target"
       "cryptsetup-pre.target"
       "remote-cryptsetup.target"
-    ] ++ optionals cfg.package.withTpm2Tss [
-      "tpm2.target"
     ] ++ [
       "sigpwr.target"
       "timers.target"
