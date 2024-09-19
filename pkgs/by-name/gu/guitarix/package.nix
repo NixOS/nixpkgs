@@ -7,7 +7,7 @@
   boost,
   curl,
   eigen,
-  fftw,
+  fftwFloat,
   gettext,
   glib,
   glib-networking,
