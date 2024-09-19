@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/aquasecurity/trivy/pkg/version.ver=v${version}"
+    "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -58,13 +58,13 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = trivy;
     command = "trivy --version";
-    version = "Version: v${version}";
+    version = "Version: ${version}";
   };
 
   meta = with lib; {
+    description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     homepage = "https://github.com/aquasecurity/trivy";
     changelog = "https://github.com/aquasecurity/trivy/releases/tag/v${version}";
-    description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     longDescription = ''
       Trivy is a simple and comprehensive vulnerability scanner for containers
       and other artifacts. A software vulnerability is a glitch, flaw, or
