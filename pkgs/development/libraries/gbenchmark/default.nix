@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     maintainers = with maintainers; [ abbradar ];
   };
 }
