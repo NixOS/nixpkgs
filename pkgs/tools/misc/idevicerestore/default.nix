@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, curl
-, libimobiledevice
-, libirecovery
-, libzip
-, libusbmuxd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  curl,
+  libimobiledevice,
+  libirecovery,
+  libzip,
+  libusbmuxd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "idevicerestore";
-  version = "1.0.0+date=2023-05-23";
+  version = "1.0.0-unstable-2024-09-18";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "609f7f058487596597e8e742088119fdd46729df";
-    hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
+    repo = "idevicerestore";
+    rev = "ad46e149702ece0af81932cc48f8603362102b96";
+    hash = "";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   meta = with lib; {
@@ -58,9 +59,9 @@ stdenv.mkDerivation rec {
 
       This will download and restore a device to the latest firmware available.
     '';
-    license = licenses.lgpl21Plus;
+    license = licenses.lgpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ nh2 ];
     mainProgram = "idevicerestore";
   };
-}
+})
