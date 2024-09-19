@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   cargoLock = {
-    lockFile = src + "/Cargo.lock";
+    lockFile = ./Cargo.lock;
     outputHashes = {
       "tui-tree-widget-0.20.0" = "sha256-/uLp63J4FoMT1rMC9cv49JAX3SuPvFWPtvdS8pspsck=";
     };
