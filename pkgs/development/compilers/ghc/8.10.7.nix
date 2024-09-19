@@ -450,7 +450,7 @@ stdenv.mkDerivation (rec {
     bootPkgs.ghc
   ];
 
-  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
+  buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
