@@ -23,6 +23,7 @@
 , libsvm
 , libtiff
 , libxml2
+, llvmPackages
 , netcdf
 , pdal
 , pkg-config
@@ -86,7 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ] ++ lib.optionals withOpenGL [ libGLU ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
 
