@@ -1915,10 +1915,6 @@ self: super: {
     sha256 = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
   }) super.pipes-aeson;
 
-  # Needs bytestring 0.11
-  # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/pull/17
-  pipes-http = doJailbreak super.pipes-http;
-
   # 2024-09-18: transformers <0.6  https://github.com/Gabriella439/Haskell-Pipes-Extras-Library/pull/19
   pipes-extras = assert super.pipes-extras.version == "1.0.15"; doJailbreak super.pipes-extras;
 
