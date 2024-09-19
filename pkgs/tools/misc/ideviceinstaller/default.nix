@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, usbmuxd
-, libimobiledevice
-, libzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  usbmuxd,
+  libimobiledevice,
+  libzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ideviceinstaller";
-  version = "1.1.1+date=2023-04-30";
+  version = "1.1.1-unstable-2024-05-18";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "71ec5eaa30d2780c2614b6b227a2229ea3aeb1e9";
-    hash = "sha256-YsQwAlt71vouYJzXl0P7b3fG/MfcwI947GtvN4g3/gM=";
+    repo = "ideviceinstaller";
+    rev = "1431d42b568ee78161a41ed02df0de60dc1439d6";
+    hash = "sha256-aXnh2ydukKILPhLv4eSu73IUEZhpin8abaw9e4UCTRk=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +32,12 @@ stdenv.mkDerivation rec {
   ];
 
   # the package uses zip_get_num_entries, which is deprecated
-  env.NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   meta = with lib; {
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ aristid ];
+    maintainers = with maintainers; [ aristid frontear ];
     mainProgram = "ideviceinstaller";
   };
-}
+})
