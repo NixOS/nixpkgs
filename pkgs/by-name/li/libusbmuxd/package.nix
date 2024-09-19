@@ -8,15 +8,15 @@
   libimobiledevice-glue,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusbmuxd";
-  version = "2.1.0";
+  version = "2.1.0-unstable-2024-04-16";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = version;
-    hash = "sha256-coQqNGPsqrOYbBjO0eQZQNK8ZTB+ZzfMWvQ6Z1by9PY=";
+    repo = "libusbmuxd";
+    rev = "a7f0543fb1ecb20ac7121c0fd77297200e0e43fc";
+    hash = "";
   };
 
   nativeBuildInputs = [
@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
-  meta = {
-    description = "Client library to multiplex connections from and to iOS devices";
+  meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libusbmuxd";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ ];
+    description = "Client library to multiplex connections from and to iOS devices";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ frontear ];
   };
-}
+})
