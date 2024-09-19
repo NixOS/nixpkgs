@@ -3832,6 +3832,8 @@ self: super: with self; {
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
 
+  earcut = callPackage ../development/python-modules/earcut { };
+
   easydict = callPackage ../development/python-modules/easydict { };
 
   easyenergy = callPackage ../development/python-modules/easyenergy { };
