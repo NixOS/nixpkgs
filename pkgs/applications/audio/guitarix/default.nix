@@ -7,7 +7,6 @@
   boost,
   curl,
   eigen,
-  faust,
   fftw,
   gettext,
   glib,
@@ -72,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     curl
     eigen
-    faust
     fftw
     glib
     glib-networking.out
@@ -96,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   wafConfigureFlags = [
+    "--no-faust"
     "--no-font-cache-update"
     "--shared-lib"
     "--no-desktop-update"
