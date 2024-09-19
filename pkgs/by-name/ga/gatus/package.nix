@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "gatus";
@@ -15,12 +20,15 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib;
-    {
-      description = "Automated developer-oriented status page";
-      homepage = "https://gatus.io";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ undefined-moe ];
-      mainProgram = "gatus";
-    };
+  passthru.tests = {
+    inherit (nixosTests) gatus;
+  };
+
+  meta = with lib; {
+    description = "Automated developer-oriented status page";
+    homepage = "https://gatus.io";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ undefined-moe ];
+    mainProgram = "gatus";
+  };
 }
