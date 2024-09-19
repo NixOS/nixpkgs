@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "vdf";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
