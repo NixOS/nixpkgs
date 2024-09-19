@@ -19,19 +19,7 @@ let
 
   inherit (pkgs) nixos-build-vms;
 
-  nixos-install = makeProg {
-    name = "nixos-install";
-    src = ./nixos-install.sh;
-    inherit (pkgs) runtimeShell;
-    nix = config.nix.package.out;
-    path = makeBinPath [
-      pkgs.jq
-      nixos-enter
-      pkgs.util-linuxMinimal
-    ];
-    manPage = ./manpages/nixos-install.8;
-  };
-
+  nixos-install = pkgs.nixos-install.override { nix = config.nix.package; };
   nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
 
   nixos-generate-config = makeProg {
