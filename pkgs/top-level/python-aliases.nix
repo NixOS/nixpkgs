@@ -468,6 +468,7 @@ mapAliases ({
   pyruckus = throw "pyruckus has been removed, it was deprecrated in favor of aioruckus."; # added 2023-09-07
   py_scrypt = py-scrypt; # added 2024-01-07
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
+  pysimplegui = throw "pysimplegui update to v5 broke the package, it now needs a license key to decrypt the source code"; # added 2024-09-16
   pysmart-smartx = pysmart; # added 2021-10-22
   pySmartDL = pysmartdl; # added 2023-10-11
   pysmi-lextudio = pysmi; # added 2024-07-18
@@ -482,6 +483,7 @@ mapAliases ({
   pytest-pep8 = pytestpep8; # added 2021-01-04
   pytest-pep257 = throw "pytest-pep257 was removed, as the pep257 package was migrated into pycodestyle"; # added 2022-04-12
   pytest-pythonpath = throw "pytest-pythonpath is obsolete as of pytest 7.0.0 and has been removed"; # added 2022-03-09
+  pytest-runner = throw "pytest-runner has been removed as it uses deprecated features of setuptools and is deprecated by upstream"; # added 2024-09-15
   pytest-sanic = throw "pytest-sanic has been removed because it is unmaintained and broken"; # added 2023-06-22
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
   pytestquickcheck = pytest-quickcheck; # added 2021-07-20

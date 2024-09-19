@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-serializable";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "madpah";
     repo = "serializable";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8rGsFQzZbWJydzGhdobeN/L2LH2BEpC7O9D/h8zoXcM=";
+    hash = "sha256-8ciRzanrcb7DMAcWzIxRkgeCRGw+Ji8Epnw67cylGeQ=";
   };
 
   build-system = [ poetry-core ];

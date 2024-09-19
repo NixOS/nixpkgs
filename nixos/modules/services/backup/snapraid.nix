@@ -128,8 +128,8 @@ in
             lib.concatStringsSep "\n"
               (map prependData
                 ((lib.mapAttrsToList (name: value: name + " " + value)) dataDisks)
-              ++ zipListsWith (a: b: a + b)
-                ([ "parity " ] ++ map (i: toString i + "-parity ") (range 2 6))
+              ++ lib.zipListsWith (a: b: a + b)
+                ([ "parity " ] ++ map (i: toString i + "-parity ") (lib.range 2 6))
                 parityFiles ++ map prependContent contentFiles
               ++ map prependExclude exclude) + "\n" + extraConfig;
         };
@@ -222,7 +222,7 @@ in
                 # Multiple "split" parity files can be specified in a single
                 # "parityFile", separated by a comma.
                 # https://www.snapraid.it/manual#7.1
-                splitParityFiles = map (s: splitString "," s) parityFiles;
+                splitParityFiles = map (s: lib.splitString "," s) parityFiles;
               in
               lib.unique (
                 lib.attrValues dataDisks ++ splitParityFiles ++ contentDirs

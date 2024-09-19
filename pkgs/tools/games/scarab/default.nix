@@ -25,6 +25,12 @@ buildDotnetModule rec {
   projectFile = "Scarab.sln";
   executables = [ "Scarab" ];
 
+  preConfigureNuGet = ''
+    # This should really be in the upstream nuget.config
+    dotnet nuget add source https://api.nuget.org/v3/index.json \
+      -n nuget.org --configfile NuGet.Config
+  '';
+
   runtimeDeps = [
     glibc
     zlib

@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.43";
+  version = "3.11.45";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -13,21 +13,17 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KX7Bvu4rt+Q7x2XkBiZMngAgqRKYu90EVi2oQ21o5AI=";
+    hash = "sha256-QtxtkXKBYf46cS+TAxJGQNQktHpLgGDIf7Czfznzr1s=";
   };
 
-  postPatch = ''
-    # remove dependency constraints but keep environment constraints
-    sed 's/[~<>=][^;]*//' -i requirements.txt
-  '';
+  # relax dep constrains, keep environment constraints
+  pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
+    # and https://github.com/Flexget/Flexget/blob/develop/requirements.txt
     apscheduler
     beautifulsoup4
     colorama
@@ -48,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     rich
     rpyc
     sqlalchemy
+    zstandard
 
     # WebUI requirements
     cherrypy

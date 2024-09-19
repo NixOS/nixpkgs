@@ -339,6 +339,7 @@ mapAliases ({
   dhcp = throw "dhcp (ISC DHCP) has been removed from nixpkgs, because it reached its end of life"; # Added 2023-04-04
   dibbler = throw "dibbler was removed because it is not maintained anymore"; # Added 2024-05-14
   dnnl = oneDNN; # Added 2020-04-22
+  dnscrypt-wrapper = throw "dnscrypt-wrapper was removed because it has been effectively unmaintained since 2018. Use DNSCcrypt support in dnsdist instead"; # Added 2024-09-14
   docker-compose_1 = throw "'docker-compose_1' has been removed because it has been unmaintained since May 2021. Use docker-compose instead."; # Added 2024-07-29
   docker-distribution = distribution; # Added 2023-12-26
   docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
@@ -531,6 +532,7 @@ mapAliases ({
   gmpc = throw "'gmpc' has been removed due to lack of maintenance upstream. Consider using 'plattenalbum' instead"; # Added 2024-09-14
   gmtk = throw "'gmtk' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   gmtp = throw "'gmtp' has been removed due to lack of maintenance upstream. Consider using 'gnome-music' instead"; # Added 2024-09-14
+  gnu-cobol = gnucobol; # Added 2024-09-17
   go-dependency-manager = throw "'go-dependency-manager' is unmaintained and the go community now uses 'go.mod' mostly instead"; # Added 2023-10-04
   gotktrix = throw "'gotktrix' has been removed, as it was broken and unmaintained"; # Added 2023-12-06
   git-backup = throw "git-backup has been removed, as it has been abandoned upstream. Consider using git-backup-go instead.";

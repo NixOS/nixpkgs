@@ -17,6 +17,7 @@ ghc.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
+just.section.md
 libiconv.section.md
 libxml2.section.md
 meson.section.md

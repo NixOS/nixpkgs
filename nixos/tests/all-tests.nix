@@ -260,7 +260,6 @@ in {
   disable-installer-tools = handleTest ./disable-installer-tools.nix {};
   discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
-  dnscrypt-wrapper = runTestOn ["x86_64-linux"] ./dnscrypt-wrapper;
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = handleTest ./doas.nix {};
   docker = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker.nix {};
@@ -686,7 +685,7 @@ in {
   nix-misc = handleTest ./nix/misc.nix {};
   nix-upgrade = handleTest ./nix/upgrade.nix {inherit (pkgs) nixVersions;};
   nix-required-mounts = runTest ./nix-required-mounts;
-  nix-serve = handleTest ./nix-serve.nix {};
+  nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};

@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch,
   buildGo123Module,
   fetchFromGitHub,
   git,
@@ -9,24 +8,16 @@
 
 buildGo123Module rec {
   pname = "git-spice";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ftNLe/3akvk6nUrseBqpbJQSiUPEJO6cTEc7uEBKX3k=";
+    hash = "sha256-VODBN+3xDa+sGynhnWnnhPy0VEKPWOQeh2Ge75OTS0A=";
   };
 
-  vendorHash = "sha256-f7bjlTVwCFoQrgbeyAvsVAS6vy5uE/AvMGKEutE1lfs=";
-
-  # Fixes flaky test. Remove next release.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/abhinav/git-spice/commit/92c28474bab81881443129e4a8e9bfc3f1564931.patch";
-      hash = "sha256-6v++jG7Wm6awqHRiNzwjX25BB8X9yGYhSzcUDNQKJ7k=";
-    })
-  ];
+  vendorHash = "sha256-irYXuh0KmCmeZ2fKNduu7zpVqDQmmR7H2bNTMa2zOjI=";
 
   subPackages = [ "." ];
 

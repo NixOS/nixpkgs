@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.9.1";
+  version = "2024.9.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -4494,7 +4494,8 @@
       aiounifi
     ];
     "unifi_direct" = ps: with ps; [
-    ]; # missing inputs: unifi_ap
+      unifi-ap
+    ];
     "unifiled" = ps: with ps; [
       unifiled
     ];

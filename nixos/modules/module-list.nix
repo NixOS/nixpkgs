@@ -265,6 +265,7 @@
   ./programs/pqos-wrapper.nix
   ./programs/projecteur.nix
   ./programs/proxychains.nix
+  ./programs/pulseview.nix
   ./programs/qdmr.nix
   ./programs/qgroundcontrol.nix
   ./programs/qt5ct.nix
@@ -698,6 +699,7 @@
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
+  ./services/matrix/hookshot.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-meta.nix
@@ -1014,7 +1016,6 @@
   ./services/networking/dhcpcd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnscrypt-proxy2.nix
-  ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsdist.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/dnsproxy.nix

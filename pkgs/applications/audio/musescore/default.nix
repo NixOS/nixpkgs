@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, wrapGAppsNoGuiHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , pkg-config
 , ninja
@@ -50,13 +50,13 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.1";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eLtpLgXSc8L5y1Mg3s1wrxr09+/vBxNqJEtl9IoKYSM=";
+    sha256 = "sha256-wgujiFvaWejSEXTbq/Re/7Ca1jIqso2uZej3Lb3V4I8=";
   };
   patches = [
     # https://github.com/musescore/MuseScore/pull/24326
@@ -64,6 +64,11 @@ in stdenv'.mkDerivation (finalAttrs: {
       name = "fix-menubar-with-qt6.5+.patch";
       url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
       hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
+    })
+    (fetchpatch {
+      name = "fix-crash-accessing-uninitialized-properties.patch";
+      url = "https://github.com/musescore/MuseScore/pull/24714.patch";
+      hash = "sha256-ErrCU/U+wyfD7R8kiZTifGIeuCAdKi1q7uxYsoE/OLA=";
     })
   ];
 
@@ -83,6 +88,8 @@ in stdenv'.mkDerivation (finalAttrs: {
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
     "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    # Don't build unit tests unless we are going to run them.
+    (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   qtWrapperArgs = [
@@ -103,14 +110,15 @@ in stdenv'.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    # Just to make it not crash when looking up Gschemas when opening external
-    # files
-    wrapGAppsNoGuiHook
     wrapQtAppsHook
     cmake
     qttools
     pkg-config
     ninja
+  ] ++ lib.optionals stdenv.isLinux [
+    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -150,6 +158,29 @@ in stdenv'.mkDerivation (finalAttrs: {
     ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
 
+  # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
+  # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".
+  # We need to ensure this in two cases:
+  #
+  # 1) when the user invokes MuseScore as "mscore" on the command line or from
+  #    the .desktop file, and the normal argv0 is "mscore" (no "/");
+  # 2) when MuseScore invokes itself via File -> New, and the normal argv0 is
+  #    the target of /proc/self/exe, which in Nixpkgs was "{...}/.mscore-wrapped"
+  #
+  # In order to achieve (2) we install the final binary as $out/libexec/mscore, and
+  # in order to achieve (1) we use makeWrapper without --inherit-argv0.
+  #
+  # wrapQtAppsHook uses wrapQtApp -> wrapProgram -> makeBinaryWrapper --inherit-argv0
+  # so we disable it and explicitly use makeQtWrapper.
+  #
+  # TODO: check if something like this is also needed for macOS.
+  dontWrapQtApps = stdenv.isLinux;
+  postFixup = lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/libexec
+    mv $out/bin/mscore $out/libexec
+    makeQtWrapper $out/libexec/mscore $out/bin/mscore
+  '';
+
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
@@ -159,7 +190,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever doronbehar ];
+    maintainers = with maintainers; [ vandenoever doronbehar orivej ];
     mainProgram = "mscore";
     platforms = platforms.unix;
   };

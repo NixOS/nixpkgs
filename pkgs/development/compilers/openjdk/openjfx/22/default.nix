@@ -2,6 +2,7 @@
 , lib
 , pkgs
 , fetchFromGitHub
+, fetchpatch2
 , writeText
 , openjdk21_headless
 , gradle
@@ -15,7 +16,7 @@
 , libXxf86vm
 , glib
 , alsa-lib
-, ffmpeg_6
+, ffmpeg_7
 , python3
 , ruby
 , withMedia ? true
@@ -25,7 +26,7 @@
 let
   pname = "openjfx-modular-sdk";
   major = "22";
-  update = ".0.1";
+  update = ".0.2";
   build = "-ga";
   repover = "${major}${update}${build}";
   jdk = openjdk21_headless;
@@ -38,10 +39,19 @@ in stdenv.mkDerivation {
     owner = "openjdk";
     repo = "jfx22u";
     rev = repover;
-    hash = "sha256-VoEufSO+LciUCvoAM86MG1iMjCA3FSb60Ik4OP2Rk/Q=";
+    hash = "sha256-7Q9nZ2p3KfQPt1A2ULwk64OU/5/ghEkcsf9ECD6Ln2g=";
   };
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_6 ];
+  patches = [
+    # 8338701: Provide media support for libavcodec version 61
+    # <https://github.com/openjdk/jfx/pull/1552>
+    (fetchpatch2 {
+      url = "https://github.com/openjdk/jfx/commit/6115b396bacf62f39dcaa93c7c0adcd60b428b8c.patch?full_index=1";
+      hash = "sha256-6EES4qsumFgXePZSDEetJC1Li65zquz3UjwRbq/6YJM=";
+    })
+  ];
+
+  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_7 ];
   nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
 
   dontUseCmakeConfigure = true;

@@ -27,6 +27,7 @@
 , readline
 , rtrlib
 , protobufc
+, zeromq
 
 # tests
 , nettools
@@ -45,7 +46,6 @@
 , numMultipath ? 64
 , watchfrrSupport ? true
 , cumulusSupport ? false
-, datacenterSupport ? true
 , rtadvSupport ? true
 , irdpSupport ? true
 , routeReplacementSupport ? true
@@ -84,15 +84,15 @@
 lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
   "cannot enable SNMP support due to cross-compilation issues with net-snmp-config"
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.0.1";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
-    repo = pname;
-    rev = "${pname}-${version}";
-    hash = "sha256-bY5SSF/fmKQc8ECPik0v/ZlUiFsbZhwG2C5pbmoMzwQ=";
+    repo = finalAttrs.pname;
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-pmFdxL8QpyXvpX2YiSOZ+KIoNaj1OOH6/qnVAWZLE9s=";
   };
 
   patches = [
@@ -122,10 +122,11 @@ stdenv.mkDerivation rec {
     openssl
     pam
     pcre2
+    protobufc
     python3
     readline
     rtrlib
-    protobufc
+    zeromq
   ] ++ lib.optionals stdenv.isLinux [
     libcap
   ] ++ lib.optionals snmpSupport [
@@ -141,7 +142,7 @@ stdenv.mkDerivation rec {
 
   # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
   # navigation in dependency hell
-  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frrVersion = version; frrSource = src; };
+  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frrVersion = finalAttrs.version; frrSource = finalAttrs.src; };
 
   configureFlags = [
     "--disable-silent-rules"
@@ -155,7 +156,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/run/frr"
     "--sbindir=$(out)/libexec/frr"
     "--sysconfdir=/etc/frr"
-    "--with-clippy=${clippy-helper}/bin/clippy"
+    "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
     # general options
     (lib.strings.enableFeature snmpSupport "snmp")
     (lib.strings.enableFeature rpkiSupport "rpki")
@@ -193,8 +194,6 @@ stdenv.mkDerivation rec {
     (lib.strings.enableFeature ospfApi "ospfapi")
     # Cumulus options
     (lib.strings.enableFeature cumulusSupport "cumulus")
-    # Datacenter options
-    (lib.strings.enableFeature datacenterSupport "datacenter")
   ];
 
   postPatch = ''
@@ -243,4 +242,4 @@ stdenv.mkDerivation rec {
   };
 
   passthru.tests = { inherit (nixosTests) frr; };
-}
+})

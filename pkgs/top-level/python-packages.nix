@@ -12109,8 +12109,6 @@ self: super: with self; {
 
   pysim = callPackage ../development/python-modules/pysim { };
 
-  pysimplegui = callPackage ../development/python-modules/pysimplegui { };
-
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   pyslim = callPackage ../development/python-modules/pyslim { };
@@ -12475,8 +12473,6 @@ self: super: with self; {
   pytest-resource-path = callPackage ../development/python-modules/pytest-resource-path { };
 
   pytest-responses = callPackage ../development/python-modules/pytest-responses { };
-
-  pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
@@ -14289,6 +14285,11 @@ self: super: with self; {
   sip4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
+
+  sirius = toPythonModule (pkgs.sirius.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
 
   sismic = callPackage ../development/python-modules/sismic { };
 
@@ -16860,6 +16861,8 @@ self: super: with self; {
   unidiff = callPackage ../development/python-modules/unidiff { };
 
   unifi = callPackage ../development/python-modules/unifi { };
+
+  unifi-ap = callPackage ../development/python-modules/unifi-ap { };
 
   unifi-discovery = callPackage ../development/python-modules/unifi-discovery { };
 

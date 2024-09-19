@@ -99,8 +99,7 @@ let self = python3.pkgs.buildPythonApplication rec {
     lockfile
     mock
     pexpect
-    pytest
-    pytest-runner
+    pytestCheckHook
     fasteners
   ]);
 

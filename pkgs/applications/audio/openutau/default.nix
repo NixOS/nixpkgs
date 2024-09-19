@@ -22,6 +22,10 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
+  # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [[...]/OpenUtau.Core.csproj]
+  # [...]/Microsoft.NET.Sdk.targets(157,5): error MSB4018: System.IO.IOException: The process cannot access the file '[...]/OpenUtau.Core.deps.json' because it is being used by another process. [[...]/OpenUtau.Core.csproj]
+  enableParallelBuilding = false;
+
   projectFile = "OpenUtau.sln";
   nugetDeps = ./deps.nix;
 

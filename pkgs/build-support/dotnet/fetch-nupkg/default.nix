@@ -43,8 +43,7 @@ let
     unpackPhase = ''
       runHook preUnpack
 
-      unzip -nqd source $src
-      chmod -R +rw source
+      unpackNupkg "$src" source
       cd source
 
       runHook postUnpack
@@ -75,6 +74,13 @@ let
     '';
 
     createInstallableNugetSource = installable;
+
+    meta = {
+      sourceProvenance = with lib.sourceTypes; [
+        binaryBytecode
+        binaryNativeCode
+      ];
+    };
   };
 in
 overrides.${pname} or lib.id package
