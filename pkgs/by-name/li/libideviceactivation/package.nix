@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libideviceactivation";
-  version = "1.1.1";
+  version = "1.1.1-unstable-2024-05-29";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libideviceactivation";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-owcQpCN4+A785oy9pCboJIyfpgZ6X+8PRzqGtWpYl2w=";
+    rev = "ecc10ef8048c6591b936c5ca1b0971157087e6b2";
+    hash = "";
   };
 
   nativeBuildInputs = [
@@ -39,17 +39,20 @@ stdenv.mkDerivation (finalAttrs: {
     usbmuxd
   ];
 
-  installFlags = [ "PREFIX=$(out)" ];
+  # installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
-    description = "Library to manage the activation process of Apple iOS devices";
+  meta = with lib; {
     homepage = "https://libimobiledevice.org";
-    license = with lib.licenses; [
-      lgpl21
-      gpl3
+    description = "Library to manage the activation process of Apple iOS devices";
+    license = with licenses; [
+      lgpl21Only
+      gpl3Only
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      clebs
+      frontear
     ];
     mainProgram = "ideviceactivation";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ clebs ];
   };
 })
