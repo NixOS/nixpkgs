@@ -47,6 +47,8 @@
       lib.mkIf cfg.tpm2.enable {
         systemd.additionalUpstreamSystemUnits = [
           "tpm2.target"
+          "systemd-tpm2-setup-early.service"
+          "systemd-tpm2-setup.service"
         ];
       }
     )
@@ -59,6 +61,7 @@
       lib.mkIf cfg.tpm2.enable {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "tpm2.target"
+          "systemd-tpm2-setup-early.service"
         ];
 
         boot.initrd.availableKernelModules =
@@ -68,6 +71,8 @@
           ) "tpm-crb";
         boot.initrd.systemd.storePaths = [
           pkgs.tpm2-tss
+          "${cfg.package}/lib/systemd/systemd-tpm2-setup"
+          "${cfg.package}/lib/systemd/system-generators/systemd-tpm2-generator"
         ];
       }
     )
