@@ -475,37 +475,65 @@ let
             };
           };
 
-      pkgsCross.ghcjs =
-        removePlatforms
-          [
-            # Hydra output size of 3GB is exceeded
-            "aarch64-linux"
-          ]
-          {
-            haskellPackages = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-                ghc
-                hello
-                microlens
-              ;
+      pkgsCross = {
+        ghcjs =
+          removePlatforms
+            [
+              # Hydra output size of 3GB is exceeded
+              "aarch64-linux"
+            ]
+            {
+              haskellPackages = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
+
+              haskell.packages.ghc98 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
+
+              haskell.packages.ghcHEAD = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
             };
 
-            haskell.packages.ghc98 = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
-                ghc
-                hello
-                microlens
+        riscv64 = {
+          # Cross compilation of GHC
+          haskell.compiler = {
+            inherit (packagePlatforms pkgs.pkgsCross.riscv64.haskell.compiler)
+              # Our oldest GHC which still uses its own expression. 8.10.7 can
+              # theoretically be used to chain bootstrap all GHCs on riscv64
+              # which doesn't have official bindists.
+              ghc8107
+              # Latest GHC we are able to cross-compile.
+              ghc948
               ;
-            };
-
-            haskell.packages.ghcHEAD = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
-                ghc
-                hello
-                microlens
-              ;
-            };
           };
+        };
+
+        aarch64-multiplatform = {
+          # Cross compilation of GHC
+          haskell.compiler = {
+            inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.compiler)
+              # Uses a separate expression and LLVM backend for aarch64.
+              ghc8107
+              # Latest GHC we are able to cross-compile. Uses NCG backend.
+              ghc948
+              ;
+          };
+        };
+      };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
