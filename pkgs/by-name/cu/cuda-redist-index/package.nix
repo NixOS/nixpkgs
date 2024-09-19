@@ -4,6 +4,7 @@
   jq,
   lib,
   nixVersions,
+  path,
   pkgs,
   srcOnly,
   writers,
@@ -17,7 +18,7 @@ let
 
   storePathOf =
     let
-      nixpkgsRootInStore = ../../../..;
+      nixpkgsRootInStore = path;
     in
     # NOTE: Since nixpkgsRootInStore is an actual Path, we need to make sure we concatenate the directory separator
     # with the stringified `path` argument before concatenating it with nixpkgsRootInStore.

@@ -134,18 +134,33 @@ def mk_package_hashes(
         if actual_relative_path != expected_relative_path:
             # TensorRT will fail this check because it doesn't follow the usual naming convention.
             if release_info.name != "NVIDIA TensorRT":
-                logger.info("Expected relative path to be %s, got %s", expected_relative_path, actual_relative_path)
-            package_info = PackageInfo.model_validate({"sha256": sha256, "relative_path": actual_relative_path})
+                logger.info(
+                    "Expected relative path to be %s, got %s",
+                    expected_relative_path,
+                    actual_relative_path,
+                )
+            package_info = PackageInfo.model_validate({
+                "sha256": sha256,
+                "relative_path": actual_relative_path,
+            })
         else:
-            package_info = PackageInfo.model_validate({"sha256": sha256, "relative_path": None})
+            package_info = PackageInfo.model_validate({
+                "sha256": sha256,
+                "relative_path": None,
+            })
 
         infos[cuda_variant_name] = package_info
     return PackageVariants.model_validate(infos)
 
 
-def mk_manifest(redist_name: RedistName, version: Version, nvidia_manifest: None | NvidiaManifest = None) -> Manifest:
+def mk_manifest(
+    redist_name: RedistName,
+    version: Version,
+    nvidia_manifest: None | NvidiaManifest = None,
+    tensorrt_manifest_dir: None | Path = None,
+) -> Manifest:
     if nvidia_manifest is None:
-        nvidia_manifest = get_nvidia_manifest(redist_name, version)
+        nvidia_manifest = get_nvidia_manifest(redist_name, version, tensorrt_manifest_dir)
 
     releases: dict[str, Release] = {
         package_name: release
@@ -157,10 +172,11 @@ def mk_manifest(redist_name: RedistName, version: Version, nvidia_manifest: None
     return Manifest.model_validate(releases)
 
 
-def mk_index() -> Index:
+def mk_index(tensorrt_manifest_dir: Path) -> Index:
     return Index.model_validate({
         redist_name: {
-            version: mk_manifest(redist_name, version) for version in get_nvidia_manifest_versions(redist_name)
+            version: mk_manifest(redist_name, version, tensorrt_manifest_dir=tensorrt_manifest_dir)
+            for version in get_nvidia_manifest_versions(redist_name, tensorrt_manifest_dir)
         }
         for redist_name in RedistNames
     })

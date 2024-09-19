@@ -15,10 +15,11 @@ dependencies = ["annotated-types", "pydantic", "rich"]
 dev = ["ruff"]
 
 [project.scripts]
-mk-index-of-sha256-and-relative-path = "cuda_redist_lib:__main__.main"
+regen-manifest-hashes = "cuda_redist_lib.cmd:regen_manifest_hashes.main"
+mk-index-of-sha256-and-relative-path = "cuda_redist_lib.cmd:mk_index_of_sha256_and_relative_path.main"
 
 [project.urls]
-Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/cu/cuda-redist-lib"
+Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/python-modules/cuda-redist-lib"
 
 [tool.ruff]
 line-length = 120

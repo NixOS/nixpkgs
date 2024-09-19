@@ -1,13 +1,46 @@
-{ lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
+  inherit (config.utils) mkRedistURL;
+  inherit (config.types)
+    attrs
+    redistName
+    sriHash
+    version
+    ;
   inherit (lib.attrsets) mapAttrs;
   inherit (lib.options) mkOption;
-  inherit (lib.trivial) const;
-  inherit (lib.types) nonEmptyListOf nonEmptyStr;
+  inherit (lib.trivial) const importJSON;
+  inherit (lib.types) nonEmptyListOf nonEmptyStr package;
+  inherit (pkgs) fetchurl;
 in
 {
   imports = [ ./indices ];
   options.data = mapAttrs (const mkOption) {
+    manifestHashes = {
+      description = "Hashes used to retrieve CUDA manifests";
+      type = attrs redistName (attrs version sriHash);
+      default = importJSON ./manifest-hashes.json;
+    };
+    manifests = {
+      description = "Packages containing CUDA manifests";
+      type = attrs redistName (attrs version package);
+      default = mapAttrs (
+        redistName:
+        mapAttrs (
+          version: hash:
+          fetchurl {
+            pname = "redistrib-${redistName}";
+            url = mkRedistURL redistName "redistrib_${version}.json";
+            inherit hash version;
+          }
+        )
+      ) config.data.manifestHashes;
+    };
     platforms = {
       description = "List of platforms to use in creation of the platform type.";
       type = nonEmptyListOf nonEmptyStr;

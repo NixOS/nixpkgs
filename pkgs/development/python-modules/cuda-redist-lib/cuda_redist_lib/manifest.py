@@ -1,9 +1,7 @@
 # NOTE: Open bugs in Pydantic like https://github.com/pydantic/pydantic/issues/8984 prevent the full switch to the type
 # keyword introduced in Python 3.12.
-import os
 import re
 from collections.abc import Mapping, Sequence
-from io import TextIOWrapper
 from logging import Logger
 from pathlib import Path
 from typing import Annotated, Final, Self, override
@@ -37,16 +35,24 @@ class NvidiaPackage(PydanticObject):
     relative_path: Annotated[Path, Field(description="Relative path to the package from the index URL.")]
     sha256: Annotated[Sha256, Field(description="SHA256 hash of the package.")]
     md5: Annotated[Md5, Field(description="MD5 hash of the package.")]
-    size: Annotated[str, Field(description="Size of the package in bytes, as a string.", pattern=r"\d+")]
+    size: Annotated[
+        str,
+        Field(description="Size of the package in bytes, as a string.", pattern=r"\d+"),
+    ]
 
 
 class NvidiaReleaseCommon(PydanticObject):
     name: Annotated[str, Field(description="Full name and description of the release.")]
     license: Annotated[str, Field(description="License under which the release is distributed.")]
-    license_path: Annotated[None | Path, Field(description="Relative path to the license file.", default=None)]
+    license_path: Annotated[
+        None | Path,
+        Field(description="Relative path to the license file.", default=None),
+    ]
     version: Annotated[Version, Field(description="Version of the release.")]
 
-    def packages(self) -> Mapping[RedistPlatform, NvidiaPackage | Mapping[CudaVariant, NvidiaPackage]]:
+    def packages(
+        self,
+    ) -> Mapping[RedistPlatform, NvidiaPackage | Mapping[CudaVariant, NvidiaPackage]]:
         raise NotImplementedError()
 
 
@@ -98,7 +104,10 @@ class NvidiaReleaseV3(NvidiaReleaseCommon):
         NvidiaPackage | Mapping[CudaVariant, NvidiaPackage],  # NOTE: `source` does not use cuda variants
     ]
 
-    cuda_variant: Annotated[Sequence[MajorVersion], Field(description="CUDA variants supported by the release.")]
+    cuda_variant: Annotated[
+        Sequence[MajorVersion],
+        Field(description="CUDA variants supported by the release."),
+    ]
 
     @field_validator("cuda_variant", mode="after")
     @classmethod
@@ -147,7 +156,9 @@ class NvidiaReleaseV3(NvidiaReleaseCommon):
         return self
 
     @override
-    def packages(self) -> Mapping[RedistPlatform, NvidiaPackage | Mapping[CudaVariant, NvidiaPackage]]:
+    def packages(
+        self,
+    ) -> Mapping[RedistPlatform, NvidiaPackage | Mapping[CudaVariant, NvidiaPackage]]:
         return self.__pydantic_extra__
 
 
@@ -211,7 +222,9 @@ def is_ignored_nvidia_manifest(redist_name: RedistName, version: Version) -> Non
             return None
 
 
-def get_nvidia_manifest_versions(redist_name: RedistName) -> Sequence[Version]:
+def get_nvidia_manifest_versions(
+    redist_name: RedistName, tensorrt_manifest_dir: None | Path = None
+) -> Sequence[Version]:
     logger.info("Getting versions for %s", redist_name)
     regex_pattern = re.compile(
         r"""
@@ -239,10 +252,10 @@ def get_nvidia_manifest_versions(redist_name: RedistName) -> Sequence[Version]:
     listing: str
     match redist_name:
         case "tensorrt":
+            if tensorrt_manifest_dir is None:
+                raise ValueError("Must provide the path to the tensorrt manifests")
             listing = "\n".join(
-                redistrib_path.name
-                for redistrib_path in Path(os.environ["TENSORRT_MANIFEST_DIR"]).iterdir()
-                if redistrib_path.is_file()
+                redistrib_path.name for redistrib_path in tensorrt_manifest_dir.iterdir() if redistrib_path.is_file()
             )
         case _:
             with request.urlopen(f"{RedistUrlPrefix}/{redist_name}/redist/index.html") as response:
@@ -266,13 +279,20 @@ def get_nvidia_manifest_versions(redist_name: RedistName) -> Sequence[Version]:
     return [version for _, version in version_dict.values()]
 
 
-def get_nvidia_manifest(redist_name: RedistName, version: Version) -> NvidiaManifest:
+def get_nvidia_manifest_str(
+    redist_name: RedistName, version: Version, tensorrt_manifest_dir: None | Path = None
+) -> bytes:
     logger.info("Getting manifest for %s %s", redist_name, version)
-    context: TextIOWrapper
     match redist_name:
         case "tensorrt":
-            context = (Path(os.environ["TENSORRT_MANIFEST_DIR"]) / f"redistrib_{version}.json").open(encoding="utf-8")
+            if tensorrt_manifest_dir is None:
+                raise ValueError("Must provide the path to the tensorrt manifests")
+            return (tensorrt_manifest_dir / f"redistrib_{version}.json").read_bytes()
         case _:
-            context = request.urlopen(f"{RedistUrlPrefix}/{redist_name}/redist/redistrib_{version}.json")
+            return request.urlopen(f"{RedistUrlPrefix}/{redist_name}/redist/redistrib_{version}.json").read()
 
-    return NvidiaManifest.model_validate_json(context.read())
+
+def get_nvidia_manifest(
+    redist_name: RedistName, version: Version, tensorrt_manifest_dir: None | Path = None
+) -> NvidiaManifest:
+    return NvidiaManifest.model_validate_json(get_nvidia_manifest_str(redist_name, version, tensorrt_manifest_dir))
