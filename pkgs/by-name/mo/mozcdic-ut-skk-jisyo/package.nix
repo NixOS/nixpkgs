@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/utuhiro78/mozcdic-ut-sudachidict";
     license = with lib.licenses; [
       asl20
-      gpl2
+      gpl2Plus
     ];
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
