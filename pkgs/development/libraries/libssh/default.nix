@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libssh";
-  version = "0.10.6";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/${lib.versions.majorMinor version}/libssh-${version}.tar.xz";
-    hash = "sha256-GGHUmPW28XQbarxz5ghHhJHtz5ydS2Yw7vbnRZbencE=";
+    hash = "sha256-FLfcxy6R4IFRxYuYGntXCrJmP2MOfSg3ZF1anGEsG3k=";
   };
 
   # Do not split 'dev' output until lib/cmake/libssh/libssh-config.cmake
