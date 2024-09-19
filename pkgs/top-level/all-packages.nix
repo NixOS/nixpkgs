@@ -15422,18 +15422,12 @@ with pkgs;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
+  # Please remove all this logic when bumping to LLVM 19 and make this
+  # a simple alias.
   llvmPackages = let
     # This returns the minimum supported version for the platform. The
     # assumption is that or any later version is good.
-    choose = platform:
-      /**/ if platform.isDarwin then 16
-      else if platform.isFreeBSD then 18
-      else if platform.isOpenBSD then 18
-      else if platform.isAndroid then 12
-      else if platform.isLinux then 18
-      else if platform.isWasm then 16
-      # For unknown systems, assume the latest version is required.
-      else 18;
+    choose = platform: if platform.isDarwin then 16 else 18;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
     # taking the min bound of that.
