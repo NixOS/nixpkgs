@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "0-unstable-2024-09-09";
+  version = "0-unstable-2024-09-19";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
-    rev = "f8a18e96f049f2fd51409aac011e1aa09eaac2db";
-    hash = "sha256-ZEczUdFyjgqCisFjgQeYWJ9JQP0/G7cgVpkHwWjNfRQ=";
+    rev = "7a02447abc7d51f56e8abf90200fdd442247b442";
+    hash = "sha256-H2CgMgLCHDTQxT3Kc+agqTdRaoX8C6is5q4Z43bfStA=";
   };
 
   strictDeps = true;
