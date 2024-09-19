@@ -6,17 +6,17 @@
 , withCyrusSaslXoauth2 ? false, cyrus-sasl-xoauth2, makeWrapper
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "isync";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/isync/${pname}-${version}.tar.gz";
-    sha256 = "oMgeEJOHvyedoWFFMQM5nneUav7PXFH5QTxedzVX940=";
+    url = "mirror://sourceforge/isync/isync-${finalAttrs.version}.tar.gz";
+    hash = "sha256-oMgeEJOHvyedoWFFMQM5nneUav7PXFH5QTxedzVX940=";
   };
 
-
   # Fixes "Fatal: buffer too small" error
+  # see https://sourceforge.net/p/isync/mailman/isync-devel/thread/87fsevvebj.fsf%40steelpick.2x.cz/
   env.NIX_CFLAGS_COMPILE = "-DQPRINTF_BUFF=4000";
 
   nativeBuildInputs = [ pkg-config perl ]
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ primeos ];
     mainProgram = "mbsync";
   };
-}
+})
