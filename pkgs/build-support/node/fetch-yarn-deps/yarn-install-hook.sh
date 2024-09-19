@@ -17,7 +17,7 @@ yarnInstallHook() {
         --offline
     )
 
-    local -r tmpDir="$(mktemp -d yarnInstallHook.XXXXXX)"
+    local -r tmpDir="$(mktemp -d)"
 
     # yarn pack does not work at all with bundleDependencies.
     # Since we are imediately unpacking, we can just remove them from package.json
