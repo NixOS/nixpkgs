@@ -8,6 +8,7 @@
   makeWrapper,
   stdenv,
   addDriverRunpath,
+  nix-update-script,
 
   cmake,
   gcc12,
@@ -199,20 +200,24 @@ goBuild {
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
 
-  passthru.tests =
-    {
-      inherit ollama;
-      version = testers.testVersion {
-        inherit version;
-        package = ollama;
+  passthru = {
+    tests =
+      {
+        inherit ollama;
+        version = testers.testVersion {
+          inherit version;
+          package = ollama;
+        };
+      }
+      // lib.optionalAttrs stdenv.isLinux {
+        inherit ollama-rocm ollama-cuda;
+        service = nixosTests.ollama;
+        service-cuda = nixosTests.ollama-cuda;
+        service-rocm = nixosTests.ollama-rocm;
       };
-    }
-    // lib.optionalAttrs stdenv.isLinux {
-      inherit ollama-rocm ollama-cuda;
-      service = nixosTests.ollama;
-      service-cuda = nixosTests.ollama-cuda;
-      service-rocm = nixosTests.ollama-rocm;
-    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description =
