@@ -26063,8 +26063,6 @@ with pkgs;
 
   system76-power = callPackage ../os-specific/linux/system76-power { };
 
-  system76-scheduler = callPackage ../os-specific/linux/system76-scheduler { };
-
   ocf-resource-agents = callPackage ../os-specific/linux/ocf-resource-agents { };
 
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
