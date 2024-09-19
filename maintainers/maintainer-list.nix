@@ -12222,7 +12222,7 @@
     name = "Luis Wirth";
   };
   luc65r = {
-    email = "lucas@ransan.tk";
+    email = "lucas@ransan.fr";
     github = "luc65r";
     githubId = 59375051;
     name = "Lucas Ransan";
