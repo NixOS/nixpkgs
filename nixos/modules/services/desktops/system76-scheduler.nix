@@ -252,7 +252,7 @@ in {
         # No custom settings: just use stock configuration with a fix for Pipewire
         "system76-scheduler/config.kdl".source = "${cfg.package}/data/config.kdl";
         "system76-scheduler/process-scheduler/00-dist.kdl".source = "${cfg.package}/data/pop_os.kdl";
-        "system76-scheduler/process-scheduler/01-fix-pipewire-paths.kdl".source = ../../../../pkgs/os-specific/linux/system76-scheduler/01-fix-pipewire-paths.kdl;
+        "system76-scheduler/process-scheduler/01-fix-pipewire-paths.kdl".source = ../../../../pkgs/by-name/sy/system76-scheduler/01-fix-pipewire-paths.kdl;
       })
 
       (let
