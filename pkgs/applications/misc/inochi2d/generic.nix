@@ -98,7 +98,7 @@ buildDubPackage (
       . gentl.sh
 
       # Use the fake git to generate version info
-      dub build --skip-registry=all --compiler=ldc2 --build=release --config=meta
+      dub build --skip-registry=all --compiler=ldc2 --build=release --config=update-version
     '';
 
     # Use the "barebones" configuration so that we don't include the mascot and icon files in out build
