@@ -11065,8 +11065,6 @@ with pkgs;
 
   paperless-ngx = callPackage ../applications/office/paperless-ngx { };
 
-  paperoni = callPackage ../tools/text/paperoni { };
-
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   papeer = callPackage ../tools/text/papeer { };

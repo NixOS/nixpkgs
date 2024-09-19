@@ -1195,6 +1195,7 @@ mapAliases ({
   PageEdit = pageedit; # Added 2024-01-21
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = metal-cli; # Added 2021-10-25
+  paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14
   packet = throw "packet has been removed as it is no longer working and unmaintained"; # Added 2024-03-29
   palemoon = throw "palemoon has been dropped due to python2 being EOL and marked insecure. Use 'palemoon-bin' instead"; # Added 2023-05-18
   pam_usb = throw "'pam_usb' has been removed: abandoned by upstream since 2015."; # Added 2023-10-30
