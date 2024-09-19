@@ -12,19 +12,20 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-queue";
-  version = "12.11.0";
+  version = "12.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Cox3eDnbpcUIJMrEivo8xWvgRPqkXKYbcmnrMZ6/AXE=";
+    pname = "azure_storage_queue";
+    inherit version;
+    hash = "sha256-uvLxvIK31PUpGSLD6k8jziJD6ULb50lPyheCKQs38eQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-core
     cryptography
     isodate
