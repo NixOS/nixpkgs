@@ -7,6 +7,7 @@
 let
   inherit (lib)
     getExe
+    hasAttr
     id
     maintainers
     mkEnableOption
@@ -26,10 +27,12 @@ let
       id;
 
   spotifydConf =
-    if cfg.settings != { } then
-      toml.generate "spotify.conf" cfg.settings
-    else
-      warnConfig (pkgs.writeText "spotifyd.conf" cfg.config);
+    if cfg.settings != { } then cfg.settings else warnConfig (builtins.fromTOML cfg.config);
+
+  spotifydConfFile = toml.generate "spotify.conf" spotifydConf;
+
+  defaultCachePath = "/var/cache/spotifyd";
+  cachePath = (spotifydConf.spotifyd or spotifydConf.global).cache_path or defaultCachePath;
 in
 {
   options = {
@@ -69,6 +72,10 @@ in
         assertion = cfg.config == "" || cfg.settings == { };
         message = "At most one of the .config attribute and the .settings attribute may be set";
       }
+      {
+        assertion = hasAttr "spotifyd" spotifydConf || hasAttr "global" spotifydConf;
+        message = "A main spotifyd or global attribute must be set.";
+      }
     ];
 
     systemd.services.spotifyd = {
@@ -81,11 +88,11 @@ in
       description = "spotifyd, a Spotify playing daemon";
       environment.SHELL = "/bin/sh";
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
+        ExecStart = "${getExe cfg.package} --no-daemon --cache-path ${cachePath} --config-path ${spotifydConfFile}";
         Restart = "always";
         RestartSec = 12;
         DynamicUser = true;
-        CacheDirectory = "spotifyd";
+        CacheDirectory = mkIf (cachePath == defaultCachePath) "spotifyd";
         SupplementaryGroups = [ "audio" ];
       };
     };
