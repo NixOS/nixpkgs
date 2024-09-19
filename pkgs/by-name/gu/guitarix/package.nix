@@ -7,7 +7,7 @@
   boost,
   curl,
   eigen,
-  fftw,
+  fftwFloat,
   gettext,
   glib,
   glib-networking,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     curl
     eigen
-    fftw
+    fftwFloat
     glib
     glib-networking.out
     glibmm
