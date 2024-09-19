@@ -21,6 +21,7 @@ let
         enable = true;
         radios.wlan0 = {
           band = "2g";
+          channel = 6;
           countryCode = "US";
           networks = {
             wlan0 = {
