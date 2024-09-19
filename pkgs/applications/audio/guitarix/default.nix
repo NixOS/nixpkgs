@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     maintainers = with lib.maintainers; [ astsmtl lord-valen ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "guitarix";
     homepage = "https://github.com/brummer10/guitarix";
     description = "Virtual guitar amplifier for Linux running with JACK";
