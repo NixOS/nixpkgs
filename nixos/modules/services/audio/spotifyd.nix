@@ -6,11 +6,13 @@
 }:
 let
   inherit (lib)
+    getExe
     id
     maintainers
     mkEnableOption
     mkIf
     mkOption
+    mkPackageOption
     types
     ;
 
@@ -33,6 +35,10 @@ in
   options = {
     services.spotifyd = {
       enable = mkEnableOption "spotifyd, a Spotify playing daemon";
+
+      package = mkPackageOption pkgs "spotifyd" {
+        example = "pkgs.spotifyd.override { withMpris = false; }";
+      };
 
       config = mkOption {
         default = "";
@@ -75,7 +81,7 @@ in
       description = "spotifyd, a Spotify playing daemon";
       environment.SHELL = "/bin/sh";
       serviceConfig = {
-        ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
+        ExecStart = "${getExe cfg.package} --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
         Restart = "always";
         RestartSec = 12;
         DynamicUser = true;
