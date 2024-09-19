@@ -5,6 +5,9 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+#TODO: Use `jq` instead of `sed`.
+#TODO: Accept the small security drawback and make this script runnable by r-ryantm.
+
 # This script expects to be called in an interactive terminal somewhere inside Nixpkgs.
 echo "Preparing..."
 nixpkgs=$(git rev-parse --show-toplevel)
@@ -22,7 +25,7 @@ userInputFingerprint=${userInputFingerprint:-"23E3222C145F4475FA8060A783FE14C957
 
 # Clone xen.git.
 echo -e "Cloning \e[1;34mxen.git\e[0m..."
-git clone --quiet https://xenbits.xen.org/git-http/xen.git /tmp/xenUpdateScript/xen
+git clone --quiet https://xenbits.xenproject.org/git-http/xen.git /tmp/xenUpdateScript/xen
 cd /tmp/xenUpdateScript/xen
 
 # Get list of versions and branches.
@@ -34,6 +37,8 @@ branchList=($(echo "$versionList" | tr ' ' '\n' | sed s/\.[0-9]*$//g | awk '!see
 minSupportedBranch="$(grep "  minSupportedVersion = " "$xenPath"/generic/default.nix | sed s/'  minSupportedVersion = "'//g | sed s/'";'//g)"
 supportedBranches=($(for version in "${branchList[@]}"; do if [ "$(printf '%s\n' "$minSupportedBranch" "$version" | sort -V | head -n1)" = "$minSupportedBranch" ]; then echo "$version"; fi; done))
 supportedVersions=($(for version in "${supportedBranches[@]}"; do echo "$versionList" | tr ' ' '\n' | grep "$version" | tail --lines=1; done))
+
+echo -e "\e[1mNOTE\e[0m: As we're also pre-fetching the submodules, QEMU and OVMF may take a very long time to fetch."
 
 # Main loop that installs every supportedVersion.
 for version in "${supportedVersions[@]}"; do
@@ -59,31 +64,33 @@ for version in "${supportedVersions[@]}"; do
     git switch --quiet --detach RELEASE-"$version"
 
     # Originally we told people to go check the Makefile themselves.
-    echo -e "\nDetermining source versions from Xen Makefiles..."
-    qemuVersion="$(grep -ie "QEMU_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"QEMU_UPSTREAM_REVISION ?= "//g)"
-    seaBIOSVersion="$(grep -ie "SEABIOS_UPSTREAM_REVISION ?= rel-" /tmp/xenUpdateScript/xen/Config.mk | sed s/"SEABIOS_UPSTREAM_REVISION ?= "//g)"
-    ovmfVersion="$(grep -ie "OVMF_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"OVMF_UPSTREAM_REVISION ?= "//g)"
-    ipxeVersion="$(grep -ie "IPXE_GIT_TAG :=" /tmp/xenUpdateScript/xen/tools/firmware/etherboot/Makefile | sed s/"IPXE_GIT_TAG := "//g)"
+    echo -e -n "\nDetermining source versions from Xen Makefiles..."
+    qemuVersion="$(grep "QEMU_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"QEMU_UPSTREAM_REVISION ?= "//g)"
+    seaBIOSVersion="$(grep "SEABIOS_UPSTREAM_REVISION ?= rel-" /tmp/xenUpdateScript/xen/Config.mk | sed s/"SEABIOS_UPSTREAM_REVISION ?= "//g)"
+    ovmfVersion="$(grep "OVMF_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"OVMF_UPSTREAM_REVISION ?= "//g)"
+    miniOSVersion="$(grep "MINIOS_UPSTREAM_REVISION ?=" /tmp/xenUpdateScript/xen/Config.mk | sed s/"MINIOS_UPSTREAM_REVISION ?= "//g)"
+    ipxeVersion="$(grep "IPXE_GIT_TAG :=" /tmp/xenUpdateScript/xen/tools/firmware/etherboot/Makefile | sed s/"IPXE_GIT_TAG := "//g)"
+    echo "done!"
 
     # Use `nix-prefetch-git` to fetch `rev`s and `hash`es.
     echo "Pre-fetching sources and determining hashes..."
     echo -e -n "  \e[1;32mXen\e[0m..."
-    fetchXen=$(nix-prefetch-git --url https://xenbits.xen.org/git-http/xen.git --rev RELEASE-"$version" --quiet)
+    fetchXen=$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/xen.git --rev RELEASE-"$version" --quiet)
     finalVersion="$(echo "$fetchXen" | tr ', ' '\n ' | grep -ie rev | sed s/'  "rev": "'//g | sed s/'"'//g)"
     hash="$(echo "$fetchXen" | tr ', ' '\n ' | grep -ie hash | sed s/'  "hash": "'//g | sed s/'"'//g)"
     echo "done!"
     echo -e -n "  \e[1;36mQEMU\e[0m..."
-    fetchQEMU=$(nix-prefetch-git --url https://xenbits.xen.org/git-http/qemu-xen.git --rev "$qemuVersion" --quiet --fetch-submodules)
+    fetchQEMU=$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/qemu-xen.git --rev "$qemuVersion" --quiet --fetch-submodules)
     finalQEMUVersion="$(echo "$fetchQEMU" | tr ', ' '\n ' | grep -ie rev | sed s/'  "rev": "'//g | sed s/'"'//g)"
     qemuHash="$(echo "$fetchQEMU" | tr ', ' '\n ' | grep -ie hash | sed s/'  "hash": "'//g | sed s/'"'//g)"
     echo "done!"
     echo -e -n "  \e[1;36mSeaBIOS\e[0m..."
-    fetchSeaBIOS=$(nix-prefetch-git --url https://xenbits.xen.org/git-http/seabios.git --rev "$seaBIOSVersion" --quiet)
+    fetchSeaBIOS=$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/seabios.git --rev "$seaBIOSVersion" --quiet)
     finalSeaBIOSVersion="$(echo "$fetchSeaBIOS" | tr ', ' '\n ' | grep -ie rev | sed s/'  "rev": "'//g | sed s/'"'//g)"
     seaBIOSHash="$(echo "$fetchSeaBIOS" | tr ', ' '\n ' | grep -ie hash | sed s/'  "hash": "'//g | sed s/'"'//g)"
     echo "done!"
     echo -e -n "  \e[1;36mOVMF\e[0m..."
-    ovmfHash="$(nix-prefetch-git --url https://xenbits.xen.org/git-http/ovmf.git --rev "$ovmfVersion" --quiet --fetch-submodules | grep -ie hash | sed s/'  "hash": "'//g | sed s/'",'//g)"
+    ovmfHash="$(nix-prefetch-git --url https://xenbits.xenproject.org/git-http/ovmf.git --rev "$ovmfVersion" --quiet --fetch-submodules | grep -ie hash | sed s/'  "hash": "'//g | sed s/'",'//g)"
     echo "done!"
     echo -e -n "  \e[1;36miPXE\e[0m..."
     ipxeHash="$(nix-prefetch-git --url https://github.com/ipxe/ipxe.git --rev "$ipxeVersion" --quiet | grep -ie hash | sed s/'  "hash": "'//g | sed s/'",'//g)"
@@ -120,13 +127,13 @@ for version in "${supportedVersions[@]}"; do
     echo -e "Found the following patches:\n  \e[1;32mXen\e[0m:     \e[1;33m$discoveredXenPatchesEcho\e[0m\n  \e[1;36mQEMU\e[0m:    \e[1;33m$discoveredQEMUPatchesEcho\e[0m\n  \e[1;36mSeaBIOS\e[0m: \e[1;33m$discoveredSeaBIOSPatchesEcho\e[0m\n  \e[1;36mOVMF\e[0m:    \e[1;33m$discoveredOVMFPatchesEcho\e[0m\n  \e[1;36miPXE\e[0m:    \e[1;33m$discoveredIPXEPatchesEcho\e[0m"
 
     # Prepare patches that are called in ./patches.nix.
-    defaultPatchListInit=("QUBES_REPRODUCIBLE_BUILDS" "XSA_458" "XSA_460" "XSA_461" )
+    defaultPatchListInit=("QUBES_REPRODUCIBLE_BUILDS" "XSA_460" "XSA_461" )
     read -r -a defaultPatchList -p $'\nWould you like to override the \e[1;34mupstreamPatches\e[0m list for \e[1;32mXen '"$version"$'\e[0m? If no, press \e[1;34menter\e[0m to use the default patch list: [ \e[1;34m'"${defaultPatchListInit[*]}"$' \e[0m]: '
     defaultPatchList=(${defaultPatchList[@]:-${defaultPatchListInit[@]}})
     upstreamPatches=${defaultPatchList[*]}
 
     # Write and format default.nix file.
-    echo -e "\nWriting updated \e[1;34mversionDefinition\e[0m..."
+    echo -e -n "\nWriting updated \e[1;34mversionDefinition\e[0m..."
     cat >"$branch"/default.nix <<EOF
 {
   lib,
@@ -181,9 +188,11 @@ callPackage (import ../generic/default.nix {
   };
 }) ({ ocamlPackages = ocaml-ng.ocamlPackages_$ocamlVersion; } // genericDefinition)
 EOF
+echo done!
 
-    echo "Formatting..."
+    echo -n "Formatting..."
     nixfmt "$branch"/default.nix
+    echo done!
 
     echo -e "\n\e[1;32mSuccessfully produced $branch/default.nix.\e[0m"
 done
