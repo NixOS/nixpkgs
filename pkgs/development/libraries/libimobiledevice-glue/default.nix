@@ -1,26 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libplist
-, nix-update-script
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
 
-stdenv.mkDerivation rec {
+  autoreconfHook,
+  pkg-config,
+
+  libplist,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "libimobiledevice-glue";
-  version = "1.3.0";
+  version = "1.3.0-unstable-2024-06-16";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = version;
+    repo = "libimobiledevice-glue";
+    rev = "362f7848ac89b74d9dd113b38b51ecb601f76094";
     hash = "sha256-+poCrn2YHeH8RQCfWDdnlmJB4Nf+unWUVwn7YwILHIs=";
   };
 
-  preAutoreconf = ''
-    export RELEASE_VERSION=${version}
-  '';
+  outputs = [
+    "out"
+    "dev"
+  ];
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -31,15 +35,15 @@ stdenv.mkDerivation rec {
     libplist
   ];
 
-  outputs = [ "out" "dev" ];
-
-  passthru.updateScript = nix-update-script { };
+  preAutoreconf = ''
+    export RELEASE_VERSION=${finalAttrs.version}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice-glue";
     description = "Library with common code used by the libraries and tools around the libimobiledevice project";
-    license = licenses.lgpl21Plus;
+    license = licenses.lgpl21Only;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [ frontear ];
   };
-}
+})
