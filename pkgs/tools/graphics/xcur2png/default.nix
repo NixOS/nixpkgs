@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0858wn2p14bxpv9lvaz2bz1rk6zk0g8zgxf8iy595m8fqv4q2fya";
   };
 
+  patches = [
+    # https://github.com/eworm-de/xcur2png/pull/3
+    ./malloc.diff
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
