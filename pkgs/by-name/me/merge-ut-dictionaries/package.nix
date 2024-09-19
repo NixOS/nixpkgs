@@ -20,6 +20,8 @@
   ],
 }:
 
+assert lib.assertMsg (dictionaries != [ ]) "merge-ut-dictionaries needs at least one dictionary.";
+
 stdenvNoCC.mkDerivation {
   pname = "merge-ut-dictionaries";
   version = "0-unstable-2024-08-28";
@@ -53,7 +55,7 @@ stdenvNoCC.mkDerivation {
           --replace-fail "urllib.request.urlopen" "open" \
           --replace-fail "read().decode()" "read()"
 
-        for dir in ${builtins.toString dictionaries}; do
+        for dir in ${lib.concatStringsSep " " dictionaries}; do
           cp -v $dir/mozcdic-ut-*.txt.tar.bz2 .
         done
       '';
