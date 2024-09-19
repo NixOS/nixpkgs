@@ -88,8 +88,6 @@ assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == std
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  inherit (bootPkgs) ghc;
-
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = lib.optionalString
     (targetPlatform != hostPlatform)
@@ -441,7 +439,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3
-    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
     bootPkgs.ghc-settings-edit
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
@@ -453,8 +451,11 @@ stdenv.mkDerivation (rec {
     xattr
   ];
 
-  # Used by the STAGE0 compiler to build stage1
+  # Stage0 compiler and the tools/libs it needs to build Stage1. Stage0 is
+  # build->build, Stage1 is build->target (which may be the same as
+  # host->target)
   depsBuildBuild = [
+    bootPkgs.ghc
     buildCC
     # stage0 builds terminfo unconditionally, so we always need ncurses
     ncurses
@@ -554,7 +555,7 @@ stdenv.mkDerivation (rec {
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     platforms = lib.platforms.all;
-    inherit (ghc.meta) license;
+    inherit (bootPkgs.ghc.meta) license;
   };
 
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
