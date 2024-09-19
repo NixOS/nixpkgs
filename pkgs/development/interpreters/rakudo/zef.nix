@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zef";
-  version = "0.22.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "ugexe";
     repo = "zef";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zvFmh4Q1Q6gizxdCCoOX2hgQ7/f8ozczY7IwWqMKGSo=";
+    hash = "sha256-uMVfBptiCungO+XJMlwV2Fhs2jgVNDOqUFqgJPV5RhM=";
   };
 
   nativeBuildInputs = [
