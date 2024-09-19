@@ -35678,6 +35678,8 @@ with pkgs;
 
   steam-run = steam.run;
 
+  steam-run-free = steamPackages.steam-fhsenv-without-steam.run;
+
   steam-tui = callPackage ../games/steam-tui { };
 
   steamcmd = steamPackages.steamcmd;

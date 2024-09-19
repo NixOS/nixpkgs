@@ -341,6 +341,10 @@ in buildFHSEnv rec {
       description = "Run commands in the same FHS environment that is used for Steam";
       mainProgram = "steam-run";
       name = "steam-run";
+      # steam-run itself is just a script that lives in nixpkgs (which is licensed under MIT).
+      # steam is a dependency and already unfree, so normal steam-run will not install without
+      # allowing unfree packages or appropriate `allowUnfreePredicate` rules.
+      license = lib.licenses.mit;
     };
   };
 }
