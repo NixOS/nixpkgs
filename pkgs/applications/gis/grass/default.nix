@@ -5,7 +5,7 @@
 , makeWrapper
 , wrapGAppsHook3
 
-, withOpenGL ? true
+, withOpenGL ? !stdenv.isDarwin
 
 , bison
 , blas
