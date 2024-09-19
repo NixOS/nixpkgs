@@ -1675,6 +1675,8 @@ self: super: with self; {
 
   blackrenderer = callPackage ../development/python-modules/blackrenderer { };
 
+  blake3 = callPackage ../development/python-modules/blake3 { };
+
   bleach = callPackage ../development/python-modules/bleach { };
 
   bleach-allowlist = callPackage ../development/python-modules/bleach-allowlist { };
