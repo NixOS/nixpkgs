@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation {
         latestLinux="$(curl -s https://download.todesktop.com/${appKey}/latest-linux.yml)"
         version="$(echo "$latestLinux" | yq -r .version)"
         filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-        update-source-version cursor "$version" "" "https://download.todesktop.com/${appKey}/$filename" --source-key=src.src
+        update-source-version code-cursor "$version" "" "https://download.todesktop.com/${appKey}/$filename" --source-key=src.src
       '';
     });
   };
