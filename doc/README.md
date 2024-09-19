@@ -5,7 +5,7 @@ This directory houses the sources files for the Nixpkgs reference manual.
 > [!IMPORTANT]
 > We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
 >
-> Going forward, this folder should only contain **[reference](https://nix.dev/contributing/documentation/diataxis#reference) documentation**.
+> Going forward, this directory should **only** contain [reference documentation](https://nix.dev/contributing/documentation/diataxis#reference).
 > For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
 >
 > We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
