@@ -7,7 +7,6 @@
 , doxygen
 , enet
 , fetchzip
-, fetchurl
 , fmt
 , ffmpeg-headless
 , gamemode

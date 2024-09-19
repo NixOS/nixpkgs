@@ -14,16 +14,10 @@
   freezegun,
   httpx,
   langchain,
-  lark,
-  pandas,
   pytest-asyncio,
   pytestCheckHook,
   pytest-mock,
-  pytest-socket,
-  requests-mock,
-  responses,
   syrupy,
-  toml,
 
   nix-update-script,
 }:

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   buildPythonPackage,
   python,
   ndtypes,

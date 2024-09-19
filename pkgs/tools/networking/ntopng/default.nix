@@ -5,7 +5,6 @@
   curl,
   expat,
   fetchFromGitHub,
-  fetchpatch,
   git,
   json_c,
   libcap,
