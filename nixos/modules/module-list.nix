@@ -858,6 +858,7 @@
   ./services/misc/tautulli.nix
   ./services/misc/tiddlywiki.nix
   ./services/misc/tp-auto-kbbl.nix
+  ./services/misc/turn-rs.nix
   ./services/misc/tuxclocker.nix
   ./services/misc/transfer-sh.nix
   ./services/misc/tzupdate.nix
