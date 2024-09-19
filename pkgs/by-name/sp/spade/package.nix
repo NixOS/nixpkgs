@@ -7,6 +7,7 @@
   writeScript,
   git,
   python312,
+  swim,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,6 +44,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
   env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
+
+  passthru.tests = {
+    inherit swim;
+  };
 
   meta = with lib; {
     description = "Better hardware description language";
