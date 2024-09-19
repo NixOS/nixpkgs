@@ -941,10 +941,10 @@ in {
   switchTestNg = handleTest ./switch-test.nix { ng = true; };
   sx = handleTest ./sx.nix {};
   sympa = handleTest ./sympa.nix {};
-  syncthing = handleTest ./syncthing.nix {};
-  syncthing-no-settings = handleTest ./syncthing-no-settings.nix {};
-  syncthing-init = handleTest ./syncthing-init.nix {};
-  syncthing-many-devices = handleTest ./syncthing-many-devices.nix {};
+  syncthing = handleTest ./syncthing/default.nix {};
+  syncthing-no-settings = handleTest ./syncthing/no-settings.nix {};
+  syncthing-init = handleTest ./syncthing/init.nix {};
+  syncthing-many-devices = handleTest ./syncthing/many-devices.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
   systemd = handleTest ./systemd.nix {};
