@@ -52,7 +52,17 @@ in {
 
   package-list = callPackage ../development/haskell-modules/package-list.nix {};
 
-  # Always get boot compilers from `pkgsBuildBuild`
+  # Always get boot compilers from `pkgsBuildBuild`. The boot (stage0) compiler
+  # is used to build another compiler (stage1) that'll be used to build the
+  # final compiler (stage2) (except when building a cross-compiler). This means
+  # that stage1's host platform is the same as stage0: build. Consequently,
+  # stage0 needs to be build->build.
+  #
+  # Note that we use bb.haskell.packages.*. haskell.packages.*.ghc is similar to
+  # stdenv: The ghc comes from the previous package set, i.e. this predicate holds:
+  # `name: pkgs: pkgs.haskell.packages.${name}.ghc == pkgs.buildPackages.haskell.compiler.${name}.ghc`.
+  # This isn't problematic since pkgsBuildBuild.buildPackages is also build->build,
+  # just something to keep in mind.
   compiler = let bb = pkgsBuildBuild.haskell; in {
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
       # Should be llvmPackages_6 which has been removed from nixpkgs
