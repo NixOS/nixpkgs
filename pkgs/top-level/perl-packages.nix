@@ -9517,10 +9517,10 @@ with self; {
 
   FFIPlatypus = buildPerlPackage {
     pname = "FFI-Platypus";
-    version = "2.08";
+    version = "2.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.08.tar.gz";
-      hash = "sha256-EbOrEU7ZY1YxzYWzjSKXhuFEv5Sjr5rAnD17s0M2uSQ=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.09.tar.gz";
+      hash = "sha256-nTEjEiieeHNbRcMRt6wWqejaCT93m/aUaccK+sTdW2M=";
     };
     buildInputs = [ AlienFFI Test2Suite ];
     propagatedBuildInputs = [ CaptureTiny FFICheckLib ];
