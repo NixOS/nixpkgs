@@ -48,6 +48,9 @@ in stdenv.mkDerivation {
       -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
          modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
 
+    substituteInPlace modules/javafx.web/src/main/native/Source/JavaScriptCore/offlineasm/parser.rb \
+      --replace-fail "File.exists?" "File.exist?"
+
     ln -s $config gradle.properties
   '';
 
