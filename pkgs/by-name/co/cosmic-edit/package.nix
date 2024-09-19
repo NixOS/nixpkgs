@@ -105,7 +105,7 @@ rustPlatform.buildRustPackage rec {
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [ ahoneybun nyabinary ];
     platforms = platforms.linux;
   };
 }
