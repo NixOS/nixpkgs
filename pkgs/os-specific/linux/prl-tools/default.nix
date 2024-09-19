@@ -169,11 +169,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ catap wegank ];
+    maintainers = with maintainers; [ catap wegank codgician ];
     platforms = platforms.linux;
   };
 })
