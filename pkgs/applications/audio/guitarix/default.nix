@@ -37,10 +37,6 @@
   optimizationSupport ? false, # Enable support for native CPU extensions
 }:
 
-let
-  inherit (lib) optional;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "guitarix";
   version = "0.46.0";
@@ -100,41 +96,34 @@ stdenv.mkDerivation (finalAttrs: {
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
-  ] ++ optional optimizationSupport "--optimization";
+  ] ++ lib.optional optimizationSupport "--optimization";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
-  meta = with lib; {
-    description = "Virtual guitar amplifier for Linux running with JACK";
+  meta = {
     mainProgram = "guitarix";
-    longDescription = ''
-        guitarix is a virtual guitar amplifier for Linux running with
-      JACK (Jack Audio Connection Kit). It is free as in speech and
-      free as in beer. Its free sourcecode allows to build it for
-      other UNIX-like systems also, namely for BSD and for MacOSX.
-
-        It takes the signal from your guitar as any real amp would do:
-      as a mono-signal from your sound card. Your tone is processed by
-      a main amp and a rack-section. Both can be routed separately and
-      deliver a processed stereo-signal via JACK. You may fill the
-      rack with effects from more than 25 built-in modules spanning
-      from a simple noise-gate to brain-slashing modulation-fx like
-      flanger, phaser or auto-wah. Your signal is processed with
-      minimum latency. On any properly set-up Linux-system you do not
-      need to wait for more than 10 milli-seconds for your playing to
-      be delivered, processed by guitarix.
-
-        guitarix offers the range of sounds you would expect from a
-      full-featured universal guitar-amp. You can get crisp
-      clean-sounds, nice overdrive, fat distortion and a diversity of
-      crazy sounds never heard before.
-    '';
+    description = "Virtual guitar amplifier for Linux running with JACK";
     homepage = "https://github.com/brummer10/guitarix";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       astsmtl
       lord-valen
     ];
-    platforms = platforms.linux;
+    longDescription = ''
+      Guitarix takes the signal from your guitar as any real amp would do: as a
+      mono-signal from your sound card. Your tone is processed by a main amp and
+      a rack-section. Both can be routed separately and deliver a processed
+      stereo-signal via JACK. You may fill the rack with effects from more than
+      25 built-in modules spanning from a simple noise-gate to brain-slashing
+      modulation-fx like flanger, phaser or auto-wah. Your signal is processed
+      with minimum latency. On a properly set-up Linux-system you do not need to
+      wait for more than 10 milliseconds for your playing to be delivered,
+      processed by guitarix.
+
+      Guitarix offers the range of sounds you would expect from a full-featured
+      universal guitar-amp. You can get crisp clean-sounds, nice overdrive, fat
+      distortion and a diversity of crazy sounds never heard before.
+    '';
   };
 })
