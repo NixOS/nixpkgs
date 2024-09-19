@@ -1,25 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
 
-, enablePython ? false
-, python3
+  autoreconfHook,
+  pkg-config,
+
+  python3,
+  enablePython ? false,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libplist";
-  version = "2.6.0";
-
-  outputs = [ "bin" "dev" "out" ] ++ lib.optional enablePython "py";
+  version = "2.6.0-unstable-2024-05-19";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = version;
-    hash = "sha256-hitRcOjbF+L9Og9/qajqFqOhKfRn9+iWLoCKmS9dT80=";
+    repo = "libplist";
+    rev = "e8791e2d8b1d1672439b78d31271a8cf74d6a16d";
+    hash = "sha256-sKLFfv+B5UuYjMxG8a6GbP6BvohkhkqjS5+RBncHvxI=";
   };
+
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ] ++ lib.optional enablePython "py";
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -31,28 +38,31 @@ stdenv.mkDerivation rec {
     python3.pkgs.cython
   ];
 
+  configureFlags =
+    [
+      "--enable-debug"
+    ]
+    ++ lib.optionals (!enablePython) [
+      "--without-cython"
+    ];
+
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
-
-  configureFlags = [
-    "--enable-debug"
-  ] ++ lib.optionals (!enablePython) [
-    "--without-cython"
-  ];
-
-  doCheck = true;
 
   postFixup = lib.optionalString enablePython ''
     moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
   meta = with lib; {
-    description = "Library to handle Apple Property List format in binary or XML";
     homepage = "https://github.com/libimobiledevice/libplist";
-    license = licenses.lgpl21Plus;
-    maintainers = [ ];
+    description = "Library to handle Apple Property List format in binary or XML";
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ frontear ];
     mainProgram = "plistutil";
   };
-}
+})
