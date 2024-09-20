@@ -386,7 +386,7 @@ in
           `nixpkgs.config` options should be passed when creating the instance instead.
 
           Current value:
-          ${lib.generators.toPretty { multiline = true; } opt.config}
+          ${lib.generators.toPretty { multiline = true; } cfg.config}
         '';
       }
     ];
