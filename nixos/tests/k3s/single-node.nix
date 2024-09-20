@@ -83,10 +83,7 @@ import ../make-test-python.nix (
         machine.wait_for_unit("k3s")
         machine.succeed("kubectl cluster-info")
         machine.fail("sudo -u noprivs kubectl cluster-info")
-      '' # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
-      + lib.optionalString (!pkgs.stdenv.isAarch64) ''machine.succeed("k3s check-config")''
-      + ''
-
+        machine.succeed("k3s check-config")
         machine.succeed(
             "${pauseImage} | ctr image import -"
         )
