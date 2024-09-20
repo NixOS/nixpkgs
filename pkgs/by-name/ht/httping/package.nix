@@ -35,10 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
-  ];
-
   installPhase = ''
     runHook preInstall
     install -D httping $out/bin/httping

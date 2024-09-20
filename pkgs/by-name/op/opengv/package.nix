@@ -23,10 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
   ];
 
-  cmakeFlakes = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
-  ];
-
   meta = {
     description = "Collection of computer vision methods for solving geometric vision problems";
     homepage = "https://github.com/laurentkneip/opengv";

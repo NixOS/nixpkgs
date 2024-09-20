@@ -30,7 +30,6 @@
 , jansson
 , libXaw
 , libXcursor
-, libXft
 , libXi
 , libXpm
 , libgccjit

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   rustPlatform,
-  typing-extensions,
   pytestCheckHook,
   pyahocorasick,
   hypothesis,

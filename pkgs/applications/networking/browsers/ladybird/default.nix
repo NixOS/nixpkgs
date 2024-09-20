@@ -12,7 +12,6 @@
 , pkg-config
 , libavif
 , libjxl
-, libtiff
 , libwebp
 , libxcrypt
 , python3

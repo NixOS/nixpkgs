@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  unittestCheckHook,
   pythonOlder,
   setuptools-scm,
   setuptools,

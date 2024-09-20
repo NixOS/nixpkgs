@@ -60,8 +60,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tools/cover/LmsCover.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   postInstall = ''
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${ffmpeg}/bin/ffmpeg"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/Wt/resources" "${wt}/share/Wt/resources"

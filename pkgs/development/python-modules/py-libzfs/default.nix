@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-  setuptools,
   cython_0,
   zfs,
 }:

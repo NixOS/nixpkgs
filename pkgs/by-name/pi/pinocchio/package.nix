@@ -1,19 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, casadi
-, cmake
-, boost
-, eigen
-, example-robot-data
-, casadiSupport ? true
-, collisionSupport ? true
-, console-bridge
-, jrl-cmakemodules
-, hpp-fcl
-, urdfdom
-, pythonSupport ? false
-, python3Packages
+{
+  boost,
+  casadi,
+  casadiSupport ? true,
+  cmake,
+  collisionSupport ? true,
+  console-bridge,
+  doxygen,
+  eigen,
+  example-robot-data,
+  fetchFromGitHub,
+  hpp-fcl,
+  jrl-cmakemodules,
+  lib,
+  pkg-config,
+  pythonSupport ? false,
+  python3Packages,
+  stdenv,
+  urdfdom,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-8V+n1TwFojXKOVkGG8k9aXVadt2NBFlZKba93L+NRNU=";
   };
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
   prePatch = lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
@@ -41,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # allow package:// uri use in examples
     export ROS_PACKAGE_PATH=${example-robot-data}/share
+
+    # silence matplotlib warning
+    export MPLCONFIGDIR=$(mktemp -d)
   '';
 
   # CMAKE_BUILD_TYPE defaults to Release in this package,
@@ -52,31 +63,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals pythonSupport [
-    python3Packages.python
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+      pkg-config
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
 
-  propagatedBuildInputs = [
-    console-bridge
-    jrl-cmakemodules
-    urdfdom
-  ] ++ lib.optionals (!pythonSupport) [
-    boost
-    eigen
-  ] ++ lib.optionals (!pythonSupport && collisionSupport) [
-    hpp-fcl
-  ] ++ lib.optionals pythonSupport [
-    python3Packages.boost
-    python3Packages.eigenpy
-  ] ++ lib.optionals (pythonSupport && collisionSupport) [
-    python3Packages.hpp-fcl
-  ] ++ lib.optionals (!pythonSupport && casadiSupport) [
-    casadi
-  ] ++ lib.optionals (pythonSupport && casadiSupport) [
-    python3Packages.casadi
-  ];
+  propagatedBuildInputs =
+    [
+      console-bridge
+      jrl-cmakemodules
+      urdfdom
+    ]
+    ++ lib.optionals (!pythonSupport) [
+      boost
+      eigen
+    ]
+    ++ lib.optionals (!pythonSupport && collisionSupport) [ hpp-fcl ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.boost
+      python3Packages.eigenpy
+    ]
+    ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.hpp-fcl ]
+    ++ lib.optionals (!pythonSupport && casadiSupport) [ casadi ]
+    ++ lib.optionals (pythonSupport && casadiSupport) [ python3Packages.casadi ];
 
   checkInputs = lib.optionals (pythonSupport && casadiSupport) [ python3Packages.matplotlib ];
 
@@ -85,21 +100,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
     (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
     (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
+    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
   ];
 
   doCheck = true;
-
-  # pythonImportsCheck, but in stdenv.mkDerivation
-  postInstall = lib.optionalString pythonSupport ''
-    PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
-    python -c "import pinocchio"
-  '';
+  pythonImportsCheck = [ "pinocchio" ];
 
   meta = {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
     homepage = "https://github.com/stack-of-tasks/pinocchio";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ nim65s wegank ];
+    maintainers = with lib.maintainers; [
+      nim65s
+      wegank
+    ];
     platforms = lib.platforms.unix;
   };
 })

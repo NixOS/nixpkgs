@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  fetchPypi,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "yt-dlg";

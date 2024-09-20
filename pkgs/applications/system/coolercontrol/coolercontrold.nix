@@ -1,5 +1,4 @@
 { rustPlatform
-, buildNpmPackage
 , testers
 , libdrm
 , coolercontrol

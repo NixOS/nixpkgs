@@ -11,7 +11,6 @@
   libgpg-error,
   libsecret,
   pkg-config,
-  polkit,
   python3,
   qt5compat,
   qtbase,

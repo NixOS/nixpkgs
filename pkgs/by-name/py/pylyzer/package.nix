@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.61";
+  version = "0.0.62";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t0BzNNofjeBlNqf6iqaWrTzVpzEACyyrZ3YKDYz713U=";
+    hash = "sha256-aoYdtW+cZZY2pHzfzAGjNbjF031Qtg76mZ/wQPqMJsw=";
   };
 
   cargoLock = {

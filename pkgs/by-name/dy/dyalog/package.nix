@@ -51,14 +51,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dyalog";
-  version = "19.0.49960";
+  version = "19.0.50027";
   shortVersion = lib.versions.majorMinor finalAttrs.version;
 
   src =
     assert !acceptLicense -> throw licenseDisclaimer;
     fetchurl {
       url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/linux_64_${finalAttrs.version}_unicode.x86_64.deb";
-      hash = "sha256-WeIrwF6msiQGS6ltYWn6TN+v+aXK1cbJ1e11B6f0+2A=";
+      hash = "sha256-3uB102Hr0dmqAZj2ezLhsAdBotY24PWJfE7g5wSmKMA=";
     };
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc";

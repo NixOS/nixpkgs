@@ -99,21 +99,6 @@ in
     })
   ];
 
-  # Xen Security Advisory #458: (4.16.6 - 4.19-rc3)
-  "XSA_458" = xsaPatch {
-    id = "458";
-    title = "Double unlock in x86 guest IRQ handling";
-    description = ''
-      An optional feature of PCI MSI called "Multiple Message" allows a device
-      to use multiple consecutive interrupt vectors.  Unlike for MSI-X, the
-      setting up of these consecutive vectors needs to happen all in one go.
-      In this handling an error path could be taken in different situations,
-      with or without a particular lock held. This error path wrongly releases
-      the lock even when it is not currently held.
-    '';
-    cve = [ "CVE-2024-31143" ];
-    hash = "sha256-yHI9Sp/7Ed40iIYQ/HOOIULlfzAzL0c0MGqdF+GR+AQ=";
-  };
   # Xen Security Advisory #460: (4.16.6 - 4.19.0)
   "XSA_460" = xsaPatch {
     id = "460";

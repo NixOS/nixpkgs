@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, pkgs
 , stdenv
 , rustPlatform
 , pkg-config

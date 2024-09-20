@@ -5,7 +5,7 @@
 , makeWrapper
 , wrapGAppsHook3
 
-, withOpenGL ? true
+, withOpenGL ? !stdenv.isDarwin
 
 , bison
 , blas
@@ -23,6 +23,7 @@
 , libsvm
 , libtiff
 , libxml2
+, llvmPackages
 , netcdf
 , pdal
 , pkg-config
@@ -86,14 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ] ++ lib.optionals withOpenGL [ libGLU ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
-
-  patches = lib.optionals stdenv.isDarwin [
-    # Fix conversion of const char* to unsigned int.
-    ./clang-integer-conversion.patch
-  ];
 
   configureFlags = [
     "--with-blas"

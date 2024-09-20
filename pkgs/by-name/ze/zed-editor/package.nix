@@ -85,13 +85,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.152.4";
+  version = "0.153.6";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nmnhJQ8DDKuy0DBfQCEj9FsVXre/gTkIsr5UjiiWasU=";
+    hash = "sha256-8yu1xAN8GQXWXF4PHRbOx4oWK3EYc4POQlOYaDiPH+A=";
     fetchSubmodules = true;
   };
 

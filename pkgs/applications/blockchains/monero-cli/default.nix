@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  ninja,
   pkg-config,
   boost,
   libsodium,

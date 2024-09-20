@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Wno-dev" # dev warnings are only needed for upstream development
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWL_INSTALL_BASEDIR=${placeholder "out"}/share/widelands" # for COPYING, Changelog, etc.
     "-DWL_INSTALL_DATADIR=${placeholder "out"}/share/widelands" # for game data
     "-DWL_INSTALL_BINDIR=${placeholder "out"}/bin"

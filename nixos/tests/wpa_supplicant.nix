@@ -21,6 +21,7 @@ let
         enable = true;
         radios.wlan0 = {
           band = "2g";
+          channel = 6;
           countryCode = "US";
           networks = {
             wlan0 = {
@@ -123,13 +124,15 @@ in
     };
 
     testScript = ''
-      config_file = "/etc/static/wpa_supplicant.conf"
-
       with subtest("Daemon is running and accepting connections"):
           machine.wait_for_unit("wpa_supplicant.service")
           status = machine.wait_until_succeeds("wpa_cli status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
+
+      # get the configuration file
+      cmdline = machine.succeed("cat /proc/$(pgrep wpa)/cmdline").split('\x00')
+      config_file = cmdline[cmdline.index("-c") + 1]
 
       with subtest("WPA2 fallbacks have been generated"):
           assert int(machine.succeed(f"grep -c sae-only {config_file}")) == 1
