@@ -11,6 +11,8 @@ lib.makeScope newScope (self: {
     buildGhidraScripts
     ;
 
+  findcrypt = self.callPackage ./extensions/findcrypt { };
+
   ghidraninja-ghidra-scripts = self.callPackage ./extensions/ghidraninja-ghidra-scripts { };
 
   ghidra-delinker-extension = self.callPackage ./extensions/ghidra-delinker-extension {
