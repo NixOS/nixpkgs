@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchFromGitLab, imagemagick, inkscape, xcursorgen }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitLab,
+  imagemagick,
+  inkscape,
+  xcursorgen,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hackneyed";
@@ -42,5 +49,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ somasis ];
+    broken = stdenvNoCC.isDarwin;
   };
 }
