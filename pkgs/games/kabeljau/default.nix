@@ -37,5 +37,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://codeberg.org/annaaurora/kabeljau";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ annaaurora ];
+    broken = stdenvNoCC.isDarwin; # #343346 installation failure when Inkscape tries to escape the sandbox
   };
 }
