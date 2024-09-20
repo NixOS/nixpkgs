@@ -495,7 +495,18 @@ let
               stripLen = 1;
               hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
             })
-          ];
+          ]
+          ++
+            lib.optionals
+              (lib.versionAtLeast metadata.release_version "17" && lib.versionOlder metadata.release_version "19")
+              [
+                # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
+                (fetchpatch2 {
+                  url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+                  hash = "sha256-EX+PYGicK73lsL/J0kSZ4S5y1/NHIclBddhsnV6NPPI=";
+                  stripLen = 1;
+                })
+              ];
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
