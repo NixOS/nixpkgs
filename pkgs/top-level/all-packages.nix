@@ -29212,7 +29212,6 @@ with pkgs;
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs28
-    emacs28-gtk2
     emacs28-gtk3
     emacs28-nox
 

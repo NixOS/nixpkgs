@@ -22,7 +22,6 @@
 , gnutls
 , gpm
 , gsettings-desktop-schemas
-, gtk2-x11
 , gtk3
 , gtk3-x11
 , harfbuzz
@@ -69,7 +68,6 @@
 , withAthena ? false
 , withCsrc ? true
 , withDbus ? stdenv.isLinux
-, withGTK2 ? false
 , withGTK3 ? withPgtk && !noGui
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
@@ -95,8 +93,7 @@
 # Options
 , siteStart ? ./site-start.el
 , toolkit ? (
-  if withGTK2 then "gtk2"
-  else if withGTK3 then "gtk3"
+  if withGTK3 then "gtk3"
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
@@ -117,14 +114,11 @@
 , WebKit
 }:
 
-assert (withGTK2 && !withNS && variant != "macport") -> withX;
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
 
-assert noGui -> !(withX || withGTK2 || withGTK3 || withNS || variant == "macport");
+assert noGui -> !(withX || withGTK3 || withNS || variant == "macport");
 assert withAcl -> stdenv.isLinux;
 assert withAlsaLib -> stdenv.isLinux;
-assert withGTK2 -> !(withGTK3 || withPgtk);
-assert withGTK3 -> !withGTK2 || withPgtk;
 assert withGpm -> stdenv.isLinux;
 assert withNS -> stdenv.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
@@ -148,7 +142,6 @@ mkDerivation (finalAttrs: {
              else if variant == "macport" then "-macport"
              else if withPgtk then "-pgtk"
              else if withGTK3 then "-gtk3"
-             else if withGTK2 then "-gtk2"
              else "");
   inherit version;
 
@@ -241,8 +234,6 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.isLinux && withX) [
     libotf
     m17n_lib
-  ] ++ lib.optionals (withX && withGTK2) [
-    gtk2-x11
   ] ++ lib.optionals (withX && withGTK3) [
     gtk3-x11
   ] ++ lib.optionals (withX && withMotif) [
