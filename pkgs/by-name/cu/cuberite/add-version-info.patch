@@ -1,0 +1,80 @@
+From 779d92d99769e85e286d9041930a0a2b70015664 Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Sat, 7 Dec 2024 08:53:48 -0800
+Subject: [PATCH] Add version info and description to cuberite CLI
+
+---
+ CMake/SetVersion.cmake | 31 +++++++++++++++++++++++++++++++
+ CMakeLists.txt         |  1 +
+ src/main.cpp           |  8 +++++++-
+ 3 files changed, 39 insertions(+), 1 deletion(-)
+ create mode 100644 CMake/SetVersion.cmake
+
+diff --git a/CMake/SetVersion.cmake b/CMake/SetVersion.cmake
+new file mode 100644
+index 0000000000..12739adf92
+--- /dev/null
++++ b/CMake/SetVersion.cmake
+@@ -0,0 +1,31 @@
++option(OVERRIDE_VERSION "Override the auto-detected version" OFF)
++if (OVERRIDE_VERSION)
++    set(PROJECT_VERSION ${OVERRIDE_VERSION} CACHE STRING "User-specified version")
++else()
++    execute_process(
++        COMMAND git rev-parse --short HEAD
++        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
++        OUTPUT_VARIABLE GIT_COMMIT_HASH
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++        RESULT_VARIABLE GIT_COMMIT_RESULT
++    )
++
++    execute_process(
++        COMMAND git describe --tags --exact-match
++        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
++        OUTPUT_VARIABLE GIT_TAG
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++        RESULT_VARIABLE GIT_TAG_RESULT
++    )
++
++    if (GIT_TAG_RESULT EQUAL 0)
++        set(PROJECT_VERSION ${GIT_TAG})
++    elseif (GIT_COMMIT_RESULT EQUAL 0)
++        set(PROJECT_VERSION "git-${GIT_COMMIT_HASH}")
++    else()
++        message(WARNING "Git is not installed or repository is not valid. Falling back to 'unknown'.")
++        set(PROJECT_VERSION "unknown")
++    endif()
++endif()
++
++add_compile_definitions(PROGRAM_VERSION="${PROJECT_VERSION}")
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e1c271b52b..e8aef70371 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,6 +23,7 @@ include("CMake/AddDependencies.cmake")
+ include("CMake/Fixups.cmake")
+ include("CMake/GenerateBindings.cmake")
+ include("CMake/GroupSources.cmake")
++include("CMake/SetVersion.cmake")
+ include("SetFlags.cmake")
+ 
+ # Add build timestamp and details:
+diff --git a/src/main.cpp b/src/main.cpp
+index dd84e3be4b..651e93ba6a 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -32,7 +32,13 @@ bool g_RunAsService;
+ static void ParseArguments(int argc, char ** argv, cMemorySettingsRepository & a_Settings)
+ {
+ 	// Parse the comand line args:
+-	TCLAP::CmdLine cmd("Cuberite");
++#ifdef PROGRAM_VERSION
++	const char * version = PROGRAM_VERSION;
++#else
++	const char * version = "unknown";
++#endif
++
++	TCLAP::CmdLine cmd("Cuberite is a Minecraft-compatible multiplayer game server that is written in C++ and designed to be efficient with memory and CPU, as well as having a flexible Lua Plugin API. Cuberite is compatible with the Java Edition Minecraft client.", ' ', version);
+ 	TCLAP::ValueArg<int> slotsArg    ("s", "max-players",         "Maximum number of slots for the server to use, overrides setting in setting.ini", false, -1, "number", cmd);
+ 	TCLAP::ValueArg<AString> confArg ("c", "config-file",         "Config file to use", false, "settings.ini", "string", cmd);
+ 	TCLAP::MultiArg<int> portsArg    ("p", "port",                "The port number the server should listen to", false, "port", cmd);
