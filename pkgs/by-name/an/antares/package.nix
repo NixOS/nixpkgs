@@ -4,7 +4,6 @@
   buildNpmPackage,
   electron,
   nodejs,
-  fetchpatch,
 }:
 
 buildNpmPackage rec {

@@ -7,7 +7,6 @@
   meson,
   ninja,
   pkg-config,
-  gnome,
   perl,
   gettext,
   gtk3,

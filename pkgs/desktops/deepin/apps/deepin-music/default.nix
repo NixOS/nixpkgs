@@ -18,7 +18,6 @@
   libvlc,
   taglib,
   SDL2,
-  qtbase,
   gst_all_1,
 }:
 

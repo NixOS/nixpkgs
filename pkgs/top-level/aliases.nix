@@ -532,6 +532,7 @@ mapAliases ({
   gmpc = throw "'gmpc' has been removed due to lack of maintenance upstream. Consider using 'plattenalbum' instead"; # Added 2024-09-14
   gmtk = throw "'gmtk' has been removed due to lack of maintenance upstream"; # Added 2024-09-14
   gmtp = throw "'gmtp' has been removed due to lack of maintenance upstream. Consider using 'gnome-music' instead"; # Added 2024-09-14
+  gnome-latex = throw "'gnome-latex' has been superseded by 'enter-tex'"; # Added 2024-09-18
   gnu-cobol = gnucobol; # Added 2024-09-17
   go-dependency-manager = throw "'go-dependency-manager' is unmaintained and the go community now uses 'go.mod' mostly instead"; # Added 2023-10-04
   gotktrix = throw "'gotktrix' has been removed, as it was broken and unmaintained"; # Added 2023-12-06
@@ -1194,6 +1195,7 @@ mapAliases ({
   PageEdit = pageedit; # Added 2024-01-21
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = metal-cli; # Added 2021-10-25
+  paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14
   packet = throw "packet has been removed as it is no longer working and unmaintained"; # Added 2024-03-29
   palemoon = throw "palemoon has been dropped due to python2 being EOL and marked insecure. Use 'palemoon-bin' instead"; # Added 2023-05-18
   pam_usb = throw "'pam_usb' has been removed: abandoned by upstream since 2015."; # Added 2023-10-30

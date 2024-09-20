@@ -5,7 +5,6 @@
   fetchpatch,
   stdenv,
   pkg-config,
-  gnome,
   gettext,
   gobject-introspection,
   cairo,

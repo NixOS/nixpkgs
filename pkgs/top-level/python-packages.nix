@@ -521,6 +521,11 @@ self: super: with self; {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
+  aligator = toPythonModule (pkgs.aligator.override {
+    python3Packages = self;
+    pythonSupport = true;
+  });
+
   alive-progress = callPackage ../development/python-modules/alive-progress { };
 
   aliyun-python-sdk-cdn = callPackage ../development/python-modules/aliyun-python-sdk-cdn { };
@@ -15246,7 +15251,7 @@ self: super: with self; {
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     inherit (pkgs.config) cudaSupport;
     # https://www.tensorflow.org/install/source#gpu
-    cudaPackages = pkgs.cudaPackages_11;
+    cudaPackages = pkgs.cudaPackages_12;
   };
 
   tensorflow-build = let

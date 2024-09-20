@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-settings";
     description = "Settings for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
+    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
     mainProgram = "cosmic-settings";
   };

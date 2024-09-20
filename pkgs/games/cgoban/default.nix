@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, writers
 , temurin-jre-bin-17
 , fetchurl
 , makeWrapper
