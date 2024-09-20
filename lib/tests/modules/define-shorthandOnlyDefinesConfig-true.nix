@@ -1,0 +1,1 @@
+{ shorthandOnlyDefinesConfig = true; }

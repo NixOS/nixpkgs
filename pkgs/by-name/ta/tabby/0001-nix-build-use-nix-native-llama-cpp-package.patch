@@ -1,0 +1,29 @@
+From c0152b6bbd751313be756fdcd7b3e3912567b535 Mon Sep 17 00:00:00 2001
+From: Will Owens <ghthor@gmail.com>
+Date: Fri, 1 Mar 2024 01:37:55 -0500
+Subject: [PATCH] nix-build: use nix native llama-cpp package
+
+---
+ crates/llama-cpp-bindings/build.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/crates/llama-cpp-bindings/build.rs b/crates/llama-cpp-bindings/build.rs
+index 06629ac4..aa004493 100644
+--- a/crates/llama-cpp-bindings/build.rs
++++ b/crates/llama-cpp-bindings/build.rs
+@@ -12,10 +12,10 @@ fn main() {
+ 
+     println!("cargo:rerun-if-changed=include/engine.h");
+     println!("cargo:rerun-if-changed=src/engine.cc");
++    println!("cargo:rustc-link-search=native={}", env::var("LLAMA_CPP_LIB").unwrap());
+     println!("cargo:rustc-link-lib=llama");
+-    println!("cargo:rustc-link-lib=ggml_static");
++    println!("cargo:rustc-link-lib=ggml_shared");
+ 
+-    build_llama_cpp();
+     build_cxx_binding();
+ }
+ 
+-- 
+2.43.1
+

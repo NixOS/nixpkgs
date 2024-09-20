@@ -1,0 +1,11 @@
+--- a/cnijnpr/src/cnijnpr.c	2016-11-13 21:51:33.844977618 +0100
++++ a/cnijnpr/src/cnijnpr.c	2016-11-13 21:52:03.129977094 +0100
+@@ -34,6 +34,8 @@
+ #include <sys/ioctl.h>
+ #include <net/if.h>
+ #include <sys/sysctl.h>
++#include <sys/types.h>
++#include <unistd.h>
+ #include <config.h>
+ #include <fcntl.h>
+ 

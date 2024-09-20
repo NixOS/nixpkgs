@@ -1,0 +1,12 @@
+diff --git a/cmake/modules/FindHunspell.cmake b/cmake/modules/FindHunspell.cmake
+index a2d180b3..3a5aef3a 100644
+--- a/cmake/modules/FindHunspell.cmake
++++ b/cmake/modules/FindHunspell.cmake
+@@ -64,6 +64,7 @@ set(HUNSPELL_NAMES
+ 	hunspell-1.4
+ 	hunspell-1.5
+ 	hunspell-1.6
++	hunspell-1.7
+ 	libhunspell${d}
+ )
+ find_library(

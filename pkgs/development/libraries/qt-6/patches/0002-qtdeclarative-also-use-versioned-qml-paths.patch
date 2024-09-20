@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Wed, 7 Feb 2024 11:49:04 -0500
+Subject: [PATCH] qtdeclarative: also use versioned qml paths
+
+---
+ src/qml/qml/qqmlimport.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
+index f9cc8da240..f8cb033be0 100644
+--- a/src/qml/qml/qqmlimport.cpp
++++ b/src/qml/qml/qqmlimport.cpp
+@@ -1520,6 +1520,7 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
+     // env import paths
+     addEnvImportPath("QML_IMPORT_PATH");
+     addEnvImportPath("QML2_IMPORT_PATH");
++    addEnvImportPath("NIXPKGS_QT6_QML_IMPORT_PATH");
+ 
+     addImportPath(QStringLiteral("qrc:/qt/qml"));
+     addImportPath(QStringLiteral("qrc:/qt-project.org/imports"));

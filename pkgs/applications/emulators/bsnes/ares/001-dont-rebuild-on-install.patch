@@ -1,0 +1,22 @@
+From 65cc7647110edd768e7baa7991143014316e655a Mon Sep 17 00:00:00 2001
+From: Madoura <93990818+Madouura@users.noreply.github.com>
+Date: Mon, 9 May 2022 10:17:06 -0500
+Subject: [PATCH] Update GNUmakefile
+
+---
+ desktop-ui/GNUmakefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/desktop-ui/GNUmakefile b/desktop-ui/GNUmakefile
+index 8e27b11d3..0bee561fb 100644
+--- a/desktop-ui/GNUmakefile
++++ b/desktop-ui/GNUmakefile
+@@ -106,7 +106,7 @@ endif
+ 	$(call rdelete,$(object.path))
+ 	$(call rdelete,$(output.path))
+ 
+-install: all
++install:
+ ifeq ($(platform),windows)
+ 	$(call mkdir,$(prefix)/$(name)/)
+ else ifeq ($(shell id -un),root)

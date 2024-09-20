@@ -1,0 +1,35 @@
+diff --git a/src/pikepdf/_methods.py b/src/pikepdf/_methods.py
+index da40043f..4f566f01 100644
+--- a/src/pikepdf/_methods.py
++++ b/src/pikepdf/_methods.py
+@@ -74,7 +74,7 @@ def _mudraw(buffer, fmt) -> bytes:
+         tmp_in.flush()
+ 
+         proc = run(
+-            ['mutool', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
++            ['@mutool@', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
+             capture_output=True,
+             check=True,
+         )
+diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
+index 901f3b6f..45551820 100644
+--- a/src/pikepdf/jbig2.py
++++ b/src/pikepdf/jbig2.py
+@@ -72,7 +72,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+             output_path = Path(tmpdir) / "outfile"
+ 
+             args = [
+-                "jbig2dec",
++                "@jbig2dec@",
+                 "--embedded",
+                 "--format",
+                 "png",
+@@ -101,7 +101,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+     def _version(self) -> Version:
+         try:
+             proc = self._run(
+-                ['jbig2dec', '--version'],
++                ['@jbig2dec@', '--version'],
+                 stdout=PIPE,
+                 check=True,
+                 encoding='ascii',

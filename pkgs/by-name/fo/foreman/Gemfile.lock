@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    foreman (0.87.2)
+
+PLATFORMS
+  aarch64-darwin
+  aarch64-linux
+  ruby
+  x86_64-darwin
+  x86_64-linux
+
+DEPENDENCIES
+  foreman
+
+BUNDLED WITH
+   2.2.20

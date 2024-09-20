@@ -1,0 +1,23 @@
+diff --git a/ccx_2.19/src/Makefile b/ccx_2.19/src/Makefile
+index c503513..8a69a0c 100755
+--- a/ccx_2.19/src/Makefile
++++ b/ccx_2.19/src/Makefile
+@@ -18,15 +18,10 @@ OCCXF = $(SCCXF:.f=.o)
+ OCCXC = $(SCCXC:.c=.o)
+ OCCXMAIN = $(SCCXMAIN:.c=.o)
+ 
+-DIR=../../../SPOOLES.2.2
++LIBS = -lpthread -lm -lc -lspooles -larpack -lblas -llapack
+ 
+-LIBS = \
+-       $(DIR)/spooles.a \
+-	../../../ARPACK/libarpack_INTEL.a \
+-       -lpthread -lm -lc
+-
+-ccx_2.19: $(OCCXMAIN) ccx_2.19.a  $(LIBS)
+-	./date.pl; $(CC) $(CFLAGS) -c ccx_2.19.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.19.a $(LIBS) -fopenmp
++ccx_2.19: $(OCCXMAIN) ccx_2.19.a
++	$(CC) $(CFLAGS) -c ccx_2.19.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.19.a $(LIBS) -fopenmp
+ 
+ ccx_2.19.a: $(OCCXF) $(OCCXC)
+ 	ar vr $@ $?

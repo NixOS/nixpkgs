@@ -1,0 +1,7 @@
+--- a/TESTING/MATGEN/CMakeLists.txt
++++ b/TESTING/MATGEN/CMakeLists.txt
+@@ -97,3 +97,4 @@ if(enable_complex16)
+ endif()
+ 
+ add_library(matgen ${sources})
++target_link_libraries(matgen superlu)

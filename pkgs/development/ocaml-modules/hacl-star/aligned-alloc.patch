@@ -1,0 +1,14 @@
+diff --git a/hacl-star-raw/karamel/include/krml/internal/target.h b/hacl-star-raw/karamel/include/krml/internal/target.h
+index 695873a..c0aed18 100644
+--- a/hacl-star-raw/karamel/include/krml/internal/target.h
++++ b/hacl-star-raw/karamel/include/krml/internal/target.h
+@@ -82,6 +82,9 @@
+ #  endif
+ #  if (defined(_MSC_VER) || (defined(__MINGW32__) && defined(__MINGW64_VERSION_MAJOR)))
+ #    define KRML_ALIGNED_MALLOC(X, Y) _aligned_malloc(Y, X)
++#  elif defined(__APPLE__)
++#    include <mm_malloc.h>
++#    define KRML_ALIGNED_MALLOC(X, Y) _mm_malloc(Y, X)
+ #  else
+ #    define KRML_ALIGNED_MALLOC(X, Y) aligned_alloc(X, Y)
+ #  endif

@@ -1,0 +1,18 @@
+--- a/1.0.0.rc16/lib/events/libdmraid-events-isw.c	2016-01-29 05:16:57.455425454 +0000
++++ b/1.0.0.rc16/lib/events/libdmraid-events-isw.c	2016-01-29 05:17:55.520564013 +0000
+@@ -838,13 +838,13 @@
+ 
+ 	sz = _log_all_devs(log_type, rs, NULL, 0);
+ 	if (!sz) {
+-		syslog(LOG_ERR, msg[0]);
++		syslog(LOG_ERR, "%s", msg[0]);
+ 		return;
+ 	}
+ 
+ 	str = dm_malloc(++sz);
+ 	if (!str) {
+-		syslog(LOG_ERR, msg[1]);
++		syslog(LOG_ERR, "%s", msg[1]);
+ 		return;
+ 	}
+ 

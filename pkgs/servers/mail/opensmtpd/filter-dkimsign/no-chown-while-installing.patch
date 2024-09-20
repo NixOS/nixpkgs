@@ -1,0 +1,24 @@
+diff --git a/Makefile.gnu b/Makefile.gnu
+index 1f97bd2..807b692 100644
+--- a/Makefile.gnu
++++ b/Makefile.gnu
+@@ -46,11 +46,7 @@ NEED_PLEDGE?=		1
+ 
+ MANFORMAT?=		mangz
+ 
+-BINOWN?=	root
+-BINGRP?=	root
+ BINPERM?=	755
+-MANOWN?=	root
+-MANGRP?=	root
+ MANPERM?=	644
+ 
+ ifeq (${MANFORMAT}, mangz)
+@@ -115,5 +111,5 @@ clean:
+ 
+ .PHONY: install
+ install: ${PROG}
+-	${INSTALL} -D -o ${BINOWN} -g ${BINGRP} -m ${BINPERM} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+-	${INSTALL} -D -o ${MANOWN} -g ${MANGRP} -m ${MANPERM} ${TARGET_MAN} ${DESTDIR}${MANDIR}/${TARGET_MAN}
++	${INSTALL} -D -m ${BINPERM} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++	${INSTALL} -D -m ${MANPERM} ${TARGET_MAN} ${DESTDIR}${MANDIR}/${TARGET_MAN}

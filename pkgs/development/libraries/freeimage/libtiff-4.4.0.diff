@@ -1,0 +1,15 @@
+Fix build with libtiff 4.4.0 by not using a private libtiff API.
+Patch by Kurt Schwehr: https://sourceforge.net/p/freeimage/discussion/36109/thread/2018fdc6e7/
+
+diff -ru a/Source/Metadata/XTIFF.cpp b/Source/Metadata/XTIFF.cpp
+--- a/Source/Metadata/XTIFF.cpp
++++ b/Source/Metadata/XTIFF.cpp
+@@ -749,7 +749,7 @@
+ 				continue;
+ 			}
+ 			// type of storage may differ (e.g. rationnal array vs float array type)
+-			if((unsigned)_TIFFDataSize(tif_tag_type) != FreeImage_TagDataWidth(tag_type)) {
++			if((unsigned)TIFFFieldSetGetSize(fld) != FreeImage_TagDataWidth(tag_type)) {
+ 				// skip tag or _TIFFmemcpy will fail
+ 				continue;
+ 			}

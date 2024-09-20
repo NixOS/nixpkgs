@@ -1,0 +1,13 @@
+diff --git a/lib/pipeline.c b/lib/pipeline.c
+index 26478f9..1612307 100644
+--- a/lib/pipeline.c
++++ b/lib/pipeline.c
+@@ -75,6 +75,8 @@
+ #   endif
+ #endif
+ 
++const char* program_name = "libpipeline";
++
+ #if defined(HAVE_SETENV) && !defined(HAVE_CLEARENV)
+ int clearenv (void)
+ {

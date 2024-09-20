@@ -1,0 +1,11 @@
+diff -ur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	1970-01-01 00:00:01.000000000 +0000
++++ b/CMakeLists.txt	2016-02-19 08:49:30.053759000 +0000
+@@ -178,6 +178,5 @@
+ install(FILES ${DOCS} DESTINATION share/vmmlib COMPONENT dev)
+ 
+ include(DoxygenRule) # must be after all targets
+-include(CPackConfig)
+ include(CTest)
+-include(PackageConfig)
++
