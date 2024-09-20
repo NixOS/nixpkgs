@@ -27,19 +27,20 @@
 , avahi
 , systemd
 , dbus
+, man-db
 , writeText
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.8.beta";
+  version = "3.8.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-Xn3Fr+Py5XbUNyXXU8hpFiuhnoeCkW362+ILk8eIey4=";
+    hash = "sha256-wPzad1IPUxVIsjlRN9zRk+6c3l4iLTydJz8DDRdipQQ=";
   };
 
   strictDeps = true;
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    man-db
   ];
 
   mesonFlags = [
@@ -120,6 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
       utils/data-generators/cc/generate \
       docs/reference/libtracker-sparql/embed-files.py \
       docs/reference/libtracker-sparql/generate-svgs.sh
+
+    # File "/build/tinysparql-3.8.0/tests/functional-tests/test_cli.py", line 233, in test_help
+    # self.assertIn("TINYSPARQL-IMPORT(1)", output, "Manpage not found")
+    # AssertionError: 'TINYSPARQL-IMPORT(1)' not found in '\x1b[4mTINYSPARQL-IMPORT\x1b[24m(1) ...'
+    substituteInPlace tests/functional-tests/test_cli.py --replace-fail "TINYSPARQL-IMPORT(1)" "TINYSPARQL-IMPORT"
   '';
 
   preCheck =
