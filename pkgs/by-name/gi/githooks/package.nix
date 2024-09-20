@@ -9,13 +9,13 @@
 }:
 buildGoModule rec {
   pname = "githooks";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "gabyx";
     repo = "githooks";
     rev = "v${version}";
-    hash = "sha256-gTvbvW+AFyZUBt7gSKJGc9lrl7CAy+cOElcADlIvuRk=";
+    hash = "sha256-9IsE9XGeMgOPPEyBvGLZaZKyz5HjnugiELP76+alFmU=";
   };
 
   modRoot = "./githooks";
