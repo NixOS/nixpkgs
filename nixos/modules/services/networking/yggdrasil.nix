@@ -234,6 +234,6 @@ in
   );
   meta = {
     doc = ./yggdrasil.md;
-    maintainers = with lib.maintainers; [ gazally ehmry ];
+    maintainers = with lib.maintainers; [ gazally ehmry nagy ];
   };
 }
