@@ -28,6 +28,7 @@
 , libsForQt5
 , libspnav
 , libzip
+, manifold
 , mesa
 , mpfr
 , python3
@@ -42,12 +43,12 @@
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-09-19";
+  version = "2024-09-22";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "4b645fc30929683f8873f7321fea38d5a35f2acf";
-    hash = "sha256-k0TdtYZUVgxql19zeFkGkAk9hlyhVjWH8uHhcVt9+js=";
+    rev = "1cf4e97ed488d606c823f107dcc361f218aa84ca";
+    hash = "sha256-5WzLAQnjH+4JjJhh9pCgY3j8+lyNPrtY9a104tzkglo=";
     fetchSubmodules = true;  # Only really need sanitizers-cmake and MCAD
   };
 
@@ -85,7 +86,7 @@ clangStdenv.mkDerivation rec {
     lib3mf
     libspnav
     libzip
-    # manifold  after https://github.com/NixOS/nixpkgs/pull/342211 submitted
+    manifold
     mpfr
     qscintilla
     qtbase
@@ -106,8 +107,7 @@ clangStdenv.mkDerivation rec {
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
     "-DUSE_BUILTIN_OPENCSG=OFF"
-    # builtin manifold: OFF once https://github.com/NixOS/nixpkgs/pull/342211 in
-    "-DUSE_BUILTIN_MANIFOLD=ON"
+    "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
     "-DCMAKE_UNITY_BUILD=ON" # faster build
     # IPO
