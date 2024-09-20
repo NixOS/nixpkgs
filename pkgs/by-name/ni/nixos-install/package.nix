@@ -29,5 +29,10 @@ substituteAll {
     installManPage ${./nixos-install.8}
   '';
 
-  meta.mainProgram = "nixos-install";
+  meta = {
+    description = "Install bootloader and NixOS";
+    homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-install";
+    license = lib.licenses.mit;
+    mainProgram = "nixos-install";
+  };
 }
