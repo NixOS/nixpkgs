@@ -69,7 +69,11 @@ let
     priority = drv.meta.priority or lib.meta.defaultPriority;
   }) paths;
 
-  pathsForClosure = lib.flatten (map (p: p.paths) chosenOutputs);
+  pathsForClosure = lib.pipe chosenOutputs [
+    (map (p: p.paths))
+    lib.flatten
+    (lib.remove null)
+  ];
 in runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
