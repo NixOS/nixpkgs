@@ -19917,6 +19917,12 @@
     github = "srounce";
     githubId = 60792;
   };
+  sshine = {
+    email = "simon@simonshine.dk";
+    github = "sshine";
+    githubId = 50879;
+    name = "Simon Shine";
+  };
   SShrike = {
     email = "severen@shrike.me";
     github = "severen";
