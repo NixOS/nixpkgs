@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "glance";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
     repo = "glance";
     rev = "v${version}";
-    hash = "sha256-0P1f7IDEPSlVHtrygIsD502lIHqLISsSAi9pqB/gFdA=";
+    hash = "sha256-neoRuduQOC3DHeIy/sh1BWUwcwXPGQIgZRWQcL7gzlk=";
   };
 
   vendorHash = "sha256-BLWaYiWcLX+/DW7Zzp6/Mtw5uVxIVtfubB895hrZ+08=";
