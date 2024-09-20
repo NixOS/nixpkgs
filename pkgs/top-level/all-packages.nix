@@ -38002,9 +38002,7 @@ with pkgs;
 
   nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 
-  nix-serve = callPackage ../tools/package-management/nix-serve {
-    nix = nixVersions.nix_2_18;
-  };
+  nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nix-serve-ng = haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
 
