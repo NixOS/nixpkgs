@@ -46,6 +46,8 @@ buildPythonPackage rec {
     mkdir utest/output_dir
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.rev}/docs/SeleniumLibrary-${version}.rst";
     description = "Web testing library for Robot Framework";
