@@ -17,6 +17,7 @@ let
     nixpkgs.buildPlatform = "aarch64-linux";
   };
   externalPkgsWithConfig = {
+    _file = "ext-pkgs-config.nix";
     nixpkgs.pkgs = pkgs;
     nixpkgs.config.allowUnfree = true;
   };
@@ -122,6 +123,9 @@ lib.recurseIntoAttrs {
           {
             allowUnfree = true;
           }
+
+          Defined in:
+            - ext-pkgs-config.nix
         ''];
     assert getErrors {
         nixpkgs.localSystem = pkgs.stdenv.hostPlatform;
