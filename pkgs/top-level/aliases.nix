@@ -1054,6 +1054,7 @@ mapAliases ({
 
   ### N ###
 
+  nbqa = lib.warn "nbqa has been moved to python3Packages.nbqa" python3Packages.nbqa; # Added 2024-09-20
   ncdu_2 = ncdu; # Added 2022-07-22
   neocities-cli = neocities; # Added 2024-07-31
   nestopia = throw "nestopia was forked; use nestopia-ue instead"; # Added 2024-01-24

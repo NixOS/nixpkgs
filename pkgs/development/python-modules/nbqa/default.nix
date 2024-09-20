@@ -1,18 +1,33 @@
 {
   lib,
-  python3,
+  buildPythonPackage,
+  callPackage,
   fetchFromGitHub,
-
-  # optional-dependencies
+  setuptools,
+  autoflake,
+  autopep8,
+  distutils,
+  ipython,
+  mdformat,
+  pre-commit-hooks,
+  pydocstyle,
+  pytestCheckHook,
+  tokenize-rt,
+  tomli,
+  yapf,
+  # Optional Dependencies
+  flake8,
+  isort,
+  jupytext,
+  mypy,
+  pylint,
+  pyupgrade,
   black,
   blacken-docs,
   ruff,
-
-  # passthru
-  testers,
-  nbqa,
 }:
-python3.pkgs.buildPythonApplication rec {
+
+buildPythonPackage rec {
   pname = "nbqa";
   version = "1.9.0";
   pyproject = true;
@@ -24,31 +39,28 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-9s+q2unh+jezU0Er7ZH0tvgntmPFts9OmsgAMeQXRrY=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   passthru.optional-dependencies = {
-    black = [ black ];
-    blacken-docs = [ blacken-docs ];
-    flake8 = [ python3.pkgs.flake8 ];
-    isort = [ python3.pkgs.isort ];
-    jupytext = [ python3.pkgs.jupytext ];
-    mypy = [ python3.pkgs.mypy ];
-    pylint = [ python3.pkgs.pylint ];
-    pyupgrade = [ python3.pkgs.pyupgrade ];
-    ruff = [ ruff ];
+    inherit
+      black
+      blacken-docs
+      flake8
+      isort
+      jupytext
+      mypy
+      pylint
+      pyupgrade
+      ruff
+      ;
   };
 
-  dependencies =
-    with python3.pkgs;
-    [
-      autopep8
-      ipython
-      tokenize-rt
-      tomli
-    ]
-    ++ builtins.attrValues passthru.optional-dependencies;
+  dependencies = [
+    autopep8
+    ipython
+    tokenize-rt
+    tomli
+  ] ++ builtins.attrValues passthru.optional-dependencies;
 
   postPatch = ''
     # Force using the Ruff executable rather than the Python package
@@ -60,25 +72,22 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$out/bin":"$PATH"
   '';
 
-  nativeCheckInputs =
-    [
-      black
-      ruff
-    ]
-    ++ (with python3.pkgs; [
-      autoflake
-      distutils
-      flake8
-      isort
-      jupytext
-      mdformat
-      pre-commit-hooks
-      pydocstyle
-      pylint
-      pytestCheckHook
-      pyupgrade
-      yapf
-    ]);
+  nativeCheckInputs = [
+    black
+    ruff
+    autoflake
+    distutils
+    flake8
+    isort
+    jupytext
+    mdformat
+    pre-commit-hooks
+    pydocstyle
+    pylint
+    pytestCheckHook
+    pyupgrade
+    yapf
+  ];
 
   disabledTests = [
     # Test data not found
@@ -98,11 +107,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_include_exclude.py"
   ];
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = nbqa;
-    };
-  };
+  passthru.tests = callPackage ./tests.nix { };
 
   meta = {
     homepage = "https://github.com/nbQA-dev/nbQA";
