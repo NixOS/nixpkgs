@@ -11,11 +11,11 @@
 }:
 let
   pname = "cursor";
-  version = "0.40.4";
+  version = "0.41.1";
   appKey = "230313mzl4w4u92";
   src = fetchurl {
-    url = "https://download.todesktop.com/${appKey}/cursor-0.40.4-build-2409052yfcjagw2-x86_64.AppImage";
-    hash = "sha256-ZURE8UoLPw+Qo1e4xuwXgc+JSwGrgb/6nfIGXMacmSg=";
+    url = "https://download.todesktop.com/${appKey}/cursor-0.41.1-build-2409189xe3envg5-x86_64.AppImage";
+    hash = "sha256-9zqktOR5UOMLkKLD1uJ8eNSujWnnyKAN9H8ejrgcfVU=";
   };
   appimageContents = appimageTools.extractType2 { inherit version pname src; };
 in
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation {
         latestLinux="$(curl -s https://download.todesktop.com/${appKey}/latest-linux.yml)"
         version="$(echo "$latestLinux" | yq -r .version)"
         filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-        update-source-version cursor "$version" "" "https://download.todesktop.com/${appKey}/$filename" --source-key=src.src
+        update-source-version code-cursor "$version" "" "https://download.todesktop.com/${appKey}/$filename" --source-key=src.src
       '';
     });
   };
