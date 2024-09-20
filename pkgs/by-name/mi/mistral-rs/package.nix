@@ -7,6 +7,8 @@
   # nativeBuildInputs
   pkg-config,
   python3,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
 
   # buildInputs
   oniguruma,
@@ -88,10 +90,16 @@ rustPlatform.buildRustPackage rec {
     rm "$cargoDepsCopy"/llguidance-*/build.rs
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+      # autoPatchelfHook
+      cudaPackages.cuda_nvcc
+    ];
 
   buildInputs =
     [
@@ -159,6 +167,39 @@ rustPlatform.buildRustPackage rec {
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
     "--skip=util::tests::test_parse_image_url"
+  ];
+
+  # postFixup = lib.optionalString cudaSupport (
+  #   let
+  #     patchelfCommand = binaryName: ''
+  #       patchelf \
+  #         --add-rpath ${
+  #           lib.makeLibraryPath (
+  #             with cudaPackages;
+  #             [
+  #               libcublas
+  #               libcurand
+  #             ]
+  #           )
+  #         } \
+  #         $out/bin/${binaryName}
+  #     '';
+  #   in
+  #   ''
+  #     ${patchelfCommand "mistralrs-bench"}
+  #     ${patchelfCommand "mistralrs-server"}
+  #   ''
+  # );
+  # runtimeDependencies = lib.optionals cudaSupport [
+  #   cudaPackages.libcublas.lib
+  #   cudaPackages.libcurand.lib
+  # ];
+  autoPatchelfIgnoreMissingDeps = lib.optionals cudaSupport [
+    # This is the hardware-dependent userspace driver that comes from
+    # nvidia_x11 package. It must be deployed at runtime in
+    # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
+    # than pinned in runpath
+    "libcuda.so.1"
   ];
 
   nativeInstallCheckInputs = [
