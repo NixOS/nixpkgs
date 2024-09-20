@@ -7,6 +7,8 @@
   # nativeBuildInputs
   pkg-config,
   python3,
+  autoPatchelfHook,
+  autoAddDriverRunpath,
 
   # buildInputs
   oniguruma,
@@ -86,10 +88,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals cudaSupport [
+      # WARNING: autoAddDriverRunpath must run AFTER autoPatchelfHook
+      # Otherwise, autoPatchelfHook removes driverLink from RUNPATH
+      autoPatchelfHook
+      autoAddDriverRunpath
+
+      cudaPackages.cuda_nvcc
+    ];
 
   buildInputs =
     [
@@ -97,6 +108,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       openssl
     ]
     ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cccl
       cudaPackages.cuda_cudart
       cudaPackages.cuda_nvrtc
       cudaPackages.libcublas
@@ -132,13 +144,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     // (lib.optionalAttrs cudaSupport {
       CUDA_COMPUTE_CAP = cudaCapability';
 
-      # Apparently, cudart is enough: No need to provide the entire cudaPackages.cudatoolkit derivation.
+      # We already list CUDA dependencies in buildInputs
+      # We only set CUDA_TOOLKIT_ROOT_DIR to satisfy some redundant checks from upstream
       CUDA_TOOLKIT_ROOT_DIR = lib.getDev cudaPackages.cuda_cudart;
     });
 
-  NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
-    "-I${lib.getDev cudaPackages.cuda_cudart}/include"
-    "-I${lib.getDev cudaPackages.cuda_cccl}/include"
+  appendRunpaths = [
+    (lib.makeLibraryPath [
+      cudaPackages.libcublas
+      cudaPackages.libcurand
+    ])
   ];
 
   # swagger-ui will once more be copied in the target directory during the check phase
