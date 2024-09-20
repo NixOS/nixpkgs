@@ -10656,9 +10656,9 @@ self: super: with self; {
 
   proton-vpn-network-manager = callPackage ../development/python-modules/proton-vpn-network-manager { };
 
-  proton-vpn-network-manager-openvpn = callPackage ../development/python-modules/proton-vpn-network-manager-openvpn { };
+  proton-vpn-network-manager-openvpn = self.proton-vpn-network-manager; # Alias added 20-09-2024
 
-  proton-vpn-network-manager-wireguard = callPackage ../development/python-modules/proton-vpn-network-manager-wireguard { };
+  proton-vpn-network-manager-wireguard = self.proton-vpn-network-manager; # Alias added 20-09-2024
 
   proton-vpn-session = callPackage ../development/python-modules/proton-vpn-session { };
 
