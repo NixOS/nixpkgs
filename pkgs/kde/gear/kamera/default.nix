@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "kamera";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [libgphoto2];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ libgphoto2 ];
 }
