@@ -15778,6 +15778,8 @@ self: super: with self; {
 
   treeo = callPackage ../development/python-modules/treeo { };
 
+  treescope = callPackage ../development/python-modules/treescope { };
+
   treex = callPackage ../development/python-modules/treex { };
 
   treq = callPackage ../development/python-modules/treq { };
