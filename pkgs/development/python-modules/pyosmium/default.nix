@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "3.7.0";
+  version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6" || isPyPy;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "osmcode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBFDAKNrD93MRXjoM8dIJQ/HJ9Aj8oMJuPVQxTrKYfI=";
+    hash = "sha256-HYp1MzXSa0tx0hY0JyMf2bmEvm5YuS2R+o25TsO8J6I=";
   };
 
   nativeBuildInputs = [ cmake ];
