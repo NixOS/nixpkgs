@@ -30187,10 +30187,6 @@ with pkgs;
 
   hmm = callPackage ../applications/misc/hmm { };
 
-  homebank = callPackage ../applications/office/homebank {
-    gtk = gtk3;
-  };
-
   hollywood = callPackage ../applications/misc/hollywood {
     inherit (python3Packages) pygments;
   };
