@@ -3579,7 +3579,7 @@ with pkgs;
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
-  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
+  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/security/echidna { });
 
   sedutil = callPackage ../tools/security/sedutil { };
 
@@ -7714,9 +7714,9 @@ with pkgs;
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
-  bsd-fingerd = bsd-finger.override({
+  bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
-  });
+  };
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix { };
 
@@ -8669,9 +8669,9 @@ with pkgs;
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
-  highlight = callPackage ../tools/text/highlight ({
+  highlight = callPackage ../tools/text/highlight {
     lua = lua5;
-  });
+  };
 
   hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
 
@@ -15640,12 +15640,12 @@ with pkgs;
       stdenv.targetPlatform));
   in pkgs.${"llvmPackages_${minSupported}"};
 
-  llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 ({
+  llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_12.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_12.libraries or llvmPackages_12.libraries;
     targetLlvm = targetPackages.llvmPackages_12.llvm or llvmPackages_12.llvm;
-  }));
+  });
 
   inherit (rec {
     llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
@@ -38359,7 +38359,7 @@ with pkgs;
   /*
     A NixOS/home-manager/arion/... module that sets the `pkgs` module argument.
    */
-  pkgsModule = { lib, options, ... }: {
+  pkgsModule = { options, ... }: {
     config =
       if options?nixpkgs.pkgs then {
         # legacy / nixpkgs.nix style
