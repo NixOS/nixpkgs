@@ -5211,12 +5211,6 @@ with pkgs;
 
   grobi = callPackage ../tools/X11/grobi { };
 
-  gscan2pdf = callPackage ../applications/graphics/gscan2pdf {
-    # needs this fork of libtiff, because original libtiff
-    # stopped packaging required tools with version 4.6
-    libtiff = libtiff_t;
-  };
-
   gsctl = callPackage ../applications/misc/gsctl { };
 
   gsocket = callPackage ../tools/networking/gsocket { };
@@ -8620,12 +8614,6 @@ with pkgs;
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
-
-  hylafaxplus = callPackage ../servers/hylafaxplus {
-    # needs this fork of libtiff, because original libtiff
-    # stopped packaging required tools with version 4.6
-    libtiff = libtiff_t;
-  };
 
   hyphen = callPackage ../development/libraries/hyphen { };
 
@@ -21841,15 +21829,6 @@ with pkgs;
   libticonv = callPackage ../development/libraries/libticonv { };
 
   libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
-
-  inherit
-    ({
-      libtiff = callPackage ../development/libraries/libtiff { };
-      libtiff_t = callPackage ../development/libraries/libtiff/libtiff_t.nix { };
-    })
-    libtiff
-    libtiff_t
-    ;
 
   libtiger = callPackage ../development/libraries/libtiger { };
 

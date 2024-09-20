@@ -1,27 +1,41 @@
 { lib
 , stdenv
-, fetchzip
+, fetchFromGitLab
+, fetchpatch
+, nix-update-script
 
 , autoreconfHook
 , pkg-config
 , sphinx
 
+, lerc
 , libdeflate
 , libjpeg
+, libwebp
 , xz
 , zlib
+, zstd
+
+  # for passthru.tests
+, libgeotiff
+, python3Packages
+, imagemagick
+, graphicsmagick
+, gdal
+, openimageio
+, freeimage
+, testers
 }:
 
-# This is a fork created by the hylafaxplus developer to
-# restore tools dropped by original libtiff in version 4.6.0.
-
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libtiff_t";
-  version = "4.6.0t";
+  pname = "libtiff";
+  version = "4.7.0";
 
-  src = fetchzip {
-    url = "http://www.libtiff.org/downloads/tiff-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9ov4w2jw4LtKr82/4jWMAGhc5GEdviJ7bT+y0+U/Ac4=";
+  src = fetchFromGitLab {
+    owner = "libtiff";
+    repo = "libtiff";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SuK9/a6OUAumEe1kz1itFJGKxJzbmHkBVLMnyXhIwmQ=";
   };
 
   patches = [
@@ -49,25 +63,45 @@ stdenv.mkDerivation (finalAttrs: {
   # sure cross-compilation works first!
   nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
+  buildInputs = [
+    lerc
+    zstd
+  ];
+
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
     libdeflate
     libjpeg
+    # libwebp depends on us; this will cause infinite
+    # recursion otherwise
+    (libwebp.override { tiffSupport = false; })
     xz
     zlib
+    zstd
   ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
+  passthru = {
+    tests = {
+      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit (python3Packages) pillow imread;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
-    description = "Library and utilities for working with the TIFF image file format (fork containing tools dropped in original libtiff version)";
-    homepage = "http://www.libtiff.org";
-    changelog = "http://www.libtiff.org/releases/v${finalAttrs.version}.html";
-    maintainers = with maintainers; [ yarny ];
+    description = "Library and utilities for working with the TIFF image file format";
+    homepage = "https://libtiff.gitlab.io/libtiff";
+    changelog = "https://libtiff.gitlab.io/libtiff/releases/v${finalAttrs.version}.html";
     license = licenses.libtiff;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
+    maintainers = teams.geospatial.members;
   };
 })
