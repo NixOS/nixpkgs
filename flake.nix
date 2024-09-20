@@ -16,10 +16,44 @@
       });
     in
     {
+      /**
+        `nixpkgs.lib` is a combination of the [Nixpkgs library](https://nixos.org/manual/nixpkgs/unstable/#id-1.4), and other attributes
+        that are _not_ part of the Nixpkgs library, but part of the Nixpkgs flake:
+
+        - `lib.nixosSystem` for creating a NixOS system configuration
+
+        - `lib.nixos` for other NixOS-provided functionality, such as [`runTest`](https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos)
+      */
       lib = lib.extend (final: prev: {
 
+        /**
+          Other NixOS-provided functionality, such as [`runTest`](https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos).
+          See also `lib.nixosSystem`.
+        */
         nixos = import ./nixos/lib { lib = final; };
 
+        /**
+          Create a NixOS system configuration.
+
+          Example:
+
+              lib.nixosSystem {
+                modules = [ ./configuration.nix ];
+              }
+
+          Inputs:
+
+          - `modules` (list of paths or inline modules): The NixOS modules to include in the system configuration.
+
+          - `specialArgs` (attribute set): Extra arguments to pass to all modules, that are available in `imports` but can not be extended or overridden by the `modules`.
+
+          - `modulesLocation` (path): A default location for modules that aren't passed by path, used for error messages.
+
+          Legacy inputs:
+
+          - `system`: Legacy alias for `nixpkgs.hostPlatform`, but this is already set in the generated `hardware-configuration.nix`, included by `configuration.nix`.
+          - `pkgs`: Legacy alias for `nixpkgs.pkgs`; use `nixpkgs.pkgs` and `nixosModules.readOnlyPkgs` instead.
+        */
         nixosSystem = args:
           import ./nixos/lib/eval-config.nix (
             {
@@ -78,28 +112,56 @@
       };
 
       devShells = forAllSystems (system: {
+        /** A shell to get tooling for Nixpkgs development. See nixpkgs/shell.nix. */
         default = import ./shell.nix { inherit system; };
       });
 
-      # The "legacy" in `legacyPackages` doesn't imply that the packages exposed
-      # through this attribute are "legacy" packages. Instead, `legacyPackages`
-      # is used here as a substitute attribute name for `packages`. The problem
-      # with `packages` is that it makes operations like `nix flake show
-      # nixpkgs` unusably slow due to the sheer number of packages the Nix CLI
-      # needs to evaluate. But when the Nix CLI sees a `legacyPackages`
-      # attribute it displays `omitted` instead of evaluating all packages,
-      # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
-      # information rich.
+      /**
+        A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.
+
+        The "legacy" in `legacyPackages` doesn't imply that the packages exposed
+        through this attribute are "legacy" packages. Instead, `legacyPackages`
+        is used here as a substitute attribute name for `packages`. The problem
+        with `packages` is that it makes operations like `nix flake show
+        nixpkgs` unusably slow due to the sheer number of packages the Nix CLI
+        needs to evaluate. But when the Nix CLI sees a `legacyPackages`
+        attribute it displays `omitted` instead of evaluating all packages,
+        which keeps `nix flake show` on Nixpkgs reasonably fast, though less
+        information rich.
+
+        The reason why finding the tree structure of `legacyPackages` is slow,
+        is that for each attribute in the tree, it is necessary to check whether
+        the attribute value is a package or a package set that needs further
+        evaluation. Evaluating the attribute value tends to require a significant
+        amount of computation, even considering lazy evaluation.
+      */
       legacyPackages = forAllSystems (system:
         (import ./. { inherit system; }).extend (final: prev: {
           lib = prev.lib.extend libVersionInfoOverlay;
         })
       );
 
+      /**
+        Optional modules that can be imported into a NixOS configuration.
+
+        Example:
+
+            # flake.nix
+            outputs = { nixpkgs, ... }: {
+              nixosConfigurations = {
+                foo = nixpkgs.lib.nixosSystem {
+                  modules = [
+                    ./foo/configuration.nix
+                    nixpkgs.nixosModules.notDetected
+                  ];
+                };
+              };
+            };
+        */
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
 
-        /*
+        /**
           Make the `nixpkgs.*` configuration read-only. Guarantees that `pkgs`
           is the way you initialize it.
 
