@@ -8766,8 +8766,6 @@ with pkgs;
 
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
-  inxi = callPackage ../tools/system/inxi { };
-
   iodine = callPackage ../tools/networking/iodine { };
 
   ioc-scan = callPackage ../tools/security/ioc-scan { };
