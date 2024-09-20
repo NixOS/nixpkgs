@@ -61,16 +61,16 @@ let
       dnsutils
     ] ++ recommendedSystemPrograms ++ recommendedDisplayInformationPrograms;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";
-  version = "3.3.35-1";
+  version = "3.3.36-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
-    rev = version;
-    hash = "sha256-wWG/fs+tZIiFI+dcqfwXeh9RxT2zJDiAZoizhAAu60Q=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-qUaBobpktoZZQZuGQWYvahtGJ6xOkKt/l9zfG4UVHIY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     cp inxi.1 $out/share/man/man1/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and
@@ -96,10 +96,10 @@ stdenv.mkDerivation rec {
       Processes, RAM usage, and a wide variety of other useful information.
     '';
     homepage = "https://smxi.org/docs/inxi.htm";
-    changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    changelog = "https://codeberg.org/smxi/inxi/src/tag/${finalAttrs.version}/inxi.changelog";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "inxi";
   };
-}
+})
