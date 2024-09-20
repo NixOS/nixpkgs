@@ -71,4 +71,7 @@ in
     nixpkgs.hostPlatform = cfg.pkgs.stdenv.hostPlatform;
     nixpkgs.buildPlatform = cfg.pkgs.stdenv.buildPlatform;
   };
+  meta.maintainers = [
+    lib.maintainers.roberth
+  ];
 }

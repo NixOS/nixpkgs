@@ -100,6 +100,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/lib/eval-config.nix                            @infinisil
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
+/nixos/modules/misc/nixpkgs/read-only.nix             @roberth
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
