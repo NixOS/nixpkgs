@@ -99,5 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/lagadic/visp/blob/v${finalAttrs.version}/ChangeLog.txt";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 })
