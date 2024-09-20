@@ -8,6 +8,7 @@
   makeWrapper,
   stdenv,
   addDriverRunpath,
+  nix-update-script,
 
   cmake,
   gcc12,
@@ -39,13 +40,13 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.3.10";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-iNjqnhiM0L873BiBPAgI2Y0KEQyCInn2nEihzwLasFU=";
+    hash = "sha256-YYrNrlXL6ytLfnrvSHybi0va0lvgVNuIRP+IFE5XZX8=";
     fetchSubmodules = true;
   };
 
@@ -199,20 +200,24 @@ goBuild {
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
 
-  passthru.tests =
-    {
-      inherit ollama;
-      version = testers.testVersion {
-        inherit version;
-        package = ollama;
+  passthru = {
+    tests =
+      {
+        inherit ollama;
+        version = testers.testVersion {
+          inherit version;
+          package = ollama;
+        };
+      }
+      // lib.optionalAttrs stdenv.isLinux {
+        inherit ollama-rocm ollama-cuda;
+        service = nixosTests.ollama;
+        service-cuda = nixosTests.ollama-cuda;
+        service-rocm = nixosTests.ollama-rocm;
       };
-    }
-    // lib.optionalAttrs stdenv.isLinux {
-      inherit ollama-rocm ollama-cuda;
-      service = nixosTests.ollama;
-      service-cuda = nixosTests.ollama-cuda;
-      service-rocm = nixosTests.ollama-rocm;
-    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description =
