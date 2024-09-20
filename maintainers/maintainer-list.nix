@@ -4229,6 +4229,12 @@
     githubId = 2623;
     name = "Dan Peebles";
   };
+  corbinwunderlich = {
+    email = "corbin@wcopy.net";
+    github = "CorbinWunderlich";
+    githubId = 140280062;
+    name = "Corbin Wunderlich";
+  };
   corbanr = {
     email = "corban@raunco.co";
     github = "CorbanR";
