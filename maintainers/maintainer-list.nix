@@ -12546,6 +12546,14 @@
     github = "mac-chaffee";
     githubId = 7581860;
   };
+  macronova = {
+    name = "Sicheng Pan";
+    email = "trivial@invariantspace.com";
+    matrix = "@macronova:invariantspace.com";
+    github = "Sicheng-Pan";
+    githubId = 60079945;
+    keys = [ { fingerprint = "49D3 FFDA 4D30 DDEE 68EF  AE84 EBC4 A200 6737 3921"; } ];
+  };
   madjar = {
     email = "georges.dubus@compiletoi.net";
     github = "madjar";
