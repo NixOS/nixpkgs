@@ -14712,9 +14712,7 @@ with pkgs;
 
   gbforth = callPackage ../development/compilers/gbforth { };
 
-  default-gcc-version =
-    if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
-    else 14;
+  default-gcc-version = 14;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
