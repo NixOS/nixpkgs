@@ -15,6 +15,7 @@
 
   # env
   fetchurl,
+  symlinkJoin,
 
   versionCheckHook,
 
@@ -86,10 +87,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+    ];
 
   buildInputs =
     [
@@ -132,8 +137,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     // (lib.optionalAttrs cudaSupport {
       CUDA_COMPUTE_CAP = cudaCapability';
 
-      # Apparently, cudart is enough: No need to provide the entire cudaPackages.cudatoolkit derivation.
-      CUDA_TOOLKIT_ROOT_DIR = lib.getDev cudaPackages.cuda_cudart;
+      # Avoid providing the full cudaPackages.cudatoolkit and create a minimal closure instead
+      CUDA_TOOLKIT_ROOT_DIR = symlinkJoin {
+        name = "cuda-redist";
+        paths = [
+          # cuda.h
+          (lib.getDev cudaPackages.cuda_cudart)
+          # nv/target
+          (lib.getDev cudaPackages.cuda_cccl)
+        ];
+      };
     });
 
   NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
