@@ -426,8 +426,6 @@ stdenv.mkDerivation (finalAttrs: {
     "xen" # Build the Xen Hypervisor.
     "tools" # Build the userspace tools, such as `xl`.
     "docs" # Build the Xen Documentation
-    # TODO: Enable the Stubdomains target. This requires another pre-fetched source: mini-os. Currently, Xen appears to build a limited version of stubdomains which does not include mini-os.
-    # "stubdom"
   ];
 
   enableParallelBuilding = true;
