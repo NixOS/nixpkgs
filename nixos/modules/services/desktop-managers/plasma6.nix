@@ -147,6 +147,9 @@ in {
         spectacle
         ffmpegthumbs
         krdp
+        kaccounts-integration
+        kaccounts-providers
+        kio-gdrive # google drive interface for KIO
       ] ++ lib.optionals config.services.flatpak.enable [
         # Since PackageKit Nix support is not there yet,
         # only install discover if flatpak is enabled.
@@ -314,6 +317,15 @@ in {
       wantedBy = [ "graphical-session-pre.target" ];
       serviceConfig.Type = "oneshot";
       script = activationScript;
+    };
+
+    services.signond = {
+      enable = true;
+      package = kdePackages.signond;
+      plugins = with kdePackages; [
+        signon-plugin-oauth2
+        signon-kwallet-extension
+      ];
     };
   };
 }
