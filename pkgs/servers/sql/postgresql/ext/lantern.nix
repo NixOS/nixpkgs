@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       CREATE TABLE small_world (id integer, vector real[3]);
       INSERT INTO small_world (id, vector) VALUES (0, '{0,0,0}'), (1, '{0,0,1}');
 
-      CREATE INDEX ON small_world USING hnsw (vector dist_l2sq_ops)
+      CREATE INDEX ON small_world USING lantern_hnsw (vector dist_l2sq_ops)
       WITH (M=2, ef_construction=10, ef=4, dim=3);
     '';
     failureHook = "postgresqlStop";
