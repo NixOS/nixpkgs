@@ -55,6 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_aws" ];
 
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
+
   meta = {
     changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";
     description = "Build LangChain application on AWS";
