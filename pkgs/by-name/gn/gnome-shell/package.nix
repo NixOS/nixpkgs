@@ -57,7 +57,6 @@
   gnome-settings-daemon,
   gnome-autoar,
   gnome-tecla,
-  asciidoc,
   bash-completion,
   mesa,
   libGL,
@@ -124,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     desktop-file-utils
     libxslt.bin
-    asciidoc
     gobject-introspection
   ];
 
