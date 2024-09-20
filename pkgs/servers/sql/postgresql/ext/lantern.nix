@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , openssl
 , postgresql
-, postgresqlTestHook
+, postgresqlTestExtension
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,14 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-S ../lantern_hnsw"
   ];
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "lantern-pg-test";
-    dontUnpack = true;
-    doCheck = true;
-    buildInputs = [ postgresqlTestHook ];
-    nativeCheckInputs = [ (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    passAsFile = [ "sql" ];
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
     sql = ''
       CREATE EXTENSION lantern;
 
@@ -64,13 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
       CREATE INDEX ON small_world USING lantern_hnsw (vector dist_l2sq_ops)
       WITH (M=2, ef_construction=10, ef=4, dim=3);
     '';
-    failureHook = "postgresqlStop";
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
   };
 
   meta = with lib; {

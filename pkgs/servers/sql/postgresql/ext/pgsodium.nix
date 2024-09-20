@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , libsodium
 , postgresql
-, postgresqlTestHook
+, postgresqlTestExtension
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,17 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "pgsodium-test";
-    dontUnpack = true;
-    doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
-    failureHook = "postgresqlStop";
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
     postgresqlExtraSettings = ''
       shared_preload_libraries=pgsodium
     '';
-    passAsFile = [ "sql" ];
     sql = ''
       CREATE EXTENSION pgsodium;
 
@@ -54,12 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
       SELECT pgsodium.randombytes_random() FROM generate_series(0, 5);
       SELECT * FROM pgsodium.crypto_box_new_keypair();
     '';
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
   };
 
   meta = with lib; {
