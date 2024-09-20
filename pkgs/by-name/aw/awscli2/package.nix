@@ -59,28 +59,22 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.17.42"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.17.56"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-f6S206MQy0qyHIJTIKSHBKT+P0dVCiUn5pMp2tClSb0=";
+    hash = "sha256-h82g99+3TsMa5yyzt7A1q3m2vO34rJlhmOlXx6jqmUk=";
   };
 
-  patches = [
-    # Temporary test fix until https://github.com/aws/aws-cli/pull/8838 is merged upstream
-    (fetchpatch {
-      url = "https://github.com/aws/aws-cli/commit/b5f19fe136ab0752cd5fcab21ff0ab59bddbea99.patch";
-      hash = "sha256-NM+nVlpxGAHVimrlV0m30d4rkFVb11tiH8Y6//2QhMI=";
-    })
-  ];
+  patches = [ ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'awscrt>=0.19.18,<=0.21.2' 'awscrt>=0.19.18' \
-      --replace-fail 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
+      --replace-fail 'cryptography>=40.0.0,<40.0.2' 'cryptography>=43.0.0' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
       --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
