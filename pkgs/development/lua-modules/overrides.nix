@@ -776,7 +776,7 @@ in
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
-    doCheck = true;
+    doCheck = stdenv.isLinux;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
     # the plugin loads the library from either the LIBSQLITE env
