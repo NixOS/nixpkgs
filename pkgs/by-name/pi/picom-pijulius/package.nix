@@ -9,13 +9,13 @@
 }:
 picom.overrideAttrs (previousAttrs: {
   pname = "picom-pijulius";
-  version = "8.2-unstable-2024-09-08";
+  version = "8.2-unstable-2024-09-14";
 
   src = fetchFromGitHub {
     owner = "pijulius";
     repo = "picom";
-    rev = "c7f7d6ed3858ca507ed8abd057d1039fc889940a";
-    hash = "sha256-LRUU516bfiN06mqLY7CWtrUmRubQ/ysPtciUNd/qGhA=";
+    rev = "0c46ea546d9c507e744612e80b25ef5dfa531855";
+    hash = "sha256-g/RknjZh5O2/3Plk1w8QnNywWZXZaABfunBY6XyixnA=";
   };
 
   buildInputs = (previousAttrs.buildInputs or [ ]) ++ [ pcre ];
