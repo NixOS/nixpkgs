@@ -1,0 +1,85 @@
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 6b0b44f98..ab630144f 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -37,45 +37,45 @@ endif()
+ if(NOT CONFIG_MODE OR (CONFIG_MODE AND NOT DEPTHAI_SHARED_LIBS))
+ 
+     # BZip2 (for bspatch)
+-    find_package(BZip2 ${_QUIET} CONFIG REQUIRED)
++    find_package(BZip2 REQUIRED)
+ 
+     # FP16 for conversions
+-    find_package(FP16 ${_QUIET} CONFIG REQUIRED)
++    find_package(FP16 REQUIRED)
+ 
+     # libarchive for firmware packages
+-    find_package(archive_static ${_QUIET} CONFIG REQUIRED)
+-    find_package(lzma ${_QUIET} CONFIG REQUIRED)
++    find_package(LibArchive REQUIRED)
++    find_package(LibLZMA REQUIRED)
+     # ZLIB for compressing Apps
+-    find_package(ZLIB CONFIG REQUIRED)
++    find_package(ZLIB REQUIRED)
+ 
+     # spdlog for library and device logging
+-    find_package(spdlog ${_QUIET} CONFIG REQUIRED)
++    find_package(spdlog REQUIRED)
+ 
+     # Backward
+     if(DEPTHAI_ENABLE_BACKWARD)
+         # Disable automatic check for additional stack unwinding libraries
+         # Just use the default compiler one
+         set(STACK_DETAILS_AUTO_DETECT FALSE CACHE BOOL "Auto detect backward's stack details dependencies")
+-        find_package(Backward ${_QUIET} CONFIG REQUIRED)
++        find_package(Backward REQUIRED)
+         unset(STACK_DETAILS_AUTO_DETECT)
+     endif()
+ 
+     # Log collection dependencies
+     if(DEPTHAI_ENABLE_CURL)
+-        find_package(CURL ${_QUIET} CONFIG REQUIRED)
+-        find_package(cpr ${_QUIET} CONFIG REQUIRED)
++        find_package(CURL REQUIRED)
++        find_package(cpr REQUIRED)
+     endif()
+-    find_package(ghc_filesystem ${_QUIET} CONFIG REQUIRED)
++    find_package(ghc_filesystem REQUIRED)
+ endif()
+ 
+ # Add threads (c++)
+ find_package(Threads ${_QUIET} REQUIRED)
+ 
+ # Nlohmann JSON
+-find_package(nlohmann_json 3.6.0 ${_QUIET} CONFIG REQUIRED)
++find_package(nlohmann_json 3.6.0 REQUIRED)
+ 
+ # libnop for serialization
+-find_package(libnop ${_QUIET} CONFIG REQUIRED)
++find_package(libnop REQUIRED)
+ 
+ # XLink
+ if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
+@@ -86,11 +86,11 @@ if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
+     unset(_BUILD_SHARED_LIBS_SAVED)
+     list(APPEND targets_to_export XLink)
+ else()
+-    find_package(XLink ${_QUIET} CONFIG REQUIRED HINTS "${CMAKE_CURRENT_LIST_DIR}/XLink" "${CMAKE_CURRENT_LIST_DIR}/../XLink")
++    find_package(XLink REQUIRED HINTS "${CMAKE_CURRENT_LIST_DIR}/XLink" "${CMAKE_CURRENT_LIST_DIR}/../XLink")
+ endif()
+ 
+ # OpenCV 4 - (optional, quiet always)
+-find_package(OpenCV 4 QUIET CONFIG)
++find_package(OpenCV 4)
+ if(DEPTHAI_PCL_SUPPORT AND NOT TARGET JsonCpp::JsonCpp)
+     find_package(jsoncpp)
+ endif()
+@@ -99,7 +99,7 @@ set(PREFIX_TEMP ${CMAKE_PREFIX_PATH})
+ set(CMAKE_MODULE_PATH ${_DEPTHAI_MODULE_PATH_ORIGINAL})
+ set(CMAKE_PREFIX_PATH ${_DEPTHAI_PREFIX_PATH_ORIGINAL})
+ if(DEPTHAI_PCL_SUPPORT)
+-    find_package(PCL CONFIG COMPONENTS common visualization)
++    find_package(PCL COMPONENTS common visualization)
+ endif()
+ set(CMAKE_MODULE_PATH ${MODULE_TEMP})
+ set(CMAKE_PREFIX_PATH ${PREFIX_TEMP})

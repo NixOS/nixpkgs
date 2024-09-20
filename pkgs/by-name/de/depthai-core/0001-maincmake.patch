@@ -1,0 +1,123 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7ac7877fc..01947fc55 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -150,7 +150,7 @@ endif()
+ set(PROJECT_EXPORT_GROUP "${PROJECT_NAME}Targets")
+ 
+ ## Check if cloned or sources
+-find_package(Git)
++# find_package(Git)
+ if(GIT_FOUND)
+     execute_process(
+         COMMAND ${GIT_EXECUTABLE} rev-parse --show-toplevel
+@@ -345,66 +345,25 @@ endif()
+ 
+ # Set constant
+ set(DEPTHAI_RESOURCES_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/resources")
++message(STATUS "resource folder: ${DEPTHAI_RESOURCES_OUTPUT_DIR}")
+ 
+ # Include configuration
+ include(Depthai/DepthaiDeviceSideConfig)    # Depthai device binary commit/version configuration
+ include(Depthai/DepthaiBootloaderConfig)    # Depthai bootloader binary commit/version configuration
+ 
+-# Include downloaders
+-include(DepthaiDownloader)                  # Depthai device binary downloader
+-include(DepthaiBootloaderDownloader)        # Depthai bootloader binary downloader
+-
+-
+ # depthai-shared enforce commit hash match if CI
+ if($ENV{CI})
+     set(DEPTHAI_SHARED_COMMIT_HASH_ENFORCE ON)
+     set(DEPTHAI_BOOTLOADER_SHARED_COMMIT_HASH_ENFORCE ON)
+ endif()
+ 
++if(DEPTHAI_BINARIES_RESOURCE_COMPILE)
++    message(STATUS "LIST OF RESOURCE COMPILED FILES: ${RESOURCE_COMPILED_FILES}")
+ 
+-# Then get the Depthai device side binaries (local or download)
+-if(DEPTHAI_CMD_PATH OR DEPTHAI_USB2_CMD_PATH OR DEPTHAI_USB2_PATCH_PATH)
+-    # At least one of the paths is set. include binaries locally
+-    message(STATUS "Using local Depthai device side binaries...")
+-
+-    DepthaiLocal(
+-        PATCH_ONLY ${DEPTHAI_USB2_PATCH_ONLY_MODE}
+-        "${DEPTHAI_RESOURCES_OUTPUT_DIR}"            # Output folder
+-        DEPTHAI_RESOURCE_LIST                       # List of output resources
+-        "${DEPTHAI_CMD_PATH}"                       # depthai.cmd
+-        "${DEPTHAI_USB2_CMD_PATH}"                  # depthai-usb2.cmd
+-        "${DEPTHAI_USB2_PATCH_PATH}"                # depthai-usb2-patch.patch
+-    )
+-
+-else()
+-    # No user specified paths, download from server
+-    message(STATUS "Downloading Depthai device side binaries from server...")
+-
+-    DepthaiDownload(
+-        "${DEPTHAI_SHARED_COMMIT_HASH}" "${DEPTHAI_SHARED_COMMIT_HASH_ENFORCE}"
+-        PATCH_ONLY ${DEPTHAI_USB2_PATCH_ONLY_MODE}
+-        "${DEPTHAI_RESOURCES_OUTPUT_DIR}"            # Output folder
+-        DEPTHAI_RESOURCE_LIST                       # List of output resources
+-        "${DEPTHAI_DEVICE_SIDE_MATURITY}"           # Maturity
+-        "${DEPTHAI_DEVICE_SIDE_COMMIT}"             # commit hash
+-        "${DEPTHAI_DEVICE_SIDE_VERSION}"            # Optional version
+-    )
+-endif()
+-list(APPEND RESOURCE_COMPILED_FILES ${DEPTHAI_RESOURCE_LIST})
+-
+-# Add bootloader
+-DepthaiBootloaderDownload(
+-    "${DEPTHAI_BOOTLOADER_SHARED_COMMIT_HASH}" "${DEPTHAI_BOOTLOADER_SHARED_COMMIT_HASH_ENFORCE}"
+-    "${DEPTHAI_RESOURCES_OUTPUT_DIR}"                # Output folder
+-    DEPTHAI_BOOTLOADER_RESOURCE_LIST                # List of output resources
+-    "${DEPTHAI_BOOTLOADER_MATURITY}"                # Maturity
+-    "${DEPTHAI_BOOTLOADER_VERSION}"                 # if maturity == snapshot -> hash else version
+-)
+-list(APPEND RESOURCE_COMPILED_FILES ${DEPTHAI_BOOTLOADER_RESOURCE_LIST})
+-
+-message(STATUS "LIST OF RESOURCE COMPILED FILES: ${RESOURCE_COMPILED_FILES}")
++    file(COPY "${DEPTHAI_BOOTLOADER_FWP}" DESTINATION "${DEPTHAI_RESOURCES_OUTPUT_DIR}")
++    file(COPY "${DEPTHAI_DEVICE_FWP}" DESTINATION "${DEPTHAI_RESOURCES_OUTPUT_DIR}")
++    file(GLOB RESOURCE_COMPILED_FILES "${DEPTHAI_RESOURCES_OUTPUT_DIR}/*.tar.xz")
+ 
+-if(DEPTHAI_BINARIES_RESOURCE_COMPILE)
+     # Add RC and resource compile the binares
+     include(CMakeRC)
+ 
+@@ -471,11 +430,11 @@ target_link_libraries(${TARGET_CORE_NAME}
+     PRIVATE
+         XLink
+         Threads::Threads
+-        BZip2::bz2
++        BZip2::BZip2
+         FP16::fp16
+-        archive_static
++        LibArchive::LibArchive
+         spdlog::spdlog
+-        ZLIB::zlib
++        ZLIB::ZLIB
+         ghcFilesystem::ghc_filesystem
+ )
+ 
+@@ -743,8 +702,10 @@ configure_file("cmake/${PROJECT_NAME}Dependencies.cmake" ${PROJECT_NAME}Dependen
+ write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake VERSION ${PROJECT_VERSION} COMPATIBILITY AnyNewerVersion)
+ 
+ # Configure config file (one for exporting build directory, one for installation)
++if (HUNTER_ENABLED)
+ file(RELATIVE_PATH DEPTHAI_DEPENDENCIES_INSTALLATION_PATH_REL "${CMAKE_CURRENT_BINARY_DIR}" "${HUNTER_INSTALL_PREFIX}")
+ configure_file(cmake/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
++endif()
+ 
+ # Config for installation
+ set(DEPTHAI_DEPENDENCIES_INSTALLATION_PATH_REL "./dependencies")
+@@ -783,7 +744,9 @@ if(DEPTHAI_INSTALL)
+     # Install depthai-bootloader-shared public headers
+     install(DIRECTORY "${DEPTHAI_BOOTLOADER_SHARED_PUBLIC_INCLUDE}/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+     # Install Hunter dependencies
+-    install(DIRECTORY "${HUNTER_INSTALL_PREFIX}/" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/dependencies")
++    if(HUNTER_ENABLED)
++        install(DIRECTORY "${HUNTER_INSTALL_PREFIX}/" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/dependencies")
++    endif()
+     # Install resources if not RC'd
+     if(NOT DEPTHAI_BINARIES_RESOURCE_COMPILE)
+         install(DIRECTORY "${DEPTHAI_RESOURCES_OUTPUT_DIR}/" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}")
