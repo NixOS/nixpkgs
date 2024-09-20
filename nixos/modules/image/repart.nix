@@ -69,6 +69,10 @@ let
   }) opts;
 in
 {
+  imports = [
+    ./repart-verity-store.nix
+  ];
+
   options.image.repart = {
 
     name = lib.mkOption {

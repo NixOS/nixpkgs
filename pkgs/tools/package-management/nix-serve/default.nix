@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , bzip2
-, nix
+, nixVersions
 , perl
 , makeWrapper
 , nixosTests
@@ -12,6 +12,7 @@
 let
   rev = "77ffa33d83d2c7c6551c5e420e938e92d72fec24";
   sha256 = "sha256-MJRdVO2pt7wjOu5Hk0eVeNbk5bK5+Uo/Gh9XfO4OlMY=";
+  nix = nixVersions.nix_2_24;
 in
 
 stdenv.mkDerivation {
