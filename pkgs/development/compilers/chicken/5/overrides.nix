@@ -132,6 +132,7 @@ in
       addToNativeBuildInputs pkgs.taglib old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
+  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
   yaml = addToBuildInputs pkgs.libyaml;
@@ -224,7 +225,6 @@ in
   svn-client = broken;
   system = broken;
   tokyocabinet = broken;
-  webview = broken;
 
   # mark broken darwin
 
