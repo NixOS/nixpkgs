@@ -3,11 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   gobject-introspection,
+  apt,
+  iproute2,
   setuptools,
   networkmanager,
   proton-core,
   proton-vpn-api-core,
-  proton-vpn-connection,
+  proton-vpn-local-agent,
   pycairo,
   pygobject3,
   pytest-asyncio,
@@ -41,12 +43,23 @@ buildPythonPackage rec {
     networkmanager
     proton-core
     proton-vpn-api-core
-    proton-vpn-connection
+    proton-vpn-local-agent
     pycairo
     pygobject3
   ];
 
-  pythonImportsCheck = [ "proton.vpn.backend.linux.networkmanager" ];
+  postPatch = ''
+    substituteInPlace proton/vpn/backend/linux/networkmanager/killswitch/wireguard/killswitch_connection_handler.py \
+      --replace '/usr/sbin/ip' '${iproute2}/bin/ip'
+    substituteInPlace proton/vpn/backend/linux/networkmanager/killswitch/wireguard/wgkillswitch.py \
+      --replace '/usr/bin/apt' '${apt}/bin/apt'
+  '';
+
+  pythonImportsCheck = [
+    "proton.vpn.backend.linux.networkmanager"
+    "proton.vpn.backend.linux.networkmanager.killswitch.default"
+    "proton.vpn.backend.linux.networkmanager.killswitch.wireguard"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

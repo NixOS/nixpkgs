@@ -9,14 +9,9 @@
   packaging,
   proton-core,
   proton-keyring-linux,
-  proton-keyring-linux-secretservice,
   proton-vpn-api-core,
-  proton-vpn-connection,
-  proton-vpn-killswitch,
-  proton-vpn-killswitch-network-manager,
-  proton-vpn-logger,
+  proton-vpn-local-agent,
   proton-vpn-network-manager,
-  proton-vpn-session,
   pycairo,
   pygobject3,
   withIndicator ? true,
@@ -26,14 +21,14 @@
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "4.4.4";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e581FgXrk1cfjsl/UaG9M+3VBYXcV0mggeLeEW9s9KM=";
+    hash = "sha256-GCfr6x0KbIJr2r4UcFtMjuyHZVyDLKPvgtjdpTCb5Ro=";
   };
 
   nativeBuildInputs = [
@@ -58,14 +53,9 @@ buildPythonApplication rec {
     packaging
     proton-core
     proton-keyring-linux
-    proton-keyring-linux-secretservice
     proton-vpn-api-core
-    proton-vpn-connection
-    proton-vpn-killswitch
-    proton-vpn-killswitch-network-manager
-    proton-vpn-logger
+    proton-vpn-local-agent
     proton-vpn-network-manager
-    proton-vpn-session
     pycairo
     pygobject3
   ];

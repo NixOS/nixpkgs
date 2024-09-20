@@ -2,12 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cryptography,
   setuptools,
+  jinja2,
   proton-core,
-  proton-vpn-connection,
-  proton-vpn-logger,
-  proton-vpn-killswitch,
-  proton-vpn-session,
+  pynacl,
+  aiohttp,
+  pyopenssl,
+  pytest-asyncio,
+  requests,
   sentry-sdk,
   distro,
   pytestCheckHook,
@@ -26,26 +29,37 @@ buildPythonPackage rec {
     hash = "sha256-YdBsA8qKcWpR+L/I9rEFntR448kaxEjYuGDPS1ynsMU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
+    cryptography
     distro
+    jinja2
+    pynacl
     proton-core
-    proton-vpn-connection
-    proton-vpn-logger
-    proton-vpn-killswitch
-    proton-vpn-session
     sentry-sdk
   ];
 
-  pythonImportsCheck = [ "proton.vpn.core" ];
+  pythonImportsCheck = [
+    "proton.vpn.core"
+    "proton.vpn.connection"
+    "proton.vpn.killswitch.interface"
+    "proton.vpn.logging"
+    "proton.vpn.session"
+  ];
 
   nativeCheckInputs = [
+    aiohttp
+    pyopenssl
+    pytest-asyncio
+    requests
     pytestCheckHook
     pytest-cov-stub
   ];
 
-  preCheck = ''
+  postInstall = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
   '';
