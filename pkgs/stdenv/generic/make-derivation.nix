@@ -57,7 +57,7 @@ let
     :::{.note}
     This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
 
-    Most Arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
     :::
   */
   mkDerivation =
