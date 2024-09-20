@@ -15,7 +15,6 @@
 , zlib
 , zstd
 , openssl
-, glibc
 , nixosTests
 , sparkSupport ? true
 , spark

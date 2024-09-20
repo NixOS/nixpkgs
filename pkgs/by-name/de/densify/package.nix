@@ -2,7 +2,6 @@
   fetchFromGitHub,
   lib,
   python3Packages,
-  python3,
   gtk3,
   gobject-introspection,
   wrapGAppsHook3,

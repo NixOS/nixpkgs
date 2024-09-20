@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchCrate
 , fetchFromGitHub
-, libiconv
 , openssl
 , pkg-config
 , Security

@@ -4,7 +4,6 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
-  fetchpatch,
   installShellFiles,
   lib,
   python3Packages,

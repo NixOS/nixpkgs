@@ -7,7 +7,6 @@
 , fetchurl
 , fetchFromGitHub
 , openal
-, libtool
 , enet
 , SDL2
 , curl
