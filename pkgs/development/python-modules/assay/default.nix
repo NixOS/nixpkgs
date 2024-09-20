@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "assay";
-  version = "unstable-2024-05-09";
+  version = "0-unstable-2024-05-09";
   format = "setuptools";
 
   src = fetchFromGitHub {
