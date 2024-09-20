@@ -28,7 +28,10 @@ buildPythonPackage rec {
     proton-core
   ];
 
-  pythonImportsCheck = [ "proton.keyring_linux.core" ];
+  pythonImportsCheck = [
+    "proton.keyring_linux.core"
+    "proton.keyring_linux"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

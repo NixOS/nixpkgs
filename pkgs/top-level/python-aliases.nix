@@ -416,6 +416,15 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
+  proton-keyring-linux-secretservice = throw "proton-keyring-linux-secretservice functionality was integrated in the proton-keyring-linux module"; # added 2024-10-16
+  proton-vpn-connection = throw "proton-vpn-connection functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-killswitch = throw "proton-vpn-killswitch functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-killswitch-network-manager = throw "proton-vpn-killswitch-network-manager functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-killswitch-network-manager-wireguard = throw "proton-vpn-killswitch-network-manager-wireguard functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-logger = throw "proton-vpn-logger functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-network-manager-openvpn = throw "proton-vpn-network-manager-openvpn functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-network-manager-wireguard = throw "proton-vpn-network-manager-wireguard functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-session = throw "proton-vpn-session functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
   proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
