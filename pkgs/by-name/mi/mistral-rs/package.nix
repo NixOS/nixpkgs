@@ -6,6 +6,8 @@
   # nativeBuildInputs
   pkg-config,
   python3,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
 
   # buildInputs
   oniguruma,
@@ -97,10 +99,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+      autoPatchelfHook
+      cudaPackages.cuda_nvcc
+    ];
 
   buildInputs =
     [
@@ -176,6 +184,32 @@ rustPlatform.buildRustPackage rec {
     "--skip=sampler::tests::test_argmax"
     "--skip=sampler::tests::test_gumbel_speculative"
     "--skip=util::tests::test_parse_image_url"
+  ];
+
+  # postFixup = lib.optionalString cudaSupport (
+  #   let
+  #     patchelfCommand = binaryName: ''
+  #       patchelf \
+  #         --add-rpath ${
+  #           lib.makeLibraryPath (
+  #             with cudaPackages;
+  #             [
+  #               libcublas
+  #               libcurand
+  #             ]
+  #           )
+  #         } \
+  #         $out/bin/${binaryName}
+  #     '';
+  #   in
+  #   ''
+  #     ${patchelfCommand "mistralrs-bench"}
+  #     ${patchelfCommand "mistralrs-server"}
+  #   ''
+  # );
+  runtimeDependencies = lib.optionals cudaSupport [
+    cudaPackages.libcublas
+    cudaPackages.libcurand
   ];
 
   passthru = {
