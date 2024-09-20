@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
     vte-gtk4
   ];
 
+  preFixup = ''
+    # FIXME: properly address https://github.com/NixOS/nixpkgs/pull/333911#issuecomment-2362710334
+    # and https://gitlab.gnome.org/GNOME/console/-/commit/c81801c82f186f20
+    gappsWrapperArgs+=(--set "TERM" "xterm-256color")
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-console";
