@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
 , pnpm
 , nodejs
 , makeWrapper
@@ -92,6 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
