@@ -87,4 +87,6 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = "export NIX_STATE_DIR=$TMPDIR";
+
+  passthru = { inherit perl; };
 })
