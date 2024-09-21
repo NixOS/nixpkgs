@@ -13,7 +13,7 @@
 # files.
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libunistring";
+  pname = "libunistring091";
   version = "0.9.10";
 
   src = fetchurl {
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unicode string library";
 
     longDescription = ''
-      This library of downgraded version 0.9.1 provide missing dependencies which is no longer provided in the latest releases.
+      This downgraded version 0.9.1 of library 'libunistring' provides missing dependencies which is no longer provided in the latest releases.
       Such as: libunistring.so.2
    '';
 
