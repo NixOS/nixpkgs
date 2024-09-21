@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  llvmPackages,
   SDL2,
   callPackage,
   cmake,
@@ -31,7 +32,7 @@ let
     wrapQtAppsHook
     ;
 in
-stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   inherit (sources.duckstation) pname version src;
 
   patches = [
