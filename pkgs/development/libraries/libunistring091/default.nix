@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       This downgraded version 0.9.1 of library 'libunistring' provides missing dependencies which is no longer provided in the latest releases.
       Such as: libunistring.so.2
-   '';
+    '';
 
     license = lib.licenses.lgpl3Plus;
 
