@@ -13,11 +13,12 @@ in
   {
     # the lua attribute name that matches this vim plugin. Both should be equal
     # in the majority of cases but we make it possible to have different attribute names
-    luaAttr ? (normalizeName attrs.pname)
+    luaAttr ? (lua.pkgs.${normalizeName attrs.pname})
     , ...
   }@attrs:
     let
-      originalLuaDrv = lua.pkgs.${luaAttr};
+      # warning added Sep 2024
+      originalLuaDrv = lib.warnIf (lib.typeOf luaAttr == "string") "luaAttr as string is deprecated. Pass a lua derivation directly ( e.g., `buildNeovimPlugin { luaAttr = lua.pkgs.plenary-nvim; }`)" luaAttr;
 
       luaDrv = originalLuaDrv.overrideAttrs (oa: {
         version = attrs.version or oa.version;
