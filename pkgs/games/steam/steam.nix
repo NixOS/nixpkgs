@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
   '';
 
+  passthru.updateScript = ./update-bootstrap.py;
+
   meta = with lib; {
     description = "Digital distribution platform";
     longDescription = ''
