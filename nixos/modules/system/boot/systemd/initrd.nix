@@ -38,6 +38,7 @@ let
     "kmod-static-nodes.service"
     "local-fs-pre.target"
     "local-fs.target"
+    "modprobe@.service"
     "multi-user.target"
     "paths.target"
     "poweroff.target"
