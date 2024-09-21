@@ -5,16 +5,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "conserve";
-  version = "23.11.0";
+  version = "24.8.0";
 
   src = fetchFromGitHub {
     owner = "sourcefrog";
     repo = "conserve";
     rev = "v${version}";
-    hash = "sha256-Ck2+3etwfZiDMZHzI2hIBuUKn7L0ZTGEe9yJjXjoRIM=";
+    hash = "sha256-rdZTx0wFFtWt3EcpvWHY6m+8TEHEj53vhVpdRp5wbos=";
   };
 
-  cargoHash = "sha256-tMj1icGNTFpouts1TE6BIiABexV3vmOW9r5Y/7ynUMM=";
+  cargoHash = "sha256-IP9x3n5RdI+TKOhMBWEfw9P2CROcC0SmEsmMVaXjiDE=";
+
+  checkFlags = [
+    # expected to panic if unix user has no secondary group,
+    # which is the case in the nix sandbox
+    "--skip=test_fixtures::test::arbitrary_secondary_group_is_found"
+    "--skip=chgrp_reported_as_changed"
+  ];
 
   meta = with lib; {
     description = "Robust portable backup tool in Rust";
