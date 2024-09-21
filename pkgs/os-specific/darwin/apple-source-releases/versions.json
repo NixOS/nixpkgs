@@ -6,5 +6,9 @@
   "adv_cmds": {
     "hash": "sha256-Ztp8ALWcviEpthoiY8ttWzGI8OcsLzsULjlqe8GIzw8=",
     "version": "163"
+  },
+  "basic_cmds": {
+    "hash": "sha256-BYPPTg4/7x6RPs0WwwQlkNiZxxArV+7EVe6bM+a/I6Q=",
+    "version": "55"
   }
 }

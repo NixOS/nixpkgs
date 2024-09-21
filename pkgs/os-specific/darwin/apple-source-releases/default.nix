@@ -309,7 +309,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     hfs             = applePackage "hfs"               "osx-10.12.6"     "sha256-eGi18HQFJrU5UHoBOE0LqO5gQ0xOf8+OJuAWQljfKE4=" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "sha256-YHbGws901xONzAbo6sB5zSea4Wp0sgYUJ8YgwVfWxnE=" {};
     adv_cmds        = callPackage ./adv_cmds/package.nix { };
-    basic_cmds      = applePackage "basic_cmds"        "osx-10.11.6"     "sha256-BYPPTg4/7x6RPs0WwwQlkNiZxxArV+7EVe6bM+a/I6Q=" {};
+    basic_cmds      = callPackage ./basic_cmds/package.nix { };
     developer_cmds  = applePackage "developer_cmds"    "osx-10.11.6"     "sha256-h0wMVlS6QdRvKOVJ74W9ziHYGApjvnk77AIR6ukYBRo=" {};
     diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "sha256-VX+hcZ7JhOA8EhwLloPlM3Yx79RXp9OYHV9Mi10uw3Q=" {
       macosPackages_11_0_1 = macosPackages_11_0_1;
