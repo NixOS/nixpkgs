@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "steam-original";
-  version = "1.0.0.74";
+  version = "1.0.0.81";
 
   src = fetchurl {
     # use archive url so the tarball doesn't 404 on a new release
     url = "https://repo.steampowered.com/steam/archive/stable/steam_${finalAttrs.version}.tar.gz";
-    hash = "sha256-sO07g3j1Qejato2LWJ2FrW3AzfMCcBz46HEw7aKxojQ=";
+    hash = "sha256-Gia5182s4J4E3Ia1EeC5kjJX9mSltsr+b+1eRtEXtPk=";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
