@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "john";
-  version = "rolling-2404";
+  version = "rolling-2409";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-zvoN+8Sx6qpVg2JeRLOIH1ehfl3tFTv7r5wQZ44Qsbc=";
+    rev = "63f6c352b6c82241b33d95a87e1cd01b42ffd29e";
+    hash = "sha256-maONzqz+yTqXE1vuKk9axSQwpzPgrGtOfWBAhJJBijw=";
   };
 
   patches = lib.optionals withOpenCL [
