@@ -3536,6 +3536,18 @@ final: prev:
     meta.homepage = "https://github.com/Bekaboo/dropbar.nvim/";
   };
 
+  earthly-vim = buildVimPlugin {
+    pname = "earthly.vim";
+    version = "2024-04-02";
+    src = fetchFromGitHub {
+      owner = "earthly";
+      repo = "earthly.vim";
+      rev = "cb0440a357a09fb9234ece56a6b09e04d25c1b1d";
+      sha256 = "038g9sjik2jn5la06k7i5xfnzc28faibskn2fikgrxwlx240c8wv";
+    };
+    meta.homepage = "https://github.com/earthly/earthly.vim/";
+  };
+
   echodoc-vim = buildVimPlugin {
     pname = "echodoc.vim";
     version = "2022-11-27";

@@ -7,7 +7,6 @@
   numpy,
   poetry-core,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -38,11 +37,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-chroma==(.*)"
-    ];
+  passthru = {
+    inherit (langchain-core) updateScript;
   };
 
   meta = {

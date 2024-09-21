@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit (source) version;
 
   src = fetchurl {
-    url = "https://developer.nordicsemi.com/.pc-tools/nrfutil/nrfutil-${platform.name}-${finalAttrs.version}.tar.gz";
+    url = "https://files.nordicsemi.com/artifactory/swtools/external/nrfutil/packages/nrfutil/nrfutil-${platform.name}-${finalAttrs.version}.tar.gz";
     inherit (platform) hash;
   };
 
