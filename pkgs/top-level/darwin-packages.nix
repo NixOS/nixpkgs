@@ -77,6 +77,8 @@ impure-cmds // appleSourcePackages // stubs // {
     extraBuildInputs = [];
   };
 
+  inherit (self.adv_cmds) locale ps;
+
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs) cctools;
     inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
