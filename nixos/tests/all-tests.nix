@@ -805,6 +805,7 @@ in {
   postgresql-jit = handleTest ./postgresql-jit.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   postgresql-tls-client-cert = handleTest ./postgresql-tls-client-cert.nix {};
+  postgresql-wal2json = handleTest ./postgresql-wal2json.nix {};
   powerdns = handleTest ./powerdns.nix {};
   powerdns-admin = handleTest ./powerdns-admin.nix {};
   power-profiles-daemon = handleTest ./power-profiles-daemon.nix {};
