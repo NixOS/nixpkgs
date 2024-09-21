@@ -33,7 +33,7 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
 , postInstall ? ""
 , meta ? {}
 , turnCompilationWarningToError ? false
-, ignoreCompilationError ? true
+, ignoreCompilationError ? false
 , ...
 }@args:
 
