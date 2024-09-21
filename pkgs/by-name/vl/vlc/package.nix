@@ -10,7 +10,8 @@
 , faad2
 , fetchpatch
 , fetchurl
-, ffmpeg
+# Please unpin FFmpeg on the next upstream release.
+, ffmpeg_6
 , flac
 , fluidsynth
 , freefont_ttf
@@ -135,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     avahi
     dbus
     faad2
-    ffmpeg
+    ffmpeg_6
     flac
     fluidsynth
     fribidi
