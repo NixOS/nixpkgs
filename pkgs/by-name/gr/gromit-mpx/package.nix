@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       to make annotations on the screen.
     '';
     homepage = "https://github.com/bk138/gromit-mpx";
+    changelog = "https://github.com/bk138/gromit-mpx/blob/${finalAttrs.version}/NEWS.md";
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
