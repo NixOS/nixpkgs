@@ -2,7 +2,9 @@
   type,
   version,
   srcs,
-  packages ? null,
+  commonPackages ? null,
+  hostPackages ? null,
+  targetPackages ? null,
 }:
 
 assert builtins.elem type [
@@ -10,7 +12,11 @@ assert builtins.elem type [
   "runtime"
   "sdk"
 ];
-assert if type == "sdk" then packages != null else true;
+assert
+  if type == "sdk" then
+    commonPackages != null && hostPackages != null && targetPackages != null
+  else
+    true;
 
 {
   lib,
@@ -32,7 +38,7 @@ assert if type == "sdk" then packages != null else true;
   writeShellScript,
   mkNugetDeps,
   callPackage,
-  dotnetCorePackages,
+  systemToDotnetRid,
   xmlstarlet,
 }:
 
@@ -53,12 +59,13 @@ let
 
   mkCommon = callPackage ./common.nix { };
 
-  targetRid = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
+  hostRid = systemToDotnetRid stdenv.hostPlatform.system;
+  targetRid = systemToDotnetRid stdenv.targetPlatform.system;
 
   sigtool = callPackage ./sigtool.nix { };
   signAppHost = callPackage ./sign-apphost.nix { };
 
-  hasILCompiler = lib.versionAtLeast version (if targetRid == "osx-arm64" then "8" else "7");
+  hasILCompiler = lib.versionAtLeast version (if hostRid == "osx-arm64" then "8" else "7");
 
   extraTargets = writeText "extra.targets" (
     ''
@@ -108,8 +115,7 @@ mkCommon type rec {
   ] ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
 
   src = fetchurl (
-    srcs."${stdenv.hostPlatform.system}"
-      or (throw "Missing source (url and hash) for host system: ${stdenv.hostPlatform.system}")
+    srcs.${hostRid} or (throw "Missing source (url and hash) for host RID: ${hostRid}")
   );
 
   sourceRoot = ".";
@@ -157,15 +163,15 @@ mkCommon type rec {
       --add-needed libicuuc.so \
       $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
     patchelf \
       --add-needed libgssapi_krb5.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
     patchelf \
       --add-needed libssl.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
   '';
 
   # fixes: Could not load ICU data. UErrorCode: 2
@@ -181,10 +187,8 @@ mkCommon type rec {
       inherit icu hasILCompiler;
     }
     // lib.optionalAttrs (type == "sdk") {
-      packages = mkNugetDeps {
-        name = "${pname}-${version}-deps";
-        nugetDeps = packages;
-      };
+      packages = commonPackages ++ hostPackages.${hostRid} ++ targetPackages.${targetRid};
+      inherit targetPackages;
 
       updateScript =
         let
@@ -205,7 +209,13 @@ mkCommon type rec {
       mdarocha
     ];
     mainProgram = "dotnet";
-    platforms = attrNames srcs;
+    platforms = lib.filter (
+      platform:
+      let
+        e = builtins.tryEval (systemToDotnetRid platform);
+      in
+      e.success && srcs ? "${e.value}"
+    ) lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode

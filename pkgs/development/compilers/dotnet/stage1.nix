@@ -18,7 +18,7 @@ let
   vmr =
     (mkVMR {
       inherit releaseManifestFile tarballHash;
-      dotnetSdk = stage0.sdk;
+      bootstrapSdk = stage0.sdk;
     }).overrideAttrs
       (old: {
         passthru = old.passthru or { } // {
@@ -27,4 +27,10 @@ let
       });
 
 in
-mkPackages { inherit vmr; } // { stage0 = lib.dontRecurseIntoAttrs stage0; }
+mkPackages {
+  inherit vmr;
+  fallbackTargetPackages = bootstrapSdk.targetPackages;
+}
+// {
+  stage0 = lib.dontRecurseIntoAttrs stage0;
+}

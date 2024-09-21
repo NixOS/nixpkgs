@@ -10,6 +10,7 @@
   dotnetCorePackages,
   xmlstarlet,
   patchNupkgs,
+  symlinkJoin,
 
   releaseManifestFile,
   tarballHash,
@@ -21,20 +22,19 @@ let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  dotnetSdk = callPackage bootstrapSdk { };
-
-  deps = mkNugetDeps {
-    name = "dotnet-vmr-deps";
-    sourceFile = depsFile;
-  };
-
-  sdkPackages = dotnetSdk.packages.override {
-    installable = true;
+  sdkPackages = symlinkJoin {
+    name = "${bootstrapSdk.name}-packages";
+    paths = map (
+      p:
+      p.override {
+        installable = true;
+      }
+    ) bootstrapSdk.packages;
   };
 
   vmr =
     (mkVMR {
-      inherit releaseManifestFile tarballHash dotnetSdk;
+      inherit releaseManifestFile tarballHash bootstrapSdk;
     }).overrideAttrs
       (old: rec {
         prebuiltPackages = mkNugetDeps {

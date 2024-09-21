@@ -27,7 +27,7 @@
   unzip,
   yq,
 
-  dotnetSdk,
+  bootstrapSdk,
   releaseManifestFile,
   tarballHash,
 }:
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       # this gets copied into the tree, but we still want the hooks to run
-      dotnetSdk
+      bootstrapSdk
       # the propagated build inputs in llvm.dev break swift compilation
       llvm.out
       zlib
@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       # set the sdk version in global.json to match the bootstrap sdk
-      jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$(${dotnetSdk}/bin/dotnet --version)" > global.json~
+      jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$(${bootstrapSdk}/bin/dotnet --version)" > global.json~
       mv global.json{~,}
 
       patchShebangs $(find -name \*.sh -type f -executable)
@@ -334,7 +334,7 @@ stdenv.mkDerivation rec {
     "--no-artifacts"
     "--no-prebuilts"
     "--with-packages"
-    dotnetSdk.artifacts
+    bootstrapSdk.artifacts
   ];
 
   configurePhase =
@@ -346,7 +346,7 @@ stdenv.mkDerivation rec {
 
       # The build process tries to overwrite some things in the sdk (e.g.
       # SourceBuild.MSBuildSdkResolver.dll), so it needs to be mutable.
-      cp -Tr ${dotnetSdk} .dotnet
+      cp -Tr ${bootstrapSdk} .dotnet
       chmod -R +w .dotnet
 
       ${prepScript} $prepFlags
@@ -369,7 +369,7 @@ stdenv.mkDerivation rec {
   buildFlags =
     [
       "--with-packages"
-      dotnetSdk.artifacts
+      bootstrapSdk.artifacts
       "--clean-while-building"
       "--release-manifest"
       releaseManifestFile

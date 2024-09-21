@@ -40,10 +40,10 @@ buildEnv {
     inherit (cli) icu;
 
     versions = lib.catAttrs "version" dotnetPackages;
-    packages = symlinkJoin {
-      name = "combined-packages";
-      paths = lib.remove null (lib.catAttrs "packages" dotnetPackages);
-    };
+    packages = lib.concatLists (lib.catAttrs "packages" dotnetPackages);
+    targetPackages = lib.zipAttrsWith (_: lib.concatLists) (
+      lib.catAttrs "targetPackages" dotnetPackages
+    );
   };
 
   inherit (cli) meta;
