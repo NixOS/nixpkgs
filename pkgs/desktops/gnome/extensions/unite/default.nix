@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-unite";
-  version = "79";
+  version = "80";
 
   src = fetchFromGitHub {
     owner = "hardpixel";
     repo = "unite-shell";
     rev = "v${version}";
-    hash = "sha256-OyxNibjQn7VBEdAPUaGd0MEgzCzpaFqViMKhF52haUI=";
+    hash = "sha256-mK5EoGlfJ6JGQkKuYFg1wxwyL5p+woIlJfkj9UWozio=";
   };
 
   passthru = {
