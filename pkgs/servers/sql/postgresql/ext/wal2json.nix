@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, callPackage, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "wal2json";
@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     install -D -t $out/lib *${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension sql/*.sql
   '';
+
+  passthru.tests.wal2json = lib.recurseIntoAttrs (callPackage ../../../../../nixos/tests/postgresql-wal2json.nix {
+    inherit (stdenv) system;
+    inherit postgresql;
+  });
 
   meta = with lib; {
     description = "PostgreSQL JSON output plugin for changeset extraction";

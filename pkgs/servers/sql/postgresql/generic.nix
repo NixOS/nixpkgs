@@ -48,7 +48,7 @@ let
     pname = "postgresql";
 
     stdenv' =
-      if jitSupport then
+      if jitSupport && !stdenv.cc.isClang then
         overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
           # LLVM bintools are not used by default, but are needed to make -flto work below.
           bintools = llvmPackages.bintools;
@@ -132,7 +132,6 @@ let
     # and allows splitting them cleanly.
     env.CFLAGS = "-fdata-sections -ffunction-sections"
       + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections")
-      + lib.optionalString (stdenv'.isDarwin && jitSupport) " -fuse-ld=lld"
       # Makes cross-compiling work when xml2-config can't be executed on the host.
       # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
       + lib.optionalString (olderThan "13") " -I${libxml2.dev}/include/libxml2";

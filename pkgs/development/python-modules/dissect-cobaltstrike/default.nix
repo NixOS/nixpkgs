@@ -78,5 +78,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
+    # Compatibility with dissect.struct 4.x
+    # https://github.com/fox-it/dissect.cobaltstrike/issues/53
+    broken = versionAtLeast dissect-cstruct.version "4";
   };
 }
