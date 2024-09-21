@@ -253,15 +253,12 @@ let
     inherit (pkgs.darwin) bootstrapStdenv xcodeProjectCheckHook;
   };
 
-  # Only used for bootstrapping. It’s convenient because it was the last version to come with a real makefile.
-  adv_cmds-boot = applePackage "adv_cmds/boot.nix" "osx-10.5.8" "sha256-/OJLNpATyS31W5nWfJgSVO5itp8j55TRwG57/QLT5Fg=" {};
-
 in
 
 developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     # TODO: shorten this list, we should cut down to a minimum set of bootstrap or necessary packages here.
 
-    inherit (adv_cmds-boot) ps locale;
+    inherit (self.adv_cmds) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "sha256-cUKeMx6mOAxBSRHIdfzsrR65Qv86m7+20XvpKqVfwVI=" {};
     AvailabilityVersions = applePackage "AvailabilityVersions" "macos-14.4" "sha256-O9/EOsbK5ZXxh6iDSTwGWWrY5GX/viUwdfG3tdvZwcQ=" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "sha256-CW8zP5QZMhWTGp+rhrm8oHE/vSLsRlv1VRAGe1OUDmI=" {};
@@ -311,7 +308,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     else macosPackages_11_0_1.xnu;
     hfs             = applePackage "hfs"               "osx-10.12.6"     "sha256-eGi18HQFJrU5UHoBOE0LqO5gQ0xOf8+OJuAWQljfKE4=" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "sha256-YHbGws901xONzAbo6sB5zSea4Wp0sgYUJ8YgwVfWxnE=" {};
-    adv_cmds        = applePackage "adv_cmds"          "osx-10.11.6"     "sha256-Ztp8ALWcviEpthoiY8ttWzGI8OcsLzsULjlqe8GIzw8=" {};
+    adv_cmds        = callPackage ./adv_cmds/package.nix { };
     basic_cmds      = applePackage "basic_cmds"        "osx-10.11.6"     "sha256-BYPPTg4/7x6RPs0WwwQlkNiZxxArV+7EVe6bM+a/I6Q=" {};
     developer_cmds  = applePackage "developer_cmds"    "osx-10.11.6"     "sha256-h0wMVlS6QdRvKOVJ74W9ziHYGApjvnk77AIR6ukYBRo=" {};
     diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "sha256-VX+hcZ7JhOA8EhwLloPlM3Yx79RXp9OYHV9Mi10uw3Q=" {
