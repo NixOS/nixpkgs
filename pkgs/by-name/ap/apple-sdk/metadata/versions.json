@@ -14,6 +14,11 @@
     "version": "10.14.6",
     "hash": "sha256-NMNkycIl3AVZCw0ZpHNkaeYVS9LAZVSddHw5loL9dhk="
   },
+  "10.15": {
+    "url": "https://swcdn.apple.com/content/downloads/50/51/071-29699-A_YC8SX0OHH3/7479xojqghsvgtnt3dxjpnxuz9sjpmbmds/CLTools_macOSLMOS_SDK.pkg",
+    "version": "10.15.6",
+    "hash": "sha256-mPJQC+v4yNiOCKLQfhidB2WH2MMclSCP1odvOoGdVPw="
+  },
   "11": {
     "url": "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOSNMOS_SDK.pkg",
     "version": "11.3",
