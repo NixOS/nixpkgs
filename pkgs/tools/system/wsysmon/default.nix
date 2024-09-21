@@ -1,13 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, pkg-config
-, gtkmm3
-, gtk3
-, procps
-, spdlog
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  gtkmm3,
+  gtk3,
+  procps,
+  spdlog,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,15 +18,12 @@ stdenv.mkDerivation rec {
     owner = "slyfabi";
     repo = "wsysmon";
     rev = version;
-    sha256 = "sha256-5kfZT+hm064qXoAzi0RdmUqXi8VaXamlbm+FJOrGh3A=";
+    hash = "sha256-5kfZT+hm064qXoAzi0RdmUqXi8VaXamlbm+FJOrGh3A=";
   };
 
   patches = [
-    # Prevent CMake from trying to fetch libraries from GitHub
-    (substituteAll {
-      src = ./dependencies.patch;
-      spdlog_src = spdlog.src;
-    })
+    # Dynamically link spdlog
+    ./dependencies.patch
     # Add an installPhase
     ./install.patch
   ];
