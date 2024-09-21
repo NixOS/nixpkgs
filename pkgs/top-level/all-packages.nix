@@ -2116,7 +2116,7 @@ with pkgs;
 
   bitbucket-server-cli = callPackage ../applications/version-management/bitbucket-server-cli { };
 
-  bump2version = python3Packages.callPackage ../applications/version-management/bump2version { };
+  bump2version = with python3Packages; toPythonApplication bump2version;
 
   cgit = callPackage ../applications/version-management/cgit { };
 
@@ -9513,7 +9513,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  nanoemoji = python3Packages.callPackage ../tools/misc/nanoemoji { };
+  nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
   nagelfar = callPackage ../development/tools/nagelfar { };
 
