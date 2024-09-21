@@ -18,14 +18,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gromit-mpx";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-olDQGw0qDWwXpqRopVoEPDXLRpFiiBo+/jiVeL7R6QA=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     mainProgram = "gromit-mpx";
   };
-}
+})
