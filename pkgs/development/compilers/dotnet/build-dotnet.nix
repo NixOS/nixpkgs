@@ -206,5 +206,9 @@ mkCommon type rec {
     ];
     mainProgram = "dotnet";
     platforms = attrNames srcs;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
   };
 }
