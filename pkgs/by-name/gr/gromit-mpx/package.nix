@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/bk138/gromit-mpx";
     changelog = "https://github.com/bk138/gromit-mpx/blob/${finalAttrs.version}/NEWS.md";
-    maintainers = with maintainers; [ pjones ];
+    maintainers = with maintainers; [
+      pjones
+      gepbird
+    ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     mainProgram = "gromit-mpx";
