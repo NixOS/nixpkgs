@@ -341,4 +341,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
     Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
+
+    libsbuf = callPackage ./libsbuf/package.nix { };
 }
