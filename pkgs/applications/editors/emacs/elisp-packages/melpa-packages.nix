@@ -364,6 +364,13 @@ let
 
         forge = buildWithGit super.forge;
 
+        gnuplot-mode = super.gnuplot-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace gnuplot-mode.el \
+              --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+          '';
+        });
+
         magit = buildWithGit super.magit;
 
         magit-find-file = buildWithGit super.magit-find-file;
