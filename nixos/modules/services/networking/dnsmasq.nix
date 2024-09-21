@@ -20,13 +20,7 @@ let
     listsAsDuplicateKeys = true;
   };
 
-  # Because formats.generate is outputting a file, we use of conf-file. Once
-  # `extraConfig` is deprecated we can just use
-  # `dnsmasqConf = format.generate "dnsmasq.conf" cfg.settings`
-  dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
-    conf-file=${settingsFormat.generate "dnsmasq.conf" cfg.settings}
-    ${cfg.extraConfig}
-  '';
+  dnsmasqConf = settingsFormat.generate "dnsmasq.conf" cfg.settings;
 
 in
 
@@ -34,6 +28,7 @@ in
 
   imports = [
     (lib.mkRenamedOptionModule [ "services" "dnsmasq" "servers" ] [ "services" "dnsmasq" "settings" "server" ])
+    (lib.mkRemovedOptionModule [ "services" "dnsmasq" "extraConfig" ] "This option has been replaced by `services.dnsmasq.settings`")
   ];
 
   ###### interface
@@ -104,17 +99,6 @@ in
         '';
       };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-          Extra configuration directives that should be added to
-          `dnsmasq.conf`.
-
-          This option is deprecated, please use {option}`settings` instead.
-        '';
-      };
-
     };
 
   };
@@ -123,8 +107,6 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-
-    warnings = lib.optional (cfg.extraConfig != "") "Text based config is deprecated, dnsmasq now supports `services.dnsmasq.settings` for an attribute-set based config";
 
     services.dnsmasq.settings = {
       dhcp-leasefile = lib.mkDefault "${stateDir}/dnsmasq.leases";
