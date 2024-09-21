@@ -1,0 +1,12 @@
+{
+  "10.12": {
+    "url": "http://swcdn.apple.com/content/downloads/22/62/041-88607/wg8avdk0jo75k9a13gentz9stwqgrqmcv6/CLTools_SDK_OSX1012.pkg",
+    "version": "10.12.2",
+    "hash": "sha256-Jf2WIB9bY/rPwe0AOW3YWJY/6EqVe41yhezdTGOO3M8="
+  },
+  "11": {
+    "url": "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOSNMOS_SDK.pkg",
+    "version": "11.3",
+    "hash": "sha256-/go8utcx3jprf6c8V/DUbXwsmNYSFchOAai1OaJs3Bg="
+  }
+}
