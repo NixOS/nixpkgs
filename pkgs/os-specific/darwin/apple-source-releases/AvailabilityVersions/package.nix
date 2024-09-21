@@ -29,7 +29,6 @@ mkAppleDerivation (finalAttrs: {
     declare -a unifdef_sources=(
       os_availability.modulemap
       os_availability_private.modulemap
-      AvailabilityPrivate.modulemap
     )
     unifdef -x2 -UBUILD_FOR_DRIVERKIT -m $(for x in "''${unifdef_sources[@]}"; do echo templates/$x; done)
 
