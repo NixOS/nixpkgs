@@ -15,18 +15,19 @@
   at-spi2-core,
   dbus,
   libdbusmenu,
+  lz4,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gromit-mpx";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
     rev = finalAttrs.version;
-    sha256 = "sha256-olDQGw0qDWwXpqRopVoEPDXLRpFiiBo+/jiVeL7R6QA=";
+    sha256 = "sha256-jHw4V2ZvfpT3PUihe/O+9BPsv+udFg5seMbYmxOz8Yk=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     dbus
     libdbusmenu
+    lz4
   ];
 
   meta = with lib; {
