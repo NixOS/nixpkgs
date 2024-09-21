@@ -93,9 +93,12 @@ makeScopeWithSplicing' {
         else appleSourcePackages
     ) Security;
   };
+
+  stubs = lib.genAttrs [
+  ] (mkStub apple_sdk.version);
 in
 
-impure-cmds // appleSourcePackages // chooseLibs // {
+impure-cmds // appleSourcePackages // chooseLibs // stubs // {
 
   inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
 
