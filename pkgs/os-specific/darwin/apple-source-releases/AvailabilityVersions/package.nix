@@ -8,6 +8,7 @@
 
 let
   inherit (buildPackages) gnused python3;
+  xnu = apple-sdk.sourceRelease "xnu";
 in
 mkAppleDerivation (finalAttrs: {
   releaseName = "AvailabilityVersions";
@@ -47,6 +48,16 @@ mkAppleDerivation (finalAttrs: {
       --replace-fail 'f"{os.path.abspath(os.path.dirname(sys.argv[0]))}/' "\"$out/share/availability/"
     chmod a+x "$out/libexec/availability"
 
+    substitute ${xnu}/bsd/sys/make_symbol_aliasing.sh "$out/libexec/make_symbol_aliasing.sh" \
+    ${
+      if lib.versionOlder (lib.getVersion xnu) "6153.11.26" then
+        ''--replace-fail "\''${SDKROOT}/usr/local/libexec/availability.pl" "$out/libexec/availability" \''
+      else
+        ''--replace-fail "\''${SDKROOT}/\''${DRIVERKITROOT}/usr/local/libexec/availability.pl" "$out/libexec/availability" \''
+    }
+      --replace-fail '--macosx' '--macosx --threshold $SDKROOT'
+    chmod a+x "$out/libexec/make_symbol_aliasing.sh"
+
     cat <<SCRIPT > "$out/bin/gen-headers"
     #!/usr/bin/env bash
     set -eu
@@ -70,6 +81,8 @@ mkAppleDerivation (finalAttrs: {
         --threshold "\$threshold" \\
         --preprocess "$out/share/availability/templates/\$header_src" "\$dest/include/\$header"
     done
+
+    "$out/libexec/make_symbol_aliasing.sh" \$threshold "\$dest/include/sys/_symbol_aliasing.h"
 
     # __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__ is only defined by clang 17+, so define it for older versions.
     ${lib.getExe gnused} -E '/#ifndef __MAC_OS_X_VERSION_MIN_REQUIRED/{
