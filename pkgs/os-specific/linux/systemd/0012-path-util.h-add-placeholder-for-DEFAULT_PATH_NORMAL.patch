@@ -19,8 +19,8 @@ index fcb3aa9399..b9e69cbf91 100644
  
 -#define DEFAULT_PATH_WITH_SBIN PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/")
 -#define DEFAULT_PATH_WITHOUT_SBIN PATH_MERGED_BIN("/usr/local/") ":" PATH_MERGED_BIN("/usr/")
-+#define DEFAULT_PATH_WITH_SBIN "@defaultPathNormal@"
-+#define DEFAULT_PATH_WITHOUT_SBIN DEFAULT_PATH_WITH_SBIN
++#define DEFAULT_PATH_WITH_SBIN "@defaultPathNormal@:" PATH_SPLIT_BIN("/run/current-system/sw/")
++#define DEFAULT_PATH_WITHOUT_SBIN "@defaultPathNormal@:" PATH_MERGED_BIN("/run/current-system/sw/")
  
 -#define DEFAULT_PATH_COMPAT PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/") ":" PATH_SPLIT_BIN("/")
 +#define DEFAULT_PATH_COMPAT DEFAULT_PATH_WITH_SBIN
