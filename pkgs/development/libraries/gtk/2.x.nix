@@ -28,6 +28,12 @@
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , cupsSupport ? config.gtk2.cups or stdenv.isLinux
 , xineramaSupport ? stdenv.isLinux
+
+# for passthru.tests
+, gimp
+, gtk-sharp-2_0
+, gtkmm2
+, gtkspell2
 }:
 
 let
@@ -136,7 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
     ''; # workaround for bug of nix-mode for Emacs */ '';
     inherit gdktarget;
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      inherit
+        gimp
+        gtk-sharp-2_0
+        gtkmm2
+        gtkspell2
+      ;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {
