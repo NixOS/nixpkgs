@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   libglut,
   libX11,
   libXt,
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gle";
-  version = "3.1.0";
+  version = "3.1.2";
 
   buildInputs = [
     libGLU
@@ -27,12 +28,15 @@ stdenv.mkDerivation rec {
     libXext
   ];
 
-  src = fetchurl {
-    urls = [
-      "mirror://sourceforge/project/gle/gle/gle-${version}/gle-${version}.tar.gz"
-      "https://www.linas.org/gle/pub/gle-${version}.tar.gz"
-      ];
-    sha256 = "09zs1di4dsssl9k322nzildvf41jwipbzhik9p43yb1bcfsp92nw";
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  src = fetchFromGitHub {
+    owner = "linas";
+    repo = "glextrusion";
+    rev = "refs/tags/${pname}-${version}";
+    sha256 = "sha256-yvCu0EOwxOMN6upeHX+C2sIz1YVjjB/320g+Mf24S6g=";
   };
 
   meta = {
