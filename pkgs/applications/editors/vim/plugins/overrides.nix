@@ -1283,6 +1283,10 @@
     dependencies = with self; [ nvim-dap ];
   };
 
+  nvim-dap-rego = super.nvim-dap-rego.overrideAttrs {
+    dependencies = with self; [ nvim-dap ];
+  };
+
   nvim-dap-ui = super.nvim-dap-ui.overrideAttrs {
     dependencies = with self; [ nvim-dap nvim-nio ];
 
