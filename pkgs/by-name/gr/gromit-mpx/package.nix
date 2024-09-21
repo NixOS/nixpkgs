@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bk138";
     repo = "gromit-mpx";
     rev = finalAttrs.version;
-    sha256 = "sha256-jHw4V2ZvfpT3PUihe/O+9BPsv+udFg5seMbYmxOz8Yk=";
+    hash = "sha256-jHw4V2ZvfpT3PUihe/O+9BPsv+udFg5seMbYmxOz8Yk=";
   };
 
   nativeBuildInputs = [
