@@ -14,17 +14,19 @@ let
     inherit lib stdenv rsync runCommand testers;
     jdk = jdk17;
     gradle = gradle_7;
-    version = "17.0.11.9.1";
+    version = "17.0.12.7.1";
     src = fetchFromGitHub {
       owner = "corretto";
       repo = "corretto-17";
       rev = version;
-      sha256 = "sha256-LxZSFILFfyh8oBiYEnuBQ0Og2i713qdK2jIiCBnrlj0=";
+      sha256 = "sha256-aRn1hqaqNsBkp2jHHkwMKc8cNiBM+TYVm3tVMPJJ1YE=";
     };
   };
 in
 corretto.overrideAttrs (final: prev: {
-  # HACK: Removes the FixNullPtrCast patch, as it fails to apply. Need to figure out what causes it to fail to apply.
+  # Corretto17 has incorporated this patch already so it fails to apply.
+  # We thus skip it here.
+  # See https://github.com/corretto/corretto-17/pull/158
   patches = lib.remove
     (fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
