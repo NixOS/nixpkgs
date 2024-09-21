@@ -104,6 +104,11 @@ buildPythonPackage rec {
     "test_modified_bessel_first_kind_vect"
     "test_periodic_gp_one_dim_model"
     "test_no_tracer_leak_at_lazy_property_sample"
+
+    # flaky on darwin
+    # TODO: uncomment at next release (0.15.4) as it has been fixed:
+    # https://github.com/pyro-ppl/numpyro/pull/1863
+    "test_change_point_x64"
   ];
 
   disabledTestPaths = [
