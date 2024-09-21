@@ -7053,6 +7053,13 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+  fnune = {
+    email = "fausto.nunez@mailbox.org";
+    github = "fnune";
+    githubId = 16181067;
+    name = "Fausto Núñez Alberro";
+    keys = [ { fingerprint = "668E 01D1 B129 3F42 0A0F  933A C880 6451 94A2 D562"; } ];
+  };
   foo-dogsquared = {
     email = "foodogsquared@foodogsquared.one";
     github = "foo-dogsquared";
