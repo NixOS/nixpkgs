@@ -13123,6 +13123,8 @@ self: super: with self; {
 
   pyyardian = callPackage ../development/python-modules/pyyardian { };
 
+  pyytlounge = callPackage ../development/python-modules/pyytlounge { };
+
   pyzabbix = callPackage ../development/python-modules/pyzabbix { };
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
