@@ -86,7 +86,7 @@ stdenv.mkDerivation (
                 unpackPhase = ''
                   mkdir test
                   cd test
-                  dotnet new ${template} -o .
+                  dotnet new ${template} -o . --no-restore
                 '';
                 buildPhase = build;
                 dontPatchELF = true;
