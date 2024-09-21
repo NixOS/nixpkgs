@@ -3,8 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   pkg-config,
+  setuptools,
   pango,
   cython,
   AppKit,
@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "manimpango";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -30,17 +30,20 @@ buildPythonPackage rec {
 
   buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
-  propagatedBuildInputs = [ cython ];
+  build-system = [
+    setuptools
+    cython
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -r manimpango
+  '';
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "--cov --no-cov-on-fail" ""
-  '';
-
-  preBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
   pythonImportsCheck = [ "manimpango" ];
