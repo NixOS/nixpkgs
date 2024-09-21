@@ -124,8 +124,6 @@ buildPythonPackage {
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
-    # Tests are currently failing because backend is unavailable and causes tests to fail
-    # Progress tracked in https://github.com/NixOS/nixpkgs/pull/264902
     broken = lib.versionAtLeast protobuf.version "26";
   };
 }
