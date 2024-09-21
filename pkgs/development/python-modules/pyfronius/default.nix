@@ -36,5 +36,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/nielstron/pyfronius/releases/tag/release-${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    # https://github.com/nielstron/pyfronius/issues/18
+    broken = versionAtLeast aiohttp.version "3.10.1";
   };
 }
