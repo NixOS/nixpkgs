@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "24.1.3";
+  version = "24.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,22 +25,22 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "pytest-ansible";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pQNm7Q9NAc/jLlR6f0132tpXyBoQaKpm7JoEgqOJL8U=";
+    hash = "sha256-OlRWtKMgcZCDCFcUl3YXzG/ERPfx2KBEaKNf0strgCU=";
   };
 
   postPatch = ''
-    substituteInPlace tests/conftest.py inventory \
-      --replace '/usr/bin/env' '${coreutils}/bin/env'
+    substituteInPlace inventory \
+      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ansible-core
     ansible-compat
     packaging

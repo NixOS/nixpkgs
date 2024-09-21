@@ -5,8 +5,7 @@
 , cmake
 , zlib
 , ncurses
-, swig3
-, swig4
+, swig
 , which
 , libedit
 , libxml2
@@ -30,16 +29,18 @@
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } ''
+      runCommand "lldb-src-${version}" { } (''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/lldb "$out"
-      '' else src;
+      '' + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+        mkdir -p "$out/llvm"
+        cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+      '') else src;
   vscodeExt = {
     name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
     version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
   };
-  swig = if lib.versionAtLeast release_version "18" then swig4 else swig3;
 in
 
 stdenv.mkDerivation (rec {
@@ -183,10 +184,7 @@ stdenv.mkDerivation (rec {
       larger LLVM Project, such as the Clang expression parser and LLVM
       disassembler.
     '';
-    # llvm <10 never built on aarch64-darwin since first introduction in nixpkgs
-    broken =
-      (lib.versionOlder release_version "11" && stdenv.isDarwin && stdenv.isAarch64)
-        || (((lib.versions.major release_version) == "13") && stdenv.isDarwin);
+    broken = lib.versionOlder release_version "14";
     mainProgram = "lldb";
   };
 } // lib.optionalAttrs enableManpages {

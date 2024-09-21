@@ -3,28 +3,34 @@ dotnetCheckHook() {
 
     runHook preCheck
 
-    local -r hostRuntimeId=@runtimeId@
     local -r dotnetBuildType="${dotnetBuildType-Release}"
-    local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
 
     if [[ -n $__structuredAttrs ]]; then
         local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
         local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
         local dotnetTestFlagsArray=( "${dotnetTestFlags[@]}" )
+        local dotnetTestFiltersArray=( "${dotnetTestFilters[@]}" )
         local dotnetDisabledTestsArray=( "${dotnetDisabledTests[@]}" )
         local dotnetRuntimeDepsArray=( "${dotnetRuntimeDeps[@]}" )
+        local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
     else
         local dotnetProjectFilesArray=($dotnetProjectFiles)
         local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
         local dotnetTestFlagsArray=($dotnetTestFlags)
+        local dotnetTestFiltersArray=($dotnetTestFilters)
         local dotnetDisabledTestsArray=($dotnetDisabledTests)
         local dotnetRuntimeDepsArray=($dotnetRuntimeDeps)
+        local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
     fi
 
     if (( ${#dotnetDisabledTestsArray[@]} > 0 )); then
         local disabledTestsFilters=("${dotnetDisabledTestsArray[@]/#/FullyQualifiedName!=}")
+        dotnetTestFiltersArray=( "${dotnetTestFiltersArray[@]}" "${disabledTestsFilters[@]//,/%2C}" )
+    fi
+
+    if (( ${#dotnetTestFiltersArray[@]} > 0 )); then
         local OLDIFS="$IFS" IFS='&'
-        dotnetTestFlagsArray+=("--filter:${disabledTestsFilters[*]//,/%2C}")
+        dotnetTestFlagsArray+=("--filter:${dotnetTestFiltersArray[*]}")
         IFS="$OLDIFS"
     fi
 
@@ -42,24 +48,26 @@ dotnetCheckHook() {
         local -r maxCpuFlag="1"
     fi
 
-    local projectFile
+    local projectFile runtimeId
     for projectFile in "${dotnetTestProjectFilesArray[@]-${dotnetProjectFilesArray[@]}}"; do
-        local runtimeIdFlagsArray=()
-        if [[ $projectFile == *.csproj ]]; then
-            runtimeIdFlagsArray=("--runtime" "$dotnetRuntimeId")
-        fi
+        for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+            local runtimeIdFlagsArray=()
+            if [[ $projectFile == *.csproj ]]; then
+                runtimeIdFlagsArray=("--runtime" "$runtimeId")
+            fi
 
-        LD_LIBRARY_PATH=$libraryPath \
-            dotnet test "$projectFile" \
-              -maxcpucount:"$maxCpuFlag" \
-              -p:ContinuousIntegrationBuild=true \
-              -p:Deterministic=true \
-              --configuration "$dotnetBuildType" \
-              --no-build \
-              --logger "console;verbosity=normal" \
-              "${runtimeIdFlagsArray[@]}" \
-              "${dotnetTestFlagsArray[@]}" \
-              "${dotnetFlagsArray[@]}"
+            LD_LIBRARY_PATH=$libraryPath \
+                dotnet test "$projectFile" \
+                -maxcpucount:"$maxCpuFlag" \
+                -p:ContinuousIntegrationBuild=true \
+                -p:Deterministic=true \
+                --configuration "$dotnetBuildType" \
+                --no-build \
+                --logger "console;verbosity=normal" \
+                "${runtimeIdFlagsArray[@]}" \
+                "${dotnetTestFlagsArray[@]}" \
+                "${dotnetFlagsArray[@]}"
+        done
     done
 
     runHook postCheck

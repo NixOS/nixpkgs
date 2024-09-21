@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd twm \
       --bash <($out/bin/twm --print-bash-completion) \
       --zsh <($out/bin/twm --print-zsh-completion) \
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Customizable workspace manager for tmux";
     homepage = "https://github.com/vinnymeller/twm";
-    changelog = "https://github.com/vinnymeller/twm/releases/tag/${src.rev}";
+    changelog = "https://github.com/vinnymeller/twm/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers =  [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";

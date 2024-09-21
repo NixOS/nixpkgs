@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamemode";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "FeralInteractive";
     repo = "gamemode";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-kusb58nGxYA3U9GbZdW3hLjA3NmHc+af0VT4iGRewBw=";
+    hash = "sha256-JkDFhFLUHlgD6RKxlxMjrSF2zQ4AWmRUQMLbWYwIZmg=";
   };
 
   outputs = [ "out" "dev" "lib" "man" ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--libexecdir=libexec"
   ];
 
-  doCheck = false; # https://github.com/FeralInteractive/gamemode/issues/468
+  doCheck = true;
   nativeCheckInputs = [
     appstream
   ];
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Optimise Linux system performance on demand";
-    homepage = "https://github.com/FeralInteractive/gamemode";
+    homepage = "https://feralinteractive.github.io/gamemode";
     changelog = "https://github.com/FeralInteractive/gamemode/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kira-bruneau ];

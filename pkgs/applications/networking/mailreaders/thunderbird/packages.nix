@@ -21,7 +21,7 @@ let
       description = "Full-featured e-mail client";
       homepage = "https://thunderbird.net/";
       mainProgram = "thunderbird";
-      maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
+      maintainers = with maintainers; [ lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
@@ -47,11 +47,11 @@ let
   };
 
 in rec {
-  thunderbird = thunderbird-115;
+  thunderbird = thunderbird-128;
 
   thunderbird-115 = common {
-    version = "115.13.0";
-    sha512 = "98ee23f684aa7a166878459a6a217bf3bcc4ddd8fa8ebbd0a1d2d66392ec1ebff67dbad55d145cdd0771539f127d91c4137211cf4efc80e450e6a34c95e8529c";
+    version = "115.15.0";
+    sha512 = "b161b99e09b6d1ba833f77264e35034ad199438b4fc88d244a6b68c84693fa2e90fbab60dafb827a2e23b37c484f9843a58751d93826ba7cdd0391114d253de2";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-115";
@@ -60,8 +60,8 @@ in rec {
   };
 
   thunderbird-128 = common {
-    version = "128.0esr";
-    sha512 = "8524fbdcc51eddf83fec439273319315c44e6d3be9e4dcf51e453ced7fd1676abdca44442dcb302c637a98b7873828168f2d2d2b635551e406645a134d09aee0";
+    version = "128.1.1esr";
+    sha512 = "91e17d63383b05a7565838c61eda3b642f1bb3b4c43ae78a8810dd6d9ba2e5f10939be17598dd5e87bdf28d6f70ff9e154e54218aaf161bd89a5a6d30b504427";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

@@ -10,6 +10,7 @@ let
   # uses eliot in a way incompatible after version 1.14.0.
   # These versions should be unpinned, when updating Tahoe-LAFS to a more recent version.
   python = python311.override {
+    self = python;
     packageOverrides = self: super: {
       eliot = super.eliot.overridePythonAttrs (oldAttrs: rec {
         version = "1.14.0";

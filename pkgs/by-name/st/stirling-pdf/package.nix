@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.25.1";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DgQLn4+uBAF8/c3G6ckkq/0gtJEE9GPHd1d/xB6omlA=";
+    hash = "sha256-88UdJPn9AeLtpKEu3efHm+xj4lheQ0EPyvId4vYskIo=";
   };
 
   patches = [
@@ -35,12 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   # disable spotless because it tries to fetch files not in deps.json
   # and also because it slows down the build process
-  gradleFlags = [ "-x" "spotlessApply" ];
+  gradleFlags = [
+    "-x"
+    "spotlessApply"
+  ];
 
   doCheck = true;
 
   nativeBuildInputs = [
     gradle
+    gradle.jdk # one of the tests also require that the `java` command is available on the command line
     makeWrapper
   ];
 
@@ -54,8 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
     description = "Locally hosted web application that allows you to perform various operations on PDF files";
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
     license = lib.licenses.gpl3Only;

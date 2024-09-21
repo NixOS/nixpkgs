@@ -17,6 +17,7 @@
 , vulkan-volk
 , wayland
 , wayland-protocols
+, wayland-scanner
 , moltenvk
 , AppKit
 , Cocoa
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.283.0";
+  version = "1.3.290.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-IAlqFCenv5e70XyLSYh2fE84JZQFJwg+YKTGaK7ShKA=";
+    hash = "sha256-8xuE4OTwtH8ckCKDU7oo0WI7/R4Ox53+j+F+ZuKysKI=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     libXrandr
     wayland
     wayland-protocols
+    wayland-scanner
   ] ++ lib.optionals stdenv.isDarwin [
     moltenvk
     moltenvk.dev
@@ -64,14 +66,13 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER="${buildPackages.wayland-scanner}/bin/wayland-scanner";
+  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
 
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
-    "-DPKG_CONFIG_EXECUTABLE=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"

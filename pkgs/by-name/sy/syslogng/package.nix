@@ -33,6 +33,9 @@
 , libesmtp
 , rdkafka
 , gperf
+, withGrpc ? true
+, grpc
+, protobuf
 }:
 let
   python-deps = ps: with ps; [
@@ -61,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
     rev = "syslog-ng-${finalAttrs.version}";
-    hash = "sha256-runFMUxQv7B023I38QfGqn89ZbzA5vMXHOOkYwMxArI=";
+    hash = "sha256-sfCElufK80BU8I6pbdCJ+IlAPhSOt9MOYDy3E2hg5/A=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf python3Packages.setuptools ];
@@ -94,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     paho-mqtt-c
     hiredis
     rdkafka
-  ];
+  ] ++ (lib.optionals withGrpc [ protobuf grpc ]);
 
   configureFlags = [
     "--enable-manpages"
@@ -111,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--without-compile-date"
-  ];
+  ] ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
 
   outputs = [ "out" "man" ];
 

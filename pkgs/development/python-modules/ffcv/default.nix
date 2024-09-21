@@ -17,6 +17,7 @@
   psutil,
   torchvision,
   webdataset,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -108,5 +109,8 @@ buildPythonPackage rec {
       samuela
       djacu
     ];
+    # OSError: dlopen(libc.so.6, 0x0006): tried: '/usr/lib/libc.so.6' (no such file, not in dyld cache),
+    # 'libc.so.6' (no such file), '/usr/local/lib/libc.so.6' (no such file), '/usr/lib/libc.so.6' (no such file, not in dyld cache)
+    broken = stdenv.isDarwin;
   };
 }

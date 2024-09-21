@@ -3,7 +3,7 @@
 , fetchurl
 , lib
 , genericUpdater
-, go_1_21
+, go
 , perl
 , stdenv
 , writeShellScript
@@ -11,16 +11,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
-  version = "8.10.0";
+  version = "8.11.0";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
-    sha256 = "154e13ba15c0ea93f54525793b0699e496b2db7281e1555f08d785a528f3f7fc";
+    hash = "sha256-7EEUvNkYSqh4HzjbqjqgQlXfu6nDU2v3WWnma8M0r/I=";
   };
 
   nativeBuildInputs = [
-    go_1_21
+    go
   ];
 
   # Build parameters

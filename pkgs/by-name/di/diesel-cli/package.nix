@@ -27,15 +27,15 @@ assert lib.assertMsg (lib.elem true [
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.2.1";
+  version = "2.2.4";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-B+AHTJgOBUGVc4J2VcwuqVwAbm0wpsFHc9+gc5g2RAM=";
+    hash = "sha256-kTwAG1B4gy+1jj5ar5RkmIUMAO9wYsG7QnMcZii/OZk=";
   };
 
-  cargoHash = "sha256-HFhkePq2fZ7MxZfH0jLlS5B10jqf15+RUcGZnDbML5Q=";
+  cargoHash = "sha256-qcyNFuKJldHVJDAye4K1rHPf/SvpZ+BmqBast1vh/3Q=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   # Tests currently fail due to *many* duplicate definition errors
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd diesel \
       --bash <($out/bin/diesel completions bash) \
       --fish <($out/bin/diesel completions fish) \

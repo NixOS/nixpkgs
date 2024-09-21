@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kconfigwidgets";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
 }

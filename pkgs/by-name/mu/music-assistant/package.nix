@@ -9,6 +9,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       music-assistant-frontend = self.callPackage ./frontend.nix { };
     };
@@ -23,14 +24,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.0.7";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    rev = version;
-    hash = "sha256-JtdlZ3hH4fRU5TjmMUlrdSSCnLrIGCuSwSSrnLgjYEs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7PIyo3srKwftakDiaxvZjrzo/1I9LGUwG+QGfIU5pRA=";
   };
 
   patches = [
@@ -42,8 +43,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
   '';
@@ -70,6 +69,7 @@ python.pkgs.buildPythonApplication rec {
       certifi
       colorlog
       cryptography
+      eyed3
       faust-cchardet
       ifaddr
       mashumaro
@@ -86,10 +86,13 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeCheckInputs = with python.pkgs; [
-    ffmpeg-headless
+    aiojellyfin
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    syrupy
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "music_assistant" ];
 

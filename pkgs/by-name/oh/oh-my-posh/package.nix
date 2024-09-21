@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "21.17.2";
+  version = "23.12.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9+gzjDxkDMOy7r3M6MVepNJ44HJszyzYs5LrM8x3m6Q=";
+    hash = "sha256-9Yyq0tssLBcRKWFboDzJ0p7Z5WgeDb880KhX6w56+DE=";
   };
 
-  vendorHash = "sha256-yArae/1TxiQkNCkElFOHdujWzLCfltSV72I8tQKDyw8=";
+  vendorHash = "sha256-SXcBhjgANPi/eWkcYBUGmCKID/1jkdGq7Q8m/y1Euzc=";
 
   sourceRoot = "${src.name}/src";
 
@@ -38,7 +38,7 @@ buildGoModule rec {
 
   postPatch = ''
     # these tests requires internet access
-    rm engine/image_test.go engine/migrate_glyphs_test.go
+    rm image/image_test.go config/migrate_glyphs_test.go upgrade/notice_test.go
   '';
 
   postInstall = ''

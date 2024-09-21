@@ -7,8 +7,9 @@
 , ...
 }:
 
-with lib;
-
+let
+  inherit (lib) optional optionals optionalString;
+in
 stdenv.mkDerivation rec {
   version = "3.1.0";
   pname = "tengine";
@@ -22,9 +23,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ openssl zlib pcre libxcrypt libxml2 libxslt gd geoip gperftools jemalloc ]
-    ++ concatMap (mod: mod.inputs or []) modules;
+    ++ lib.concatMap (mod: mod.inputs or []) modules;
 
-  patches = singleton (substituteAll {
+  patches = lib.singleton (substituteAll {
     src = ../nginx/nix-etag-1.15.4.patch;
     preInstall = ''
       export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
     + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
 
-  preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
+  preConfigure = (lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
@@ -116,7 +117,7 @@ stdenv.mkDerivation rec {
     tests = nixosTests.nginx-variants.tengine;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Web server based on Nginx and has many advanced features, originated by Taobao";
     mainProgram = "nginx";
     homepage    = "https://tengine.taobao.org";

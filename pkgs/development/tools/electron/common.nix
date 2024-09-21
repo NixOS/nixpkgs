@@ -16,7 +16,7 @@
 , pipewire
 , libsecret
 , libpulseaudio
-, speechd
+, speechd-minimal
 , info
 }:
 
@@ -27,7 +27,7 @@ let
 
   fetchedDeps = lib.mapAttrs (name: fetchdep) info.deps;
 
-in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
+in ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
   buildTargets = [ "electron:electron_dist_zip" ];
@@ -169,12 +169,17 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_cet_shadow_stack = false;
     is_cfi = false;
     use_qt = false;
-    use_perfetto_client_library = false;
     v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
     dawn_use_built_dxc = false;
     v8_enable_private_mapping_fork_optimization = true;
     v8_expose_public_symbols = true;
+  } // lib.optionalAttrs (lib.versionOlder info.version "31") {
+    use_perfetto_client_library = false;
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "31") {
+    enable_dangling_raw_ptr_feature_flag = false;
+    clang_unsafe_buffers_paths = "";
+    enterprise_cloud_content_analysis = false;
   } // {
 
     # other
@@ -199,7 +204,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
         stdenv.cc.cc.lib
         libsecret
         libpulseaudio
-        speechd
+        speechd-minimal
       ];
     in
   base.postFixup + ''
@@ -238,5 +243,10 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     mainProgram = "electron";
     hydraPlatforms = lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version)) ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+  };
+})).overrideAttrs (finalAttrs: prevAttrs: {
+  # this was the only way I could get the package to properly reference itself
+  passthru = prevAttrs.passthru // {
+    dist = finalAttrs.finalPackage + "/libexec/electron";
   };
 })

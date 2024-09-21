@@ -32,6 +32,8 @@ buildPythonPackage rec {
     "test_pool_worker_exceptions"
     "test_pool_worker_max_tasks"
     "test_pool_worker_stop"
+    # error message changed with python 3.12
+    "test_spawn_method"
   ];
 
   pythonImportsCheck = [ "aiomultiprocess" ];

@@ -79,7 +79,8 @@ let
       fromHexString toHexString toBaseDigits inPureEvalMode isBool isInt pathExists
       genericClosure readFile;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
-      composeManyExtensions makeExtensible makeExtensibleWithCustomName;
+      composeManyExtensions makeExtensible makeExtensibleWithCustomName
+      toExtension;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
@@ -105,7 +106,7 @@ let
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs
       isStorePath isStringLike
-      isValidPosixName toShellVar toShellVars
+      isValidPosixName toShellVar toShellVars trim trimWith
       escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
@@ -123,7 +124,8 @@ let
     inherit (self.derivations) lazyDerivation optionalDrvAttr;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
-      hiPrioSet getLicenseFromSpdxId getExe getExe';
+      hiPrioSet licensesSpdx getLicenseFromSpdxId getLicenseFromSpdxIdOr
+      getExe getExe';
     inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile
       packagesFromDirectoryRecursive;
     inherit (self.sources) cleanSourceFilter

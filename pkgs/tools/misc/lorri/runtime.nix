@@ -2,7 +2,6 @@
   # Plumbing tools:
   closureInfo
 , runCommand
-, writeText
 , buildEnv
 , # Actual dependencies to propagate:
   bash

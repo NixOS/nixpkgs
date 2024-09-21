@@ -1,11 +1,11 @@
 # builder for Emacs packages built for packages.el
 # using MELPA package-build.el
 
-{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
+{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText }:
 
 let
-  handledArgs = [ "meta" "preUnpack" "postUnpack" ];
-  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; };
+  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText; };
+  libBuildHelper = import ./lib-build-helper.nix;
 
   packageBuild = stdenv.mkDerivation {
     name = "package-build";
@@ -29,6 +29,8 @@ let
 
 in
 
+libBuildHelper.extendMkDerivation' genericBuild (finalAttrs:
+
 { /*
     pname: Nix package name without special symbols and without version or
     "emacs-" prefix.
@@ -51,7 +53,7 @@ in
     This will be written into the generated package but it is not needed during
     the build process.
   */
-, commit ? (args.src.rev or "unknown")
+, commit ? (finalAttrs.src.rev or "unknown")
   /*
     files: Optional recipe property specifying the files used to build the package.
     If null, do not set it in recipe, keeping the default upstream behaviour.
@@ -61,25 +63,26 @@ in
   /*
     recipe: Optional MELPA recipe.
     Default: a minimally functional recipe
+    This can be a path of a recipe file, a string of the recipe content or an empty string.
+    The default value is used if it is an empty string.
   */
-, recipe ? (writeText "${pname}-recipe" ''
-    (${ename} :fetcher git :url ""
-              ${lib.optionalString (files != null) ":files ${files}"})
-  '')
+, recipe ? ""
 , preUnpack ? ""
 , postUnpack ? ""
 , meta ? {}
 , ...
 }@args:
 
-genericBuild ({
+{
 
-  elpa2nix = ./elpa2nix.el;
-  melpa2nix = ./melpa2nix.el;
+  elpa2nix = args.elpa2nix or ./elpa2nix.el;
+  melpa2nix = args.melpa2nix or ./melpa2nix.el;
 
-  inherit packageBuild commit ename recipe;
+  inherit commit ename files recipe;
 
-  melpaVersion =
+  packageBuild = args.packageBuild or packageBuild;
+
+  melpaVersion = args.melpaVersion or (
     let
       parsed = lib.flip builtins.match version
         # match <version>-unstable-YYYY-MM-DD format
@@ -90,13 +93,25 @@ genericBuild ({
     in
     if unstableVersionInNixFormat
     then date + "." + time
-    else version;
+    else finalAttrs.version);
 
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
-    if [ -n "$recipe" ]; then
-      cp "$recipe" "$NIX_BUILD_TOP/recipes/$ename"
+    recipeFile="$NIX_BUILD_TOP/recipes/$ename"
+    if [ -r "$recipe" ]; then
+      ln -s "$recipe" "$recipeFile"
+      nixInfoLog "link recipe"
+    elif [ -n "$recipe" ]; then
+      printf "%s" "$recipe" > "$recipeFile"
+      nixInfoLog "write recipe"
+    else
+      cat > "$recipeFile" <<'EOF'
+(${finalAttrs.ename} :fetcher git :url "" ${lib.optionalString (finalAttrs.files != null) ":files ${finalAttrs.files}"})
+EOF
+      nixInfoLog "use default recipe"
     fi
+    nixInfoLog "recipe content:" "$(< $recipeFile)"
+    unset -v recipeFile
 
     ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
 
@@ -108,10 +123,15 @@ genericBuild ({
     ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
   '' + postUnpack;
 
-  buildPhase = ''
+  buildPhase = args.buildPhase or ''
     runHook preBuild
 
-    cd "$NIX_BUILD_TOP"
+    # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
+    if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
+      foundMakefile=1
+    fi
+
+    pushd "$NIX_BUILD_TOP"
 
     emacs --batch -Q \
         -L "$NIX_BUILD_TOP/package-build" \
@@ -119,10 +139,12 @@ genericBuild ({
         -f melpa2nix-build-package \
         $ename $melpaVersion $commit
 
+    popd
+
     runHook postBuild
     '';
 
-  installPhase = ''
+  installPhase = args.installPhase or ''
     runHook preInstall
 
     archive="$NIX_BUILD_TOP/packages/$ename-$melpaVersion.el"
@@ -143,4 +165,4 @@ genericBuild ({
   } // meta;
 }
 
-// removeAttrs args handledArgs)
+)

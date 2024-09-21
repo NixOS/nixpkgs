@@ -4,19 +4,19 @@
 callPackage ./make-brave.nix (removeAttrs args [ "callPackage" ])
   (
     if stdenv.isAarch64 then
-      {
+      rec {
         pname = "brave";
-        version = "1.67.134";
-        url = "https://github.com/brave/brave-browser/releases/download/v1.67.134/brave-browser_1.67.134_arm64.deb";
-        hash = "sha256-5wa4y+3PlcrT+U7xiPjkXqhpFz1rC+wyH6q9blmjaCI=";
+        version = "1.70.117";
+        url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_arm64.deb";
+        hash = "sha256-FUomXWnIbuW8H0/r+fKEmMG8qO0vBAKUS9kijCbH5Mc=";
         platform = "aarch64-linux";
       }
     else if stdenv.isx86_64 then
-      {
+      rec {
         pname = "brave";
-        version = "1.67.134";
-        url = "https://github.com/brave/brave-browser/releases/download/v1.67.134/brave-browser_1.67.134_amd64.deb";
-        hash = "sha256-OJYPV3yJkqGh4OdX4lFZNrOxv33ysFQSTwYmlToXOq8=";
+        version = "1.70.117";
+        url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
+        hash = "sha256-54puHFpg3zqgORoqale9ZNgokn7q8fbI+240azFqrlQ=";
         platform = "x86_64-linux";
       }
     else

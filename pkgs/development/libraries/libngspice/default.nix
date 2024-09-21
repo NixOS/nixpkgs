@@ -7,15 +7,17 @@
 , withNgshared ? true
 , libXaw
 , libXext
+, llvmPackages
+, readline
 }:
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
-  version = "42";
+  version = "43";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    hash = "sha256-c3/jhGqyMzolDfrfHtbr4YYK8dil/154A8dyzEJW5Qo=";
+    hash = "sha256-FN1qbwhTHyBRwTrmN5CkVwi9Q/PneIamqEiYwpexNpk=";
   };
 
   nativeBuildInputs = [
@@ -25,9 +27,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fftw
+    readline
   ] ++ lib.optionals (!withNgshared) [
     libXaw
     libXext
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.openmp
   ];
 
   configureFlags = lib.optionals withNgshared [

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "sha256-DN1ExvQ5wcIUyhMAfiakFbZkDsx+5l8VMtYGvSdboPA=";
+    hash = "sha256-DN1ExvQ5wcIUyhMAfiakFbZkDsx+5l8VMtYGvSdboPA=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")) [
@@ -56,9 +56,7 @@ stdenv.mkDerivation rec {
     # ../../../server/TracyView.cpp:649:34, preventing building.
     ++ lib.optional stdenv.isDarwin "-Wno-format-security"
     ++ lib.optional stdenv.isLinux "-ltbb"
-    ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
-    # workaround issue #19098
-    ++ lib.optional (stdenv.cc.isClang && stdenv.isDarwin) "-fno-lto");
+    ++ lib.optional stdenv.cc.isClang "-faligned-allocation");
 
   buildPhase = ''
     runHook preBuild

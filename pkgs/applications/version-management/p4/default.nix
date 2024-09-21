@@ -6,7 +6,6 @@
 , linkFarm
 , jam
 , openssl
-, xcbuild
 , CoreServices
 , Foundation
 , Security

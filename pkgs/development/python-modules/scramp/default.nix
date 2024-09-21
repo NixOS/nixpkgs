@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Implementation of the SCRAM authentication protocol";
     homepage = "https://github.com/tlocke/scramp";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

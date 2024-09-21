@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "binwalk${lib.optionalString visualizationSupport "-full"}";
-  version = "2.4.1";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OSPG";
     repo = "binwalk";
-    rev = "v${version}";
-    hash = "sha256-VApqQrVBV7w15Bpwc6Fd/cA1Ikqu7Ds8qu0TH68YVog=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IFq/XotW3bbf3obWXRK6Nw1KQDqyFHb4tcA09Twg8SQ=";
   };
 
   build-system = [ setuptools ];

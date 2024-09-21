@@ -7,15 +7,16 @@ name: Check that Nix files are formatted
 
 on:
   pull_request_target:
-    # See the comment at the same location in ./check-by-name.yml
+    # See the comment at the same location in ./nixpkgs-vet.yml
     types: [opened, synchronize, reopened, edited]
 permissions:
   contents: read
 
 jobs:
   nixos:
+    name: nixfmt-check
     runs-on: ubuntu-latest
-    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
+    if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
@@ -76,13 +77,14 @@ jobs:
             if [[ -n "$source" ]] && ! nixfmt --check ${{ env.base }}/"$source" 2>/dev/null; then
               echo "Ignoring file $file because it's not formatted in the base commit"
             elif ! nixfmt --check "$dest"; then
-              unformattedFiles+=("$file")
+              unformattedFiles+=("$dest")
             fi
           done < <(git diff -z --name-status ${{ env.baseRev }} -- '*.nix')
 
           if (( "${#unformattedFiles[@]}" > 0 )); then
             echo "Some new/changed Nix files are not properly formatted"
-            echo "Please run the following in \`nix-shell\`:"
+            echo "Please go to the Nixpkgs root directory, run \`nix-shell\`, then:"
             echo "nixfmt ${unformattedFiles[*]@Q}"
+            echo "If you're having trouble, please ping @NixOS/nix-formatting"
             exit 1
           fi

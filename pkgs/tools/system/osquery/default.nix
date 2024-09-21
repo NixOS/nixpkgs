@@ -6,51 +6,25 @@
 , git
 , perl
 , python3
+, stdenv
 , stdenvNoCC
 , ninja
+, nix-prefetch-git
 , autoPatchelfHook
-, writeShellApplication
 , jq
 , removeReferencesTo
 , nixosTests
+, file
+, writers
 }:
 
 let
 
-  version = "5.12.2";
+  info = builtins.fromJSON (builtins.readFile ./info.json);
 
-  opensslVersion = "3.2.1";
+  opensslSrc = fetchurl info.openssl;
 
-  opensslSha256 = "83c7329fe52c850677d75e5d0b0ca245309b97e8ecbcfdc1dfdc4ab9fac35b39";
-
-  src = fetchFromGitHub {
-    owner = "osquery";
-    repo = "osquery";
-    rev = version;
-    fetchSubmodules = true;
-    hash = "sha256-PJrGAqDxo5l6jtQdpTqraR195G6kaLQ2ik08WtlWEmk=";
-  };
-
-  extractOpensslInfo = writeShellApplication {
-    name = "extractOpensslInfo";
-    text = ''
-      if [ $# -ne 1 ]; then
-        echo "Usage: $0 <osquery-source-directory>"
-        exit 1
-      fi
-      opensslCmake="$1"/libraries/cmake/formula/openssl/CMakeLists.txt
-      version=$(gawk 'match($0, /OPENSSL_VERSION "(.*)"/, a) {print a[1]}' < "$opensslCmake")
-      sha256=$(gawk 'match($0, /OPENSSL_ARCHIVE_SHA256 "(.*)"/, a) {print a[1]}' < "$opensslCmake")
-      echo "{\"version\": \"$version\", \"sha256\": \"$sha256\"}"
-    '';
-  };
-
-  opensslSrc = fetchurl {
-    url = "https://www.openssl.org/source/openssl-${opensslVersion}.tar.gz";
-    sha256 = opensslSha256;
-  };
-
-  toolchain = import ./toolchain-bin.nix { inherit autoPatchelfHook stdenvNoCC lib fetchzip; };
+  toolchain = import ./toolchain-bin.nix { inherit stdenv lib fetchzip file; };
 
 in
 
@@ -58,7 +32,9 @@ stdenvNoCC.mkDerivation rec {
 
   pname = "osquery";
 
-  inherit src version;
+  version = info.osquery.rev;
+
+  src = fetchFromGitHub info.osquery;
 
   patches = [
     ./Remove-git-reset.patch
@@ -71,7 +47,6 @@ stdenvNoCC.mkDerivation rec {
     python3
     ninja
     autoPatchelfHook
-    extractOpensslInfo
     jq
     removeReferencesTo
   ];
@@ -81,23 +56,6 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   configurePhase = ''
-    expectedOpensslVersion=$(extractOpensslInfo . | jq -r .version)
-    expectedOpensslSha256=$(extractOpensslInfo . | jq -r .sha256)
-
-    if [ "$expectedOpensslVersion" != "${opensslVersion}" ]; then
-      echo "openssl version mismatch: expected=$expectedOpensslVersion actual=${opensslVersion}"
-      opensslMismatch=1
-    fi
-
-    if [ "$expectedOpensslSha256" != "${opensslSha256}" ]; then
-      echo "openssl sha256 mismatch: expected=$expectedOpensslSha256 actual=${opensslSha256}"
-      opensslMismatch=1
-    fi
-
-    if [ -n "$opensslMismatch" ]; then
-      exit 1
-    fi
-
     mkdir build
     cd build
     cmake .. \
@@ -118,10 +76,14 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    inherit extractOpensslInfo opensslSrc toolchain;
+    inherit opensslSrc toolchain;
     tests = {
       inherit (nixosTests) osquery;
     };
+    updateScript = writers.writePython3
+      "osquery-update"
+      { makeWrapperArgs = "--prefix PATH : ${lib.makeBinPath [ nix-prefetch-git ]}"; }
+      (builtins.readFile ./update.py);
   };
 
   meta = with lib; {

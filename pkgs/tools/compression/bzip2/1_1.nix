@@ -42,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsdOriginal;
     pkgConfigModules = [ "bz2" ];
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 })

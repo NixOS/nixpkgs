@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, darwin, disablePosixThreads ? false }:
+{ lib, stdenv, fetchurl, cctools, disablePosixThreads ? false }:
 
 stdenv.mkDerivation rec {
   pname = "libmcrypt";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gipgb939vy9m66d3k8il98rvvwczyaw2ixr8yn6icds9c3nrsz4";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.cctools;
+  buildInputs = lib.optional stdenv.isDarwin cctools;
 
   configureFlags = lib.optionals disablePosixThreads [ "--disable-posix-threads" ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

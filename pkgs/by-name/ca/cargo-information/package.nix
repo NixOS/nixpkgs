@@ -4,6 +4,7 @@
 , makeWrapper
 , pkg-config
 , openssl
+, curl
 , rustc
 , stdenv
 , darwin
@@ -11,19 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-information";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hi-rustin";
     repo = "cargo-information";
     rev = "v${version}";
-    hash = "sha256-5F8O8M8cz7sdXtqGYuDIeTolovZjx2BLEBCZuBIb9YA=";
+    hash = "sha256-gu1t0jMBJ+mJIVMGy1JlabzcOT4lbmTvO/VQfxLLsWM=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cargo-test-macro-0.1.0" = "sha256-4u3Ium+WYBdyocuehDulRgUOR74JC6AUI2+A5xlnUGw=";
+      "cargo-test-macro-0.2.1" = "sha256-3sergm2T4VXT41ERCLL7p9+pJwIKzT54qdla8V58Psk=";
     };
   };
 
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    curl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];

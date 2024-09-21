@@ -7,7 +7,6 @@
 , gdk-pixbuf
 , gettext
 , glib
-, gnome
 , gobject-introspection
 , gtk4
 , gtksourceview5

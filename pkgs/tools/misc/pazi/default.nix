@@ -1,25 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "euank";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z8x70mwg0mvz6iap92gil37d4kpg5dizlyfx3zk7984ynycgap8";
+    sha256 = "sha256-PDgk6VQ/J9vkFJ0N+BH9LqHOXRYM+a+WhRz8QeLZGiM=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoSha256 = "1iamlp5519h8mmgd4964cvyp7mmnqdg2d3qj5v7yzilyp4nz15jc";
+  cargoHash = "sha256-7ChHYcyzRPFkZ+zh9lBOHcOizDvJf2cp9ULoI7Ofmqk=";
+
+  postInstall = ''
+    installManPage packaging/man/pazi.1
+  '';
 
   meta = with lib; {
     description = "Autojump \"zap to directory\" helper";
     homepage = "https://github.com/euank/pazi";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pazi";
   };
 }

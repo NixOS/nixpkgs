@@ -6,17 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "offat";
-  version = "0.18.0";
+  version = "0.19.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "OFFAT";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AROfhVVV9MN+yRGWrzC2y9lfErT4C3Mg8qPz8lSODFM=";
+    hash = "sha256-LZd9nMeI+TMd95r6CuNAB7eMqrE97ne0ioPjuIbtK7w=";
   };
 
   sourceRoot = "${src.name}/src";
+
+  pythonRelaxDeps = [ "setuptools" ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 

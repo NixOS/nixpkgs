@@ -3,18 +3,20 @@
 , fetchFromGitHub
 , git
 , nixosTests
-, python311
+, python3
 , vaultwarden
 }:
 
 let
-  version = "2024.5.1b";
+  version = "2024.6.2c";
+
+  suffix = lib.head (lib.match "[0-9.]*([a-z]*)" version);
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-5nlFt05ari9ovl+CaoyR/X9BzhsmsGyDt6eGLJ5ae/4=";
+    hash = "sha256-Gd8yQx9j6ieUvaM6IPSELNRy83y0cBkBwLYMqk8OIjU=";
   };
 
 in buildNpmPackage rec {
@@ -24,11 +26,11 @@ in buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-U/lAt2HfoHGMu6mOki/4+ljhU9FwkodvFBr5zcDO8Wk=";
+    rev = "web-v${lib.removeSuffix suffix version}";
+    hash = "sha256-HMQ0oQ04WkLlUgsYt6ZpcziDq05mnSA0+VnJCpteceg=";
   };
 
-  npmDepsHash = "sha256-ui00afmnu77CTT9gh6asc4uT7AhVIuiD60sq/1f9viA=";
+  npmDepsHash = "sha256-zMzQEM5mV14gewzYhy1F2bNEugXjZSOviYwYVV2Cb8c=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
@@ -37,8 +39,7 @@ in buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
-    # signalr through gyp wants to import distutils
-    python311
+    (python3.withPackages (ps: [ ps.setuptools ]))
   ];
 
   makeCacheWritable = true;

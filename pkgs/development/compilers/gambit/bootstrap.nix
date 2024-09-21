@@ -1,7 +1,7 @@
 # This derivation is a reduced-functionality variant of Gambit stable,
 # used to compile the full version of Gambit stable *and* unstable.
 
-{ gccStdenv, lib, fetchurl, autoconf, gcc, coreutils, gambit-support, ... }:
+{ gccStdenv, fetchurl, autoconf, gcc, coreutils, gambit-support, ... }:
 # As explained in build.nix, GCC compiles Gambit 10x faster than Clang, for code 3x better
 
 gccStdenv.mkDerivation {

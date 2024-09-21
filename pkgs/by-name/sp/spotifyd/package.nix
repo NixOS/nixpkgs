@@ -24,16 +24,16 @@
 
 rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.3.5-unstable-2024-07-10";
+  version = "0.3.5-unstable-2024-09-05";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
-    rev = "8fb0b9a5cce46d2e99e127881a04fb1986e58008";
-    hash = "sha256-wEPdf5ylnmu/SqoaWHxAzIEUpdRhhZfdQ623zYzcU+s=";
+    rev = "e280d84124d854af3c2f9509ba496b1c2ba6a1ae";
+    hash = "sha256-RFfM/5DY7IG0E79zc8IuXpSNAIjloMWI3ZVbyLxh4O8=";
   };
 
-  cargoHash = "sha256-+xTmkp+hGzmz4XrfKqPCtlpsX8zLA8XgJWM1SPunjq4=";
+  cargoHash = "sha256-z3zcQD2v71FZg6nEvKfaMiQU/aRAPFNt69b9Rm+jpuY=";
 
   nativeBuildInputs = [ pkg-config ];
 

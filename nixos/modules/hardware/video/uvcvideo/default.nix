@@ -1,8 +1,4 @@
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.uvcvideo;
@@ -19,8 +15,8 @@ in
   options = {
     services.uvcvideo.dynctrl = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable {command}`uvcvideo` dynamic controls.
@@ -31,9 +27,9 @@ in
         '';
       };
 
-      packages = mkOption {
-        type = types.listOf types.path;
-        example = literalExpression "[ pkgs.tiscamera ]";
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        example = lib.literalExpression "[ pkgs.tiscamera ]";
         description = ''
           List of packages containing {command}`uvcvideo` dynamic controls
           rules. All files found in
@@ -45,12 +41,12 @@ in
           the dynamic controls from specified packages to the {command}`uvcvideo`
           driver.
         '';
-        apply = map getBin;
+        apply = map lib.getBin;
       };
     };
   };
 
-  config = mkIf cfg.dynctrl.enable {
+  config = lib.mkIf cfg.dynctrl.enable {
 
     services.udev.packages = [
       (uvcdynctrl-udev-rules cfg.dynctrl.packages)

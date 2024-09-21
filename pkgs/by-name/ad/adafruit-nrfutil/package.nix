@@ -23,12 +23,12 @@ python3Packages.buildPythonApplication rec {
     (fetchpatch {
       name = "fix-tests.patch";
       url = "https://github.com/adafruit/Adafruit_nRF52_nrfutil/commit/e5fbcc8ee5958041db38c04139ba686bf7d1b845.patch";
-      sha256 = "sha256-0tbJldGtYcDdUzA3wZRv0lenXVn6dqV016U9nMpQ6/w=";
+      hash = "sha256-0tbJldGtYcDdUzA3wZRv0lenXVn6dqV016U9nMpQ6/w=";
     })
     (fetchpatch {
       name = "fix-test-test_get_vk_pem.patch";
       url = "https://github.com/adafruit/Adafruit_nRF52_nrfutil/commit/f42cee3c2d7c8d0911f27ba24d6a140083cb85cf.patch";
-      sha256 = "sha256-7WoRqPKc8O5EYK7Fj1WrMJREwhueiVpkEizIfVnEPBU=";
+      hash = "sha256-7WoRqPKc8O5EYK7Fj1WrMJREwhueiVpkEizIfVnEPBU=";
     })
   ];
 

@@ -42,8 +42,6 @@ stdenv.mkDerivation rec {
     "--with-sqlite3-libdir=${sqlite.out}/lib/sqlite"
   ] ++ lib.optionals (postgresql != null) [
     "--with-pgsql"
-    "--with-pgsql_incdir=${postgresql}/include"
-    "--with-pgsql_libdir=${postgresql.lib}/lib"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
@@ -69,6 +67,6 @@ stdenv.mkDerivation rec {
     description = "Database drivers for libdbi";
     platforms = platforms.all;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

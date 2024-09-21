@@ -6,7 +6,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  fetchpatch2,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -18,25 +17,17 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "31.2.1";
+  version = "32.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "commoncode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4ZgyNlMj1i1fRru4wgDOyP3qzbne8D2eH/tFI60kgrE=";
+    hash = "sha256-yqvsBJHrxVkSqp3QnYmHDJr3sef/g4pkSlkSioYuOc4=";
   };
-
-  patches = [
-    # https://github.com/nexB/commoncode/pull/66
-    (fetchpatch2 {
-      url = "https://github.com/nexB/commoncode/commit/4f87b3c9272dcf209b9c4b997e98b58e0edaf570.patch";
-      hash = "sha256-loUtAww+SK7kMt5uqZmLQ8Wg/OqB7LWVA4BiztnwHsA=";
-    })
-  ];
 
   dontConfigure = true;
 
@@ -79,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nexB/commoncode";
     changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

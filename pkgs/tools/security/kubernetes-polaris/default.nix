@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, packr, ... }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kubernetes-polaris";
-  version = "8.5.5";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
     rev = version;
-    sha256 = "sha256-DKfCXtFrZgmR0jiXwCD1iuwx/8aNEjwZ/fCQNeRhSu4=";
+    sha256 = "sha256-qJAhxwVM/tYdCWLL1snUYjXGfgdcHkBFrI9xBg1/EXU=";
   };
 
-  vendorHash = "sha256-ZWetW+Xar4BXXlR0iG+O/NRqYk41x+PPVCGis2W2Nkk=";
+  vendorHash = "sha256-6sxzRI22xiZOQds20iU5OsU+JqcNB2wOUrOZrOH1Sa4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,10 +21,6 @@ buildGoModule rec {
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];
-
-  preBuild = ''
-    ${packr}/bin/packr2 -v --ignore-imports
-  '';
 
   postInstall = ''
     installShellCompletion --cmd polaris \

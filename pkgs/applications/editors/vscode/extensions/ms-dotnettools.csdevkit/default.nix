@@ -14,7 +14,7 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-lpMwA5jMr10uV4uIjq9VNOKjqduxXuDZVIIszVIXSGw=";
+        hash = "sha256-yPenOk2sKt3DGmb69Ewbz8YT5KU371wizLdqfHCxBfg=";
         binaries = [
           "components/vs-green-server/platforms/linux-x64/node_modules/@microsoft/servicehub-controller-net60.linux-x64/Microsoft.ServiceHub.Controller"
           "components/vs-green-server/platforms/linux-x64/node_modules/@microsoft/visualstudio-code-servicehost.linux-x64/Microsoft.VisualStudio.Code.ServiceHost"
@@ -24,7 +24,7 @@ let
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-OaA3uNvKwbRGqMQqg6YozQF6AXxisO9ndDAFBj7wUEM=";
+        hash = "sha256-zjGyewO5Ss0kBr2GyWa/sBPy1K21MrNsIwzDBjGKlCc=";
         binaries = [
           "components/vs-green-server/platforms/linux-arm64/node_modules/@microsoft/servicehub-controller-net60.linux-arm64/Microsoft.ServiceHub.Controller"
           "components/vs-green-server/platforms/linux-arm64/node_modules/@microsoft/visualstudio-code-servicehost.linux-arm64/Microsoft.VisualStudio.Code.ServiceHost"
@@ -34,7 +34,7 @@ let
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-o6B6eA4LqoLw1aGvUI95aK3pChyFXK3jUOH5Fpp4/IM=";
+        hash = "sha256-nhX04v+r8IbUJ5Uoryuxvthn07MAoncDr5dxptlv9GM=";
         binaries = [
           "components/vs-green-server/platforms/darwin-x64/node_modules/@microsoft/servicehub-controller-net60.darwin-x64/Microsoft.ServiceHub.Controller"
           "components/vs-green-server/platforms/darwin-x64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-x64/Microsoft.VisualStudio.Code.ServiceHost"
@@ -44,7 +44,7 @@ let
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-cDv1l57C73UEtSJhTO+xb2sSX8xwepzJYxYuGsNq+r4=";
+        hash = "sha256-IvH2wmaiw/TAMzuaFg+5gsKxjnp+Hi3PQnGLXp1KEHM=";
         binaries = [
           "components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller"
           "components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-arm64/Microsoft.VisualStudio.Code.ServiceHost"
@@ -59,7 +59,7 @@ buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csdevkit";
     publisher = "ms-dotnettools";
-    version = "1.7.27";
+    version = "1.8.14";
     inherit (extInfo) hash arch;
   };
   sourceRoot = "extension"; # This has more than one folder.

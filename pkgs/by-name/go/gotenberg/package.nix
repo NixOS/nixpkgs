@@ -12,6 +12,7 @@
   makeFontsConf,
   liberation_ttf_v2,
   exiftool,
+  nixosTests,
   nix-update-script,
 }:
 let
@@ -22,16 +23,16 @@ let
 in
 buildGoModule rec {
   pname = "gotenberg";
-  version = "8.8.0";
+  version = "8.9.1";
 
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OHvtdUFZYm+I8DN8lAdlNAIRLWNRC/GbVEueRfyrwDA=";
+    hash = "sha256-y54DtOYIzFAk05TvXFcLdStfAXim3sVHBkW+R8CrtMM=";
   };
 
-  vendorHash = "sha256-w9Q3hK8d5NwDYp8kydrWrlBlOmMyDqDixdv3z79yhK8=";
+  vendorHash = "sha256-BYcdqZ8TNEG6popRt+Dg5xW5Q7RmYvdlV+niUNenRG0=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;
@@ -81,9 +82,13 @@ buildGoModule rec {
   '';
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests) gotenberg;
+  };
 
   meta = {
     description = "Converts numerous document formats into PDF files";
+    mainProgram = "gotenberg";
     homepage = "https://gotenberg.dev";
     changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${version}";
     license = lib.licenses.mit;

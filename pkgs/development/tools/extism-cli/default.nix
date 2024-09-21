@@ -27,9 +27,9 @@ buildGoModule rec {
   postInstall = ''
     local INSTALL="$out/bin/extism"
     installShellCompletion --cmd extism \
-      --bash <($out/bin/containerlab completion bash) \
-      --fish <($out/bin/containerlab completion fish) \
-      --zsh <($out/bin/containerlab completion zsh)
+      --bash <($out/bin/extism completion bash) \
+      --fish <($out/bin/extism completion fish) \
+      --zsh <($out/bin/extism completion zsh)
   '';
 
   meta = with lib; {

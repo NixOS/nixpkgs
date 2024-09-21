@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd flavours \
       --zsh <($out/bin/flavours --completions zsh) \
       --fish <($out/bin/flavours --completions fish) \

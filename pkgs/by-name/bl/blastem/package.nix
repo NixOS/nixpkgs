@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blastem";
-  version = "0.6.2-unstable-2024-03-31";
+  version = "0.6.2-unstable-2024-08-14";
 
   src = fetchhg {
     url = "https://www.retrodev.com/repos/blastem";
-    rev = "48ab1e3e5df5";
-    hash = "sha256-UZl5fIE7LJqxwS8kFJ3xr8BJyHF60dnRNeA5k7lAuxg=";
+    rev = "aa888682faa0";
+    hash = "sha256-0xw9O0o1pkJiXHyZer4nMJeLlRXS3Z4YYoLgfkrz3Yo=";
   };
 
   # will probably be fixed in https://github.com/NixOS/nixpkgs/pull/302481

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   python,
   nose,
   mock,
@@ -60,5 +59,8 @@ buildPythonPackage rec {
       Services.  This includes S3, SQS, EC2, among others.
     '';
     maintainers = [ ];
+    # Unmaintained since 2020, archived in the beginning of May 2024 and broken
+    # https://github.com/boto/boto/issues/3951
+    broken = true;
   };
 }

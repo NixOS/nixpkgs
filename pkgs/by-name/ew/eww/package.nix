@@ -1,18 +1,20 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, librsvg
-, gtk-layer-shell
-, stdenv
-, libdbusmenu-gtk3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
+  librsvg,
+  gtk-layer-shell,
+  stdenv,
+  libdbusmenu-gtk3,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "0.6.0-unstable-2024-04-26";
+  version = "0.6.0-unstable-2024-07-05";
 
   src = fetchFromGitHub {
     owner = "elkowar";
@@ -20,11 +22,13 @@ rustPlatform.buildRustPackage rec {
     # FIXME: change to a release tag once a new release is available
     # https://github.com/elkowar/eww/pull/1084
     # using the revision to fix string truncation issue in eww config
-    rev = "2c8811512460ce6cc75e021d8d081813647699dc";
-    hash = "sha256-eDOg5Ink3iWT/B1WpD9po5/UxS4DEaVO4NPIRyjSheM=";
+    rev = "4d55e9ad63d1fae887726dffcd25a32def23d34f";
+    hash = "sha256-LTSFlW/46hl1u9SzqnvbtNxswCW05bhwOY6CzVEJC5o=";
   };
 
-  cargoHash = "sha256-ClnIW7HxbQcC85OyoMhBLFjVtdEUCOARuimfS4uRi+E=";
+  # needed to fix build errors with rust 1.80 due to outdated time crate
+  cargoPatches = [ ./lockfile.patch ];
+  cargoHash = "sha256-55lmQl5pJwrEj5RlSG8b0PqtZVrASxTmX4Qdk090DZo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,6 +52,8 @@ rustPlatform.buildRustPackage rec {
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     description = "Widget system made in Rust to create widgets for any WM";
     longDescription = ''
@@ -61,7 +67,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       coffeeispower
-      eclairevoyant
       figsoda
       lom
       w-lfchen

@@ -15,8 +15,6 @@
   scipy,
   setuptools-scm,
   setuptools,
-  tomli,
-  wheel,
 }:
 
 buildPythonPackage rec {

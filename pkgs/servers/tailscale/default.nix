@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "1.70.0";
+  version = "1.74.0";
 in
 buildGoModule {
   pname = "tailscale";
@@ -25,7 +25,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-rB/zaJavA3OH1HK7Rfpta/QmQzi0xsEYTvW5JzzTAlI=";
+    hash = "sha256-KTg1rxyCgvZAwkGxhFXLff5UggKlqa6VLMItK81JV2k=";
   };
 
   patches = [
@@ -37,7 +37,7 @@ buildGoModule {
     })
   ];
 
-  vendorHash = "sha256-NtNjH2Vo1Leh98VIOkpyALErhC+6H5BE/uaPkwlejoo=";
+  vendorHash = "sha256-HJEgBs2GOzXvRa95LdwySQmG4/+QwupFDBGrQT6Y2vE=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
@@ -64,15 +64,14 @@ buildGoModule {
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
-
+    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
+    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/tailscale"
     installShellCompletion --cmd tailscale \
       --bash <($out/bin/tailscale completion bash) \
       --fish <($out/bin/tailscale completion fish) \
       --zsh <($out/bin/tailscale completion zsh)
-
-    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
-    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
 
   passthru.tests = {

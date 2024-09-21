@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "8.4.0";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-r06nPiWrdIyMBjt4wviOSIM9ubKsNp4pvRFXAueJdV4=";
+    hash = "sha256-pBsnLO65IMVyY+yFFgRULZ7IXuMDBQbZRmIGfHtquJ4=";
   };
 
   postPatch = ''
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
     changelog = "https://github.com/harfbuzz/harfbuzz/raw/${finalAttrs.version}/NEWS";
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [

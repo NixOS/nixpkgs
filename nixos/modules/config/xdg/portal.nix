@@ -6,6 +6,7 @@ let
     mkIf
     mkOption
     mkRenamedOptionModule
+    mkRemovedOptionModule
     teams
     types;
 
@@ -17,18 +18,7 @@ in
 {
   imports = [
     (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
-
-    ({ config, lib, options, ... }:
-      let
-        from = [ "xdg" "portal" "gtkUsePortal" ];
-        fromOpt = lib.getAttrFromPath from options;
-      in
-      {
-        warnings = lib.mkIf config.xdg.portal.gtkUsePortal [
-          "The option `${lib.showOption from}' defined in ${lib.showFiles fromOpt.files} has been deprecated. Setting the variable globally with `environment.sessionVariables' NixOS option can have unforeseen side-effects."
-        ];
-      }
-    )
+    (mkRemovedOptionModule [ "xdg" "portal" "gtkUsePortal" ] "This option has been removed due to being unsupported and discouraged by the GTK developers.")
   ];
 
   meta = {
@@ -51,18 +41,6 @@ in
         adds `xdg-desktop-portal-gtk`; and
         `xdg-desktop-portal-kde` respectively. On other desktop
         environments you probably want to add them yourself.
-      '';
-    };
-
-    gtkUsePortal = mkOption {
-      type = types.bool;
-      visible = false;
-      default = false;
-      description = ''
-        Sets environment variable `GTK_USE_PORTAL` to `1`.
-        This will force GTK-based programs ran outside Flatpak to respect and use XDG Desktop Portals
-        for features like file chooser but it is an unsupported hack that can easily break things.
-        Defaults to `false` to respect its opt-in nature.
       '';
     };
 
@@ -105,7 +83,7 @@ in
     configPackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      example = lib.literalExpression "[ pkgs.gnome.gnome-session ]";
+      example = lib.literalExpression "[ pkgs.gnome-session ]";
       description = ''
         List of packages that provide XDG desktop portal configuration, usually in
         the form of `share/xdg-desktop-portal/$desktop-portals.conf`.
@@ -154,7 +132,6 @@ in
         ];
 
         sessionVariables = {
-          GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
           NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
           NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };

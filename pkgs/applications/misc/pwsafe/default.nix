@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     gettext
     perl
     pkg-config
+    wxGTK32
     zip
   ];
 

@@ -62,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     # ensure the script uses the rsync package from nixpkgs
     substituteInPlace ../scripts/package.sh --replace-fail "rsync" "${lib.getExe rsync}"
 
+    substituteInPlace gui/CMakeLists.txt \
+      --replace-fail "find_package(Qt6 COMPONENTS " "find_package(Qt6 COMPONENTS NetworkAuth " \
+      --replace-fail "set(QT_LIBRARIES " "set(QT_LIBRARIES Qt6::NetworkAuth "
 
     # the npm build step only runs typescript
     # run this step directly so it doesn't try and fail to download the unnecessary node_modules, etc.

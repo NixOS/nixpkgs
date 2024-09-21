@@ -1,57 +1,44 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, git
-, libiconv
-, ncurses
-, openssl
-, pkg-config
-, rustPlatform
-, sqlite
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  libiconv,
+  ncurses,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  sqlite,
+  stdenv,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    hash = "sha256-ev56NzrEF7xm3WmR2a0pHPs69Lvmb4He7+kIBYiJjKY=";
+    hash = "sha256-4RRSffkAe0/8k4SNnlB1iiaW4gWFTuYXplVBj2aRIdU=";
   };
 
-  patches = [
-    # Fix tests with Git 2.44.0+
-    (fetchpatch {
-      name = "1245.patch"; # https://github.com/arxanas/git-branchless/pull/1245
-      url = "https://github.com/arxanas/git-branchless/commit/c8436aed3d616409b4d6fb1eedb383077f435497.patch";
-      hash = "sha256-gBm0A478Uhg9IQVLQppvIeTa8s1yHUMddxiUbpHUvGw=";
-    })
-    # Fix tests with Git 2.44.0+
-    (fetchpatch {
-      name = "1161.patch"; # https://github.com/arxanas/git-branchless/pull/1161
-      url = "https://github.com/arxanas/git-branchless/commit/6e1f26900a0dd60d10d9aa3552cab9181fa7be03.patch";
-      hash = "sha256-KHobEIXhlDar8CvIVUi4I695jcJZXgGRhU86b99x86Y=";
-    })
-  ];
-
-  cargoHash = "sha256-Ppw5TN/6zMNxFAx90Q9hQ7RdGxV+TT8UlOm68ldK8oc=";
+  cargoHash = "sha256-Jg4d7tJXr2O1sEDdB/zk+7TPBZvgHlmW8mNiXozLKV8=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    ncurses
-    openssl
-    sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    SystemConfiguration
-    libiconv
-  ];
+  buildInputs =
+    [
+      ncurses
+      openssl
+      sqlite
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      SystemConfiguration
+      libiconv
+    ];
 
   postInstall = ''
     $out/bin/git-branchless install-man-pages $out/share/man
@@ -73,6 +60,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/arxanas/git-branchless";
     license = licenses.gpl2Only;
     mainProgram = "git-branchless";
-    maintainers = with maintainers; [ nh2 hmenke ];
+    maintainers = with maintainers; [
+      nh2
+      hmenke
+    ];
   };
 }

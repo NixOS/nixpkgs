@@ -1,10 +1,10 @@
 { alsa-lib
 , autoPatchelfHook
-, callPackage
 , fetchzip
 , gtk2
 , gtk3
 , lib
+, makeShellWrapper
 , mesa
 , nss
 , stdenv
@@ -18,11 +18,11 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      checksum = "sha256-9o0nprGcJhudS1LNm+T7Vf0Dwd1RBauYKI+w1FBQ3ZM=";
+      checksum = "sha256-zS/yMXNNYlxgYyUDou2HaXuetPotqiOM8kv1Y7JouCo=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      checksum = "sha256-aW3cUZqAdiOLzOC9BQM/bTkDVyw24Dx9nBSXgbiKe4c=";
+      checksum = "sha256-rB0ak6jYnJMb0aHDLAyhaGoOFK4FXDLEOeofNdW/Wk8=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -30,7 +30,7 @@ let
   inherit (binary) platform checksum;
 in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "13.2.0";
+  version = "13.13.2";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook3 unzip ];
+  nativeBuildInputs = [ autoPatchelfHook (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) unzip makeShellWrapper];
 
   buildInputs = with xorg; [
     libXScrnSaver
@@ -68,9 +68,14 @@ in stdenv.mkDerivation rec {
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
     # Cypress now looks for binary_state.json in bin
     echo '{"verified": true}' > $out/binary_state.json
-    ln -s $out/opt/cypress/Cypress $out/bin/Cypress
-
+    ln -s $out/opt/cypress/Cypress $out/bin/cypress
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # exit with 1 after 25.05
+    makeWrapper $out/opt/cypress/Cypress $out/bin/Cypress \
+      --run 'echo "Warning: Use the lowercase cypress executable instead of the capitalized one."'
   '';
 
   passthru = {

@@ -2,16 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
   pytz,
-
-  # tests
-  nose,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytz ];
 
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [ nose ];
+  doCheck = false; # tests are not including in PyPI tarball
 
   meta = with lib; {
     description = "Generate and parse RFC 3339 timestamps";

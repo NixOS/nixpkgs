@@ -3,7 +3,7 @@
 , fetchurl
 , runCommand
 , cmake
-, ffmpeg_4
+, ffmpeg_7
 , glslang
 , libdrm
 , libglvnd
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg_7
     libdrm
     libffi
     libglvnd
@@ -89,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wayland-scanner
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   cmakeFlags = [

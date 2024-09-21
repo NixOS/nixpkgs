@@ -88,7 +88,7 @@ For example, to propagate a dependency on SDL2 for lockfiles that select the Nim
 }
 ```
 
-The annotations in the `nim-overrides.nix` set are functions that take two arguments and return a new attrset to be overlayed on the package being built.
+The annotations in the `nim-overrides.nix` set are functions that take two arguments and return a new attrset to be overlaid on the package being built.
 - lockAttrs: the attrset for this library from within a lockfile. This can be used to implement library version constraints, such as marking libraries as broken or insecure.
 - prevAttrs: the attrset produced by initial arguments to `buildNimPackage` and any preceding lockfile overlays.
 

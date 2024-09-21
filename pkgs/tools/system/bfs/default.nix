@@ -2,24 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "3.1.3";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    hash = "sha256-/thPPueNrYzbxxZYAqlxZ2GEsceCzd+LkI84S8AS1mo=";
+    hash = "sha256-WIJyCpnlD6/c7PG+ZPmUT8qfPelRY9Od1Dk9Ro1y1yY=";
   };
 
   buildInputs = [ oniguruma ] ++ lib.optionals stdenv.isLinux [ libcap acl liburing ];
 
-  # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
-  preConfigure = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace GNUMakefile --replace "-flto=auto" ""
-  '';
-
+  configureFlags = [ "--enable-release" ];
   makeFlags = [ "PREFIX=$(out)" ];
-  buildFlags = [ "release" ]; # "release" enables compiler optimizations
 
   meta = with lib; {
     description = "Breadth-first version of the UNIX find command";

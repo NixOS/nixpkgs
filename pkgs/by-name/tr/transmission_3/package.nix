@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -40,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
+    hash = "sha256-n4iEDt9AstDZPZXN47p13brNLbNWS3BTB+A4UuoEjzE=";
     fetchSubmodules = true;
   };
 

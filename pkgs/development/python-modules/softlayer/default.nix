@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.2.2";
+  version = "6.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "softlayer-python";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-xlfVxQFsBKKpEsVmPlxn0sSyePNEmhly6wS/lTvP3DA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-wDLMVonPUexoaZ60kRBILmr5l46yajzACozCp6uETGY=";
   };
 
   postPatch = ''

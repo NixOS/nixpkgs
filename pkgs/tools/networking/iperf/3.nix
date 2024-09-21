@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
+    mainProgram = "iperf3";
     maintainers = with lib.maintainers; [ fpletz ];
   };
 }

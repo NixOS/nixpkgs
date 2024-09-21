@@ -81,6 +81,12 @@ The license, or licenses, for the package. One from the attribute set defined in
 
 For details, see [Licenses](#sec-meta-license).
 
+### `sourceProvenance` {#var-meta-sourceProvenance}
+
+A list containing the type or types of source inputs from which the package is built, e.g. original source code, pre-built binaries, etc.
+
+For details, see [Source provenance](#sec-meta-sourceProvenance).
+
 ### `maintainers` {#var-meta-maintainers}
 
 A list of the maintainers of this Nix expression. Maintainers are defined in [`nixpkgs/maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix). There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled “maintainers: add alice” in the same pull request, and reference maintainers with `maintainers = with lib.maintainers; [ alice bob ]`.

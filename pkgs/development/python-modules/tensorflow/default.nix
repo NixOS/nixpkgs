@@ -5,7 +5,7 @@
   lib,
   fetchFromGitHub,
   symlinkJoin,
-  addOpenGLRunpath,
+  addDriverRunpath,
   fetchpatch,
   fetchzip,
   linkFarm,
@@ -308,7 +308,7 @@ let
       perl
       protobuf-core
       protobuf-extra
-    ] ++ lib.optional cudaSupport addOpenGLRunpath;
+    ] ++ lib.optional cudaSupport addDriverRunpath;
 
     buildInputs =
       [
@@ -581,7 +581,7 @@ let
 
       postFixup = lib.optionalString cudaSupport ''
         find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-          addOpenGLRunpath "$lib"
+          addDriverRunpath "$lib"
         done
       '';
 
@@ -589,15 +589,14 @@ let
     };
 
     meta =
-      with lib;
       {
         badPlatforms = lib.optionals cudaSupport lib.platforms.darwin;
         changelog = "https://github.com/tensorflow/tensorflow/releases/tag/v${version}";
         description = "Computation using data flow graphs for scalable machine learning";
         homepage = "http://tensorflow.org";
-        license = licenses.asl20;
-        maintainers = with maintainers; [ abbradar ];
-        platforms = with platforms; linux ++ darwin;
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [ abbradar ];
+        platforms = with lib.platforms; linux ++ darwin;
         broken =
           stdenv.isDarwin
           || !(xlaSupport -> cudaSupport)
@@ -664,11 +663,11 @@ buildPythonPackage {
     wrapt
   ] ++ lib.optionals withTensorboard [ tensorboard ];
 
-  nativeBuildInputs = lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs = lib.optionals cudaSupport [ addDriverRunpath ];
 
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
 
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnnMerged}/lib:${lib.getLib nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = "RustScan";
     rev = "refs/tags/${version}";
-    hash = "sha256-GOoyq2GgVGNUxxy0KQeRvkISb3FJqwWK5XpmoBAw/tk=";
+    hash = "sha256-6heC/bHo4IqKNvPjch7AiyWTCZDCv4MZHC7DTEX3U5c=";
   };
 
-  cargoHash = "sha256-K9NFm++jBsrn7U+rZkTOWhrUuL4CA0NR7SlSyhSIwSc=";
+  cargoHash = "sha256-Fr+m4BeYvUOoSkewwdUgpmdNchweeLK7v/tKLEzFOBs=";
 
   postPatch = ''
     substituteInPlace src/scripts/mod.rs \
@@ -39,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     # These tests require network access
     "--skip=parse_correct_host_addresses"
     "--skip=parse_hosts_file_and_incorrect_hosts"
+    "--skip=resolver_args_google_dns"
+    "--skip=resolver_default_cloudflare"
   ];
 
   meta = with lib; {

@@ -1,11 +1,11 @@
---- a/tests/testEnc.sh	2020-04-20 14:30:32.000000000 -0400
-+++ b/tests/testEnc.sh	2020-10-21 22:09:25.000000000 -0400
-@@ -405,9 +405,6 @@
+--- a/tests/testEnc.sh
++++ b/tests/testEnc.sh
+@@ -1181,9 +1181,6 @@ for aesgcm_k_l in $aesgcm_key_lengths ; do
              else
                  # generate binary file out of base64
                  DECODE="-d"
 -                if [ "`uname`" = "Darwin" ]; then
--		    DECODE="-D"
+-		            DECODE="-D"
 -                fi
                  cat "$topfolder/$base_test_name.data" | base64 $DECODE > $tmpfile.3
                  execEncTest "$res_success" \

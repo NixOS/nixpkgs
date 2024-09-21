@@ -33,16 +33,19 @@ buildPythonPackage rec {
     hash = "sha256-2iTZqZIxlt1GKhElasTcnys18UbNNDwHoZziHBOIGBo=";
   };
 
+  pythonRelaxDeps = [
+    "aiosmtplib"
+    "pydantic"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "1.2.5"' 'version = "${version}"' \
-      --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
-      --replace 'pydantic = "^2.0"' 'pydantic = "*"' \
+      --replace-fail 'version = "1.2.5"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aioredis
     aiosmtplib
     blinker

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.21.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = finalAttrs.version;
-    sha256 = "sha256-X9H5nxbYFSMfxZMxs3iWwCgdrJ2FTVWW7tlgQek3WIg=";
+    sha256 = "sha256-0eOYxyMt2M2lkhoWOhoUQgP/1LYY3QQqSF5TdRUuCbs=";
   };
 
   outputs = [ "dev" "out" ];
@@ -37,6 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Add FHS and Debian paths for non-NixOS applications
     "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
+
+  env = lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") {
+    NIX_LDFLAGS = "--undefined-version";
+  } // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+    NIX_CFLAGS_COMPILE = "-DHAVE_SECURE_GETENV";
+  };
 
   passthru.tests = {
     # other drivers depending on libva and selected application users.

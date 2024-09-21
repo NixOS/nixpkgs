@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  python,
   blas,
   lapack,
   suitesparse,

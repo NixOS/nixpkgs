@@ -9,7 +9,7 @@
 , gst_all_1
 , nv-codec-headers-11
 , libva
-, addOpenGLRunpath
+, addDriverRunpath
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   buildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    addOpenGLRunpath "$out/lib/dri/nvidia_drv_video.so"
+    addDriverRunpath "$out/lib/dri/nvidia_drv_video.so"
   '';
 
   meta = with lib;{

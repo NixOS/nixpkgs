@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-CH9DZ/7Bhbe6qKg1Nbj1rA9SzIsqVlBJg51XxAh0XnY=";
   };
 
-  cargoSha256 = "sha256-HTfRWvE3m7XZhZDj5bEkrQI3pD6GNiKd2gJtMjRQ8Rw=";
+  cargoHash = "sha256-HTfRWvE3m7XZhZDj5bEkrQI3pD6GNiKd2gJtMjRQ8Rw=";
 
   meta = with lib; {
     description = "River-status client written in Rust";

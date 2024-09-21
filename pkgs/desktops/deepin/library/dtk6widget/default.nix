@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, dtk6gui
-, cups
-, libstartup_notification
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  dtk6gui,
+  cups,
+  libstartup_notification,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6widget";
-  version = "6.0.16";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6widget";
     rev = finalAttrs.version;
-    hash = "sha256-4WmnO4msQVWAEOzH1zOWfvJl5X+/VKWv4bbZAH//IXg=";
+    hash = "sha256-6H3Dtdyq/adb3jz9lGaKmOguXqvhvZn1/G7+YajyF2k=";
   };
 
   patches = [
@@ -40,14 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    cups
-    libstartup_notification
-  ] ++ (with qt6Packages; [
-    qtbase
-    qtmultimedia
-    qtsvg
-  ]);
+  buildInputs =
+    [
+      cups
+      libstartup_notification
+    ]
+    ++ (with qt6Packages; [
+      qtbase
+      qtmultimedia
+      qtsvg
+    ]);
 
   propagatedBuildInputs = [ dtk6gui ];
 
@@ -64,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/lib/dtk6/DWidget/bin/*; do

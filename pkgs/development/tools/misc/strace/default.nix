@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.10";
+  version = "6.11";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-dl7HGqHeL+NzY8HkDHt2afwdQMRLtdOLqOjNgsTtzwc=";
+    hash = "sha256-gyYlg6NSnwLDUBqouKx3K0y8A9yTTpi6tuSINibig6U=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     # -kk
     ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
-  configureFlags = [ "--enable-mpers=check" ];
+  configureFlags = [ "--enable-mpers=check" ]
+    ++ lib.optional stdenv.cc.isClang "CFLAGS=-Wno-unused-function";
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.

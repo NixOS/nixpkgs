@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/shoyer/h5netcdf";
     changelog = "https://github.com/h5netcdf/h5netcdf/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

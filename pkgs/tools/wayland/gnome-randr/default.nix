@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-mciHgBEOCFjRA4MSoEdP7bIag0KE+zRbk4wOkB2PAn0=";
   };
 
-  cargoSha256 = "sha256-rk8/sg5rSNS741QOWoAGIloqph+ZdBjl/xUaFl0A3Bs=";
+  cargoHash = "sha256-rk8/sg5rSNS741QOWoAGIloqph+ZdBjl/xUaFl0A3Bs=";
 
   buildInputs = [ dbus ];
 

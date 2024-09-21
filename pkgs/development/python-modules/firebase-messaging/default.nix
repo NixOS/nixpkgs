@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdb9696/firebase-messaging";
     changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

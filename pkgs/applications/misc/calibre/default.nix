@@ -21,7 +21,7 @@
 , qmake
 , qtbase
 , qtwayland
-, speechd
+, speechd-minimal
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.15.0";
+  version = "7.16.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-03CRYdi5dX3+S+o4wDehsFzI36AGLAF5e/TtfmYmBis=";
+    hash = "sha256-EWQfaoTwO9BdZQgJQrxfj6b8tmtukvlW5hFo/USjNhU=";
   };
 
   patches = [
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
       ] ++ lib.optional (unrarSupport) unrardll)
     )
     xdg-utils
-  ] ++ lib.optional (speechSupport) speechd;
+  ] ++ lib.optional (speechSupport) speechd-minimal;
 
   installPhase = ''
     runHook preInstall
@@ -185,6 +185,29 @@ stdenv.mkDerivation (finalAttrs: {
           ${if popplerSupport then popplerArgs else ""}
       done
     '';
+
+  doInstallCheck = true;
+  installCheckInputs = with python3Packages; [
+    fonttools
+    psutil
+  ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ETN='--exclude-test-name'
+    EXCLUDED_FLAGS=(
+      $ETN 'test_7z'  # we don't include 7z support
+      $ETN 'test_zstd'  # we don't include zstd support
+      $ETN 'test_qt'  # we don't include svg or webp support
+      $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
+      $ETN 'test_websocket_basic'  # flakey
+      ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
+    )
+
+    python setup.py test ''${EXCLUDED_FLAGS[@]}
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     homepage = "https://calibre-ebook.com";

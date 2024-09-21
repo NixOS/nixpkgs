@@ -32,7 +32,6 @@
 , AVFoundation
 , AVKit
 , WebKit
-, fetchpatch
 }:
 let
   catch = fetchFromGitHub {

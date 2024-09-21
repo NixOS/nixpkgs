@@ -1,7 +1,5 @@
 { lib, stdenv, fetchgit, ncurses, conf ? null }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "noice";
   version = "0.8";
@@ -18,8 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace noice.c --replace 'printw(str);' 'printw("%s", str);'
   '';
 
-  configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = lib.optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
+  preBuild = lib.optionalString (conf!=null) "cp ${configFile} config.def.h";
 
   buildInputs = [ ncurses ];
 
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
-  meta = {
+  meta = with lib; {
     description = "Small ncurses-based file browser";
     homepage = "https://git.2f30.org/noice/";
     license = licenses.bsd2;

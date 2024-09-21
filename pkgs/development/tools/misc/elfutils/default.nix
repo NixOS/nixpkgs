@@ -73,7 +73,11 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     (lib.enableFeature enableDebuginfod "libdebuginfod")
     (lib.enableFeature enableDebuginfod "debuginfod")
-  ];
+  ] ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
+    ++ lib.optionals stdenv.cc.isClang [
+      "CFLAGS=-Wno-unused-private-field"
+      "CXXFLAGS=-Wno-unused-private-field"
+    ];
 
   enableParallelBuilding = true;
 
@@ -103,6 +107,6 @@ stdenv.mkDerivation rec {
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
     license = with licenses; [ gpl2Only lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ eelco r-burns ];
+    maintainers = with maintainers; [ r-burns ];
   };
 }

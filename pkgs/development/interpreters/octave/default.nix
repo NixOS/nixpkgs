@@ -204,7 +204,7 @@ in stdenv.mkDerivation (finalAttrs: {
       inherit enableQt enableReadline enableJava;
       buildEnv = callPackage ./build-env.nix {
         octave = finalAttrs.finalPackage;
-        inherit octavePackages wrapOctave;
+        inherit wrapOctave;
         inherit (octavePackages) computeRequiredOctavePackages;
       };
       withPackages = import ./with-packages.nix { inherit buildEnv octavePackages; };

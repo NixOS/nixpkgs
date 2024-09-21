@@ -72,6 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/giampaolo/psutil";
     changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

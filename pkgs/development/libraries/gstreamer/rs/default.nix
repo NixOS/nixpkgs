@@ -11,6 +11,7 @@
 , rustc
 , cargo
 , cargo-c
+, lld
 , nasm
 , gstreamer
 , gst-plugins-base
@@ -143,7 +144,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.12.4";
+  version = "0.12.8";
 
   outputs = [ "out" "dev" ];
 
@@ -152,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-Qnp+e1Vww2kWjDG0x2tcigwDdG67I4xnm8+QrBI+o08=";
+    hash = "sha256-AGXKI/0Y2BdaSnpQAt3T/rkYlM8UpQpKm4kMAGd6Dyk=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -177,12 +178,12 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cairo-rs-0.19.3" = "sha256-TjVXdnlYEfPLbUx1pC84rCC2MlNecECMK2Yo9XKwz9M=";
+      "cairo-rs-0.19.8" = "sha256-AdIUcxxuZVAWQ+KOBTrtsvTu4KtFiXkQPYWT9Avt7Z0=";
       "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
-      "gdk4-0.8.1" = "sha256-VPmegFZ/bC8x1vkl3YU208jQ8FCEKLwe6ZDatz4mIvM=";
-      "gstreamer-0.22.4" = "sha256-r5+wOEhTVztDMEu6t47yJ9HIlbXyjdvswUND4l7kPl8=";
+      "gdk4-0.8.2" = "sha256-DZjHlhzrELZ8M5YUM5kSeOphjF7863DmywFgGbZL4Jo=";
+      "gstreamer-0.22.7" = "sha256-vTEDqmyqhj9e7r7N0QfG4uTNBizrU0gTUfLOJ8kU1JE=";
     };
   };
 
@@ -199,9 +200,13 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     cargo-c'
     nasm
+  ] ++ lib.optionals stdenv.isDarwin [
+    lld
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
   buildInputs = [
     gstreamer
@@ -258,6 +263,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
     license = with licenses; [ mpl20 asl20 mit lgpl21Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

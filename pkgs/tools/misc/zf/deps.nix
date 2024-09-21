@@ -4,10 +4,10 @@
 
 linkFarm "zig-packages" [
   {
-    name = "1220dee955839b7f267c1bb21e0ee60888c08f408c30f0722b243cabcc8cce8b7508";
+    name = "12207831bce7d4abce57b5a98e8f3635811cfefd160bca022eb91fe905d36a02cf25";
     path = fetchzip {
-      url = "https://codeberg.org/dude_the_builder/ziglyph/archive/v0.11.1.tar.gz";
-      hash = "sha256-tpl4RyCcukKWZehlZf6t2n41gYFDyL27t7+bzcxHP7g=";
+      url = "https://codeberg.org/dude_the_builder/ziglyph/archive/b89d43d1e3fb01b6074bc1f7fc980324b04d26a5.tar.gz";
+      hash = "sha256-e/zYB9w6vvHUBJzjlocSjpJu3qao7sXjBsfUO9oDXyg=";
     };
   }
 ]

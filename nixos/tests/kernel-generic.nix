@@ -23,7 +23,7 @@ let
         assert "${linuxPackages.kernel.modDirVersion}" in machine.succeed("uname -a")
       '';
   }) args);
-  kernels = (removeAttrs pkgs.linuxKernel.vanillaPackages ["__attrsFailEvaluation"]) // {
+  kernels = pkgs.linuxKernel.vanillaPackages // {
     inherit (pkgs.linuxKernel.packages)
       linux_4_19_hardened
       linux_5_4_hardened
@@ -31,8 +31,6 @@ let
       linux_5_15_hardened
       linux_6_1_hardened
       linux_6_6_hardened
-      linux_6_8_hardened
-      linux_6_9_hardened
       linux_rt_5_4
       linux_rt_5_10
       linux_rt_5_15

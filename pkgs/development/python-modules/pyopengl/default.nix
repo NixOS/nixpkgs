@@ -5,6 +5,7 @@
   fetchPypi,
   pkgs,
   pillow,
+  mesa,
 }:
 
 buildPythonPackage rec {
@@ -80,6 +81,6 @@ buildPythonPackage rec {
       liberal BSD-style Open-Source license.
     '';
     license = licenses.bsd3;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
   };
 }

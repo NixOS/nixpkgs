@@ -23,7 +23,6 @@
 , runc
 , conmon
 , extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
-, slirp4netns
 , fuse-overlayfs
 , util-linux
 , iptables
@@ -33,6 +32,7 @@
 , aardvark-dns
 , netavark
 , passt
+, vfkit
 , testers
 , podman
 }:
@@ -44,19 +44,20 @@ let
     util-linux
     iptables
     iproute2
+  ] ++ lib.optionals stdenv.isDarwin [
+    vfkit
   ] ++ extraPackages);
 
   helpersBin = symlinkJoin {
     name = "podman-helper-binary-wrapper";
 
-    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    # this only works for some binaries, others may need to be added to `binPath` or in the modules
     paths = [
       gvproxy
     ] ++ lib.optionals stdenv.isLinux [
       aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
-      slirp4netns
       passt
       conmon
       crun
@@ -65,13 +66,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.1.2";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-IeGOagP1MGH92Si2i6HPwZ71XrYJ7RpxxRNbQN3HGOw=";
+    hash = "sha256-48ltjGrzh74CYV6T6YDFSFC+Msui8YCG1N+c9k5Y09I=";
   };
 
   patches = [

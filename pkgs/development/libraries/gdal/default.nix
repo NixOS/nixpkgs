@@ -79,13 +79,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WCTQHUU2WYYiliwCJ4PsbvJIOar9LmvXn/i5jJzTCtM=";
+    hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
   };
 
   nativeBuildInputs = [
@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       json_c
       lerc
       xz
-      libxml2
+      (libxml2.override { enableHttp = true; })
       lz4
       openjpeg
       openssl

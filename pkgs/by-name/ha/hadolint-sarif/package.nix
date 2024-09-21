@@ -7,14 +7,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hadolint-sarif";
-  version = "0.5.0";
+  version = "0.6.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Zh3y31Q+ue1TqncZpdX+fAp2yfEnv8W8jkzUW7UvrKg=";
+    hash = "sha256-v1rbM1HEZpSIS07x4GyICu6OR7PfH89wNywlXXPh1to=";
   };
 
-  cargoHash = "sha256-bwEQ9lZXvZL6JN24N8gRdbV5gcFiH1fQ59PQILfW1z8=";
+  cargoHash = "sha256-lojb6tESIl2kbVDUyoDf1CntvzJOtoZZJEyDs9PR7Gw=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

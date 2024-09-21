@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildLuarocksPackage, lua51Packages, lua, pkg-config, lib, substituteAll, zenity, AppKit}:
+{ stdenv, fetchFromGitHub, buildLuarocksPackage, lua, pkg-config, lib, substituteAll, zenity, AppKit}:
 
 buildLuarocksPackage {
   pname = "nfd";

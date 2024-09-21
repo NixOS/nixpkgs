@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.5.29";
+  version = "9.5.35";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "squidfunk";
     repo = "mkdocs-material";
     rev = "refs/tags/${version}";
-    hash = "sha256-ebn19oD1Q+HYo9tksiDX1FlKKaB4U/bN51JCHXxSHx8=";
+    hash = "sha256-iiukdgkC2B8xWf8abtiSWjEBiCwk/2+1iJqkV9d43VQ=";
   };
 
   nativeBuildInputs = [

@@ -23,6 +23,11 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/miracle2k/tarsnapper/commit/2ee33ce748b9bb42d559cc2c0104115732cb4150.patch";
       hash = "sha256-fEXGhzlfB+J5lw1pcsC5Ne7I8UMnDzwyyCx/zm15+fU=";
     })
+    # Migrate to pytest, see: https://github.com/miracle2k/tarsnapper/pull/73
+    (fetchpatch {
+      url = "https://github.com/miracle2k/tarsnapper/commit/eace01f3085fba8a6421d4f19110b814511e5170.patch?full_index=1";
+      hash = "sha256-2YPb7iaAusT1DkISfOWs72jr/GBY/qG5qFyRlnVt0IY=";
+    })
   ];
 
   nativeBuildInputs = with python3Packages; [
@@ -35,22 +40,14 @@ python3Packages.buildPythonApplication rec {
     pexpect
   ];
 
-  doCheck = python3Packages.pythonOlder "3.12";
-
   nativeCheckInputs = with python3Packages; [
-    nose
+    pytestCheckHook
   ];
 
   # Remove standard module argparse from requirements
   pythonRemoveDeps = [ "argparse" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ tarsnap ]}" ];
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests tests
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "tarsnapper" ];
 

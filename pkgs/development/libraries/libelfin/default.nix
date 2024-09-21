@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aclements/libelfin/";
     license = licenses.mit;
     description = "C++11 ELF/DWARF parser";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

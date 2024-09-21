@@ -24,6 +24,7 @@
 , libSM
 , libICE
 , libXext
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +45,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Wno-dev" # dev warnings are only needed for upstream development
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWL_INSTALL_BASEDIR=${placeholder "out"}/share/widelands" # for COPYING, Changelog, etc.
     "-DWL_INSTALL_DATADIR=${placeholder "out"}/share/widelands" # for game data
     "-DWL_INSTALL_BINDIR=${placeholder "out"}/bin"
@@ -71,16 +71,19 @@ stdenv.mkDerivation rec {
     asio
     libSM  # XXX: these should be propagated by SDL2?
     libICE
-    libXext
-  ];
+  ]
+  ++ lib.optional stdenv.isLinux libXext
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Cocoa
+  ]);
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     install -Dm444 -t $out/share/applications ../xdg/org.widelands.Widelands.desktop
 
     for s in 16 32 48 64 128; do
       install -Dm444 ../data/images/logos/wl-ico-''${s}.png $out/share/icons/hicolor/''${s}x''${s}/org.widelands.Widelands.png
     done
-
+  '' + ''
     installManPage ../xdg/widelands.6
   '';
 
@@ -96,7 +99,7 @@ stdenv.mkDerivation rec {
     mainProgram = "widelands";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin jcumming ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     hydraPlatforms = [ ];
   };
 }

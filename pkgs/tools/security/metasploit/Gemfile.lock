@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 5426fc47cdc588a0f51617712b2419bd1fefe630
-  ref: refs/tags/6.4.18
+  revision: 4ec7d1be72158642c17b18dcb9e66e44c1bb5a5a
+  ref: refs/tags/6.4.26
   specs:
-    metasploit-framework (6.4.18)
+    metasploit-framework (6.4.26)
       aarch64
       abbrev
       actionpack (~> 7.0.0)
@@ -31,7 +31,7 @@ GIT
       faraday (= 2.7.11)
       faraday-retry
       faye-websocket
-      ffi (= 1.16.3)
+      ffi (< 1.17.0)
       filesize
       getoptlong
       hrr_rb_ssh-ed25519
@@ -485,4 +485,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.5.11
+   2.5.16

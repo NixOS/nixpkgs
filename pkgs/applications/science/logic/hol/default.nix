@@ -4,16 +4,12 @@
 let
   pname = "hol4";
   vnum = "14";
-in
 
-let
   version = "k.${vnum}";
   longVersion = "kananaskis-${vnum}";
   holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "--expk" else "--stdknl";
-in
 
-let
   polymlEnableShared = with pkgs; lib.overrideDerivation polyml (attrs: {
     configureFlags = [ "--enable-shared" ];
   });

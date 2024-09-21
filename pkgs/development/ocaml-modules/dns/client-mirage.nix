@@ -3,6 +3,7 @@
 , domain-name, ipaddr
 , ca-certs-nss
 , happy-eyeballs
+, happy-eyeballs-mirage
 , tcpip
 , tls, tls-mirage
 }:
@@ -10,7 +11,6 @@
 buildDunePackage {
   pname = "dns-client-mirage";
   inherit (dns) src version;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns-client
@@ -22,6 +22,7 @@ buildDunePackage {
     mirage-clock
     ca-certs-nss
     happy-eyeballs
+    happy-eyeballs-mirage
     tcpip
     tls
     tls-mirage

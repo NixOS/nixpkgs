@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtx11extras
-, qtdeclarative
-, dtkwidget
-, dde-qt-dbus-factory
-, xorg
-, xscreensaver
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  qtx11extras,
+  qtdeclarative,
+  dtkwidget,
+  dde-qt-dbus-factory,
+  xorg,
+  xscreensaver,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,4 +68,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.deepin.members;
   };
 }
-

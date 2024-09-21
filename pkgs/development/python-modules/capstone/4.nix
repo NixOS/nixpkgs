@@ -11,7 +11,7 @@ buildPythonPackage {
   pname = "capstone";
   inherit (capstone_4) version src;
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${capstone_4.src.name}/bindings/python";
   patches = [
     # Drop distutils in python binding (PR 2271)
     (fetchpatch {

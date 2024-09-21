@@ -5,11 +5,22 @@
   ...
 }:
 let
+  cfg = config.services.graphical-desktop;
   xcfg = config.services.xserver;
   dmcfg = config.services.displayManager;
 in
 {
-  config = lib.mkIf (xcfg.enable || dmcfg.enable) {
+  options = {
+    services.graphical-desktop.enable =
+      lib.mkEnableOption "bits and pieces required for a graphical desktop session"
+      // {
+        default = xcfg.enable || dmcfg.enable;
+        defaultText = lib.literalExpression "(config.services.xserver.enable || config.services.displayManager.enable)";
+        internal = true;
+      };
+  };
+
+  config = lib.mkIf cfg.enable {
     # The default max inotify watches is 8192.
     # Nowadays most apps require a good number of inotify watches,
     # the value below is used by default on several other distros.
@@ -41,6 +52,14 @@ in
     hardware.graphics.enable = lib.mkDefault true;
 
     programs.gnupg.agent.pinentryPackage = lib.mkOverride 1100 pkgs.pinentry-gnome3;
+
+    services.speechd.enable = lib.mkDefault true;
+
+    services.pipewire = {
+      enable = lib.mkDefault true;
+      pulse.enable = lib.mkDefault true;
+      alsa.enable = lib.mkDefault true;
+    };
 
     systemd.defaultUnit = lib.mkIf (xcfg.autorun || dmcfg.enable) "graphical.target";
 

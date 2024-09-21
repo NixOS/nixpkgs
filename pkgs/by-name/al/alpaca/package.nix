@@ -17,27 +17,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     rev = version;
-    hash = "sha256-GxnYPnrjaJ47/i+pigw+on2dmbHwQSX+STasvqnAtuQ=";
+    hash = "sha256-FFMclm+IUEU4cQZ0+uJHDCHytgW8+fygooWw3Nc1jxM=";
   };
-
-  patches = [
-    # Change the way XDG paths are handled so it makes sense outside of flatpak
-    ./fix_xdg_path_flatpak.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/local_instance.py \
-      --replace-fail '/app/bin/ollama' 'ollama'
-    substituteInPlace src/window.py \
-      --replace-fail '/app/share' "$out/share"
-  '';
 
   nativeBuildInputs = [
     appstream

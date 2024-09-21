@@ -6,28 +6,32 @@
 , darwin
 , gcc
 , libcxx
+, cacert
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.10";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-fRaKydMSwd1zl6ptBKvn5ej2pqtI8xi9dioFmR8QA+g=";
+    hash = "sha256-+Q7mZ2uzMjShKWVvYLz9qH8g0w8oP93lNlJiYxFFoAI=";
   };
 
-  cargoHash = "sha256-iOP5llFtySG8Z2Mj7stt6fYpQWqiQqJuftuYBrbkmyU=";
+  cargoHash = "sha256-DJOj9EJswnPIm66u585k4ZWSi6Su/naQ+myQuLiGLFE=";
 
   nativeBuildInputs = [
     installShellFiles
     rustPlatform.bindgenHook
   ];
 
+  checkInputs = [ cacert ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
     gcc.cc.lib
   ];
 
@@ -35,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   };
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fh \
       --bash <($out/bin/fh completion bash) \
       --fish <($out/bin/fh completion fish) \

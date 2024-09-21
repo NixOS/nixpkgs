@@ -6,16 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libxsmm";
-  version = "1.16.3";
+  version = "1.17";
 
   src = fetchFromGitHub {
-    owner = "hfp";
+    owner = "libxsmm";
     repo = "libxsmm";
     rev = version;
-    sha256 = "sha256-PpMiD/PeQ0pe5hqFG6VFHWpR8y3wnO2z1dJfHHeItlQ=";
+    sha256 = "sha256-s/NEFU4IwQPLyPLwMmrrpMDd73q22Sk2BNid/kedawY=";
   };
 
+  # Fixes /build references in the rpath
+  patches = [ ./rpath.patch ];
+
   outputs = [ "out" "dev" "doc" ];
+
   nativeBuildInputs = [
     gfortran
     python3
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
     mkdir -p $dev/lib/pkgconfig
     mv $out/lib/*.pc $dev/lib/pkgconfig
 
-    moveToOutput "share/libxsmm" "$doc"
+    moveToOutput "share/libxsmm" ''${!outputDoc}
   '';
 
   prePatch = ''

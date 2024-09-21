@@ -18,48 +18,45 @@ python3Packages.buildPythonPackage rec {
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies =
-    with python3Packages;
-    [
-      aiohttp
-      aiohttp-middlewares
-      aioredis
-      aiosqlite
-      appdirs
-      arrow
-      babel
-      bitstring
-      bleach
-      # botbuilder-core, connector for teams
-      certifi
-      click
-      # dialogflow, connector for Dialogflow
-      dnspython
-      emoji
-      get-video-properties
-      ibm-watson
-      matrix-nio
-      mattermostdriver
-      motor
-      multidict
-      nbconvert
-      nbformat
-      opsdroid-get-image-size
-      parse
-      puremagic
-      pycron
-      python-olm
-      pyyaml
-      regex
-      rich
-      slack-sdk
-      tailer
-      voluptuous
-      watchgod
-      webexteamssdk
-      wrapt
-    ]
-    ++ matrix-nio.optional-dependencies.e2e;
+  dependencies = with python3Packages; [
+    aiohttp
+    aiohttp-middlewares
+    aioredis
+    aiosqlite
+    appdirs
+    arrow
+    babel
+    bitstring
+    bleach
+    # botbuilder-core, connector for teams
+    certifi
+    click
+    # dialogflow, connector for Dialogflow
+    dnspython
+    emoji
+    get-video-properties
+    ibm-watson
+    (matrix-nio.override { withOlm = true; })
+    mattermostdriver
+    motor
+    multidict
+    nbconvert
+    nbformat
+    opsdroid-get-image-size
+    parse
+    puremagic
+    pycron
+    python-olm
+    pyyaml
+    regex
+    rich
+    slack-sdk
+    tailer
+    voluptuous
+    watchgod
+    webexteamssdk
+    wrapt
+  ];
 
   passthru.python = python3Packages.python;
 

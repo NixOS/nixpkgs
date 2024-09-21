@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchgit,
   gitUpdater,
-  rename,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

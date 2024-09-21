@@ -40,7 +40,7 @@ python3.pkgs.buildPythonPackage rec {
     pydantic_1
     slack-sdk
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

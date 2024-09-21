@@ -1,7 +1,6 @@
 { git
 , lib
 , libgit2
-, makeWrapper
 , rustPlatform
 , stdenv
 , fetchFromGitHub

@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "ktop";
-  version = "0.3.6";
+  version = "0.3.7";
   excludedPackages = [".ci"];
 
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-nVZ1e/GKiJFTwuq5dPIzF4Jrv2DJ2wwWAiOn304hTA4=";
+    hash = "sha256-oxyEkDY53HjBgjWRajlcg+8Kx092lyLkPgOJleioO7o=";
   };
 
   vendorHash = "sha256-MLIcTHWo7lsqtAqH8naSvpS013t8KBVPRbch+CfeUNk=";

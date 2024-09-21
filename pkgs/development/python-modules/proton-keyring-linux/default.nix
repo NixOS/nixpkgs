@@ -6,6 +6,7 @@
   keyring,
   proton-core,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -20,26 +21,24 @@ buildPythonPackage rec {
     hash = "sha256-c2wdbd8Hkz2hF9zYMy4/V/W6uZRItz7tWqLJqTsJoHU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     keyring
     proton-core
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=proton.keyring_linux.core --cov-report html --cov-report term" ""
-  '';
-
   pythonImportsCheck = [ "proton.keyring_linux.core" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "ProtonVPN core component to access Linux's keyring";
     homepage = "https://github.com/ProtonVPN/python-proton-keyring-linux";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }

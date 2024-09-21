@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://forge.extranet.logilab.fr/open-source/logilab-constraint";
     changelog = "https://forge.extranet.logilab.fr/open-source/logilab-constraint/-/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

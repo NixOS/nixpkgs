@@ -1,72 +1,65 @@
-{ lib
-, python3
-, fetchPypi
-, nix-update-script
-, runtimeShell
-, installShellFiles
-, testers
-, pdm
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  runtimeShell,
+  installShellFiles,
+  testers,
+  pdm,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.15.4";
+  version = "2.18.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = python3.pkgs.pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WOIlhQVn3K3OQkGNtGOJlt8rE3jNCDDNSK/aG0VdnHI=";
+  src = fetchFromGitHub {
+    owner = "pdm-project";
+    repo = "pdm";
+    rev = "refs/tags/${version}";
+    hash = "sha256-R3oeu8HvPWAQoO0FHHx9lSKmB/riPtQ9gq4qKtQCeiA=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [
+  build-system = with python3.pkgs; [
     pdm-backend
+    pdm-build-locked
   ];
 
-  dependencies = [
-    blinker
-    dep-logic
-    filelock
-    findpython
-    hishel
-    httpx
-    installer
-    msgpack
-    packaging
-    pbs-installer
-    platformdirs
-    pyproject-hooks
-    python-dotenv
-    resolvelib
-    rich
-    shellingham
-    tomlkit
-    unearth
-    virtualenv
-  ] ++ httpx.optional-dependencies.socks
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ]
-  ++ lib.optionals (pythonAtLeast "3.10") [
-    truststore
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      blinker
+      dep-logic
+      filelock
+      findpython
+      hishel
+      httpx
+      installer
+      msgpack
+      packaging
+      pbs-installer
+      platformdirs
+      pyproject-hooks
+      python-dotenv
+      resolvelib
+      rich
+      shellingham
+      tomlkit
+      truststore
+      unearth
+      virtualenv
+    ]
+    ++ httpx.optional-dependencies.socks;
 
-  makeWrapperArgs = [
-    "--set PDM_CHECK_UPDATE 0"
-  ];
+  makeWrapperArgs = [ "--set PDM_CHECK_UPDATE 0" ];
 
+  # Silence network warning during pypaInstallPhase
+  # by disabling latest version check
   preInstall = ''
-    # Silence network warning during pypaInstallPhase
-    # by disabling latest version check
     export PDM_CHECK_UPDATE=0
   '';
 
@@ -79,7 +72,7 @@ buildPythonApplication rec {
     unset PDM_LOG_DIR
   '';
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     first
     pytestCheckHook
     pytest-mock
@@ -87,9 +80,7 @@ buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -102,27 +93,29 @@ buildPythonApplication rec {
     "test_convert_setup_py_project"
     # pythonfinder isn't aware of nix's python infrastructure
     "test_use_wrapper_python"
+    "test_build_with_no_isolation"
+    "test_run_script_with_inline_metadata"
 
     # touches the network
     "test_find_candidates_from_find_links"
     "test_lock_all_with_excluded_groups"
     "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
+    "test_build_distributions"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = pdm;
-  };
-
-  passthru.updateScript = nix-update-script { };
+  passthru.tests.version = testers.testVersion { package = pdm; };
 
   meta = with lib; {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      natsukium
+    ];
     mainProgram = "pdm";
   };
 }

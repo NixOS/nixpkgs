@@ -3,7 +3,6 @@
 , gnat
 , gprbuild
 , fetchFromGitHub
-, xmlada
 , which
 }:
 

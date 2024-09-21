@@ -15,7 +15,7 @@ in
     inherit version;
 
     src = fetchurl {
-      url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
+      url = "https://www.redmine.org/releases/redmine-${version}.tar.gz";
       hash = "sha256-iiIyD9nJQOZZjzrV+3o5MxlchgaO7plLpvzcIsXOy1k=";
     };
 

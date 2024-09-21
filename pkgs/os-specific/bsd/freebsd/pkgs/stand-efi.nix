@@ -21,6 +21,7 @@ mkDerivation {
     "lib/libc"
     "lib/liblua"
     "libexec/flua"
+    "lib/flua"
     "stand"
     "sys"
   ];

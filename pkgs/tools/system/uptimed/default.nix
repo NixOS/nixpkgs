@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/rpodgorny/uptimed/";
     license = with licenses; [ gpl2Only lgpl21Plus ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

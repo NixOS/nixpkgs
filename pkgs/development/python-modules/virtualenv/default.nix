@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  isPy27,
   isPyPy,
   cython,
   distlib,

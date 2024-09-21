@@ -29,11 +29,11 @@ buildPythonPackage rec {
       --replace-fail "result ~= 0.9.0" "result >= 0.9.0"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/crossandra/blob/${src.rev}/CHANGELOG.md";
     description = "Fast and simple enum/regex-based tokenizer with decent configurability";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://trag1c.github.io/crossandra";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

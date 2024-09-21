@@ -1,11 +1,12 @@
 { lib, stdenv, fetchFromGitHub, fetchFromGitLab
 , autoconf, automake, gettext, intltool
-, libtool, pkg-config, wrapGAppsHook3, wrapPython, gobject-introspection
+, libtool, pkg-config, wrapGAppsHook3, wrapPython, gobject-introspection, wayland-scanner
 , gtk3, python, pygobject3, pyxdg
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
 , withDrm ? stdenv.isLinux, libdrm
+, withVidmode ? stdenv.isLinux, libXxf86vm
 
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
@@ -26,6 +27,8 @@ let
 
       strictDeps = true;
 
+      depsBuildBuild = [ pkg-config ];
+
       nativeBuildInputs = [
         autoconf
         automake
@@ -37,12 +40,13 @@ let
         wrapPython
         gobject-introspection
         python
-      ];
+      ] ++ lib.optionals (pname == "gammastep") [ wayland-scanner ];
 
       configureFlags = [
         "--enable-randr=${if withRandr then "yes" else "no"}"
         "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
         "--enable-drm=${if withDrm then "yes" else "no"}"
+        "--enable-vidmode=${if withVidmode then "yes" else "no"}"
         "--enable-quartz=${if withQuartz then "yes" else "no"}"
         "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
       ] ++ lib.optionals (pname == "gammastep") [
@@ -55,6 +59,7 @@ let
       ] ++ lib.optional  withRandr        libxcb
         ++ lib.optional  withGeoclue      geoclue
         ++ lib.optional  withDrm          libdrm
+        ++ lib.optional  withVidmode      libXxf86vm
         ++ lib.optional  withQuartz       ApplicationServices
         ++ lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
         ++ lib.optional  withAppIndicator (if (pname != "gammastep")
@@ -120,7 +125,7 @@ rec {
       homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
       mainProgram = "redshift";
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -141,7 +146,7 @@ rec {
         + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
-      maintainers = (with lib.maintainers; [ eclairevoyant primeos ]) ++ redshift.meta.maintainers;
+      maintainers = (with lib.maintainers; [ primeos ]) ++ redshift.meta.maintainers;
     };
   };
 }

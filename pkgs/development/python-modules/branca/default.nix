@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-visualization/branca";
     changelog = "https://github.com/python-visualization/branca/blob/v${version}/CHANGES.txt";
     license = with licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

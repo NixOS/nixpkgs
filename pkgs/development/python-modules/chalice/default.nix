@@ -105,6 +105,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aws/chalice";
     changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

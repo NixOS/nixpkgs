@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   isPy27,
   pytestCheckHook,
   autoconf271,
@@ -11,14 +10,14 @@
   cmake,
   gcc,
   libtool,
+  parameterized,
   perl,
   setuptools,
   simplejson,
 }:
-
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "2.0.11";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = isPy27;
@@ -27,21 +26,8 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-9DiUpgeL4bY7G3b5R06FjpN0st03F84fj0bhp70moKo=";
+    sha256 = "sha256-FHZ7ZTCOzElW/DM07TScp6bfOOFe4b307q/ALVX1fWQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/aws/aws-lambda-python-runtime-interface-client/pull/58
-      url = "https://github.com/aws/aws-lambda-python-runtime-interface-client/commit/162c3c0051bb9daa92e4a2a4af7e90aea60ee405.patch";
-      sha256 = "09qqq5x6npc9jw2qbhzifqn5sqiby4smiin1aw30psmlp21fv7j8";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace requirements/base.txt \
-      --replace 'simplejson==3' 'simplejson~=3'
-  '';
 
   propagatedBuildInputs = [ simplejson ];
 
@@ -58,11 +44,9 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # Test fails with: Assertion error
-    "test_handle_event_request_fault_exception_logging_syntax_error"
+  nativeCheckInputs = [
+    parameterized
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -71,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = stdenv.isLinux && stdenv.isAarch64;
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;

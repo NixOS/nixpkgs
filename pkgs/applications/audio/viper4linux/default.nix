@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
 , gst_all_1
 , libviperfx
 , makeWrapper

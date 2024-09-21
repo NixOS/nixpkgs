@@ -2,7 +2,8 @@
 , bzrtp
 , cmake
 , fetchFromGitLab
-, ffmpeg_4
+, fetchpatch2
+, ffmpeg_7
 , glew
 , gsm
 , lib
@@ -43,6 +44,12 @@ stdenv.mkDerivation rec {
     # plugin directory with desired plugins and wrap executables so that the
     # environment variable points to that directory.
     ./plugins_dir.patch
+
+    # Port to ffmpeg 5.0 API
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/pkg-voip-team/linphone-stack/mediastreamer2/-/raw/4e7784802d2eac57dffe210c8c23e696f40ac6ec/debian/patches/ffmpeg_5_0_fixes.patch";
+      hash = "sha256-5ay4iVbx8IOX952HEFaKLBGKLRYUWRntufciApUVhh0=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -58,7 +65,7 @@ stdenv.mkDerivation rec {
     bzrtp
     ortp
 
-    ffmpeg_4
+    ffmpeg_7
     glew
     libX11
     libXext

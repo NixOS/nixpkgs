@@ -1,33 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qtbase
-, qtsvg
-, dde-qt-dbus-factory
-, kcodecs
-, syntax-highlighting
-, libchardet
-, libuchardet
-, libiconv
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  qtbase,
+  qtsvg,
+  dde-qt-dbus-factory,
+  kcodecs,
+  syntax-highlighting,
+  libchardet,
+  libuchardet,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-editor";
-  version = "6.0.16";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-55hRXHP02MJWt+JUDCDKv4Boq0IwNW1itGw9rtCZrao=";
+    hash = "sha256-f6CJlSgsKU311ziXmm7Ado8tH+3dNRpWB1e4TewVf/8=";
   };
 
   nativeBuildInputs = [
@@ -55,13 +55,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  passthru.updateScript = gitUpdater { };
-
-  meta = with lib; {
+  meta = {
     description = "Desktop text editor that supports common text editing features";
     homepage = "https://github.com/linuxdeepin/deepin-editor";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

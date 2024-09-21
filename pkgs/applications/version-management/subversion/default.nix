@@ -49,6 +49,14 @@ let
     # "-P" CPPFLAG is needed to build Python bindings and subversionClient
     CPPFLAGS = [ "-P" ];
 
+    env = lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+        "-Wno-error=implicit-function-declaration"
+        "-Wno-error=implicit-int"
+        "-Wno-int-conversion"
+      ];
+    };
+
     preConfigure = lib.optionalString needsAutogen ''
       ./autogen.sh
     '';
@@ -115,7 +123,7 @@ let
       license = licenses.asl20;
       homepage = "https://subversion.apache.org/";
       mainProgram = "svn";
-      maintainers = with maintainers; [ eelco lovek323 ];
+      maintainers = with maintainers; [ lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
 

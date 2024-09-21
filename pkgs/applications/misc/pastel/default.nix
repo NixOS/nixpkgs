@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pastel";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uK4HWC+uGiey+K0p8+Wi+Pi+U7b4k09b8iKF9BmTPcc=";
+    sha256 = "sha256-kr2aLRd143ksVx42ZDO/NILydObinn3AwPCniXVVmY0=";
   };
 
-  cargoSha256 = "sha256-5paHSrqU8tItD/CAbauj6KcW/mKsveOAfXjD/NUuFAc=";
+  cargoHash = "sha256-+Cw/aAXkSbYLqc7TGWsMUJNo88v0s1Cq1m4V84j3gXE=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

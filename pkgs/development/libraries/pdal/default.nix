@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.7.2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-ukBZLr/iyYQ68sv9JWrR4YP0ahHfGhytgcWKPzrF3Ps=";
+    hash = "sha256-VHcUyYADmNzxZ+Ix56TNuaP9wG+vRlEl71cNM0uMaHg=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     laszip
     libgeotiff
     libtiff
-    libxml2
+    (libxml2.override { enableHttp = true; })
     openscenegraph
     postgresql
     proj
@@ -124,7 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
       version = "pdal ${finalAttrs.finalPackage.version}";
     };
     pdal = callPackage ./tests.nix { pdal = finalAttrs.finalPackage; };
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {

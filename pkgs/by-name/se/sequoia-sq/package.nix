@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitLab
-, fetchpatch
 , lib
 , darwin
 , nettle
@@ -15,24 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "0.34.0";
+  version = "0.37.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     rev = "v${version}";
-    hash = "sha256-voFektWZnkmIQzI7s5nKzVVWQtEhzk2GKtxX926RtxU=";
+    hash = "sha256-D22ECJvbGbnyvusWXfU5F1aLF/ETuMyhAStT5HPWR2U=";
   };
-  patches = [
-    # Fixes test failing on Darwin, see:
-    # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/211
-    (fetchpatch {
-      url = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/commit/21221a935e0d058ed269ae6c8f45c5fa7ea0d598.patch";
-      hash = "sha256-ZjTl3EumeFwMJUl+qMpX+P2maYz4Ow/Tn9KwYbHDbes=";
-    })
-  ];
 
-  cargoHash = "sha256-3ncBpRi0v6g6wwPkSASDwt0d8cOOAUv9BwZaYvnif1U=";
+  cargoHash = "sha256-jFpqZKyRCMkMtOezsYJy3Fy1WXUPyn709wZxuwKlSYI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,12 +38,15 @@ rustPlatform.buildRustPackage rec {
     nettle
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
-  # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [
-    # doctest for sequoia-ipc fail for some reason
-    "--skip=macros::assert_send_and_sync"
-    "--skip=macros::time_it"
+    # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/297
+    "--skip=sq_autocrypt_import"
   ];
+
+  # Needed for tests to be able to create a ~/.local/share/sequoia directory
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   env.ASSET_OUT_DIR = "/tmp/";
 
@@ -69,12 +63,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ minijackson doronbehar ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ minijackson doronbehar ];
     mainProgram = "sq";
   };
 }

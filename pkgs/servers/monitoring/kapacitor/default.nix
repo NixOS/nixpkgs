@@ -40,7 +40,7 @@ let
       })
     ];
     sourceRoot = "${src.name}/libflux";
-    cargoSha256 = "sha256-oAMoGGdR0QEjSzZ0/J5J9s/ekSlryCcRBSo5N2r70Ko=";
+    cargoHash = "sha256-oAMoGGdR0QEjSzZ0/J5J9s/ekSlryCcRBSo5N2r70Ko=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     pkgcfg = ''

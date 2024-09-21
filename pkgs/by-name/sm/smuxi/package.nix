@@ -30,11 +30,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ autoconf automake itstool intltool gettext
     mono
-    stfl
-    makeWrapper ] ++ lib.optionals (guiSupport) [
+    stfl ] ++ lib.optionals (guiSupport) [
       gtk-sharp-2_0
       # loaded at runtime by GTK#
       gdk-pixbuf pango

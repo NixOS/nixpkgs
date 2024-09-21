@@ -39,7 +39,7 @@
 , pcre2
 , libdeflate
 
-, swig4
+, swig
 , python
 , wxPython
 , opencascade-occt_7_6
@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
-    swig4
+    swig
     python
     unixODBC
     libdeflate

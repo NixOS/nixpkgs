@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/NoMore201/googleplay-api";
     license = licenses.gpl3Only;
     description = "Google Play Unofficial Python API";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

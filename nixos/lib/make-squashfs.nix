@@ -10,6 +10,9 @@
 , # Compression parameters.
   # For zstd compression you can use "zstd -Xcompression-level 6".
   comp ? "xz -Xdict-size 100%"
+, # create hydra build product. will put image in directory instead
+  # of directly in the store
+  hydraBuildProduct ? false
 }:
 
 let
@@ -17,7 +20,7 @@ let
   compFlag = if comp == null then "-no-compression" else "-comp ${comp}";
 in
 stdenv.mkDerivation {
-  name = "${fileName}.img";
+  name = "${fileName}${lib.optionalString (!hydraBuildProduct) ".img"}";
   __structuredAttrs = true;
 
   nativeBuildInputs = [ squashfsTools ];
@@ -30,7 +33,13 @@ stdenv.mkDerivation {
       # for nix-store --load-db.
       cp $closureInfo/registration nix-path-registration
 
+      imgPath="$out"
+    '' + lib.optionalString hydraBuildProduct ''
+
+      mkdir $out
+      imgPath="$out/${fileName}.squashfs"
     '' + lib.optionalString stdenv.buildPlatform.is32bit ''
+
       # 64 cores on i686 does not work
       # fails with FATAL ERROR: mangle2:: xz compress failed with error code 5
       if ((NIX_BUILD_CORES > 48)); then
@@ -39,8 +48,12 @@ stdenv.mkDerivation {
     '' + ''
 
       # Generate the squashfs image.
-      mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $out ${pseudoFilesArgs} \
+      mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $imgPath ${pseudoFilesArgs} \
         -no-hardlinks ${lib.optionalString noStrip "-no-strip"} -keep-as-directory -all-root -b 1048576 ${compFlag} \
         -processors $NIX_BUILD_CORES
+    '' + lib.optionalString hydraBuildProduct ''
+
+      mkdir -p $out/nix-support
+      echo "file squashfs-image $out/${fileName}.squashfs" >> $out/nix-support/hydra-build-products
     '';
 }

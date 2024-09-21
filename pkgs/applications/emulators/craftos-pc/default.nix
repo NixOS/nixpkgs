@@ -15,18 +15,18 @@
 }:
 
 let
-  version = "2.8.2";
+  version = "2.8.3";
   craftos2-lua = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2-lua";
     rev = "v${version}";
-    hash = "sha256-Kv0supnYKWLaVqOeZAzQNd3tQRP2KJugZqytyoj8QtY=";
+    hash = "sha256-OCHN/ef83X4r5hZcPfFFvNJHjINCTiK+COf369/WPsA=";
   };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
     rev = "v${version}";
-    hash = "sha256-5ZsLsqrkO02NLJCzsgf0k/ifsqNybTi4DcB9GLmWDHw=";
+    hash = "sha256-YidLt/JLwBMW0LMo5Q5PV6wGhF0J72FGX+iWYn6v0Z4=";
   };
 in
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    hash = "sha256-ozebHgUgwdqYtWAyL+EdwpjEvZC+PkWcLYCPWz2FjSw=";
+    hash = "sha256-DbxAsXxpsa42dF6DaLmgIa+Hs/PPqJ4dE97PoKxG2Ig=";
   };
 
   nativeBuildInputs = [ patchelf unzip ];

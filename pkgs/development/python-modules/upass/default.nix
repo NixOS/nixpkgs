@@ -38,6 +38,6 @@ buildPythonPackage rec {
     mainProgram = "upass";
     homepage = "https://github.com/Kwpolska/upass";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

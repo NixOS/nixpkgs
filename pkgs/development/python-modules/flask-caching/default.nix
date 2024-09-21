@@ -59,7 +59,7 @@ buildPythonPackage rec {
     description = "Caching extension for Flask";
     homepage = "https://github.com/pallets-eco/flask-caching";
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   ffmpeg,
   poco,
   ocl-icd,
   opencl-clhpp,
+  gitUpdater,
+  callPackage,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "sanjuuni";
     rev = version;
-    sha256 = "sha256-wJRPD4OWOTPiyDr9dYseRA7BI942HPfHONVJGTc/+wU=";
+    hash = "sha256-wJRPD4OWOTPiyDr9dYseRA7BI942HPfHONVJGTc/+wU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -37,6 +38,13 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = {
+      run-on-nixos-artwork = callPackage ./tests/run-on-nixos-artwork.nix { };
+    };
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/MCJack123/sanjuuni";

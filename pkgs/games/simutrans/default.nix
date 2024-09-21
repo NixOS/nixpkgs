@@ -6,9 +6,9 @@ let
   # Choose your "paksets" of objects, images, text, music, etc.
   paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
 
-  result = with lib; withPaks (
-    if paksets == "*" then attrValues pakSpec # taking all
-      else map (name: pakSpec.${name}) (splitString " " paksets)
+  result = withPaks (
+    if paksets == "*" then lib.attrValues pakSpec # taking all
+      else map (name: pakSpec.${name}) (lib.splitString " " paksets)
   );
 
   ver1 = "121";
@@ -152,7 +152,7 @@ let
       mv build/default/sim $out/bin/simutrans
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Simulation game in which the player strives to run a successful transport system";
       mainProgram = "simutrans";
       longDescription = ''
@@ -163,9 +163,9 @@ let
       '';
 
       homepage = "http://www.simutrans.com/";
-      license = with licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms = with platforms; linux; # TODO: ++ darwin;
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ ];
+      platforms = lib.platforms.linux; # TODO: ++ darwin;
     };
   };
 

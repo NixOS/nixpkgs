@@ -37,6 +37,8 @@ buildPythonPackage {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
+  buildInputs = dotnet-build.nugetDeps;
+
   nativeBuildInputs = [
     setuptools
     dotnet-sdk
@@ -62,7 +64,7 @@ buildPythonPackage {
     dotnet restore \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
-      --source ${dotnet-build.nuget-source}
+      --source "$nugetSource"
   '';
 
   # Rerun this when updating to refresh Nuget dependencies

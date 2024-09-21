@@ -4,12 +4,10 @@
 , fetchFromGitHub
 , freetype
 , gtk3-x11
-, mount
 , pcre
 , pkg-config
 , webkitgtk
 , xorg
-, llvmPackages
 , WebKit
 , MetalKit
 , CoreAudioKit

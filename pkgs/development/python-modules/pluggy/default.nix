@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools-scm,
   pythonOlder,
-  importlib-metadata,
   callPackage,
 }:
 

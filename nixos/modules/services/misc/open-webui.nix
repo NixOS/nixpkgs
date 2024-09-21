@@ -54,7 +54,21 @@ in
             WEBUI_AUTH = "False";
           }
         '';
-        description = "Extra environment variables for Open-WebUI";
+        description = ''
+          Extra environment variables for Open-WebUI.
+          For more details see https://docs.openwebui.com/getting-started/env-configuration/
+        '';
+      };
+
+      environmentFile = lib.mkOption {
+        description = ''
+          Environment file to be passed to the systemd service.
+          Useful for passing secrets to the service to prevent them from being
+          world-readable in the Nix store.
+        '';
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/var/lib/secrets/openWebuiSecrets";
       };
 
       openFirewall = lib.mkOption {
@@ -83,6 +97,7 @@ in
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} serve --host ${cfg.host} --port ${toString cfg.port}";
+        EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "open-webui";
         RuntimeDirectory = "open-webui";

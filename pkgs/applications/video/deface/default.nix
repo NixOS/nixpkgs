@@ -2,7 +2,6 @@
 , stdenv
 , python3
 , fetchFromGitHub
-, makeWrapper
 , pkgs
 }:
 

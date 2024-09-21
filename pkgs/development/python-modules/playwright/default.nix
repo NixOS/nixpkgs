@@ -21,7 +21,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.44.0";
+  version = "1.47.0";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RM04I1QiyJhPvKdAdy8w2GmOOR+BWilxrZ5QUrwxBWA=";
+    hash = "sha256-C/spH54hhLI0Egs2jjTjQ5BH1pIw1syrfSyUvVQRoKM=";
   };
 
   patches = [
@@ -51,11 +51,11 @@ buildPythonPackage rec {
     git commit -m "workaround setuptools-scm"
 
     substituteInPlace setup.py \
-      --replace "setuptools-scm==8.0.4" "setuptools-scm" \
+      --replace "setuptools-scm==8.1.0" "setuptools-scm" \
       --replace-fail "wheel==0.42.0" "wheel"
 
     substituteInPlace pyproject.toml \
-      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.42.0", "auditwheel==5.4.0"]' \
+      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.1.0", "wheel==0.42.0", "auditwheel==5.4.0"]' \
                 'requires = ["setuptools", "setuptools-scm", "wheel"]'
 
     # Skip trying to download and extract the driver.
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     # Set the correct driver path with the help of a patch in patches
     substituteInPlace playwright/_impl/_driver.py \
       --replace-fail "@node@" "${lib.getExe nodejs}" \
-      --replace-fail "@driver@" "${driver}/package/cli.js"
+      --replace-fail "@driver@" "${driver}/cli.js"
   '';
 
   nativeBuildInputs = [

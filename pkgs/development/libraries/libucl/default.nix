@@ -36,17 +36,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  buildInputs = with lib;
-    concatLists (
-      mapAttrsToList (feat: enabled:
-        optionals enabled (featureDeps."${feat}" or [])
+  buildInputs = lib.concatLists (
+      lib.mapAttrsToList (feat: enabled:
+        lib.optionals enabled (featureDeps."${feat}" or [])
       ) features
     );
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib;
-    mapAttrsToList (feat: enabled: strings.enableFeature enabled feat) features;
+  configureFlags = lib.mapAttrsToList (feat: enabled: lib.strings.enableFeature enabled feat) features;
 
   meta = with lib; {
     description = "Universal configuration library parser";

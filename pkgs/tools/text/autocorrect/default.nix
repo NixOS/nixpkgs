@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "autocorrect";
-  version = "2.9.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "huacnlee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NCDJoKOH4ZaXtGXZ7bgOXrjgrY8Edui+EOOI8/yfW08=";
+    sha256 = "sha256-iBwF8rMm4MbHwJSDmENDgGJKCl05psStxsi6BIliZP0=";
   };
 
   cargoLock = {
@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://huacnlee.github.io/autocorrect";
     changelog = "https://github.com/huacnlee/autocorrect/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

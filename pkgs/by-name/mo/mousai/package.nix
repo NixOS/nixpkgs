@@ -7,7 +7,6 @@
 , desktop-file-utils
 , glib
 , glib-networking
-, gobject-introspection
 , gst_all_1
 , gtk4
 , libadwaita
@@ -33,8 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-FjnRI1vHA9YF/Uw2+hDtMJmeJVa5RcxaYoG4XgXa9Ds=";
   };
 

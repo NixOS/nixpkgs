@@ -19,7 +19,7 @@ buildGoModule rec {
     owner = "smallstep";
     repo = "certificates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G+oahvBbMW8vs1DublFAC1rREmQ7Q1r7rNNS0+gnfPE=";
+    hash = "sha256-byVWNab6Q3yryluhMomzLkRNfXQ/68pAq+YGFjbvX1o=";
   };
 
   vendorHash = "sha256-gQEGCbVgtKIaUgBkfpVwLXoUg1EUhaQFn9JZvV5Rjhc=";

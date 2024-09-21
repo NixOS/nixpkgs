@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "dfandrich";
     repo = "gpscorrelate";
     rev = version;
-    sha256 = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
+    hash = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  preCheck = ''
+    # https://github.com/dfandrich/gpscorrelate/issues/29
+    rm tests/data/test005.*
+  '';
 
   installTargets = [ "install" "install-po" "install-desktop-file" ];
 

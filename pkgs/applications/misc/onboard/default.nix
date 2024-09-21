@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , lib
 , substituteAll
 , aspellWithDicts
@@ -54,6 +55,22 @@ python3.pkgs.buildPythonApplication rec {
     })
     # Allow loading hunspell dictionaries installed in NixOS system path
     ./hunspell-use-xdg-datadirs.patch
+
+    # Python 3.12 fixes (otherwise crashes at startup)
+    (fetchpatch {
+      url = "https://github.com/void-linux/void-packages/raw/1be95325d320122efd5dedf7437839cfcca01f7a/srcpkgs/onboard/patches/python-3.12.patch";
+      hash = "sha256-Lw5wlaWFlP5rFlEWmlPo5Ux8idrmhET/X9yiu+2Akkk=";
+    })
+    (fetchpatch {
+      url = "https://github.com/void-linux/void-packages/raw/1be95325d320122efd5dedf7437839cfcca01f7a/srcpkgs/onboard/patches/thread-state.patch";
+      hash = "sha256-fJfxD7HshroiEVkaKVBGV7py8tdOhbcprcmBQNuxR9U=";
+    })
+
+    # Fix for https://bugs.launchpad.net/onboard/+bug/1948723
+    (fetchpatch {
+      url = "https://github.com/void-linux/void-packages/raw/9ef46bf26ac5acc1af5809f11c97b19c5e2233ed/srcpkgs/onboard/patches/fix-brokenformat.patch";
+      hash = "sha256-r9mvJNWpPR1gsayuSSLpzIuafEKqtADYklre0Ju+KOM=";
+    })
   ];
 
   nativeBuildInputs = [

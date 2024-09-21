@@ -1,5 +1,4 @@
 {
-  config,
   fetchFromGitHub,
   hidapi,
   kmod,
@@ -9,14 +8,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.2.1";
+  version = "3.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oRmaF9ciULhN6Rvig34Ibtn4w7fcb/ulRXcApQ+QLWs=";
+    hash = "sha256-NniHOxe77hBHn81pVtlaSeIK+Hp+Lw3xBHolO6Acbho=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

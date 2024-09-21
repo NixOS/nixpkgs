@@ -50,19 +50,19 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   nativeCheckInputs = with python3.pkgs; [ passlib ];
-  checkPhase = with lib; let
+  checkPhase = let
     # these tests require network access so we need to skip them.
-    brokenTests = map escapeRegex [
+    brokenTests = map lib.escapeRegex [
       "Ice/udp" "Glacier2" "IceGrid/simple" "IceStorm" "IceDiscovery/simple"
 
       # FIXME: certificate expired, remove for next release?
       "IceSSL/configuration"
     ];
     # matches CONFIGS flag in makeFlagsArray
-    configFlag = optionalString cpp11 "--config=cpp11-shared";
+    configFlag = lib.optionalString cpp11 "--config=cpp11-shared";
   in ''
     runHook preCheck
-    ${python3.interpreter} ./cpp/allTests.py ${configFlag} --rfilter='${concatStringsSep "|" brokenTests}'
+    ${python3.interpreter} ./cpp/allTests.py ${configFlag} --rfilter='${lib.concatStringsSep "|" brokenTests}'
     runHook postCheck
   '';
 

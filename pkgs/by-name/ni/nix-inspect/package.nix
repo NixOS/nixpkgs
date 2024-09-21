@@ -22,7 +22,7 @@
 
     pname = "nix-inspect-worker";
     version = "0.1.2";
-    sourceRoot = "source/worker";
+    sourceRoot = "${src.name}/worker";
 
     nativeBuildInputs = [meson ninja pkg-config];
 

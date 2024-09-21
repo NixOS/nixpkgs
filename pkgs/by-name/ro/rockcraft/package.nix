@@ -8,6 +8,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       craft-application = super.craft-application.overridePythonAttrs (old: rec {
         version = "1.2.1";

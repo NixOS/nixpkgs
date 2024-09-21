@@ -27,13 +27,10 @@
 , tl-expected
 , hunspell
 , gobject-introspection
-, glibmm_2_68
 , jemalloc
 , rnnoise
-, abseil-cpp
 , microsoft-gsl
 , boost
-, fmt
 , wayland
 , libicns
 , darwin
@@ -49,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kotatogram-desktop";
-  version = "0-unstable-2024-07-01";
+  version = "0-unstable-2024-09-01";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
     repo = "kotatogram-desktop";
-    rev = "fbb22ebd3e39dfa4a036fa79a7a3f78b86b1cea2";
-    hash = "sha256-ccfmaqapk9ct+5kvBI02xHJ7YCGmm1CcqwM+3hC1bk0=";
+    rev = "e30c1857bf38c354467f4e6a2a37b1252b4e28e6";
+    hash = "sha256-kmJeqaDAVKhMWwcazy+gGB+55Kao67RJrlLvZQ+AtqY=";
     fetchSubmodules = true;
   };
 
@@ -116,9 +113,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpulseaudio
     hunspell
-    glibmm_2_68
     jemalloc
-    fmt
     wayland
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa

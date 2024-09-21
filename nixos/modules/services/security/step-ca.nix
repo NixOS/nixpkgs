@@ -4,7 +4,7 @@ let
   settingsFormat = (pkgs.formats.json { });
 in
 {
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   options = {
     services.step-ca = {

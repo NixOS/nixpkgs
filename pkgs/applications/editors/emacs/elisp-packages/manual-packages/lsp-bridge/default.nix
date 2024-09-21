@@ -29,13 +29,13 @@ let
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2024-07-14";
+  version = "0-unstable-2024-09-11";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "023924926ae6adfbcf5458c350b90dea7c05d51b";
-    hash = "sha256-59bl4YbKS3HgrGJlUfM3LPabxKuuE+dT7CnVUJIl05k=";
+    rev = "fb64891c2585f9fc0b7f2062cc2b98321aa4e4ca";
+    hash = "sha256-ChpZhFEKvN+1oYHbQKBUMbTjk/U++kCDnImMVtcYVBc=";
   };
 
   patches = [
@@ -77,7 +77,6 @@ melpaBuild {
   checkPhase = ''
     runHook preCheck
 
-    cd "$sourceRoot"
     mkfifo test.log
     cat < test.log &
     HOME=$(mktemp -d) python -m test.test
@@ -86,6 +85,8 @@ melpaBuild {
   '';
 
   __darwinAllowLocalNetworking = true;
+
+  ignoreCompilationError = false;
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 

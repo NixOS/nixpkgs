@@ -6,7 +6,6 @@
 , zlib
 , libsodium
 , pkg-config
-, autoPatchelfHook
 , lib
 }:
 stdenv.mkDerivation (finalAttrs: {

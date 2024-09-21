@@ -13,6 +13,7 @@
   prettytable,
   pytest-mock,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   requests,
   setuptools,
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace-fail "==" ">="
     substituteInPlace pytest.ini \
-      --replace ' --cov toggl -m "not premium"' ""
+      --replace-fail ' -m "not premium"' ""
   '';
 
   build-system = [
@@ -60,6 +61,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
     faker
     factory-boy

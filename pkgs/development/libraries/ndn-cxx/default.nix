@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ndn-cxx";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
     rev = "${pname}-${version}";
-    sha256 = "sha256-nnnxlkYVTSRB6ZcuIUDFol999+amGtqegHXK+06ITK8=";
+    sha256 = "sha256-u9+QxqdCET1f5B54HF+Jk/YuQvhcYWsPNIVHi5l0XTM=";
   };
 
   nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];

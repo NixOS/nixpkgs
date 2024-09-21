@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shlomif/rinutils";
     changelog = "https://github.com/shlomif/rinutils/raw/${version}/NEWS.asciidoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

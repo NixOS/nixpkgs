@@ -1,5 +1,4 @@
-{ lib
-, makeWrapper
+{ makeWrapper
 , nixosTests
 , symlinkJoin
 
@@ -25,13 +24,13 @@ in symlinkJoin rec {
   pythonInputs = qgis-ltr-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-ltr-unwrapped.py.pkgs);
 
   postBuild = ''
-    # unpackPhase
-
     buildPythonPath "$pythonInputs"
 
-    wrapProgram $out/bin/qgis \
-      --prefix PATH : $program_PATH \
-      --set PYTHONPATH $program_PYTHONPATH
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        --prefix PATH : $program_PATH \
+        --set PYTHONPATH $program_PYTHONPATH
+    done
   '';
 
   passthru = {

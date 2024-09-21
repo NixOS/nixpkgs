@@ -6,6 +6,7 @@
 , river
 , wayland
 , wayland-protocols
+, wayland-scanner
 , zig_0_12
 }:
 
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     river
     wayland
     wayland-protocols
+    wayland-scanner
     zig_0_12.hook
   ];
 

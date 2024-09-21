@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fangfufu";
     repo = "httpdirfs";
     rev = "refs/tags/${finalAttrs.version}";
-    sha256 = "sha256-PUYsT0VDEzerPqwrLJrET4kSsWsQhtnfmLepeaqtA+I=";
+    hash = "sha256-PUYsT0VDEzerPqwrLJrET4kSsWsQhtnfmLepeaqtA+I=";
   };
 
   postPatch = lib.optional stdenv.isDarwin ''

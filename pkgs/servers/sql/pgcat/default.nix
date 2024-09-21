@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  nix-update-script,
+  testers,
+  pgcat,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pgcat";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "postgresml";
     repo = "pgcat";
     rev = "v${version}";
-    hash = "sha256-BERxdGgPk8POnhLsyy4lKV4LCoHsJTmv2OhAOz6CKKc=";
+    hash = "sha256-DHXUhAAOmPSt4aVp93I1y69of+MEboXJBZH50mzQTm8=";
   };
 
-  cargoHash = "sha256-GwcqR8pEvz42NEmcuXpcoPdChzRBYsDEnllX62T8ulQ=";
+  cargoHash = "sha256-QqwUEbWKSUuxzYjWpVpQuKZDiNib1gM2eZJ4y7XIzXY=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -24,28 +28,21 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # requires network access
-    "--skip=dns_cache::CachedResolver::lookup_ip"
-    "--skip=dns_cache::CachedResolver::new"
-    "--skip=dns_cache::CachedResolver"
-    "--skip=dns_cache::tests::has_changed"
-    "--skip=dns_cache::tests::incorrect_address"
-    "--skip=dns_cache::tests::lookup_ip"
-    "--skip=dns_cache::tests::new"
-    "--skip=dns_cache::tests::thread"
-    "--skip=dns_cache::tests::unknown_host"
+    "--skip=dns_cache"
   ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/pgcat --version | grep "pgcat ${version}"
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = pgcat; };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/postgresml/pgcat";
     description = "PostgreSQL pooler with sharding, load balancing and failover support";
-    license = with licenses; [mit];
+    changelog = "https://github.com/postgresml/pgcat/releases";
+    license = with licenses; [ mit ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [cathalmullan];
+    maintainers = with maintainers; [ cathalmullan ];
     mainProgram = "pgcat";
   };
 }

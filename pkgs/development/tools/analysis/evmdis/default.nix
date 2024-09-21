@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule {
   pname = "evmdis";
@@ -14,11 +18,10 @@ buildGoModule {
   vendorHash = null;
 
   preBuild = ''
-    # Add go modules support
-    cp ${./go.mod} go.mod
+    go mod init github.com/Arachnid/evmdis
   '';
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" ];
 
   meta = with lib; {
     homepage = "https://github.com/Arachnid/evmdis";

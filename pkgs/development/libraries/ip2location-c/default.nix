@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.ip2location.com/developers/c";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

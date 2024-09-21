@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, udisks2-qt5
-, cmake
-, qtbase
-, qttools
-, pkg-config
-, kcodecs
-, karchive
-, wrapQtAppsHook
-, minizip
-, libzip
-, libuuid
-, libarchive
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  cmake,
+  qtbase,
+  qttools,
+  pkg-config,
+  kcodecs,
+  karchive,
+  wrapQtAppsHook,
+  minizip,
+  libzip,
+  libuuid,
+  libarchive,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,9 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
+  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
 
   strictDeps = true;
 

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20240508115724";
+  version = "3.1.20240708091337";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
     rev = "refs/tags/${version}";
-    hash = "sha256-hBP/8PIqvs820UsxrRuyMVIWgQGFVcMHCUToxhcupTk=";
+    hash = "sha256-Umxh8sRBy7fC6+GrcN1q4iO0KVpmUhGPtnqZZK/6c9M=";
   };
 
   postPatch = ''
@@ -24,7 +24,8 @@ python3.pkgs.buildPythonApplication rec {
       --replace '"schema-salad >= 8.4.20230426093816, < 9",' "" \
       --replace "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml"
+      --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml" \
+      --replace "mypy==1.10.0" "mypy==1.10.*"
   '';
 
   nativeBuildInputs = [

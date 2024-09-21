@@ -9,14 +9,14 @@
   httpx,
   pydantic,
   pythonOlder,
+  requests,
   setuptools-scm,
-  tqdm,
   validators,
 }:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.6.7";
+  version = "4.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Y+KX9ZJhQgXGdweLtnh7vQO7U7WBvT9RR94ro9kw7qg=";
+    hash = "sha256-JVn9Xhq7MJD+o6DA/EaW1NNnvsjjqyW+pmFctuQStgo=";
   };
 
   pythonRelaxDeps = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     grpcio-tools
     httpx
     pydantic
-    tqdm
+    requests
     validators
   ];
 

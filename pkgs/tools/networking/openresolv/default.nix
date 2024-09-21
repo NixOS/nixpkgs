@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     mainProgram = "resolvconf";
     homepage = "https://roy.marples.name/projects/openresolv";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

@@ -16,18 +16,19 @@
   appimage-run,
   gtk4,
   bintools,
+  libnotify,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gearlever";
-  version = "2.0.1";
+  version = "2.0.7";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
-    rev = version;
-    hash = "sha256-f4rQXenJCZiDC9MRQkjy0mOiNkWzOPSS05GXHXlhUao=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Zp0w6ZJFRV5IANF0sY/n8jqgG+3h9J2eV/dUP+we8PY=";
   };
 
   postPatch =
@@ -36,14 +37,6 @@ python3Packages.buildPythonApplication rec {
     ''
       substituteInPlace build-aux/meson/postinstall.py \
         --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
-    ''
-    # Some attempts to overcome flatpak assumptions
-    + ''
-      substituteInPlace src/lib/utils.py \
-        --replace-fail '/run/host/os-release' '/etc/os-release'
-
-      substituteInPlace src/lib/terminal.py \
-        --replace-fail "cmd = ['flatpak-spawn', '--host', *command]" "cmd = [*command]"
     ''
     # Use gtk4 instead of gtk3 to get smaller closure size
     + ''
@@ -87,6 +80,7 @@ python3Packages.buildPythonApplication rec {
         desktop-file-utils # update-desktop-database
         gtk4.dev # gtk4-launch
         bintools # readelf
+        libnotify # notify-send
       ]
     }"
   ];

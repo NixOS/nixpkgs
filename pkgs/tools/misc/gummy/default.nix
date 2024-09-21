@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitea
-, substituteAll
 , testers
 , gummy
 , cmake
@@ -76,6 +75,6 @@ stdenv.mkDerivation rec {
       via backlight (currently only for embedded displays) and gamma. Multiple monitors are supported.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

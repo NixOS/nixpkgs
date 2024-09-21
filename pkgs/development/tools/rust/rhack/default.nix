@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "088ynf65szaa86pxwwasn3wwi00z5pn7i8w9gh5dyn983z4d8237";
   };
 
-  cargoSha256 = "sha256-HmBh2qbO/HuNPfHKifq41IB5ResnGka2iaAsnwppm9s=";
+  cargoHash = "sha256-HmBh2qbO/HuNPfHKifq41IB5ResnGka2iaAsnwppm9s=";
 
   meta = with lib; {
     description = "Temporary edit external crates that your project depends on";

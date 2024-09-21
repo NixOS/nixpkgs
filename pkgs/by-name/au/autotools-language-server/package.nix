@@ -5,7 +5,15 @@
 }:
 
 let
-  python3 = python311;
+  python3 = python311.override {
+    self = python3;
+    packageOverrides = _: super: {
+      tree-sitter = super.tree-sitter_0_21;
+      lsp-tree-sitter = super.lsp-tree-sitter.overridePythonAttrs(__: {
+        pythonRelaxDeps = [ "tree-sitter" ];
+      });
+    };
+  };
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "autotools-language-server";

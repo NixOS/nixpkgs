@@ -3,6 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  sphinxHook,
+  furo,
+  myst-parser,
+  pbr,
+  sphinxcontrib-apidoc,
 
   # dependencies
   attrs,
@@ -30,7 +35,20 @@ buildPythonPackage rec {
     hash = "sha256-oKtQBT8tuAk4S/Sygp4qxLk4ADWDTG0MbVaL5O2qsuA=";
   };
 
-  build-system = [ poetry-core ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  build-system = [
+    poetry-core
+    sphinxHook
+    furo
+    myst-parser
+    pbr
+    sphinxcontrib-apidoc
+  ];
 
   dependencies = [
     attrs
@@ -42,12 +60,21 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  nativeCheckInputs = [ pytestCheckHook freezegun ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    freezegun
+  ];
 
   disabledTestPaths = [
     # pytest wants to execute the actual source files for some reason, which fails with ImportPathMismatchError()
     "src/reuse"
   ];
+
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
+  sphinxRoot = "docs";
 
   pythonImportsCheck = [ "reuse" ];
 

@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , autoreconfHook
 , bsd-finger
 , perl
 , talloc
-, linkOpenssl? true, openssl
+, linkOpenssl ? true, openssl
 , withCap ? true, libcap
 , withCollectd ? false, collectd
 , withJson ? false, json_c
@@ -25,9 +25,11 @@ stdenv.mkDerivation rec {
   pname = "freeradius";
   version = "3.2.5";
 
-  src = fetchurl {
-    url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    hash = "sha256-HnX1/Blh2YVNHLPGkhYS++K57bjuUIpafL1p8edgcRU=";
+  src = fetchFromGitHub {
+    owner = "FreeRADIUS";
+    repo = "freeradius-server";
+    rev = "refs/tags/release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-1n447BpTqmkg5tyXe9yPzjfDoh7wMLZhwouUEzkwxKM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -39,6 +39,6 @@ buildPythonPackage rec {
       bsd2 # and
       asl20
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -77,7 +77,7 @@ gnustep.stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
   };
 }
 

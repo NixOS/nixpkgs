@@ -3,29 +3,35 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   coloredlogs,
   datasets,
+  huggingface-hub,
+  numpy,
+  packaging,
+  sympy,
+  torch,
+  transformers,
+
+  # optional-dependencies
   diffusers,
   evaluate,
   h5py,
-  huggingface-hub,
-  numpy,
   onnx,
   onnxruntime,
-  packaging,
   protobuf,
-  setuptools,
-  sympy,
   tensorflow,
   tf2onnx,
   timm,
-  torch,
-  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.21.2";
+  version = "1.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -34,10 +40,12 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "optimum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OhquE+QhNOXFkKy/TvKlLn65CMchvKjcbR/S4Rl2MT4=";
+    hash = "sha256-fVpSoa6s7puYO8BiA6aSAhSOTfiZJgaX5iwYkd9VdVo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "transformers" ];
 
   dependencies = [
     coloredlogs
@@ -108,12 +116,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "optimum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
-    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/huggingface/optimum/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

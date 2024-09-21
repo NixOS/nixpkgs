@@ -1,14 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
-  setuptools,
-  nodejs,
-  yarn,
-  fixup-yarn-lock,
+  yarnConfigHook,
   fetchYarnDeps,
+  nodejs,
+
+  setuptools,
 
   flask,
   werkzeug,
@@ -37,23 +36,19 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.17.1";
+  version = "2.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     rev = "refs/tags/v${version}";
-    hash = "sha256-51/nMnXUhb+hTL4xS9x4urI+2eENo/8sEKtk/kt6xTk=";
+    hash = "sha256-4/MiiS2uspjfGg0KIrgzShG7eW10Be6CoISCOnXSou0=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    yarnConfigHook
     nodejs
-    yarn
-    fixup-yarn-lock
   ];
 
   yarnOfflineCache = fetchYarnDeps {
@@ -61,25 +56,25 @@ buildPythonPackage rec {
     hash = "sha256-L/or8jO6uEypI5krwy/ElIxa6jJrXGsCRZ9mh+0kcGA=";
   };
 
-  preBuild = ''
+  # as of writing this yarnConfigHook has no parameter that changes in which directory it will be run
+  # until then we use preConfigure for entering the directory and preBuild for exiting it
+  preConfigure = ''
     pushd @plotly/dash-jupyterlab
 
-    export HOME=$(mktemp -d)
+    substituteInPlace package.json \
+        --replace-fail 'jlpm' 'yarn'
+  '';
 
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    fixup-yarn-lock yarn.lock
-
-    substituteInPlace package.json --replace jlpm yarn
-    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts
-    patchShebangs node_modules
-
-    # Generates the jupyterlab extension files
-    yarn run build:pack
+  preBuild = ''
+    # Generate the jupyterlab extension files
+    yarn --offline run build:pack
 
     popd
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     werkzeug
     plotly
@@ -93,7 +88,7 @@ buildPythonPackage rec {
     nest-asyncio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     celery = [
       celery
       redis

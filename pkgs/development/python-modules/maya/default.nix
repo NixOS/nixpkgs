@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/timofurrer/maya";
     changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

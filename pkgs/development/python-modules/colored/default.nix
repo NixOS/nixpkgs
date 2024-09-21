@@ -30,7 +30,7 @@ buildPythonPackage rec {
     description = "Simple library for color and formatting to terminal";
     homepage = "https://gitlab.com/dslackw/colored";
     changelog = "https://gitlab.com/dslackw/colored/-/raw/${version}/CHANGES.md";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

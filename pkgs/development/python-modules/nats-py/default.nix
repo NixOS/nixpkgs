@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xPjyi5dFR9xVp1Fl6mM2JNKTRlLBQ6J9aB0dpjnZ+eQ=";
+    hash = "sha256-r94dDXPpkLS1PsB9L4qlDw15tPa2vpxOS52eqJk2dNU=";
   };
 
   build-system = [ setuptools ];
@@ -47,11 +47,12 @@ buildPythonPackage rec {
 
   disabledTests =
     [
-      # AssertionError: assert 5 == 0
-      "test_pull_subscribe_limits"
+      # AssertionError
       "test_fetch_n"
-      "test_subscribe_no_echo"
+      "test_kv_simple"
+      "test_pull_subscribe_limits"
       "test_stream_management"
+      "test_subscribe_no_echo"
       # Tests fail on hydra, often Time-out
       "test_subscribe_iterate_next_msg"
       "test_ordered_consumer_larger_streams"

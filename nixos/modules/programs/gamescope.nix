@@ -17,6 +17,7 @@ let
       mkdir -p $out/bin
       makeWrapper ${cfg.package}/bin/gamescope $out/bin/gamescope --inherit-argv0 \
         ${builtins.toString wrapperArgs}
+      ln -s ${cfg.package}/bin/gamescopectl $out/bin/gamescopectl
     '';
 in
 {

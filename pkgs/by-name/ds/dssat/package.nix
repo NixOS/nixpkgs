@@ -31,7 +31,7 @@ stdenv.mkDerivation (final: {
     owner = "DSSAT";
     repo = "dssat-csm-os";
     rev = "refs/tags/v${final.version}";
-    sha256 = "sha256-8OaTM7IXFZjlelx5O4O+bVNQj4dIhGzIk2iCfpqI8uA=";
+    hash = "sha256-8OaTM7IXFZjlelx5O4O+bVNQj4dIhGzIk2iCfpqI8uA=";
   };
 
   # maintainers are on windows and have CRLF endings in their files

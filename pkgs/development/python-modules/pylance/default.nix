@@ -2,35 +2,50 @@
   lib,
   stdenv,
   buildPythonPackage,
-  rustPlatform,
   fetchFromGitHub,
-  darwin,
-  libiconv,
+  rustPlatform,
+
+  # nativeBuildInputs
   pkg-config,
+
+  # buildInputs
+  libiconv,
   protobuf,
+  darwin,
+
+  # dependencies
   numpy,
   pyarrow,
+
+  # optional-dependencies
+  torch,
+
+  # tests
+  duckdb,
   ml-dtypes,
   pandas,
   pillow,
   polars,
   pytestCheckHook,
   tqdm,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.13.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gwSpdj3i68QBrIcuvjj/32CsRKYVh9dSf98qNLDpxpc=";
+    hash = "sha256-E+29CbVNbzmrQnBZt0860IvL4xYZqzE+uzSuKDwgxzg=";
   };
 
-  sourceRoot = "${src.name}/python";
+  buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
@@ -65,31 +80,53 @@ buildPythonPackage rec {
     pyarrow
   ];
 
+  optional-dependencies = {
+    torch = [ torch ];
+  };
+
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
+    duckdb
     ml-dtypes
     pandas
     pillow
     polars
     pytestCheckHook
     tqdm
-  ];
+  ] ++ optional-dependencies.torch;
 
   preCheck = ''
-    cd python/tests
+    cd python/python/tests
   '';
 
-  disabledTests = [
-    # Error during planning: Invalid function 'invert'.
-    "test_polar_scan"
-    "test_simple_predicates"
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
+    "test_convert_int_tensors"
+    "test_ground_truth"
+    "test_index_cast_centroids"
+    "test_index_with_no_centroid_movement"
+    "test_iter_filter"
+    "test_iter_over_dataset_fixed_shape_tensor"
+    "test_iter_over_dataset_fixed_size_lists"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--generate-lockfile"
+      "--lockfile-metadata-path"
+      "python"
+    ];
+  };
 
   meta = {
     description = "Python wrapper for Lance columnar format";
     homepage = "https://github.com/lancedb/lance";
+    changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
+    # test_indices.py ...sss.Fatal Python error: Fatal Python error: Illegal instructionIllegal instruction
+    # File "/nix/store/wiiccrs0vd1qbh4j6ki9p40xmamsjix3-python3.12-pylance-0.17.0/lib/python3.12/site-packages/lance/indices.py", line 237 in train_ivf
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

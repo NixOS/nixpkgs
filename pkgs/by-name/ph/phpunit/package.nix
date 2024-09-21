@@ -4,18 +4,18 @@
 , php
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpunit";
-  version = "11.2.7";
+  version = "11.3.1";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-s/zfTW8a+E/FOuHg+oSpVZdxBdfIVL0RmvBBcI6zB9Y=";
+    hash = "sha256-uTH5LlXabhsu86Te/oNnIrvq88MhAqYbVTyKEaPtTuU=";
   };
 
-  vendorHash = "sha256-Gjii3m8wWmZbozKnJW/n9+wQUupemIU8XjmlCuTtfxU=";
+  vendorHash = "sha256-cOy5kipPr73LbxmQAsqqR0GfegQp1ARrbqei2zi5JHc=";
 
   passthru.updateScript = nix-update-script { };
 

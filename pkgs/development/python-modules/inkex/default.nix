@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   inkscape,
   fetchpatch,
@@ -62,10 +63,16 @@ buildPythonPackage {
     scour
   ];
 
-  disabledTests = [
-    "test_extract_multiple"
-    "test_lookup_and"
-  ];
+  disabledTests =
+    [
+      "test_extract_multiple"
+      "test_lookup_and"
+    ]
+    ++ lib.optional stdenv.isDarwin [
+      "test_image_extract"
+      "test_path_number_nodes"
+      "test_plotter" # Hangs
+    ];
 
   disabledTestPaths = [
     # Fatal Python error: Segmentation fault

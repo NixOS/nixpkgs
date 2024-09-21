@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg, libkeyfinder }:
+{ lib, stdenv, fetchFromGitHub, ffmpeg_7, libkeyfinder, fftw }:
 
 stdenv.mkDerivation rec {
   pname = "keyfinder-cli";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     repo = "keyfinder-cli";
     owner = "EvanPurkhiser";
     rev = "v${version}";
-    sha256 = "1mlcygbj3gqii3cz8jd6ks1lz612i4jp0343qjg293xm39fg47ns";
+    hash = "sha256-9/+wzPTaQ5PfPiqTZ5EuHdswXJgfgnvAul/FeeDbbJA=";
   };
 
-  buildInputs = [ ffmpeg libkeyfinder ];
+  buildInputs = [ ffmpeg_7 libkeyfinder fftw ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

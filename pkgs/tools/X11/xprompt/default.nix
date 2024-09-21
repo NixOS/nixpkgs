@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
-  postPatch = with lib;
+  postPatch =
     let
       configFile =
-        if isDerivation conf || builtins.isPath conf
+        if lib.isDerivation conf || builtins.isPath conf
         then conf else writeText "config.h" conf;
     in
-    optionalString (conf != null) "cp ${configFile} config.h";
+    lib.optionalString (conf != null) "cp ${configFile} config.h";
 
   makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
 

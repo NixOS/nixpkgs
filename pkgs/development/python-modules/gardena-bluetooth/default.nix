@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gardena-bluetooth";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "gardena-bluetooth";
     rev = "refs/tags/${version}";
-    hash = "sha256-eze99JvNSwhot8t43oy30iaFrrkpeMNFyHvfQcA56IM=";
+    hash = "sha256-H2v96G/mu17puq8jNyk6L9iuWUvRombPd+s6byNQ4Zw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     tzlocal

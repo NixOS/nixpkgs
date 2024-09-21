@@ -5,19 +5,13 @@
 , runCommand
 , python3
 , encryptionSupport ? true
+, sqliteSupport ? true
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
-      # aiosqlite>=0.16,<0.19
-      aiosqlite = prev.aiosqlite.overridePythonAttrs (old: rec {
-        version = "0.18.0";
-        src = old.src.override {
-          rev = "refs/tags/v${version}";
-          hash = "sha256-yPGSKqjOz1EY5/V0oKz2EiZ90q2O4TINoXdxHuB7Gqk=";
-        };
-      });
       # SQLAlchemy>=1,<1.4
       # SQLAlchemy 2.0's derivation is very different, so don't override, just write it from scratch
       # (see https://github.com/NixOS/nixpkgs/blob/65dbed73949e4c0207e75dcc7271b29f9e457670/pkgs/development/python-modules/sqlalchemy/default.nix)
@@ -42,29 +36,27 @@ let
 
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
-    version = "0.4.2";
-    disabled = python.pythonOlder "3.9";
+    version = "0.5.0";
+    disabled = python.pythonOlder "3.10";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-svdg7KpCy/+T9Hu+FbsgLNU8nVuIn0flPg7qyn7I+30=";
+      hash = "sha256-PkeZ7C4Srs2I10g7X1XD/HclumUwWTYj2F3J2CxN4Hs=";
     };
 
     patches = [
       # add entry point - https://github.com/maubot/maubot/pull/146
       (fetchpatch {
-        url = "https://github.com/maubot/maubot/commit/283f0a3ed5dfae13062b6f0fd153fbdc477f4381.patch";
-        sha256 = "0yn5357z346qzy5v5g124mgiah1xsi9yyfq42zg028c8paiw8s8x";
+        url = "https://github.com/maubot/maubot/commit/ef6e23eccb530187dd3447b6aac2047d4a32fb83.patch";
+        hash = "sha256-d5fu47F93aXZmk6MiSsxTE8pHjMKNL0FUdU+ynUqY2o=";
       })
     ];
 
     propagatedBuildInputs = with python.pkgs; [
-      setuptools
       # requirements.txt
-      mautrix
+      (mautrix.override { withOlm = encryptionSupport; })
       aiohttp
       yarl
-      sqlalchemy
       asyncpg
       aiosqlite
       commonmark
@@ -76,12 +68,22 @@ let
       colorama
       questionary
       jinja2
+      setuptools
     ]
     # optional-requirements.txt
     ++ lib.optionals encryptionSupport [
       python-olm
       pycryptodome
       unpaddedbase64
+    ]
+    ++ lib.optionals sqliteSupport [
+      sqlalchemy
+    ];
+
+    # used for plugin tests
+    propagatedNativeBuildInputs = with python.pkgs; [
+      pytest
+      pytest-asyncio
     ];
 
     postInstall = ''

@@ -34,11 +34,8 @@ buildNpmPackage rec {
         --out-dir lib/html-language-server/node/
       npx babel ${extensions}/json-language-features/server/dist/node \
         --out-dir lib/json-language-server/node/
-      npx babel ${extensions}/markdown-language-features/server/dist/node \
-        --out-dir lib/markdown-language-server/node/
       cp -r ${vscode-extensions.dbaeumer.vscode-eslint}/share/vscode/extensions/dbaeumer.vscode-eslint/server/out \
         lib/eslint-language-server
-      mv lib/markdown-language-server/node/workerMain.js lib/markdown-language-server/node/main.js
     '';
 
   meta = with lib; {

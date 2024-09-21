@@ -76,7 +76,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "xhtml2pdf";
   };
 }

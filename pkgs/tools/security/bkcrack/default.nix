@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBKCRACK_BUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DBKCRACK_BUILD_TESTING=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   postInstall = ''

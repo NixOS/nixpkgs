@@ -128,6 +128,8 @@ stdenv.mkDerivation rec {
   # zerocallusedregs interferes during BPF compilation; TODO: perhaps improve
   hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
 
+  doCheck = true;
+
   installFlags = [
     "e_datadir=\${TMPDIR}"
     "e_localstatedir=\${TMPDIR}"

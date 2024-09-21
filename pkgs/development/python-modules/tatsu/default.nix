@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://tatsu.readthedocs.io/";
     changelog = "https://github.com/neogeny/TatSu/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

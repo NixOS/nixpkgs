@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "auth0-cli";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j7HT57/4rrrVkx9Zz+XuWD6UL0spdej+U5gWtFo1FSI=";
+    hash = "sha256-x53mS/nLRuxwDzYSwTtS+35OoDkO9ULTrdV7N43IQ/I=";
   };
 
-  vendorHash = "sha256-bWAneCRsQbPRxEM/3jr1/Lov6NV67MRycOgrlj3bKF8=";
+  vendorHash = "sha256-p739VSwemwEh5siP9qChNQY76NHp7MsG3xAiBPZSvcs=";
 
   ldflags = [
     "-s"

@@ -10,6 +10,12 @@ stdenv.mkDerivation {
     hash = "sha256-H3IU9aTFSzUAqYgrtHd4F18hbhZsbOJGC4K5JwMQOOw=";
   };
 
+  patches = [
+    # stop using transitional LFS64 APIs, which are removed in musl 1.2.4
+    # https://android-review.googlesource.com/c/platform/hardware/google/aemu/+/3105640/1
+    ./LFS64.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa

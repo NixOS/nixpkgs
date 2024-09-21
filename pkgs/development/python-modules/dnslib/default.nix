@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Simple library to encode/decode DNS wire-format packets";
     homepage = "https://github.com/paulc/dnslib";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

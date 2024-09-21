@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mapnik";
-  version = "4.0.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     rev = "v${version}";
-    hash = "sha256-CNFNGMJU3kzkRrOGsf8/uv5ebHPEQ0tkA+5OubRVEjs=";
+    hash = "sha256-U5QQ7I7ZBNlMm74Vpvv8lvJ4EefM3+jHURFAP03Lmvw=";
     fetchSubmodules = true;
   };
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     python3
     sqlite
     zlib
-    libxml2
+    (libxml2.override { enableHttp = true; })
     postgresql
     protozero
     sparsehash

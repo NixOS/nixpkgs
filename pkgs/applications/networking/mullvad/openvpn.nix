@@ -3,7 +3,6 @@
 , openvpn
 , fetchpatch
 , fetchurl
-, iproute2
 , libnl
 , autoreconfHook
 , pkg-config

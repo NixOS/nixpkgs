@@ -11,6 +11,7 @@
   pyarrow,
   Security,
   SystemConfiguration,
+  typing-extensions,
 }:
 
 let
@@ -33,7 +34,7 @@ in
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "38.0.1";
+  version = "40.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,13 +42,13 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "arrow-datafusion-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-rBS6i2HqpdhnhZZfO0ywL/e4a+rnUZkHzezKd8PuG80=";
+    hash = "sha256-5WOSlx4XW9zO6oTY16lWQElShLv0ubflVPfSSEGrFgg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "datafusion-cargo-deps";
-    inherit src pname version;
-    hash = "sha256-M2ZNAFWdsnN9C4+YbqFxZVH9fHR10Bimf1Xzrd9oy9E=";
+    inherit src;
+    hash = "sha256-hN03tbnH77VsMDxSMddMHIH00t7lUs5h8rTHbiMIExw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -63,13 +64,18 @@ buildPythonPackage rec {
       SystemConfiguration
     ];
 
-  propagatedBuildInputs = [ pyarrow ];
+  dependencies = [
+    pyarrow
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     numpy
   ];
+
   pythonImportsCheck = [ "datafusion" ];
+
   pytestFlagsArray = [
     "--pyargs"
     pname

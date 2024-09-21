@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, dtk6widget
-, qt6Packages
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dtk6widget,
+  qt6Packages,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qt6integration";
-  version = "6.0.16";
+  version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-2QNHJZ4Bz21UyuRhD/9gC7Ls9GggHp4QwtFzoxyyAL4=";
+    hash = "sha256-7FGOnAAcwOonpMDDukj88s1b4WmLJNu7MZSW7f7P44g=";
   };
 
   nativeBuildInputs = [

@@ -19,11 +19,11 @@
 , libGLU ? null
 , wxGTK ? null
 , xorg ? null
-, exdoc ? null
+, ex_doc ? null
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
-, exdocSupport ? false
+, ex_docSupport ? false
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
 , writeScript
@@ -64,7 +64,7 @@
 , installPhase ? ""
 , preInstall ? ""
 , postInstall ? ""
-, installTargets ? [ "install" "install-docs" ]
+, installTargets ? if ((lib.versionOlder version "27.0") || ex_docSupport) then [ "install" "install-docs" ] else [ "install" ]
 , checkPhase ? ""
 , preCheck ? ""
 , postCheck ? ""
@@ -80,7 +80,7 @@ else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk11 != null;
-assert exdocSupport -> exdoc != null;
+assert ex_docSupport -> ex_doc != null;
 
 let
   inherit (lib) optional optionals optionalAttrs optionalString;
@@ -122,15 +122,15 @@ stdenv.mkDerivation ({
   '';
 
   # For OTP 27+ we need ex_doc to build the documentation
-  # When exdocSupport is enabled, grab the raw ex_doc executable from the exdoc
+  # When ex_docSupport is enabled, grab the raw ex_doc executable from the ex_doc
   # derivation. Next, patch the first line to use the escript that will be
   # built during the build phase of this derivation. Finally, building the
   # documentation requires the erlang-logo.png asset.
   preConfigure = ''
     ./otp_build autoconf
-  '' + optionalString exdocSupport ''
+  '' + optionalString ex_docSupport ''
     mkdir -p $out/bin
-    cp ${exdoc}/bin/.ex_doc-wrapped $out/bin/ex_doc
+    cp ${ex_doc}/bin/.ex_doc-wrapped $out/bin/ex_doc
     sed -i "1 s:^.*$:#!$out/bin/escript:" $out/bin/ex_doc
     export EX_DOC=$out/bin/ex_doc
 

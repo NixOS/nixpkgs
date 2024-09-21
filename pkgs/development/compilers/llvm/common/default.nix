@@ -5,10 +5,12 @@
   lib,
   stdenv,
   preLibcCrossHeaders,
+  libxcrypt,
   substitute,
   substituteAll,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
@@ -73,7 +75,238 @@ let
       p:
       builtins.path {
         name = builtins.baseNameOf p;
-        path = "${metadata.versionDir}/${p}";
+        path =
+          let
+            patches = {
+              "clang/gnu-install-dirs.patch" = [
+                {
+                  before = "14";
+                  path = ../12;
+                }
+                {
+                  after = "19";
+                  before = "20";
+                  path = ../19;
+                }
+                {
+                  after = "20";
+                  path = ../git;
+                }
+              ];
+              "clang/purity.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  before = "17";
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  before = "16";
+                  path = ../12;
+                }
+              ];
+              "lld/add-table-base.patch" = [
+                {
+                  after = "16";
+                  path = ../16;
+                }
+              ];
+              "lld/gnu-install-dirs.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  before = "14";
+                  path = ../12;
+                }
+              ];
+              "llvm/gnu-install-dirs.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+              ];
+              "llvm/gnu-install-dirs-polly.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  before = "18";
+                  after = "14";
+                  path = ../14;
+                }
+              ];
+              "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
+                {
+                  before = "17";
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  after = "17";
+                  path = ../17;
+                }
+              ];
+              "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+                {
+                  after = "16";
+                  before = "18";
+                  path = ../16;
+                }
+              ];
+              "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
+                {
+                  after = "15";
+                  path = ../15;
+                }
+              ];
+              "libcxx/0001-darwin-10.12-mbstate_t-fix.patch" = [
+                {
+                  after = "18";
+                  path = ../18;
+                }
+              ];
+              "libunwind/gnu-install-dirs.patch" = [
+                {
+                  before = "17";
+                  after = "15";
+                  path = ../15;
+                }
+              ];
+              "compiler-rt/X86-support-extension.patch" = [
+                {
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  before = "15";
+                  path = ../12;
+                }
+              ];
+              "compiler-rt/armv7l.patch" = [
+                {
+                  before = "15";
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "compiler-rt/gnu-install-dirs.patch" = [
+                {
+                  before = "14";
+                  path = ../12;
+                }
+                {
+                  after = "13";
+                  before = "15";
+                  path = ../14;
+                }
+                {
+                  after = "15";
+                  before = "17";
+                  path = ../15;
+                }
+                {
+                  after = "16";
+                  path = ../17;
+                }
+              ];
+              "compiler-rt/darwin-targetconditionals.patch" = [
+                {
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "compiler-rt/codesign.patch" = [
+                {
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "compiler-rt/normalize-var.patch" = [
+                {
+                  after = "16";
+                  path = ../16;
+                }
+                {
+                  before = "16";
+                  path = ../12;
+                }
+              ];
+              "lldb/procfs.patch" = [
+                {
+                  after = "15";
+                  path = ../15;
+                }
+                {
+                  before = "15";
+                  path = ../12;
+                }
+              ];
+              "lldb/cpu_subtype_arm64e_replacement.patch" = [
+                {
+                  after = "13";
+                  path = ../13;
+                }
+              ];
+              "lldb/resource-dir.patch" = [
+                {
+                  before = "16";
+                  path = ../12;
+                }
+              ];
+              "openmp/fix-find-tool.patch" = [
+                {
+                  after = "17";
+                  before = "19";
+                  path = ../17;
+                }
+              ];
+              "openmp/run-lit-directly.patch" = [
+                {
+                  after = "16";
+                  path = ../16;
+                }
+                {
+                  after = "14";
+                  before = "16";
+                  path = ../14;
+                }
+              ];
+            };
+
+            constraints = patches."${p}" or null;
+            matchConstraint =
+              {
+                before ? null,
+                after ? null,
+                path,
+              }:
+              let
+                check = fn: value: if value == null then true else fn release_version value;
+                matchBefore = check lib.versionOlder before;
+                matchAfter = check lib.versionAtLeast after;
+              in
+              matchBefore && matchAfter;
+
+            patchDir =
+              toString
+                (
+                  if constraints == null then
+                    { path = metadata.versionDir; }
+                  else
+                    (lib.findFirst matchConstraint { path = metadata.versionDir; } constraints)
+                ).path;
+          in
+          "${patchDir}/${p}";
       };
   };
 
@@ -88,9 +321,7 @@ let
         }
       );
     in
-    {
-      llef = callPackage ./lldb-plugins/llef.nix { };
-    }
+    lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
   );
 
   tools = lib.makeExtensible (
@@ -114,6 +345,13 @@ let
         ln -s "${cc.lib}/lib/clang/${clangVersion}/include" "$rsrc"
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       '';
+      mkExtraBuildCommandsBasicRt =
+        cc:
+        mkExtraBuildCommands0 cc
+        + ''
+          ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/lib" "$rsrc/lib"
+          ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/share" "$rsrc/share"
+        '';
       mkExtraBuildCommands =
         cc:
         mkExtraBuildCommands0 cc
@@ -225,7 +463,24 @@ let
                   stripLen = 1;
                   hash = "sha256-e8YKrMy2rGcSJGC6er2V66cOnAnI+u1/yImkvsRsmg8=";
                 }
-              );
+              )
+          ++ lib.optionals (lib.versions.major metadata.release_version == "18") [
+            # Reorgs one test so the next patch applies
+            (fetchpatch {
+              name = "osabi-test-reorg.patch";
+              url = "https://github.com/llvm/llvm-project/commit/06cecdc60ec9ebfdd4d8cdb2586d201272bdf6bd.patch";
+              stripLen = 1;
+              hash = "sha256-s9GZTNgzLS511Pzh6Wb1hEV68lxhmLWXjlybHBDMhvM=";
+            })
+            # Sets the OSABI for OpenBSD, needed for an LLD patch for OpenBSD.
+            # https://github.com/llvm/llvm-project/pull/98553
+            (fetchpatch {
+              name = "mc-set-openbsd-osabi.patch";
+              url = "https://github.com/llvm/llvm-project/commit/b64c1de714c50bec7493530446ebf5e540d5f96a.patch";
+              stripLen = 1;
+              hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
+            })
+          ];
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
@@ -327,7 +582,16 @@ let
           )
           ++ lib.optional (
             lib.versionAtLeast metadata.release_version "16" && lib.versionOlder metadata.release_version "18"
-          ) (metadata.getVersionFile "lld/add-table-base.patch");
+          ) (metadata.getVersionFile "lld/add-table-base.patch")
+          ++ lib.optional (lib.versions.major metadata.release_version == "18") (
+            # https://github.com/llvm/llvm-project/pull/97122
+            fetchpatch {
+              name = "more-openbsd-program-headers.patch";
+              url = "https://github.com/llvm/llvm-project/commit/d7fd8b19e560fbb613159625acd8046d0df75115.patch";
+              stripLen = 1;
+              hash = "sha256-7wTy7XDTx0+fhWQpW1KEuz7xJvpl42qMTUfd20KGOfA=";
+            }
+          );
       };
 
       lldb = callPackage ./lldb.nix (
@@ -343,9 +607,35 @@ let
                   (_: _: { name = "resource-dir.patch"; })
               ) { };
             in
-            lib.optional (lib.versionOlder metadata.release_version "16")
+            lib.optionals (lib.versionOlder metadata.release_version "15") [
+              # Fixes for SWIG 4
+              (fetchpatch2 {
+                url = "https://github.com/llvm/llvm-project/commit/81fc5f7909a4ef5a8d4b5da2a10f77f7cb01ba63.patch?full_index=1";
+                stripLen = 1;
+                hash = "sha256-Znw+C0uEw7lGETQLKPBZV/Ymo2UigZS+Hv/j1mUo7p0=";
+              })
+              (fetchpatch2 {
+                url = "https://github.com/llvm/llvm-project/commit/f0a25fe0b746f56295d5c02116ba28d2f965c175.patch?full_index=1";
+                stripLen = 1;
+                hash = "sha256-QzVeZzmc99xIMiO7n//b+RNAvmxghISKQD93U2zOgFI=";
+              })
+            ]
+            ++ lib.optionals (lib.versionOlder metadata.release_version "16") [
+              # Fixes for SWIG 4
+              (fetchpatch2 {
+                url = "https://github.com/llvm/llvm-project/commit/ba35c27ec9aa9807f5b4be2a0c33ca9b045accc7.patch?full_index=1";
+                stripLen = 1;
+                hash = "sha256-LXl+WbpmWZww5xMDrle3BM2Tw56v8k9LO1f1Z1/wDTs=";
+              })
+              (fetchpatch2 {
+                url = "https://github.com/llvm/llvm-project/commit/9ec115978ea2bdfc60800cd3c21264341cdc8b0a.patch?full_index=1";
+                stripLen = 1;
+                hash = "sha256-u0zSejEjfrH3ZoMFm1j+NVv2t5AP9cE5yhsrdTS1dG4=";
+              })
+
               # FIXME: do we need this after 15?
               (metadata.getVersionFile "lldb/procfs.patch")
+            ]
             ++ lib.optional (lib.versionOlder metadata.release_version "17") resourceDirPatch
             ++ lib.optional (lib.versionOlder metadata.release_version "14") (
               metadata.getVersionFile "lldb/gnu-install-dirs.patch"
@@ -437,31 +727,85 @@ let
               && stdenv.targetPlatform.useLLVM or false
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+          nixSupport.cc-ldflags =
+            lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD)
+              (
+                [ "-L${targetLlvmLibraries.libunwind}/lib" ]
+                ++ lib.optional (lib.versionAtLeast metadata.release_version "17") "--undefined-version"
+              );
+        }
+      );
+
+      clangWithLibcAndBasicRtAndLibcxx = wrapCCWith (
+        rec {
+          cc = tools.clang-unwrapped;
+          libcxx = targetLlvmLibraries.libcxx;
+          bintools = bintools';
+          extraPackages =
+            [ targetLlvmLibraries.compiler-rt-no-libc ]
+            ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
+              targetLlvmLibraries.libunwind
+            ];
+          extraBuildCommands =
+            lib.optionalString (lib.versions.major metadata.release_version == "13") (
+              ''
+                echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
+                echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
+              ''
+              + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
+                echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
+                echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
+              ''
+              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
+                echo "-lunwind" >> $out/nix-support/cc-ldflags
+              ''
+              + lib.optionalString stdenv.targetPlatform.isWasm ''
+                echo "-fno-exceptions" >> $out/nix-support/cc-cflags
+              ''
+            )
+            + mkExtraBuildCommandsBasicRt cc;
+        }
+        // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
+          nixSupport.cc-cflags =
+            [
+              "-rtlib=compiler-rt"
+              "-Wno-unused-command-line-argument"
+              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+            ]
+            ++ lib.optional (
+              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+            ) "--unwindlib=libunwind"
+            ++ lib.optional (
+              !stdenv.targetPlatform.isWasm
+              && !stdenv.targetPlatform.isFreeBSD
+              && stdenv.targetPlatform.useLLVM or false
+            ) "-lunwind"
+            ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
             !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
 
-      clangNoLibcxx = wrapCCWith (
+      clangWithLibcAndBasicRt = wrapCCWith (
         rec {
           cc = tools.clang-unwrapped;
           libcxx = null;
           bintools = bintools';
-          extraPackages = [ targetLlvmLibraries.compiler-rt ];
+          extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") ''
               echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-              echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
               echo "-nostdlib++" >> $out/nix-support/cc-cflags
             ''
-            + mkExtraBuildCommands cc;
+            + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
           nixSupport.cc-cflags =
             [
               "-rtlib=compiler-rt"
-              "-B${targetLlvmLibraries.compiler-rt}/lib"
+              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
               "-nostdlib++"
             ]
             ++ lib.optional (
@@ -470,24 +814,24 @@ let
         }
       );
 
-      clangNoLibc = wrapCCWith (
+      clangNoLibcWithBasicRt = wrapCCWith (
         rec {
           cc = tools.clang-unwrapped;
           libcxx = null;
           bintools = bintoolsNoLibc';
-          extraPackages = [ targetLlvmLibraries.compiler-rt ];
+          extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") ''
               echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-              echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
             ''
-            + mkExtraBuildCommands cc;
+            + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
           nixSupport.cc-cflags =
             [
               "-rtlib=compiler-rt"
-              "-B${targetLlvmLibraries.compiler-rt}/lib"
+              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
             ]
             ++ lib.optional (
               lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
@@ -495,7 +839,7 @@ let
         }
       );
 
-      clangNoCompilerRt = wrapCCWith (
+      clangNoLibcNoRt = wrapCCWith (
         rec {
           cc = tools.clang-unwrapped;
           libcxx = null;
@@ -516,6 +860,8 @@ let
         }
       );
 
+      # This is an "oddly ordered" bootstrap just for Darwin. Probably
+      # don't want it otherwise.
       clangNoCompilerRtWithLibc =
         wrapCCWith rec {
           cc = tools.clang-unwrapped;
@@ -527,6 +873,11 @@ let
         // lib.optionalAttrs (
           lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
         ) { nixSupport.cc-cflags = [ "-fno-exceptions" ]; };
+
+      # Aliases
+      clangNoCompilerRt = tools.clangNoLibcNoRt;
+      clangNoLibc = tools.clangNoLibcWithBasicRt;
+      clangNoLibcxx = tools.clangWithLibcAndBasicRt;
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "15") {
       # TODO: pre-15: lldb/docs/index.rst:155:toctree contains reference to nonexisting document 'design/structureddataplugins'
@@ -540,6 +891,16 @@ let
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "16") {
       mlir = callPackage ./mlir { };
       libclc = callPackage ./libclc.nix { };
+    }
+    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
+      bolt = callPackage ./bolt {
+        patches = lib.optionals (lib.versions.major metadata.release_version == "19") [
+          (fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/abc2eae68290c453e1899a94eccc4ed5ea3b69c1.patch";
+            hash = "sha256-oxCxOjhi5BhNBEraWalEwa1rS3Mx9CuQgRVZ2hrbd7M=";
+          })
+        ];
+      };
     }
   );
 
@@ -592,49 +953,65 @@ let
           ./compiler-rt/armv6-scudo-no-yield.patch
           ./compiler-rt/armv6-scudo-libatomic.patch
         ]
-        ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (
-          fetchpatch {
-            url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
-            hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
-            relative = "compiler-rt";
-          }
-        );
+        ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
+          hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
+          relative = "compiler-rt";
+        });
     in
     {
-      compiler-rt-libc = callPackage ./compiler-rt {
-        patches = compiler-rtPatches;
-        stdenv =
-          if
-            stdenv.hostPlatform.useLLVM or false
-            || (
+      compiler-rt-libc = callPackage ./compiler-rt (
+        let
+          # temp rename to avoid infinite recursion
+          stdenv =
+            if args.stdenv.hostPlatform.useLLVM or false then
+              overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+            else if
               lib.versionAtLeast metadata.release_version "16"
-              && stdenv.hostPlatform.isDarwin
-              && stdenv.hostPlatform.isStatic
-            )
-          then
-            overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
-          else
-            args.stdenv;
-      };
+              && args.stdenv.hostPlatform.isDarwin
+              && args.stdenv.hostPlatform.isStatic
+            then
+              overrideCC args.stdenv buildLlvmTools.clangNoCompilerRtWithLibc
+            else
+              args.stdenv;
+        in
+        {
+          patches = compiler-rtPatches;
+          inherit stdenv;
+        }
+        // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
+          libxcrypt = (libxcrypt.override { inherit stdenv; }).overrideAttrs (old: {
+            configureFlags = old.configureFlags ++ [ "--disable-symvers" ];
+          });
+        }
+      );
 
       compiler-rt-no-libc = callPackage ./compiler-rt {
         patches = compiler-rtPatches;
+        doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
         stdenv =
-          if stdenv.hostPlatform.useLLVM or false then
-            overrideCC stdenv buildLlvmTools.clangNoCompilerRt
+          if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform then
+            stdenv
           else
-            stdenv;
+            # TODO: make this branch unconditional next rebuild
+            overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
       };
 
-      # N.B. condition is safe because without useLLVM both are the same.
       compiler-rt =
         if
-          stdenv.hostPlatform.isAndroid
-          || (lib.versionAtLeast metadata.release_version "16" && stdenv.hostPlatform.isDarwin)
+          stdenv.hostPlatform.libc == null
+          # Building the with-libc compiler-rt and WASM doesn't yet work,
+          # because wasilibc doesn't provide some expected things. See
+          # compiler-rt's file for further details.
+          || stdenv.hostPlatform.isWasm
+          # Failing `#include <term.h>` in
+          # `lib/sanitizer_common/sanitizer_platform_limits_freebsd.cpp`
+          # sanitizers, not sure where to get it.
+          || stdenv.hostPlatform.isFreeBSD
         then
-          libraries.compiler-rt-libc
+          libraries.compiler-rt-no-libc
         else
-          libraries.compiler-rt-no-libc;
+          libraries.compiler-rt-libc;
 
       stdenv = overrideCC stdenv buildLlvmTools.clang;
 
@@ -698,7 +1075,7 @@ let
                 )
                 # https://github.com/llvm/llvm-project/issues/64226
                 (metadata.getVersionFile "libcxx/0001-darwin-10.12-mbstate_t-fix.patch");
-          stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
         }
         // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") {
           # TODO: remove this, causes LLVM 13 packages rebuild.
@@ -710,14 +1087,14 @@ let
         patches = lib.optional (lib.versionOlder metadata.release_version "17") (
           metadata.getVersionFile "libunwind/gnu-install-dirs.patch"
         );
-        stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+        stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
       };
 
       openmp = callPackage ./openmp {
         patches =
-          lib.optional (lib.versionAtLeast metadata.release_version "15") (
-            metadata.getVersionFile "openmp/fix-find-tool.patch"
-          )
+          lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && lib.versionOlder metadata.release_version "19"
+          ) (metadata.getVersionFile "openmp/fix-find-tool.patch")
           ++ lib.optional (
             lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
           ) (metadata.getVersionFile "openmp/gnu-install-dirs.patch")

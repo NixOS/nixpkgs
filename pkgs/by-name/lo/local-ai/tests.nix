@@ -52,7 +52,7 @@ in
         # Note: q4_0 and q4_1 models can not be loaded
         parameters.model = fetchurl {
           url = "https://huggingface.co/skeskinen/ggml/resolve/main/all-MiniLM-L6-v2/ggml-model-f16.bin";
-          sha256 = "9c195b2453a4fef60a4f6be3a88a39211366214df6498a4fe4885c9e22314f50";
+          hash = "sha256-nBlbJFOk/vYKT2vjqIo5IRNmIU32SYpP5IhcniIxT1A=";
         };
         backend = "bert-embeddings";
         embeddings = true;
@@ -101,17 +101,16 @@ in
 
       # https://localai.io/advanced/#full-config-model-file-reference
       model-configs.${model} = rec {
-        context_size = 8192;
+        context_size = 16 * 1024; # 128kb is possible, but needs 16GB RAM
         backend = "llama-cpp";
         parameters = {
-          # https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF
-          # https://ai.meta.com/blog/meta-llama-3/
+          # https://ai.meta.com/blog/meta-llama-3-1/
           model = fetchurl {
-            url = "https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf";
-            sha256 = "ab9e4eec7e80892fd78f74d9a15d0299f1e22121cea44efd68a7a02a3fe9a1da";
+            url = "https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf";
+            hash = "sha256-8r4+GiOcEsnz8BqWKxH7KAf4Ay/bY7ClUC6kLd71XkQ=";
           };
           # defaults from:
-          # https://deepinfra.com/meta-llama/Meta-Llama-3-8B-Instruct
+          # https://deepinfra.com/meta-llama/Meta-Llama-3.1-8B-Instruct
           temperature = 0.7;
           top_p = 0.9;
           top_k = 0;
@@ -135,7 +134,9 @@ in
 
             {{.Content}}${builtins.head stopwords}'';
 
-          chat = "<|begin_of_text|>{{.Input}}<|start_header_id|>assistant<|end_header_id|>";
+          chat = "{{.Input}}<|start_header_id|>assistant<|end_header_id|>";
+
+          completion = "{{.Input}}";
         };
       };
 
@@ -185,7 +186,7 @@ in
           machine.succeed("curl -f http://localhost:${port}/v1/chat/completions --json @${writers.writeJSON "request-chat-completions.json" requests.chat-completions} --output chat-completions.json")
           machine.copy_from_vm("chat-completions.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .object == \"chat.completion\"' chat-completions.json")
-          machine.succeed("${jq}/bin/jq --exit-status 'debug | .choices | first.message.content | tonumber == 3' chat-completions.json")
+          machine.succeed("${jq}/bin/jq --exit-status 'debug | .choices | first.message.content | split(\" \") | last | tonumber == 3' chat-completions.json")
 
           machine.succeed("curl -f http://localhost:${port}/v1/edits --json @${writers.writeJSON "request-edit-completions.json" requests.edit-completions} --output edit-completions.json")
           machine.copy_from_vm("edit-completions.json")

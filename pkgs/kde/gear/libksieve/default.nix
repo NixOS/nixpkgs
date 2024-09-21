@@ -6,5 +6,8 @@
 mkKdeDerivation {
   pname = "libksieve";
 
-  extraBuildInputs = [qtwebengine cyrus_sasl];
+  extraBuildInputs = [
+    qtwebengine
+    cyrus_sasl
+  ];
 }

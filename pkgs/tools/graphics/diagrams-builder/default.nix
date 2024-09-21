@@ -35,8 +35,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildCommand = with lib;
-    concatStringsSep "\n" (map exeWrapper backends);
+  buildCommand = lib.concatStringsSep "\n" (map exeWrapper backends);
 
   # Will be faster to build the wrapper locally then to fetch it from a binary cache.
   preferLocalBuild = true;

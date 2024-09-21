@@ -12,7 +12,8 @@
 , qemu
 , scribus
 , tigervnc
-, wlroots
+, wlroots_0_17
+, wlroots_0_18
 , xwayland
 
 , gitUpdater
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit cairo qemu scribus tigervnc wlroots xwayland;
+      inherit cairo qemu scribus tigervnc wlroots_0_17 wlroots_0_18 xwayland;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };

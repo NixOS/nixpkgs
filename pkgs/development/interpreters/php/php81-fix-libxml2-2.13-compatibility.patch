@@ -1,0 +1,28 @@
+diff --git a/ext/libxml/php_libxml.h b/ext/libxml/php_libxml.h
+index a1011f0b17..7a7622c482 100644
+--- a/ext/libxml/php_libxml.h
++++ b/ext/libxml/php_libxml.h
+@@ -119,6 +119,23 @@ PHP_LIBXML_API void php_libxml_shutdown(void);
+ ZEND_TSRMLS_CACHE_EXTERN()
+ #endif
+ 
++#if defined(__clang__)
++# define PHP_LIBXML_IGNORE_DEPRECATIONS_START \
++	_Pragma("clang diagnostic push") \
++	_Pragma("clang diagnostic ignored \"-Wdeprecated-declarations\"")
++# define PHP_LIBXML_IGNORE_DEPRECATIONS_END \
++	_Pragma("clang diagnostic pop")
++#elif defined(__GNUC__)
++# define PHP_LIBXML_IGNORE_DEPRECATIONS_START \
++	_Pragma("GCC diagnostic push") \
++	_Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
++# define PHP_LIBXML_IGNORE_DEPRECATIONS_END \
++	_Pragma("GCC diagnostic pop")
++#else
++# define PHP_LIBXML_IGNORE_DEPRECATIONS_START
++# define PHP_LIBXML_IGNORE_DEPRECATIONS_END
++#endif
++
+ /* Other extension may override the global state options, these global options
+  * are copied initially to ctxt->options. Set the options to a known good value.
+  * See libxml2 globals.c and parserInternals.c.

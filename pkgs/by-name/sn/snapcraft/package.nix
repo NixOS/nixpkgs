@@ -12,6 +12,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
         version = "0.11.2";
@@ -34,7 +35,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.3.1";
+  version = "8.3.3";
 
   pyproject = true;
 
@@ -42,7 +43,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-cdRlUY9hAJ8US93aiJymzsV27JVPY7lWCK7IUdjDmYE=";
+    hash = "sha256-xE+5nYvXawl9HjeBI9ogwyYAVCj/sPoMCVfEeZL5vN4=";
   };
 
   patches = [
@@ -87,8 +88,7 @@ python.pkgs.buildPythonApplication rec {
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
     substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' "" \
-      --replace-fail "--cov=snapcraft" ""
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -154,6 +154,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       pytest-check
+      pytest-cov-stub
       pytest-mock
       pytest-subprocess
       pytestCheckHook

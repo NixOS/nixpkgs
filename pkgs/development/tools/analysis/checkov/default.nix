@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.201";
+  version = "3.2.254";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-jt0JMwmk+M1S+vRvrFSm53IVMJ4aAec73K23wucOoS4=";
+    hash = "sha256-+3hx6MEJWDbTby0bvUSe/AGoneqJ/ojzkkpb8oF4ZIo=";
   };
 
   patches = [ ./flake8-compat-5.x.patch ];
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     "bc-python-hcl2"
     "boto3"
     "botocore"
+    "cloudsplaining"
     "cyclonedx-python-lib"
     "dpath"
     "igraph"
@@ -45,9 +46,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [
     setuptools-scm
-  ];
-
-  nativeBuildInputs = with python3.pkgs; [
   ];
 
   dependencies = with python3.pkgs; [
@@ -126,6 +124,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_get_cyclonedx_report"
     # Test fails on Hydra
     "test_sast_js_filtered_files_by_ts"
+    # Timing sensitive
+    "test_non_multiline_pair_time_limit_creating_report"
   ];
 
   disabledTestPaths = [

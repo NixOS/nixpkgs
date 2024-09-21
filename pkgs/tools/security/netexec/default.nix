@@ -5,6 +5,7 @@
 }:
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       impacket = super.impacket.overridePythonAttrs {
         version = "0.12.0.dev1-unstable-2023-11-30";

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.asterisk;
 
@@ -13,7 +10,7 @@ let
   logdir = "/var/log/asterisk";
 
   # Add filecontents from files of useTheseDefaultConfFiles to confFiles, do not override
-  defaultConfFiles = subtractLists (attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
+  defaultConfFiles = lib.subtractLists (lib.attrNames cfg.confFiles) cfg.useTheseDefaultConfFiles;
   allConfFiles = {
     # Default asterisk.conf file
     "asterisk.conf".text = ''
@@ -48,25 +45,25 @@ let
       syslog.local0 => notice,warning,error
     '';
   } //
-    mapAttrs (name: text: { inherit text; }) cfg.confFiles //
-    listToAttrs (map (x: nameValuePair x { source = cfg.package + "/etc/asterisk/" + x; }) defaultConfFiles);
+    lib.mapAttrs (name: text: { inherit text; }) cfg.confFiles //
+    lib.listToAttrs (map (x: lib.nameValuePair x { source = cfg.package + "/etc/asterisk/" + x; }) defaultConfFiles);
 
 in
 
 {
   options = {
     services.asterisk = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the Asterisk PBX server.
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         example = ''
           [options]
           verbose=3
@@ -78,10 +75,10 @@ in
         '';
       };
 
-      confFiles = mkOption {
+      confFiles = lib.mkOption {
         default = {};
-        type = types.attrsOf types.str;
-        example = literalExpression
+        type = lib.types.attrsOf lib.types.str;
+        example = lib.literalExpression
           ''
             {
               "extensions.conf" = '''
@@ -144,9 +141,9 @@ in
         '';
       };
 
-      useTheseDefaultConfFiles = mkOption {
+      useTheseDefaultConfFiles = lib.mkOption {
         default = [ "ari.conf" "acl.conf" "agents.conf" "amd.conf" "calendar.conf" "cdr.conf" "cdr_syslog.conf" "cdr_custom.conf" "cel.conf" "cel_custom.conf" "cli_aliases.conf" "confbridge.conf" "dundi.conf" "features.conf" "hep.conf" "iax.conf" "pjsip.conf" "pjsip_wizard.conf" "phone.conf" "phoneprov.conf" "queues.conf" "res_config_sqlite3.conf" "res_parking.conf" "statsd.conf" "udptl.conf" "unistim.conf" ];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example = [ "sip.conf" "dundi.conf" ];
         description = ''Sets these config files to the default content. The default value for
           this option contains all necesscary files to avoid errors at startup.
@@ -154,24 +151,24 @@ in
         '';
       };
 
-      extraArguments = mkOption {
+      extraArguments = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         example =
           [ "-vvvddd" "-e" "1024" ];
         description = ''
           Additional command line arguments to pass to Asterisk.
         '';
       };
-      package = mkPackageOption pkgs "asterisk" { };
+      package = lib.mkPackageOption pkgs "asterisk" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = mapAttrs' (name: value:
-      nameValuePair "asterisk/${name}" value
+    environment.etc = lib.mapAttrs' (name: value:
+      lib.nameValuePair "asterisk/${name}" value
     ) allConfFiles;
 
     users.users.asterisk =
@@ -214,7 +211,7 @@ in
         ExecStart =
           let
             # FIXME: This doesn't account for arguments with spaces
-            argString = concatStringsSep " " cfg.extraArguments;
+            argString = lib.concatStringsSep " " cfg.extraArguments;
           in
           "${cfg.package}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
         ExecReload = ''${cfg.package}/bin/asterisk -x "core reload"

@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let cfg = config.services.libinput;
 
     xorgBool = v: if v then "on" else "off";
 
     mkConfigForDevice = deviceType: {
-      dev = mkOption {
-        type = types.nullOr types.str;
+      dev = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/dev/input/event0";
         description = ''
@@ -17,31 +14,100 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelProfile = mkOption {
-        type = types.enum [ "flat" "adaptive" ];
+      accelProfile = lib.mkOption {
+        type = lib.types.enum [ "flat" "adaptive" "custom" ];
         default = "adaptive";
         example = "flat";
         description = ''
             Sets the pointer acceleration profile to the given profile.
-            Permitted values are `adaptive`, `flat`.
+            Permitted values are `adaptive`, `flat`, `custom`.
             Not all devices support this option or all profiles.
             If a profile is unsupported, the default profile for this is used.
             `flat`: Pointer motion is accelerated by a constant
             (device-specific) factor, depending on the current speed.
             `adaptive`: Pointer acceleration depends on the input speed.
             This is the default profile for most devices.
+            `custom`: Allows the user to define a custom acceleration function.
+            To define custom functions use the accelPoints<Fallback/Motion/Scroll>
+            and accelStep<Fallback/Motion/Scroll> options.
           '';
       };
 
-      accelSpeed = mkOption {
-        type = types.nullOr types.str;
+      accelSpeed = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "-0.5";
-        description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
+        description = ''
+            Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).
+            This only applies to the flat or adaptive profile.
+          '';
       };
 
-      buttonMapping = mkOption {
-        type = types.nullOr types.str;
+      accelPointsFallback = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.number);
+        default = null;
+        example = [ 0.0 1.0 2.4 2.5 ];
+        description = ''
+            Sets the points of the fallback acceleration function. The value must be a list of
+            floating point non-negative numbers. This only applies to the custom profile.
+          '';
+      };
+
+      accelPointsMotion = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.number);
+        default = null;
+        example = [ 0.0 1.0 2.4 2.5 ];
+        description = ''
+            Sets the points of the (pointer) motion acceleration function. The value must be a
+            list of floating point non-negative numbers. This only applies to the custom profile.
+          '';
+      };
+
+      accelPointsScroll = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.number);
+        default = null;
+        example = [ 0.0 1.0 2.4 2.5 ];
+        description = ''
+            Sets the points of the scroll acceleration function. The value must be a list of
+            floating point non-negative numbers. This only applies to the custom profile.
+          '';
+      };
+
+      accelStepFallback = lib.mkOption {
+        type = lib.types.nullOr lib.types.number;
+        default = null;
+        example = 0.1;
+        description = ''
+            Sets the step between the points of the fallback acceleration function. When a step of
+            0.0 is provided, libinput's Fallback acceleration function is used. This only applies
+            to the custom profile.
+          '';
+      };
+
+      accelStepMotion = lib.mkOption {
+        type = lib.types.nullOr lib.types.number;
+        default = null;
+        example = 0.1;
+        description = ''
+            Sets the step between the points of the (pointer) motion acceleration function. When a
+            step of 0.0 is provided, libinput's Fallback acceleration function is used. This only
+            applies to the custom profile.
+          '';
+      };
+
+      accelStepScroll = lib.mkOption {
+        type = lib.types.nullOr lib.types.number;
+        default = null;
+        example = 0.1;
+        description = ''
+            Sets the step between the points of the scroll acceleration function. When a step of
+            0.0 is provided, libinput's Fallback acceleration function is used. This only applies
+            to the custom profile.
+          '';
+      };
+
+      buttonMapping = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "1 6 3 4 5 0 7";
         description = ''
@@ -54,8 +120,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      calibrationMatrix = mkOption {
-        type = types.nullOr types.str;
+      calibrationMatrix = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "0.5 0 0 0 0.8 0.1 0 0 1";
         description = ''
@@ -64,8 +130,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      clickMethod = mkOption {
-        type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
+      clickMethod = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "none" "buttonareas" "clickfinger" ]);
         default = null;
         example = "buttonareas";
         description = ''
@@ -76,14 +142,14 @@ let cfg = config.services.libinput;
           '';
       };
 
-      leftHanded = mkOption {
-        type = types.bool;
+      leftHanded = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enables left-handed button orientation, i.e. swapping left and right buttons.";
       };
 
-      middleEmulation = mkOption {
-        type = types.bool;
+      middleEmulation = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables middle button emulation. When enabled, pressing the left and right buttons
@@ -91,14 +157,14 @@ let cfg = config.services.libinput;
           '';
       };
 
-      naturalScrolling = mkOption {
-        type = types.bool;
+      naturalScrolling = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enables or disables natural scrolling behavior.";
       };
 
-      scrollButton = mkOption {
-        type = types.nullOr types.int;
+      scrollButton = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         example = 1;
         description = ''
@@ -107,8 +173,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      scrollMethod = mkOption {
-        type = types.enum [ "twofinger" "edge" "button" "none" ];
+      scrollMethod = lib.mkOption {
+        type = lib.types.enum [ "twofinger" "edge" "button" "none" ];
         default = "twofinger";
         example = "edge";
         description = ''
@@ -117,8 +183,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      horizontalScrolling = mkOption {
-        type = types.bool;
+      horizontalScrolling = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables or disables horizontal scrolling. When disabled, this driver will discard any
@@ -127,8 +193,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      sendEventsMode = mkOption {
-        type = types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ];
+      sendEventsMode = lib.mkOption {
+        type = lib.types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ];
         default = "enabled";
         example = "disabled";
         description = ''
@@ -137,24 +203,24 @@ let cfg = config.services.libinput;
           '';
       };
 
-      tapping = mkOption {
-        type = types.bool;
+      tapping = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables or disables tap-to-click behavior.
           '';
       };
 
-      tappingButtonMap = mkOption {
-        type = types.nullOr (types.enum [ "lrm" "lmr" ]);
+      tappingButtonMap = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "lrm" "lmr" ]);
         default = null;
         description = ''
           Set the button mapping for 1/2/3-finger taps to left/right/middle or left/middle/right, respectively.
         '';
       };
 
-      tappingDragLock = mkOption {
-        type = types.bool;
+      tappingDragLock = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables or disables drag lock during tapping behavior. When enabled, a finger up during tap-
@@ -163,8 +229,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      transformationMatrix = mkOption {
-        type = types.nullOr types.str;
+      transformationMatrix = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "0.5 0 0 0 0.8 0.1 0 0 1";
         description = ''
@@ -173,16 +239,16 @@ let cfg = config.services.libinput;
         '';
       };
 
-      disableWhileTyping = mkOption {
-        type = types.bool;
+      disableWhileTyping = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
             Disable input method while typing.
           '';
       };
 
-      additionalOptions = mkOption {
-        type = types.lines;
+      additionalOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
         ''
@@ -200,22 +266,28 @@ let cfg = config.services.libinput;
       Identifier "libinput ${deviceType} configuration"
       MatchDriver "libinput"
       MatchIs${matchIs} "${xorgBool true}"
-      ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
+      ${lib.optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
       Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
-      ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
-      ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
-      ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
-      ${optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
-      ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelPointsFallback != null) ''Option "AccelPointsFallback" "${toString cfg.${deviceType}.accelPointsFallback}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelPointsMotion != null) ''Option "AccelPointsMotion" "${toString cfg.${deviceType}.accelPointsMotion}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelPointsScroll != null) ''Option "AccelPointsScroll" "${toString cfg.${deviceType}.accelPointsScroll}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelStepFallback != null) ''Option "AccelStepFallback" "${toString cfg.${deviceType}.accelStepFallback}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelStepMotion != null) ''Option "AccelStepMotion" "${toString cfg.${deviceType}.accelStepMotion}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelStepScroll != null) ''Option "AccelStepScroll" "${toString cfg.${deviceType}.accelStepScroll}"''}
+      ${lib.optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
+      ${lib.optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
+      ${lib.optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
+      ${lib.optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
       Option "LeftHanded" "${xorgBool cfg.${deviceType}.leftHanded}"
       Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
       Option "NaturalScrolling" "${xorgBool cfg.${deviceType}.naturalScrolling}"
-      ${optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
+      ${lib.optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
       Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"
       Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
       Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
       Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
-      ${optionalString (cfg.${deviceType}.tappingButtonMap != null) ''Option "TappingButtonMap" "${cfg.${deviceType}.tappingButtonMap}"''}
+      ${lib.optionalString (cfg.${deviceType}.tappingButtonMap != null) ''Option "TappingButtonMap" "${cfg.${deviceType}.tappingButtonMap}"''}
       Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
       Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
       ${cfg.${deviceType}.additionalOptions}
@@ -223,7 +295,7 @@ let cfg = config.services.libinput;
 in {
 
   imports =
-    (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "libinput" "touchpad" option ]) [
+    (map (option: lib.mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "libinput" "touchpad" option ]) [
       "accelProfile"
       "accelSpeed"
       "buttonMapping"
@@ -243,15 +315,15 @@ in {
       "disableWhileTyping"
       "additionalOptions"
     ]) ++ [
-      (mkRenamedOptionModule [ "services" "xserver" "libinput" "enable" ]   [ "services" "libinput" "enable" ])
-      (mkRenamedOptionModule [ "services" "xserver" "libinput" "mouse" ]    [ "services" "libinput" "mouse" ])
-      (mkRenamedOptionModule [ "services" "xserver" "libinput" "touchpad" ] [ "services" "libinput" "touchpad" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "libinput" "enable" ]   [ "services" "libinput" "enable" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "libinput" "mouse" ]    [ "services" "libinput" "mouse" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "libinput" "touchpad" ] [ "services" "libinput" "touchpad" ])
     ];
 
   options = {
 
     services.libinput = {
-      enable = mkEnableOption "libinput" // {
+      enable = lib.mkEnableOption "libinput" // {
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
       };
@@ -261,7 +333,7 @@ in {
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
 

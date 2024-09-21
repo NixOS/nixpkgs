@@ -15,9 +15,9 @@
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.33.1";
+  version = "1.34.0";
 
-  vendorHash = "sha256-VHl6CKPWqahX70GHbZE6SVa8XPfiC912DvsOteH2B0w=";
+  vendorHash = "sha256-gw5Ol7Gp26KyIaiMvwik8FJpABpMT86vpFnZnAJ6hhs=";
 
   doCheck = false;
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-z0wNngEzddxpeeLyQVA2yRC5SfYvU5G66V95sVmW6bA=";
+    sha256 = "sha256-Z7x3MOQUF3a19X4SSiIUfSJ3xl3482eKH700m/9pqcU=";
   };
   postPatch =
     (

@@ -3,11 +3,16 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+
+  # dependencies
+  aiohttp,
+  asyncssh,
   atomicwrites,
   chardet,
   cloudpickle,
   cookiecutter,
   diff-match-patch,
+  fzf,
   intervaltree,
   jedi,
   jellyfish,
@@ -18,6 +23,7 @@
   numpydoc,
   pickleshare,
   psutil,
+  pygithub,
   pygments,
   pylint-venv,
   pyls-spyder,
@@ -25,7 +31,7 @@
   pyqtwebengine,
   python-lsp-black,
   python-lsp-server,
-  pyxdg,
+  pyuca,
   pyzmq,
   qdarkstyle,
   qstylizer,
@@ -37,21 +43,21 @@
   scipy,
   setuptools,
   spyder-kernels,
+  superqt,
   textdistance,
   three-merge,
   watchdog,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.5";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y+JZO/LfWi1QzoSSV1uDI4zxLcte0HwVMNmBK0aXgd4=";
+    hash = "sha256-/UUtSpSkt1hJeIZfBLe8owP82jRx02kUF6TdfCsq6CY=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
@@ -62,11 +68,14 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiohttp
+    asyncssh
     atomicwrites
     chardet
     cloudpickle
     cookiecutter
     diff-match-patch
+    fzf
     intervaltree
     jedi
     jellyfish
@@ -77,6 +86,7 @@ buildPythonPackage rec {
     numpydoc
     pickleshare
     psutil
+    pygithub
     pygments
     pylint-venv
     pyls-spyder
@@ -84,7 +94,7 @@ buildPythonPackage rec {
     pyqtwebengine
     python-lsp-black
     python-lsp-server
-    pyxdg
+    pyuca
     pyzmq
     qdarkstyle
     qstylizer
@@ -95,9 +105,11 @@ buildPythonPackage rec {
     rtree
     scipy
     spyder-kernels
+    superqt
     textdistance
     three-merge
     watchdog
+    yarl
   ] ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder

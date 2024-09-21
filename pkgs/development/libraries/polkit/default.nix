@@ -19,6 +19,7 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , coreutils
+, fetchpatch
 , useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , elogind
@@ -55,6 +56,13 @@ stdenv.mkDerivation rec {
     ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
 
     ./elogind.patch
+
+    # FIXME: remove in the next release
+    # https://github.com/NixOS/nixpkgs/issues/18012
+    (fetchpatch {
+      url = "https://github.com/polkit-org/polkit/commit/f93c7466039ea3403e0576928aeb620b806d0cce.patch";
+      sha256 = "sha256-cF0nNovYmyr+XixpBgQFF0A+oJeSPGZgTkgDQkQuof8=";
+    })
   ];
 
   depsBuildBuild = [

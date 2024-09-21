@@ -50,6 +50,6 @@ mkYarnPackage rec {
     homepage = "https://github.com/react-static/react-static";
     license = lib.licenses.mit;
     mainProgram = "react-static";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

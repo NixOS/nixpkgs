@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "pslib";
-  version = "0.4.6";
+  version = "0.4.8";
 
   src = fetchurl {
     name = "${pname}-snixource-${version}.tar.gz";
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0m191ckqj1kj2yvxiilqw26x4vrn7pnlc2vy636yphjxr02q8bk4";
+    sha256 = "sha256-gaWNvBLuUUy0o+HWCOyG6KmzxDrYCY6PV3WbA/jjH64=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,

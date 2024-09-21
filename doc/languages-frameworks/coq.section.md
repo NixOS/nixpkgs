@@ -23,7 +23,7 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
   * if it is a string of the form `owner:branch` then it tries to download the `branch` of owner `owner` for a project of the same name using the same vcs, and the `version` attribute of the resulting derivation is set to `"dev"`, additionally if the owner is not provided (i.e. if the `owner:` prefix is missing), it defaults to the original owner of the package (see below),
   * if it is a string of the form `"#N"`, and the domain is github, then it tries to download the current head of the pull request `#N` from github,
 * `defaultVersion` (optional). Coq libraries may be compatible with some specific versions of Coq only. The `defaultVersion` attribute is used when no `version` is provided (or if `version = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `coq` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `coqPackages` attribute set.
-* `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `sha256` attribute (you may put the empty string `""` in order to automatically insert a fake sha256, this will trigger an error which will allow you to find the correct sha256), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
+* `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `hash` attribute (you may put the empty string `""` in order to automatically insert a fake hash, this will trigger an error which will allow you to find the correct hash), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
 * `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `hash` and returns an attribute set with a `version` and `src`.
 * `repo` (optional, defaults to the value of `pname`),
 * `owner` (optional, defaults to `"coq-community"`).
@@ -69,15 +69,15 @@ mkCoqDerivation {
       { cases = [ (isEq "8.6")         (range "1.6" "1.7") ];  out = "1.1"; }
     ] null;
   release = {
-    "1.5.2".sha256 = "15aspf3jfykp1xgsxf8knqkxv8aav2p39c2fyirw7pwsfbsv2c4s";
-    "1.5.1".sha256 = "13nlfm2wqripaq671gakz5mn4r0xwm0646araxv0nh455p9ndjs3";
-    "1.5.0".sha256 = "064rvc0x5g7y1a0nip6ic91vzmq52alf6in2bc2dmss6dmzv90hw";
-    "1.5.0".rev    = "1.5";
-    "1.4".sha256   = "0vnkirs8iqsv8s59yx1fvg1nkwnzydl42z3scya1xp1b48qkgn0p";
-    "1.3".sha256   = "0l3vi5n094nx3qmy66hsv867fnqm196r8v605kpk24gl0aa57wh4";
-    "1.2".sha256   = "1mh1w339dslgv4f810xr1b8v2w7rpx6fgk9pz96q0fyq49fw2xcq";
-    "1.1".sha256   = "1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s";
-    "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
+    "1.5.2".hash = "sha256-mjCx9XKa38Nz9E6wNK7YSqHdJ7YTua5fD3d6J4e7WpU=";
+    "1.5.1".hash = "sha256-Q8tm0y2FQAt2V1kZYkDlHWRia/lTvXAMVjdmzEV11I4=";
+    "1.5.0".hash = "sha256-HIK0f21G69oEW8JG46gSBde/Q2LR3GiBCv680gHbmRg=";
+    "1.5.0".rev  = "1.5";
+    "1.4".hash   = "sha256-F9g3MSIr3B6UZ3p8QWjz3/Jpw9sudJ+KRlvjiHSO024=";
+    "1.3".hash   = "sha256-BPJTlAL0ETHvLMBslE0KFVt3DNoaGuMrHt2SBGyJe1A=";
+    "1.2".hash   = "sha256-mHXBXSLYO4BN+jfN50y/+XCx0Qq5g4Ac2Y/qlsbgAdY=";
+    "1.1".hash   = "sha256-ejAsMQbB/LtU9j+g160VdGXULrCe9s0gBWzyhKqmCuE=";
+    "1.0".hash   = "sha256-tZTOltEBBKWciDxDMs/Ye4Jnq/33CANrHJ4FBMPtq+I=";
   };
 
   propagatedBuildInputs =
@@ -126,7 +126,7 @@ For example, here is how you could locally add a new release of the `multinomial
 coqPackages.lib.overrideCoqDerivation
   {
     defaultVersion = "2.0";
-    release."2.0".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkk";
+    release."2.0".hash = "sha256-czoP11rtrIM7+OLdMisv2EF7n/IbGuwFxHiPtg3qCNM=";
   }
   coqPackages.multinomials
 ```

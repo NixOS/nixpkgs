@@ -104,6 +104,6 @@ buildPythonPackage rec {
     mainProgram = "feature_download";
     license = licenses.lgpl3Plus;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
 }

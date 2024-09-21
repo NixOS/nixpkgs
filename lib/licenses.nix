@@ -229,6 +229,7 @@ lib.mapAttrs mkLicense ({
   };
 
   bsl11 = {
+    spdxId = "BUSL-1.1";
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
@@ -403,6 +404,12 @@ lib.mapAttrs mkLicense ({
     fullName  = "CeCILL-C Free Software License Agreement";
   };
 
+  cockroachdb-community-license = {
+    fullName = "CockroachDB Community License Agreement";
+    url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
+    free = false;
+  };
+
   cpal10 = {
     spdxId = "CPAL-1.0";
     fullName = "Common Public Attribution License 1.0";
@@ -543,6 +550,13 @@ lib.mapAttrs mkLicense ({
   fsl11Mit = {
     fullName = "Functional Source License, Version 1.1, MIT Future License";
     url = "https://fsl.software/FSL-1.1-MIT.template.md";
+    free = false;
+    redistributable = true;
+  };
+
+  fsl11Asl20 = {
+    fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
+    url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
     free = false;
     redistributable = true;
   };
@@ -714,10 +728,9 @@ lib.mapAttrs mkLicense ({
     fullName = "ISC License";
   };
 
-  # Proprietary binaries; free to redistribute without modification.
   databricks = {
-    fullName = "Databricks Proprietary License";
-    url = "https://pypi.org/project/databricks-connect";
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
     free = false;
   };
 
@@ -726,6 +739,12 @@ lib.mapAttrs mkLicense ({
     url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
     free = false;
     redistributable = false;
+  };
+
+  databricks-license = {
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
+    free = false;
   };
 
   fair = {
@@ -820,11 +839,6 @@ lib.mapAttrs mkLicense ({
     fullName = "PNG Reference Library version 2";
   };
 
-  libssh2 = {
-    fullName = "libssh2 License";
-    url = "https://www.libssh2.org/license.html";
-  };
-
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
@@ -866,8 +880,6 @@ lib.mapAttrs mkLicense ({
     url = "https://opensource.org/licenses/MirOS";
   };
 
-  # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
@@ -876,6 +888,12 @@ lib.mapAttrs mkLicense ({
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
+  };
+
+  mit-modern = {
+    # Also known as Zsh license
+    spdxId = "MIT-Modern-Variant";
+    fullName = "MIT License Modern Variant";
   };
 
   mitAdvertising = {
@@ -1099,6 +1117,11 @@ lib.mapAttrs mkLicense ({
     url = "https://qwt.sourceforge.io/qwtlicense.html";
   };
 
+  radiance = {
+    fullName = "The Radiance Software License, Version 2.0";
+    url = "https://github.com/LBNL-ETA/Radiance/blob/master/License.txt";
+  };
+
   ruby = {
     spdxId = "Ruby";
     fullName = "Ruby License";
@@ -1303,11 +1326,6 @@ lib.mapAttrs mkLicense ({
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
-  };
-
-  zsh = {
-    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
-    fullName = "Zsh License";
   };
 
   zpl20 = {

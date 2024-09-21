@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "Show keyboard, gamepad and mouse input on stream ";
+    description = "Show keyboard, gamepad and mouse input on stream";
     homepage = "https://github.com/univrsal/input-overlay";
     maintainers = with maintainers; [ glittershark ];
     license = licenses.gpl2;

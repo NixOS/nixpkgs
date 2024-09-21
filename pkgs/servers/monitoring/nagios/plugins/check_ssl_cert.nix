@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "check_ssl_cert";
-  version = "2.82.0";
+  version = "2.83.1";
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u+/IXevDt4mlnQ4a1M1t2Zh26/FBd9yAtpr71NrdXTY=";
+    hash = "sha256-EFFA7lhI2NlOl7gQFk4ZmLgRuH2GxLnwb4CDWX8Q6/0=";
   };
 
   nativeBuildInputs = [

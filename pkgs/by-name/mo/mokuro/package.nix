@@ -6,26 +6,26 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mokuro";
-  version = "0.1.8";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "mokuro";
     rev = "v${version}";
-    hash = "sha256-w+hhUt2fTl9zrca4xotK5eNhbfragYNC0u5WDwNGb7k=";
+    hash = "sha256-+hcc3spbpktavqJ8q4kuQFpkm0PYIru6UdpkU7L8XI4=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace pyproject.toml \
         --replace-fail 'opencv-python' 'opencv'
   '';
 
 
   pythonRelaxDeps = [ "torchvision" ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
   dependencies = with python3Packages; [
     fire

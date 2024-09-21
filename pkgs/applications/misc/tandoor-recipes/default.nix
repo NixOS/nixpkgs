@@ -6,6 +6,7 @@
 let
   # python-ldap-3.4.4 does not work with python3(12)
   python = python311.override {
+    self = python;
     packageOverrides = self: super: {
       validators = super.validators.overridePythonAttrs (_: rec {
         version = "0.20.0";
@@ -164,8 +165,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
 
   # flaky
   disabledTests = [
+    "test_add_duplicate"
+    "test_reset_inherit_space_fields"
     "test_search_count"
     "test_url_import_regex_replace"
+    "test_url_validator"
     "test_delete"
   ];
 

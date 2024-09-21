@@ -54,7 +54,11 @@ let self = buildPythonPackage rec {
     changelog = "https://github.com/tiangolo/fastapi-cli/releases/tag/${version}";
     mainProgram = "fastapi";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    # This package provides a `fastapi`-executable that is in conflict with the one from
+    # python3Packages.fastapi. Because this package is primarily used for the purpose of
+    # implementing the CLI for python3Packages.fastapi, we reduce the executable's priority
+    priority = 10;
   };
 };
 in self

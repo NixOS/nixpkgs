@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  cargoSha256 = "sha256-eTAEf2nRrJ7i2Dw5BBZlLLu8mK2G/wUk40ivtfxk1pI=";
+  cargoHash = "sha256-eTAEf2nRrJ7i2Dw5BBZlLLu8mK2G/wUk40ivtfxk1pI=";
 
   meta = with lib; {
     description = "Quickfix allows you to commit changes in your git repository to a new branch without leaving the current branch";

@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
+  #passthru.tests = { inherit (nixosTests) tinc; }; # test uses tinc_pre
+
   meta = {
     description = "VPN daemon with full mesh routing";
     longDescription = ''

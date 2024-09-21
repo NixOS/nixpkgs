@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Re-implementation of the Rails routes system for mapping URLs to application actions";
     homepage = "https://github.com/bbangert/routes";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

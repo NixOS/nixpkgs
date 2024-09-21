@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Anka/Coder fonts";
     homepage = "https://code.google.com/archive/p/anka-coder-fonts";
     license = licenses.ofl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

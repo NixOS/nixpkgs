@@ -5,12 +5,17 @@
   pythonOlder,
   fetchFromGitHub,
   substituteAll,
-  llhttp,
   python,
-  # build_requires
+
+  # build-system
   cython,
   setuptools,
-  # install_requires
+
+  # native dependencies
+  llhttp,
+
+  # dependencies
+  aiohappyeyeballs,
   attrs,
   multidict,
   async-timeout,
@@ -19,11 +24,14 @@
   aiosignal,
   aiodns,
   brotli,
-  # tests_require
+
+  # tests
   freezegun,
   gunicorn,
+  proxy-py,
+  pytest-cov-stub,
   pytest-mock,
-  pytest7CheckHook,
+  pytestCheckHook,
   python-on-whales,
   re-assert,
   trustme,
@@ -31,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.9.5";
+  version = "3.10.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +48,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FRtirmwgU8v+ee3db7rOFsmy0rNW8A7+yRZC5d6uYNA=";
+    hash = "sha256-HN2TJ8hVbClakV3ldTOn3wbrhCuf2Qn9EjWCSlSyJpw=";
   };
 
   patches = [
@@ -52,8 +60,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -i '/--cov/d' setup.cfg
-
     rm -r vendor
     patchShebangs tools
     touch .git  # tools/gen.py uses .git to find the project root
@@ -69,6 +75,7 @@ buildPythonPackage rec {
   '';
 
   dependencies = [
+    aiohappyeyeballs
     attrs
     multidict
     async-timeout
@@ -85,20 +92,17 @@ buildPythonPackage rec {
   '';
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
-  nativeCheckInputs =
-    [
-      freezegun
-      gunicorn
-      pytest-mock
-      pytest7CheckHook
-      python-on-whales
-      re-assert
-    ]
-    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
-      # Optional test dependency. Depends indirectly on pyopenssl, which is
-      # broken on aarch64-darwin.
-      trustme
-    ];
+  nativeCheckInputs = [
+    freezegun
+    gunicorn
+    proxy-py
+    pytest-cov-stub
+    pytest-mock
+    pytestCheckHook
+    python-on-whales
+    re-assert
+    trustme
+  ];
 
   disabledTests =
     [
@@ -115,17 +119,15 @@ buildPythonPackage rec {
       "test_close"
     ];
 
-  disabledTestPaths = [
-    "tests/test_proxy_functional.py" # FIXME package proxy.py
-  ];
-
   __darwinAllowLocalNetworking = true;
 
-  # aiohttp in current folder shadows installed version
   preCheck =
     ''
+      # aiohttp in current folder shadows installed version
       rm -r aiohttp
       touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
+
+      export HOME=$(mktemp -d)
     ''
     + lib.optionalString stdenv.isDarwin ''
       # Work around "OSError: AF_UNIX path too long"

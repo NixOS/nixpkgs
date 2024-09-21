@@ -2,7 +2,6 @@
   lib,
   beautifulsoup4,
   buildPythonPackage,
-  drawio-headless,
   fetchFromGitHub,
   mkdocs,
   pathspec,

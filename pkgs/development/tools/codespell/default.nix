@@ -16,12 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-X3Pueu0E7Q57sbKSXqCZki4/PUb1WyWk/Zmj+lhVTM8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=codespell_lib" "" \
-      --replace "--cov-report=" ""
-  '';
-
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
   ];
@@ -30,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     aspell-python
     chardet
     pytestCheckHook
+    pytest-cov-stub
     pytest-dependency
   ];
 

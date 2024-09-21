@@ -11,6 +11,7 @@
   cryptography,
   fetchFromGitHub,
   freezegun,
+  frozendict,
   importlib-resources,
   jsonschema,
   pycryptodome,
@@ -26,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.64.3";
+  version = "0.66.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-bFCQAobzYdEFjr4dE2ANj6uHnhGzxz+Ij7wMT/nMH4I=";
+    hash = "sha256-Rv45WP6KxsFY/eGgNja5JSgmVKQWrRbP6K4tz6CFpMs=";
   };
 
   postPatch = ''
@@ -53,6 +54,7 @@ buildPythonPackage rec {
       aiosqlite
       crccheck
       cryptography
+      frozendict
       jsonschema
       pyserial-asyncio
       typing-extensions

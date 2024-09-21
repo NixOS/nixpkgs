@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signaturepdf";
-  version = "1.5.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "24eme";
-    repo = "${pname}";
+    repo = "signaturepdf";
     rev = "v${version}";
-    hash = "sha256-5isvVyT8s2ZAhLP4x/jjxDssBQ2WAvYDkGOWf3NcjHM=";
+    hash = "sha256-OFsTTF+QmjRv0LdfRTWig6LjRXq1TXWOLeyEX5Ak62o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/signaturepdf $out/bin
 
     cp --target-directory=$out/share/signaturepdf --recursive \
-      app.php config locale public templates vendor
+      app.php config locale public templates vendor lib
 
     makeWrapper ${lib.getExe php} $out/bin/signaturepdf \
       --inherit-argv0 \

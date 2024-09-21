@@ -3,21 +3,21 @@ dotnetInstallHook() {
 
     runHook preInstall
 
-    local -r hostRuntimeId=@runtimeId@
     local -r dotnetInstallPath="${dotnetInstallPath-$out/lib/$pname}"
     local -r dotnetBuildType="${dotnetBuildType-Release}"
-    local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
 
     if [[ -n $__structuredAttrs ]]; then
         local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
         local dotnetFlagsArray=( "${dotnetFlags[@]}" )
         local dotnetInstallFlagsArray=( "${dotnetInstallFlags[@]}" )
         local dotnetPackFlagsArray=( "${dotnetPackFlags[@]}" )
+        local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
     else
         local dotnetProjectFilesArray=($dotnetProjectFiles)
         local dotnetFlagsArray=($dotnetFlags)
         local dotnetInstallFlagsArray=($dotnetInstallFlags)
         local dotnetPackFlagsArray=($dotnetPackFlags)
+        local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
     fi
 
     if [[ -n ${dotnetSelfContainedBuild-} ]]; then
@@ -33,36 +33,51 @@ dotnetInstallHook() {
         dotnetInstallFlagsArray+=("-p:UseAppHost=true")
     fi
 
+    if [[ -n ${enableParallelBuilding-} ]]; then
+        local -r maxCpuFlag="$NIX_BUILD_CORES"
+    else
+        local -r maxCpuFlag="1"
+    fi
+
     dotnetPublish() {
         local -r projectFile="${1-}"
 
-        runtimeIdFlagsArray=()
-        if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
-            runtimeIdFlagsArray+=("--runtime" "$dotnetRuntimeId")
-        fi
+        for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+            runtimeIdFlagsArray=()
+            if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+                runtimeIdFlagsArray+=("--runtime" "$runtimeId")
+            fi
 
-        dotnet publish ${1+"$projectFile"} \
-            -p:ContinuousIntegrationBuild=true \
-            -p:Deterministic=true \
-            --output "$dotnetInstallPath" \
-            --configuration "$dotnetBuildType" \
-            --no-build \
-            "${runtimeIdFlagsArray[@]}" \
-            "${dotnetInstallFlagsArray[@]}" \
-            "${dotnetFlagsArray[@]}"
+            dotnet publish ${1+"$projectFile"} \
+                -maxcpucount:"$maxCpuFlag" \
+                -p:ContinuousIntegrationBuild=true \
+                -p:Deterministic=true \
+                -p:OverwriteReadOnlyFiles=true \
+                --output "$dotnetInstallPath" \
+                --configuration "$dotnetBuildType" \
+                --no-build \
+                "${runtimeIdFlagsArray[@]}" \
+                "${dotnetInstallFlagsArray[@]}" \
+                "${dotnetFlagsArray[@]}"
+        done
     }
 
     dotnetPack() {
         local -r projectFile="${1-}"
-        dotnet pack ${1+"$projectFile"} \
-            -p:ContinuousIntegrationBuild=true \
-            -p:Deterministic=true \
-            --output "$out/share" \
-            --configuration "$dotnetBuildType" \
-            --no-build \
-            --runtime "$dotnetRuntimeId" \
-            "${dotnetPackFlagsArray[@]}" \
-            "${dotnetFlagsArray[@]}"
+
+        for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+            dotnet pack ${1+"$projectFile"} \
+                   -maxcpucount:"$maxCpuFlag" \
+                   -p:ContinuousIntegrationBuild=true \
+                   -p:Deterministic=true \
+                   -p:OverwriteReadOnlyFiles=true \
+                   --output "$out/share/nuget/source" \
+                   --configuration "$dotnetBuildType" \
+                   --no-build \
+                   --runtime "$runtimeId" \
+                   "${dotnetPackFlagsArray[@]}" \
+                   "${dotnetFlagsArray[@]}"
+        done
     }
 
     if (( ${#dotnetProjectFilesArray[@]} == 0 )); then

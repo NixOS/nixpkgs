@@ -1,31 +1,31 @@
 { lib
 , coreutils
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , fetchpatch
 , getopt
 , libcap
 , gnused
 , nixosTests
 , testers
+, autoreconfHook
+, po4a
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.29";
+  version = "1.32.2";
   pname = "fakeroot";
 
-  src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${finalAttrs.version}.orig.tar.gz";
-    sha256 = "sha256-j7uvt4DJFz46zkoEr7wdkA8zfzIWiDk59cfbNDG+fCA=";
+  src = fetchFromGitLab {
+    owner = "clint";
+    repo = "fakeroot";
+    rev = "upstream/${finalAttrs.version}";
+    domain = "salsa.debian.org";
+    hash = "sha256-j1qSMPNCtAxClqYqWkRNQmtxkitYi7g/9KtQ5XqcX3w=";
   };
 
   patches = lib.optionals stdenv.isLinux [
     ./einval.patch
-    (fetchpatch {
-      name = "also-wrap-stat-library-call.patch";
-      url = "https://sources.debian.org/data/main/f/fakeroot/1.29-1/debian/patches/also-wrap-stat-library-call.patch";
-      sha256 = "0p7lq6m31k3rqsnjbi06a8ykdqa3cp4y5ngsjyk3q1269gx59x8b";
-    })
 
     # patches needed for musl libc, borrowed from alpine packaging.
     # it is applied regardless of the environment to prevent patchrot
@@ -39,8 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/main/fakeroot/fakeroot-no64.patch?id=f68c541324ad07cc5b7f5228501b5f2ce4b36158";
       sha256 = "sha256-NCDaB4nK71gvz8iQxlfaQTazsG0SBUQ/RAnN+FqwKkY=";
     })
+  ] ++ [
+    (fetchpatch {
+      name = "addendum-charset-conversion.patch";
+      url = "https://salsa.debian.org/clint/fakeroot/-/commit/b769fb19fd89d696a5e0fd70b974f833f6a0655a.patch";
+      hash = "sha256-3z1g+xzlyTpa055kpsoumP/E8srDlZss6B7Fv5A0QkU=";
+    })
   ];
 
+  nativeBuildInputs = [ autoreconfHook po4a ];
   buildInputs = lib.optional (!stdenv.isDarwin) libcap;
 
   postUnpack = ''
@@ -50,7 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's@kill@${coreutils}/bin/kill@g' \
       -e 's@/bin/ls@${coreutils}/bin/ls@g' \
       -e 's@cut@${coreutils}/bin/cut@g' \
-      fakeroot-${finalAttrs.version}/scripts/fakeroot.in
+      source/scripts/fakeroot.in
+  '';
+
+  postConfigure = ''
+    pushd doc
+    po4a -k 0 --variable "srcdir=../doc/" po4a/po4a.cfg
+    popd
   '';
 
   passthru = {
@@ -66,8 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";
+    mainProgram = "fakeroot";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

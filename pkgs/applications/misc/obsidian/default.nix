@@ -11,7 +11,6 @@
 , commandLineArgs ? ""
 }:
 let
-  inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
   version = "1.6.7";
   appname = "Obsidian";
@@ -19,6 +18,7 @@ let
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
+    mainProgram = "obsidian";
     license = licenses.obsidian;
     maintainers = with maintainers; [ atila conradmearns zaninime qbit kashw2 w-lfchen ];
   };

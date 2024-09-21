@@ -11,6 +11,7 @@
 , qmake
 , qtbase
 , qtsvg
+, qtwayland
 , stdenv
 , usePipewire ? true
 , usePulseaudio ? false
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     qtbase
     qtsvg
+    qtwayland
   ] ++ lib.optionals usePipewire [
     pipewire
   ] ++ lib.optionals usePulseaudio [

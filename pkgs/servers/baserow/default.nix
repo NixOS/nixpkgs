@@ -8,6 +8,7 @@
 let
 
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       antlr4-python3-runtime = super.antlr4-python3-runtime.override {
         antlr4 = antlr4_9;

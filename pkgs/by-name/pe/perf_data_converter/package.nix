@@ -10,13 +10,13 @@
 
 buildBazelPackage rec {
   pname = "perf_data_converter";
-  version = "0-unstable-2024-07-10";
+  version = "0-unstable-2024-07-25";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "perf_data_converter";
-    rev = "5b27c287a57811db91d40b5776cbaedd00945afc";
-    hash = "sha256-A5DEDi52gp1gTugGnutmKNRa/GGsc+LKLE3xRl/1gbw=";
+    rev = "571052793d8c49fd3e93121af548cc8ebd8920f0";
+    hash = "sha256-yoWOCSYAfnDVDQ6uwZ30P4p3pgvfmjVQiN9gu5auusY=";
   };
 
   bazel = bazel_6;
@@ -26,7 +26,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-Qm6Ng9cXvKx043P7qyNHyyMvdGK9aNarX1ZKeCp3mgY=";
+    hash = "sha256-Qm6Ng9cXvKx043P7qyNHyyMvdGK9aNarX1ZKeCp3mgY=";
   };
 
   nativeBuildInputs = [ jdk ];
@@ -41,6 +41,7 @@ buildBazelPackage rec {
   bazelBuildFlags = [ "-c opt" ];
   bazelTargets = [ "src:perf_to_profile" ];
 
+  doCheck = true;
   bazelTestTargets = [ "src:all" ];
 
   buildAttrs = {

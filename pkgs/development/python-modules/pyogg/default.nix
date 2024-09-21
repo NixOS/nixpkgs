@@ -9,7 +9,6 @@
   libopus,
   opusfile,
   substituteAll,
-  python,
 }:
 
 buildPythonPackage rec {

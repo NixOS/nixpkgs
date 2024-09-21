@@ -14,7 +14,7 @@
 , python
 , re2
 , stdenv
-, swig4
+, swig
 , unzip
 , zlib
 }:
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     ensureNewerSourcesForZipFilesHook
     pkg-config
     python.pythonOnBuildForHost
-    swig4
+    swig
     unzip
   ] ++ lib.optionals stdenv.isDarwin [
     DarwinTools

@@ -14,6 +14,9 @@
   vulkan-headers,
   vulkan-loader,
 
+  # NOTE: Not coming from vcpkg
+  IMGUI_LINK_GLVND ? !stdenv.hostPlatform.isWindows && (IMGUI_BUILD_OPENGL2_BINDING || IMGUI_BUILD_OPENGL3_BINDING),
+
   # The intent is to mirror vcpkg's flags[^1],
   # but we only actually support Linux and glfw3 until someone contributes the rest
   # [^1]: https://github.com/microsoft/vcpkg/blob/095ee06e7f60dceef7d713e3f8b1c2eb10d650d7/ports/imgui/CMakeLists.txt#L33-L108
@@ -84,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs =
-    lib.optionals (IMGUI_BUILD_OPENGL2_BINDING || IMGUI_BUILD_OPENGL3_BINDING) [ libGL ]
+    lib.optionals IMGUI_LINK_GLVND [ libGL ]
     ++ lib.optionals IMGUI_BUILD_GLFW_BINDING [ glfw ]
     ++ lib.optionals IMGUI_BUILD_SDL2_BINDING [ SDL2 ]
     ++ lib.optionals IMGUI_BUILD_VULKAN_BINDING [

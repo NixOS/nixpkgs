@@ -19,7 +19,6 @@
 , qtbase ? null
 , qttools ? null
 , python3
-, nixosTests
 , withGui
 , withWallet ? true
 }:

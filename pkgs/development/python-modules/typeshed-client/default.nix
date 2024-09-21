@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/JelleZijlstra/typeshed_client";
     changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -18,12 +18,18 @@ let
           "ManageForeignRoutes"
           "RouteTable"
           "IPv6PrivacyExtensions"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
+          "UseDomains"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -648,10 +654,13 @@ let
           "Address"
           "Gateway"
           "DNS"
+          "UseDomains"
           "Domains"
           "DNSDefaultRoute"
           "NTP"
           "IPForward"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
           "IPMasquerade"
           "IPv6PrivacyExtensions"
           "IPv6AcceptRA"
@@ -699,8 +708,11 @@ let
         (assertValueOneOf "DNSSEC" (boolValues ++ ["allow-downgrade"]))
         (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertValueOneOf "IPForward" (boolValues ++ ["ipv4" "ipv6"]))
+        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
         (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv6AcceptRA" boolValues)
@@ -770,8 +782,7 @@ let
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
-        (assertInt "FirewallMark")
-        (assertRange "FirewallMark" 1 4294967295)
+        (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
         (assertInt "Priority")
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
@@ -1010,6 +1021,7 @@ let
           "BootServerAddress"
           "BootServerName"
           "BootFilename"
+          "IPv6OnlyPreferredSec"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -1031,19 +1043,27 @@ let
           "Managed"
           "OtherInformation"
           "RouterLifetimeSec"
+          "RetransmitSec"
           "RouterPreference"
+          "HopLimit"
           "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitDomains"
           "Domains"
           "DNSLifetimeSec"
+          "HomeAgent"
+          "HomeAgentLifetimeSec"
+          "HomeAgentPreference"
         ])
         (assertValueOneOf "Managed" boolValues)
         (assertValueOneOf "OtherInformation" boolValues)
         (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+        (assertInt "HopLimit")
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitDomains" boolValues)
+        (assertValueOneOf "HomeAgent" boolValues)
+        (assertInt "HomeAgentPreference")
       ];
 
       sectionIPv6PREF64Prefix = checkUnitConfigWithLegacyKey "ipv6PREF64PrefixConfig" "IPv6PREF64Prefix" [
@@ -2835,6 +2855,7 @@ let
         "systemd-networkd-wait-online.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
+        "systemd-networkd-persistent-storage.service"
       ];
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;

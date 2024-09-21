@@ -10,9 +10,6 @@
   electron,
 }:
 
-let
-  electronDist = "${electron}/${if stdenv.isDarwin then "Applications" else "libexec/electron"}";
-in
 buildNpmPackage rec {
   pname = "blockbench";
   version = "4.10.4";
@@ -45,7 +42,7 @@ buildNpmPackage rec {
 
   postBuild = ''
     # electronDist needs to be modifiable on Darwin
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \

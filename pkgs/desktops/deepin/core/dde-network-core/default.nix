@@ -1,30 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, dtkwidget
-, dde-dock
-, dde-control-center
-, dde-session-shell
-, networkmanager-qt
-, glib
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+  dtkwidget,
+  dde-control-center,
+  dde-session-shell,
+  networkmanager-qt,
+  glib,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-network-core";
-  version = "2.0.26";
+  version = "2.0.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-eicwutePtKPY5DmNmIFSTQkdrE/i2RKfu766lQWy+iY=";
+    hash = "sha256-dXLvBCNitlV07dH/rPatsbP6DFf8SZQ7hcDUYtqt2FA=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     dtkwidget
-    dde-dock
     dde-control-center
     dde-session-shell
     networkmanager-qt
@@ -46,9 +45,7 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
   strictDeps = true;
 

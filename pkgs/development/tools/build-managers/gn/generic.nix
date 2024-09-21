@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, darwin, writeText
+{ stdenv, lib, fetchgit, cctools, darwin, writeText
 , ninja, python3
 , ...
 }:

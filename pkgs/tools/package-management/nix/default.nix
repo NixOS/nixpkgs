@@ -3,12 +3,14 @@
 , stdenv
 , aws-sdk-cpp
 , boehmgc
+, libgit2
 , callPackage
 , fetchFromGitHub
 , fetchpatch
 , fetchpatch2
 , runCommand
 , overrideSDK
+, buildPackages
 , Security
 
 , storeDir ? "/nix/store"
@@ -85,6 +87,27 @@ let
     requiredSystemFeatures = [ ];
   };
 
+  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
+    nativeBuildInputs = args.nativeBuildInputs or []
+      # gitMinimal does not build on Windows. See packbuilder patch.
+      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+        # Needed for `git apply`; see `prePatch`
+        buildPackages.gitMinimal
+      ];
+    # Only `git apply` can handle git binary patches
+    prePatch = args.prePatch or ""
+      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+        patch() {
+          git apply
+        }
+      '';
+    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
+    patches = (args.patches or []) ++ [
+      ./patches/libgit2-mempack-thin-packfile.patch
+    ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+      ./patches/libgit2-packbuilder-callback-interruptible.patch
+    ];
+  });
 
   common = args:
     callPackage
@@ -93,6 +116,7 @@ let
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
+        libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -115,7 +139,9 @@ let
         runCommand "test-nix-fallback-paths-version-equals-nix-stable" {
           paths = lib.concatStringsSep "\n" (builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix));
         } ''
-          if [[ "" != $(grep -v 'nix-${pkg.version}$' <<< "$paths") ]]; then
+          # NOTE: name may contain cross compilation details between the pname
+          #       and version this is permitted thanks to ([^-]*-)*
+          if [[ "" != $(grep -vE 'nix-([^-]*-)*${lib.strings.replaceStrings ["."] ["\\."] pkg.version}$' <<< "$paths") ]]; then
             echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
             echo "The following paths are not up to date:"
             grep -v 'nix-${pkg.version}$' <<< "$paths"
@@ -149,8 +175,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.5";
-    hash = "sha256-xEcYQuJz6DjdYfS6GxIYcn8U+3Hgopne3CvqrNoGguQ=";
+    version = "2.18.7";
+    hash = "sha256-ZfcL4utJHuxCGILb/zIeXVVbHkskgp70+c2IitkFJwA=";
     self_attribute_name = "nix_2_18";
   };
 
@@ -184,14 +210,29 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_23";
   };
 
+  nix_2_24 = (common {
+    version = "2.24.7";
+    hash = "sha256-NAyc5MR/T70umcSeMv7y3AVt00ZkmDXGm7LfYKTONfE=";
+    self_attribute_name = "nix_2_24";
+  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    # Fix the following error with the default x86_64-darwin SDK:
+    #
+    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+    #
+    # Despite the use of the 10.13 deployment target here, the aligned
+    # allocation function Clang uses with this setting actually works
+    # all the way back to 10.6.
+    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
+  });
+
   git = (common rec {
-    version = "2.24.0";
-    suffix = "pre20240717_${lib.substring 0 8 src.rev}";
+    version = "2.25.0";
+    suffix = "pre20240920_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "464e5925cb21150e3c94f31224efabd3c1e74237";
-      hash = "sha256-C9pE0ghVURE3nLZmmgTG6CnGvWQ84g2lcyN7KKGCfN8=";
+      rev = "ca3fc1693b309ab6b8b0c09408a08d0055bf0363";
+      hash = "sha256-Hp7dkx7zfB9a4l5QusXUob0b1T2qdZ23LFo5dcp3xrU=";
     };
     self_attribute_name = "git";
   }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
@@ -205,7 +246,7 @@ in lib.makeExtensible (self: ({
     stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
   });
 
-  latest = self.nix_2_23;
+  latest = self.nix_2_24;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,

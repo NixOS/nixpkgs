@@ -10,6 +10,8 @@ melpaBuild {
 
   files = ''("emacs/*.el")'';
 
+  ignoreCompilationError = false;
+
   meta = {
     inherit (texpresso.meta) homepage license;
     description = "Emacs mode for TeXpresso";

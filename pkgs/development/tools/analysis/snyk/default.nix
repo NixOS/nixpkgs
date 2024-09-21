@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "snyk";
-  version = "1.1292.1";
+  version = "1.1293.1";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N54fSRYTFOlmfpommEFIqbMP5IBkhatMwx4CQ8fd5QI=";
+    hash = "sha256-Vgt9h0LLIC5I9NZZKKWD9b1xnNOSkxApLxSGf2C0ODk=";
   };
 
-  npmDepsHash = "sha256-VHZqc111cC8AANogxXVg4BFlngdmrrt7E+tCMF5Rl7g=";
+  npmDepsHash = "sha256-1YtyQg14vj85KtOXP93vLkqIMmT+8DAJdG/ql+1ooyU=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -39,7 +39,7 @@ buildNpmPackage rec {
     homepage = "https://snyk.io";
     changelog = "https://github.com/snyk/cli/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "snyk";
   };
 }

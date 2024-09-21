@@ -1,6 +1,6 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
+{ lib, stdenv, fetchFromGitHub, python311Packages, lilypond }:
 
-buildPythonApplication rec {
+python311Packages.buildPythonApplication rec {
   pname = "frescobaldi";
   version = "3.3.0";
 
@@ -11,7 +11,7 @@ buildPythonApplication rec {
     sha256 = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python311Packages; [
     qpageview
     lilypond
     pygame
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     pyqtwebengine
   ];
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [ python311Packages.pyqtwebengine.wrapQtAppsHook ];
 
   # Needed because source is fetched from git
   preBuild = ''

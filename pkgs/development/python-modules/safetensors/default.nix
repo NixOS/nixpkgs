@@ -1,48 +1,51 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
-  cargo,
   fetchFromGitHub,
+  rustPlatform,
+
+  # nativeBuildInputs
+  cargo,
+  rustc,
+  setuptools-rust,
+
+  # buildInputs
+  libiconv,
+
+  # tests
   h5py,
   numpy,
-  pythonOlder,
   pytestCheckHook,
-  rustc,
-  rustPlatform,
-  setuptools-rust,
   torch,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.4.3";
+  version = "0.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rc+o7epQJ8qEvdgbFnGvXxBr/U4eULZwkKNEaPlJkyU=";
+    hash = "sha256-gr4hBbecaGHaoNhRQQXWfLfNB0/wQPKftSiTnGgngog=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-tzNEUvWgolSwX0t/JLgYcTEIv3/FiKxoTJ4VjFQs8AY=";
+    hash = "sha256-zDXzEVvmJF1dEVUFGBc3losr9U1q/qJCjNFkdJ/pCd4=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
-    setuptools-rust
     cargo
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    setuptools-rust
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -68,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "safetensors" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/huggingface/safetensors";
     description = "Fast (zero-copy) and safe (unlike pickle) format for storing tensors";
     changelog = "https://github.com/huggingface/safetensors/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

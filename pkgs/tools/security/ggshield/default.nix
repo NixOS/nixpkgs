@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.29.0";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x37FRSjhqV7LxD8VFSmVjg/FPlxsa4NEX6y7OEAniF4=";
+    hash = "sha256-ShczC0DvAO92apkNq5oyYRbkqGdqwl6vaCY1hn8O6so=";
   };
 
   pythonRelaxDeps = true;
@@ -70,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_git_dir"
     "test_does_not_fail_if_cache"
     # Encoding issues
+    "test_create_files_from_paths"
     "test_file_decode_content"
     "test_file_is_longer_than_does_not_read_utf8_file"
     "test_file_is_longer_using_8bit_codec"

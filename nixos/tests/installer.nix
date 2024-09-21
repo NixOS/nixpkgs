@@ -463,7 +463,32 @@ let
         """)
 
       with subtest("Switch to flake based config"):
-        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz 2>&1 | tee activation-log >&2")
+
+        target.succeed("""
+          cat -n activation-log >&2
+        """)
+
+        target.succeed("""
+          grep -F '/root/.nix-defexpr/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F '/nix/var/nix/profiles/per-user/root/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F '/root/.nix-defexpr/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F 'Due to https://github.com/NixOS/nix/issues/9574, Nix may still use these channels when NIX_PATH is unset.' activation-log
+        """)
+        target.succeed("rm activation-log")
+
+        # Perform the suggested cleanups we've just seen in the log
+        # TODO after https://github.com/NixOS/nix/issues/9574: don't remove them yet
+        target.succeed("""
+          rm -rf /root/.nix-defexpr/channels /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
+        """)
+
 
       target.shutdown()
 
@@ -474,10 +499,20 @@ let
 
       # Note that the channel profile is still present on disk, but configured
       # not to be used.
-      with subtest("builtins.nixPath is now empty"):
-        target.succeed("""
-          [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]]
-        """)
+      # TODO after issue https://github.com/NixOS/nix/issues/9574: re-enable this assertion
+      # I believe what happens is
+      #   - because of the issue, we've removed the `nix-path =` line from nix.conf
+      #   - the "backdoor" shell is not a proper session and does not have `NIX_PATH=""` set
+      #   - seeing no nix path settings at all, Nix loads its hardcoded default value,
+      #     which is unfortunately non-empty
+      # Or maybe it's the new default NIX_PATH?? :(
+      # with subtest("builtins.nixPath is now empty"):
+      #   target.succeed("""
+      #     (
+      #       set -x;
+      #       [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]];
+      #     )
+      #   """)
 
       with subtest("<nixpkgs> does not resolve"):
         target.succeed("""
@@ -491,12 +526,16 @@ let
         target.succeed("""
           (
             exec 1>&2
-            rm -v /root/.nix-channels
+            rm -vf /root/.nix-channels
             rm -vrf ~/.nix-defexpr
             rm -vrf /nix/var/nix/profiles/per-user/root/channels*
           )
         """)
-        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz | tee activation-log >&2")
+        target.succeed("cat -n activation-log >&2")
+        target.succeed("! grep -F '/root/.nix-defexpr/channels' activation-log")
+        target.succeed("! grep -F 'but channels have been disabled' activation-log")
+        target.succeed("! grep -F 'https://github.com/NixOS/nix/issues/9574' activation-log")
 
       target.shutdown()
     '';
@@ -587,12 +626,16 @@ let
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
             ntp
+            perlPackages.ConfigIniFiles
+            perlPackages.FileSlurp
+            perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             # make-options-doc/default.nix
             (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
+            switch-to-configuration-ng
             texinfo
             unionfs-fuse
             xorg.lndir
@@ -606,6 +649,10 @@ let
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })
+            pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader
+            pkgs.perlPackages.FileCopyRecursive
+            pkgs.perlPackages.XMLSAX
+            pkgs.perlPackages.XMLSAXBase
           ])
           ++ optionals (bootLoader == "systemd-boot") [
             pkgs.zstd.bin

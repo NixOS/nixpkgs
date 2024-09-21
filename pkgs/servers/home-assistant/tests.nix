@@ -35,6 +35,12 @@ let
     shelly = [
       pyswitchbot
     ];
+    songpal = [
+      isal
+    ];
+    system_log = [
+      isal
+    ];
     tilt_ble = [
       ibeacon-ble
     ];

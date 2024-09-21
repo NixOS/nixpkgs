@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  ccache,
   fetchFromGitHub,
   isPyPy,
   ordered-set,
@@ -23,14 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-nKdCMgA92v9VsSgfktXDbSh3DyKsGlcTjpn0Y7u4rxU=";
   };
 
-  # default lto off for darwin
-  patches = [ ./darwin-lto.patch ];
-
   build-system = [
     setuptools
     wheel
   ];
-  nativeCheckInputs = [ ccache ];
 
   dependencies = [
     ordered-set

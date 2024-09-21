@@ -21,7 +21,7 @@ python3.pkgs.buildPythonPackage rec {
     aiohttp
     asyncpg
     commonmark
-    mautrix
+    (mautrix.override { withOlm = true; })
     paho-mqtt
     pillow
     prometheus-client

@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, nixosTests
-, testers
-, accountsservice
-, cmake
-, dbus-test-runner
-, withDocumentation ? true
-, docbook_xsl
-, docbook_xml_dtd_45
-, glib
-, gobject-introspection
-, gtest
-, gtk-doc
-, intltool
-, lomiri
-, pkg-config
-, python3
-, systemd
-, vala
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  testers,
+  accountsservice,
+  cmake,
+  dbus-test-runner,
+  withDocumentation ? true,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  glib,
+  gobject-introspection,
+  gtest,
+  gtk-doc,
+  intltool,
+  lomiri,
+  pkg-config,
+  python3,
+  systemd,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,49 +31,51 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-messages";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-D1181eD2mAVXEa7RLXXC4b2tVGrxbh0WWgtbC1anHH0=";
   };
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocumentation [
-    "devdoc"
-  ];
+  ] ++ lib.optionals withDocumentation [ "devdoc" ];
 
-  postPatch = ''
-    # Uses pkg_get_variable, cannot substitute prefix with that
-    substituteInPlace data/CMakeLists.txt \
-      --replace "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
+  postPatch =
+    ''
+      # Uses pkg_get_variable, cannot substitute prefix with that
+      substituteInPlace data/CMakeLists.txt \
+        --replace "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
 
-    # Bad concatenation
-    substituteInPlace libmessaging-menu/messaging-menu.pc.in \
-      --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
-      --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+      # Bad concatenation
+      substituteInPlace libmessaging-menu/messaging-menu.pc.in \
+        --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
+        --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
 
-    # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
-    substituteInPlace tests/CMakeLists.txt \
-      --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
-  '' + lib.optionalString (!withDocumentation) ''
-    sed -i CMakeLists.txt \
-      '/add_subdirectory(doc)/d'
-  '';
+      # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
+      substituteInPlace tests/CMakeLists.txt \
+        --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
+    ''
+    + lib.optionalString (!withDocumentation) ''
+      sed -i CMakeLists.txt \
+        '/add_subdirectory(doc)/d'
+    '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    glib # For glib-compile-schemas
-    intltool
-    pkg-config
-    vala
-    wrapGAppsHook3
-  ] ++ lib.optionals withDocumentation [
-    docbook_xsl
-    docbook_xml_dtd_45
-    gtk-doc
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      glib # For glib-compile-schemas
+      intltool
+      pkg-config
+      vala
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals withDocumentation [
+      docbook_xsl
+      docbook_xml_dtd_45
+      gtk-doc
+    ];
 
   buildInputs = [
     accountsservice
@@ -83,10 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [
@@ -95,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.doCheck}"
+    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-DGSETTINGS_LOCALINSTALL=ON"
     "-DGSETTINGS_COMPILE=ON"
   ];
@@ -133,9 +138,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    ayatana-indicators = [
-      "ayatana-indicator-messages"
-    ];
+    ayatana-indicators = {
+      ayatana-indicator-messages = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       vm = nixosTests.ayatana-indicators;
@@ -143,18 +151,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicator Messages Applet";
     longDescription = ''
       The -messages Ayatana System Indicator is the messages menu indicator for Unity7, MATE and Lomiri (optionally for
       others, e.g. XFCE, LXDE).
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-messages";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ OPNA2608 ];
-    pkgConfigModules = [
-      "messaging-menu"
-    ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    pkgConfigModules = [ "messaging-menu" ];
   };
 })

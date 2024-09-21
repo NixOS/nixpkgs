@@ -38,5 +38,6 @@ in stdenv.mkDerivation {
       jlesquembre
       cpcloud
     ];
+    hydraPlatforms = [ ]; # Hydra fails with "Output limit exceeded"
   };
 }

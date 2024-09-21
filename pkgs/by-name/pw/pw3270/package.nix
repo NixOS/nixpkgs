@@ -5,7 +5,6 @@
 , pkg-config
 , automake
 , autoconf
-, m4
 , libtool
 , gtk3
 , libv3270
@@ -13,7 +12,6 @@
 , openssl
 , gettext
 , desktop-file-utils
-, glib
 , wrapGAppsHook3
 }:
 
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "PerryWerneck";
-    repo = pname;
+    repo = "pw3270";
     rev = version;
     hash = "sha256-Nk/OUqrWngKgb1D1Wi8q5ygKtvuRKUPhPQaLvWi1Z4g=";
   };
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Schemas get installed to wrong directory.
     mkdir -p $out/share/glib-2.0
-    mv $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas $out/share/glib-2.0/
+    mv $out/share/gsettings-schemas/pw3270-${version}/glib-2.0/schemas $out/share/glib-2.0/
     rm -rf $out/share/gsettings-schemas
   '';
 

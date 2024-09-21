@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lixxu/flask-paginate";
     changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

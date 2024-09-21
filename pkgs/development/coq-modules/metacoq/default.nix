@@ -1,6 +1,6 @@
-{ lib, fetchzip,
+{ lib,
   mkCoqDerivation, single ? false,
-  coqPackages, coq, equations, version ? null }@args:
+  coq, equations, version ? null }@args:
 
 let
   repo  = "metacoq";
@@ -15,7 +15,8 @@ let
       { case = "8.16"; out = "1.1-8.16"; }
       { case = "8.17"; out = "1.3.1-8.17"; }
       { case = "8.18"; out = "1.3.1-8.18"; }
-      { case = "8.19"; out = "1.3.1-8.19"; }
+      { case = "8.19"; out = "1.3.2-8.19"; }
+      { case = "8.20"; out = "1.3.2-8.20"; }
     ] null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";
@@ -32,6 +33,8 @@ let
     "1.3.1-8.17".sha256 = "sha256-l0/QLC7V3zSk/FsaE2eL6tXy2BzbcI5MAk/c+FESwnc=";
     "1.3.1-8.18".sha256 = "sha256-L6Ym4Auwqaxv5tRmJLSVC812dxCqdUU5aN8+t5HVYzY=";
     "1.3.1-8.19".sha256 = "sha256-fZED/Uel1jt5XF83dR6HfyhSkfBdLkET8C/ArDgsm64=";
+    "1.3.2-8.19".sha256 = "sha256-e5Pm1AhaQrO6JoZylSXYWmeXY033QflQuCBZhxGH8MA=";
+    "1.3.2-8.20".sha256 = "sha256-4J7Ly4Fc2E/I6YqvzTLntVVls5t94OUOjVMKJyyJdw8=";
   };
   releaseRev = v: "v${v}";
 

@@ -48,7 +48,6 @@ with pkgs;
           sets = lib.pipe gccTests ([
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
             # Broken
-            (filterAttrs (n: _: n != "gcc49Stdenv"))
             (filterAttrs (n: _: n != "gccMultiStdenv"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
             # fails with things like
@@ -105,6 +104,8 @@ with pkgs;
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
+
+  compress-drv = callPackage ../build-support/compress-drv/test.nix { };
 
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchtorrent = callPackages ../build-support/fetchtorrent/tests.nix { };
@@ -180,6 +181,8 @@ with pkgs;
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
   systemd = callPackage ./systemd { };
+
+  replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
 
   substitute = recurseIntoAttrs (callPackage ./substitute { });
 }

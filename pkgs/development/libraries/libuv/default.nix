@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };

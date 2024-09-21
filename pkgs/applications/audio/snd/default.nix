@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ccrma.stanford.edu/software/snd/";
     platforms = platforms.unix;
     license = licenses.free;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "snd";
   };
 }

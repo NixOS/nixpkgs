@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "7.24.0";
+  version = "7.26.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    hash = "sha256-rs02V6+9jMF0S78rCCXcDn3gzghqnOtWEHMo/491JxA=";
+    hash = "sha256-MC7D7bgguDFZi8Dyip1wAa2zxxkpLupl05xFiDc8Byw=";
     # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
     # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
     # submodules until upstream exports glaxnimate as a library: https://gitlab.com/mattbas/glaxnimate/-/issues/545

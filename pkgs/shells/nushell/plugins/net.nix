@@ -8,18 +8,18 @@
   unstableGitUpdater,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "nu-plugin-net";
-  version = "0-unstable-2024-04-05";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
-    rev = "60d315afb19c3c673409db796a4cc7a240058605";
-    hash = "sha256-izIxV2rFxZ1Om6NNaofNpc5prtN/lsw8dC4DyKEQ+v8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GOF2CSlsjI8PAmIxj/+mR01X5XMviEM8gj7ZYTbeX7I=";
   };
 
-  cargoHash = "sha256-nBxcxADyvPgGrfkW8eBq/wmB2Slq+YGJV2IlxuuCgCg=";
+  cargoHash = "sha256-2FjKGirjTb6ZjDmhK9ciQzVtWCF8CcYeA+YXcr1oMP4=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 

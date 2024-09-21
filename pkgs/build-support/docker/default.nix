@@ -1115,6 +1115,8 @@ rec {
             preferLocalBuild = true;
             passthru = passthru // {
               inherit (conf) imageTag;
+              inherit conf;
+              inherit streamScript;
 
               # Distinguish tarballs and exes at the Nix level so functions that
               # take images can know in advance how the image is supposed to be used.
@@ -1129,26 +1131,18 @@ rec {
   );
 
   # This function streams a docker image that behaves like a nix-shell for a derivation
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Tests: nixos/tests/docker-tools-nix-shell.nix
   streamNixShellImage =
-    { # The derivation whose environment this docker image should be based on
-      drv
-    , # Image Name
-      name ? drv.name + "-env"
-    , # Image tag, the Nix's output hash will be used if null
-      tag ? null
-    , # User id to run the container as. Defaults to 1000, because many
-      # binaries don't like to be run as root
-      uid ? 1000
-    , # Group id to run the container as, see also uid
-      gid ? 1000
-    , # The home directory of the user
-      homeDirectory ? "/build"
-    , # The path to the bash binary to use as the shell. See `NIX_BUILD_SHELL` in `man nix-shell`
-      shell ? bashInteractive + "/bin/bash"
-    , # Run this command in the environment of the derivation, in an interactive shell. See `--command` in `man nix-shell`
-      command ? null
-    , # Same as `command`, but runs the command in a non-interactive shell instead. See `--run` in `man nix-shell`
-      run ? null
+    { drv
+    , name ? drv.name + "-env"
+    , tag ? null
+    , uid ? 1000
+    , gid ? 1000
+    , homeDirectory ? "/build"
+    , shell ? bashInteractive + "/bin/bash"
+    , command ? null
+    , run ? null
     }:
       assert lib.assertMsg (! (drv.drvAttrs.__structuredAttrs or false))
         "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
@@ -1190,16 +1184,9 @@ rec {
         # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
         sandboxBuildDir = "/build";
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L992-L1004
-        drvEnv = lib.mapAttrs' (name: value:
-          let str = valueToString value;
-          in if lib.elem name (drv.drvAttrs.passAsFile or [])
-          then lib.nameValuePair "${name}Path" (writeText "pass-as-text-${name}" str)
-          else lib.nameValuePair name str
-        ) drv.drvAttrs //
-          # A mapping from output name to the nix store path where they should end up
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1253
-          lib.genAttrs drv.outputs (output: builtins.unsafeDiscardStringContext drv.${output}.outPath);
+        drvEnv =
+          devShellTools.unstructuredDerivationInputEnv { inherit (drv) drvAttrs; }
+          // devShellTools.derivationOutputEnv { outputList = drv.outputs; outputMap = drv; };
 
         # Environment variables set in the image
         envVars = {
@@ -1291,6 +1278,8 @@ rec {
       };
 
   # Wrapper around streamNixShellImage to build an image from the result
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Tests: nixos/tests/docker-tools-nix-shell.nix
   buildNixShellImage = { drv, compressor ? "gz", ... }@args:
     let
       stream = streamNixShellImage (builtins.removeAttrs args ["compressor"]);

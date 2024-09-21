@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , electron
-, runtimeShell
 , makeWrapper
 , copyDesktopItems
 , makeDesktopItem

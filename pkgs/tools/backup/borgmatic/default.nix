@@ -4,21 +4,21 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
-  fetchpatch,
   installShellFiles,
   lib,
   python3Packages,
   stdenv,
   systemd,
   testers,
+  nixosTests,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.8.13";
+  version = "1.8.14";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4Z5imxNjfvd4fkpFsggSO9XueN5Yzcz4RCl+BqmddCM=";
+    hash = "sha256-WYs7wiwZ1TvTdeUpWv7FbREXWfdGcYRarP4FXFOfp0Y=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;
@@ -60,7 +60,10 @@ python3Packages.buildPythonApplication rec {
                --replace "sleep " "${coreutils}/bin/sleep "
   '';
 
-  passthru.tests.version = testers.testVersion { package = borgmatic; };
+  passthru.tests = {
+    version = testers.testVersion { package = borgmatic; };
+    inherit (nixosTests) borgmatic;
+  };
 
   __darwinAllowLocalNetworking = true;
 

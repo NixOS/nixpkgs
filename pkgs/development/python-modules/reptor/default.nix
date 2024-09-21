@@ -13,11 +13,9 @@
   markdown-it-py,
   mdurl,
   pygments,
-  pytest,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  reptor,
   requests,
   rich,
   setuptools,
@@ -32,16 +30,16 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.20";
+  version = "0.23";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-6DuIJScNiSaEez4vMRuA5Thr8zmvH0j3oiZmQhONSdY=";
+    hash = "sha256-IZjPdfg6q5uWEpvQE3djekvChcB7HWbbPqAv/0tu6fM=";
   };
 
   pythonRelaxDeps = true;
@@ -100,10 +98,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to do automated pentest reporting with SysReptor";
-    mainProgram = "reptor";
     homepage = "https://github.com/Syslifters/reptor";
     changelog = "https://github.com/Syslifters/reptor/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "reptor";
   };
 }

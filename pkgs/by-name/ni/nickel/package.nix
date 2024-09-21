@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     rev = "refs/tags/${version}";
-    hash = "sha256-EwiZg0iyF9EQ0Z65Re5WgeV7xgs/wPtTQ9XA0iEMEIQ=";
+    hash = "sha256-mjmT1ogvUJgy3Jb6m/npE+1if1Uy191wPU80nNlVwdM=";
   };
 
-  cargoHash = "sha256-JwuBjCWETIlBX5xswdznOAmzkL0Rn6cv7pxM6DwAkOs=";
+  cargoHash = "sha256-XDDvuIVWvmsO09aQLF28OyH5n+9aO5J+89EQLru7Jrc=";
 
   cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
 

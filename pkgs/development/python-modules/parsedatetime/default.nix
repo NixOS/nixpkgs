@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

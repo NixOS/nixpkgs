@@ -1,18 +1,15 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.greenclip;
 in {
 
   options.services.greenclip = {
-    enable = mkEnableOption "Greenclip, a clipboard manager";
+    enable = lib.mkEnableOption "Greenclip, a clipboard manager";
 
-    package = mkPackageOption pkgs [ "haskellPackages" "greenclip" ] { };
+    package = lib.mkPackageOption pkgs [ "haskellPackages" "greenclip" ] { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.greenclip = {
       enable      = true;
       description = "greenclip daemon";

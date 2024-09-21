@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tio";
-  version = "3.5";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3d3TYHSERIQdw+Iw6qCydGpWRpWrhZwb4SnwV1nVtIk=";
+    hash = "sha256-/eXy1roYmeZaQlY4PjBchwRR7JwyTvVIqDmmf6upJqA=";
   };
 
   strictDeps = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Serial console TTY";
     homepage = "https://tio.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tio";
     platforms = platforms.unix;
   };

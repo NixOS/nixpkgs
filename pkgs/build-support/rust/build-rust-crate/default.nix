@@ -16,16 +16,6 @@
 }:
 
 let
-  # Returns a true if the builder's rustc was built with support for the target.
-  targetAlreadyIncluded = lib.elem stdenv.hostPlatform.rust.rustcTarget
-    (lib.splitString "," (lib.removePrefix "--target=" (
-      lib.elemAt (lib.filter (f: lib.hasPrefix "--target=" f) pkgsBuildBuild.rustc.unwrapped.configureFlags) 0)
-    ));
-
-  # If the build's rustc was built with support for the target then reuse it. (Avoids uneeded compilation for targets like `wasm32-unknown-unknown`)
-  rustc' = if targetAlreadyIncluded then pkgsBuildBuild.rustc else rustc;
-  cargo' = if targetAlreadyIncluded then pkgsBuildBuild.cargo else cargo;
-
   # Create rustc arguments to link against the given list of dependencies
   # and renames.
   #
@@ -85,11 +75,6 @@ let
     inherit lib stdenv echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
   };
 
-  buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
-    rustc = rustc';
-  };
-
   installCrate = import ./install-crate.nix { inherit stdenv; };
 in
 
@@ -103,7 +88,11 @@ crate_: lib.makeOverridable
     # The rust compiler to use.
     #
     # Default: pkgs.rustc
-    { rust
+    { rust ? rustc
+      # The cargo package to use for getting some metadata.
+      #
+      # Default: pkgs.cargo
+    , cargo ? cargo
       # Whether to build a release version (`true`) or a debug
       # version (`false`). Debug versions are faster to build
       # but might be much slower at runtime.
@@ -262,6 +251,11 @@ crate_: lib.makeOverridable
       # https://github.com/kolloch/crate2nix/blame/5b19c1b14e1b0e5522c3e44e300d0b332dc939e7/crate2nix/templates/build.nix.tera#L89
       crateBin = lib.filter (bin: !(bin ? name && bin.name == ",")) (crate.crateBin or [ ]);
       hasCrateBin = crate ? crateBin;
+
+      buildCrate = import ./build-crate.nix {
+        inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
+        rustc = rust;
+      };
     in
     stdenv.mkDerivation (rec {
 
@@ -285,7 +279,7 @@ crate_: lib.makeOverridable
       name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
       version = crate.version;
       depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-      nativeBuildInputs = [ rustc' cargo' jq ]
+      nativeBuildInputs = [ rust cargo jq ]
         ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
         ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
@@ -392,7 +386,8 @@ crate_: lib.makeOverridable
     )
   )
 {
-  rust = rustc';
+  rust = crate_.rust or rustc;
+  cargo = crate_.cargo or cargo;
   release = crate_.release or true;
   verbose = crate_.verbose or true;
   extraRustcOpts = [ ];

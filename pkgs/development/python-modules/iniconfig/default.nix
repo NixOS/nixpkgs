@@ -3,7 +3,6 @@
   buildPythonPackage,
   substituteAll,
   fetchPypi,
-  hatch-vcs,
   hatchling,
 }:
 
@@ -37,6 +36,6 @@ buildPythonPackage rec {
     description = "brain-dead simple parsing of ini files";
     homepage = "https://github.com/pytest-dev/iniconfig";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

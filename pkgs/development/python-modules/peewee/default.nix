@@ -56,7 +56,7 @@ buildPythonPackage rec {
     homepage = "http://peewee-orm.com";
     changelog = "https://github.com/coleifer/peewee/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pwiz.py";
   };
 }

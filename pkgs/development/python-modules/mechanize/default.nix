@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-mechanize/mechanize";
     changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

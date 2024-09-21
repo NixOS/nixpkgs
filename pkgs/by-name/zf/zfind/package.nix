@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "zfind";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "laktak";
     repo = "zfind";
     rev = "v${version}";
-    hash = "sha256-CHudSfvl+YnKjvvuSH0RgIqF2bDEO1KW3oAiNN2mLro=";
+    hash = "sha256-sRZAsmh193K5HX7oC1UdCQccNpSc5QHtec+UpvpntKU=";
   };
 
   vendorHash = "sha256-blq0/pRppdf2jcuhIqYeNhcazFNZOGeEjPTSLgHqhrU=";

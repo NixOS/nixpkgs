@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.15.3";
+  version = "0.16.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-0Z7W9Z5zl7N0WbvfOTs8wcloI5VfqrZ+OBWocFAnjwY=";
+    hash = "sha256-IrGOhUnWTtCI5juFFuNdWSWxeFr7s8bRNT8sUludGo0=";
   };
 
   build-system = [
@@ -66,6 +66,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+    export PATH=$out/bin:$PATH
   '';
 
   pythonImportsCheck = [ "bimmer_connected" ];

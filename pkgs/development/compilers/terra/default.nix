@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, llvmPackages_16, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
+, symlinkJoin, cudaPackages, enableCUDA ? false
 , libffi, libobjc, libpfm, Cocoa, Foundation
 }:
 

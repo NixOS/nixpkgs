@@ -3,6 +3,7 @@
 }:
 
 let python = python3.override {
+  self = python;
   packageOverrides = self: super: {
     # see https://github.com/devicetree-org/dt-schema/issues/108
     jsonschema = super.jsonschema.overridePythonAttrs (old: rec {
@@ -27,4 +28,3 @@ let python = python3.override {
     });
   };
 }; in python.pkgs.toPythonApplication python.pkgs.dtschema
-

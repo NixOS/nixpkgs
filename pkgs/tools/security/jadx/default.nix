@@ -1,29 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gradle
-, jdk
-, quark-engine
-, makeWrapper
-, imagemagick
-, makeDesktopItem
-, copyDesktopItems
-, desktopToDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gradle,
+  jdk,
+  quark-engine,
+  makeBinaryWrapper,
+  imagemagick,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.4.7";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3t2e3WfH/ohkdGWlfV3t9oHJ1Q6YM6nSLOgmzgJEkls=";
+    hash = "sha256-+F+PHAd1+FmdAlQkjYDBsUYCUzKXG19ZUEorfvBUEg0=";
   };
 
-  nativeBuildInputs = [ gradle jdk imagemagick makeWrapper copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  patches = [
+    # Remove use of launch4j - contains platform binaries not able to be cached by mitmCache
+    ./no-native-deps.diff
+  ];
+
+  nativeBuildInputs = [
+    gradle
+    jdk
+    imagemagick
+    makeBinaryWrapper
+    copyDesktopItems
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;
@@ -69,22 +80,28 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "jadx-gui";
       icon = "jadx";
       comment = finalAttrs.meta.description;
-      categories = [ "Development" "Utility" ];
+      categories = [
+        "Development"
+        "Utility"
+      ];
     })
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/skylot/jadx/releases/tag/v${finalAttrs.version}";
     description = "Dex to Java decompiler";
+    homepage = "https://github.com/skylot/jadx";
     longDescription = ''
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "jadx-gui";
     maintainers = with maintainers; [ emilytrau ];
   };
 })

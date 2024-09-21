@@ -8,17 +8,18 @@
 , findutils
 , systemd
 , python3
+, nixosTests
 # makes the package unfree via pynvml
 , withAtopgpu ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "atop";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    hash = "sha256-56ZzzyyCV4592C7LDeyD/Z7LMIKLJWHCip+lqvddX5M=";
+    hash = "sha256-m5TGZmAu//e/QC7M5wbDR/OMOctjSY+dOWJoYeVkbiA=";
   };
 
   nativeBuildInputs = lib.optionals withAtopgpu [
@@ -78,6 +79,8 @@ stdenv.mkDerivation rec {
   '' else ''
     rm $out/lib/systemd/system/atopgpu.service $out/bin/atopgpud $out/share/man/man8/atopgpud.8
   '');
+
+  passthru.tests = { inherit (nixosTests) atop; };
 
   meta = with lib; {
     platforms = platforms.linux;

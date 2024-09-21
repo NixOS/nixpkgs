@@ -1,7 +1,6 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, bash
 , cmake
 , colordiff
 , flex

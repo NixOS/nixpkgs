@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
-  version = "0.41.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
     rev = "v${version}";
-    hash = "sha256-Ab/f6n2n24mLsWS4WF6jOBt9m7dyeSP0ftYixKANsjY=";
+    hash = "sha256-eada2xQlzB1kknwitwxZhFiv6myTbtYHHFkQtppa0tc=";
   };
 
-  cargoHash = "sha256-CNHDZHyg4jrEl3hmdQ7ITCtg9iTmB2RwDAzqSirOCO4=";
+  cargoHash = "sha256-juT3trREV7LmjBz+x7Od4XoTGuL1XRhknbU4Nopg2HU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=validate_printed_urls"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dufs \
       --bash <($out/bin/dufs --completions bash) \
       --fish <($out/bin/dufs --completions fish) \

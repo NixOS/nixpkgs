@@ -60,11 +60,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.5";
+  version = "3.8.6";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-ZiaaLP4OHC2r7Ie9u9irZW85bt2aQN0AaXjgA8+lK/w=";
+    hash = "sha256-LhWIquU8sy1Dk38fTsoo/r2cDHqhc0/F3WGn6B4OvN0=";
   };
 
   outputs = [ "bin" "dev" "out" ]
@@ -85,16 +85,6 @@ stdenv.mkDerivation rec {
       revert = true;
       hash = "sha256-r/+Gmwqy0Yc1LHL/PdPLXlErUBC5JxquLzCBAN3LuRM=";
     })
-    # Makes the system-wide configuration for RSAES-PKCS1-v1_5 actually apply
-    # and makes it enabled by default when the config file is missing
-    # Without this an error 113 is thrown when using some RSA certificates
-    # see https://gitlab.com/gnutls/gnutls/-/issues/1540
-    # "This is pretty sever[e], since it breaks on letsencrypt-issued RSA keys." (comment from above issue)
-    (fetchpatch2 {
-      name = "fix-rsaes-pkcs1-v1_5-system-wide-configuration.patch";
-      url = "https://gitlab.com/gnutls/gnutls/-/commit/2d73d945c4b1dfcf8d2328c4d23187d62ffaab2d.diff";
-      hash = "sha256-2aWcLff9jzJnY+XSqCIaK/zdwSLwkNlfDeMlWyRShN8=";
-    })
   ];
 
   # Skip some tests:
@@ -102,6 +92,7 @@ stdenv.mkDerivation rec {
   #  - fastopen: no idea; it broke between 3.6.2 and 3.6.3 (3437fdde6 in particular)
   #  - trust-store: default trust store path (/etc/ssl/...) is missing in sandbox (3.5.11)
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
+  #  - ktls: requires tls module loaded into kernel
   # Change p11-kit test to use pkg-config to find p11-kit
   postPatch = ''
     sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
@@ -109,6 +100,8 @@ stdenv.mkDerivation rec {
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
   '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
     sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
+  '' + lib.optionalString stdenv.isLinux ''
+    sed '2iexit 77' -i tests/{ktls,ktls_keyupdate}.sh
   '';
 
   preConfigure = "patchShebangs .";
@@ -122,6 +115,8 @@ stdenv.mkDerivation rec {
       "--with-unbound-root-key-file=${dns-root-data}/root.key"
       (lib.withFeature withP11-kit "p11-kit")
       (lib.enableFeature cxxBindings "cxx")
+    ] ++ lib.optionals stdenv.isLinux [
+      "--enable-ktls"
     ] ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
       "--disable-doc"
     ];

@@ -69,7 +69,7 @@ let
       # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
       "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
       "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]);
+    ]) ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "-DCLANG_DEFAULT_CXX_STDLIB=ON";
 
     postPatch = ''
       # Make sure clang passes the correct location of libLTO to ld64
@@ -138,6 +138,16 @@ let
       isClang = true;
       hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
         [ "fortify3" ]
+        ++ lib.optional (
+          (lib.versionOlder release_version "7")
+          || !targetPlatform.isLinux
+          || !targetPlatform.isx86_64
+        ) "shadowstack"
+        ++ lib.optional (
+          (lib.versionOlder release_version "8")
+          || !targetPlatform.isAarch64
+          || !targetPlatform.isLinux
+        ) "pacret"
         ++ lib.optional (
           (lib.versionOlder release_version "11")
           || (targetPlatform.isAarch64 && (lib.versionOlder release_version "18.1"))

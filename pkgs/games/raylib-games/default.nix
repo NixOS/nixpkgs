@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Collection of games made with raylib ";
+    description = "Collection of games made with raylib";
     homepage = "https://www.raylib.com/games.html";
     license = licenses.zlib;
     maintainers = with maintainers; [ ehmry ];

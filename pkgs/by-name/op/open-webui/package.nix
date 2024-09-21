@@ -7,25 +7,25 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.10";
+  version = "0.3.21";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "v${version}";
-    hash = "sha256-Q8ZUc3fNfWeijPLUtgwkU2rv7SWSfi7Q1QOlt14O3nE=                 ";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-b+r+nEv+9IM56KkCi9tZqnEbyCX69mFhp0Be5/9lR9c=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-nkJksj1FAOMqEDQS1k++E2izv9TT3PkoZLxzHIcHzvA=";
+    npmDepsHash = "sha256-LH07LzYZpVzRAvkjoTgt7LJdXZZoDMt//ZAl30z7AHw=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build" \
+        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
@@ -59,6 +59,9 @@ python3.pkgs.buildPythonApplication rec {
     "opencv-python-headless"
     # using `psycopg2` instead
     "psycopg2-binary"
+    "docker"
+    "pytest"
+    "pytest-docker"
   ];
 
   dependencies = with python3.pkgs; [
@@ -88,6 +91,7 @@ python3.pkgs.buildPythonApplication rec {
     langchain-community
     langfuse
     markdown
+    nltk
     openai
     opencv4
     openpyxl
@@ -103,6 +107,7 @@ python3.pkgs.buildPythonApplication rec {
     pymysql
     pypandoc
     pypdf
+    python-dotenv
     python-jose
     python-multipart
     python-pptx
@@ -114,7 +119,6 @@ python3.pkgs.buildPythonApplication rec {
     redis
     requests
     sentence-transformers
-    sqlalchemy
     tiktoken
     unstructured
     uvicorn
@@ -125,7 +129,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ hatchling ];
 
-
   pythonImportsCheck = [ "open_webui" ];
 
   makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
@@ -135,7 +138,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Full-stack of open-webui. open-webui is a user-friendly WebUI for LLMs (Formerly Ollama WebUI)";
+    description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
     changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

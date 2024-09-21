@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.15.0";
+  version = "2.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ChOkOBb0bPCEZX+wVZaCO5PVtI5173djyKdW7BIXg3o=";
+    hash = "sha256-OxWcEFqjiMHiJFxPr0g/VArajK2ZQCKBEZEAFm5e2zw=";
   };
 
   build-system = [ setuptools ];
@@ -89,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
     license = licenses.epl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

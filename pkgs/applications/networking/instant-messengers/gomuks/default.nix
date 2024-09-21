@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, substituteAll
 , buildGoModule
 , fetchFromGitHub
 , makeDesktopItem

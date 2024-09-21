@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${version}/autopsy-${version}.zip";
-    sha256 = "32iOQA3+ykltCYW/MpqCVxyhh3mm6eYzY+t0smAsWRw=";
+    hash = "sha256-32iOQA3+ykltCYW/MpqCVxyhh3mm6eYzY+t0smAsWRw=";
   };
 
   nativeBuildInputs = [ makeWrapper findutils ];

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "weatherflow4py";
-  version = "0.2.22";
+  version = "1.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jeeftor";
     repo = "weatherflow4py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J1hZormJByWC29fuRAJ2ozydRxQh9bGp4Pi96DuTSQo=";
+    hash = "sha256-NazRT/gSaxat90eA66ajjVPvN9UFNEX4y1hfOtu9UoE=";
   };
 
   build-system = [ poetry-core ];

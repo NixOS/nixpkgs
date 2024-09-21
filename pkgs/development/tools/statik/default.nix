@@ -22,7 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/rakyll/statik";
-    description = "Embed files into a Go executable ";
+    description = "Embed files into a Go executable";
     mainProgram = "statik";
     license = licenses.asl20;
     maintainers = with maintainers; [ Madouura ];

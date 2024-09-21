@@ -22,9 +22,12 @@ in {
         libusermetrics
         lomiri
         lomiri-calculator-app
+        lomiri-camera-app
         lomiri-clock-app
+        lomiri-docviewer-app
         lomiri-download-manager
         lomiri-filemanager-app
+        lomiri-gallery-app
         lomiri-polkit-agent
         lomiri-schemas # exposes some required dbus interfaces
         lomiri-session # wrappers to properly launch the session
@@ -47,7 +50,10 @@ in {
       };
     };
 
-    hardware.pulseaudio.enable = lib.mkDefault true;
+    hardware = {
+      bluetooth.enable = lib.mkDefault true;
+    };
+
     networking.networkmanager.enable = lib.mkDefault true;
 
     systemd.packages = with pkgs.lomiri; [
@@ -85,6 +91,8 @@ in {
         ayatana-indicator-messages
         ayatana-indicator-power
         ayatana-indicator-session
+      ] ++ lib.optionals config.hardware.bluetooth.enable [
+        ayatana-indicator-bluetooth
       ] ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         ayatana-indicator-sound
       ]) ++ (with pkgs.lomiri; [

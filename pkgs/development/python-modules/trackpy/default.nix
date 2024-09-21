@@ -54,7 +54,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/soft-matter/trackpy";
     changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

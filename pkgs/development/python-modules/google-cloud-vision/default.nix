@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.7.3";
+  version = "3.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7kjEjoIMfgmTJmOYaXD+9FbcD0XHr3KdRvHz3ZfB37Y=";
+    pname = "google_cloud_vision";
+    inherit version;
+    hash = "sha256-gLZ/Ci3Fh6MddILT0mkqdz8l+9CUaP2d5F0AtnGq2Zk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -58,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-vision";
     changelog = "https://github.com/googleapis/python-vision/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

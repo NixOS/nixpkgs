@@ -8,7 +8,6 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
@@ -49,7 +48,6 @@
   purty = "purty";
   pscid = "pscid";
   remod-cli = "remod";
-  teck-programmer = "teck-firmware-upgrade";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }

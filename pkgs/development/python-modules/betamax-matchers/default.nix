@@ -1,29 +1,43 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
   betamax,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
   requests-toolbelt,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "betamax-matchers";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "07qpwjyq2i2aqhz5iwghnj4pqr2ys5n45v1vmpcfx9r5mhwrsq43";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "betamaxpy";
+    repo = "betamax_matchers";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BV9DOfZLDAZIr2E75l988QxFWWvazBL9VttxGFIez1M=";
   };
 
-  buildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     betamax
     requests-toolbelt
   ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "betamax_matchers" ];
+
   meta = with lib; {
+    description = "A group of experimental matchers for Betamax";
     homepage = "https://github.com/sigmavirus24/betamax_matchers";
-    description = "Group of experimental matchers for Betamax";
+    changelog = "https://github.com/betamaxpy/betamax_matchers/blob/${version}/HISTORY.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];
   };

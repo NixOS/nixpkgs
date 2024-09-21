@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, mpiCheckPhaseHook
-, gfortran, perl, mpi, blas, lapack, scalapack, openssh
+, perl, mpi, blas, lapack, scalapack, openssh
 # CPU optimizations
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , avx2Support ? stdenv.hostPlatform.avx2Support
@@ -19,13 +19,13 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
-  version = "2023.11.001";
+  version = "2024.05.001";
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
-    sha256 = "sha256-tXvRl85nvbbiRRJOn9q4mz/a3dvTTYEu5JDVdH7npBA=";
+    sha256 = "sha256-nK9Bo+YA4vb0zhkxvVQYUXna3pwXFVbQybQbvGlA8vY=";
   };
 
   patches = [
@@ -101,7 +101,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
-    broken = true;  # At 2024-06-25. 49 unit tests fail.
-                    # https://hydra.nixos.org/build/263906391/nixlog/1
   };
 }

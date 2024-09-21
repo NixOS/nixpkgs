@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -55,6 +57,10 @@ stdenv.mkDerivation rec {
   mesonFlags = lib.optionals stdenv.hostPlatform.isMusl [
     "-Dprofiler=disabled"
   ];
+
+  postPatch = ''
+    patchShebangs --build build/choose-tests-locale.sh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cjs";

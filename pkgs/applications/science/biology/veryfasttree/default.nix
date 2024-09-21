@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veryfasttree";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "citiususc";
     repo = "veryfasttree";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Sp331VJRaYv/BTwFj3HwUcUsWjYf6YEXWjYdOzDhBBA=";
+    hash = "sha256-S4FW91VEdTPOIwRamz62arLSN9inxoKXpKsen2ISXMo=";
   };
 
   nativeBuildInputs = [ cmake ];

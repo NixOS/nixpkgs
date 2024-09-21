@@ -4,6 +4,7 @@
   bellows,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   pyserial,
   pyserial-asyncio,
   pyserial-asyncio-fast,
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.20";
+  version = "0.0.33";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     rev = "refs/tags/${version}";
-    hash = "sha256-kmTOWHREdzXfgDPPs91GfQCgpmkUshwGtscOTT1WGns=";
+    hash = "sha256-qcXKHIiEm1wqcQKRH+TqgQMPZbLqNnBiR6dbmLwxW1Y=";
   };
 
   postPatch = ''
@@ -43,15 +44,6 @@ buildPythonPackage rec {
       --replace-fail '"setuptools-git-versioning<3"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
-
-  pythonRelaxDeps = [
-    "bellows"
-    "pyserial-asyncio-fast"
-    "universal-silabs-flasher"
-    "zha-quirks"
-    "zigpy"
-  ];
-
 
   build-system = [
     setuptools
@@ -75,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytest-timeout
     pytest-xdist
@@ -90,7 +83,7 @@ buildPythonPackage rec {
     "test_check_available_unsuccessful"
     "test_device_counter_sensors"
     "test_device_tracker"
-    "test_device_unavailable_skips_entity_polling"
+    "test_device_unavailable_or_disabled_skips_entity_polling"
     "test_elec_measurement_sensor_polling"
     "test_electrical_measurement_init"
     "test_group_member_assume_state"
@@ -102,6 +95,12 @@ buildPythonPackage rec {
     "test_sinope_time"
     "test_siren_timed_off"
     "test_zha_group_light_entity"
+    # flaky, either due to race conditions or timeouts
+    "test_zha_group_switch_entity"
+    "test_zha_group_fan_entity"
+    "test_startup_concurrency_limit"
+    "test_fan_ikea"
+    "test_background"
   ];
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];

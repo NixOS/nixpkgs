@@ -313,8 +313,8 @@ let
         mktplcRef = {
           name = "vscode-apollo";
           publisher = "apollographql";
-          version = "1.19.11";
-          hash = "sha256-EixefDuJiw/p5yAR/UQLK1a1RXJLXlTmOlD34qpAN+U=";
+          version = "2.2.0";
+          hash = "sha256-9CKm9SLotPlwkAELb7Us/blK959HVt6eXiDp0fgVLmA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
@@ -406,8 +406,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.18.4";
-          hash = "sha256-mTmfIEXObDWi82z+59JaCjUDqFd9nOO/6QDtlHGuVvk=";
+          version = "1.18.11";
+          hash = "sha256-j1igEItS4TT1WxSxK3tFG29McTTo8ojEs6TJShGZiGI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -735,8 +735,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.10.4";
-          hash = "sha256-bD7AL4x0yL5S+MzQXMBrSZs1pVclfvsTfUbImP1oQok=";
+          version = "1.12.5";
+          hash = "sha256-2Tamwag4KovIOKTe/g4qePVDFxm0mgsLtPNdWcKzigI=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -771,7 +771,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bradgashler.htmltagwrap";
           homepage = "https://github.com/bgashler1/vscode-htmltagwrap";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
@@ -1047,26 +1047,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                hash = "sha256-ZlbPRFQwvZNCp8K/rbHqVa3coXa2dT4nOrNChC9naC8=";
+                hash = "sha256-X6Oszc88F0ENABwX63uwxbJ4VPQOQzZbJA87znVg5d8=";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                hash = "sha256-hSRdvno8VZNi48rckaqWbAgDXT6RXEcPnkNOT8DV1wA=";
+                hash = "sha256-NH3kGmNZpKofNplw+FRJFvV3m36HRuIqGR3zt6X5x60=";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                hash = "sha256-rimE7dKT6zajHo6E42z7IyfP35xBXThIwMHhZjaZwHk=";
+                hash = "sha256-hlFAMz17cl2/1CK7/dgrLktcPZYAcccIWIpkAVdwpkI=";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                hash = "sha256-7TeUAZLiEnqi5i5nHLhtv5aMxIcw7iiABOAkwP1YYqM=";
+                hash = "sha256-oVkmdw0sHv5Y+ysT4zWW6qFDh/h4/TcgSAauh1KrE1c=";
               };
             };
           in
           {
             name = "continue";
             publisher = "Continue";
-            version = "0.8.40";
+            version = "0.8.44";
           }
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
@@ -1096,6 +1096,23 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.kamadorueda ];
+        };
+      };
+
+      csharpier.csharpier-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "csharpier-vscode";
+          publisher = "csharpier";
+          version = "1.7.3";
+          hash = "sha256-/ZLjnlLl6xmgEazdCbnuE6UuuV1tDwAjpxz+vmBuYHE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/csharpier.csharpier-vscode/changelog";
+          description = "CSharpier code formatter for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode";
+          homepage = "https://github.com/belav/csharpier";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.magnouvean ];
         };
       };
 
@@ -1194,6 +1211,23 @@ let
         };
 
         meta.license = lib.licenses.mit;
+      };
+
+      databricks.databricks = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "databricks";
+          publisher = "databricks";
+          version = "2.3.1";
+          hash = "sha256-Qa839ygG8Z3aD/ZSshe2hg0ee3ZFU8xRrJ5E0cUjfCU=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
+          description = "Databricks extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=databricks.databricks";
+          homepage = "https://github.com/databricks/databricks-vscode";
+          license = lib.licenses.databricks-license;
+          maintainers = [ lib.maintainers.softinio ];
+        };
       };
 
       davidanson.vscode-markdownlint = buildVscodeMarketplaceExtension {
@@ -1608,8 +1642,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.22.1";
-          hash = "sha256-zi+Rcy63AUqDnVZCbPuljs+aBHsyOTHgbiJ+h9dB9us=";
+          version = "0.23.1";
+          hash = "sha256-rwpaixQbuxVkH4wlKPG4Qk69IylwjfCtyfUcqCuN/e8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1782,8 +1816,8 @@ let
         mktplcRef = {
           name = "dependi";
           publisher = "fill-labs";
-          version = "0.7.4";
-          hash = "sha256-6nU0bVAe/vwq43ECLwypIkMAG/q5+P2bE1RPAjeTCX4=";
+          version = "0.7.9";
+          hash = "sha256-VsjISVDZGGh6/pf3Fd5g8pYDvWXA1+0oZKlQEGLBp4M=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fill-labs.dependi/changelog";
@@ -2003,8 +2037,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.200.920";
-          hash = "sha256-LMShW9GN/wsDBodVn33Ui4qW0619r13VO2rSTPVE9TQ=";
+          version = "1.219.1028"; # compatible with vscode ^1.92.0
+          hash = "sha256-5f1P/CV6+Rp2kS9oSz5Ko5jMUt/Q6pWa9a+3nPyin6k=";
         };
 
         meta = {
@@ -2020,8 +2054,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.16.2024060502"; # compatible with vscode 1.90.0
-          hash = "sha256-SAydDc3JlJzfCtbJICy3rWx8psVPdRdPfOuzR9Dqtp8=";
+          version = "0.19.2024073102"; # compatible with vscode ^1.92.0
+          hash = "sha256-ekRBmJiAav1gITWlqBOuWtZMt1YZeseF+3fw326db/s=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -2085,8 +2119,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "3.60.0";
-          hash = "sha256-rH0+6sQfBfI8SrKY9GGtTOONdzKus6Z62E8Qv5xY7Fw=";
+          version = "5.6.0";
+          hash = "sha256-K4oCMQBH5jrt61f/C3DDZC61RuDvOApnPEF3AsOrE20=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2323,6 +2357,22 @@ let
         };
       };
 
+      huytd.nord-light = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nord-light";
+          publisher = "huytd";
+          version = "0.1.1";
+          hash = "sha256-q2GG3j5j3CLGF02J7/plywKLkhUmm2Gn3MiSVmiZ+48=";
+        };
+        meta = {
+          description = "Light theme for VSCode based on the Nord color palette";
+          license = lib.licenses.mit;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=huytd.nord-light";
+          homepage = "https://github.com/huytd/vscode-nord-light";
+          maintainers = [ lib.maintainers.Flameopathic ];
+        };
+      };
+
       ibm.output-colorizer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "output-colorizer";
@@ -2550,7 +2600,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-nix-syntax";
           homepage = "https://github.com/jeff-hykin/better-nix-syntax";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
@@ -2621,6 +2671,22 @@ let
           sha256 = "1z9crpz025ha9hgc9mxxg3vyrsfpf9d16zm1vrf4q592j9156d2m";
         };
         meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      jgclark.vscode-todo-highlight = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-todo-highlight";
+          publisher = "jgclark";
+          version = "2.0.8";
+          hash = "sha256-/CctaLcG+dA2Cf69/ACeDKdRLsu/VUGbAxUbyhI0VyA=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/wayou.vscode-todo-highlight/changelog";
+          description = "highlight TODOs, FIXMEs, and any keywords, annotations...";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jgclark.vscode-todo-highlight";
+          homepage = "https://github.com/jgclark/vscode-todo-highlight";
           license = lib.licenses.mit;
         };
       };
@@ -2812,13 +2878,14 @@ let
         mktplcRef = {
           name = "vscord";
           publisher = "leonardssh";
-          version = "5.2.12";
-          hash = "sha256-WGDEizYG6UAqe1jnhvjfFouXDA9Yr5P+BjxPahAIsTE=";
+          version = "5.2.13";
+          hash = "sha256-Jgm3ekXFLhylX7RM6tdfi+lRLrcl4UQGmRHbr27M59M=";
         };
         meta = {
           description = "Highly customizable Discord Rich Presence extension for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=leonardssh.vscord";
           homepage = "https://github.com/leonardssh/vscord";
+          maintainers = [ lib.maintainers.ryand56 ];
           license = lib.licenses.mit;
         };
       };
@@ -3072,6 +3139,8 @@ let
         };
       };
 
+      mongodb.mongodb-vscode = callPackage ./mongodb.mongodb-vscode { };
+
       moshfeu.compare-folders = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "compare-folders";
@@ -3108,6 +3177,72 @@ let
 
       ms-dotnettools.csdevkit = callPackage ./ms-dotnettools.csdevkit { };
       ms-dotnettools.csharp = callPackage ./ms-dotnettools.csharp { };
+
+      ms-dotnettools.vscode-dotnet-runtime = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-dotnet-runtime";
+          publisher = "ms-dotnettools";
+          version = "2.1.1";
+          hash = "sha256-k14bjWITPDduJi79W59SnMV2TFNRCeAymhs6u1Y0vzk=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscode-dotnet-runtime/changelog";
+          description = "Provides a way for other Visual Studio Code extensions to install local versions of .NET SDK/Runtime";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.vscode-dotnet-runtime";
+          homepage = "https://github.com/dotnet/vscode-dotnet-runtime";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.magnouvean ];
+        };
+      };
+
+      ms-dotnettools.vscodeintellicode-csharp = buildVscodeMarketplaceExtension {
+        mktplcRef =
+          let
+            sources = {
+              "x86_64-linux" = {
+                arch = "linux-x64";
+                hash = "sha256-oQMwzQuW5vjxtDboRCeiEO5aytsAY6rb14JDTmK3JPg=";
+              };
+              "x86_64-darwin" = {
+                arch = "darwin-x64";
+                hash = "sha256-/9+qtLDNYUFvdoehit3BihA38p6RqJ7na5Q27xxpZk0=";
+              };
+              "aarch64-linux" = {
+                arch = "linux-arm64";
+                hash = "sha256-JqLlYMKyTXaEzuTPPxVaO8WJiuCUN+9xBzyA6+aYdSc=";
+              };
+              "aarch64-darwin" = {
+                arch = "darwin-arm64";
+                hash = "sha256-dhiUePePkO3MxRQ5UP+lOxRax503JlERe/GWJ8pPUIg=";
+              };
+            };
+          in
+          {
+            name = "vscodeintellicode-csharp";
+            publisher = "ms-dotnettools";
+            version = "2.1.11";
+          }
+          // sources.${stdenv.system};
+        nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+        buildInputs = [
+          stdenv.cc.cc.lib
+          zlib
+        ];
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscodeintellicode-csharp/changelog";
+          description = "AI-assisted development features for C# in Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.vscodeintellicode-csharp";
+          homepage = "https://github.com/MicrosoftDocs/intellicode";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.magnouvean ];
+          platforms = [
+            "x86_64-linux"
+            "x86_64-darwin"
+            "aarch64-darwin"
+            "aarch64-linux"
+          ];
+        };
+      };
 
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3232,8 +3367,8 @@ let
         mktplcRef = {
           name = "datawrangler";
           publisher = "ms-toolsai";
-          version = "0.29.6";
-          hash = "sha256-9MR2+hb9YdjIGDfUkdLW41HOxhjeS/San49C8QRZ/YY=";
+          version = "1.7.2";
+          hash = "sha256-3UK87MhDBCT4La8jRgmkRJJQPZbgvOu0+VBea7ho9hs=";
         };
 
         meta = {
@@ -4126,8 +4261,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.13";
-          hash = "sha256-DxM7oWAbIonsKTvJjxX4oTaBwvRcxNT2y10ljYAzVeI=";
+          version = "0.8.14";
+          hash = "sha256-vCuuPB/GTkM2xCBn1UF3CZwP49Ge/8eelHhg67EG7tQ=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -4182,7 +4317,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
           homepage = "https://github.com/signageos/vscode-sops";
           license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.superherointj ];
+          maintainers = [ ];
         };
       };
 
@@ -4356,8 +4491,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "4.0.4";
-          hash = "sha256-WbEhTIuPqH77IuEDgjPUz9chHM/aYjMdpCI9Kf0KS2Q=";
+          version = "4.0.7";
+          hash = "sha256-y+xD8rOa/ljavAF7tdEpaOKEd4gUzfH15WBwMHyW7z4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -4732,8 +4867,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.44";
-          hash = "sha256-lumK7gcj/NIhiZKT6F++ZsTFKWw7ZVaKZgIsQvZAGs4=";
+          version = "0.0.53";
+          hash = "sha256-5CHAX1jGyJ2VVEBTh5G1JM8+L9paryBa2zJoTkZ+G7Q=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

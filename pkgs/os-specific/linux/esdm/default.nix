@@ -59,23 +59,25 @@ assert cryptoBackend == "openssl" || cryptoBackend == "botan" || cryptoBackend =
 
 stdenv.mkDerivation rec {
   pname = "esdm";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "esdm";
     rev = "v${version}";
-    sha256 = "sha256-UH6ws/hfHdcmbLETyZ0b4wDm8nHPdLsot3ZhIljpUlw=";
+    hash = "sha256-5XctrI02pfCgK1P76AaSkMjiQqav6LX3SMjKr4F44sw=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];
-  buildInputs = [ protobufc ]
-    ++ lib.optional (cryptoBackend == "botan" || botanRng) botan3
+
+  buildInputs = lib.optional (cryptoBackend == "botan" || botanRng) botan3
     ++ lib.optional (cryptoBackend == "openssl" || openSSLRandProvider) openssl
     ++ lib.optional selinux libselinux
     ++ lib.optional esJitterRng jitterentropy
     ++ lib.optional linuxDevFiles fuse3
     ++ lib.optional esJitterRngKernel libkcapi;
+
+  propagatedBuildInputs = [ protobufc ];
 
   mesonFlags = [
     (lib.mesonBool "b_lto" false)

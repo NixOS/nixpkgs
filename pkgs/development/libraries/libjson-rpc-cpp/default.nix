@@ -1,47 +1,22 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, cmake
-, argtable
-, catch2
-, curl
-, doxygen
-, hiredis
-, jsoncpp
-, libmicrohttpd
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, argtable, catch2
+, curl, doxygen, hiredis, jsoncpp, libmicrohttpd }:
 
 stdenv.mkDerivation rec {
   pname = "libjson-rpc-cpp";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "cinemast";
     repo = "libjson-rpc-cpp";
-    sha256 = "sha256-EAakiqlfMprwLjloDekOssaB/EnAmn5njcwHGZtYs9w=";
+    sha256 = "sha256-YCCZN4y88AixQeo24pk6YHfSCsJz8jJ97Dg40KM08cQ=";
     rev = "v${version}";
   };
 
   env.NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
 
-  patches = [
-    (fetchpatch {
-      name = "int-to-MHD_Result.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/cinemast/libjson-rpc-cpp/pull/299.patch";
-      sha256 = "sha256-hiey6etzbOxhMElTMX7offKbey7c2OO/UWeN03k0AaM=";
-    })
-  ];
-
   nativeBuildInputs = [ pkg-config cmake doxygen ];
-  buildInputs = [
-    argtable
-    catch2
-    curl
-    hiredis
-    jsoncpp
-    libmicrohttpd
-  ];
+
+  buildInputs = [ argtable catch2 curl hiredis jsoncpp libmicrohttpd ];
 
   postPatch = ''
     for f in cmake/FindArgtable.cmake \
@@ -71,7 +46,9 @@ stdenv.mkDerivation rec {
   preInstall = ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      q="$p:${lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
+      q="$p:${
+        lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]
+      }:$out/lib"
       patchelf --set-rpath $q $1
     }
 
@@ -98,5 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";
     license = licenses.mit;
     platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ robertrichter ];
   };
 }

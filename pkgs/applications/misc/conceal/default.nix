@@ -2,21 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "conceal";
-  version = "0.4.1";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "TD-Sky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zrG4AE8I1nVvEGNvi7tOsqn6yNOqpRmhJzbuJINnJBw=";
+    sha256 = "sha256-N/KlxtxzEDwUvQMpgf2S6u7MaYiF0eXnMrGoowc08J0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "trash-3.0.1" = "sha256-6GTdT7pVy9yVMeZglPUS4kub2xVLW1h1uynE6zX3w98=";
-    };
-  };
+  cargoHash = "sha256-50EHc8ZHzbl5IFpi5k3/Katc3FaxBgnpf8COrpPHZWk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

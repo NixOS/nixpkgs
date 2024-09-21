@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     mkdir -p $out/share/kbs2
     cp -r contrib/ $out/share/kbs2
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kbs2 \
       --bash <($out/bin/kbs2 --completions bash) \
       --fish <($out/bin/kbs2 --completions fish) \

@@ -779,7 +779,7 @@ dependencies = [
 
 [[package]]
 name = "hbbs"
-version = "1.1.11"
+version = "1.1.11-1"
 dependencies = [
  "async-speed-limit",
  "async-trait",

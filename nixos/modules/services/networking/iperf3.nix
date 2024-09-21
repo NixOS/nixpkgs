@@ -4,6 +4,7 @@ let
 
   api = {
     enable = mkEnableOption "iperf3 network throughput testing server";
+    package = mkPackageOption pkgs "iperf3" { };
     port = mkOption {
       type        = types.ints.u16;
       default     = 5201;
@@ -76,7 +77,7 @@ let
         CapabilityBoundingSet = "";
         NoNewPrivileges = true;
         ExecStart = ''
-          ${pkgs.iperf3}/bin/iperf \
+          ${lib.getExe cfg.package} \
             --server \
             --port ${toString cfg.port} \
             ${optionalString (cfg.affinity != null) "--affinity ${toString cfg.affinity}"} \

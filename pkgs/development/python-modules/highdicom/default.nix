@@ -10,7 +10,6 @@
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
-  pylibjpeg-openjpeg,
 }:
 
 let

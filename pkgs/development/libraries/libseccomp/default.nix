@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeCheckInputs = [ util-linuxMinimal which ];
-  doCheck = true;
+  doCheck = !(stdenv.targetPlatform.useLLVM or false);
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";

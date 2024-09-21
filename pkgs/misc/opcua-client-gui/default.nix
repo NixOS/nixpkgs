@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/FreeOpcUa/opcua-client-gui";
     platforms = platforms.unix;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "opcua-client";
   };
 }

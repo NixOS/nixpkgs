@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool, gobject-introspection, gnome
-, testers
+{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool, gobject-introspection, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -8,7 +7,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgnome-keyring/${lib.versions.majorMinor finalAttrs.version}/libgnome-keyring-${finalAttrs.version}.tar.xz";
-    sha256 = "c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783";
+    hash = "sha256-xMF4+7BfcqzEhNIt2wVo91MsQJsKE+BlE/9UuR6Ud4M=";
   };
 
   outputs = [ "out" "dev" ];
@@ -38,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     pkgConfigModules = [ "gnome-keyring-1" ];
     platforms = lib.platforms.unix;
-    maintainers = [];
+    maintainers = [ ];
 
     longDescription = ''
       gnome-keyring is a program that keeps password and other secrets for

@@ -1,9 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  pykerberos,
   pyspnego,
   pytest-mock,
   pytestCheckHook,
@@ -25,23 +25,19 @@ buildPythonPackage rec {
     hash = "sha256-s1Q3zqKPSuTkiFExr+axai9Eta1xjw/cip8xzfDGR88=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    requests
-    pykerberos
-    pyspnego
-  ];
+  propagatedBuildInputs =
+    [
+      cryptography
+      requests
+      pyspnego
+    ]
+    # Avoid broken Python krb5 package on Darwin
+    ++ lib.optionals (!stdenv.isDarwin) pyspnego.optional-dependencies.kerberos;
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
-
-  # avoid needing to package krb5
-  postPatch = ''
-    substituteInPlace setup.py \
-    --replace "pyspnego[kerberos]" "pyspnego"
-  '';
 
   pythonImportsCheck = [ "requests_kerberos" ];
 

@@ -1,30 +1,39 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+  setuptools,
   pytestCheckHook,
   pytest-xdist,
   torchvision,
-  pythonOlder,
   matplotlib,
   mock,
   packaging,
   torch,
-  scikit-learn,
-  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.5.0.post2";
-  format = "setuptools";
+  version = "0.5.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Lg7ASODYwWWhC45X4+Bk50gSlSWwgn2tM4atLXWbQLI=";
+    hash = "sha256-J0xrqAGwH0bAs59T7zA8irMWOGbE2+Zd9kwqxYUYYMA=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    packaging
+    torch
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -32,12 +41,6 @@ buildPythonPackage rec {
     mock
     pytest-xdist
     torchvision
-  ];
-  propagatedBuildInputs = [
-    packaging
-    torch
-    scikit-learn
-    tqdm
   ];
 
   # runs successfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
@@ -76,10 +79,24 @@ buildPythonPackage rec {
     "visdom"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [
+    "ignite"
+    "ignite.engine"
+    "ignite.handlers"
+    "ignite.metrics"
+    "ignite.distributed"
+    "ignite.exceptions"
+    "ignite.utils"
+    "ignite.contrib"
+  ];
+
+  meta = {
     description = "High-level training library for PyTorch";
-    homepage = "https://pytorch.org/ignite";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    homepage = "https://pytorch-ignite.ai";
+    changelog = "https://github.com/pytorch/ignite/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
+    # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+    broken = stdenv.isDarwin;
   };
 }

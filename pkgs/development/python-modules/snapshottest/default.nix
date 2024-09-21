@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Snapshot testing for pytest, unittest, Django, and Nose";
     homepage = "https://github.com/syrusakbary/snapshottest";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

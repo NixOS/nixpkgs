@@ -8,7 +8,6 @@
 , lapack
 , fflas-ffpack
 , gmpxx
-, withSage ? false # sage support
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -56,8 +55,6 @@ stdenv.mkDerivation rec {
     "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
     "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
     "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
-  ] ++ lib.optionals withSage [
-    "--enable-sage"
   ];
 
   # https://github.com/linbox-team/linbox/issues/304

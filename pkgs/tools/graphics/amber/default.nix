@@ -4,17 +4,20 @@
 , pkg-config
 , cctools
 , makeWrapper
+, mesa
 , python3
+, runCommand
 , vulkan-headers
 , vulkan-loader
 , vulkan-validation-layers
 }:
 let
+  # From https://github.com/google/amber/blob/main/DEPS
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "81cc10a498b25a90147cccd6e8939493c1e9e20e";
-    hash = "sha256-jTOxZ1nU7kvtdWjPzyIp/5ZeKw3JtYyqhlFeIE7CyX8=";
+    rev = "e8dd0b6903b34f1879520b444634c75ea2deedf5";
+    hash = "sha256-B6jVCeoFjd2H6+7tIses+Kj8DgHS6E2dkVzQAIzDHEc=";
   };
 
   lodepng = fetchFromGitHub {
@@ -27,34 +30,34 @@ let
   shaderc = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
-    rev = "e72186b66bb90ed06aaf15cbdc9a053581a0616b";
-    hash = "sha256-hd1IGsWksgAfB8Mq5yZOzSyNGxXsCJxb350pD/Gcskk=";
+    rev = "f59f0d11b80fd622383199c867137ededf89d43b";
+    hash = "sha256-kHz8Io5GZDWv1FjPyBWRpnKhGygKhSU4L9zl/AKXZlU=";
   };
 
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "d13b52222c39a7e9a401b44646f0ca3a640fbd47";
-    hash = "sha256-bjiWGSmpEbydXtCLP8fRZfPBvdCzBoJxKXTx3BroQbg=";
+    rev = "5e3ad389ee56fca27c9705d093ae5387ce404df4";
+    hash = "sha256-gjF5mVTXqU/GZzr2S6oKGChgvqqHcQSrEq/ePP2yJys=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "d87f61605b3647fbceae9aaa922fce0031afdc63";
-    hash = "sha256-lB2i6wjehIFDOQdIPUvCy3zzcnJSsR5vNawPhGmb0es=";
+    rev = "9241a58a8028c49510bc174b6c970e3c2b4b8e51";
+    hash = "sha256-0qHUpwNDJI2jV4h68QaTNPIwTPxwTt0iAUnMXqFCiJE=";
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amber";
-  version = "unstable-2023-09-02";
+  version = "unstable-2024-08-21";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "8e90b2d2f532bcd4a80069e3f37a9698209a21bc";
-    hash = "sha256-LuNCND/NXoNbbTWv7RYQUkq2QXL1qXR27uHwFIz0DXg=";
+    repo = "amber";
+    rev = "66399a35927606a435bf7a59756e87e6cb5a0013";
+    hash = "sha256-PCO64zI/vzp4HyGz5WpeYpCBeaWjTvz1punWsTz1yiM=";
   };
 
   buildInputs = [
@@ -92,10 +95,53 @@ stdenv.mkDerivation rec {
       --suffix VK_LAYER_PATH : ${vulkan-validation-layers}/share/vulkan/explicit_layer.d
   '';
 
+  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" {
+    nativeBuildInputs = [ finalAttrs.finalPackage mesa.llvmpipeHook ];
+  } ''
+    cat > test.amber <<EOF
+    #!amber
+    # Simple amber compute shader.
+
+    SHADER compute kComputeShader GLSL
+    #version 450
+
+    layout(binding = 3) buffer block {
+      uvec2 values[];
+    };
+
+    void main() {
+      values[gl_WorkGroupID.x + gl_WorkGroupID.y * gl_NumWorkGroups.x] =
+                    gl_WorkGroupID.xy;
+    }
+    END  # shader
+
+    BUFFER kComputeBuffer DATA_TYPE vec2<int32> SIZE 524288 FILL 0
+
+    PIPELINE compute kComputePipeline
+      ATTACH kComputeShader
+      BIND BUFFER kComputeBuffer AS storage DESCRIPTOR_SET 0 BINDING 3
+    END  # pipeline
+
+    RUN kComputePipeline 256 256 1
+
+    # Four corners
+    EXPECT kComputeBuffer IDX 0 EQ 0 0
+    EXPECT kComputeBuffer IDX 2040 EQ 255 0
+    EXPECT kComputeBuffer IDX 522240 EQ 0 255
+    EXPECT kComputeBuffer IDX 524280 EQ 255 255
+
+    # Center
+    EXPECT kComputeBuffer IDX 263168 EQ 128 128
+    EOF
+
+    amber test.amber
+    touch $out
+  '';
+
   meta = with lib; {
     description = "Multi-API shader test framework";
     homepage = "https://github.com/google/amber";
     license = licenses.asl20;
     maintainers = with maintainers; [ Flakebi ];
   };
-}
+})

@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://effect.readthedocs.io/";
     changelog = "https://github.com/python-effect/effect/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

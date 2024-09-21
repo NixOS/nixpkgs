@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Tools for handling the encrypted keyfile format used to store private keys";
     homepage = "https://github.com/ethereum/eth-keyfile";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

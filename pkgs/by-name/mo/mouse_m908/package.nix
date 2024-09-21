@@ -4,20 +4,22 @@
 , installShellFiles
 , fetchFromGitHub
 , pkg-config
-}: stdenv.mkDerivation (finalAttrs: {
-  name = "mouse_m908";
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "mouse_m908";
   version = "3.4";
-
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-
-  buildInputs = [ libusb1.dev ];
 
   src = fetchFromGitHub {
     owner = "dokutan";
     repo = "mouse_m908";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sCAvjNpJYkp4G0KkDJtHOBR1vc80DZJtWR2W9gakkzQ=";
+    hash = "sha256-sCAvjNpJYkp4G0KkDJtHOBR1vc80DZJtWR2W9gakkzQ=";
   };
+
+  nativeBuildInputs = [ pkg-config installShellFiles ];
+
+  buildInputs = [ libusb1 ];
 
   # Uses proper nix directories rather than the ones specified in the makefile
   installPhase = ''
@@ -28,11 +30,11 @@
       $out/share/doc/mouse_m908 \
       $out/lib/udev/rules.d
 
-    cp mouse_m908 $out/bin/mouse_m908 && \
-    cp mouse_m908.rules $out/lib/udev/rules.d && \
-    cp examples/* $out/share/doc/mouse_m908 && \
-    cp README.md $out/share/doc/mouse_m908 && \
-    cp keymap.md $out/share/doc/mouse_m908 && \
+    cp mouse_m908 $out/bin/mouse_m908
+    cp mouse_m908.rules $out/lib/udev/rules.d
+    cp examples/* $out/share/doc/mouse_m908
+    cp README.md $out/share/doc/mouse_m908
+    cp keymap.md $out/share/doc/mouse_m908
     installManPage mouse_m908.1
 
     runHook postInstall

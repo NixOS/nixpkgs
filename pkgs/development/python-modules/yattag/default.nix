@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Library to generate HTML or XML";
     homepage = "https://www.yattag.org/";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

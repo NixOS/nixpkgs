@@ -6,11 +6,11 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "clash-nyanpasu";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/LibNyanpasu/clash-nyanpasu/releases/download/v${version}/clash-nyanpasu_${version}_amd64.AppImage";
-    hash = "sha256-uUWs7yfSrqe/6kTb4iMA9ty6j/Wi9qGYX65VzTG5nkc=";
+    hash = "sha256-Xl6FRwYDXztirDZEr8Xn13BNZBW54TdwsK8H0rnLEgU=";
   };
 
   extraInstallCommands =

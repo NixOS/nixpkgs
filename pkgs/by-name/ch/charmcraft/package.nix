@@ -8,6 +8,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
         version = "0.11.2";
@@ -30,7 +31,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.1.1";
+  version = "3.1.2";
 
   pyproject = true;
 
@@ -38,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-oxNbAIf7ltdDYkGJj29zvNDNXT6vt1jWaIqHJoMr7gU=";
+    hash = "sha256-Qi2ZtAYgQlKj77QPovcT3RrPwAlEwaFyoJ0MAq4EETE=";
   };
 
   postPatch = ''

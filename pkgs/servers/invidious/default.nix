@@ -1,7 +1,7 @@
 { lib
 , callPackage
 , crystal
-, fetchFromGitea
+, fetchFromGitHub
 , librsvg
 , pkg-config
 , libxml2
@@ -29,8 +29,7 @@ crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
 
-  src = fetchFromGitea {
-    domain = "gitea.invidious.io";
+  src = fetchFromGitHub {
     owner = "iv-org";
     repo = "invidious";
     fetchSubmodules = true;

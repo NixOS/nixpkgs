@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib; [
-    (enableFeature doCheck "unit-tests")
-    (enableFeature doCheck "tests")
+  configureFlags = [
+    (lib.enableFeature doCheck "unit-tests")
+    (lib.enableFeature doCheck "tests")
   ];
 
   makeFlags = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://git.infradead.org/mtd-utils.git";
     license = licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with maintainers; [ viric ];
+    maintainers = with lib.maintainers; [ skeuchel ];
     platforms = with platforms; linux;
   };
 }

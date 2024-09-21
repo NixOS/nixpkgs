@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     gtest
     wayland
+    wayland-scanner # needed by cmake
   ];
 
   passthru = {

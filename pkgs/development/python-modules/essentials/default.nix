@@ -3,7 +3,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonImportsCheckHook,
   lib,
 }:
 buildPythonPackage rec {

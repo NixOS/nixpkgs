@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, curl
-, webkitgtk
-, libmicrohttpd
-, libsecret
-, qrencode
-, libsodium
-, pkg-config
-, help2man
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  webkitgtk,
+  libmicrohttpd,
+  libsecret,
+  qrencode,
+  libsodium,
+  pkg-config,
+  help2man,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "oidc-agent";
-  version = "5.1.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cOK/rZ/jnyALLuhDM3+qvwwe4Fjkv8diQBkw7NfVo0c=";
+    hash = "sha256-SjpCD/x93kYB5759e/D0btLO48d6g4SkEUAX7PYfm2w=";
   };
 
   nativeBuildInputs = [
@@ -39,14 +40,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" "BIN_PATH=$(out)" "LIB_PATH=$(out)/lib" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "BIN_PATH=$(out)"
+    "PROMPT_BIN_PATH=$(out)"
+    "LIB_PATH=$(out)/lib"
+  ];
 
-  installTargets = [ "install_bin" "install_lib" "install_conf" ];
+  installTargets = [
+    "install_bin"
+    "install_lib"
+    "install_conf"
+  ];
 
   postFixup = ''
     # Override with patched binary to be used by help2man
     cp -r $out/bin/* bin
-    make install_man PREFIX=$out
+    make install_man PREFIX=$out MAN_PATH=$out/share/man PROMPT_MAN_PATH=$out/share/man
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -58,4 +68,3 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
   };
 }
-

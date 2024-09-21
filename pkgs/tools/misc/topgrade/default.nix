@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     "AppKit"
   ]);
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd topgrade \
       --bash <($out/bin/topgrade --gen-completion bash) \
       --fish <($out/bin/topgrade --gen-completion fish) \

@@ -21,6 +21,8 @@
 , boost
 , eigen
 , libvdwxc
+, enablePython ? false
+, pythonPackages ? null
 , llvmPackages
 , cudaPackages
 , rocmPackages
@@ -35,16 +37,17 @@
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
+assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "SIRIUS";
-  version = "7.5.2";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DYie6ufgZNqg7ohlIed3Bo+sqLKHOxWXTwAkea2guLk=";
+    hash = "sha256-JvI75AbthNThXep2jcriLTPC8GGiPgrg5nYCCbCi+EI=";
   };
 
 
@@ -81,10 +84,23 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
-  ;
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.openmp
+  ] ++ lib.optionals enablePython (with pythonPackages; [
+    python
+    pybind11
+  ]);
 
-  propagatedBuildInputs = [ (lib.getBin mpi) ];
+  propagatedBuildInputs = [
+    (lib.getBin mpi)
+  ] ++ lib.optionals enablePython (with pythonPackages; [
+    mpi4py
+    voluptuous
+    numpy
+    h5py
+    scipy
+    pyyaml
+  ]);
 
   CXXFLAGS = [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
@@ -92,20 +108,20 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DUSE_SCALAPACK=ON"
+    "-DSIRIUS_USE_SCALAPACK=ON"
+    "-DSIRIUS_USE_VDWXC=ON"
+    "-DSIRIUS_CREATE_FORTRAN_BINDINGS=ON"
+    "-DSIRIUS_USE_OPENMP=ON"
     "-DBUILD_TESTING=ON"
-    "-DUSE_VDWXC=ON"
-    "-DCREATE_FORTRAN_BINDINGS=ON"
-    "-DUSE_OPENMP=ON"
-    "-DBUILD_TESTING=ON"
-  ]
-  ++ lib.optionals (gpuBackend == "cuda") [
-    "-DUSE_CUDA=ON"
+  ] ++ lib.optionals (gpuBackend == "cuda") [
+    "-DSIRIUS_USE_CUDA=ON"
     "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
-  ]
-  ++ lib.optionals (gpuBackend == "rocm") [
-    "-DUSE_ROCM=ON"
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ] ++ lib.optionals (gpuBackend == "rocm") [
+    "-DSIRIUS_USE_ROCM=ON"
     "-DHIP_ROOT_DIR=${rocmPackages.clr}"
+  ] ++ lib.optionals enablePython [
+    "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
   ];
 
   doCheck = true;

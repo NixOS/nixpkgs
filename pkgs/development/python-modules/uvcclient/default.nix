@@ -2,36 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  poetry-core,
   mock,
+  pytest-cov-stub,
+  pytest-xdist,
   pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "uvcclient";
-  version = "0.11.1";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-0OUdBygL2AAtccL5hdyL+0PIRK4o+lNN3droWDysDeI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ilZTRoSuoJMWlyRfvY/PpTBbr+d6wx+T3cVyW3ZkXlY=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_camera.py \
-      --replace-fail "assertEquals" "assertEqual"
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     mock
+    pytest-cov-stub
+    pytest-xdist
     pytestCheckHook
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/uilibs/uvcclient/blob/${src.rev}/CHANGELOG.md";
     description = "Client for Ubiquiti's Unifi Camera NVR";
     mainProgram = "uvc";
     homepage = "https://github.com/kk7ds/uvcclient";

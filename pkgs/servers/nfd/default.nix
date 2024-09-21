@@ -16,18 +16,23 @@
 
 stdenv.mkDerivation rec {
   pname = "nfd";
-  version = "22.12";
+  version = "24.07";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = lib.toUpper pname;
     rev = "NFD-${version}";
-    hash = "sha256-epY5qtET7rsKL3KIKvxfa+wF+AGZbYs+zRhy8SnIffk=";
+    hash = "sha256-iEI8iS0eLLVe6PkOiCHL3onYNVYVZ1ttmk/aWrBkDhg=";
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    # These tests fail because they try to check for user/group permissions.
+    rm tests/daemon/mgmt/general-config-section.t.cpp
+  '';
+
   nativeBuildInputs = [ pkg-config sphinx wafHook ];
-  buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
+  buildInputs = [ boost179 libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
     "--boost-includes=${boost179.dev}/include"
@@ -39,8 +44,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
     build/unit-tests-core
-    # build/unit-tests-daemon # 3 tests fail
-    build/unit-tests-rib
+    build/unit-tests-daemon
     build/unit-tests-tools
     runHook postCheck
   '';

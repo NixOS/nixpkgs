@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   CONTAINS_NEWLINE_RE = ".*\n.*";
   # The following values are reserved as complete option values:
@@ -53,14 +50,14 @@ in
 {
   options = {
     services.minetest-server = {
-      enable = mkOption {
-        type        = types.bool;
+      enable = lib.mkOption {
+        type        = lib.types.bool;
         default     = false;
         description = "If enabled, starts a Minetest Server.";
       };
 
-      gameId = mkOption {
-        type        = types.nullOr types.str;
+      gameId = lib.mkOption {
+        type        = lib.types.nullOr lib.types.str;
         default     = null;
         description = ''
           Id of the game to use. To list available games run
@@ -70,8 +67,8 @@ in
         '';
       };
 
-      world = mkOption {
-        type        = types.nullOr types.path;
+      world = lib.mkOption {
+        type        = lib.types.nullOr lib.types.path;
         default     = null;
         description = ''
           Name of the world to use. To list available worlds run
@@ -81,8 +78,8 @@ in
         '';
       };
 
-      configPath = mkOption {
-        type        = types.nullOr types.path;
+      configPath = lib.mkOption {
+        type        = lib.types.nullOr lib.types.path;
         default     = null;
         description = ''
           Path to the config to use.
@@ -92,8 +89,8 @@ in
         '';
       };
 
-      config = mkOption {
-        type = types.attrsOf types.anything;
+      config = lib.mkOption {
+        type = lib.types.attrsOf lib.types.anything;
         default = {};
         description = ''
           Settings to add to the minetest config file.
@@ -102,8 +99,8 @@ in
         '';
       };
 
-      logPath = mkOption {
-        type        = types.nullOr types.path;
+      logPath = lib.mkOption {
+        type        = lib.types.nullOr lib.types.path;
         default     = null;
         description = ''
           Path to logfile for logging.
@@ -113,8 +110,8 @@ in
         '';
       };
 
-      port = mkOption {
-        type        = types.nullOr types.int;
+      port = lib.mkOption {
+        type        = lib.types.nullOr lib.types.int;
         default     = null;
         description = ''
           Port number to bind to.
@@ -123,8 +120,8 @@ in
         '';
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         description = ''
           Additional command line flags to pass to the minetest executable.
@@ -133,7 +130,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.minetest = {
       description     = "Minetest Server Service user";
       home            = "/var/lib/minetest";

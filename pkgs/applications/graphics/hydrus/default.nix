@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "581";
+  version = "588";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q/EdqwIMCjeDtFAPlYd04NMpEgC6xUDGK5LwxDCiI9Y=";
+    hash = "sha256-0uRoOgpz3FSDedzx728jAPhrCAReVygkb5tZTTUxNEY=";
   };
 
   nativeBuildInputs = [
@@ -81,9 +81,6 @@ python3Packages.buildPythonPackage rec {
     service-identity
     twisted
   ];
-
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = with python3Packages; [
     nose

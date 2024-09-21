@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fnm \
       --bash <($out/bin/fnm completions --shell bash) \
       --fish <($out/bin/fnm completions --shell fish) \

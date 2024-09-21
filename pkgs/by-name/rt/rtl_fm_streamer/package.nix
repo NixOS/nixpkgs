@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AlbrechtL";
     repo = "rtl_fm_streamer";
     rev = "ceb2bf06883f986ed01aa57c84989ba35b6b9a27";
-    sha256 = "sha256-9M7GS6AC7HEJge04vl7V6ZdtwWvbMu/Rhaf9fwQa9WA=";
+    hash = "sha256-9M7GS6AC7HEJge04vl7V6ZdtwWvbMu/Rhaf9fwQa9WA=";
   };
 
   postPatch = ''

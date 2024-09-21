@@ -7,6 +7,7 @@ permissions: {}
 
 jobs:
   x86_64-linux:
+    name: shell-check-x86_64-linux
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -18,6 +19,7 @@ jobs:
         run: nix-build shell.nix
 
   aarch64-darwin:
+    name: shell-check-aarch64-darwin
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7

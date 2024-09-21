@@ -23,18 +23,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-rdhG9MdjWyvoaMGdjgFyCfQaoV48QtAZE7buA5TkDKg=";
+    sha256 = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-iQoMPV97V9WJqT+qVtNpQtW5g+Jyl+U2uA+JEoRYTQA=";
 
   nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
 
@@ -45,7 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "no-self-update" ];
 
-  checkFeatures = [ ];
+  checkFeatures = [ "test" ];
 
   patches = lib.optionals stdenv.isLinux [
     (runCommand "0001-dynamically-patchelf-binaries.patch"
@@ -62,7 +60,9 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
-  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  # Random tests fail nondeterministically on macOS.
+  # TODO: Investigate this.
+  doCheck = !stdenv.isDarwin;
 
   # skip failing tests
   checkFlags = [

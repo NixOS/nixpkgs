@@ -1,69 +1,66 @@
-{ lib
-, stdenv
-, nix-update-script
-, appstream
-, dbus
-, fetchFromGitHub
-, flatpak
-, glib
-, granite
-, gtk3
-, json-glib
-, libgee
-, libhandy
-, libportal-gtk3
-, libsoup_3
-, libxml2
-, meson
-, ninja
-, pkg-config
-, vala
-, polkit
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  wrapGAppsHook4,
+  appstream,
+  dbus,
+  flatpak,
+  glib,
+  granite7,
+  gtk4,
+  json-glib,
+  libadwaita,
+  libgee,
+  libportal-gtk4,
+  libsoup_3,
+  libxml2,
+  polkit,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.4.0-unstable-2024-02-07";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    # Add support for AppStream 1.0.
-    # https://github.com/elementary/appcenter/pull/2099
-    # nixpkgs-update: no auto update
-    rev = "fce55d9373bfb82953191b32e276a2129ffcb8c1";
-    hash = "sha256-7VYiE1RkaqN1Yg4pFUBs6k8QjoljYFDgQ9jCTLG3uyk=";
+    rev = version;
+    hash = "sha256-j2S8E/sdtkir3lhN1yg4qOjcvxlriXpapsPuANPqhcc=";
   };
 
   nativeBuildInputs = [
-    dbus # for pkg-config
     meson
     ninja
     pkg-config
+    sassc
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     appstream
+    dbus
     flatpak
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
     json-glib
+    libadwaita
     libgee
-    libhandy
-    libportal-gtk3
+    libportal-gtk4
     libsoup_3
     libxml2
     polkit
   ];
 
   mesonFlags = [
-    # We don't have a working nix packagekit backend yet.
-    "-Dpackagekit_backend=false"
-    "-Dubuntu_drivers_backend=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];

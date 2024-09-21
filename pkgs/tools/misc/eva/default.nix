@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eX2d9h6zNbheS68j3lyhJW05JZmQN2I2MdcmiZB8Mec=";
   };
 
-  cargoSha256 = "sha256-gnym2sedyzQzubOtj64Yoh+sKT+sa60w/Z72hby7Pms=";
+  cargoHash = "sha256-gnym2sedyzQzubOtj64Yoh+sKT+sa60w/Z72hby7Pms=";
 
   meta = with lib; {
     description = "Calculator REPL, similar to bc";

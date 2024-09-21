@@ -1,10 +1,9 @@
 { lib, stdenv, fetchurl
 , meson, ninja, pkg-config, python3, wayland-scanner
-, cairo, libGL, libdrm, libevdev, libinput, libxkbcommon, mesa, seatd, wayland
-, wayland-protocols, xcbutilcursor
+, cairo, libGL, libdisplay-info, libdrm, libevdev, libinput, libxkbcommon, mesa
+, seatd, wayland, wayland-protocols, xcbutilcursor
 
 , demoSupport ? true
-, hdrSupport ? true, libdisplay-info
 , jpegSupport ? true, libjpeg
 , lcmsSupport ? true, lcms2
 , pangoSupport ? true, pango
@@ -19,27 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "13.0.3";
+  version = "14.0.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    hash = "sha256-J/aNluO5fZjare8TogI1ZSSST6OBQY+mcWuRNu8JkJM=";
+    hash = "sha256-R/0DJbC5SOmwA6OP306zqFgfP9x0C4kys1roeTv05KU=";
   };
-
-  postPatch = ''
-    # raise neatvnc version bound to 0.8.0
-    # https://gitlab.freedesktop.org/wayland/weston/-/issues/890
-    substituteInPlace libweston/backend-vnc/meson.build \
-      --replace-fail "'neatvnc', version: ['>= 0.7.0', '< 0.8.0']" "'neatvnc', version: ['>= 0.7.0', '<= 0.8.0']"
-  '';
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    cairo libGL libdrm libevdev libinput libxkbcommon mesa seatd wayland
-    wayland-protocols
-  ] ++ lib.optional hdrSupport libdisplay-info
-    ++ lib.optional jpegSupport libjpeg
+    cairo libGL libdisplay-info libdrm libevdev libinput libxkbcommon mesa seatd
+    wayland wayland-protocols
+  ] ++ lib.optional jpegSupport libjpeg
     ++ lib.optional lcmsSupport lcms2
     ++ lib.optional pangoSupport pango
     ++ lib.optional pipewireSupport pipewire

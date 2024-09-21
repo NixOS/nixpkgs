@@ -16,13 +16,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "osmo-bsc";
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bsc";
     rev = version;
-    hash = "sha256-pMdQcIFWiawXYnmHSjTk+3YcZNMrv3qmgWr4gkTknJA=";
+    hash = "sha256-4ELOkxgtqV30r7xD1XcYXpscswvCQacJWUYcbfDNPhI=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "GSM Base Station Controller";
     homepage = "https://projects.osmocom.org/projects/osmobsc";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-bsc";
   };

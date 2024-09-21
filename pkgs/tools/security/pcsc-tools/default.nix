@@ -25,13 +25,13 @@ assert systemdSupport -> dbusSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcsc-tools";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pcsc-tools";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-+cvgSNlSYSJ2Zr2iWk96AacyQ38ru9/RK8yeK3ceqCo=";
+    hash = "sha256-5a3sVcFEFzBkbRKUqlCPV7sL3O17G7hDVpxLpAWofdE=";
   };
 
   configureFlags = [

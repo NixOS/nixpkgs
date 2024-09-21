@@ -17,11 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-AJ0ZWRxqhBJEics6XnIVWyf7pJI8MphQU4LRqSYYNSQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail '--cov-config=setup.cfg' ""
-  '';
-
   dependencies = with python3.pkgs; [
     dbus-python
     icalendar
@@ -40,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     dbus
     freezegun
+    pytest-cov-stub
     pytest-datadir
     pytest-httpserver
     pytest-mock

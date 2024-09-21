@@ -1,7 +1,6 @@
 {
   pname,
   version,
-  disabled,
   src,
   patches ? [ ],
   meta,

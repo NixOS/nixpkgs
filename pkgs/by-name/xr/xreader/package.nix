@@ -20,7 +20,6 @@
 , webkitgtk_4_1
 , nodePackages
 , ninja
-, gsettings-desktop-schemas
 , djvulibre
 , backends ? [ "pdf" "ps" /* "dvi" "t1lib" */ "djvu" "tiff" "pixbuf" "comics" "xps" "epub" ]
 }:
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-c3oZ+PAsu180mlriQlF86TCBAnehLBv9Nc0SCtSkUuQ=";
+    hash = "sha256-c3oZ+PAsu180mlriQlF86TCBAnehLBv9Nc0SCtSkUuQ=";
   };
 
   nativeBuildInputs = [

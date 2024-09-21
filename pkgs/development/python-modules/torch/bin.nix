@@ -7,7 +7,7 @@
   python,
   pythonAtLeast,
   pythonOlder,
-  addOpenGLRunpath,
+  addDriverRunpath,
   callPackage,
   cudaPackages,
   future,
@@ -16,7 +16,6 @@
   pyyaml,
   requests,
   setuptools,
-  torch-bin,
   typing-extensions,
   sympy,
   jinja2,
@@ -29,7 +28,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.3.1";
+  version = "2.4.0";
 in
 buildPythonPackage {
   inherit version;
@@ -44,7 +43,7 @@ buildPythonPackage {
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     autoAddDriverRunpath
   ];
@@ -103,7 +102,9 @@ buildPythonPackage {
   #
   # This is a quick hack to add `libnvrtc` to the runpath so that torch can find
   # it when it is needed at runtime.
-  extraRunpaths = lib.optionals stdenv.hostPlatform.isLinux [ "${lib.getLib cudaPackages.cuda_nvrtc}/lib" ];
+  extraRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
+    "${lib.getLib cudaPackages.cuda_nvrtc}/lib"
+  ];
   postPhases = lib.optionals stdenv.isLinux [ "postPatchelfPhase" ];
   postPatchelfPhase = ''
     while IFS= read -r -d $'\0' elf ; do
@@ -121,7 +122,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ./tests.nix {};
+  passthru.tests = callPackage ./tests.nix { };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";

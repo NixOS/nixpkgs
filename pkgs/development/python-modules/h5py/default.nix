@@ -1,6 +1,7 @@
 {
   lib,
   fetchPypi,
+  fetchpatch,
   buildPythonPackage,
   pythonOlder,
   setuptools,
@@ -14,6 +15,7 @@
   pytestCheckHook,
   pytest-mpi,
   cached-property,
+  stdenv,
 }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
@@ -38,6 +40,11 @@ buildPythonPackage rec {
     # Unlock an overly strict locking of mpi4py version (seems not to be necessary).
     # See also: https://github.com/h5py/h5py/pull/2418/files#r1589372479
     ./mpi4py-requirement.patch
+    # Fix 16-bit float dtype and tests on darwin (remove in next release)
+    (fetchpatch {
+      url = "https://github.com/h5py/h5py/commit/a27a1f49ce92d985e14b8a24fa80d30e5174add2.patch";
+      hash = "sha256-7TcmNSJucknq+Vnv4ViT6S0nWeH1+krarWxq6WXLYEA=";
+    })
   ];
 
   # avoid strict pinning of numpy, can't be replaced with pythonRelaxDepsHook,
@@ -46,9 +53,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0rc1" "numpy"
   '';
-  pythonRelaxDeps = [
-    "mpi4py"
-  ];
+  pythonRelaxDeps = [ "mpi4py" ];
 
   HDF5_DIR = "${hdf5}";
   HDF5_MPI = if mpiSupport then "ON" else "OFF";

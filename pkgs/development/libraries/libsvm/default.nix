@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsvm";
-  version = "3.32";
+  version = "3.33";
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "sha256-hkTMZRjKiLvFDYyOrRc08aubbxcBcEXvmuOHc6plPa0=";
+    sha256 = "sha256-1doSzMPQ7thFP732+sfZ8AUvPopfB6IXTk7wqdg9zfg=";
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];

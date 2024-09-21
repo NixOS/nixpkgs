@@ -21,7 +21,7 @@ let
   mkExtraBuildCommands0 = cc: ''
     rsrc="$out/resource-root"
     mkdir "$rsrc"
-    ln -s "${lib.getLib cc}/lib/clang/16/include" "$rsrc"
+    ln -s "${lib.getLib cc}/lib/clang/${lib.versions.major cc.version}/include" "$rsrc"
     echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
   '';
   mkExtraBuildCommands =
@@ -87,7 +87,8 @@ let
           "bin/clang++"
           "bin/cpp"
         ];
-        version = "16";
+        # SYNCME: this version number must be synced with the one in make-bootstrap-tools.nix
+        version = "18";
       };
       libunwind = linkBootstrap {
         name = "libunwind";
@@ -484,7 +485,6 @@ in
       # we can import the foundational libs from boot-0
       # we can import bins and libs that DON'T get imported OR LINKED into the final stdenv from boot-0
       curl = prevStage.curlReal;
-      curlReal = super.curl;
       inherit (prevStage)
         fetchurl
         python3
@@ -510,7 +510,6 @@ in
     name = "freebsd";
     overrides = prevStage: self: super: {
       __bootstrapArchive = bootstrapArchive;
-      curl = prevStage.curlReal;
       fetchurl = prevStage.fetchurlReal;
       freebsd = super.freebsd.overrideScope (
         self': super': { localesPrev = prevStage.freebsd.localesReal; }

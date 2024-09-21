@@ -88,10 +88,6 @@ final: prev: {
     nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs.psc-package final.pulp ];
   });
 
-  intelephense = prev.intelephense.override (oldAttrs: {
-    meta = oldAttrs.meta // { license = lib.licenses.unfree; };
-  });
-
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
@@ -106,7 +102,7 @@ final: prev: {
 
       libsecret
       final.node-gyp-build
-      final.node-pre-gyp
+      node-pre-gyp
 
       pixman
       cairo
@@ -168,18 +164,8 @@ final: prev: {
     '';
   };
 
-  node-gyp = prev.node-gyp.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
-    # This is important when build nodejs packages in sandbox.
-    postInstall = ''
-      wrapProgram "$out/bin/node-gyp" \
-        --set npm_config_nodedir ${nodejs}
-    '';
-  };
-
   node-red = prev.node-red.override {
-    buildInputs = [ final.node-pre-gyp ];
+    buildInputs = [ pkgs.node-pre-gyp ];
   };
 
   node2nix = prev.node2nix.override {
@@ -204,6 +190,11 @@ final: prev: {
           url = "https://github.com/svanderburg/node2nix/commit/3b63e735458947ef39aca247923f8775633363e5.patch";
           hash = "sha256-pe8Xm4mjPh9oKXugoMY6pRl8YYgtdw0sRXN+TienalU=";
         })
+        # Use top-level cctools in generated files - PR svanderburg/node2nix#334
+        (fetchpatch {
+          url = "https://github.com/svanderburg/node2nix/commit/31c308bba5f39ea0105f66b9f40dbe57fed7a292.patch";
+          hash = "sha256-DdNRteonMvyffPh0uo0lUbsohKYnyqv0QcD9vjN6aXE=";
+        })
       ];
     in ''
       ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
@@ -219,7 +210,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==";
+        sha512 = "sha512-EV6+ovTsEXCPAp58g2dD68LxoP/wK5pRvgy0J/HxPGB009omFPv3Yet0HiaqvrIrgPTBuC6wCH1LTOY91EO5hQ==";
       };
     };
     esbuild-linux-arm64 = {
@@ -228,7 +219,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==";
+        sha512 = "sha512-/93bf2yxencYDnItMYV/v116zff6UyTjo4EtEQjUBeGiVpMmffDNUyD9UN2zV+V3LRV3/on4xdZ26NKzn6754g==";
       };
     };
     esbuild-darwin-x64 = {
@@ -237,7 +228,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-tBcXp9KNphnNH0dfhv8KYkZhjc+H3XBkF5DKtswJblV7KlT9EI2+jeA8DgBjp908WEuYll6pF+UStUCfEpdysA==";
+        sha512 = "sha512-aClqdgTDVPSEGgoCS8QDG37Gu8yc9lTHNAQlsztQ6ENetKEO//b8y31MMu2ZaPbn4kVsIABzVLXYLhCGekGDqw==";
       };
     };
     esbuild-darwin-arm64 = {
@@ -246,7 +237,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-4J6IRT+10J3aJH3l1yzEg9y3wkTDgDk7TSDFX+wKFiWjqWp/iCfLIYzGyasx9l0SAFPT1HwSCR+0w/h1ES/MjA==";
+        sha512 = "sha512-YsS2e3Wtgnw7Wq53XXBLcV6JhRsEq8hkfg91ESVadIrzr9wO6jJDMZnCQbHm1Guc5t/CdDiFSSfWP58FNuvT3Q==";
       };
     };
   in{
@@ -272,33 +263,6 @@ final: prev: {
       license = lib.licenses.mit;
     };
   });
-
-  # To update prisma, please first update prisma-engines to the latest
-  # version. Then change the correct hash to this package. The PR should hold
-  # two commits: one for the engines and the other one for the node package.
-  prisma = prev.prisma.override rec {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-
-    inherit (pkgs.prisma-engines) version;
-
-    src = fetchurl {
-      url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-TlwKCuDQRFM6+Hhx9eFCfXbtLZq6RwBTIFCWzE4D8N8=";
-    };
-    postInstall = with pkgs; ''
-      wrapProgram "$out/bin/prisma" \
-        --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-        --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
-        --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
-        --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
-    '';
-
-    passthru.tests = {
-      simple-execution = pkgs.callPackage ./package-tests/prisma.nix {
-        inherit (final) prisma;
-      };
-    };
-  };
 
   pulp = prev.pulp.override {
     # tries to install purescript
@@ -337,22 +301,16 @@ final: prev: {
     };
   };
 
-  teck-programmer = prev.teck-programmer.override ({ meta, ... }: {
-    nativeBuildInputs = [ final.node-gyp-build ];
-    buildInputs = [ pkgs.libusb1 ];
-    meta = meta // { license = lib.licenses.gpl3Plus; };
-  });
-
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
   };
 
   thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
   };
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
     # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
     preRebuild = ''
       rm -r node_modules/node-gyp
@@ -360,7 +318,7 @@ final: prev: {
   };
 
   thelounge-theme-flat-dark = prev.thelounge-theme-flat-dark.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
     # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
     preRebuild = ''
       rm -r node_modules/node-gyp
@@ -390,7 +348,7 @@ final: prev: {
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
-      final.node-pre-gyp
+      node-pre-gyp
       pixman
       cairo
       pango
@@ -417,7 +375,7 @@ final: prev: {
   };
 
   wavedrom-cli = prev.wavedrom-cli.override {
-    nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.pkg-config pkgs.node-pre-gyp ];
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
     buildInputs = with pkgs; [

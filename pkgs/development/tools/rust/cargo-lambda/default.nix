@@ -1,36 +1,46 @@
-{ lib
-, cacert
-, curl
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, openssl
-, stdenv
-, CoreServices
-, Security
-, zig
-, nix-update-script
+{
+  lib,
+  cacert,
+  curl,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  openssl,
+  stdenv,
+  CoreServices,
+  Security,
+  zig,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.2.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E9jUlEiHyf5UR/UZxJj9LTfyAxGR/WsvRQdFdIVvLG8=";
+    hash = "sha256-QTFIFD04pAcNgj+ktY8WP0ScDmSy6mNlhfiXAabMlGE=";
   };
 
-  cargoHash = "sha256-IXMkgpyYwll8NwTXRffbsSP5uFHGJe1n2RQ1Mbu+E70=";
+  cargoHash = "sha256-1/+bkxEpIvaJBJatqpX186MHKOdLO8Jiw8NEnyr9ctg=";
 
-  nativeCheckInputs = [cacert];
+  nativeCheckInputs = [ cacert ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl CoreServices Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      curl
+      CoreServices
+      Security
+    ];
 
   checkFlags = [
     # Disabled because they access the network.
@@ -44,11 +54,20 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_build_internal_zip_extension"
     "--skip=test_build_logs_extension"
     "--skip=test_build_telemetry_extension"
+    "--skip=test_build_zip_workspace"
     "--skip=test_download_example"
     "--skip=test_init_subcommand"
     "--skip=test_init_subcommand_without_override"
     "--skip=test_build_example"
     "--skip=test_deploy_workspace"
+    "--skip=test_add_files"
+    "--skip=test_consistent_hash"
+    "--skip=test_create_binary_archive_from_target"
+    "--skip=test_create_binary_archive_with_base_path"
+    "--skip=test_zip_extension"
+    "--skip=test_zip_funcion"
+    "--skip=test_zip_funcion_with_files"
+    "--skip=test_zip_internal_extension"
   ];
 
   # remove date from version output to make reproducible
@@ -69,6 +88,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-lambda";
     homepage = "https://cargo-lambda.info";
     license = licenses.mit;
-    maintainers = with maintainers; [ taylor1791 calavera ];
+    maintainers = with maintainers; [
+      taylor1791
+      calavera
+    ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , cmake, wrapQtAppsHook, perl
 , flatbuffers, protobuf, mbedtls
-, hidapi, libcec, libusb1
+, alsa-lib, hidapi, libcec, libusb1
 , libX11, libxcb, libXrandr, python3
 , qtbase, qtserialport, qtsvg, qtx11extras
 , withRPiDispmanx ? false, libraspberrypi
@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hyperion.ng";
-  version = "2.0.14";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
     owner = "hyperion-project";
     repo = pname;
     rev = version;
-    hash = "sha256-Y1PZ+YyPMZEX4fBpMG6IVT1gtXR9ZHlavJMCQ4KAenc=";
+    hash = "sha256-nQPtJw9DOKMPGI5trxZxpP+z2PYsbRKqOQEyaGzvmmA=";
     # needed for `dependencies/external/`:
     # * rpi_ws281x` - not possible to use as a "system" lib
     # * qmdnsengine - not in nixpkgs yet
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+    alsa-lib
     hidapi
     libusb1
     libX11

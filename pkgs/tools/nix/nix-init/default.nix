@@ -25,16 +25,19 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-YUstBO+iznr0eJYVJdNQ2BjDhvviRQuojhT9IlTuR0k=";
+    hash = "sha256-0RLEPVtYnwYH+pMnpO0/Evbp7x9d0RMobOVAqwgMJz4=";
   };
 
-  cargoHash = "sha256-OAgEzf+EyrwjNa40BwPwSNZ4lhEH93YxCbPJJ3r7oSQ=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes."cargo-0.82.0" = "sha256-1G14vLW3FhLxOWGxuHXcWgb+XXS1vOOyQYKVbrJWlmI=";
+  };
 
   nativeBuildInputs = [
     curl

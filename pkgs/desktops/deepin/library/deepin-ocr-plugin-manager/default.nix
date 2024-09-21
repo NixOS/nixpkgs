@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qttools
-, wrapQtAppsHook
-, libisoburn
-, ncnn
-, opencv
-, vulkan-headers
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+  ncnn,
+  opencv,
+  vulkan-headers,
 }:
 
 stdenv.mkDerivation rec {

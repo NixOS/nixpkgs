@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "htmltools";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "posit-dev";
     repo = "py-htmltools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-H0M9dY8CNQAMEGEGHhPIWEYRmk4omCuVFgJUg8ef8Zw=";
+    hash = "sha256-+BSbJdWmqoEQGEJWBgoTVe4bbvlGJiMyfvvj0lAy9ZA=";
   };
 
   build-system = [

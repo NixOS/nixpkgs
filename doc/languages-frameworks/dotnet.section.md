@@ -93,18 +93,18 @@ The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given
 To package Dotnet applications, you can use `buildDotnetModule`. This has similar arguments to `stdenv.mkDerivation`, with the following additions:
 
 * `projectFile` is used for specifying the dotnet project file, relative to the source root. These have `.sln` (entire solution) or `.csproj` (single project) file extensions. This can be a list of multiple projects as well. When omitted, will attempt to find and build the solution (`.sln`). If running into problems, make sure to set it to a file (or a list of files) with the `.csproj` extension - building applications as entire solutions is not fully supported by the .NET CLI.
-* `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`.
+* `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. For compatibility, if the argument is a list of derivations, they will be added to `buildInputs`.
 ::: {.note}
 For more detail about managing the `deps.nix` file, see [Generating and updating NuGet dependencies](#generating-and-updating-nuget-dependencies)
 :::
 
-* `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
-* `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
+* `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `buildInputs`.
+* `buildInputs` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `buildInputs`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
  For example, your project has a local dependency:
  ```xml
      <ProjectReference Include="../foo/bar.fsproj" />
  ```
- To enable discovery through `projectReferences` you would need to add:
+ To enable discovery through `buildInputs` you would need to add:
  ```xml
      <ProjectReference Include="../foo/bar.fsproj" />
      <PackageReference Include="bar" Version="*" Condition=" '$(ContinuousIntegrationBuild)'=='true' "/>
@@ -118,6 +118,7 @@ For more detail about managing the `deps.nix` file, see [Generating and updating
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used. You can also set this to the result of `dotnetSdkPackages.combinePackages`, if the project uses multiple SDKs to build.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
 * `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this. Note that if set, only tests from this project are executed.
+* `testFilters` is used to disable running unit tests based on various [filters](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-test#filter-option-details). This gets passed as: `dotnet test --filter "{}"`, with each filter being concatenated using `"&"`.
 * `disabledTests` is used to disable running specific unit tests. This gets passed as: `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all unit test frameworks.
 * `dotnetRestoreFlags` can be used to pass flags to `dotnet restore`.
 * `dotnetBuildFlags` can be used to pass flags to `dotnet build`.
@@ -143,7 +144,7 @@ in buildDotnetModule rec {
   projectFile = "src/project.sln";
   nugetDeps = ./deps.nix; # see "Generating and updating NuGet dependencies" section for details
 
-  projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
+  buildInputs = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
@@ -218,7 +219,7 @@ buildDotnetGlobalTool {
 ## Generating and updating NuGet dependencies {#generating-and-updating-nuget-dependencies}
 
 When writing a new expression, you can use the generated `fetch-deps` script to initialise the lockfile.
-After creating a blank `deps.nix` and pointing `nugetDeps` to it,
+After setting `nugetDeps` to the desired location of the lockfile (e.g. `./deps.nix`),
 build the script with `nix-build -A package.fetch-deps` and then run the result.
 (When the root attr is your package, it's simply `nix-build -A fetch-deps`.)
 

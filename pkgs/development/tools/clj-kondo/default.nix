@@ -1,26 +1,20 @@
-{ lib, buildGraalvmNativeImage, graalvmCEPackages, removeReferencesTo, fetchurl
+{ lib, buildGraalvmNativeImage, graalvmCEPackages, fetchurl
 }:
 
 buildGraalvmNativeImage rec {
   pname = "clj-kondo";
-  version = "2024.05.24";
+  version = "2024.08.29";
 
   src = fetchurl {
     url =
       "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-vqdTfsIRPi2VlJLcbesRSqa/KFgqbk13vJBbEYd3heM=";
+    sha256 = "sha256-0Mvj8FW6/Q9GudaD3lnRFvTjMkkAGwpAokdNJa/HfsI=";
   };
 
   graalvmDrv = graalvmCEPackages.graalvm-ce;
 
-  nativeBuildInputs = [ removeReferencesTo ];
-
   extraNativeImageBuildArgs =
     [ "-H:+ReportExceptionStackTraces" "--no-fallback" ];
-
-  postInstall = ''
-    remove-references-to -t ${graalvmDrv} $out/bin/${pname}
-  '';
 
   meta = with lib; {
     description = "Linter for Clojure code that sparks joy";

@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "keis";
     repo = "git-fixup";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Mue2xgYxJSEu0VoDmB7rnoSuzyT038xzETUO1fwptrs=";
+    hash = "sha256-Mue2xgYxJSEu0VoDmB7rnoSuzyT038xzETUO1fwptrs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

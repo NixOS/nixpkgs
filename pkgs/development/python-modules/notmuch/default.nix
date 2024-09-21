@@ -31,6 +31,6 @@ buildPythonPackage {
     description = "Python wrapper around notmuch";
     homepage = "https://notmuchmail.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Featureful, flexible, scriptable, transaction-oriented SMTP test tool";
     mainProgram = "swaks";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 

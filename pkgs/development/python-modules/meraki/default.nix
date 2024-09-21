@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "1.48.0";
+  version = "1.50.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jl4968yXPseSzbPIG7d7KPWY6It8xgy6Gz9DamlCQd0=";
+    hash = "sha256-tKtfshAsKtXPkkDY13+QWRaWduQCBhor4+ReLjarwLA=";
   };
 
   propagatedBuildInputs = [

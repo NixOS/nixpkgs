@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.18";
+  version = "7.22";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
-    hash = if stdenv.isDarwin then "sha256-ETvWq+71G4v25F/iUjP7NWJ0QkPMKn7akfBOA7EKzKg=" else {
-      x86_64-linux = "sha256-kddqIKgTTImbDIFtPqV/6YsnfNYsDPLhcelJIBC4R8s=";
-      aarch64-linux = "sha256-PNFSifZwH+VzfljyrlQZKZ+NEiiINXnVecOXgn1gY/Q=";
+    hash = if stdenv.isDarwin then "sha256-dIRZCUIfqnGTxBaLzczwzD6hA/PyAxPqfa+FfCRKdu0=" else {
+      x86_64-linux = "sha256-aa2KcL8yZYG+Dki7J6U473E2BQgdACAIzRLtD9zuHV0=";
+      aarch64-linux = "sha256-NECEEUKtTQajl0MZK8/NsbhcuyihHOo0Q5Y5UpAAgrM=";
     }.${stdenv.hostPlatform.system};
   };
 
@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
-    ln -s $out/opt/REAPER/reamote-server $out/bin/
 
     runHook postInstall
   '';

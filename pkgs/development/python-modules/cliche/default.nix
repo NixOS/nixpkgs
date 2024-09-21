@@ -34,6 +34,6 @@ buildPythonPackage {
     mainProgram = "cliche";
     homepage = "https://github.com/kootenpv/cliche";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

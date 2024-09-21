@@ -69,7 +69,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          **Deprecated**, please use virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+          **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
 
           Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
         '';
@@ -186,7 +186,7 @@ in
       # wrappers.
       warnings = lib.optionals (cfg.enableNvidia && (lib.strings.versionAtLeast cfg.package.version "25")) [
         ''
-          You have set virtualisation.docker.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+          You have set virtualisation.docker.enableNvidia. This option is deprecated, please set hardware.nvidia-container-toolkit.enable instead.
         ''
       ];
 
@@ -256,7 +256,11 @@ in
         live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
-            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+            # Use the legacy nvidia-container-runtime wrapper to allow
+            # the `--runtime=nvidia` approach to expose
+            # GPU's. Starting with Docker > 25, CDI can be used
+            # instead, removing the need for runtime wrappers.
+            path = lib.getExe' pkgs.nvidia-docker "nvidia-container-runtime.legacy";
           };
         };
       };

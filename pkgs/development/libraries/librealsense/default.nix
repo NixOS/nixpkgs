@@ -2,9 +2,9 @@
 , config
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , libusb1
+, nlohmann_json
 , ninja
 , pkg-config
 , gcc
@@ -23,7 +23,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.54.2";
+  version = "2.56.1";
 
   outputs = [ "out" "dev" ];
 
@@ -31,31 +31,36 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EbnIHnsUgsqN/SVv4m9H7K8gfwni+u82+M55QBstAGI=";
+    sha256 = "sha256-1ICSJqr5WRePLIHsD3T2L0Nxdn1LWaHqHDJrfTIRl88=";
   };
 
   buildInputs = [
     libusb1
     gcc.cc.lib
-  ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    nlohmann_json
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
     ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
 
   patches = [
     ./py_pybind11_no_external_download.patch
     ./install-presets.patch
-    # https://github.com/IntelRealSense/librealsense/pull/11917
-    (fetchpatch {
-      name = "fix-gcc13-missing-cstdint.patch";
-      url = "https://github.com/IntelRealSense/librealsense/commit/b59b13671658910fc453a4a6bbd61f13ba6e83cc.patch";
-      hash = "sha256-zaW8HG8rfsApI5S/3x+x9Fx8xhyTIPNn/fJVFtkmlEA=";
-    })
   ];
+
+  postPatch = ''
+    # use nixpkgs nlohmann_json instead of fetching it
+    substituteInPlace third-party/CMakeLists.txt \
+      --replace-fail \
+        'include(CMake/external_json.cmake)' \
+        'find_package(nlohmann_json 3.11.3 REQUIRED)'
+  '';
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [

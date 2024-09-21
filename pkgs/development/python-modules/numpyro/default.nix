@@ -3,12 +3,18 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
+
+  # build-system
   setuptools,
+
+  # dependencies
   jax,
   jaxlib,
   multipledispatch,
   numpy,
   tqdm,
+
+  # checks
   funsor,
   pytestCheckHook,
 # TODO: uncomment when tensorflow-probability gets fixed.
@@ -17,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-HnX6sYRdEpbCMDXHsk1l/h60630ZwmED3SUioLA3wrU=";
+    hash = "sha256-6G3TrDyQ5N2uuzLzzEus1czCtvg3M0wBorLo2vQZozE=";
   };
 
   build-system = [ setuptools ];

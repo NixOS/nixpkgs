@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     homepage = "https://roy.marples.name/projects/dhcpcd";
     platforms = platforms.linux ++ platforms.freebsd;
     license = licenses.bsd2;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = [ ];
     mainProgram = "dhcpcd";
   };
 }

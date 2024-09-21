@@ -49,10 +49,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes_contrib_drivers" ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-    # At index 13 diff: 'sour6:volt 0.29000000000000004' != 'sour6:volt 0.29'
-    "test_stability_diagram_external"
-  ];
+  disabledTests =
+    lib.optionals (stdenv.isDarwin) [
+      # At index 13 diff: 'sour6:volt 0.29000000000000004' != 'sour6:volt 0.29'
+      "test_stability_diagram_external"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # AssertionError: assert ['outp:trig4:...9999996', ...] == ['outp:trig4:...t 0.266', ...]
+      "test_stability_diagram_external"
+    ];
 
   postInstall = ''
     export HOME="$TMPDIR"

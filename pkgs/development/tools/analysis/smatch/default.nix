@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Pv3bd2cjnQKnhH7TrkYWfDEeaq6u/q/iK1ZErzn6bME=";
   };
 
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [
+    "-Wno-incompatible-function-pointer-types"
+  ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ sqlite openssl ]
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

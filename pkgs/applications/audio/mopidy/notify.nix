@@ -24,6 +24,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/phijor/mopidy-notify";
     description = "Mopidy extension for showing desktop notifications on track change";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

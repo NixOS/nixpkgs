@@ -3,7 +3,6 @@
 , lib
 , autoPatchelfHook
 , wrapQtAppsHook
-, gmpxx
 , gnustep
 , libbsd
 , libffi_3_3

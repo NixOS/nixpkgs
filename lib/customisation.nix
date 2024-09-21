@@ -455,7 +455,7 @@ rec {
 
       1. Takes a function `p`, or a path to a Nix file that contains a function `p`, which takes an attribute set and returns value of arbitrary type `a`,
       2. Takes an attribute set `args` with explicit attributes to pass to `p`,
-      3. Calls `f` with attributes from the original attribute set `attrs` passed to `newScope` updated with `args, i.e. `attrs // args`, if they match the attributes in the argument of `p`.
+      3. Calls `f` with attributes from the original attribute set `attrs` passed to `newScope` updated with `args`, i.e. `attrs // args`, if they match the attributes in the argument of `p`.
 
       All such functions `p` will be called with the same value for `attrs`.
 

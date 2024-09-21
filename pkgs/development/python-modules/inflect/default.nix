@@ -3,10 +3,17 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  more-itertools,
+
+  # build-system
+  setuptools,
   setuptools-scm,
-  pytestCheckHook,
+
+  # dependencies
+  more-itertools,
   typeguard,
+
+  # checks
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +30,10 @@ buildPythonPackage rec {
     hash = "sha256-J0XgSKPzZIt/7WnMGARXpyYzagBGiqRiuNmNnGKDBrs=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     more-itertools
@@ -39,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inflect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Correctly generate plurals, singular nouns, ordinals, indefinite articles";
     homepage = "https://github.com/jaraco/inflect";
     changelog = "https://github.com/jaraco/inflect/blob/v${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = teams.tts.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.tts.members;
   };
 }

@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
-    rev = with lib;
-      "v" + concatStringsSep "_" (splitVersion version);
+    rev = "v" + lib.concatStringsSep "_" (lib.splitVersion version);
     sha256 = "sha256-U39zr8XGIDbyY480bla2yTaRQLP3wMrL8RLWjlTa5uY=";
   };
 

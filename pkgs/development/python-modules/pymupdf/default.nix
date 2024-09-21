@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.23.26";
+  version = "1.24.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -49,15 +49,14 @@ buildPythonPackage rec {
     owner = "pymupdf";
     repo = "PyMuPDF";
     rev = "refs/tags/${version}";
-    hash = "sha256-m2zq04+PDnlzFuqeSt27UhdHXTHxpHdMPIg5RQl/5bQ=";
+    hash = "sha256-NG4ZJYMYTQHiqpnaOz7hxf5UW417UKawe5EqXaBnKJ8=";
   };
 
   # swig is not wrapped as Python package
   # libclang calls itself just clang in wheel metadata
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"swig",' "" \
-      --replace-fail "libclang" "clang"
+    substituteInPlace setup.py \
+      --replace-fail "ret.append( 'swig')" "pass" \
   '';
 
   nativeBuildInputs = [
@@ -81,6 +80,8 @@ buildPythonPackage rec {
   env = {
     # force using system MuPDF (must be defined in environment and empty)
     PYMUPDF_SETUP_MUPDF_BUILD = "";
+    # Setup the name of the package away from the default 'libclang'
+    PYMUPDF_SETUP_LIBCLANG = "clang";
     # provide MuPDF paths
     PYMUPDF_MUPDF_LIB = "${lib.getLib mupdf-cxx}/lib";
     PYMUPDF_MUPDF_INCLUDE = "${lib.getDev mupdf-cxx}/include";
@@ -104,6 +105,9 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # Fails in release tarballs without .git
+      "test_codespell"
+      "test_pylint"
       # fails for indeterminate reasons
       "test_2548"
       "test_2753"
@@ -140,6 +144,8 @@ buildPythonPackage rec {
       "test_3140"
       "test_3209"
       "test_3209"
+      "test_3301"
+      "test_3347"
       "test_caret"
       "test_deletion"
       "test_file_info"
@@ -153,6 +159,12 @@ buildPythonPackage rec {
       "test_htmlbox"
       "test_2246"
       "test_3140"
+      "test_3400"
+      "test_707560"
+      "test_open"
+      "test_objectstream1"
+      "test_objectstream2"
+      "test_objectstream3"
       "test_fit_springer"
       "test_write_stabilized_with_links"
       "test_textbox"
@@ -173,17 +185,14 @@ buildPythonPackage rec {
     "tests/test_docs_samples.py"
   ];
 
-  pythonImportsCheck = [
-    "fitz"
-    "fitz_old"
-  ];
+  pythonImportsCheck = [ "fitz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ teto ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = lib.platforms.unix;
   };
 }

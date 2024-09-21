@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "24.3.0";
+  version = "24.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-azi27Ocpa14SLJ6xfaLuqz2YoZj1DKnv0A+wPltP1K4=";
+    hash = "sha256-WmAUfwRBh6En7H2pbRcNSbzOUMb9NvWU5g9Fh+/005Q=";
   };
 
   patches = [
@@ -226,6 +226,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

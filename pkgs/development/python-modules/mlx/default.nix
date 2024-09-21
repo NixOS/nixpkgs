@@ -2,14 +2,13 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  python3Packages,
   pybind11,
   cmake,
   xcbuild,
   zsh,
-  darwin,
   blas,
   lapack,
+  setuptools,
 }:
 
 let
@@ -70,7 +69,8 @@ buildPythonPackage rec {
     zsh
     gguf-tools
     nlohmann_json
-  ] ++ (with python3Packages; [ setuptools ]);
+    setuptools
+  ];
 
   buildInputs = [
     blas

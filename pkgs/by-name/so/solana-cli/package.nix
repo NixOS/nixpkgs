@@ -32,7 +32,7 @@
 }:
 let
   version = "1.17.31";
-  sha256 = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
+  hash = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
   rocksdb = rocksdb_8_3;
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     owner = "solana-labs";
     repo = "solana";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
   };
 
   cargoLock = {
@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     Libsystem
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd solana \
       --bash <($out/bin/solana completion --shell bash) \
       --fish <($out/bin/solana completion --shell fish) \

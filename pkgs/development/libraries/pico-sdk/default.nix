@@ -1,14 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+
+  # Options
+
+  # The submodules in the pico-sdk contain important additional functionality
+  # such as tinyusb, but not all these libraries might be bsd3.
+  # Off by default.
+  withSubmodules ? false,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pico-sdk";
-  version = "1.5.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
     rev = finalAttrs.version;
-    hash = "sha256-JNcxd86XNNiPkvipVFR3X255boMmq+YcuJXUP4JwInU=";
+    fetchSubmodules = withSubmodules;
+    hash = if (withSubmodules) then
+      "sha256-fVSpBVmjeP5pwkSPhhSCfBaEr/FEtA82mQOe/cHFh0A="
+    else
+      "sha256-d6mEjuG8S5jvJS4g8e90gFII3sEqUVlT2fgd9M9LUkA=";
   };
 
   nativeBuildInputs = [ cmake ];

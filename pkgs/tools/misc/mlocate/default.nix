@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://pagure.io/mlocate";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

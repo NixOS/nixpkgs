@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-LDgRv7Todyy2pnE21Z0O5JQ6mE4ZO3THv6rfEWU66Cc=";
+    sha256 = "sha256-axw0/QFQfnEc2P8tFRtSY5vVUJTqv+kRn68GXdZ5SeQ=";
   };
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
   qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.isDarwin [
-    "PGSQL_INC=${postgresql}/include"
-    "PGSQL_LIB=${postgresql.lib}/lib/libpq.dylib"
+    "PGSQL_INC=${lib.getDev postgresql}/include"
+    "PGSQL_LIB=${lib.getLib postgresql}/lib/libpq.dylib"
     "XML_INC=${libxml2.dev}/include/libxml2"
     "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
     "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"
