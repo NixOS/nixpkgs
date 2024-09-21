@@ -95,6 +95,7 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
              --batch \
              -f package-activate-all \
              --eval '(setq native-comp-eln-load-path (cdr native-comp-eln-load-path))' \
+             --eval '(let ((default-directory \"$out/share/emacs/site-lisp\")) (normal-top-level-add-subdirs-to-load-path))' \
              --eval '(setq large-file-warning-threshold nil)' \
              --eval '(setq byte-compile-error-on-warn ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"})' \
              -f batch-native-compile {} \
