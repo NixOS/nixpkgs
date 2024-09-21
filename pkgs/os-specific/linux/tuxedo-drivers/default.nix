@@ -1,7 +1,14 @@
-{ lib, stdenv, fetchFromGitLab, kernel, linuxHeaders, pahole }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  kernel,
+  linuxHeaders,
+  pahole,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "tuxedo-keyboard-${kernel.version}";
+  pname = "tuxedo-drivers-${kernel.version}";
   version = "4.6.2";
 
   src = fetchFromGitLab {
@@ -36,10 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers";
     license = lib.licenses.gpl3Plus;
     longDescription = ''
-      This driver provides support for Fn keys, brightness/color/mode for most TUXEDO
-      keyboards (except white backlight-only models).
+      Drivers for several platform devices for TUXEDO notebooks:
+      - Driver for Fn-keys
+      - SysFS control of brightness/color/mode for most TUXEDO keyboards
+      - Hardware I/O driver for TUXEDO Control Center
 
-      Can be used with the "hardware.tuxedo-keyboard" NixOS module.
+      Can be used with the "hardware.tuxedo-drivers" NixOS module.
     '';
     maintainers = [ lib.maintainers.blanky0230 ];
     platforms = lib.platforms.linux;
