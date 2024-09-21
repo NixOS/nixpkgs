@@ -1,10 +1,11 @@
 {
   lib,
+  buildPythonPackage,
   fetchFromGitHub,
-  python3Packages,
+  setuptools,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "zulip-emoji-mapping";
   version = "1.0.1";
   pyproject = true;
@@ -16,7 +17,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-logm5uAnLAcFqI7mUxKEO9ZmHqRkd6CFiCW4B5tqZzg=";
   };
 
-  build-system = with python3Packages; [
+  build-system = [
     setuptools
   ];
 
