@@ -3422,6 +3422,12 @@
     githubId = 5241813;
     name = "Carter Sande";
   };
+  casaca = {
+    name = "J McNutt";
+    email = "jmacasac@hotmail.com";
+    github = "casaca24";
+    githubId = 87252279;
+  };
   casey = {
     email = "casey@rodarmor.net";
     github = "casey";
@@ -12264,6 +12270,12 @@
     githubId = 15693688;
     name = "Lucas Eduardo Wendt";
   };
+  lucastso10 = {
+    email = "lucastso10@gmail.com";
+    github = "lucastso10";
+    githubId = 84486266;
+    name = "Lucas Teixeira Soares";
+  };
   lucc = {
     email = "lucc+nix@posteo.de";
     github = "lucc";
@@ -16575,6 +16587,12 @@
     githubId = 358550;
     name = "Philip Lykke Carlsen";
   };
+  plebhash = {
+    name = "plebhash";
+    email = "plebhash@proton.me";
+    github = "plebhash";
+    githubId = 147345153;
+  };
   pleshevskiy = {
     email = "dmitriy@pleshevski.ru";
     github = "pleshevskiy";
@@ -19916,6 +19934,12 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
+  };
+  sshine = {
+    email = "simon@simonshine.dk";
+    github = "sshine";
+    githubId = 50879;
+    name = "Simon Shine";
   };
   SShrike = {
     email = "severen@shrike.me";
