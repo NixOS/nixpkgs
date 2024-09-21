@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "embarkstudios";
     repo = pname;
     rev = version;
-    sha256 = "0n1wbxcnxb7x5xwakxdzq7kg1fn0c48i520j03p7wvm5x97vm5h4";
+    hash = "sha256-BJa6T+qlbn7uABKIEhFhwLrw5sG/9al4L/2sbllfPFg=";
   };
 
   cargoLock = {
@@ -17,6 +17,13 @@ rustPlatform.buildRustPackage rec {
       "img_hash-2.1.0" = "sha256-Ba26n//bZweYvb5p47U209dHrsDHKHLQ3YEHbKT+hjE=";
     };
   };
+
+  cargoPatches = [
+    # fix build with rust 1.76+
+    # https://github.com/rust-lang/rust/pull/117984
+    # https://github.com/rust-lang-deprecated/rustc-serialize/pull/200
+    ./update-rustc-serialize.patch
+  ];
 
   # tests fail for unknown reasons on aarch64-darwin
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
