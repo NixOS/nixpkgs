@@ -32,6 +32,10 @@ let
     runtimeEnv = {
       efiMountPoint = config.boot.loader.efi.efiSysMountPoint;
     };
+
+    # We disable SC2016 because we don't want to expand the regexes in the sed commands.
+    excludeShellChecks = [ "SC2016" ];
+
     text = builtins.readFile ./xen-boot-builder.sh;
   };
 in
