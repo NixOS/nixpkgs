@@ -16587,6 +16587,12 @@
     githubId = 358550;
     name = "Philip Lykke Carlsen";
   };
+  plebhash = {
+    name = "plebhash";
+    email = "plebhash@proton.me";
+    github = "plebhash";
+    githubId = 147345153;
+  };
   pleshevskiy = {
     email = "dmitriy@pleshevski.ru";
     github = "pleshevskiy";
