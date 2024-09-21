@@ -16,6 +16,7 @@
 , libharu
 , opencv
 , vigra
+, pdal
 , postgresql
 , darwin
 , unixODBC
@@ -31,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.3.2";
+  version = "9.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-741O6C7amxSnOOTledF0izmVhiT79tFI4+EOtpNqP2Q=";
+    hash = "sha256-6rdtEpHxbSqJDWf7+jRx0IAS3tCQ5NioqskTVkhpSQo=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     hdf5
     gdal
     wxGTK32
+    pdal
     proj
     libharu
     opencv
