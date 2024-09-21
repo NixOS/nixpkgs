@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkIf mkOption types optionalAttrs;
+  inherit (lib.types) nullOr listOf str attrsOf submodule;
   cfg = config.services.nbd;
   iniFields = with types; attrsOf (oneOf [ bool int float str ]);
   # The `[generic]` section must come before all the others in the
@@ -19,12 +19,12 @@ let
     }));
   };
   exportSections =
-    mapAttrs
+    lib.mapAttrs
       (_: { path, allowAddresses, extraOptions }:
         extraOptions // {
           exportname = path;
         } // (optionalAttrs (allowAddresses != null) {
-          authfile = pkgs.writeText "authfile" (concatStringsSep "\n" allowAddresses);
+          authfile = pkgs.writeText "authfile" (lib.concatStringsSep "\n" allowAddresses);
         }))
       cfg.server.exports;
   serverConfig =
@@ -33,9 +33,9 @@ let
       ${lib.generators.toINI {} exportSections}
     '';
   splitLists =
-    partition
-      (path: hasPrefix "/dev/" path)
-      (mapAttrsToList (_: { path, ... }: path) cfg.server.exports);
+    lib.partition
+      (path: lib.hasPrefix "/dev/" path)
+      (lib.mapAttrsToList (_: { path, ... }: path) cfg.server.exports);
   allowedDevices = splitLists.right;
   boundPaths = splitLists.wrong;
 in
@@ -43,7 +43,7 @@ in
   options = {
     services.nbd = {
       server = {
-        enable = mkEnableOption "the Network Block Device (nbd) server";
+        enable = lib.mkEnableOption "the Network Block Device (nbd) server";
 
         listenPort = mkOption {
           type = types.port;
@@ -65,7 +65,7 @@ in
         exports = mkOption {
           description = "Files or block devices to make available over the network.";
           default = { };
-          type = with types; attrsOf
+          type = attrsOf
             (submodule {
               options = {
                 path = mkOption {
@@ -97,7 +97,7 @@ in
         };
 
         listenAddress = mkOption {
-          type = with types; nullOr str;
+          type = nullOr str;
           description = "Address to listen on. If not specified, the server will listen on all interfaces.";
           default = null;
           example = "10.10.0.1";
