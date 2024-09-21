@@ -523,6 +523,89 @@ rec {
   writeFishBin = name: writeFish "/bin/${name}";
 
   /**
+    Like writeScript but the first line is a shebang to babashka
+
+    Can be called with or without extra arguments.
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` without arguments
+
+    ```nix
+    writeBabashka "example" ''
+      (println "hello world")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` with arguments
+
+    ```nix
+    writeBabashka "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      (require '[babashka.tasks :as tasks])
+      (tasks/shell "hello" "-g" "Hello babashka!")
+    ''
+    ```
+    :::
+  */
+  writeBabashka =
+    name: argsOrScript:
+    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
+      makeScriptWriter (
+        argsOrScript
+        // {
+          interpreter = "${lib.getExe pkgs.babashka}";
+          check = "${lib.getExe pkgs.clj-kondo} --lint";
+        }
+      ) name
+    else
+      makeScriptWriter {
+        interpreter = "${lib.getExe pkgs.babashka}";
+        check = "${lib.getExe pkgs.clj-kondo} --lint";
+      } name argsOrScript;
+
+  /**
+    Like writeScriptBin but the first line is a shebang to babashka
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeBabashkaBin` without arguments
+
+    ```nix
+    writeBabashkaBin "example" ''
+      (println "hello world")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashkaBin` with arguments
+
+    ```nix
+    writeBabashkaBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      (require '[babashka.tasks :as tasks])
+      (tasks/shell "hello" "-g" "Hello babashka!")
+    ''
+    ```
+    :::
+  */
+  writeBabashkaBin = name: writeBabashka "/bin/${name}";
+
+  /**
     writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
     and some haskell source code and returns an executable.
 

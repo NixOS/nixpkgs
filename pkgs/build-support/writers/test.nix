@@ -18,6 +18,8 @@ let
     makeFSharpWriter
     writeBash
     writeBashBin
+    writeBabashka
+    writeBabashkaBin
     writeDash
     writeDashBin
     writeFish
@@ -83,6 +85,10 @@ recurseIntoAttrs {
       if test "test" = "test"
         echo "success"
       end
+    '');
+
+    babashka = expectSuccessBin (writeBabashkaBin "test-writers-babashka-bin" ''
+      (println "success")
     '');
 
     rust = expectSuccessBin (writeRustBin "test-writers-rust-bin" {} ''
@@ -187,6 +193,10 @@ recurseIntoAttrs {
 
     nu = expectSuccess (writeNu "test-writers-nushell" ''
       echo "success"
+    '');
+
+    babashka = expectSuccess (writeBabashka "test-writers-babashka" ''
+      (println "success")
     '');
 
     haskell = expectSuccess (writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
@@ -366,6 +376,36 @@ recurseIntoAttrs {
           if [[ "$ThaigerSprint" == "Thailand" ]]; then
             echo "success"
           fi
+        ''
+    );
+
+    babashka-bin = expectSuccessBin (
+      writeBabashkaBin "test-writers-wrapping-babashka-bin"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          (when (= (System/getenv "ThaigerSprint") "Thailand")
+            (println "success"))
+        ''
+    );
+
+    babashka = expectSuccess (
+      writeBabashka "test-writers-wrapping-babashka"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          (when (= (System/getenv "ThaigerSprint") "Thailand")
+            (println "success"))
         ''
     );
 
