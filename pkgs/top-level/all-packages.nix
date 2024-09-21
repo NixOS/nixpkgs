@@ -38519,9 +38519,7 @@ with pkgs;
 
   vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins {
-    luaPackages = lua51Packages;
-  });
+  vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins { });
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
