@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   appdirs,
   dungeon-eos,
   explorerscript,
@@ -29,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.7.0";
+  version = "1.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -38,18 +37,10 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = "skytemple-files";
     rev = version;
-    hash = "sha256-G2AAQ+eRnsMTWrAF0SNmxUmOoHTSMCuSy1kUZbFy8y0=";
+    hash = "sha256-4ENuYq074j/VdzLyrGVCGaZhoStwlgJWTqGbrt20A3Q=";
     # Most patches are in submodules
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "fix-tests.patch";
-      url = "https://github.com/SkyTemple/skytemple-files/commit/854e5514e6c63ba082618d14643e3a4b30a6c2b2.patch";
-      hash = "sha256-oTV2EQQ2OPgu2pYB2fLd4jODfybnV29YNLxzDs2v6Cg=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
@@ -86,10 +77,13 @@ buildPythonPackage rec {
     parameterized
     xmldiff
   ] ++ optional-dependencies.spritecollab;
-  pytestFlagsArray = [ "test/" ];
+
+  preCheck = "pushd test";
+  postCheck = "popd";
+
   disabledTestPaths = [
-    "test/skytemple_files_test/common/spritecollab/sc_online_test.py"
-    "test/skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test
+    "skytemple_files_test/common/spritecollab/sc_online_test.py"
+    "skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test
   ];
 
   pythonImportsCheck = [ "skytemple_files" ];
