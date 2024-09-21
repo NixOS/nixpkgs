@@ -3,13 +3,17 @@
 , libGL
 , makeWrapper
 , openal
-, openjdk
+, openjdk8
 , stdenv
 , xorg
 , copyDesktopItems
 , makeDesktopItem
 , writeScript
 }:
+
+let
+  openjdk = openjdk8;
+in
 
 stdenv.mkDerivation rec {
   pname = "starsector";
@@ -80,7 +84,7 @@ stdenv.mkDerivation rec {
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     set -eou pipefail;
     version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-\K.*?(?=\.zip)" | head -1)
-    update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
+    update-source-version ${pname} "$version" --file=./pkgs/by-name/st/starsector/package.nix
   '';
 
   meta = with lib; {

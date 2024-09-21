@@ -34934,10 +34934,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  starsector = callPackage ../games/starsector {
-    openjdk = openjdk8;
-  };
-
   scid = callPackage ../games/scid { };
 
   scid-vs-pc = callPackage ../games/scid-vs-pc { };
