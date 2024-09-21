@@ -8135,8 +8135,6 @@ with pkgs;
 
   groff = callPackage ../tools/text/groff { };
 
-  gromit-mpx = callPackage ../tools/graphics/gromit-mpx { };
-
   gron = callPackage ../development/tools/gron { };
 
   groonga = callPackage ../servers/search/groonga { };
