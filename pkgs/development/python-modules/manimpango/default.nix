@@ -8,6 +8,7 @@
   pango,
   cython,
   AppKit,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -35,15 +36,13 @@ buildPythonPackage rec {
     cython
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   preCheck = ''
     rm -r manimpango
-  '';
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --no-cov-on-fail" ""
   '';
 
   pythonImportsCheck = [ "manimpango" ];
