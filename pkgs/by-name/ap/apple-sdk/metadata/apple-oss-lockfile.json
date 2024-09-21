@@ -355,6 +355,184 @@
       "version": "4570.31.3"
     }
   },
+  "10.14.6": {
+    "CarbonHeaders": {
+      "hash": "sha256-nIPXnLr21yVnpBhx9K5q3l/nPARA6JL/dED08MeyhP8=",
+      "version": "18.1"
+    },
+    "CommonCrypto": {
+      "hash": "sha256-hqsLaS7LEPu8t/bNuV4VUUbMteCetf3/o8e2X0iQvOo=",
+      "version": "60118.250.2"
+    },
+    "IOAudioFamily": {
+      "hash": "sha256-UG09Dc+up5cJKDHPpCmo11IsBchqZ72hVBPx8y+1klw=",
+      "version": "206.5"
+    },
+    "IOBDStorageFamily": {
+      "hash": "sha256-aaS5jWPRX4be8d3Rigq+kXzi9Zwbr8dHcNgcIz0n66o=",
+      "version": "19"
+    },
+    "IOCDStorageFamily": {
+      "hash": "sha256-U6v+Gj+IumU8Aha5+uf3yOU0Z4KMuBh7aXnJqiZ/abY=",
+      "version": "58"
+    },
+    "IODVDStorageFamily": {
+      "hash": "sha256-JLp4xN0Rdb2VpuXtVTODYNqQthDEZk+g/lvHRwJHQB4=",
+      "version": "42"
+    },
+    "IOFWDVComponents": {
+      "hash": "sha256-WkfkWnzRupEh20U7vjsTta89clhus6GTkOpXQWXw/bM=",
+      "version": "208"
+    },
+    "IOFireWireAVC": {
+      "hash": "sha256-EXGpObJVC0b9X3xxEXJScDlM6xygmK3MoCbng21XCmg=",
+      "version": "426"
+    },
+    "IOFireWireFamily": {
+      "hash": "sha256-a8zEWhwQTzgGKg75RBmDXb1pgJr602IxnPBTFkKEqSM=",
+      "version": "473"
+    },
+    "IOFireWireSBP2": {
+      "hash": "sha256-lpYBTL9TzreyxJn4J3vfuXoWMH/4y8FnNKk5YiuDgHI=",
+      "version": "433"
+    },
+    "IOFireWireSerialBusProtocolTransport": {
+      "hash": "sha256-4Y+5+5cJtolSrM3AUnnhSBS3RrKXbg9Kh1ynmllOA2E=",
+      "version": "252.250.2"
+    },
+    "IOGraphics": {
+      "hash": "sha256-QFT+h0gtc7SUf0HNciknG0aMOQXnsWCR25C04dgK1/A=",
+      "version": "530.66"
+    },
+    "IOHIDFamily": {
+      "hash": "sha256-DpYcxGLvk10iz5TG2SO8R+5obEJv+zLK56RzA/pH0KA=",
+      "version": "1090.270.6"
+    },
+    "IOKitUser": {
+      "hash": "sha256-QH2m6BCYtO2JDksH0TebrEldjjZdC4U9otVu/uUoyWY=",
+      "version": "1483.260.4"
+    },
+    "IONetworkingFamily": {
+      "hash": "sha256-M01+Bhf7CTJMA7StjSRFW6ffq7Qf/IOh7aM+JI3ONe8=",
+      "version": "129.200.1"
+    },
+    "IOSerialFamily": {
+      "hash": "sha256-wVS4QTx6MBOS0VrwyCZ3s5Usezwaf8rWzmNnfdDTXTU=",
+      "version": "93"
+    },
+    "IOStorageFamily": {
+      "hash": "sha256-X6s/IyApMQ7zo1wO7IpIk1e94tSsmvvT+fZHThMWv5Y=",
+      "version": "218.260.1"
+    },
+    "IOUSBFamily": {
+      "hash": "sha256-Z0E3TfKP49toYo1Fo9kElRap8CZ+mVDHy5RIexgJTpA=",
+      "version": "630.4.5"
+    },
+    "Libc": {
+      "hash": "sha256-mhhs8U/oZku9o2kqzLW4K8Xv9QbnKNBbBr+Q6NqC1vQ=",
+      "version": "1272.250.1"
+    },
+    "Libinfo": {
+      "hash": "sha256-DUbyWZI+n3WvftlI7aj60CoEHb9y18H1+FYiYQroVEE=",
+      "version": "517.200.9"
+    },
+    "Libm": {
+      "hash": "sha256-p4BndAag9d0XSMYWQ+c4myGv5qXbKx5E1VghudSbpTk=",
+      "version": "2026"
+    },
+    "Libnotify": {
+      "hash": "sha256-q0ns85I9Zwo5bZPN5JqjrJofY8/XLl+mbsRhyF1kx+o=",
+      "version": "172.200.21"
+    },
+    "Librpcsvc": {
+      "hash": "sha256-8e8E9TkRTAep3/miyqhF/mSkNdlym12W+AVhXF94+Bg=",
+      "version": "26"
+    },
+    "Libsystem": {
+      "hash": "sha256-Lo4S7fsepuYlRtXGcVvNTAlx/soabjvKEUuiO09htNs=",
+      "version": "1252.250.1"
+    },
+    "OpenDirectory": {
+      "hash": "sha256-6fSl8PasCZSBfe0ftaePcBuSEO3syb6kK+mfDI6iR7A=",
+      "version": "146"
+    },
+    "Security": {
+      "hash": "sha256-uqSRU4Ft7+zMQ59FBS+Mu2JcWdbbuWP9/dFfo+Vkr5s=",
+      "version": "58286.270.3.0.1"
+    },
+    "architecture": {
+      "hash": "sha256-WGUNtFSBu9AuefHVEO3uB/JpKEGAgGFX/zRaaW4eYbI=",
+      "version": "272.230.1"
+    },
+    "configd": {
+      "hash": "sha256-Pg58INpZfdKXn1EPut2Kzghfjwxaz1Ex+u5KACA2O7g=",
+      "version": "963.270.3"
+    },
+    "copyfile": {
+      "hash": "sha256-gbxGQ8Wjt20++Bf+BkZT/R5dpsCnRo8+qUcerv5m7V8=",
+      "version": "146.250.1"
+    },
+    "dtrace": {
+      "hash": "sha256-ZbAaH2wmYlgLKtq0bpDoEInZiHMe5Bx84iUQC67ia0E=",
+      "version": "284.250.4"
+    },
+    "dyld": {
+      "hash": "sha256-5wtx+4pSAcNEwcE024XwIRorS3ZW/qmvfkY7UGe75ho=",
+      "version": "655.1.1"
+    },
+    "eap8021x": {
+      "hash": "sha256-9j+6Hw7w9wdLZxjdRwTACws2obg2/VCgl9ed4+Y4pPg=",
+      "version": "264.250.6"
+    },
+    "hfs": {
+      "hash": "sha256-/yf6z0VJkw2pPnVst2qgnSZfO6x9ot/cWT7Aewo3IZ4=",
+      "version": "407.200.4"
+    },
+    "launchd": {
+      "hash": "sha256-8mW9bnuHmRXCx9py8Wy28C5b2QPICW0rlAps5njYa00=",
+      "version": "842.1.4"
+    },
+    "libclosure": {
+      "hash": "sha256-NHK+yc7M/wc6Sbk24LDejNjBrbcWIg9zrYHlnPXC/Yc=",
+      "version": "73"
+    },
+    "libdispatch": {
+      "hash": "sha256-b0WqX3qX/qhUi2l63BrNvaVq167SuIgYGPid92MJ32U=",
+      "version": "1008.270.1"
+    },
+    "libmalloc": {
+      "hash": "sha256-1ZvO0LGV4AkDSdtwqfPFgCUbpAVzfKS0msa58tL2WLA=",
+      "version": "166.251.2"
+    },
+    "libplatform": {
+      "hash": "sha256-xQqCf+/DpHu/JMbmOpy6jl3np0H7/m1NKWZ21YWaerE=",
+      "version": "177.270.1"
+    },
+    "libpthread": {
+      "hash": "sha256-+AuYgLTM5RO3+MbxeE86rPh9WbiTiAl2gHZOAaQRkec=",
+      "version": "330.250.2"
+    },
+    "mDNSResponder": {
+      "hash": "sha256-SlrC3LIOndY1DVJ26bnuYQwpLhkV1PHAMJeaE3bMDI4=",
+      "version": "878.270.2"
+    },
+    "objc4": {
+      "hash": "sha256-rzDiOE//rUnRyCHM/XUQs9IImKGIFN/0D0IZ7SeGp2s=",
+      "version": "756.2"
+    },
+    "ppp": {
+      "hash": "sha256-a0zTwevtC+AAyLV/0+rX9VN5BXc2vaZGArz83VZtiWs=",
+      "version": "847.200.5"
+    },
+    "removefile": {
+      "hash": "sha256-23+ivRTPKId9Is5NAwYmVgN7TX2+7v9NONs9u7DrGH4=",
+      "version": "45.200.2"
+    },
+    "xnu": {
+      "hash": "sha256-ZRgj214Mmvvcji4OdzRjK/7Xtpz7r69SFmzSvtZNhNU=",
+      "version": "4903.270.47"
+    }
+  },
   "11.3": {
     "CarbonHeaders": {
       "hash": "sha256-nIPXnLr21yVnpBhx9K5q3l/nPARA6JL/dED08MeyhP8=",
