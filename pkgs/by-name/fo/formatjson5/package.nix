@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "formatjson5";
-  version = "0.2.6";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Lredw/Fez+2U2++ShZcKTFCv8Qpai9YUvqvpGjG5W0o=";
   };
 
-  cargoHash = "sha256-zPgaZPDyNVPmBXz6QwOYnmh/sbJ8aPST8znLMfIWejk=";
+  cargoHash = "sha256-NOiy9jH4w43lcEiWviY/1C+YwDVBBNEQruzCDK0toOk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
