@@ -61,6 +61,12 @@ let
     "py-tree-sitter"
     # afl fuzzing for tree sitter
     "afl-tree-sitter"
+    # this is the kotlin language bindings, tree-sitter-kotlin is the grammar
+    "kotlin-tree-sitter"
+    # this is the go language bindings, tree-sitter-go is the grammar
+    "go-tree-sitter"
+    # this is the java language bindings, tree-sitter-java is the grammar
+    "java-tree-sitter"
     # archived
     "highlight-schema"
     # website

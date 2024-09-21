@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , libdrm
-, ffmpeg_7
+, ffmpeg
 , wayland
 }:
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     wayland
     libdrm
-    ffmpeg_7
+    ffmpeg
   ];
 
   doCheck = false; # tests use host compositor, etc

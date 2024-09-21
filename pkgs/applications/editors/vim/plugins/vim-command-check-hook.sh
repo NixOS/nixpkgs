@@ -21,5 +21,5 @@ vimCommandCheckHook () {
 }
 
 echo "Using vimCommandCheckHook"
-preDistPhases+=" vimCommandCheckHook"
+appendToVar preDistPhases vimCommandCheckHook
 

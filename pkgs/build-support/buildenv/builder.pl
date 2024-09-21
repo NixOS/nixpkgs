@@ -255,6 +255,21 @@ while (scalar(keys %postponed) > 0) {
     }
 }
 
+my $extraPathsFilePath = $ENV{"extraPathsFrom"};
+if ($extraPathsFilePath) {
+    open FILE, $extraPathsFilePath or die "cannot open extra paths file $extraPathsFilePath: $!";
+
+    while(my $line = <FILE>) {
+        chomp $line;
+        addPkg($line,
+               $ENV{"ignoreCollisions"} eq "1",
+               $ENV{"checkCollisionContents"} eq "1",
+               1000)
+            if -d $line;
+    }
+
+    close FILE;
+}
 
 # Create the symlinks.
 my $nrLinks = 0;

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , wxGTK32
-, ffmpeg_7
+, ffmpeg
 , lua5_1
 , curl
 , libpng
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     wxGTK32
-    ffmpeg_7
+    ffmpeg
     lua5_1
     curl
     libpng

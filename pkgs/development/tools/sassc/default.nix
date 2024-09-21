@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsass ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Front-end for libsass";
     homepage = "https://github.com/sass/sassc/";

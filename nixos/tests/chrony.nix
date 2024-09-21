@@ -13,8 +13,6 @@ import ./make-test-python.nix ({ lib, ... }:
       specialisation.hardened.configuration = {
         services.chrony.enableMemoryLocking = true;
         environment.memoryAllocator.provider = "graphene-hardened";
-        # dhcpcd privsep is incompatible with graphene-hardened
-        networking.useNetworkd = true;
       };
     };
   };

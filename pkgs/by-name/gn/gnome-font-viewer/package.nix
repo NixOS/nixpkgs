@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
   # Do not run meson-postinstall.sh
   preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-font-viewer";

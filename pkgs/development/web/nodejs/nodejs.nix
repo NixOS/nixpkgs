@@ -363,7 +363,13 @@ let
       # assemble a static v8 library and put it in the 'libv8' output
       mkdir -p $libv8/lib
       pushd out/Release/obj
-      find . -path "./torque_*/**/*.o" -or -path "./v8*/**/*.o" | sort -u >files
+      find . -path "**/torque_*/**/*.o" -or -path "**/v8*/**/*.o" \
+        -and -not -name "torque.*" \
+        -and -not -name "mksnapshot.*" \
+        -and -not -name "gen-regexp-special-case.*" \
+        -and -not -name "bytecode_builtins_list_generator.*" \
+        | sort -u >files
+      test -s files # ensure that the list is not empty
       $AR -cqs $libv8/lib/libv8.a @files
       popd
 

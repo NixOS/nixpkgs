@@ -4,9 +4,9 @@ __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
 
-if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
+if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 5 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
-    echo "Please install Bash 4 or greater to continue."
+    echo "Please install Bash 5 or greater to continue."
     exit 1
 fi
 
@@ -389,6 +389,8 @@ appendToVar() {
 # Arrays are simply concatenated, strings are split on whitespace.
 # Default values can be passed via name=default.
 concatTo() {
+    local -
+    set -o noglob
     local -n targetref="$1"; shift
     local arg default name type
     for arg in "$@"; do

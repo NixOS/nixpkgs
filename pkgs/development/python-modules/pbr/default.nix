@@ -1,22 +1,28 @@
 {
   lib,
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
-  callPackage,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0TdxIqWgDi+UDuSCmZUY7+FtdF1COmcMJ3c9+8PJp9k=";
+    hash = "sha256-eIGD44Lj0ddwfbCJeCOZZei55OXtQmab9HWBhnNNXyQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    setuptools # for pkg_resources
+    six
+  ];
 
   # check in passthru.tests.pytest to escape infinite recursion with fixtures
   doCheck = false;

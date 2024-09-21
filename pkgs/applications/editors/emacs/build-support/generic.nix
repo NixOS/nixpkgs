@@ -33,7 +33,7 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
 , postInstall ? ""
 , meta ? {}
 , turnCompilationWarningToError ? false
-, ignoreCompilationError ? true
+, ignoreCompilationError ? false
 , ...
 }@args:
 
@@ -86,10 +86,16 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
     source ${./emacs-funcs.sh}
     addEmacsVars "$out"
 
-    find $out/share/emacs -type f -name '*.el' -print0 \
+    # package-activate-all is used to activate packages.  In other builder
+    # helpers, package-initialize is used for this purpose because
+    # package-activate-all is not available before Emacs 27.
+    find $out/share/emacs -type f -name '*.el' -not -name ".dir-locals.el" -print0 \
       | xargs --verbose -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
           "emacs \
              --batch \
+             -f package-activate-all \
+             --eval '(setq native-comp-eln-load-path (cdr native-comp-eln-load-path))' \
+             --eval '(let ((default-directory \"$out/share/emacs/site-lisp\")) (normal-top-level-add-subdirs-to-load-path))' \
              --eval '(setq large-file-warning-threshold nil)' \
              --eval '(setq byte-compile-error-on-warn ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"})' \
              -f batch-native-compile {} \

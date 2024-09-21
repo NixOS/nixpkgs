@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   expat,
-  ffmpeg_7,
+  ffmpeg,
   freetype,
   libarchive,
   libjpeg,
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildInputs =
     [
       expat
-      ffmpeg_7
+      ffmpeg
       freetype
       libarchive
       libjpeg

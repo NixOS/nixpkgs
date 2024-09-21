@@ -83,7 +83,6 @@
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
 , withNvdec ? withHeadlessDeps && withNvcodec
 , withNvenc ? withHeadlessDeps && withNvcodec
-, withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
@@ -263,7 +262,6 @@
 , libjxl
 , libmodplug
 , libmysofa
-, libogg
 , libopenmpt
 , libopus
 , libplacebo
@@ -764,7 +762,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
-  ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
   ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
@@ -822,6 +819,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "all" ]
     ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 

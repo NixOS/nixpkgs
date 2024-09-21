@@ -10,12 +10,12 @@ neovimRequireCheckHook () {
 		# editorconfig-checker-disable
         export HOME="$TMPDIR"
         @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
-            --cmd "set rtp+=$out,${dependencies/ /,}" \
+            --cmd "set rtp+=$out,${dependencies// /,}" \
             --cmd "lua require('$nvimRequireCheck')"
     fi
 }
 
 echo "Using neovimRequireCheckHook"
-preDistPhases+=" neovimRequireCheckHook"
+appendToVar preDistPhases neovimRequireCheckHook
 
 

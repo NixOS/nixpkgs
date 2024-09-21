@@ -7,11 +7,11 @@
 
 mkDerivation rec {
   pname = "plasma-wayland-protocols";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-3Ud+NS9f9uasaGKGxLIrGb9aSSG4XuWn2gK7eqEV1X4=";
+    hash = "sha256-GkOF7Px591ifBzgcqxHD/1H24vpLc7eGANatCWOUv4E=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

@@ -2,11 +2,16 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   requests,
   pyyaml,
   setuptools,
   pytestCheckHook,
+  pytest-asyncio,
+  uvloop,
+  hypercorn,
+  starlette,
+  pydantic_1,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +20,11 @@ buildPythonPackage rec {
   pyproject = true;
 
   disabled = pythonOlder "3.8";
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ohpJBXPYnKaa2ny+WFrbL8pJZCV/bzod9THxKBVFXSw=";
+  src = fetchFromGitHub {
+    owner = "Dorthu";
+    repo = "openapi3";
+    rev = version;
+    hash = "sha256-Crn+nRbptRycnWJzH8Tm/BBLcBSRCcNtLX8NoKnSDdA=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -27,7 +34,19 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckinputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pydantic_1
+    uvloop
+    hypercorn
+    starlette
+  ];
+
+  disabledTestPaths = [
+    # tests old fastapi behaviour
+    "tests/fastapi_test.py"
+  ];
 
   pythonImportsCheck = [ "openapi3" ];
 

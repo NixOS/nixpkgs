@@ -10,5 +10,5 @@ xdtAutogenPhase() {
 }
 
 if [ -z "${dontUseXdtAutogenPhase-}" ]; then
-    preConfigurePhases+=(xdtAutogenPhase)
+    appendToVar preConfigurePhases xdtAutogenPhase
 fi

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , perl
 , cracklib
@@ -29,6 +30,12 @@ stdenv.mkDerivation rec {
   patches = [
     # ensure python site-packages goes in $py output
     ./python-binding-prefix.patch
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/libpwquality/libpwquality/commit/b0fcd96954be89e8c318e5328dd27c40b401de96.patch";
+      hash = "sha256-ykN1hcRKyX3QAqWTH54kUjOxN6+IwRpqQVsujTd9XWs=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals enablePython [ python ];
