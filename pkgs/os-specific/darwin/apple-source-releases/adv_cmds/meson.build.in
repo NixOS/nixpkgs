@@ -12,6 +12,7 @@ cc = meson.get_compiler('c')
 cxx = meson.get_compiler('cpp')
 
 dbm = cc.find_library('dbm')
+libxo = dependency('libxo')
 ncurses = dependency('ncurses')
 
 
@@ -107,6 +108,7 @@ install_man('genwrap/genwrap.8')
 
 executable(
     'last',
+    dependencies : libxo,
     install : true,
     sources : ['last/last.c'],
 )
@@ -119,15 +121,23 @@ executable(
 )
 install_man('locale/locale.1')
 
-# TODO(@reckenrode) Requires Perl. Needs separate packaging.
-custom_target(
+executable(
     'localedef',
-    command : [ 'cp', '@INPUT@', '@OUTPUT@' ],
+    include_directories : [ 'localedef', 'localedef/libc' ],
     install : true,
-    install_dir : get_option('bindir'),
-    install_mode : 'r-xr-xr-x',
-    input : 'localedef/localedef.pl',
-    output : 'localedef',
+    sources : [
+        'localedef/charmap.c',
+        'localedef/collate.c',
+        'localedef/ctype.c',
+        'localedef/localedef.c',
+        'localedef/messages.c',
+        'localedef/monetary.c',
+        'localedef/numeric.c',
+        'localedef/scanner.c',
+        'localedef/time.c',
+        'localedef/wide.c',
+        bison.process('localedef/parser.y'),
+    ],
 )
 install_man('localedef/localedef.1')
 
