@@ -25,42 +25,45 @@ let
     journey = 3;
   };
 
-  mkLine = name: val: (lib.optionalString (val == null) "# ") + "${name}=${toString val}";
+  mkLine = name: val: (lib.optionalString (val != null) "${name}=${toString val}");
   mkTodo = name: "# ${name}= # TODO: add option";
 
   # Based on https://terraria.wiki.gg/wiki/Server#Server_config_file
-  configLines = [
-    (mkLine "world" cfg.worldPath)
-    (mkLine "autocreate" (builtins.getAttr cfg.autoCreatedWorldSize worldSizeMap))
-    (mkLine "seed" cfg.autoCreatedWorldSeed)
-    (mkTodo "worldname")
-    (mkLine "difficulty" (builtins.getAttr cfg.autoCreatedWorldDifficulty difficultyMap))
-    (mkLine "maxplayers" cfg.maxPlayers)
-    (mkLine "port" cfg.port)
-    (mkLine "password" cfg.password)
-    (mkLine "motd" cfg.messageOfTheDay)
-    (mkTodo "worldpath")
-    (mkLine "banlist" cfg.banListPath)
-    (mkLine "secure" (if cfg.secure then "1" else "0"))
-    (mkLine "upnp" (if cfg.noUPnP then "0" else "1")) # should probably be inverted in the option name instead
-    (mkTodo "npcstream")
-    (mkTodo "priority")
-    (mkTodo "journeypermission_time_setfrozen")
-    (mkTodo "journeypermission_time_setdawn")
-    (mkTodo "journeypermission_time_setnoon")
-    (mkTodo "journeypermission_time_setdusk")
-    (mkTodo "journeypermission_time_setmidnight")
-    (mkTodo "journeypermission_godmode")
-    (mkTodo "journeypermission_wind_setstrength")
-    (mkTodo "journeypermission_rain_setstrength")
-    (mkTodo "journeypermission_time_setspeed")
-    (mkTodo "journeypermission_rain_setfrozen")
-    (mkTodo "journeypermission_wind_setfrozen")
-    (mkTodo "journeypermission_increaseplacementrange")
-    (mkTodo "journeypermission_setdifficulty")
-    (mkTodo "journeypermission_biomespread_setfrozen")
-    (mkTodo "journeypermission_setspawnrate")
-  ];
+  configLines =
+    lib.optionals cfg.autocreate.enable [
+      (mkLine "autocreate" (builtins.getAttr cfg.autocreate.size worldSizeMap))
+      (mkLine "difficulty" (builtins.getAttr cfg.autocreate.difficulty difficultyMap))
+      (mkLine "seed" cfg.autocreate.seed)
+    ]
+    ++ [
+      (mkLine "world" cfg.worldPath)
+      (mkTodo "worldname")
+      (mkLine "maxplayers" cfg.maxPlayers)
+      (mkLine "port" cfg.port)
+      (mkLine "password" cfg.password)
+      (mkLine "motd" cfg.messageOfTheDay)
+      (mkTodo "worldpath")
+      (mkLine "banlist" cfg.banListPath)
+      (mkLine "secure" (if cfg.secure then "1" else "0"))
+      (mkLine "upnp" (if cfg.noUPnP then "0" else "1")) # should probably be inverted in the option name instead
+      (mkTodo "npcstream")
+      (mkTodo "priority")
+      (mkTodo "journeypermission_time_setfrozen")
+      (mkTodo "journeypermission_time_setdawn")
+      (mkTodo "journeypermission_time_setnoon")
+      (mkTodo "journeypermission_time_setdusk")
+      (mkTodo "journeypermission_time_setmidnight")
+      (mkTodo "journeypermission_godmode")
+      (mkTodo "journeypermission_wind_setstrength")
+      (mkTodo "journeypermission_rain_setstrength")
+      (mkTodo "journeypermission_time_setspeed")
+      (mkTodo "journeypermission_rain_setfrozen")
+      (mkTodo "journeypermission_wind_setfrozen")
+      (mkTodo "journeypermission_increaseplacementrange")
+      (mkTodo "journeypermission_setdifficulty")
+      (mkTodo "journeypermission_biomespread_setfrozen")
+      (mkTodo "journeypermission_setspawnrate")
+    ];
 
   configFile = pkgs.writeText "serverconfig.txt" ''
     # This file was created by the services.terraria NixOS module
@@ -91,6 +94,13 @@ let
   '';
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "terraria"
+      "autoCreatedWorldSize"
+    ] "Configure services.terraria.autocreate instead")
+  ];
   options = {
     services.terraria = {
       enable = mkOption {
@@ -134,6 +144,37 @@ in
         '';
       };
 
+      autocreate = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to auto-create a world if `worldPath` does not point to an existing world.
+          '';
+        };
+        size = mkOption {
+          type = types.enum (lib.attrNames worldSizeMap);
+          default = "medium";
+          description = ''
+            Specifies the size of the auto-created world.
+          '';
+        };
+        difficulty = mkOption {
+          type = types.enum (lib.attrNames difficultyMap);
+          default = "normal";
+          description = ''
+            Specifies the difficulty of the auto-created world.
+          '';
+        };
+        seed = mkOption {
+          type = types.nullOr (types.enum (lib.attrNames difficultyMap));
+          default = null;
+          description = ''
+            Specifies the seed of the auto-created world.
+          '';
+        };
+      };
+
       worldPath = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -141,19 +182,6 @@ in
           The path to the world file (`.wld`) which should be loaded.
           If no world exists at this path, one will be created with the size
           specified by `autoCreatedWorldSize`.
-        '';
-      };
-
-      autoCreatedWorldSize = mkOption {
-        type = types.enum [
-          "small"
-          "medium"
-          "large"
-        ];
-        default = "medium";
-        description = ''
-          Specifies the size of the auto-created world if `worldPath` does not
-          point to an existing world.
         '';
       };
 
