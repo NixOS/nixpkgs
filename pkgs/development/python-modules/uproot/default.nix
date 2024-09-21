@@ -49,6 +49,7 @@ buildPythonPackage rec {
     numpy
     fsspec
     packaging
+    xxhash
   ];
 
   nativeCheckInputs = [
@@ -57,7 +58,6 @@ buildPythonPackage rec {
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
-    xxhash
   ];
 
   preCheck = ''
