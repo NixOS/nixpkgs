@@ -2,12 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
   python-socks,
   pythonOlder,
-  setuptools,
   tldextract,
   whodap,
 }:
@@ -26,18 +26,13 @@ buildPythonPackage rec {
     hash = "sha256-y5JmAbrk9qJeNYejNcz5nI5bghaetUw1xkD8qgwOkao=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "python-socks[asyncio]" "python-socks"
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     python-socks
     tldextract
     whodap
-  ];
+  ] ++ python-socks.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -68,7 +63,7 @@ buildPythonPackage rec {
     description = "Python module for retrieving WHOIS information";
     homepage = "https://github.com/pogzyb/asyncwhois";
     changelog = "https://github.com/pogzyb/asyncwhois/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
