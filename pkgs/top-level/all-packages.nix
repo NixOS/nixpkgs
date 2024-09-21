@@ -29210,8 +29210,6 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  elvis = callPackage ../applications/editors/elvis { };
-
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs28
     emacs28-gtk2
@@ -30188,10 +30186,6 @@ with pkgs;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
   hmm = callPackage ../applications/misc/hmm { };
-
-  homebank = callPackage ../applications/office/homebank {
-    gtk = gtk3;
-  };
 
   hollywood = callPackage ../applications/misc/hollywood {
     inherit (python3Packages) pygments;
@@ -38008,9 +38002,7 @@ with pkgs;
 
   nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 
-  nix-serve = callPackage ../tools/package-management/nix-serve {
-    nix = nixVersions.nix_2_18;
-  };
+  nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nix-serve-ng = haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
 

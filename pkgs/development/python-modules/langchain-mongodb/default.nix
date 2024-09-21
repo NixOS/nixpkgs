@@ -18,8 +18,6 @@
   pytestCheckHook,
   pytest-mock,
   syrupy,
-
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -58,11 +56,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain-mongodb==(.*)"
-    ];
+  passthru = {
+    inherit (langchain-core) updateScript;
   };
 
   meta = {

@@ -42,6 +42,24 @@ let
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
 
+  /**
+    This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
+    that refers to the derivation's outputs.
+
+    `mkDerivation` takes many argument attributes, most of which affect the derivation environment,
+    but [`meta`](#chap-meta) and [`passthru`](#var-stdenv-passthru) only directly affect package attributes.
+
+    The `mkDerivation` argument attributes can be made to refer to one another by passing a function to `mkDerivation`.
+    See [Fixed-point argument of `mkDerivation`](#mkderivation-recursive-attributes).
+
+    Reference documentation see: https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
+
+    :::{.note}
+    This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
+
+    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    :::
+  */
   mkDerivation =
     fnOrAttrs:
       if builtins.isFunction fnOrAttrs

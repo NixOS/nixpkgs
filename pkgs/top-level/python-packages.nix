@@ -15778,6 +15778,8 @@ self: super: with self; {
 
   treeo = callPackage ../development/python-modules/treeo { };
 
+  treescope = callPackage ../development/python-modules/treescope { };
+
   treex = callPackage ../development/python-modules/treex { };
 
   treq = callPackage ../development/python-modules/treq { };
@@ -17863,6 +17865,8 @@ self: super: with self; {
   };
 
   zulip = callPackage ../development/python-modules/zulip { };
+
+  zulip-emoji-mapping = callPackage ../development/python-modules/zulip-emoji-mapping { };
 
   zwave-me-ws = callPackage ../development/python-modules/zwave-me-ws { };
 

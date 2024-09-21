@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-1V95S0FWHzCxztgip+rbCjji4O71D+QdcSZ/hbABeKg=";
+    hash = "sha256-8EKOBlF6bgjgB5t3KP4AcWU7YkLaiFoAj+wuJWEOAic=";
   };
 
   cargoLock = {
@@ -30,13 +30,6 @@ rustPlatform.buildRustPackage rec {
       "salsa-0.18.0" = "sha256-EjpCTOB6E7n5oNn1bvzNyznzs0uRJvAXrNsZggk4hgM=";
     };
   };
-
-  # Revert the change made in https://github.com/astral-sh/ruff/pull/13299
-  # It was causing linking issues: https://github.com/NixOS/nixpkgs/pull/341674#issuecomment-2351172084
-  postPatch = ''
-    substituteInPlace crates/ruff_benchmark/Cargo.toml \
-      --replace-fail '"unprefixed_malloc_on_supported_platforms"' ' '
-  '';
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -71,6 +71,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_app_cleans_up_images"
+    # DeprecationWarning in dependency: reportlab
+    "test_align_option_1"
+    # Comparison w/ magic values in test
+    "test_generate_with_separate"
   ];
 
   pythonImportsCheck = [ "blockdiag" ];

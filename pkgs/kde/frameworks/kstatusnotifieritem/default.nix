@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kstatusnotifieritem";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }
