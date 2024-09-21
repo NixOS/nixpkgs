@@ -65,36 +65,13 @@ makeScopeWithSplicing' {
   }.${stdenv.hostPlatform.darwinSdkVersion}
   or (throw "Unsupported sdk: ${stdenv.hostPlatform.darwinSdkVersion}");
 
-  # Pick the source of libraries: either Apple's open source releases, or the
-  # SDK.
-  useAppleSDKLibs = lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11";
-
-  selectAttrs = attrs: names:
-    lib.listToAttrs (lib.concatMap (n: lib.optionals (attrs ? "${n}") [(lib.nameValuePair n attrs."${n}")]) names);
-
-  chooseLibs = (
-    # There are differences in which libraries are exported. Avoid evaluation
-    # errors when a package is not provided.
-    selectAttrs (
-      if useAppleSDKLibs
-        then apple_sdk
-        else appleSourcePackages
-    ) ["Libsystem" "LibsystemCross" "libcharset" "libunwind" "objc4" "configd" "IOKit"]
-  ) // {
-    inherit (
-      if useAppleSDKLibs
-        then apple_sdk.frameworks
-        else appleSourcePackages
-    ) Security;
-  };
-
   stubs = {
     inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
   } // lib.genAttrs [
   ] (mkStub apple_sdk.version);
 in
 
-impure-cmds // appleSourcePackages // chooseLibs // stubs // {
+impure-cmds // appleSourcePackages // stubs // {
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
