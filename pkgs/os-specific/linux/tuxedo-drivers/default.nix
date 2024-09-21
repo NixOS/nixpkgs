@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.6.2";
+  version = "4.7.0";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HS/KGhgFW0vO2SSFYSdseQBhAZC70eAx9JvRgR6e6qs=";
+    hash = "sha256-wZUQHIkbxt9ckTFs8VTrA5I+ebBeaOm+Fb0+GqX5y0c=";
   };
 
   buildInputs = [
