@@ -4,9 +4,9 @@
   apple-sdk_11,
   bison,
   flex,
+  libxo,
   mkAppleDerivation,
   ncurses,
-  perl,
   pkg-config,
   stdenvNoCC,
 }:
@@ -40,7 +40,12 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-cpoHF++eko3NHGJlKnFONKnGkVRD0zI+bg/XLzWtpN8=";
+  xcodeHash = "sha256-2p/JyMPw6acHphvzkaJXPXGwxCUEoxryCejww5kPHvQ=";
+
+  patches = [
+    # Use older API when running on systems prior to 11.3.
+    ./patches/0001-Fall-back-to-task_read_pid-on-older-systems.patch
+  ];
 
   postPatch = ''
     # Meson generators require using @BASENAME@ in the output.
@@ -51,16 +56,13 @@ mkAppleDerivation {
     substituteInPlace colldef/scan.l \
       --replace-fail y.tab.h parse.tab.h
 
+    find localedef -name '*.c' -exec sed -e 's/parser.h/parser.tab.h/' -i {} \;
+
     # Fix paths to point to the store
     for file in genwrap.c genwrap.8; do
       substituteInPlace genwrap/$file \
         --replace-fail '/usr/local' "$out"
     done
-
-    substituteInPlace localedef/localedef.pl \
-      --replace-fail '/usr/bin/perl' '${lib.getExe perl}' \
-      --replace-fail '/usr/bin' "$out/bin" \
-      --replace-fail '/usr/share/locale' "$locale/share/locale"
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
@@ -68,13 +70,13 @@ mkAppleDerivation {
   buildInputs = [
     # Use the 11.3 SDK because CMake depends on adv_cmds.ps, so it can’t simply be omitted when using an older SDK.
     apple-sdk_11
+    libxo
     ncurses
   ];
 
   nativeBuildInputs = [
     bison
     flex
-    perl
     pkg-config
   ];
 
