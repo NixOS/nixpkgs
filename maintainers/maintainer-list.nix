@@ -12270,6 +12270,12 @@
     githubId = 15693688;
     name = "Lucas Eduardo Wendt";
   };
+  lucastso10 = {
+    email = "lucastso10@gmail.com";
+    github = "lucastso10";
+    githubId = 84486266;
+    name = "Lucas Teixeira Soares";
+  };
   lucc = {
     email = "lucc+nix@posteo.de";
     github = "lucc";
