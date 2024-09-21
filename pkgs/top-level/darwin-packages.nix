@@ -84,6 +84,7 @@ makeScopeWithSplicing' {
     "architecture"
     "configd"
     "configdHeaders"
+    "darwin-stubs"
   ] (mkStub apple_sdk.version);
 in
 impure-cmds // appleSourcePackages // stubs // {
@@ -147,8 +148,6 @@ impure-cmds // appleSourcePackages // stubs // {
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
-
-  darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
 
   print-reexports = callPackage ../os-specific/darwin/print-reexports { };
 
