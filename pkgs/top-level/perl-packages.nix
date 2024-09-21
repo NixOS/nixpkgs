@@ -10770,10 +10770,10 @@ with self; {
 
   GetoptLong = buildPerlPackage {
     pname = "Getopt-Long";
-    version = "2.54";
+    version = "2.58";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/Getopt-Long-2.54.tar.gz";
-      hash = "sha256-WEujyZuy1rNBN1IS+bh0YT9wbPsBzuIbiiZ2qYq5hf4=";
+      url = "mirror://cpan/authors/id/J/JV/JV/Getopt-Long-2.58.tar.gz";
+      hash = "sha256-EwXtRuoh95QwTpeqPc06OFGQWXhenbdBXa8sIYUGxWk=";
     };
     meta = {
       description = "Extended processing of command line options";
@@ -10789,7 +10789,7 @@ with self; {
       hash = "sha256-QQ6EIRSpy/0/06X9JIqWcDwHxdh5sqpfnbAzPyMnYBY=";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
-    propagatedBuildInputs = [ ParamsValidate SubExporter ];
+    propagatedBuildInputs = [ ParamsValidate SubExporter GetoptLong ];
     meta = {
       description = "Getopt::Long, but simpler and more powerful";
       homepage = "https://github.com/rjbs/Getopt-Long-Descriptive";
