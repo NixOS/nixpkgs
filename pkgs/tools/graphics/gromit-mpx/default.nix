@@ -4,10 +4,10 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  gtk,
+  gtk3,
   glib,
   pcre,
-  libappindicator,
+  libappindicator-gtk3,
   libpthreadstubs,
   xorg,
   libxkbcommon,
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk
+    gtk3
     glib
     pcre
-    libappindicator
+    libappindicator-gtk3
     libpthreadstubs
     xorg.libXdmcp
     libxkbcommon
