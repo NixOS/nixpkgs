@@ -70,15 +70,6 @@
     ]
   },
   {
-    "package": "dtrace",
-    "headers": [
-      "dtrace.h"
-    ],
-    "libraries": [
-      "*dtrace*"
-    ]
-  },
-  {
     "package": "editline",
     "headers": [
       "editline.h",
