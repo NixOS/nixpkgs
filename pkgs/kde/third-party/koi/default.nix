@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     homepage = "https://github.com/baduhai/Koi";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fnune ];
   };
 }
