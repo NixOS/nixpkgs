@@ -26,5 +26,9 @@
   "developer_cmds": {
     "hash": "sha256-h0wMVlS6QdRvKOVJ74W9ziHYGApjvnk77AIR6ukYBRo=",
     "version": "62"
+  },
+  "diskdev_cmds": {
+    "hash": "sha256-VX+hcZ7JhOA8EhwLloPlM3Yx79RXp9OYHV9Mi10uw3Q=",
+    "version": "593"
   }
 }
