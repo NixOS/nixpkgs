@@ -52,8 +52,8 @@
     "version": "448.0.3"
   },
   "libiconv": {
-    "hash": "sha256-TGt6rsU52ztfW2rCqwnhMAExLbexI/59IoDOGY+XGu0=",
-    "version": "99"
+    "hash": "sha256-4I70hci8SUQ5QERbImP3htjYCGXdZZ0a6RM7ggUnVa4=",
+    "version": "107"
   },
   "libresolv": {
     "hash": "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=",

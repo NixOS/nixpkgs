@@ -293,7 +293,7 @@ install_man('iconv/iconv.1')
 if get_option('tests') == true
 ## Only required for running the tests
     atf = dependency('atf-c')
-    foreach suite : ['libiconv_test', 'mbopt_test', 'nixpkgs_test']
+    foreach suite : ['fallback_test', 'libiconv_test', 'mbopt_test', 'nixpkgs_test']
         test_src = f'tests/libiconv/@suite@.c'
         test_exe = executable(
             suite,
