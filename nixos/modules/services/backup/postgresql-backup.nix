@@ -156,9 +156,10 @@ in {
       ];
     }
     (lib.mkIf cfg.enable {
-      systemd.tmpfiles.rules = [
-        "d '${cfg.location}' 0700 postgres - - -"
-      ];
+      systemd.tmpfiles.settings."10-postgresql-backup".${cfg.location}.d = {
+        user = "postgres";
+        mode = "0700";
+      };
     })
     (lib.mkIf (cfg.enable && cfg.backupAll) {
       systemd.services.postgresqlBackup =
