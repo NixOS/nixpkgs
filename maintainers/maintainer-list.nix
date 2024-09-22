@@ -21903,9 +21903,7 @@
     github = "yzx9";
     githubId = 41458459;
     name = "Zexin Yuan";
-    keys = [{
-      fingerprint = "FE16 B281 90EF 6C3F F661  6441 C2DD 1916 FE47 1BE2";
-    }];
+    keys = [ { fingerprint = "FE16 B281 90EF 6C3F F661  6441 C2DD 1916 FE47 1BE2"; } ];
   };
   zachcoyle = {
     email = "zach.coyle@gmail.com";
