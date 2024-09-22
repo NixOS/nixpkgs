@@ -39,6 +39,10 @@
     "hash": "sha256-TebggzBS/HwEP3W2w2p+XvPDxsQtdTbtKEn9wik653Q=",
     "version": "735"
   },
+  "doc_cmds": {
+    "hash": "sha256-/Mf+RhaTU9O5i95gddZ2h9eDjLezwj3nP6FvryMF54E=",
+    "version": "66"
+  },
   "file_cmds": {
     "hash": "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=",
     "version": "264.1.1"
