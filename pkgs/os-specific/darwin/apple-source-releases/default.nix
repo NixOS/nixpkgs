@@ -310,9 +310,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     adv_cmds        = callPackage ./adv_cmds/package.nix { };
     basic_cmds      = callPackage ./basic_cmds/package.nix { };
     developer_cmds  = callPackage ./developer_cmds/package.nix { };
-    diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "sha256-VX+hcZ7JhOA8EhwLloPlM3Yx79RXp9OYHV9Mi10uw3Q=" {
-      macosPackages_11_0_1 = macosPackages_11_0_1;
-    };
+    diskdev_cmds    = callPackage ./diskdev_cmds/package.nix { };
     network_cmds    = if isSdk10_12 then
       applePackage "network_cmds" "osx-10.11.6" "sha256-I89CLIswGheewOjiNZwQTgWvWbhm0qtB5+KUqzxnQ5M=" {}
     else macosPackages_11_0_1.network_cmds;
