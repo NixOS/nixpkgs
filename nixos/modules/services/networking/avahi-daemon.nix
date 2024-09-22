@@ -298,7 +298,10 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.tmpfiles.rules = [ "d /run/avahi-daemon - avahi avahi -" ];
+    systemd.tmpfiles.settings."10-avahi-daemon"."/run/avahi-daemon".d = {
+      user = "avahi";
+      group = "avahi";
+    };
 
     systemd.services.avahi-daemon = {
       description = "Avahi mDNS/DNS-SD Stack";
