@@ -1,4 +1,13 @@
-# run tests by building `neovim.tests`
+/*
+run tests with `nix-build -A neovim.tests`
+
+The attrset exposes both the wrapped neovim and the associated test for easier debugging
+
+Here are some common neovim flags used in the tests:
+-e runs neovim in `:h Ex-mode` which returns an exit code != 0 when hitting an error
+-i NONE  gets rid of shada warnings
+
+*/
 { vimUtils, writeText, neovim, vimPlugins
 , neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
@@ -43,7 +52,7 @@ let
     '';
   };
 
-  nvim-with-luasnip = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
+  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
     plugins = [ {
         plugin = vimPlugins.luasnip;
 
@@ -72,18 +81,21 @@ let
       meta.platforms = neovim-drv.meta.platforms;
     }) (''
       source ${nmt}/bash-lib/assertions.sh
-      vimrc="${writeText "init.vim" neovim-drv.initRc}"
-      luarc="${writeText "init.lua" neovim-drv.luaRcContent}"
+      vimrc="${writeText "test-${neovim-drv.name}-init.vim" neovim-drv.initRc}"
+      luarc="${writeText "test-${neovim-drv.name}-init.lua" neovim-drv.luaRcContent}"
       luarcGeneric="$out/patched.lua"
       vimrcGeneric="$out/patched.vim"
       mkdir $out
+      export HOME=$TMPDIR
       ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
       ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$luarc" > "$luarcGeneric"
     '' + buildCommand);
 
 in
-  pkgs.recurseIntoAttrs (
-rec {
+  pkgs.recurseIntoAttrs (rec {
+
+  inherit nmt;
+
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
   ### neovim tests
@@ -129,7 +141,6 @@ rec {
   };
 
   run_nvim_with_plug = runTest nvim_with_plug ''
-    export HOME=$TMPDIR
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
@@ -156,7 +167,6 @@ rec {
   # regression test that ftplugin files from plugins are loaded before the ftplugin
   # files from $VIMRUNTIME
   run_nvim_with_ftplugin = runTest nvim_with_ftplugin ''
-    export HOME=$TMPDIR
     echo '\documentclass{article}' > main.tex
 
     ${nvim_with_ftplugin}/bin/nvim -i NONE -V3log.txt main.tex -c "set ft?" -c quit
@@ -195,8 +205,8 @@ rec {
       ];
     };
   };
+
   checkHelpLuaPackages = runTest nvim_with_gitsigns_plugin ''
-    export HOME=$TMPDIR
     ${nvim_with_gitsigns_plugin}/bin/nvim -i NONE -c 'help gitsigns' +quitall! -e
   '';
 
@@ -224,8 +234,8 @@ rec {
 
   checkAliases = runTest nvim_with_aliases ''
       folder=${nvim_with_aliases}/bin
-      assertFileExists "$folder/vi"
-      assertFileExists "$folder/vim"
+      assertFileIsExecutable "$folder/vi"
+      assertFileIsExecutable "$folder/vim"
   '';
 
   # having no RC generated should autodisable init.vim wrapping
@@ -251,8 +261,7 @@ rec {
   });
 
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
-    export HOME=$TMPDIR
-    ${nvimWithLuaPackages}/bin/nvim -i NONE --noplugin -es
+    ${nvimWithLuaPackages}/bin/nvim -V3log.txt -i NONE --noplugin +quitall! -e
   '';
 
   # nixpkgs should install optional packages in the opt folder
@@ -290,7 +299,6 @@ rec {
   };
 
   run_nvim_with_opt_plugin = runTest nvim_with_opt_plugin ''
-    export HOME=$TMPDIR
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
 
@@ -300,7 +308,6 @@ rec {
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps =
     runTest nvim-with-luasnip ''
-    export HOME=$TMPDIR
     cat ${nvim-with-luasnip}/bin/nvim
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
