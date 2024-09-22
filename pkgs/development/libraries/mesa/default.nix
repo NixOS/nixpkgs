@@ -251,11 +251,12 @@ in stdenv.mkDerivation {
     spirv-llvm-translator
     udev
     vulkan-loader
-    wayland
-    wayland-protocols
     xcbutilkeysyms
     xorgproto
     zstd
+  ] ++ lib.optionals (lib.elem "wayland" eglPlatforms) [
+    wayland
+    wayland-protocols
   ] ++ lib.optionals withValgrind [
     valgrind-light
   ];
