@@ -50,5 +50,9 @@
   "libutil": {
     "hash": "sha256-4PFuk+CTLwvd/Ll9GLBkiIM0Sh/CVaiKwh5m1noheRs=",
     "version": "47.30.1"
+  },
+  "network_cmds": {
+    "hash": "sha256-PChAbC/4cHa0lbojElR2PHOUo+cDvsoNdiorle0IXss=",
+    "version": "606.40.2"
   }
 }
