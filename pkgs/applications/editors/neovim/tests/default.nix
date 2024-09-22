@@ -302,7 +302,7 @@ rec {
     runTest nvim-with-luasnip ''
     export HOME=$TMPDIR
     cat ${nvim-with-luasnip}/bin/nvim
-    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e
+    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
 
 })
