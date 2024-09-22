@@ -9,10 +9,12 @@
 , libllvm
 , libxml2
 }:
-
-stdenv.mkDerivation rec {
-  pname = "smatch";
+let
   version = "1.73";
+in
+stdenv.mkDerivation {
+  pname = "smatch";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "error27";
@@ -33,11 +35,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "CXX=${stdenv.cc.targetPrefix}c++" ];
 
-  meta = with lib; {
+  meta = {
     description = "Semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ momeemt ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }
