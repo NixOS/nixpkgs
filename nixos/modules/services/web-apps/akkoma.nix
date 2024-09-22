@@ -1112,10 +1112,16 @@ in {
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${uploadDir}  0700 ${cfg.user} ${cfg.group} - -"
-      "Z ${uploadDir} ~0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-akkoma".${uploadDir} = {
+      d = {
+        inherit (cfg) user group;
+        mode = "0700";
+      };
+      Z = {
+        inherit (cfg) user group;
+        mode = "~0700";
+      };
+    };
 
     environment.systemPackages = mkIf (cfg.installWrapper) [ userWrapper ];
 
