@@ -23,12 +23,11 @@ python3Packages.buildPythonApplication {
 
   src = lib.cleanSource ./.;
 
-  nativeBuildInputs = [
-    makeWrapper
+  build-system = [
     python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python3Packages.gitpython
   ];
 
