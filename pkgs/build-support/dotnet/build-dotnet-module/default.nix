@@ -214,7 +214,12 @@ stdenvNoCC.mkDerivation (
   let
     args = if lib.isFunction fnOrAttrs then fnOrAttrs (args' // finalAttrs) else fnOrAttrs;
     args' = transformArgs finalAttrs args;
-    inherit (args') nugetDeps nugetLockFile runtimeId meta;
+    inherit (args')
+      nugetDeps
+      nugetLockFile
+      runtimeId
+      meta
+      ;
     args'' = removeAttrs args' [
       "nugetDeps"
       "runtimeId"

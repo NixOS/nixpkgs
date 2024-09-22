@@ -24,28 +24,33 @@ let
   package = stdenvNoCC.mkDerivation rec {
     inherit pname version;
 
-    src = let
+    src =
+      let
         urls' = if urls != null then urls else [ url ];
-      in fetchurl ({
-      name = "${pname}.${version}.nupkg";
-      # There is no need to verify whether both sha256 and hash are
-      # valid here, because nuget-to-nix does not generate a deps.nix
-      # containing both.
-      inherit
-        sha256
-        hash
-        version
-        ;
-      urls = urls';
+      in
+      fetchurl (
+        {
+          name = "${pname}.${version}.nupkg";
+          # There is no need to verify whether both sha256 and hash are
+          # valid here, because nuget-to-nix does not generate a deps.nix
+          # containing both.
+          inherit
+            sha256
+            hash
+            version
+            ;
+          urls = urls';
 
-    } // (lib.optionalAttrs removeSignature {
-      downloadToTemp = true;
-      postFetch = ''
-        mv $downloadedFile file.zip
-        ${zip}/bin/zip -d file.zip ".signature.p7s"
-        mv file.zip $out
-      '';
-    }));
+        }
+        // (lib.optionalAttrs removeSignature {
+          downloadToTemp = true;
+          postFetch = ''
+            mv $downloadedFile file.zip
+            ${zip}/bin/zip -d file.zip ".signature.p7s"
+            mv file.zip $out
+          '';
+        })
+      );
 
     nativeBuildInputs = [
       unzip
