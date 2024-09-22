@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "billiard" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python multiprocessing fork with improvements and bugfixes";
     homepage = "https://github.com/celery/billiard";
     changelog = "https://github.com/celery/billiard/blob/v${version}/CHANGES.txt";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }
