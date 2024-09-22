@@ -29973,8 +29973,6 @@ with pkgs;
 
   remontoire = callPackage ../applications/misc/remontoire { };
 
-  waycorner = callPackage ../applications/misc/waycorner { };
-
   wayshot = callPackage ../tools/misc/wayshot { };
 
   waylevel = callPackage ../tools/misc/waylevel { };
