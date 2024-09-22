@@ -26,13 +26,13 @@
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.25";
+  version = "1.8.26";
 
   src = fetchFromGitHub {
     owner = "marlam";
     repo = "msmtp";
     rev = "msmtp-${version}";
-    hash = "sha256-UZKUpF/ZwYPM2rPDudL1O8e8LguKJh9sTcJRT3vgsf4=";
+    hash = "sha256-MV3fzjjyr7qZw/BbKgsSObX+cxDDivI+0ZlulrPFiWM=";
   };
 
   meta = with lib; {
@@ -118,6 +118,7 @@ let
         fix."$MSMTP" = [ "msmtp" ];
         fake.external = [ "ping" ]
           ++ optionals (!withSystemd) [ "systemd-cat" ];
+        keep.source = [ "~/.msmtpqrc" ];
       };
 
       msmtp-queue = {
