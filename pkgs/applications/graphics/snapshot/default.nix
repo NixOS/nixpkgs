@@ -1,9 +1,12 @@
 { stdenv
 , lib
 , fetchurl
+, glycin-loaders
 , cargo
 , desktop-file-utils
+, jq
 , meson
+, moreutils
 , ninja
 , pkg-config
 , rustc
@@ -26,10 +29,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YqfxDJAhui5J5+aOfrie9UDAnyx933fCBeVCydro/7E=";
   };
 
+  patches = [
+    # Fix paths in glycin library
+    glycin-loaders.passthru.glycinPathsPatch
+  ];
+
   nativeBuildInputs = [
     cargo
     desktop-file-utils
+    jq
     meson
+    moreutils # sponge is used in postPatch
     ninja
     pkg-config
     rustc
@@ -41,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-rs # for gtk4paintablesink
     gst_all_1.gstreamer
     gtk4
     libadwaita
@@ -48,10 +59,21 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire # for device provider
   ];
 
+  postPatch = ''
+    # Replace hash of file we patch in vendored glycin.
+    jq \
+      --arg hash "$(sha256sum vendor/glycin/src/sandbox.rs | cut -d' ' -f 1)" \
+      '.files."src/sandbox.rs" = $hash' \
+      vendor/glycin/.cargo-checksum.json \
+      | sponge vendor/glycin/.cargo-checksum.json
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       # vp8enc preset
       --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
 
