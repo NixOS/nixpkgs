@@ -9,7 +9,6 @@
   nodejs,
   runCommand,
   yarn,
-  writeShellScript,
   writers,
 }:
 let
@@ -119,12 +118,12 @@ let
       {
         rootFolder = preStart.outPath;
         preStartScript = writers.writeBash "${pname}-${version}-preStart" ''
-          cd ${preStart.outPath}
+          cd ${preStart}
           ${commonEnvironment}
           ${yarn}/bin/yarn --offline run prisma migrate deploy
         '';
         startScript = writers.writeBash "${pname}-${version}-start" ''
-          cd ${preStart.outPath}
+          cd ${preStart}
           ${yarn}/bin/yarn start
 
         '';
