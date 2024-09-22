@@ -1293,7 +1293,8 @@ won't take effect until you reboot the system.
                 units_to_reload.insert(unit.to_string(), ());
                 record_unit(RELOAD_LIST_FILE, &unit)
             }
-        } else {
+        // systemd creates a transient mount unit for /nix/store, that we shouldn't try to unmount
+        } else if !matches!(mountpoint.as_str(), "/nix/store") {
             // Filesystem entry disappeared, so unmount it.
             units_to_stop.insert(unit, ());
         }
