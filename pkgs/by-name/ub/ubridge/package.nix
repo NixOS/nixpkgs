@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libpcap,
+  nix-update-script,
   testers,
   ubridge,
 }:
@@ -35,9 +36,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = ubridge;
-    command = "ubridge -v";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = ubridge;
+      command = "ubridge -v";
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
