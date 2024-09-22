@@ -4,13 +4,16 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  version = "6.1.3";
+in
+stdenvNoCC.mkDerivation {
   pname = "activemq";
-  version = "6.1.2";
+  inherit version;
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/activemq/${version}/apache-activemq-${version}-bin.tar.gz";
-    hash = "sha256-EJZWrGvXICxp+eDzrX5BPnl/ZuUMO7utKgaS2c4IBQ0=";
+    hash = "sha256-ytFOgW6ZDxMScJ6/wij0KJXYxUxlLTzVbwtRRWNdx5Q=";
   };
 
   installPhase = ''
