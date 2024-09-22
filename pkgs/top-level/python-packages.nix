@@ -10623,7 +10623,7 @@ self: super: with self; {
 
   # Protobuf 4.x
   protobuf4 = callPackage ../development/python-modules/protobuf/4.nix {
-    protobuf = pkgs.protobuf;
+    protobuf = pkgs.protobuf_25;
   };
 
   # Protobuf 5.x
