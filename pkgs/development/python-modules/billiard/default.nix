@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   psutil,
   pythonOlder,
@@ -10,14 +11,18 @@
 buildPythonPackage rec {
   pname = "billiard";
   version = "4.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ErZBsMU5Bz/I0/W4t76ZiVZmXEIzx8H81mp+Z3xPs28=";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "billiard";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9LuAlIn6hNiZGvWuaaDQxx9g0aBVF6Z2krxEOrssqRs=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     psutil
