@@ -756,6 +756,7 @@ mapAliases ({
   kube3d = k3d; # Added 2022-0705
   kafkacat = kcat; # Added 2021-10-07
   kak-lsp = kakoune-lsp; # Added 2024-04-01
+  kargo = throw "kargo was removed as it is deprecated upstream and depends on the removed boto package"; # Added 2024-09-22
   kdbplus = throw "'kdbplus' has been removed from nixpkgs"; # Added 2024-05-06
   kdeconnect = plasma5Packages.kdeconnect-kde; # Added 2020-10-28
   keepassx = throw "KeePassX is no longer actively developed. Please consider KeePassXC as a maintained alternative."; # Added 2023-02-17
