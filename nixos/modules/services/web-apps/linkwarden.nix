@@ -115,6 +115,16 @@ in
 
   };
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.secret != null || cfg.secretFile != null;
+        message = "One of secret or secretFile must be defined";
+      }
+      {
+        assertion = !(cfg.secret == null && cfg.secretFile == null);
+        message = "Only one of secret or secretFile should be defined";
+      }
+    ];
     systemd.services.linkwarden = {
       wantedBy = [ "multi-user.target" ];
       wants = optionals cfg.database.createLocally [ "postgresql.service" ];
