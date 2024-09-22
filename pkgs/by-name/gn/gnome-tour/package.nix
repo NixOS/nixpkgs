@@ -9,7 +9,6 @@
   pkg-config,
   gtk4,
   glib,
-  gdk-pixbuf,
   desktop-file-utils,
   appstream-glib,
   wrapGAppsHook4,
@@ -52,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gdk-pixbuf
     glib
     gtk4
     libadwaita
