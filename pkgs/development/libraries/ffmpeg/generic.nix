@@ -120,7 +120,7 @@
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW # Vdpau hardware acceleration
 , withVideoToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple VideoToolbox
-, withVidStab ? withFullDeps && withGPL # Video stabilization
+, withVidStab ? withHeadlessDeps && withGPL # Video stabilization
 , withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
