@@ -140,7 +140,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [ "d '${cfg.dataDir}' 0700 traefik traefik - -" ];
+    systemd.tmpfiles.settings."10-traefik".${cfg.dataDir}.d = {
+      user = "traefik";
+      group = "traefik";
+      mode = "0700";
+    };
 
     systemd.services.traefik = {
       description = "Traefik web server";
