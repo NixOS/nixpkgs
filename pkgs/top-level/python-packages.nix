@@ -11257,6 +11257,8 @@ self: super: with self; {
 
   pyflume = callPackage ../development/python-modules/pyflume { };
 
+  pyflipper = callPackage ../development/python-modules/pyflipper { };
+
   pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
