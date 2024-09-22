@@ -315,7 +315,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     file_cmds       = callPackage ./file_cmds/package.nix { };
     shell_cmds      = callPackage ./shell_cmds/package.nix { };
     system_cmds     = callPackage ./system_cmds/package.nix { };
-    text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "sha256-KSebU7ZyUsPeqn51nzuGNaNxs9pvmlIQQdkWXIVzDxw=" {};
+    text_cmds       = callPackage ./text_cmds/package.nix { };
     top             = applePackage "top"               "osx-10.11.6"     "sha256-jbz64ODogtpNyLpXGSZj1jCBdFPVXcVcBkL1vc7g5qQ=" {};
     PowerManagement = callPackage ./PowerManagement/package.nix { };
 
