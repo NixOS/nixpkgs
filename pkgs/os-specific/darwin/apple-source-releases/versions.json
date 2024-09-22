@@ -83,6 +83,10 @@
     "hash": "sha256-foIoIMe+zgPISFmE10q4cwEUBhiah4nbD7UtjBumZYU=",
     "version": "66"
   },
+  "remote_cmds": {
+    "hash": "sha256-a5ELSGJSTlyCb3bPdJqYSX320UzIkS2FiHxSpELIgls=",
+    "version": "303.0.2"
+  },
   "removefile": {
     "hash": "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=",
     "version": "45"
