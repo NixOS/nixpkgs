@@ -524,13 +524,13 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
-    systemd.tmpfiles.rules = let
+    systemd.tmpfiles.settings."10-libvirtd"."/var/lib/qemu/vhost-user"."L+".argument = let
       vhostUserCollection = pkgs.buildEnv {
         name = "vhost-user";
         paths = cfg.qemu.vhostUserPackages;
         pathsToLink = [ "/share/qemu/vhost-user" ];
       };
-    in [ "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user" ];
+    in "${vhostUserCollection}/share/qemu/vhost-user";
 
     security.polkit = {
       enable = true;
