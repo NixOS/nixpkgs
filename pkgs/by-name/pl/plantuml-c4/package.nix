@@ -1,4 +1,13 @@
-{ lib, stdenv, makeWrapper, fetchzip, runCommand, plantuml, plantuml-c4, jre }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  makeWrapper,
+  plantuml-c4,
+  plantuml,
+  runCommand,
+}:
 
 # The C4-PlantUML docs say that it suffices to run plantuml with the
 # -DRELATIVE_INCLUDE="..." arg to make plantuml find the C4 templates
@@ -26,20 +35,22 @@ let
   # This way the plantuml derivation can remain unchanged.
   plantumlWithExtraPath =
     let
-      plantumlIncludePath = lib.concatStringsSep ":" [ c4-lib sprites ];
+      plantumlIncludePath = lib.concatStringsSep ":" [
+        c4-lib
+        sprites
+      ];
       includeFlag = "-Dplantuml.include.path=${lib.escapeShellArg plantumlIncludePath}";
-      postFixedJre =
-        runCommand "jre-postfixed" { nativeBuildInputs = [ makeWrapper ]; } ''
-          mkdir -p $out/bin
+      postFixedJre = runCommand "jre-postfixed" { nativeBuildInputs = [ makeWrapper ]; } ''
+        mkdir -p $out/bin
 
-          makeWrapper ${jre}/bin/java $out/bin/java \
-            --add-flags ${lib.escapeShellArg includeFlag}
-        '';
+        makeWrapper ${jre}/bin/java $out/bin/java \
+          --add-flags ${lib.escapeShellArg includeFlag}
+      '';
     in
     plantuml.override { jre = postFixedJre; };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "plantuml-c4";
   version = "2.8.0";
 
@@ -55,13 +66,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.example-c4-diagram =
-    runCommand "c4-plantuml-sample.png" { nativeBuildInputs = [ plantuml-c4 ]; } ''
-      sed 's/https:.*\///' "${c4-lib}/samples/C4_Context Diagram Sample - enterprise.puml" > sample.puml
-      plantuml sample.puml -o $out
+    runCommand "c4-plantuml-sample.png" { nativeBuildInputs = [ plantuml-c4 ]; }
+      ''
+        sed 's/https:.*\///' "${c4-lib}/samples/C4_Context Diagram Sample - enterprise.puml" > sample.puml
+        plantuml sample.puml -o $out
 
-      sed 's/!include ..\//!include /' ${sprites}/examples/complex-example.puml > sprites.puml
-      plantuml sprites.puml -o $out
-    '';
+        sed 's/!include ..\//!include /' ${sprites}/examples/complex-example.puml > sprites.puml
+        plantuml sprites.puml -o $out
+      '';
 
   meta = with lib; {
     description = "PlantUML bundled with C4-Plantuml and plantuml sprites library";
