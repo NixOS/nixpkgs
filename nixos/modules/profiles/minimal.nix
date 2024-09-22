@@ -19,7 +19,7 @@ with lib;
   # Perl is a default package.
   environment.defaultPackages = mkDefault [ ];
 
-  environment.stub-ld.enable = false;
+  environment.stub-ld.enable = mkDefault false;
 
   # The lessopen package pulls in Perl.
   programs.less.lessopen = mkDefault null;
@@ -28,6 +28,8 @@ with lib;
   boot.enableContainers = mkDefault false;
 
   programs.command-not-found.enable = mkDefault false;
+
+  programs.ssh.setXAuthLocation = mkDefault false;
 
   services.logrotate.enable = mkDefault false;
 

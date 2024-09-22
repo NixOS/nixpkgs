@@ -1,12 +1,12 @@
 { lib, appimageTools, fetchurl }:
 
 let
-  version = "2.0.4";
+  version = "2.0.9";
   pname = "lunatask";
 
   src = fetchurl {
     url = "https://lunatask.app/download/Lunatask-${version}.AppImage";
-    sha256 = "sha256-U+yelFSulAhgsn5xt45mxC7qGpQwmb3m3lt9nEW6MHU=";
+    sha256 = "sha256-tV3giMBF3DN8Aop1B1D7pGp3HYPMQlcZ52JrOhxFrEE=";
   };
 
   appimageContents = appimageTools.extractType2 {

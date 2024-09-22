@@ -858,16 +858,10 @@ mapAliases {
   linux-rt_6_1 = linuxKernel.kernels.linux_rt_6_1;
   linuxPackages_4_14 = linuxKernel.packages.linux_4_14;
   linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
-  linuxPackages_4_9 = linuxKernel.packages.linux_4_9;
+  linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
   linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
   linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
-  linuxPackages_5_18 = linuxKernel.packages.linux_5_18;
-  linuxPackages_5_19 = linuxKernel.packages.linux_5_19;
-  linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
-  linuxPackages_6_0 = linuxKernel.packages.linux_6_0;
   linuxPackages_6_1 = linuxKernel.packages.linux_6_1;
-  linuxPackages_6_2 = linuxKernel.packages.linux_6_2;
-  linuxPackages_6_3 = linuxKernel.packages.linux_6_3;
   linuxPackages_6_4 = linuxKernel.packages.linux_6_4;
   linuxPackages_6_5 = linuxKernel.packages.linux_6_5;
   linuxPackages_6_6 = linuxKernel.packages.linux_6_6;
@@ -888,16 +882,10 @@ mapAliases {
   linuxPackages_rt_6_1 = linuxKernel.packages.linux_rt_6_1;
   linux_4_14 = linuxKernel.kernels.linux_4_14;
   linux_4_19 = linuxKernel.kernels.linux_4_19;
-  linux_4_9 = linuxKernel.kernels.linux_4_9;
+  linux_5_4 = linuxKernel.kernels.linux_5_4;
   linux_5_10 = linuxKernel.kernels.linux_5_10;
   linux_5_15 = linuxKernel.kernels.linux_5_15;
-  linux_5_18 = linuxKernel.kernels.linux_5_18;
-  linux_5_19 = linuxKernel.kernels.linux_5_19;
-  linux_5_4 = linuxKernel.kernels.linux_5_4;
-  linux_6_0 = linuxKernel.kernels.linux_6_0;
   linux_6_1 = linuxKernel.kernels.linux_6_1;
-  linux_6_2 = linuxKernel.kernels.linux_6_2;
-  linux_6_3 = linuxKernel.kernels.linux_6_3;
   linux_6_4 = linuxKernel.kernels.linux_6_4;
   linux_6_5 = linuxKernel.kernels.linux_6_5;
   linux_6_6 = linuxKernel.kernels.linux_6_6;
@@ -1620,6 +1608,7 @@ mapAliases {
   ### V ###
 
   v4l_utils = throw "'v4l_utils' has been renamed to/replaced by 'v4l-utils'"; # Converted to throw 2023-09-10
+  validphys2 = throw "validphys2 has been removed, since it has a broken dependency that was removed"; # Added 2024-08-21
   vamp = { vampSDK = vamp-plugin-sdk; }; # Added 2020-03-26
   vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
   vaapiVdpau = libva-vdpau-driver; # Added 2024-06-05

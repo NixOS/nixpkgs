@@ -6205,8 +6205,6 @@ with pkgs;
 
   byzanz = callPackage ../applications/video/byzanz { };
 
-  algolia-cli = callPackage ../development/tools/algolia-cli { };
-
   anydesk = callPackage ../applications/networking/remote/anydesk { };
 
   anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
@@ -7845,7 +7843,7 @@ with pkgs;
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
-      garage_1_0_0 garage_1_x;
+      garage_1_0_1 garage_1_x;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -16415,7 +16413,7 @@ with pkgs;
   luarocks-nix = luaPackages.luarocks-nix;
 
   luarocks-packages-updater = callPackage ../by-name/lu/luarocks-packages-updater/package.nix {
-    pluginupdate = ../../maintainers/scripts/pluginupdate.py;
+    pluginupdate = ../../maintainers/scripts/pluginupdate-py;
   };
 
   luau = callPackage ../development/interpreters/luau { };
@@ -16927,8 +16925,6 @@ with pkgs;
   abuild = callPackage ../development/tools/abuild { };
 
   actiona = libsForQt5.callPackage ../applications/misc/actiona { };
-
-  actionlint = callPackage ../development/tools/analysis/actionlint { };
 
   adreaper = callPackage ../tools/security/adreaper { };
 
@@ -18610,15 +18606,11 @@ with pkgs;
 
   sloc = nodePackages.sloc;
 
-  smatch = callPackage ../development/tools/analysis/smatch { };
-
   smc = callPackage ../tools/misc/smc { };
 
   snakemake = callPackage ../applications/science/misc/snakemake { };
 
   snore = callPackage ../tools/misc/snore { };
-
-  snyk = callPackage ../development/tools/analysis/snyk { };
 
   snzip = callPackage ../tools/archivers/snzip { };
 
@@ -26145,8 +26137,6 @@ with pkgs;
   # hardened kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
   linux_hardened = linuxPackages_hardened.kernel;
-  linuxPackages_4_19_hardened = linuxKernel.packages.linux_4_19_hardened;
-  linux_4_19_hardened = linuxPackages_4_19_hardened.kernel;
   linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
   linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
   linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
@@ -36679,8 +36669,6 @@ with pkgs;
 
   shtns = callPackage ../applications/science/physics/shtns { };
 
-  validphys2 = with python3Packages; toPythonApplication validphys2;
-
   xfitter = callPackage ../applications/science/physics/xfitter { };
 
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
@@ -38492,9 +38480,7 @@ with pkgs;
 
   vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins {
-    luaPackages = lua51Packages;
-  });
+  vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins { });
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
