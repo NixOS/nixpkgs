@@ -10791,7 +10791,7 @@ with pkgs;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
-  ophis = python3Packages.callPackage ../development/compilers/ophis { };
+  ophis = callPackage ../development/compilers/ophis { };
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
