@@ -20,7 +20,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-YcqscjaTBvqXePItsGLImij7sFQ6u0AP/MlfkKsGND8=";
+  xcodeHash = "sha256-yHNa6cpI3T4R/iakeHmL6S/c9p+VpYR4fudv2UXUpnY=";
 
   postUnpack = ''
     mkdir -p "$sourceRoot/arpa"
