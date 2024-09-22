@@ -16948,8 +16948,6 @@ with pkgs;
 
   actiona = libsForQt5.callPackage ../applications/misc/actiona { };
 
-  actionlint = callPackage ../development/tools/analysis/actionlint { };
-
   adreaper = callPackage ../tools/security/adreaper { };
 
   aeron = callPackage ../servers/aeron { };
