@@ -80,7 +80,10 @@ stdenv.mkDerivation {
     mainProgram = "plantuml";
     homepage = "https://github.com/plantuml-stdlib/C4-PlantUML";
     license = licenses.mit;
-    maintainers = with maintainers; [ tfc ];
+    maintainers = with maintainers; [
+      tfc
+      anthonyroussel
+    ];
     platforms = platforms.unix;
   };
 }
