@@ -18,7 +18,7 @@ mkAppleDerivation (finalAttrs: {
     "dev"
   ];
 
-  xcodeHash = "sha256-wTKaRMqKC6T/nxJIEr6IlRGgsPwObgi/spw5gk2lACg=";
+  xcodeHash = "sha256-IiTqhEJIZ8JYjlpBS7ITwYlp8ndU6cehus9TIr+5LYM=";
 
   patches =
     lib.optionals hostPlatform.isStatic [
