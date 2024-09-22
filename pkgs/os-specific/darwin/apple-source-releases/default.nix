@@ -313,7 +313,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     diskdev_cmds    = callPackage ./diskdev_cmds/package.nix { };
     network_cmds    = callPackage ./network_cmds/package.nix { };
     file_cmds       = callPackage ./file_cmds/package.nix { };
-    shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "sha256-kmEOprkiJGMVcl7yHkGX8ymk/5KjE99gWuF8j2hK5hY=" {};
+    shell_cmds      = callPackage ./shell_cmds/package.nix { };
     system_cmds     = applePackage "system_cmds"       "macos-14.3"      "sha256-qFp9nkzsq9uQ7zoyfvO+3gvDlc7kaPvn6luvmO/Io30=" {};
     text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "sha256-KSebU7ZyUsPeqn51nzuGNaNxs9pvmlIQQdkWXIVzDxw=" {};
     top             = applePackage "top"               "osx-10.11.6"     "sha256-jbz64ODogtpNyLpXGSZj1jCBdFPVXcVcBkL1vc7g5qQ=" {};
