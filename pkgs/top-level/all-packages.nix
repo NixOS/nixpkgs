@@ -11418,7 +11418,9 @@ with pkgs;
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose { };
 
-  podman-desktop = callPackage ../applications/virtualization/podman-desktop {};
+  podman-desktop = callPackage ../applications/virtualization/podman-desktop {
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
 
   pods = callPackage ../applications/virtualization/pods { };
 

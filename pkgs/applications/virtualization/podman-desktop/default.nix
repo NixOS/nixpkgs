@@ -1,31 +1,40 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, applyPatches
 , fetchYarnDeps
 , yarn
 , fixup-yarn-lock
 , nodejs
 , makeWrapper
 , copyDesktopItems
-, desktopToDarwinBundle
 , electron
 , makeDesktopItem
+, xcbuild
+, autoSignDarwinBinariesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "0.12.0";
+  version = "1.12.0";
 
-  src = fetchFromGitHub {
-    owner = "containers";
-    repo = "podman-desktop";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gEjcI+bfETYZB/pHDXRcNxNVDsbwuqQL1E22fMkIJHI=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "containers";
+      repo = "podman-desktop";
+      rev = "v${finalAttrs.version}";
+      sha256 = "sha256-AdiomKM2RfJQKnyrcsdh8FtX7NuAj3g0KQ3pzy76gYI=";
+    };
+    # fix handling of Unix epoch timestamps for zip header, https://github.com/cthackers/adm-zip/pull/518
+    # apply the patch early so that fetchYarnDeps can pull the patched yarn.lock
+    patches = [
+      ./patches/0001-chore-deps-bump-adm-zip-from-0.5.14-to-0.5.15.patch
+    ];
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    sha256 = "sha256-x0hqNxi6r1i3vBe1tJQl+Oht2St9VIH3Eq27MZLkojA=";
+    sha256 = "sha256-y3ftK2SrysaWoHKEUeTF7aFp3yKmKcdVEJtOOKLr2G0=";
   };
 
   patches = [
@@ -49,10 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     nodejs
     makeWrapper
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    desktopToDarwinBundle
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild.xcrun
+    autoSignDarwinBinariesHook
   ];
 
   configurePhase = ''
@@ -71,9 +81,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     yarn --offline run build
+
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Disable code signing during build on macOS.
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    sed -i "/afterSign/d" .electron-builder.config.cjs
+  '' + ''
     yarn --offline run electron-builder --dir \
       --config .electron-builder.config.cjs \
-      -c.electronDist=${electron.dist} \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -83,6 +101,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/share/lib/podman-desktop"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv dist/mac*/Podman\ Desktop.app $out/Applications
+    ln -s $out/Applications/Podman\ Desktop.app/Contents/Resources "$out/share/lib/podman-desktop/resources"
+
+    makeWrapper "$out/Applications/Podman Desktop.app/Contents/MacOS/Podman Desktop" $out/bin/podman-desktop
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
 
     install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
@@ -91,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --inherit-argv0
+  '' + ''
 
     runHook postInstall
   '';
