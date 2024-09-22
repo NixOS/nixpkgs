@@ -56,6 +56,7 @@ makeScopeWithSplicing' {
 
       mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
       mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
+      addPackageLockDeps = callPackage ../../../build-support/dotnet/add-packagelock-deps { };
       addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
       fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
 
