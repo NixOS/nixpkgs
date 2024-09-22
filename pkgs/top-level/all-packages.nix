@@ -13582,8 +13582,6 @@ with pkgs;
 
   wego = callPackage ../applications/misc/wego { };
 
-  wal_e = callPackage ../tools/backup/wal-e { };
-
   wander = callPackage ../tools/admin/wander { };
 
   watchexec = callPackage ../tools/misc/watchexec {
