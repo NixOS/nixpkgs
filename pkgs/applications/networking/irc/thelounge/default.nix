@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "thelounge";
     repo = "thelounge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-csVrgsEy9HjSBXxtgNG0hcBrR9COlcadhMQrw6BWPc4=";
+    hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
   };
 
   # Allow setting package path for the NixOS module.
