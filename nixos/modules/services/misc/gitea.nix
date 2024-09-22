@@ -492,33 +492,40 @@ in
       ];
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+    systemd.tmpfiles.settings."10-gitea" = let
+      defaultConfig = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+    in {
+      ${cfg.dump.backupDir}.d = defaultConfig;
+      ${cfg.dump.backupDir}.z = defaultConfig;
+      ${cfg.repositoryRoot}.d = defaultConfig;
+      ${cfg.repositoryRoot}.z = defaultConfig;
+
+      ${cfg.stateDir}.d = defaultConfig;
+      "${cfg.stateDir}/conf".d = defaultConfig;
+      ${cfg.customDir}.d = defaultConfig;
+      "${cfg.customDir}/conf".d = defaultConfig;
+      "${cfg.stateDir}/data".d = defaultConfig;
+      "${cfg.stateDir}/log".d = defaultConfig;
+      ${cfg.stateDir}.z = defaultConfig;
+      "${cfg.stateDir}/.ssh".z = defaultConfig // { mode = "0700"; };
+      "${cfg.stateDir}/conf".z = defaultConfig;
+      ${cfg.customDir}.z = defaultConfig;
+      "${cfg.customDir}/conf".z = defaultConfig;
+      "${cfg.stateDir}/data".z = defaultConfig;
+      "${cfg.stateDir}/log".z = defaultConfig;
 
       # If we have a folder or symlink with gitea locales, remove it
       # And symlink the current gitea locales in place
-      "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
+      "${cfg.stateDir}/conf/locale"."L+".argument = "${cfg.package.out}/locale";
 
-    ] ++ lib.optionals cfg.lfs.enable [
-      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-    ];
+      ${cfg.lfs.contentDir} = lib.mkIf cfg.lfs.enable {
+        d = defaultConfig;
+        z = defaultConfig;
+      };
+    };
 
     systemd.services.gitea = {
       description = "gitea";
