@@ -101,6 +101,8 @@ let
         no-sdk = with-sdk null;
       };
 
+    passthru.updateScript = ./update.sh;
+
     meta = {
       description = "OmniSharp based on roslyn workspaces";
       homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
