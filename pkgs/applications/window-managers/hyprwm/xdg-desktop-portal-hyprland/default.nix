@@ -2,15 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  pkg-config,
-  wayland-scanner,
   makeWrapper,
+  pkg-config,
   wrapQtAppsHook,
   nix-update-script,
+  hyprland,
   hyprland-protocols,
   hyprlang,
+  hyprutils,
+  hyprwayland-scanner,
   libdrm,
   mesa,
   pipewire,
@@ -18,42 +19,22 @@
   qttools,
   qtwayland,
   sdbus-cpp,
+  slurp,
   systemd,
   wayland,
   wayland-protocols,
-  hyprland,
-  hyprpicker,
-  slurp,
+  wayland-scanner,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-cyyxu/oj4QEFp3CVx2WeXa9T4OAUyynuBJHGkBZSxJI=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-xTqnMoJsEojuvqJLuM+U7EZ7q71efaj3pbvjutq4TXc=";
   };
-
-  patches = [
-    # CMake formatting, required for the next two commits to cleanly apply
-    (fetchpatch {
-      url = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/commit/5555f467f68ce7cdf1060991c24263073b95e9da.patch";
-      hash = "sha256-yNkg7GCXDPJdsE7M6J98YylnRxQWpcM5N3olix7Oc1A=";
-    })
-    # removes wayland-scanner from deps, as it includes a pkg-config that
-    # defines that it has a non-existent include directory which trips up CMake
-    (fetchpatch {
-      url = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/commit/0dd9af698b9386bcf25d3ea9f5017eca721831c1.patch";
-      hash = "sha256-Y6eWASHoMXVN2rYJ1rs0jy2qP81/qbHsZU+6b7XNBBg=";
-    })
-    # handle finding wayland-scanner more nicely
-    (fetchpatch {
-      url = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/commit/2425e8f541525fa7409d9f26a8ffaf92a3767251.patch";
-      hash = "sha256-6dCg/U/SIjtvo07Z3tn0Hn8Xwx72nwVz6Q2cFnObonU=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -61,15 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    pkg-config
-    wayland-scanner
     makeWrapper
+    pkg-config
     wrapQtAppsHook
+    hyprwayland-scanner
   ];
 
   buildInputs = [
     hyprland-protocols
     hyprlang
+    hyprutils
     libdrm
     mesa
     pipewire
@@ -80,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     wayland
     wayland-protocols
+    wayland-scanner
   ];
 
   dontWrapQtApps = true;
@@ -95,12 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${
-        lib.makeBinPath [
-          (placeholder "out")
-          hyprpicker
-        ]
-      }
+      --prefix PATH ":" ${lib.makeBinPath [ (placeholder "out") ]}
   '';
 
   passthru = {
