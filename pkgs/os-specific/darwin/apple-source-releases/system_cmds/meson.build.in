@@ -3,7 +3,7 @@
 
 
 # Project settings
-project('system_cmds', 'c', version : '@version@')
+project('system_cmds', 'c', 'objc', version : '@version@')
 
 add_project_arguments(
     '-D__FreeBSD__',
@@ -199,7 +199,9 @@ executable(
         'gcore/corefile.c',
         'gcore/dyld.c',
         'gcore/dyld_shared_cache.c',
+        'gcore/gcore_framework.m',
         'gcore/main.c',
+        'gcore/notes.c',
         'gcore/sparse.c',
         'gcore/threads.c',
         'gcore/utils.c',
@@ -575,6 +577,7 @@ executable(
 
 executable(
     'zdump',
+    c_args : [ '-DHAVE_LOCALTIME_RZ=0' ],
     include_directories : 'zic',
     install : true,
     sources : 'zdump/zdump.c',
