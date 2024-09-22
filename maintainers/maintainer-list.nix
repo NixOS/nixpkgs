@@ -21271,6 +21271,12 @@
     githubId = 3159881;
     name = "Tobias Markus";
   };
+  tmayoff = {
+    email = "tyler@tylermayoff.com";
+    github = "tmayoff";
+    githubId = 10094264;
+    name = "Tyler Mayoff";
+  };
   tm-drtina = {
     email = "tm.drtina@gmail.com";
     github = "tm-drtina";
