@@ -252,11 +252,24 @@ in
         cfg.sshAccess;
     };
     users.groups.btrbk = { };
-    systemd.tmpfiles.rules = [
-      "d /var/lib/btrbk 0750 btrbk btrbk"
-      "d /var/lib/btrbk/.ssh 0700 btrbk btrbk"
-      "f /var/lib/btrbk/.ssh/config 0700 btrbk btrbk - StrictHostKeyChecking=accept-new"
-    ];
+    systemd.tmpfiles.settings."10-btrbk" = {
+      "/var/lib/btrbk".d = {
+        user = "btrbk";
+        group = "btrbk";
+        mode = "0750";
+      };
+      "/var/lib/btrbk/.ssh".d = {
+        user = "btrbk";
+        group = "btrbk";
+        mode = "0700";
+      };
+      "/var/lib/btrbk/.ssh/config".f = {
+        user = "btrbk";
+        group = "btrbk";
+        mode = "0700";
+        argument = "StrictHostKeyChecking=accept-new";
+      };
+    };
     environment.etc = mapAttrs'
       (
         name: instance: {
