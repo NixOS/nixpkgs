@@ -34,7 +34,7 @@ buildPythonPackage rec {
   version = "1.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "matplotlib~=3.0" "matplotlib"
+      --replace-fail "matplotlib~=3.0" "matplotlib"
   '';
 
   build-system = [ setuptools ];
