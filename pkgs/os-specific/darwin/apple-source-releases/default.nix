@@ -316,7 +316,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     shell_cmds      = callPackage ./shell_cmds/package.nix { };
     system_cmds     = callPackage ./system_cmds/package.nix { };
     text_cmds       = callPackage ./text_cmds/package.nix { };
-    top             = applePackage "top"               "osx-10.11.6"     "sha256-jbz64ODogtpNyLpXGSZj1jCBdFPVXcVcBkL1vc7g5qQ=" {};
+    top             = callPackage ./top/package.nix { };
     PowerManagement = callPackage ./PowerManagement/package.nix { };
 
     # `configdHeaders` can’t use an override because `pkgs.darwin.configd` on aarch64-darwin will
