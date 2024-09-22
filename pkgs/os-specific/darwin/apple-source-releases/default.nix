@@ -261,7 +261,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     inherit (self.adv_cmds) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "sha256-cUKeMx6mOAxBSRHIdfzsrR65Qv86m7+20XvpKqVfwVI=" {};
     AvailabilityVersions = callPackage ./AvailabilityVersions/package.nix { };
-    bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "sha256-CW8zP5QZMhWTGp+rhrm8oHE/vSLsRlv1VRAGe1OUDmI=" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "sha256-UNaHvxzYzEBnYYuoMLqWUVprZa6Wqn/3XleoSCco050=" {};
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "sha256-FLgODBrfv+XsGaAjddncYAm/BIJJYw6LcwX/z7ncKFM=" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
