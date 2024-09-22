@@ -14,5 +14,9 @@
   "bootstrap_cmds": {
     "hash": "sha256-dJmwRgUoBilkfgEeebsJBTbB/YqSHPtSrbifLSN/62E=",
     "version": "121"
+  },
+  "copyfile": {
+    "hash": "sha256-uHqLFOIpXK+n0RHyOZzVsP2DDZcFDivKCnqHBaXvHns=",
+    "version": "138"
   }
 }
