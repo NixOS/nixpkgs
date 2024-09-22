@@ -1,185 +1,131 @@
 {
   lib,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  libpng,
+  libxml2,
+  makeBinaryWrapper,
+  ninja,
   stdenv,
-  makeWrapper,
-  writeText,
-  writeTextFile,
-  runCommand,
-  callPackage,
-  CoreServices,
-  ImageIO,
-  CoreGraphics,
-  xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX",
-  xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1",
-  sdkVer ? stdenv.targetPlatform.darwinSdkVersion or "10.12",
-  productBuildVer ? null,
+  zlib,
+
+  # These arguments are obsolete but required to avoid evaluation errors for now
+  CoreGraphics ? null,
+  CoreServices ? null,
+  ImageIO ? null,
 }:
 
 let
-
-  toolchainName = "com.apple.dt.toolchain.XcodeDefault";
-  sdkName = "${xcodePlatform}${sdkVer}";
-  xcrunSdkName = lib.toLower xcodePlatform;
-
-  # TODO: expose MACOSX_DEPLOYMENT_TARGET in nix so we can use it here.
-  sdkBuildVersion = "17E189";
-  xcodeSelectVersion = "2349";
-
-  xcbuild = callPackage ./default.nix {
-    inherit
-      CoreServices
-      ImageIO
-      CoreGraphics
-      stdenv
-      ;
+  googletest = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    rev = "43359642a1c16ad3f4fc575c7edd0cb935810815";
+    sha256 = "sha256-mKjXaawFHSRrbJBtADJ1Pdk6vtuD+ax0HFk6YaBSnXg=";
   };
 
-  toolchains = callPackage ./toolchains.nix { inherit toolchainName stdenv; };
-
-  sdks = callPackage ./sdks.nix {
-    inherit
-      toolchainName
-      sdkName
-      xcodePlatform
-      sdkVer
-      productBuildVer
-      ;
+  linenoise = fetchFromGitHub {
+    owner = "antirez";
+    repo = "linenoise";
+    rev = "c894b9e59f02203dbe4e2be657572cf88c4230c3";
+    sha256 = "sha256-nKxwWuSqr89lvI9Y3QAW5Mo7/iFfMNj/OOQVeA/FWnE=";
   };
-
-  platforms = callPackage ./platforms.nix { inherit sdks xcodePlatform stdenv; };
-
-  xcconfig = writeText "nix.xcconfig" ''
-    SDKROOT=${sdkName}
-  '';
-
-  xcode-select = writeText "xcode-select" ''
-    #!${stdenv.shell}
-    while [ $# -gt 0 ]; do
-       case "$1" in
-             -h | --help) ;; # noop
-             -s | --switch) shift;; # noop
-             -r | --reset) ;; # noop
-             -v | --version) echo xcode-select version ${xcodeSelectVersion} ;;
-             -p | -print-path | --print-path) echo @DEVELOPER_DIR@ ;;
-             --install) ;; # noop
-        esac
-        shift
-    done
-  '';
-
-  xcrun = writeTextFile {
-    name = "xcrun";
-    executable = true;
-    destination = "/bin/xcrun";
-    text = ''
-      #!${stdenv.shell}
-      args=( "$@" )
-
-      # If an SDK was requested, check that it matches.
-      for ((i = 0; i < ''${#args[@]}; i++)); do
-        case "''${args[i]}" in
-          --sdk | -sdk)
-            i=$((i + 1))
-            if [[ "''${args[i]}" != '${xcrunSdkName}' ]]; then
-              echo >&2 "xcodebuild: error: SDK \"''${args[i]}\" cannot be located."
-              exit 1
-            fi
-            ;;
-        esac
-      done
-
-      while [ $# -gt 0 ]; do
-         case "$1" in
-               --sdk | -sdk) shift ;;
-               --toolchain | -toolchain) shift ;;
-               --find | -find | -f)
-                 shift
-                 command -v $1 || exit 1 ;;
-               --log | -log) ;; # noop
-               --verbose | -verbose) ;; # noop
-               --no-cache | -no-cache) ;; # noop
-               --kill-cache | -kill-cache) ;; # noop
-               --show-sdk-path | -show-sdk-path)
-                 echo ${sdks}/${sdkName}.sdk ;;
-               --show-sdk-platform-path | -show-sdk-platform-path)
-                 echo ${platforms}/${xcodePlatform}.platform ;;
-               --show-sdk-version | -show-sdk-version)
-                 echo ${sdkVer} ;;
-               --show-sdk-build-version | -show-sdk-build-version)
-                 echo ${sdkBuildVersion} ;;
-               *) break ;;
-          esac
-          shift
-      done
-
-      if ! [[ -z "$@" ]]; then
-         exec "$@"
-      fi
-    '';
-    checkPhase = ''
-      ${stdenv.shellDryRun} "$target"
-    '';
-  };
-
 in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "xcbuild";
 
-runCommand "xcodebuild-${xcbuild.version}"
-  {
-    nativeBuildInputs = [ makeWrapper ];
-    inherit (xcbuild) meta;
+  outputs = [
+    "out"
+    "xcrun"
+  ];
 
-    # ensure that the toolchain goes in PATH
-    propagatedBuildInputs = [ "${toolchains}/XcodeDefault.xctoolchain" ];
+  # Once a version is released that includes
+  # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
+  # we can stop doing this -pre thing.
+  version = "0.1.2-pre";
 
-    passthru = {
-      inherit xcbuild xcrun;
-      toolchain = "${toolchains}/XcodeDefault.xctoolchain";
-      sdk = "${sdks}/${sdkName}";
-      platform = "${platforms}/${xcodePlatform}.platform";
-    };
+  src = fetchFromGitHub {
+    owner = "facebook";
+    repo = "xcbuild";
+    rev = "32b9fbeb69bfa2682bd0351ec2f14548aaedd554";
+    sha256 = "1xxwg2849jizxv0g1hy0b1m3i7iivp9bmc4f5pi76swsn423d41m";
+  };
 
-    preferLocalBuild = true;
-  }
-  ''
-    mkdir -p $out/bin
+  patches = [
+    # Add missing header for `abort`
+    ./patches/includes.patch
+  ];
 
-    ln -s $out $out/usr
+  prePatch = ''
+    rmdir ThirdParty/*
+    cp -r --no-preserve=all ${googletest} ThirdParty/googletest
+    cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
+  '';
 
-    mkdir -p $out/Library/Xcode
-    ln -s ${xcbuild}/Library/Xcode/Specifications $out/Library/Xcode/Specifications
+  postPatch =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      # Fix build on gcc-13 due to missing includes
+      sed -e '1i #include <cstdint>' -i \
+        Libraries/libutil/Headers/libutil/Permissions.h \
+        Libraries/pbxbuild/Headers/pbxbuild/Tool/AuxiliaryFile.h \
+        Libraries/pbxbuild/Headers/pbxbuild/Tool/Invocation.h
 
-    ln -s ${platforms} $out/Platforms
-    ln -s ${toolchains} $out/Toolchains
+      # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+      sed 1i'#include <sys/sysmacros.h>' \
+        -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Apple Open Sourced LZFSE, but not libcompression, and it isn't
+      # part of an impure framework we can add
+      substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+        --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
+    '';
 
-    mkdir -p $out/Applications/Xcode.app/Contents
-    ln -s $out $out/Applications/Xcode.app/Contents/Developer
+  strictDeps = true;
 
-    # The native xcodebuild command supports an invocation like "xcodebuild -version -sdk" without specifying the specific SDK, so we simulate this by
-    # detecting this case and simulating the output; printing the header and appending the normal output via appending the sdk version to the positional
-    # arguments we pass through to the wrapped xcodebuild.
-    makeWrapper ${xcbuild}/bin/xcodebuild $out/bin/xcodebuild \
-      --add-flags "-xcconfig ${xcconfig}" \
-      --add-flags "DERIVED_DATA_DIR=." \
-      --set DEVELOPER_DIR "$out" \
-      --set SDKROOT ${sdkName} \
-      --run '[ "$#" -eq 2 ] && [ "$1" = "-version" ] && [ "$2" = "-sdk" ] && echo ${sdkName}.sdk - macOS ${sdkVer} \(macosx${sdkVer}\) && set -- "$@" "${sdkName}"' \
-      --run '[ "$1" = "-version" ] && [ "$#" -eq 1 ] && (echo Xcode ${xcodeVer}; echo Build version ${sdkBuildVersion}) && exit 0' \
-      --run '[ "$1" = "-license" ] && exit 0'
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-    substitute ${xcode-select} $out/bin/xcode-select \
-      --subst-var-by DEVELOPER_DIR $out/Applications/Xcode.app/Contents/Developer
-    chmod +x $out/bin/xcode-select
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+    ninja
+  ];
 
-    cp ${xcrun}/bin/xcrun $out/bin/xcrun
+  buildInputs = [
+    libpng
+    libxml2
+    zlib
+  ];
 
-    for bin in PlistBuddy actool builtin-copy builtin-copyPlist \
-               builtin-copyStrings builtin-copyTiff \
-               builtin-embeddedBinaryValidationUtility \
-               builtin-infoPlistUtility builtin-lsRegisterURL \
-               builtin-productPackagingUtility builtin-validationUtility \
-               lsbom plutil; do
-      ln -s ${xcbuild}/bin/$bin $out/bin/$bin
-    done
+  # TODO: instruct cmake not to put it in /usr, rather than cleaning up
+  postInstall = ''
+    mv $out/usr/* $out
+    rmdir $out/usr
+    cp liblinenoise.* $out/lib/
 
-    fixupPhase
-  ''
+    mkdir -p "$xcrun/bin"
+    ln -s "$out/bin/xcrun" "$xcrun/bin/xcrun"
+
+    # xcbuild and xcrun support absolute paths, but they can’t find the SDK with the way it’s set up in
+    # the store. Fortunately, the combination of `DEVELOPER_DIR` and a plain `SDKROOT` is enough.
+    wrapProgram "$out/bin/xcbuild" --set SDKROOT macosx
+    wrapProgram "$out/bin/xcrun" --set SDKROOT macosx
+  '';
+
+  __structuredAttrs = true;
+
+  passthru = {
+    xcbuild = lib.warn "xcbuild.xcbuild is deprecated and will be removed; use xcbuild instead." finalAttrs.finalPackage;
+  };
+
+  meta = {
+    description = "Xcode-compatible build tool";
+    homepage = "https://github.com/facebook/xcbuild";
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+    ];
+    maintainers = lib.teams.darwin.members;
+    platforms = lib.platforms.unix;
+  };
+})

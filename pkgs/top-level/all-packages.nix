@@ -18614,7 +18614,6 @@ with pkgs;
   xcode-install = callPackage ../development/tools/xcode-install { };
 
   xcbuild = callPackage ../by-name/xc/xcbuild/package.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
     stdenv =
       # xcbuild is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
       if stdenv.hostPlatform.isDarwin then
