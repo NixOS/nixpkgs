@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gensio";
-  version = "2.8.5";
+  version = "2.8.9";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J1fP3CtTLkUMZxzsbu3ZMbg4ag1NFvaI5AibFT7eZso=";
+    sha256 = "sha256-xW3I1OfL+AfbeKf/kwBdsZRoCsPPZ7oLMppeIepn/P0=";
   };
 
   passthru = {
