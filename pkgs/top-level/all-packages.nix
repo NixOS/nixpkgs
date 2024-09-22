@@ -6217,8 +6217,6 @@ with pkgs;
 
   byzanz = callPackage ../applications/video/byzanz { };
 
-  algolia-cli = callPackage ../development/tools/algolia-cli { };
-
   anydesk = callPackage ../applications/networking/remote/anydesk { };
 
   anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
