@@ -11,6 +11,10 @@
     "hash": "sha256-p3CYITMljHVuwijeYnUbKaIWp/xPC4/hg1G1lO6PlFU=",
     "version": "66108"
   },
+  "PowerManagement": {
+    "hash": "sha256-bYGtYnBOcE5W03AZzfVTJXPZ6GgryGAMt/LgLPxFkVk=",
+    "version": "572.50.1"
+  },
   "adv_cmds": {
     "hash": "sha256-Ztp8ALWcviEpthoiY8ttWzGI8OcsLzsULjlqe8GIzw8=",
     "version": "163"
