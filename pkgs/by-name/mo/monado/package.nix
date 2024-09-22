@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ Scrumplex expipiplus1 prusnak ];
+    maintainers = with maintainers; [ Scrumplex expipiplus1 prusnak pandapip1 ];
     platforms = platforms.linux;
     mainProgram = "monado-cli";
   };
