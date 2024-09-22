@@ -44,6 +44,7 @@ let
         '${libmalloc}/private/stack_logging.h' \
         '${libplatform}/private/_simple.h' \
         '${xnu}/libsyscall/wrappers/spawn/spawn_private.h'
+      touch "$out/include/btm.h"
 
       cp -r '${libdispatch}/private' "$out/include/dispatch"
       # Work around availability headers compatibility issue when building with an unprocessed SDK.
@@ -59,6 +60,7 @@ let
       install -D -t "$out/include/os" \
         '${Libc}/os/assumes.h' \
         '${xnu}/libkern/os/base_private.h'
+      touch "$out/include/os/feature_private.h"
 
       install -D -t "$out/include/sys" \
         '${xnu}/bsd/sys/csr.h' \
@@ -77,7 +79,7 @@ in
 mkAppleDerivation {
   releaseName = "system_cmds";
 
-  xcodeHash = "sha256-KYOKLOwJyHwIQmIdCCN+UtiqKSr8NLPJudIOiznbfMw=";
+  xcodeHash = "sha256-gdtn3zNIneZKy6+X0mQ51CFVLNM6JQYLbd/lotG5/Tw=";
 
   patches = [
     # Use availability checks to fall back to older APIs on older macOS versions.
@@ -87,6 +89,9 @@ mkAppleDerivation {
   postPatch = ''
     # Replace hard-coded, impure system paths with the output path in the store.
     sed -e "s|PATH=[^;]*|PATH='$out/bin'|" -i "pagesize/pagesize.sh"
+
+    # Requires BackgroundTaskManagement.framework headers.
+    sed -e '/    if (os_feature_enabled(cronBTMToggle, cronBTMCheck))/,/    }/d' -i atrun/atrun.c
   '';
 
   preConfigure = ''
