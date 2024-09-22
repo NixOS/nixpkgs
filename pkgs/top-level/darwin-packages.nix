@@ -232,8 +232,6 @@ impure-cmds // appleSourcePackages // stubs // {
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
 
-  libtapi = pkgs.libtapi;
-
   ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
