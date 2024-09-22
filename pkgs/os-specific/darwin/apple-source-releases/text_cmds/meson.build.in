@@ -6,6 +6,9 @@ project('text_cmds', 'c', version : '@version@')
 add_global_arguments(
     # Many programs use old prototypes
     '-Wno-deprecated-non-prototype',
+    # Needed to build errx functions from Libc
+    '-include', 'crt_externs.h',
+    '-D_getprogname()=(*_NSGetProgname())',
     language : 'c',
 )
 
@@ -16,6 +19,7 @@ cc = meson.get_compiler('c')
 
 bzip2 = dependency('bzip2')
 libbsd = dependency('libbsd-overlay', required : false)
+libmd = dependency('libmd')
 libresolv = cc.find_library('resolv')
 libutil = cc.find_library('util')
 libxo = dependency('libxo')
@@ -42,6 +46,7 @@ executable(
         'bintrans/qp.c',
         'bintrans/uudecode.c',
         'bintrans/uuencode.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
     ],
 )
 install_man(
@@ -78,14 +83,20 @@ executable(
     'col',
     dependencies : [ libbsd ],
     install : true,
-    sources : [ 'col/col.c' ],
+    sources : [
+        'col/col.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
 )
 install_man('col/col.1')
 
 executable(
     'colrm',
     install : true,
-    sources : [ 'colrm/colrm.c' ],
+    sources : [
+        'colrm/colrm.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
 )
 install_man('colrm/colrm.1')
 
@@ -99,14 +110,20 @@ install_man('column/column.1')
 executable(
     'comm',
     install : true,
-    sources : [ 'comm/comm.c' ],
+    sources : [
+        'comm/comm.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
 )
 install_man('comm/comm.1')
 
 executable(
     'csplit',
     install : true,
-    sources : [ 'csplit/csplit.c' ],
+    sources : [
+        'csplit/csplit.c',
+        fs.exists('err-libc.c') ? 'err-libc.c' : [ ],
+    ],
 )
 install_man('csplit/csplit.1')
 
@@ -134,26 +151,6 @@ install_man(
     'ed/ed.1',
     'ed/red.1',
 )
-
-executable(
-    'ee',
-    c_args : [ '-Wno-format-security' ],
-    dependencies : [ ncurses ],
-    c_args : [
-        '-DHAS_NCURSES',
-        '-DHAS_STDARG',
-        '-DHAS_STDLIB',
-        '-DHAS_SYS_WAIT',
-        '-DHAS_UNISTD',
-        '-DNO_CATGETS',
-    ],
-    install : true,
-    sources : [
-        'ee/ee.c',
-        'ee/new_curse.c',
-    ],
-)
-install_man('ee/ee.1')
 
 executable(
     'expand',
@@ -227,13 +224,28 @@ install_man('look/look.1')
 
 executable(
     'md5',
+    dependencies : [ libmd ],
     install : true,
-    sources : [
-        'md5/commoncrypto.c',
-        'md5/md5.c',
-    ],
+    sources : [ 'md5/md5.c' ],
 )
 install_man('md5/md5.1')
+foreach cmd : [ 'md5', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512' ]
+    foreach suffix : [ '', 'sum' ]
+        cmd += suffix
+        if cmd != 'md5'
+            install_symlink(
+                cmd,
+                install_dir : get_option('bindir'),
+                pointing_to : 'md5',
+            )
+            install_symlink(
+                f'@cmd@.1',
+                install_dir : get_option('mandir') + '/man1',
+                pointing_to : 'md5.1',
+            )
+        endif
+    endforeach
+endforeach
 
 executable(
     'nl',
@@ -304,7 +316,7 @@ executable(
 
 executable(
     'split',
-    dependencies : [ libutil ],
+    dependencies : [ libbsd, libutil ],
     install : true,
     sources : [ 'split/split.c' ],
 )
@@ -354,6 +366,7 @@ executable(
 
 executable(
     'uniq',
+    dependencies : [ libbsd ],
     install : true,
     sources : [ 'uniq/uniq.c' ],
 )
