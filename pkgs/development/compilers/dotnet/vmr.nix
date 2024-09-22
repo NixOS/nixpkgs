@@ -138,7 +138,9 @@ stdenv.mkDerivation rec {
                        (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
-  patches = lib.optionals (lib.versionOlder version "9") [
+  patches = lib.optionals (lib.versionAtLeast version "9") [
+    ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
+  ] ++ lib.optionals (lib.versionOlder version "9") [
     ./fix-aspnetcore-portable-build.patch
   ];
 
