@@ -6,7 +6,6 @@
   pkg-config,
   boost,
   howard-hinnant-date,
-  nix,
 
   # for tests
   runCommand,
@@ -31,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     howard-hinnant-date
-    nix
+    nixVersions.nix_2_18
   ];
 
   passthru.tests = let
