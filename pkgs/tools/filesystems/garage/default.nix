@@ -111,16 +111,16 @@ rec {
     broken = stdenv.isDarwin;
   };
 
-  garage_1_0_0 = generic {
-    version = "1.0.0";
-    sha256 = "sha256-5W5cXylFCrDup+HOOUVPWBJUSphOp8szgtpvRIv82b8=";
-    cargoSha256 = "sha256-tXO+Vk6bYpayNWi/y4sMtkn2EQ9wiwSAfn79Zbt28q0=";
+  garage_1_0_1 = generic {
+    version = "1.0.1";
+    sha256 = "sha256-f6N2asycN04I6U5XQ5LEAqYu/v5jYZiFCxZ8YQ32XyM=";
+    cargoHash = "sha256-jpc/vaygC5WNSkVA3P01mCRk9Nx/CUumE893tHWoe34=";
     broken = stdenv.isDarwin;
   };
 
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_0_0;
+  garage_1_x = garage_1_0_1;
 
   garage = garage_1_x;
 }
