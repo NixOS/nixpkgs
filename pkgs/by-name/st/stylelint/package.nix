@@ -1,8 +1,15 @@
-{ buildNpmPackage, fetchFromGitHub, lib }:
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+}:
 
-buildNpmPackage rec {
-  pname = "stylelint";
+let
   version = "16.9.0";
+in
+buildNpmPackage {
+  pname = "stylelint";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "stylelint";
@@ -15,11 +22,11 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Mighty CSS linter that helps you avoid errors and enforce conventions";
     mainProgram = "stylelint";
     homepage = "https://stylelint.io";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
