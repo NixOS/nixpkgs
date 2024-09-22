@@ -5,6 +5,7 @@
   graphviz,
   jre,
   makeBinaryWrapper,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -36,6 +37,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     $out/bin/plantuml -help
     $out/bin/plantuml -testdot
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "plantuml --version";
+  };
 
   meta = {
     description = "Draw UML diagrams using a simple and human readable text description";
