@@ -20,6 +20,7 @@
   pam,
   makeDesktopItem,
   rustPlatform,
+  libayatana-appindicator,
   rustc,
   rustfmt,
   xdotool,
@@ -162,6 +163,8 @@ flutter316.buildFlutterApplication rec {
   patches = [ ./make-build-reproducible.patch ];
 
   postPatch = ''
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${lib.getLib libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""
     # The supplied Cargo.lock doesn't work with our fetcher so copy over the fixed version
     cp ${./Cargo.lock} ../Cargo.lock
