@@ -74,6 +74,7 @@ in
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule [ "services" "globalprotect"] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "homeassistant-satellite"] "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`.")
     (mkRemovedOptionModule [ "services" "hydron" ] "The `services.hydron` module has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability.")
     (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")

@@ -1732,10 +1732,6 @@ with pkgs;
 
   gen6dns = callPackage ../tools/networking/gen6dns { };
 
-  gen-license = callPackage ../development/tools/gen-license {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
   # This is to workaround gfal2-python broken against Python 3.12 or later.
@@ -6508,6 +6504,7 @@ with pkgs;
 
   netbird = callPackage ../tools/networking/netbird {
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
+    buildGoModule = buildGo123Module;
   };
 
   netbird-ui = netbird.override {
@@ -12452,8 +12449,6 @@ with pkgs;
 
   snet = callPackage ../tools/networking/snet { };
 
-  sng = callPackage ../tools/graphics/sng { };
-
   snmpcheck = callPackage ../tools/networking/snmpcheck { };
 
   snobol4 = callPackage ../development/interpreters/snobol4 { };
@@ -13541,8 +13536,6 @@ with pkgs;
   openconnectPackages = callPackage ../tools/networking/openconnect { };
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
-
-  globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
 
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
