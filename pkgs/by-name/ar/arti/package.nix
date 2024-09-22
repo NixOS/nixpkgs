@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, sqlite
-, openssl
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  sqlite,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = [ sqlite ]
+  buildInputs =
+    [ sqlite ]
     ++ lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin (
       with darwin.apple_sdk.frameworks;
@@ -34,9 +36,15 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  cargoBuildFlags = [ "--package" "arti" ];
+  cargoBuildFlags = [
+    "--package"
+    "arti"
+  ];
 
-  cargoTestFlags = [ "--package" "arti" ];
+  cargoTestFlags = [
+    "--package"
+    "arti"
+  ];
 
   checkFlags = [
     # problematic tests that were fixed after the release
@@ -49,7 +57,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = [ ];
   };
 }
