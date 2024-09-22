@@ -14641,6 +14641,12 @@
     githubId = 17240342;
     name = "Nano Twerpus";
   };
+  nanoyaki = {
+    name = "Hana Kretzer";
+    email = "hanakretzer@gmail.com";
+    github = "nanoyaki";
+    githubId = 144328493;
+  };
   naphta = {
     github = "naphta";
     githubId = 6709831;
