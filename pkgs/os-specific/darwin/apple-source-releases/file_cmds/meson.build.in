@@ -3,7 +3,10 @@
 
 # Project settings
 project('file_cmds', 'c', version : '@version@')
-
+add_global_arguments(
+    '-DTARGET_OS_BRIDGE=0',
+    language : 'c',
+)
 
 # Dependencies
 cc = meson.get_compiler('c')
@@ -210,9 +213,14 @@ install_symlink(
 
 executable(
     'install-bin', # Meson reserves the name “install”, so use a different name and rename in install phase.
+    c_args : utimensat_c_args,
     dependencies : [ copyfile ],
     install : true,
-    sources: [ 'install/xinstall.c' ],
+    link_args : compat_link_args,
+    sources: [
+        'install/xinstall.c',
+        utimensat_sources,
+    ],
 )
 install_man('install/install.1')
 

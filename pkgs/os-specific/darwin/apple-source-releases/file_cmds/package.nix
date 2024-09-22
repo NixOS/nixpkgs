@@ -101,11 +101,13 @@ mkAppleDerivation {
     "xattr"
   ];
 
-  xcodeHash = "sha256-Q5Pw/Tl1Ar47VsoIxR229GabyDcA11sTrLtE/A3k2gg=";
+  xcodeHash = "sha256-u23AoLa7J0eFtf4dXKkVO59eYL2I3kRsHcWPfT03MCU=";
 
   patches = [
     # Fixes build of ls
     ./patches/0001-Add-missing-extern-unix2003_compat-to-ls.patch
+    # Add missing conditional to avoid using private APFS APIs that we lack headers for using.
+    ./patches/0002-Add-missing-ifdef-for-private-APFS-APIs.patch
     # Add implementations of missing functions for older SDKs
     ./patches/0003-Add-implementations-of-missing-APIs-for-older-SDKs.patch
   ];
