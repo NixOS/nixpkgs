@@ -84,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Add missing header for `abort`
     ./patches/includes.patch
+    # Prevent xcrun from recusively invoking itself
+    ./patches/Avoid-fork-bomb-when-searching-system-paths.patch
   ];
 
   prePatch = ''
