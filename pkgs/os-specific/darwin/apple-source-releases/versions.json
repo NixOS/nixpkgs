@@ -66,5 +66,9 @@
   "shell_cmds": {
     "hash": "sha256-kmEOprkiJGMVcl7yHkGX8ymk/5KjE99gWuF8j2hK5hY=",
     "version": "187"
+  },
+  "system_cmds": {
+    "hash": "sha256-qFp9nkzsq9uQ7zoyfvO+3gvDlc7kaPvn6luvmO/Io30=",
+    "version": "970.0.4"
   }
 }
