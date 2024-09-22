@@ -146,28 +146,16 @@ in
         PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
         PLAYWRIGHT_NODEJS_PATH = "${pkgs.nodejs}/bin/node";
         NIXPKGS_PLAYRIGHT_EXECUTABLE_PATH = "${pkgs.playwright-driver.browsers}/chromium-1091/chrome-linux/chrome";
-        # CRPATH = "${pkgs.chromium}/bin/chromium";
       } // cfg.settings // optionalAttrs cfg.database.createLocally database_information;
-
-      # preStart = ''
-      #   rm -f /var/lib/linkwarden/src/data
-      #   ln -s "${cfg.data_path}" /var/lib/linkwarden/src/data
-      # '';
-
-      # script = ''
-      #  echo "Starting linkwarden"
-      #   ${pkgs.yarn}/bin/yarn start
-      # '';
 
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "linkwarden";
         WorkingDirectory = "/var/lib/linkwarden";
         PrivateTmp = true;
-        EnvironmentFile = optional (cfg.settingsFile != null) cfg.settingsFile;
         ExecStartPre = linkwarden.preStartScript;
         ExecStart = linkwarden.startScript;
-      };
+      } // optionalAttrs (cfg.settingsFile != null) { EnvironmentFile = cfg.settingsFile; };
     };
     services.postgresql = mkIf cfg.database.createLocally {
       enable = true;
