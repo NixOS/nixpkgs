@@ -13306,8 +13306,6 @@ with pkgs;
 
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
-  ubridge = callPackage ../tools/networking/ubridge { };
-
   ubertooth = callPackage ../applications/radio/ubertooth { };
 
   ucarp = callPackage ../servers/ucarp { };
