@@ -382,12 +382,12 @@ in
 
   codeium-nvim = let
     # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-    codeiumVersion = "1.8.80";
+    codeiumVersion = "1.16.18";
     codeiumHashes = {
-      x86_64-linux = "sha256-ULHO7NrbW0DDlOYiSHGXwJ+NOa68Ma+HMHgq2WyAKBA=";
-      aarch64-linux = "sha256-WVqPV/D9jPADkxt5XmydqXjSG8461URPsk1+W/kyZV0=";
-      x86_64-darwin = "sha256-0P/eYZp0Wieza0btOA+yxqKtoIYlUN6MhN0dI6R8GEg=";
-      aarch64-darwin = "sha256-2Cv22+Ii+otKLDQ404l9R/x42PkKTEzPB72/gc9wfig=";
+      x86_64-linux = "sha256-/m+t4abPgVWeGpfDkPm5DGCIXm1LoM5znHfES9lotAo=";
+      aarch64-linux = "sha256-0kR799yuxSFmyedJ14f5/EqOiFHs9cWjeJKvDIpIRl0=";
+      x86_64-darwin = "sha256-7Go5qZVAe2UHn547HZG4fmh84iF2r15+0IIlJK72Fqg=";
+      aarch64-darwin = "sha256-fe4GrgLRr66Qmme3p0X5BEwvKZhqG1aiE8xs5A1Dt6E=";
     };
 
     codeium' = codeium.overrideAttrs rec {
