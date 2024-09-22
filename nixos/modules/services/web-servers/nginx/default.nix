@@ -1373,9 +1373,7 @@ in
     boot.kernelModules = optional (versionAtLeast config.boot.kernelPackages.kernel.version "4.17") "tls";
 
     # do not delete the default temp directories created upon nginx startup
-    systemd.tmpfiles.rules = [
-      "X /tmp/systemd-private-%b-nginx.service-*/tmp/nginx_*"
-    ];
+    systemd.tmpfiles.settings."10-nginx"."/tmp/systemd-private-%b-nginx.service-*/tmp/nginx_*".X = { };
 
     services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
       files = "/var/log/nginx/*.log";
