@@ -21,6 +21,8 @@
 , systemd
 , withScripts ? true
 , gitUpdater
+, binlore
+, msmtp
 }:
 
 let
@@ -139,6 +141,12 @@ if withScripts then
     paths = [ binaries scripts ];
     passthru = {
       inherit binaries scripts src;
+      # msmtpq forwards most of its arguments to msmtp [1].
+      #
+      # [1]: <https://github.com/marlam/msmtp/blob/msmtp-1.8.26/scripts/msmtpq/msmtpq#L301>
+      binlore.out = binlore.synthesize msmtp ''
+        wrapper bin/msmtpq bin/msmtp
+      '';
       updateScript = gitUpdater { rev-prefix = "msmtp-"; };
     };
   } else binaries
