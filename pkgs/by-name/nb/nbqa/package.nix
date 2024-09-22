@@ -4,8 +4,6 @@
   fetchFromGitHub,
 
   # optional-dependencies
-  black,
-  blacken-docs,
   ruff,
 
   # passthru
@@ -28,27 +26,27 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
-    black = [ black ];
-    blacken-docs = [ blacken-docs ];
-    flake8 = [ python3.pkgs.flake8 ];
-    isort = [ python3.pkgs.isort ];
-    jupytext = [ python3.pkgs.jupytext ];
-    mypy = [ python3.pkgs.mypy ];
-    pylint = [ python3.pkgs.pylint ];
-    pyupgrade = [ python3.pkgs.pyupgrade ];
-    ruff = [ ruff ];
-  };
+  optional-dependencies.toolchain =
+    (with python3.pkgs; [
+      black
+      blacken-docs
+      flake8
+      isort
+      jupytext
+      mypy
+      pylint
+      pyupgrade
+    ])
+    ++ [
+      ruff
+    ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      autopep8
-      ipython
-      tokenize-rt
-      tomli
-    ]
-    ++ builtins.attrValues passthru.optional-dependencies;
+  dependencies = with python3.pkgs; [
+    autopep8
+    ipython
+    tokenize-rt
+    tomli
+  ];
 
   postPatch = ''
     # Force using the Ruff executable rather than the Python package
@@ -61,24 +59,16 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs =
-    [
-      black
-      ruff
-    ]
-    ++ (with python3.pkgs; [
+    (with python3.pkgs; [
       autoflake
       distutils
-      flake8
-      isort
-      jupytext
       mdformat
       pre-commit-hooks
       pydocstyle
-      pylint
       pytestCheckHook
-      pyupgrade
       yapf
-    ]);
+    ])
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # Test data not found
