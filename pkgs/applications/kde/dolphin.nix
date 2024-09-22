@@ -29,6 +29,9 @@
   qtwayland,
   qtx11extras,
   qtimageformats,
+  kio-extras,
+  kdegraphics-thumbnailers,
+  ffmpegthumbs,
 }:
 
 mkDerivation {
@@ -74,6 +77,9 @@ mkDerivation {
     qtwayland
     qtx11extras
     qtimageformats
+    kio-extras
+    kdegraphics-thumbnailers
+    ffmpegthumbs
   ];
   outputs = [
     "out"
