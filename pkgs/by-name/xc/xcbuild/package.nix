@@ -69,16 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     "xcrun"
   ];
 
-  # Once a version is released that includes
-  # https://github.com/facebook/xcbuild/commit/183c087a6484ceaae860c6f7300caf50aea0d710,
-  # we can stop doing this -pre thing.
-  version = "0.1.2-pre";
-
+  version = "0.1.1-unstable-2019-11-20";
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "xcbuild";
-    rev = "32b9fbeb69bfa2682bd0351ec2f14548aaedd554";
-    sha256 = "1xxwg2849jizxv0g1hy0b1m3i7iivp9bmc4f5pi76swsn423d41m";
+    rev = "dbaee552d2f13640773eb1ad3c79c0d2aca7229c";
+    hash = "sha256-7mvSuRCWU/LlIBdmnC59F4SSzJPEcQhlmEK13PNe1xc=";
   };
 
   patches = [
