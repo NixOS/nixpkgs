@@ -9034,8 +9034,6 @@ with pkgs;
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
 
-  kargo = callPackage ../tools/misc/kargo { };
-
   kazam = callPackage ../applications/video/kazam { };
 
   kalibrate-rtl = callPackage ../applications/radio/kalibrate-rtl { };
@@ -13571,8 +13569,6 @@ with pkgs;
   weather = callPackage ../applications/misc/weather { };
 
   wego = callPackage ../applications/misc/wego { };
-
-  wal_e = callPackage ../tools/backup/wal-e { };
 
   wander = callPackage ../tools/admin/wander { };
 
@@ -18796,8 +18792,6 @@ with pkgs;
   todoist = callPackage ../applications/misc/todoist { };
 
   todoist-electron = callPackage ../applications/misc/todoist-electron { };
-
-  toil = callPackage ../applications/science/misc/toil { };
 
   travis = callPackage ../development/tools/misc/travis { };
 
@@ -37814,7 +37808,7 @@ with pkgs;
     # Not recommended; too fragile
     nixops_unstable_full;
 
-  # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-aws: ...` to trigger automatically.
+  # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-digitalocean: ...` to trigger automatically.
   nixops_unstablePlugins = recurseIntoAttrs nixops_unstable_minimal.availablePlugins;
 
   /*
