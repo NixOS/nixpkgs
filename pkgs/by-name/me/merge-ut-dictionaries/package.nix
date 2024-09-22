@@ -24,13 +24,13 @@ assert lib.assertMsg (dictionaries != [ ]) "merge-ut-dictionaries needs at least
 
 stdenvNoCC.mkDerivation {
   pname = "merge-ut-dictionaries";
-  version = "0-unstable-2024-08-28";
+  version = "0-unstable-2024-09-09";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "merge-ut-dictionaries";
-    rev = "9cacaadfc4a199914726687ad6545bfd7152c001";
-    hash = "sha256-AdcwXl+33pyN8Q95EDNwMps3ObCzys8nicege6yeRk8=";
+    rev = "35dfcca5c8657f2bf78bc000baa349c322ecb771";
+    hash = "sha256-s6m430nXrG5v6iA+Fp2CKDPfFoAZirw/c3WahLrsaL4=";
   };
 
   nativeBuildInputs = [ python3 ];

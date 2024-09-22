@@ -2733,6 +2733,13 @@
     githubId = 19915050;
     name = "binarycat";
   };
+  binary-eater = {
+    email = "sergeantsagara@protonmail.com";
+    github = "Binary-Eater";
+    githubId = 10691440;
+    name = "Rahul Rameshbabu";
+    keys = [ { fingerprint = "678A 8DF1 D9F2 B51B 7110  BE53 FF24 7B3E 5411 387B"; } ];
+  };
   binsky = {
     email = "timo@binsky.org";
     github = "binsky08";
