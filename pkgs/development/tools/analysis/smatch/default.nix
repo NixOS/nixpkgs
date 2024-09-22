@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, sqlite
-, openssl
-, buildllvmsparse ? false
-, buildc2xml ? false
-, libllvm
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  openssl,
+  buildllvmsparse ? false,
+  buildc2xml ? false,
+  libllvm,
+  libxml2,
 }:
 let
   version = "1.73";
@@ -29,11 +30,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ sqlite openssl ]
-    ++ lib.optionals buildllvmsparse [ libllvm ]
-    ++ lib.optionals buildc2xml [ libxml2.dev ];
+  buildInputs = [
+    sqlite
+    openssl
+  ] ++ lib.optionals buildllvmsparse [ libllvm ] ++ lib.optionals buildc2xml [ libxml2.dev ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "CXX=${stdenv.cc.targetPrefix}c++" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   meta = {
     description = "Semantic analysis tool for C";
