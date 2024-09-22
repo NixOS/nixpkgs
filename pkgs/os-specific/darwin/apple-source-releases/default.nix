@@ -314,7 +314,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     network_cmds    = if isSdk10_12 then
       applePackage "network_cmds" "osx-10.11.6" "sha256-I89CLIswGheewOjiNZwQTgWvWbhm0qtB5+KUqzxnQ5M=" {}
     else macosPackages_11_0_1.network_cmds;
-    file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=" {};
+    file_cmds       = callPackage ./file_cmds/package.nix { };
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "sha256-kmEOprkiJGMVcl7yHkGX8ymk/5KjE99gWuF8j2hK5hY=" {};
     system_cmds     = applePackage "system_cmds"       "macos-14.3"      "sha256-qFp9nkzsq9uQ7zoyfvO+3gvDlc7kaPvn6luvmO/Io30=" {};
     text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "sha256-KSebU7ZyUsPeqn51nzuGNaNxs9pvmlIQQdkWXIVzDxw=" {};
