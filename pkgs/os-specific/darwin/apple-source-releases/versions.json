@@ -46,5 +46,9 @@
   "libresolv": {
     "hash": "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=",
     "version": "64"
+  },
+  "libutil": {
+    "hash": "sha256-4PFuk+CTLwvd/Ll9GLBkiIM0Sh/CVaiKwh5m1noheRs=",
+    "version": "47.30.1"
   }
 }

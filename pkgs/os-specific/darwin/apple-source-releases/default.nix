@@ -296,7 +296,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = callPackage ./libresolv/package.nix { };
     Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" { inherit (pkgs.darwin.apple_sdk) sdkRoot; };
-    libutil         = applePackage "libutil"           "osx-10.12.6"     "sha256-4PFuk+CTLwvd/Ll9GLBkiIM0Sh/CVaiKwh5m1noheRs=" {};
+    libutil         = callPackage ./libutil/package.nix { };
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "sha256-CC0sndP/mKYe3dZu3v7fjuDASV4V4w7dAcnWMvpoquE=" {};
     mDNSResponder   = applePackage "mDNSResponder"     "osx-10.12.6"     "sha256-ddZr6tropkpdMJhq/kUlm3OwO8b0yxtkrMpwec8R4FY=" {};
     objc4           = applePackage "objc4"             "osx-10.12.6"     "sha256-ZsxRpdsfv3Dxs7yBBCkjbKXKR6aXwkEpxc1XYXz7ueM=" {};
@@ -328,7 +328,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
       Security    = null;
       xpc         = null;
     };
-    libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
+    libutilHeaders  = lib.getDev self.libutil;
     hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };
     libresolvHeaders= lib.getDev self.libresolv;
 
