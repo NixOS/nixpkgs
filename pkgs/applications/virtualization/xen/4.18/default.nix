@@ -16,6 +16,7 @@ let
     with upstreamPatches;
     [
       QUBES_REPRODUCIBLE_BUILDS
+      XSA_462
     ]
   );
 in

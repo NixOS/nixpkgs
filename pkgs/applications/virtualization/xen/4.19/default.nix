@@ -18,6 +18,7 @@ let
       QUBES_REPRODUCIBLE_BUILDS
       XSA_460
       XSA_461
+      XSA_462
     ]
   );
 in
