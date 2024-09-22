@@ -1,4 +1,5 @@
 {
+  apple-sdk_14,
   copyfile,
   mkAppleDerivation,
 }:
@@ -12,9 +13,15 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-7t2yz022PUuVwMQP7NBB3I9neuhxJin5W2C+Y5IQYAA=";
+  xcodeHash = "sha256-LwR9fmvcdJ/QYlOx+7ffhV4mKvjkwN3rX3+yHSCovKQ=";
+
+  patches = [
+    # The only change from macOS 13 to 14 was setting this flag. Check at runtime and only set if supported.
+    ./patches/0001-Conditionally-pre-condition.patch
+  ];
 
   buildInputs = [
+    apple-sdk_14
     copyfile
   ];
 
