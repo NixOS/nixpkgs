@@ -50,10 +50,15 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.videoDir} 0755 ${cfg.user} ${cfg.group} -"
-      "Z ${cfg.videoDir} - ${cfg.user} ${cfg.group} -"
-    ];
+    systemd.tmpfiles.settings."10-vdr".${cfg.videoDir} = {
+      d = {
+        inherit (cfg) user group;
+        mode = "0755";
+      };
+      Z = {
+        inherit (cfg) user group;
+      };
+    };
 
     systemd.services.vdr = {
       description = "VDR";
