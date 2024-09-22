@@ -55,7 +55,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/GNS3/ubridge/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     mainProgram = "ubridge";
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [
+      primeos
+      anthonyroussel
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
