@@ -67,6 +67,10 @@
     "hash": "sha256-tUsl22Z0HUVSkSoohFXkhicNFCW+RARvpTS0q6yaQFk=",
     "version": "72"
   },
+  "mail_cmds": {
+    "hash": "sha256-ET1nga9nwgBtN7fuvsPs1yqe5OhQ62PVl7LxqbsAPqU=",
+    "version": "38.0.1"
+  },
   "network_cmds": {
     "hash": "sha256-PChAbC/4cHa0lbojElR2PHOUo+cDvsoNdiorle0IXss=",
     "version": "606.40.2"
