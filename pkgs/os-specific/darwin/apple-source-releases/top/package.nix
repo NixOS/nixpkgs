@@ -13,7 +13,14 @@ in
 mkAppleDerivation {
   releaseName = "top";
 
-  xcodeHash = "sha256-TuBdZztwCpNwPP0er+7h6FoPV9AbdZAXpzGcqBAuD5Y=";
+  xcodeHash = "sha256-b7Qv9ks9JmilY9GaEU3/iXoHBNyHRYr4IB0jVf0fYdo=";
+
+  patches = [
+    # Upstream removed aarch64 support from the 137 source release, but the removal can be reverted.
+    # Otherwise, top will fail to run on aarch64-darwin.
+    # Based on https://github.com/apple-oss-distributions/top/commit/a989bd5d18246e330e5feadd80958b913351f8ae.diff
+    ./patches/0001-Revert-change-that-dropped-aarch64-support.patch
+  ];
 
   postPatch = ''
     # Fix duplicate symbol error. `tsamp` is unused in `main.c`.
