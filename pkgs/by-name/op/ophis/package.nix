@@ -8,16 +8,17 @@
 let
   self = python3Packages.buildPythonApplication {
     pname = "ophis";
-    version = "0-unstable-2019-04-13";
+    version = "2.2-unstable-2024-07-28";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "michaelcmartin";
       repo = "Ophis";
-      rev = "99f074da278d4ec80689c0e22e20c5552ea12512";
-      hash = "sha256-2x8vwLTSngqQqmVrVh/mM4peATgaRqOSwrfm5XCkg/g=";
+      rev = "6a5e5a586832e828b598e8162457e673a6c38275";
+      hash = "sha256-cxgSgAypS02AO9vjYjNWDY/cx7kxLt1Bdw8HGgGGBhU=";
     };
 
-    sourceRoot = "${self.src.name}/src";
+    build-system = [ python3Packages.setuptools ];
 
     passthru = {
       updateScript = unstableGitUpdater { };
