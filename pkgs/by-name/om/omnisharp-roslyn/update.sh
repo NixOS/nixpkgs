@@ -6,7 +6,7 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-new_version="$(curl -s "https://api.github.com/repos/OmniSharp/omnisharp-roslyn/releases?per_page=1" | jq -r '.[0].name')"
+new_version="$(curl -s "https://api.github.com/repos/OmniSharp/omnisharp-roslyn/releases/latest" | jq -r '.name')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
 
 if [[ "$new_version" == "$old_version" ]]; then
