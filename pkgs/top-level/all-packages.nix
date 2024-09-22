@@ -6605,7 +6605,7 @@ with pkgs;
 
   bbin = callPackage ../development/tools/bbin { };
 
-  blacken-docs = callPackage ../tools/misc/blacken-docs { };
+  blacken-docs = with python3Packages; toPythonApplication blacken-docs;
 
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
