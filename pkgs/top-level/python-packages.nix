@@ -13861,6 +13861,8 @@ self: super: with self; {
 
   sagemaker = callPackage ../development/python-modules/sagemaker { };
 
+  salib = callPackage ../development/python-modules/salib { };
+
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   sane = callPackage ../development/python-modules/sane {
