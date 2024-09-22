@@ -97,7 +97,6 @@ let
       {
         # Make sure we can run OmniSharp with any supported SDK version, as well as without
         with-net6-sdk = with-sdk dotnetCorePackages.sdk_6_0;
-        with-net7-sdk = with-sdk dotnetCorePackages.sdk_7_0;
         with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
         no-sdk = with-sdk null;
       };
