@@ -124,10 +124,14 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d  ${cfg.dataDir}            0750 trilium trilium - -"
-      "L+ ${cfg.dataDir}/config.ini -    -       -       - ${configIni}"
-    ];
+    systemd.tmpfiles.settings."10-trilium" = {
+      "${cfg.dataDir}".d = {
+        user = "trilium";
+        group = "trilium";
+        mode = "0750";
+      };
+      "${cfg.dataDir}/config.ini"."L+".argument = configIni;
+    };
 
   }
 
