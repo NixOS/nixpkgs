@@ -64,8 +64,8 @@
     "version": "83"
   },
   "libutil": {
-    "hash": "sha256-4PFuk+CTLwvd/Ll9GLBkiIM0Sh/CVaiKwh5m1noheRs=",
-    "version": "47.30.1"
+    "hash": "sha256-tUsl22Z0HUVSkSoohFXkhicNFCW+RARvpTS0q6yaQFk=",
+    "version": "72"
   },
   "network_cmds": {
     "hash": "sha256-PChAbC/4cHa0lbojElR2PHOUo+cDvsoNdiorle0IXss=",
