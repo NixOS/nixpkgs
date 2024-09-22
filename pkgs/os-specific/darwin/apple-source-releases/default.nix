@@ -294,7 +294,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
       applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {}
     else macosPackages_11_0_1.libplatform;
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
-    libresolv       = applePackage "libresolv"         "osx-10.12.6"     "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=" {};
+    libresolv       = callPackage ./libresolv/package.nix { };
     Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" { inherit (pkgs.darwin.apple_sdk) sdkRoot; };
     libutil         = applePackage "libutil"           "osx-10.12.6"     "sha256-4PFuk+CTLwvd/Ll9GLBkiIM0Sh/CVaiKwh5m1noheRs=" {};
     libunwind       = applePackage "libunwind"         "osx-10.12.6"     "sha256-CC0sndP/mKYe3dZu3v7fjuDASV4V4w7dAcnWMvpoquE=" {};
@@ -330,7 +330,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     };
     libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
     hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };
-    libresolvHeaders= pkgs.darwin.libresolv.override { headersOnly = true; };
+    libresolvHeaders= lib.getDev self.libresolv;
 
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.

@@ -42,5 +42,9 @@
   "libiconv": {
     "hash": "sha256-TGt6rsU52ztfW2rCqwnhMAExLbexI/59IoDOGY+XGu0=",
     "version": "99"
+  },
+  "libresolv": {
+    "hash": "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=",
+    "version": "64"
   }
 }
