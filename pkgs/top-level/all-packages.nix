@@ -19005,8 +19005,6 @@ with pkgs;
 
   acsccid = callPackage ../tools/security/acsccid { };
 
-  activemq = callPackage ../development/libraries/apache-activemq { };
-
   adns = callPackage ../development/libraries/adns { };
 
   adslib = callPackage ../development/libraries/adslib { };

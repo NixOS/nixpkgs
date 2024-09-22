@@ -1,21 +1,29 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
-stdenv.mkDerivation rec {
-  pname = "apache-activemq";
+stdenvNoCC.mkDerivation rec {
+  pname = "activemq";
   version = "6.1.2";
 
   src = fetchurl {
-    sha256 = "sha256-EJZWrGvXICxp+eDzrX5BPnl/ZuUMO7utKgaS2c4IBQ0=";
-    url = "mirror://apache/activemq/${version}/${pname}-${version}-bin.tar.gz";
+    url = "https://archive.apache.org/dist/activemq/${version}/apache-activemq-${version}-bin.tar.gz";
+    hash = "sha256-EJZWrGvXICxp+eDzrX5BPnl/ZuUMO7utKgaS2c4IBQ0=";
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv * $out/
-    for j in `find $out/lib -name "*.jar"`; do
+    for j in $(find $out/lib -name "*.jar"); do
       cp="''${cp:+"$cp:"}$j";
     done
     echo "CLASSPATH=$cp" > $out/lib/classpath.env
+
+    runHook postInstall
   '';
 
   meta = {
@@ -23,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Messaging and Integration Patterns server written in Java";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
+    mainProgram = "activemq";
     platforms = lib.platforms.unix;
   };
-
 }
