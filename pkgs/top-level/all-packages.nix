@@ -18613,14 +18613,22 @@ with pkgs;
 
   xcode-install = callPackage ../development/tools/xcode-install { };
 
-  xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
+  xcbuild = callPackage ../by-name/xc/xcbuild/package.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
+    stdenv =
+      # xcbuild is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
   };
-  xcbuild = xcodebuild;
+
   xcbuildHook = makeSetupHook {
     name = "xcbuild-hook";
     propagatedBuildInputs = [ xcbuild ];
-  } ../development/tools/xcbuild/setup-hook.sh  ;
+  } ../by-name/xc/xcbuild/setup-hook.sh;
+
+  xcodebuild = xcbuild;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
 
