@@ -112,10 +112,11 @@ let
       ];
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        tesq0
-        ericdallo
         corngood
+        ericdallo
+        gepbird
         mdarocha
+        tesq0
       ];
       mainProgram = "OmniSharp";
     };
