@@ -7946,6 +7946,8 @@ self: super: with self; {
 
   mkdocs-git-authors-plugin = callPackage ../development/python-modules/mkdocs-git-authors-plugin { };
 
+  mkdocs-git-committers-plugin-2 = callPackage ../development/python-modules/mkdocs-git-committers-plugin-2 { };
+
   mkdocs-git-revision-date-localized-plugin = callPackage ../development/python-modules/mkdocs-git-revision-date-localized-plugin { };
 
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
