@@ -12653,6 +12653,17 @@
     githubId = 24735185;
     name = "Mahmoud Ayman";
   };
+  mahtaran = {
+    email = "luka.leer@gmail.com";
+    github = "mahtaran";
+    githubId = 22727323;
+    name = "Luka Leer";
+    keys = [
+      {
+        fingerprint = "C7FF B72E 0527 423A D470  E132 AA82 C4EB CB16 82E0";
+      }
+    ];
+  };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
     github = "MajesticMullet";
