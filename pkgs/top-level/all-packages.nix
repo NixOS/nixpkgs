@@ -2116,7 +2116,7 @@ with pkgs;
 
   bitbucket-server-cli = callPackage ../applications/version-management/bitbucket-server-cli { };
 
-  bump2version = python3Packages.callPackage ../applications/version-management/bump2version { };
+  bump2version = with python3Packages; toPythonApplication bump2version;
 
   cgit = callPackage ../applications/version-management/cgit { };
 
@@ -6552,7 +6552,18 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { };
+    inherit mozc;
+
+    mozc-ut = mozc.override { dictionaries = [
+      mozcdic-ut-alt-cannadic
+      mozcdic-ut-edict2
+      mozcdic-ut-jawiki
+      mozcdic-ut-neologd
+      mozcdic-ut-personal-names
+      mozcdic-ut-place-names
+      mozcdic-ut-skk-jisyo
+      mozcdic-ut-sudachidict
+    ]; };
 
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
 
@@ -9513,7 +9524,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  nanoemoji = python3Packages.callPackage ../tools/misc/nanoemoji { };
+  nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
   nagelfar = callPackage ../development/tools/nagelfar { };
 

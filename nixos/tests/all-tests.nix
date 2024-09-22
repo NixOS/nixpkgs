@@ -786,6 +786,7 @@ in {
   plasma6 = handleTest ./plasma6.nix {};
   plasma5-systemd-start = handleTest ./plasma5-systemd-start.nix {};
   plausible = handleTest ./plausible.nix {};
+  playwright-python = handleTest ./playwright-python.nix {};
   please = handleTest ./please.nix {};
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix {};
   plikd = handleTest ./plikd.nix {};
@@ -805,6 +806,7 @@ in {
   postgresql-jit = handleTest ./postgresql-jit.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
   postgresql-tls-client-cert = handleTest ./postgresql-tls-client-cert.nix {};
+  postgresql-wal2json = handleTest ./postgresql-wal2json.nix {};
   powerdns = handleTest ./powerdns.nix {};
   powerdns-admin = handleTest ./powerdns-admin.nix {};
   power-profiles-daemon = handleTest ./power-profiles-daemon.nix {};

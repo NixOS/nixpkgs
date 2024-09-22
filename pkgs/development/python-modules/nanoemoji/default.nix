@@ -1,19 +1,38 @@
-{ lib
-, python3
-, fetchFromGitHub
-, resvg
-, pngquant
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  resvg,
+  pngquant,
+  absl-py,
+  fonttools,
+  lxml,
+  ninja,
+  picosvg,
+  pillow,
+  regex,
+  toml,
+  tomlkit,
+  ufo2ft,
+  ufolib2,
+  zopfli,
 }:
-python3.pkgs.buildPythonApplication rec {
+
+buildPythonPackage rec {
   pname = "nanoemoji";
   version = "0.15.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
-    repo = pname;
-    rev = "v${version}";
+    repo = "nanoemoji";
+    rev = "refs/tags/v${version}";
     hash = "sha256-P/lT0PnjTdYzyttICzszu4OL5kj+X8GHZ8doL3tpXQM=";
   };
+
   patches = [
     # this is necessary because the tests clear PATH/PYTHONPATH otherwise
     ./test-pythonpath.patch
@@ -21,17 +40,23 @@ python3.pkgs.buildPythonApplication rec {
     ./fix-test.patch
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = [
+    setuptools
     setuptools-scm
+  ];
 
+  nativeBuildInputs = [
     pngquant
     resvg
   ];
 
   # these two packages are just prebuilt wheels containing the respective binaries
-  pythonRemoveDeps = [ "pngquant-cli" "resvg-cli" ];
+  pythonRemoveDeps = [
+    "pngquant-cli"
+    "resvg-cli"
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = [
     absl-py
     fonttools
     lxml
@@ -46,15 +71,19 @@ python3.pkgs.buildPythonApplication rec {
     zopfli
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
     pytestCheckHook
-
     ninja
     picosvg
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ pngquant resvg ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        pngquant
+        resvg
+      ]
+    }"
   ];
 
   preCheck = ''
@@ -65,6 +94,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Wee tool to build color fonts";
     homepage = "https://github.com/googlefonts/nanoemoji";
+    changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ _999eagle ];
   };

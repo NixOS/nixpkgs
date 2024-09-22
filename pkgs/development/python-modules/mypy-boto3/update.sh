@@ -229,7 +229,7 @@ packages=(
   mypy-boto3-migrationhub-config
   mypy-boto3-migrationhuborchestrator
   mypy-boto3-migrationhubstrategy
-  mypy-boto3-mobile
+  # mypy-boto3-mobile
   mypy-boto3-mq
   mypy-boto3-mturk
   mypy-boto3-mwaa

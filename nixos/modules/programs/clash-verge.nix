@@ -1,9 +1,22 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.programs.clash-verge = {
     enable = lib.mkEnableOption "Clash Verge";
-    package = lib.mkPackageOption pkgs "clash-verge" {};
+    package = lib.mkOption {
+      type = lib.types.package;
+      description = ''
+        The clash-verge package to use. Available options are
+        clash-verge-rev and clash-nyanpasu, both are forks of
+        the original clash-verge project.
+      '';
+      example = "pkgs.clash-verge-rev";
+    };
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
     tunMode = lib.mkEnableOption "Clash Verge TUN mode";
   };
@@ -16,10 +29,12 @@
 
       environment.systemPackages = [
         cfg.package
-        (lib.mkIf cfg.autoStart (pkgs.makeAutostartItem {
-          name = "clash-verge";
-          package = cfg.package;
-        }))
+        (lib.mkIf cfg.autoStart (
+          pkgs.makeAutostartItem {
+            name = "clash-verge";
+            package = cfg.package;
+          }
+        ))
       ];
 
       security.wrappers.clash-verge = lib.mkIf cfg.tunMode {

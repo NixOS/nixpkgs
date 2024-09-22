@@ -110,8 +110,7 @@ buildPythonPackage rec {
       # flaky, sometimes fail to strip uuid from AIMessageChunk before comparing to test value
       "test_map_stream"
       # Compares with machine-specific timings
-      "test_rate_limit_invoke"
-      "test_rate_limit_stream"
+      "test_rate_limit"
       # flaky: assert (1726352133.7419367 - 1726352132.2697523) < 1
       "test_benchmark_model"
 

@@ -1,39 +1,40 @@
-{ stdenv
-, lib
-, fetchurl
-, buildFHSEnv
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildFHSEnv,
   # Alphabetic ordering below
-, alsa-lib
-, at-spi2-atk
-, atk
-, autoPatchelfHook
-, cairo
-, curl
-, dbus
-, dconf
-, dpkg
-, fontconfig
-, gcc-unwrapped
-, gdk-pixbuf
-, glib
-, glibc
-, gsettings-desktop-schemas
-, gst_all_1
-, gtk2
-, gtk3
-, libpulseaudio
-, libudev0-shim
-, libdrm
-, makeWrapper
-, mesa
-, noto-fonts-cjk-sans
-, nspr
-, nss
-, pulseaudio
-, qt5
-, wrapGAppsHook3
-, xkeyboard_config
-, xorg
+  alsa-lib,
+  at-spi2-atk,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  curl,
+  dbus,
+  dconf,
+  dpkg,
+  fontconfig,
+  gcc-unwrapped,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gsettings-desktop-schemas,
+  gst_all_1,
+  gtk2,
+  gtk3,
+  libpulseaudio,
+  libudev0-shim,
+  libdrm,
+  makeWrapper,
+  mesa,
+  noto-fonts-cjk-sans,
+  nspr,
+  nss,
+  pulseaudio,
+  qt5,
+  wrapGAppsHook3,
+  xkeyboard_config,
+  xorg,
 }:
 let
 
@@ -65,11 +66,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "8.1.0";
+    version = "8.1.1";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-hS1+gLN17sP3EFud3fQXRWeFiQbrumBONLjqXEl89Js=";
+      hash = "sha256-RwWIYcbYljDqWRJcXCDODjVeYnp9xreNGO2l2aqWJ9w=";
     };
 
     nativeBuildInputs = [
@@ -184,15 +185,17 @@ buildFHSEnv {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
-    mainProgram = "onlyoffice-desktopeditors";
     homepage = "https://www.onlyoffice.com/";
     downloadPage = "https://github.com/ONLYOFFICE/DesktopEditors/releases";
     changelog = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ nh2 gtrunsec ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      nh2
+      gtrunsec
+    ];
   };
 }

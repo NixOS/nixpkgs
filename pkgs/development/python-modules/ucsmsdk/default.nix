@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ucsmsdk";
-  version = "0.9.19";
+  version = "0.9.20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CiscoUcs";
     repo = "ucsmsdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PPxslqY8v6WbRiRXnR9jVSGAo8k89lHomXpqgSK0meo=";
+    hash = "sha256-X8lGpfVjIZIpNneOM/mE+9RvglW9FlYoGz7pFs7ellk=";
   };
 
   propagatedBuildInputs = [

@@ -1671,6 +1671,8 @@ self: super: with self; {
 
   black-macchiato = callPackage ../development/python-modules/black-macchiato { };
 
+  blackrenderer = callPackage ../development/python-modules/blackrenderer { };
+
   bleach = callPackage ../development/python-modules/bleach { };
 
   bleach-allowlist = callPackage ../development/python-modules/bleach-allowlist { };
@@ -1909,6 +1911,10 @@ self: super: with self; {
   build = callPackage ../development/python-modules/build { };
 
   buildcatrust = callPackage ../development/python-modules/buildcatrust { };
+
+  bump2version = callPackage ../development/python-modules/bump2version { };
+
+  bumpfontversion = callPackage ../development/python-modules/bumpfontversion { };
 
   bumps = callPackage ../development/python-modules/bumps { };
 
@@ -3141,6 +3147,8 @@ self: super: with self; {
   diff-cover = callPackage ../development/python-modules/diff-cover { };
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
+
+  diffenator2 = callPackage ../development/python-modules/diffenator2 { };
 
   diffimg = callPackage ../development/python-modules/diffimg { };
 
@@ -5004,6 +5012,8 @@ self: super: with self; {
 
   gfsubsets = callPackage ../development/python-modules/gfsubsets { };
 
+  gftools = callPackage ../development/python-modules/gftools { };
+
   gguf = callPackage ../development/python-modules/gguf { };
 
   ghapi = callPackage ../development/python-modules/ghapi { };
@@ -6824,6 +6834,8 @@ self: super: with self; {
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
 
   langchain-mongodb = callPackage ../development/python-modules/langchain-mongodb { };
+
+  langchain-ollama = callPackage ../development/python-modules/langchain-ollama { };
 
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
@@ -8671,6 +8683,8 @@ self: super: with self; {
 
   nanobind = callPackage ../development/python-modules/nanobind { };
 
+  nanoemoji = callPackage ../development/python-modules/nanoemoji { };
+
   nanoid = callPackage ../development/python-modules/nanoid { };
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
@@ -8980,6 +8994,8 @@ self: super: with self; {
   notmuch2 = callPackage ../development/python-modules/notmuch2 {
     inherit (pkgs) notmuch;
   };
+
+  notobuilder = callPackage ../development/python-modules/notobuilder { };
 
   nototools = callPackage ../development/python-modules/nototools { };
 
@@ -9508,6 +9524,8 @@ self: super: with self; {
   paho-mqtt_2 = callPackage ../development/python-modules/paho-mqtt/default.nix { };
   paho-mqtt = paho-mqtt_1;
 
+  paintcompiler = callPackage ../development/python-modules/paintcompiler { };
+
   palace = callPackage ../development/python-modules/palace { };
 
   palettable = callPackage ../development/python-modules/palettable { };
@@ -9843,6 +9861,8 @@ self: super: with self; {
   openaiauth = callPackage ../development/python-modules/openaiauth { };
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
+
+  opentype-feature-freezer = callPackage ../development/python-modules/opentype-feature-freezer { };
 
   openusd = callPackage ../development/python-modules/openusd {
     alembic = pkgs.alembic;
@@ -16795,6 +16815,8 @@ self: super: with self; {
 
   ufolint = callPackage ../development/python-modules/ufolint { };
 
+  ufomerge = callPackage ../development/python-modules/ufomerge { };
+
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
@@ -17167,6 +17189,8 @@ self: super: with self; {
     inherit python;
     enablePython = true;
   });
+
+  vttlib = callPackage ../development/python-modules/vttlib { };
 
   vulcan-api = callPackage ../development/python-modules/vulcan-api { };
 

@@ -10,14 +10,14 @@ let
   platform =
     if stdenvNoCC.hostPlatform.isDarwin then "universal-macos" else stdenvNoCC.hostPlatform.system;
   hash = builtins.getAttr platform {
-    "universal-macos" = "sha256-ls2QFCiPkXMTiCHo8AXb5bFl118zjtuQAGl26c4huwU=";
-    "x86_64-linux" = "sha256-QjQjP5p2fpOLWNGiU2aMMs2bUEFOWfBZrbPGLTOFozg=";
-    "aarch64-linux" = "sha256-DMxGakZBJhLTgZp7B9lwxilr6yhDVDe/GQCMFaRTWe4=";
+    "universal-macos" = "sha256-VtKM+Fw1yy0KYvbtxerYykEbYv1hCc81ckfETH36vCU=";
+    "x86_64-linux" = "sha256-LtnLLWSOUtnp27swwCrRiA3NIKqrOD2MZylXKbLm2fw=";
+    "aarch64-linux" = "sha256-tmlizjB8BWtbQd75RoYvIsRxqEuj1V7Fx9LgArvphm4=";
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tigerbeetle";
-  version = "0.15.5";
+  version = "0.16.2";
 
   src = fetchzip {
     url = "https://github.com/tigerbeetle/tigerbeetle/releases/download/${finalAttrs.version}/tigerbeetle-${platform}.zip";
@@ -49,7 +49,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://tigerbeetle.com/";
     description = "Financial accounting database designed to be distributed and fast";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danielsidhion ];
+    maintainers = with lib.maintainers; [
+      danielsidhion
+      nwjsmith
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -3422,6 +3422,12 @@
     githubId = 5241813;
     name = "Carter Sande";
   };
+  casaca = {
+    name = "J McNutt";
+    email = "jmacasac@hotmail.com";
+    github = "casaca24";
+    githubId = 87252279;
+  };
   casey = {
     email = "casey@rodarmor.net";
     github = "casey";
@@ -7046,6 +7052,13 @@
     github = "fmthoma";
     githubId = 5918766;
     name = "Franz Thoma";
+  };
+  fnune = {
+    email = "fausto.nunez@mailbox.org";
+    github = "fnune";
+    githubId = 16181067;
+    name = "Fausto Núñez Alberro";
+    keys = [ { fingerprint = "668E 01D1 B129 3F42 0A0F  933A C880 6451 94A2 D562"; } ];
   };
   foo-dogsquared = {
     email = "foodogsquared@foodogsquared.one";
@@ -12264,6 +12277,12 @@
     githubId = 15693688;
     name = "Lucas Eduardo Wendt";
   };
+  lucastso10 = {
+    email = "lucastso10@gmail.com";
+    github = "lucastso10";
+    githubId = 84486266;
+    name = "Lucas Teixeira Soares";
+  };
   lucc = {
     email = "lucc+nix@posteo.de";
     github = "lucc";
@@ -15322,6 +15341,12 @@
     githubId = 5047052;
     name = "Niclas Hirschfeld";
   };
+  nwjsmith = {
+    email = "nate@theinternate.com";
+    github = "nwjsmith";
+    githubId = 1348;
+    name = "Nate Smith";
+  };
   nyabinary = {
     name = "Niko Cantero";
     email = "nyanbinary@keemail.me";
@@ -16574,6 +16599,12 @@
     github = "plcplc";
     githubId = 358550;
     name = "Philip Lykke Carlsen";
+  };
+  plebhash = {
+    name = "plebhash";
+    email = "plebhash@proton.me";
+    github = "plebhash";
+    githubId = 147345153;
   };
   pleshevskiy = {
     email = "dmitriy@pleshevski.ru";
@@ -18054,6 +18085,12 @@
     github = "rohanssrao";
     githubId = 17805516;
     name = "Rohan Rao";
+  };
+  rolfschr = {
+    email = "rolf.schr@posteo.de";
+    github = "rolfschr";
+    githubId = 1188465;
+    name = "Rolf Schröder";
   };
   rollf = {
     email = "rolf.schroeder@limbus-medtec.com";
@@ -19916,6 +19953,12 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
+  };
+  sshine = {
+    email = "simon@simonshine.dk";
+    github = "sshine";
+    githubId = 50879;
+    name = "Simon Shine";
   };
   SShrike = {
     email = "severen@shrike.me";
