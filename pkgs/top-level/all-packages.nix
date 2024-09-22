@@ -11317,12 +11317,6 @@ with pkgs;
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
-  plantuml = callPackage ../tools/misc/plantuml { };
-
-  plantuml-c4 = callPackage ../tools/misc/plantuml/plantuml-c4.nix { };
-
-  plantuml-server = callPackage ../tools/misc/plantuml-server { };
-
   plan9port = darwin.apple_sdk_11_0.callPackage ../tools/system/plan9port {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit Metal QuartzCore;
     inherit (darwin) DarwinTools;
