@@ -28,6 +28,7 @@
 # `libcompiler_rt` library, at least under certain configurations. Some
 # platforms stil expect this, however, so we symlink one into place.
 , forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
+, devExtraCmakeFlags ? []
 }:
 
 let
@@ -134,9 +135,9 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
   ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-DSANITIZER_MIN_OSX_VERSION=10.10"
-  ]  ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+  ] ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   outputs = [ "out" "dev" ];
 
