@@ -23,8 +23,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.rules =
-      [ "d '${cfg.dataDir}' 0700 nzbhydra2 nzbhydra2 - -" ];
+    systemd.tmpfiles.settings."10-nzbhydra2".${cfg.dataDir}.d = {
+      user = "nzbhydra2";
+      group = "nzbhydra2";
+      mode = "0700";
+    };
 
     systemd.services.nzbhydra2 = {
       description = "NZBHydra2";
