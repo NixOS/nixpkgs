@@ -7188,6 +7188,11 @@
     githubId = 13279982;
     name = "freezeboy";
   };
+  frenetic00 = {
+    github = "frenetic00";
+    githubId = 50942055;
+    name = "frenetic00";
+  };
   Fresheyeball = {
     email = "fresheyeball@gmail.com";
     github = "Fresheyeball";
