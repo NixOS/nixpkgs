@@ -124,6 +124,8 @@ in
       } // optionalAttrs (cfg.environmentFile != null) {
         EnvironmentFile = cfg.environmentFile;
       };
+    } // optionalAttrs (cfg.environmentFile != null) {
+      restartTriggers = [ cfg.environmentFile ];
     };
   };
 
