@@ -138,9 +138,9 @@ in
     };
     users.groups = lib.mkIf (cfg.user == "graylog") { graylog = {}; };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.messageJournalDir}' - ${cfg.user} - - -"
-    ];
+    systemd.tmpfiles.settings."10-graylog".${cfg.messageJournalDir}.d = {
+      inherit (cfg) user;
+    };
 
     systemd.services.graylog = {
       description = "Graylog Server";
