@@ -13,7 +13,10 @@ import ./make-test-python.nix (
         services.linkwarden = {
           enable = true;
           nginx = { };
-          secret = "secret";
+          secretFile = pkgs.writeTextFile {
+            name = "secret";
+            text = "secret";
+          };
           domain = "linkwarden.nix";
         };
         networking.extraHosts = ''

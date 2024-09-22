@@ -24,7 +24,7 @@ let
 
   linkwarden = cfg.package.withUserConfiguration {
     secret = cfg.secret;
-    # secretFile = cfg.secretFile;
+    secretFile = cfg.secretFile;
     authUrl = "https://${cfg.domain}/api/v1/auth";
     databaseURI = database_information.DATABASE_URL;
     dataStoragePath = cfg.data_path;

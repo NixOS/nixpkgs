@@ -94,7 +94,7 @@ let
         '';
         preStart =
           let
-            localSecret = if secret != null then secret else ''cat ${secretFile}'';
+            localSecret = if secret != null then secret else ''$(cat ${lib.escapeShellArg secretFile})'';
           in
           runCommand "${pname}-${version}-wrapped" { meta = placeholder "meta"; } ''
             ${commonEnvironment}
