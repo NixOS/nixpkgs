@@ -58,5 +58,9 @@
   "network_cmds": {
     "hash": "sha256-PChAbC/4cHa0lbojElR2PHOUo+cDvsoNdiorle0IXss=",
     "version": "606.40.2"
+  },
+  "removefile": {
+    "hash": "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=",
+    "version": "45"
   }
 }
