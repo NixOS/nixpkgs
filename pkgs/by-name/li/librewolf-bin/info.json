@@ -1,11 +1,11 @@
 {
     "aarch64-linux": {
-        "hash": "sha256-yu4ZMgVf8F06FjQjLwgyhaWYKxj2cKVgq3hlswgt8C8=",
-        "url": "https://gitlab.com/api/v4/projects/24386000/packages/generic/librewolf/130.0-3/LibreWolf.aarch64.AppImage"
+        "hash": "sha256-VzBxB4QomAdVFCyTi+dqKOKFkZB79fqxZzvpk4bTjwA=",
+        "url": "https://gitlab.com/api/v4/projects/24386000/packages/generic/librewolf/130.0.1-1/LibreWolf.aarch64.AppImage"
     },
-    "version": "130.0-3",
+    "version": "130.0.1-1",
     "x86_64-linux": {
-        "hash": "sha256-hY+HiwhpKlRc+Cjn/j6ZOqlitY7bUSqTNGgWoVIQkM4=",
-        "url": "https://gitlab.com/api/v4/projects/24386000/packages/generic/librewolf/130.0-3/LibreWolf.x86_64.AppImage"
+        "hash": "sha256-uD6u96nQSdor7PawBmbxsBGsuHRaVL1VJ1NEq61Kco8=",
+        "url": "https://gitlab.com/api/v4/projects/24386000/packages/generic/librewolf/130.0.1-1/LibreWolf.x86_64.AppImage"
     }
 }
