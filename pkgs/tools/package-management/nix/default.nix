@@ -265,7 +265,7 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = addFallbackPathsCheck self.nix_2_18;
+  stable = addFallbackPathsCheck self.nix_2_24;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:

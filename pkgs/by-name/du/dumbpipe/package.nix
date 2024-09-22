@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dumbpipe";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gv6V5I9LPNfXyuopo8BaYRELxzTfNhTG1EBWoZ/4cpc=";
+    hash = "sha256-7OHghotSibkGRrcsh7CqZBp94FY6RKZvcn8QW+dTH1I=";
   };
 
-  cargoHash = "sha256-t6w2XrMSm5g6dmYQ5gX+w8M3pPzWDytGY9uSuXYgnDA=";
+  cargoHash = "sha256-rlhfGw/b0HnV1Xl9VWIqEuyM9pq29O6bpaawk2hnG+o=";
 
   buildInputs = lib.optionals stdenv.isDarwin (
     with darwin.apple_sdk.frameworks; [
