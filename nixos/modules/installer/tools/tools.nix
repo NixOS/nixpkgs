@@ -54,6 +54,11 @@ let
     { config, lib, pkgs, ... }:
 
     {
+      # A list of modules to include in the final configuration result, this file included! This should
+      # not be confused with the primitive `import` function provided by Nix itself!
+      #
+      # For more info see:
+      # https://nixos.org/manual/nixos/stable/#sec-writing-modules
       imports =
         [ # Include the results of the hardware scan.
           ./hardware-configuration.nix
