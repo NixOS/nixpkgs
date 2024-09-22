@@ -1,0 +1,47 @@
+diff --git a/Libraries/xcsdk/Tools/xcrun.cpp b/Libraries/xcsdk/Tools/xcrun.cpp
+index 9d6d4576d7..7400267c2b 100644
+--- a/Libraries/xcsdk/Tools/xcrun.cpp
++++ b/Libraries/xcsdk/Tools/xcrun.cpp
+@@ -23,6 +23,8 @@
+ #include <process/DefaultUser.h>
+ #include <pbxsetting/Type.h>
+ 
++#include <algorithm>
++
+ using libutil::DefaultFilesystem;
+ using libutil::Filesystem;
+ using libutil::FSUtil;
+@@ -398,6 +400,8 @@
+             fprintf(stderr, "\n");
+         }
+ 
++        std::unordered_map<std::string, std::string> environment = processContext->environmentVariables();
++
+         /*
+          * Collect search paths for the tool.
+          * Can be in toolchains, target (if one is provided), developer root,
+@@ -408,6 +412,15 @@
+         executablePaths.insert(executablePaths.end(), defaultExecutablePaths.begin(), defaultExecutablePaths.end());
+ 
+         /*
++         * Don’t look for tools in `/usr/bin` because it can cause an infinite recursion when `xcrun` finds a shim
++         * that tries to invoke `xcrun` to run the tool.
++         */
++        executablePaths.erase(
++            std::remove(executablePaths.begin(), executablePaths.end(), "/usr/bin"),
++            executablePaths.end()
++        );
++
++        /*
+          * Find the tool to execute.
+          */
+         ext::optional<std::string> executable = filesystem->findExecutable(*options.tool(), executablePaths);
+@@ -428,8 +441,6 @@
+         } else {
+             /* Run is the default. */
+ 
+-            std::unordered_map<std::string, std::string> environment = processContext->environmentVariables();
+-
+             if (target != nullptr) {
+                 /*
+                  * Update effective environment to include the target path.
