@@ -44,7 +44,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/GNS3/dynamips/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     mainProgram = "dynamips";
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [
+      primeos
+      anthonyroussel
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
