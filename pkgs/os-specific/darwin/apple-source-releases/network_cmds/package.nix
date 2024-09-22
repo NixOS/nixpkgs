@@ -37,13 +37,33 @@ let
   # Newer releases of netstat use struct members that aren’t present with the 11.x headers.
   # Use files from an older release for now.
   old_netstat = {
-    "if" = fetchurl {
+    "if.c" = fetchurl {
       url = "https://github.com/apple-oss-distributions/network_cmds/raw/2e18102a14ab72b25caf3a5007c92b9f23e723fc/netstat.tproj/if.c";
       hash = "sha256-P87rexLkoV1BCyUghVrkGoG6r9rAoWynfpvlwIj7A40=";
     };
-    main = fetchurl {
+    "main.c" = fetchurl {
       url = "https://github.com/apple-oss-distributions/network_cmds/raw/2e18102a14ab72b25caf3a5007c92b9f23e723fc/netstat.tproj/main.c";
       hash = "sha256-e3n54l6Wo+G5koMhGMfOTo8+QIkJRurr2fBOjg/nFgI=";
+    };
+    "inet.c" = fetchurl {
+      url = "https://github.com/apple-oss-distributions/network_cmds/raw/2e18102a14ab72b25caf3a5007c92b9f23e723fc/netstat.tproj/inet.c";
+      hash = "sha256-X1+dz+D6xR2Xqoxypjmy65pKBCh4iGVfByJGI0wVGO0=";
+    };
+    "inet6.c" = fetchurl {
+      url = "https://github.com/apple-oss-distributions/network_cmds/raw/2e18102a14ab72b25caf3a5007c92b9f23e723fc/netstat.tproj/inet6.c";
+      hash = "sha256-av5K1UQE3edUbzKN9FIn/DOeibsJaTZc0xJzDu9VZ5Q=";
+    };
+    "netstat.h" = fetchurl {
+      url = "https://github.com/apple-oss-distributions/network_cmds/raw/2e18102a14ab72b25caf3a5007c92b9f23e723fc/netstat.tproj/netstat.h";
+      hash = "sha256-UYi3lmA8G0wRJqVA2NYyMj0yCBUlxu0gMoMYW7NauJg=";
+    };
+    "unix.c" = fetchurl {
+      url = "https://github.com/apple-oss-distributions/network_cmds/raw/2e18102a14ab72b25caf3a5007c92b9f23e723fc/netstat.tproj/unix.c";
+      hash = "sha256-txs/mnR4WK8JAUN3PtqZsp6q2h+nx5VFKxI/itCTBNo=";
+    };
+    "systm.c" = fetchurl {
+      url = "https://github.com/apple-oss-distributions/network_cmds/raw/2e18102a14ab72b25caf3a5007c92b9f23e723fc/netstat.tproj/systm.c";
+      hash = "sha256-bISSIsA6OYfkHNOKB4dj9KNLBHfcelGVzwGiYiVqnRM=";
     };
   };
 
@@ -149,6 +169,7 @@ let
         -e '/^struct rt_reach_info\s*{/,/^};/p' \
         '${xnu}/bsd/net/route.h')
       EOF
+      ln -s "$out/include/net/route.h" "$out/include/net/route_private.h"
 
       install -D -t "$out/include/netinet" \
         '${xnu}/bsd/netinet/ip_flowid.h'
@@ -384,7 +405,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-luDJ4tYCvCAH/pSROdF9NtF/Ogb2Rd0ZyizG2SciloU=";
+  xcodeHash = "sha256-L5upfoE6uHsdFOzylTTH+UPftA96qdpnvgFcK5dmhgY=";
 
   patches = [
     # Some private headers depend on corecrypto, which we can’t use.
@@ -402,7 +423,7 @@ mkAppleDerivation {
     )}
 
     ${lib.concatLines (
-      lib.mapAttrsToList (name: path: "cp '${path}' 'netstat.tproj/${name}.c'") old_netstat
+      lib.mapAttrsToList (name: path: "cp '${path}' 'netstat.tproj/${name}'") old_netstat
     )}
 
     # Use private struct ifreq instead of the one defined in the system header.
