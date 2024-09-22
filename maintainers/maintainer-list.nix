@@ -16673,6 +16673,13 @@
     githubId = 17240342;
     name = "Nano Twerpus";
   };
+  nanoyaki = {
+    name = "Hana Kretzer";
+    email = "hanakretzer@gmail.com";
+    github = "nanoyaki";
+    githubId = 144328493;
+    keys = [ { fingerprint = "D89F 440C 6CD7 4753 090F  EC7A 4682 C5CB 4D9D EA3C"; } ];
+  };
   naphta = {
     github = "naphta";
     githubId = 6709831;
