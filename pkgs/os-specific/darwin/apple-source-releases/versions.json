@@ -30,5 +30,9 @@
   "diskdev_cmds": {
     "hash": "sha256-VX+hcZ7JhOA8EhwLloPlM3Yx79RXp9OYHV9Mi10uw3Q=",
     "version": "593"
+  },
+  "file_cmds": {
+    "hash": "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=",
+    "version": "264.1.1"
   }
 }
