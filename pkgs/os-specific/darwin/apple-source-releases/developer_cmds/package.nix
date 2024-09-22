@@ -14,7 +14,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-4Ucyy4esmaekoVysvDTGq5/F/zH2CfU+iGmsmYykLa8=";
+  xcodeHash = "sha256-oE1GJF/M4vXLTM7BBjezKqrMu9iTUlEKDBKgwyFqu3k=";
 
   postPatch = ''
     substituteInPlace rpcgen/rpc_main.c \
