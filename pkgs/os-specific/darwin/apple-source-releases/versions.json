@@ -3,6 +3,10 @@
     "hash": "sha256-O9/EOsbK5ZXxh6iDSTwGWWrY5GX/viUwdfG3tdvZwcQ=",
     "version": "140.1"
   },
+  "Csu": {
+    "hash": "sha256-l8RI8aiin7ovZuoDh54thDmd/b502w+dtjN5ZoISZBg=",
+    "version": "88"
+  },
   "adv_cmds": {
     "hash": "sha256-Ztp8ALWcviEpthoiY8ttWzGI8OcsLzsULjlqe8GIzw8=",
     "version": "163"
