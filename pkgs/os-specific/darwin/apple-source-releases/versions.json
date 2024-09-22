@@ -79,6 +79,10 @@
     "hash": "sha256-8aW3dAA/dfZTayGLHqzRqnVLmwJzRpvVmXL4eJGz5OQ=",
     "version": "696"
   },
+  "patch_cmds": {
+    "hash": "sha256-foIoIMe+zgPISFmE10q4cwEUBhiah4nbD7UtjBumZYU=",
+    "version": "66"
+  },
   "removefile": {
     "hash": "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=",
     "version": "45"
