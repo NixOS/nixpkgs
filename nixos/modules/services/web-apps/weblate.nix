@@ -203,7 +203,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [ "L+ ${settingsDir} - - - - ${settings_py}" ];
+    systemd.tmpfiles.settings."10-weblate".${settingsDir}."L+".argument = settings_py;
 
     services.nginx = {
       enable = true;
