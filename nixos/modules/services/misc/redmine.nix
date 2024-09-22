@@ -327,28 +327,33 @@ in
     };
 
     # create symlinks for the basic directory layout the redmine package expects
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/cache' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/config' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/files' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/plugins' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/public' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/public/plugin_assets' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/public/themes' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
+    systemd.tmpfiles.settings."10-redmine" = let
+      defaultConfig = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+    in {
+      "${cfg.stateDir}" = defaultConfig;
+      "${cfg.stateDir}/cache" = defaultConfig;
+      "${cfg.stateDir}/config" = defaultConfig;
+      "${cfg.stateDir}/files" = defaultConfig;
+      "${cfg.stateDir}/log" = defaultConfig;
+      "${cfg.stateDir}/plugins" = defaultConfig;
+      "${cfg.stateDir}/public" = defaultConfig;
+      "${cfg.stateDir}/public/plugin_assets" = defaultConfig;
+      "${cfg.stateDir}/public/themes" = defaultConfig;
+      "${cfg.stateDir}/tmp" = defaultConfig;
 
-      "d /run/redmine - - - - -"
-      "d /run/redmine/public - - - - -"
-      "L+ /run/redmine/config - - - - ${cfg.stateDir}/config"
-      "L+ /run/redmine/files - - - - ${cfg.stateDir}/files"
-      "L+ /run/redmine/log - - - - ${cfg.stateDir}/log"
-      "L+ /run/redmine/plugins - - - - ${cfg.stateDir}/plugins"
-      "L+ /run/redmine/public/plugin_assets - - - - ${cfg.stateDir}/public/plugin_assets"
-      "L+ /run/redmine/public/themes - - - - ${cfg.stateDir}/public/themes"
-      "L+ /run/redmine/tmp - - - - ${cfg.stateDir}/tmp"
-    ];
+      "/run/redmine".d = { };
+      "/run/redmine/public".d = { };
+      "/run/redmine/config"."L+".argument = "${cfg.stateDir}/config";
+      "/run/redmine/files"."L+".argument = "${cfg.stateDir}/files";
+      "/run/redmine/log"."L+".argument = "${cfg.stateDir}/log";
+      "/run/redmine/plugins"."L+".argument = "${cfg.stateDir}/plugins";
+      "/run/redmine/public/plugin_assets"."L+".argument = "${cfg.stateDir}/public/plugin_assets";
+      "/run/redmine/public/themes"."L+".argument = "${cfg.stateDir}/public/themes";
+      "/run/redmine/tmp"."L+".argument = "${cfg.stateDir}/tmp";
+    };
 
     systemd.services.redmine = {
       after = [ "network.target" ] ++ optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
