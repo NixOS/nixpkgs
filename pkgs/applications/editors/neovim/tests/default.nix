@@ -65,15 +65,6 @@ let
     sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
   };
 
-  # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
-  # $VIMRUNTIME/ftplugin/vim.tex sources $VIMRUNTIME/ftplugin/initex.vim which sets b:did_ftplugin
-  # we save b:did_ftplugin's value in a `plugin_was_loaded_too_late` file
-  texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
-    mkdir -p $out/ftplugin
-    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' >> $out/ftplugin/tex.vim
-    echo ':q!' >> $out/ftplugin/tex.vim
-  '') // { pname = "test-ftplugin"; };
-
   # neovim-drv must be a wrapped neovim
   runTest = neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}" ({
@@ -139,10 +130,21 @@ rec {
 
   run_nvim_with_plug = runTest nvim_with_plug ''
     export HOME=$TMPDIR
-    ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
+    ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
-  nvim_with_ftplugin = neovim.override {
+  nvim_with_ftplugin = let
+    # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
+    # $VIMRUNTIME/ftplugin/vim.tex sources $VIMRUNTIME/ftplugin/initex.vim which sets b:did_ftplugin
+    # we save b:did_ftplugin's value in a `plugin_was_loaded_too_late` file
+    texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
+      mkdir -p $out/ftplugin
+      echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' >> $out/ftplugin/tex.vim
+      echo ':q!' >> $out/ftplugin/tex.vim
+    '') // { pname = "test-ftplugin"; };
+    in
+
+    neovim.override {
     extraName = "-with-ftplugin";
     configure.packages.plugins = {
       start = [
@@ -157,10 +159,12 @@ rec {
     export HOME=$TMPDIR
     echo '\documentclass{article}' > main.tex
 
-    ${nvim_with_ftplugin}/bin/nvim main.tex -c "set ft?" -c quit
+    ${nvim_with_ftplugin}/bin/nvim -i NONE -V3log.txt main.tex -c "set ft?" -c quit
     ls -l $TMPDIR
-    # if the file exists, then our plugin has been loaded instead of neovim's
-    [ ! -f plugin_was_loaded_too_late ]
+    # check the saved value b:did_ftplugin then our plugin has been loaded instead of neovim's
+    result="$(cat plugin_was_loaded_too_late)"
+    echo $result
+    [ "$result" = 0 ]
   '';
 
 
