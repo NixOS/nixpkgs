@@ -2475,6 +2475,8 @@ self: super: with self; {
 
   confuse = callPackage ../development/python-modules/confuse { };
 
+  confusable-homoglyphs = callPackage ../development/python-modules/confusable-homoglyphs { };
+
   confight = callPackage ../development/python-modules/confight { };
 
   connexion = callPackage ../development/python-modules/connexion { };
