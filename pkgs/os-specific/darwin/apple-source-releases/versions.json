@@ -55,6 +55,10 @@
     "hash": "sha256-4I70hci8SUQ5QERbImP3htjYCGXdZZ0a6RM7ggUnVa4=",
     "version": "107"
   },
+  "libpcap": {
+    "hash": "sha256-x5mKK6LXGS3LBRUVNZwxA750a0NoRScTpoDUsumlg+s=",
+    "version": "135"
+  },
   "libresolv": {
     "hash": "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=",
     "version": "64"
