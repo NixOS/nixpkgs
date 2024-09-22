@@ -52,12 +52,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=reload_cfg::test::watch_multiple"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Tor in Rust";
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
