@@ -1689,8 +1689,6 @@ self: super: with self; {
 
   blessed = callPackage ../development/python-modules/blessed { };
 
-  blessings = callPackage ../development/python-modules/blessings { };
-
   blinker = callPackage ../development/python-modules/blinker { };
 
   blinkpy = callPackage ../development/python-modules/blinkpy { };
@@ -2053,8 +2051,6 @@ self: super: with self; {
   catppuccin = callPackage ../development/python-modules/catppuccin { };
 
   cattrs = callPackage ../development/python-modules/cattrs { };
-
-  cbeams = callPackage ../misc/cbeams { };
 
   cbor2 = callPackage ../development/python-modules/cbor2 { };
 
@@ -8659,8 +8655,6 @@ self: super: with self; {
 
   myuplink = callPackage ../development/python-modules/myuplink { };
 
-  n3fit = callPackage ../development/python-modules/n3fit { };
-
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
@@ -13471,8 +13465,6 @@ self: super: with self; {
 
   repocheck = callPackage ../development/python-modules/repocheck { };
 
-  reportengine = callPackage ../development/python-modules/reportengine { };
-
   reportlab = callPackage ../development/python-modules/reportlab { };
 
   reportlab-qrcode = callPackage ../development/python-modules/reportlab-qrcode { };
@@ -13716,8 +13708,6 @@ self: super: with self; {
   roombapy = callPackage ../development/python-modules/roombapy { };
 
   roonapi = callPackage ../development/python-modules/roonapi { };
-
-  ronin = callPackage ../development/python-modules/ronin { };
 
   rope = callPackage ../development/python-modules/rope { };
 
@@ -17032,8 +17022,6 @@ self: super: with self; {
   validators = callPackage ../development/python-modules/validators { };
 
   validobj = callPackage ../development/python-modules/validobj { };
-
-  validphys2 = callPackage ../development/python-modules/validphys2 { };
 
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
