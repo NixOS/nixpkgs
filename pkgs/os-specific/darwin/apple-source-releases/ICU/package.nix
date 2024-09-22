@@ -21,7 +21,7 @@ let
   baseAttrs = finalAttrs: {
     releaseName = "ICU";
 
-    sourceRoot = "source/icuSources";
+    sourceRoot = "source/icu/icu4c/source";
 
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
@@ -96,6 +96,12 @@ let
 
       substituteInPlace test/intltest/rbbitst.cpp \
         --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
+
+      # Otherwise `make install` is broken.
+      substituteInPlace Makefile.in \
+        --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
+      substituteInPlace config/dist-data.sh \
+        --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
     '';
 
     # remove dependency on bootstrap-tools in early stdenv build
