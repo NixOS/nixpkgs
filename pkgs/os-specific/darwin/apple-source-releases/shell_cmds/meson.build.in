@@ -15,17 +15,12 @@ host_cxx = meson.get_compiler('cpp')
 
 
 # pam = cc.find_library('pam')
+libbsd = dependency('libbsd-overlay', required : false)
 libedit = dependency('libedit')
 libresolv = host_cc.find_library('resolv')
 libsbuf = host_cc.find_library('sbuf')
 libutil = host_cc.find_library('util')
 libxo = dependency('libxo')
-
-xargs_deps = [ ]
-# Versions of macOS prior to 11.0 do not support `strtonum` or `rpmatch`
-if not host_cc.has_function('strtonum', prefix : '#include <stdlib.h>')
-    xargs_deps += [ dependency('libbsd-overlay') ]
-endif
 
 
 # Generators
@@ -52,7 +47,6 @@ single_file_cmds = [
     'kill',
     'killall',
     'lastcomm',
-    'lockf',
     'logname',
     'mktemp',
     'nice',
@@ -263,6 +257,14 @@ foreach manpage : [ 'concatdb', 'mklocatedb' ]
     )
 endforeach
 
+executable(
+    'lockf',
+    dependencies : [ libbsd ],
+    install : true,
+    sources : [ 'lockf/lockf.c' ],
+)
+install_man('lockf/lockf.1')
+
 # Building `sh` requires several custom targets to generate files it needs.
 
 bash_bin = find_program('bash')
@@ -345,6 +347,13 @@ install_man('sh/sh.1')
 # install_man('su/su.1')
 
 executable(
+    'stdbuf',
+    install : true,
+    sources : [ 'stdbuf/stdbuf.c' ],
+)
+install_man('stdbuf/stdbuf.1')
+
+executable(
     '[',
     install : true,
     sources : [ 'test/test.c' ],
@@ -406,7 +415,7 @@ install_man('who/who.1')
 
 executable(
     'xargs',
-    dependencies : xargs_deps,
+    dependencies : [ libbsd ],
     include_directories : 'xargs',
     install : true,
     sources : [
