@@ -1,81 +1,68 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   atf,
   gperf,
-  libiconvReal,
-  meson,
-  ninja,
+  mkAppleDerivation,
   pkg-config,
-  gitUpdater,
+  stdenv,
 }:
 
 let
   inherit (stdenv) hostPlatform;
 in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "libiconv";
-  version = "99";
+mkAppleDerivation (finalAttrs: {
+  releaseName = "libiconv";
 
   outputs = [
     "out"
     "dev"
   ];
 
+  xcodeHash = "sha256-wTKaRMqKC6T/nxJIEr6IlRGgsPwObgi/spw5gk2lACg=";
+
+  patches =
+    lib.optionals hostPlatform.isStatic [
+      # Use gperf to implement module loading statically by looking up the module functions in the static binary.
+      ./patches/0001-Support-static-module-loading.patch
+    ]
+    ++ [
+      # Avoid out of bounds write with ISO-2022
+      ./patches/0002-Fix-ISO-2022-out-of-bounds-write-with-encoded-charac.patch
+    ];
+
   # Propagate `out` only when there are dylibs to link (i.e., don’t propagate when doing a static build).
   propagatedBuildOutputs = lib.optionalString (!hostPlatform.isStatic) "out";
 
-  src = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "libiconv";
-    rev = "libiconv-${finalAttrs.version}";
-    hash = "sha256-TGt6rsU52ztfW2rCqwnhMAExLbexI/59IoDOGY+XGu0=";
-  };
-
-  setupHooks =
-    libiconvReal.setupHooks
-    ++ lib.optionals hostPlatform.isStatic [ ./static-setup-hook.sh ];
-
-  patches = lib.optionals hostPlatform.isStatic [ ./0001-Support-static-module-loading.patch ] ++ [
-    ./0002-Fix-ISO-2022-out-of-bounds-write-with-encoded-charac.patch
-  ];
-
   postPatch =
     ''
-      substitute ${./meson.build} meson.build --subst-var version
-      cp ${./meson.options} meson.options
-
-      # Work around unnecessary private API usage in libcharset
+      # Work around unnecessary private API usage in libcharset.
       mkdir -p libcharset/os && cat <<-header > libcharset/os/variant_private.h
         #pragma once
         #include <stdbool.h>
         static inline bool os_variant_has_internal_content(const char*) { return false; }
       header
 
+      # Add additional test cases found while working on packaging libiconv in nixpkgs.
       cp ${./nixpkgs_test.c} tests/libiconv/nixpkgs_test.c
     ''
     + lib.optionalString hostPlatform.isStatic ''
       cp ${./static-modules.gperf} static-modules.gperf
     '';
 
-  strictDeps = true;
-
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-    ]
-    # Dynamic builds use `dlopen` to load modules, but static builds have to link them all.
-    # `gperf` is used to generate a lookup table from module to ops functions.
-    ++ lib.optionals hostPlatform.isStatic [ gperf ];
-
-  mesonBuildType = "release";
+  # Dynamic builds use `dlopen` to load modules, but static builds have to link them all.
+  # `gperf` is used to generate a lookup table from module to ops functions.
+  nativeBuildInputs = lib.optionals hostPlatform.isStatic [ gperf ];
 
   mesonFlags = [ (lib.mesonBool "tests" finalAttrs.doInstallCheck) ];
 
+  postBuild =
+    # Add `libcharset.a` contents to `libiconv.a` to duplicate the reexport from `libiconv.dylib`.
+    lib.optionalString hostPlatform.isStatic ''
+      ${stdenv.cc.targetPrefix}ar qL libiconv.a libcharset.a
+    '';
+
   postInstall =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && !hostPlatform.isStatic) ''
+    lib.optionalString (hostPlatform.isDarwin && !hostPlatform.isStatic) ''
       ${stdenv.cc.targetPrefix}install_name_tool "$out/lib/libiconv.2.dylib" \
         -change '@rpath/libcharset.1.dylib' "$out/lib/libcharset.1.dylib"
     ''
@@ -98,22 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "libiconv-"; };
-
-  __structuredAttrs = true;
-
   meta = {
     description = "Iconv(3) implementation";
-    homepage = "https://opensource.apple.com/releases/";
-    license =
-      with lib.licenses;
-      [
-        bsd2
-        bsd3
-      ]
-      ++ lib.optional finalAttrs.doInstallCheck apsl10;
+    license = [
+      lib.licenses.bsd2
+      lib.licenses.bsd3
+    ] ++ lib.optional finalAttrs.doInstallCheck lib.licenses.apple-psl10;
     mainProgram = "iconv";
-    maintainers = with lib.maintainers; [ reckenrode ];
-    platforms = lib.platforms.darwin;
   };
 })

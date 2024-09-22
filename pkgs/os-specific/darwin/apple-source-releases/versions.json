@@ -38,5 +38,9 @@
   "file_cmds": {
     "hash": "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=",
     "version": "264.1.1"
+  },
+  "libiconv": {
+    "hash": "sha256-TGt6rsU52ztfW2rCqwnhMAExLbexI/59IoDOGY+XGu0=",
+    "version": "99"
   }
 }
