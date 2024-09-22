@@ -13151,8 +13151,6 @@ self: super: with self; {
 
   qdrant-client = callPackage ../development/python-modules/qdrant-client { };
 
-  qds-sdk = callPackage ../development/python-modules/qds-sdk { };
-
   qgrid = callPackage ../development/python-modules/qgrid { };
 
   qemu = callPackage ../development/python-modules/qemu {
