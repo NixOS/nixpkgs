@@ -21,13 +21,13 @@
 
 let
   c4-lib = fetchzip {
-    url = "https://github.com/plantuml-stdlib/C4-PlantUML/archive/refs/tags/v2.8.0.zip";
-    hash = "sha256-pGtTFg7HcAFYPrjd+CAaxS4C6Cqaj94aq45v3NpiAxM=";
+    url = "https://github.com/plantuml-stdlib/C4-PlantUML/archive/refs/tags/v2.10.0.zip";
+    hash = "sha256-p9Njb7VauXVf6yOBDQrO9mS+za9NntFUCK5tig0mH3U=";
   };
 
   sprites = fetchzip {
-    url = "https://github.com/tupadr3/plantuml-icon-font-sprites/archive/fa3f885dbd45c9cd0cdf6c0e5e4fb51ec8b76582.zip";
-    hash = "sha256-lt9+NNMIaZSkKNsGyHoqXUCTlKmZFGfNYYGjer6X0Xc=";
+    url = "https://github.com/tupadr3/plantuml-icon-font-sprites/archive/refs/tags/v3.0.0.zip";
+    hash = "sha256-I/cR1VPR7aKyTZF9X/4GkgcxV9+sLgNpTZugvCy0Dvs=";
   };
 
   # In order to pre-fix the plantuml.jar parameter with the argument
@@ -52,7 +52,7 @@ in
 
 stdenv.mkDerivation {
   pname = "plantuml-c4";
-  version = "2.8.0";
+  version = "2.10.0";
 
   nativeBuildInputs = [ makeWrapper ];
 
