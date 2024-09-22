@@ -62,9 +62,12 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
-    ];
+    # for dnsmasq.leases
+    systemd.tmpfiles.settings."10-waydroid"."/var/lib/misc".d = {
+      user = "root";
+      group = "root";
+      mode = "0755";
+    };
 
     services.dbus.packages = with pkgs; [ waydroid ];
   };
