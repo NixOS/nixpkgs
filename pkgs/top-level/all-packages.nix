@@ -18712,8 +18712,6 @@ with pkgs;
 
   strace-analyzer = callPackage ../development/tools/misc/strace-analyzer { };
 
-  stylelint = callPackage ../development/tools/analysis/stylelint { };
-
   stylua = callPackage ../development/tools/stylua { };
 
   summon = callPackage ../development/tools/summon { };
