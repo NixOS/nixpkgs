@@ -87,8 +87,6 @@ melpaBuild {
 
   __darwinAllowLocalNetworking = true;
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
