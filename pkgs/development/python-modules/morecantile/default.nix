@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -40,6 +41,11 @@ buildPythonPackage rec {
     mercantile
     pytestCheckHook
     rasterio
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # https://github.com/developmentseed/morecantile/issues/156
+    "test_tiles_when_tms_bounds_and_provided_bounds_cross_antimeridian"
   ];
 
   pythonImportsCheck = [ "morecantile" ];
