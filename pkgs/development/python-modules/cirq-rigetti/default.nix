@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   cirq-core,
+  fetchpatch2,
   lib,
   pytestCheckHook,
   attrs,
@@ -30,6 +31,16 @@ buildPythonPackage rec {
   inherit (cirq-core) version src;
 
   disabled = pythonOlder "3.7";
+
+  patches = [
+    # https://github.com/quantumlib/Cirq/pull/6734
+    (fetchpatch2 {
+      name = "fix-rigetti-check-for-aspen-family-device-kind.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/dd395fb71fb7f92cfd34f008bf2a98fc70b57fae.patch";
+      stripLen = 1;
+      hash = "sha256-EWB2CfMS2+M3zNFX5PwFNtEBdgJkNVUVNd+I/E6n9kI=";
+    })
+  ];
 
   sourceRoot = "${src.name}/${pname}";
 

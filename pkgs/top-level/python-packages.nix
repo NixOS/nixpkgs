@@ -13135,6 +13135,8 @@ self: super: with self; {
 
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
+  qcs-api-client-common = callPackage ../development/python-modules/qcs-api-client-common { };
+
   qcs-sdk-python = callPackage ../development/python-modules/qcs-sdk-python { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
