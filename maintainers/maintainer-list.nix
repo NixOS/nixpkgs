@@ -13446,6 +13446,12 @@
     github = "Mephistophiles";
     githubId = 4850908;
   };
+  merrkry = {
+    email = "merrkry@tsubasa.moe";
+    name = "merrkry";
+    github = "merrkry";
+    githubId = 124278440;
+  };
   mevatron = {
     email = "mevatron@gmail.com";
     name = "mevatron";

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.7";
+  version = "24.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tefra";
     repo = "xsdata";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7rROd0iKs/SuIZGUwVDbusKgp7APIlvFto43Q3QCfZk=";
+    hash = "sha256-wQSrdAS4E6AmpP+pKviFomLrcSHLROhTWHg/hYGTaeQ=";
   };
 
   patches = [

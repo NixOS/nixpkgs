@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
+, clang-tools
 , cmake
 , colordiff
 , flex
@@ -34,11 +35,11 @@ buildPythonApplication rec {
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     substituteInPlace CMakeLists.txt \
-      --replace " -Werror " " "
+      --replace-fail " -Werror " " "
 
     substituteInPlace cvise/utils/testing.py \
-      --replace "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \
-      --replace "'colordiff'" "'${colordiff}/bin/colordiff'"
+      --replace-fail "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \
+      --replace-fail "'colordiff'" "'${colordiff}/bin/colordiff'"
   '';
 
   nativeBuildInputs = [
@@ -63,6 +64,12 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     pytestCheckHook
     unifdef
+  ];
+
+  cmakeFlags = [
+    # By default `cvise` looks it up in `llvm` bin directory. But
+    # `nixpkgs` moves it into a separate derivation.
+    "-DCLANG_FORMAT_PATH=${clang-tools}/bin/clang-format"
   ];
 
   disabledTests = [
