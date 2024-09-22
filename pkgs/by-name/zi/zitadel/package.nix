@@ -99,6 +99,10 @@ buildGoModule rec {
   name = "zitadel";
   inherit version;
 
+  patches = [
+    ./2.42.x-CVE-2024-41953.patch
+  ];
+
   src = zitadelRepo;
 
   nativeBuildInputs = [ sass statik ];
@@ -149,5 +153,8 @@ buildGoModule rec {
     license = licenses.asl20;
     sourceProvenance = [ sourceTypes.fromSource ];
     maintainers = with maintainers; [ Sorixelle ];
+    knownVulnerabilities = [
+      "CVE-2024-41952"
+    ];
   };
 }
