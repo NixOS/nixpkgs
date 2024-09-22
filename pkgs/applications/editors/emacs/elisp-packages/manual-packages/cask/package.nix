@@ -46,8 +46,6 @@ melpaBuild (finalAttrs: {
     shut-up
   ];
 
-  ignoreCompilationError = false;
-
   strictDeps = true;
 
   # use melpaVersion so that it works for unstable releases too
