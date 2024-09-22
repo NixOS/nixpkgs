@@ -133,6 +133,13 @@ let
         # Expects bash to be at /bin/bash
         ac-rtags = fix-rtags super.ac-rtags;
 
+        age = super.age.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace age.el \
+              --replace-fail 'age-program (executable-find "age")' 'age-program "${lib.getExe pkgs.age}"'
+          '';
+        });
+
         airline-themes = super.airline-themes.override {
           inherit (self.melpaPackages) powerline;
         };
@@ -356,6 +363,13 @@ let
         eopengrok = buildWithGit super.eopengrok;
 
         forge = buildWithGit super.forge;
+
+        gnuplot-mode = super.gnuplot-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace gnuplot-mode.el \
+              --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+          '';
+        });
 
         magit = buildWithGit super.magit;
 
