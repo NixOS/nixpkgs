@@ -20,6 +20,7 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , withScripts ? true
+, gitUpdater
 }:
 
 let
@@ -135,5 +136,8 @@ if withScripts then
     name = "msmtp-${version}";
     inherit version meta;
     paths = [ binaries scripts ];
-    passthru = { inherit binaries scripts; };
+    passthru = {
+      inherit binaries scripts src;
+      updateScript = gitUpdater { rev-prefix = "msmtp-"; };
+    };
   } else binaries
