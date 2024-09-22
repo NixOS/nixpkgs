@@ -62,5 +62,9 @@
   "removefile": {
     "hash": "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=",
     "version": "45"
+  },
+  "shell_cmds": {
+    "hash": "sha256-kmEOprkiJGMVcl7yHkGX8ymk/5KjE99gWuF8j2hK5hY=",
+    "version": "187"
   }
 }
