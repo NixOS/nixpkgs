@@ -911,14 +911,20 @@ in {
         };
       };
 
-      systemd.tmpfiles.rules = map (dir: "d ${dir} 0750 nextcloud nextcloud - -") [
+      systemd.tmpfiles.settings."10-nextcloud" = lib.genAttrs [
         "${cfg.home}"
         "${datadir}/config"
         "${datadir}/data"
         "${cfg.home}/store-apps"
-      ] ++ [
-        "L+ ${datadir}/config/override.config.php - - - - ${overrideConfig}"
-      ];
+      ] (dir: {
+        ${dir}.d = {
+          user = "nextcloud";
+          group = "nextcloud";
+          mode = "0750";
+        };
+      }) // {
+        "${datadir}/config/override.config.php"."L+".argument = overrideConfig;
+      };
 
       systemd.services = {
         # When upgrading the Nextcloud package, Nextcloud can report errors such as
