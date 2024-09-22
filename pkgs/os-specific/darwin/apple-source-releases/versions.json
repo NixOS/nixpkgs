@@ -7,6 +7,10 @@
     "hash": "sha256-l8RI8aiin7ovZuoDh54thDmd/b502w+dtjN5ZoISZBg=",
     "version": "88"
   },
+  "ICU": {
+    "hash": "sha256-p3CYITMljHVuwijeYnUbKaIWp/xPC4/hg1G1lO6PlFU=",
+    "version": "66108"
+  },
   "adv_cmds": {
     "hash": "sha256-Ztp8ALWcviEpthoiY8ttWzGI8OcsLzsULjlqe8GIzw8=",
     "version": "163"
