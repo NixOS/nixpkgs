@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libelf
-, libpcap
-, nix-update-script
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  libelf,
+  libpcap,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,27 +14,34 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "GNS3";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dynamips";
+    rev = "refs/tags/v${version}";
     hash = "sha256-+h+WsZ/QrDd+dNrR6CJb2uMG+vbUvK8GTxFJZOxknL0=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libelf libpcap ];
 
-  cmakeFlags = [ "-DDYNAMIPS_CODE=stable" ];
+  buildInputs = [
+    libelf
+    libpcap
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "DYNAMIPS_CODE" "stable")
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Cisco router emulator";
     longDescription = ''
       Dynamips is an emulator computer program that was written to emulate Cisco
       routers.
     '';
+    homepage = "https://github.com/GNS3/dynamips";
+    changelog = "https://github.com/GNS3/dynamips/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     mainProgram = "dynamips";
     maintainers = with maintainers; [ primeos ];
