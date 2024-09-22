@@ -42,8 +42,6 @@ in melpaBuild {
 
   files = ''("core/*.el" "${tsc-dyn}/lib/*")'';
 
-  ignoreCompilationError = false;
-
   passthru = {
     inherit tsc-dyn;
     updateScript = nix-update-script { attrPath = "emacsPackages.tsc.tsc-dyn"; };
