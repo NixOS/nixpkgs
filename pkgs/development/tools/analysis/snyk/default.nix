@@ -1,14 +1,18 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, stdenv
-, testers
-, snyk
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  stdenv,
+  testers,
+  snyk,
 }:
 
-buildNpmPackage rec {
-  pname = "snyk";
+let
   version = "1.1293.1";
+in
+buildNpmPackage {
+  pname = "snyk";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "snyk";
@@ -26,7 +30,9 @@ buildNpmPackage rec {
 
   env.NIX_CFLAGS_COMPILE =
     # Fix error: no member named 'aligned_alloc' in the global namespace
-    lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
+    lib.optionalString (
+      stdenv.isDarwin && stdenv.isx86_64
+    ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   npmBuildScript = "build:prod";
 
@@ -34,12 +40,12 @@ buildNpmPackage rec {
     package = snyk;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scans and monitors projects for security vulnerabilities";
     homepage = "https://snyk.io";
     changelog = "https://github.com/snyk/cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ momeemt ];
     mainProgram = "snyk";
   };
 }
