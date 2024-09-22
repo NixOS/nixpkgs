@@ -1,7 +1,7 @@
-diff --git a/icuSources/test/cintltst/cmsgtst.c b/icuSources/test/cintltst/cmsgtst.c
+diff --git a/test/cintltst/cmsgtst.c b/test/cintltst/cmsgtst.c
 index cb328707..1073e6c1 100644
---- a/icuSources/test/cintltst/cmsgtst.c
-+++ b/icuSources/test/cintltst/cmsgtst.c
+--- a/test/cintltst/cmsgtst.c
++++ b/test/cintltst/cmsgtst.c
 @@ -231,7 +231,7 @@ static void MessageFormatTest( void )
                          austrdup(result), austrdup(testResultStrings[i]) );
                  }
