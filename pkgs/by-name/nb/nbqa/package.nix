@@ -6,9 +6,8 @@
   # optional-dependencies
   ruff,
 
-  # passthru
-  testers,
-  nbqa,
+  # tests
+  versionCheckHook,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
@@ -68,7 +67,8 @@ python3.pkgs.buildPythonApplication rec {
       pytestCheckHook
       yapf
     ])
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ [ versionCheckHook ];
 
   disabledTests = [
     # Test data not found
@@ -87,12 +87,6 @@ python3.pkgs.buildPythonApplication rec {
     # Test data not found
     "tests/test_include_exclude.py"
   ];
-
-  passthru = {
-    tests.version = testers.testVersion {
-      package = nbqa;
-    };
-  };
 
   meta = {
     homepage = "https://github.com/nbQA-dev/nbQA";
