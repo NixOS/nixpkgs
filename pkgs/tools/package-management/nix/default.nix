@@ -147,8 +147,9 @@ let
             grep -v 'nix-${pkg.version}$' <<< "$paths"
             echo
             echo "Fix it by running in nixpkgs:"
-            echo
             echo "curl https://releases.nixos.org/nix/nix-${pkg.version}/fallback-paths.nix >nixos/modules/installer/tools/nix-fallback-paths.nix"
+            echo "Or go to the current maintainance branch on https://hydra.nixos.org/project/nix to get the latest eval of nix and run:"
+            echo "nixos/modules/installer/tools/update-fallback-paths.py <hydra-eval-id>"
             echo
             exit 1
           else
