@@ -8,7 +8,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-c1qADIrlwWCvKHPa1/s8jW1Eo+7RT8y7yExYNifFF3s=";
+  xcodeHash = "sha256-gT7kP/w23d5kGKgNPYS9ydCbeVaLwriMJj0BPIHgQ4U=";
 
   meta = {
     description = "Basic commands for Darwin";
