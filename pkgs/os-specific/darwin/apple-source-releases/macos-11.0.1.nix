@@ -5,7 +5,7 @@
 {
 CommonCrypto = applePackage' "CommonCrypto" "60178.40.2" "macos-11.0.1" "129gsxhhcxqycg0zjrdrz2ay4dv2ih1ckafqh33qrc499z8dam2p" {};
 Csu = applePackage' "Csu" "88" "macos-11.0.1" "1lzp9x8iv60c2h12q2s89nf49b5hvpqq4a9li44zr2fxszn8lqxh" {};
-ICU = applePackage' "ICU" "66108" "macos-11.0.1" "0mclizp99daihghqy2sgzjkid8i93dsn5pi8q9p7b3156chrhw57" {};
+ICU = callPackage ./ICU/package.nix { };
 Libc = applePackage' "Libc" "1439.40.11" "macos-11.0.1" "12k5sbz2k1pl839w2lk9iw414zzl50zdjzgq2x6bm20yjbfj69qm" {};
 Libinfo = applePackage' "Libinfo" "542.40.3" "macos-11.0.1" "18jvl7cdg64x6clhsfv5pbzxis2aldddpca5r81xqakrmi9mck80" {};
 Libnotify = applePackage' "Libnotify" "279.40.4" "macos-11.0.1" "1vr11s0c42ssjs29shy1m8rj008np7aswdzjpimsfzyav47jb6y7" {};
