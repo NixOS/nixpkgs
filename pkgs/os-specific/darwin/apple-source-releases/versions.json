@@ -22,5 +22,9 @@
   "copyfile": {
     "hash": "sha256-uHqLFOIpXK+n0RHyOZzVsP2DDZcFDivKCnqHBaXvHns=",
     "version": "138"
+  },
+  "developer_cmds": {
+    "hash": "sha256-h0wMVlS6QdRvKOVJ74W9ziHYGApjvnk77AIR6ukYBRo=",
+    "version": "62"
   }
 }
