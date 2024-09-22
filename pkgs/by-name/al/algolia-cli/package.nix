@@ -1,8 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
-
-buildGoModule rec {
-  pname = "algolia-cli";
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
+let
   version = "1.6.11";
+in
+buildGoModule {
+  pname = "algolia-cli";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "algolia";
@@ -17,7 +24,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/algolia" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/algolia/cli/pkg/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/algolia/cli/pkg/version.Version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd algolia \
@@ -26,11 +37,11 @@ buildGoModule rec {
       --zsh <($out/bin/algolia completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Algolia’s official CLI devtool";
     mainProgram = "algolia";
     homepage = "https://algolia.com/doc/tools/cli/";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
