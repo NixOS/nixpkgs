@@ -18809,8 +18809,6 @@ with pkgs;
 
   todoist-electron = callPackage ../applications/misc/todoist-electron { };
 
-  toil = callPackage ../applications/science/misc/toil { };
-
   travis = callPackage ../development/tools/misc/travis { };
 
   tree-sitter = makeOverridable (callPackage ../development/tools/parsing/tree-sitter) {
