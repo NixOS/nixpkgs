@@ -1732,10 +1732,6 @@ with pkgs;
 
   gen6dns = callPackage ../tools/networking/gen6dns { };
 
-  gen-license = callPackage ../development/tools/gen-license {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
   # This is to workaround gfal2-python broken against Python 3.12 or later.
