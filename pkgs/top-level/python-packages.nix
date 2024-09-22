@@ -7962,6 +7962,8 @@ self: super: with self; {
 
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
 
+  mkdocs-material-insiders = callPackage ../development/python-modules/mkdocs-material-insiders { };
+
   mkdocs-mermaid2-plugin = callPackage ../development/python-modules/mkdocs-mermaid2-plugin { };
 
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
