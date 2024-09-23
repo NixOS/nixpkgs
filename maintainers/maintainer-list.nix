@@ -2028,6 +2028,13 @@
     github = "Atry";
     githubId = 601530;
   };
+  attila = {
+    name = "Attila Oláh";
+    email = "attila@dorn.haus";
+    github = "attilaolah";
+    githubId = 196617;
+    keys = [ { fingerprint = "BF2E 4759 74D3 88E0 E30C  9604 07E6 C064 3FD1 42C3"; } ];
+  };
   auchter = {
     name = "Michael Auchter";
     email = "a@phire.org";
