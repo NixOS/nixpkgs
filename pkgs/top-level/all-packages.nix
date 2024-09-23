@@ -18556,8 +18556,6 @@ with pkgs;
 
   time-ghc-modules = callPackage ../development/tools/time-ghc-modules { };
 
-  tflint = callPackage ../development/tools/analysis/tflint { };
-
   tflint-plugins = recurseIntoAttrs (
     callPackage ../development/tools/analysis/tflint-plugins { }
   );
