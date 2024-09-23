@@ -1,6 +1,17 @@
-{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu73, fetchpatch2, config }:
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, icu73, fetchpatch2, config }:
 
 let
+  icu73' = icu73.overrideAttrs (attrs: {
+    # standardize vtzone output
+    # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
+    patches = attrs.patches ++ [(fetchpatch2 {
+      url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+      stripLen = 3;
+      hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+    })];
+  });
+
   common = { version, sha512, updateScript }: (buildMozillaMach rec {
     pname = "thunderbird";
     inherit version updateScript;
@@ -15,6 +26,10 @@ let
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
       ./no-buildconfig.patch
     ];
+
+    extraPassthru = {
+      icu73 = icu73';
+    };
 
     meta = with lib; {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
@@ -34,16 +49,7 @@ let
 
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
-    icu73 = icu73.overrideAttrs (attrs: {
-      # standardize vtzone output
-      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-      patches = attrs.patches ++ [(fetchpatch2 {
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-        stripLen = 3;
-        hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-      })];
-    });
+    icu73 = icu73';
   };
 
 in rec {
