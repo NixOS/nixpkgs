@@ -309,9 +309,7 @@ let
         #   starting with clang 16. Patches are available upstream that can be backported.
         # Because the first error is non-trivial to fix and suppressing it risks future breakage,
         # clang is pinned to clang 15. That also makes fixing the second set of errors unnecessary.
-        stdenv =
-          let stdenv' = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
-          in if stdenv'.hostPlatform.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
+        stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
         inherit (srcs.qtwebengine) version;
         python = python3;
         inherit (darwin) xnu;
