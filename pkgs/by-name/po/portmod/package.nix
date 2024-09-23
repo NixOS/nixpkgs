@@ -3,29 +3,33 @@
 , cacert
 , fetchFromGitLab
 , git
-, imagemagick
 , openmw
+, jre
+, perl
 , python3Packages
 , rustPlatform
-, tes3cmd
-, tr-patcher
+, fontconfig
+, freetype
+, libX11
+, harfbuzz
+, fribidi
 }:
 
 let
-  version = "2.6.2";
+  version = "2.8.0";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    hash = "sha256-ufr2guaPdCvI5JOicL/lTrT3t6UlaY1hEB2xbwzhw6A=";
+    hash = "sha256-SV0nwUA72vBnaelbErmrSERCWSnZjKUv9LSH4aT8klA=";
   };
 
-  portmod-rust = rustPlatform.buildRustPackage rec {
+  portmod-rust = rustPlatform.buildRustPackage {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-sAjgGVVjgXaWbmN/eGEvatYjkHeFTZNX1GXFcJqs3GI=";
+    cargoHash = "sha256-+JFfbXAjWo8Cx1W7tcPCEBh7qbINjOZtsTjjM8pYevQ=";
 
     nativeBuildInputs = [
       python3Packages.python
@@ -38,14 +42,21 @@ let
     bubblewrap
     git
     python3Packages.virtualenv
-    tr-patcher
-    tes3cmd
-    imagemagick
     openmw
+    jre # to run tr-patcher
+    perl # to run tes3cmd
   ];
 
+  # Portmod fetch some binaries by itself, but seems to neglect a few common libraries (at least for ImageMagick)
+  extra-libs = [
+    fontconfig
+    freetype
+    libX11
+    harfbuzz
+    fribidi
+  ];
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit src version;
 
   pname = "portmod";
@@ -82,6 +93,7 @@ python3Packages.buildPythonApplication rec {
     patool
     packaging
     fasteners
+    distutils
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -113,7 +125,8 @@ python3Packages.buildPythonApplication rec {
     cp ${portmod-rust}/lib/libportmod.so $out/${python3Packages.python.sitePackages}/portmodlib/portmod.so
 
     makeWrapperArgs+=("--prefix" "GIT_SSL_CAINFO" ":" "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")
+      "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }" \
+      "--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath extra-libs }")
   '';
 
   meta = with lib; {
