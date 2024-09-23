@@ -167,6 +167,7 @@ let
         ranlib = cc.bintools.bintools;
         nm = cc.bintools.bintools;
         readelf = cc.bintools.bintools;
+        objdump = cc.bintools;
 
         ld = cc.bintools;
         "ld.gold" = cc.bintools;
@@ -331,6 +332,7 @@ stdenv.mkDerivation (rec {
     export RANLIB="${toolPath "ranlib" targetCC}"
     export READELF="${toolPath "readelf" targetCC}"
     export STRIP="${toolPath "strip" targetCC}"
+    export OBJDUMP="${toolPath "objdump" targetCC}"
   '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
     export OTOOL="${toolPath "otool" targetCC}"
     export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
