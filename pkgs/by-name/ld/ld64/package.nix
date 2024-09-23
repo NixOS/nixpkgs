@@ -5,7 +5,6 @@
   fetchurl,
   darwin,
   libtapi,
-  libunwind,
   llvm,
   meson,
   ninja,
@@ -146,7 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libtapi
       llvm
-      libunwind
       openssl
       xar
     ]
