@@ -217,6 +217,8 @@ in
 
   preview-tailor = mkHome super.preview-tailor;
 
+  psgml = ignoreCompilationError super.psgml; # elisp error
+
   # native-ice https://github.com/mattiase/relint/issues/15
   relint = ignoreCompilationError super.relint;
 
