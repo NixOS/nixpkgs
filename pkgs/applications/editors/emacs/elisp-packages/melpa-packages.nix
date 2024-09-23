@@ -364,6 +364,13 @@ let
 
         forge = buildWithGit super.forge;
 
+        gnuplot = super.gnuplot.overrideAttrs (attrs: {
+           postPatch = attrs.postPatch or "" + ''
+             substituteInPlace gnuplot.el \
+               --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+           '';
+        });
+
         gnuplot-mode = super.gnuplot-mode.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace gnuplot-mode.el \
