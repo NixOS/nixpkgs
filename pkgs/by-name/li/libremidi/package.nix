@@ -41,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
       CoreServices
     ];
 
+  # Bug: set this as true breaks obs-studio-plugins.advanced-scene-switcher
+  strictDeps = false;
+
   postInstall = ''
     cp -r $src/include $out
   '';
