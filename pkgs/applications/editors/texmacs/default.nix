@@ -21,7 +21,7 @@
 
 let
   pname = "texmacs";
-  version = "2.1.2";
+  version = "2.1.4";
   common = callPackage ./common.nix {
     inherit extraFonts chineseFonts japaneseFonts koreanFonts;
     tex = texliveSmall;
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
-    hash = "sha256-Ds9gxOwMYSttEWrawgxLHGxHyMBvt8WmyPIwBP2g/CM=";
+    hash = "sha256-h6aSLuDdrAtVzOnNVPqMEWX9WLDHtkCjPy9JXWnBgYY=";
   };
 
   postPatch = common.postPatch + ''

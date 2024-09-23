@@ -12152,6 +12152,7 @@ with self; {
     };
     buildInputs = [ ModuleBuildTiny TestNeeds ];
     propagatedBuildInputs = [ HTTPMessage ];
+    __darwinAllowLocalNetworking = true;
     meta = {
       description = "Simple http server class";
       homepage = "https://github.com/libwww-perl/HTTP-Daemon";

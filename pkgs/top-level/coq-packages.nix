@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip
+{ lib, stdenv, fetchurl, fetchzip
 , callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
 , ocamlPackages_4_10, ocamlPackages_4_12, ocamlPackages_4_14
 , fetchpatch, makeWrapper, coq2html
@@ -11,7 +11,7 @@ let
       coqPackages = self // { __attrsFailEvaluation = true; recurseForDerivations = false; };
 
       metaFetch = import ../build-support/coq/meta-fetch/default.nix
-        {inherit lib stdenv fetchzip; };
+        {inherit lib stdenv fetchzip fetchurl; };
       mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq {});
 
       contribs = recurseIntoAttrs

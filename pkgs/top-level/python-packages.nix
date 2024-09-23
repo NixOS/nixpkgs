@@ -6546,8 +6546,6 @@ self: super: with self; {
 
   jupyter-contrib-core = callPackage ../development/python-modules/jupyter-contrib-core { };
 
-  jupyter-contrib-nbextensions = callPackage ../development/python-modules/jupyter-contrib-nbextensions { };
-
   jupyter-console = callPackage ../development/python-modules/jupyter-console { };
 
   jupyter-core = callPackage ../development/python-modules/jupyter-core { };
@@ -6879,6 +6877,8 @@ self: super: with self; {
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
+
+  latexrestricted = callPackage ../development/python-modules/latexrestricted { };
 
   launchpadlib = callPackage ../development/python-modules/launchpadlib { };
 
