@@ -691,10 +691,16 @@ stdenv.mkDerivation (finalAttrs: {
           # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
           # This will hopefully give users the peace of mind that their Xen is secure, without needing
           # to search the source code for the XSA patches.
-          + lib.strings.optionalString (writeAdvisoryDescription != [ ]) (
-            "\n\nThis Xen (${version}) has been patched against the following known security vulnerabilities:\n"
-            + lib.strings.removeSuffix "\n" (lib.strings.concatLines writeAdvisoryDescription)
-          );
+          + lib.strings.optionalString (writeAdvisoryDescription != [ ]) ''
+
+
+            <details>
+              <summary>This Xen (${version}) has been patched against the following known security vulnerabilities:</summary>
+
+            ${builtins.concatStringsSep "\n" writeAdvisoryDescription}
+
+            </details>
+          '';
 
         homepage = "https://xenproject.org/";
         downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
