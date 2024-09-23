@@ -5,6 +5,7 @@
   libspelling,
   fetchFromGitHub,
   python3Packages,
+  nodePackages,
   meson,
   ninja,
   pkg-config,
@@ -50,7 +51,7 @@ let
     hash = "sha256-a+J+GasFmRvu5cJ1GLXscoJ+owzFXsLhCbeDbYChkyQ=";
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   inherit version src;
   pname = "apostrophe";
   pyproject = false;
@@ -61,6 +62,11 @@ python3Packages.buildPythonApplication rec {
         --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
 
       patchShebangs --build build-aux/meson_post_install.py
+    ''
+    # Use mathjax from nixpkgs to avoid loading from CDN
+    + ''
+      substituteInPlace apostrophe/preview_converter.py \
+        --replace-fail "--mathjax" "--mathjax=file://${nodePackages.mathjax}/lib/node_modules/mathjax/es5/tex-chtml-full.js"
     ''
     # Should be done in postInstall, but meson checks this eagerly before build
     + ''
