@@ -1,5 +1,5 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
-, asciidoctor, libiconv, Security, Foundation, makeWrapper, nix-update-script }:
+, darwin, asciidoctor, libiconv, makeWrapper, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ncurses ];
 
   buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security Foundation libiconv gettext ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security Foundation libiconv gettext ]);
 
   postBuild = ''
     make -j $NIX_BUILD_CORES prefix="$out"
