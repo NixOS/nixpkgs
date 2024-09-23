@@ -17,7 +17,7 @@ buildDotnetModule rec {
     hash = "sha256-IWtYbb1IFB6DLIYYTP+q7q+h/0aqonxr/mWwf+83aRo=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.json;
 

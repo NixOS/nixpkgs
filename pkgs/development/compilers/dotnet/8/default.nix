@@ -5,5 +5,5 @@
   releaseInfoFile = ./release-info.json;
   bootstrapSdkFile = ./bootstrap-sdk.nix;
   depsFile = ./deps.nix;
-  fallbackTargetPackages = dotnetCorePackages.sdk_8_0.targetPackages;
+  fallbackTargetPackages = dotnetCorePackages.sdk_8_0-bin.targetPackages;
 }

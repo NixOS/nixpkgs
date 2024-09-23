@@ -33,7 +33,7 @@ buildDotnetModule rec {
       inherit
         (combinePackages [
           sdk_8_0
-          sdk_6_0
+          sdk_6_0-bin
         ])
         packages
         targetPackages
