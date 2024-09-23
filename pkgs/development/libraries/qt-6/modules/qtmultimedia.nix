@@ -21,7 +21,6 @@
 , elfutils
 , libunwind
 , orc
-, VideoToolbox
 , pkgsBuildBuild
 }:
 
@@ -34,8 +33,7 @@ qtModule {
     ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ];
   propagatedBuildInputs = [ qtbase qtdeclarative qtsvg qtshadertools ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ qtquick3d ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ VideoToolbox ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ];
 
   patches = [
     ../patches/fix-qtgui-include-incorrect-case.patch
