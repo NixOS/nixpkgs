@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       AndersonTorres
-      aidalgol
     ];
     platforms = lib.platforms.all;
   };
