@@ -41,13 +41,13 @@ in
 
 flutter.buildFlutterApplication rec {
   pname = "mangayomi";
-  version = "0.2.2";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yrLaytLdGt7UIcAsLxmDks90uSFgfwFuoigcRCGLj78=";
+    hash = "sha256-TvUprEdqLzQT8zJfUOXXQb1MW93pTjyNiPQtKi629Gk=";
   };
 
   postPatch = ''
@@ -57,7 +57,14 @@ flutter.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = { };
+  gitHashes = {
+    "desktop_webview_window" = "sha256-PTZmKorYXLOITMBXNbyY6Gow2FMemV3j6LVaaZr7VnY=";
+    "flutter_qjs" = "sha256-l6uUUqiIkdD3ayUY9rUzxKXunlW2QU2sAuDd8fc2Iyc=";
+    "flutter_windows_webview" = "sha256-lo8RwaInPa/dwD7Kay4edupOhNHdMTrMXy0f3XzRUgU=";
+    "media_kit_libs_windows_video" = "sha256-aKW7HHiBP1IIKQ+v6QGtYSimQIbJ+43cU8xn6VoJb38=";
+    "media_kit_native_event_loop" = "sha256-aKW7HHiBP1IIKQ+v6QGtYSimQIbJ+43cU8xn6VoJb38=";
+    "media_kit_video" = "sha256-aKW7HHiBP1IIKQ+v6QGtYSimQIbJ+43cU8xn6VoJb38=";
+  };
 
   nativeBuildInputs = [
     jq
@@ -76,9 +83,12 @@ flutter.buildFlutterApplication rec {
     jdk
   ];
 
+  cargoRoot = "rust";
+
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit pname version src;
-    hash = "sha256-9xUQEItdeebN/gSS3e/6fJhrqpk5cPsR7fxckiCQM4A=";
+    sourceRoot = "${src.name}/${cargoRoot}";
+    hash = "sha256-zlhhyo01mMRo2JRbMVKNcFFT9JkcDmOCLjwY4xCiD6M=";
   };
 
   # media-kit builds mimalloc from source
@@ -93,7 +103,7 @@ flutter.buildFlutterApplication rec {
     #packageRun rinf message
   '';
 
-  #env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
   postInstall = ''
     install -Dm644 linux/appimage/AppRun.desktop $out/share/applications/mangayomi.desktop
