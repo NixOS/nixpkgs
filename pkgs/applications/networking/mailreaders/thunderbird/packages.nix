@@ -29,7 +29,7 @@ let
       license = licenses.mpl20;
     };
     
-    passthru.icu73.overrideAttrs (attrs: {
+    passthru.icu73 = icu73.overrideAttrs (attrs: {
       # standardize vtzone output
       # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
