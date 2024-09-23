@@ -1,0 +1,30 @@
+diff --git a/src/io.github.diegopvlk.Dosage.in b/src/io.github.diegopvlk.Dosage.in
+index 5c71c3c..d1b16d9 100755
+--- a/src/io.github.diegopvlk.Dosage.in
++++ b/src/io.github.diegopvlk.Dosage.in
+@@ -1,6 +1,7 @@
+ #!@GJS@ -m
+ 
+ import { exit, programArgs, programInvocationName } from "system";
++import Gio from "gi://Gio";
+ 
+ imports.package.init({
+   name: "@PACKAGE_NAME@",
+@@ -10,6 +11,17 @@ imports.package.init({
+   datadir: "@datadir@",
+ });
+ 
++const resource_src = Gio.resource_load(
++  "@datadir@/@PACKAGE_NAME@/io.github.diegopvlk.Dosage.src.gresource",
++);
++
++const resource_data = Gio.resource_load(
++  "@datadir@/@PACKAGE_NAME@/io.github.diegopvlk.Dosage.data.gresource",
++);
++
++Gio.resources_register(resource_src);
++Gio.resources_register(resource_data);
++
+ const { main } = await import("resource://@resource_path@/js/main.js");
+ const exit_code = await main([programInvocationName, ...programArgs]);
+ exit(exit_code);
