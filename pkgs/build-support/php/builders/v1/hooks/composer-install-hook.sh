@@ -101,6 +101,8 @@ composerInstallInstallHook() {
 
     setComposeRootVersion
 
+    export COMPOSER_MIRROR_PATH_REPOS="1"
+
     # Finally, run `composer install` to install the dependencies and generate
     # the autoloader.
     composer \
