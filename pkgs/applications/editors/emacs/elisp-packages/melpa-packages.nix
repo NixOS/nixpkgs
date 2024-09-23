@@ -39,6 +39,7 @@ let
     fix-rtags
     fixRequireHelmCore
     ignoreCompilationError
+    ignoreCompilationErrorIfOlder
     markBroken
     mkHome
     ;
@@ -732,6 +733,9 @@ let
             '';
           })
           else super.osx-dictionary;
+
+        # https://github.com/skeeto/at-el/issues/9
+        "@" = ignoreCompilationErrorIfOlder super."@" "20240923.1318";
 
         abgaben = addPackageRequires (mkHome super.abgaben) [ self.mu4e ];
 
