@@ -9,7 +9,6 @@
 , qtpositioning ? null # qt6 only
 , qtserialport
 , qtsvg
-, qt5compat ? null # qt6 only
 , wrapQtAppsHook
 }:
 
@@ -33,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtpositioning
     qtsvg
-    qt5compat
   ] else [
     qtlocation
   ]);
