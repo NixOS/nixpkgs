@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.4";
+  version = "0.10.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -77,6 +77,14 @@ buildPythonPackage rec {
     "tests/test_runner/test_activation_checkpointing.py"
     # missing dependencies
     "tests/test_visualizer/test_vis_backend.py"
+    # Tests are outdated (runTest instead of run_test)
+    "mmengine/testing/_internal"
+    "tests/test_dist/test_dist.py"
+    "tests/test_dist/test_utils.py"
+    "tests/test_hooks/test_sync_buffers_hook.py"
+    "tests/test_model/test_wrappers/test_model_wrapper.py"
+    "tests/test_optim/test_optimizer/test_optimizer.py"
+    "tests/test_optim/test_optimizer/test_optimizer_wrapper.py"
   ];
 
   disabledTests = [
