@@ -6878,6 +6878,8 @@ self: super: with self; {
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
 
+  latexrestricted = callPackage ../development/python-modules/latexrestricted { };
+
   launchpadlib = callPackage ../development/python-modules/launchpadlib { };
 
   laundrify-aio = callPackage ../development/python-modules/laundrify-aio { };
