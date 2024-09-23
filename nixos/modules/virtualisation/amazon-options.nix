@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
-let
-  inherit (lib) literalExpression types;
+let inherit (lib) literalExpression types;
 in {
   options = {
     ec2 = {
@@ -22,7 +21,7 @@ in {
             on an existing system.
           '';
 
-          default = {};
+          default = { };
 
           type = types.attrsOf (types.submodule {
             options = {
@@ -35,7 +34,7 @@ in {
               properties = lib.mkOption {
                 description = "Properties to set on this dataset.";
                 type = types.attrsOf types.str;
-                default = {};
+                default = { };
               };
             };
           });
@@ -50,7 +49,8 @@ in {
         '';
       };
       hvm = lib.mkOption {
-        description = "Unused legacy option. While support for non-hvm has been dropped, we keep this option around so that NixOps remains compatible with a somewhat recent `nixpkgs` and machines with an old `stateVersion`.";
+        description =
+          "Unused legacy option. While support for non-hvm has been dropped, we keep this option around so that NixOps remains compatible with a somewhat recent `nixpkgs` and machines with an old `stateVersion`.";
         internal = true;
         default = true;
         readOnly = true;
@@ -62,12 +62,12 @@ in {
     networking.hostId = lib.mkDefault "00000000";
 
     fileSystems = let
-      mountable = lib.filterAttrs (_: value: ((value.mount or null) != null)) config.ec2.zfs.datasets;
-    in lib.mapAttrs'
-      (dataset: opts: lib.nameValuePair opts.mount {
+      mountable = lib.filterAttrs (_: value: ((value.mount or null) != null))
+        config.ec2.zfs.datasets;
+    in lib.mapAttrs' (dataset: opts:
+      lib.nameValuePair opts.mount {
         device = dataset;
         fsType = "zfs";
-      })
-      mountable;
+      }) mountable;
   };
 }

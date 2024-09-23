@@ -9,9 +9,8 @@
 let
   inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
-in
 
-{
+in {
   imports = [
     ../profiles/headless.nix
     # Note: While we do use the headless profile, we also explicitly
@@ -45,9 +44,7 @@ in
 
     boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
-    boot.extraModulePackages = [
-      config.boot.kernelPackages.ena
-    ];
+    boot.extraModulePackages = [ config.boot.kernelPackages.ena ];
     boot.initrd.kernelModules = [ "xen-blkfront" ];
     boot.initrd.availableKernelModules = [ "nvme" ];
     boot.kernelParams = [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
@@ -71,7 +68,7 @@ in
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = ["network-online.target"];
+      after = [ "network-online.target" ];
       path = [ pkgs.curl ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
