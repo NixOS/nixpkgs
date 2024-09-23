@@ -1,18 +1,20 @@
-{ lib
-, nix-update-script
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, coreutils
-, bash
-, pkg-config
-, openssl
-, direnv
-, Security
-, SystemConfiguration
-, mise
-, testers
+{
+  lib,
+  nix-update-script,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  coreutils,
+  bash,
+  pkg-config,
+  openssl,
+  direnv,
+  Security,
+  SystemConfiguration,
+  usage,
+  mise,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,8 +36,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jGqaGbue+AEK0YjhHMlm84XBgA20p8Um03TjctjXVz0=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   postPatch = ''
     patchShebangs --build \
@@ -69,6 +79,10 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage ./man/man1/mise.1
+
+    substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
+      --replace-fail '-v usage' '-v ${usage}/bin/usage' \
+      --replace-fail 'usage complete-word' '${usage}/bin/usage complete-word'
 
     installShellCompletion \
       --bash ./completions/mise.bash \
