@@ -85,6 +85,7 @@ writeShellScriptBin "patch-nupkgs" (
       pushd "$x"
       sed -i 's: -no_code_signature_warning::g' build/Microsoft.NETCore.Native.targets
       sed -i 's:Include="-ld_classic"::g' build/Microsoft.NETCore.Native.Unix.targets
+      sed -i 's:-L/usr/lib/swift:-L$(SDKROOT)/usr/lib/swift:g' build/Microsoft.NETCore.Native.Unix.targets
       touch .nix-patched-ilcompiler
       popd
     done

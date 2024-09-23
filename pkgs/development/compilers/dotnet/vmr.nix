@@ -306,6 +306,15 @@ stdenv.mkDerivation rec {
           -s \$prev -t elem -n SkipInstallerBuild -v true \
           src/runtime/Directory.Build.props
 
+        # Make sure .NET uses the Swift overlay for the SDK active in the build environment.
+        substituteInPlace \
+          src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
+          --replace-fail '-L/usr/lib/swift' '-L$(SDKROOT)/usr/lib/swift'
+
+        substituteInPlace \
+          src/runtime/src/native/libs/System.Security.Cryptography.Native.Apple/extra_libs.cmake \
+          --replace-fail '-L/usr/lib/swift' '-L''${CMAKE_OSX_SYSROOT}/usr/lib/swift'
+
         # stop passing -sdk without a path
         # stop using xcrun
         # add -module-cache-path to fix swift errors, see sandboxProfile
