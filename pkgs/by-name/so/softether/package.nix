@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   openssl,
   readline,
   ncurses,
@@ -9,14 +9,15 @@
   dataDir ? "/var/lib/softether",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "softether";
-  version = "4.38";
-  build = "9760";
+  version = "4.41-9782-beta";
 
-  src = fetchurl {
-    url = "https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/v${version}-${build}-rtm/softether-src-v${version}-${build}-rtm.tar.gz";
-    sha256 = "0d8zahi9lkv72jh8yj66pwrsi4451vk113d3khzrzgbic6s2i0g6";
+  src = fetchFromGitHub {
+    owner = "SoftEtherVPN";
+    repo = "SoftEtherVPN_Stable";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-yvN5hlfAtE+gWm0s/TY/Lp53By5SDHyQIvvDutRnDNQ=";
   };
 
   buildInputs = [
@@ -40,11 +41,14 @@ stdenv.mkDerivation rec {
       Makefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-Source Free Cross-platform Multi-protocol VPN Program";
     homepage = "https://www.softether.org/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.rick68 ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.rick68 ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
-}
+})
