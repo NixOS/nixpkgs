@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   curl,
   darwin,
@@ -11,26 +11,33 @@
   gdal,
   blas,
   lapack,
-  glibc,
   ghostscript,
   dcw-gmt,
   gshhg-gmt,
+  libxml2,
 }:
-/*
-  The onus is on the user to also install:
-   - ffmpeg for webm or mp4 output
-   - graphicsmagick for gif output
-*/
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmt";
-  version = "6.4.0";
-  src = fetchurl {
-    url = "https://github.com/GenericMappingTools/gmt/releases/download/${finalAttrs.version}/gmt-${finalAttrs.version}-src.tar.gz";
-    sha256 = "sha256-0mfAx9b7MMnqfgKe8n2tsm/9e5LLS0cD+aO6Do85Ohs=";
+  version = "6.5.0";
+
+  src = fetchFromGitHub {
+    owner = "GenericMappingTools";
+    repo = "gmt";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-KKIYhljCtk9t9CuvTLsSGvUkUwazWTm9ymBB3wLwSoI=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  env = {
+    NIX_LDFLAGS = "-lxml2 -L${lib.getLib (libxml2.override { enableHttp = true; })}/lib";
+    NIX_CFLAGS_COMPILE =
+      lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration "
+      + lib.optionalString (
+        stdenv.isDarwin
+        && lib.versionOlder (darwin.apple_sdk.MacOSX-SDK.version or darwin.apple_sdk.sdk.version) "13.3"
+      ) "-D__LAPACK_int=int";
+  };
 
   buildInputs =
     [
@@ -51,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       else
         [
-          glibc
           fftwSinglePrec
           blas
           lapack
@@ -62,31 +68,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DGMT_DOCDIR=share/doc/gmt"
-      "-DGMT_MANDIR=share/man"
-      "-DGMT_LIBDIR=lib"
-      "-DCOPY_GSHHG:BOOL=FALSE"
-      "-DGSHHG_ROOT=${gshhg-gmt.out}/share/gshhg-gmt"
-      "-DCOPY_DCW:BOOL=FALSE"
-      "-DDCW_ROOT=${dcw-gmt.out}/share/dcw-gmt"
-      "-DGDAL_ROOT=${gdal.out}"
-      "-DNETCDF_ROOT=${netcdf.out}"
-      "-DPCRE_ROOT=${pcre.out}"
-      "-DGMT_INSTALL_TRADITIONAL_FOLDERNAMES:BOOL=FALSE"
-      "-DGMT_ENABLE_OPENMP:BOOL=TRUE"
-      "-DGMT_INSTALL_MODULE_LINKS:BOOL=FALSE"
-      "-DLICENSE_RESTRICTED=LGPL" # "GPL" and "no" also valid
+      (lib.cmakeFeature "GMT_DOCDIR" "share/doc/gmt")
+      (lib.cmakeFeature "GMT_MANDIR" "share/man")
+      (lib.cmakeFeature "GMT_LIBDIR" "lib")
+      (lib.cmakeBool "COPY_GSHHG" false)
+      (lib.cmakeFeature "GSHHG_ROOT" "${gshhg-gmt.out}/share/gshhg-gmt")
+      (lib.cmakeBool "COPY_DCW" false)
+      (lib.cmakeFeature "DCW_ROOT" "${dcw-gmt.out}/share/dcw-gmt")
+      (lib.cmakeFeature "GDAL_ROOT" "${gdal.out}")
+      (lib.cmakeFeature "NETCDF_ROOT" "${netcdf.out}")
+      (lib.cmakeFeature "PCRE_ROOT" "${pcre.out}")
+      (lib.cmakeBool "GMT_INSTALL_TRADITIONAL_FOLDERNAMES" false)
+      (lib.cmakeBool "GMT_ENABLE_OPENMP" true)
+      (lib.cmakeBool "GMT_INSTALL_MODULE_LINKS" false)
+      (lib.cmakeFeature "LICENSE_RESTRICTED" "LGPL")
     ]
-    ++ (
-      with stdenv;
-      lib.optionals (!isDarwin) [
-        "-DFFTW3_ROOT=${fftwSinglePrec.dev}"
-        "-DLAPACK_LIBRARY=${lapack}/lib/liblapack.so"
-        "-DBLAS_LIBRARY=${blas}/lib/libblas.so"
-      ]
-    );
+    ++ (lib.optionals (!stdenv.isDarwin) [
+      (lib.cmakeFeature "FFTW3_ROOT" "${fftwSinglePrec.dev}")
+      (lib.cmakeFeature "LAPACK_LIBRARY" "${lib.getLib lapack}/lib/liblapack.so")
+      (lib.cmakeFeature "BLAS_LIBRARY" "${lib.getLib blas}/lib/libblas.so")
+    ]);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.generic-mapping-tools.org";
     description = "Tools for manipulating geographic and cartesian data sets";
     longDescription = ''
@@ -98,11 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
       transformations and includes supporting data such as coastlines, rivers,
       and political boundaries and optionally country polygons.
     '';
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ tviti ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ tviti ];
   };
 })
