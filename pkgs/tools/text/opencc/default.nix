@@ -5,6 +5,7 @@
   cmake,
   python3,
   opencc,
+  rapidjson,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +27,15 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       opencc # opencc_dict
     ];
+
+  buildInputs = [
+    rapidjson
+  ];
+
+  # TODO use more system dependencies
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_RAPIDJSON" true)
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";
