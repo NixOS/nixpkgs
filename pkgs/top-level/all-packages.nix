@@ -21276,13 +21276,7 @@ with pkgs;
 
   librem = callPackage ../development/libraries/librem { };
 
-  libremidi = callPackage ../development/libraries/libremidi {
-      inherit (darwin.apple_sdk.frameworks)
-        CoreAudio
-        CoreFoundation
-        CoreMIDI
-        CoreServices;
-  };
+  libremidi = callPackage ../development/libraries/libremidi { };
 
   libremines = qt6.callPackage ../games/libremines { };
 
