@@ -21,6 +21,10 @@ in
 
     # Completely removed modules
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
+    (mkRemovedOptionModule [ "environment" "noXlibs" ] ''
+      The environment.noXlibs option was removed, as it often caused surprising breakages for new users.
+      If you need its functionality, you can apply similar overlays in your own config.
+    '')
     (mkRemovedOptionModule [ "fonts" "fontconfig" "penultimate" ] "The corresponding package has removed from nixpkgs.")
     (mkRemovedOptionModule [ "hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of

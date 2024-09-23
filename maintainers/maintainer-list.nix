@@ -2757,6 +2757,12 @@
     githubId = 10164833;
     name = "Birk Bohne";
   };
+  bjesus = {
+    email = "nixpkgs@yoavmoshe.com";
+    github = "bjesus";
+    githubId = 55081;
+    name = "Yo'av Moshe";
+  };
   bjornfor = {
     email = "bjorn.forsman@gmail.com";
     github = "bjornfor";

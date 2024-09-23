@@ -36,6 +36,7 @@
 , languagetool
 , llvmPackages
 , meson
+, neovim-unwrapped
 , nim1
 , nodePackages
 , openscad
@@ -129,10 +130,12 @@
 , # hurl dependencies
   hurl
 , # must be lua51Packages
-  luaPackages
-, luajitPackages
+  luajitPackages
 ,
 }: self: super:
+let
+  luaPackages = neovim-unwrapped.lua.pkgs;
+in
 {
   alpha-nvim = super.alpha-nvim.overrideAttrs {
     dependencies = [
@@ -452,12 +455,12 @@
 
   codesnap-nvim =
     let
-      version = "1.6.0";
+      version = "1.6.1";
       src = fetchFromGitHub {
         owner = "mistricky";
         repo = "codesnap.nvim";
         rev = "refs/tags/v${version}";
-        hash = "sha256-3z0poNmS6LOS7/qGTBhvz1Q9WpYC7Wu4rNvHsUXB5ZY=";
+        hash = "sha256-OmSgrTYDtNb2plMyzjVvxGrfXB/lGKDpUQhpRqKfAMA=";
       };
       codesnap-lib = rustPlatform.buildRustPackage {
         pname = "codesnap-lib";
@@ -465,7 +468,7 @@
 
         sourceRoot = "${src.name}/generator";
 
-        cargoHash = "sha256-u0NvChN50LIxUhmsT4mvWs5xB/TwJkMabggFePA/b1E=";
+        cargoHash = "sha256-6n37n8oHIHrz3S1+40nuD0Ud3l0iNgXig1ZwrgsnYTI=";
 
         nativeBuildInputs = [
           pkg-config
@@ -915,7 +918,7 @@
     dependencies = with self; [ nvim-treesitter ];
   };
 
-  haskell-tools-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "haskell-tools-nvim"; };
+  haskell-tools-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.haskell-tools-nvim; };
 
   hex-nvim = super.hex-nvim.overrideAttrs {
     postPatch = ''
@@ -1058,7 +1061,7 @@
   };
 
   lsp-progress-nvim = neovimUtils.buildNeovimPlugin {
-    luaAttr = "lsp-progress-nvim";
+    luaAttr = luaPackages.lsp-progress-nvim;
     nvimRequireCheck = "lsp-progress";
   };
 
@@ -1066,11 +1069,11 @@
     dependencies = with self; [ luaPackages.jsregexp ];
   };
 
-  lz-n = neovimUtils.buildNeovimPlugin { luaAttr = "lz-n"; };
+  lz-n = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.lz-n; };
 
-  lze = neovimUtils.buildNeovimPlugin { luaAttr = "lze"; };
+  lze = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.lze; };
 
-  lzn-auto-require = neovimUtils.buildNeovimPlugin { luaAttr = "lzn-auto-require"; };
+  lzn-auto-require = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.lzn-auto-require; };
 
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";
@@ -1146,7 +1149,7 @@
   };
 
   middleclass = neovimUtils.buildNeovimPlugin {
-    luaAttr = "middleclass";
+    luaAttr = luaPackages.middleclass;
     nvimRequireCheck = "middleclass";
   };
 
@@ -1506,17 +1509,17 @@
     ];
   };
 
-  rocks-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rocks-nvim"; };
+  rocks-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rocks-nvim; };
 
-  rocks-config-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rocks-config-nvim"; };
+  rocks-config-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rocks-config-nvim; };
 
   roslyn-nvim = super.roslyn-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig ];
   };
 
-  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rtp-nvim"; };
+  rtp-nvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rtp-nvim; };
 
-  rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = "rustaceanvim"; };
+  rustaceanvim = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.rustaceanvim; };
 
   sg-nvim = super.sg-nvim.overrideAttrs (old:
     let
