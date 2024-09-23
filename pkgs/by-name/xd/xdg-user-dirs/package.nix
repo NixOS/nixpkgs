@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
+  autoreconfHook,
   fetchurl,
   libxslt,
   docbook_xsl,
   gettext,
-  libiconv,
   makeWrapper,
 }:
 
@@ -18,9 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace-fail 'libraries = $(LIBINTL)' 'libraries = $(LIBICONV) $(LIBINTL)'
+  '';
 
   nativeBuildInputs = [
+    autoreconfHook
     makeWrapper
     libxslt
     docbook_xsl
