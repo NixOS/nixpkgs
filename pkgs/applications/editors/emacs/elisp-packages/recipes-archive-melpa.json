@@ -6975,8 +6975,8 @@
  },
  {
   "ename": "bbdb",
-  "commit": "1ae754064cd1f062bbdd6ecf9af03fa0c2798cf6",
-  "sha256": "0gnjdlb338gxpsmdx8scj5vb1rbvfkmm71xq37sahy0m4r402al1",
+  "commit": "8a7d0c7287d157f45ebcb7a6ba2a776b3ee2bc2d",
+  "sha256": "0rrjvg3rq9267hyr5dkr82kqd3lxxnv6zhmn4ldzb00ynwwmrzr0",
   "fetcher": "git",
   "url": "https://git.savannah.nongnu.org/git/bbdb.git",
   "unstable": {
