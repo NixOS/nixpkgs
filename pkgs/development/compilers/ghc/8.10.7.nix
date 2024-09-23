@@ -158,12 +158,12 @@ let
       tools = {
         "cc" = cc;
         "c++" = cc;
-        as = cc.bintools.bintools;
+        as = cc.bintools;
 
-        ar = cc.bintools.bintools;
-        ranlib = cc.bintools.bintools;
-        nm = cc.bintools.bintools;
-        readelf = cc.bintools.bintools;
+        ar = cc.bintools;
+        ranlib = cc.bintools;
+        nm = cc.bintools;
+        readelf = cc.bintools;
         objdump = cc.bintools;
 
         ld = cc.bintools;
