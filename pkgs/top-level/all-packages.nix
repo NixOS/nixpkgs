@@ -6900,8 +6900,6 @@ with pkgs;
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
-  deno = callPackage ../development/web/deno { };
-
   deqp-runner = callPackage ../tools/graphics/deqp-runner { };
 
   detox = callPackage ../tools/misc/detox { };
