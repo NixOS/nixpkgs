@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "knocki";
-  version = "0.3.2";
+  version = "0.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "swan-solutions";
     repo = "knocki-homeassistant";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WdX/RvLjxkElgDXVMXcslYWlupQ7RDns5F+Y5XGQk5w=";
+    hash = "sha256-Fb3skFttY5gtm80k1LCUQ4Z7/TQGClCNcWt1k6bLQoI=";
   };
 
   postPatch = ''
