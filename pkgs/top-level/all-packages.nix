@@ -17327,8 +17327,6 @@ with pkgs;
 
   blackmagic = callPackage ../development/embedded/blackmagic { };
 
-  bloaty = callPackage ../development/tools/bloaty { };
-
   bloomrpc = callPackage ../development/web/bloomrpc { };
 
   bloop = callPackage ../development/tools/build-managers/bloop { };
