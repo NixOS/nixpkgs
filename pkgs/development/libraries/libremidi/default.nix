@@ -1,14 +1,18 @@
 { alsa-lib
 , cmake
-, CoreAudio
-, CoreFoundation
-, CoreMIDI
-, CoreServices
+, darwin
 , fetchFromGitHub
 , lib
 , stdenv
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks)
+    CoreAudio
+    CoreFoundation
+    CoreMIDI
+    CoreServices;
+in
 stdenv.mkDerivation rec {
   pname = "libremidi";
   version = "4.4.0";
