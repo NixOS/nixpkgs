@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.10.5";
+  version = "0.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hpwXEWPofgMT4ua2tZI1mtGbaBkT2XPBd6QL8xTi1A0=";
+    hash = "sha256-R6/Y9brIYBA1P3YeG8zGaoPcxWFUDqZlqbZpWu3MIIw=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.11") ''
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
-    changelog = "https://github.com/scikit-build/scikit-build-core/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-build/scikit-build-core/blob/${src.rev}/docs/changelog.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };
