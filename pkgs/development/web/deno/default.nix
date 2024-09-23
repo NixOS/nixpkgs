@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, protobuf
-, installShellFiles
-, libiconv
-, darwin
-, librusty_v8 ? callPackage ./librusty_v8.nix { }
-,
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  protobuf,
+  installShellFiles,
+  libiconv,
+  darwin,
+  librusty_v8 ? callPackage ./librusty_v8.nix { },
 }:
 rustPlatform.buildRustPackage rec {
   pname = "deno";
@@ -39,8 +39,11 @@ rustPlatform.buildRustPackage rec {
     protobuf
     installShellFiles
   ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    [ libiconv darwin.libobjc ]
+  buildInputs = lib.optionals stdenv.isDarwin (
+    [
+      libiconv
+      darwin.libobjc
+    ]
     ++ (with darwin.apple_sdk_11_0.frameworks; [
       Security
       CoreServices
@@ -102,6 +105,11 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     mainProgram = "deno";
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }
