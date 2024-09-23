@@ -222,8 +222,12 @@ let
       rm -r $etc/etc/ssl/misc
 
       rmdir $etc/etc/ssl/{certs,private}
-
-      ${lib.optionalString (conf != null) "cat ${conf} > $etc/etc/ssl/openssl.cnf"}
+    '' + lib.optionalString (conf != null) ''
+      cat ${conf} > $etc/etc/ssl/openssl.cnf
+    '' + lib.optionalString (lib.versionAtLeast version "3.3.0") ''
+      # cleanup cmake helpers for now (for OpenSSL >= 3.3), only rely on pkg-config.
+      # pkg-config gets its paths fixed correctly
+      rm -rf $dev/lib/cmake
     '';
 
     postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
