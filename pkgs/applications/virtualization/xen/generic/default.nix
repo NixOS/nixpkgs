@@ -272,9 +272,9 @@ let
   #  * [CVE-1999-00003](https://www.cve.org/CVERecord?id=CVE-1999-00003)
   writeAdvisoryDescription =
     if (lib.lists.remove null (retrievePatchAttributes [ "xsa" ]) != [ ]) then
-      lib.lists.zipListsWith (a: b: a + b)
-        (lib.lists.zipListsWith (a: b: a + "**" + b + ".**\n  >")
-          (lib.lists.zipListsWith (a: b: "* [Xen Security Advisory #" + a + "](" + b + "): ")
+      lib.lists.zipListsWith (header: description: header + description) # The full patch description item (the header created below + patch.meta.longDescription)
+        (lib.lists.zipListsWith (item: title: item + "**${title}.**\n  >") # The full `header` (item + XSA title)
+          (lib.lists.zipListsWith (number: link: "* [Xen Security Advisory #${number}](${link}): ") # The `item` (number + link + formatting)
             (lib.lists.remove null (retrievePatchAttributes [ "xsa" ]))
             (
               lib.lists.remove null (retrievePatchAttributes [
