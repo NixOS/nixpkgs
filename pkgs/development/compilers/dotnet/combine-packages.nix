@@ -18,7 +18,7 @@ in
 assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
   You must include at least one package, e.g
         `with dotnetCorePackages; combinePackages [
-            sdk_6_0 aspnetcore_7_0
+            sdk_9_0 aspnetcore_8_0
          ];`'';
 mkWrapper "sdk" (buildEnv {
   name = "dotnet-combined";

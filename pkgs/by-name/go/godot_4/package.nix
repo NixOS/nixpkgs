@@ -4,7 +4,6 @@
   buildPackages,
   dbus,
   dotnet-sdk_6,
-  dotnet-sdk_8,
   dotnetCorePackages,
   fetchFromGitHub,
   fontconfig,
@@ -59,6 +58,8 @@ let
   suffix = if withMono then "-mono" else "";
 
   arch = stdenv.hostPlatform.linuxArch;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
 
   attrs = finalAttrs: rec {
     pname = "godot4${suffix}";
@@ -154,7 +155,7 @@ let
       ]
       ++ lib.optionals withWayland [ wayland-scanner ]
       ++ lib.optionals withMono [
-        dotnet-sdk_8
+        dotnet-sdk
         makeWrapper
       ];
 
@@ -222,10 +223,10 @@ let
       + lib.optionalString withMono ''
         cp -r bin/GodotSharp/ $out/bin/
         wrapProgram $out/bin/godot4${suffix} \
-          --set DOTNET_ROOT ${dotnet-sdk_8} \
+          --set DOTNET_ROOT ${dotnet-sdk} \
           --prefix PATH : "${
             lib.makeBinPath [
-              dotnet-sdk_8
+              dotnet-sdk
             ]
           }"
       ''
