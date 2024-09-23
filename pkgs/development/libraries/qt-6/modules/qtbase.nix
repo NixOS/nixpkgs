@@ -67,15 +67,10 @@
 , unixODBCDrivers
   # darwin
 , moveBuildTree
+, apple-sdk_11
+, apple-sdk_14
+, darwinMinVersionHook
 , xcbuild
-, AGL
-, AVFoundation
-, AppKit
-, Contacts
-, CoreBluetooth
-, EventKit
-, GSS
-, MetalKit
   # mingw
 , pkgsBuildBuild
   # optional dependencies
@@ -162,14 +157,8 @@ stdenv.mkDerivation rec {
     xorg.xcbutilcursor
     libepoxy
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AGL
-    AVFoundation
-    AppKit
-    Contacts
-    CoreBluetooth
-    EventKit
-    GSS
-    MetalKit
+    apple-sdk_14
+    (darwinMinVersionHook "11.0")
   ] ++ lib.optionals libGLSupported [
     libGL
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
@@ -181,9 +170,9 @@ stdenv.mkDerivation rec {
     at-spi2-core
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
     libinput
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    AppKit
-    CoreBluetooth
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+    (darwinMinVersionHook "11.0")
   ]
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
