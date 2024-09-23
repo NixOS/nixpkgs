@@ -27761,15 +27761,6 @@ with pkgs;
 
   ### APPLICATIONS / GIS
 
-  gmt = callPackage ../applications/gis/gmt {
-    inherit (darwin.apple_sdk.frameworks)
-      Accelerate CoreGraphics CoreVideo;
-  };
-
-  gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
-
-  dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
-
   grass = callPackage ../applications/gis/grass {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
