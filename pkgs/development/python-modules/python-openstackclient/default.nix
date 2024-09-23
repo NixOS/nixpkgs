@@ -5,6 +5,7 @@
   ddt,
   openstackdocstheme,
   osc-lib,
+  osc-placement,
   pbr,
   python-barbicanclient,
   python-cinderclient,
@@ -74,6 +75,7 @@ buildPythonPackage rec {
     optional-dependencies = {
       # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
       cli-plugins = [
+        osc-placement
         python-barbicanclient
         python-designateclient
         python-heatclient

@@ -9428,6 +9428,8 @@ self: super: with self; {
 
   osc-lib = callPackage ../development/python-modules/osc-lib { };
 
+  osc-placement = callPackage ../development/python-modules/osc-placement { };
+
   osc-sdk-python = callPackage ../development/python-modules/osc-sdk-python { };
 
   oschmod = callPackage ../development/python-modules/oschmod { };
