@@ -250,23 +250,15 @@ let
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.hostPlatform.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk_11_0.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
-          CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
-        libobjc = darwin.apple_sdk_11_0.objc4;
-        xcbuild = darwin.apple_sdk_11_0.xcodebuild;
       };
 
       qt3d = callPackage ../modules/qt3d.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth;
-      };
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix { };
       qtdatavis3d = callPackage ../modules/qtdatavis3d.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
-      qtgamepad = callPackage ../modules/qtgamepad.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) GameController;
-      };
+      qtgamepad = callPackage ../modules/qtgamepad.nix { };
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
@@ -278,9 +270,7 @@ let
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtpim = callPackage ../modules/qtpim.nix {};
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
-      qtpurchasing = callPackage ../modules/qtpurchasing.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) Foundation StoreKit;
-      };
+      qtpurchasing = callPackage ../modules/qtpurchasing.nix { };
       qtquick1 = null;
       qtquick3d = callPackage ../modules/qtquick3d.nix { };
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
@@ -313,24 +303,13 @@ let
           let stdenv' = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
           in if stdenv'.hostPlatform.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
         inherit (srcs.qtwebengine) version;
+        inherit (darwin) bootstrap_cmds;
         python = python3;
-        inherit (darwin) xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
-        inherit (darwin.apple_sdk_11_0.libs) sandbox;
-        inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
-          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
-          MediaPlayer MediaAccessibility SecurityInterface Vision CoreML OpenDirectory Accelerate;
-        libobjc = darwin.apple_sdk_11_0.objc4;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
-      qtwebkit = callPackage ../modules/qtwebkit.nix {
-        inherit (darwin) ICU;
-        inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
-      };
+      qtwebkit = callPackage ../modules/qtwebkit.nix { };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
-      qtwebview = callPackage ../modules/qtwebview.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation WebKit;
-      };
+      qtwebview = callPackage ../modules/qtwebview.nix { };
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 

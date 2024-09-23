@@ -2,6 +2,7 @@
 , stdenv
 , buildPackages
 , mkDerivation
+, apple-sdk_14
 , perl
 , qmake
 , patches
@@ -22,6 +23,11 @@ in
 mkDerivation (args // {
   inherit pname version src;
   patches = (args.patches or []) ++ (patches.${pname} or []);
+
+  buildInputs =
+    args.buildInputs or [ ]
+    # Per https://doc.qt.io/qt-5/macos.html#supported-versions
+    ++ lib.optionals stdenv.isDarwin [ apple-sdk_14 ];
 
   nativeBuildInputs =
     (args.nativeBuildInputs or []) ++ [
