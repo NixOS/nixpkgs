@@ -1,12 +1,19 @@
-{ stdenv, fetchurl, makeWrapper, jre, lib }:
-
-stdenv.mkDerivation rec {
+{
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  lib,
+}:
+let
   pname = "avro-tools";
   version = "1.11.3";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchurl {
-    url =
-    "mirror://maven/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
+    url = "mirror://maven/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
     sha256 = "sha256-dPaV1rZxxE+G/gB7hEDyiMI7ZbzkTpNEtexp/Y6hrPI=";
   };
 
@@ -25,12 +32,12 @@ stdenv.mkDerivation rec {
     --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
   '';
 
-  meta = with lib; {
-    homepage    = "https://avro.apache.org/";
+  meta = {
+    homepage = "https://avro.apache.org/";
     description = "Avro command-line tools and utilities";
     mainProgram = "avro-tools";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license     = lib.licenses.asl20;
-    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
