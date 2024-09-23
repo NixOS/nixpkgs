@@ -59,6 +59,8 @@ composerVendorConfigureHook() {
 composerVendorBuildHook() {
     echo "Executing composerVendorBuildHook"
 
+    setComposeEnvVariables
+
     composer \
         `# The acpu-autoloader is not reproducible and has to be disabled.` \
         `# Upstream PR: https://github.com/composer/composer/pull/12090` \

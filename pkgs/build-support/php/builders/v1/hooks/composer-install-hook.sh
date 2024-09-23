@@ -100,6 +100,7 @@ composerInstallInstallHook() {
     echo "Executing composerInstallInstallHook"
 
     setComposeRootVersion
+    setComposeEnvVariables
 
     # Finally, run `composer install` to install the dependencies and generate
     # the autoloader.
