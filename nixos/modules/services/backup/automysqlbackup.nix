@@ -118,15 +118,6 @@ in
       name = user;
       ensurePermissions = {
         "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES, EVENT";
-
-        # https://forums.mysql.com/read.php?10,668311,668315#msg-668315
-        "function sys.extract_table_from_file_name" = "execute";
-        "function sys.format_path" = "execute";
-        "function sys.format_statement" = "execute";
-        "function sys.extract_schema_from_file_name" = "execute";
-        "function sys.ps_thread_account" = "execute";
-        "function sys.format_time" = "execute";
-        "function sys.format_bytes" = "execute";
       };
     };
 
