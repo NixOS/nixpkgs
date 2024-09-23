@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.sing-box;
   settingsFormat = pkgs.formats.json { };
@@ -20,20 +26,24 @@ in
           freeformType = settingsFormat.type;
           options = {
             route = {
-              geoip.path = lib.mkOption {
-                type = lib.types.path;
-                default = "${pkgs.sing-geoip}/share/sing-box/geoip.db";
-                defaultText = lib.literalExpression "\${pkgs.sing-geoip}/share/sing-box/geoip.db";
+              geoip = lib.mkOption {
+                type = lib.types.submodule {
+                  freeformType = settingsFormat.type;
+                };
+                default = { };
+                example = lib.literalExpression "{ path = \"\${pkgs.sing-geoip}/share/sing-box/geoip.db\"; }";
                 description = ''
-                  The path to the sing-geoip database.
+                  The path or download url to the sing-geoip database.
                 '';
               };
-              geosite.path = lib.mkOption {
-                type = lib.types.path;
-                default = "${pkgs.sing-geosite}/share/sing-box/geosite.db";
-                defaultText = lib.literalExpression "\${pkgs.sing-geosite}/share/sing-box/geosite.db";
+              geosite = lib.mkOption {
+                type = lib.types.submodule {
+                  freeformType = settingsFormat.type;
+                };
+                default = { };
+                example = lib.literalExpression "{ path = \"\${pkgs.sing-geosite}/share/sing-box/geosite.db\"; }";
                 description = ''
-                  The path to the sing-geosite database.
+                  The path or download url to the sing-geosite database.
                 '';
               };
             };
