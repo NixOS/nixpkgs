@@ -57,6 +57,19 @@ rec {
       ./no-buildconfig-115.patch
     ];
 
+    passthru = {
+      icu = icu.overrideAttrs (attrs: {
+        # standardize vtzone output
+        # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
+        patches = attrs.patches ++ [(fetchpatch2 {
+          url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+          stripLen = 3;
+          hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+        })];
+      });
+    };
+
     meta = with lib; {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
@@ -73,21 +86,12 @@ rec {
       attrPath = "thunderbird-unwrapped";
       versionPrefix = "115";
     };
-  }).override {
+  }).override (previous: {
     geolocationSupport = false;
     webrtcSupport = false;
 
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
-    icu = icu.overrideAttrs (attrs: {
-      # standardize vtzone output
-      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-      patches = attrs.patches ++ [(fetchpatch2 {
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-        stripLen = 3;
-        hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-      })];
-    });
-  };
+    icu = previous.passthru.icu;
+  });
 }
