@@ -30,8 +30,8 @@ buildDotnetModule rec {
 
   executables = [ "PabloDraw" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0-bin;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0-bin;
 
   nugetDeps = ./deps.json;
 
