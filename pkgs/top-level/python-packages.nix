@@ -12559,6 +12559,8 @@ self: super: with self; {
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
+  python-aodhclient = callPackage ../development/python-modules/python-aodhclient { };
+
   python-apt = callPackage ../development/python-modules/python-apt { };
 
   python-arango = callPackage ../development/python-modules/python-arango { };
