@@ -74,13 +74,13 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "QT based Spotify music downloader written in Python";
     homepage = "https://github.com/casualsnek/onthespot";
     changelog = "https://github.com/casualsnek/onthespot/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.linux;
     mainProgram = "onthespot_gui";
   };
 }
