@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage rec {
       aidalgol
     ];
     platforms = with platforms; all;
+    mainProgram = "nu_plugin_formats";
   };
 }

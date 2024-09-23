@@ -47,5 +47,6 @@ rustPlatform.buildRustPackage {
       aidalgol
     ];
     platforms = with platforms; all;
+    mainProgram = "nu_plugin_query";
   };
 }
