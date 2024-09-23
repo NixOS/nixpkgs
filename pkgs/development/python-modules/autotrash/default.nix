@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pandoc,
+  installShellFiles,
   pytestCheckHook,
 }:
 
@@ -20,6 +22,13 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ];
+  postBuild = "make -C doc autotrash.1";
+  postInstall = "installManPage doc/autotrash.1";
+
   pythonImportsCheck = [ "autotrash" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,7 +36,10 @@ buildPythonPackage rec {
     description = "Tool to automatically purge old trashed files";
     license = lib.licenses.gpl3Plus;
     homepage = "https://bneijt.nl/pr/autotrash";
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      mithicspirit
+    ];
     mainProgram = "autotrash";
   };
 }
