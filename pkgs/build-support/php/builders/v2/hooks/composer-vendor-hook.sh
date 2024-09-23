@@ -15,7 +15,7 @@ source @phpScriptUtils@
 composerVendorConfigureHook() {
     echo "Executing composerVendorConfigureHook"
 
-    setComposeRootVersion
+    setComposerRootVersion
 
     if [[ -e "$composerLock" ]]; then
         echo -e "\e[32mUsing user provided \`composer.lock\` file from \`$composerLock\`\e[0m"
@@ -59,7 +59,7 @@ composerVendorConfigureHook() {
 composerVendorBuildHook() {
     echo "Executing composerVendorBuildHook"
 
-    setComposeEnvVariables
+    setComposerEnvVariables
 
     composer \
         `# The acpu-autoloader is not reproducible and has to be disabled.` \
