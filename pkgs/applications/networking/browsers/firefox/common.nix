@@ -18,6 +18,7 @@
 , extraBuildInputs ? []
 , extraMakeFlags ? []
 , extraPassthru ? {}
+, passthru ? {}
 , tests ? []
 }:
 
