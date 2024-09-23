@@ -1674,8 +1674,6 @@ with pkgs;
 
   crypto-tracker = callPackage ../tools/misc/crypto-tracker { };
 
-  ejs = callPackage ../development/tools/ejs { };
-
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
