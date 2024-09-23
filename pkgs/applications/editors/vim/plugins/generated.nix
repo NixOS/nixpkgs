@@ -2309,6 +2309,18 @@ final: prev:
     meta.homepage = "https://github.com/manicmaniac/coconut.vim/";
   };
 
+  codecompanion-nvim = buildVimPlugin {
+    pname = "codecompanion.nvim";
+    version = "2024-09-23";
+    src = fetchFromGitHub {
+      owner = "olimorris";
+      repo = "codecompanion.nvim";
+      rev = "135c6d24efddceb1d5d9db4a302f12cd4cd1105b";
+      sha256 = "0rpkzg9h9474lsm4bng9ribdjc1v36b8dxrwf2k2xsnd3l7fmja1";
+    };
+    meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
+  };
+
   codeium-nvim = buildVimPlugin {
     pname = "codeium.nvim";
     version = "2024-09-06";
