@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pysml";
-  version = "0.1.2";
+  version = "0.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtdcr";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-TLIpc0bVx1As2oLyYD+BBMalwJiKdvBCcrd1tUNyh6Y=";
+    hash = "sha256-LmybrMHHWsLd6Y2xMqJ8g65SQCsysBGxeL43qouo3SM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
