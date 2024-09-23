@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.11";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    hash = "sha256-jJrKiRdrargk0JzcPWxBZGyOpMfTIONHG8HNRecazVo=";
+    hash = "sha256-SEFyiKxfKC2Rx5tQ2OK8zEiCBFex2kZUY/vnnDsdCoc=";
   };
 
   nativeBuildInputs = [ perl makeWrapper ];
@@ -70,10 +70,11 @@ stdenv.mkDerivation rec {
           "gzip" "bzip2" "lzip" "lzma" "xz" "brotli" "compress" "zstd" "lz4"
           "archive_color" "bat" "batcat" "pygmentize" "source-highlight" "vimcolor" "code2color"
 
-          "w3m" "lynx" "elinks" "html2text" "dtc" "pdftotext" "pdftohtml" "pdfinfo" "ps2ascii" "procyon" "ccze"
+          "w3m" "lynx" "elinks" "html2text" "xmq" "dtc" "pdftotext" "pdftohtml" "pdfinfo" "ps2ascii" "procyon" "ccze"
           "mdcat" "pandoc" "docx2txt" "libreoffice" "pptx2md" "mdcat" "xlscat" "odt2txt" "wvText" "antiword" "catdoc"
           "broken_catppt" "sxw2txt" "groff" "mandoc" "unrtf" "dvi2tty" "pod2text" "perldoc" "h5dump" "ncdump" "matdump"
-          "djvutxt" "openssl" "gpg" "plistutil" "plutil" "id3v2" "csvlook" "jq" "zlib-flate" "lessfilter"
+          "djvutxt" "openssl" "gpg" "plistutil" "plutil" "id3v2" "csvlook" "csvtable" "jq" "zlib-flate" "lessfilter"
+          "snap"
         ] ++ lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) [
           # resholve only identifies this on darwin/bsd
           # call site is guarded by || so it's safe to leave dynamic
