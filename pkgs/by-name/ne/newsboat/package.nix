@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.36";
+  version = "2.37";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    hash = "sha256-RnDnyRAZ71aE5st5wUcUKjFFGY288oFpiyDXAno15MQ=";
+    hash = "sha256-RNvzGGvicujqkRWVHBwnlROuhpH5XqPNWmx6q7n4g+U=";
   };
 
-  cargoHash = "sha256-0z3G8j0Qk0HEDUKA7fmjFfNW956rRtzKO+0ltNQR4es=";
+  cargoHash = "sha256-EBA+ucegXr3YtU2K7bhwli8O+knnugMMUuSksDuaY9E=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -85,25 +85,15 @@ rustPlatform.buildRustPackage rec {
     make -j $NIX_BUILD_CORES test
   '';
 
-<<<<<<< HEAD
-  postInstall = ''
-    make -j $NIX_BUILD_CORES prefix="$out" install
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
-    done
-  '';
-=======
   postInstall =
     ''
       make -j $NIX_BUILD_CORES prefix="$out" install
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       for prog in $out/bin/*; do
         wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
       done
     '';
->>>>>>> f6bae49a470c (newsboat: reformat unix nixfmt-rfc-style)
 
   passthru = {
     updateScript = nix-update-script { };
