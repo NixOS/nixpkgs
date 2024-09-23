@@ -32,6 +32,7 @@ let
         };
 
         services.automysqlbackup.enable = true;
+        automysqlbackup.settings.mysql_dump_port = "";
       };
 
       testScript = ''
