@@ -21246,8 +21246,6 @@ with pkgs;
 
   librem = callPackage ../development/libraries/librem { };
 
-  libremidi = callPackage ../development/libraries/libremidi { };
-
   libremines = qt6.callPackage ../games/libremines { };
 
   librelp = callPackage ../development/libraries/librelp { };
