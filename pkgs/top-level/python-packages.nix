@@ -2050,6 +2050,8 @@ self: super: with self; {
 
   cattrs = callPackage ../development/python-modules/cattrs { };
 
+  causal-conv1d = callPackage ../development/python-modules/causal-conv1d { };
+
   cbor2 = callPackage ../development/python-modules/cbor2 { };
 
   cbor = callPackage ../development/python-modules/cbor { };
@@ -7538,6 +7540,8 @@ self: super: with self; {
   mako = callPackage ../development/python-modules/mako { };
 
   malduck = callPackage ../development/python-modules/malduck { };
+
+  mamba-ssm = callPackage ../development/python-modules/mamba-ssm { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
 
