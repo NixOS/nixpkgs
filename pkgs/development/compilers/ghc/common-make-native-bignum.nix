@@ -317,6 +317,8 @@ stdenv.mkDerivation (rec {
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
+    # Stage0 (build->build) which builds stage 1
+    export GHC="${bootPkgs.ghc}/bin/ghc"
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${toolPath "cc" targetCC}"
@@ -451,11 +453,13 @@ stdenv.mkDerivation (rec {
     xattr
   ];
 
-  # Stage0 compiler and the tools/libs it needs to build Stage1. Stage0 is
-  # build->build, Stage1 is build->target (which may be the same as
-  # host->target)
+  # Everything the stage0 compiler needs to build stage1: CC, bintools, extra libs.
+  # See also GHC, {CC,LD,AR}_STAGE0 in preConfigure.
   depsBuildBuild = [
-    bootPkgs.ghc
+    # N.B. We do not declare bootPkgs.ghc in any of the stdenv.mkDerivation
+    # dependency lists to prevent the bintools setup hook from adding ghc's
+    # lib directory to the linker flags. Instead we tell configure about it
+    # via the GHC environment variable.
     buildCC
     # stage0 builds terminfo unconditionally, so we always need ncurses
     ncurses
