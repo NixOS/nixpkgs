@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "nice-go";
-  version = "0.3.8";
+  version = "0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IceBotYT";
     repo = "nice-go";
     rev = "refs/tags/${version}";
-    hash = "sha256-d035AA8N2yjkUJh2TBqkp2RLvH89cJXC4mFrny1sJ6k=";
+    hash = "sha256-Gb6VDHADtqmVXMPwic0NokWm5GmhTpy7g+o/rYxrBZk=";
   };
 
   build-system = [ poetry-core ];

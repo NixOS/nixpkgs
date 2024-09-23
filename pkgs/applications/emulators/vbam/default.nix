@@ -19,12 +19,12 @@
 
 stdenv.mkDerivation rec {
   pname = "visualboyadvance-m";
-  version = "2.1.10";
+  version = "2.1.11";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "sha256-ca+BKedHuOwHOCXgjLkkpR6Pd+59X2R66dbPWEg2O5A=";
+    sha256 = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];

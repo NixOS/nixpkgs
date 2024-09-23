@@ -50,7 +50,7 @@ class LuaPlugin:
     name: str
     """Name of the plugin, as seen on luarocks.org"""
     rockspec: str
-    """Full path towards the rockspec"""
+    """Full URI towards the rockspec"""
     ref: Optional[str]
     """git reference (branch name/tag)"""
     version: Optional[str]
@@ -60,7 +60,7 @@ class LuaPlugin:
     Its value can be 'http://luarocks.org/dev'
     """
     luaversion: Optional[str]
-    """Attribue of the lua interpreter if a package is available only for a specific lua version"""
+    """lua version if a package is available only for a specific lua version"""
     maintainers: Optional[str]
     """ Optional string listing maintainers separated by spaces"""
 

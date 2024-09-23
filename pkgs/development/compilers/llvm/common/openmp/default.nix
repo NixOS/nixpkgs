@@ -15,6 +15,7 @@
 , perl
 , pkg-config
 , version
+, devExtraCmakeFlags ? []
 }:
 let
   pname = "openmp";
@@ -60,7 +61,7 @@ stdenv.mkDerivation (rec {
     "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
     "-DOPT_TOOL=${llvm}/bin/opt"
     "-DLINK_TOOL=${llvm}/bin/llvm-link"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";

@@ -2083,9 +2083,7 @@ dependencies = [
  "countme",
  "hashbrown",
  "insta",
- "once_cell",
  "ordermap",
- "path-slash",
  "ruff_db",
  "ruff_index",
  "ruff_python_ast",
@@ -2094,6 +2092,7 @@ dependencies = [
  "ruff_python_stdlib",
  "ruff_source_file",
  "ruff_text_size",
+ "ruff_vendored",
  "rustc-hash 2.0.0",
  "salsa",
  "smallvec",
@@ -2102,8 +2101,6 @@ dependencies = [
  "test-case",
  "thiserror",
  "tracing",
- "walkdir",
- "zip",
 ]
 
 [[package]]
@@ -2159,6 +2156,7 @@ dependencies = [
  "ruff_db",
  "ruff_python_ast",
  "ruff_text_size",
+ "ruff_vendored",
  "rustc-hash 2.0.0",
  "salsa",
  "tempfile",
@@ -2255,7 +2253,7 @@ dependencies = [
 
 [[package]]
 name = "ruff"
-version = "0.6.6"
+version = "0.6.7"
 dependencies = [
  "anyhow",
  "argfile",
@@ -2450,15 +2448,18 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "once_cell",
  "red_knot_python_semantic",
  "ruff_cache",
  "ruff_db",
  "ruff_linter",
  "ruff_macros",
  "ruff_python_ast",
+ "ruff_python_parser",
  "salsa",
  "schemars",
  "serde",
+ "zip",
 ]
 
 [[package]]
@@ -2471,7 +2472,7 @@ dependencies = [
 
 [[package]]
 name = "ruff_linter"
-version = "0.6.6"
+version = "0.6.7"
 dependencies = [
  "aho-corasick",
  "annotate-snippets 0.9.2",
@@ -2790,8 +2791,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "ruff_vendored"
+version = "0.0.0"
+dependencies = [
+ "once_cell",
+ "path-slash",
+ "ruff_db",
+ "walkdir",
+ "zip",
+]
+
+[[package]]
 name = "ruff_wasm"
-version = "0.6.6"
+version = "0.6.7"
 dependencies = [
  "console_error_panic_hook",
  "console_log",

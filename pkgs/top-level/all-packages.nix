@@ -1341,7 +1341,7 @@ with pkgs;
 
   desktopToDarwinBundle = makeSetupHook {
     name = "desktop-to-darwin-bundle-hook";
-    propagatedBuildInputs = [ writeDarwinBundle librsvg imagemagick python3Packages.icnsutil ];
+    propagatedBuildInputs = [ writeDarwinBundle librsvg imagemagick (onlyBin python3Packages.icnsutil) ];
   } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
 
   keepBuildTree = makeSetupHook {
@@ -1731,10 +1731,6 @@ with pkgs;
   gam = callPackage ../tools/admin/gam { };
 
   gen6dns = callPackage ../tools/networking/gen6dns { };
-
-  gen-license = callPackage ../development/tools/gen-license {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
@@ -2548,8 +2544,6 @@ with pkgs;
   dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
     inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
   };
-
-  dynamips = callPackage ../applications/emulators/dynamips { };
 
   fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
 
@@ -3536,7 +3530,7 @@ with pkgs;
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
-  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage (../tools/security/echidna) { });
+  echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/security/echidna { });
 
   sedutil = callPackage ../tools/security/sedutil { };
 
@@ -6217,8 +6211,6 @@ with pkgs;
 
   byzanz = callPackage ../applications/video/byzanz { };
 
-  algolia-cli = callPackage ../development/tools/algolia-cli { };
-
   anydesk = callPackage ../applications/networking/remote/anydesk { };
 
   anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
@@ -6516,6 +6508,7 @@ with pkgs;
 
   netbird = callPackage ../tools/networking/netbird {
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
+    buildGoModule = buildGo123Module;
   };
 
   netbird-ui = netbird.override {
@@ -7617,9 +7610,9 @@ with pkgs;
 
   fingerprintx = callPackage ../tools/security/fingerprintx { };
 
-  bsd-fingerd = bsd-finger.override({
+  bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
-  });
+  };
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix { };
 
@@ -7856,7 +7849,7 @@ with pkgs;
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
-      garage_1_0_0 garage_1_x;
+      garage_1_0_1 garage_1_x;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -8562,9 +8555,9 @@ with pkgs;
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
-  highlight = callPackage ../tools/text/highlight ({
+  highlight = callPackage ../tools/text/highlight {
     lua = lua5;
-  });
+  };
 
   hockeypuck = callPackage ../servers/hockeypuck/server.nix { };
 
@@ -9040,8 +9033,6 @@ with pkgs;
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
-
-  kargo = callPackage ../tools/misc/kargo { };
 
   kazam = callPackage ../applications/video/kazam { };
 
@@ -11322,12 +11313,6 @@ with pkgs;
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
-  plantuml = callPackage ../tools/misc/plantuml { };
-
-  plantuml-c4 = callPackage ../tools/misc/plantuml/plantuml-c4.nix { };
-
-  plantuml-server = callPackage ../tools/misc/plantuml-server { };
-
   plan9port = darwin.apple_sdk_11_0.callPackage ../tools/system/plan9port {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit Metal QuartzCore;
     inherit (darwin) DarwinTools;
@@ -12468,8 +12453,6 @@ with pkgs;
 
   snet = callPackage ../tools/networking/snet { };
 
-  sng = callPackage ../tools/graphics/sng { };
-
   snmpcheck = callPackage ../tools/networking/snmpcheck { };
 
   snobol4 = callPackage ../development/interpreters/snobol4 { };
@@ -13558,8 +13541,6 @@ with pkgs;
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
 
-  globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
-
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
   sssd = callPackage ../os-specific/linux/sssd {
@@ -13588,8 +13569,6 @@ with pkgs;
   weather = callPackage ../applications/misc/weather { };
 
   wego = callPackage ../applications/misc/wego { };
-
-  wal_e = callPackage ../tools/backup/wal-e { };
 
   wander = callPackage ../tools/admin/wander { };
 
@@ -15431,18 +15410,12 @@ with pkgs;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
+  # Please remove all this logic when bumping to LLVM 19 and make this
+  # a simple alias.
   llvmPackages = let
     # This returns the minimum supported version for the platform. The
     # assumption is that or any later version is good.
-    choose = platform:
-      /**/ if platform.isDarwin then 16
-      else if platform.isFreeBSD then 18
-      else if platform.isOpenBSD then 18
-      else if platform.isAndroid then 12
-      else if platform.isLinux then 18
-      else if platform.isWasm then 16
-      # For unknown systems, assume the latest version is required.
-      else 18;
+    choose = platform: if platform.isDarwin then 16 else 18;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
     # taking the min bound of that.
@@ -15450,12 +15423,12 @@ with pkgs;
       stdenv.targetPlatform));
   in pkgs.${"llvmPackages_${minSupported}"};
 
-  llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 ({
+  llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_12.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_12.libraries or llvmPackages_12.libraries;
     targetLlvm = targetPackages.llvmPackages_12.llvm or llvmPackages_12.llvm;
-  }));
+  });
 
   inherit (rec {
     llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
@@ -16446,7 +16419,7 @@ with pkgs;
   luarocks-nix = luaPackages.luarocks-nix;
 
   luarocks-packages-updater = callPackage ../by-name/lu/luarocks-packages-updater/package.nix {
-    pluginupdate = ../../maintainers/scripts/pluginupdate.py;
+    pluginupdate = ../../maintainers/scripts/pluginupdate-py;
   };
 
   luau = callPackage ../development/interpreters/luau { };
@@ -16958,8 +16931,6 @@ with pkgs;
   abuild = callPackage ../development/tools/abuild { };
 
   actiona = libsForQt5.callPackage ../applications/misc/actiona { };
-
-  actionlint = callPackage ../development/tools/analysis/actionlint { };
 
   adreaper = callPackage ../tools/security/adreaper { };
 
@@ -18641,15 +18612,11 @@ with pkgs;
 
   sloc = nodePackages.sloc;
 
-  smatch = callPackage ../development/tools/analysis/smatch { };
-
   smc = callPackage ../tools/misc/smc { };
 
   snakemake = callPackage ../applications/science/misc/snakemake { };
 
   snore = callPackage ../tools/misc/snore { };
-
-  snyk = callPackage ../development/tools/analysis/snyk { };
 
   snzip = callPackage ../tools/archivers/snzip { };
 
@@ -18722,8 +18689,6 @@ with pkgs;
   strace = callPackage ../development/tools/misc/strace { };
 
   strace-analyzer = callPackage ../development/tools/misc/strace-analyzer { };
-
-  stylelint = callPackage ../development/tools/analysis/stylelint { };
 
   stylua = callPackage ../development/tools/stylua { };
 
@@ -18825,8 +18790,6 @@ with pkgs;
   todoist = callPackage ../applications/misc/todoist { };
 
   todoist-electron = callPackage ../applications/misc/todoist-electron { };
-
-  toil = callPackage ../applications/science/misc/toil { };
 
   travis = callPackage ../development/tools/misc/travis { };
 
@@ -26183,8 +26146,6 @@ with pkgs;
   # hardened kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
   linux_hardened = linuxPackages_hardened.kernel;
-  linuxPackages_4_19_hardened = linuxKernel.packages.linux_4_19_hardened;
-  linux_4_19_hardened = linuxPackages_4_19_hardened.kernel;
   linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
   linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
   linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
@@ -36717,8 +36678,6 @@ with pkgs;
 
   shtns = callPackage ../applications/science/physics/shtns { };
 
-  validphys2 = with python3Packages; toPythonApplication validphys2;
-
   xfitter = callPackage ../applications/science/physics/xfitter { };
 
   xflr5 = libsForQt5.callPackage ../applications/science/physics/xflr5 { };
@@ -37847,7 +37806,7 @@ with pkgs;
     # Not recommended; too fragile
     nixops_unstable_full;
 
-  # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-aws: ...` to trigger automatically.
+  # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-digitalocean: ...` to trigger automatically.
   nixops_unstablePlugins = recurseIntoAttrs nixops_unstable_minimal.availablePlugins;
 
   /*
@@ -37929,7 +37888,7 @@ with pkgs;
   /*
     A NixOS/home-manager/arion/... module that sets the `pkgs` module argument.
    */
-  pkgsModule = { lib, options, ... }: {
+  pkgsModule = { options, ... }: {
     config =
       if options?nixpkgs.pkgs then {
         # legacy / nixpkgs.nix style
@@ -38530,9 +38489,7 @@ with pkgs;
 
   vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix { };
 
-  vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins {
-    luaPackages = lua51Packages;
-  });
+  vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins { });
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
