@@ -62,6 +62,33 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions =
+      let
+        rules = cfg.settings.route.rules or [ ];
+      in
+      [
+        {
+          assertion = lib.any (r: r ? source_geoip || r ? geoip) rules -> cfg.settings.route.geoip != { };
+          message = ''
+            Deprecated option `services.sing-box.settings.route.rules.*.{source_geoip,geoip}` is set,
+            but `services.sing-box.settings.route.geoip` is missing.
+
+            Please either set geoip database location, or migrate to rule-sets,
+            see https://sing-box.sagernet.org/migration/#migrate-geoip-to-rule-sets for instructions.
+          '';
+        }
+        {
+          assertion = lib.any (r: r ? geosite) rules -> cfg.settings.route.geosite != { };
+          message = ''
+            Deprecated option `services.sing-box.settings.route.rules.*.geosite` is set,
+            but `services.sing-box.settings.route.geosite` is missing.
+
+            Please either set geosite database location, or migrate to rule-sets,
+            see https://sing-box.sagernet.org/migration/#migrate-geosite-to-rule-sets for instructions.
+          '';
+        }
+      ];
+
     systemd.packages = [ cfg.package ];
 
     systemd.services.sing-box = {
