@@ -53,7 +53,8 @@ in ((buildMozillaMach {
     hash = "sha256-A3/D8D9e5PI9SUetKFUE0oDpJsThprIk1zUfZoxu1/A=";
   };
 
-  extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
+  extraPostPatch =
+    thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
     PATH=$PATH:${lib.makeBinPath [ git ]}
     patches=$(mktemp -d)
     for dir in branding bugs external features misc; do
@@ -106,15 +107,15 @@ in ((buildMozillaMach {
     maintainers = with maintainers; [ SuperSandro2000 ];
     inherit (thunderbird-unwrapped.meta) platforms badPlatforms broken license;
   };
-}).override (previous: {
+}).override {
   crashreporterSupport = false; # not supported
   geolocationSupport = false;
   webrtcSupport = false;
 
   pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
   
-  icu73 = previous.passthru.icu73;
-})).overrideAttrs (oldAttrs: {
+  icu73 = thunderbird-unwrapped.passthru.icu73;
+}).overrideAttrs (oldAttrs: {
   postInstall = oldAttrs.postInstall or "" + ''
     mv $out/lib/thunderbird/* $out/lib/betterbird
     rmdir $out/lib/thunderbird/
