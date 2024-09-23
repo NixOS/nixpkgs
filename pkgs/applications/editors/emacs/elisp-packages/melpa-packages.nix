@@ -30,7 +30,7 @@ in
 
 { lib, pkgs }: variant: self:
 let
-  inherit (import ./lib-override-helper.nix pkgs)
+  inherit (import ./lib-override-helper.nix pkgs lib)
     buildWithGit
     dontConfigure
     externalSrc
