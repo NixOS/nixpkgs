@@ -173,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     cd "$NIX_BUILD_TOP/$sourceRoot"
 
     export NIX_CFLAGS_COMPILE+=" --ld-path=$out/bin/${targetPrefix}ld"
+    export NIX_CFLAGS_LINK+=" -L$SDKROOT/usr/lib"
     meson setup build-install-check -Db_lto=true --buildtype=$mesonBuildType${
       lib.optionalString (targetPrefix != "") " -Dtarget_prefix=${targetPrefix}"
     }
