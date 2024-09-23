@@ -1,14 +1,11 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
-  poetry-core,
   pandoc,
   installShellFiles,
-  pytestCheckHook,
 }:
-
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "autotrash";
   version = "0.4.7";
   pyproject = true;
@@ -20,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-qMU3jjBL5+fd9vKX5BIqES5AM8D/54aBOmdHFiBtfEo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ python3Packages.poetry-core ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,7 +27,7 @@ buildPythonPackage rec {
   postInstall = "installManPage doc/autotrash.1";
 
   pythonImportsCheck = [ "autotrash" ];
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   meta = {
     description = "Tool to automatically purge old trashed files";
