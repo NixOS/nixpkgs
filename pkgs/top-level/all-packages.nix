@@ -1341,7 +1341,7 @@ with pkgs;
 
   desktopToDarwinBundle = makeSetupHook {
     name = "desktop-to-darwin-bundle-hook";
-    propagatedBuildInputs = [ writeDarwinBundle librsvg imagemagick python3Packages.icnsutil ];
+    propagatedBuildInputs = [ writeDarwinBundle librsvg imagemagick (onlyBin python3Packages.icnsutil) ];
   } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
 
   keepBuildTree = makeSetupHook {
@@ -2544,8 +2544,6 @@ with pkgs;
   dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
     inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
   };
-
-  dynamips = callPackage ../applications/emulators/dynamips { };
 
   fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
 
@@ -9020,8 +9018,6 @@ with pkgs;
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
 
-  kargo = callPackage ../tools/misc/kargo { };
-
   kazam = callPackage ../applications/video/kazam { };
 
   kalibrate-rtl = callPackage ../applications/radio/kalibrate-rtl { };
@@ -11301,12 +11297,6 @@ with pkgs;
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
-  plantuml = callPackage ../tools/misc/plantuml { };
-
-  plantuml-c4 = callPackage ../tools/misc/plantuml/plantuml-c4.nix { };
-
-  plantuml-server = callPackage ../tools/misc/plantuml-server { };
-
   plan9port = darwin.apple_sdk_11_0.callPackage ../tools/system/plan9port {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit Metal QuartzCore;
     inherit (darwin) DarwinTools;
@@ -13563,8 +13553,6 @@ with pkgs;
   weather = callPackage ../applications/misc/weather { };
 
   wego = callPackage ../applications/misc/wego { };
-
-  wal_e = callPackage ../tools/backup/wal-e { };
 
   wander = callPackage ../tools/admin/wander { };
 
@@ -18684,8 +18672,6 @@ with pkgs;
 
   strace-analyzer = callPackage ../development/tools/misc/strace-analyzer { };
 
-  stylelint = callPackage ../development/tools/analysis/stylelint { };
-
   stylua = callPackage ../development/tools/stylua { };
 
   summon = callPackage ../development/tools/summon { };
@@ -18786,8 +18772,6 @@ with pkgs;
   todoist = callPackage ../applications/misc/todoist { };
 
   todoist-electron = callPackage ../applications/misc/todoist-electron { };
-
-  toil = callPackage ../applications/science/misc/toil { };
 
   travis = callPackage ../development/tools/misc/travis { };
 
@@ -37797,7 +37781,7 @@ with pkgs;
     # Not recommended; too fragile
     nixops_unstable_full;
 
-  # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-aws: ...` to trigger automatically.
+  # Useful with ofborg, e.g. commit prefix `nixops_unstablePlugins.nixops-digitalocean: ...` to trigger automatically.
   nixops_unstablePlugins = recurseIntoAttrs nixops_unstable_minimal.availablePlugins;
 
   /*

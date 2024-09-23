@@ -1788,8 +1788,6 @@ self: super: with self; {
 
   boto3-stubs = callPackage ../development/python-modules/boto3-stubs { };
 
-  boto = callPackage ../development/python-modules/boto { };
-
   botocore = callPackage ../development/python-modules/botocore { };
 
   botocore-stubs = callPackage ../development/python-modules/botocore-stubs { };
@@ -4868,8 +4866,6 @@ self: super: with self; {
   gcodepy = callPackage ../development/python-modules/gcodepy { };
 
   gcovr = callPackage ../development/python-modules/gcovr { };
-
-  gcs-oauth2-boto-plugin = callPackage ../development/python-modules/gcs-oauth2-boto-plugin { };
 
   gcsa = callPackage ../development/python-modules/gcsa { };
 
@@ -13136,6 +13132,8 @@ self: super: with self; {
 
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
+  qcs-api-client-common = callPackage ../development/python-modules/qcs-api-client-common { };
+
   qcs-sdk-python = callPackage ../development/python-modules/qcs-sdk-python { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
@@ -13143,8 +13141,6 @@ self: super: with self; {
   qdldl = callPackage ../development/python-modules/qdldl { };
 
   qdrant-client = callPackage ../development/python-modules/qdrant-client { };
-
-  qds-sdk = callPackage ../development/python-modules/qds-sdk { };
 
   qgrid = callPackage ../development/python-modules/qgrid { };
 

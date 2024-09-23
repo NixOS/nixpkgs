@@ -299,7 +299,7 @@ in buildFHSEnv rec {
   '' + args.extraPreBwrapCmds or "";
 
   extraBwrapArgs = [
-    "--bind /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
+    "--bind-try /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
     "--bind-try /tmp/dumps /tmp/dumps"
   ] ++ args.extraBwrapArgs or [];
 
