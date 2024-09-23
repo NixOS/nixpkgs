@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, libiconv
-, cargo
-, coursier
-, dotnet-sdk
-, git
-, glibcLocales
-, go
-, nodejs
-, perl
-, cabal-install
-, testers
-, pre-commit
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  libiconv,
+  cargo,
+  coursier,
+  dotnet-sdk,
+  git,
+  glibcLocales,
+  go,
+  nodejs,
+  perl,
+  cabal-install,
+  testers,
+  pre-commit,
 }:
 
 with python3Packages;
@@ -32,6 +33,7 @@ buildPythonApplication rec {
 
   patches = [
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
+    ./system-hooks-use-calling-environment-paths.patch
     ./hook-tmpl.patch
     ./pygrep-pythonpath.patch
   ];
@@ -81,34 +83,48 @@ buildPythonApplication rec {
     "--forked"
   ];
 
-  preCheck = lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
-    # Disable outline atomics for rust tests on aarch64-linux.
-    export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
-  '' + ''
-    export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
-           GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
-           VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1 LANG=en_US.UTF-8
+  preCheck =
+    lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
+      # Disable outline atomics for rust tests on aarch64-linux.
+      export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
+    ''
+    + ''
+      export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
+             GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
+             VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1 LANG=en_US.UTF-8
 
-    # Resolve `.NET location: Not found` errors for dotnet tests
-    export DOTNET_ROOT="${dotnet-sdk}"
+      # Resolve `.NET location: Not found` errors for dotnet tests
+      export DOTNET_ROOT="${dotnet-sdk}"
 
-    export HOME=$(mktemp -d)
+      export HOME=$(mktemp -d)
 
-    git init -b master
+      git init -b master
 
-    python -m venv --system-site-packages venv
-    source "$PWD/venv/bin/activate"
-  '';
+      python -m venv --system-site-packages venv
+      source "$PWD/venv/bin/activate"
+    '';
 
   postCheck = ''
     deactivate
   '';
 
-  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-  # when used in nix-shell.
   postFixup = ''
+    # Propagating inputs causes them to show up in $PYTHONPATH in a nix shell,
+    # this is problematic because they might conflict with the user's dependencies,
+    # so we remove them.
     rm $out/nix-support/propagated-build-inputs
+
+    # the wrapper script modifies PATH and PYTHONPATH to point into the nix store
+    # this prevents 'system' type hooks from referencing the calling environment
+    # save untainted copies of that environment for such cases
+    sed -i '2i\export "OUTER_PYTHONPATH=$PYTHONPATH"' $out/bin/pre-commit
+    sed -i '2i\export "OUTER_PATH=$PATH"' $out/bin/pre-commit
   '';
+
+  # Pre-commit also has built-in hooks which it needs to import from the nix store
+  # we hid them from user devshells by removing propated-build-inputs, but now we
+  # need to restore them for pre-commit's use (but only inside of the wrapper).
+  makeWrapperArgs = ''--set PYTHONPATH $PYTHONPATH'';
 
   disabledTests = [
     # ERROR: The install method you used for conda--probably either `pip install conda`
@@ -178,8 +194,8 @@ buildPythonApplication rec {
     "pre_commit"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = pre-commit;
+  passthru.tests = callPackage ./tests.nix {
+    inherit git pre-commit;
   };
 
   meta = with lib; {
