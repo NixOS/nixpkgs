@@ -13,9 +13,9 @@
 buildPythonPackage rec {
   pname = "prettytable";
   version = "3.11.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-LtphoD5gCMgWgDcFghinq9zjUD69XudEeGIToqqmVPs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [ wcwidth ];
+  dependencies = [ wcwidth ];
 
   nativeCheckInputs = [
     pytest-lazy-fixtures
