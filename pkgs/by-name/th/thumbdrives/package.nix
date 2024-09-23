@@ -16,7 +16,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "thumbdrives";
-  version = "0.3.1";
+  version = "0.3.2";
 
   format = "other";
 
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "~martijnbraam";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CPZKswbvsG61A6J512FOCKAntoJ0sUb2s+MKb0rO+Xw=";
+    hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
   };
 
   postPatch = ''
