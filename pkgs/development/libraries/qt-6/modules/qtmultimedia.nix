@@ -37,8 +37,6 @@ qtModule {
 
   patches = [
     ../patches/fix-qtgui-include-incorrect-case.patch
-    # Remove new constants since macOS 12+, since we build Qt with the macOS 11 SDK
-    ../patches/qtmultimedia-darwin-revert-replace-deprecated-constant.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     ../patches/qtmultimedia-windows-no-uppercase-libs.patch
     ../patches/qtmultimedia-windows-resolve-function-name.patch
