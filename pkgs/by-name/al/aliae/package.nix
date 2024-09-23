@@ -32,7 +32,6 @@ buildGoModule rec {
   tags = [
     "netgo"
     "osusergo"
-    "static_build"
   ];
 
   postInstall =
