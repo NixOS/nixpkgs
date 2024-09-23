@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./outputs.patch
-
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # This patch defines `_POSIX_C_SOURCE`, which breaks system headers
+    # on Darwin.
     (fetchurl {
       name = "musl.patch";
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";

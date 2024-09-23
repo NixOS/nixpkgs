@@ -17107,7 +17107,9 @@ with pkgs;
     electron_28-bin
     electron_29-bin
     electron_30-bin
-    electron_31-bin;
+    electron_31-bin
+    electron_32-bin
+    ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
     electron-chromedriver_29
@@ -17121,9 +17123,10 @@ with pkgs;
   electron_29 = electron_29-bin;
   electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
   electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
-  electron = electron_31;
-  electron-bin = electron_31-bin;
-  electron-chromedriver = electron-chromedriver_31;
+  electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
+  electron = electron_32;
+  electron-bin = electron_32-bin;
+  electron-chromedriver = electron-chromedriver_32;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -24998,7 +25001,7 @@ with pkgs;
     mariadb_105
     mariadb_106
     mariadb_1011
-    mariadb_110
+    mariadb_114
   ;
   mariadb = mariadb_1011;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
