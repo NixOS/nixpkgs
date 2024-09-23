@@ -50,6 +50,33 @@ buildNodejs {
     })
 
     # Patches for OpenSSL 3.2
+    # Patches already in 20.13.0
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/9f939f5af7d11299796999af3cbfa4845b505c78.patch?full_index=1";
+      hash = "sha256-vZJMTI8KR+RoCl4r9dfNdNMKssk4osLS61A/F7gdeWQ=";
+    })
+    # Patches already in 20.16.0
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/5909cf3b047f708de6a1373232bfcc899fa97a1d.patch?full_index=1";
+      hash = "sha256-JidSO/73fjxTcGBiMHC7x10muYtv04inXNVJebFmcgo=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/ce531af0c27acf29dd05ab2fac19b4af88f8780d.patch?full_index=1";
+      hash = "sha256-2WD4lVCtfji0AXlIHq4tiQ2TWKVMPjYZjbaVxd3HEFw=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/3e7129e5d60d4f017ad06c006dec7f95d986095c.patch?full_index=1";
+      hash = "sha256-2SRoUMswY25GamJ6APVAzDwqopSCpVPKAEIIqyaAmBA=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/da0f19208786cd7c57fec733e4ba24d0454f556a.patch?full_index=1";
+      hash = "sha256-AyQe2eHIx0O2jUgMCqWnzLhW8XduPaU4ZmhFA3UQI+Q=";
+    })
+    # Patches already in 20.17.0
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/53ac448022b7cdfcc09296da88d9a1b59921f6bf.patch?full_index=1";
+      hash = "sha256-JcEbluU9k20Q3W915D1O6wWgX5R/UKjxqsuDemjMoTc=";
+    })
     # Patches already in 22.7.0
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/bd42e4c6a73f61f7ee47e4426d86708fd80c6c4f.patch?full_index=1";
@@ -69,6 +96,10 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/2bfc9e467cb05578efa4d3db497f368fb144e5fc.patch?full_index=1";
       hash = "sha256-TyHSd+O0T/bFR7YZuxm4HumrMljnJu2a8RRLRvz6KNM=";
     })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/01f751b529d126529f1d2019f0dcb13b8e54b787.patch?full_index=1";
+      hash = "sha256-m3IaWL7U8fQMnmP2Xch4M8Qn1AJU8Ao9GCqMPcDnqCk=";
+    })
     # Patches already in 22.9.0
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/d9ca8b018efd172a99365ada8f536491b19bd87b.patch?full_index=1";
@@ -85,6 +116,10 @@ buildNodejs {
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/c77bcf018716e97ae35203990bcd51c143840348.patch?full_index=1";
       hash = "sha256-EwrZKpLRzk3Yjen1WVQqKTiHKE2uLTpaPsE13czH2rY=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/18101d83a158b877ac765936aba973c664130ea2.patch?full_index=1";
+      hash = "sha256-vpHDj5+340bjYLo7gTWFu7iS4vVveBZAMypQ2eLoQzM=";
     })
     # Patches not yet released
     (fetchpatch2 {
@@ -106,6 +141,10 @@ buildNodejs {
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/2cec716c48cea816dcd5bf4997ae3cdf1fe4cd90.patch?full_index=1";
       hash = "sha256-ExIkAj8yRJEK39OfV6A53HiuZsfQOm82/Tvj0nCaI8A=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/0f7bdcc17fbc7098b89f238f4bd8ecad9367887b.patch?full_index=1";
+      hash = "sha256-lXx6QyD2anlY9qAwjNMFM2VcHckBshghUF1NaMoaNl4=";
     })
   ] ++ gypPatches;
 }
