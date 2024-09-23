@@ -35,8 +35,8 @@
   });
 
   propagatedBuildInputs =
-    (args.propagatedBuildInputs or [])
-    ++ [ nugetPackageHook ];
+    (args.propagatedBuildInputs or [ ])
+    ++ lib.optional (type == "sdk") nugetPackageHook;
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ installShellFiles ];
 

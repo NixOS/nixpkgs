@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qrtool";
-  version = "0.11.4";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";
-    hash = "sha256-lD/xi2k5baZGUUixy/032jTBevr0uQIT/JmX+d+kPyA=";
+    hash = "sha256-2Msc8VTEzpK5eQHxJxNekj6YSqFRX/DN206hvYshiOg=";
   };
 
-  cargoHash = "sha256-lR/LusIgdA+G7YeSLHjxdcC96tOSqSyalVamS42ORs0=";
+  cargoHash = "sha256-wBEimPiht7VN3lQfPlflrG2L47bfNnipK/JmurKqHrg=";
 
   nativeBuildInputs = [
     asciidoctor
