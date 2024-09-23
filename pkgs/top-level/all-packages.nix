@@ -23600,6 +23600,18 @@ with pkgs;
 
   plumed = callPackage ../development/libraries/science/chemistry/plumed { };
 
+  ### DEVELOPMENT / LIBRARIES / DARWIN SDKS
+
+  darwinMinVersionHook =
+    deploymentTarget:
+    makeSetupHook {
+      name = "darwin-deployment-target-hook-${deploymentTarget}";
+      substitutions = {
+        darwinMinVersionVariable = lib.escapeShellArg stdenv.hostPlatform.darwinMinVersionVariable;
+        deploymentTarget = lib.escapeShellArg deploymentTarget;
+      };
+    } ../os-specific/darwin/darwin-min-version-hook/setup-hook.sh;
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agdaPackages = callPackage ./agda-packages.nix {
