@@ -3,7 +3,7 @@
 , gobject-introspection
 , gtk3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , libappindicator
 , librsvg
@@ -14,13 +14,13 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.1.10";
+  version = "1.1.13";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     rev = "refs/tags/${version}";
-    hash = "sha256-cs1kj/spZtMUL9aUtBHINAH7uyjMSn9jRDF/hRPzIbo=";
+    hash = "sha256-sYJrVAeZi0a7yD0i/zIIxcu9X/c5HvgoI/n50eXD47s=";
   };
 
   outputs = [ "out" "udev" ];
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gdk-pixbuf
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pretend
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pretend,
+  pytestCheckHook,
 }:
 
 let
@@ -45,4 +46,4 @@ let
     };
   };
 in
-  self
+self

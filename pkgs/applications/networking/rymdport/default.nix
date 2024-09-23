@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "rymdport";
-  version = "3.5.1";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "Jacalz";
     repo = "rymdport";
     rev = "v${version}";
-    hash = "sha256-wsFZN2qDp0XScqBdwLYZdRsS30g+ex+sYjw2GkBwwI4=";
+    hash = "sha256-PMCetU+E0Kl50K7sJB6UiHVouWPtfW8ALXFacxCvAhE=";
   };
 
-  vendorHash = "sha256-SDNCVROfwCTfoQpUyChxtX3rTf0OPFOTzH5PeH4ahUI=";
+  vendorHash = "sha256-RsmwTRVjhEgKAT9aekSfkRuai2165KG7q5aFjAiLSPU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,6 +40,15 @@ buildGoModule rec {
     Cocoa
     IOKit
   ];
+
+  postInstall = ''
+    for res in $(ls internal/assets/icons | sed -e 's/icon-//g' -e 's/.png//g'); do
+      install -Dm444 internal/assets/icons/icon-$res.png \
+        $out/share/icons/hicolor/''${res}x''${res}/apps/io.github.jacalz.rymdport.png
+    done
+    install -Dm444 internal/assets/svg/icon.svg $out/share/icons/hicolor/scalable/apps/io.github.jacalz.rymdport.svg
+    install -Dm444 internal/assets/unix/io.github.jacalz.rymdport.desktop -t $out/share/applications
+  '';
 
   meta = {
     description = "Easy encrypted file, folder, and text sharing between devices";

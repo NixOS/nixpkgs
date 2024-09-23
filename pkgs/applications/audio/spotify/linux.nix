@@ -1,8 +1,8 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook3, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, zenity
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
-, pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu
+, pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu, libGL
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
 , deviceScaleFactor ? null
@@ -14,14 +14,14 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.25.1011.g0348b2ea";
+  version = "1.2.42.290.g242057a2";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "73";
+  rev = "78";
 
   deps = [
     alsa-lib
@@ -44,6 +44,7 @@ let
     libdbusmenu
     libdrm
     libgcrypt
+    libGL
     libnotify
     libpng
     libpulseaudio
@@ -85,11 +86,12 @@ stdenv.mkDerivation {
   # spotify ourselves:
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
+    name = "spotify-${version}-${rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    hash = "sha512-93A+0YfP2/HnQOhSMw3UZ374bpS5ccQqb7a+e4RPSKvyT54wcI6hpmRn8CVo02oLo0yI2hho3Bu3ggsJLVgzbw==";
+    hash = "sha512-3kT7SA2Q1OxgDa5duivIiHaxcROBAFjDnTx6rw2ya6o5yOVygseS02zBgWg2Qd8jq0721KbYC83u9M+MWtWhhA==";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook makeShellWrapper squashfsTools ];
+  nativeBuildInputs = [ wrapGAppsHook3 makeShellWrapper squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -119,15 +121,17 @@ stdenv.mkDerivation {
   # Prevent double wrapping
   dontWrapGApps = true;
 
+  env = rec {
+    libdir = "${placeholder "out"}/lib/spotify";
+    librarypath = "${lib.makeLibraryPath deps}:${libdir}";
+  };
+
   installPhase =
     ''
       runHook preInstall
 
-      libdir=$out/lib/spotify
       mkdir -p $libdir
       mv ./usr/* $out/
-
-      cp meta/snap.yaml $out
 
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
@@ -145,16 +149,6 @@ stdenv.mkDerivation {
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/share/spotify/spotify
-
-      librarypath="${lib.makeLibraryPath deps}:$libdir"
-      wrapProgramShell $out/share/spotify/spotify \
-        ''${gappsWrapperArgs[@]} \
-        ${lib.optionalString (deviceScaleFactor != null) ''
-          --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
-        ''} \
-        --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome.zenity}/bin" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
       # fix Icon line in the desktop file (#48062)
       sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"
@@ -174,7 +168,22 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+    fixupPhase = ''
+      runHook preFixup
+
+      wrapProgramShell $out/share/spotify/spotify \
+        ''${gappsWrapperArgs[@]} \
+        ${lib.optionalString (deviceScaleFactor != null) ''
+          --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
+        ''} \
+        --prefix LD_LIBRARY_PATH : "$librarypath" \
+        --prefix PATH : "${zenity}/bin" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+
+      runHook postFixup
+    '';
+
   meta = meta // {
-    maintainers = with lib.maintainers; [ eelco ftrvxmtrx sheenobu timokau ma27 ];
+    maintainers = with lib.maintainers; [ ftrvxmtrx sheenobu timokau ma27 ];
   };
 }

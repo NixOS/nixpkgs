@@ -1,9 +1,8 @@
 { lib
 , stdenv
-, python3Packages
+, python311Packages
 , fetchFromGitHub
 , fetchurl
-, sd
 , cargo
 , curl
 , pkg-config
@@ -13,7 +12,7 @@
 , fetchYarnDeps
 , yarn
 , nodejs
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , glibcLocales
 , libiconv
 , Cocoa
@@ -48,7 +47,7 @@ let
     owner = "facebook";
     repo = "sapling";
     rev = version;
-    hash = "sha256-+LxvPJkyq/6gtcBQepZ5pVGXP1/h30zhCHVfUGPUzFE=";
+    hash = "sha256-4pOpJ91esTSH90MvvMu74CnlLULLUawqxcniUeqnLwA=";
   };
 
   addonsSrc = "${src}/addons";
@@ -56,7 +55,7 @@ let
   # Fetches the Yarn modules in Nix to to be used as an offline cache
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${addonsSrc}/yarn.lock";
-    sha256 = "sha256-3JFrVk78EiNVLLXkCFbuRnXwYHNfVv1pBPBS1yCHtPU=";
+    sha256 = "sha256-jCtrflwDrwql6rY1ff1eXLKdwmnXhg5bCJPlCczBCIk=";
   };
 
   # Builds the NodeJS server that runs with `sl web`
@@ -66,7 +65,7 @@ let
     inherit version;
 
     nativeBuildInputs = [
-      prefetch-yarn-deps
+      fixup-yarn-lock
       nodejs
       yarn
     ];
@@ -79,12 +78,12 @@ let
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
       patchShebangs node_modules
+      patchShebangs isl/node_modules
 
-      # TODO: build-tar.py tries to run 'yarn install'. We patched
-      # shebangs node_modules, so we don't want 'yarn install'
-      # changing files. We should disable the 'yarn install' in
-      # build-tar.py to be safe.
-      ${python3Packages.python}/bin/python3 build-tar.py \
+      substituteInPlace build-tar.py \
+        --replace-fail 'run(yarn + ["--cwd", src_join(), "install", "--prefer-offline"])' 'pass'
+
+      ${python311Packages.python}/bin/python3 build-tar.py \
         --output isl-dist.tar.xz \
         --yarn 'yarn --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress'
 
@@ -102,7 +101,7 @@ let
   };
 in
 # Builds the main `sl` binary and its Python extensions
-python3Packages.buildPythonApplication {
+python311Packages.buildPythonApplication {
   pname = "sapling";
   inherit src version;
 
@@ -113,10 +112,10 @@ python3Packages.buildPythonApplication {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "abomonation-0.7.3+smallvec1" = "sha256-AxEXR6GC8gHjycIPOfoViP7KceM29p2ZISIt4iwJzvM=";
-      "cloned-0.1.0" = "sha256-dtAyQq6fgxvr1RXPQHGiCQesvitsKpVkis4c50uolLc=";
-      "fb303_core-0.0.0" = "sha256-j+4zPXxewRxJsPQaAfvcpSkGNKw3d+inVL45Ibo7Q4E=";
-      "fbthrift-0.0.1+unstable" = "sha256-fsIL07PFu645eJFttIJU4sRSjIVuA4BMJ6kYAA0BpwY=";
-      "serde_bser-0.3.1" = "sha256-h50EJL6twJwK90sBXu40Oap4SfiT4kQAK1+bA8XKdHw=";
+      "cloned-0.1.0" = "sha256-2BaNR/pQmR7pHtRf6VBQLcZgLHbj2JCxeX4auAB0efU=";
+      "fb303_core-0.0.0" = "sha256-PDGdKjR6KPv1uH1JSTeoG5Rs0ZkmNJLqqSXtvV3RWic=";
+      "fbthrift-0.0.1+unstable" = "sha256-J4REXGuLjHyN3SHilSWhMoqpRcn1QnEtsTsZF4Z3feU=";
+      "serde_bser-0.4.0" = "sha256-Su1IP3NzQu/87p/+uQaG8JcICL9hit3OV1O9oFiACsQ=";
     };
   };
   postPatch = ''
@@ -191,7 +190,7 @@ python3Packages.buildPythonApplication {
   passthru.isl = isl;
 
   meta = with lib; {
-    description = "A Scalable, User-Friendly Source Control System";
+    description = "Scalable, User-Friendly Source Control System";
     homepage = "https://sapling-scm.com";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pbar thoughtpolice ];

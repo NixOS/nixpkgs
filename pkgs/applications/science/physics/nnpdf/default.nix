@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nnpdf";
-  version = "4.0.6";
+  version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "NNPDF";
     repo = pname;
     rev = version;
-    hash = "sha256-mwOMNlYFhHZq/wakO1/HGwcxvKGKh5OyFa2D9d3Y3IA=";
+    hash = "sha256-PyhkHlOlzKfDxUX91NkeZWjdEzFR4PW0Yh5Yz6ZA27g=";
   };
 
   postPatch = ''
@@ -54,12 +54,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An open-source machine learning framework for global analyses of parton distributions";
+    description = "Open-source machine learning framework for global analyses of parton distributions";
+    mainProgram = "evolven3fit";
     homepage = "https://docs.nnpdf.science/";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.veprbl ];
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

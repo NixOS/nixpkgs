@@ -3,7 +3,7 @@
 , libXScrnSaver
 , makeWrapper
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , unzip
@@ -12,7 +12,8 @@
 , mesa
 , libxkbcommon
 , libxshmfence
-, libglvnd
+, libGL
+, vulkan-loader
 , alsa-lib
 , cairo
 , cups
@@ -35,12 +36,14 @@ let
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
-    maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
+    mainProgram = "electron";
+    maintainers = with maintainers; [ yayayayaka teutat3s ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = optional (versionOlder version "25.0.0") "Electron version ${version} is EOL";
+    # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
+    knownVulnerabilities = optional (versionOlder version "30.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -101,16 +104,16 @@ let
     ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
     ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libglvnd ]
+    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libGL vulkan-loader ]
   );
 
-  linux = {
+  linux = finalAttrs: {
     buildInputs = [ glib gtk3 ];
 
     nativeBuildInputs = [
       unzip
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     dontUnpack = true;
@@ -129,10 +132,21 @@ let
         --set-rpath "${electronLibPath}:$out/libexec/electron" \
         $out/libexec/electron/.electron-wrapped \
         ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
+
+      # patch libANGLE
+      patchelf \
+        --set-rpath "${lib.makeLibraryPath [ libGL pciutils vulkan-loader ]}" \
+        $out/libexec/electron/lib*GL*
+
+      # replace bundled vulkan-loader
+      rm "$out/libexec/electron/libvulkan.so.1"
+      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
+
+    passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
   };
 
-  darwin = {
+  darwin = finalAttrs: {
     nativeBuildInputs = [
       makeWrapper
       unzip
@@ -145,9 +159,12 @@ let
       mkdir -p $out/bin
       makeWrapper $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
     '';
+
+    passthru.dist = finalAttrs.finalPackage + "/Applications";
   };
 in
-  stdenv.mkDerivation (
-    (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
+  stdenv.mkDerivation (finalAttrs:
+    lib.recursiveUpdate
+      (common stdenv.hostPlatform)
+      ((if stdenv.isDarwin then darwin else linux) finalAttrs)
   )

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub }:
+{ fetchurl, stdenv, unixODBC, cmake, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub, psqlodbc }:
 
 # Each of these ODBC drivers can be configured in your odbcinst.ini file using
 # the various passthru and meta values. Of note are:
@@ -16,40 +16,17 @@
 # ''
 
 {
-  psql = stdenv.mkDerivation rec {
-    pname = "psqlodbc";
-    version = "10.01.0000";
-
-    src = fetchurl {
-      url = "mirror://postgresql/odbc/versions/src/${pname}-${version}.tar.gz";
-      sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
-    };
-
-    buildInputs = [ unixODBC postgresql ];
-
-    # see the top of the file for an explanation
-    passthru = {
-      fancyName = "PostgreSQL";
-      driver = "lib/psqlodbcw.so";
-    };
-
-    meta = with lib; {
-      description = "Official PostgreSQL ODBC Driver";
-      homepage = "https://odbc.postgresql.org/";
-      license = licenses.lgpl2;
-      platforms = platforms.unix;
-    };
-  };
+  psql = psqlodbc.override { withUnixODBC = true; withLibiodbc = false; };
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";
-    version = "3.1.14";
+    version = "3.1.20";
 
     src = fetchFromGitHub {
       owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
       rev = version;
-      sha256 = "0wvy6m9qfvjii3kanf2d1rhfaww32kg0d7m57643f79qb05gd6vg";
+      hash = "sha256-l+HlS7/A0shwsEXYKDhi+QCmwHaMTeKrtcvo9yYpYws=";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)
       fetchSubmodules = true;
@@ -64,13 +41,6 @@
     buildInputs = [ unixODBC openssl libiconv zlib ]
       ++ lib.optionals stdenv.isDarwin [ libkrb5 ];
 
-    preConfigure = ''
-      # we don't want to build a .pkg
-      substituteInPlace CMakeLists.txt \
-        --replace "IF(APPLE)" "IF(0)" \
-        --replace "CMAKE_SYSTEM_NAME MATCHES AIX" "APPLE"
-    '';
-
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
       "-DODBC_LIB_DIR=${lib.getLib unixODBC}/lib"
@@ -79,6 +49,10 @@
       # on darwin this defaults to ON but we want to build against unixODBC
       "-DWITH_IODBC=OFF"
     ];
+
+    buildFlags = if stdenv.isDarwin then [ "maodbc" ] else null;
+
+    installTargets = if stdenv.isDarwin then [ "install/fast" ] else null;
 
     # see the top of the file for an explanation
     passthru = {
@@ -217,17 +191,17 @@
 
     src = fetchurl {
       url = {
-        x86_64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/${finalAttrs.pname}/${finalAttrs.pname}_${finalAttrs.version}_amd64.deb";
-        aarch64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/${finalAttrs.pname}/${finalAttrs.pname}_${finalAttrs.version}_arm64.deb";
-        x86_64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/${finalAttrs.pname}-${finalAttrs.version}-amd64.tar.gz";
-        aarch64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/${finalAttrs.pname}-${finalAttrs.version}-arm64.tar.gz";
-      }.${stdenv.system} or (throw "Unsupported platform");
+        x86_64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/msodbcsql${finalAttrs.versionMajor}/msodbcsql${finalAttrs.versionMajor}_${finalAttrs.version}_amd64.deb";
+        aarch64-linux = "https://packages.microsoft.com/debian/11/prod/pool/main/m/msodbcsql${finalAttrs.versionMajor}/msodbcsql${finalAttrs.versionMajor}_${finalAttrs.version}_arm64.deb";
+        x86_64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/msodbcsql${finalAttrs.versionMajor}-${finalAttrs.version}-amd64.tar.gz";
+        aarch64-darwin = "https://download.microsoft.com/download/6/4/0/64006503-51e3-44f0-a6cd-a9b757d0d61b/msodbcsql${finalAttrs.versionMajor}-${finalAttrs.version}-arm64.tar.gz";
+      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
       hash = {
         x86_64-linux = "sha256:1f0rmh1aynf1sqmjclbsyh2wz5jby0fixrwz71zp6impxpwvil52";
         aarch64-linux = "sha256:0zphnbvkqdbkcv6lvv63p7pyl68h5bs2dy6vv44wm6bi89svms4a";
         x86_64-darwin = "sha256:1fn80byn1yihflznxcm9cpj42mpllnz54apnk9n46vzm2ng2lj6d";
         aarch64-darwin = "sha256:116xl8r2apr5b48jnq6myj9fwqs88yccw5176yfyzh4534fznj5x";
-      }.${stdenv.system} or (throw "Unsupported platform");
+      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
     };
 
     nativeBuildInputs =

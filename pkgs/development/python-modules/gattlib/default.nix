@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
 
-# build
-, pkg-config
-, glibc
-, python
+  # build
+  pkg-config,
+  glibc,
+  python,
 
-# runtime
-, bluez
-, boost
-, glib
+  # runtime
+  bluez,
+  boost,
+  glib,
 
 }:
 
@@ -23,7 +24,6 @@ buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-
   src = fetchFromGitHub {
     owner = "oscaracena";
     repo = "pygattlib";
@@ -34,9 +34,10 @@ buildPythonPackage {
   patches = [
     (substituteAll {
       src = ./setup.patch;
-      boost_version = let
-        pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
-      in
+      boost_version =
+        let
+          pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
+        in
         "boost_python${pythonVersion}";
     })
   ];
@@ -55,9 +56,7 @@ buildPythonPackage {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gattlib"
-  ];
+  pythonImportsCheck = [ "gattlib" ];
 
   meta = with lib; {
     description = "Python library to use the GATT Protocol for Bluetooth LE devices";

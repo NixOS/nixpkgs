@@ -6,23 +6,23 @@
 , libpulseaudio
 , pkg-config
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.3.20";
+  version = "6.4.19";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hVQPLRyDXrqpheAqzC/hQ/ZaFxP1c7ClAJQs3wlEcGc=";
+    hash = "sha256-dK1rCfyTIASMGWEWQomdbazpI6faBvlrRpyGDuSoW5g=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dt $out/bin praat
+    install -Dm444 main/praat.desktop -t $out/share/applications
+    install -Dm444 main/praat-32.ico $out/share/icons/hicolor/32x32/apps/praat.ico
+    install -Dm444 main/praat-256.ico $out/share/icons/hicolor/256x256/apps/praat.ico
+    install -Dm444 main/praat-480.png $out/share/icons/hicolor/480x480/apps/praat.png
+    install -Dm444 main/praat-480.svg $out/share/icons/hicolor/scalable/apps/praat.svg
 
     runHook postInstall
   '';
@@ -55,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Doing phonetics by computer";
+    mainProgram = "praat";
     homepage = "https://www.fon.hum.uva.nl/praat/";
     license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
     maintainers = with lib.maintainers; [ orivej ];

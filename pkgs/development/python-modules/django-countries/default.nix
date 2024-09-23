@@ -1,39 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build
-, setuptools
+  # build-system
+  setuptools,
 
-# propagates
-, asgiref
-, typing-extensions
+  # dependencies
+  asgiref,
+  typing-extensions,
 
-# tests
-, django
-, djangorestframework
-, graphene-django
-, pytestCheckHook
-, pytest-django
+  # tests
+  django,
+  djangorestframework,
+  graphene-django,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "django-countries";
-  version = "7.5.1";
-  format = "pyproject";
+  version = "7.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-se6s0sgIfMLW0sIMp/3vK4KdDPQ5ahg6OQCDAs4my4M=";
+    hash = "sha256-IR9cJbDVkZrcF3Ti70mV8VeXINQDK8OpwUTWVjD4Zn0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     typing-extensions
   ];

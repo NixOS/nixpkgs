@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cglm";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "recp";
     repo = "cglm";
     rev = "v${version}";
-    sha256 = "sha256-qOPOJ+h1bq5yKkP3ZNeZnRwiOMSgS7bxTk7s/5tREQw=";
+    sha256 = "sha256-VQgnc3DSZoY1ounc9fj3Mju52noI0JZ7ck8FqWpEgY8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/recp/cglm";
     description = "Highly Optimized Graphics Math (glm) for C";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

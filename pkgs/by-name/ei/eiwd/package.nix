@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eiwd";
-  version = "2.8-1";
+  version = "2.16-1";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "eiwd";
     rev = finalAttrs.version;
-    hash = "sha256-SD/RJFuGBwFT4G73f93VrWO/6mGKQxjVhmNrpKRA/WY=";
+    hash = "sha256-TQA9aVdXGX2hje7lRQ8T9QDpSTYGpB5cIDlNYsUg/dM=";
     fetchSubmodules = true;
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $doc/share/doc
     cp -a doc $doc/share/doc/iwd
     cp -a README AUTHORS TODO $doc/share/doc/iwd
-  '' + lib.optionalString finalAttrs.doCheck ''
+  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/
   '';

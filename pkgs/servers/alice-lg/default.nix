@@ -6,22 +6,21 @@
 , yarn
 , nodejs
 , nixosTests
-, git
-, prefetch-yarn-deps
+, fixup-yarn-lock
 }:
 
 buildGoModule rec {
   pname = "alice-lg";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "alice-lg";
     repo = "alice-lg";
     rev = version;
-    hash = "sha256-BdhbHAFqyQc8UbVm6eakbVmLS5QgXhr06oxoc6vYtsM=";
+    hash = "sha256-BbwTLHDtpa8HCECIiy+UxyQiLf9iAD2GzE0azXk7QGU=";
   };
 
-  vendorHash = "sha256-SNF46uUTRCaa9qeGCfkHBjyo4BWOlpRaTDq+Uha08y8=";
+  vendorHash = "sha256-8N5E1CW5Z7HujwXRsZLv7y4uNOJkjj155kmX9PCjajQ=";
 
   passthru.ui = stdenv.mkDerivation {
     pname = "alice-lg-ui";
@@ -30,10 +29,10 @@ buildGoModule rec {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = src + "/ui/yarn.lock";
-      hash = "sha256-NeK9IM8E2IH09SVH9lMlV3taCmqwlroo4xzmv4Q01jI=";
+      hash = "sha256-PwByNIegKYTOT8Yg3nDMDFZiLRVkbX07z99YaDiBsIY=";
     };
 
-    nativeBuildInputs = [ nodejs yarn git prefetch-yarn-deps ];
+    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ];
     configurePhase = ''
       runHook preConfigure
 
@@ -79,10 +78,10 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/alice-lg/alice-lg";
-    description = "A looking-glass for BGP sessions";
+    description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
     mainProgram = "alice-lg";
   };
 }

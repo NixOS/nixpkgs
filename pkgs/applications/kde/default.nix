@@ -13,7 +13,7 @@ IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
 Many of the packages released upstream are not yet built in Nixpkgs due to lack
 of demand. To add a Nixpkgs build for an upstream package, copy one of the
 existing packages here and modify it as necessary. A simple example package that
-still shows most of the available features is in `./gwenview.nix`.
+still shows most of the available features is in `./gwenview`.
 
 # Updates
 
@@ -92,7 +92,7 @@ let
       ghostwriter = callPackage ./ghostwriter.nix {};
       granatier = callPackage ./granatier.nix {};
       grantleetheme = callPackage ./grantleetheme {};
-      gwenview = callPackage ./gwenview.nix {};
+      gwenview = callPackage ./gwenview {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
       itinerary = callPackage ./itinerary.nix {};
       juk = callPackage ./juk.nix {};
@@ -101,6 +101,7 @@ let
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
+      kalgebra = callPackage ./kalgebra.nix {};
       merkuro = callPackage ./merkuro.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
@@ -186,6 +187,7 @@ let
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpmcore = callPackage ./kpmcore {};
       kpublictransport = callPackage ./kpublictransport.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
@@ -229,6 +231,7 @@ let
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
       palapeli = callPackage ./palapeli.nix {};
+      partitionmanager = callPackage ./partitionmanager {};
       picmi = callPackage ./picmi.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

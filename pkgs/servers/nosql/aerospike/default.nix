@@ -1,40 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, cmake, libtool, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "aerospike-server";
-  version = "4.2.0.4";
+  version = "7.1.0.6";
 
   src = fetchFromGitHub {
     owner = "aerospike";
     repo = "aerospike-server";
     rev = version;
-    sha256 = "1vqi3xir4l57v62q1ns3713vajxffs6crss8fpvbcs57p7ygx3s7";
+    hash = "sha256-10Ky4j4XyskjuuabCvD0mjpLOd9QjChM9TrDvKmgGHQ=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake cmake libtool ];
   buildInputs = [ openssl zlib ];
+
+  dontUseCmakeConfigure = true;
 
   preBuild = ''
     patchShebangs build/gen_version
     substituteInPlace build/gen_version --replace 'git describe' 'echo ${version}'
-
-    # drop blanket -Werror
-    substituteInPlace make_in/Makefile.in --replace '-Werror' ""
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/udf
-    cp      target/Linux-x86_64/bin/asd $out/bin/asd
-    cp -dpR modules/lua-core/src        $out/share/udf/lua
+    mkdir -p $out/bin
+    cp target/Linux-x86_64/bin/asd $out/bin/asd
   '';
 
   meta = with lib; {
     description = "Flash-optimized, in-memory, NoSQL database";
+    mainProgram = "asd";
     homepage = "https://aerospike.com/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kalbasit ];
-    knownVulnerabilities = [ "CVE-2020-13151" ];
   };
 }

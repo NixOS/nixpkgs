@@ -1,72 +1,80 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, pbr
-, cliff
-, jsonschema
-, testtools
-, paramiko
-, netaddr
-, oslo-concurrency
-, oslo-config
-, oslo-log
-, stestr
-, oslo-serialization
-, oslo-utils
-, fixtures
-, pythonOlder
-, pyyaml
-, subunit
-, stevedore
-, prettytable
-, urllib3
-, debtcollector
-, hacking
-, oslotest
-, bash
-, python
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  cliff,
+  debtcollector,
+  defusedxml,
+  fetchPypi,
+  fixtures,
+  hacking,
+  jsonschema,
+  netaddr,
+  oslo-concurrency,
+  oslo-config,
+  oslo-log,
+  oslo-serialization,
+  oslo-utils,
+  oslotest,
+  paramiko,
+  pbr,
+  prettytable,
+  python,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  stestr,
+  stevedore,
+  subunit,
+  testscenarios,
+  testtools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "36.0.0";
-  format = "setuptools";
+  version = "40.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-97Z5C7IluOXSkkUamFuljzzvD3QxdHZ/p8mXE9jW/2I=";
+    hash = "sha256-s2EvD1TDoRoKrvpRc6h3P7xRyT941nW1hveucXDLB4w=";
   };
 
-  propagatedBuildInputs = [
-    pbr
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     cliff
+    debtcollector
     defusedxml
+    fixtures
     jsonschema
-    testtools
-    paramiko
     netaddr
     oslo-concurrency
     oslo-config
     oslo-log
-    stestr
     oslo-serialization
     oslo-utils
-    fixtures
-    pyyaml
-    subunit
-    stevedore
+    paramiko
+    pbr
     prettytable
+    pyyaml
+    stestr
+    stevedore
+    subunit
+    testscenarios
+    testtools
     urllib3
-    debtcollector
   ];
 
   nativeCheckInputs = [
-    stestr
     hacking
     oslotest
+    stestr
   ];
 
   checkPhase = ''
@@ -85,9 +93,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tempest" ];
 
   meta = with lib; {
-    description = "An OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
+    description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
     license = licenses.asl20;
+    mainProgram = "tempest";
     maintainers = teams.openstack.members;
   };
 }

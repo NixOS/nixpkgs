@@ -8,25 +8,26 @@ let
 in {
   options = {
     services.roon-server = {
-      enable = mkEnableOption (lib.mdDoc "Roon Server");
+      enable = mkEnableOption "Roon Server";
+      package = lib.mkPackageOption pkgs "roon-server" { };
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the server.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "roon-server";
-        description = lib.mdDoc ''
+        description = ''
           User to run the Roon Server as.
         '';
       };
       group = mkOption {
         type = types.str;
         default = "roon-server";
-        description = lib.mdDoc ''
+        description = ''
           Group to run the Roon Server as.
         '';
       };
@@ -43,7 +44,7 @@ in {
       environment.ROON_ID_DIR = "/var/lib/${name}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.roon-server}/bin/RoonServer";
+        ExecStart = "${lib.getExe cfg.package}";
         LimitNOFILE = 8192;
         User = cfg.user;
         Group = cfg.group;

@@ -1,5 +1,4 @@
-{
-  chromaprint
+{ chromaprint
 , cmake
 , docbook_xml_dtd_45
 , docbook_xsl
@@ -7,32 +6,50 @@
 , ffmpeg
 , flac
 , id3lib
+, kdePackages
 , lib
 , libogg
 , libvorbis
 , libxslt
 , mp4v2
-, phonon
 , pkg-config
 , python3
 , qtbase
+, qtdeclarative
 , qtmultimedia
-, qtquickcontrols
 , qttools
 , readline
 , stdenv
 , taglib
 , wrapQtAppsHook
 , zlib
+, withCLI ? true
+, withKDE ? true
+, withQt ? false
 }:
 
+let
+  inherit (lib) optionals;
+
+  apps = lib.concatStringsSep ";" (
+    optionals withCLI [ "CLI" ]
+    ++ optionals withKDE [ "KDE" ]
+    ++ optionals withQt [ "Qt" ]
+  );
+
+  mainProgram =
+    if withQt then "kid3-qt"
+    else if withKDE then "kid3"
+    else "kid3-cli";
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kid3";
-  version = "3.9.4";
+  version = "3.9.5";
 
   src = fetchurl {
     url = "mirror://kde/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xBCWDpYiXeChxIiMPqHG3CyiRau2kUdDJtzcPtvWpSA=";
+    hash = "sha256-pCT+3eNcF247RDNEIqrUOEhBh3LaAgdR0A0IdOXOgUU=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     pkg-config
     python3
+    qttools
     wrapQtAppsHook
   ];
 
@@ -53,25 +71,32 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libxslt
     mp4v2
-    phonon
     qtbase
+    qtdeclarative
     qtmultimedia
-    qtquickcontrols
-    qttools
     readline
     taglib
     zlib
-  ];
+  ] ++ lib.optionals withKDE (with kdePackages; [
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kio
+    kxmlgui
+    phonon
+  ]);
 
-  cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
-  NIX_LDFLAGS = "-lm -lpthread";
+  cmakeFlags = [ (lib.cmakeFeature "WITH_APPS" apps) ];
 
-  preConfigure = ''
-    export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
-  '';
+  env = {
+    DOCBOOKDIR = "${docbook_xsl}/xml/xsl/docbook/";
+    LANG = "C.UTF-8";
+    NIX_LDFLAGS = "-lm -lpthread";
+  };
 
   meta = {
-    description = "A simple and powerful audio tag editor";
+    description = "Simple and powerful audio tag editor";
+    inherit mainProgram;
     homepage = "https://kid3.kde.org/";
     license = lib.licenses.lgpl2Plus;
     longDescription = ''
@@ -103,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Edit synchronized lyrics and event timing codes, import and export
         LRC files.
     '';
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })

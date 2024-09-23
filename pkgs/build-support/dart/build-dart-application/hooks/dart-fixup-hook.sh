@@ -10,9 +10,12 @@ dartFixupHook() {
     #
     # This could alternatively be fixed with patchelf --add-needed, but this would cause all the libraries to be opened immediately,
     # which is not what application authors expect.
-    echo "$runtimeDependencyLibraryPath"
-    if [[ ! -z "$runtimeDependencyLibraryPath" ]]; then
-        wrapProgramArgs+=(--suffix LD_LIBRARY_PATH : \"$runtimeDependencyLibraryPath\")
+    APPLICATION_LD_LIBRARY_PATH=""
+    for runtimeDependency in "${runtimeDependencies[@]}"; do
+      addToSearchPath APPLICATION_LD_LIBRARY_PATH "${runtimeDependency}/lib"
+    done
+    if [[ ! -z "$APPLICATION_LD_LIBRARY_PATH" ]]; then
+        wrapProgramArgs+=(--suffix LD_LIBRARY_PATH : \"$APPLICATION_LD_LIBRARY_PATH\")
     fi
 
     if [[ ! -z "$extraWrapProgramArgs" ]]; then

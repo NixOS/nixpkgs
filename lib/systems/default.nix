@@ -1,7 +1,25 @@
 { lib }:
-  let inherit (lib.attrsets) mapAttrs; in
 
-rec {
+let
+  inherit (lib)
+    any
+    filterAttrs
+    foldl
+    hasInfix
+    isFunction
+    isList
+    isString
+    mapAttrs
+    optional
+    optionalAttrs
+    optionalString
+    removeSuffix
+    replaceStrings
+    toUpper
+    ;
+
+  inherit (lib.strings) toJSON;
+
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
@@ -9,7 +27,7 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
-  /*
+  /**
     Elaborated systems contain functions, which means that they don't satisfy
     `==` for a lack of reflexivity.
 
@@ -24,13 +42,16 @@ rec {
     both arguments have been `elaborate`-d.
   */
   equals =
-    let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
+    let removeFunctions = a: filterAttrs (_: v: !isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
-  /* List of all Nix system doubles the nixpkgs flake will expose the package set
-     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+  /**
+    List of all Nix system doubles the nixpkgs flake will expose the package set
+    for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
-     **Warning**: This attribute is considered experimental and is subject to change.
+    :::{.warning}
+    This attribute is considered experimental and is subject to change.
+    :::
   */
   flakeExposed = import ./flake-systems.nix { };
 
@@ -41,7 +62,7 @@ rec {
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
   elaborate = args': let
-    args = if lib.isString args' then { system = args'; }
+    args = if isString args' then { system = args'; }
            else args';
 
     # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
@@ -60,20 +81,24 @@ rec {
         && final.parsed.kernel == platform.parsed.kernel;
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
+      useLLVM = final.isFreeBSD || final.isOpenBSD;
+
       libc =
-        /**/ if final.isDarwin              then "libSystem"
-        else if final.isMinGW               then "msvcrt"
-        else if final.isWasi                then "wasilibc"
-        else if final.isRedox               then "relibc"
-        else if final.isMusl                then "musl"
-        else if final.isUClibc              then "uclibc"
-        else if final.isAndroid             then "bionic"
-        else if final.isLinux /* default */ then "glibc"
-        else if final.isFreeBSD             then "fblibc"
-        else if final.isNetBSD              then "nblibc"
-        else if final.isAvr                 then "avrlibc"
-        else if final.isGhcjs               then null
-        else if final.isNone                then "newlib"
+        /**/ if final.isDarwin                then "libSystem"
+        else if final.isMinGW                 then "msvcrt"
+        else if final.isWasi                  then "wasilibc"
+        else if final.isWasm && !final.isWasi then null
+        else if final.isRedox                 then "relibc"
+        else if final.isMusl                  then "musl"
+        else if final.isUClibc                then "uclibc"
+        else if final.isAndroid               then "bionic"
+        else if final.isLinux  /* default */  then "glibc"
+        else if final.isFreeBSD               then "fblibc"
+        else if final.isOpenBSD               then "oblibc"
+        else if final.isNetBSD                then "nblibc"
+        else if final.isAvr                   then "avrlibc"
+        else if final.isGhcjs                 then null
+        else if final.isNone                  then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
       # Choose what linker we wish to use by default. Someday we might also
@@ -89,7 +114,14 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = lib.optionalAttrs final.hasSharedLibraries {
+      # The standard lib directory name that non-nixpkgs binaries distributed
+      # for this platform normally assume.
+      libDir = if final.isLinux then
+        if final.isx86_64 || final.isMips64 || final.isPower64
+        then "lib64"
+        else "lib"
+      else null;
+      extensions = optionalAttrs final.hasSharedLibraries {
         sharedLibrary =
           if      final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
@@ -127,9 +159,9 @@ rec {
          # uname -m
          processor =
            if final.isPower64
-           then "ppc64${lib.optionalString final.isLittleEndian "le"}"
+           then "ppc64${optionalString final.isLittleEndian "le"}"
            else if final.isPower
-           then "ppc${lib.optionalString final.isLittleEndian "le"}"
+           then "ppc${optionalString final.isLittleEndian "le"}"
            else if final.isMips64
            then "mips64"  # endianness is *not* included on mips64
            else final.parsed.cpu.name;
@@ -147,7 +179,8 @@ rec {
       hasSharedLibraries = with final;
         (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
-         || isCygwin || isMinGW                                        # Windows
+         || isCygwin || isMinGW || isWindows                           # Windows
+         || isWasm                                                     # WASM
         ) && !isStatic;
 
       # The difference between `isStatic` and `hasSharedLibraries` is mainly the
@@ -156,7 +189,7 @@ rec {
       # don't support dynamic linking, but don't get the `staticMarker`.
       # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
       # has the `staticMarker`.
-      isStatic = final.isWasm || final.isRedox;
+      isStatic = final.isWasi || final.isRedox;
 
       # Just a guess, based on `system`
       inherit
@@ -195,8 +228,8 @@ rec {
         else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
-        else if final.isMips64n32 then "mipsn32${lib.optionalString final.isLittleEndian "el"}"
-        else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
+        else if final.isMips64n32 then "mipsn32${optionalString final.isLittleEndian "el"}"
+        else if final.isMips64 then "mips64${optionalString final.isLittleEndian "el"}"
         else final.uname.processor;
 
       # Name used by UEFI for architectures.
@@ -224,6 +257,22 @@ rec {
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
+
+      # Remove before 25.05
+      androidSdkVersion =
+        if (args ? sdkVer && !args ? androidSdkVersion) then
+          throw "For android `sdkVer` has been renamed to `androidSdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidSdkVersion
+        else
+          null;
+      androidNdkVersion =
+        if (args ? ndkVer && !args ? androidNdkVersion) then
+          throw "For android `ndkVer` has been renamed to `androidNdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidNdkVersion
+        else
+          null;
     } // (
       let
         selectEmulator = pkgs:
@@ -236,19 +285,26 @@ rec {
               vncSupport = false;
               gtkSupport = false;
               sdlSupport = false;
+              alsaSupport = false;
               pulseSupport = false;
               pipewireSupport = false;
+              jackSupport = false;
               smbdSupport = false;
               seccompSupport = false;
+              tpmSupport = false;
+              capstoneSupport = false;
               enableDocs = false;
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
+          # Note: we guarantee that the return value is either `null` or a path
+          # to an emulator program. That is, if an emulator requires additional
+          # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          then "${pkgs.execline}/bin/exec"
           else if final.isWindows
-          then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"
+          then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
           then "${qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
@@ -286,6 +342,7 @@ rec {
             os =
               /**/ if rust ? platform then rust.platform.os or "none"
               else if final.isDarwin then "macos"
+              else if final.isWasm && !final.isWasi then "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
               else final.parsed.kernel.name;
 
             # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
@@ -299,10 +356,11 @@ rec {
                   let
                     f = args.rustc.platform.target-family;
                   in
-                    if builtins.isList f then f else [ f ]
+                    if isList f then f else [ f ]
                 )
-              else lib.optional final.isUnix "unix"
-                   ++ lib.optional final.isWindows "windows";
+              else optional final.isUnix "unix"
+                   ++ optional final.isWindows "windows"
+                   ++ optional final.isWasm "wasm";
 
             # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
             vendor = let
@@ -321,18 +379,19 @@ rec {
               "armv7l" = "armv7";
               "armv6l" = "arm";
               "armv5tel" = "armv5te";
+              "riscv32" = "riscv32gc";
               "riscv64" = "riscv64gc";
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;
           # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
           in args.rust.rustcTarget or args.rustc.config
-            or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+            or "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.
           rustcTargetSpec = rust.rustcTargetSpec or (
             /**/ if rust ? platform
-            then builtins.toFile (final.rust.rustcTarget + ".json") (builtins.toJSON rust.platform)
+            then builtins.toFile (final.rust.rustcTarget + ".json") (toJSON rust.platform)
             else final.rust.rustcTarget);
 
           # The name of the rust target if it is standard, or the
@@ -341,7 +400,7 @@ rec {
           #
           # This is the name used by Cargo for target subdirectories.
           cargoShortTarget =
-            lib.removeSuffix ".json" (baseNameOf "${final.rust.rustcTargetSpec}");
+            removeSuffix ".json" (baseNameOf "${final.rust.rustcTargetSpec}");
 
           # When used as part of an environment variable name, triples are
           # uppercased and have all hyphens replaced by underscores:
@@ -349,17 +408,17 @@ rec {
           # https://github.com/rust-lang/cargo/pull/9169
           # https://github.com/rust-lang/cargo/issues/8285#issuecomment-634202431
           cargoEnvVarTarget =
-            lib.strings.replaceStrings ["-"] ["_"]
-              (lib.strings.toUpper final.rust.cargoShortTarget);
+            replaceStrings ["-"] ["_"]
+              (toUpper final.rust.cargoShortTarget);
 
           # True if the target is no_std
           # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
           isNoStdTarget =
-            builtins.any (t: lib.hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
+            any (t: hasInfix t final.rust.rustcTarget) ["-none" "nvptx" "switch" "-uefi"];
         };
       };
   in assert final.useAndroidPrebuilt -> final.isAndroid;
-     assert lib.foldl
+     assert foldl
        (pass: { assertion, message }:
          if assertion final
          then pass
@@ -367,4 +426,20 @@ rec {
        true
        (final.parsed.abi.assertions or []);
     final;
+
+in
+
+# Everything in this attrset is the public interface of the file.
+{
+  inherit
+    architectures
+    doubles
+    elaborate
+    equals
+    examples
+    flakeExposed
+    inspect
+    parse
+    platforms
+    ;
 }

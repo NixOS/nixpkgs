@@ -17,7 +17,7 @@ let
 in
 {
   options.networking.wireless.iwd = {
-    enable = mkEnableOption (lib.mdDoc "iwd");
+    enable = mkEnableOption "iwd";
 
     package = mkPackageOption pkgs "iwd" { };
 
@@ -34,7 +34,7 @@ in
         };
       };
 
-      description = lib.mdDoc ''
+      description = ''
         Options passed to iwd.
         See [here](https://iwd.wiki.kernel.org/networkconfigurationsettings) for supported options.
       '';
@@ -64,8 +64,10 @@ in
     };
 
     systemd.services.iwd = {
+      path = [ config.networking.resolvconf.package ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      serviceConfig.ReadWritePaths = "-/etc/resolv.conf";
     };
   };
 

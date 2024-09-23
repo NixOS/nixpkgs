@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, gio-qt
-, cmake
-, extra-cmake-modules
-, qttools
-, wayland
-, kwayland
-, dwayland
-, pkg-config
-, wrapQtAppsHook
-, glibmm
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  gio-qt,
+  cmake,
+  extra-cmake-modules,
+  qttools,
+  wayland,
+  kwayland,
+  dwayland,
+  pkg-config,
+  wrapQtAppsHook,
+  glibmm,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-clipboard";
-  version = "6.0.7";
+  version = "6.0.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-6CbCor0vgVMsMt8KY2uWrNqOsBEIaz7s2nViiHz+m1g=";
+    hash = "sha256-VSwip3WgpOYvqGw7/A8bqsYrVSACrVgoIp/pjXSAKcU=";
   };
 
   nativeBuildInputs = [
@@ -44,9 +45,7 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  cmakeFlags = [
-    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
-  ];
+  cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
   meta = with lib; {
     description = "DDE optional clipboard manager componment";

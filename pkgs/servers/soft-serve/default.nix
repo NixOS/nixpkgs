@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "soft-serve";
-  version = "0.7.3";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
     rev = "v${version}";
-    hash = "sha256-pJ8rh0WRpkyNH2zhfN8AVDZT5F690k6xhP+PSqB1JMI=";
+    hash = "sha256-Ga1RpBkEzuPTu0j+dGg2WX6E3y9hcUJTRPx6XPz4bfk=";
   };
 
-  vendorHash = "sha256-t2Ciulzs/7dYFCpiX7bo0hwwImJBkRV2I1aTT2lQm+M=";
+  vendorHash = "sha256-eri/GAsJgsmT73orTawCMS6o/FYCBv33yVb1qA+/LqY=";
 
   doCheck = false;
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   passthru.tests = nixosTests.soft-serve;
 
   meta = with lib; {
-    description = "A tasty, self-hosted Git server for the command line";
+    description = "Tasty, self-hosted Git server for the command line";
     homepage = "https://github.com/charmbracelet/soft-serve";
     changelog = "https://github.com/charmbracelet/soft-serve/releases/tag/v${version}";
     mainProgram = "soft";

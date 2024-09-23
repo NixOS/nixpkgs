@@ -23,7 +23,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A powerful markdown processor in Go geared towards the IETF";
+    description = "Powerful markdown processor in Go geared towards the IETF";
     homepage = "https://github.com/mmarkdown/mmark";
     license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ yrashk ];

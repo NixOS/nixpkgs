@@ -1,12 +1,13 @@
 diff --git a/psycopg/psycopg/pq/_pq_ctypes.py b/psycopg/psycopg/pq/_pq_ctypes.py
-index 4f9d00fb..24b90ef6 100644
+index f3a7b143..1bf935fb 100644
 --- a/psycopg/psycopg/pq/_pq_ctypes.py
 +++ b/psycopg/psycopg/pq/_pq_ctypes.py
-@@ -11,14 +11,10 @@ from ctypes import Structure, CFUNCTYPE, POINTER
+@@ -13,14 +13,11 @@ from ctypes import Structure, CFUNCTYPE, POINTER
  from ctypes import c_char, c_char_p, c_int, c_size_t, c_ubyte, c_uint, c_void_p
- from typing import List, Optional, Tuple
+ from typing import Any, NoReturn
  
--from .misc import find_libpq_full_path
+-from .misc import find_libpq_full_path, version_pretty
++from .misc import version_pretty
  from ..errors import NotSupportedError
  
 -libname = find_libpq_full_path()
@@ -18,29 +19,41 @@ index 4f9d00fb..24b90ef6 100644
  
  
  class FILE(Structure):
-@@ -28,9 +24,7 @@ class FILE(Structure):
+@@ -30,12 +27,7 @@ class FILE(Structure):
  FILE_ptr = POINTER(FILE)
  
  if sys.platform == "linux":
 -    libcname = ctypes.util.find_library("c")
--    assert libcname
+-    if not libcname:
+-        # Likely this is a system using musl libc, see the following bug:
+-        # https://github.com/python/cpython/issues/65821
+-        libcname = "libc.so"
 -    libc = ctypes.cdll.LoadLibrary(libcname)
 +    libc = ctypes.cdll.LoadLibrary("@libc@")
  
      fdopen = libc.fdopen
      fdopen.argtypes = (c_int, c_char_p)
 diff --git a/tests/fix_pq.py b/tests/fix_pq.py
-index 6811a26c..c1829c82 100644
+index 1cff7e18..218d90a0 100644
 --- a/tests/fix_pq.py
 +++ b/tests/fix_pq.py
-@@ -51,9 +51,7 @@ def libpq():
-         from psycopg.pq.misc import find_libpq_full_path
- 
-         # Not available when testing the binary package
+@@ -49,18 +49,7 @@ def pytest_runtest_setup(item):
+ @pytest.fixture
+ def libpq():
+     """Return a ctypes wrapper to access the libpq."""
+-    try:
+-        from psycopg.pq.misc import find_libpq_full_path
+-
+-        # Not available when testing the binary package
 -        libname = find_libpq_full_path()
 -        assert libname, "libpq libname not found"
--        return ctypes.pydll.LoadLibrary(libname)
-+        return ctypes.pydll.LoadLibrary("@libpq@")
-     except Exception as e:
-         if pq.__impl__ == "binary":
-             pytest.skip(f"can't load libpq for testing: {e}")
+-        return ctypes.cdll.LoadLibrary(libname)
+-    except Exception as e:
+-        if pq.__impl__ == "binary":
+-            pytest.skip(f"can't load libpq for testing: {e}")
+-        else:
+-            raise
++    return ctypes.cdll.LoadLibrary("@libpq@")
+ 
+ 
+ @pytest.fixture

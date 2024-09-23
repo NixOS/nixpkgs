@@ -1,72 +1,61 @@
-{ stdenv
-, lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, pandas
-, matplotlib
-, tox
-, coverage
-, flake8
-, nbval
-, pyvisa
-, networkx
-, ipython
-, ipykernel
-, ipywidgets
-, jupyter-client
-, sphinx-rtd-theme
-, sphinx
-, nbsphinx
-, openpyxl
-, qtpy
-, pyqtgraph
-, pyqt5
-, setuptools
-, pytestCheckHook
-, pytest-cov
-, pytest-mock
+{
+  stdenv,
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  pandas,
+  matplotlib,
+  nbval,
+  pyvisa,
+  networkx,
+  ipython,
+  ipykernel,
+  ipywidgets,
+  jupyter-client,
+  sphinx-rtd-theme,
+  sphinx,
+  nbsphinx,
+  openpyxl,
+  setuptools,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "0.29.1";
+  version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
-    repo = pname;
+    repo = "scikit-rf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sLE6rcBGUKmk5y7oO06rHON3GVIjcvnKlr6Tgddj64Y=";
+    hash = "sha256-cYQDoEX33fjxekTA2COHMvcLxCFCD7g9bp3y9sE4uUU=";
   };
 
-  buildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=skrf" ""
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scipy
     pandas
   ];
 
-  passthru.optional-dependencies = {
-    plot = [
-      matplotlib
-    ];
-    xlsx = [
-      openpyxl
-    ];
-    netw = [
-      networkx
-    ];
-    visa = [
-      pyvisa
-    ];
+  optional-dependencies = {
+    plot = [ matplotlib ];
+    xlsx = [ openpyxl ];
+    netw = [ networkx ];
+    visa = [ pyvisa ];
     docs = [
       ipython
       ipykernel
@@ -77,42 +66,30 @@ buildPythonPackage rec {
       nbsphinx
       openpyxl
     ];
-    qtapps = [
-      qtpy
-      pyqtgraph
-      pyqt5
-    ];
   };
 
+  env = lib.optionalAttrs stdenv.isDarwin { MPLBACKEND = "Agg"; };
+
   nativeCheckInputs = [
-    tox
-    coverage
-    flake8
-    pytest-cov
     pytest-mock
     nbval
     matplotlib
     pyvisa
     openpyxl
     networkx
-  ];
-
-  checkInputs = [
     pytestCheckHook
   ];
 
   # test_calibration.py generates a divide by zero error on darwin
   # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths =
-    lib.optional (stdenv.isAarch64 && stdenv.isDarwin)
-    "skrf/calibration/tests/test_calibration.py";
+  disabledTestPaths = lib.optional (
+    stdenv.isAarch64 && stdenv.isDarwin
+  ) "skrf/calibration/tests/test_calibration.py";
 
-  pythonImportsCheck = [
-    "skrf"
-  ];
+  pythonImportsCheck = [ "skrf" ];
 
   meta = with lib; {
-    description = "A Python library for RF/Microwave engineering";
+    description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
     changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/v${version}";
     license = licenses.bsd3;

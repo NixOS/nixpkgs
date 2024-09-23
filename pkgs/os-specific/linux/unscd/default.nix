@@ -69,8 +69,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://busybox.net/~vda/unscd/";
     description = "Less buggy replacement for the glibc name service cache daemon";
+    mainProgram = "nscd";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

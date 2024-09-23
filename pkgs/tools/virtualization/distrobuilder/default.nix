@@ -1,24 +1,33 @@
 { lib
-, pkg-config
 , buildGoModule
-, fetchFromGitHub
-, makeWrapper
+, callPackage
+, cdrkit
 , coreutils
+, debootstrap
+, fetchFromGitHub
 , gnupg
 , gnutar
-, squashfsTools
-, debootstrap
-, callPackage
+, hivex
+, makeWrapper
 , nixosTests
+, pkg-config
+, squashfsTools
+, stdenv
+, wimlib
 }:
 
 let
   bins = [
     coreutils
+    debootstrap
     gnupg
     gnutar
     squashfsTools
-    debootstrap
+  ] ++ lib.optionals stdenv.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
+    wimlib
   ];
 in
 buildGoModule rec {
@@ -51,7 +60,10 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests.incus = nixosTests.incus.container;
+    tests = {
+      incus-legacy-init = nixosTests.incus.container-legacy-init;
+      incus-systemd-init = nixosTests.incus.container-systemd-init;
+    };
 
     generator = callPackage ./generator.nix { inherit src version; };
   };
@@ -60,7 +72,7 @@ buildGoModule rec {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ megheaiulian adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
     mainProgram = "distrobuilder";
   };

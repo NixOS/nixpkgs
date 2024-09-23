@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
       cmake/Modules/FindOpenSSL_EP.cmake
   '';
 
+  # upstream will hopefully fix this in some newer release
+  env.CXXFLAGS = "-include random";
+
   # (bundled) blosc headers have a warning on some archs that it will be using
   # unaccelerated routines.
   cmakeFlags = [

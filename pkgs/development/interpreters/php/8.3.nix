@@ -1,9 +1,9 @@
-{ callPackage, fetchurl, ... }@_args:
+{ callPackage, ... }@_args:
 
 let
   base = callPackage ./generic.nix (_args // {
-    version = "8.3.0";
-    hash = "sha256-3mfQgz1CsZblpm+hozL0Xilsvo6UcuklayoHHDTcXtY=";
+    version = "8.3.11";
+    hash = "sha256-ZkDiRVCAqJrcQdTle7BPjCv7fuxif+GZr5c7/zTX8O4=";
   });
 in
 base.withExtensions ({ all, ... }: with all; ([

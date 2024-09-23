@@ -42,7 +42,7 @@ let
       database = lib.last (lib.splitString "/" noSchema);
     };
 
-  postgresDBs = [
+  postgresDBs = builtins.filter isPostgresql [
     cfg.settings.database
     cfg.settings.crypto_database
     cfg.settings.plugin_databases.postgres
@@ -57,7 +57,7 @@ let
 in
 {
   options.services.maubot = with lib; {
-    enable = mkEnableOption (mdDoc "maubot");
+    enable = mkEnableOption "maubot";
 
     package = lib.mkPackageOption pkgs "maubot" { };
 
@@ -70,7 +70,7 @@ in
           xyz.maubot.rss
         ];
       '';
-      description = mdDoc ''
+      description = ''
         List of additional maubot plugins to make available.
       '';
     };
@@ -83,7 +83,7 @@ in
           aiohttp
         ];
       '';
-      description = mdDoc ''
+      description = ''
         List of additional Python packages to make available for maubot.
       '';
     };
@@ -91,7 +91,7 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/maubot";
-      description = mdDoc ''
+      description = ''
         The directory where maubot stores its stateful data.
       '';
     };
@@ -100,7 +100,7 @@ in
       type = types.str;
       default = "./config.yaml";
       defaultText = literalExpression ''"''${config.services.maubot.dataDir}/config.yaml"'';
-      description = mdDoc ''
+      description = ''
         A file for storing secrets. You can pass homeserver registration keys here.
         If it already exists, **it must contain `server.unshared_secret`** which is used for signing API keys.
         If `configMutable` is not set to true, **maubot user must have write access to this file**.
@@ -110,14 +110,14 @@ in
     configMutable = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whether maubot should write updated config into `extraConfigFile`. **This will make your Nix module settings have no effect besides the initial config, as extraConfigFile takes precedence over NixOS settings!**
       '';
     };
 
     settings = mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         YAML settings for maubot. See the
         [example configuration](https://github.com/maubot/maubot/blob/master/maubot/example-config.yaml)
         for more info.
@@ -130,7 +130,7 @@ in
             type = str;
             default = "sqlite:maubot.db";
             example = "postgresql://username:password@hostname/dbname";
-            description = mdDoc ''
+            description = ''
               The full URI to the database. SQLite and Postgres are fully supported.
               Other DBMSes supported by SQLAlchemy may or may not work.
             '';
@@ -140,7 +140,7 @@ in
             type = str;
             default = "default";
             example = "postgresql://username:password@hostname/dbname";
-            description = mdDoc ''
+            description = ''
               Separate database URL for the crypto database. By default, the regular database is also used for crypto.
             '';
           };
@@ -148,21 +148,21 @@ in
           database_opts = mkOption {
             type = types.attrs;
             default = { };
-            description = mdDoc ''
+            description = ''
               Additional arguments for asyncpg.create_pool() or sqlite3.connect()
             '';
           };
 
           plugin_directories = mkOption {
             default = { };
-            description = mdDoc "Plugin directory paths";
+            description = "Plugin directory paths";
             type = submodule {
               options = {
                 upload = mkOption {
                   type = types.str;
                   default = "./plugins";
                   defaultText = literalExpression ''"''${config.services.maubot.dataDir}/plugins"'';
-                  description = mdDoc ''
+                  description = ''
                     The directory where uploaded new plugins should be stored.
                   '';
                 };
@@ -170,7 +170,7 @@ in
                   type = types.listOf types.str;
                   default = [ "./plugins" ];
                   defaultText = literalExpression ''[ "''${config.services.maubot.dataDir}/plugins" ]'';
-                  description = mdDoc ''
+                  description = ''
                     The directories from which plugins should be loaded. Duplicate plugin IDs will be moved to the trash.
                   '';
                 };
@@ -178,7 +178,7 @@ in
                   type = with types; nullOr str;
                   default = "./trash";
                   defaultText = literalExpression ''"''${config.services.maubot.dataDir}/trash"'';
-                  description = mdDoc ''
+                  description = ''
                     The directory where old plugin versions and conflicting plugins should be moved. Set to null to delete files immediately.
                   '';
                 };
@@ -187,7 +187,7 @@ in
           };
 
           plugin_databases = mkOption {
-            description = mdDoc "Plugin database settings";
+            description = "Plugin database settings";
             default = { };
             type = submodule {
               options = {
@@ -195,7 +195,7 @@ in
                   type = types.str;
                   default = "./plugins";
                   defaultText = literalExpression ''"''${config.services.maubot.dataDir}/plugins"'';
-                  description = mdDoc ''
+                  description = ''
                     The directory where SQLite plugin databases should be stored.
                   '';
                 };
@@ -204,7 +204,7 @@ in
                   type = types.nullOr types.str;
                   default = if isPostgresql cfg.settings.database then "default" else null;
                   defaultText = literalExpression ''if isPostgresql config.services.maubot.settings.database then "default" else null'';
-                  description = mdDoc ''
+                  description = ''
                     The connection URL for plugin database. See [example config](https://github.com/maubot/maubot/blob/master/maubot/example-config.yaml) for exact format.
                   '';
                 };
@@ -212,7 +212,7 @@ in
                 postgres_max_conns_per_plugin = mkOption {
                   type = types.nullOr types.int;
                   default = 3;
-                  description = mdDoc ''
+                  description = ''
                     Maximum number of connections per plugin instance.
                   '';
                 };
@@ -220,7 +220,7 @@ in
                 postgres_opts = mkOption {
                   type = types.attrs;
                   default = { };
-                  description = mdDoc ''
+                  description = ''
                     Overrides for the default database_opts when using a non-default postgres connection URL.
                   '';
                 };
@@ -230,20 +230,20 @@ in
 
           server = mkOption {
             default = { };
-            description = mdDoc "Listener config";
+            description = "Listener config";
             type = submodule {
               options = {
                 hostname = mkOption {
                   type = types.str;
                   default = "127.0.0.1";
-                  description = mdDoc ''
+                  description = ''
                     The IP to listen on
                   '';
                 };
                 port = mkOption {
                   type = types.port;
                   default = 29316;
-                  description = mdDoc ''
+                  description = ''
                     The port to listen on
                   '';
                 };
@@ -251,14 +251,14 @@ in
                   type = types.str;
                   default = "http://${cfg.settings.server.hostname}:${toString cfg.settings.server.port}";
                   defaultText = literalExpression ''"http://''${config.services.maubot.settings.server.hostname}:''${toString config.services.maubot.settings.server.port}"'';
-                  description = mdDoc ''
+                  description = ''
                     Public base URL where the server is visible.
                   '';
                 };
                 ui_base_path = mkOption {
                   type = types.str;
                   default = "/_matrix/maubot";
-                  description = mdDoc ''
+                  description = ''
                     The base path for the UI.
                   '';
                 };
@@ -268,14 +268,14 @@ in
                   defaultText = literalExpression ''
                     "''${config.services.maubot.settings.server.ui_base_path}/plugin/"
                   '';
-                  description = mdDoc ''
+                  description = ''
                     The base path for plugin endpoints. The instance ID will be appended directly.
                   '';
                 };
                 override_resource_path = mkOption {
                   type = types.nullOr types.str;
                   default = null;
-                  description = mdDoc ''
+                  description = ''
                     Override path from where to load UI resources.
                   '';
                 };
@@ -288,7 +288,7 @@ in
               options = {
                 url = mkOption {
                   type = types.str;
-                  description = mdDoc ''
+                  description = ''
                     Client-server API URL
                   '';
                 };
@@ -299,7 +299,7 @@ in
                 url = "https://matrix-client.matrix.org";
               };
             };
-            description = mdDoc ''
+            description = ''
               Known homeservers. This is required for the `mbc auth` command and also allows more convenient access from the management UI.
               If you want to specify registration secrets, pass this via extraConfigFile instead.
             '';
@@ -308,7 +308,7 @@ in
           admins = mkOption {
             type = types.attrsOf types.str;
             default = { root = ""; };
-            description = mdDoc ''
+            description = ''
               List of administrator users. Plaintext passwords will be bcrypted on startup. Set empty password
               to prevent normal login. Root is a special user that can't have a password and will always exist.
             '';
@@ -328,14 +328,14 @@ in
               dev_open = true;
               log = true;
             };
-            description = mdDoc ''
+            description = ''
               API feature switches.
             '';
           };
 
           logging = mkOption {
             type = types.attrs;
-            description = mdDoc ''
+            description = ''
               Python logging configuration. See [section 16.7.2 of the Python
               documentation](https://docs.python.org/3.6/library/logging.config.html#configuration-dictionary-schema)
               for more info.

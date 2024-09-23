@@ -1,32 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mailchecker";
-  version = "6.0.1";
+  version = "6.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PXo6dfiAqC1WD/z5NBI6UZVUl/cwlvoqKDyfZI4fn2s=";
+    hash = "sha256-8X6Qf/5vb67cJD9X6wyclR9h3smvjpaSLB3NCTOJuI0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "MailChecker"
-  ];
+  pythonImportsCheck = [ "MailChecker" ];
 
   meta = with lib; {
     description = "Module for temporary (disposable/throwaway) email detection";

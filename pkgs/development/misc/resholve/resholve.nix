@@ -1,18 +1,31 @@
 { lib
-, stdenv
 , callPackage
 , python27
+, fetchFromGitHub
 , installShellFiles
 , rSrc
 , version
 , oildev
 , configargparse
+, gawk
 , binlore
 , resholve
 , resholve-utils
 }:
 
-python27.pkgs.buildPythonApplication {
+let
+  sedparse = python27.pkgs.buildPythonPackage rec {
+    pname = "sedparse";
+    version = "0.1.2";
+    src = fetchFromGitHub {
+      owner = "aureliojargas";
+      repo = "sedparse";
+      rev = "0.1.2";
+      hash = "sha256-Q17A/oJ3GZbdSK55hPaMdw85g43WhTW9tuAuJtDfHHU=";
+    };
+  };
+
+in python27.pkgs.buildPythonApplication {
   pname = "resholve";
   inherit version;
   src = rSrc;
@@ -22,6 +35,11 @@ python27.pkgs.buildPythonApplication {
   propagatedBuildInputs = [
     oildev
     configargparse
+    sedparse
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ gawk ]}"
   ];
 
   postPatch = ''

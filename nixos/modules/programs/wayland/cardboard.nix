@@ -7,7 +7,7 @@ in
   meta.maintainers = with lib.maintainers; [ AndersonTorres ];
 
   options.programs.cardboard = {
-    enable = lib.mkEnableOption (lib.mdDoc "cardboard");
+    enable = lib.mkEnableOption "cardboard";
 
     package = lib.mkPackageOption pkgs "cardboard" { };
   };
@@ -17,8 +17,8 @@ in
       environment.systemPackages = [ cfg.package ];
 
       # To make a cardboard session available for certain DMs like SDDM
-      services.xserver.displayManager.sessionPackages = [ cfg.package ];
+      services.displayManager.sessionPackages = [ cfg.package ];
     }
-    (import ./wayland-session.nix { inherit lib pkgs; })
+    (import ./wayland-session.nix { inherit lib; })
   ]);
 }

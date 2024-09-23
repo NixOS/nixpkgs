@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , fetchFromGitLab
 , callPackage
@@ -24,7 +25,7 @@ let
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderFetcher ? fetchFromGitHub
-     , mkProviderGoModule ? buildGoModule
+     , mkProviderGoModule ? buildGo123Module
        # "https://registry.terraform.io/providers/vancluever/acme"
      , homepage ? ""
        # "registry.terraform.io/vancluever/acme"
@@ -86,6 +87,7 @@ let
       heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
+      minio = automated-providers.minio.override { spdx = "AGPL-3.0-only"; };
     };
 
   # Put all the providers we not longer support in this list.

@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
-  pythonSupport ? false, python2Packages,
   gnome2,
   openexrSupport ? true, openexr,
   libzipSupport ? true, libzip,
@@ -15,36 +14,28 @@
   openglSupport ? !stdenv.isDarwin, libGL
 }:
 
-let
-    inherit (python2Packages) pygtk pygobject2 python;
-in
-
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.64";
+   version = "2.66";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-FDL4XDHH6WYF47OsnhxpM7s7YadutiCDjcJKCF8ZlCw=";
+    sha256 = "sha256-N3vtzSsNjRM6MpaG2p9fkYB/8dR5N/mZEZXx6GN5LVI=";
   };
 
   nativeBuildInputs = [ pkg-config file ];
 
-  buildInputs = with lib;
-    [ gtk2 fftw ] ++
-    optionals openglSupport [ gnome2.gtkglext libGL ] ++
-    optional openexrSupport openexr ++
-    optional libXmuSupport xorg.libXmu ++
-    optional fitsSupport cfitsio ++
-    optional libpngSupport libpng ++
-    optional libxsltSupport libxslt ++
-    optional libxml2Support libxml2 ++
-    optional libwebpSupport libwebp ++
-    optional zlibSupport zlib ++
-    optional libuniqueSupport libunique ++
-    optional libzipSupport libzip;
-
-  propagatedBuildInputs = with lib;
-    optionals pythonSupport [ pygtk pygobject2 python gnome2.gtksourceview ];
+  buildInputs = [ gtk2 fftw ] ++
+    lib.optionals openglSupport [ gnome2.gtkglext libGL ] ++
+    lib.optional openexrSupport openexr ++
+    lib.optional libXmuSupport xorg.libXmu ++
+    lib.optional fitsSupport cfitsio ++
+    lib.optional libpngSupport libpng ++
+    lib.optional libxsltSupport libxslt ++
+    lib.optional libxml2Support libxml2 ++
+    lib.optional libwebpSupport libwebp ++
+    lib.optional zlibSupport zlib ++
+    lib.optional libuniqueSupport libunique ++
+    lib.optional libzipSupport libzip;
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if
@@ -67,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = [ lib.maintainers.cge ];
+    maintainers = [ ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

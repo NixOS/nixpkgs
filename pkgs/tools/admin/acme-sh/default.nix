@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://acme.sh/";
     changelog = "https://github.com/acmesh-official/acme.sh/releases/tag/${version}";
-    description = "A pure Unix shell script implementing ACME client protocol";
+    description = "Pure Unix shell script implementing ACME client protocol";
     longDescription = ''
       An ACME Shell script: acme.sh
 
@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mkaito ] ++ teams.serokell.members;
     inherit (coreutils.meta) platforms;
+    mainProgram = "acme.sh";
   };
 }

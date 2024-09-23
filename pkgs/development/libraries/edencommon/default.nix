@@ -1,15 +1,29 @@
-{ stdenv, lib, cmake, fetchFromGitHub, glog, folly, fmt_8, boost, gtest }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, boost
+, cmake
+, fmt_8
+, folly
+, glog
+, gtest
+}:
 
 stdenv.mkDerivation rec {
   pname = "edencommon";
-  version = "2023.03.06.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
     rev = "v${version}";
-    sha256 = "sha256-m54TaxThWe6bUa6Q1t+e99CLFOvut9vq9RSmimTNuaU=";
+    sha256 = "sha256-1z4QicS98juv4bUEbHBkCjVJHEhnoJyLYp4zMHmDbMg=";
   };
+
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
+    ./increase-test-discovery-timeout.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -26,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
+    description = "Shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
     homepage = "https://github.com/facebookexperimental/edencommon";
     license = licenses.mit;
     platforms = platforms.unix;

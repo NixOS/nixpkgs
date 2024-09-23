@@ -20,20 +20,20 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable cachefilesd network filesystems caching daemon.";
+        description = "Whether to enable cachefilesd network filesystems caching daemon.";
       };
 
       cacheDir = mkOption {
         type = types.str;
         default = "/var/cache/fscache";
-        description = lib.mdDoc "Directory to contain filesystem cache.";
+        description = "Directory to contain filesystem cache.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
         example = "brun 10%";
-        description = lib.mdDoc "Additional configuration file entries. See cachefilesd.conf(5) for more information.";
+        description = "Additional configuration file entries. See cachefilesd.conf(5) for more information.";
       };
 
     };
@@ -56,8 +56,10 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.cacheDir} 0700 root root - -"
-    ];
+    systemd.tmpfiles.settings."10-cachefilesd".${cfg.cacheDir}.d = {
+      user = "root";
+      group = "root";
+      mode = "0700";
+    };
   };
 }

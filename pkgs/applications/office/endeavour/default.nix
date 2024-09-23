@@ -6,7 +6,7 @@
 , pkg-config
 , wrapGAppsHook4
 , gettext
-, gnome
+, adwaita-icon-theme
 , glib
 , gtk4
 , wayland
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libpeas
     gnome-online-accounts
     gsettings-desktop-schemas
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
 
     # Plug-ins
     evolution-data-server-gtk4 # eds
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Personal task manager for GNOME";
+    mainProgram = "endeavour";
     homepage = "https://gitlab.gnome.org/World/Endeavour";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;

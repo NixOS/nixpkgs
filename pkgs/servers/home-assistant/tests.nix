@@ -5,45 +5,72 @@
 let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    airzone_cloud = [ aioairzone ];
-    alexa = [ av ];
-    bluetooth = [ pyswitchbot ];
-    bthome = [ xiaomi-ble ];
-    camera = [ av ];
-    cloud = [ mutagen ];
-    config = [ pydispatcher ];
-    generic = [ av ];
-    google_translate = [ mutagen ];
-    google_sheets = [ oauth2client ];
-    govee_ble = [ ibeacon-ble ];
-    hassio = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
-    homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    lovelace = [ pychromecast ];
-    matrix = [ pydantic ];
-    mopeka = [ pyswitchbot ];
-    nest = [ av ];
-    onboarding = [ pymetno radios rpi-bad-power ];
-    otbr = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    raspberry_pi = [ rpi-bad-power ];
-    shelly = [ pyswitchbot ];
-    tilt_ble = [ govee-ble ibeacon-ble ];
-    tomorrowio = [ pyclimacell ];
-    version = [ aioaseko ];
-    xiaomi_miio = [ arrow ];
-    voicerss = [ mutagen ];
-    yandextts = [ mutagen ];
-    zha = [ pydeconz ];
-    zwave_js = [ homeassistant-pyozw ];
+    airzone_cloud = [
+      aioairzone
+    ];
+    androidtv = home-assistant.getPackages "asuswrt" home-assistant.python.pkgs;
+    bluetooth = [
+      pyswitchbot
+    ];
+    govee_ble = [
+      ibeacon-ble
+    ];
+    lovelace = [
+      pychromecast
+    ];
+    matrix = [
+      pydantic
+    ];
+    mopeka = [
+      pyswitchbot
+    ];
+    onboarding = [
+      pymetno
+      radios
+      rpi-bad-power
+    ];
+    raspberry_pi = [
+      rpi-bad-power
+    ];
+    shelly = [
+      pyswitchbot
+    ];
+    songpal = [
+      isal
+    ];
+    system_log = [
+      isal
+    ];
+    tilt_ble = [
+      ibeacon-ble
+    ];
+    xiaomi_miio = [
+      arrow
+    ];
+    zha = [
+      pydeconz
+    ];
   };
 
   extraDisabledTestPaths = {
   };
 
   extraDisabledTests = {
-    mqtt = [
-      # Assert None is not None
-      "test_handle_logging_on_writing_the_entity_state"
+    advantage_air = [
+      # AssertionError: assert 2 == 1 (Expected two calls, got one)
+      "test_binary_sensor_async_setup_entry"
+    ];
+    hassio = [
+      # fails to load the hardware component
+      "test_device_registry_calls"
+    ];
+    husqvarna_automower = [
+      # snapshot mismatch
+      "test_device_diagnostics"
+    ];
+    recorder = [
+      # call not happening, likely due to timezone issues
+      "test_auto_purge"
     ];
     shell_command = [
       # tries to retrieve file from github
@@ -53,60 +80,42 @@ let
       # missing operating_status attribute in entity
       "test_sensor_entities"
     ];
-    vesync = [
-      # homeassistant.components.vesync:config_validation.py:863 The 'vesync' option has been removed, please remove it from your configuration
-      "test_async_get_config_entry_diagnostics__single_humidifier"
-      "test_async_get_device_diagnostics__single_fan"
+    websocket_api = [
+      # racy
+      "test_render_template_with_timeout"
     ];
   };
 
   extraPytestFlagsArray = {
-    conversation = [
-      "--deselect tests/components/conversation/test_init.py::test_get_agent_list"
+    cloud = [
+      # Tries to connect to alexa-api.nabucasa.com:443
+      "--deselect tests/components/cloud/test_http_api.py::test_websocket_update_preferences_alexa_report_state"
     ];
     dnsip = [
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
     ];
-    history_stats = [
-      # Flaky: AssertionError: assert '0.0' == '12.0'
-      "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
-    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
+      "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
       # AssertionError: assert [+ received] == [- snapshot]
       "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
-    ];
-    modbus = [
-      # homeassistant.components.modbus.modbus:modbus.py:317 Pymodbus: modbusTest: Modbus Error: test connect exception
-      "--deselect tests/components/modbus/test_init.py::test_pymodbus_connect_fail"
     ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
-    sonos = [
-      # KeyError: 'sonos_media_player'
-      "--deselect tests/components/sonos/test_init.py::test_async_poll_manual_hosts_warnings"
-      "--deselect tests/components/sonos/test_init.py::test_async_poll_manual_hosts_3"
-    ];
-    unifiprotect = [
-      # "TypeError: object Mock can't be used in 'await' expression
-      "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
-    ];
-    xiaomi_ble = [
-      # assert 0 == 1"
-      "--deselect tests/components/xiaomi_ble/test_sensor.py::test_xiaomi_consumable"
-    ];
-    zha = [
-      "--deselect tests/components/zha/test_config_flow.py::test_formation_strategy_restore_manual_backup_non_ezsp"
-      "--deselect tests/components/zha/test_config_flow.py::test_formation_strategy_restore_automatic_backup_non_ezsp"
+    velux = [
+      # uses unmocked sockets
+      "--deselect tests/components/velux/test_config_flow.py::test_user_success"
+      "--deselect tests/components/velux/test_config_flow.py::test_import_valid_config"
     ];
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {
     pname = "homeassistant-test-${component}";
+    pyproject = null;
     format = "other";
 
     dontBuild = true;
@@ -131,10 +140,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     '';
 
     meta = old.meta // {
-      broken = lib.elem component [
-        # pinned version incompatible with urllib3>=2.0
-        "telegram_bot"
-      ];
+      broken = lib.elem component [ ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;
     };

@@ -1,34 +1,29 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, django
-, python-fsutil
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  python,
+  python-fsutil,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-maintenance-mode";
-  version = "0.18.0";
-  format = "setuptools";
+  version = "0.21.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
-    repo = pname;
+    repo = "django-maintenance-mode";
     rev = "refs/tags/${version}";
-    hash = "sha256-Mcj8O20hCINGf5T3PCG9jq0onSrm4R+Ke5CLMqMDmuU=";
+    hash = "sha256-rZo0yru+y5TkdULBQDMGAVb494PSLtbnNX/7cuphKNk=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-broken-test.patch";
-      url = "https://github.com/fabiocaccamo/django-maintenance-mode/commit/68cde8d9ceef00eeaa2068f420698c1c562fa9fc.patch";
-      hash = "sha256-K/zYYkcnmWGc7Knz4l9PgvUtT0IccPRXc3UFriC1ldc=";
-    })
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     django
@@ -43,11 +38,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [ "maintenance_mode" ];
+
   meta = with lib; {
     description = "Shows a 503 error page when maintenance-mode is on";
     homepage = "https://github.com/fabiocaccamo/django-maintenance-mode";
     changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${version}";
-    maintainers = with maintainers; [ mrmebelman ];
     license = licenses.bsd3;
+    maintainers = with maintainers; [ mrmebelman ];
   };
 }

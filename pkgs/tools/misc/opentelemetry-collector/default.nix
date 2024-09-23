@@ -3,22 +3,23 @@
 , fetchFromGitHub
 , installShellFiles
 , testers
+, nixosTests
 , opentelemetry-collector
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.90.0";
+  version = "0.109.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-FL0lNlofXHTdn5o6g4FHNYauzJkjCKTrspSXP9slp/A=";
+    hash = "sha256-ShVUBohSnIoeq2aTWJ9IMXKt0CeRv3CZjlqpYHR9DhY=";
   };
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-6Vr4Nk4mp505H3oAznAQ2mJl6qYFbHyO5MqgYeinnf8=";
+  vendorHash = "sha256-rXC4lm2ZvO3k6h1ZiYB+FskhW0c2uJyPLZg6n125MZE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,16 +42,19 @@ buildGoModule rec {
       --zsh <($out/bin/otelcorecol completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = opentelemetry-collector;
-    command = "otelcorecol -v";
+  passthru.tests = {
+    version = testers.testVersion {
+      inherit version;
+      package = opentelemetry-collector;
+      command = "otelcorecol -v";
+    };
+    inherit (nixosTests) opentelemetry-collector;
   };
 
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "Vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the

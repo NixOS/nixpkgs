@@ -93,11 +93,11 @@ build-idris-package  {
     hash = "sha256-h28F9EEPuvab6zrfeE+0k1XGQJGwINnsJEG8yjWIl7w=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Idris YAML lib";
     homepage = "https://github.com/Heather/Idris.Yaml";
-    license = licenses.mit;
-    maintainers = [ maintainers.brainrape ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.brainrape ];
   };
 }
 ```
@@ -134,9 +134,9 @@ For example you could set
 
 ```nix
 build-idris-package {
-  idrisBuildOptions = [ "--log" "1" "--verbose" ]
+  idrisBuildOptions = [ "--log" "1" "--verbose" ];
 
-  ...
+  # ...
 }
 ```
 

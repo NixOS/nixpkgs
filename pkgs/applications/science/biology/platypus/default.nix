@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "The Platypus variant caller";
+    description = "Platypus variant caller";
     license = licenses.gpl3;
     homepage = "https://github.com/andyrimmer/Platypus";
     maintainers = with maintainers; [ jbedo ];

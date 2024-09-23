@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , gtest
 , pkg-config
@@ -18,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
-    repo = finalAttrs.pname;
+    repo = "minizip-ng";
     rev = finalAttrs.version;
     hash = "sha256-rP3WficGQZ2sSYnU9Tj0lVl36ShwV76fn/1lv+TrK2c=";
   };
@@ -29,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
     "-DMZ_OPENSSL=ON"
-    "-DMZ_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
-    "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DMZ_LIB_SUFFIX='-ng'"
   ] ++ lib.optionals stdenv.isDarwin [
     # missing header file

@@ -1,48 +1,40 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, udisks2-qt5
-, cmake
-, qtbase
-, qttools
-, pkg-config
-, kcodecs
-, karchive
-, wrapQtAppsHook
-, minizip
-, libzip
-, libuuid
-, libarchive
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  cmake,
+  qtbase,
+  qttools,
+  pkg-config,
+  kcodecs,
+  karchive,
+  wrapQtAppsHook,
+  minizip,
+  libzip,
+  libuuid,
+  libarchive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.20";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-oOxto0X/GBAA9q691uwC0PtCdHDTMBqi80ov4xCXPn0=";
+    hash = "sha256-DUpYb1xNmWpBcKo9kajeVm/+z4yj2OBE+qOyEkCHbUI=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-build-failures-for-new-dtkgui.patch";
-      url = "https://github.com/linuxdeepin/deepin-compressor/commit/0ee07030034b06021e366d8d6109f344d47ea26c.patch";
-      hash = "sha256-P++SxzZCWoXJnLQhC0H/64/LjW/dqnl3hCGBWHVDn9Q=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/source/common/pluginmanager.cpp \
-      --replace "/usr/lib/" "$out/lib/"
+      --replace-fail "/usr/lib" "$out/lib"
     substituteInPlace src/desktop/deepin-compressor.desktop \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [
@@ -70,10 +62,14 @@ stdenv.mkDerivation rec {
     "-DUSE_TEST=OFF"
   ];
 
+  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
+  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
+
   strictDeps = true;
 
   meta = with lib; {
-    description = "A fast and lightweight application for creating and extracting archives";
+    description = "Fast and lightweight application for creating and extracting archives";
+    mainProgram = "deepin-compressor";
     homepage = "https://github.com/linuxdeepin/deepin-compressor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

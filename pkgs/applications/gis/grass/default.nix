@@ -3,7 +3,9 @@
 , callPackage
 , fetchFromGitHub
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
+
+, withOpenGL ? !stdenv.isDarwin
 
 , bison
 , blas
@@ -11,20 +13,23 @@
 , ffmpeg
 , fftw
 , flex
+, freetype
 , gdal
 , geos
+, lapack
+, libGLU
 , libiconv
-, libmysqlclient
 , libpng
+, libsvm
 , libtiff
 , libxml2
+, llvmPackages
 , netcdf
 , pdal
 , pkg-config
 , postgresql
 , proj
-, proj-datumgrid
-, python3Packages
+, python311Packages
 , readline
 , sqlite
 , wxGTK32
@@ -32,86 +37,86 @@
 , zstd
 }:
 
+let
+  pyPackages = python311Packages;
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.3.1";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-SoJq4SuDYImfkM2e991s47vYusrmnrQaXn7p3xwyOOQ=";
+    hash = "sha256-NKMshd6pr2O62ZjmQ/oPttmeVBYVD0Nqhh3SwQrhZf8=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
 
     bison
     flex
     gdal # for `gdal-config`
     geos # for `geos-config`
-    libmysqlclient # for `mysql_config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
     cairo
     ffmpeg
     fftw
+    freetype
     gdal
     geos
-    libmysqlclient
+    lapack
     libpng
+    libsvm
     libtiff
-    libxml2
+    (libxml2.override { enableHttp = true; })
     netcdf
     pdal
     postgresql
     proj
-    proj-datumgrid
     readline
     sqlite
     wxGTK32
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ] ++ lib.optionals withOpenGL [ libGLU ]
+  ++ lib.optionals stdenv.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
 
-  patches = lib.optionals stdenv.isDarwin [
-    # Fix conversion of const char* to unsigned int.
-    ./clang-integer-conversion.patch
-  ];
-
-  # Correct mysql_config query
-  postPatch = ''
-      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
-  '';
-
   configureFlags = [
     "--with-blas"
+    "--with-cairo-ldflags=-lfontconfig"
+    "--with-cxx"
     "--with-fftw"
+    "--with-freetype"
     "--with-geos"
-    # It complains about missing libmysqld but doesn't really seem to need it
-    "--with-mysql"
-    "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
-    "--with-mysql-libs=${libmysqlclient}/lib/mysql"
-    "--with-netcdf"
+    "--with-gdal"
+    "--with-lapack"
+    "--with-libsvm"
+    "--with-nls"
+    "--with-openmp"
+    "--with-pdal"
     "--with-postgres"
     "--with-postgres-libs=${postgresql.lib}/lib/"
     "--with-proj-includes=${proj.dev}/include"
     "--with-proj-libs=${proj}/lib"
     "--with-proj-share=${proj}/share/proj"
-    "--with-pthread"
-    "--with-readline"
-    "--with-wxwidgets"
+    "--with-sqlite"
     "--with-zstd"
+    "--without-bzlib"
+    "--without-mysql"
+    "--without-odbc"
+  ] ++ lib.optionals (! withOpenGL) [
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--with-pdal"
   ] ++ lib.optionals stdenv.isDarwin [
     "--without-cairo"
     "--without-freetype"
@@ -134,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/grass \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
+    --set GRASS_PYTHON ${pyPackages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include

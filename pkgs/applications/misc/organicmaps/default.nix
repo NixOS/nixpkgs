@@ -11,6 +11,7 @@
 , qtbase
 , qtpositioning
 , qtsvg
+, qtwayland
 , libGLU
 , libGL
 , zlib
@@ -29,13 +30,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.11.17-17";
+  version = "2024.09.08-7";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    hash = "sha256-3oGcupO49+ZXyW+ii4T+wov4qweDnLO+VkXSAIh7qJ4=";
+    hash = "sha256-X1dmk1IBjqM2AUVkvSDNZyVtV5Ens9ninZvMvsRc334=";
     fetchSubmodules = true;
   };
 
@@ -68,6 +69,7 @@ in stdenv.mkDerivation rec {
     qtbase
     qtpositioning
     qtsvg
+    qtwayland
     libGLU
     libGL
     zlib

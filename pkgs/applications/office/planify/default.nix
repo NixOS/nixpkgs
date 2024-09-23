@@ -7,15 +7,20 @@
 , pkg-config
 , vala
 , wrapGAppsHook4
-, evolution-data-server
+, evolution-data-server-gtk4
 , glib
 , glib-networking
+, gst_all_1
 , gtk4
+, gtksourceview5
+, gxml
 , json-glib
 , libadwaita
 , libgee
 , libical
 , libportal-gtk4
+, libsecret
+, libsoup_3
 , pantheon
 , sqlite
 , webkitgtk_6_0
@@ -23,16 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.1.1";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    # The commit is named as "Release 4.1.1", published to Flathub, but not tags
-    # https://github.com/flathub/io.github.alainm23.planify/commit/2a353ccfcf3379add6778d569f49da37f40accfa
-    # https://github.com/alainm23/planify/issues/1002
-    rev = "adf3629bcacfc9978f6dde5b87eff0278533ab3e";
-    hash = "sha256-xqklvSYmqBQ+IQ3lRjMbV4W4vD/rLCln7rBVCbYiBGo=";
+    rev = version;
+    hash = "sha256-yEe8zBaczCCY5Cs9lIc2J3GYSeDwmB1vsX9cANXQIC0=";
   };
 
   nativeBuildInputs = [
@@ -45,25 +47,36 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
     glib-networking
+    # Needed for GtkMediaStream creation with success.ogg, see #311295.
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gtk4
+    gtksourceview5
+    gxml
     json-glib
     libadwaita
     libgee
     libical
     libportal-gtk4
+    libsecret
+    libsoup_3
     pantheon.granite7
     sqlite
     webkitgtk_6_0
+  ];
+
+  mesonFlags = [
+    "-Dprofile=default"
   ];
 
   meta = with lib; {
     description = "Task manager with Todoist support designed for GNU/Linux";
     homepage = "https://github.com/alainm23/planify";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "io.github.alainm23.planify";
   };

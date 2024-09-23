@@ -167,7 +167,7 @@ def test_full() -> None:
           <span class="citerefentry"><span class="refentrytitle">man</span>(1)</span>
          </a> reference
         </p>
-        <p><a id="b" />some <a id="a" />nested anchors</p>
+        <p><span id="b"></span>some <span id="a"></span>nested anchors</p>
         <p>
          <span class="emphasis"><em>emph</em></span>␣
          <span class="strong"><strong>strong</strong></span>␣

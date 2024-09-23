@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, opentype-sanitizer
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  opentype-sanitizer,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ots-python";
   version = "9.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "opentype-sanitizer";
@@ -27,17 +29,11 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    opentype-sanitizer
-  ];
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ opentype-sanitizer ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python wrapper for ots (OpenType Sanitizer)";

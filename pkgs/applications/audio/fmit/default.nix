@@ -44,6 +44,7 @@ mkDerivation rec {
     '';
     homepage = "http://gillesdegottex.github.io/fmit/";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
   };
 }

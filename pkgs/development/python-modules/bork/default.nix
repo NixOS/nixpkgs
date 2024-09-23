@@ -1,40 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 
-, build
-, coloredlogs
-, packaging
-, pip
-, toml
-, twine
-, wheel
+  setuptools,
+  build,
+  coloredlogs,
+  importlib-metadata,
+  packaging,
+  pip,
+  toml,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "bork";
-  version = "7.0.2";
+  version = "9.0.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-sHCPT6nTenE6mbTifNPtg0OMNIJCs7LRcF8Xuk+MwLs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YqvtOwd00TXD4I3fIQolvjHnjREvQgbdrEO9Z96v1Kk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
+  ];
+
+  dependencies = [
     build
     coloredlogs
     packaging
     pip
-    toml
-    twine
-    wheel
-  ];
+    urllib3
+  ] ++ lib.optionals (pythonOlder "3.11") [ toml ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+  ;
 
   pythonImportsCheck = [
     "bork"
@@ -42,17 +53,22 @@ buildPythonPackage rec {
     "bork.cli"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "-m 'not network'" ];
+
+  disabledTests = [
+    # tries to call python -m bork
+    "test_repo"
   ];
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+
+  passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
     description = "Python build and release management tool";
+    mainProgram = "bork";
     homepage = "https://github.com/duckinator/bork";
+    license = licenses.mit;
     maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.all;
   };
 }

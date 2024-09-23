@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 buildPythonPackage rec {
   pname = "pytweening";
-  version = "1.0.7";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dnE08b9Xt2wc6faS3Rz8d22aJ53mck6NBIVFCP1+3ts=";
+    hash = "sha256-JDMYt3NmmAZsXzYuxcK2Q07PQpfDyOfKqKv+avTKxxs=";
   };
 
   pythonImportsCheck = [ "pytweening" ];

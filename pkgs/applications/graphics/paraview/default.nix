@@ -1,32 +1,53 @@
-{ lib, stdenv, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
-, qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, ninja, mpi, python3, tbb, libGLU, libGL
-, withDocs ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchurl,
+  boost,
+  cmake,
+  ffmpeg,
+  wrapQtAppsHook,
+  qtbase,
+  qtx11extras,
+  qttools,
+  qtxmlpatterns,
+  qtsvg,
+  gdal,
+  gfortran,
+  libXt,
+  makeWrapper,
+  ninja,
+  mpi,
+  python3,
+  tbb,
+  libGLU,
+  libGL,
+  withDocs ? true,
 }:
 
 let
-  version = "5.11.1";
+  version = "5.13.0";
 
   docFiles = [
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewTutorial-${version}.pdf";
       name = "Tutorial.pdf";
-      sha256 = "1knpirjbz3rv8p8n03p39vv8vi5imvxakjsssqgly09g0cnsikkw";
+      hash = "sha256-hoCa/aTy2mmsPHP3Zm0hLZlZKbtUMpjUlc2rFKKChco=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewGettingStarted-${version}.pdf";
       name = "GettingStarted.pdf";
-      sha256 = "14xhlvg7s7d5amqf4qfyamx2a6b66zf4cmlfm3s7iw3jq01x1lx6";
+      hash = "sha256-ptPQA8By8Hj0qI5WRtw3ZhklelXeYeJwVaUdfd6msJM=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewCatalystGuide-${version}.pdf";
       name = "CatalystGuide.pdf";
-      sha256 = "133vcfrbg2nh15igl51ns6gnfn1is20vq6j0rg37wha697pmcr4a";
+      hash = "sha256-t1lJ1Wiswhdxovt2O4sXTXfFxshDiZZVdnkXt/+BQn8=";
     })
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -35,7 +56,7 @@ in stdenv.mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    hash = "sha256-LatNHfiAqB2kqzERRnYae0WIXBb4nXQ79Be4kuh8NFQ=";
+    hash = "sha256-JRSuvBON2n0UnbrFia4Qmf6eYb1Mc+Z7dIcXSeUhpIc=";
     fetchSubmodules = true;
   };
 
@@ -86,11 +107,10 @@ in stdenv.mkDerivation rec {
     qtsvg
   ];
 
-  patches = [
-    ./dont-redefine-strlcat.patch
-  ];
-
-  postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in
+  postInstall =
+    let
+      docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc";
+    in
     lib.optionalString withDocs ''
       mkdir -p ${docDir};
       for docFile in ${lib.concatStringsSep " " docFiles}; do
@@ -99,14 +119,21 @@ in stdenv.mkDerivation rec {
     '';
 
   propagatedBuildInputs = [
-    (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
+    (python3.withPackages (
+      ps: with ps; [
+        numpy
+        matplotlib
+        mpi4py
+      ]
+    ))
   ];
 
-  meta = with lib; {
-    homepage = "https://www.paraview.org/";
+  meta = {
+    homepage = "https://www.paraview.org";
     description = "3D Data analysis and visualization application";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ guibert ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ guibert ];
+    changelog = "https://www.kitware.com/paraview-${lib.concatStringsSep "-" (lib.versions.splitVersion version)}-release-notes";
+    platforms = lib.platforms.linux;
   };
 }

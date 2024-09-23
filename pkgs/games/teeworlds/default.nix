@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsa-lib
+{ fetchFromGitHub, fetchpatch, lib, stdenv, cmake, pkg-config, python3, alsa-lib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
 , nixosTests
 , Cocoa
@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     # Can't use fetchpatch or fetchpatch2 because of https://github.com/NixOS/nixpkgs/issues/32084
     # Using fetchurl instead is also not a good idea, see https://github.com/NixOS/nixpkgs/issues/32084#issuecomment-727223713
     ./rename-VERSION-to-VERSION.txt.patch
+    (fetchpatch {
+      name = "CVE-2021-43518.patch";
+      url = "https://salsa.debian.org/games-team/teeworlds/-/raw/a6c4b23c1ce73466e6d89bccbede70e61e8c9cba/debian/patches/CVE-2021-43518.patch";
+      hash = "sha256-2MmsucaaYjqLgMww1492gNmHmvBJm/NED+VV5pZDnBY=";
+    })
   ];
 
   postPatch = ''
@@ -90,6 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Retro multiplayer shooter game";
+    mainProgram = "teeworlds_srv";
 
     longDescription = ''
       Teeworlds is a free online multiplayer game, available for all

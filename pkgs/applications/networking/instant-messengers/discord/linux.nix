@@ -1,17 +1,17 @@
 { pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
-, makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
+, makeDesktopItem, lib, stdenv, wrapGAppsHook3, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
 , libunity
-, speechd
+, speechd-minimal
 , wayland
 , branch
 , withOpenASAR ? false, openasar
 , withVencord ? false, vencord
-, withTTS ? false }:
+, withTTS ? true }:
 
 let
   disableBreakingUpdates = runCommand "disable-breaking-updates.py"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libxshmfence
     mesa
     nss
-    wrapGAppsHook
+    wrapGAppsHook3
     makeShellWrapper
   ];
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libdbusmenu
     wayland
-  ] ++ lib.optional withTTS speechd);
+  ] ++ lib.optional withTTS speechd-minimal);
 
   installPhase = ''
     runHook preInstall

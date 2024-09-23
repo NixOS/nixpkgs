@@ -1,6 +1,6 @@
 { stdenvNoCC
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , librsvg
 , xorg
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     xorg.lndir
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   installPhase = ''

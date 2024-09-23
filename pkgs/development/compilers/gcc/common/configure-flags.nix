@@ -6,7 +6,6 @@
 , version
 
 , binutils, gmp, mpfr, libmpc, isl
-, cloog ? null
 
 , enableLTO
 , enableMultilib
@@ -18,17 +17,16 @@
 , langCC
 , langD ? false
 , langFortran
-, langJava ? false, javaAwtGtk ? false, javaAntlr ? null, javaEcj ? null
 , langAda ? false
 , langGo
 , langObjC
 , langObjCpp
 , langJit
+, langRust ? false
 , disableBootstrap ? stdenv.targetPlatform != stdenv.hostPlatform
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
-assert langJava -> lib.versionOlder version "7";
 
 # Note [Windows Exception Handling]
 # sjlj (short jump long jump) exception handling makes no sense on x86_64,
@@ -135,6 +133,8 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       "--with-build-sysroot=/"
+      # Same with the stdlibc++ headers embedded in the gcc output
+      "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
     ]
 
     # Basic configuration
@@ -162,13 +162,13 @@ let
           ++ lib.optional langCC       "c++"
           ++ lib.optional langD        "d"
           ++ lib.optional langFortran  "fortran"
-          ++ lib.optional langJava     "java"
           ++ lib.optional langAda      "ada"
           ++ lib.optional langGo       "go"
           ++ lib.optional langObjC     "objc"
           ++ lib.optional langObjCpp   "obj-c++"
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
           ++ lib.optional langJit      "jit"
+          ++ lib.optional langRust     "rust"
           )
       }"
     ]
@@ -193,29 +193,12 @@ let
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
-    ++ lib.optionals (lib.versionOlder version "5" && cloog != null) [
-      "--with-cloog=${cloog}"
-      "--disable-cloog-version-check"
-      "--enable-cloog-backend=isl"
-    ]
 
     # Ada options, gcc can't build the runtime library for a cross compiler
     ++ lib.optional langAda
       (if hostPlatform == targetPlatform
        then "--enable-libada"
        else "--disable-libada")
-
-    # Java options
-    ++ lib.optionals langJava [
-      "--with-ecj-jar=${javaEcj}"
-
-      # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
-      # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
-      "--enable-java-home"
-      "--with-java-home=\${prefix}/lib/jvm/jre"
-    ]
-    ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
-    ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
     ++ import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; }
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
@@ -248,6 +231,11 @@ let
     # glibc's definitions and fail the build. It was fixed in gcc-13+.
     ++ lib.optionals (targetPlatform.isMips && targetPlatform.parsed.abi.name == "gnu" && lib.versions.major version == "12") [
       "--disable-libsanitizer"
+    ]
+    ++ lib.optionals targetPlatform.isAlpha [
+      # Workaround build failures like:
+      #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
+      "--disable-werror"
     ]
   ;
 

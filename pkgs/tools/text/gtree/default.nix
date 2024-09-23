@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gtree";
-  version = "1.10.3";
+  version = "1.10.11";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
     rev = "v${version}";
-    hash = "sha256-KFEYkhCLMcJ4NkHu0kkuG70EvJQ3HYDvicmomcMJZjc=";
+    hash = "sha256-wxN4bvSSeCTPGjIIDLotr0XsiCf0u0GochEo1SPyopM=";
   };
 
-  vendorHash = "sha256-rvVrVv73gW26UUy1MyxKDjUgX1mrMMii+l8qU2hLOek=";
+  vendorHash = "sha256-s3GsqrXd84VVGuxY18ielAt0BZGMyl1tNavlD66rWoA=";
 
   subPackages = [
     "cmd/gtree"
@@ -37,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Generate directory trees and directories using Markdown or programmatically";
+    mainProgram = "gtree";
     homepage = "https://github.com/ddddddO/gtree";
     changelog = "https://github.com/ddddddO/gtree/releases/tag/${src.rev}";
     license = licenses.bsd2;

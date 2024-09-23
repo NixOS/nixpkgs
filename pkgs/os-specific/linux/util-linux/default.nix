@@ -20,16 +20,15 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.39.2";
+  version = "2.39.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-h6vfqo5JD4vm3el298gLm1/58wHhtn44meHwWlmhUx8=";
+    hash = "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-    ./bcachefs-patch-set.patch
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -110,6 +109,9 @@ stdenv.mkDerivation rec {
     ln -svf "$swap/bin/"* $bin/bin/
     '' + ''
 
+    ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
+    ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
+
     installShellCompletion --bash bash-completion/*
   '';
 
@@ -124,7 +126,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
-    description = "A set of system utilities for Linux";
+    description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
     license = with licenses; [ gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain ];

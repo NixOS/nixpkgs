@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, pycryptodome
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  packaging,
+  pycryptodome,
 }:
 
 buildPythonPackage rec {
   pname = "solc-select";
   version = "1.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

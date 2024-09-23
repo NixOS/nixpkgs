@@ -1,17 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyquaternion";
   version = "0.9.9";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sfYa8hnLL+lmtft5oZISTy5jo/end6w8rfKVexqBvqg=";
+  src = fetchFromGitHub {
+    owner = "KieranWynn";
+    repo = "pyquaternion";
+    rev = "v${version}";
+    hash = "sha256-L0wT9DFUDRcmmN7OpmIDNvtQWQrM7iFnZt6R2xrJ+3A=";
   };
 
   # The VERSION.txt file is required for setup.py
@@ -20,13 +25,18 @@ buildPythonPackage rec {
     echo "${version}" > VERSION.txt
   '';
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ nose ];
+  dependencies = [ numpy ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "pyquaternion/test/" ];
+
   pythonImportsCheck = [ "pyquaternion" ];
 
   meta = with lib; {
-    description = "Library for representing and using quaternions.";
+    description = "Library for representing and using quaternions";
     homepage = "http://kieranwynn.github.io/pyquaternion/";
     license = licenses.mit;
     maintainers = with maintainers; [ lucasew ];

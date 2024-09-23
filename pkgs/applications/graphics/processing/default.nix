@@ -1,4 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, javaPackages, rsync, ffmpeg, batik, gsettings-desktop-schemas, xorg, wrapGAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  ant,
+  unzip,
+  makeWrapper,
+  jdk,
+  jogl,
+  rsync,
+  ffmpeg,
+  batik,
+  stripJavaArchivesHook,
+  wrapGAppsHook3,
+  libGL,
+}:
 let
   buildNumber = "1293";
   vaqua = fetchurl {
@@ -37,9 +53,11 @@ let
     sha256 = "sha256-N4U04znm5tULFzb7Ort28cFdG+P0wTzsbVNkEuI9pgM=";
   };
 
-  arch = {
-    x86_64 = "amd64";
-  }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+  arch =
+    {
+      x86_64 = "amd64";
+    }
+    .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "processing";
@@ -52,17 +70,32 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
   };
 
-  nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
-  buildInputs = [ jdk javaPackages.jogl_2_4_0 ant rsync ffmpeg batik ];
+  nativeBuildInputs = [
+    ant
+    unzip
+    makeWrapper
+    stripJavaArchivesHook
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    jdk
+    jogl
+    ant
+    rsync
+    ffmpeg
+    batik
+  ];
 
   dontWrapGApps = true;
 
   buildPhase = ''
+    runHook preBuild
+
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
     mkdir -p core/library
-    ln -s ${javaPackages.jogl_2_4_0}/share/java/* core/library/
+    ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
     ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
@@ -72,15 +105,19 @@ stdenv.mkDerivation rec {
     mv app/lib/{jna-5.10.0/dist/jna.jar,}
     mv app/lib/{jna-5.10.0/dist/jna-platform.jar,}
     ln -sf ${batik}/* java/libraries/svg/library/
-    cp java/libraries/svg/library/lib/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
+    cp java/libraries/svg/library/share/java/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
     echo "tarring ffmpeg"
     tar --checkpoint=10000 -czf build/shared/tools/MovieMaker/ffmpeg-5.0.1.gz ${ffmpeg}
     cd build
     ant build
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
     mkdir -p $out/share/applications/
     cp -dp build/linux/${pname}.desktop $out/share/applications/
@@ -89,16 +126,23 @@ stdenv.mkDerivation rec {
     ln -s ${jdk} $out/share/${pname}/java
     makeWrapper $out/share/${pname}/processing $out/bin/processing \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
     makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
       ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A language and IDE for electronic arts";
+    description = "Language and IDE for electronic arts";
     homepage = "https://processing.org";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ evan-goode ];
   };

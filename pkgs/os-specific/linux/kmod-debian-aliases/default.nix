@@ -2,16 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "kmod-debian-aliases.conf";
-  version = "22-1.1";
+  version = "30+20230601-2";
 
   src = fetchurl {
-    url = "https://snapshot.debian.org/archive/debian/20160404T220610Z/pool/main/k/kmod/kmod_${version}.debian.tar.xz";
-    sha256 = "0daap2n4bvjqcnksaayy6csmdb1px4r02w3xp36bcp6w3lbnqamh";
+    url = "https://snapshot.debian.org/archive/debian/20231117T085632Z/pool/main/k/kmod/kmod_${version}.debian.tar.xz";
+    hash = "sha256-xJMGKht8hu0aQjN9TER87Rv5EYkVMeDfX/jJ8+UjAqM=";
   };
 
   installPhase = ''
-    patch -i patches/aliases_conf
-    cp aliases.conf $out
+    cp extra/aliases.conf $out
   '';
 
   meta = with lib; {

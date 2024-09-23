@@ -7,8 +7,11 @@ set -eu -o pipefail
 # Stackage solver to use, LTS or Nightly
 # (should be capitalized like the display name)
 SOLVER=LTS
+# Stackage solver verson, if any. Use latest if empty
+VERSION=
 TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER
+readonly VERSION
 readonly TMP_TEMPLATE
 
 toLower() {
@@ -23,7 +26,7 @@ stackage_config="pkgs/development/haskell-modules/configuration-hackage2nix/stac
 trap 'rm "${tmpfile}" "${tmpfile_new}"' 0
 touch "$tmpfile" "$tmpfile_new" # Creating files here so that trap creates no errors.
 
-curl -L -s "https://stackage.org/$(toLower "$SOLVER")/cabal.config" >"$tmpfile"
+curl -L -s "https://stackage.org/$(toLower "$SOLVER")${VERSION:+-$VERSION}/cabal.config" >"$tmpfile"
 old_version=$(grep '^# Stackage' $stackage_config | sed -e 's/.\+ \([A-Za-z]\+ [0-9.-]\+\)$/\1/g')
 version="$SOLVER $(sed -rn "s/^--.*http:..(www.)?stackage.org.snapshot.$(toLower "$SOLVER")-//p" "$tmpfile")"
 
@@ -60,6 +63,7 @@ sed -r \
     -e '/ language-nix /d' \
     -e '/ hackage-db /d' \
     -e '/ cabal-install /d' \
+    -e '/ cabal-install-solver /d' \
     -e '/ lsp /d' \
     -e '/ lsp-types /d' \
     -e '/ lsp-test /d' \

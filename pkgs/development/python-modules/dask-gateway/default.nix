@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, dask
-, distributed
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  dask,
+  distributed,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dask_gateway" ];
 
   meta = with lib; {
-    description = "A client library for interacting with a dask-gateway server";
+    description = "Client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

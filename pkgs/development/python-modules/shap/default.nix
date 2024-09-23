@@ -1,37 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, writeText
-, catboost
-, cloudpickle
-, ipython
-, lightgbm
-, lime
-, matplotlib
-, nose
-, numba
-, numpy
-, oldest-supported-numpy
-, opencv4
-, pandas
-, pyspark
-, pytest-mpl
-, scikit-learn
-, scipy
-, sentencepiece
-, setuptools
-, slicer
-, tqdm
-, transformers
-, xgboost
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  writeText,
+  catboost,
+  cloudpickle,
+  ipython,
+  lightgbm,
+  lime,
+  matplotlib,
+  numba,
+  numpy,
+  oldest-supported-numpy,
+  opencv4,
+  pandas,
+  pyspark,
+  pytest-mpl,
+  scikit-learn,
+  scipy,
+  sentencepiece,
+  setuptools,
+  setuptools-scm,
+  slicer,
+  tqdm,
+  transformers,
+  xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.43.0";
+  version = "0.45.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,13 +40,13 @@ buildPythonPackage rec {
     owner = "slundberg";
     repo = "shap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ylkpXhaLXsQiu6YMC3pUtlicptQmtjITzW+ydinB4ls=";
+    hash = "sha256-REMAubT9WRe0exfhO4UCLt3FFQHq4HApHnI6i2F/V1o=";
   };
 
   nativeBuildInputs = [
     oldest-supported-numpy
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -61,48 +61,52 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    plots = [ matplotlib ipython ];
+    plots = [
+      matplotlib
+      ipython
+    ];
     others = [ lime ];
   };
 
-  preCheck = let
-    # This pytest hook mocks and catches attempts at accessing the network
-    # tests that try to access the network will raise, get caught, be marked as skipped and tagged as xfailed.
-    conftestSkipNetworkErrors = writeText "conftest.py" ''
-      from _pytest.runner import pytest_runtest_makereport as orig_pytest_runtest_makereport
-      import urllib, requests, transformers
+  preCheck =
+    let
+      # This pytest hook mocks and catches attempts at accessing the network
+      # tests that try to access the network will raise, get caught, be marked as skipped and tagged as xfailed.
+      conftestSkipNetworkErrors = writeText "conftest.py" ''
+        from _pytest.runner import pytest_runtest_makereport as orig_pytest_runtest_makereport
+        import urllib, requests, transformers
 
-      class NetworkAccessDeniedError(RuntimeError): pass
-      def deny_network_access(*a, **kw):
-        raise NetworkAccessDeniedError
+        class NetworkAccessDeniedError(RuntimeError): pass
+        def deny_network_access(*a, **kw):
+          raise NetworkAccessDeniedError
 
-      requests.head = deny_network_access
-      requests.get  = deny_network_access
-      urllib.request.urlopen = deny_network_access
-      urllib.request.Request = deny_network_access
-      transformers.AutoTokenizer.from_pretrained = deny_network_access
+        requests.head = deny_network_access
+        requests.get  = deny_network_access
+        urllib.request.urlopen = deny_network_access
+        urllib.request.Request = deny_network_access
+        transformers.AutoTokenizer.from_pretrained = deny_network_access
 
-      def pytest_runtest_makereport(item, call):
-        tr = orig_pytest_runtest_makereport(item, call)
-        if call.excinfo is not None and call.excinfo.type is NetworkAccessDeniedError:
-            tr.outcome = 'skipped'
-            tr.wasxfail = "reason: Requires network access."
-        return tr
+        def pytest_runtest_makereport(item, call):
+          tr = orig_pytest_runtest_makereport(item, call)
+          if call.excinfo is not None and call.excinfo.type is NetworkAccessDeniedError:
+              tr.outcome = 'skipped'
+              tr.wasxfail = "reason: Requires network access."
+          return tr
+      '';
+    in
+    ''
+      export HOME=$TMPDIR
+      # when importing the local copy the extension is not found
+      rm -r shap
+
+      # Add pytest hook skipping tests that access network.
+      # These tests are marked as "Expected fail" (xfail)
+      cat ${conftestSkipNetworkErrors} >> tests/conftest.py
     '';
-  in ''
-    export HOME=$TMPDIR
-    # when importing the local copy the extension is not found
-    rm -r shap
-
-    # Add pytest hook skipping tests that access network.
-    # These tests are marked as "Expected fail" (xfail)
-    cat ${conftestSkipNetworkErrors} >> tests/conftest.py
-  '';
 
   nativeCheckInputs = [
     ipython
     matplotlib
-    nose
     pytest-mpl
     pytestCheckHook
     # optional dependencies, which only serve to enable more tests:
@@ -115,6 +119,9 @@ buildPythonPackage rec {
     transformers
     xgboost
   ];
+
+  # Test startup hangs with 0.43.0 and Hydra ends with a timeout
+  doCheck = false;
 
   disabledTestPaths = [
     # The resulting plots look sane, but does not match pixel-perfectly with the baseline.
@@ -131,24 +138,16 @@ buildPythonPackage rec {
     "test_simple_bar_with_cohorts_dict"
   ];
 
-  pythonImportsCheck = [
-    "shap"
-    "shap.explainers"
-    "shap.explainers.other"
-    "shap.plots"
-    "shap.plots.colors"
-    "shap.benchmark"
-    "shap.maskers"
-    "shap.utils"
-    "shap.actions"
-    "shap.models"
-  ];
+  pythonImportsCheck = [ "shap" ];
 
   meta = with lib; {
-    description = "A unified approach to explain the output of any machine learning model";
+    description = "Unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
     changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ evax natsukium ];
+    maintainers = with maintainers; [
+      evax
+      natsukium
+    ];
   };
 }

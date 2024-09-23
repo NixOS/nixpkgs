@@ -1,16 +1,21 @@
-{ lib
-, buildPythonPackage
-, cython
-, numpy
-, libdynd
-, fetchpatch
-, cmake
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  numpy,
+  libdynd,
+  fetchpatch,
+  cmake,
+  fetchFromGitHub,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   version = "0.7.2";
+  format = "setuptools";
   pname = "dynd";
+
+  disabled = pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "libdynd";
@@ -61,5 +66,4 @@ buildPythonPackage rec {
     description = "Python exposure of dynd";
     maintainers = with maintainers; [ teh ];
   };
-
 }

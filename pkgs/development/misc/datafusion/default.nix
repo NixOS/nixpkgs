@@ -7,19 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "datafusion-cli";
-  version = "32.0.0";
+  version = "33.0.0";
 
   src = fetchFromGitHub {
     name = "datafusion-cli-source";
     owner = "apache";
     repo = "arrow-datafusion";
     rev = version;
-    sha256 = "sha256-QJOv2neEOxLvWoGuS3QyBqGOBi1KJQ8feK6LOrHBL8g=";
+    sha256 = "sha256-ywyzvk50Fr9TSaCrqd14lSi1PJ9ggA1YQ/X0aFGFk1M=";
   };
 
   sourceRoot = "${src.name}/datafusion-cli";
 
-  cargoHash = "sha256-NYdxDFUBOBC3nTZB8STdZfOz3Dw0htFCqE0qBRMzQvw=";
+  cargoHash = "sha256-0a/O9nNi3JLufQxG+5EgCXtV0y03X7R6UY+f/tVGB90=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "cli for Apache Arrow DataFusion";
+    mainProgram = "datafusion-cli";
     homepage = "https://arrow.apache.org/datafusion";
     changelog = "https://github.com/apache/arrow-datafusion/blob/${version}/datafusion/CHANGELOG.md";
     license = licenses.asl20;

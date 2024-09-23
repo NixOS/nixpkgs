@@ -34,7 +34,7 @@ lib.makeOverridable (
 , stdenv ? ruby.stdenv
 , namePrefix ? (let
     rubyName = builtins.parseDrvName ruby.name;
-  in "${rubyName.name}${rubyName.version}-")
+  in "${rubyName.name}${lib.versions.majorMinor rubyName.version}-")
 , nativeBuildInputs ? []
 , buildInputs ? []
 , meta ? {}
@@ -62,7 +62,7 @@ let
     if type == "gem" then
       fetchurl {
         urls = map (
-          remote: "${remote}/gems/${gemName}-${version}.gem"
+          remote: "${remote}/gems/${gemName}-${suffix}.gem"
         ) (attrs.source.remotes or [ "https://rubygems.org" ]);
         inherit (attrs.source) sha256;
       }
@@ -80,6 +80,8 @@ let
   suffix =
     if type == "git" then
       builtins.substring 0 12 attrs.source.rev
+    else if platform != "ruby" then
+      "${version}-${platform}"
     else
       version;
 
@@ -248,6 +250,14 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
         -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
     done
     ''}
+
+    # For Ruby-generated binstubs, shebang paths are already in Nix store but for
+    # ruby used to build the package. Update them to match the host system. Note
+    # that patchShebangsAuto ignores scripts where shebang line is already in Nix
+    # store.
+    if [[ -d $GEM_HOME/bin ]]; then
+      patchShebangs --update --host -- "$GEM_HOME"/bin
+    fi
 
     runHook postInstall
   '';

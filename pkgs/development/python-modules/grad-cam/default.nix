@@ -1,34 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, matplotlib
-, numpy
-, opencv4
-, pillow
-, scikit-learn
-, torch
-, torchvision
-, ttach
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  matplotlib,
+  numpy,
+  opencv4,
+  pillow,
+  scikit-learn,
+  torch,
+  torchvision,
+  ttach,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.4.8";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  version = "1.5.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BNcwDaEEmRsEoJ4nvvGfjZ9LdG0eRqZCFuY5/Gmp5N4=";
+    hash = "sha256-WhC3QjMDh4E8NnO8SyCtg9rFgDJkYP6/xdWNcTvlKFU=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace "opencv-python" "opencv"
+    substituteInPlace requirements.txt\
+      --replace "opencv-python" "opencv"
   '';
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+  ];
+
+  pythonRelaxDeps = [
+    "torchvision"
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     matplotlib
     numpy
     opencv4
@@ -40,11 +55,9 @@ buildPythonPackage rec {
   ];
 
   # Let the user bring their own instance (as with torchmetrics)
-  buildInputs = [
-    torch
-  ];
+  buildInputs = [ torch ];
 
-  doCheck = false;  # every nontrivial test tries to download a pretrained model
+  doCheck = false; # every nontrivial test tries to download a pretrained model
 
   pythonImportsCheck = [
     "pytorch_grad_cam"
@@ -56,10 +69,10 @@ buildPythonPackage rec {
     "pytorch_grad_cam.utils.model_targets"
   ];
 
-  meta = with lib; {
-    description = "Advanced AI explainability for computer vision.";
+  meta = {
+    description = "Advanced AI explainability for computer vision";
     homepage = "https://jacobgil.github.io/pytorch-gradcam-book";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

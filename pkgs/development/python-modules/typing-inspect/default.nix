@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, typing-extensions
-, mypy-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  typing-extensions,
+  mypy-extensions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "typing-inspect";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -21,18 +23,14 @@ buildPythonPackage rec {
     mypy-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/ilevkivskyi/typing_inspect/issues/84
     "test_typed_dict_typing_extension"
   ];
 
-  pythonImportsCheck = [
-    "typing_inspect"
-  ];
+  pythonImportsCheck = [ "typing_inspect" ];
 
   meta = with lib; {
     description = "Runtime inspection utilities for Python typing module";

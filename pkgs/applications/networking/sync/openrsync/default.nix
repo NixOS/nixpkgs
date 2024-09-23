@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "openrsync";
   version = "unstable-2022-05-08";
 
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.openrsync.org/";
     description = "BSD-licensed implementation of rsync";
+    mainProgram = "openrsync";
     license = licenses.isc;
     maintainers = with maintainers; [ fgaz ];
     # https://github.com/kristapsdz/openrsync#portability

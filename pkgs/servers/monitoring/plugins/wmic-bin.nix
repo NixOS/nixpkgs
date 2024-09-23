@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "WMI client for Linux (binary)";
+    mainProgram = "wmic";
     homepage    = "https://www.openvas.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.mit;

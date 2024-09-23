@@ -11,7 +11,7 @@ let
 
   # The configuration to install.
   makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0, flake ? false
+               , extraConfig, forceGrubReinstallCount ? 0, withTestInstrumentation ? true
                , clevisTest
                }:
     pkgs.writeText "configuration.nix" ''
@@ -19,7 +19,7 @@ let
 
       { imports =
           [ ./hardware-configuration.nix
-            ${if flake
+            ${if !withTestInstrumentation
               then "" # Still included, but via installer/flake.nix
               else "<nixpkgs/nixos/modules/testing/test-instrumentation.nix>"}
           ];
@@ -51,7 +51,7 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
-        boot.initrd.secrets."/etc/secret" = ./secret;
+        boot.initrd.secrets."/etc/secret" = "/etc/nixos/secret";
 
         ${optionalString clevisTest ''
           boot.kernelParams = [ "console=tty0" "ip=192.168.1.1:::255.255.255.0::eth1:none" ];
@@ -80,49 +80,23 @@ let
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi, grubIdentifier
-                  , postInstallCommands, preBootCommands, postBootCommands, extraConfig
-                  , testSpecialisationConfig, testFlakeSwitch, clevisTest, clevisFallbackTest
+                  , postInstallCommands, postBootCommands, extraConfig
+                  , testSpecialisationConfig, testFlakeSwitch, testByAttrSwitch, clevisTest, clevisFallbackTest
+                  , disableFileSystems
                   }:
-    let iface = "virtio";
-        isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
-        bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
-    in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then ''
-      machine.succeed("true")
-    '' else ''
-      import subprocess
-      tpm_folder = os.environ['NIX_BUILD_TOP']
-      def assemble_qemu_flags():
-          flags = "-cpu max"
-          ${if (system == "x86_64-linux" || system == "i686-linux")
-            then ''flags += " -m 1024"''
-            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
-          }
-          ${optionalString clevisTest ''flags += f" -chardev socket,id=chrtpm,path={tpm_folder}/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"''}
-          ${optionalString clevisTest ''flags += " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:11:02 -netdev vde,id=vlan1,sock=\"$QEMU_VDE_SOCKET_1\""''}
-          return flags
-
-
-      qemu_flags = {"qemuFlags": assemble_qemu_flags()}
-
+    let
+      startTarget = ''
+        ${optionalString clevisTest "tpm.start()"}
+        target.start()
+        ${postBootCommands}
+        target.wait_for_unit("multi-user.target")
+      '';
+    in ''
+      ${optionalString clevisTest ''
       import os
+      import subprocess
 
-      image_dir = machine.state_dir
-      disk_image = os.path.join(image_dir, "machine.qcow2")
-
-      hd_flags = {
-          "hdaInterface": "${iface}",
-          "hda": disk_image,
-      }
-      ${optionalString isEfi ''
-        hd_flags.update(
-            bios="${pkgs.OVMF.fd}/FV/${bios}"
-        )''
-      }
-      default_flags = {**hd_flags, **qemu_flags}
-
-
-      def create_machine_named(name):
-          return create_machine({**default_flags, "name": name})
+      tpm_folder = os.environ['NIX_BUILD_TOP']
 
       class Tpm:
             def __init__(self):
@@ -154,28 +128,31 @@ let
       os.mkdir(f"{tpm_folder}/swtpm")
       tpm = Tpm()
       tpm.check()
-
-      start_all()
-      ${optionalString clevisTest ''
-      tang.wait_for_unit("sockets.target")
-      tang.wait_for_unit("network-online.target")
-      machine.wait_for_unit("network-online.target")
       ''}
-      machine.wait_for_unit("multi-user.target")
 
+      installer.start()
+      ${optionalString clevisTest ''
+      tang.start()
+      tang.wait_for_unit("sockets.target")
+      tang.systemctl("start network-online.target")
+      tang.wait_for_unit("network-online.target")
+      installer.systemctl("start network-online.target")
+      installer.wait_for_unit("network-online.target")
+      ''}
+      installer.wait_for_unit("multi-user.target")
 
       with subtest("Assert readiness of login prompt"):
-          machine.succeed("echo hello")
+          installer.succeed("echo hello")
 
       with subtest("Wait for hard disks to appear in /dev"):
-          machine.succeed("udevadm settle")
+          installer.succeed("udevadm settle")
 
       ${createPartitions}
 
       with subtest("Create the NixOS configuration"):
-          machine.succeed("nixos-generate-config --root /mnt")
-          machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
-          machine.copy_from_host(
+          installer.succeed("nixos-generate-config ${optionalString disableFileSystems "--no-filesystems"} --root /mnt")
+          installer.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
+          installer.copy_from_host(
               "${ makeConfig {
                     inherit bootLoader grubDevice grubIdentifier
                             grubUseEfi extraConfig clevisTest;
@@ -183,12 +160,13 @@ let
               }",
               "/mnt/etc/nixos/configuration.nix",
           )
-          machine.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
+          installer.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
       ${optionalString clevisTest ''
         with subtest("Create the Clevis secret with Tang"):
-             machine.wait_for_unit("network-online.target")
-             machine.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
+             installer.systemctl("start network-online.target")
+             installer.wait_for_unit("network-online.target")
+             installer.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
 
       ${optionalString clevisFallbackTest ''
         with subtest("Shutdown Tang to check fallback to interactive prompt"):
@@ -196,13 +174,13 @@ let
       ''}
 
       with subtest("Perform the installation"):
-          machine.succeed("nixos-install < /dev/null >&2")
+          installer.succeed("nixos-install < /dev/null >&2")
 
       with subtest("Do it again to make sure it's idempotent"):
-          machine.succeed("nixos-install < /dev/null >&2")
+          installer.succeed("nixos-install < /dev/null >&2")
 
       with subtest("Check that we can build things in nixos-enter"):
-          machine.succeed(
+          installer.succeed(
               """
               nixos-enter -- nix-build --option substitute false -E 'derivation {
                   name = "t";
@@ -217,48 +195,48 @@ let
       ${postInstallCommands}
 
       with subtest("Shutdown system after installation"):
-          machine.succeed("umount -R /mnt")
-          machine.succeed("sync")
-          machine.shutdown()
+          installer.succeed("umount -R /mnt")
+          installer.succeed("sync")
+          installer.shutdown()
+
+      # We're actually the same machine, just booting differently this time.
+      target.state_dir = installer.state_dir
 
       # Now see if we can boot the installation.
-      machine = create_machine_named("boot-after-install")
-
-      # For example to enter LUKS passphrase.
-      ${preBootCommands}
+      ${startTarget}
 
       with subtest("Assert that /boot get mounted"):
-          machine.wait_for_unit("local-fs.target")
+          target.wait_for_unit("local-fs.target")
           ${if bootLoader == "grub"
-              then ''machine.succeed("test -e /boot/grub")''
-              else ''machine.succeed("test -e /boot/loader/loader.conf")''
+              then ''target.succeed("test -e /boot/grub")''
+              else ''target.succeed("test -e /boot/loader/loader.conf")''
           }
 
       with subtest("Check whether /root has correct permissions"):
-          assert "700" in machine.succeed("stat -c '%a' /root")
+          assert "700" in target.succeed("stat -c '%a' /root")
 
       with subtest("Assert swap device got activated"):
           # uncomment once https://bugs.freedesktop.org/show_bug.cgi?id=86930 is resolved
-          machine.wait_for_unit("swap.target")
-          machine.succeed("cat /proc/swaps | grep -q /dev")
+          target.wait_for_unit("swap.target")
+          target.succeed("cat /proc/swaps | grep -q /dev")
 
       with subtest("Check that the store is in good shape"):
-          machine.succeed("nix-store --verify --check-contents >&2")
+          target.succeed("nix-store --verify --check-contents >&2")
 
       with subtest("Check whether the channel works"):
-          machine.succeed("nix-env -iA nixos.procps >&2")
-          assert ".nix-profile" in machine.succeed("type -tP ps | tee /dev/stderr")
+          target.succeed("nix-env -iA nixos.procps >&2")
+          assert ".nix-profile" in target.succeed("type -tP ps | tee /dev/stderr")
 
       with subtest(
           "Check that the daemon works, and that non-root users can run builds "
           "(this will build a new profile generation through the daemon)"
       ):
-          machine.succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2")
+          target.succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2")
 
       with subtest("Configure system with writable Nix store on next boot"):
           # we're not using copy_from_host here because the installer image
           # doesn't know about the host-guest sharing mechanism.
-          machine.copy_from_host_via_shell(
+          target.copy_from_host_via_shell(
               "${ makeConfig {
                     inherit bootLoader grubDevice grubIdentifier
                             grubUseEfi extraConfig clevisTest;
@@ -269,25 +247,22 @@ let
           )
 
       with subtest("Check whether nixos-rebuild works"):
-          machine.succeed("nixos-rebuild switch >&2")
+          target.succeed("nixos-rebuild switch >&2")
 
-      # FIXME: Nix 2.4 broke nixos-option, someone has to fix it.
-      # with subtest("Test nixos-option"):
-      #     kernel_modules = machine.succeed("nixos-option boot.initrd.kernelModules")
-      #     assert "virtio_console" in kernel_modules
-      #     assert "List of modules" in kernel_modules
-      #     assert "qemu-guest.nix" in kernel_modules
+      with subtest("Test nixos-option"):
+          kernel_modules = target.succeed("nixos-option boot.initrd.kernelModules")
+          assert "virtio_console" in kernel_modules
+          assert "List of modules" in kernel_modules
+          assert "qemu-guest.nix" in kernel_modules
 
-      machine.shutdown()
+      target.shutdown()
 
       # Check whether a writable store build works
-      machine = create_machine_named("rebuild-switch")
-      ${preBootCommands}
-      machine.wait_for_unit("multi-user.target")
+      ${startTarget}
 
       # we're not using copy_from_host here because the installer image
       # doesn't know about the host-guest sharing mechanism.
-      machine.copy_from_host_via_shell(
+      target.copy_from_host_via_shell(
           "${ makeConfig {
                 inherit bootLoader grubDevice grubIdentifier
                 grubUseEfi extraConfig clevisTest;
@@ -296,85 +271,187 @@ let
           }",
           "/etc/nixos/configuration.nix",
       )
-      machine.succeed("nixos-rebuild boot >&2")
-      machine.shutdown()
+      target.succeed("nixos-rebuild boot >&2")
+      target.shutdown()
 
-      # And just to be sure, check that the machine still boots after
-      # "nixos-rebuild switch".
-      machine = create_machine_named("boot-after-rebuild-switch")
-      ${preBootCommands}
-      machine.wait_for_unit("network.target")
+      # And just to be sure, check that the target still boots after "nixos-rebuild switch".
+      ${startTarget}
+      target.wait_for_unit("network.target")
 
       # Sanity check, is it the configuration.nix we generated?
-      hostname = machine.succeed("hostname").strip()
+      hostname = target.succeed("hostname").strip()
       assert hostname == "thatworked"
 
-      ${postBootCommands}
-      machine.shutdown()
+      target.shutdown()
 
       # Tests for validating clone configuration entries in grub menu
     ''
     + optionalString testSpecialisationConfig ''
-      # Reboot Machine
-      machine = create_machine_named("clone-default-config")
-      ${preBootCommands}
-      machine.wait_for_unit("multi-user.target")
+      # Reboot target
+      ${startTarget}
 
       with subtest("Booted configuration name should be 'Home'"):
           # This is not the name that shows in the grub menu.
           # The default configuration is always shown as "Default"
-          machine.succeed("cat /run/booted-system/configuration-name >&2")
-          assert "Home" in machine.succeed("cat /run/booted-system/configuration-name")
+          target.succeed("cat /run/booted-system/configuration-name >&2")
+          assert "Home" in target.succeed("cat /run/booted-system/configuration-name")
 
       with subtest("We should **not** find a file named /etc/gitconfig"):
-          machine.fail("test -e /etc/gitconfig")
+          target.fail("test -e /etc/gitconfig")
 
       with subtest("Set grub to boot the second configuration"):
-          machine.succeed("grub-reboot 1")
+          target.succeed("grub-reboot 1")
 
-      ${postBootCommands}
-      machine.shutdown()
+      target.shutdown()
 
-      # Reboot Machine
-      machine = create_machine_named("clone-alternate-config")
-      ${preBootCommands}
+      # Reboot target
+      ${startTarget}
 
-      machine.wait_for_unit("multi-user.target")
       with subtest("Booted configuration name should be Work"):
-          machine.succeed("cat /run/booted-system/configuration-name >&2")
-          assert "Work" in machine.succeed("cat /run/booted-system/configuration-name")
+          target.succeed("cat /run/booted-system/configuration-name >&2")
+          assert "Work" in target.succeed("cat /run/booted-system/configuration-name")
 
       with subtest("We should find a file named /etc/gitconfig"):
-          machine.succeed("test -e /etc/gitconfig")
+          target.succeed("test -e /etc/gitconfig")
 
-      ${postBootCommands}
-      machine.shutdown()
+      target.shutdown()
     ''
-    + optionalString testFlakeSwitch ''
-      ${preBootCommands}
-      machine.start()
-
-      with subtest("Configure system with flake"):
-        # TODO: evaluate as user?
-        machine.succeed("""
+    + optionalString testByAttrSwitch ''
+      with subtest("Configure system with attribute set"):
+        target.succeed("""
           mkdir /root/my-config
           mv /etc/nixos/hardware-configuration.nix /root/my-config/
-          mv /etc/nixos/secret /root/my-config/
           rm /etc/nixos/configuration.nix
         """)
-        machine.copy_from_host_via_shell(
+        target.copy_from_host_via_shell(
           "${makeConfig {
                inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig clevisTest;
                forceGrubReinstallCount = 1;
-               flake = true;
+               withTestInstrumentation = false;
             }}",
           "/root/my-config/configuration.nix",
         )
-        machine.copy_from_host_via_shell(
+        target.copy_from_host_via_shell(
+          "${./installer/byAttrWithChannel.nix}",
+          "/root/my-config/default.nix",
+        )
+      with subtest("Switch to attribute set based config with channels"):
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+
+      target.shutdown()
+
+      ${startTarget}
+
+      target.succeed("""
+        rm /root/my-config/default.nix
+      """)
+      target.copy_from_host_via_shell(
+        "${./installer/byAttrNoChannel.nix}",
+        "/root/my-config/default.nix",
+      )
+
+      target.succeed("""
+        pkgs=$(readlink -f /nix/var/nix/profiles/per-user/root/channels)/nixos
+        if ! [[ -e $pkgs/pkgs/top-level/default.nix ]]; then
+          echo 1>&2 "$pkgs does not seem to be a nixpkgs source. Please fix the test so that pkgs points to a nixpkgs source.";
+          exit 1;
+        fi
+        sed -e s^@nixpkgs@^$pkgs^ -i /root/my-config/default.nix
+
+      """)
+
+      with subtest("Switch to attribute set based config without channels"):
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+
+      target.shutdown()
+
+      ${startTarget}
+
+      with subtest("nix-channel command is not available anymore"):
+        target.succeed("! which nix-channel")
+
+      with subtest("builtins.nixPath is now empty"):
+        target.succeed("""
+          [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]]
+        """)
+
+      with subtest("<nixpkgs> does not resolve"):
+        target.succeed("""
+          ! nix-instantiate '<nixpkgs>' --eval --expr
+        """)
+
+      with subtest("Evaluate attribute set based config in fresh env without nix-channel"):
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+
+      with subtest("Evaluate attribute set based config in fresh env without channel profiles"):
+        target.succeed("""
+          (
+            exec 1>&2
+            mkdir -p /root/restore
+            mv -v /root/.nix-channels /root/restore/
+            mv -v ~/.nix-defexpr /root/restore/
+            mkdir -p /root/restore/channels
+            mv -v /nix/var/nix/profiles/per-user/root/channels* /root/restore/channels/
+          )
+        """)
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+    ''
+    + optionalString (testByAttrSwitch && testFlakeSwitch) ''
+      with subtest("Restore channel profiles"):
+        target.succeed("""
+          (
+            exec 1>&2
+            mv -v /root/restore/.nix-channels /root/
+            mv -v /root/restore/.nix-defexpr ~/.nix-defexpr
+            mv -v /root/restore/channels/* /nix/var/nix/profiles/per-user/root/
+            rm -vrf /root/restore
+          )
+        """)
+
+      with subtest("Restore /etc/nixos"):
+        target.succeed("""
+          mv -v /root/my-config/hardware-configuration.nix /etc/nixos/
+        """)
+        target.copy_from_host_via_shell(
+          "${makeConfig {
+               inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig clevisTest;
+               forceGrubReinstallCount = 1;
+            }}",
+          "/etc/nixos/configuration.nix",
+        )
+
+      with subtest("Restore /root/my-config"):
+        target.succeed("""
+          rm -vrf /root/my-config
+        """)
+
+    ''
+    + optionalString (testByAttrSwitch && !testFlakeSwitch) ''
+      target.shutdown()
+    ''
+    + optionalString testFlakeSwitch ''
+      ${startTarget}
+
+      with subtest("Configure system with flake"):
+        # TODO: evaluate as user?
+        target.succeed("""
+          mkdir /root/my-config
+          mv /etc/nixos/hardware-configuration.nix /root/my-config/
+          rm /etc/nixos/configuration.nix
+        """)
+        target.copy_from_host_via_shell(
+          "${makeConfig {
+               inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig clevisTest;
+               forceGrubReinstallCount = 1;
+               withTestInstrumentation = false;
+            }}",
+          "/root/my-config/configuration.nix",
+        )
+        target.copy_from_host_via_shell(
           "${./installer/flake.nix}",
           "/root/my-config/flake.nix",
         )
-        machine.succeed("""
+        target.succeed("""
           # for some reason the image does not have `pkgs.path`, so
           # we use readlink to find a Nixpkgs source.
           pkgs=$(readlink -f /nix/var/nix/profiles/per-user/root/channels)/nixos
@@ -386,53 +463,87 @@ let
         """)
 
       with subtest("Switch to flake based config"):
-        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz 2>&1 | tee activation-log >&2")
 
-      ${postBootCommands}
-      machine.shutdown()
+        target.succeed("""
+          cat -n activation-log >&2
+        """)
 
-      ${preBootCommands}
-      machine.start()
+        target.succeed("""
+          grep -F '/root/.nix-defexpr/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F '/nix/var/nix/profiles/per-user/root/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F '/root/.nix-defexpr/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F 'Due to https://github.com/NixOS/nix/issues/9574, Nix may still use these channels when NIX_PATH is unset.' activation-log
+        """)
+        target.succeed("rm activation-log")
 
-      machine.wait_for_unit("multi-user.target")
+        # Perform the suggested cleanups we've just seen in the log
+        # TODO after https://github.com/NixOS/nix/issues/9574: don't remove them yet
+        target.succeed("""
+          rm -rf /root/.nix-defexpr/channels /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
+        """)
+
+
+      target.shutdown()
+
+      ${startTarget}
 
       with subtest("nix-channel command is not available anymore"):
-        machine.succeed("! which nix-channel")
+        target.succeed("! which nix-channel")
 
       # Note that the channel profile is still present on disk, but configured
       # not to be used.
-      with subtest("builtins.nixPath is now empty"):
-        machine.succeed("""
-          [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]]
-        """)
+      # TODO after issue https://github.com/NixOS/nix/issues/9574: re-enable this assertion
+      # I believe what happens is
+      #   - because of the issue, we've removed the `nix-path =` line from nix.conf
+      #   - the "backdoor" shell is not a proper session and does not have `NIX_PATH=""` set
+      #   - seeing no nix path settings at all, Nix loads its hardcoded default value,
+      #     which is unfortunately non-empty
+      # Or maybe it's the new default NIX_PATH?? :(
+      # with subtest("builtins.nixPath is now empty"):
+      #   target.succeed("""
+      #     (
+      #       set -x;
+      #       [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]];
+      #     )
+      #   """)
 
       with subtest("<nixpkgs> does not resolve"):
-        machine.succeed("""
+        target.succeed("""
           ! nix-instantiate '<nixpkgs>' --eval --expr
         """)
 
       with subtest("Evaluate flake config in fresh env without nix-channel"):
-        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
 
       with subtest("Evaluate flake config in fresh env without channel profiles"):
-        machine.succeed("""
+        target.succeed("""
           (
             exec 1>&2
-            rm -v /root/.nix-channels
+            rm -vf /root/.nix-channels
             rm -vrf ~/.nix-defexpr
             rm -vrf /nix/var/nix/profiles/per-user/root/channels*
           )
         """)
-        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz | tee activation-log >&2")
+        target.succeed("cat -n activation-log >&2")
+        target.succeed("! grep -F '/root/.nix-defexpr/channels' activation-log")
+        target.succeed("! grep -F 'but channels have been disabled' activation-log")
+        target.succeed("! grep -F 'https://github.com/NixOS/nix/issues/9574' activation-log")
 
-      ${postBootCommands}
-      machine.shutdown()
+      target.shutdown()
     '';
 
 
   makeInstallerTest = name:
     { createPartitions
-    , postInstallCommands ? "", preBootCommands ? "", postBootCommands ? ""
+    , postInstallCommands ? "", postBootCommands ? ""
     , extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
@@ -440,21 +551,44 @@ let
     , enableOCR ? false, meta ? {}
     , testSpecialisationConfig ? false
     , testFlakeSwitch ? false
+    , testByAttrSwitch ? false
     , clevisTest ? false
     , clevisFallbackTest ? false
+    , disableFileSystems ? false
     }:
-    makeTest {
+    let
+      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+    in makeTest {
       inherit enableOCR;
       name = "installer-" + name;
       meta = {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
+        # non-EFI tests can only run on x86
+        platforms = if isEfi then platforms.linux else [ "x86_64-linux" "i686-linux" ];
       };
-      nodes = {
+      nodes = let
+        commonConfig = {
+          # builds stuff in the VM, needs more juice
+          virtualisation.diskSize = 8 * 1024;
+          virtualisation.cores = 8;
+          virtualisation.memorySize = 2048;
 
-        # The configuration of the machine used to run "nixos-install".
-        machine = { pkgs, ... }: {
+          # both installer and target need to use the same drive
+          virtualisation.diskImage = "./target.qcow2";
+
+          # and the same TPM options
+          virtualisation.qemu.options = mkIf (clevisTest) [
+            "-chardev socket,id=chrtpm,path=$NIX_BUILD_TOP/swtpm-sock"
+            "-tpmdev emulator,id=tpm0,chardev=chrtpm"
+            "-device tpm-tis,tpmdev=tpm0"
+          ];
+        };
+      in {
+        # The configuration of the system used to run "nixos-install".
+        installer = {
           imports = [
+            commonConfig
             ../modules/profiles/installation-device.nix
             ../modules/profiles/base.nix
             extraInstallerConfig
@@ -465,11 +599,6 @@ let
           # root filesystem.
           virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
-          # builds stuff in the VM, needs more juice
-          virtualisation.diskSize = 8 * 1024;
-          virtualisation.cores = 8;
-          virtualisation.memorySize = 1536;
-
           boot.initrd.systemd.enable = systemdStage1;
 
           # Use a small /dev/vdb as the root disk for the
@@ -477,17 +606,6 @@ let
           # the same during and after installation.
           virtualisation.emptyDiskImages = [ 512 ];
           virtualisation.rootDevice = "/dev/vdb";
-          virtualisation.bootLoaderDevice = "/dev/vda";
-          virtualisation.qemu.diskInterface = "virtio";
-          virtualisation.qemu.options = mkIf (clevisTest) [
-            "-chardev socket,id=chrtpm,path=$NIX_BUILD_TOP/swtpm-sock"
-            "-tpmdev emulator,id=tpm0,chardev=chrtpm"
-            "-device tpm-tis,tpmdev=tpm0"
-          ];
-          # We don't want to have any networking in the guest apart from the clevis tests.
-          virtualisation.vlans = mkIf (!clevisTest) [];
-
-          boot.loader.systemd-boot.enable = mkIf (bootLoader == "systemd-boot") true;
 
           hardware.enableAllFirmware = mkForce false;
 
@@ -508,18 +626,16 @@ let
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
             ntp
+            perlPackages.ConfigIniFiles
+            perlPackages.FileSlurp
+            perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
-            python3Minimal
             # make-options-doc/default.nix
-            (let
-                self = (pkgs.python3Minimal.override {
-                  inherit self;
-                  includeSiteCustomize = true;
-                });
-              in self.withPackages (p: [ p.mistune ]))
+            (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
+            switch-to-configuration-ng
             texinfo
             unionfs-fuse
             xorg.lndir
@@ -529,12 +645,21 @@ let
             curl
           ]
           ++ optionals (bootLoader == "grub") (let
-            zfsSupport = lib.any (x: x == "zfs")
-              (extraInstallerConfig.boot.supportedFilesystems or []);
+            zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })
-          ]) ++ optionals clevisTest [ pkgs.klibc ];
+            pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader
+            pkgs.perlPackages.FileCopyRecursive
+            pkgs.perlPackages.XMLSAX
+            pkgs.perlPackages.XMLSAXBase
+          ])
+          ++ optionals (bootLoader == "systemd-boot") [
+            pkgs.zstd.bin
+            pkgs.mypy
+            pkgs.bootspec
+          ]
+          ++ optionals clevisTest [ pkgs.klibc ];
 
           nix.settings = {
             substituters = mkForce [];
@@ -543,6 +668,18 @@ let
           };
         };
 
+        target = {
+          imports = [ commonConfig ];
+          virtualisation.useBootLoader = true;
+          virtualisation.useEFIBoot = isEfi;
+          virtualisation.useDefaultFilesystems = false;
+          virtualisation.efi.keepVariables = false;
+
+          virtualisation.fileSystems."/" = {
+            device = "/dev/disk/by-label/this-is-not-real-and-will-never-be-used";
+            fsType = "ext4";
+          };
+        };
       } // optionalAttrs clevisTest {
         tang = {
           services.tang = {
@@ -555,15 +692,16 @@ let
       };
 
       testScript = testScriptFun {
-        inherit bootLoader createPartitions postInstallCommands preBootCommands postBootCommands
+        inherit bootLoader createPartitions postInstallCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
-                testSpecialisationConfig testFlakeSwitch clevisTest clevisFallbackTest;
+                testSpecialisationConfig testFlakeSwitch testByAttrSwitch clevisTest clevisFallbackTest
+                disableFileSystems;
       };
     };
 
     makeLuksRootTest = name: luksFormatOpts: makeInstallerTest name {
       createPartitions = ''
-        machine.succeed(
+        installer.succeed(
             "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
             + " mkpart primary ext2 1M 100MB"  # /boot
             + " mkpart primary linux-swap 100M 1024M"
@@ -585,10 +723,9 @@ let
         boot.kernelParams = lib.mkAfter [ "console=tty0" ];
       '';
       enableOCR = true;
-      preBootCommands = ''
-        machine.start()
-        machine.wait_for_text("[Pp]assphrase for")
-        machine.send_chars("supersecret\n")
+      postBootCommands = ''
+        target.wait_for_text("[Pp]assphrase for")
+        target.send_chars("supersecret\n")
       '';
     };
 
@@ -596,7 +733,7 @@ let
   # one big filesystem partition.
   simple-test-config = {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           + " mkpart primary linux-swap 1M 1024M"
           + " mkpart primary ext2 1024M -1s",
@@ -613,9 +750,18 @@ let
     testFlakeSwitch = true;
   };
 
+  simple-test-config-by-attr = simple-test-config // {
+    testByAttrSwitch = true;
+  };
+
+  simple-test-config-from-by-attr-to-flake = simple-test-config // {
+    testByAttrSwitch = true;
+    testFlakeSwitch = true;
+  };
+
   simple-uefi-grub-config = {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
           + " mkpart ESP fat32 1M 100MiB"  # /boot
           + " set 1 boot on"
@@ -669,7 +815,7 @@ let
       environment.systemPackages = with pkgs; [ keyutils clevis ];
     };
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
         + " mkpart primary ext2 1M 100MB"
         + " mkpart primary linux-swap 100M 1024M"
@@ -693,13 +839,9 @@ let
       # not know the UUID in advance.
       fileSystems."/" = lib.mkForce { device = "/dev/vda3"; fsType = "bcachefs"; };
     '';
-    preBootCommands = ''
-      tpm = Tpm()
-      tpm.check()
-    '' + optionalString fallback ''
-      machine.start()
-      machine.wait_for_text("enter passphrase for")
-      machine.send_chars("password\n")
+    postBootCommands = optionalString fallback ''
+      target.wait_for_text("enter passphrase for")
+      target.send_chars("password\n")
     '';
   };
 
@@ -711,7 +853,7 @@ let
       environment.systemPackages = with pkgs; [ clevis ];
     };
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
         + " mkpart primary ext2 1M 100MB"
         + " mkpart primary linux-swap 100M 1024M"
@@ -732,21 +874,17 @@ let
     extraConfig = ''
       boot.initrd.clevis.devices."crypt-root".secretFile = "/etc/nixos/clevis-secret.jwe";
     '';
-    preBootCommands = ''
-      tpm = Tpm()
-      tpm.check()
-    '' + optionalString fallback ''
-      machine.start()
+    postBootCommands = optionalString fallback ''
       ${if systemdStage1 then ''
-      machine.wait_for_text("Please enter")
+      target.wait_for_text("Please enter")
       '' else ''
-      machine.wait_for_text("Passphrase for")
+      target.wait_for_text("Passphrase for")
       ''}
-      machine.send_chars("password\n")
+      target.send_chars("password\n")
     '';
   };
 
-  mkClevisZfsTest = { fallback ? false }: makeInstallerTest "clevis-zfs${optionalString fallback "-fallback"}" {
+  mkClevisZfsTest = { fallback ? false, parentDataset ? false }: makeInstallerTest "clevis-zfs${optionalString parentDataset "-parent-dataset"}${optionalString fallback "-fallback"}" {
     clevisTest = true;
     clevisFallbackTest = fallback;
     enableOCR = fallback;
@@ -755,7 +893,7 @@ let
       environment.systemPackages = with pkgs; [ clevis ];
     };
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
         + " mkpart primary ext2 1M 100MB"
         + " mkpart primary linux-swap 100M 1024M"
@@ -763,17 +901,27 @@ let
         "udevadm settle",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
+    '' + optionalString (!parentDataset) ''
         "zpool create -O mountpoint=legacy rpool /dev/vda3",
         "echo -n password | zfs create"
         + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
+    '' + optionalString (parentDataset) ''
+        "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
+        "zfs create -o mountpoint=legacy rpool/root",
+    '' +
+    ''
         "mount -t zfs rpool/root /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount LABEL=boot /mnt/boot",
         "udevadm settle")
     '';
-    extraConfig = ''
+    extraConfig = optionalString (!parentDataset) ''
       boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
+    '' + optionalString (parentDataset) ''
+      boot.initrd.clevis.devices."rpool".secretFile = "/etc/nixos/clevis-secret.jwe";
+    '' +
+    ''
       boot.zfs.requestEncryptionCredentials = true;
 
 
@@ -783,17 +931,13 @@ let
       boot.zfs.devNodes = "/dev/disk/by-uuid/";
       networking.hostId = "00000000";
     '';
-    preBootCommands = ''
-      tpm = Tpm()
-      tpm.check()
-    '' + optionalString fallback ''
-      machine.start()
+    postBootCommands = optionalString fallback ''
       ${if systemdStage1 then ''
-      machine.wait_for_text("Enter key for rpool/root")
+      target.wait_for_text("Enter key for rpool/root")
       '' else ''
-      machine.wait_for_text("Key load error")
+      target.wait_for_text("Key load error")
       ''}
-      machine.send_chars("password\n")
+      target.send_chars("password\n")
     '';
   };
 
@@ -808,13 +952,17 @@ in {
 
   switchToFlake = makeInstallerTest "switch-to-flake" simple-test-config-flake;
 
+  switchToByAttr = makeInstallerTest "switch-to-by-attr" simple-test-config-by-attr;
+
+  switchFromByAttrToFlake = makeInstallerTest "switch-from-by-attr-to-flake" simple-test-config-from-by-attr-to-flake;
+
   # Test cloned configurations with the simple grub configuration
   simpleSpecialised = makeInstallerTest "simpleSpecialised" (simple-test-config // specialisation-test-extraconfig);
 
   # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
   simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
           + " mkpart ESP fat32 1M 100MiB"  # /boot
           + " set 1 boot on"
@@ -841,7 +989,7 @@ in {
   # Same as the previous, but now with a separate /boot partition.
   separateBoot = makeInstallerTest "separateBoot" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           + " mkpart primary ext2 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100MB 1024M"
@@ -861,7 +1009,7 @@ in {
   # Same as the previous, but with fat32 /boot.
   separateBootFat = makeInstallerTest "separateBootFat" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           + " mkpart primary ext2 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100MB 1024M"
@@ -875,6 +1023,78 @@ in {
           "mkdir -p /mnt/boot",
           "mount LABEL=BOOT /mnt/boot",
       )
+    '';
+  };
+
+  # Same as the previous, but with ZFS /boot.
+  separateBootZfs = makeInstallerTest "separateBootZfs" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "zfs" ];
+    };
+
+    extraConfig = ''
+      # Using by-uuid overrides the default of by-id, and is unique
+      # to the qemu disks, as they don't produce by-id paths for
+      # some reason.
+      boot.zfs.devNodes = "/dev/disk/by-uuid/";
+      networking.hostId = "00000000";
+    '';
+
+    createPartitions = ''
+      installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 256MB"   # /boot
+          + " mkpart primary linux-swap 256MB 1280M"
+          + " mkpart primary ext2 1280M -1s", # /
+          "udevadm settle",
+
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+
+          "mkfs.ext4 -L nixos /dev/vda3",
+          "mount LABEL=nixos /mnt",
+
+          # Use as many ZFS features as possible to verify that GRUB can handle them
+          "zpool create"
+            " -o compatibility=grub2"
+            " -O utf8only=on"
+            " -O normalization=formD"
+            " -O compression=lz4"      # Activate the lz4_compress feature
+            " -O xattr=sa"
+            " -O acltype=posixacl"
+            " bpool /dev/vda1",
+          "zfs create"
+            " -o recordsize=1M"        # Prepare activating the large_blocks feature
+            " -o mountpoint=legacy"
+            " -o relatime=on"
+            " -o quota=1G"
+            " -o filesystem_limit=100" # Activate the filesystem_limits features
+            " bpool/boot",
+
+          # Snapshotting the top-level dataset would trigger a bug in GRUB2: https://github.com/openzfs/zfs/issues/13873
+          "zfs snapshot bpool/boot@snap-1",                     # Prepare activating the livelist and bookmarks features
+          "zfs clone bpool/boot@snap-1 bpool/test",             # Activate the livelist feature
+          "zfs bookmark bpool/boot@snap-1 bpool/boot#bookmark", # Activate the bookmarks feature
+          "zpool checkpoint bpool",                             # Activate the zpool_checkpoint feature
+          "mkdir -p /mnt/boot",
+          "mount -t zfs bpool/boot /mnt/boot",
+          "touch /mnt/boot/empty",                              # Activate zilsaxattr feature
+          "dd if=/dev/urandom of=/mnt/boot/test bs=1M count=1", # Activate the large_blocks feature
+
+          # Print out all enabled and active ZFS features (and some other stuff)
+          "sync /mnt/boot",
+          "zpool get all bpool >&2",
+
+          # Abort early if GRUB2 doesn't like the disks
+          "grub-probe --target=device /mnt/boot >&2",
+      )
+    '';
+
+    # umount & export bpool before shutdown
+    # this is a fix for "cannot import 'bpool': pool was previously in use from another system."
+    postInstallCommands = ''
+      installer.succeed("umount /mnt/boot")
+      installer.succeed("zpool export bpool")
     '';
   };
 
@@ -895,9 +1115,9 @@ in {
     '';
 
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary 1M 100MB"  # bpool
+          + " mkpart primary 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100M 1024M"
           + " mkpart primary 1024M -1s", # rpool
           "udevadm settle",
@@ -909,19 +1129,11 @@ in {
           "zfs create -o mountpoint=legacy rpool/root/usr",
           "mkdir /mnt/usr",
           "mount -t zfs rpool/root/usr /mnt/usr",
-          "zpool create -o compatibility=grub2 bpool /dev/vda1",
-          "zfs create -o mountpoint=legacy bpool/boot",
+          "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir /mnt/boot",
-          "mount -t zfs bpool/boot /mnt/boot",
+          "mount LABEL=BOOT /mnt/boot",
           "udevadm settle",
       )
-    '';
-
-    # umount & export bpool before shutdown
-    # this is a fix for "cannot import 'bpool': pool was previously in use from another system."
-    postInstallCommands = ''
-      machine.succeed("umount /mnt/boot")
-      machine.succeed("zpool export bpool")
     '';
   };
 
@@ -929,7 +1141,7 @@ in {
   # that contains the logical swap and root partitions.
   lvm = makeInstallerTest "lvm" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           + " mkpart primary 1M 2048M"  # PV1
           + " set 1 lvm on"
@@ -945,6 +1157,9 @@ in {
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
           "mount LABEL=nixos /mnt",
       )
+    '';
+    extraConfig = optionalString systemdStage1 ''
+      boot.initrd.services.lvm.enable = true;
     '';
   };
 
@@ -962,7 +1177,7 @@ in {
   # keyfile is configured
   encryptedFSWithKeyfile = makeInstallerTest "encryptedFSWithKeyfile" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           + " mkpart primary ext2 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100M 1024M"
@@ -1001,7 +1216,7 @@ in {
   # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
   fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
           + " mkpart ESP fat32 1M 100MiB"  # /boot/efi
           + " set 1 boot on"
@@ -1032,23 +1247,22 @@ in {
       boot.loader.grub.enableCryptodisk = true;
       boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-      boot.initrd.secrets."/luks.key" = ./luks.key;
+      boot.initrd.secrets."/luks.key" = "/etc/nixos/luks.key";
       boot.initrd.luks.devices.crypt =
         { device  = "/dev/vda2";
           keyFile = "/luks.key";
         };
     '';
     enableOCR = true;
-    preBootCommands = ''
-      machine.start()
-      machine.wait_for_text("Enter passphrase for")
-      machine.send_chars("supersecret\n")
+    postBootCommands = ''
+      target.wait_for_text("Enter passphrase for")
+      target.send_chars("supersecret\n")
     '';
   };
 
   swraid = makeInstallerTest "swraid" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda --"
           + " mklabel msdos"
           + " mkpart primary ext2 1M 100MB"  # /boot
@@ -1077,15 +1291,14 @@ in {
           "udevadm settle",
       )
     '';
-    preBootCommands = ''
-      machine.start()
-      machine.fail("dmesg | grep 'immediate safe mode'")
+    postBootCommands = ''
+      target.fail("dmesg | grep 'immediate safe mode'")
     '';
   };
 
   bcache = makeInstallerTest "bcache" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "flock /dev/vda parted --script /dev/vda --"
           + " mklabel msdos"
           + " mkpart primary ext2 1M 100MB"  # /boot
@@ -1114,7 +1327,7 @@ in {
     };
 
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
         + " mkpart primary ext2 1M 100MB"          # /boot
         + " mkpart primary linux-swap 100M 1024M"  # swap
@@ -1146,18 +1359,17 @@ in {
     '';
 
     enableOCR = true;
-    preBootCommands = ''
-      machine.start()
+    postBootCommands = ''
       # Enter it wrong once
-      machine.wait_for_text("enter passphrase for ")
-      machine.send_chars("wrong\n")
+      target.wait_for_text("enter passphrase for ")
+      target.send_chars("wrong\n")
       # Then enter it right.
-      machine.wait_for_text("enter passphrase for ")
-      machine.send_chars("password\n")
+      target.wait_for_text("enter passphrase for ")
+      target.send_chars("password\n")
     '';
 
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
         + " mkpart primary ext2 1M 100MB"          # /boot
         + " mkpart primary linux-swap 100M 1024M"  # swap
@@ -1184,7 +1396,7 @@ in {
     };
 
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
         "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
         + " mkpart primary ext2 1M 100MB"          # /boot
         + " mkpart primary linux-swap 100M 1024M"  # swap
@@ -1202,72 +1414,10 @@ in {
     '';
   };
 
-  bcachefsLinuxTesting = makeInstallerTest "bcachefs-linux-testing" {
-    extraInstallerConfig = {
-      imports = [ no-zfs-module ];
-
-      boot = {
-        supportedFilesystems = [ "bcachefs" ];
-        kernelPackages = pkgs.linuxPackages_testing;
-      };
-    };
-
-    extraConfig = ''
-      boot.kernelPackages = pkgs.linuxPackages_testing;
-    '';
-
-    createPartitions = ''
-      machine.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "mkfs.bcachefs -L root /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
-  };
-
-  bcachefsUpgradeToLinuxTesting = makeInstallerTest "bcachefs-upgrade-to-linux-testing" {
-    extraInstallerConfig = {
-      imports = [ no-zfs-module ];
-      boot.supportedFilesystems = [ "bcachefs" ];
-      # We don't have network access in the VM, we need this for `nixos-install`
-      system.extraDependencies = [ pkgs.linux_testing ];
-    };
-
-    extraConfig = ''
-      boot.kernelPackages = pkgs.linuxPackages_testing;
-    '';
-
-    createPartitions = ''
-      machine.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "mkfs.bcachefs -L root /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
-  };
-
   # Test using labels to identify volumes in grub
   simpleLabels = makeInstallerTest "simpleLabels" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "sgdisk -Z /dev/vda",
           "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
           "mkswap /dev/vda2 -L swap",
@@ -1284,7 +1434,7 @@ in {
   simpleProvided = makeInstallerTest "simpleProvided" {
     createPartitions = ''
       uuid = "$(blkid -s UUID -o value /dev/vda2)"
-      machine.succeed(
+      installer.succeed(
           "sgdisk -Z /dev/vda",
           "sgdisk -n 1:0:+1M -n 2:0:+100M -n 3:0:+1G -N 4 -t 1:ef02 -t 2:8300 "
           + "-t 3:8200 -t 4:8300 -c 2:boot -c 4:root /dev/vda",
@@ -1293,9 +1443,9 @@ in {
           "mkfs.ext4 -L boot /dev/vda2",
           "mkfs.ext4 -L root /dev/vda4",
       )
-      machine.execute(f"ln -s ../../vda2 /dev/disk/by-uuid/{uuid}")
-      machine.execute("ln -s ../../vda4 /dev/disk/by-label/root")
-      machine.succeed(
+      installer.execute(f"ln -s ../../vda2 /dev/disk/by-uuid/{uuid}")
+      installer.execute("ln -s ../../vda4 /dev/disk/by-label/root")
+      installer.succeed(
           "mount /dev/disk/by-label/root /mnt",
           "mkdir /mnt/boot",
           f"mount /dev/disk/by-uuid/{uuid} /mnt/boot",
@@ -1307,7 +1457,7 @@ in {
   # Simple btrfs grub testing
   btrfsSimple = makeInstallerTest "btrfsSimple" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "sgdisk -Z /dev/vda",
           "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
           "mkswap /dev/vda2 -L swap",
@@ -1321,7 +1471,7 @@ in {
   # Test to see if we can detect /boot and /nix on subvolumes
   btrfsSubvols = makeInstallerTest "btrfsSubvols" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "sgdisk -Z /dev/vda",
           "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
           "mkswap /dev/vda2 -L swap",
@@ -1343,7 +1493,7 @@ in {
   # Test to see if we can detect default and aux subvolumes correctly
   btrfsSubvolDefault = makeInstallerTest "btrfsSubvolDefault" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "sgdisk -Z /dev/vda",
           "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
           "mkswap /dev/vda2 -L swap",
@@ -1369,7 +1519,7 @@ in {
   # Test to see if we can deal with subvols that need to be escaped in fstab
   btrfsSubvolEscape = makeInstallerTest "btrfsSubvolEscape" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
           "sgdisk -Z /dev/vda",
           "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
           "mkswap /dev/vda2 -L swap",
@@ -1393,10 +1543,12 @@ in {
   clevisLuksFallback = mkClevisLuksTest { fallback = true; };
   clevisZfs = mkClevisZfsTest { };
   clevisZfsFallback = mkClevisZfsTest { fallback = true; };
+  clevisZfsParentDataset = mkClevisZfsTest { parentDataset = true; };
+  clevisZfsParentDatasetFallback = mkClevisZfsTest { parentDataset = true; fallback = true; };
 } // optionalAttrs systemdStage1 {
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''
-      machine.succeed(
+      installer.succeed(
         "sgdisk --zap-all /dev/vda",
         "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
         "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
@@ -1427,5 +1579,40 @@ in {
         ];
       };
     };
+  };
+
+  gptAutoRoot = let
+    rootPartType = {
+      ia32 = "44479540-F297-41B2-9AF7-D131D5F0458A";
+      x64 = "4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709";
+      arm = "69DAD710-2CE4-4E3C-B16C-21A1D49ABED3";
+      aa64 = "B921B045-1DF0-41C3-AF44-4C6F280D3FAE";
+    }.${pkgs.stdenv.hostPlatform.efiArch};
+  in makeInstallerTest "gptAutoRoot" {
+    disableFileSystems = true;
+    createPartitions = ''
+      installer.succeed(
+        "sgdisk --zap-all /dev/vda",
+        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
+        "sgdisk --new=3:0:+5G --typecode=0:${rootPartType} /dev/vda", # /
+        "udevadm settle",
+
+        "mkfs.vfat /dev/vda1",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.ext4 -L root /dev/vda3",
+        "udevadm settle",
+
+        "mount /dev/vda3 /mnt",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot"
+      )
+    '';
+    bootLoader = "systemd-boot";
+    extraConfig = ''
+      boot.initrd.systemd.root = "gpt-auto";
+      boot.initrd.supportedFilesystems = ["ext4"];
+    '';
   };
 }

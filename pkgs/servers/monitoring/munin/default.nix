@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python3, ruby, jre, nettools, bc
+, python3, ruby, jre8, nettools, bc
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.75";
+  version = "2.0.76";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "sha256-fxjF2CV5SoUTirusGQBpbNu9MYKU5yx+DHS2h0NJoic=";
+    sha256 = "sha256-9PfIzUObm3Nu2k2TFjbQ3cqIDkPz07ZUczEcfm3bpDc=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     perlPackages.Socket6
     perlPackages.URI
     perlPackages.DBFile
-    perlPackages.DateManip
+    perlPackages.TimeDate
     perlPackages.FileCopyRecursive
     perlPackages.FCGI
     perlPackages.NetSNMP
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     perlPackages.DBDPg
     python3
     ruby
-    jre
+    jre8
     # tests
     perlPackages.TestLongString
     perlPackages.TestDifferences
@@ -106,7 +107,7 @@ stdenv.mkDerivation rec {
     "PERL=${perlPackages.perl.outPath}/bin/perl"
     "PYTHON=${python3.interpreter}"
     "RUBY=${ruby.outPath}/bin/ruby"
-    "JAVARUN=${jre.outPath}/bin/java"
+    "JAVARUN=${jre8.outPath}/bin/java"
     "PLUGINUSER=munin"
   ];
 
@@ -126,12 +127,14 @@ stdenv.mkDerivation rec {
         esac
         wrapProgram "$file" \
           --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-                LogLog4perl IOSocketINET6 Socket6 URI DBFile DateManip
+                LogLog4perl IOSocketINET6 Socket6 URI DBFile TimeDate
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
                 ListMoreUtils DBDPg LWP rrdtool
                 ]}"
     done
   '';
+
+  passthru.tests = { inherit (nixosTests) munin; };
 
   meta = with lib; {
     description = "Networked resource monitoring tool";
@@ -142,7 +145,7 @@ stdenv.mkDerivation rec {
       to kill our performance?' problems.
     '';
     homepage = "https://munin-monitoring.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
     platforms = platforms.linux;
   };

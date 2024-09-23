@@ -18,12 +18,14 @@ let
   fetchurlBoot = import ../build-support/fetchurl/boot.nix {
     inherit (stdenv) system;
   };
+
+  aliases = self: super: lib.optionalAttrs config.allowAliases (import ../top-level/darwin-aliases.nix lib self super pkgs);
 in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "darwin";
   extra = spliced: spliced.apple_sdk.frameworks;
-  f = (self: let
+  f = lib.extends aliases (self: let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -45,12 +47,19 @@ makeScopeWithSplicing' {
     fetchurl = fetchurlBoot;
   };
 
+  # macOS 12.3 SDK
+  apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
+
   # Pick an SDK
-  apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
+  apple_sdk = {
+    "10.12" = apple_sdk_10_12;
+    "11.0" = apple_sdk_11_0;
+  }.${stdenv.hostPlatform.darwinSdkVersion}
+  or (throw "Unsupported sdk: ${stdenv.hostPlatform.darwinSdkVersion}");
 
   # Pick the source of libraries: either Apple's open source releases, or the
   # SDK.
-  useAppleSDKLibs = stdenv.hostPlatform.isAarch64;
+  useAppleSDKLibs = lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11";
 
   selectAttrs = attrs: names:
     lib.listToAttrs (lib.concatMap (n: lib.optionals (attrs ? "${n}") [(lib.nameValuePair n attrs."${n}")]) names);
@@ -74,15 +83,15 @@ in
 
 impure-cmds // appleSourcePackages // chooseLibs // {
 
-  inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0;
+  inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (pkgs) cctools;
+    inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -93,37 +102,35 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
-    dualAs = true;
+  # x86-64 Darwin gnat-bootstrap emits assembly
+  # with MOVQ as the mnemonic for quadword interunit moves
+  # such as `movq %rbp, %xmm0`.
+  # The clang integrated assembler recognises this as valid,
+  # but unfortunately the cctools.gas GNU assembler does not;
+  # it instead uses MOVD as the mnemonic.
+  # The assembly that a GCC build emits is determined at build time
+  # and cannot be changed afterwards.
+  #
+  # To build GNAT on x86-64 Darwin, therefore,
+  # we need both the clang _and_ the cctools.gas assemblers to be available:
+  # the former to build at least the stage1 compiler,
+  # and the latter at least to be detectable
+  # as the target for the final compiler.
+  binutilsDualAs-unwrapped = pkgs.buildEnv {
+    name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
+    paths = [
+      self.binutils-unwrapped
+      (lib.getOutput "gas" pkgs.cctools)
+    ];
   };
 
-  binutilsDualAs = pkgs.wrapBintoolsWith {
-    libc =
-      if stdenv.targetPlatform != stdenv.hostPlatform
-      then pkgs.libcCross
-      else pkgs.stdenv.cc.libc;
+  binutilsDualAs = self.binutils.override {
     bintools = self.binutilsDualAs-unwrapped;
   };
 
   binutilsNoLibc = pkgs.wrapBintoolsWith {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
-  };
-
-  cctools = self.cctools-llvm;
-
-  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
@@ -153,11 +160,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     propagatedBuildInputs = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 
-  maloader = callPackage ../os-specific/darwin/maloader {
-  };
-
-  insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
-
   iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
@@ -170,17 +172,16 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
-  moltenvk = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/moltenvk {
-    inherit (apple_sdk_11_0.frameworks) AppKit Foundation Metal QuartzCore;
-    inherit (apple_sdk_11_0) MacOSX-SDK Libsystem;
-    inherit (pkgs.darwin) cctools sigtool;
+  moltenvk = callPackage ../os-specific/darwin/moltenvk {
+    stdenv = pkgs.overrideSDK stdenv {
+      darwinMinVersion = "10.15";
+      darwinSdkVersion = "12.3";
+    };
+    inherit (apple_sdk.frameworks) AppKit Foundation Metal QuartzCore;
+    inherit (apple_sdk.libs) simd;
   };
 
-  opencflite = callPackage ../os-specific/darwin/opencflite { };
-
-  openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
-    inherit (apple_sdk_11_0.frameworks) AppKit Foundation UniformTypeIdentifiers;
-  };
+  openwith = callPackage ../os-specific/darwin/openwith { };
 
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
 
@@ -196,9 +197,12 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     xcode_12 xcode_12_0_1 xcode_12_1 xcode_12_2 xcode_12_3 xcode_12_4 xcode_12_5 xcode_12_5_1
     xcode_13 xcode_13_1 xcode_13_2 xcode_13_3 xcode_13_3_1 xcode_13_4 xcode_13_4_1
     xcode_14 xcode_14_1
+    xcode_15 xcode_15_1 xcode_15_2 xcode_15_3 xcode_15_4
     xcode;
 
-  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
+  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication {
+    inherit (apple_sdk) darwin-stubs;
+  };
 
   # TODO: Remove the CF hook if a solution to the crashes is not found.
   CF =
@@ -227,13 +231,13 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
 
-  libtapi = callPackage ../os-specific/darwin/libtapi {};
+  libtapi = pkgs.libtapi;
 
   ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
 
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
-  # See doc/builders/special/darwin-builder.section.md
+  # See doc/packages/darwin-builder.section.md
   linux-builder = lib.makeOverridable ({ modules }:
     let
       toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
@@ -263,7 +267,5 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
   };
 
-} // lib.optionalAttrs config.allowAliases {
-  builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
 });
 }

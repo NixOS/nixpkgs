@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, gmt
-, numpy
-, netcdf4
-, pandas
-, packaging
-, xarray
-, pytest-mpl
-, ipython
-, ghostscript
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  gmt,
+  numpy,
+  netcdf4,
+  pandas,
+  packaging,
+  xarray,
+  pytest-mpl,
+  ipython,
+  ghostscript,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "0.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "GenericMappingTools";
     repo = "pygmt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+bkjqHjJIwk44u226q6xqeGmwMWleyc4lRfMZdDjVBA=";
+    hash = "sha256-DbewB/lP44bpNSQ4ht7n0coS2Ml7qmEU4CP91p5YtZg=";
   };
 
   postPatch = ''
@@ -35,9 +36,7 @@ buildPythonPackage rec {
       --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     numpy
@@ -61,12 +60,10 @@ buildPythonPackage rec {
     export HOME=$TMP
   '';
 
-  pythonImportsCheck = [
-    "pygmt"
-  ];
+  pythonImportsCheck = [ "pygmt" ];
 
   meta = with lib; {
-    description = "A Python interface for the Generic Mapping Tools";
+    description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;
     changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";

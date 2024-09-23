@@ -35,12 +35,17 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
+  # Dependants of xvidcore don't know to look in bin for dependecies. Link them
+  # in lib so other depedants of xvidcore can find the dlls.
+  postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    ln -s $out/bin/*.dll $out/lib
+  '';
+
   meta = with lib; {
     description = "MPEG-4 video codec for PC";
-    homepage    = "https://www.xvid.com/";
-    license     = licenses.gpl2;
+    homepage = "https://www.xvid.com/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ codyopel lovek323 ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }
-

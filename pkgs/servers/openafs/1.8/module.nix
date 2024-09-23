@@ -14,11 +14,9 @@
 , fetchpatch
 }:
 
-with (import ./srcs.nix {
-  inherit fetchurl;
-});
-
 let
+  inherit (import ./srcs.nix { inherit fetchurl; }) src version;
+
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -33,65 +31,30 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # cf: Fix cast-function-type err w/disable-checking
+    # Linux-6.10: Use filemap_alloc_folio when avail
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6867a3e8429f37fb748575df52256227ae9e5b53";
-      hash = "sha256-FDvOFDzl2eFN7ZKUqQBQSWGo0ntayc8NCYh/haVi8Ng=";
+      url = "https://github.com/openafs/openafs/commit/0f6a3a402f4a66114da9231032bd68cdc4dee7bc.patch";
+      hash = "sha256-1D0mijyF4hbd+xCONT50cd6T9eCpeM8Li3nCI7HgLPA=";
     })
-    # LINUX: Make 'fs flush*' invalidate dentry
+    # Linux-6.10: define a wrapper for vmalloc
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=898098e01e19970f80f60a0551252b2027246038";
-      hash = "sha256-ehwRrzpqB8iJKuZ/18oJsrHVlKQs6EzCNaPtSG1m0sw=";
+      url = "https://github.com/openafs/openafs/commit/658942f2791fad5e33ec7542158c16dfc66eed39.patch";
+      hash = "sha256-MhfAUX/eNOEkjO0cGVbnIdObMlGtLdCnnGfJECDwO+A=";
     })
-    # Linux 6.5: Replace generic_file_splice_read
+    # Linux-6.10: remove includes for asm/ia32_unistd.h
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=fef245769366efe8694ddadd1e1f2ed5ef8608f4";
-      hash = "sha256-TD1xYvlc9aJyravNZLPhceeOwBawvn0Ndxd50rszTJU=";
+      url = "https://github.com/openafs/openafs/commit/03b280649f5e22ed74c217d7c98c3416a2fa9052.patch";
+      hash = "sha256-ZdXz2ziuflqz7zNzjepuGvwDAPM31FIzsoEa4iNdLmo=";
     })
-    # LINUX: Make sysctl definitions more concise
+    # afs: avoid empty-body warning
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=d15c7ab50c92671052cbe9a93b0440c81156d8aa";
-      hash = "sha256-6K593AJvgC34RfnIqW8+0A/v9cF6tsbVMeKpCv+QrK4=";
+      url = "https://github.com/openafs/openafs/commit/d8b56f21994ce66d8daebb7d69e792f34c1a19ed.patch";
+      hash = "sha256-10VUfZdZiOC8xSPM0nq8onqiv7X/Vv4/WwGlkqWkNkQ=";
     })
-    # Linux 6.5: Use register_sysctl()
+    # Linux 6.10: Move 'inline' before func return type
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=63801cfd1fc06ec3259fcfd67229f3a3c70447ed";
-      hash = "sha256-eoQxaZ28OanSoaHRJcfvXQORbe21YLhwPLoJUILjMkU=";
-    })
-    # hcrypto: rename abort to _afscrypto_abort
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=538f450033a67e251b473ff92238b3124b85fc72";
-      hash = "sha256-ztfJQKvGHGdWQe/0+BGkgRFxOi3n4YY+EFxgbD3DO1E=";
-    })
-    # cf: Avoid nested C functions built by autoconf
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=d50ced2a17e05884ea18bb3dfcde6378b2531dc7";
-      hash = "sha256-dK2/9bGhlXCPCB9t9T/K2dKdRBShVKXtYXWPttsOhAM=";
-    })
-    # cf: Use static allocated structs for cf tests
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=00f13c45d637249a0d698458e08c1b8e2da8e219";
-      hash = "sha256-YNszJIxBDIsl3RgBcHEpNtYIrNLC0tnSbIOQvX0oZ+s=";
-    })
-    # LINUX: Pass an array of structs to register_sysctl
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=5b647bf17a878271e1ce9882e41663770ee73528";
-      hash = "sha256-9o4cr/KORtanTfuKMAMAOvePB+vK579rR85rY+m8VNM=";
-    })
-    # linux: Replace fop iterate with fop iterate_shared
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6de0a646036283266e1d4aeb583e426005ca5ad4";
-      hash = "sha256-cL3ByjUS3QU8fSbuN7ZEEKyjb+6TbbZL10UKbSgNl6c=";
-    })
-    # Linux 6.6: convert to ctime accessor functions
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6413fdbc913834f2884989e5811841f4ccea2b5f";
-      hash = "sha256-vdK25vfS5Yr0xQufzUk431FXHwMIWlP2UpLjqnobJWI=";
-    })
-    # Linux 6.6: Pass request_mask to generic_fillattr
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=4f1d8104d17d2b4e95c7abaf5498db6b80aefa8f";
-      hash = "sha256-XJpqbDB/LOuqZj3gPHlcLeGzAQCGvPH8ArgWf+sbBJU=";
+      url = "https://github.com/openafs/openafs/commit/7097eec17bc01bcfc12c4d299136b2d3b94ec3d7.patch";
+      hash = "sha256-PZmqeXWJL3EQFD9250YfDwCY1rvSGVCbAhzyHP1pE0Q=";
     })
   ];
 

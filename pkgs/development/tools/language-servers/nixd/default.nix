@@ -1,90 +1,156 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, bison
-, boost182
-, flex
-, gtest
-, libbacktrace
-, lit
-, llvmPackages
-, meson
-, ninja
-, nix
-, nixpkgs-fmt
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost182,
+  gtest,
+  llvmPackages,
+  meson,
+  ninja,
+  nix,
+  nix-update-script,
+  nixd,
+  nixf,
+  nixt,
+  nlohmann_json,
+  pkg-config,
+  testers,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "nixd";
-  version = "1.2.2";
+let
+  common = rec {
+    version = "2.3.2";
 
-  src = fetchFromGitHub {
-    owner = "nix-community";
-    repo = "nixd";
-    rev = version;
-    hash = "sha256-W44orkPZQ9gDUTogb8YVIaw4WHzUA+ExOXhTnZlJ6yY=";
+    src = fetchFromGitHub {
+      owner = "nix-community";
+      repo = "nixd";
+      rev = version;
+      hash = "sha256-ffHLKHpqgVlYLGQ/Dc/6hW/inA98QdMJiv/fT2IrH7c=";
+    };
+
+    nativeBuildInputs = [
+      meson
+      ninja
+      python3
+      pkg-config
+    ];
+
+    mesonBuildType = "release";
+
+    strictDeps = true;
+
+    doCheck = true;
+
+    meta = {
+      homepage = "https://github.com/nix-community/nixd";
+      changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
+      license = lib.licenses.lgpl3Plus;
+      maintainers = with lib.maintainers; [
+        inclyc
+        Ruixi-rebirth
+        aleksana
+        redyf
+      ];
+      platforms = lib.platforms.unix;
+    };
   };
+in
+{
+  nixf = stdenv.mkDerivation (
+    common
+    // {
+      pname = "nixf";
 
-  mesonBuildType = "release";
+      sourceRoot = "${common.src.name}/libnixf";
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    bison
-    flex
-  ];
+      outputs = [
+        "out"
+        "dev"
+      ];
 
-  nativeCheckInputs = [
-    lit
-    nixpkgs-fmt
-  ];
+      buildInputs = [
+        gtest
+        boost182
+        nlohmann_json
+      ];
 
-  buildInputs = [
-    libbacktrace
-    nix
-    gtest
-    boost182
-    llvmPackages.llvm
-  ];
+      passthru.tests.pkg-config = testers.hasPkgConfigModules {
+        package = nixf;
+        moduleNames = [ "nixf" ];
+      };
 
-  env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
+      meta = common.meta // {
+        description = "Nix language frontend, parser & semantic analysis";
+        mainProgram = "nixf-tidy";
+      };
+    }
+  );
 
-  # https://github.com/nix-community/nixd/issues/215
-  doCheck = !stdenv.isDarwin;
+  nixt = stdenv.mkDerivation (
+    common
+    // {
+      pname = "nixt";
 
-  checkPhase = ''
-    runHook preCheck
-    dirs=(store var var/nix var/log/nix etc home)
+      sourceRoot = "${common.src.name}/libnixt";
 
-    for dir in $dirs; do
-      mkdir -p "$TMPDIR/$dir"
-    done
+      outputs = [
+        "out"
+        "dev"
+      ];
 
-    export NIX_STORE_DIR=$TMPDIR/store
-    export NIX_LOCALSTATE_DIR=$TMPDIR/var
-    export NIX_STATE_DIR=$TMPDIR/var/nix
-    export NIX_LOG_DIR=$TMPDIR/var/log/nix
-    export NIX_CONF_DIR=$TMPDIR/etc
-    export HOME=$TMPDIR/home
+      buildInputs = [
+        nix
+        gtest
+        boost182
+      ];
 
-    # Disable nixd regression tests, because it uses some features provided by
-    # nix, and does not correctly work in the sandbox
-    meson test --print-errorlogs server regression/nix-ast-dump
-    runHook postCheck
-  '';
+      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
-  passthru.updateScript = nix-update-script { };
+      passthru.tests.pkg-config = testers.hasPkgConfigModules {
+        package = nixt;
+        moduleNames = [ "nixt" ];
+      };
 
-  meta = {
-    description = "Nix language server";
-    homepage = "https://github.com/nix-community/nixd";
-    changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
-    mainProgram = "nixd";
-    platforms = lib.platforms.unix;
-  };
+      meta = common.meta // {
+        description = "Supporting library that wraps C++ nix";
+      };
+    }
+  );
+
+  nixd = stdenv.mkDerivation (
+    common
+    // {
+      pname = "nixd";
+
+      sourceRoot = "${common.src.name}/nixd";
+
+      buildInputs = [
+        nix
+        nixf
+        nixt
+        llvmPackages.llvm
+        gtest
+        boost182
+      ];
+
+      nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
+
+      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
+
+      # See https://github.com/nix-community/nixd/issues/519
+      doCheck = false;
+
+      passthru = {
+        updateScript = nix-update-script { };
+        tests.version = testers.testVersion { package = nixd; };
+      };
+
+      meta = common.meta // {
+        description = "Feature-rich Nix language server interoperating with C++ nix";
+        mainProgram = "nixd";
+      };
+    }
+  );
 }

@@ -1,7 +1,7 @@
 { lib
 , fetchFromSourcehut
 , pythonPackages
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -16,18 +16,19 @@ pythonPackages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with pythonPackages; [
     pyopengl
-    wxPython_4_2
+    wxpython
   ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~thestr4ng3r/mymcplus";
-    description = "A PlayStation 2 memory card manager";
+    description = "PlayStation 2 memory card manager";
+    mainProgram = "mymcplus";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -41,6 +41,10 @@ in {
 
     boot.kernelParams = ["console=tty1" "console=${serialDevice}"];
 
+    services.udev.extraRules = ''
+      SUBSYSTEM=="cpu", CONST{arch}=="x86-64", TEST=="online", ATTR{online}=="0", ATTR{online}="1"
+    '';
+
     virtualisation.lxd.agent.enable = lib.mkDefault true;
   };
 }

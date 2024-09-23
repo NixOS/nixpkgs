@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # takes some time
 
   meta = with lib; {
-    description = "A Library for doing Number Theory";
+    description = "Library for doing Number Theory";
     longDescription = ''
       NTL is a high-performance, portable C++ library providing data
       structures and algorithms for manipulating signed, arbitrary

@@ -1,20 +1,25 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pytz
-, six
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pytz,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "l18n";
   version = "2021.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GVbokNZz0XE1zCCRMlPBVPa8HAAmbCK31QPMGlpC2Eg=";
+    hash = "sha256-GVbokNZz0XE1zCCRMlPBVPa8HAAmbCK31QPMGlpC2Eg=";
   };
 
-  propagatedBuildInputs = [ pytz six ];
+  propagatedBuildInputs = [
+    pytz
+    six
+  ];
 
   # tests are not included in sdist and building from source is none trivial
   doCheck = false;

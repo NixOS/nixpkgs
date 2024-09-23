@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Prints an ASCII logo and some system info";
+    mainProgram = "linux_logo";
     homepage = "http://www.deater.net/weave/vmwprod/linux_logo";
     changelog = "https://github.com/deater/linux_logo/blob/${src.rev}/CHANGES";
     license = licenses.gpl2Plus;

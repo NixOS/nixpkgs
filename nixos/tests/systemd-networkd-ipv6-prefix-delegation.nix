@@ -40,7 +40,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             address = [
               "2001:DB8::1/64"
             ];
-            networkConfig.IPForward = true;
+            networkConfig.IPv4Forwarding = true;
+            networkConfig.IPv6Forwarding = true;
           };
         };
       };
@@ -66,6 +67,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           settings = {
             interfaces-config.interfaces = [ "eth1" ];
             subnet6 = [ {
+              id = 1;
               interface = "eth1";
               subnet = "2001:DB8::/32";
               pd-pools = [ {
@@ -173,6 +175,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         # for fowarding/input from the configured interfaces so you do not have
         # to manage multiple places
         firewall.enable = false;
+        interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
       };
 
       systemd.network = {
@@ -258,14 +261,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           "01-lo" = {
             name = "lo";
             addresses = [
-              { addressConfig.Address = "FD42::1/128"; }
+              { Address = "FD42::1/128"; }
             ];
           };
         };
       };
-
-      # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
 
     # This is the client behind the router. We should be receiving router
@@ -277,10 +277,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       networking = {
         useNetworkd = true;
         useDHCP = false;
+        interfaces.eth1.ipv6.addresses = lib.mkForce [ ];
       };
-
-      # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
   };
 
@@ -294,6 +292,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Since we only care about IPv6 that should not involve waiting for legacy
     # IP leases.
     client.start()
+    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
 
     # the static address on the router should not be reachable
@@ -312,6 +311,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     isp.wait_for_unit("multi-user.target")
 
     # wait until the uplink interface has a good status
+    router.systemctl("start network-online.target")
     router.wait_for_unit("network-online.target")
     router.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 

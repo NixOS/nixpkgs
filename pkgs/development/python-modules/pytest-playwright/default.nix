@@ -1,21 +1,21 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, playwright
-, playwright-driver
-, pytest
-, pytest-base-url
-, pytestCheckHook
-, python-slugify
-, pythonOlder
-, setuptools-scm
-, django
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  playwright,
+  playwright-driver,
+  pytest,
+  pytest-base-url,
+  python-slugify,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.4.3";
-  format = "setuptools";
+  version = "0.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,20 +23,17 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-pytest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5qjfZGDM1OqXXNyj81O49ClKKGiAPdgyZZu6TgpskGs=";
+    hash = "sha256-F5tbqm1k4SdTHIUgwSunLIL2W5mhJoMI4x4UZBLidlA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     playwright
     pytest-base-url
     python-slugify
@@ -50,9 +47,7 @@ buildPythonPackage rec {
     export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
   '';
 
-  pythonImportsCheck = [
-    "pytest_playwright"
-  ];
+  pythonImportsCheck = [ "pytest_playwright" ];
 
   meta = with lib; {
     description = "Pytest plugin to write end-to-end browser tests with Playwright";

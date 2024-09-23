@@ -16,7 +16,7 @@ in {
       # substitute server which requires Avahi.
       services.avahi = {
         enable = true;
-        nssmdns = true;
+        nssmdns4 = true;
         publish = {
           enable = true;
           userServices = true;
@@ -80,6 +80,7 @@ in {
 
     # Now it's the client turn to make use of it.
     substitute_server = "http://server.local:${toString publishPort}"
+    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
     response = client.succeed(f"curl {substitute_server}")
     assert "Guix Substitute Server" in response

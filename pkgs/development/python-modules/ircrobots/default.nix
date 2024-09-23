@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, anyio
-, asyncio-rlock
-, asyncio-throttle
-, ircstates
-, async-stagger
-, async-timeout
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  anyio,
+  asyncio-rlock,
+  asyncio-throttle,
+  ircstates,
+  async-stagger,
+  async-timeout,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "ircrobots";
   version = "0.6.6";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

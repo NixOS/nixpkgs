@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , Security
 , autoreconfHook
 , util-linux
@@ -11,26 +10,18 @@
 # requiring to build a special variant for that software. Example: 'haproxy'
 , variant ? "all"
 , extraConfigureFlags ? []
-, enableLto ? !(stdenv.isDarwin || stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
+, enableLto ? !(stdenv.hostPlatform.isStatic || stdenv.cc.isClang)
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.6.4";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "refs/tags/v${finalAttrs.version}-stable";
-    hash = "sha256-a9a3ca4Zb/XTS5YfPJwnXPYbDjmgD8qylhPQg5pjzJM=";
+    hash = "sha256-VTMVgBSDL6pw1eEKnxGzTdyQYWVbMd3mAnOnpAOKVhk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-expected-test-response.patch";
-      url = "https://github.com/wolfSSL/wolfssl/commit/ca694938fd053a8557f9f08b1b4265292d8bef65.patch";
-      hash = "sha256-ETxszjjEMk0WdYgXHWTxTaWZPpyDs9jdko0jtkjzgwI=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./scripts
@@ -69,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-armasm=inline"
   ] ++ extraConfigureFlags;
 
+  # Breaks tls13 tests on aarch64-darwin.
+  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "zerocallusedregs" ];
+
   # LTO should help with the C implementations.
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableLto "-flto";
   env.NIX_LDFLAGS_COMPILE = lib.optionalString enableLto "-flto";
@@ -105,7 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
+    description = "Small, fast, portable implementation of TLS/SSL for embedded devices";
+    mainProgram = "wolfssl-config";
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
     platforms = platforms.all;

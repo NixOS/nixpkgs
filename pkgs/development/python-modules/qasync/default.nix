@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyqt5
-, pytestCheckHook
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyqt5,
+  pytestCheckHook,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "qasync";
-  version = "0.27.0";
+  version = "0.27.1";
 
   format = "pyproject";
 
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     owner = "CabbageDevelopment";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kU8QgcBZSzQQO3V4zKaIBuodUCQS4CLHOH7qHYU8ja0=";
+    hash = "sha256-oXzwilhJ1PhodQpOZjnV9gFuoDy/zXWva9LhhK3T00g=";
   };
 
   postPatch = ''
@@ -31,9 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qasync" ];
 
-  disabledTestPaths = [
-    "tests/test_qeventloop.py"
-  ];
+  disabledTestPaths = [ "tests/test_qeventloop.py" ];
 
   meta = {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation of the PEP 3156 event-loop";

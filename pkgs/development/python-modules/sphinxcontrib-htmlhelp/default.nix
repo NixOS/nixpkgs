@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
-  version = "2.0.4";
+  version = "2.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -15,14 +16,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_htmlhelp";
     inherit version;
-    hash = "sha256-bCahGKBbdgAHOEKbckoFaNveW3I5GmiFd9oI8RiRCSo=";
+    hash = "sha256-Dch2N9XeU91e7DpqAXU7HM+ZSUvXVqr+zXS0+p5ykBU=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # Check is disabled due to circular dependency of sphinx
+  dontCheckRuntimeDeps = true;
   doCheck = false;
 
   pythonNamespaces = [ "sphinxcontrib" ];

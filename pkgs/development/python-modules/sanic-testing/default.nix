@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, httpx
-, pythonOlder
-, sanic
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  httpx,
+  pythonOlder,
+  sanic,
+  setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "23.6.0";
-  format = "setuptools";
+  version = "24.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,7 +21,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WDiEuve9P9fLHxpK0UjxhbZUmWXtP+DV7e6OT19TASs=";
+    hash = "sha256-biUgxa0sINHAYzyKimVD8+/mPUq2dlnCl2BN+UeUaEo=";
   };
 
   outputs = [
@@ -27,7 +29,9 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     httpx
     sanic
     websockets
@@ -52,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic-testing";
     changelog = "https://github.com/sanic-org/sanic-testing/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

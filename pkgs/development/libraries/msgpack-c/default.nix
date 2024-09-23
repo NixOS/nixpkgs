@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msgpack-c";
-  version = "6.0.0";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
     rev = "refs/tags/c-${finalAttrs.version}";
-    hash = "sha256-TfC37QKwqvHxsLPgsEqJYkb7mpRQekbntbBPV4v4FO8=";
+    hash = "sha256-Tjgn9ayyPK1mKA4OBr7/VogSzJwh5RZR5BrMNadfqak=";
   };
 
   strictDeps = true;
@@ -24,8 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DMSGPACK_BUILD_EXAMPLES=OFF" # examples are not installed even if built
-  ] ++ lib.optional (!finalAttrs.doCheck) "-DMSGPACK_BUILD_TESTS=OFF";
+    (lib.cmakeBool "MSGPACK_BUILD_EXAMPLES" false) # examples are not installed even if built
+    (lib.cmakeBool "MSGPACK_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
   checkInputs = [
     gtest

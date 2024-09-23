@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, django
-, python-dateutil
-, freezegun
-, psycopg2
-, postgresql
-, postgresqlTestHook
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  django,
+  python-dateutil,
+  freezegun,
+  psycopg2,
+  postgresql,
+  postgresqlTestHook,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "django-auditlog";
-  version = "2.2.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = pname;
+    repo = "django-auditlog";
     rev = "v${version}";
-    hash = "sha256-QHSGqtpkOgltAg+RlG/Ik3DfEjtSWt45sqlD+Zw4Bh0=";
+    hash = "sha256-SJ4GJp/gVIxiLbdAj3ZS+weevqIDZCMQnW/pqc5liJU=";
   };
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -48,9 +47,11 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
+    # strip escape codes otherwise tests fail
+    # see https://github.com/jazzband/django-auditlog/issues/644
     TEST_DB_USER=$PGUSER \
     TEST_DB_HOST=$PGHOST \
-    ${python.interpreter} runtests.py
+    ${python.interpreter} runtests.py | cat
 
     runHook postCheck
   '';
@@ -59,7 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/jazzband/django-auditlog/blob/v${version}/CHANGELOG.md";
-    description = "A Django app that keeps a log of changes made to an object";
+    description = "Django app that keeps a log of changes made to an object";
     downloadPage = "https://github.com/jazzband/django-auditlog";
     license = licenses.mit;
     maintainers = with maintainers; [ leona ];

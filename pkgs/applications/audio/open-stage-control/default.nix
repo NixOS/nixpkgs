@@ -1,14 +1,24 @@
-{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3, nix-update-script }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nodejs_18
+, electron
+, python3
+, nix-update-script
+}:
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.25.6";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-ZjNnchI8W0Xeuz1DHf3Q0cIL97BFXb3zY/HWQnrqqnk=";
+    hash = "sha256-hBQyz6VAtiC1XOADZml1MwGKtmdyiJNlRAmHRjt6QsA=";
   };
 
   # Remove some Electron stuff from package.json
@@ -18,10 +28,11 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-UqjYNXdNoQmirIgU9DRgkp14SIrawfrfi9mD2h6ACyU=";
 
+  nodejs = nodejs_18;
+
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
-    python3
   ];
 
   buildInputs = [
@@ -77,7 +88,8 @@ buildNpmPackage rec {
     description = "Libre and modular OSC / MIDI controller";
     homepage = "https://openstagecontrol.ammd.net/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     platforms = platforms.linux;
+    mainProgram = "open-stage-control";
   };
 }

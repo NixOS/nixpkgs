@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "inotify-simple";
   version = "1.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "inotify_simple";
@@ -16,7 +21,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "inotify_simple" ];
 
   meta = with lib; {
-    description = "A simple Python wrapper around inotify";
+    description = "Simple Python wrapper around inotify";
     homepage = "https://github.com/chrisjbillington/inotify_simple";
     license = licenses.bsd2;
     maintainers = with maintainers; [ erikarvstedt ];

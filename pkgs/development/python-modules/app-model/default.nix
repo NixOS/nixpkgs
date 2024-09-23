@@ -1,51 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, in-n-out
-, psygnal
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
-, hatch-vcs
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  in-n-out,
+  psygnal,
+  pydantic,
+  pydantic-compat,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "app-model";
-  version = "0.2.2";
-  format = "pyproject";
+  version = "0.2.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
-    repo = pname;
+    repo = "app-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vo10BHUzvYlldAqTw/1LxgvSXgTM3LAls9jQIeB5LcU=";
+    hash = "sha256-vGSFo2ZckIDI3TjBSTKZagTEYdILt1/5Wyws3P7FNiQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     psygnal
     pydantic
+    pydantic-compat
     in-n-out
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "app_model"
-  ];
+  pythonImportsCheck = [ "app_model" ];
 
   meta = with lib; {
     description = "Module to implement generic application schema";

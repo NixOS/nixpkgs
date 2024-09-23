@@ -1,25 +1,22 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.duckling;
 in {
   options = {
     services.duckling = {
-      enable = mkEnableOption (lib.mdDoc "duckling");
+      enable = lib.mkEnableOption "duckling";
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8080;
-        description = lib.mdDoc ''
+        description = ''
           Port on which duckling will run.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.duckling = {
       description = "Duckling server service";
       wantedBy    = [ "multi-user.target" ];

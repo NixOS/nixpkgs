@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
+{ lib, stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -6,14 +6,14 @@
 # Multi-threaded applications must not call a threaded OpenBLAS
 # (the only exception is when an application uses OpenMP as its
 # *only* form of multi-threading). See
-#     https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
-#     https://github.com/xianyi/OpenBLAS/issues/2543
+#     https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+#     https://github.com/OpenMathLib/OpenBLAS/issues/2543
 # This flag builds a single-threaded OpenBLAS using the flags
 # stated in thre.
 , singleThreaded ? false
 , buildPackages
 # Select a specific optimization target (other than the default)
-# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+# See https://github.com/OpenMathLib/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
 # Select whether DYNAMIC_ARCH is enabled or not.
 , dynamicArch ? null
@@ -30,6 +30,7 @@
 , octave
 , opencv
 , python3
+, openmp ? null
 }:
 
 let blas64_ = blas64; in
@@ -113,6 +114,13 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    s390x-linux = {
+      BINARY = 64;
+      TARGET = setTarget "ZARCH_GENERIC";
+      DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = true;
+    };
   };
 in
 
@@ -141,15 +149,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.24";
+  version = "0.3.28";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "xianyi";
+    owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "sha256-IuXhrZRB3o7kbnivv/6En/aAeF2F18sQw9pKs1WEJc4=";
+    hash = "sha256-430zG47FoBNojcPFsVC7FA43FhVPxrulxAW3Fs6CHo8=";
   };
 
   postPatch = ''
@@ -172,12 +180,18 @@ stdenv.mkDerivation rec {
     "strictoverflow"
     # don't interfere with dynamic target detection
     "relro" "bindnow"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # "__builtin_clear_padding not supported for variable length aggregates"
+    # in aarch64-specific code
+    "trivialautovarinit"
   ];
 
   nativeBuildInputs = [
     perl
     which
   ];
+
+  buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) openmp;
 
   depsBuildBuild = [
     buildPackages.gfortran
@@ -206,10 +220,12 @@ stdenv.mkDerivation rec {
         else stdenv.hostPlatform != stdenv.buildPlatform;
     # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)
     # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
-    # https://github.com/xianyi/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
+    # https://github.com/OpenMathLib/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
     MAKE_NB_JOBS = 0;
-  } // (lib.optionalAttrs singleThreaded {
-    # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+  } // (lib.optionalAttrs stdenv.cc.isClang {
+    LDFLAGS = "-L${lib.getLib buildPackages.gfortran.cc}/lib"; # contains `libgfortran.so`; building with clang needs this, gcc has it implicit
+  }) // (lib.optionalAttrs singleThreaded {
+    # As described on https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
     USE_LOCKING = true; # available with openblas >= 0.3.7
     USE_OPENMP = false; # openblas will refuse building with both USE_OPENMP=1 and USE_THREAD=0
@@ -220,7 +236,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Write pkgconfig aliases. Upstream report:
-    # https://github.com/xianyi/OpenBLAS/issues/1740
+    # https://github.com/OpenMathLib/OpenBLAS/issues/1740
     for alias in blas cblas lapack; do
       cat <<EOF > $out/lib/pkgconfig/$alias.pc
 Name: $alias
@@ -250,14 +266,14 @@ EOF
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) numpy scipy;
+    inherit (python3.pkgs) numpy scipy scikit-learn;
     inherit ceres-solver giac octave opencv;
   };
 
   meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
-    homepage = "https://github.com/xianyi/OpenBLAS";
+    homepage = "https://github.com/OpenMathLib/OpenBLAS";
     platforms = attrNames configs;
     maintainers = with maintainers; [ ttuegel ];
   };

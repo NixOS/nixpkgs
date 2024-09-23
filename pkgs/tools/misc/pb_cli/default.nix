@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A no bullshit 0x0.st client";
+    description = "No bullshit 0x0.st client";
     homepage = "https://github.com/ptpb/pb_cli";
     maintainers = [ maintainers.ar1a ];
     license = licenses.gpl3Plus;

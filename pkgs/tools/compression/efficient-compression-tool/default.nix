@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "fhanau";
     repo = "Efficient-Compression-Tool";
     rev = "v${version}";
-    sha256 = "sha256-TSV5QXf6GuHAwQrde3Zo9MA1rtpAhtRg0UTzMkBnHB8=";
+    hash = "sha256-TSV5QXf6GuHAwQrde3Zo9MA1rtpAhtRg0UTzMkBnHB8=";
     fetchSubmodules = true;
   };
 
@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
   cmakeDir = "../src";
 
   cmakeFlags = [ "-DECT_FOLDER_SUPPORT=ON" ];
+
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' does not name a type
+    "-include cstdint"
+  ];
 
   meta = with lib; {
     description = "Fast and effective C++ file optimizer";

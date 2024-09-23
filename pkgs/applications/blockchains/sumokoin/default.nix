@@ -43,11 +43,13 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
+  env.CXXFLAGS = "-include cstdint";
+
   # cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    description = "A fork of Monero and a truely fungible cryptocurrency";
+    description = "Fork of Monero and a truely fungible cryptocurrency";
     homepage = "https://www.sumokoin.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wegank ];

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, cmake
 , fetchFromGitLab
 , pkg-config
 , meson
@@ -45,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "USB traffic redirection protocol";
+    mainProgram = "usbredirect";
     homepage = "https://www.spice-space.org/usbredir.html";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ offline ];

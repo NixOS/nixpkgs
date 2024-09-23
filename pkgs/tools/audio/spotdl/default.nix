@@ -1,60 +1,51 @@
 { lib
 , python3
-, fetchPypi
 , fetchFromGitHub
 , ffmpeg
 }:
 
-let
-  python = python3;
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.2";
+  version = "4.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pJr0OGUI3OcFsmvn9eqkvpFeF1EkHDdNoWc91s8h9O8=";
+    hash = "sha256-1NPYMyiYWWpiGlr80IcILcC1nI8zkmf7+aA+mqwSAU0=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python.pkgs; [
-    spotipy
-    ytmusicapi
-    pytube
-    yt-dlp
-    mutagen
-    rich
+  dependencies = with python3.pkgs; [
     beautifulsoup4
-    requests
-    rapidfuzz
-    python-slugify
-    uvicorn
-    pydantic
     fastapi
+    mutagen
     platformdirs
+    pydantic
     pykakasi
-    syncedlyrics
-    typing-extensions
+    python-slugify
+    pytube
+    rapidfuzz
+    requests
+    rich
     soundcloud-v2
-    bandcamp-api
-    setuptools # for pkg_resources
+    spotipy
+    syncedlyrics
+    uvicorn
+    yt-dlp
+    ytmusicapi
   ] ++ python-slugify.optional-dependencies.unidecode;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    pytest-mock
-    pytest-vcr
+  nativeCheckInputs = with python3.pkgs; [
     pyfakefs
+    pytest-mock
     pytest-subprocess
+    pytest-vcr
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -62,7 +53,7 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   disabledTestPaths = [
-    # require networking
+    # Tests require networking
     "tests/test_init.py"
     "tests/test_matching.py"
     "tests/providers/lyrics"
@@ -74,13 +65,15 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # require networking
+    # Test require networking
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
     "test_preload_song"
-    "test_ytm_get_results"
+    "test_yt_get_results"
+    "test_yt_search"
     "test_ytm_search"
+    "test_ytm_get_results"
   ];
 
   makeWrapperArgs = [
@@ -93,5 +86,6 @@ in python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "spotdl";
   };
 }

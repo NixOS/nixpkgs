@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, gnome, gmime3, webkitgtk, ronn
-, libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, adwaita-icon-theme, gmime3, webkitgtk, ronn
+, libsass, notmuch, boost, wrapGAppsHook3, glib-networking, protobuf
 , gtkmm3, libpeas, gsettings-desktop-schemas, gobject-introspection, python3
 
 # vim to be used, should support the GUI mode.
@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake ronn pkg-config wrapGAppsHook gobject-introspection
+    cmake ronn pkg-config wrapGAppsHook3 gobject-introspection
     python3 python3.pkgs.wrapPython
   ];
 
   buildInputs = [
     gtkmm3 gmime3 webkitgtk libsass libpeas
     python3
-    notmuch boost gsettings-desktop-schemas gnome.adwaita-icon-theme
+    notmuch boost gsettings-desktop-schemas adwaita-icon-theme
     glib-networking protobuf
     vim
   ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     sed -i "s~ -geom 10x10~~g" src/config.cc
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ] ++ extraPythonPackages;
+  pythonPath = with python3.pkgs; requiredPythonModules extraPythonPackages;
   preFixup = ''
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://astroidmail.github.io/";
     description = "GTK frontend to the notmuch mail system";
+    mainProgram = "astroid";
     maintainers = with maintainers; [ bdimcheff SuprDewd ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

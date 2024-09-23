@@ -9,12 +9,14 @@
 , libsecret
 , mesa
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "8.1.2";
+  version = "9.6.1";
+  revision = "204";
 
   src = fetchurl {
     # find the latest version with
@@ -23,8 +25,8 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_167.snap";
-    hash = "sha512-M/cyLfSnoCFJcdGXlA5/kH/MuyRpYcfBoyp6y6KSsTyh8Goq6niGZAQcCdIjNX8KVUvmcTWISsx8so4W5BrkCw==";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
+    hash = "sha512-ok3B/h+d0Q7k5i+IjgGB+4S5g2kzrQT/b4dYz4k07OnyfjJRgJ4X4f7BFFrwKLd+IbIC5OIibrvivWnkSWU3Ew==";
   };
 
   desktopItem = makeDesktopItem {
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
-  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook3 ];
 
   buildInputs = [
     alsa-lib
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/termius
     cp -r ./ $out/opt/termius
 
-    mkdir -p "$out/share/applications" "$out/share/pixmaps/termius-app.png"
+    mkdir -p "$out/share/applications" "$out/share/pixmaps"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
     cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
 
@@ -77,8 +79,30 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
+  passthru.updateScript = writeScript "update-termius" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl jq
+
+    set -eu -o pipefail
+
+    data=$(curl -H 'X-Ubuntu-Series: 16' \
+    'https://api.snapcraft.io/api/v1/snaps/details/termius-app?fields=download_sha512,revision,version')
+
+    version=$(jq -r .version <<<"$data")
+
+    if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
+
+        revision=$(jq -r .revision <<<"$data")
+        hash=$(nix hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+
+        update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
+        update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"
+
+    fi
+  '';
+
   meta = with lib; {
-    description = "A cross-platform SSH client with cloud data sync and more";
+    description = "Cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

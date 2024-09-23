@@ -1,36 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, flit-core
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.0.2";
-  format = "pyproject";
+  version = "4.0.9";
+  pyproject = true;
 
-  src = fetchFromGitLab {
-    owner = "Taywee";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "absperf";
     repo = "asyncinotify";
-    rev = "v${version}";
-    hash = "sha256-Q7b406UENCmD9SGbaml+y2YLDi7VLZBmDkYMo8CLuVw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Pmv1BXmKUNjFE5h99GR0GmjYKYmTi8ECKAUCKwIAMzc=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  checkPhase = ''
-    ${python.pythonOnBuildForHost.interpreter} ${src}/test.py
-  '';
-  pythonImportsCheck = ["asyncinotify"];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "asyncinotify" ];
+
+  pytestFlagsArray = [ "test.py" ];
 
   meta = with lib; {
-    description = "A simple optionally-async python inotify library, focused on simplicity of use and operation, and leveraging modern Python features";
-    homepage = "https://pypi.org/project/asyncinotify/";
-    changelog = "https://gitlab.com/Taywee/asyncinotify/-/blob/master/CHANGELOG.md";
-    license = licenses.mit;
+    description = "Module for inotify";
+    homepage = "https://github.com/absperf/asyncinotify/";
+    changelog = "https://github.com/absperf/asyncinotify/releases/tag/v${version}";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ cynerd ];
   };
 }

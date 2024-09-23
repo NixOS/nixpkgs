@@ -4,12 +4,12 @@ let
   archiveVersion = import ./archive-version.nix lib;
   mkTool = { pname, makeTarget, description, homepage, mainProgram }: stdenv.mkDerivation rec {
     inherit pname;
-    version = "3.43.2";
+    version = "3.46.0";
 
     # nixpkgs-update: no auto update
     src = assert version == sqlite.version; fetchurl {
-      url = "https://sqlite.org/2023/sqlite-src-${archiveVersion version}.zip";
-      hash = "sha256-62ZRUj9XpccPJC/Ba8QWuB7QLVkmOb+34JnyAeL5otM=";
+      url = "https://sqlite.org/2024/sqlite-src-${archiveVersion version}.zip";
+      hash = "sha256-BwNiEJvraJn2V5dXG5i4gkyPQ39bKSb4juBo2Y7zaOw=";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -32,14 +32,14 @@ in
   sqldiff = mkTool {
     pname = "sqldiff";
     makeTarget = "sqldiff";
-    description = "A tool that displays the differences between SQLite databases";
+    description = "Tool that displays the differences between SQLite databases";
     homepage = "https://www.sqlite.org/sqldiff.html";
     mainProgram = "sqldiff";
   };
   sqlite-analyzer = mkTool {
     pname = "sqlite-analyzer";
     makeTarget = "sqlite3_analyzer";
-    description = "A tool that shows statistics about SQLite databases";
+    description = "Tool that shows statistics about SQLite databases";
     homepage = "https://www.sqlite.org/sqlanalyze.html";
     mainProgram = "sqlite3_analyzer";
   };

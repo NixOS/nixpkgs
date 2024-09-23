@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
   };
 
-  cargoSha256 = "sha256-cUE2IZOunR/NIo/qytORRfNqCsf87LfpKA8o/v4Nkhk=";
+  cargoHash = "sha256-cUE2IZOunR/NIo/qytORRfNqCsf87LfpKA8o/v4Nkhk=";
 
   nativeBuildInputs = [ glib pkg-config wrapGAppsHook4 ];
 
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple and fast GTK image viewer with basic image manipulation tools";
+    mainProgram = "image-roll";
     homepage = "https://github.com/weclaw1/image-roll";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

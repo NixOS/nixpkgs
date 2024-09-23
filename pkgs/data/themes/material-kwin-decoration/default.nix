@@ -17,7 +17,7 @@
 
 mkDerivation rec {
   pname = "material-kwin-decoration";
-  version = "unstable-2023-01-15";
+  version = "7-unstable-2023-01-15";
 
   src = fetchFromGitHub {
     owner = "Zren";
@@ -47,7 +47,9 @@ mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
   };
 
   meta = with lib; {

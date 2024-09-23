@@ -1,0 +1,39 @@
+From f63028c5712a89cb310165cde9701538fa85ce46 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=A9clairevoyant?=
+ <848000+eclairevoyant@users.noreply.github.com>
+Date: Wed, 6 Mar 2024 06:09:44 -0500
+Subject: [PATCH] fix desktop item
+
+---
+ Makefile                | 1 -
+ src/etc/wslview.desktop | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 2399009..e823882 100644
+--- a/Makefile
++++ b/Makefile
+@@ -59,7 +59,6 @@ res_install:
+ 	install -Dm 644 src/etc/*.ps1 -t $(DESTDIR)$(PREFIX)/share/wslu
+ 	install -Dm 644 src/etc/*.ico -t $(DESTDIR)$(PREFIX)/share/wslu
+ 	install -Dm 755 src/etc/*.sh -t $(DESTDIR)$(PREFIX)/share/wslu
+-	install -Dm 644 src/etc/*.desktop $(DESTDIR)$(PREFIX)/share/wslu
+ 	install -Dm 644 src/etc/conf $(DESTDIR)$(PREFIX)/share/wslu
+ 
+ conf_install:
+diff --git a/src/etc/wslview.desktop b/src/etc/wslview.desktop
+index ebb84b6..235a365 100644
+--- a/src/etc/wslview.desktop
++++ b/src/etc/wslview.desktop
+@@ -2,7 +2,7 @@
+ Name=WSLView
+ Comment=Open files and addresses in Windows
+ Icon=windows
+-Exec=/usr/bin/wslview %U
++Exec=wslview %U
+ Terminal=false
+ Type=Application
+ Categories=Utility;
+-- 
+2.43.1
+

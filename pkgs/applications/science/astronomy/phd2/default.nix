@@ -1,21 +1,21 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK32
-, curl, gettext, glib, indi-full, libnova, wrapGAppsHook }:
+, curl, gettext, glib, indi-full, libnova, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "phd2";
-  version = "2.6.12";
+  version = "2.6.13";
 
   src = fetchFromGitHub {
     owner = "OpenPHDGuiding";
     repo = "phd2";
     rev = "v${version}";
-    sha256 = "sha256-vq6qhwL8mB5ET/9qFWDZHxqL+RDXRly+CwbRz/wuyZg=";
+    sha256 = "sha256-GnT/tyk975caqESBSu4mdX5IWGi5O+RljLSd+CwoGWo=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

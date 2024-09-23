@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, nose2
-, msgpack
-, cbor2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  nose2,
+  msgpack,
+  cbor2,
 }:
 
 buildPythonPackage rec {
   pname = "persist-queue";
-  version = "0.8.1";
+  version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4ZONOsbZthaSwRX43crajZox8iUGeCWF45WIpB7Ppao=";
+    hash = "sha256-P/t0aQLTAj/QnrRol2Cf3ubHexZB8Z4vyNmNdEvfyEU=";
   };
 
   disabled = pythonOlder "3.6";

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    hash = "sha256-3qLmo9Ibl44v6Jj5Ix17ixwqfPt3ITTXUqBETF5pzE4=";
+    hash = "sha256-CzKfvQzhF4Mz2WZaJM/Nt6XjF6ThlX4jyQSaXfZukG8=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
     homepage    = "https://www.fluidsynth.org";
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ goibhniu lovek323 ];
+    maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    mainProgram = "fluidsynth";
   };
 }

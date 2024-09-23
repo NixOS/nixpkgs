@@ -1,33 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, cython
-, nose
-, pytest
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  meson-python,
+  cython,
+  pytestCheckHook,
+  numpy,
 }:
 
 buildPythonPackage rec {
-  pname = "PyWavelets";
-  version = "1.4.1";
-  disabled = isPy27;
+  pname = "pywavelets";
+  version = "1.6.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZDevPd8IMRjCbY+Xq0OwckuVbJ+Vjp6niGWfaig0upM=";
+  disabled = pythonOlder "3.9";
+
+  src = fetchFromGitHub {
+    owner = "PyWavelets";
+    repo = "pywt";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Dr6LWGVlYGDD21l1RQ7elScovcen5uuFdJJXe3deB5o=";
   };
 
-  nativeCheckInputs = [ nose pytest ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
+  '';
 
-  buildInputs = [ cython ];
+  build-system = [
+    meson-python
+    cython
+    numpy
+  ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
-  # Somehow nosetests doesn't run the tests, so let's use pytest instead
-  doCheck = false; # tests use relative paths, which fail to resolve
-  checkPhase = ''
-    py.test pywt/tests
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    cd $out
   '';
 
   # ensure compiled modules are present
@@ -42,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Wavelet transform module";
     homepage = "https://github.com/PyWavelets/pywt";
+    changelog = "https://github.com/PyWavelets/pywt/releases/tag/v${version}";
     license = licenses.mit;
   };
-
 }

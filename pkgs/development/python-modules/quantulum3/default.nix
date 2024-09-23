@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
   # build inputs
-, inflect
-, num2words
-, numpy
-, scipy
-, scikit-learn
-, joblib
-, wikipedia
-, stemming
-, setuptools
+  inflect,
+  num2words,
+  numpy,
+  scipy,
+  scikit-learn,
+  joblib,
+  wikipedia,
+  stemming,
+  setuptools,
 }:
 let
   pname = "quantulum3";
@@ -48,6 +48,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Library for unit extraction - fork of quantulum for python3";
+    mainProgram = "quantulum3-training";
     homepage = "https://github.com/nielstron/quantulum3";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

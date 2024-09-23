@@ -4,15 +4,12 @@
 , lib
 , emptyDirectory
 , linkFarm
-, symlinkJoin
 , jam
-, libcxx
-, libcxxabi
 , openssl
-, xcbuild
 , CoreServices
 , Foundation
 , Security
+, testers
 }:
 
 let
@@ -33,19 +30,15 @@ let
       # cone-based Git sparse checkout, either.)
       { name = "contrib"; path = "${src}/contrib"; }
     ];
-  libcxxUnified = symlinkJoin {
-    inherit (libcxx) name;
-    paths = [ libcxx libcxxabi ];
-  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "p4";
-  version = "2022.2.2407422";
+  version = "2024.1/2596294";
 
   src = fetchurl {
     # Upstream replaces minor versions, so use archived URL.
-    url = "https://web.archive.org/web/20230512173806id_/https://ftp.perforce.com/perforce/r22.2/bin.tools/p4source.tgz";
-    sha256 = "4355375def3f3d2256d4a92ac1b9960173e7aa97404346c0c74caf23a0905e1b";
+    url = "https://web.archive.org/web/20240526153453id_/https://ftp.perforce.com/perforce/r24.1/bin.tools/p4source.tgz";
+    sha256 = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
   };
 
   nativeBuildInputs = [ jam ];
@@ -70,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [
       "-sOSVER=1013"
       "-sMACOSX_SDK=${emptyDirectory}"
-      "-sLIBC++DIR=${libcxxUnified}/lib"
+      "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
     ];
 
   CCFLAGS =
@@ -99,10 +92,15 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $bin/bin $dev $out
     cp bin.unix/p4 $bin/bin
-    cp -r bin.unix/p4api-${version}/include $dev
-    cp -r bin.unix/p4api-${version}/lib $out
+    cp -r bin.unix/p4api-*/include $dev
+    cp -r bin.unix/p4api-*/lib $out
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "p4 -V";
+  };
 
   meta = with lib; {
     description = "Perforce Helix Core command-line client and APIs";
@@ -112,4 +110,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ corngood impl ];
   };
-}
+})

@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustdesk-server";
-  version = "1.1.8";
+  version = "1.1.11-1";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk-server";
     rev = version;
-    hash = "sha256-KzIylbPe+YN513UNFuisvDAIe4kICGYDUrfURDOw/no=";
+    hash = "sha256-dAw1xKyZovPkz1qw58QymIvv7ABhmHs2lFx/H6g7GgI=";
   };
 
   cargoLock = {

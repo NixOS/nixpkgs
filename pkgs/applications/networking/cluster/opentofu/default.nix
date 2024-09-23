@@ -14,28 +14,29 @@
 let
   package =  buildGoModule rec {
     pname = "opentofu";
-    version = "1.6.0-beta1";
+    version = "1.8.2";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       rev = "v${version}";
-      hash = "sha256-bOZzMraJ1Bc5CauYkJLH4riCOhAbZlXh9TdBjJsp4Ds=";
+      hash = "sha256-kBI3Jgi4fDOx5bknTMlcI2K3LxKj6Q4dunbG9N33Ps0=";
     };
-    vendorHash = "sha256-T67VFtAsw6Dn+Ma0znwaa53GvzmrNLFoU17rCeJehKw=";
-    ldflags = [ "-s" "-w" ];
+
+    vendorHash = "sha256-cM2DSP2ss3vleUhPBIdyxKeWJxtHpdjL5b5HVS/iC6o=";
+    ldflags = [ "-s" "-w" "-X" "github.com/opentofu/opentofu/version.dev=no" ];
 
     postConfigure = ''
       # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
       substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-        --replace "/bin/stty" "${coreutils}/bin/stty"
+        --replace-fail "/bin/stty" "${coreutils}/bin/stty"
     '';
 
     nativeBuildInputs = [ installShellFiles ];
     patches = [ ./provider-path-0_15.patch ];
 
     passthru = {
-      inherit plugins withPlugins;
+      inherit full plugins withPlugins;
       tests = { inherit opentofu_plugins_test; };
     };
 
@@ -57,12 +58,14 @@ let
       changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
       license = licenses.mpl20;
       maintainers = with maintainers; [
-        gmemstr
         nickcao
+        zowoq
       ];
       mainProgram = "tofu";
     };
   };
+
+  full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
   opentofu_plugins_test = let
     mainTf = writeText "main.tf" ''
@@ -107,7 +110,6 @@ let
       passthru = {
         withPlugins = newplugins:
           withPlugins (x: newplugins x ++ actualPlugins);
-        full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
         # Expose wrappers around the override* functions of the terraform
         # derivation.

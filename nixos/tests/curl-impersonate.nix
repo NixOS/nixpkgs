@@ -97,6 +97,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
       pyyaml
       pytest-asyncio
       dpkt
+      ts1-signatures
     ]}"
 
     # Prepare test root prefix
@@ -113,7 +114,7 @@ in {
   name = "curl-impersonate";
 
   meta = with lib.maintainers; {
-    maintainers = [ lilyinstarlight ];
+    maintainers = [ ];
   };
 
   nodes = {
@@ -144,6 +145,8 @@ in {
     start_all()
 
     with subtest("Wait for network"):
+        web.systemctl("start network-online.target")
+        curl.systemctl("start network-online.target")
         web.wait_for_unit("network-online.target")
         curl.wait_for_unit("network-online.target")
 

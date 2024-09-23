@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.journalbeat;
 
@@ -18,46 +15,46 @@ in
 
     services.journalbeat = {
 
-      enable = mkEnableOption (lib.mdDoc "journalbeat");
+      enable = lib.mkEnableOption "journalbeat";
 
-      package = mkPackageOption pkgs "journalbeat" { };
+      package = lib.mkPackageOption pkgs "journalbeat" { };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "journalbeat";
-        description = lib.mdDoc "Name of the beat";
+        description = "Name of the beat";
       };
 
-      tags = mkOption {
-        type = types.listOf types.str;
+      tags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
-        description = lib.mdDoc "Tags to place on the shipped log messages";
+        description = "Tags to place on the shipped log messages";
       };
 
-      stateDir = mkOption {
-        type = types.str;
+      stateDir = lib.mkOption {
+        type = lib.types.str;
         default = "journalbeat";
-        description = lib.mdDoc ''
+        description = ''
           Directory below `/var/lib/` to store journalbeat's
           own logs and other data. This directory will be created automatically
           using systemd's StateDirectory mechanism.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc "Any other configuration options you want to add";
+        description = "Any other configuration options you want to add";
       };
 
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
-        assertion = !hasPrefix "/" cfg.stateDir;
+        assertion = !lib.hasPrefix "/" cfg.stateDir;
         message =
           "The option services.journalbeat.stateDir shouldn't be an absolute directory." +
           " It should be a directory relative to /var/lib/.";

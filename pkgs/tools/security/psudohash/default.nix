@@ -1,18 +1,18 @@
 {
   lib,
-  fetchFromGitHub,
   stdenv,
-  python3
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "psudohash";
-  version = "unstable-2023-05-15";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "t3l3machus";
     repo = "psudohash";
-    rev = "2d586dec8b5836546ae54b924eb59952a7ee393c";
+    rev = "refs/tags/v${version}";
     hash = "sha256-l/Rp9405Wf6vh85PFrRTtTLJE7GPODowseNqEw42J18=";
   };
 
@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Password list generator for orchestrating brute force attacks and cracking hashes";
     homepage = "https://github.com/t3l3machus/psudohash";
+    changelog = "https://github.com/t3l3machus/psudohash/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ exploitoverload ];
+    mainProgram = "psudohash";
   };
 }

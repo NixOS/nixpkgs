@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yash";
-  version = "2.55";
+  version = "2.57";
 
   src = fetchFromGitHub {
     owner = "magicant";
     repo = pname;
     rev = version;
-    hash = "sha256-raTIqklo69JEuhzdWUK3uywuLjqeQJCJ9nvnLRxlGr4=";
+    hash = "sha256-TqQWbwNk2P2vETJ2294bd689WBry0xRdz7xz/NnMBrk=";
   };
 
   strictDeps = true;
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://yash.osdn.jp/index.html.en";
     description = "Yet another POSIX-compliant shell";
+    mainProgram = "yash";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qbit ];
     platforms = platforms.all;

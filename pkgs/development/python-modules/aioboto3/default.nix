@@ -1,67 +1,71 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, aiobotocore
-, chalice
-, cryptography
-, boto3
-, pytestCheckHook
-, pytest-asyncio
-, requests
-, aiofiles
-, moto
-, dill
+{
+  lib,
+  aiobotocore,
+  aiofiles,
+  buildPythonPackage,
+  chalice,
+  cryptography,
+  dill,
+  fetchFromGitHub,
+  moto,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "11.3.0";
+  version = "13.1.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "terrycain";
     repo = "aioboto3";
-    rev = "v${version}";
-    hash = "sha256-jU9sKhbUdVeOvOXQnXR/S/4sBwTNcQCc9ZduO+HDXho=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g86RKQxTcfG1CIH3gfgn9Vl9JxUkeC1ztmLk4q/MVn0=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-    --replace poetry.masonry.api poetry.core.masonry.api \
-    --replace "poetry>=0.12" "poetry-core>=0.12"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
-    aiobotocore
-    boto3
-  ];
+  pythonRelaxDeps = [ "aiobotocore" ];
 
-  passthru.optional-dependencies = {
-    chalice = [
-      chalice
-    ];
-    s3cse = [
-      cryptography
-    ];
+  dependencies = [
+    aiobotocore
+    aiofiles
+  ] ++ aiobotocore.optional-dependencies.boto3;
+
+  optional-dependencies = {
+    chalice = [ chalice ];
+    s3cse = [ cryptography ];
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    requests
-    aiofiles
-    moto
     dill
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    moto
+    pytest-asyncio
+    pytestCheckHook
+    requests
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aioboto3" ];
+
+  disabledTests = [
+    # Our moto package is not ready to support more tests
+    "encrypt_decrypt_aes_cbc"
+    "test_chalice_async"
+    "test_dynamo"
+    "test_flush_doesnt_reset_item_buffer"
+    "test_kms"
+    "test_s3"
+  ];
 
   meta = with lib; {
     description = "Wrapper to use boto3 resources with the aiobotocore async backend";

@@ -2,27 +2,34 @@
 , buildGoModule
 , fetchFromGitHub
 , nix-update-script
+, pkg-config
+, libusb1
 }:
 
 buildGoModule rec {
   pname = "go-ios";
-  version = "1.0.120";
+  version = "1.0.143";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
-    sha256 = "sha256-qBy1lfG1Uppld9jwsdxHfV8oibPfr13RONfBl9GSLjs=";
+    sha256 = "sha256-6RiKyhV5y6lOrhfZezSB2m/l17T3bHYaYRhsMf04wT8=";
   };
 
-  vendorHash = "sha256-lLpvpT0QVVyy12HmtOQxagT0JNwRO7CcfkGhCpouH8w=";
+  proxyVendor = true;
+  vendorHash = "sha256-GfVHAOlN2tL21ILQYPw/IaYQZccxitjHGQ09unfHcKg=";
 
   excludedPackages = [
     "restapi"
   ];
 
-  checkFlags = [
-    "-tags=fast"
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libusb1
   ];
 
   postInstall = ''
@@ -30,10 +37,20 @@ buildGoModule rec {
     mv $out/bin/go-ios $out/bin/ios
   '';
 
+  # skips all the integration tests (requires iOS device) (`-tags=fast`)
+  # as well as tests that requires networking
+  checkFlags = let
+    skippedTests = [
+      "TestWorksWithoutProxy"
+      "TestUsesProxy"
+    ];
+  in [ "-tags=fast" ]
+  ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "An operating system independent implementation of iOS device features";
+    description = "Operating system independent implementation of iOS device features";
     homepage = "https://github.com/danielpaulus/go-ios";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

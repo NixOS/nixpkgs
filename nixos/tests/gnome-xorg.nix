@@ -15,15 +15,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.displayManager = {
         gdm.enable = true;
         gdm.debug = true;
-        autoLogin = {
-          enable = true;
-          user = user.name;
-        };
+      };
+
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = user.name;
       };
 
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
-      services.xserver.displayManager.defaultSession = "gnome-xorg";
+      services.displayManager.defaultSession = "gnome-xorg";
 
       systemd.user.services = {
         "org.gnome.Shell@x11" = {
@@ -34,7 +35,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
               # Eval API is now internal so Shell needs to run in unsafe mode.
               # TODO: improve test driver so that it supports openqa-like manipulation
               # that would allow us to drop this mess.
-              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+              "${pkgs.gnome-shell}/bin/gnome-shell --unsafe-mode"
             ];
           };
         };

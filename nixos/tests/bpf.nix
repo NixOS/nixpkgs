@@ -16,14 +16,14 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     # list probes
     machine.succeed("bpftrace -l")
     # simple BEGIN probe (user probe on bpftrace itself)
-    print(machine.succeed("bpftrace -e 'BEGIN { print(\"ok\"); exit(); }'"))
+    print(machine.succeed("bpftrace -e 'BEGIN { print(\"ok\\n\"); exit(); }'"))
     # tracepoint
     print(machine.succeed("bpftrace -e 'tracepoint:syscalls:sys_enter_* { print(probe); exit() }'"))
     # kprobe
     print(machine.succeed("bpftrace -e 'kprobe:schedule { print(probe); exit() }'"))
     # BTF
     print(machine.succeed("bpftrace -e 'kprobe:schedule { "
-        "    printf(\"tgid: %d\", ((struct task_struct*) curtask)->tgid); exit() "
+        "    printf(\"tgid: %d\\n\", ((struct task_struct*) curtask)->tgid); exit() "
         "}'"))
     # module BTF (bpftrace >= 0.17)
     # test is currently disabled on aarch64 as kfunc does not work there yet
@@ -32,5 +32,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         "bpftrace -e 'kfunc:nft_trans_alloc_gfp { "
         "    printf(\"portid: %d\\n\", args->ctx->portid); "
         "} BEGIN { exit() }'"))
+    # glibc includes
+    print(machine.succeed("bpftrace -e '#include <errno.h>\n"
+        "BEGIN { printf(\"ok %d\\n\", EINVAL); exit(); }'"))
   '';
 })

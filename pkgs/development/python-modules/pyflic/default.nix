@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyflic";
-  version = "2.0.3";
+  version = "2.0.4";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "soldag";
     repo = pname;
     rev = version;
-    sha256 = "0adf4k191138jmbsfhkhhbgaxcq97d1hr5w48ryxr1fig64sjqy2";
+    sha256 = "sha256-K1trMBZfc1aHSNSddq0v//Gv8ySgT/ONQYgrKWzw2qs=";
   };
 
   # Projec thas no tests

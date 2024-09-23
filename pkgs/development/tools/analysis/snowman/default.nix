@@ -25,7 +25,7 @@ mkDerivation rec {
 
     # https://github.com/yegord/snowman/blob/master/doc/licenses.asciidoc
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

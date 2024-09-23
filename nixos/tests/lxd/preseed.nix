@@ -3,10 +3,6 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
 {
   name = "lxd-preseed";
 
-  meta = {
-    maintainers = with lib.maintainers; [ adamcstephens ];
-  };
-
   nodes.machine = { lib, ... }: {
     virtualisation = {
       diskSize = 4096;

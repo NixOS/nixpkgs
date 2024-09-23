@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A faster, more efficient replacement for std::unordered_map / std::unordered_set";
+    description = "Faster, more efficient replacement for std::unordered_map / std::unordered_set";
     homepage    = "https://github.com/martinus/robin-hood-hashing";
     platforms   = platforms.linux;
     license     = licenses.mit;

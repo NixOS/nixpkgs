@@ -30,6 +30,7 @@ let
       meta = with lib; {
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
+        mainProgram = "ragel";
         inherit broken license;
         platforms = platforms.unix;
         maintainers = with maintainers; [ pSub ];

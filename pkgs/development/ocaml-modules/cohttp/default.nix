@@ -1,18 +1,18 @@
 { lib, fetchurl, buildDunePackage
 , ppx_sexp_conv, base64, jsonm, re, stringext, uri-sexp
-, ocaml, fmt, alcotest
+, fmt, alcotest
 , crowbar
 }:
 
 buildDunePackage rec {
   pname = "cohttp";
-  version = "5.3.0";
+  version = "5.3.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-${version}.tbz";
-    hash = "sha256-s72RxwTl6lEOkkuDqy7eH8RqLM5Eiw+M70iDuaFu7d0=";
+    hash = "sha256-9eJz08Lyn/R71+Ftsj4fPWzQGkC+ACCJhbxDTIjUV2s=";
   };
 
   postPatch = ''

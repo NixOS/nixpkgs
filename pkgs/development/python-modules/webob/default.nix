@@ -1,14 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  legacy-cgi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "webob";
   version = "1.8.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,13 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-tk71FBvlWc+t5EjwRPpFwiYDUe3Lao72t+AMfc7wwyM=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "webob"
-  ];
+  # https://github.com/Pylons/webob/issues/437
+  dependencies = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "webob" ];
 
   disabledTestPaths = [
     # AttributeError: 'Thread' object has no attribute 'isAlive'
@@ -36,6 +41,6 @@ buildPythonPackage rec {
     description = "WSGI request and response object";
     homepage = "https://webob.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

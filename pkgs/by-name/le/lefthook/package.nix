@@ -6,19 +6,19 @@
 
 let
   pname = "lefthook";
-  version = "1.5.3";
+  version = "1.7.15";
 in
-buildGoModule rec {
+buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${version}";
-    hash = "sha256-pC6kEDOXNcuMfDvXomPZVMWpS/aHR4P4pIhqNkXAGuc=";
+    hash = "sha256-N79unpeeOwcdHJo9IbsGa/gmTyg+QQCJF599cshV3sc=";
   };
 
-  vendorHash = "sha256-/VLS7+nPERjIU7V2CzqXH69Z3/y+GKZbAFn+KcRKRuA=";
+  vendorHash = "sha256-rJdtax3r5Nwew+ptY4kIAUtxqPguwrFMMRk78zrZUcU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

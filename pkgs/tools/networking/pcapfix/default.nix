@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;
+    mainProgram = "pcapfix";
   };
 }

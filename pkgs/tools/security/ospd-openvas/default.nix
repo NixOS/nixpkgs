@@ -1,29 +1,29 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ospd-openvas";
-  version = "22.6.2";
-  format = "pyproject";
+  version = "22.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "ospd-openvas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SO2+PpxjyP+Yba0X81EgNCOAu7ntlG7zOeWA+7XdRIA=";
+    hash = "sha256-bFZTwNITDG5OpoWD7F1Ad6BQFpY4Q5CGUGbYy7rTuc0=";
   };
 
   pythonRelaxDeps = [
+    "defusedxml"
     "packaging"
+    "psutil"
     "python-gnupg"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     defusedxml
@@ -37,13 +37,9 @@ python3.pkgs.buildPythonApplication rec {
     sentry-sdk
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ospd_openvas"
-  ];
+  pythonImportsCheck = [ "ospd_openvas" ];
 
   meta = with lib; {
     description = "OSP server implementation to allow GVM to remotely control an OpenVAS Scanner";
@@ -51,5 +47,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/greenbone/ospd-openvas/releases/tag/v${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

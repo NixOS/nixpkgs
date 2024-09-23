@@ -1,30 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  sshs,
 }:
 
-buildGoModule rec {
+rustPlatform.buildRustPackage rec {
   pname = "sshs";
-  version = "3.4.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
-    repo = pname;
+    repo = "sshs";
     rev = version;
-    hash = "sha256-KD971dGm1oQt9GbiUGZm2k4SJrBAA9rnHj7Gu0t3SJw=";
+    hash = "sha256-8tIIpGEQBXfLQ/Bok4KrpDGwoYhIQz/ylg6fUc6mBdc=";
   };
 
-  vendorHash = "sha256-OCh37wjSs40Q0VQmoc1nXQ4nWddnoUCrI5xgxpxR/Ec=";
+  cargoHash = "sha256-w+KYaYO3LXUEk4If6LSncS5KZJyNl8JMLGa+NtF3hf0=";
 
-  ldflags = [ "-s" "-w" "-X github.com/quantumsheep/sshs/cmd.Version=${version}" ];
+  passthru.tests.version = testers.testVersion { package = sshs; };
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
+  meta = {
     description = "Terminal user interface for SSH";
     homepage = "https://github.com/quantumsheep/sshs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ not-my-segfault ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ not-my-segfault ];
+    mainProgram = "sshs";
   };
 }

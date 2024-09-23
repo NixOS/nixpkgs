@@ -10,7 +10,7 @@
 , qtbase
 , qtsvg
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 
 , guiSupport ? true
@@ -30,19 +30,19 @@ stdenv.mkDerivation rec {
   pname = "qbittorrent"
     + lib.optionalString (guiSupport && qtVersion == "5") "-qt5"
     + lib.optionalString (!guiSupport) "-nox";
-  version = "4.6.2";
+  version = "4.6.5";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    hash = "sha256-+leX0T+yJUG6F7WbHa3nCexQZmd7RRfK8Uc+suMJ+vI=";
+    hash = "sha256-umJObvPv4VjdAZdQEuhqFCRvi1eZQViu1IO88oeTTq8=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha kashw2 paveloom ];
+    maintainers = with maintainers; [ Anton-Latukha kashw2 ];
   };
 }

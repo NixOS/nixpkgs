@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xcp";
-  version = "0.12.1";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "tarka";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-P+KrqimZwbUVNAD5P+coBDSjqNnq18g/wSlhT8tWrkA=";
+    hash = "sha256-psxA4YgrO1zg1hVL93opxxQ4VgjdmLP7KI2nkhEYmaE=";
   };
 
   # no such file or directory errors
   doCheck = false;
 
-  cargoHash = "sha256-ULHS2uOFh8y011qs51zQQUkq7drqD5TlQkMLAaJsFx8=";
+  cargoHash = "sha256-o29DesCKOtl4aQysFOVZUm2BghkFbxBOQi02KrUJRGM=";
 
   meta = with lib; {
-    description = "An extended cp(1)";
+    description = "Extended cp(1)";
     homepage = "https://github.com/tarka/xcp";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lom ];

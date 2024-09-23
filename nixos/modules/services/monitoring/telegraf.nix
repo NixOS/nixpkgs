@@ -11,7 +11,7 @@ in {
   ###### interface
   options = {
     services.telegraf = {
-      enable = mkEnableOption (lib.mdDoc "telegraf server");
+      enable = mkEnableOption "telegraf server";
 
       package = mkPackageOption pkgs "telegraf" { };
 
@@ -19,7 +19,7 @@ in {
         type = types.listOf types.path;
         default = [];
         example = [ "/run/keys/telegraf.env" ];
-        description = lib.mdDoc ''
+        description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
           syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
@@ -29,7 +29,7 @@ in {
 
       extraConfig = mkOption {
         default = {};
-        description = lib.mdDoc "Extra configuration options for telegraf";
+        description = "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {
           outputs.influxdb = {
@@ -59,8 +59,10 @@ in {
     in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps;
+      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps
+             ++ lib.optional (config.services.telegraf.extraConfig.inputs ? ping) pkgs.iputils;
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFiles;
         ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])

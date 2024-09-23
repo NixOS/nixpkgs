@@ -14,7 +14,7 @@
 , fcitx5-gtk
 , ibus
 , uim #IME
-, wrapGAppsHook #color picker in mlconfig
+, wrapGAppsHook3 #color picker in mlconfig
 , gdk-pixbuf
 , gtk3
 , gtk ? gtk3
@@ -111,7 +111,7 @@ in stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoconf
   ] ++ lib.optionals enableTools.mlconfig [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk
@@ -164,6 +164,10 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace "-m 2755 -g utmp" " " \
       --replace "-m 4755 -o root" " "
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=incompatible-function-pointer-types";
+  };
 
   configureFlags = [
     (withFeaturesList "type-engines" enableTypeEngines)

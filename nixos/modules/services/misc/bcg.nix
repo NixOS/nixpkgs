@@ -4,13 +4,10 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.bcg;
   configFile = (pkgs.formats.yaml {}).generate "bcg.conf.yaml" (
-    filterAttrsRecursive (n: v: v != null) {
+    lib.filterAttrsRecursive (n: v: v != null) {
       inherit (cfg) device name mqtt;
       retain_node_messages = cfg.retainNodeMessages;
       qos_node_messages = cfg.qosNodeMessages;
@@ -25,32 +22,32 @@ in
 {
   options = {
     services.bcg = {
-      enable = mkEnableOption (mdDoc "BigClown gateway");
-      package = mkPackageOption pkgs [ "python3Packages" "bcg" ] { };
-      environmentFiles = mkOption {
-        type = types.listOf types.path;
+      enable = lib.mkEnableOption "BigClown gateway";
+      package = lib.mkPackageOption pkgs [ "python3Packages" "bcg" ] { };
+      environmentFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
         example = [ "/run/keys/bcg.env" ];
-        description = mdDoc ''
+        description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
           syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
           This is useful to avoid putting secrets into the nix store.
         '';
       };
-      verbose = mkOption {
-        type = types.enum ["CRITICAL" "ERROR" "WARNING" "INFO" "DEBUG"];
+      verbose = lib.mkOption {
+        type = lib.types.enum ["CRITICAL" "ERROR" "WARNING" "INFO" "DEBUG"];
         default = "WARNING";
-        description = mdDoc "Verbosity level.";
+        description = "Verbosity level.";
       };
-      device = mkOption {
-        type = types.str;
-        description = mdDoc "Device name to configure gateway to use.";
+      device = lib.mkOption {
+        type = lib.types.str;
+        description = "Device name to configure gateway to use.";
       };
-      name = mkOption {
-        type = with types; nullOr str;
+      name = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
-        description = mdDoc ''
+        description = ''
           Name for the device.
 
           Supported variables:
@@ -61,86 +58,86 @@ in
         '';
       };
       mqtt = {
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1";
-          description = mdDoc "Host where MQTT server is running.";
+          description = "Host where MQTT server is running.";
         };
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 1883;
-          description = mdDoc "Port of MQTT server.";
+          description = "Port of MQTT server.";
         };
-        username = mkOption {
-          type = with types; nullOr str;
+        username = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc "MQTT server access username.";
+          description = "MQTT server access username.";
         };
-        password = mkOption {
-          type = with types; nullOr str;
+        password = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc "MQTT server access password.";
+          description = "MQTT server access password.";
         };
-        cafile = mkOption {
-          type = with types; nullOr str;
+        cafile = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc "Certificate Authority file for MQTT server access.";
+          description = "Certificate Authority file for MQTT server access.";
         };
-        certfile = mkOption {
-          type = with types; nullOr str;
+        certfile = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc "Certificate file for MQTT server access.";
+          description = "Certificate file for MQTT server access.";
         };
-        keyfile = mkOption {
-          type = with types; nullOr str;
+        keyfile = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc "Key file for MQTT server access.";
+          description = "Key file for MQTT server access.";
         };
       };
-      retainNodeMessages = mkOption {
-        type = types.bool;
+      retainNodeMessages = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = mdDoc "Specify that node messages should be retaied in MQTT broker.";
+        description = "Specify that node messages should be retaied in MQTT broker.";
       };
-      qosNodeMessages = mkOption {
-        type = types.int;
+      qosNodeMessages = lib.mkOption {
+        type = lib.types.int;
         default = 1;
-        description = mdDoc "Set the guarantee of MQTT message delivery.";
+        description = "Set the guarantee of MQTT message delivery.";
       };
-      baseTopicPrefix = mkOption {
-        type = types.str;
+      baseTopicPrefix = lib.mkOption {
+        type = lib.types.str;
         default = "";
-        description = mdDoc "Topic prefix added to all MQTT messages.";
+        description = "Topic prefix added to all MQTT messages.";
       };
-      automaticRemoveKitFromNames = mkOption {
-        type = types.bool;
+      automaticRemoveKitFromNames = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = mdDoc "Automatically remove kits.";
+        description = "Automatically remove kits.";
       };
-      automaticRenameKitNodes = mkOption {
-        type = types.bool;
+      automaticRenameKitNodes = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = mdDoc "Automatically rename kit's nodes.";
+        description = "Automatically rename kit's nodes.";
       };
-      automaticRenameGenericNodes = mkOption {
-        type = types.bool;
+      automaticRenameGenericNodes = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = mdDoc "Automatically rename generic nodes.";
+        description = "Automatically rename generic nodes.";
       };
-      automaticRenameNodes = mkOption {
-        type = types.bool;
+      automaticRenameNodes = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = mdDoc "Automatically rename all nodes.";
+        description = "Automatically rename all nodes.";
       };
-      rename = mkOption {
-        type = with types; attrsOf str;
+      rename = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = {};
-        description = mdDoc "Rename nodes to different name.";
+        description = "Rename nodes to different name.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       python3Packages.bcg
       python3Packages.bch
@@ -149,20 +146,20 @@ in
     systemd.services.bcg = let
       envConfig = cfg.environmentFiles != [];
       finalConfig = if envConfig
-                    then "$RUNTIME_DIRECTORY/bcg.config.yaml"
+                    then "\${RUNTIME_DIRECTORY}/bcg.config.yaml"
                     else configFile;
     in {
       description = "BigClown Gateway";
       wantedBy = [ "multi-user.target" ];
-      wants = mkIf config.services.mosquitto.enable [ "mosquitto.service" ];
+      wants = [ "network-online.target" ] ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
       after = [ "network-online.target" ];
-      preStart = ''
+      preStart = lib.mkIf envConfig ''
         umask 077
         ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
         '';
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStart="${cfg.package}/bin/bcg -c ${finalConfig} -v ${cfg.verbose}";
+        ExecStart = "${cfg.package}/bin/bcg -c ${finalConfig} -v ${cfg.verbose}";
         RuntimeDirectory = "bcg";
       };
     };

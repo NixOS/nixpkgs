@@ -3,7 +3,7 @@ nvidia_x11: sha256:
 { stdenv, lib, fetchurl, patchelf }:
 
 let
-  sys = with lib; concatStringsSep "-" (reverseList (splitString "-" stdenv.system));
+  sys = lib.concatStringsSep "-" (lib.reverseList (lib.splitString "-" stdenv.system));
   bsys = builtins.replaceStrings ["_"] ["-"] sys;
   fmver = nvidia_x11.version;
 in
@@ -12,19 +12,18 @@ stdenv.mkDerivation rec {
   pname = "fabricmanager";
   version = fmver;
   src = fetchurl {
-    url = "https://developer.download.nvidia.com/compute/cuda/redist/fabricmanager/" +
+    url = "https://developer.download.nvidia.com/compute/nvidia-driver/redist/fabricmanager/" +
           "${sys}/${pname}-${sys}-${fmver}-archive.tar.xz";
     inherit sha256;
   };
-  phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
-    find .
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
     for bin in nv{-fabricmanager,switch-audit};do
     ${patchelf}/bin/patchelf \
       --set-interpreter ${stdenv.cc.libc}/lib/ld-${bsys}.so.2 \
       --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc ]} \
+      --shrink-rpath \
       bin/$bin
     done
     mv bin/nv{-fabricmanager,switch-audit} $out/bin/.
@@ -36,12 +35,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Fabricmanager daemon for NVLink intialization and control";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     mainProgram = "nv-fabricmanager";
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }

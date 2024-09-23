@@ -2,20 +2,20 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.virtualisation.lxc.lxcfs;
 in {
-  meta.maintainers = [ maintainers.mic92 ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   ###### interface
   options.virtualisation.lxc.lxcfs = {
     enable =
-      mkOption {
-        type = types.bool;
+      lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This enables LXCFS, a FUSE filesystem for LXC.
           To use lxcfs in include the following configuration in your
           container configuration:
@@ -27,7 +27,7 @@ in {
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.lxcfs = {
       description = "FUSE filesystem for LXC";
       wantedBy = [ "multi-user.target" ];

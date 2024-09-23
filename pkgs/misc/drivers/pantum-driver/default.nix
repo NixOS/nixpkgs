@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pantum-driver";
-  version = "1.1.84";
+  version = "1.1.123";
 
   src = fetchzip {
-    url = "https://drivers.pantum.com/Pantum_Ubuntu_Driver_V${version}_1.zip";
-    sha256 = "sha256-UJzYBsGj/TMhQoMourx7UPGBpN0MPi4pEN8m1sXLw/g=";
+    url = "https://github.com/ArticExploit/pantum-driver/releases/download/${version}/Pantum.Ubuntu.Driver.V${builtins.replaceStrings ["."] ["_"] version}.zip";
+    hash = "sha256-TUk6CTnWlSvyG8MOpDRhg/eblAo6X/MDUFOiWuOuro0=";
   };
 
   buildInputs = [ libusb1 libjpeg8 cups ];
@@ -43,11 +43,12 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libqpdf.so $out/lib/libqpdf.so.21
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Pantum universal driver";
     homepage = "https://global.pantum.com/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ deinferno ];
   };
 }

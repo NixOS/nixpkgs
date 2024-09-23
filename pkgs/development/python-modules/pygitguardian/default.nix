@@ -1,39 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, marshmallow-dataclass
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, setuptools
-, typing-extensions
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow-dataclass,
+  marshmallow,
+  pdm-backend,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  typing-extensions,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.11.0";
-  format = "pyproject";
+  version = "1.16.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vr0+y3Zi7DsXzm2COOlMqUVjlZMRJkaVxT8QpSePhuA=";
+    hash = "sha256-2yuYu02Nd9B3UfzrM0p19hDM5HmvigBf48gu+ZSO0kU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  pythonRelaxDeps = [
+    "marshmallow-dataclass"
+    "setuptools"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    pdm-backend
+  ];
+
+  dependencies = [
     marshmallow
     marshmallow-dataclass
     requests
+    setuptools
     typing-extensions
   ];
 
@@ -43,12 +51,11 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "pygitguardian"
-  ];
+  pythonImportsCheck = [ "pygitguardian" ];
 
   disabledTests = [
     # Tests require an API key
+    "test_bogus_rate_limit"
     "test_compute_sca_files"
     "test_content_scan_exceptions"
     "test_content_scan"
@@ -60,7 +67,12 @@ buildPythonPackage rec {
     "test_multi_content_scan"
     "test_multiscan_parameters"
     "test_quota_overview"
+    "test_rate_limit"
+    "test_read_metadata_bad_response"
+    "test_read_metadata_no_remediation_message"
+    "test_read_metadata_remediation_message"
     "test_sca_client_scan_diff"
+    "test_sca_scan_all_with_params"
     "test_sca_scan_directory_invalid_tar"
     "test_sca_scan_directory"
     "test_versions_from_headers"
@@ -69,7 +81,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to access the GitGuardian API";
     homepage = "https://github.com/GitGuardian/py-gitguardian";
-    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

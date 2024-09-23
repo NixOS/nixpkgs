@@ -1,5 +1,5 @@
 { mkDerivation, lib
-, extra-cmake-modules, kdoctools
+, extra-cmake-modules, kdoctools, wayland-scanner
 , kconfig, kcoreaddons, kcrash, kdbusaddons, kdnssd, knotifications, kwallet
 , kwidgetsaddons, kwindowsystem, kxmlgui, kwayland, kpipewire
 , libvncserver, libXtst, libXdamage
@@ -14,7 +14,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = with lib.maintainers; [ jerith666 ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
   buildInputs = [
     libvncserver libXtst libXdamage
     kconfig kcoreaddons kcrash kdbusaddons knotifications kwallet kwidgetsaddons

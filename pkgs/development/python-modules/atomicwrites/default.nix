@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "atomicwrites";
   version = "1.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

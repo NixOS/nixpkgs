@@ -1,7 +1,6 @@
 { buildPythonApplication
 , lib
 , fetchFromGitHub
-, fetchpatch
 
   # build inputs
 , atk
@@ -15,7 +14,7 @@
 , libnotify
 , pango
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 
   # check inputs
 , xvfb-run
@@ -40,7 +39,7 @@
 , xrandr
 , pciutils
 , psmisc
-, glxinfo
+, mesa-demos
 , vulkan-tools
 , xboxdrv
 , pulseaudio
@@ -59,7 +58,7 @@ let
     xrandr
     pciutils
     psmisc
-    glxinfo
+    mesa-demos
     vulkan-tools
     xboxdrv
     pulseaudio
@@ -76,25 +75,16 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.14";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    hash = "sha256-h7oHFVqMJU1HuuUgh5oKXxr9uaIPHz7Q4gf8ONLzric=";
+    hash = "sha256-Tr5k5LU0s75+1B17oK8tlgA6SlS1SHyyLS6UBKadUmw=";
   };
 
-  # Backport patch to fix a failing test
-  # FIXME: remove in next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/lutris/lutris/commit/1f1d554df3b38da64fc65557ad619e55e050641e.patch";
-      hash = "sha256-kVK1RX6T1ijffWVU7VEt2fR62QpvI6VZebiKPgEE/N8=";
-    })
-  ];
-
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
   buildInputs = [
     atk
     gdk-pixbuf
@@ -131,7 +121,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace lutris/util/magic.py \
-      --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
+      --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
   nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;

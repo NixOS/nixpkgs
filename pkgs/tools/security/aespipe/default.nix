@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aespipe";
-  version = "2.4g";
+  version = "2.4h";
 
   src = fetchurl {
     url = "mirror://sourceforge/loop-aes/aespipe/aespipe-v${version}.tar.bz2";
-    sha256 = "sha256-v7l+feFh6NfOETsWO9odGo7HfSwa+rVtzIFT16kBh/w=";
+    sha256 = "sha256-6rMR/CbqQyibw632YNYnBJJJSWByXSAm7EkXKUoaukk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "AES encrypting or decrypting pipe";
     homepage = "https://loop-aes.sourceforge.net/aespipe.README";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    license = licenses.gpl2Only;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

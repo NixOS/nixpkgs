@@ -1,27 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, webob
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  webob,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hawkauthlib";
   version = "0.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
-    repo = pname;
+    repo = "hawkauthlib";
     rev = "refs/tags/v${version}";
-    sha256 = "0mr1mpx4j9q7sch9arwfvpysnpf2p7ijy7072wilxm8pnj0bwvsi";
+    hash = "sha256-UW++gLQX1U4jFwccL+O5wl2r/d2OZ5Ug0wcnSfqtIVc=";
   };
 
-  propagatedBuildInputs = [ requests webob ];
+  postPatch = ''
+    substituteInPlace hawkauthlib/tests/* \
+        --replace-warn 'assertEquals' 'assertEqual'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    requests
+    webob
+  ];
+
+  pythonImportsCheck = [ "hawkauthlib" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/mozilla-services/hawkauthlib";
     description = "Hawk Access Authentication protocol";
     license = licenses.mpl20;
+    maintainers = [ ];
   };
-
 }

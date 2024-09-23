@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
+{
+  lib,
+  buildPythonPackage,
 
-, lang
-, version
-, format
-, src
+  lang,
+  version,
+  src,
+  build-system,
 }:
 
 buildPythonPackage rec {
   pname = "gruut-lang-${lang}";
-  inherit version format src;
+  pyproject = true;
+  inherit version src build-system;
 
   prePatch = ''
     cd "${pname}"
   '';
 
-  pythonImportsCheck = [
-    "gruut_lang_${lang}"
-  ];
+  pythonImportsCheck = [ "gruut_lang_${lang}" ];
 
   doCheck = false;
 

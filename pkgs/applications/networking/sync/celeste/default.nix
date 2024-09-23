@@ -2,7 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, substituteAll
+, darwin
 , just
 , pkg-config
 , wrapGAppsHook4
@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-fJK3UTa5NS+dSsjnqZtRN3HmHQ1bYU2jepkJ5tchYD4=";
+    hash = "sha256-Yj2PvAlAkwLaSE27KnzEmiRAD5K/YVGbF4+N3uhDVT8=";
   };
 
-  cargoHash = "sha256-/0w52bh9CsBoMTJsnWuEAQNgQzf92mbzh53H4iQYswc=";
+  cargoHash = "sha256-nlYkFgm5r6nAbJvtrXW2VxzVYq1GrSs8bzHYWOglL1c=";
 
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys
@@ -45,11 +45,6 @@ rustPlatform.buildRustPackage rec {
       --replace "{{ env_var('DESTDIR') }}/usr" "${placeholder "out"}"
     # buildRustPackage takes care of installing the binary
     sed -i "#/bin/celeste#d" justfile
-  '';
-
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo update --offline
   '';
 
   RUSTC_BOOTSTRAP = 1;
@@ -71,7 +66,14 @@ rustPlatform.buildRustPackage rec {
     libadwaita
     librclone
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.Security
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=incompatible-function-pointer-types"
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -86,6 +88,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     changelog = "https://github.com/hwittenborn/celeste/blob/${src.rev}/CHANGELOG.md";
     description = "GUI file synchronization client that can sync with any cloud provider";
+    mainProgram = "celeste";
     homepage = "https://github.com/hwittenborn/celeste";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];

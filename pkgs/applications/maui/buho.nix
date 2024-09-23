@@ -41,6 +41,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Task and Note Keeper";
+    mainProgram = "buho";
     homepage = "https://invent.kde.org/maui/buho";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

@@ -1,51 +1,44 @@
-# Gomplate 3.x does not build with go > 1.20.
-# Version 4 of gomplate (yet unreleased) should not have this issue.
-#
-# see https://github.com/hairyhenderson/gomplate/issues/1872
-
 { lib
-#, buildGoModule
-, buildGo120Module
+, buildGoModule
 , fetchFromGitHub
 }:
 
-# buildGoModule rec {
-buildGo120Module rec {
+buildGoModule rec {
   pname = "gomplate";
-  version = "3.11.6";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "hairyhenderson";
-    repo = pname;
+    repo = "gomplate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IXNI+VkmW7k+Hkx2gv8OCpfAe4qJ3sH9KT/mO8y3JcU=";
+    hash = "sha256-shbG0q86wlSjoCK2K7hNdUCwNPiQp94GWQJ1e71A1T0=";
   };
 
-  vendorHash = "sha256-DAtgebWwGBYioKTvW2qtzy+GPxYE2SuXIYpex6M85Vc=";
+  vendorHash = "sha256-UKqSKypAm6gt2JUCZh/DyfWo8uJeMp0M+4FiqwzzHIA=";
 
-  postPatch = ''
+  ldflags = [
+    "-s"
+    "-X github.com/${src.owner}/${pname}/v4/version.Version=${version}"
+  ];
+
+  preCheck = ''
     # some tests require network access
     rm net/net_test.go \
       internal/tests/integration/datasources_blob_test.go \
-      internal/tests/integration/datasources_git_test.go
+      internal/tests/integration/datasources_git_test.go \
+      render_test.go
     # some tests rely on external tools we'd rather not depend on
     rm internal/tests/integration/datasources_consul_test.go \
       internal/tests/integration/datasources_vault*_test.go
   '';
 
-  # TestInputDir_RespectsUlimit
-  preCheck = ''
-    ulimit -n 1024
+  postInstall = ''
+    rm $out/bin/gen
   '';
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/${src.owner}/${pname}/v3/version.Version=${version}"
-  ];
-
   meta = with lib; {
-    description = "A flexible commandline tool for template rendering";
+    description = "Flexible commandline tool for template rendering";
+    mainProgram = "gomplate";
     homepage = "https://gomplate.ca/";
     changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${version}";
     license = licenses.mit;

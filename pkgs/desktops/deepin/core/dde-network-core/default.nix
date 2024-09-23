@@ -1,62 +1,55 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, dtkwidget
-, dde-dock
-, dde-control-center
-, dde-session-shell
-, networkmanager-qt
-, glib
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dtkwidget,
+  dde-control-center,
+  dde-session-shell,
+  libsForQt5,
+  glib,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-network-core";
-  version = "2.0.15";
+  version = "2.0.34";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-AMuWEz3Eyw0tG0srLWpqS7MO7Z4ZzIay4z59cZQZU0o=";
+    hash = "sha256-bS/PkutP5BQtqZ6MzeImFyGKoztoTswXhXaEftEv0FI=";
   };
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     dtkwidget
-    dde-dock
     dde-control-center
     dde-session-shell
-    networkmanager-qt
+    libsForQt5.networkmanager-qt
     glib
     gtest
   ];
 
-  cmakeFlags = [
-    "-DVERSION=${version}"
-  ];
+  cmakeFlags = [ "-DVERSION=${version}" ];
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "DDE network library framework";
     homepage = "https://github.com/linuxdeepin/dde-network-core";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

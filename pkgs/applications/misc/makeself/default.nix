@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     repo = "makeself";
     rev = "release-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
+    hash = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -23,16 +23,18 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   nativeCheckInputs = [ which zstd pbzip2 ];
 
+  sharePath = "$out/share/${pname}";
+
   installPhase = ''
     runHook preInstall
     installManPage makeself.1
     install -Dm555 makeself.sh $out/bin/makeself
-    install -Dm444 -t $out/share/${pname}/ makeself.lsm README.md makeself-header.sh
+    install -Dm444 -t ${sharePath}/ makeself.lsm README.md makeself-header.sh
     runHook postInstall
   '';
 
   fixupPhase = ''
-    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i $out/bin/makeself
+    sed -e "s|^HEADER=.*|HEADER=${sharePath}/makeself-header.sh|" -i $out/bin/makeself
   '';
 
   meta = with lib; {
@@ -41,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.wmertens ];
     platforms = platforms.all;
+    mainProgram = "makeself";
   };
 }

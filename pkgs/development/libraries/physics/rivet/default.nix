@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.8";
+  version = "3.1.10";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    hash = "sha256-dbPz1BnKY4jR/S7A7afh+Q8yS5lszwWR9IpdLijczBM=";
+    hash = "sha256-RYuODfHec46ZctJLJg6qCH3xLJnU/p3uU3fUfqakmRk=";
   };
 
   latex = texliveBasic.withPackages (ps: with ps; [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
+    description = "Framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
     license     = licenses.gpl3;
     homepage    = "https://rivet.hepforge.org";
     platforms   = platforms.unix;

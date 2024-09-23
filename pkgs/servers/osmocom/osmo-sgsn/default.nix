@@ -16,14 +16,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "osmo-ggsn";
-  version = "1.11.0";
+  pname = "osmo-sgsn";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sgsn";
     rev = version;
-    hash = "sha256-jI82LS/WubFAkxBVF31qH4NWSmjC94dL73oOu3shfdU=";
+    hash = "sha256-7roXf5+jZNtx9ZfPYIs5kojiTIHsGGh180cc7uv6hdk=";
   };
 
   postPatch = ''
@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     description = "Osmocom implementation of the 3GPP Serving GPRS Support Node (SGSN)";
     homepage = "https://osmocom.org/projects/osmosgsn";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "osmo-sgsn";
   };
 }

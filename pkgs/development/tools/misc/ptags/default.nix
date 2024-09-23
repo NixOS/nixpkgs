@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, cargo
 , ctags
 , lib
 , makeWrapper
@@ -33,7 +32,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A parallel universal-ctags wrapper for git repository";
+    description = "Parallel universal-ctags wrapper for git repository";
+    mainProgram = "ptags";
     homepage = "https://github.com/dalance/ptags";
     maintainers = with maintainers; [ pamplemousse ];
     license = licenses.mit;

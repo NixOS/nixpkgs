@@ -1,41 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, async-timeout
-, lxml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  aiozoneinfo,
+  lxml,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
-  version = "0.3.8";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3p2tKFuzgl+VFRRXV66MRgcL1XS8xxDqMOUZw+Ql/5E=";
+    hash = "sha256-qvJbAE5C19RSg5p823sCJ/dWIHBSD4kJrw/p8PF2HkI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
-    async-timeout
+    aiozoneinfo
     lxml
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytrafikverket"
-  ];
+  pythonImportsCheck = [ "pytrafikverket" ];
 
   meta = with lib; {
     description = "Library to get data from the Swedish Transport Administration (Trafikverket) API";
-    homepage = "https://github.com/endor-force/pytrafikverket";
-    changelog = "https://github.com/endor-force/pytrafikverket/releases/tag/${version}";
+    homepage = "https://github.com/gjohansson-ST/pytrafikverket";
+    changelog = "https://github.com/gjohansson-ST/pytrafikverket/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

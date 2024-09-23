@@ -6,22 +6,34 @@ set -eu -o pipefail
 {
     dxvk32_dir=@dxvk32@/bin
     dxvk64_dir=@dxvk64@/bin
-
-    mcfgthreads32_dir=@mcfgthreads32@/bin
-    mcfgthreads64_dir=@mcfgthreads64@/bin
 }
+
 
 ## Defaults
 
 declare -A dlls=(
+    [d3d8]="dxvk/d3d8.dll"
     [d3d9]="dxvk/d3d9.dll"
     [d3d10]="dxvk/d3d10.dll dxvk/d3d10_1.dll dxvk/d3d10core.dll"
     [d3d11]="dxvk/d3d11.dll"
     [dxgi]="dxvk/dxgi.dll"
+)
+
+declare -A obsolete_dlls=(
     [mcfgthreads]="mcfgthreads/mcfgthread-12.dll"
 )
 
-declare -A targets=([d3d9]=1 [d3d11]=1 [dxgi]=1 [mcfgthreads]=1)
+declare -A targets=([d3d8]=1 [d3d9]=1 [d3d11]=1 [dxgi]=1)
+
+
+# Option variables
+
+do_cleanup=false
+ignore_obsolete=false
+
+do_symlink=false
+do_makeprefix=false
+
 
 ## Command-line Parsing
 
@@ -46,6 +58,10 @@ usage() {
 }
 
 case "${1:-}" in
+    cleanup)
+        do_cleanup=true
+        shift
+        ;;
     uninstall|install)
         action=$1
         shift
@@ -60,10 +76,6 @@ case "${1:-}" in
         usage
         ;;
 esac
-
-
-do_symlink=false
-do_makeprefix=false
 
 while [ -n "${1:-}" ]; do
     case "$1" in
@@ -100,6 +112,10 @@ while [ -n "${1:-}" ]; do
                 usage
             fi
             ;;
+        --ignore-obsolete)
+            shift
+            ignore_obsolete=true
+            ;;
         -h|--help)
             usage
             ;;
@@ -110,6 +126,7 @@ while [ -n "${1:-}" ]; do
     esac
     shift
 done
+
 
 ## Get information on the Wine environment
 
@@ -165,6 +182,7 @@ if [ -z "${win32_sys_path:-}" ] && [ -z "${win64_sys_path:-}" ]; then
   exit 1
 fi
 
+
 ## Utility functions
 
 install_file() {
@@ -200,6 +218,13 @@ install_file() {
 uninstall_file() {
     srcfile=$1
     dstfile=$2
+    args=$3
+
+    if [ "${args}" = "-f" ]; then
+        rm -v "${dstfile}"
+        [ -e "${dstfile}.old" ] && rm -v "${dstfile}.old"
+        return 0
+    fi
 
     if [ -f "${srcfile}.so" ]; then
         srcfile="${srcfile}.so"
@@ -239,6 +264,26 @@ uninstall_override() {
     fi
 }
 
+print_cleanup_message() {
+    declare -a obsolete_paths=($@)
+    if ! $ignore_obsolete && [ -n "${obsolete_paths[@]}" ]; then
+        fold -w $COLUMNS -s <<MSG >&2
+Obsolete DLLs detected at the specified Wine prefix. These DLLs are no longer needed \
+or managed by the \`setup_dxvk.sh\` script in nixpkgs. You should remove them manually, \
+use the cleanup command, or suppress this message using the \`--ignore-obsolete\` option.
+MSG
+        for obspath in "${obsolete_paths[@]}"; do
+            if $do_cleanup; then
+                cleanup_file "$obspath"
+            else
+                echo " - ${obspath}"
+            fi
+        done
+        ! $do_cleanup && echo
+    fi
+}
+
+
 ## Perform the requested command
 
 declare -A paths
@@ -260,7 +305,32 @@ for target in "${!targets[@]}"; do
     done
 done
 
-for srcpath in "${!paths[@]}"; do
-    "${action}_file" "$srcpath" "${paths["$srcpath"]}"
+declare -A obsolete_paths
+
+for target in "${!obsolete_dlls[@]}"; do
+    for dll in ${obsolete_dlls[$target]}; do
+        dllname=$(basename "$dll")
+        basedir=$(dirname "$dll")
+
+        if [ -e "${win32_sys_path:-}/$dllname" ]; then
+            obsolete_paths["${basedir}32_dir/$dllname"]="${win32_sys_path:-}/$dllname"
+        fi
+        if [ -e "${win64_sys_path:-}/$dllname" ]; then
+            obsolete_paths["${basedir}64_dir/$dllname"]="${win64_sys_path:-}/$dllname"
+        fi
+    done
+done
+
+if $do_cleanup; then
+    declare -n action_paths=obsolete_paths
+    action=uninstall
+    args=-f
+else
+    declare -n action_paths=paths
+    print_cleanup_message "${obsolete_paths[@]}"
+fi
+
+for srcpath in "${!action_paths[@]}"; do
+    "${action}_file" "$srcpath" "${action_paths["$srcpath"]}" "${args:-}"
     "${action}_override" "$(basename "$srcpath" .dll)"
 done

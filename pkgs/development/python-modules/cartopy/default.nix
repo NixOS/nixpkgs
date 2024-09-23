@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch
-, cython
-, setuptools-scm
-, geos
-, proj
-, matplotlib
-, numpy
-, pyproj
-, pyshp
-, shapely
-, owslib
-, pillow
-, gdal
-, scipy
-, fontconfig
-, pytest-mpl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchpatch,
+  fetchPypi,
+  cython,
+  setuptools-scm,
+  geos,
+  proj,
+  matplotlib,
+  numpy,
+  pyproj,
+  pyshp,
+  shapely,
+  owslib,
+  pillow,
+  gdal,
+  scipy,
+  fontconfig,
+  pytest-mpl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.22.0";
+  version = "0.23.0";
 
   disabled = pythonOlder "3.8";
 
@@ -32,8 +33,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    hash = "sha256-swD5ASCTHUPxHvh8Bk6h2s7BtZpJQKp26/gs8JVIu0k=";
+    hash = "sha256-Ix83s1cB8rox2UlZzKdebaBMLuo6fxTOHHXuOw6udnY=";
   };
+
+  patches = [
+    # Some tests in the 0.23.0 release are failing due to missing network markers. Revisit after update.
+    (fetchpatch {
+      name = "mnt-add-missing-needs-network-markers.patch";
+      url = "https://github.com/SciTools/cartopy/commit/2403847ea69c3d95e899ad5d0cab32ac6017df0e.patch";
+      hash = "sha256-aGBUX4jFn7GgoqmHVC51DmS+ga3GcQGKfkut++x67Q0=";
+    })
+  ];
 
   nativeBuildInputs = [
     cython
@@ -56,8 +66,15 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    ows = [ owslib pillow ];
-    plotting = [ gdal pillow scipy ];
+    ows = [
+      owslib
+      pillow
+    ];
+    plotting = [
+      gdal
+      pillow
+      scipy
+    ];
   };
 
   nativeCheckInputs = [
@@ -78,13 +95,15 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_gridliner_constrained_adjust_datalim"
     "test_gridliner_labels_bbox_style"
   ];
 
   meta = with lib; {
     description = "Process geospatial data to create maps and perform analyses";
+    mainProgram = "feature_download";
     license = licenses.lgpl3Plus;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
 }

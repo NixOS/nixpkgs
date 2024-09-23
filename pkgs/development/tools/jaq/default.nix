@@ -7,23 +7,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "1.2.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     rev = "v${version}";
-    hash = "sha256-Jc/etdQtJfFmmdxWdJUVQqPjHTCY6ZUAO+ShNJboOq0=";
+    hash = "sha256-VD10BO7bxTmD1A1AZsiEiYBsVhAKlXxdHNMmXqpvpKM=";
   };
 
-  cargoHash = "sha256-TaWD9xpTsNWQt/Wz5PYY0mgFfP5d/Jn3EhcHUywUk3Q=";
+  cargoHash = "sha256-7MK0iLBpjvWE7UH5Tb3qIm2XnEVsAvBy34Ed4wHagZQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
-    description = "A jq clone focused on correctness, speed and simplicity";
+    description = "Jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
     changelog = "https://github.com/01mf02/jaq/releases/tag/${src.rev}";
     license = licenses.mit;

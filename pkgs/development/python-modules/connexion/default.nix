@@ -1,30 +1,41 @@
-{ lib
-, aiohttp
-, aiohttp-jinja2
-, aiohttp-remotes
-, aiohttp-swagger
-, buildPythonPackage
-, clickclick
-, decorator
-, fetchFromGitHub
-, flask
-, inflection
-, jsonschema
-, openapi-spec-validator
-, packaging
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, swagger-ui-bundle
-, testfixtures
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  asgiref,
+  httpx,
+  inflection,
+  jsonschema,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  requests,
+  starlette,
+  typing-extensions,
+  werkzeug,
+
+  # optional-dependencies
+  a2wsgi,
+  flask,
+  swagger-ui-bundle,
+  uvicorn,
+
+  # tests
+  pytest-aiohttp,
+  pytestCheckHook,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.14.2";
-  format = "setuptools";
+  version = "3.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -32,46 +43,57 @@ buildPythonPackage rec {
     owner = "spec-first";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
+    hash = "sha256-rngQDU9kXw/Z+Al0SCVnWN8xnphueTtZ0+xPBR5MbEM=";
   };
 
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
-    aiohttp
-    aiohttp-jinja2
-    aiohttp-swagger
-    clickclick
-    flask
+    asgiref
+    httpx
     inflection
     jsonschema
-    openapi-spec-validator
-    packaging
+    jinja2
+    python-multipart
     pyyaml
     requests
-    swagger-ui-bundle
+    starlette
+    typing-extensions
+    werkzeug
   ];
 
+  passthru.optional-dependencies = {
+    flask = [
+      a2wsgi
+      flask
+    ];
+    swagger-ui = [ swagger-ui-bundle ];
+    uvicorn = [ uvicorn ];
+  };
+
   nativeCheckInputs = [
-    aiohttp-remotes
-    decorator
     pytest-aiohttp
     pytestCheckHook
     testfixtures
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "connexion"
-  ];
+  pythonImportsCheck = [ "connexion" ];
 
   disabledTests = [
     # AssertionError
     "test_headers"
+    # waiter.acquire() deadlock
+    "test_cors_server_error"
+    "test_get_bad_default_response"
+    "test_schema_response"
+    "test_writeonly"
   ];
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
+    mainProgram = "connexion";
     homepage = "https://github.com/spec-first/connexion";
     changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

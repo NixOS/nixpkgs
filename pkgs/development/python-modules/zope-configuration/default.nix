@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope-i18nmessageid
-, zope_interface
-, zope_schema
-, pytestCheckHook
-, zope-testing
-, zope_testrunner
-, manuel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-i18nmessageid,
+  zope-interface,
+  zope-schema,
+  pytestCheckHook,
+  zope-testing,
+  zope-testrunner,
+  manuel,
 }:
 
 buildPythonPackage rec {
   pname = "zope-configuration";
-  version = "5.0";
+  version = "5.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,42 +23,36 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.configuration";
     inherit version;
-    hash = "sha256-I0tKGMcfazub9rzyJSZLrgFJrGjeoHsHLw9pmkzsJuc=";
+    hash = "sha256-81h36tXpmANjhdLdxGkZ6ryZjmmcBZh5ZPFxrY3ZJxs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     manuel
     pytestCheckHook
     zope-testing
-    zope_testrunner
+    zope-testrunner
   ];
 
   propagatedBuildInputs = [
     zope-i18nmessageid
-    zope_interface
-    zope_schema
+    zope-interface
+    zope-schema
   ];
 
   # Need to investigate how to run the tests with zope-testrunner
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zope.configuration"
-  ];
+  pythonImportsCheck = [ "zope.configuration" ];
 
-  pythonNamespaces = [
-    "zope"
-  ];
+  pythonNamespaces = [ "zope" ];
 
   meta = with lib; {
     description = "Zope Configuration Markup Language (ZCML)";
     homepage = "https://github.com/zopefoundation/zope.configuration";
     changelog = "https://github.com/zopefoundation/zope.configuration/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

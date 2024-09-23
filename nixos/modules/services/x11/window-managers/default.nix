@@ -1,8 +1,7 @@
 { config, lib, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption types;
   cfg = config.services.xserver.windowManager;
 in
 
@@ -62,7 +61,7 @@ in
           name = "wmii";
           start = "...";
         }];
-        description = lib.mdDoc ''
+        description = ''
           Internal option used to add some common line to window manager
           scripts before forwarding the value to the
           `displayManager`.
@@ -70,17 +69,6 @@ in
         apply = map (d: d // {
           manage = "window";
         });
-      };
-
-      default = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "wmii";
-        description = lib.mdDoc ''
-          **Deprecated**, please use [](#opt-services.xserver.displayManager.defaultSession) instead.
-
-          Default window manager loaded if none have been chosen.
-        '';
       };
 
     };

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , xxd
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mamba";
-  version = "2.3";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "Mamba";
     rev = "v${version}";
-    sha256 = "sha256-Dj8yPmuEtDVgu6Gm6aEY+dgJ0dtwB8RPg9EuaVAsiIs=";
+    hash = "sha256-S1+nGnB1LHIUgYves0qtWh+QXYKjtKWICpOo38b3zbY=";
     fetchSubmodules = true;
   };
 
@@ -37,8 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ magnetophon orivej ];
     platforms = platforms.linux;
-    # 2023-08-19, `-Werror=format-security` fails for xputty
-    # reported as https://github.com/brummer10/libxputty/issues/12
-    broken = true;
   };
 }

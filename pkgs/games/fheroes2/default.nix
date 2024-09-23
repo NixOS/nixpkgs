@@ -1,23 +1,25 @@
 { stdenv, lib, fetchFromGitHub, imagemagick
 , gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
+, libiconv
 
 , gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "1.0.10";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    hash = "sha256-bh27piX1/HIlbOmTpqQCV7NaHxOMtwMIGrjlXrFvHWE=";
+    hash = "sha256-FSfA2gjJZWAbl2nTJwkAhWcJghbw5ulftU+6QBqljxY=";
   };
 
   nativeBuildInputs = [ imagemagick ];
 
-  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
+  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   makeFlags = [
     "FHEROES2_STRICT_COMPILATION=1"
@@ -59,6 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ihhub/fheroes2";
     description = "Free implementation of Heroes of Might and Magic II game engine";
+    mainProgram = "fheroes2";
     longDescription = ''
         In order to play this game, an original game data is required.
         Please refer to README of the project for instructions.
@@ -66,6 +69,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.karolchmist ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

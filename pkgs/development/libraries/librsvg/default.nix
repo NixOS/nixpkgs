@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.57.0";
+  version = "2.58.2";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -50,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-M1/i4MLL8be/BmhlEiSiPhNUUfCxeTzYE2Sb4r/6dOg=";
+    hash = "sha256-GOnXDAjPJfUNYQ1tWvVxVh1nz0F5+WLgQmZHXfbi4iQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-P8W4z/MwSpP0xqrxoVZPAip7ymdIUL2+uP88Q2Y3hVU=";
+    hash = "sha256-E0bXSxWI0MkJmNvl8gxklXHgy4zlkiee59+s0h4Gw5s=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
@@ -184,14 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
                 jq
                 nix
               ]}
-              # update-source-version does not allow updating to the same version so we need to clear it temporarily.
-              # Get the current version so that we can restore it later.
-              latestVersion=$(nix-instantiate --eval -A librsvg.version | jq --raw-output)
-              # Clear the version. Provide hash so that we do not need to do pointless TOFU.
-              # Needs to be a fake SRI hash that is non-zero, since u-s-v uses zero as a placeholder.
-              # Also cannot be here verbatim or u-s-v would be confused what to replace.
-              update-source-version librsvg 0 "sha256-${lib.fixedWidthString 44 "B" "="}" --source-key=cargoDeps > /dev/null
-              update-source-version librsvg "$latestVersion" --source-key=cargoDeps > /dev/null
+              update-source-version librsvg --ignore-same-version --source-key=cargoDeps > /dev/null
             ''
           ];
           # Experimental feature: do not copy!
@@ -216,8 +209,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A small library to render SVG images to Cairo surfaces";
-    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
+    description = "Small library to render SVG images to Cairo surfaces";
+    homepage = "https://gitlab.gnome.org/GNOME/librsvg";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
     mainProgram = "rsvg-convert";

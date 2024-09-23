@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, ctranslate2
-, ctranslate2-cpp
-, sentencepiece
-, stanza
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  ctranslate2,
+  ctranslate2-cpp,
+  sentencepiece,
+  stanza,
 }:
 let
   ctranslate2OneDNN = ctranslate2.override {
@@ -18,13 +19,13 @@ let
 in
 buildPythonPackage rec {
   pname = "argostranslate";
-  version = "1.9.1";
+  version = "1.9.6";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OlVrRfBhbJpIFjWdLQsn7zEteRP6UfkIpGT4Y933QKk=";
+    hash = "sha256-3YzBMnqmcTIpn5UOFg3SDTFLjPSE9UDw0i8fB8LYh2s=";
   };
 
   propagatedBuildInputs = [
@@ -42,9 +43,7 @@ buildPythonPackage rec {
 
   doCheck = false; # needs network access
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # required for import check to work
   # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'

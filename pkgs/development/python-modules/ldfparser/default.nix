@@ -1,18 +1,19 @@
-{ lib
-, bitstruct
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, jsonschema
-, lark
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  bitstruct,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  lark,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ldfparser";
-  version = "0.21.0";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,14 +22,12 @@ buildPythonPackage rec {
     owner = "c4deszes";
     repo = "ldfparser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4uwze9TJYmNvhDiKYyUX6Ya+eQb0mbpQQaawUWmO3Gs=";
+    hash = "sha256-SZ9mWV5PjkQ2OiScPSMrunkKQWmuYW2lB2JvpTGNbY4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bitstruct
     jinja2
     lark
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ldfparser"
-  ];
+  pythonImportsCheck = [ "ldfparser" ];
 
   disabledTestPaths = [
     # We don't care about benchmarks
@@ -54,5 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/c4deszes/ldfparser/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ldfparser";
   };
 }

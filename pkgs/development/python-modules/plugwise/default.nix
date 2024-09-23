@@ -1,47 +1,46 @@
- { lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, freezegun
-, jsonpickle
-, munch
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, semver
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  jsonpickle,
+  munch,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.35.1";
-  format = "setuptools";
+  version = "1.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "plugwise";
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eHJQXLiuWmJo/Eo4B8gEo44rwpPA7ASjxKSmdu6Tv9M=";
+    hash = "sha256-CVgcqyg5DDtEJxE/oen5MJP+mV4B+Sq0uopEZTOCfV0=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # setuptools and wheel
+    sed -i -e "s/~=[0-9.]*//g" pyproject.toml
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
-    async-timeout
-    crcmod
     defusedxml
     munch
-    pyserial
     python-dateutil
-    pytz
-    semver
   ];
 
   nativeCheckInputs = [
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "plugwise"
-  ];
+  pythonImportsCheck = [ "plugwise" ];
 
   __darwinAllowLocalNetworking = true;
 

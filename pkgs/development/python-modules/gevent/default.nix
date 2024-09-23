@@ -1,61 +1,58 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, isPyPy
-, python
-, libev
-, cffi
-, cython_3
-, greenlet
-, importlib-metadata
-, setuptools
-, wheel
-, zope_event
-, zope_interface
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPyPy,
+  python,
+  libev,
+  cffi,
+  cython,
+  greenlet,
+  importlib-metadata,
+  setuptools,
+  wheel,
+  zope-event,
+  zope-interface,
+  pythonOlder,
+  c-ares,
+  libuv,
+
+  # for passthru.tests
+  dulwich,
+  gunicorn,
+  opentracing,
+  pika,
 }:
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "22.10.2";
+  version = "24.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HKAdoXbuN7NSeicC99QNvJ/7jPx75aA7+k+e7EXlXEY=";
+    hash = "sha256-Qy/Hb2gKz3zxiMLuD106tztjwfAxFMfNijTOu+WqIFY=";
   };
 
-  patches = [
-    # Replace deprecated pkg_resources with importlib-metadata
-    (fetchpatch {
-      url = "https://github.com/gevent/gevent/commit/bd96d8e14dc99f757de22ab4bb98439f912dab1e.patch";
-      hash = "sha256-Y+cxIScuEgAVYmmxBJ8OI+JuJ4G+iiROTcRdWglo3l0=";
-      includes = [ "src/gevent/events.py" ];
-    })
-  ];
-
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
     wheel
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
   buildInputs = [
     libev
+    libuv
+    c-ares
   ];
 
   propagatedBuildInputs = [
     importlib-metadata
-    zope_event
-    zope_interface
-  ] ++ lib.optionals (!isPyPy) [
-    greenlet
-  ];
+    zope-event
+    zope-interface
+  ] ++ lib.optionals (!isPyPy) [ greenlet ];
 
   # Bunch of failures.
   doCheck = false;
@@ -64,6 +61,17 @@ buildPythonPackage rec {
     "gevent"
     "gevent.events"
   ];
+
+  passthru.tests = {
+    inherit
+      dulwich
+      gunicorn
+      opentracing
+      pika
+      ;
+  } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
+
+  GEVENTSETUP_EMBED = "0";
 
   meta = with lib; {
     description = "Coroutine-based networking library";

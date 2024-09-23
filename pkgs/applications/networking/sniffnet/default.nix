@@ -3,28 +3,30 @@
 , fetchFromGitHub
 , pkg-config
 , libpcap
+, libxkbcommon
 , openssl
 , stdenv
 , alsa-lib
 , expat
 , fontconfig
 , vulkan-loader
+, wayland
 , xorg
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.2.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wIyPb1RxvjkGu3Gs69HyL1WuLZUIFWB8URJjkz3oar0=";
+    hash = "sha256-wepy56LOhliU6t0ZRPviEbZtsWNqrtUnpUXsEdkRDqI=";
   };
 
-  cargoHash = "sha256-iB8KL0ad+rI4HuZLgb7KqfrUBTQuKRWjqaa6BnHU5eg=";
+  cargoHash = "sha256-cV3WhidnH2CBlmHa3IVHTQfTuPdSHwwY0XhgNPyLDN4=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -50,9 +52,19 @@ rustPlatform.buildRustPackage rec {
     "--skip=secondary_threads::check_updates::tests::fetch_latest_release_from_github"
   ];
 
+  postInstall = ''
+    for res in $(ls resources/packaging/linux/graphics | sed -e 's/sniffnet_//g' -e 's/x.*//g'); do
+      install -Dm444 resources/packaging/linux/graphics/sniffnet_''${res}x''${res}.png \
+        $out/share/icons/hicolor/''${res}x''${res}/apps/sniffnet.png
+    done
+    install -Dm444 resources/packaging/linux/sniffnet.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/sniffnet.desktop \
+      --replace 'Exec=/usr/bin/sniffnet' 'Exec=sniffnet'
+  '';
+
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/sniffnet \
-      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 libxkbcommon wayland ]}
   '';
 
   meta = with lib; {

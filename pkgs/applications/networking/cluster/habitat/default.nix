@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "An application automation framework";
+    description = "Application automation framework";
     homepage = "https://www.habitat.sh";
     changelog = "https://github.com/habitat-sh/habitat/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

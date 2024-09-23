@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pytest-localserver
-, numpy
-, pillow
-, pydicom
-, requests
-, retrying
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pytest-localserver,
+  numpy,
+  pillow,
+  pydicom,
+  requests,
+  retrying,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     pytest-localserver
   ];
 
-  pythonImportsCheck = [
-    "dicomweb_client"
-  ];
+  pythonImportsCheck = [ "dicomweb_client" ];
 
   meta = with lib; {
     description = "Python client for DICOMweb RESTful services";

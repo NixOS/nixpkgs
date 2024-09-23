@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://optipng.sourceforge.net/";
-    description = "A PNG optimizer";
+    description = "PNG optimizer";
     license = licenses.zlib;
     platforms = platforms.unix;
     mainProgram = "optipng";

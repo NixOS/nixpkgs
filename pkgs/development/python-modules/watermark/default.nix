@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, ipython
-, py3nvml
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  ipython,
+  py3nvml,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,29 +24,22 @@ buildPythonPackage rec {
     hash = "sha256-4/1Y7cdh1tF33jgPrqdxCGPcRnnxx+Wf8lyztF54Ck0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     ipython
-  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
   passthru.optional-dependencies = {
-    gpu = [
-      py3nvml
-    ];
+    gpu = [ py3nvml ];
   };
 
-  nativeCheckInputs =  [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "watermark"
-  ];
+  pythonImportsCheck = [ "watermark" ];
 
   meta = with lib; {
     description = "IPython extension for printing date and timestamps, version numbers, and hardware information";

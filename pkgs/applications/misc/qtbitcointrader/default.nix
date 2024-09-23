@@ -27,6 +27,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Bitcoin trading client";
+    mainProgram = "QtBitcoinTrader";
     homepage = "https://centrabit.com/";
     license = licenses.gpl3;
     platforms = qt5.qtbase.meta.platforms;

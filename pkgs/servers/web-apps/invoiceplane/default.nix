@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, writeText, unzip, nixosTests, fetchpatch }:
+{ lib, stdenv, fetchurl, unzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "invoiceplane";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    sha256 = "sha256-EwhOwUoOy3LNZTDgp9kvR/0OsO2TDpWkdT0fd7u0Ns8=";
+    hash = "sha256-66vXxE4pTUMkmPalLgJrCt2pl2BSWOJ3tiJ5K5wspYY=";
   };
 
   nativeBuildInputs = [ unzip ];

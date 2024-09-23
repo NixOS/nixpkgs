@@ -2,22 +2,26 @@
 , runCommand
 , newScope
 , fetchFromGitLab
-, gnome
-, dconf
-, wxGTK32
-, gtk3
 , makeWrapper
-, gsettings-desktop-schemas
-, hicolor-icon-theme
+, symlinkJoin
 , callPackage
 , callPackages
+
+, adwaita-icon-theme
+, dconf
+, gtk3
+, wxGTK32
 , librsvg
 , cups
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+
 , unzip
 , jq
 
 , pname ? "kicad"
 , stable ? true
+, testing ? false
 , withNgspice ? !stdenv.isDarwin
 , libngspice
 , withScripting ? true
@@ -29,7 +33,6 @@
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
-, symlinkJoin
 }:
 
 # `addons`: https://dev-docs.kicad.org/en/addons/
@@ -75,7 +78,9 @@
 # }
 
 let
-  baseName = if (stable) then "kicad" else "kicad-unstable";
+  baseName = if (testing) then "kicad-testing"
+    else if (stable) then "kicad"
+    else "kicad-unstable";
   versionsImport = import ./versions.nix;
 
   # versions.nix does not provide us with version, src and rev. We
@@ -118,7 +123,7 @@ let
 
   wxGTK = wxGTK32;
   python = python3;
-  wxPython = python.pkgs.wxPython_4_2;
+  wxPython = python.pkgs.wxpython;
   addonPath = "addon.zip";
   addonsDrvs = map (pkg: pkg.override { inherit addonPath python3; }) addons;
 
@@ -154,7 +159,7 @@ stdenv.mkDerivation rec {
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
   passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
-    inherit stable baseName;
+    inherit stable testing baseName;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
     inherit withNgspice withScripting withI18n;
@@ -188,21 +193,21 @@ stdenv.mkDerivation rec {
       "${symbols}/share/kicad/template"
     ];
   };
-  # We are emulating wrapGAppsHook, along with other variables to the wrapper
+  # We are emulating wrapGAppsHook3, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
+    "--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
-    # wrapGAppsHook did these two as well, no idea if it matters...
+    # wrapGAppsHook3 did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland
     "--set-default MOZ_DBUS_REMOTE 1"
-    "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
-    "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD7_TEMPLATE_DIR ${template_dir}"
+    "--set-default KICAD8_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+    "--set-default KICAD8_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+    "--set-default KICAD8_TEMPLATE_DIR ${template_dir}"
   ]
   ++ optionals (addons != [ ]) (
     let stockDataPath = symlinkJoin {
@@ -213,11 +218,11 @@ stdenv.mkDerivation rec {
       ];
     };
     in
-    [ "--set-default NIX_KICAD7_STOCK_DATA_PATH ${stockDataPath}" ]
+    [ "--set-default NIX_KICAD8_STOCK_DATA_PATH ${stockDataPath}" ]
   )
   ++ optionals (with3d)
   [
-    "--set-default KICAD7_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    "--set-default KICAD8_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
   ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
@@ -262,17 +267,16 @@ stdenv.mkDerivation rec {
     ln -s ${base}/share/metainfo $out/share/metainfo
   '';
 
-  # can't run this for each pname
-  # stable and unstable are in the same versions.nix
-  # and kicad-small reuses stable
-  # with "all" it updates both, run it manually if you don't want that
-  # and can't git commit if this could be running in parallel with other scripts
-  passthru.updateScript = [ ./update.sh "all" ];
+  passthru.updateScript = {
+    command = [ ./update.sh "${pname}" ];
+    supportedFeatures = [ "commit" ];
+  };
 
   meta = rec {
     description = (if (stable)
     then "Open Source Electronics Design Automation suite"
-    else "Open Source EDA suite, development build")
+    else if (testing) then "Open Source EDA suite, latest on stable branch"
+    else "Open Source EDA suite, latest on master branch")
     + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''

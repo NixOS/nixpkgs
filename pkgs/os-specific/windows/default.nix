@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages
-, newScope, overrideCC, crossLibcStdenv, libcCross
+, newScope, overrideCC, stdenvNoLibc, libcCross
 }:
 
 lib.makeScope newScope (self: with self; {
@@ -14,12 +14,13 @@ lib.makeScope newScope (self: with self; {
   mingw_runtime = mingwrt;
 
   mingw_w64 = callPackage ./mingw-w64 {
-    stdenv = crossLibcStdenv;
+    stdenv = stdenvNoLibc;
   };
 
-  crossThreadsStdenv = overrideCC crossLibcStdenv
+  # FIXME untested with llvmPackages_16 was using llvmPackages_8
+  crossThreadsStdenv = overrideCC stdenvNoLibc
     (if stdenv.hostPlatform.useLLVM or false
-     then buildPackages.llvmPackages_8.clangNoLibcxx
+     then buildPackages.llvmPackages.clangNoLibcxx
      else buildPackages.gccWithoutTargetLibc.override (old: {
        bintools = old.bintools.override {
          libc = libcCross;
@@ -33,10 +34,6 @@ lib.makeScope newScope (self: with self; {
     stdenv = crossThreadsStdenv;
   };
 
-  mcfgthreads_pre_gcc_13 = callPackage ./mcfgthreads/pre_gcc_13.nix {
-    stdenv = crossThreadsStdenv;
-  };
-
   mcfgthreads = callPackage ./mcfgthreads {
     stdenv = crossThreadsStdenv;
   };
@@ -44,8 +41,6 @@ lib.makeScope newScope (self: with self; {
   npiperelay = callPackage ./npiperelay { };
 
   pthreads = callPackage ./pthread-w32 { };
-
-  wxMSW = callPackage ./wxMSW-2.8 { };
 
   libgnurx = callPackage ./libgnurx { };
 })

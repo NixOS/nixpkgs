@@ -1,29 +1,38 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, astropy
-, numpy
-, matplotlib
-, scipy
-, six
-, pytestCheckHook
-, pytest-astropy
+{
+  lib,
+  fetchPypi,
+  fetchpatch2,
+  buildPythonPackage,
+  setuptools-scm,
+  astropy,
+  numpy,
+  matplotlib,
+  scipy,
+  six,
+  pytestCheckHook,
+  pytest-astropy,
 }:
 
 buildPythonPackage rec {
   pname = "radio-beam";
-  version = "0.3.6";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U+IjOTt7x9uzUl7IcQRu2s+MBKF/OR+sLddvHmp9hqU=";
+    hash = "sha256-7AFkuuYLzibwwgz6zrFw0fBXCnGLzdm4OgT+Chve5jU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  # Fix distutils deprecation in Python 3.12. See:
+  # https://github.com/radio-astro-tools/radio-beam/pull/124
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/radio-astro-tools/radio-beam/commit/1eb0216c8d7f5a4494d8d1fe8c79b48425a9c491.patch";
+      hash = "sha256-kTJF/cnkJCjJI2psvs+4MWFn/+b8TvUWjdfYu5ot0XU=";
+    })
   ];
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     astropy
@@ -38,9 +47,7 @@ buildPythonPackage rec {
     pytest-astropy
   ];
 
-  pythonImportsCheck = [
-    "radio_beam"
-  ];
+  pythonImportsCheck = [ "radio_beam" ];
 
   meta = with lib; {
     description = "Tools for Beam IO and Manipulation";
@@ -50,5 +57,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ smaret ];
   };
 }
-
-

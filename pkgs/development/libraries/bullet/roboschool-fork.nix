@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, libglut
 , Cocoa,  OpenGL
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
+  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL libglut ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   patches = [ ./gwen-narrowing.patch ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "A professional free 3D Game Multiphysics Library";
+    description = "Professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.

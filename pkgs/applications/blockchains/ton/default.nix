@@ -6,20 +6,24 @@
 , pkg-config
 , gperf
 , libmicrohttpd
+, libsodium
+, lz4
 , openssl
 , readline
+, secp256k1
 , zlib
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "ton";
-  version = "2023.06";
+  version = "2024.08";
 
   src = fetchFromGitHub {
     owner = "ton-blockchain";
     repo = "ton";
     rev = "v${version}";
-    sha256 = "sha256-mDYuOokCGS1sDP6fHDXhGboDjn4JeyA5ea4/6RRt9x4=";
+    hash = "sha256-OV/1//zIHebc3eLUxtUVV0TMuDdB25M7TT5y58x2Z68=";
     fetchSubmodules = true;
   };
 
@@ -34,13 +38,21 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gperf
     libmicrohttpd
+    libsodium
+    lz4
     openssl
     readline
+    secp256k1
     zlib
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "A fully decentralized layer-1 blockchain designed by Telegram";
+    # The build fails on darwin as:
+    #   error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+    broken = stdenv.isDarwin;
+    description = "Fully decentralized layer-1 blockchain designed by Telegram";
     homepage = "https://ton.org/";
     changelog = "https://github.com/ton-blockchain/ton/blob/v${version}/Changelog.md";
     license = licenses.lgpl2Only;

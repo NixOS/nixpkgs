@@ -27,6 +27,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical frontend (GUI) to GDB";
+    mainProgram = "gede";
     homepage = "http://gede.dexar.se";
     license = licenses.bsd2;
     platforms = platforms.linux;

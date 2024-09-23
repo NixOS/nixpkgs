@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/font-store/BehdadFont";
-    description = "A Persian/Arabic Open Source Font";
+    description = "Persian/Arabic Open Source Font";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ ];

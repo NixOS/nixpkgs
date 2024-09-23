@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , glibcLocales
 , installShellFiles
@@ -18,8 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-5tQaNT6QVN9mxa9t6OvMux4ZGy4flUqszTAwet2QL0w=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     pytestCheckHook
     glibcLocales
-    pytest-cov
+    pytest-cov-stub
   ];
 
   LC_ALL = "en_US.UTF-8";

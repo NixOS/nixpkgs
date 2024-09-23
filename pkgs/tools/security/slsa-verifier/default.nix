@@ -5,20 +5,18 @@
 
 buildGoModule rec {
   pname = "slsa-verifier";
-  version = "2.4.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "slsa-framework";
     repo = "slsa-verifier";
     rev = "v${version}";
-    hash = "sha256-swyBDJTv6Sp65Q46QGm/N/kIfGfln+vBTYXVOI9CAOE=";
+    hash = "sha256-x9phhfQVeUO7NRjB6n1rdwkpeCu4VMUcJTrkP6PfVyA=";
   };
 
-  vendorHash = "sha256-rCGj2o59US2t/ckqXirEDgYn9dGvVSzMVcFEZosasBc=";
+  vendorHash = "sha256-HJ3/RY0Co86y1t2Mas5C+rjwRRG4ZJgxjkz9iWcKf5E=";
 
   CGO_ENABLED = 0;
-  GO111MODULE = "on";
-  GOFLAGS = "-trimpath";
 
   subPackages = [ "cli/slsa-verifier" ];
 
@@ -27,7 +25,6 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-buildid="
     "-X sigs.k8s.io/release-utils/version.gitVersion=${version}"
   ];
 
@@ -37,6 +34,7 @@ buildGoModule rec {
     homepage = "https://github.com/slsa-framework/slsa-verifier";
     changelog = "https://github.com/slsa-framework/slsa-verifier/releases/tag/v${version}";
     description = "Verify provenance from SLSA compliant builders";
+    mainProgram = "slsa-verifier";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ developer-guy mlieberman85 ];
   };

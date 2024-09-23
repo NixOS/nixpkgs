@@ -1,23 +1,24 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "screed";
-  version = "1.1.2";
+  version = "1.1.3";
+  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c0/6eopkUoZJbYlbc2+R1rKYiVbi/UI1gSPZPshRm2o=";
+    hash = "sha256-N+gWl8fbqVoFNVTltahq/zKXBeHPXfxee42lht7gcrg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonImportsCheck = [ "screed" ];
   checkInputs = [ pytestCheckHook ];
@@ -31,7 +32,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A simple read-only sequence database, designed for short reads";
+    description = "Simple read-only sequence database, designed for short reads";
+    mainProgram = "screed";
     homepage = "https://pypi.org/project/screed/";
     maintainers = with maintainers; [ luizirber ];
     license = licenses.bsd3;

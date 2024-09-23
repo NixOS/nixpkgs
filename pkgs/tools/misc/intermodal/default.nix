@@ -2,23 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "intermodal";
-  version = "0.1.13";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hKMO7ZicXSYESXWKmDC2ILD996KoYDXS5HJExyXMdX4=";
+    hash = "sha256-N3TumAwHcHDuVyY4t6FPNOO28D7xX5jheCTodfn71/Q=";
   };
 
-  cargoHash = "sha256-7vtUMG6mxAHKnbouyTsaUf1myJssxYoqAIOjc6m86Fo=";
+  cargoHash = "sha256-k34psGOs6G+B/msmLSDHLNxnjO1yyE4OY6aQU8bt+is=";
 
   # include_hidden test tries to use `chflags` on darwin
-  checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];
+  checkFlags = lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd imdl \
       --bash <($out/bin/imdl completions bash) \
       --fish <($out/bin/imdl completions fish) \

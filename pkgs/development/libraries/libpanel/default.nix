@@ -1,29 +1,39 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, glib
-, gtk4
-, libadwaita
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  glib,
+  gtk4,
+  libadwaita,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpanel";
-  version = "1.4.0";
+  version = "1.6.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
+
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libpanel/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "gPFD2QDoztj/hPqG/jTra0gyPLYQvPtoWOpl2LmPFSw=";
+    hash = "sha256-t3NJSjxpMANFzY4nAnRI0RiRgwJswTeAL4hkF8bqMLY=";
   };
+
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -32,6 +42,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     vala
     gi-docgen
+    gtk4 # gtk4-update-icon-cache
   ];
 
   buildInputs = [
@@ -40,9 +51,7 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  mesonFlags = [
-    "-Dinstall-examples=true"
-  ];
+  mesonFlags = [ (lib.mesonBool "install-examples" true) ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -50,13 +59,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = pname;
-    };
+    updateScript = gnome.updateScript { packageName = pname; };
   };
 
   meta = with lib; {
     description = "Dock/panel library for GTK 4";
+    mainProgram = "libpanel-example";
     homepage = "https://gitlab.gnome.org/GNOME/libpanel";
     license = licenses.lgpl3Plus;
     maintainers = teams.gnome.members;

@@ -1,19 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, callPackage
-, horizon-eda
-, mesa
-, pycairo
-, python
-, pythonOlder
+{
+  buildPythonPackage,
+  horizon-eda,
+  mesa,
+  pycairo,
+  python,
+  pythonOlder,
 }:
 
 let
   base = horizon-eda.passthru.base;
 in
 buildPythonPackage {
-  inherit (base) pname version src meta CASROOT;
+  inherit (base)
+    pname
+    version
+    src
+    meta
+    CASROOT
+    ;
 
   pyproject = false;
 
@@ -25,19 +29,17 @@ buildPythonPackage {
     python
   ];
 
-  propagatedBuildInputs = [
-    pycairo
-  ];
+  propagatedBuildInputs = [ pycairo ];
 
   nativeBuildInputs = base.nativeBuildInputs;
 
-  buildFlags = ["pymodule"];
+  ninjaFlags = [ "horizon.so" ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/${python.sitePackages}
-    cp build/horizon.so $out/${python.sitePackages}
+    cp horizon.so $out/${python.sitePackages}
 
     runHook postInstall
   '';

@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     platforms = lib.platforms.x86_64;
     maintainers = [ lib.maintainers.seppeljordan ];
+    mainProgram = "guetzli";
   };
 }

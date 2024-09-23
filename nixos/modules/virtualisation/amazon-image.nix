@@ -6,9 +6,8 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
 in
 
@@ -71,12 +70,17 @@ in
 
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = ["network-online.target"];
       path = [ pkgs.curl ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
       serviceConfig.StandardOutput = "journal+console";
     };
+
+    # Amazon-issued AMIs include the SSM Agent by default, so we do the same.
+    # https://docs.aws.amazon.com/systems-manager/latest/userguide/ami-preinstalled-agent.html
+    services.amazon-ssm-agent.enable = true;
 
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
@@ -102,4 +106,5 @@ in
     # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
+  meta.maintainers = with lib.maintainers; [ arianvp ];
 }

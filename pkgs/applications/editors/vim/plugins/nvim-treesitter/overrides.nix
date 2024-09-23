@@ -4,9 +4,17 @@ self: super:
 
 let
   inherit (neovimUtils) grammarToPlugin;
-  generatedGrammars = callPackage ./generated.nix {
+
+  initialGeneratedGrammars = callPackage ./generated.nix {
     inherit (tree-sitter) buildGrammar;
   };
+  grammarOverrides = final: prev: {
+    nix = prev.nix.overrideAttrs {
+      # workaround for https://github.com/NixOS/nixpkgs/issues/332580
+      prePatch = "rm queries/highlights.scm";
+    };
+  };
+  generatedGrammars = lib.fix (lib.extends grammarOverrides (_: initialGeneratedGrammars));
 
   generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
 
@@ -48,7 +56,7 @@ in
     rm -r parser
   '';
 
-  passthru = {
+  passthru = (super.nvim-treesitter.passthru or { }) // {
     inherit builtGrammars allGrammars grammarToPlugin withPlugins withAllGrammars;
 
     grammarPlugins = lib.mapAttrs (_: grammarToPlugin) generatedDerivations;

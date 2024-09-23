@@ -1,7 +1,5 @@
 { stdenv
 , lib
-, abc-verifier
-, bash
 , bison
 , boost
 , fetchFromGitHub
@@ -13,7 +11,7 @@
 , readline
 , symlinkJoin
 , tcl
-, verilog
+, iverilog
 , zlib
 , yosys
 , yosys-bluespec
@@ -77,18 +75,32 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.35";
+  version = "0.45";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
-    hash  = "sha256-jB8y7XGDX9rVF6c4FSTLOyvsxPhdjU8Taj6MQeoU4KQ=";
+    rev   = "refs/tags/${finalAttrs.version}";
+    hash  = "sha256-NF4NQ7mCfARuMsMTJVBbJk39puJ8+D41woYEPgthfUI=";
+    fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      # set up git hashes as if we used the tarball
+
+      pushd $out
+      git rev-parse HEAD > .gitcommit
+      cd $out/abc
+      git rev-parse HEAD > .gitcommit
+      popd
+
+      # remove .git now that we are through with it
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config bison flex ];
-  buildInputs = [
+  propagatedBuildInputs = [
     tcl
     readline
     libffi
@@ -107,23 +119,14 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
+      --replace-fail 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
 
-    chmod +x ./misc/yosys-config.in
     patchShebangs tests ./misc/yosys-config.in
   '';
 
-  preBuild = let
-    shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
-  in ''
+  preBuild = ''
     chmod -R u+w .
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
-    echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
-
-    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
-      echo "ERROR: yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
-      exit 1
-    fi
 
     if ! grep -q "YOSYS_VER := $version" Makefile; then
       echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
@@ -135,19 +138,16 @@ in stdenv.mkDerivation (finalAttrs: {
     echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
   '';
 
+  preCheck = ''
+    # autotest.sh automatically compiles a utility during startup if it's out of date.
+    # having N check jobs race to do that creates spurious codesigning failures on macOS.
+    # run it once without asking it to do anything so that compilation is done before the jobs start.
+    tests/tools/autotest.sh
+  '';
+
   checkTarget = "test";
   doCheck = true;
-  nativeCheckInputs = [ verilog ];
-
-  # Internally, yosys knows to use the specified hardcoded ABCEXTERNAL binary.
-  # But other tools (like mcy or symbiyosys) can't know how yosys was built, so
-  # they just assume that 'yosys-abc' is available -- but it's not installed
-  # when using ABCEXTERNAL
-  #
-  # add a symlink to fake things so that both variants work the same way. this
-  # is also needed at build time for the test suite.
-  postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
-  postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
+  nativeCheckInputs = [ iverilog ];
 
   setupHook = ./setup-hook.sh;
 
@@ -160,6 +160,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ shell thoughtpolice emily Luflosi ];
+    maintainers = with maintainers; [ shell thoughtpolice Luflosi ];
   };
 })

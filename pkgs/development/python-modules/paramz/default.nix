@@ -1,8 +1,20 @@
-{ lib, buildPythonPackage, fetchpatch, fetchPypi, numpy, scipy, six, decorator, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  setuptools,
+  numpy,
+  scipy,
+  six,
+  decorator,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "paramz";
   version = "0.9.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,14 +34,37 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ numpy scipy six decorator ];
-  nativeCheckInputs = [ nose ];
+  build-system = [ setuptools ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    six
+    decorator
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    substituteInPlace paramz/tests/parameterized_tests.py \
+      --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
+  '';
+
+  pytestFlagsArray = [
+    "paramz/tests/array_core_tests.py"
+    "paramz/tests/cacher_tests.py"
+    "paramz/tests/examples_tests.py"
+    "paramz/tests/index_operations_tests.py"
+    "paramz/tests/init_tests.py"
+    "paramz/tests/lists_and_dicts_tests.py"
+    "paramz/tests/model_tests.py"
+    "paramz/tests/observable_tests.py"
+    "paramz/tests/parameterized_tests.py"
+    "paramz/tests/pickle_tests.py"
+    "paramz/tests/verbose_optimize_tests.py"
+  ];
 
   pythonImportsCheck = [ "paramz" ];
-
-  checkPhase = ''
-      nosetests -v paramz/tests
-  '';
 
   meta = with lib; {
     description = "Parameterization framework for parameterized model creation and handling";

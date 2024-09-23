@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycrypto
-, pythonOlder
-, enum34
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycrypto,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "android-backup";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bluec0re";
@@ -18,9 +18,7 @@ buildPythonPackage rec {
     sha256 = "0c436hv64ddqrjs77pa7z6spiv49pjflbmgg31p38haj5mzlrqvw";
   };
 
-  propagatedBuildInputs = [
-    pycrypto
-  ] ++ lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = [ pycrypto ];
 
   checkPhase = ''
     ${python.interpreter} -m android_backup.tests

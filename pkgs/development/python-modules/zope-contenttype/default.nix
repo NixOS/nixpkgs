@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope_testrunner
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-testrunner,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,24 +21,20 @@ buildPythonPackage rec {
     hash = "sha256-AAHvG2XKZQUZBW3OUwxY0LOWlXzPBQIyPIoVSdtk0xc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    zope_testrunner
+    zope-testrunner
   ];
 
-  pythonImportsCheck = [
-    "zope.contenttype"
-  ];
+  pythonImportsCheck = [ "zope.contenttype" ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.contenttype";
-    description = "A utility module for content-type (MIME type) handling";
+    description = "Utility module for content-type (MIME type) handling";
     changelog = "https://github.com/zopefoundation/zope.contenttype/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

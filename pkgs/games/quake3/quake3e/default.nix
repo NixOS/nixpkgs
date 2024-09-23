@@ -1,19 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, curl, libGL, libX11, libXxf86dga, alsa-lib, libXrandr, libXxf86vm, libXext, SDL2, glibc
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, curl
+, libGL
+, libX11
+, libXxf86dga
+, alsa-lib
+, libXrandr
+, libXxf86vm
+, libXext
+, SDL2
+, glibc
+, copyDesktopItems
+, makeDesktopItem
 }:
-
+let
+  arch =
+    /**/ if stdenv.hostPlatform.isx86_64 then "x64"
+    else stdenv.hostPlatform.parsed.cpu.name;
+in
 stdenv.mkDerivation rec {
   pname = "Quake3e";
-  version = "2022-04-01-dev";
+  version = "2024-09-02-dev";
 
   src = fetchFromGitHub {
     owner = "ec-";
     repo = pname;
-    rev = "c6cec00b858aa5955eb1d6eb65b9bfd41fd869cb";
-    sha256 = "0qd13fndbhgkkmhxbprpzmj2l2v9ihacxagpdqi9sg9nrzvahr9h";
+    rev = "b6e7ce4f78711e1c9d2924044a9a9d8a9db7020f";
+    sha256 = "sha256-tQgrHiP+QhBzcUnHRwzaDe38Th0uDt450fra8O3Vjqc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
   buildInputs = [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext SDL2 glibc ];
   env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
   enableParallelBuilding = true;
@@ -36,19 +54,27 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     make install DESTDIR=$out/lib
-    makeWrapper $out/lib/quake3e.x64 $out/bin/quake3e
-    makeWrapper $out/lib/quake3e.ded.x64 $out/bin/quake3e.ded
+    makeWrapper $out/lib/quake3e.${arch} $out/bin/quake3e
+    makeWrapper $out/lib/quake3e.ded.${arch} $out/bin/quake3e.ded
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Quake3e";
+      exec = "quake3e";
+      desktopName = "Quake3e";
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ec-/Quake3e";
     description = "Improved Quake III Arena engine";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pmiddend ];
-    badPlatforms = platforms.aarch64;
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    maintainers = with maintainers; [ pmiddend alx ];
   };
 }

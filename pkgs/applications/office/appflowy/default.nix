@@ -1,31 +1,46 @@
-{ stdenv
-, lib
-, fetchzip
-, autoPatchelfHook
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
-, gtk3
-, xdg-user-dirs
-, keybinder3
-, libnotify
+{
+  stdenvNoCC,
+  lib,
+  fetchzip,
+  autoPatchelfHook,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  gtk3,
+  xdg-user-dirs,
+  keybinder3,
+  libnotify,
 }:
 
-stdenv.mkDerivation rec {
+let
+  dist =
+    rec {
+      x86_64-linux = {
+        urlSuffix = "linux-x86_64.tar.gz";
+        hash = "sha256-sQ3dxwPWHLUoWgnR9+oHaFoDzXxtwKRiBvz2wkFB01g=";
+      };
+      x86_64-darwin = {
+        urlSuffix = "macos-universal.zip";
+        hash = "sha256-4bU/qecZBrTr34SZAjDDgwpXAAHDITz6lV6mJGjElko=";
+      };
+      aarch64-darwin = x86_64-darwin;
+    }
+    ."${stdenvNoCC.hostPlatform.system}";
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.3.8";
+  version = "0.6.8";
 
   src = fetchzip {
-    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-linux-x86_64.tar.gz";
-    hash = "sha256-3ICeKSqzx1zp/KpaAFl9qLSaugWm4HZrKjrDCWz9ok4=";
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
+    inherit (dist) hash;
     stripRoot = false;
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
     makeWrapper
     copyDesktopItems
-  ];
+  ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     gtk3
@@ -36,33 +51,49 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    lib.optionalString stdenvNoCC.isLinux ''
+      runHook preInstall
 
-    cd AppFlowy/
+      cd AppFlowy/
 
-    mkdir -p $out/opt/
-    mkdir -p $out/bin/
+      mkdir -p $out/{bin,opt}
 
-    # Copy archive contents to the outpout directory
-    cp -r ./* $out/opt/
+      # Copy archive contents to the outpout directory
+      cp -r ./* $out/opt/
 
-    runHook postInstall
-  '';
+      # Copy icon
+      install -Dm444 data/flutter_assets/assets/images/flowy_logo.svg $out/share/icons/hicolor/scalable/apps/appflowy.svg
 
-  preFixup = ''
-    # Add missing libraries to appflowy using the ones it comes with
-    makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
-      --set LD_LIBRARY_PATH "$out/opt/lib/" \
-      --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
-  '';
+      runHook postInstall
+    ''
+    + lib.optionalString stdenvNoCC.isDarwin ''
+      runHook preInstall
 
-  desktopItems = [
+      mkdir -p $out/{Applications,bin}
+      cp -r ./AppFlowy.app $out/Applications/
+
+      runHook postInstall
+    '';
+
+  preFixup =
+    lib.optionalString stdenvNoCC.isLinux ''
+      # Add missing libraries to appflowy using the ones it comes with
+      makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
+        --set LD_LIBRARY_PATH "$out/opt/lib/" \
+        --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
+    ''
+    + lib.optionalString stdenvNoCC.isDarwin ''
+      makeWrapper $out/Applications/AppFlowy.app/Contents/MacOS/AppFlowy $out/bin/appflowy
+    '';
+
+  desktopItems = lib.optionals stdenvNoCC.isLinux [
     (makeDesktopItem {
-      name = pname;
+      name = "appflowy";
       desktopName = "AppFlowy";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       exec = "appflowy";
+      icon = "appflowy";
       categories = [ "Office" ];
     })
   ];
@@ -72,8 +103,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.appflowy.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
-    changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${version}";
+    changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
     maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    mainProgram = "appflowy";
   };
-}
+})

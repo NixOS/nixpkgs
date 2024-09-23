@@ -1,7 +1,7 @@
 { lib
 , stdenv
-, mkDerivation
-, fetchurl
+, fetchFromGitHub
+, fetchpatch
 , cmake
 , doxygen
 , graphviz
@@ -12,11 +12,13 @@
 , gmp
 , libGL
 , libGLU
+, libSM
 , mpfr
 , proj
 , python3
 , qtxmlpatterns
 , qwt
+, wrapQtAppsHook
 }:
 
 let
@@ -30,24 +32,30 @@ let
   cgal = cgal_5.override {
     boost = boost';
   };
-in mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "gplates";
-  version = "2.3.0";
+  version = "2.5";
 
-  src = fetchurl {
-    name = "gplates_${version}_src.tar.bz2";
-    url = "https://www.earthbyte.org/download/8421/?uid=b89bb31428";
-    sha256 = "0lrcmcxc924ixddii8cyglqlwwxvk7f00g4yzbss5i3fgcbh8n96";
+  src = fetchFromGitHub {
+    owner = "GPlates";
+    repo = "GPlates";
+    rev = "GPlates-${finalAttrs.version}";
+    hash = "sha256-3fEwm5EKK9RcRbnyUejgwfjdsXaujjZjoMbq/BbVMeM=";
   };
 
   patches = [
-    ./boost-placeholders.patch
+    (fetchpatch {
+      name = "qwt-6.3-compile-error-fix.patch";
+      url = "https://github.com/GPlates/GPlates/commit/c4680ebe54f4535909085feacecd66410a91ff98.patch";
+      hash = "sha256-mw5+GLayMrmcSDd1ai+0JTuY3iedHT9u2kx5Dd2wMjg=";
+    })
   ];
 
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -58,6 +66,7 @@ in mkDerivation rec {
     gmp
     libGL
     libGLU
+    libSM
     mpfr
     proj
     python
@@ -67,9 +76,10 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
+    mainProgram = "gplates";
     homepage = "https://www.gplates.org";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gplates.x86_64-darwin
+    broken = stdenv.isDarwin; # FIX: this check: https://github.com/GPlates/GPlates/blob/gplates/cmake/modules/Config_h.cmake#L72
   };
-}
+})

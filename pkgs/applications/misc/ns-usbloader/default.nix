@@ -4,6 +4,8 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
+, wrapGAppsHook3
+, gvfs
 , maven
 , jre
 }:
@@ -18,13 +20,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "ns-usbloader";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "developersu";
     repo = "ns-usbloader";
     rev = "v${version}";
-    sha256 = "sha256-x4zGwsDUVUHI4AUMPSqgnZVyZx+pWQA5xvtrFE8U3QU=";
+    sha256 = "sha256-gSf5SCIhcUEYGsYssXVGjUweVU+guxOI+lzD3ANr96w=";
   };
 
   patches = [ ./no-launch4j.patch ./make-deterministic.patch ];
@@ -35,22 +37,30 @@ maven.buildMavenPackage rec {
     x86_64-linux = "sha256-vXZAlZOh9pXNF1RL78oQRal5pkXFRKDz/7SP9LibgiA=";
     aarch64-linux = "sha256-xC+feb41EPi30gBrVR8usanVULI2Pt0knztzNagPQiw=";
   };
-  mvnParameters = "-DskipTests";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
+    wrapGAppsHook3
+    gvfs
   ];
+
+  doCheck = false;
+
+  # Don't wrap binaries twice.
+  dontWrapGApps = true;
+
+  ### Issues:
+  # * Set us to only use software rendering with `-Dprism.order=sw`, had a hard time
+  #   getting `prism_es2` happy with NixOS's GL/GLES.
+  # * Currently, there's also a lot of `Failed to build parent project for org.openjfx:javafx-*`
+  #   at build, but jar runs fine when using `jreWithJavaFX`.
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/java
     install -Dm644 target/ns-usbloader-${version}.jar $out/share/java/ns-usbloader.jar
-
-    mkdir -p $out/bin
-    makeWrapper ${jreWithJavaFX}/bin/java $out/bin/ns-usbloader \
-      --append-flags "-jar $out/share/java/ns-usbloader.jar"
 
     mkdir -p $out/lib/udev/rules.d
     install -Dm644 ${./99-ns-usbloader.rules} $out/lib/udev/rules.d/99-ns-usbloader.rules
@@ -62,6 +72,13 @@ maven.buildMavenPackage rec {
     install -Dm644 target/classes/res/app_icon128x128.png $out/share/icons/hicolor/128x128/apps/ns-usbloader.png
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    mkdir -p $out/bin
+    makeWrapper ${jreWithJavaFX}/bin/java $out/bin/ns-usbloader \
+      --append-flags "-Dprism.order=sw -jar $out/share/java/ns-usbloader.jar" \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [
@@ -84,5 +101,6 @@ maven.buildMavenPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ soupglasses ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "ns-usbloader";
   };
 }

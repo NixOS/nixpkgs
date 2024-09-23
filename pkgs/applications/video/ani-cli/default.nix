@@ -21,13 +21,13 @@ assert withMpv || withVlc || withIina;
 
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
-  version = "4.6";
+  version = "4.9";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     rev = "v${version}";
-    hash = "sha256-ahyCD4QsYyb3xtNK03HITeF0+hJFIHZ+PAjisuS/Kdo=";
+    hash = "sha256-7zuepWTtrFp9RW3zTSjPzyJ9e+09PdKgwcnV+DqPEUY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/pystardust/ani-cli";
-    description = "A cli tool to browse and play anime";
+    description = "Cli tool to browse and play anime";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ skykanin ];
     platforms = platforms.unix;

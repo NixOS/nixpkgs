@@ -1,43 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# build-system
-, setuptools
-
-# l10n
-, polib
-, lingua
-, chameleon
-
-# dependencies
-, python-dateutil
-
-# tests
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  chameleon,
+  fetchFromGitHub,
+  importlib-metadata,
+  lingva,
+  polib,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.37";
+  version = "0.57";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "dr-prodigy";
+    owner = "vacanza";
     repo = "python-holidays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3IhyHLwTPLTcyZY/9dZFmIr7Ael8I3mZrXhqYaULwY8=";
+    hash = "sha256-/aijcDD0gzg217NuD7A9qdgArek1fHWjb2SfA2H4gww=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
 
     # l10n
-    lingua
+    lingva
     chameleon
     polib
   ];
@@ -52,9 +45,7 @@ buildPythonPackage rec {
     ./scripts/l10n/generate_mo_files.py
   '';
 
-  propagatedBuildInputs = [
-    python-dateutil
-  ];
+  dependencies = [ python-dateutil ];
 
   doCheck = false;
 
@@ -64,21 +55,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "holidays"
-  ];
-
-  disabledTests = [
-    # Failure starting with 0.24
-    "test_l10n"
-  ];
+  pythonImportsCheck = [ "holidays" ];
 
   meta = with lib; {
     description = "Generate and work with holidays in Python";
-    homepage = "https://github.com/dr-prodigy/python-holidays";
-    changelog = "https://github.com/dr-prodigy/python-holidays/releases/tag/v${version}";
+    homepage = "https://github.com/vacanza/python-holidays";
+    changelog = "https://github.com/vacanza/python-holidays/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab jluttine ];
+    maintainers = with maintainers; [
+      fab
+      jluttine
+    ];
   };
 }
-

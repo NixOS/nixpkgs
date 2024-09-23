@@ -1,47 +1,43 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cmake
-, ninja
-, pybind11
-, scikit-build-core
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  ninja,
+  pybind11,
+  scikit-build-core,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "awkward-cpp";
-  version = "26";
+  version = "38";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-o3wI+JEmtjfUczRUob8/KLGNn3lH0h3GuhIDfYg7HGY=";
+    pname = "awkward_cpp";
+    inherit version;
+    hash = "sha256-l0SVah14fD0hXqE8WqG2EQnIk/Ad0e/i2mj1jt6K0Vs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     ninja
     pybind11
     scikit-build-core
-  ] ++ scikit-build-core.optional-dependencies.pyproject;
-
-  propagatedBuildInputs = [
-    numpy
   ];
+
+  dependencies = [ numpy ];
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "awkward_cpp"
-  ];
+  pythonImportsCheck = [ "awkward_cpp" ];
 
-  meta = with lib; {
+  meta = {
     description = "CPU kernels and compiled extensions for Awkward Array";
     homepage = "https://github.com/scikit-hep/awkward";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

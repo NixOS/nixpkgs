@@ -1,70 +1,71 @@
-{ lib
-, python3
-, buildPythonPackage
-, fetchFromGitHub
-, agate
-, cffi
-, click
-, colorama
-, dbt-extractor
-, dbt-semantic-interfaces
-, hologram
-, idna
-, isodate
-, jinja2
-, logbook
-, mashumaro
-, minimal-snowplow-tracker
-, networkx
-, packaging
-, pathspec
-, protobuf
-, pythonRelaxDepsHook
-, pytz
-, pyyaml
-, requests
-, sqlparse
-, typing-extensions
-, urllib3
-, werkzeug
+{
+  lib,
+  agate,
+  buildPythonPackage,
+  click,
+  daff,
+  dbt-adapters,
+  dbt-common,
+  dbt-extractor,
+  dbt-semantic-interfaces,
+  fetchFromGitHub,
+  jinja2,
+  logbook,
+  mashumaro,
+  minimal-snowplow-tracker,
+  networkx,
+  packaging,
+  pathspec,
+  protobuf,
+  callPackage,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
+  setuptools,
+  sqlparse,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.6.2";
-  format = "setuptools";
+  version = "1.8.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zmZdFOB0jQHamRJ7Zuzr/augP6Y2smAdUvqSXDZDuwo=";
+    hash = "sha256-Zd1qPTfJgoGpkrMSt0K1jAdYAxICdru9vIXXqbmZryo=";
   };
 
   sourceRoot = "${src.name}/core";
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [
     "agate"
     "click"
+    "dbt-semantic-interfaces"
     "mashumaro"
     "networkx"
     "logbook"
+    "pathspec"
+    "urllib3"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     agate
-    cffi
     click
-    colorama
+    daff
+    dbt-adapters
+    dbt-common
     dbt-extractor
     dbt-semantic-interfaces
-    hologram
-    idna
-    isodate
     jinja2
     logbook
     mashumaro
@@ -78,15 +79,13 @@ buildPythonPackage rec {
     requests
     sqlparse
     typing-extensions
-    urllib3
-    werkzeug
   ] ++ mashumaro.optional-dependencies.msgpack;
 
   # tests exist for the dbt tool but not for this package specifically
   doCheck = false;
 
   passthru = {
-    withAdapters = python3.pkgs.callPackage ./with-adapters.nix { };
+    withAdapters = callPackage ./with-adapters.nix { };
   };
 
   meta = with lib; {
@@ -110,7 +109,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-core";
     changelog = "https://github.com/dbt-labs/dbt-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mausch tjni ];
+    maintainers = with maintainers; [
+      mausch
+      tjni
+    ];
     mainProgram = "dbt";
   };
 }

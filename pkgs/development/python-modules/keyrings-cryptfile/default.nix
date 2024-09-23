@@ -1,17 +1,20 @@
-{ lib
-, argon2-cffi
-, buildPythonPackage
-, fetchPypi
-, keyring
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  argon2-cffi,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  keyring,
+  pycryptodome,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "keyrings-cryptfile";
   version = "1.3.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -21,23 +24,19 @@ buildPythonPackage rec {
     hash = "sha256-fCpFPKuZhUJrjCH3rVSlfkn/joGboY4INAvYgBrPAJE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "-s --cov=keyrings/cryptfile" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argon2-cffi
     keyring
     pycryptodome
   ];
 
-  pythonImportsCheck = [
-    "keyrings.cryptfile"
-  ];
+  pythonImportsCheck = [ "keyrings.cryptfile" ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [
@@ -47,9 +46,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Encrypted file keyring backend";
+    mainProgram = "cryptfile-convert";
     homepage = "https://github.com/frispete/keyrings.cryptfile";
     changelog = "https://github.com/frispete/keyrings.cryptfile/blob/v${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = [ maintainers.lourkeur ];
+    maintainers = [ maintainers.bbjubjub ];
   };
 }

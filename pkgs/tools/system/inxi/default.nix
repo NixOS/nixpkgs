@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
+{ lib, stdenv, fetchFromGitea, perl, perlPackages, makeWrapper
 , ps, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
 , file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
 , binutils, tree, upower, pciutils
-, withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
+, withRecommendedDisplayInformationPrograms ? withRecommends, mesa-demos, xorg
 }:
 
 let
@@ -16,19 +16,20 @@ let
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms
-    ([ glxinfo ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
+    ([ mesa-demos ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
   programs = [ ps dnsutils ] # Core programs
     ++ recommendedSystemPrograms
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.3.04-1";
+  version = "3.3.35-1";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "sha256-/EutIHQGLiRcRD/r8LJYG7oJBb7EAhR5cn6QiC7zMOc=";
+    hash = "sha256-wWG/fs+tZIiFI+dcqfwXeh9RxT2zJDiAZoizhAAu60Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -45,7 +46,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A full featured CLI system information tool";
+    description = "Full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and
       IRC. It is also used a debugging tool for forum technical support to
@@ -57,7 +58,7 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "inxi";
   };
 }

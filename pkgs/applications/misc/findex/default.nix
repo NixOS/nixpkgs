@@ -1,32 +1,44 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, keybinder3, gtk3 }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook3
+, keybinder3
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "findex";
-  version = "0.7.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mdgaziur";
-    repo = pname;
+    repo = "findex";
     rev = "v${version}";
-    hash = "sha256-KaT6lEbrUelv/f9bIBW4bSCuExFu4b7XI7hcrO4mD0M=";
+    hash = "sha256-IpgmeH5oREstud0nw4i2xYeZcJYG6eCWyw3hhid/DfU=";
   };
 
-  cargoHash = "sha256-7A+EF88DJrgsKPOJt2xaBnWSMkyhpFImyZmnHcyp+Dw=";
+  cargoHash = "sha256-wsqsPh1kevkIz235qnkLkp47CnCh6qi56sZP95Upymc=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  postPatch = ''
+    # failing rust documentation tests and faulty quotes "`README.md`"
+    sed -i '/^\/\/\//d' ./crates/findex-plugin/src/lib.rs
+    substituteInPlace ./crates/findex/src/gui/css.rs \
+      --replace-fail '/opt/findex/style.css' "$out/share/findex/style.css"
+  '';
 
-  buildInputs = [
-    gtk3
-    keybinder3
-  ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+
+  buildInputs = [ keybinder3 ];
+
+  postInstall = ''
+    install -Dm644 css/style.css $out/share/findex/style.css
+  '';
 
   meta = with lib; {
     description = "Highly customizable application finder written in Rust and uses Gtk3";
     homepage = "https://github.com/mdgaziur/findex";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.pinkcreeper100 ];
+    maintainers = [ ];
   };
 }

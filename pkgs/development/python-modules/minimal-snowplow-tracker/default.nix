@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -23,14 +24,15 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "snowplow_tracker"
-  ];
+  pythonImportsCheck = [ "snowplow_tracker" ];
 
   meta = with lib; {
     description = "Minimal snowplow event tracker";
     homepage = "https://github.com/dbt-labs/snowplow-python-tracker";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mausch tjni ];
+    maintainers = with maintainers; [
+      mausch
+      tjni
+    ];
   };
 }

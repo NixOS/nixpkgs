@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "git-lfs";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     rev = "v${version}";
-    hash = "sha256-lZx+sJQttclZPET0jkv3dmpQysCpsYani+La7yfSUlI=";
+    hash = "sha256-xSLXbAvIoY3c341qi89pTrjBZdXh/bPrweJD2O2gkjY=";
   };
 
-  vendorHash = "sha256-VmPeQYWOHFqFLHKcKH3WHz50yx7GMHVIDPzqiVwwjSg=";
+  vendorHash = "sha256-N8HB2qwBxjzfNucftHxmX2W9srCx62pjmkCWzwiCj/I=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles ];
 
@@ -54,7 +54,7 @@ buildGoModule rec {
     homepage = "https://git-lfs.github.com/";
     changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ twey marsam ];
+    maintainers = with maintainers; [ twey ];
     mainProgram = "git-lfs";
   };
 }

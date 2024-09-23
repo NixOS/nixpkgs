@@ -3,10 +3,12 @@
 To install the rust compiler and cargo put
 
 ```nix
-environment.systemPackages = [
-  rustc
-  cargo
-];
+{
+  environment.systemPackages = [
+    rustc
+    cargo
+  ];
+}
 ```
 
 into your `configuration.nix` or bring them into scope with `nix-shell -p rustc cargo`.
@@ -35,44 +37,48 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jtBw4ahSl88L0iuCXxQgZVm1EcboWRJMNtjxLVTtzts=";
 
-  meta = with lib; {
-    description = "A fast line-oriented regex search tool, similar to ag and ack";
+  meta = {
+    description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    license = licenses.unlicense;
-    maintainers = [];
+    license = lib.licenses.unlicense;
+    maintainers = [ ];
   };
 }
 ```
 
-`buildRustPackage` requires either the `cargoSha256` or the
-`cargoHash` attribute which is computed over all crate sources of this
-package. `cargoHash256` is used for traditional Nix SHA-256 hashes,
-such as the one in the example above. `cargoHash` should instead be
-used for [SRI](https://www.w3.org/TR/SRI/) hashes. For example:
+`buildRustPackage` requires a `cargoHash` attribute, computed over all crate sources of this package.
 
-Exception: If the application has cargo `git` dependencies, the `cargoHash`/`cargoSha256`
-approach will not work, and you will need to copy the `Cargo.lock` file of the application
-to nixpkgs and continue with the next section for specifying the options of the`cargoLock`
-section.
+::: {.warning}
+`cargoSha256` is already deprecated, and is subject to removal in favor of
+`cargoHash` which supports [SRI](https://www.w3.org/TR/SRI/) hashes.
+
+If you are still using `cargoSha256`, you can simply replace it with
+`cargoHash` and recompute the hash, or convert the original sha256 to SRI
+hash using `nix-hash --to-sri --type sha256 "<original sha256>"`.
+:::
 
 ```nix
+{
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
+}
 ```
+
+Exception: If the application has cargo `git` dependencies, the `cargoHash`
+approach will not work, and you will need to copy the `Cargo.lock` file of the application
+to nixpkgs and continue with the next section for specifying the options of the `cargoLock`
+section.
+
 
 Both types of hashes are permitted when contributing to nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
 expression and building the package once. The correct checksum can
 then be taken from the failed build. A fake hash can be used for
-`cargoSha256` as follows:
+`cargoHash` as follows:
 
 ```nix
-  cargoSha256 = lib.fakeSha256;
-```
-
-For `cargoHash` you can use:
-
-```nix
+{
   cargoHash = lib.fakeHash;
+}
 ```
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
@@ -89,7 +95,7 @@ directory into a tar.gz archive.
 The tarball with vendored dependencies contains a directory with the
 package's `name`, which is normally composed of `pname` and
 `version`. This means that the vendored dependencies hash
-(`cargoSha256`/`cargoHash`) is dependent on the package name and
+(`cargoHash`) is dependent on the package name and
 version. The `cargoDepsName` attribute can be used to use another name
 for the directory of vendored dependencies. For example, the hash can
 be made invariant to the version by setting `cargoDepsName` to
@@ -114,7 +120,7 @@ rustPlatform.buildRustPackage rec {
 
 ### Importing a `Cargo.lock` file {#importing-a-cargo.lock-file}
 
-Using `cargoSha256` or `cargoHash` is tedious when using
+Using a vendored hash (`cargoHash`) is tedious when using
 `buildRustPackage` within a project, since it requires that the hash
 is updated after every change to `Cargo.lock`. Therefore,
 `buildRustPackage` also supports vendoring dependencies directly from
@@ -161,9 +167,11 @@ doesn't add a `Cargo.lock` to your `src`, and a `Cargo.lock` is still
 required to build a rust package. A simple fix is to use:
 
 ```nix
-postPatch = ''
-  ln -s ${./Cargo.lock} Cargo.lock
-'';
+{
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+}
 ```
 
 The output hash of each dependency that uses a git source must be
@@ -243,7 +251,7 @@ By default, it takes the `stdenv.hostPlatform.config` and replaces components
 where they are known to differ. But there are ways to customize the argument:
 
  - To choose a different target by name, define
-   `stdenv.hostPlatform.rustc.config` as that name (a string), and that
+   `stdenv.hostPlatform.rust.rustcTarget` as that name (a string), and that
    name will be used instead.
 
    For example:
@@ -251,7 +259,7 @@ where they are known to differ. But there are ways to customize the argument:
    ```nix
    import <nixpkgs> {
      crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rustc.config = "thumbv7em-none-eabi";
+       rust.rustcTarget = "thumbv7em-none-eabi";
      };
    }
    ```
@@ -263,10 +271,10 @@ where they are known to differ. But there are ways to customize the argument:
    ```
 
  - To pass a completely custom target, define
-   `stdenv.hostPlatform.rustc.config` with its name, and
-   `stdenv.hostPlatform.rustc.platform` with the value.  The value will be
+   `stdenv.hostPlatform.rust.rustcTarget` with its name, and
+   `stdenv.hostPlatform.rust.platform` with the value.  The value will be
    serialized to JSON in a file called
-   `${stdenv.hostPlatform.rustc.config}.json`, and the path of that file
+   `${stdenv.hostPlatform.rust.rustcTarget}.json`, and the path of that file
    will be used instead.
 
    For example:
@@ -274,8 +282,8 @@ where they are known to differ. But there are ways to customize the argument:
    ```nix
    import <nixpkgs> {
      crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rustc.config = "thumb-crazy";
-       rustc.platform = { foo = ""; bar = ""; };
+       rust.rustcTarget = "thumb-crazy";
+       rust.platform = { foo = ""; bar = ""; };
      };
    }
    ```
@@ -408,7 +416,7 @@ the `cargoPatches` attribute to update or add it.
 
 ```nix
 rustPlatform.buildRustPackage rec {
-  (...)
+  # ...
   cargoPatches = [
     # a patch file to add/update Cargo.lock in the source code
     ./add-Cargo.lock.patch
@@ -432,10 +440,12 @@ containing `Cargo.toml` and `Cargo.lock`, `fetchCargoTarball`
 can be used as follows:
 
 ```nix
-cargoDeps = rustPlatform.fetchCargoTarball {
-  inherit src;
-  hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
-};
+{
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+  };
+}
 ```
 
 The `src` attribute is required, as well as a hash specified through
@@ -457,23 +467,27 @@ function does not require a hash (unless git dependencies are used)
 and fetches every dependency as a separate fixed-output derivation.
 `importCargoLock` can be used as follows:
 
-```
-cargoDeps = rustPlatform.importCargoLock {
-  lockFile = ./Cargo.lock;
-};
+```nix
+{
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+  };
+}
 ```
 
 If the `Cargo.lock` file includes git dependencies, then their output
 hashes need to be specified since they are not available through the
 lock file. For example:
 
-```
-cargoDeps = rustPlatform.importCargoLock {
-  lockFile = ./Cargo.lock;
-  outputHashes = {
-    "rand-0.8.3" = "0ya2hia3cn31qa8894s3av2s8j5bjwb6yq92k0jsnlx7jid0jwqa";
+```nix
+{
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rand-0.8.3" = "0ya2hia3cn31qa8894s3av2s8j5bjwb6yq92k0jsnlx7jid0jwqa";
+    };
   };
-};
+}
 ```
 
 If you do not specify an output hash for a git dependency, building
@@ -553,8 +567,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src sourceRoot;
-    name = "${pname}-${version}";
+    inherit pname version src sourceRoot;
     hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
   };
 
@@ -597,9 +610,8 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+    inherit pname version src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
     hash = "sha256-PS562W4L1NimqDV2H0jl5vYhL08H9est/pbIxSdYVfo=";
   };
 
@@ -628,6 +640,7 @@ builds the `retworkx` Python package. `fetchCargoTarball` and
 buildPythonPackage rec {
   pname = "retworkx";
   version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
@@ -637,14 +650,70 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-heOBK8qi2nuc/Ib+I/vLzZ1fUUD/G/KTw9d7M4Hz5O0=";
   };
 
-  format = "pyproject";
-
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+
+  # ...
+}
+```
+
+#### Rust package built with `meson` {#rust-package-built-with-meson}
+
+Some projects, especially GNOME applications, are built with the Meson Build System instead of calling Cargo directly. Using `rustPlatform.buildRustPackage` may successfully build the main program, but related files will be missing. Instead, you need to set up Cargo dependencies with `fetchCargoTarball` and `cargoSetupHook` and leave the rest to Meson. `rust` and `cargo` are still needed in `nativeBuildInputs` for Meson to use.
+
+```nix
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, rustPlatform
+, rustc
+, cargo
+, wrapGAppsHook4
+, blueprint-compiler
+, libadwaita
+, libsecret
+, tracker
+}:
+
+stdenv.mkDerivation rec {
+  pname = "health";
+  version = "0.95.0";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "health";
+    rev = version;
+    hash = "sha256-PrNPprSS98yN8b8yw2G6hzTSaoE65VbsM3q7FVB4mds=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit pname version src;
+    hash = "sha256-8fa3fa+sFi5H+49B5sr2vYPkp9C9s6CcE0zv4xB8gww=";
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+    wrapGAppsHook4
+    blueprint-compiler
+  ];
+
+  buildInputs = [
+    libadwaita
+    libsecret
+    tracker
+  ];
 
   # ...
 }
@@ -700,7 +769,7 @@ with import <nixpkgs> {};
     hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
       postPatch = ''
         substituteInPlace lib/zoneinfo.rs \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+          --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
       '';
     };
   };
@@ -731,27 +800,27 @@ general. A number of other parameters can be overridden:
 - The version of `rustc` used to compile the crate:
 
   ```nix
-  (hello {}).override { rust = pkgs.rust; };
+  (hello {}).override { rust = pkgs.rust; }
   ```
 
 - Whether to build in release mode or debug mode (release mode by
   default):
 
   ```nix
-  (hello {}).override { release = false; };
+  (hello {}).override { release = false; }
   ```
 
 - Whether to print the commands sent to `rustc` when building
   (equivalent to `--verbose` in cargo:
 
   ```nix
-  (hello {}).override { verbose = false; };
+  (hello {}).override { verbose = false; }
   ```
 
 - Extra arguments to be passed to `rustc`:
 
   ```nix
-  (hello {}).override { extraRustcOpts = "-Z debuginfo=2"; };
+  (hello {}).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
 - Phases, just like in any other derivation, can be specified using
@@ -767,7 +836,7 @@ general. A number of other parameters can be overridden:
     preConfigure = ''
        echo "pub const PATH=\"${hi.out}\";" >> src/path.rs"
     '';
-  };
+  }
   ```
 
 ### Setting Up `nix-shell` {#setting-up-nix-shell}
@@ -902,8 +971,8 @@ with import <nixpkgs>
 };
 let
   rustPlatform = makeRustPlatform {
-    cargo = rust-bin.stable.latest.minimal;
-    rustc = rust-bin.stable.latest.minimal;
+    cargo = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
+    rustc = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
   };
 in
 
@@ -922,11 +991,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
-    description = "A fast line-oriented regex search tool, similar to ag and ack";
+  meta = {
+    description = "Fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    license = with licenses; [ mit unlicense ];
-    maintainers = with maintainers; [];
+    license = with lib.licenses; [ mit unlicense ];
+    maintainers = with lib.maintainers; [];
   };
 }
 ```
@@ -963,7 +1032,7 @@ repository:
      lib.updateManyAttrsByPath [{
        path = [ "packages" "stable" ];
        update = old: old.overrideScope(final: prev: {
-         rustc = prev.rustc.overrideAttrs (_: {
+         rustc-unwrapped = prev.rustc-unwrapped.overrideAttrs (_: {
            src = lib.cleanSource /git/scratch/rust;
            # do *not* put passthru.isReleaseTarball=true here
          });
@@ -1003,4 +1072,3 @@ nix-build $NIXPKGS -A package-broken-by-rust-changes
 The `git submodule update --init` and `cargo vendor` commands above
 require network access, so they can't be performed from within the
 `rustc` derivation, unfortunately.
-

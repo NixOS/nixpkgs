@@ -38,14 +38,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.260";
+  version = "0.269";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-spWnaf7xXK2xzgdUagsgN5doVrpJk7EA6fzYd9FlFm0=";
+    hash = "sha256-ECOPohrfAVz0Rx/oYBFJvo91FoS76RJuBzadfXoXB4c=";
   };
 
   outputs = [ "out" "tools" ];
@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.mamedev.org/";
-    description = "A multi-purpose emulation framework";
+    description = "Multi-purpose emulation framework";
     longDescription = ''
       MAME's purpose is to preserve decades of software history. As electronic
       technology continues to rush forward, MAME prevents this important

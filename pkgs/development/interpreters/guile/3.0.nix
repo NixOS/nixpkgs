@@ -26,11 +26,11 @@ let
 in
 builder rec {
   pname = "guile";
-  version = "3.0.9";
+  version = "3.0.10";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-GiYlrHKyNm6VeS8/51j9Lfd1tARKkKSpeHMm5mwNdQ0=";
+    sha256 = "sha256-vXFoUX/VJjM0RtT3q4FlJ5JWNAlPvTcyLhfiuNjnY4g=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -163,7 +163,7 @@ builder rec {
       foreign function call interface, and powerful string processing.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

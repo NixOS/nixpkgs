@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, base58
-, coincurve
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  base58,
+  coincurve,
 }:
 
 buildPythonPackage rec {
@@ -23,22 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-o8UKR17XDWp1wTWYeDL0DJY+D11YI4mg0UuGEAPkHxE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "coincurve" ];
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     base58
     coincurve
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bip32"
-  ];
+  pythonImportsCheck = [ "bip32" ];
 
   meta = with lib; {
     description = "Minimalistic implementation of the BIP32 key derivation scheme";

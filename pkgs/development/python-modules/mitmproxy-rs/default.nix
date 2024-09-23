@@ -1,30 +1,32 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, libiconv
-, mitmproxy-macos
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  libiconv,
+  mitmproxy,
+  mitmproxy-macos,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.4.1";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
     rev = version;
-    hash = "sha256-Vc7ez/W40CefO2ZLAHot14p478pDPtQor865675vCtI=";
+    hash = "sha256-rnM2MNJ9ZVmwFjhXU8kPEQjpqNIzVZ3bVtm43WvGj5E=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
     outputHashes = {
-      "internet-packet-0.1.0" = "sha256-VtEuCE1sulBIFVymh7YW7VHCuIBjtb6tHoPz2tjxX+Q=";
+      "smoltcp-0.11.0" = "sha256-KC9nTKd2gfZ1ICjrkLK//M2bbqYlfcCK18gBdN0RqWQ=";
     };
+    lockFile = ./Cargo.lock;
   };
 
   buildAndTestSubdir = "mitmproxy-rs";
@@ -43,11 +45,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mitmproxy_rs" ];
 
   meta = with lib; {
-    description = "The Rust bits in mitmproxy";
+    description = "Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs";
-    changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md#${lib.replaceStrings ["."] [""] version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.all;
+    inherit (mitmproxy.meta) maintainers;
   };
 }

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "backcall";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,5 +26,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/takluyver/backcall";
     license = lib.licenses.bsd3;
   };
-
 }

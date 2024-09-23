@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/fcsonline/drill";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "drill";
   };
 }

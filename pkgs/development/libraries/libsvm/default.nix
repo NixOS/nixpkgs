@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsvm";
-  version = "3.32";
+  version = "3.33";
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "sha256-hkTMZRjKiLvFDYyOrRc08aubbxcBcEXvmuOHc6plPa0=";
+    sha256 = "sha256-1doSzMPQ7thFP732+sfZ8AUvPopfB6IXTk7wqdg9zfg=";
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];
@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     let
       libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
       soVersion = "3";
+      libName = if stdenv.isDarwin then "libsvm.${soVersion}${libSuff}" else "libsvm${libSuff}.${soVersion}";
     in
     ''
       runHook preInstall
 
-      install -D libsvm.so.${soVersion} $out/lib/libsvm.${soVersion}${libSuff}
-      ln -s $out/lib/libsvm.${soVersion}${libSuff} $out/lib/libsvm${libSuff}
+      install -D libsvm.so.${soVersion} $out/lib/${libName}
+      ln -s $out/lib/${libName} $out/lib/libsvm${libSuff}
 
       install -Dt $bin/bin/ svm-scale svm-train svm-predict
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A library for support vector machines";
+    description = "Library for support vector machines";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/";
     license = licenses.bsd3;
     maintainers = [ ];

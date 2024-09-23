@@ -38,8 +38,10 @@ let
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (!python.isPyPy) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
       # Use virtualenv from a Nix env.
+      # Fails on darwin with
+      #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
       nixenv-virtualenv = rec {
         env = runCommand "${python.name}-virtualenv" {} ''
           ${pythonVirtualEnv.interpreter} -m virtualenv venv
@@ -120,11 +122,51 @@ let
     }
   );
 
+  # Test editable package support
+  editableTests = let
+    testPython = python.override {
+      self = testPython;
+      packageOverrides = pyfinal: pyprev: {
+        # An editable package with a script that loads our mutable location
+        my-editable = pyfinal.mkPythonEditablePackage {
+          pname = "my-editable";
+          version = "0.1.0";
+          root = "$NIX_BUILD_TOP/src"; # Use environment variable expansion at runtime
+          # Inject a script
+          scripts = {
+            my-script = "my_editable.main:main";
+          };
+        };
+      };
+    };
+
+
+  in {
+    editable-script = runCommand "editable-test" {
+      nativeBuildInputs = [ (testPython.withPackages (ps: [ ps.my-editable ])) ];
+    } ''
+      mkdir -p src/my_editable
+
+      cat > src/my_editable/main.py << EOF
+      def main():
+        print("hello mutable")
+      EOF
+
+      test "$(my-script)" == "hello mutable"
+      test "$(python -c 'import sys; print(sys.path[1])')" == "$NIX_BUILD_TOP/src"
+
+      touch $out
+    '';
+  };
+
   # Tests to ensure overriding works as expected.
   overrideTests = let
     extension = self: super: {
       foobar = super.numpy;
     };
+    # `pythonInterpreters.pypy39_prebuilt` does not expose an attribute
+    # name (is not present in top-level `pkgs`).
+    is_prebuilt = python: python.pythonAttr == null;
   in lib.optionalAttrs (python.isPy3k) ({
     test-packageOverrides = let
       myPython = let
@@ -138,7 +180,10 @@ let
     # test-overrideScope = let
     #  myPackages = python.pkgs.overrideScope extension;
     # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
-  } // lib.optionalAttrs (python ? pythonAttr) {
+    #
+    # Have to skip prebuilt python as it's not present in top-level
+    # `pkgs` as an attribute.
+  } // lib.optionalAttrs (python ? pythonAttr && !is_prebuilt python) {
     # Test applying overrides using pythonPackagesOverlays.
     test-pythonPackagesExtensions = let
       pkgs_ = pkgs.extend(final: prev: {
@@ -184,4 +229,4 @@ let
       '';
     };
 
-in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests)
+in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests // editableTests)

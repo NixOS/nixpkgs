@@ -1,36 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, nose
-, importlib-metadata
-, platformdirs
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  importlib-metadata,
+  platformdirs,
+  tomli,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "yapf";
-  version = "0.40.1";
+  version = "0.40.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lYWH61yOxshgEZqcJdAq3fMKRPdaoVKkIg0w5WqYA3w=";
+    hash = "sha256-TauKXtcTTibVfBZHx0g6+z8TaHi1eQYreGyboWuUY3s=";
   };
 
-  # nose is unavailable on pypy
-  doCheck = !isPyPy;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     platformdirs
     tomli
   ];
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
+    changelog = "https://github.com/google/yapf/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/google/yapf";
     description = "Yet Another Python Formatter";
     longDescription = ''
@@ -54,6 +57,10 @@ buildPythonPackage rec {
       takes away some of the drudgery of maintaining your code.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres siddharthist ];
+    mainProgram = "yapf";
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      siddharthist
+    ];
   };
 }

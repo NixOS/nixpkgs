@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubedb-cli";
-  version = "0.37.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "kubedb";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-Lm7TrdUAYPYBKC+9lPmWTDp0BQqiAc/A107wtiGDwZ4=";
+    sha256 = "sha256-C106krMg4vtRe78hh6emAGBxEApfc5ZorRgTtH+QZ9g=";
   };
 
   vendorHash = null;
@@ -17,7 +17,7 @@ buildGoModule rec {
   subPackages = [ "cmd/kubectl-dba" ];
 
   meta = with lib; {
-    description = "kubectl plugin for KubeDB by AppsCode.";
+    description = "kubectl plugin for KubeDB by AppsCode";
     homepage    = "https://github.com/kubedb/cli";
     license     = licenses.unfree;
     maintainers = [ maintainers.starcraft66 ];

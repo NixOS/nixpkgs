@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, jdk, maven
+, jdk_headless, maven
 , makeWrapper
 }:
 
@@ -23,10 +23,10 @@ maven.buildMavenPackage rec {
   };
 
   mvnFetchExtraArgs.dontConfigure = true;
-  mvnParameters = "-DskipTests";
+  mvnJdk = jdk_headless;
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
-  nativeBuildInputs = [ jdk makeWrapper ];
+  nativeBuildInputs = [ jdk_headless makeWrapper ];
 
   dontConfigure = true;
   preBuild = ''
@@ -38,6 +38,8 @@ maven.buildMavenPackage rec {
       --no-man-pages \
       --compress 2
   '';
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
@@ -52,7 +54,8 @@ maven.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    description = "Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    mainProgram = "java-language-server";
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ hqurve ];

@@ -1,19 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, tox
-, six
-, python-dateutil
-, kitchen
-, pytestCheckHook
-, pytz
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # native dependencies
+  taskwarrior2,
+
+  # dependencies
+  kitchen,
+  python-dateutil,
+  pytz,
+
+  # tests
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "taskw";
   version = "2.0.0";
+  pyproject = true;
+
+  # ModuleNotFoundError: No module named 'distutils'
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,17 +39,23 @@ buildPythonPackage rec {
   ];
   postPatch = ''
     substituteInPlace taskw/warrior.py \
-      --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
+      --replace '@@taskwarrior@@' '${taskwarrior2}'
   '';
 
-  buildInputs = [ pkgs.taskwarrior ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ six python-dateutil kitchen pytz ];
+  buildInputs = [ taskwarrior2 ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [
+    kitchen
+    python-dateutil
+    pytz
+  ];
+
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   meta = with lib; {
-    homepage =  "https://github.com/ralphbean/taskw";
+    homepage = "https://github.com/ralphbean/taskw";
     description = "Python bindings for your taskwarrior database";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pierron ];

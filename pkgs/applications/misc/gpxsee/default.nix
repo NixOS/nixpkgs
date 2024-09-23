@@ -9,7 +9,6 @@
 , qtpositioning ? null # qt6 only
 , qtserialport
 , qtsvg
-, qt5compat ? null # qt6 only
 , wrapQtAppsHook
 }:
 
@@ -18,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.11";
+  version = "13.26";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = finalAttrs.version;
-    hash = "sha256-EJpyWuOyUVb34F5Pg8KPF9R3f3VpvZVeg8WBZ1oGbbE=";
+    hash = "sha256-EIeUcSHJXpd1/90fAPrP9F/DVyZhkcZk8MJd9VO1D70=";
   };
 
   buildInputs = [
@@ -33,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtpositioning
     qtsvg
-    qt5compat
   ] else [
     qtlocation
   ]);
@@ -63,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = isQt6 && stdenv.isDarwin;
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     description = "GPS log file viewer and analyzer";
+    mainProgram = "gpxsee";
     homepage = "https://www.gpxsee.org/";
     license = lib.licenses.gpl3Only;
     longDescription = ''

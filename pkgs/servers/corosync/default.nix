@@ -4,10 +4,12 @@
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
 , enableSnmp ? false
+, nixosTests
 }:
 
-with lib;
-
+let
+  inherit (lib) optional;
+in
 stdenv.mkDerivation rec {
   pname = "corosync";
   version = "3.1.8";
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = optionalString enableInfiniBandRdma ''
+  preConfigure = lib.optionalString enableInfiniBandRdma ''
     # configure looks for the pkg-config files
     # of librdmacm and libibverbs
     # Howver, rmda-core does not provide a pkg-config file
@@ -69,9 +71,9 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pacemaker;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://corosync.org/";
-    description = "A Group Communication System with features for implementing high availability within applications";
+    description = "Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ montag451 ryantm ];

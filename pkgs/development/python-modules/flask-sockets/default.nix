@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, gevent
-, gevent-websocket
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  gevent,
+  gevent-websocket,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
   # upstream doesn't have any tests, single file
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flask_sockets"
-  ];
+  pythonImportsCheck = [ "flask_sockets" ];
 
   meta = with lib; {
     description = "Elegant WebSockets for your Flask apps";

@@ -6,20 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gato";
-  version = "1.5";
+  version = "1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "gato";
     rev = "refs/tags/${version}";
-    hash = "sha256-M9ONeLjEKQD5Kys7OriM34dEBWDKW3qrBk9lu2TitGE=";
+    hash = "sha256-vXQFgP0KDWo1VWe7tMGCB2yEYlr/1KMXsiNupBVLBqc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=gato" ""
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
@@ -36,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     git
+    pytest-cov-stub
     pytestCheckHook
   ];
 

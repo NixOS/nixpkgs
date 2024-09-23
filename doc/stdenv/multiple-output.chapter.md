@@ -30,7 +30,9 @@ Here you find how to write a derivation that produces multiple outputs.
 In nixpkgs there is a framework supporting multiple-output derivations. It tries to cover most cases by default behavior. You can find the source separated in `<nixpkgs/pkgs/build-support/setup-hooks/multiple-outputs.sh>`; it’s relatively well-readable. The whole machinery is triggered by defining the `outputs` attribute to contain the list of desired output names (strings).
 
 ```nix
-outputs = [ "bin" "dev" "out" "doc" ];
+{
+  outputs = [ "bin" "dev" "out" "doc" ];
+}
 ```
 
 Often such a single line is enough. For each output an equally named environment variable is passed to the builder and contains the path in nix store for that output. Typically you also want to have the main `out` output, as it catches any files that didn’t get elsewhere.

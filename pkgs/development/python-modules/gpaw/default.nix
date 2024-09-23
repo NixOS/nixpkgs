@@ -1,27 +1,29 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-, writeTextFile
-, fetchurl
-, blas
-, lapack
-, mpi
-, scalapack
-, libxc
-, libvdwxc
-, which
-, ase
-, numpy
-, scipy
-, pyyaml
-, inetutils
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  writeTextFile,
+  fetchurl,
+  blas,
+  lapack,
+  mpi,
+  fftw,
+  scalapack,
+  libxc,
+  libvdwxc,
+  which,
+  ase,
+  numpy,
+  scipy,
+  pyyaml,
+  inetutils,
 }:
 
-assert lib.asserts.assertMsg (!blas.isILP64)
-  "A 32 bit integer implementation of BLAS is required.";
+assert lib.asserts.assertMsg (!blas.isILP64) "A 32 bit integer implementation of BLAS is required.";
 
-assert lib.asserts.assertMsg (!lapack.isILP64)
-  "A 32 bit integer implementation of LAPACK is required.";
+assert lib.asserts.assertMsg (
+  !lapack.isILP64
+) "A 32 bit integer implementation of LAPACK is required.";
 
 let
   gpawConfig = writeTextFile {
@@ -29,8 +31,8 @@ let
     text = ''
       # Compiler
       compiler = 'gcc'
-      mpicompiler = '${mpi}/bin/mpicc'
-      mpilinker = '${mpi}/bin/mpicc'
+      mpicompiler = '${lib.getDev mpi}/bin/mpicc'
+      mpilinker = '${lib.getDev mpi}/bin/mpicc'
 
       # BLAS
       libraries += ['blas']
@@ -71,26 +73,42 @@ let
     url = "https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-${setupVersion}.tar.gz";
     sha256 = "07yldxnn38gky39fxyv3rfzag9p4lb0xfpzn15wy2h9aw4mnhwbc";
   };
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "gpaw";
-  version = "23.9.1";
+  version = "24.1.0";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "gpaw";
     repo = pname;
     rev = version;
-    hash = "sha256-9nnK4ksTFATO6HexnxfMiih/yoY/noyJZXZOaDG/2kc=";
+    hash = "sha256-8eX50F124R46dGN2rJS/dDvPeDmEm7XpVyTiOAjMKyI=";
   };
 
   # `inetutils` is required because importing `gpaw`, as part of
   # pythonImportsCheck, tries to execute its binary, which in turn tries to
   # execute `rsh` as a side-effect.
-  nativeBuildInputs = [ which inetutils ];
+  nativeBuildInputs = [
+    which
+    inetutils
+  ];
 
-  buildInputs = [ blas scalapack libxc libvdwxc ];
+  buildInputs = [
+    blas
+    scalapack
+    libxc
+    libvdwxc
+    fftw
+  ];
 
-  propagatedBuildInputs = [ ase scipy numpy mpi pyyaml ];
+  propagatedBuildInputs = [
+    ase
+    scipy
+    numpy
+    (lib.getBin mpi)
+    pyyaml
+  ];
 
   patches = [ ./SetupPath.patch ];
 
@@ -116,7 +134,9 @@ in buildPythonPackage rec {
   doCheck = false; # Requires MPI runtime to work in the sandbox
   pythonImportsCheck = [ "gpaw" ];
 
-  passthru = { inherit mpi; };
+  passthru = {
+    inherit mpi;
+  };
 
   meta = with lib; {
     description = "Density functional theory and beyond within the projector-augmented wave method";

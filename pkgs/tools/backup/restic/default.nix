@@ -1,15 +1,15 @@
 { stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper
-, nixosTests, rclone }:
+, nixosTests, rclone, python3 }:
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.16.2";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-Qrbg8/f1ne+7c+mnUc/8CoZBjiGLohJXnu0cnc0pT4g=";
+    hash = "sha256-/kgZgHmIxZkkmLyR246CcU+8wAekuK8SruY5GBLxJXI=";
   };
 
   patches = [
@@ -17,11 +17,13 @@ buildGoModule rec {
     ./0001-Skip-testing-restore-with-permission-failure.patch
   ];
 
-  vendorHash = "sha256-Ctg6bln5kzGs7gDLo9zUpsbSybKOtHFuHvHG3cxCfac=";
+  vendorHash = "sha256-tU2msDHktlU0SvvxLQCU64p8DpL8B0QiliVCuHlLTHQ=";
 
   subPackages = [ "cmd/restic" ];
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  nativeCheckInputs = [ python3 ];
 
   passthru.tests.restic = nixosTests.restic;
 
@@ -44,9 +46,10 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://restic.net";
     changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
-    description = "A backup program that is fast, efficient and secure";
+    description = "Backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
     maintainers = [ maintainers.mbrgm maintainers.dotlambda ];
+    mainProgram = "restic";
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, perl, makeWrapper
-, makeDesktopItem, which, perlPackages, boost, wrapGAppsHook
+, makeDesktopItem, which, perlPackages, boost, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cf0QTOzhLyTcbJryCQoTVzU8kfrPV6SLpqi4s36X5N0=";
   };
 
-  nativeBuildInputs = [ makeWrapper which wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper which wrapGAppsHook3 ];
   buildInputs =
   [boost] ++
   (with perlPackages; [ perl
@@ -89,13 +89,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "G-code generator for 3D printers";
+    mainProgram = "slic3r";
     longDescription = ''
       Slic3r is the tool you need to convert a digital 3D model into printing
       instructions for your 3D printer. It cuts the model into horizontal
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
     homepage = "https://slic3r.org/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
   };

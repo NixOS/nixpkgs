@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, _7zz }:
 
 let
   pname = "notesnook";
-  version = "2.6.1";
+  version = "3.0.16";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash = {
-      x86_64-linux = "sha256-PLHP1Q4+xcHyr0323K4BD+oH57SspsrAcxRe/C6RFDU=";
-      x86_64-darwin = "sha256-gOUL3qLSM+/pr519Gc0baUtbmhA40lG6XzuCRyGILkc=";
-      aarch64-darwin = "sha256-d1nXdCv1mK4+4Gef1upIkHS3J2d9qzTLXbBWabsJwpw=";
+      x86_64-linux = "sha256-HywWk3MAWdRVaQyimlQJCFsgydXdE0VSLWliZT7f8w0=";
+      x86_64-darwin = "sha256-GgZVVt1Gm95/kyI/q99fZ9BIN+5kpxumcSJ9BexfARc=";
+      aarch64-darwin = "sha256-ldg+bVROm/XzACCmiMapMQf3f6le9FHzt18QcaH8TxA=";
     }.${system} or throwSystem;
   };
 
@@ -27,7 +27,7 @@ let
   };
 
   meta = with lib; {
-    description = "A fully open source & end-to-end encrypted note taking alternative to Evernote.";
+    description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
       Notesnook is a free (as in speech) & open source note taking app
       focused on user privacy & ease of use. To ensure zero knowledge
@@ -36,8 +36,9 @@ let
     '';
     homepage = "https://notesnook.com";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ j0lol ];
+    maintainers = with maintainers; [ cig0 j0lol ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "notesnook";
   };
 
   linux = appimageTools.wrapType2 rec {
@@ -47,10 +48,7 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    multiPkgs = null; # no 32bit needed
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${pname}-${version},${pname}}
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/notesnook.desktop \
@@ -61,9 +59,14 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ _7zz ];
 
     sourceRoot = "Notesnook.app";
+
+    # 7zz did not unpack in setup hook for some reason, done manually here
+    unpackPhase = ''
+      7zz x $src
+    '';
 
     installPhase = ''
       mkdir -p $out/Applications/Notesnook.app

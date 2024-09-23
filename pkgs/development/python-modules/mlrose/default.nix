@@ -1,16 +1,19 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, scikit-learn
-, pytestCheckHook
-, pytest-randomly
+{
+  lib,
+  isPy27,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  scikit-learn,
+  pytestCheckHook,
+  pytest-randomly,
 }:
 
 buildPythonPackage rec {
   pname = "mlrose";
   version = "1.3.0";
+  pyproject = true;
   disabled = isPy27;
 
   src = fetchFromGitHub {
@@ -28,11 +31,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ scikit-learn ];
-  nativeCheckInputs = [ pytest-randomly pytestCheckHook ];
+  build-system = [ setuptools ];
+  dependencies = [ scikit-learn ];
+  nativeCheckInputs = [
+    pytest-randomly
+    pytestCheckHook
+  ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace sklearn scikit-learn
+    substituteInPlace setup.py --replace-fail sklearn scikit-learn
   '';
 
   pythonImportsCheck = [ "mlrose" ];
@@ -42,8 +49,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Machine Learning, Randomized Optimization and SEarch";
-    homepage    = "https://github.com/gkhayes/mlrose";
-    license     = licenses.bsd3;
+    homepage = "https://github.com/gkhayes/mlrose";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ abbradar ];
   };
 }

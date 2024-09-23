@@ -1,34 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{ lib, rustPlatform, fetchFromGitHub, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.63";
+  version = "0.9.78";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    hash = "sha256-xAFpTcugAWUmHwWe2Ny1urxrIzRXyfxUMb9kBoGa3SA=";
+    hash = "sha256-nQIq/WCbB3iWxDdD13tthvmndYhccttcOeXWJ7Dri+0=";
   };
 
-  cargoHash = "sha256-ase0pfcDDkQGnTEtAD2ZTnBP7jdGS9pki1BoFbfUuFk=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  cargoHash = "sha256-XGDPxak2jVKkGyhPMpW4KxzyMd5aaIj1Hguw+XEM7w8=";
 
   cargoBuildFlags = [ "-p" "cargo-nextest" ];
   cargoTestFlags = [ "-p" "cargo-nextest" ];
 
-  # TODO: investigate some more why these tests fail in nix
-  checkFlags = [
-    "--skip=tests_integration::test_list"
-    "--skip=tests_integration::test_relocated_run"
-    "--skip=tests_integration::test_run"
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Next-generation test runner for Rust projects";
+    mainProgram = "cargo-nextest";
     homepage = "https://github.com/nextest-rs/nextest";
     changelog = "https://nexte.st/CHANGELOG.html";
     license = with licenses; [ mit asl20 ];

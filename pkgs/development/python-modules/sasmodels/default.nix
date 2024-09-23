@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytest
-, numpy
-, scipy
-, matplotlib
-, docutils
-, pyopencl
-, opencl-headers
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytest,
+  numpy,
+  scipy,
+  matplotlib,
+  docutils,
+  pyopencl,
+  opencl-headers,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-GZQYVvQ4bEBizTmJ+o5fIfGr8gn2/4uD3PxIswEjzSE=";
   };
 
-  buildInputs = [
-    opencl-headers
-  ];
+  buildInputs = [ opencl-headers ];
 
   propagatedBuildInputs = [
     docutils
@@ -39,17 +38,13 @@ buildPythonPackage rec {
 
   # Note: the 1.0.5 release should be compatible with pytest6, so this can
   # be set back to 'pytest' at that point
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     HOME=$(mktemp -d) py.test -c ./pytest.ini
   '';
 
-  pythonImportsCheck = [
-    "sasmodels"
-  ];
+  pythonImportsCheck = [ "sasmodels" ];
 
   meta = with lib; {
     description = "Library of small angle scattering models";

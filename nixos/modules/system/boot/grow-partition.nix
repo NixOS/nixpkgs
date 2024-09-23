@@ -12,7 +12,7 @@ with lib;
   ];
 
   options = {
-    boot.growPartition = mkEnableOption (lib.mdDoc "growing the root partition on boot");
+    boot.growPartition = mkEnableOption "growing the root partition on boot";
   };
 
   config = mkIf config.boot.growPartition {
@@ -25,7 +25,7 @@ with lib;
     systemd.services.growpart = {
       wantedBy = [ "-.mount" ];
       after = [ "-.mount" ];
-      before = [ "systemd-growfs-root.service" ];
+      before = [ "systemd-growfs-root.service" "shutdown.target" ];
       conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig = {

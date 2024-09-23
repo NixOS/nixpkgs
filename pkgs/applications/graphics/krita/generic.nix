@@ -1,49 +1,44 @@
-{ mkDerivation, lib, stdenv, fetchpatch, makeWrapper, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, fetchpatch, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
-, boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib, libjxl
-, openjpeg, opencolorio, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
-, qtmultimedia, qtx11extras, quazip
+, boost, libraw, fftw, eigen, exiv2, fribidi, libaom, libheif, libkdcraw, lcms2, gsl, openexr, giflib
+, libjxl, mlt , openjpeg, opencolorio, xsimd, poppler, curl, ilmbase, immer, kseexpr, lager
+, libmypaint , libunibreak, libwebp
+, qtmultimedia, qtx11extras, quazip, SDL2, zug, pkg-config
 , python3Packages
 , version
 , kde-channel
-, sha256
+, hash
 }:
 
 mkDerivation rec {
-  pname = "krita";
+  pname = "krita-unwrapped";
   inherit version;
 
   src = fetchurl {
     url = "mirror://kde/${kde-channel}/krita/${version}/krita-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   patches = [
+    # Fixes build with SIP 6.8
     (fetchpatch {
-      name = "exiv2-0.28.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/krita/-/raw/acd9a818660e86b14a66fceac295c2bab318c671/exiv2-0.28.patch";
-      hash = "sha256-iD2pyid513ThJVeotUlVDrwYANofnEiZmWINNUm/saw=";
-    })
-    (fetchpatch {
-      name = "krita-opencolorio-2.3-compat.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/520c633c2c868f2236d8e56eefecdcb6e3ebd840.patch";
-      hash = "sha256-eXsgBN8OnKjZOQsOxViPypts6CVh3L+IYKMB/mDUcfQ=";
-      includes = [ "plugins/dockers/lut/ocio_display_filter_vfx2021.cpp" ];
+      name = "bump-SIP-ABI-version-to-12.8.patch";
+      url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
+      hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config python3Packages.sip ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
-    boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib libjxl
-    openjpeg opencolorio poppler curl ilmbase libmypaint libwebp
-    qtmultimedia qtx11extras quazip
+    boost libraw fftw eigen exiv2 fribidi lcms2 gsl openexr lager libaom libheif libkdcraw giflib
+    libjxl mlt openjpeg opencolorio xsimd poppler curl ilmbase immer kseexpr libmypaint
+    libunibreak libwebp qtmultimedia qtx11extras quazip SDL2 zug
     python3Packages.pyqt5
-    xsimd
   ];
 
   env.NIX_CFLAGS_COMPILE = toString ([ "-I${ilmbase.dev}/include/OpenEXR" ]
@@ -58,6 +53,9 @@ mkDerivation rec {
       --replace 'PYTHONPATH=''${_sip_python_path}' 'PYTHONPATH=${pythonPath}'
     substituteInPlace cmake/modules/SIPMacros.cmake \
       --replace 'PYTHONPATH=''${_krita_python_path}' 'PYTHONPATH=${pythonPath}'
+
+    substituteInPlace plugins/impex/jp2/jp2_converter.cc \
+      --replace '<openjpeg.h>' '<${openjpeg.incDir}/openjpeg.h>'
   '';
 
   cmakeBuildType = "RelWithDebInfo";
@@ -65,16 +63,14 @@ mkDerivation rec {
   cmakeFlags = [
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+    "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
   ];
 
-  preInstall = ''
-    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
-  '';
-
   meta = with lib; {
-    description = "A free and open source painting application";
+    description = "Free and open source painting application";
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
+    mainProgram = "krita";
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

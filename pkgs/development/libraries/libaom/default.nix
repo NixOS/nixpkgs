@@ -1,7 +1,11 @@
 { lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
-, enableButteraugli ? true, libjxl
 , enableVmaf ? true, libvmaf
 , gitUpdater
+
+# for passthru.tests
+, ffmpeg
+, libavif
+, libheif
 }:
 
 let
@@ -9,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.7.0";
+  version = "3.9.1";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-Zf0g/CMI73O9Dkn9o7aIvwZ/8wh3lCmVY8nZaPwBp68=";
+    hash = "sha256-XQ1sekNZDUAiYP/HriYRj4+40PAvE/OiyG9bbrdg63I=";
     stripRoot = false;
   };
 
@@ -23,8 +27,7 @@ stdenv.mkDerivation rec {
     yasm perl cmake pkg-config python3
   ];
 
-  propagatedBuildInputs = lib.optional enableButteraugli libjxl
-    ++ lib.optional enableVmaf libvmaf;
+  propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
   preConfigure = ''
     # build uses `git describe` to set the build version
@@ -42,13 +45,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_TESTS=OFF"
-  ] ++ lib.optionals enableButteraugli [
-    "-DCONFIG_TUNE_BUTTERAUGLI=1"
   ] ++ lib.optionals enableVmaf [
     "-DCONFIG_TUNE_VMAF=1"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
-    "-DCONFIG_RUNTIME_CPU_DETECT=0"
   ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
     "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
   ] ++ lib.optionals stdenv.isAarch32 [
@@ -70,6 +68,10 @@ stdenv.mkDerivation rec {
       url = "https://aomedia.googlesource.com/aom";
       rev-prefix = "v";
       ignoredVersions = "(alpha|beta|rc).*";
+    };
+    tests = {
+      inherit libavif libheif;
+      ffmpeg = ffmpeg.override { withAom = true; };
     };
   };
 

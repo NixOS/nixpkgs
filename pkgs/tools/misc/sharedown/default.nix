@@ -6,7 +6,7 @@
 , libsecret
 , python3
 , pkg-config
-, nodePackages
+, nodejs
 , electron
 , makeWrapper
 , makeDesktopItem
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kylon";
-    repo = pname;
+    repo = "Sharedown";
     rev = version;
     sha256 = "sha256-llQt3m/qu7v5uQIfA1yxl2JZiFafk6sPgcvrIpQy/DI=";
   };
@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation rec {
       ]);
 
       modules = yarn2nix-moretea.mkYarnModules rec {
-        name = "${pname}-modules-${version}";
+        name = "Sharedown-modules-${version}";
         inherit pname version;
 
         yarnFlags = [ "--production" ];
@@ -63,7 +63,6 @@ stdenvNoCC.mkDerivation rec {
             nativeBuildInputs = [
               python3
               pkg-config
-              nodePackages.node-gyp
             ];
             buildInputs = [
               libsecret
@@ -75,6 +74,15 @@ stdenvNoCC.mkDerivation rec {
             '';
           };
         };
+
+        # needed for node-gyp, copied from https://nixos.org/manual/nixpkgs/unstable/#javascript-yarn2nix-pitfalls
+        # permalink: https://github.com/NixOS/nixpkgs/blob/d176767c02cb2a048e766215078c3d231e666091/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls
+        preBuild = ''
+          mkdir -p $HOME/.node-gyp/${nodejs.version}
+          echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+          ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+          export npm_config_nodedir=${nodejs}
+        '';
 
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;

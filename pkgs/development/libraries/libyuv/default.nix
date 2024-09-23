@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://chromium.googlesource.com/libyuv/libyuv.git";
     rev = "eb6e7bb63738e29efd82ea3cf2a115238a89fa51"; # refs/heads/stable
-    sha256 = "sha256-DtRYoaAXb9ZD2OLiKbzKzH5vzuu+Lzu4eHaDgPB9hjU=";
+    hash = "sha256-DtRYoaAXb9ZD2OLiKbzKzH5vzuu+Lzu4eHaDgPB9hjU=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
     description = "Open source project that includes YUV scaling and conversion functionality";
+    mainProgram = "yuvconvert";
     platforms = platforms.unix;
     maintainers = with maintainers; [ leixb ];
     license = licenses.bsd3;

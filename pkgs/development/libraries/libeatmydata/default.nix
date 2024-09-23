@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch2
 , autoreconfHook
 , strace
 , which
@@ -19,11 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fixes "error: redefinition of 'open'" on musl
-    (fetchpatch2 {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/861ac185a6b60134292ff93d40e40b5391d0aa8e/srcpkgs/libeatmydata/patches/musl.patch";
-      hash = "sha256-MZfTgf2Qn94UpPlYNRM2zK99iKQorKQrlbU5/1WJhJM=";
-    })
+    # https://github.com/stewartsmith/libeatmydata/pull/36
+    ./LFS64.patch
   ];
 
   postPatch = ''

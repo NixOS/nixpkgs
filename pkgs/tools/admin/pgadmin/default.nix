@@ -1,93 +1,51 @@
-{ lib
-, python3
-, fetchFromGitHub
-, fetchYarnDeps
-, zlib
-, nixosTests
-, postgresqlTestHook
-, postgresql
-, yarn
-, prefetch-yarn-deps
-, nodejs
-, fetchpatch
-, server-mode ? true
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  zlib,
+  nixosTests,
+  postgresqlTestHook,
+  postgresql,
+  yarn,
+  fixup-yarn-lock,
+  nodejs,
+  stdenv,
+  server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "7.7";
-  yarnHash = "sha256-8EbbyZHodrYz4a2IYuIWYGutqvrjauSv34o9KFvR/6c=";
+  version = "8.11";
+  yarnHash = "sha256-2N1UsGrR9rTIP50kn+gB+iGz9D/Dj0K5Y/10A5wPKTY=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-+KD05hzghNFpuw2xW3NUVyKwspCUO9fyJgMPzYk1Xt8=";
+    hash = "sha256-6v7/jFkWooUHztL+x6falD04XyDYa1beoY/yEpfbX4U=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
-  pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    # pgadmin 7.8 is incompatible with Flask >= 2.3
-    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-      version = "2.2.5";
-      src = oldAttrs.src.override {
-        pname = "Flask";
-        inherit version;
-        hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
-      };
-      format = "setuptools";
-    });
-    # downgrade needed for older Flask
-    httpbin = prev.httpbin.overridePythonAttrs (oldAttrs: rec {
-      version = "0.7.0";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-y7N3kMkVdfTxV1f0KtQdn3KesifV7b6J5OwXVIbbjfo=";
-      };
-      format = "setuptools";
-      patches = [
-        (fetchpatch {
-          # Replaces BaseResponse class with Response class for Werkezug 2.1.0 compatibility
-          # https://github.com/postmanlabs/httpbin/pull/674
-          url = "https://github.com/postmanlabs/httpbin/commit/5cc81ce87a3c447a127e4a1a707faf9f3b1c9b6b.patch";
-          hash = "sha256-SbEWjiqayMFYrbgAPZtSsXqSyCDUz3z127XgcKOcrkE=";
-        })
-      ];
-      pytestFlagsArray = [
-        "test_httpbin.py"
-      ];
-      propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ final.pythonPackages.brotlipy ];
-    });
-    # downgrade needed for older httpbin
-    werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
-      version = "2.2.3";
-      format = "setuptools";
-      src = oldAttrs.src.override {
-        pname = "Werkzeug";
-        inherit version;
-        hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
-      };
-    });
-    # Downgrade needed for older Flask
-    flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
-      version = "5.1.2";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
-      };
-      postPatch = ''
-        # This should be removed after updating to version 5.3.0.
-        sed -i '/filterwarnings =/a ignore:pkg_resources is deprecated:DeprecationWarning' pytest.ini
-      '';
-    });
-  });
+  pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
     hash = yarnHash;
   };
 
+  # don't bother to test kerberos authentication
+  # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
+  skippedTests = builtins.concatStringsSep "," (
+    [ "browser.tests.test_kerberos_with_mocking" ]
+    ++ lib.optionals stdenv.isDarwin [
+      "browser.server_groups.servers.tests.test_all_server_get"
+      "browser.server_groups.servers.tests.test_check_connect"
+      "browser.server_groups.servers.tests.test_check_ssh_mock_connect"
+      "browser.server_groups.servers.tests.test_is_password_saved"
+    ]
+  );
 in
 
 pythonPackages.buildPythonApplication rec {
@@ -109,29 +67,23 @@ pythonPackages.buildPythonApplication rec {
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
     substituteInPlace Makefile \
-      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+      --replace-fail 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
 
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
-      --replace "code_snippets" ""
-    patchShebangs .
-
+      --replace-fail "code_snippets" ""
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    #TODO: Can be removed once boto3>=1.28.0 and cryptography>=41 has been merged to master
-    substituteInPlace requirements.txt \
-      --replace "boto3>=1.28.*" "boto3>=1.26.*"
-    substituteInPlace requirements.txt \
-      --replace "botocore>=1.31.*" "botocore>=1.29.*"
-    substituteInPlace requirements.txt \
-      --replace "cryptography>=41.0.*" "cryptography>=40.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
+    # remove packageManager from package.json so we can work without corepack
+    substituteInPlace web/package.json \
+      --replace-fail "\"packageManager\": \"yarn@3.8.3\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
-      --replace "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
+      --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
-    substituteInPlace web/config.py \
-      --replace "SERVER_MODE = True" "SERVER_MODE = False"
+      substituteInPlace web/config.py \
+        --replace-fail "SERVER_MODE = True" "SERVER_MODE = False"
     ''}
   '';
 
@@ -189,7 +141,14 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn prefetch-yarn-deps nodejs ];
+  nativeBuildInputs = with pythonPackages; [
+    cython
+    pip
+    sphinx
+    yarn
+    fixup-yarn-lock
+    nodejs
+  ];
   buildInputs = [
     zlib
     pythonPackages.wheel
@@ -197,7 +156,6 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     flask
-    flask-gravatar
     flask-login
     flask-mail
     flask-migrate
@@ -215,17 +173,15 @@ pythonPackages.buildPythonApplication rec {
     python-dateutil
     sqlalchemy
     itsdangerous
-    flask-security-too
+    flask-security
     bcrypt
     cryptography
     sshtunnel
     ldap3
-    flask-babelex
     flask-babel
     gssapi
     flask-socketio
     eventlet
-    httpagentparser
     user-agents
     wheel
     authlib
@@ -245,6 +201,10 @@ pythonPackages.buildPythonApplication rec {
     google-auth-oauthlib
     google-api-python-client
     keyring
+    typer
+    rich
+    jsonformatter
+    libgravatar
   ];
 
   passthru.tests = {
@@ -257,6 +217,9 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.testscenarios
     pythonPackages.selenium
   ];
+
+  # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
+  doCheck = postgresql.doCheck;
 
   checkPhase = ''
     runHook preCheck
@@ -272,13 +235,11 @@ pythonPackages.buildPythonApplication rec {
     # in /var/lib/pgadmin and /var/log/pgadmin
     # see https://github.com/pgadmin-org/pgadmin4/blob/fd1c26408bbf154fa455a49ee5c12895933833a3/web/regression/runtests.py#L217-L226
     cp -v regression/test_config.json.in regression/test_config.json
-    substituteInPlace regression/test_config.json --replace "localhost" "$PGHOST"
-    substituteInPlace regression/runtests.py --replace "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+    substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
+    substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
 
     ## Browser test ##
-
-    # don't bother to test kerberos authentication
-    python regression/runtests.py --pkg browser --exclude browser.tests.test_kerberos_with_mocking
+    python regression/runtests.py --pkg browser --exclude ${skippedTests}
 
     ## Reverse engineered SQL test ##
 
@@ -287,25 +248,33 @@ pythonPackages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
-    description = "Administration and development platform for PostgreSQL${optionalString (!server-mode) ". Desktop Mode"}";
+  meta = {
+    description = "Administration and development platform for PostgreSQL${
+      lib.optionalString (!server-mode) ". Desktop Mode"
+    }";
     longDescription = ''
       pgAdmin 4 is designed to meet the needs of both novice and experienced Postgres users alike,
       providing a powerful graphical interface that simplifies the creation, maintenance and use of database objects.
-      ${if server-mode then ''
-      This version is build with SERVER_MODE set to True (the default). It will require access to `/var/lib/pgadmin`
-      and `/var/log/pgadmin`. This is the default version for the NixOS module `services.pgadmin`.
-      This should NOT be used in combination with the `pgadmin4-desktopmode` package as they will interfere.
-      '' else ''
-      This version is build with SERVER_MODE set to False. It will require access to `~/.pgadmin/`. This version is suitable
-      for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used.
-      This should NOT be used in combination with the NixOS module `pgadmin` as they will interfere.
-      ''}
+      ${
+        if server-mode then
+          ''
+            This version is build with SERVER_MODE set to True (the default). It will require access to `/var/lib/pgadmin`
+            and `/var/log/pgadmin`. This is the default version for the NixOS module `services.pgadmin`.
+            This should NOT be used in combination with the `pgadmin4-desktopmode` package as they will interfere.
+          ''
+        else
+          ''
+            This version is build with SERVER_MODE set to False. It will require access to `~/.pgadmin/`. This version is suitable
+            for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used (e.g. on MacOS).
+            This should NOT be used in combination with the NixOS module `pgadmin` as they will interfere.
+          ''
+      }
     '';
     homepage = "https://www.pgadmin.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
-    maintainers = with maintainers; [ gador ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "pgadmin4";
+    platforms = lib.platforms.unix;
   };
 }

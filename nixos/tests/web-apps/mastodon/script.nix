@@ -8,7 +8,6 @@
 
   ${extraInit}
 
-  server.wait_for_unit("redis-mastodon.service")
   server.wait_for_unit("mastodon-sidekiq-all.service")
   server.wait_for_unit("mastodon-streaming.target")
   server.wait_for_unit("mastodon-web.service")

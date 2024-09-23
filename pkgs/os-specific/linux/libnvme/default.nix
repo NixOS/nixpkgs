@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, bash
 , json_c
 , keyutils
 , lib
@@ -11,14 +12,13 @@
 , stdenv
 , swig
 , systemd
-, fetchpatch
 # ImportError: cannot import name 'mlog' from 'mesonbuild'
 , withDocs ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.6";
+  version = "1.10";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -26,19 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7bvjsmt16/6RycSDKIECtJ4ES7NTaspU6IMpUw0sViA=";
+    hash = "sha256-guNABLpDKdWDE79gxoNq0ukAUE7CnMw5QRXA3rl3Dk4=";
   };
-
-  patches = [
-    # included in next release
-    (fetchpatch {
-      url = "https://github.com/linux-nvme/libnvme/commit/ff742e792725c316ba6de0800188bf36751bd1d1.patch";
-      hash = "sha256-IUjPUBmGQC4oAKFFlBrjonqD2YdyNPC9siK4t/t2slE=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs scripts
+    substituteInPlace test/sysfs/tree-diff.sh test/config/config-diff.sh \
+      --replace-fail /bin/bash ${bash}/bin/bash
   '';
 
   nativeBuildInputs = [
@@ -60,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=man"
-    (lib.mesonBool "tests" finalAttrs.doCheck)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "docs-build" withDocs)
   ];
 
@@ -74,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
-    maintainers = with maintainers; [ fogti vifino ];
+    maintainers = with maintainers; [ vifino ];
     license = with licenses; [ lgpl21Plus ];
     platforms = platforms.linux;
   };

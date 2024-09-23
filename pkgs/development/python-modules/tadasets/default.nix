@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, matplotlib
-, pytest
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  matplotlib,
+  pytest,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "tadasets";
-  version = "0.0.4";
+  version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0e6c14678750315febd97fcf334bbbfd2695ebd91b4fe7707bb1220d7348416";
+    hash = "sha256-PWbq+dCQ8mGR81lolBDSArxjkTdis1ZpLY0MqZfZ66I=";
   };
 
   propagatedBuildInputs = [

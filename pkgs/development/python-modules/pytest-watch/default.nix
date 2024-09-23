@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docopt
-, colorama
-, pytest
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docopt,
+  colorama,
+  pytest,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-watch";
   version = "4.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +20,11 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ colorama docopt watchdog ];
+  propagatedBuildInputs = [
+    colorama
+    docopt
+    watchdog
+  ];
 
   # No Tests
   doCheck = false;

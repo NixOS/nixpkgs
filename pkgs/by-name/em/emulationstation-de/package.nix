@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "EmulationStation Desktop Edition is a frontend for browsing and launching games from your multi-platform game collection.";
+    description = "EmulationStation Desktop Edition is a frontend for browsing and launching games from your multi-platform game collection";
     homepage = "https://es-de.org";
     maintainers = with lib.maintainers; [ ivarmedi ];
     license = lib.licenses.mit;

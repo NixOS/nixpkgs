@@ -30,7 +30,7 @@ class Pin:
     serverHash: str = ""
     serverCargoHash: str = ""
     uiHash: str = ""
-    uiYarnDepsHash: str = ""
+    uiPNPMDepsHash: str = ""
 
     filename: Optional[str] = None
 
@@ -136,18 +136,10 @@ def make_server_pin(pin: Pin, attr: str) -> None:
     pin.write()
 
 
-def make_ui_pin(pin: Pin, package_json: str, attr: str) -> None:
-    # Save a copy of package.json
-    print("Getting package.json")
-    with urlopen(
-        f"https://raw.githubusercontent.com/{OWNER}/{UI_REPO}/{pin.uiVersion}/package.json"
-    ) as resp:
-        with open(os.path.join(SCRIPT_DIR, package_json), "wb") as fd:
-            fd.write(resp.read())
-
+def make_ui_pin(pin: Pin, attr: str) -> None:
     pin.uiHash = prefetch_github(OWNER, UI_REPO, pin.uiVersion)
     pin.write()
-    pin.uiYarnDepsHash = get_fod_hash(attr)
+    pin.uiPNPMDepsHash = get_fod_hash(attr)
     pin.write()
 
 
@@ -160,4 +152,4 @@ if __name__ == "__main__":
 
     pin = Pin(server_version, ui_version, filename=os.path.join(SCRIPT_DIR, "pin.json"))
     make_server_pin(pin, "lemmy-server")
-    make_ui_pin(pin, "package.json", "lemmy-ui")
+    make_ui_pin(pin, "lemmy-ui")

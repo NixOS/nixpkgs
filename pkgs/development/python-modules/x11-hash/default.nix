@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,16 +16,12 @@ buildPythonPackage rec {
     hash = "sha256-QtzqxEzpVGK48/lvOEr8VtPUYexLdXKD3zGv1VOdWpw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # pypi's source doesn't include tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "x11_hash"
-  ];
+  pythonImportsCheck = [ "x11_hash" ];
 
   meta = with lib; {
     description = "Binding for X11 proof of work hashing";

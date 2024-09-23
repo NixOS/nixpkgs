@@ -8,8 +8,11 @@
 , qtmultimedia
 , qtlocation
 , qqc2-desktop-style
+, kirigami-addons
 , kirigami2
+, kio
 , knotifications
+, kquickimageedit
 , zxing-cpp
 , qxmpp
 , sonnet
@@ -18,14 +21,14 @@
 
 mkDerivation rec {
   pname = "kaidan";
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    sha256 = "070njci5zyzahmz3nqyp660chxnqx1mxp31w17syfllvrw403qmg";
+    hash = "sha256-2UzXWd/fR5UwGywebYGWhh817x+VC76zmVaVZSBOg7M=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
@@ -35,8 +38,11 @@ mkDerivation rec {
     qtmultimedia
     qtlocation
     qqc2-desktop-style
+    kirigami-addons
     kirigami2
+    kio
     knotifications
+    kquickimageedit
     zxing-cpp
     qxmpp
     sonnet
@@ -51,6 +57,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "User-friendly and modern chat app, using XMPP";
+    mainProgram = "kaidan";
     longDescription = ''
        Kaidan is a user-friendly and modern chat app for every device. It uses
        the open communication protocol XMPP (Jabber). Unlike other chat apps,

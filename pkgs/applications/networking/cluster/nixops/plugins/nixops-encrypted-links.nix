@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "nixops-encrypted-links";
-  version = "unstable-2021-02-16";
+  version = "0-unstable-2021-02-16";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -40,6 +40,6 @@ buildPythonPackage {
     description = "EncryptedLinksTo from Nixops 1 module port";
     homepage = "https://github.com/nix-community/nixops-encrypted-links";
     license = licenses.mit;
-    maintainers = with maintainers; [ adisbladis ];
+    maintainers = [ ];
   };
 }

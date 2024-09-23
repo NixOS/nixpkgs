@@ -1,13 +1,14 @@
-{ stdenv
-, buildPythonPackage
-, a2wsgi
-, uvicorn
-, httpx
-, pytestCheckHook
-, pytest-mock
-, trustme
-, watchgod
-, wsproto
+{
+  stdenv,
+  buildPythonPackage,
+  a2wsgi,
+  uvicorn,
+  httpx,
+  pytestCheckHook,
+  pytest-mock,
+  trustme,
+  watchgod,
+  wsproto,
 }:
 
 buildPythonPackage {
@@ -31,8 +32,7 @@ buildPythonPackage {
     a2wsgi
     watchgod
     wsproto
-  ]
-  ++ uvicorn.optional-dependencies.standard;
+  ] ++ uvicorn.optional-dependencies.standard;
 
   doCheck = !stdenv.isDarwin;
 
@@ -45,4 +45,3 @@ buildPythonPackage {
     "test_multiple_server_header"
   ];
 }
-

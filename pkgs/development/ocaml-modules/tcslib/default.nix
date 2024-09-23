@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, ocamlPackages, buildOasisPackage, extlib, num }:
+{ lib, fetchFromGitHub, buildOasisPackage, extlib, num }:
 
 buildOasisPackage rec {
   pname = "tcslib";
@@ -17,7 +17,7 @@ buildOasisPackage rec {
 
   meta = {
     homepage = "https://github.com/tcsprojects/tcslib";
-    description = "A multi-purpose library for OCaml";
+    description = "Multi-purpose library for OCaml";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mgttlinger ];
   };

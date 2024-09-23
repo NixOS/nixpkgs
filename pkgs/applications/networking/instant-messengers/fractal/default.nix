@@ -25,21 +25,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "5";
+  version = "8";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "GNOME";
+    owner = "World";
     repo = "fractal";
-    rev = version;
-    hash = "sha256-XHb8HjQ5PDL2sen6qUivDllvYEhKnp1vQynD2Lksi30=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-a77+lPH2eqWTLFrYfcBXSvbyyYC52zSo+Rh/diqKYx4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "matrix-sdk-0.6.2" = "sha256-X+4077rlaE8zjXHXPUfiYwa/+Bg0KTFrcsAg7yCz4ug=";
-      "mas-http-0.5.0-rc.2" = "sha256-XH+I5URcbkSY4NDwfOFhIjb+/swuGz6n9hKufziPgoY=";
+      "matrix-sdk-0.7.1" = "sha256-ZlkxGXGrmZ8VQV7UY7A7BBfcqFCAB9Ep7l65irx4Dy8=";
+      "ruma-0.10.1" = "sha256-C/GJ0hDWJ9/grfjMuPSatJq2SrVkV0jxQlAAASkUWqg=";
     };
   };
 
@@ -82,8 +82,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Matrix group messaging app";
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
+    changelog = "https://gitlab.gnome.org/World/fractal/-/releases/${version}";
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ anselmschueler dtzWill ]);
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
     mainProgram = "fractal";
   };

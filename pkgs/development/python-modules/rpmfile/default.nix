@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
 }:
 buildPythonPackage rec {
   pname = "rpmfile";
-  version = "2.0.0";
+  version = "2.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tLDdVTrZlxGk+oYmeCm/4XLAPx6hzkztJP+lXtiDhb4=";
+    hash = "sha256-CsK7qJJ3xxhcuGHJxtfQyaJovlFpUW28amjxVWqeP5k=";
   };
 
   # Tests access the internet
   doCheck = false;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  pythonImportsCheck = [
-    "rpmfile"
-  ];
+  pythonImportsCheck = [ "rpmfile" ];
 
   meta = with lib; {
     description = "Read rpm archive files";
+    mainProgram = "rpmfile";
     homepage = "https://github.com/srossross/rpmfile";
     license = licenses.mit;
     maintainers = [ ];

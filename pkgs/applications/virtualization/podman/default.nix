@@ -17,11 +17,12 @@
 , makeWrapper
 , runtimeShell
 , symlinkJoin
+, substituteAll
 , extraPackages ? [ ]
-, runc
 , crun
+, runc
 , conmon
-, slirp4netns
+, extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
 , fuse-overlayfs
 , util-linux
 , iptables
@@ -30,6 +31,8 @@
 , gvproxy
 , aardvark-dns
 , netavark
+, passt
+, vfkit
 , testers
 , podman
 }:
@@ -37,41 +40,47 @@ let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
   binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
-    runc
-    crun
-    conmon
     fuse-overlayfs
     util-linux
     iptables
     iproute2
+  ] ++ lib.optionals stdenv.isDarwin [
+    vfkit
   ] ++ extraPackages);
 
   helpersBin = symlinkJoin {
     name = "podman-helper-binary-wrapper";
 
-    # this only works for some binaries, others may need to be be added to `binPath` or in the modules
+    # this only works for some binaries, others may need to be added to `binPath` or in the modules
     paths = [
       gvproxy
     ] ++ lib.optionals stdenv.isLinux [
       aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
-      slirp4netns
-    ];
+      passt
+      conmon
+      crun
+    ] ++ extraRuntimes;
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.7.2";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-o5FTCuFUbTlENqvh+u6fPEfD816tKWPxHu2yhBi/Mf0=";
+    hash = "sha256-48ltjGrzh74CYV6T6YDFSFC+Msui8YCG1N+c9k5Y09I=";
   };
 
   patches = [
+    (substituteAll {
+      src = ./hardcode-paths.patch;
+      bin_path = helpersBin;
+    })
+
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
   ];
@@ -146,7 +155,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://podman.io/";
-    description = "A program for managing pods, containers and container images";
+    description = "Program for managing pods, containers and container images";
     longDescription = ''
       Podman (the POD MANager) is a tool for managing containers and images, volumes mounted into those containers, and pods made from groups of containers. Podman runs containers on Linux, but can also be used on Mac and Windows systems using a Podman-managed virtual machine. Podman is based on libpod, a library for container lifecycle management that is also contained in this repository. The libpod library provides APIs for managing containers, pods, container images, and volumes.
 
@@ -154,6 +163,7 @@ buildGoModule rec {
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    mainProgram = "podman";
   };
 }

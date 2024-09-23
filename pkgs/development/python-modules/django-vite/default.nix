@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, django
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  django,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-vite";
-  version = "2.1.3";
+  version = "3.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,19 +17,15 @@ buildPythonPackage rec {
     owner = "MrBin99";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-HrcQt0Mdko+/XJd0srQTBYMtHaLZyImMuQn39HIwDfY=";
+    hash = "sha256-v6jmtiQjTJegD7aeuu3HkuKnYWgMZ7TqW5onkSnc7Xs=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # Package doesn’t have any tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "django_vite"
-  ];
+  pythonImportsCheck = [ "django_vite" ];
 
   meta = with lib; {
     description = "Integration of ViteJS in a Django project";

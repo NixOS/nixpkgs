@@ -1,32 +1,35 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, python
-, oldest-supported-numpy
-, setuptools
-, wheel
-, numpy
-, zlib
-, netcdf
-, hdf5
-, curl
-, libjpeg
-, cython
-, cftime
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  python,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
+  certifi,
+  numpy,
+  zlib,
+  netcdf,
+  hdf5,
+  curl,
+  libjpeg,
+  cython,
+  cftime,
 }:
 
 buildPythonPackage rec {
-  pname = "netCDF4";
-  version = "1.6.2";
+  pname = "netcdf4";
+  version = "1.6.5";
   format = "pyproject";
 
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
+    pname = "netCDF4";
+    inherit version;
+    hash = "sha256-gkiB0KrP3lvZgtat7dhXQlnIVVN4HnuD4M6CuJC/oO8=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    certifi
     cftime
     numpy
     zlib
@@ -58,9 +62,7 @@ buildPythonPackage rec {
     NETCDF4_DIR = netcdf;
     CURL_DIR = curl.dev;
     JPEG_DIR = libjpeg.dev;
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
-  };
+  } // lib.optionalAttrs stdenv.cc.isClang { NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion"; };
 
   pythonImportsCheck = [ "netCDF4" ];
 
@@ -68,7 +70,7 @@ buildPythonPackage rec {
     description = "Interface to netCDF library (versions 3 and 4)";
     homepage = "https://github.com/Unidata/netcdf4-python";
     changelog = "https://github.com/Unidata/netcdf4-python/raw/v${version}/Changelog";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

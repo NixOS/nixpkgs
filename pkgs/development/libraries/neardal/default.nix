@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, glib, readline, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, glib, readline, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "neardal";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     description = "C APIs to exchange datas with the NFC daemon 'Neard'";
     license = licenses.lgpl2;
     homepage = "https://01.org/linux-nfc";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

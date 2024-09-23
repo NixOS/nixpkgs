@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zackw/asleap";
     description = "Recovers weak LEAP and PPTP passwords";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ thehedgeh0g ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

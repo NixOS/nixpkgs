@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, matplotlib
-, numpy
-, pendulum
-, pillow
-, poetry-core
-, pyquaternion
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  matplotlib,
+  numpy,
+  pendulum,
+  pillow,
+  poetry-core,
+  pyquaternion,
 }:
 
 buildPythonPackage rec {
@@ -26,14 +27,23 @@ buildPythonPackage rec {
     hash = "sha256-FrJ8FhlqwmnEB/QvPlkDfqZncNGPhwY9aagM9yv1LGs=";
   };
 
-  propagatedBuildInputs = [ pyquaternion numpy ];
-  buildInputs = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [
+    pyquaternion
+    numpy
+  ];
 
   nativeCheckInputs = [
     matplotlib
     pendulum
     pillow
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # performance test, racy on busy machines
+    "test_multi_jaccard_index_2d_performance"
   ];
 
   pythonImportsCheck = [ "bbox" ];

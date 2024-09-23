@@ -39,6 +39,9 @@ with lib;
     # Allow the user to log in as root without a password.
     users.users.root.initialHashedPassword = "";
 
+    # Don't require sudo/root to `reboot` or `poweroff`.
+    security.polkit.enable = true;
+
     # Allow passwordless sudo from nixos user
     security.sudo = {
       enable = mkDefault true;
@@ -105,6 +108,8 @@ with lib;
       ];
 
     boot.swraid.enable = true;
+    # remove warning about unset mail
+    boot.swraid.mdadmConf = "PROGRAM ${pkgs.coreutils}/bin/true";
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
@@ -120,6 +125,16 @@ with lib;
     '';
 
     # allow nix-copy to live system
-    nix.settings.trusted-users = [ "root" "nixos" ];
+    nix.settings.trusted-users = [ "nixos" ];
+
+    # Install less voices for speechd to save some space
+    nixpkgs.overlays = [
+      (_: prev: {
+        mbrola-voices = prev.mbrola-voices.override {
+          # only ship with one voice per language
+          languages = [ "*1" ];
+        };
+      })
+    ];
   };
 }

@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, cython_3
-, poetry-core
-, setuptools
+  # build-system
+  cython,
+  poetry-core,
+  setuptools,
 
-# propagates
-, cryptography
+  # propagates
+  cryptography,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.11.0";
+  version = "0.13.2";
 in
 
 buildPythonPackage {
@@ -29,32 +30,28 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-uRndA0NnSQtJTftALzBF3FWZtavRyMwBlnCBqoIXE5Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-i6bhqfYo+gFTf3dqOBSQqGN4WPqbUR05StdwZvrVckI=";
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  pythonRelaxDeps = [ "cryptography" ];
 
-  pythonImportsCheck = [
-    "chacha20poly1305_reuseable"
-  ];
+  propagatedBuildInputs = [ cryptography ];
+
+  pythonImportsCheck = [ "chacha20poly1305_reuseable" ];
 
   preCheck = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
+      --replace-fail "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "ChaCha20Poly1305 that is reuseable for asyncio";

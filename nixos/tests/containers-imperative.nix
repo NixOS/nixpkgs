@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-imperative";
   meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
+    maintainers = with lib.maintainers; [ aristid aszlig kampfschlaefer ];
   };
 
   nodes.machine =
@@ -13,6 +13,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       nix.settings.sandbox = false;
       nix.settings.substituters = []; # don't try to access cache.nixos.org
 
+      virtualisation.memorySize = 2048;
       virtualisation.writableStore = true;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
@@ -32,6 +33,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         stdenv stdenvNoCC emptyContainer.config.containers.foo.path
         libxslt desktop-file-utils texinfo docbook5 libxml2
         docbook_xsl_ns xorg.lndir documentation-highlighter
+        perlPackages.ConfigIniFiles
       ];
     };
 

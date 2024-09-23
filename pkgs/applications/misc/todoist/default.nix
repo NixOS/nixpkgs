@@ -19,5 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/sachaos/todoist";
     description = "Todoist CLI Client";
     license = lib.licenses.mit;
+    mainProgram = "todoist";
   };
 }

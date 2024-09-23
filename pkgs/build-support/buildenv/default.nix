@@ -3,6 +3,13 @@
 
 { buildPackages, runCommand, lib, substituteAll }:
 
+let
+  builder = substituteAll {
+    src = ./builder.pl;
+    inherit (builtins) storeDir;
+  };
+in
+
 lib.makeOverridable
 ({ name
 
@@ -43,13 +50,6 @@ lib.makeOverridable
 , meta ? {}
 }:
 
-let
-  builder = substituteAll {
-    src = ./builder.pl;
-    inherit (builtins) storeDir;
-  };
-in
-
 runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
@@ -68,7 +68,7 @@ runCommand name
         # Add any extra outputs specified by the caller of `buildEnv`.
         ++ lib.filter (p: p!=null)
           (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
-      priority = drv.meta.priority or 5;
+      priority = drv.meta.priority or lib.meta.defaultPriority;
     }) paths);
     preferLocalBuild = true;
     allowSubstitutes = false;

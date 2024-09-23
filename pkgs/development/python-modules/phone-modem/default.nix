@@ -1,13 +1,15 @@
-{ lib
-, aioserial
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aioserial,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "phone-modem";
   version = "0.1.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -22,9 +24,7 @@ buildPythonPackage rec {
       --replace "aioserial==1.3.0" "aioserial"
   '';
 
-  propagatedBuildInputs = [
-    aioserial
-  ];
+  propagatedBuildInputs = [ aioserial ];
 
   # Project has no tests
   doCheck = false;

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
     platforms = platforms.linux;
+    mainProgram = "babeld";
   };
 }

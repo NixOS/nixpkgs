@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pypinyin";
-  version = "0.49.0";
+  version = "0.53.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     owner = "mozillazg";
     repo = "python-pinyin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4XiPkx7tYD5PQVyeJ/nvxrRzWmeLp9JfY1B853IEE7U=";
+    hash = "sha256-NGW94Labk3vAv4bfq/+ba2lnL/uebg0ODZWEi2yNIjg=";
   };
 
   postPatch = ''
@@ -24,16 +25,13 @@ buildPythonPackage rec {
       "--cov-report term-missing" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   meta = with lib; {
     description = "Chinese Characters to Pinyin - 汉字转拼音";
+    mainProgram = "pypinyin";
     homepage = "https://github.com/mozillazg/python-pinyin";
     changelog = "https://github.com/mozillazg/python-pinyin/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

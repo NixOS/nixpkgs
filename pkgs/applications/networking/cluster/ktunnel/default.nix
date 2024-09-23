@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 let
   version = "1.6.1";
 in
@@ -31,7 +31,8 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A cli that exposes your local resources to kubernetes ";
+    description = "Cli that exposes your local resources to kubernetes";
+    mainProgram = "ktunnel";
     homepage = "https://github.com/omrikiei/ktunnel";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

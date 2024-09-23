@@ -2,6 +2,7 @@
 , callPackage
 , fetchFromGitHub
 , rustPlatform
+, cmake
 , pkg-config
 , protobuf
 , elfutils
@@ -9,18 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.19.0";
+  version = "1.52.1";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IuS7NmlTNmHHnnSZ+YIbV6BnxJW2xprOQ5mkz5FuJEQ=";
+    hash = "sha256-Gd+YXDztRfeJ7fFKSs7EPq0FsaSzMRYgh9CUXHS675w=";
   };
 
-  cargoHash = "sha256-yeb+4lgRDssjkEx6bYfGIbn4DJGpZZ/JDmuwFjQ+U+8=";
+  cargoHash = "sha256-jRv8mzeRznq8txQ+kgOr6TIXe5VDUCfGin8aLRX6HAo=";
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     protobuf
   ];
@@ -34,11 +36,11 @@ rustPlatform.buildRustPackage rec {
   RUSTY_V8_ARCHIVE = callPackage ./librusty_v8.nix { };
 
   cargoTestFlags = [
-    "-- --skip=uplink::test::stream_from_uplink_error_no_retry"
+    "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
   ];
 
   meta = with lib; {
-    description = "A configurable, high-performance routing runtime for Apollo Federation";
+    description = "Configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
     license = licenses.elastic20;
     maintainers = [ maintainers.bbigras ];

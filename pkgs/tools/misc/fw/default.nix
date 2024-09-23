@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fw";
-  version = "2.19.0";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fw";
     rev = "v${version}";
-    hash = "sha256-6+sB/jGkVrpeqfgFdmUdU1/gOapD6fXFG5E3Rsu9rC0=";
+    hash = "sha256-fG1N/3Er7BvXOJTMGooaIMa5I9iNwnH+1om2jcWkI68=";
   };
 
-  cargoHash = "sha256-0/CtJyWr2TbEUOlHLqgPIKwInForcT9x5agw7O/6TYU=";
+  cargoHash = "sha256-1d2uX/A1HZAmAI3d0iet1NkG0IFuJpVnhWxpY0jVVUI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A workspace productivity booster";
+    description = "Workspace productivity booster";
     homepage = "https://github.com/brocode/fw";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ figsoda ];

@@ -11,15 +11,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sudo-rs";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
-    owner = "memorysafety";
+    owner = "trifectatechfoundation";
     repo = "sudo-rs";
     rev = "v${version}";
-    hash = "sha256-EQEdNDUXEMMiFZKuu9LR9ywjvKWyM5bWcRHHUB9+gp4=";
+    hash = "sha256-aXKkEdg44AJTcaGyllQmyUON3Z+irIatz06/l0cbi+E=";
   };
-  cargoHash = "sha256-Zs9/A7u4yMLKY4cAUCnsqRHgkxI8R3w1JwkAd2lw0eo=";
+  cargoHash = "sha256-laTcGi2pwc9uWjum03PviyakVMmjijKgxfIPjIpoRy8=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
 
@@ -70,8 +70,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A memory safe implementation of sudo and su.";
-    homepage = "https://github.com/memorysafety/sudo-rs";
+    description = "Memory safe implementation of sudo and su";
+    homepage = "https://github.com/trifectatechfoundation/sudo-rs";
     changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ nicoo ];

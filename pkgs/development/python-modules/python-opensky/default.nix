@@ -1,29 +1,30 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "python-opensky";
-  version = "0.2.1";
-  format = "pyproject";
+  version = "1.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-opensky";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xNXFvCUZ/x5ox3KxmG3eA73wpX4fwhvAVmlfcKiT1V8=";
+    hash = "sha256-V6iRwWzCnPCvu8eks2sHPYrX3OmaFnNj+i57kQJKYm0=";
   };
 
   postPatch = ''
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace ".joinpath(uri)" "/ uri"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -51,9 +50,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "python_opensky"
-  ];
+  pythonImportsCheck = [ "python_opensky" ];
 
   meta = with lib; {
     description = "Asynchronous Python client for the OpenSky API";

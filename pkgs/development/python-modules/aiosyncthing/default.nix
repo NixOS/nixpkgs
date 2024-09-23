@@ -1,18 +1,20 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, expects
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  expects,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiosyncthing";
   version = "0.6.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zhulik";
@@ -34,9 +36,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

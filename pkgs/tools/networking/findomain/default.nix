@@ -49,10 +49,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "The fastest and cross-platform subdomain enumerator";
+    description = "Fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Findomain/Findomain";
     changelog = "https://github.com/Findomain/Findomain/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Br1ght0ne figsoda ];
+    mainProgram = "findomain";
   };
 }

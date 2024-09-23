@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
   };
 
   dontConfigure = true;
-  buildPhase = "true";
+  dontBuild = true;
   installPhase = ''
   mkdir -p $out/bin
   mkdir -p $out/share/man/man1
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Command line tool for unpacking archives easily";
     homepage = "https://packages.qa.debian.org/u/unp.html";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [ gpl2Only ];
     maintainers = [ maintainers.timor ];
     platforms = platforms.all;
   };

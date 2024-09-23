@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "phockup";
-  version = "1.10.1";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "ivandokov";
     repo = "phockup";
     rev = version;
-    sha256 = "sha256-wnTdNzH/2Lcr3FXqm84ITiAmbKpFWLo/0/cf0fCv+4M=";
+    sha256 = "sha256-44UjxTbC2XK+NThvesROdd7aGP7zr7g7bQiQZv2TvvM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ivandokov/phockup";
     license = licenses.mit;
     maintainers = with maintainers; [ aanderse ];
+    mainProgram = "phockup";
   };
 }

@@ -2,7 +2,6 @@
 , cairo
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg
 , gettext
 , wxGTK32
@@ -14,19 +13,21 @@
 , sfml
 , zip
 , zlib
+, wrapGAppsHook3
+, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "visualboyadvance-m";
-  version = "2.1.7";
+  version = "2.1.11";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "sha256-XMb4+YPH1xgbiRC4vmooxALmjX2QURLWOGOwepdWI7o=";
+    sha256 = "sha256-OtJ632H449kPRY1i4Ydlcc1tgG00Mv622KrCyJ80OF4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
     cairo
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     zlib
     wxGTK32
     gtk3
+    gsettings-desktop-schemas
   ];
 
   cmakeFlags = [
@@ -51,10 +53,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta =  with lib; {
-    description = "A merge of the original Visual Boy Advance forks";
+    description = "Merge of the original Visual Boy Advance forks";
     license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus netali ];
     homepage = "https://vba-m.com/";
     platforms = lib.platforms.linux;
+    mainProgram = "visualboyadvance-m";
   };
 }

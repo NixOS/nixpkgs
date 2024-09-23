@@ -1,8 +1,8 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
+  pname = "p3x-onenote";
   version = "2023.4.117";
-  name = "p3x-onenote-${version}";
 
   plat = {
     aarch64-linux = "-arm64";
@@ -11,8 +11,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    aarch64-linux = "0plpwymm1bgzbzwk2689lw1fadxdwxzzn5dmayk1ayxz1k3pj9wi";
-    armv7l-linux = "1pvr8f1ccl4nyfmshn3v3jfaa5x519rsy57g4pdapffj10vpbkb8";
+    aarch64-linux = "sha256-HFuxmMo0m4UOxEQVd32LGvbFsOS8jwCCCS6K/YJIIBE=";
+    armv7l-linux = "sha256-JMgYvqkaRw5sfjbKybAkk28KT12+c19dMir2DUN7Ub0=";
     x86_64-linux = "sha256-hr/mPOrliP8Dej3DVE2+wYkb1J789WCkkY3xe9EcM44=";
   }.${stdenv.hostPlatform.system};
 
@@ -22,18 +22,17 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in
 appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
     mkdir -p $out/share/pixmaps $out/share/licenses/p3x-onenote
     cp ${appimageContents}/p3x-onenote.png $out/share/pixmaps/
     cp ${appimageContents}/p3x-onenote.desktop $out
     cp ${appimageContents}/LICENSE.electron.txt $out/share/licenses/p3x-onenote/LICENSE
-    mv $out/bin/${name} $out/bin/p3x-onenote
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
       --set-key Exec --set-value $out/bin/p3x-onenote \
@@ -47,5 +46,6 @@ appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ tiagolobocastro ];
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    mainProgram = "p3x-onenote";
   };
 }

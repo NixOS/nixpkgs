@@ -1,13 +1,15 @@
-{ buildPythonPackage
-, cffi
-, fetchPypi
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "reflink";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

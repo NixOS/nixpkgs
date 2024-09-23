@@ -1,68 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pbr
-, six
-, simplegeneric
-, netaddr
-, pytz
-, webob
-# Test inputs
-, cherrypy
-, flask
-, flask-restful
-, glibcLocales
-, nose
-, pecan
-, sphinx
-, transaction
-, webtest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  setuptools,
+  importlib-metadata,
+  simplegeneric,
+  netaddr,
+  # Test inputs
+  flask,
+  flask-restful,
+  pecan,
+  sphinx,
+  transaction,
+  webtest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wsme";
-  version = "0.11.0";
-
-  disabled = pythonAtLeast "3.9";
+  version = "0.12.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "WSME";
     inherit version;
-    sha256 = "bd2dfc715bedcc8f4649611bc0c8a238f483dc01cff7102bc1efa6bea207b64b";
+    hash = "sha256-m36yJErzxwSskUte0iGVS7aK3QqLKy84okSwZ7M3mS0=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
-    netaddr
-    pytz
+  dependencies = [
+    importlib-metadata
     simplegeneric
-    six
-    webob
+    netaddr
   ];
 
   nativeCheckInputs = [
-    nose
-    cherrypy
+    pytestCheckHook
     flask
     flask-restful
-    glibcLocales
     pecan
     sphinx
     transaction
     webtest
   ];
 
-  # from tox.ini, tests don't work with pytest
-  checkPhase = ''
-    nosetests wsme/tests tests/pecantest tests/test_sphinxext.py tests/test_flask.py --verbose
-  '';
+  pytestFlagsArray = [
+    "wsme/tests"
+    "tests/pecantest"
+    "tests/test_sphinxext.py"
+    "tests/test_flask.py"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Simplify the writing of REST APIs, and extend them with additional protocols";
     homepage = "https://pythonhosted.org/WSME/";
     changelog = "https://pythonhosted.org/WSME/changes.html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

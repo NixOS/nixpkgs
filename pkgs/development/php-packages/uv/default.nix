@@ -1,4 +1,9 @@
-{ buildPecl, lib, fetchFromGitHub, libuv }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+  libuv,
+}:
 
 buildPecl rec {
   pname = "uv";

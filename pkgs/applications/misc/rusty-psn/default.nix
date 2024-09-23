@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , makeDesktopItem
@@ -18,16 +17,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
-  version = "0.3.0";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
     rev = "v${version}";
-    sha256 = "sha256-BsbuEsW6cQbWg8BLtEBnjoCfcUCy1xWz9u0wBa8BKtA=";
+    sha256 = "sha256-EGj9VVY+Zbmth7H1oTgq38KNLT/aWoTPn8k4sVkScgg=";
   };
 
-  cargoSha256 = "sha256-TD5du7I6Hw1PC8s9NI19jYCXlaZMnsdVj/a0q+M8Raw=";
+  cargoPatches = [ ./fix-cargo-lock.patch ];
+
+  cargoHash = "sha256-8J92WtMmCTnghPqSmNYhG3IVdmpHsHEH7Fkod0UYKJU=";
+
+  # Tests require network access
+  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
@@ -51,7 +55,6 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libxcb
     libGL
-    libGL.dev
   ];
 
   buildNoDefaultFeatures = true;
@@ -87,5 +90,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ AngryAnt ];
+    mainProgram = "rusty-psn";
   };
 }

@@ -30,7 +30,7 @@ mkOpenModelicaDerivation rec {
   QMAKESPEC = "linux-clang";
 
   meta = with lib; {
-    description = "A Modelica connection editor for OpenModelica";
+    description = "Modelica connection editor for OpenModelica";
     homepage = "https://openmodelica.org";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ balodja smironov ];

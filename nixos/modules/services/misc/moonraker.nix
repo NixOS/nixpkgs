@@ -1,5 +1,4 @@
 { config, lib, options, pkgs, ... }:
-with lib;
 let
   cfg = config.services.moonraker;
   pkg = cfg.package;
@@ -7,71 +6,71 @@ let
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
-      if builtins.length l == 1 then generators.mkValueStringDefault {} (head l)
-      else lib.concatMapStrings (s: "\n  ${generators.mkValueStringDefault {} s}") l;
-    mkKeyValue = generators.mkKeyValueDefault {} ":";
+      if builtins.length l == 1 then lib.generators.mkValueStringDefault {} (lib.head l)
+      else lib.concatMapStrings (s: "\n  ${lib.generators.mkValueStringDefault {} s}") l;
+    mkKeyValue = lib.generators.mkKeyValueDefault {} ":";
   };
 
   unifiedConfigDir = cfg.stateDir + "/config";
 in {
   options = {
     services.moonraker = {
-      enable = mkEnableOption (lib.mdDoc "Moonraker, an API web server for Klipper");
+      enable = lib.mkEnableOption "Moonraker, an API web server for Klipper";
 
-      package = mkPackageOption pkgs "moonraker" {
+      package = lib.mkPackageOption pkgs "moonraker" {
         nullable = true;
         example = "moonraker.override { useGpiod = true; }";
       };
 
-      klipperSocket = mkOption {
-        type = types.path;
+      klipperSocket = lib.mkOption {
+        type = lib.types.path;
         default = config.services.klipper.apiSocket;
-        defaultText = literalExpression "config.services.klipper.apiSocket";
-        description = lib.mdDoc "Path to Klipper's API socket.";
+        defaultText = lib.literalExpression "config.services.klipper.apiSocket";
+        description = "Path to Klipper's API socket.";
       };
 
-      stateDir = mkOption {
-        type = types.path;
+      stateDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/moonraker";
-        description = lib.mdDoc "The directory containing the Moonraker databases.";
+        description = "The directory containing the Moonraker databases.";
       };
 
-      configDir = mkOption {
-        type = types.nullOr types.path;
+      configDir = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Deprecated directory containing client-writable configuration files.
 
           Clients will be able to edit files in this directory via the API. This directory must be writable.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "moonraker";
-        description = lib.mdDoc "User account under which Moonraker runs.";
+        description = "User account under which Moonraker runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "moonraker";
-        description = lib.mdDoc "Group account under which Moonraker runs.";
+        description = "Group account under which Moonraker runs.";
       };
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         example = "0.0.0.0";
-        description = lib.mdDoc "The IP or host to listen on.";
+        description = "The IP or host to listen on.";
       };
 
-      port = mkOption {
-        type = types.ints.unsigned;
+      port = lib.mkOption {
+        type = lib.types.ints.unsigned;
         default = 7125;
-        description = lib.mdDoc "The port to listen on.";
+        description = "The port to listen on.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         default = { };
         example = {
@@ -80,16 +79,16 @@ in {
             cors_domains = [ "https://app.fluidd.xyz" "https://my.mainsail.xyz" ];
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Moonraker. See the [documentation](https://moonraker.readthedocs.io/en/latest/configuration/)
           for supported values.
         '';
       };
 
-      allowSystemControl = mkOption {
-        type = types.bool;
+      allowSystemControl = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to allow Moonraker to perform system-level operations.
 
           Moonraker exposes APIs to perform system-level operations, such as
@@ -101,19 +100,20 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     warnings = []
-      ++ optional (cfg.settings ? update_manager)
-        ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.''
-      ++ optional (cfg.configDir != null)
-        ''
-          services.moonraker.configDir has been deprecated upstream and will be removed.
+      ++ (lib.optional (lib.head (cfg.settings.update_manager.enable_system_updates or [false])) ''
+        Enabling system updates is not supported on NixOS and will lead to non-removable warnings in some clients.
+      '')
+      ++ (lib.optional (cfg.configDir != null) ''
+        services.moonraker.configDir has been deprecated upstream and will be removed.
 
-          Action: ${
-            if cfg.configDir == unifiedConfigDir then "Simply remove services.moonraker.configDir from your config."
-            else "Move files from `${cfg.configDir}` to `${unifiedConfigDir}` then remove services.moonraker.configDir from your config."
-          }
-        '';
+        Action: ${
+          if cfg.configDir == unifiedConfigDir
+          then "Simply remove services.moonraker.configDir from your config."
+          else "Move files from `${cfg.configDir}` to `${unifiedConfigDir}` then remove services.moonraker.configDir from your config."
+        }
+        '');
 
     assertions = [
       {
@@ -122,14 +122,14 @@ in {
       }
     ];
 
-    users.users = optionalAttrs (cfg.user == "moonraker") {
+    users.users = lib.optionalAttrs (cfg.user == "moonraker") {
       moonraker = {
         group = cfg.group;
         uid = config.ids.uids.moonraker;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "moonraker") {
+    users.groups = lib.optionalAttrs (cfg.group == "moonraker") {
       moonraker.gid = config.ids.gids.moonraker;
     };
 
@@ -148,7 +148,7 @@ in {
           config_path = cfg.configDir;
         };
       });
-      fullConfig = recursiveUpdate cfg.settings forcedConfig;
+      fullConfig = lib.recursiveUpdate cfg.settings forcedConfig;
     in format.generate "moonraker.cfg" fullConfig;
 
     systemd.tmpfiles.rules = [
@@ -159,7 +159,7 @@ in {
       description = "Moonraker, an API web server for Klipper";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ]
-        ++ optional config.services.klipper.enable "klipper.service";
+        ++ lib.optional config.services.klipper.enable "klipper.service";
 
       # Moonraker really wants its own config to be writable...
       script = ''
@@ -186,6 +186,12 @@ in {
       };
     };
 
+    # set this to false, otherwise we'll get a warning indicating that `/etc/klipper.cfg`
+    # is not located in the moonraker config directory.
+    services.moonraker.settings = lib.mkIf (!config.services.klipper.mutableConfig) {
+      file_manager.check_klipper_config_path = false;
+    };
+
     security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''
       // nixos/moonraker: Allow Moonraker to perform system-level operations
       //
@@ -204,7 +210,7 @@ in {
     '';
   };
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     cab404
     vtuan10
     zhaofengli

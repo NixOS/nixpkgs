@@ -43,6 +43,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical file and directories comparator and merge tool";
+    mainProgram = "xxdiff";
     homepage = "http://furius.ca/xxdiff/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub raskin ];

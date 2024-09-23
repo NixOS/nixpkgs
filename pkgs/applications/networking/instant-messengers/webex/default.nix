@@ -56,11 +56,11 @@
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "43.8.0.26955";
+  version = "44.8.0.30404";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20230814223338/Webex_ubuntu.7z";
-    sha256 = "6c754d65fffbcbbb2ca303e1f8c1e5688da190eea3d3b67c77361abc6e2bb85b";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20240806164911/Webex_ubuntu.7z";
+    sha256 = "770067b495fcc3b376d77de65371f4196d0f1a0d718b84928d24aa6ea752d29b";
   };
 
   nativeBuildInputs = [
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The all-in-one app to call, meet, message, and get work done";
+    description = "All-in-one app to call, meet, message, and get work done";
     homepage = "https://webex.com/";
     downloadPage = "https://www.webex.com/downloads.html";
     license = licenses.unfree;

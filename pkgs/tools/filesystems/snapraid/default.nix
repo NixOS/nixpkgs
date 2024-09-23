@@ -1,26 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  smartmontools,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "snapraid";
-  version = "12.2";
+  version = "12.3";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
     rev = "v${version}";
-    sha256 = "sha256-3wy442tv3m1CSOAj1cngTWRiqX934c/7V2YL6j30+3U=";
+    hash = "sha256-pkLooA3JZV/rPlE5+JeJN1QW2xAdNu7c/iFFtT4M4vc=";
   };
 
   VERSION = version;
 
   doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+  ];
+
   buildInputs = [ ];
+
+  # SMART is only supported on Linux and requires the smartmontools package
+  postInstall = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/snapraid \
+     --prefix PATH : ${lib.makeBinPath [ smartmontools ]}
+  '';
 
   meta = {
     homepage = "http://www.snapraid.it/";
-    description = "A backup program for disk arrays";
+    description = "Backup program for disk arrays";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;

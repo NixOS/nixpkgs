@@ -1,39 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, asciidoctor
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  asciidoctor,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qrtool";
-  version = "0.8.5";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";
-    sha256 = "sha256-jrvNZGO1VIDo6Mz3NKda1C7qZUtF9T00CAFK8yoGWjc=";
+    hash = "sha256-2Msc8VTEzpK5eQHxJxNekj6YSqFRX/DN206hvYshiOg=";
   };
 
-  cargoSha256 = "sha256-JOnvlabCr3fZsIIRc2qTjf50Ga83zL8Aoo2sqzMBs7g=";
+  cargoHash = "sha256-wBEimPiht7VN3lQfPlflrG2L47bfNnipK/JmurKqHrg=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+  ];
 
-  postInstall = ''
-    # Built by ./build.rs using `asciidoctor`
-    installManPage ./target/*/release/build/qrtool*/out/*.?
+  postInstall =
+    ''
+      # Built by ./build.rs using `asciidoctor`
+      installManPage ./target/*/release/build/qrtool*/out/*.?
 
-    installShellCompletion --cmd qrtool \
-      --bash <($out/bin/qrtool --generate-completion bash) \
-      --fish <($out/bin/qrtool --generate-completion fish) \
-      --zsh <($out/bin/qrtool --generate-completion zsh)
-  '';
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd qrtool \
+        --bash <($out/bin/qrtool --generate-completion bash) \
+        --fish <($out/bin/qrtool --generate-completion fish) \
+        --zsh <($out/bin/qrtool --generate-completion zsh)
+    '';
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];
-    description = "A utility for encoding and decoding QR code images";
+    description = "Utility for encoding and decoding QR code images";
     license = licenses.asl20;
     homepage = "https://sorairolake.github.io/qrtool/book/index.html";
     changelog = "https://sorairolake.github.io/qrtool/book/changelog.html";

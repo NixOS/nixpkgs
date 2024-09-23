@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "vcversioner";
   version = "2.16.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

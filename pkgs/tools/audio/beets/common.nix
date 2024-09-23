@@ -1,5 +1,4 @@
-{ stdenv
-, fetchpatch
+{ fetchpatch
 , bashInteractive
 , diffPlugins
 , glibcLocales
@@ -36,12 +35,34 @@
 let
   inherit (lib) attrNames attrValues concatMap;
 
-  mkPlugin = { name, enable ? !disableAllPlugins, builtin ? false, propagatedBuildInputs ? [ ], testPaths ? [ "test/test_${name}.py" ], wrapperBins ? [ ] }: {
+  mkPlugin = { name
+  , enable ? !disableAllPlugins
+  , builtin ? false
+  , propagatedBuildInputs ? [ ]
+  , testPaths ? [
+    # NOTE: This conditional can be removed when beets-stable is updated and
+    # the default plugins test path is changed
+    (if (lib.versions.majorMinor version) == "1.6" then
+      "test/test_${name}.py"
+    else
+      "test/plugins/test_${name}.py"
+    )
+  ]
+  , wrapperBins ? [ ]
+  }: {
     inherit name enable builtin propagatedBuildInputs testPaths wrapperBins;
   };
 
   basePlugins = lib.mapAttrs (_: a: { builtin = true; } // a) (import ./builtin-plugins.nix inputs);
-  allPlugins = lib.mapAttrs (n: a: mkPlugin { name = n; } // a) (lib.recursiveUpdate basePlugins pluginOverrides);
+  pluginOverrides' = lib.mapAttrs
+    (plugName: lib.throwIf
+      (basePlugins.${plugName}.deprecated or false)
+      "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
+    )
+    pluginOverrides
+  ;
+
+  allPlugins = lib.mapAttrs ( n: a: mkPlugin { name = n; } // a) (lib.recursiveUpdate basePlugins pluginOverrides');
   builtinPlugins = lib.filterAttrs (_: p: p.builtin) allPlugins;
   enabledPlugins = lib.filterAttrs (_: p: p.enable) allPlugins;
   disabledPlugins = lib.filterAttrs (_: p: !p.enable) allPlugins;
@@ -72,6 +93,7 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = [
     gobject-introspection
     sphinxHook
+    python3Packages.pydata-sphinx-theme
   ] ++ extraNativeBuildInputs;
 
   buildInputs = [
@@ -97,6 +119,7 @@ python3Packages.buildPythonApplication {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    pytest-cov
     mock
     rarfile
     responses

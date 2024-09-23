@@ -49,9 +49,10 @@ let
 
     meta = {
       description = "Car racing game";
+      mainProgram = "vdrift";
       homepage = "http://vdrift.net/";
       license = lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [ viric ];
+      maintainers = [ ];
       platforms = lib.platforms.linux;
     };
   };

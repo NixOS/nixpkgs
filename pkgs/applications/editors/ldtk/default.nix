@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldtk";
-  version = "1.4.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://github.com/deepnight/ldtk/releases/download/v${finalAttrs.version}/ubuntu-distribution.zip";
-    hash = "sha256-Qt6ADyIbhuxFGh7IP1WwcsvMtjOUZoTd99GeWt5s4UM=";
+    hash = "sha256-i7HIcKs10srfvwihGdMEnnmGoqgFWNJhC6vGf81QJWY=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems appimage-run ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 'LDtk ${finalAttrs.version} installer.AppImage' $out/share/ldtk.AppImage
     makeWrapper ${appimage-run}/bin/appimage-run $out/bin/ldtk \
       --add-flags $out/share/ldtk.AppImage
-    install -Dm644 src/ldtk.png $out/share/icons/hicolor/1024x1024/apps/ldtk.png
+    install -Dm644 src/ldtk.png $out/share/icons/hicolor/512x512/apps/ldtk.png
 
     runHook postInstall
   '';

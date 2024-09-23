@@ -1,13 +1,14 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
 , libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux
+, openssl
 }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.3.7";
+  version = "2.4.1";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  hash = "sha256-+oqWMZqnuf9fSpkbd8vzf1SVSdhHN2JLzr76jyAEv0U=";
+  hash = "sha256-Gc+jBuP/rl3b8wUE9hoaMSSqmodyGxMKFAmNTqH+v4k=";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -50,6 +51,11 @@ in buildRubyGem rec {
   dontBuild = false;
   src = fetchurl { inherit url hash; };
 
+  # Some reports indicate that some connection types, particularly
+  # WinRM, suffer from "Digest initialization failed" errors. Adding
+  # openssl as a build input resolves this runtime error.
+  buildInputs = [ openssl ];
+
   patches = [
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
@@ -85,8 +91,12 @@ in buildRubyGem rec {
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
 
+    # install bash completion
     mkdir -p $out/share/bash-completion/completions/
     cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
+    # install zsh completion
+    mkdir -p $out/share/zsh/site-functions/
+    cp -av contrib/zsh/_vagrant $out/share/zsh/site-functions/
   '' +
   lib.optionalString withLibvirt ''
     substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
@@ -103,10 +113,10 @@ in buildRubyGem rec {
   };
 
   meta = with lib; {
-    description = "A tool for building complete development environments";
+    description = "Tool for building complete development environments";
     homepage = "https://www.vagrantup.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = licenses.bsl11;
+    maintainers = with maintainers; [ tylerjl ];
     platforms = with platforms; linux ++ darwin;
   };
 }

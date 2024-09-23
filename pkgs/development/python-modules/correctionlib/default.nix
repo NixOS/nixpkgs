@@ -1,53 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, numpy
-, scikit-build
-, setuptools
-, setuptools-scm
-, wheel
-, pybind11
-, pydantic
-, rich
-, awkward
-, pytestCheckHook
-, scipy
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  scikit-build,
+  setuptools,
+  setuptools-scm,
+  pybind11,
+
+  zlib,
+
+  # dependencies
+  numpy,
+  packaging,
+  pydantic,
+  rich,
+
+  # checks
+  awkward,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.4.0";
+  version = "2.6.4";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bQKcS8vktvD62zvSeaBtoJw36TSpo0gEpKm0HI3AuXg=";
+  src = fetchFromGitHub {
+    owner = "cms-nanoAOD";
+    repo = "correctionlib";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-l+JjW/giGzU00z0jBN3D4KB/LjTIxeJb3CS+Ge0gbiA=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    numpy
     scikit-build
     setuptools
     setuptools-scm
-    wheel
     pybind11
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    numpy
+    packaging
     pydantic
     rich
   ];
 
   dontUseCmakeConfigure = true;
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeCheckInputs = [
     awkward
@@ -55,14 +62,19 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [
-    "correctionlib"
-  ];
+  pythonImportsCheck = [ "correctionlib" ];
 
-  meta = with lib; {
+  # One test requires running the produced `correctionlib` binary
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  meta = {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";
+    mainProgram = "correction";
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/cms-nanoAOD/correctionlib/releases/tag/v${version}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -17,7 +17,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
-from test_driver.logger import rootlog
+from test_driver.logger import AbstractLogger
 
 from .qmp import QMPSession
 
@@ -165,8 +165,6 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
-        # TODO: qemu script already catpures this env variable, legacy?
-        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
         return (
             f"{self._cmd}"
@@ -208,7 +206,6 @@ class StartCommand:
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
             shell=True,
             cwd=state_dir,
             env=self.build_environment(state_dir, shared_dir),
@@ -233,77 +230,6 @@ class NixStartScript(StartCommand):
         if match:
             name = match.group(1)
         return name
-
-
-class LegacyStartCommand(StartCommand):
-    """Used in some places to create an ad-hoc machine instead of
-    using nix test instrumentation + module system for that purpose.
-    Legacy.
-    """
-
-    def __init__(
-        self,
-        netBackendArgs: Optional[str] = None,  # noqa: N803
-        netFrontendArgs: Optional[str] = None,  # noqa: N803
-        hda: Optional[Tuple[Path, str]] = None,
-        cdrom: Optional[str] = None,
-        usb: Optional[str] = None,
-        bios: Optional[str] = None,
-        qemuBinary: Optional[str] = None,  # noqa: N803
-        qemuFlags: Optional[str] = None,  # noqa: N803
-    ):
-        if qemuBinary is not None:
-            self._cmd = qemuBinary
-        else:
-            self._cmd = "qemu-kvm"
-
-        self._cmd += " -m 384"
-
-        # networking
-        net_backend = "-netdev user,id=net0"
-        net_frontend = "-device virtio-net-pci,netdev=net0"
-        if netBackendArgs is not None:
-            net_backend += "," + netBackendArgs
-        if netFrontendArgs is not None:
-            net_frontend += "," + netFrontendArgs
-        self._cmd += f" {net_backend} {net_frontend}"
-
-        # hda
-        hda_cmd = ""
-        if hda is not None:
-            hda_path = hda[0].resolve()
-            hda_interface = hda[1]
-            if hda_interface == "scsi":
-                hda_cmd += (
-                    f" -drive id=hda,file={hda_path},werror=report,if=none"
-                    " -device scsi-hd,drive=hda"
-                )
-            else:
-                hda_cmd += f" -drive file={hda_path},if={hda_interface},werror=report"
-        self._cmd += hda_cmd
-
-        # cdrom
-        if cdrom is not None:
-            self._cmd += f" -cdrom {cdrom}"
-
-        # usb
-        usb_cmd = ""
-        if usb is not None:
-            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
-            usb_cmd += (
-                " -device usb-ehci"
-                f" -drive id=usbdisk,file={usb},if=none,readonly"
-                " -device usb-storage,drive=usbdisk "
-            )
-        self._cmd += usb_cmd
-
-        # bios
-        if bios is not None:
-            self._cmd += f" -bios {bios}"
-
-        # qemu flags
-        if qemuFlags is not None:
-            self._cmd += f" {qemuFlags}"
 
 
 class Machine:
@@ -344,6 +270,7 @@ class Machine:
         out_dir: Path,
         tmp_dir: Path,
         start_command: StartCommand,
+        logger: AbstractLogger,
         name: str = "machine",
         keep_vm_state: bool = False,
         callbacks: Optional[List[Callable]] = None,
@@ -354,6 +281,7 @@ class Machine:
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
+        self.logger = logger
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -377,42 +305,19 @@ class Machine:
         self.booted = False
         self.connected = False
 
-    @staticmethod
-    def create_startcommand(args: Dict[str, str]) -> StartCommand:
-        rootlog.warning(
-            "Using legacy create_startcommand(), "
-            "please use proper nix test vm instrumentation, instead "
-            "to generate the appropriate nixos test vm qemu startup script"
-        )
-        hda = None
-        if args.get("hda"):
-            hda_arg: str = args.get("hda", "")
-            hda_arg_path: Path = Path(hda_arg)
-            hda = (hda_arg_path, args.get("hdaInterface", ""))
-        return LegacyStartCommand(
-            netBackendArgs=args.get("netBackendArgs"),
-            netFrontendArgs=args.get("netFrontendArgs"),
-            hda=hda,
-            cdrom=args.get("cdrom"),
-            usb=args.get("usb"),
-            bios=args.get("bios"),
-            qemuBinary=args.get("qemuBinary"),
-            qemuFlags=args.get("qemuFlags"),
-        )
-
     def is_up(self) -> bool:
         return self.booted and self.connected
 
     def log(self, msg: str) -> None:
-        rootlog.log(msg, {"machine": self.name})
+        self.logger.log(msg, {"machine": self.name})
 
     def log_serial(self, msg: str) -> None:
-        rootlog.log_serial(msg, self.name)
+        self.logger.log_serial(msg, self.name)
 
     def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
         my_attrs.update(attrs)
-        return rootlog.nested(msg, my_attrs)
+        return self.logger.nested(msg, my_attrs)
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
@@ -447,8 +352,7 @@ class Machine:
         """
 
         def check_active(_: Any) -> bool:
-            info = self.get_unit_info(unit, user)
-            state = info["ActiveState"]
+            state = self.get_unit_property(unit, "ActiveState", user)
             if state == "failed":
                 raise Exception(f'unit "{unit}" reached state "{state}"')
 
@@ -490,6 +394,35 @@ class Machine:
             for line in lines.split("\n")
             if line_pattern.match(line)
         )
+
+    def get_unit_property(
+        self,
+        unit: str,
+        property: str,
+        user: Optional[str] = None,
+    ) -> str:
+        status, lines = self.systemctl(
+            f'--no-pager show "{unit}" --property="{property}"',
+            user,
+        )
+        if status != 0:
+            raise Exception(
+                f'retrieving systemctl property "{property}" for unit "{unit}"'
+                + ("" if user is None else f' under user "{user}"')
+                + f" failed with exit code {status}"
+            )
+
+        invalid_output_message = (
+            f'systemctl show --property "{property}" "{unit}"'
+            f"produced invalid output: {lines}"
+        )
+
+        line_pattern = re.compile(r"^([^=]+)=(.*)$")
+        match = line_pattern.match(lines)
+        assert match is not None, invalid_output_message
+
+        assert match[1] == property, invalid_output_message
+        return match[2]
 
     def systemctl(self, q: str, user: Optional[str] = None) -> Tuple[int, str]:
         """
@@ -739,6 +672,32 @@ class Machine:
             self.pid = None
             self.booted = False
             self.connected = False
+
+    def wait_for_qmp_event(
+        self, event_filter: Callable[[dict[str, Any]], bool], timeout: int = 60 * 10
+    ) -> dict[str, Any]:
+        """
+        Wait for a QMP event which you can filter with the `event_filter` function.
+        The function takes as an input a dictionary of the event and if it returns True, we return that event,
+        if it does not, we wait for the next event and retry.
+
+        It will skip all events received in the meantime, if you want to keep them,
+        you have to do the bookkeeping yourself and store them somewhere.
+
+        By default, it will wait up to 10 minutes, `timeout` is in seconds.
+        """
+        if self.qmp_client is None:
+            raise RuntimeError("QMP API is not ready yet, is the VM ready?")
+
+        start = time.time()
+        while True:
+            evt = self.qmp_client.wait_for_event(timeout=timeout)
+            if event_filter(evt):
+                return evt
+
+            elapsed = time.time() - start
+            if elapsed >= timeout:
+                raise TimeoutError
 
     def get_tty_text(self, tty: str) -> str:
         status, output = self.execute(
@@ -1156,8 +1115,8 @@ class Machine:
 
     def cleanup_statedir(self) -> None:
         shutil.rmtree(self.state_dir)
-        rootlog.log(f"deleting VM state directory {self.state_dir}")
-        rootlog.log("if you want to keep the VM state, pass --keep-vm-state")
+        self.logger.log(f"deleting VM state directory {self.state_dir}")
+        self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
         """
@@ -1264,7 +1223,7 @@ class Machine:
     def release(self) -> None:
         if self.pid is None:
             return
-        rootlog.info(f"kill machine (pid {self.pid})")
+        self.logger.info(f"kill machine (pid {self.pid})")
         assert self.process
         assert self.shell
         assert self.monitor
@@ -1291,6 +1250,5 @@ class Machine:
             check_return=False,
             check_output=False,
         )
-        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
         self.connected = False
         self.connect()

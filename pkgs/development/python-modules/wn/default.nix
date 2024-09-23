@@ -1,45 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, flit-core
-, requests
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  flit-core,
+  requests,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "wn";
-  version = "0.9.4";
-  format = "pyproject";
+  version = "0.9.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n03hFoGMAqLu57gw52tY2jkE8uuLFAbwTZ63sHG2168=";
+    hash = "sha256-muYuDmYH9W5j6euDYJMMgzfsxE6eBIhDCqH6P7nFG+Q=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     requests
     tomli
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "wn"
-  ];
+  pythonImportsCheck = [ "wn" ];
 
   meta = with lib; {
-    description = "A modern, interlingual wordnet interface for Python";
+    description = "Modern, interlingual wordnet interface for Python";
     homepage = "https://github.com/goodmami/wn";
     changelog = "https://github.com/goodmami/wn/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

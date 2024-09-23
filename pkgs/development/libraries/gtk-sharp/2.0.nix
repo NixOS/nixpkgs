@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     ./bootstrap-${lib.versions.majorMinor version}
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=int-conversion"
+  ]);
+
   dontStrip = true;
 
   inherit monoDLLFixer;
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Graphical User Interface Toolkit for mono and .Net";
     homepage = "https://www.mono-project.com/docs/gui/gtksharp";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl2;
   };
 }

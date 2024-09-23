@@ -7,7 +7,7 @@ mkDerivation rec {
   version = "1.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/qt5ct/qt5ct-${version}.tar.bz2";
     sha256 = "sha256-I7dAVEFepBJDKHcu+ab5UIOpuGVp4SgDSj/3XfrYCOk=";
   };
 
@@ -23,10 +23,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt5 Configuration Tool";
-    homepage = "https://www.opendesktop.org/content/show.php?content=168066";
+    homepage = "https://sourceforge.net/projects/qt5ct/";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ralith ];
+    maintainers = [ ];
     mainProgram = "qt5ct";
   };
 }

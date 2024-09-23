@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "ansiconv";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ansible";
@@ -14,10 +20,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
-    description = "A module for converting ANSI coded text and converts it to either plain text or HTML";
+    description = "Module for converting ANSI coded text and converts it to either plain text or HTML";
     homepage = "https://github.com/ansible/ansiconv";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
-
 }

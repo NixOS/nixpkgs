@@ -1,1 +1,0 @@
-pkgs.nonDerivation: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/no/nonDerivation/package.nix { ... }` with a non-empty second argument.

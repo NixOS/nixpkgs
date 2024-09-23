@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
-  version = "2.55";
+  version = "2.57";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-XZf/5b+rwASB41DP3It3g8UUPIHWEtZBXGk+Qrjw1Bc=";
+    hash = "sha256-emJ4QhhIaUowG4SAUzRK6hUendc/H6JH09Js2Ji9PQ0=";
   };
 
   sourceRoot = ".";
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     xbuild /p:Configuration=Release
 
-    runHook postBuld
+    runHook postBuild
   '';
 
   outputFiles = [

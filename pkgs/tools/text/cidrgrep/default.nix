@@ -19,6 +19,7 @@ buildGoModule {
 
   meta = {
     description = "Like grep but for IPv4 CIDRs";
+    mainProgram = "cidrgrep";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ das_j ];
   };

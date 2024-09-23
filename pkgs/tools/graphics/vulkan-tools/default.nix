@@ -14,8 +14,10 @@
 , libXrandr
 , vulkan-headers
 , vulkan-loader
+, vulkan-volk
 , wayland
 , wayland-protocols
+, wayland-scanner
 , moltenvk
 , AppKit
 , Cocoa
@@ -23,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.268.0";
+  version = "1.3.290.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-IsMxiAR4ak6kC3BNYhtI+JVNkEka4ZceSElxk39THXg=";
+    hash = "sha256-8xuE4OTwtH8ckCKDU7oo0WI7/R4Ox53+j+F+ZuKysKI=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +44,7 @@ stdenv.mkDerivation rec {
     glslang
     vulkan-headers
     vulkan-loader
+    vulkan-volk
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libffi
     libX11
@@ -51,6 +54,7 @@ stdenv.mkDerivation rec {
     libXrandr
     wayland
     wayland-protocols
+    wayland-scanner
   ] ++ lib.optionals stdenv.isDarwin [
     moltenvk
     moltenvk.dev
@@ -58,29 +62,17 @@ stdenv.mkDerivation rec {
     Cocoa
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # Modify mac_common.cmake to find the ICD where nixpkgs puts it.
-    substituteInPlace mac_common.cmake \
-      --replace MoltenVK/icd/MoltenVK_icd.json MoltenVK_icd.json
-    # Remove the unconditional check for `ibtool` since the cube demo that needs it won’t be built.
-    sed -e '/#.*Interface Builder/,/^endif()/d' -i mac_common.cmake
-    # Install `vulkaninfo` to $out/bin even on Darwin.
-    substituteInPlace vulkaninfo/CMakeLists.txt \
-      --replace 'install(TARGETS vulkaninfo RUNTIME DESTINATION "vulkaninfo")' 'install(TARGETS vulkaninfo)'
-  '';
-
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
 
   dontPatchELF = true;
 
-  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER="${buildPackages.wayland-scanner}/bin/wayland-scanner";
+  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
 
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
-    "-DPKG_CONFIG_EXECUTABLE=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"

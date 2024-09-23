@@ -1,8 +1,16 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanfriendly,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "capturer";
   version = "3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xolox";

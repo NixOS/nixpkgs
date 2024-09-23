@@ -26,13 +26,13 @@ assert withQt -> wrapQtAppsHook != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "carla";
-  version = "2.5.7";
+  version = "2.5.9";
 
   src = fetchFromGitHub {
     owner = "falkTX";
-    repo = finalAttrs.pname;
+    repo = "carla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WDwYfDR760Maz3oWNPcPbl8L+0MIRbeqNVGH9Gg4ZYc=";
+    hash = "sha256-FM/6TtNhDml1V9C5VisjLcZ3CzXsuwCZrsoz4yP3kI8=";
   };
 
   nativeBuildInputs = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://kx.studio/Applications:Carla";
-    description = "An audio plugin host";
+    description = "Audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3
       and AU plugin formats, plus GIG, SF2 and SFZ file support.

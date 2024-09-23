@@ -1,35 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-learn
-, numpy
-, scipy
-, jinja2
-, pytestCheckHook
-, networkx
-, matplotlib
-, igraph
-, plotly
-, ipywidgets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  scikit-learn,
+  numpy,
+  scipy,
+  jinja2,
+  pytestCheckHook,
+  networkx,
+  matplotlib,
+  igraph,
+  plotly,
+  ipywidgets,
 }:
 
 buildPythonPackage rec {
   pname = "kmapper";
-  version = "2.0.1";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "kepler-mapper";
-    rev = "v${version}";
-    sha256 = "1jqqrn7ig9kylcc8xbslxmchzghr9jgffaab3g3y3nyghk8azlgj";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-i909J0yI8v8BqGbCkcjBAdA02Io+qpILdDkojZj0wv4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     scikit-learn
     numpy
     scipy
     jinja2
   ];
+
+  pythonImportsCheck = [ "kmapper" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -45,6 +52,5 @@ buildPythonPackage rec {
     homepage = "https://kepler-mapper.scikit-tda.org/";
     license = licenses.mit;
     maintainers = [ ];
-    broken = true;
   };
 }

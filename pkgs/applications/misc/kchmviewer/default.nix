@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CHM (Winhelp) files viewer";
+    mainProgram = "kchmviewer";
     homepage = "http://www.ulduzsoft.com/linux/kchmviewer/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];

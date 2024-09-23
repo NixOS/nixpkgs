@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-# build inputs
-, requests
-, six
-, monotonic
-, backoff
-, python-dateutil
-# check inputs
-, pytestCheckHook
-, mock
-, freezegun
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # build inputs
+  requests,
+  six,
+  monotonic,
+  backoff,
+  python-dateutil,
+  # check inputs
+  pytestCheckHook,
+  mock,
+  freezegun,
 }:
 let
   pname = "posthog";
-  version = "3.0.2";
+  version = "3.5.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +25,7 @@ buildPythonPackage {
     owner = "PostHog";
     repo = "posthog-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QASqjphAWtYuIyhbFTYwv1gD+rXvrmp5W0Te4MFn1AA=";
+    hash = "sha256-DhTX28j8RcEONEVIRoYHBk63Qw1Wff9qdQ/Ymbb9xHE=";
   };
 
   propagatedBuildInputs = [
@@ -41,9 +42,7 @@ buildPythonPackage {
     freezegun
   ];
 
-  pythonImportsCheck = [
-    "posthog"
-  ];
+  pythonImportsCheck = [ "posthog" ];
 
   disabledTests = [
     "test_load_feature_flags_wrong_key"

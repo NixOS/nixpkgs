@@ -1,15 +1,21 @@
-import ../make-test-python.nix ({ pkgs, lib, ... } :
+import ../make-test-python.nix ({ pkgs, lib, incus ? pkgs.incus-lts, ... } :
 
 {
   name = "incus-socket-activated";
 
-  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   nodes.machine = { lib, ... }: {
     virtualisation = {
-      incus.enable = true;
-      incus.socketActivation = true;
+      incus = {
+        enable = true;
+        package = incus;
+        socketActivation = true;
+      };
     };
+    networking.nftables.enable = true;
   };
 
   testScript = ''

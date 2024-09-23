@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";
-  version = "7.0.7";
+  version = "7.0.11";
 
   src = fetchFromGitHub {
     owner = "juce-framework";
     repo = "juce";
     rev = finalAttrs.version;
-    hash = "sha256-r+Wf/skPDexm3rsrVBoWrygKvV9HGlCQd7r0iHr9avM=";
+    hash = "sha256-XFC+MYxUE3NatM2oYykiPJtiQLy33JD64VZFfZS2Tas=";
   };
 
   patches = [
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Cross-platform C++ application framework";
+    mainProgram = "juceaide";
     longDescription = "JUCE is an open-source cross-platform C++ application framework for desktop and mobile applications, including VST, VST3, AU, AUv3, RTAS and AAX audio plug-ins";
     homepage = "https://github.com/juce-framework/JUCE";
     license = with licenses; [ isc gpl3Plus ];

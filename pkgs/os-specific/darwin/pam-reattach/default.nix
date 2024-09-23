@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, openpam, darwin }:
 
+let
+  sdkOlderThan11 = lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0";
+in
 stdenv.mkDerivation rec {
   pname = "pam_reattach";
   version = "1.3";
@@ -12,17 +15,12 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_OSX_ARCHITECTURES=${
-      if stdenv.hostPlatform.system == "x86_64-darwin" then
-        "x86_64"
-      else
-        "arm64"
-    }"
+    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
     "-DENABLE_CLI=ON"
-  ] ++ lib.optional (!stdenv.isAarch64) "-DCMAKE_LIBRARY_PATH=${darwin.apple_sdk.sdk}/usr/lib";
+  ] ++ lib.optional sdkOlderThan11 "-DCMAKE_LIBRARY_PATH=${darwin.apple_sdk.sdk}/usr/lib";
 
   buildInputs = [ openpam ]
-    ++ lib.optional (!stdenv.isAarch64) darwin.apple_sdk.sdk;
+    ++ lib.optional sdkOlderThan11 darwin.apple_sdk.sdk;
 
   nativeBuildInputs = [ cmake ];
 

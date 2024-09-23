@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, aiofiles
-, aiosqlite
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyopenssl
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, sortedcontainers
-, typing-extensions
+{
+  lib,
+  stdenv,
+  aiofiles,
+  aiosqlite,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyopenssl,
+  pytest-asyncio_0_21,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  setuptools,
+  sortedcontainers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.5";
-  format = "setuptools";
+  version = "1.1.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,22 +29,20 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eDrnDDiijkr5377BVWVAc5QEQCCDBoFynuT4MncCx9g=";
+    hash = "sha256-XXjzYDOEBdA4uk0VCzscHrPCY2Lgin0JBAVDdxmSOio=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    # https://github.com/FreeOpcUa/opcua-asyncio/issues/1263
-    substituteInPlace setup.py \
-      --replace ", 'asynctest'" ""
-
     # Workaround hardcoded paths in test
     # "test_cli_tools_which_require_sigint"
     substituteInPlace tests/test_tools.py \
-      --replace "tools/" "$out/bin/"
+      --replace-fail "tools/" "$out/bin/"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     aiosqlite
     cryptography
@@ -55,17 +55,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "asyncua"
-  ];
+  pythonImportsCheck = [ "asyncua" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
     # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
     "test_publish"
+  ] ++ lib.optionals stdenv.isDarwin [
     # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
     "test_anonymous_rejection"
     "test_certificate_handling_success"

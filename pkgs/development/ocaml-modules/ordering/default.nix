@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, dune_3 }:
+{ buildDunePackage, dune_3 }:
 
 buildDunePackage {
   pname = "ordering";

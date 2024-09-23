@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
     # This font doesn't appear to have any official web site but this
     # one provides some good information and samples.
     homepage = "http://openfontlibrary.org/en/font/carlito";
-    description = "A sans-serif font metric-compatible with Microsoft Calibri";
+    description = "Sans-serif font metric-compatible with Microsoft Calibri";
     longDescription = ''
       Carlito is a free font that is metric-compatible with the
       Microsoft Calibri font. The font is designed by Łukasz Dziedzic

@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.8.9";
+  version = "0.4.8.12";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Wbt9iJD2ExtM5TRPPc6l3rIYK39PEP8MtOTYHxGyz2U=";
+    sha256 = "sha256-ynzHNdmON0e1jy88wU+ATdeJ+g+zM6hNy2vXCtu4yHQ=";
   };
 
   outputs = [ "out" "geoip" ];
@@ -70,14 +70,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # disable tests on aarch64-darwin, the following tests fail there:
-  # oom/circbuf: [forking]
-  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
-  #   [circbuf FAILED]
-  # oom/streambuf: [forking]
-  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
-  #   [streambuf FAILED]
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  # disable tests on linux aarch32
+  # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
+  doCheck = !(stdenv.isLinux && stdenv.isAarch32);
 
   postInstall = ''
     mkdir -p $geoip/share/tor

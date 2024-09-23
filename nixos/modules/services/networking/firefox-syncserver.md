@@ -7,19 +7,21 @@ A storage server for Firefox Sync that you can easily host yourself.
 The absolute minimal configuration for the sync server looks like this:
 
 ```nix
-services.mysql.package = pkgs.mariadb;
+{
+  services.mysql.package = pkgs.mariadb;
 
-services.firefox-syncserver = {
-  enable = true;
-  secrets = builtins.toFile "sync-secrets" ''
-    SYNC_MASTER_SECRET=this-secret-is-actually-leaked-to-/nix/store
-  '';
-  singleNode = {
+  services.firefox-syncserver = {
     enable = true;
-    hostname = "localhost";
-    url = "http://localhost:5000";
+    secrets = builtins.toFile "sync-secrets" ''
+      SYNC_MASTER_SECRET=this-secret-is-actually-leaked-to-/nix/store
+    '';
+    singleNode = {
+      enable = true;
+      hostname = "localhost";
+      url = "http://localhost:5000";
+    };
   };
-};
+}
 ```
 
 This will start a sync server that is only accessible locally. Once the services is

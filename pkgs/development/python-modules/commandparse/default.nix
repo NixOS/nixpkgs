@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,15 +14,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-S9e90BtS6qMjFtYUmgC0w4IKQP8q1iR2tGqq5l2+n6o=";
+    hash = "sha256-S9e90BtS6qMjFtYUmgC0w4IKQP8q1iR2tGqq5l2+n6o=";
   };
 
   # tests only distributed upstream source, not PyPi
   doCheck = false;
 
-  pythonImportsCheck = [
-    "commandparse"
-  ];
+  pythonImportsCheck = [ "commandparse" ];
 
   meta = with lib; {
     description = "Python module to parse command based CLI application";

@@ -1,0 +1,11 @@
+--- a/drivers/sqlite3/dbd_sqlite3.c
++++ b/drivers/sqlite3/dbd_sqlite3.c
+@@ -1451,7 +1451,7 @@ static int getTables(char** tables, int
+ 		    break;
+ 		  }
+ 
+-		  word_lower[item-start+1];
++		  char word_lower[item-start+1];
+ 		  strncpy(word_lower,start,item-start);
+ 		  word_lower[item-start] = '\0';
+ 		  int i = 0;

@@ -76,11 +76,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A PKCS#11 interface for TPM2 hardware";
+    description = "PKCS#11 interface for TPM2 hardware";
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = [ ];
     mainProgram = "tpm2_ptool";
   };
 }

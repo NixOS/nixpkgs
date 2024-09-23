@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Administrative tooling for Falco";
+    mainProgram = "falcoctl";
     homepage = "https://github.com/falcosecurity/falcoctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ developer-guy kranurag7 LucaGuerra ];

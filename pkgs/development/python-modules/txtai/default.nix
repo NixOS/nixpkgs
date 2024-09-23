@@ -1,73 +1,110 @@
 {
-  lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pythonRelaxDepsHook
-# propagated build input
-, faiss
-, torch
-, transformers
-, huggingface-hub
-, numpy
-, pyyaml
-, regex
-# optional-dependencies
-, aiohttp
-, fastapi
-, uvicorn
-# TODO add apache-libcloud
-# , apache-libcloud
-, rich
-, duckdb
-, pillow
-, networkx
-, python-louvain
-, onnx
-, onnxruntime
-, soundfile
-, scipy
-, ttstokenizer
-, beautifulsoup4
-, nltk
-, pandas
-, tika
-, imagehash
-, timm
-, fasttext
-, sentencepiece
-, accelerate
-, onnxmltools
-, annoy
-, hnswlib
-# TODO add pymagnitude-lite
-#, pymagnitude-lite
-, scikit-learn
-, sentence-transformers
-, croniter
-, openpyxl
-, requests
-, xmltodict
-# native check inputs
-, unittestCheckHook
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  # propagated build input
+  faiss,
+  torch,
+  transformers,
+  huggingface-hub,
+  numpy,
+  pyyaml,
+  regex,
+  # optional-dependencies
+  aiohttp,
+  fastapi,
+  uvicorn,
+  # TODO add apache-libcloud
+  # , apache-libcloud
+  rich,
+  duckdb,
+  pillow,
+  networkx,
+  python-louvain,
+  onnx,
+  onnxruntime,
+  soundfile,
+  scipy,
+  ttstokenizer,
+  beautifulsoup4,
+  nltk,
+  pandas,
+  tika,
+  imagehash,
+  timm,
+  fasttext,
+  sentencepiece,
+  accelerate,
+  onnxmltools,
+  annoy,
+  hnswlib,
+  # TODO add pymagnitude-lite
+  #, pymagnitude-lite
+  scikit-learn,
+  sentence-transformers,
+  croniter,
+  openpyxl,
+  requests,
+  xmltodict,
+  # native check inputs
+  unittestCheckHook,
+
+  pythonAtLeast,
 }:
 let
-  version = "6.2.0";
-  api = [ aiohttp fastapi uvicorn ];
+  version = "7.3.0";
+  api = [
+    aiohttp
+    fastapi
+    uvicorn
+  ];
   # cloud = [ apache-libcloud ];
   console = [ rich ];
 
-  database = [ duckdb pillow ];
+  database = [
+    duckdb
+    pillow
+  ];
 
-  graph = [ networkx python-louvain ];
+  graph = [
+    networkx
+    python-louvain
+  ];
 
-  model = [ onnx onnxruntime ];
+  model = [
+    onnx
+    onnxruntime
+  ];
 
-  pipeline-audio = [ onnx onnxruntime soundfile scipy ttstokenizer ];
-  pipeline-data = [ beautifulsoup4 nltk pandas tika ];
-  pipeline-image = [ imagehash pillow timm ];
-  pipeline-text = [ fasttext sentencepiece ];
-  pipeline-train = [ accelerate onnx onnxmltools onnxruntime ];
+  pipeline-audio = [
+    onnx
+    onnxruntime
+    soundfile
+    scipy
+    ttstokenizer
+  ];
+  pipeline-data = [
+    beautifulsoup4
+    nltk
+    pandas
+    tika
+  ];
+  pipeline-image = [
+    imagehash
+    pillow
+    timm
+  ];
+  pipeline-text = [
+    fasttext
+    sentencepiece
+  ];
+  pipeline-train = [
+    accelerate
+    onnx
+    onnxmltools
+    onnxruntime
+  ];
   pipeline = pipeline-audio ++ pipeline-data ++ pipeline-image ++ pipeline-text ++ pipeline-train;
 
   similarity = [
@@ -90,8 +127,21 @@ let
   all = api ++ console ++ database ++ graph ++ model ++ pipeline ++ similarity ++ workflow;
 
   optional-dependencies = {
-    inherit api console database graph model pipeline-audio pipeline-image
-      pipeline-text pipeline-train pipeline similarity workflow all;
+    inherit
+      api
+      console
+      database
+      graph
+      model
+      pipeline-audio
+      pipeline-image
+      pipeline-text
+      pipeline-train
+      pipeline
+      similarity
+      workflow
+      all
+      ;
   };
 in
 buildPythonPackage {
@@ -105,12 +155,9 @@ buildPythonPackage {
     owner = "neuml";
     repo = "txtai";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aWuY2z5DIVhZ5bRADhKSadCofIQQdLQAb52HnjPMS/4=";
+    hash = "sha256-tnM6ye0Sxh8P2bm3awE72GvXEY0gXX1Sv+wPr77wRGU=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   pythonRemoveDeps = [
     # We call it faiss, not faiss-cpu.
@@ -143,14 +190,18 @@ buildPythonPackage {
   ] ++ optional-dependencies.api ++ optional-dependencies.similarity;
 
   unittestFlagsArray = [
-    "-s" "test/python" "-v"
+    "-s"
+    "test/python"
+    "-v"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Semantic search and workflows powered by language models";
     changelog = "https://github.com/neuml/txtai/releases/tag/v${version}";
     homepage = "https://github.com/neuml/txtai";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+    # This should be addressed in a newer version, but we first need to wait for python311Packages.faiss to be updated
+    broken = pythonAtLeast "3.12";
   };
 }

@@ -8,7 +8,6 @@
 , sslSupport ? true
 , openssl
 , nukeReferences
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -48,10 +47,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A text-mode web browser";
+    description = "Text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     mainProgram = "lynx";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

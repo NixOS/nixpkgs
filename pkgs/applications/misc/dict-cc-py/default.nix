@@ -25,8 +25,9 @@ python3.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Unofficial command line client for dict.cc";
+    mainProgram = "dict.cc.py";
     homepage = "https://github.com/rbaron/dict.cc.py";
     license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

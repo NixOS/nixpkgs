@@ -1,33 +1,34 @@
-{ aiohttp
-, bottle
-, buildPythonPackage
-, chalice
-, cherrypy
-, django
-, docker
-, falcon
-, fastapi
-, fetchFromGitHub
-, flask
-, flask-sockets
-, gunicorn
-, lib
-, moto
-, numpy
-, pyramid
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sanic
-, setuptools
-, sanic-testing
-, slack-sdk
-, starlette
-, tornado
-, uvicorn
-, websocket-client
-, websockets
-, werkzeug
+{
+  lib,
+  aiohttp,
+  bottle,
+  buildPythonPackage,
+  chalice,
+  cherrypy,
+  django,
+  docker,
+  falcon,
+  fastapi,
+  fetchFromGitHub,
+  fetchpatch,
+  flask,
+  flask-sockets,
+  gunicorn,
+  moto,
+  pyramid,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sanic,
+  setuptools,
+  sanic-testing,
+  slack-sdk,
+  starlette,
+  tornado,
+  uvicorn,
+  websocket-client,
+  websockets,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
@@ -44,19 +45,23 @@ buildPythonPackage rec {
     hash = "sha256-UwVStemFVA4hgqnSpCKpQGwLYG+p5z7MwFXXnIhrvNk=";
   };
 
-  # The packaged pytest-runner version is too new as of 2023-07-27. It's not really needed anyway. Unfortunately,
-  # pythonRelaxDepsHook doesn't work on setup_requires packages.
   postPatch = ''
-    substituteInPlace setup.py --replace "pytest-runner==5.2" ""
+    substituteInPlace setup.py \
+      --replace-fail "pytest-runner==5.2" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    # moto >=5 support, https://github.com/slackapi/bolt-python/pull/1046
+    (fetchpatch {
+      name = "moto-support.patch";
+      url = "https://github.com/slackapi/bolt-python/commit/69c2015ef49773de111f184dca9668aefac9e7c0.patch";
+      hash = "sha256-KW7KPeOqanV4n1UOv4DCadplJsqsPY+ju4ry0IvUqpA=";
+    })
   ];
 
-  propagatedBuildInputs = [
-    slack-sdk
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ slack-sdk ];
 
   passthru.optional-dependencies = {
     async = [
@@ -91,7 +96,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  # Work around "Read-only file system: '/homeless-shelter'" errors
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';
@@ -116,7 +120,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack_bolt" ];
 
   meta = with lib; {
-    description = "A framework to build Slack apps using Python";
+    description = "Framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
     changelog = "https://github.com/slackapi/bolt-python/releases/tag/v${version}";
     license = licenses.mit;

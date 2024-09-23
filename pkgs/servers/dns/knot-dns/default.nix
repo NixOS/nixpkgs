@@ -1,17 +1,18 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , ngtcp2-gnutls, xdp-tools
+, sphinx
 , autoreconfHook
 , nixosTests, knot-resolver, knot-dns, runCommandLocal
 }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.3.2";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "0d65d4b59f5df69b78c6295ade0a2ea7931831de7ef5eeee3e00f8a20af679e4";
+    sha256 = "2730b11398944faa5151c51b0655cf26631090343c303597814f2a57df424736";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
     ./runtime-deps.patch
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  # FIXME: sphinx is needed for now to get man-pages
+  nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
   buildInputs = [
     gnutls liburcu libidn2 libunistring
     nettle libedit

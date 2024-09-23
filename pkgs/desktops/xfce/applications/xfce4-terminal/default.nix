@@ -17,10 +17,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "1.1.1";
+  version = "1.1.3";
   odd-unstable = false;
 
-  sha256 = "sha256-LDfZTZ2EaboIYz+xQNC2NKpJiN8qqfead2XzpKVpL6c=";
+  sha256 = "sha256-CUIQf22Lmb6MNPd2wk8LlHFNUhdIoC1gzVV6RDP2PfY=";
 
   nativeBuildInputs = [
     libxslt
@@ -42,7 +42,8 @@ mkXfceDerivation {
   passthru.tests.test = nixosTests.terminal-emulators.xfce4-terminal;
 
   meta = with lib; {
-    description = "A modern terminal emulator";
+    description = "Modern terminal emulator";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    mainProgram = "xfce4-terminal";
   };
 }

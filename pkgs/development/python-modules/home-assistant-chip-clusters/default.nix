@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aenum
-, dacite
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aenum,
+  dacite,
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-clusters";
-  version = "2023.10.2";
+  version = "2024.7.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     pname = "home_assistant_chip_clusters";
     dist = "py3";
     python = "py3";
-    hash = "sha256-wAXxz0BryZ6i0yaqNp74PfApwMHYQuSLz5prJEiG1YE=";
+    hash = "sha256-1yR8Z+R16u099XtxPasmocFbdQPH1Rr6sqngNpWmuWE=";
   };
 
   propagatedBuildInputs = [

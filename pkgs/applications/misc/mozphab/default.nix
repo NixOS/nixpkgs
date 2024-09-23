@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozphab";
-  version = "1.4.3";
+  version = "1.5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
     rev = "refs/tags/${version}";
-    hash = "sha256-FUHT4MPzSxO3MCNYWodNxvFR2kL0P4eGmSHPtCt0Cug=";
+    hash = "sha256-HxwQ+mGtjnruppPAD01QUg3aca+k5vpj814BWM+3VfQ=";
   };
 
   postPatch = ''
@@ -29,8 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     setuptools-scm
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = with python3.pkgs; [
     colorama
@@ -59,6 +57,14 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
+  disabledTests = [
+    # AttributeError: 'called_once' is not a valid assertion.
+    "test_commit"
+    # AttributeError: 'not_called' is not a valid assertion.
+    "test_finalize_no_evolve"
+    "test_patch"
+  ];
+
   disabledTestPaths = [
     # codestyle doesn't matter to us
     "tests/test_style.py"
@@ -73,6 +79,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Phabricator CLI from Mozilla to support submission of a series of commits";
+    mainProgram = "moz-phab";
     longDescription = ''
       moz-phab is a custom command-line tool, which communicates to
       Phabricator’s API, providing several conveniences, including support for
@@ -80,7 +87,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
     license = licenses.mpl20;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

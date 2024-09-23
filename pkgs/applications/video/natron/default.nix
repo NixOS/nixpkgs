@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -36,6 +37,23 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
     hash = "sha256-dgScbfyulZPlrngqSw7xwipldoRd8uFO8VP9mlJyhQ8=";
   };
+
+  patches = [
+    # Fix gcc-13 build:
+    #   https://github.com/NatronGitHub/Natron/pull/929
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/NatronGitHub/Natron/commit/4b44fb18293035873b35c3a2d2aa29da78cb8740.patch";
+      includes = ["Global/GlobalDefines.h"];
+      hash = "sha256-9E1tJCvO7zA1iQAhrlL3GaBFIGpkjxNOr31behQXdhQ=";
+    })
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/NatronGitHub/Natron/commit/f21f58622e32c1684567c82e2ab361f33030bda7.patch";
+      includes = ["Engine/Noise.cpp"];
+      hash = "sha256-t2mzTsRuXVs8d1BB/5uAY1OPxWRa3JTK1iAWLAMsrgs=";
+    })
+  ];
 
   cmakeFlags = [ "-DNATRON_SYSTEM_LIBS=ON" ];
 

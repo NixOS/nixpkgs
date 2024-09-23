@@ -5,7 +5,7 @@
 , python3
 , fetchYarnDeps
 , fetchNpmDeps
-, fixup_yarn_lock
+, fixup-yarn-lock
 , npmHooks
 , yarn
 , substituteAll
@@ -13,7 +13,10 @@
 , unzip
 , pkgs
 , pkgsBuildHost
-
+, pipewire
+, libsecret
+, libpulseaudio
+, speechd-minimal
 , info
 }:
 
@@ -22,30 +25,35 @@ let
     opts = removeAttrs dep ["fetcher"];
   in pkgs.${dep.fetcher} opts;
 
-in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
+  fetchedDeps = lib.mapAttrs (name: fetchdep) info.deps;
+
+in ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
   buildTargets = [ "electron:electron_dist_zip" ];
 
-  nativeBuildInputs = base.nativeBuildInputs ++ [ nodejs yarn fixup_yarn_lock unzip npmHooks.npmConfigHook ];
+  nativeBuildInputs = base.nativeBuildInputs ++ [ nodejs yarn fixup-yarn-lock unzip npmHooks.npmConfigHook ];
   buildInputs = base.buildInputs ++ [ libnotify ];
 
   electronOfflineCache = fetchYarnDeps {
-    yarnLock = (fetchdep info.deps."src/electron") + "/yarn.lock";
+    yarnLock = fetchedDeps."src/electron" + "/yarn.lock";
     sha256 = info.electron_yarn_hash;
   };
-  npmDeps = fetchNpmDeps {
-    src = fetchdep info.deps."src";
-    sourceRoot = "source/third_party/node";
+  npmDeps = fetchNpmDeps rec {
+    src = fetchedDeps."src";
+    # Assume that the fetcher always unpack the source,
+    # based on update.py
+    sourceRoot = "${src.name}/third_party/node";
     hash = info.chromium_npm_hash;
   };
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionOlder info.version "28")
+  patches = base.patches ++ lib.optional (lib.versionOlder info.version "30")
     (substituteAll {
-      name = "version.patch";
-      src = if lib.versionAtLeast info.version "27" then ./version.patch else ./version-old.patch;
+      # disable a component that requires CIPD blobs
+      name = "disable-screen-ai.patch";
+      src = ./disable-screen-ai.patch;
       inherit (info) version;
     })
   ;
@@ -55,9 +63,9 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   '' + (
     lib.concatStrings (lib.mapAttrsToList (path: dep: ''
       mkdir -p ${builtins.dirOf path}
-      cp -r ${fetchdep dep}/. ${path}
+      cp -r ${dep}/. ${path}
       chmod u+w -R ${path}
-    '') info.deps)
+    '') fetchedDeps)
   ) + ''
     sourceRoot=src
     runHook postUnpack
@@ -107,7 +115,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       cd electron
       export HOME=$TMPDIR/fake_home
       yarn config --offline set yarn-offline-mirror $electronOfflineCache
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
     )
 
@@ -115,13 +123,14 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
       cd ..
       PATH=$PATH:${lib.makeBinPath (with pkgsBuildHost; [ jq git ])}
       config=src/electron/patches/config.json
-      for key in $(jq -r "keys[]" $config)
+      for entry in $(cat $config | jq -c ".[]")
       do
-        value=$(jq -r ".\"$key\"" $config)
-        echo patching $value
-        for patch in $(cat $key/.patches)
+        patch_dir=$(echo $entry | jq -r ".patch_dir")
+        repo=$(echo $entry | jq -r ".repo")
+        for patch in $(cat $patch_dir/.patches)
         do
-          git apply -p1 --directory=$value $key/$patch
+          echo applying in $repo: $patch
+          git apply -p1 --directory=$repo --exclude='src/third_party/blink/web_tests/*' --exclude='src/content/test/data/*' $patch_dir/$patch
         done
       done
     )
@@ -148,7 +157,6 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     v8_promise_internal_field_count = 1;
     v8_embedder_string = "-electron.0";
     v8_enable_snapshot_native_code_counters = false;
-    v8_scriptormodule_legacy_lifetime = true;
     v8_enable_javascript_promise_hooks = true;
     enable_cdm_host_verification = false;
     proprietary_codecs = true;
@@ -161,34 +169,67 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_cet_shadow_stack = false;
     is_cfi = false;
     use_qt = false;
-
-    enable_widevine = false;
+    v8_builtins_profiling_log_file = "";
+    enable_dangling_raw_ptr_checks = false;
+    dawn_use_built_dxc = false;
+    v8_enable_private_mapping_fork_optimization = true;
+    v8_expose_public_symbols = true;
+  } // lib.optionalAttrs (lib.versionOlder info.version "31") {
     use_perfetto_client_library = false;
-    enable_check_raw_ptr_fields = false;
-  } // lib.optionalAttrs (lib.versionOlder info.version "26")  {
-    use_gnome_keyring = false;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "28")  {
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "31") {
+    enable_dangling_raw_ptr_feature_flag = false;
+    clang_unsafe_buffers_paths = "";
+    enterprise_cloud_content_analysis = false;
+  } // {
+
+    # other
+    enable_widevine = false;
     override_electron_version = info.version;
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $libExecPath
     unzip -d $libExecPath out/Release/dist.zip
+
+    runHook postInstall
+  '';
+
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        libnotify
+        pipewire
+        stdenv.cc.cc.lib
+        libsecret
+        libpulseaudio
+        speechd-minimal
+      ];
+    in
+  base.postFixup + ''
+    patchelf \
+      --add-rpath "${libPath}" \
+      $out/libexec/electron/electron
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit info;
+    inherit info fetchedDeps;
     headers = stdenv.mkDerivation rec {
-      name = "node-v${info.node}-headers.tar.xz";
+      name = "node-v${info.node}-headers.tar.gz";
       nativeBuildInputs = [ python3 ];
-      src = fetchdep info.deps."src/third_party/electron_node";
+      src = fetchedDeps."src/third_party/electron_node";
       buildPhase = ''
+        runHook preBuild
         make tar-headers
+        runHook postBuild
       '';
       installPhase = ''
+        runHook preInstall
         mv ${name} $out
+        runHook postInstall
       '';
     };
   };
@@ -198,9 +239,14 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     homepage = "https://github.com/electron/electron";
     platforms = lib.platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ yuka ];
+    maintainers = with maintainers; [ yayayayaka teutat3s ];
     mainProgram = "electron";
     hydraPlatforms = lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version)) ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+  };
+})).overrideAttrs (finalAttrs: prevAttrs: {
+  # this was the only way I could get the package to properly reference itself
+  passthru = prevAttrs.passthru // {
+    dist = finalAttrs.finalPackage + "/libexec/electron";
   };
 })

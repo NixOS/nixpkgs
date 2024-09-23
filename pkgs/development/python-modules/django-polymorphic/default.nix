@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  django,
+  dj-database-url,
+}:
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
   version = "3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "django-polymorphic";
@@ -25,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

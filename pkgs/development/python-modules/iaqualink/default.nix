@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, httpx
-, pytestCheckHook
-, pythonOlder
-, respx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  httpx,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
@@ -23,16 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-ewPP2Xq+ecZGc5kokvLEsRokGqTWlymrzkwk480tapk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    httpx
-  ] ++ httpx.optional-dependencies.http2;
+  propagatedBuildInputs = [ httpx ] ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -44,9 +41,7 @@ buildPythonPackage rec {
       --replace "pytest --cov-config=pyproject.toml --cov-report=xml --cov-report=term --cov=src --cov=tests" ""
   '';
 
-  pythonImportsCheck = [
-    "iaqualink"
-  ];
+  pythonImportsCheck = [ "iaqualink" ];
 
   meta = with lib; {
     description = "Python library for Jandy iAqualink";

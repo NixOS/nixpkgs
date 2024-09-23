@@ -26,10 +26,8 @@ let
         emptyValue.value = {};
       };
 
-  libsForQt5 = pkgs.plasma5Packages;
-  inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (lib)
-    getBin optionalAttrs optionalString literalExpression
+    getBin optionalAttrs literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
     mkDefault mkIf mkMerge mkOption mkPackageOption types;
 
@@ -65,7 +63,7 @@ let
     # recognize that software that has been removed.
     rm -fv $HOME/.cache/ksycoca*
 
-    ${libsForQt5.kservice}/bin/kbuildsycoca5
+    ${pkgs.plasma5Packages.kservice}/bin/kbuildsycoca5
   '';
 
   set_XDG_CONFIG_HOME = ''
@@ -86,24 +84,24 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Plasma 5 (KDE 5) desktop environment.";
+        description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
       phononBackend = mkOption {
         type = types.enum [ "gstreamer" "vlc" ];
         default = "vlc";
         example = "gstreamer";
-        description = lib.mdDoc "Phonon audio backend to install.";
+        description = "Phonon audio backend to install.";
       };
 
       useQtScaling = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable HiDPI scaling in Qt.";
+        description = "Enable HiDPI scaling in Qt.";
       };
 
       runUsingSystemd = mkOption {
-        description = lib.mdDoc "Use systemd to manage the Plasma session";
+        description = "Use systemd to manage the Plasma session";
         type = types.bool;
         default = true;
       };
@@ -130,7 +128,7 @@ in
       mobile.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable support for running the Plasma Mobile shell.
         '';
       };
@@ -138,7 +136,7 @@ in
       mobile.installRecommendedSoftware = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Installs software recommended for use with Plasma Mobile, but which
           is not strictly required for Plasma Mobile to run.
         '';
@@ -147,13 +145,13 @@ in
       bigscreen.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable support for running the Plasma Bigscreen session.
         '';
       };
     };
     environment.plasma5.excludePackages = mkOption {
-        description = lib.mdDoc "List of default packages to exclude from the configuration";
+        description = "List of default packages to exclude from the configuration";
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
@@ -176,20 +174,21 @@ in
           owner = "root";
           group = "root";
           capabilities = "cap_sys_nice+ep";
-          source = "${getBin plasma5.kwin}/bin/kwin_wayland";
+          source = "${getBin pkgs.plasma5Packages.kwin}/bin/kwin_wayland";
         };
       } // optionalAttrs (!cfg.runUsingSystemd) {
         start_kdeinit = {
           setuid = true;
           owner = "root";
           group = "root";
-          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
+          source = "${getBin pkgs.plasma5Packages.kinit}/libexec/kf5/start_kdeinit";
         };
       };
 
+      qt.enable = true;
+
       environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeGear; with kdeFrameworks;
+        with pkgs.plasma5Packages;
         let
           requiredPackages = [
             frameworkintegration
@@ -256,6 +255,9 @@ in
             plasma-integration
             polkit-kde-agent
 
+            qqc2-breeze-style
+            qqc2-desktop-style
+
             plasma-desktop
             plasma-workspace
             plasma-workspace-wallpapers
@@ -284,8 +286,8 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.plasma5.excludePackages
 
         # Phonon audio backend
-        ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
-        ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
+        ++ lib.optional (cfg.phononBackend == "gstreamer") pkgs.plasma5Packages.phonon-backend-gstreamer
+        ++ lib.optional (cfg.phononBackend == "vlc") pkgs.plasma5Packages.phonon-backend-vlc
 
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
@@ -295,13 +297,13 @@ in
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
-        ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
+        ++ lib.optional config.services.samba.enable kdenetwork-filesharing
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet
         ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
       # Extra services for D-Bus activation
       services.dbus.packages = [
-        plasma5.kactivitymanagerd
+        pkgs.plasma5Packages.kactivitymanagerd
       ];
 
       environment.pathsToLink = [
@@ -325,7 +327,7 @@ in
       };
 
       # Enable GTK applications to load SVG icons
-      services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+      programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
       fonts.packages = with pkgs; [ cfg.notoPackage hack-font ];
       fonts.fontconfig.defaultFonts = {
@@ -334,17 +336,19 @@ in
         serif = [ "Noto Serif" ];
       };
 
-      programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
+      programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+      programs.ssh.askPassword = mkDefault "${pkgs.plasma5Packages.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
       services.accounts-daemon.enable = true;
+      programs.dconf.enable = true;
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
       services.power-profiles-daemon.enable = mkDefault true;
       services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [
@@ -353,13 +357,16 @@ in
         pkgs.media-player-info
       ];
 
-      services.xserver.displayManager.sddm = {
+      # Enable screen reader by default
+      services.orca.enable = mkDefault true;
+
+      services.displayManager.sddm = {
         theme = mkDefault "breeze";
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
 
-      security.pam.services.login.enableKwallet = true;
+      security.pam.services.login.kwallet.enable = true;
 
       systemd.user.services = {
         plasma-early-setup = mkIf cfg.runUsingSystemd {
@@ -370,17 +377,19 @@ in
         };
       };
 
+      xdg.icons.enable = true;
+
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
-      xdg.portal.configPackages = mkDefault [ plasma5.xdg-desktop-portal-kde ];
+      xdg.portal.extraPortals = [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
+      xdg.portal.configPackages = mkDefault [ pkgs.plasma5Packages.xdg-desktop-portal-kde ];
       # xdg-desktop-portal-kde expects PipeWire to be running.
-      # This does not, by default, replace PulseAudio.
       services.pipewire.enable = mkDefault true;
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
 
       programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
+      programs.chromium.enablePlasmaBrowserIntegration = true;
     })
 
     (mkIf (cfg.kwinrc != {}) {
@@ -398,20 +407,19 @@ in
       system.nixos-generate-config.desktopConfiguration = [
         ''
           # Enable the Plasma 5 Desktop Environment.
-          services.xserver.displayManager.sddm.enable = true;
+          services.displayManager.sddm.enable = true;
           services.xserver.desktopManager.plasma5.enable = true;
         ''
       ];
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
+      services.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-workspace ];
       # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
       # many tiny bugs.
       # See: https://github.com/NixOS/nixpkgs/issues/143272
-      services.xserver.displayManager.defaultSession = mkDefault "plasma";
+      services.displayManager.defaultSession = mkDefault "plasma";
 
       environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeGear; with kdeFrameworks;
+        with pkgs.plasma5Packages;
         let
           requiredPackages = [
             ksystemstats
@@ -447,7 +455,7 @@ in
           script = ''
             ${set_XDG_CONFIG_HOME}
 
-            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
+            ${pkgs.plasma5Packages.kconfig}/bin/kwriteconfig5 \
               --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
           '';
         };
@@ -470,13 +478,12 @@ in
         {
           # The user interface breaks without pulse
           assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
-          message = "Plasma Mobile requires pulseaudio.";
+          message = "Plasma Mobile requires a Pulseaudio compatible sound server.";
         }
       ];
 
       environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeApplications; with kdeFrameworks;
+        with pkgs.plasma5Packages;
         [
           # Basic packages without which Plasma Mobile fails to work properly.
           plasma-mobile
@@ -484,7 +491,7 @@ in
           pkgs.maliit-framework
           pkgs.maliit-keyboard
         ]
-        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with pkgs.plasma5Packages.plasmaMobileGear; [
           # Additional software made for Plasma Mobile.
           alligator
           angelfish
@@ -507,7 +514,6 @@ in
 
       # The following services are needed or the UI is broken.
       hardware.bluetooth.enable = true;
-      hardware.pulseaudio.enable = true;
       networking.networkmanager.enable = true;
       # Required for autorotate
       hardware.sensor.iio.enable = lib.mkDefault true;
@@ -535,7 +541,7 @@ in
         };
       };
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-mobile ];
+      services.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-mobile ];
     })
 
     # Plasma Bigscreen
@@ -556,7 +562,7 @@ in
           kdeconnect-kde
         ];
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-bigscreen ];
+      services.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-bigscreen ];
 
       # required for plasma-remotecontrollers to work correctly
       hardware.uinput.enable = true;

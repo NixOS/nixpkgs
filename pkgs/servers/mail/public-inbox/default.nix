@@ -78,8 +78,7 @@ let
     "v2mirror"
   ];
 
-  testConditions = with lib;
-    concatMapStringsSep " " (n: "! -name ${escapeShellArg n}.t") skippedTests;
+  testConditions = lib.concatMapStringsSep " " (n: "! -name ${lib.escapeShellArg n}.t") skippedTests;
 
 in
 

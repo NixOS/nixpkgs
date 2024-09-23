@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.5.11";
+  version = "2.0.0";
 
   platform =
     if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   bloop-binary = fetchurl rec {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
-      if stdenv.isLinux && stdenv.isx86_64 then "sha256-T07t0CTSkCPQfjhg/L0NhyZgMobXL7DCKZZefPxdBJk="
-      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-3GiMFRikru+8J+eDkba9bNNrpmtuAdH9qEjnH55beiQ="
+      if stdenv.isLinux && stdenv.isx86_64 then "sha256-SnDXAkNu//Dn24FaQcACEBEJODlrhvpQ8uNbge99nGA="
+      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-MfenrNbL1UBC4t/0w9MTDI+kz2HKv7xJcmA57qBbMFw="
       else throw "unsupported platform";
   };
 
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
     homepage = "https://scalacenter.github.io/bloop/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
+    description = "Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
+    mainProgram = "bloop";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ kubukoz tomahna ];
   };

@@ -1,30 +1,36 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  setuptools,
+  fetchPypi,
+  typing-extensions,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.11.2";
-  format = "setuptools";
+  version = "1.11.3";
+  pyproject = true;
 
+  # distutils usage: https://github.com/search?q=repo%3Aapache%2Favro%20distutils&type=code
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U9zVv/zLmnITbwjQsYdxeV6vTu+wKLuq7V9OF4fw4mg=";
+    hash = "sha256-M5O7UTn5zweR0gV1bOHjmltYWGr1sVPWo7WhmWEOnRc=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  postPatch = lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace avro/test/test_tether_word_count.py \
+      --replace-fail 'distutils' 'setuptools._distutils'
+  '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   disabledTests = [
     # Requires network access
@@ -33,12 +39,11 @@ buildPythonPackage rec {
     "test_schema_compatibility_type_mismatch"
   ];
 
-  pythonImportsCheck = [
-    "avro"
-  ];
+  pythonImportsCheck = [ "avro" ];
 
   meta = with lib; {
     description = "Python serialization and RPC framework";
+    mainProgram = "avro";
     homepage = "https://github.com/apache/avro";
     changelog = "https://github.com/apache/avro/releases/tag/release-${version}";
     license = licenses.asl20;

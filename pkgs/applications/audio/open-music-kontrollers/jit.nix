@@ -8,5 +8,5 @@ callPackage ./generic.nix (args // rec {
 
   additionalBuildInputs = [ lv2 fontconfig libvterm-neovim ];
 
-  description = "A Just-in-Time C/Rust compiler embedded in an LV2 plugin";
+  description = "Just-in-Time C/Rust compiler embedded in an LV2 plugin";
 })

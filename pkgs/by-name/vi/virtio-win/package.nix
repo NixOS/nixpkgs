@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "virtio-win";
-  version = "0.1.240-1";
+  version = "0.1.262-2";
 
   src = fetchurl {
     url = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-${version}/virtio-win.iso";
-    hash = "sha256-69SCWGaPf3jgJu0nbCip0Z2D4CD/oICtaZENyGu8vMY=";
+    hash = "sha256-vcKtFyegi22KWdQOES2TD1Ois1S974WQOrqtiWIU8KM=";
   };
 
   nativeBuildInputs = [

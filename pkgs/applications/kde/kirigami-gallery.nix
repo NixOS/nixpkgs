@@ -23,6 +23,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://apps.kde.org/kirigami2.gallery/";
     description = "View examples of Kirigami components";
+    mainProgram = "kirigami2gallery";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ shadowrz ];
   };

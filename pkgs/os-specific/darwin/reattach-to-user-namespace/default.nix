@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A wrapper that provides access to the Mac OS X pasteboard service";
+    description = "Wrapper that provides access to the Mac OS X pasteboard service";
     license = licenses.bsd2;
     maintainers = with maintainers; [ lnl7 ];
     platforms = platforms.darwin;

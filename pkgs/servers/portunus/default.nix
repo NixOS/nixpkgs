@@ -1,25 +1,26 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, libxcrypt
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "portunus";
-  version = "1.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "portunus";
     rev = "v${version}";
-    sha256 = "sha256-+sq5Wja0tVkPZ0Z++K2A6my9LfLJ4twxtoEAS6LHqzE=";
+    sha256 = "sha256-+pMMIutj+OWKZmOYH5NuA4a7aS5CD+33vAEC9bJmyfM=";
   };
+
+  buildInputs = [ libxcrypt ];
 
   vendorHash = null;
 
-  postInstall = ''
-    mv $out/bin/{,portunus-}orchestrator
-    mv $out/bin/{,portunus-}server
-  '';
+  passthru.tests = { inherit (nixosTests) portunus; };
 
   meta = with lib; {
     description = "Self-contained user/group management and authentication service";

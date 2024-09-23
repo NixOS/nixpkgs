@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xMYpZ6a8HdULblkfEqnqLjX8OVFJWx8MHDGNhuFzdTc=";
   };
 
-  cargoSha256 = "sha256-/cne7uTGyxgTRONWMEE5dPbPDnCxf+ZnYzYXRAeHJyQ=";
+  cargoHash = "sha256-/cne7uTGyxgTRONWMEE5dPbPDnCxf+ZnYzYXRAeHJyQ=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = ''Cargo subcommand "wipe": recursively finds and optionally wipes all "target" or "node_modules" folders'';
+    mainProgram = "cargo-wipe";
     homepage = "https://github.com/mihai-dinculescu/cargo-wipe";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ otavio ];

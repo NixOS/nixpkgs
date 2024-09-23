@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, wrapGAppsHook3
 , wrapQtAppsHook
 , pkg-config
 , ninja
@@ -19,15 +20,16 @@
 , portmidi
 , qtbase
 , qtdeclarative
-, qtgraphicaleffects
 , flac
-, qtquickcontrols
-, qtquickcontrols2
-, qtscript
+, libopusenc
+, libopus
+, tinyxml-2
+, qt5compat
+, qtwayland
 , qtsvg
-, qtxmlpatterns
+, qtscxml
 , qtnetworkauth
-, qtx11extras
+, qttools
 , nixosTests
 , darwin
 }:
@@ -48,51 +50,46 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.1.1";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jXievVIA0tqLdKLy6oPaOHPIbDoFstveEQBri9M0Aoo=";
+    sha256 = "sha256-wgujiFvaWejSEXTbq/Re/7Ca1jIqso2uZej3Lb3V4I8=";
   };
   patches = [
-    # Upstream from some reason wants to install qml files from qtbase in
-    # installPhase, this patch removes this behavior. See:
-    # https://github.com/musescore/MuseScore/issues/18665
+    # https://github.com/musescore/MuseScore/pull/24326
     (fetchpatch {
-      url = "https://github.com/doronbehar/MuseScore/commit/f48448a3ede46f5a7ef470940072fbfb6742487c.patch";
-      hash = "sha256-UEc7auscnW0KMfWkLKQtm+UstuTNsuFeoNJYIidIlwM=";
+      name = "fix-menubar-with-qt6.5+.patch";
+      url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
+      hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
     })
-    # Upstream removed the option to use system freetype library in v4.1.0,
-    # causing the app to crash on systems when the outdated bundled freetype
-    # tries to load the Noto Sans font. For more info on the crash itself,
-    # see #244409 and https://github.com/musescore/MuseScore/issues/18795.
-    # For now, re-add the option ourselves. The fix has been merged upstream,
-    # so we can remove this patch with the next version. In the future, we
-    # may replace the other bundled thirdparty libs with system libs, see
-    # https://github.com/musescore/MuseScore/issues/11572.
     (fetchpatch {
-      url = "https://github.com/musescore/MuseScore/commit/9ab6b32b1c3b990cfa7bb172ee8112521dc2269c.patch";
-      hash = "sha256-5GA29Z+o3I/uDTTDbkauZ8/xSdCE6yY93phMSY0ea7s=";
+      name = "fix-crash-accessing-uninitialized-properties.patch";
+      url = "https://github.com/musescore/MuseScore/pull/24714.patch";
+      hash = "sha256-ErrCU/U+wyfD7R8kiZTifGIeuCAdKi1q7uxYsoE/OLA=";
     })
   ];
 
   cmakeFlags = [
-    "-DMUSESCORE_BUILD_MODE=release"
+    "-DMUSE_APP_BUILD_MODE=release"
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
-    "-DMUE_BUILD_CRASHPAD_CLIENT=OFF"
-    # Use our freetype
+    "-DMUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT=OFF"
+    # Use our versions of system libraries
     "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
-    # From some reason, in $src/build/cmake/SetupBuildEnvironment.cmake,
-    # upstream defaults to compiling to x86_64 only, unless this cmake flag is
-    # set
-    "-DMUE_COMPILE_BUILD_MACOS_APPLE_SILICON=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_HARFBUZZ=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
+    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
+    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
     "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    # Don't build unit tests unless we are going to run them.
+    (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   qtWrapperArgs = [
@@ -106,16 +103,22 @@ in stdenv'.mkDerivation (finalAttrs: {
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the
-  # sandbox profile from `qtbase`, see:
-  # https://github.com/NixOS/nixpkgs/issues/237458
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  dontWrapGApps = true;
 
   nativeBuildInputs = [
     wrapQtAppsHook
     cmake
+    qttools
     pkg-config
     ninja
+  ] ++ lib.optionals stdenv.isLinux [
+    # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
+    # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -129,18 +132,20 @@ in stdenv'.mkDerivation (finalAttrs: {
     portaudio'
     portmidi
     flac
+    libopusenc
+    libopus
+    tinyxml-2
     qtbase
     qtdeclarative
-    qtgraphicaleffects
-    qtquickcontrols
-    qtquickcontrols2
-    qtscript
+    qt5compat
     qtsvg
-    qtxmlpatterns
+    qtscxml
     qtnetworkauth
-    qtx11extras
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
+    qtwayland
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Cocoa
   ];
 
   postInstall = ''
@@ -150,7 +155,30 @@ in stdenv'.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
+  '';
+
+  # muse-sounds-manager installs Muse Sounds sampler libMuseSamplerCoreLib.so.
+  # It requires that argv0 of the calling process ends with "/mscore" or "/MuseScore-4".
+  # We need to ensure this in two cases:
+  #
+  # 1) when the user invokes MuseScore as "mscore" on the command line or from
+  #    the .desktop file, and the normal argv0 is "mscore" (no "/");
+  # 2) when MuseScore invokes itself via File -> New, and the normal argv0 is
+  #    the target of /proc/self/exe, which in Nixpkgs was "{...}/.mscore-wrapped"
+  #
+  # In order to achieve (2) we install the final binary as $out/libexec/mscore, and
+  # in order to achieve (1) we use makeWrapper without --inherit-argv0.
+  #
+  # wrapQtAppsHook uses wrapQtApp -> wrapProgram -> makeBinaryWrapper --inherit-argv0
+  # so we disable it and explicitly use makeQtWrapper.
+  #
+  # TODO: check if something like this is also needed for macOS.
+  dontWrapQtApps = stdenv.isLinux;
+  postFixup = lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/libexec
+    mv $out/bin/mscore $out/libexec
+    makeQtWrapper $out/libexec/mscore $out/bin/mscore
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
@@ -162,10 +190,8 @@ in stdenv'.mkDerivation (finalAttrs: {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ vandenoever doronbehar ];
-    # on aarch64-linux:
-    # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    maintainers = with maintainers; [ vandenoever doronbehar orivej ];
     mainProgram = "mscore";
+    platforms = platforms.unix;
   };
 })

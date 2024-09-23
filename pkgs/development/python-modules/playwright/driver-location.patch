@@ -1,22 +1,25 @@
 diff --git a/playwright/_impl/_driver.py b/playwright/_impl/_driver.py
-index f3b911f..d00e509 100644
+index 22b53b8..2d86626 100644
 --- a/playwright/_impl/_driver.py
 +++ b/playwright/_impl/_driver.py
-@@ -23,11 +23,7 @@ from playwright._repo_version import version
- 
- 
- def compute_driver_executable() -> Path:
--    package_path = Path(inspect.getfile(playwright)).parent
--    platform = sys.platform
--    if platform == "win32":
--        return package_path / "driver" / "playwright.cmd"
--    return package_path / "driver" / "playwright.sh"
-+   return Path("@driver@")
- 
- 
- if sys.version_info.major == 3 and sys.version_info.minor == 7:
+@@ -23,14 +23,7 @@ from playwright._repo_version import version
+
+
+ def compute_driver_executable() -> Tuple[str, str]:
+-    driver_path = Path(inspect.getfile(playwright)).parent / "driver"
+-    cli_path = str(driver_path / "package" / "cli.js")
+-    if sys.platform == "win32":
+-        return (
+-            os.getenv("PLAYWRIGHT_NODEJS_PATH", str(driver_path / "node.exe")),
+-            cli_path,
+-        )
+-    return (os.getenv("PLAYWRIGHT_NODEJS_PATH", str(driver_path / "node")), cli_path)
++    return "@node@", "@driver@"
+
+
+ def get_driver_env() -> dict:
 diff --git a/setup.py b/setup.py
-index 3487a6a..05112c2 100644
+index 8709e52..59784dd 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -141,25 +141,8 @@ class PlaywrightBDistWheelCommand(BDistWheelCommand):

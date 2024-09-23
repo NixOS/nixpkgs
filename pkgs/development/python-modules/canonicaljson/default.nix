@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, frozendict
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  simplejson,
 }:
 
 buildPythonPackage rec {
@@ -20,21 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-4v2u8df63F2ctZvT0NQbBk3dppeAmsQyXc7XIdEvET8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    simplejson
-  ];
+  propagatedBuildInputs = [ simplejson ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "canonicaljson"
-  ];
+  pythonImportsCheck = [ "canonicaljson" ];
 
   meta = with lib; {
     description = "Encodes objects and arrays as RFC 7159 JSON";

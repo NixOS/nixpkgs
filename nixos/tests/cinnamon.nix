@@ -7,6 +7,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.desktopManager.cinnamon.enable = true;
+
+    # We don't ship gnome-text-editor in Cinnamon module, we add this line mainly
+    # to catch eval issues related to this option.
+    environment.cinnamon.excludePackages = [ pkgs.gnome-text-editor ];
+
+    # For the sessionPath subtest.
+    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
   };
 
   enableOCR = true;
@@ -48,6 +55,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             machine.wait_until_succeeds(f"pgrep -f {i}")
           machine.wait_until_succeeds("journalctl -b --grep 'Loaded applet menu@cinnamon.org'")
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
+
+      with subtest("Check if sessionPath option actually works"):
+          machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
 
       with subtest("Open Cinnamon Settings"):
           machine.succeed("${su "cinnamon-settings themes >&2 &"}")

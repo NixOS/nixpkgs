@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, untangle
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  untangle,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyqvrpro"
-  ];
+  pythonImportsCheck = [ "pyqvrpro" ];
 
   meta = with lib; {
     description = "Module for interfacing with QVR Pro API";

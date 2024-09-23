@@ -55,7 +55,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sieren/QSyncthingTray/";
-    description = "A Traybar Application for Syncthing written in C++";
+    description = "Traybar Application for Syncthing written in C++";
     longDescription = ''
         A cross-platform status bar for Syncthing.
         Currently supports macOS, Windows and Linux.

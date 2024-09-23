@@ -1,6 +1,8 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
+, autoconf-archive
+, autoreconfHook
 , pkg-config
 , curlWithGnuTls
 , libev
@@ -9,14 +11,16 @@
 
 stdenv.mkDerivation rec {
   pname = "clboss";
-  version = "0.12";
+  version = "0.13.3";
 
-  src = fetchurl {
-    url = "https://github.com/ZmnSCPxj/clboss/releases/download/${version}/clboss-${version}.tar.gz";
-    hash = "sha256-UZcSfbpp3vPsD3CDukp+r5Z60h0UEWTduqF4DhJ+H2U=";
+  src = fetchFromGitHub {
+    owner = "ZmnSCPxj";
+    repo = "clboss";
+    rev = "v${version}";
+    hash = "sha256-T61rkTEGLCZrEBp1WFhHnQ7DQyhctMf5lgbOs6u9E0o=";
   };
 
-  nativeBuildInputs = [ pkg-config libev curlWithGnuTls sqlite ];
+  nativeBuildInputs = [ autoconf-archive autoreconfHook pkg-config libev curlWithGnuTls sqlite ];
 
   enableParallelBuilding = true;
 

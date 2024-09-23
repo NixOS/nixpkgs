@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, libGLU, libGL, freeglut, SDL
+{ fetchurl, fetchpatch, lib, stdenv, libGLU, libGL, libglut, SDL
 , libXi, libSM, libXmu, libXext, libX11 }:
 
 stdenv.mkDerivation rec {
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libGLU libGL freeglut SDL
+    libGLU libGL libglut SDL
 
     # The following libs ought to be propagated build inputs of Mesa.
     libXi libSM libXmu libXext libX11
   ];
 
   meta = {
-    description = "A suite of portable game libraries";
+    description = "Suite of portable game libraries";
 
     longDescription = ''
       PLIB includes sound effects, music, a complete 3D engine, font

@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inflection
-, ruamel-yaml
-, setuptools-scm
-, six
-, coreapi
-, djangorestframework
-, pytestCheckHook
-, pytest-django
-, datadiff
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  inflection,
+  ruamel-yaml,
+  setuptools-scm,
+  six,
+  coreapi,
+  djangorestframework,
+  pytestCheckHook,
+  pytest-django,
+  datadiff,
 }:
 
 buildPythonPackage rec {
   pname = "drf-yasg";
   version = "1.21.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,9 +28,7 @@ buildPythonPackage rec {
     sed -i "/packaging/d" requirements/base.txt
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     six
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

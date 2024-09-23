@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation, ditto }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ninja,
+  makeWrapper,
+  CoreFoundation,
+  Foundation,
+  ditto,
+  nix-update-script,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.7.3";
+  version = "3.10.6";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
-    rev = version;
-    hash = "sha256-iAxRGG7/zaUbJ/PWgmjxGS0UTq9/OXc8RWzlpUTUftc=";
+    rev = finalAttrs.version;
+    hash = "sha256-K5+xGRGmd6X3eYF1BzhqFbbfVJXSduo/9930HxLGQCo=";
     fetchSubmodules = true;
   };
 
@@ -23,34 +33,29 @@ stdenv.mkDerivation rec {
     ditto
   ];
 
-  postPatch = ''
-    # filewatch tests are failing on darwin
-    # this feature is not used in lua-language-server
-    sed -i /filewatch/d 3rd/bee.lua/test/test.lua
+  postPatch =
+    ''
+      # filewatch tests are failing on darwin
+      # this feature is not used in lua-language-server
+      sed -i /filewatch/d 3rd/bee.lua/test/test.lua
 
-    pushd 3rd/luamake
-  '' + lib.optionalString stdenv.isDarwin ''
-    # This package uses the program clang for C and C++ files. The language
-    # is selected via the command line argument -std, but this do not work
-    # in combination with the nixpkgs clang wrapper. Therefor we have to
-    # find all c++ compiler statements and replace $cc (which expands to
-    # clang) with clang++.
-    sed -i compile/ninja/macos.ninja \
-      -e '/c++/s,$cc,clang++,' \
-      -e '/test.lua/s,= .*,= true,' \
-      -e '/ldl/s,$cc,clang++,'
-    sed -i scripts/compiler/gcc.lua \
-      -e '/cxx_/s,$cc,clang++,'
-  '';
+      pushd 3rd/luamake
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # This package uses the program clang for C and C++ files. The language
+      # is selected via the command line argument -std, but this do not work
+      # in combination with the nixpkgs clang wrapper. Therefor we have to
+      # find all c++ compiler statements and replace $cc (which expands to
+      # clang) with clang++.
+      sed -i compile/ninja/macos.ninja \
+        -e '/c++/s,$cc,clang++,' \
+        -e '/test.lua/s,= .*,= true,' \
+        -e '/ldl/s,$cc,clang++,'
+      sed -i scripts/compiler/gcc.lua \
+        -e '/cxx_/s,$cc,clang++,'
+    '';
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
-  ninjaFlags = [
-    "-fcompile/ninja/${if stdenv.isDarwin then "macos" else "linux"}.ninja"
-  ];
+  ninjaFlags = [ "-fcompile/ninja/${if stdenv.isDarwin then "macos" else "linux"}.ninja" ];
 
   postBuild = ''
     popd
@@ -80,13 +85,19 @@ stdenv.mkDerivation rec {
   # some tests require local networking
   __darwinAllowLocalNetworking = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "A language server that offers Lua language support";
+    description = "Language server that offers Lua language support";
     homepage = "https://github.com/luals/lua-language-server";
-    changelog = "https://github.com/LuaLS/lua-language-server/blob/${version}/changelog.md";
+    changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda gepbird sei40kr ];
+    maintainers = with maintainers; [
+      figsoda
+      gepbird
+      sei40kr
+    ];
     mainProgram = "lua-language-server";
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

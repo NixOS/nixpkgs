@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fixtures
-, pytestCheckHook
-, pythonOlder
-, pyxdg
-, requests
-, requests-mock
-, rich
-, setuptools
-, tomli
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fixtures,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  tomli,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "4.8.0";
+  version = "5.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,20 +24,19 @@ buildPythonPackage rec {
     owner = "containers";
     repo = "podman-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lw8ZW1Uh6pbL5Z15NBBgKFm1143rEyFdecBHsSwBYVo=";
+    hash = "sha256-2NsF00jaW2wl99sTxTQ5xJkqNOYh9RaecmBMcWP3TI8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyxdg
+  dependencies = [
     requests
-    rich
-    tomli
     urllib3
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  passthru.optional-dependencies = {
+    progress_bar = [ rich ];
+  };
 
   nativeCheckInputs = [
     fixtures
@@ -49,14 +48,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "podman"
-  ];
+  pythonImportsCheck = [ "podman" ];
 
   disabledTests = [
     # Integration tests require a running container setup
     "AdapterIntegrationTest"
     "ContainersIntegrationTest"
+    "ContainersExecIntegrationTests"
     "ImagesIntegrationTest"
     "ManifestsIntegrationTest"
     "NetworksIntegrationTest"
@@ -72,6 +70,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/containers/podman-py/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "podman";
   };
 }

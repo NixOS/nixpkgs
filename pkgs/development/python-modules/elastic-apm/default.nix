@@ -1,37 +1,39 @@
-{ lib
-, stdenv
-, aiohttp
-, blinker
-, buildPythonPackage
-, certifi
-, ecs-logging
-, fetchFromGitHub
-, httpx
-, jinja2
-, jsonschema
-, logbook
-, mock
-, pytest-asyncio
-, pytest-bdd
-, pytest-localserver
-, pytest-mock
-, pytest-random-order
-, pytestCheckHook
-, pythonOlder
-, sanic
-, sanic-testing
-, starlette
-, structlog
-, tornado
-, urllib3
-, webob
-, wrapt
+{
+  lib,
+  stdenv,
+  aiohttp,
+  blinker,
+  buildPythonPackage,
+  certifi,
+  ecs-logging,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  jsonschema,
+  logbook,
+  mock,
+  pytest-asyncio,
+  pytest-bdd,
+  pytest-localserver,
+  pytest-mock,
+  pytest-random-order,
+  pytestCheckHook,
+  pythonOlder,
+  sanic,
+  sanic-testing,
+  setuptools,
+  starlette,
+  structlog,
+  tornado,
+  urllib3,
+  webob,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.19.0";
-  format = "setuptools";
+  version = "6.23.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -39,10 +41,15 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XwAKydZuvNMOIT4GkfID8YW019OfatRekXmGrssZfMw=";
+    hash = "sha256-S1Ebo9AWN+Mf3OFwxNTiR/AZtje3gNiYkZnVqGb7D4c=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "wrapt" ];
+
+  build-system = [ setuptools ];
+
+
+  dependencies = [
     aiohttp
     blinker
     certifi
@@ -71,21 +78,19 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [
-    "elasticapm_client"
-  ];
+  disabledTests = [ "elasticapm_client" ];
 
-  disabledTestPaths = [
-    # Exclude tornado tests
-    "tests/contrib/asyncio/tornado/tornado_tests.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Flaky tests on Darwin
-    "tests/utils/threading_tests.py"
-  ];
+  disabledTestPaths =
+    [
+      # Exclude tornado tests
+      "tests/contrib/asyncio/tornado/tornado_tests.py"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Flaky tests on Darwin
+      "tests/utils/threading_tests.py"
+    ];
 
-  pythonImportsCheck = [
-    "elasticapm"
-  ];
+  pythonImportsCheck = [ "elasticapm" ];
 
   meta = with lib; {
     description = "Python agent for the Elastic APM";

@@ -4,8 +4,7 @@
 , libICE
 , vimPlugins
 , makeWrapper
-, wrapGAppsHook
-, runtimeShell
+, wrapGAppsHook3
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc
@@ -66,7 +65,7 @@ in stdenv.mkDerivation {
 
   pname = "vim-full";
 
-  inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
+  inherit (common) version outputs postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
     default = common.src; # latest release
@@ -135,7 +134,7 @@ in stdenv.mkDerivation {
   ++ lib.optional wrapPythonDrv makeWrapper
   ++ lib.optional nlsSupport gettext
   ++ lib.optional perlSupport perl
-  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook
+  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook3
   ;
 
   buildInputs = [
@@ -181,7 +180,7 @@ in stdenv.mkDerivation {
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '';
 
-  postFixup = lib.optionalString wrapPythonDrv ''
+  postFixup = common.postFixup + lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
       --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
   '';

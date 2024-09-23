@@ -1,21 +1,29 @@
 { stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
 , libXdmcp, libXau, lib, openssl
-, writeScript
+, buildPackages, substituteAll, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "argyllcms";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    hash = "sha256-IZScf+xpvvMt5YFlYQprg51cw2ztMdOrqcLm7l5uBhU=";
+    hash = "sha256-t2dvbYFHEz9IUYpcM5HqDju4ugHrD7seG3QxumspxDg=";
   };
 
   nativeBuildInputs = [ jam unzip ];
+
+  patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+    # Build process generates files by compiling and then invoking an executable.
+    substituteAll {
+      src = ./jam-cross.patch;
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    }
+  );
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Jambase \
@@ -140,7 +148,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.argyllcms.com/";
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

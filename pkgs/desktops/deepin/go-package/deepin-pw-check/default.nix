@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, gtk3
-, glib
-, libxcrypt
-, gettext
-, iniparser
-, cracklib
-, linux-pam
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  gtk3,
+  glib,
+  libxcrypt,
+  gettext,
+  iniparser,
+  cracklib,
+  linux-pam,
 }:
 
 buildGoModule rec {
@@ -22,6 +23,8 @@ buildGoModule rec {
     rev = version;
     hash = "sha256-kBrkcB0IWGUV4ZrkFzwdPglRgDcnVvYDFhTXS20pKOk=";
   };
+
+  patches = [ "${src}/rpm/0001-Mangle-Suit-Cracklib2.9.6.patch" ];
 
   vendorHash = "sha256-L0vUEkUN70Hrx5roIvTfaZBHbbq7mf3WpQJeFAMU5HY=";
 
@@ -41,9 +44,9 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    sed -i 's|iniparser/||' */*.c
+    sed -i '1i#include <stdlib.h>\n#include <string.h>' tool/pwd_conf_update.c
     substituteInPlace misc/{pkgconfig/libdeepin_pw_check.pc,system-services/org.deepin.dde.PasswdConf1.service} \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   buildPhase = ''
@@ -62,6 +65,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to verify the validity of the password";
+    mainProgram = "pwd-conf-update";
     homepage = "https://github.com/linuxdeepin/deepin-pw-check";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

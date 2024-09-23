@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description =  "Console XMPP client";
+    mainProgram = "freetalk";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

@@ -1,59 +1,40 @@
-{ pkgs, lib, fetchFromGitHub, llvmPackages_15 }:
-
+{ lib
+, llvmPackages_15
+, fetchzip
+, sbcl
+, pkg-config
+, fmt_9
+, gmpxx
+, libelf
+, boost
+, libunwind
+, ninja
+}:
 
 let
+  inherit (llvmPackages_15) stdenv llvm libclang;
+in
 
-  src = fetchFromGitHub {
-    owner = "clasp-developers";
-    repo = "clasp";
-    rev = "2.2.0";
-    hash = "sha256-gvUqUb0dftW1miiBcAPJur0wOunox4y2SUYeeJpR9R4=";
+stdenv.mkDerivation rec {
+  pname = "clasp";
+  version = "2.6.0";
+
+  src = fetchzip {
+    url = "https://github.com/clasp-developers/clasp/releases/download/${version}/clasp-${version}.tar.gz";
+    hash = "sha256-SiQ4RMha6dMV7V2fh+UxtAIgEEH/6/hF9fe+bPtoGIw=";
   };
 
-  reposDirs = [
-    "dependencies"
-    "src/lisp/kernel/contrib"
-    "src/lisp/modules/asdf"
-    "src/mps"
-    "src/bdwgc"
-    "src/libatomic_ops"
+  patches = [
+    ./remove-unused-command-line-argument.patch
   ];
 
-  reposTarball = llvmPackages_15.stdenv.mkDerivation {
-    pname = "clasp-repos";
-    version = "tarball";
-    inherit src;
-    patches = [ ./clasp-pin-repos-commits.patch ];
-    nativeBuildInputs = with pkgs; [
-      sbcl
-      git
-      cacert
-    ];
-    buildPhase = ''
-      export SOURCE_DATE_EPOCH=1
-      export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
-      sbcl --script koga --help
-      for x in {${lib.concatStringsSep "," reposDirs}}; do
-        find $x -type d -name .git -exec rm -rvf {} \; || true
-      done
-    '';
-    installPhase = ''
-      tar --owner=0 --group=0 --numeric-owner --format=gnu \
-        --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
-        -czf $out ${lib.concatStringsSep " " reposDirs}
-    '';
-    outputHashMode = "flat";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-vgwThjn2h3nKnShtKoHgaPdH/FDHv28fLMQvKFEwG6o=";
-  };
+  # Workaround for https://github.com/clasp-developers/clasp/issues/1590
+  postPatch = ''
+    echo '(defmethod configure-unit (c (u (eql :git))))' >> src/koga/units.lisp
+  '';
 
-in llvmPackages_15.stdenv.mkDerivation {
-  pname = "clasp";
-  version = "2.2.0";
-  inherit src;
-  nativeBuildInputs = (with pkgs; [
+  nativeBuildInputs = [
     sbcl
-    git
     pkg-config
     fmt_9
     gmpxx
@@ -61,41 +42,36 @@ in llvmPackages_15.stdenv.mkDerivation {
     boost
     libunwind
     ninja
-  ]) ++ (with llvmPackages_15; [
     llvm
     libclang
-  ]);
+  ];
+
+  ninjaFlags = [ "-C" "build" ];
+
   configurePhase = ''
-  export SOURCE_DATE_EPOCH=1
-  export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
-  tar xf ${reposTarball}
-  sbcl --script koga \
-    --skip-sync \
-    --cc=$NIX_CC/bin/cc \
-    --cxx=$NIX_CC/bin/c++ \
-    --reproducible-build \
-    --package-path=/ \
-    --bin-path=$out/bin \
-    --lib-path=$out/lib \
-    --share-path=$out/share
-'';
-  buildPhase = ''
-  ninja -C build
-'';
-  installPhase = ''
-  ninja -C build install
-'';
+    export SOURCE_DATE_EPOCH=1
+    export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
+    sbcl --script koga \
+      --skip-sync \
+      --build-mode=bytecode-faso \
+      --cc=$NIX_CC/bin/cc \
+      --cxx=$NIX_CC/bin/c++ \
+      --reproducible-build \
+      --package-path=/ \
+      --bin-path=$out/bin \
+      --lib-path=$out/lib \
+      --share-path=$out/share
+  '';
 
   meta = {
-    description = "A Common Lisp implementation based on LLVM with C++ integration";
+    description = "Common Lisp implementation based on LLVM with C++ integration";
     license = lib.licenses.lgpl21Plus ;
     maintainers = lib.teams.lisp.members;
     platforms = ["x86_64-linux" "x86_64-darwin"];
     # Upstream claims support, but breaks with:
     # error: use of undeclared identifier 'aligned_alloc'
-    broken = llvmPackages_15.stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/clasp-developers/clasp";
+    mainProgram = "clasp";
   };
-
 }
-

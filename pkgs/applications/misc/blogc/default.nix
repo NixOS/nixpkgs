@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A blog compiler";
+    description = "Blog compiler";
     license = licenses.bsd3;
     homepage = "https://blogc.rgm.io";
     platforms = platforms.unix;

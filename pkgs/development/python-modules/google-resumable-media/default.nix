@@ -1,27 +1,28 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-cloud-testutils
-, google-crc32c
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-cloud-testutils,
+  google-crc32c,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.6.0";
+  version = "2.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lyhS9sZfkz4VpKIQwrlpMHY7Rxl830ql9b6kNe+2Juc=";
+    hash = "sha256-6uRRp7LizbqqD9LrAMyKHuXpXha1VZc1nLw9J9fZDjM=";
   };
 
   propagatedBuildInputs = [
@@ -30,12 +31,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    requests = [
-      requests
-    ];
-    aiohttp = [
-      aiohttp
-    ];
+    requests = [ requests ];
+    aiohttp = [ aiohttp ];
   };
 
   nativeCheckInputs = [
@@ -64,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
     changelog = "https://github.com/googleapis/google-resumable-media-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

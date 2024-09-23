@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, cctools
 , darwin
 , fetchurl
 , autoconf
@@ -16,26 +17,27 @@
 , python3
 , sqlite
 , zlib
+, jq
 }:
 let
-  py3 = python3.withPackages (p: [ p.mako ]);
+  py3 = python3.withPackages (p: [ p.distutils p.mako ]);
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "23.11";
+  version = "24.08.1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "sha256:1q1plg9qhwlrcvljnrv8yd1gaz9a98pxgql7bqxjq37vk3lfggw6";
+    hash = "sha256-2ZKvhNuzGftKwSdmMkHOwE9UEI5Ewn5HHSyyZUcCwB4=";
   };
 
-  # when building on darwin we need dawin.cctools to provide the correct libtool
+  # when building on darwin we need cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
   nativeBuildInputs = [ autoconf autogen automake gettext libtool lowdown protobuf py3 unzip which ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.autoSignDarwinBinariesHook ];
+    ++ lib.optionals stdenv.isDarwin [ cctools darwin.autoSignDarwinBinariesHook ];
 
-  buildInputs = [ gmp libsodium sqlite zlib ];
+  buildInputs = [ gmp libsodium sqlite zlib jq ];
 
   # this causes some python trouble on a darwin host so we skip this step.
   # also we have to tell libwally-core to use sed instead of gsed.
@@ -44,8 +46,8 @@ stdenv.mkDerivation rec {
       tools/generate-wire.py \
       tools/update-mocks.sh \
       tools/mockup.sh \
-      devtools/sql-rewrite.py \
-      plugins/clnrest/clnrest.py
+      tools/fromschema.py \
+      devtools/sql-rewrite.py
   '' else ''
     substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
     substituteInPlace external/libwally-core/configure.ac --replace gsed sed
@@ -62,8 +64,13 @@ stdenv.mkDerivation rec {
   #                 char buf[CMSG_SPACE(sizeof(fd))];
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "-Wno-error=gnu-folding-constant";
 
+  # The `clnrest` plugin requires a Python environment to run
+  postInstall = ''
+    rm -r $out/libexec/c-lightning/plugins/clnrest
+  '';
+
   meta = with lib; {
-    description = "A Bitcoin Lightning Network implementation in C";
+    description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
       c-lightning is a standard compliant implementation of the Lightning
       Network protocol. The Lightning Network is a scalability solution for

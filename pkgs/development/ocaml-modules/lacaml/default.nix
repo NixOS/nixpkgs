@@ -6,15 +6,15 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildDunePackage rec {
   pname = "lacaml";
-  version = "11.0.8";
+  version = "11.0.10";
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mmottl/lacaml/releases/download/${version}/lacaml-${version}.tbz";
-    sha256 = "1i47wqnd9iy6ndbi9zfahpb592gahp6im26rgpwch13vgzk3kifd";
+    sha256 = "sha256-Vg6Hl31u1bvh0hfWU9eqoI8pGZt4YhpGRf3ul3h+SJk=";
   };
 
   buildInputs = [ dune-configurator ];

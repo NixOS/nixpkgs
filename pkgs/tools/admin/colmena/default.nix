@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-01bfuSY4gnshhtqA1EJCw2CMsKkAx+dHS+sEpQ2+EAQ=";
   };
 
-  cargoSha256 = "sha256-rk2atWWJIR95duUXxAiARegjeCyfAsqTDwEr5P0eIr8=";
+  cargoHash = "sha256-rk2atWWJIR95duUXxAiARegjeCyfAsqTDwEr5P0eIr8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd colmena \
       --bash <($out/bin/colmena gen-completions bash) \
       --zsh <($out/bin/colmena gen-completions zsh) \
@@ -32,16 +32,17 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     # We guarantee CLI and Nix API stability for the same minor version
-    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
+    apiVersion = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
 
     tests.version = testers.testVersion { package = colmena; };
   };
 
   meta = with lib; {
-    description = "A simple, stateless NixOS deployment tool";
+    description = "Simple, stateless NixOS deployment tool";
     homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "colmena";
   };
 }

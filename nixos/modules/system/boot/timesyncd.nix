@@ -2,34 +2,56 @@
 
 with lib;
 
+let
+  cfg = config.services.timesyncd;
+in
 {
 
   options = {
 
-    services.timesyncd = {
+    services.timesyncd = with types; {
       enable = mkOption {
         default = !config.boot.isContainer;
         defaultText = literalExpression "!config.boot.isContainer";
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = bool;
+        description = ''
           Enables the systemd NTP client daemon.
         '';
       };
       servers = mkOption {
+        default = null;
+        type = nullOr (listOf str);
+        description = ''
+          The set of NTP servers from which to synchronise.
+
+          Setting this option to an empty list will write `NTP=` to the
+          `timesyncd.conf` file as opposed to setting this option to null which
+          will remove `NTP=` entirely.
+
+          See man:timesyncd.conf(5) for details.
+        '';
+      };
+      fallbackServers = mkOption {
         default = config.networking.timeServers;
         defaultText = literalExpression "config.networking.timeServers";
-        type = types.listOf types.str;
-        description = lib.mdDoc ''
-          The set of NTP servers from which to synchronise.
+        type = nullOr (listOf str);
+        description = ''
+          The set of fallback NTP servers from which to synchronise.
+
+          Setting this option to an empty list will write `FallbackNTP=` to the
+          `timesyncd.conf` file as opposed to setting this option to null which
+          will remove `FallbackNTP=` entirely.
+
+          See man:timesyncd.conf(5) for details.
         '';
       };
       extraConfig = mkOption {
         default = "";
-        type = types.lines;
+        type = lines;
         example = ''
           PollIntervalMaxSec=180
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra config options for systemd-timesyncd. See
           [
           timesyncd.conf(5)](https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html) for available options.
@@ -38,7 +60,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.timesyncd.enable {
+  config = mkIf cfg.enable {
 
     systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
 
@@ -46,6 +68,13 @@ with lib;
       wantedBy = [ "sysinit.target" ];
       aliases = [ "dbus-org.freedesktop.timesync1.service" ];
       restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
+      # systemd-timesyncd disables DNSSEC validation in the nss-resolve module by setting SYSTEMD_NSS_RESOLVE_VALIDATE to 0 in the unit file.
+      # This is required in order to solve the chicken-and-egg problem when DNSSEC validation needs the correct time to work, but to set the
+      # correct time, we need to connect to an NTP server, which usually requires resolving its hostname.
+      # In order for nss-resolve to be able to read this environment variable we patch systemd-timesyncd to disable NSCD and use NSS modules directly.
+      # This means that systemd-timesyncd needs to have NSS modules path in LD_LIBRARY_PATH. When systemd-resolved is disabled we still need to set
+      # NSS module path so that systemd-timesyncd keeps using other NSS modules that are configured in the system.
+      environment.LD_LIBRARY_PATH = config.system.nssModules.path;
 
       preStart = (
         # Ensure that we have some stored time to prevent
@@ -72,9 +101,14 @@ with lib;
 
     environment.etc."systemd/timesyncd.conf".text = ''
       [Time]
-      NTP=${concatStringsSep " " config.services.timesyncd.servers}
-      ${config.services.timesyncd.extraConfig}
-    '';
+    ''
+    + optionalString (cfg.servers != null) ''
+      NTP=${concatStringsSep " " cfg.servers}
+    ''
+    + optionalString (cfg.fallbackServers != null) ''
+      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+    ''
+    + cfg.extraConfig;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;

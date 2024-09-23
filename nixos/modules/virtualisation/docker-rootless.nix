@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.virtualisation.docker.rootless;
@@ -15,47 +12,47 @@ in
   ###### interface
 
   options.virtualisation.docker.rootless = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         This option enables docker in a rootless mode, a daemon that manages
         linux containers. To interact with the daemon, one needs to set
         {command}`DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock`.
       '';
     };
 
-    setSocketVariable = mkOption {
-      type = types.bool;
+    setSocketVariable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Point {command}`DOCKER_HOST` to rootless Docker instance for
         normal users by default.
       '';
     };
 
-    daemon.settings = mkOption {
+    daemon.settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
       example = {
         ipv6 = true;
         "fixed-cidr-v6" = "fd00::/80";
       };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for docker daemon. The attributes are serialized to JSON used as daemon.conf.
         See https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
       '';
     };
 
-    package = mkPackageOption pkgs "docker" { };
+    package = lib.mkPackageOption pkgs "docker" { };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.extraInit = optionalString cfg.setSocketVariable ''
+    environment.extraInit = lib.optionalString cfg.setSocketVariable ''
       if [ -z "$DOCKER_HOST" -a -n "$XDG_RUNTIME_DIR" ]; then
         export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
       fi

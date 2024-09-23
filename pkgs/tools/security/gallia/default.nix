@@ -1,40 +1,39 @@
-{ lib
-, fetchFromGitHub
-, python3
-, cacert
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  cacert,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.1.4";
-  format = "pyproject";
+  version = "1.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
-    repo = pname;
+    repo = "gallia";
     rev = "refs/tags/v${version}";
-    hash = "sha256-McHzHK404kDB992T2f84dZHDxujpPIz4qglYMmv3kTw=";
+    hash = "sha256-izMTTZrp4aizq5jS51BNtq3lv9Kr+xI7scZfYKXA/oY=";
   };
 
-  pythonRelaxDeps = [
-    "aiofiles"
-    "argcomplete"
-    "msgspec"
-  ];
+  pythonRelaxDeps = [ "aiofiles" ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiofiles
     aiohttp
     aiosqlite
     argcomplete
-    can
+    python-can
+    exitcode
     construct
+    httpx
+    more-itertools
     msgspec
+    platformdirs
+    psutil
     pydantic
     pygit2
     tabulate
@@ -49,9 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "gallia"
-  ];
+  pythonImportsCheck = [ "gallia" ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -62,7 +59,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
     changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab rumpelsepp ];
+    maintainers = with maintainers; [
+      fab
+      rumpelsepp
+    ];
     platforms = platforms.linux;
   };
 }

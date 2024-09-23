@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TCP/IP Connection cutting on Linux Firewalls and Routers";
     homepage = "http://www.digitage.co.uk/digitage/software/linux-security/cutter";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.offline ];
+    mainProgram = "tcp-cutter";
   };
 }

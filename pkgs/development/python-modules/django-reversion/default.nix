@@ -1,38 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "5.0.6";
-  format = "setuptools";
+  version = "5.0.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-src = fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-buJalwcN2hTz4IK4uZm/vstKnwgv8fhR40TQVqGMk0w=";
+    hash = "sha256-wEfMmanxukqubbicOsJDR41t6Y7Ipgxwc/zIddicXNs=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ django ];
 
   # Tests assume the availability of a mysql/postgresql database
   doCheck = false;
 
-  pythonImportsCheck = [
-    "reversion"
-  ];
+  pythonImportsCheck = [ "reversion" ];
 
   meta = with lib; {
-    description = "An extension to the Django web framework that provides comprehensive version control facilities";
+    description = "Extension to the Django web framework that provides comprehensive version control facilities";
     homepage = "https://github.com/etianen/django-reversion";
     changelog = "https://github.com/etianen/django-reversion/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -10,6 +10,10 @@
 , libint
 , libvori
 , libxc
+, dftd4
+, mctc-lib
+, mstore
+, multicharge
 , mpi
 , gsl
 , scalapack
@@ -38,13 +42,11 @@
   then "rocm"
   else "none"
 )
-# gpuVersion needs to be set for both CUDA as well as ROCM hardware.
-# gpuArch is only required for the ROCM stack.
 # Change to a value suitable for your target GPU.
 # For AMD values see https://github.com/cp2k/cp2k/blob/master/INSTALL.md#2v-rocmhip-support-for-amd-gpu
 # and for Nvidia see https://github.com/cp2k/cp2k/blob/master/INSTALL.md#2i-cuda-optional-improved-performance-on-gpu-systems
-, gpuVersion ? "Mi100"
-, gpuArch ? "gfx908"
+, gpuVersion ? ( if gpuBackend == "cuda" then "A100" else "Mi100" )
+, gpuArch ? ( if gpuBackend == "cuda" then "sm_80" else "gfx908" )
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
@@ -56,17 +58,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2023.2";
+  version = "2024.3";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-1TJorIjajWFO7i9vqSBDTAIukBdyvxbr5dargt4QB8M=";
+    hash = "sha256-TeVQ0wVUx6d4knwMi9z3LjQZ4ELE6s1TnvwfFz8jbYk=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ python3 which openssh makeWrapper pkg-config ];
+  patches = [
+    # Remove the build command line from the source.
+    # This avoids dependencies to .dev inputs
+    ./remove-compiler-options.patch
+  ];
+
+  nativeBuildInputs = [ python3 which openssh makeWrapper pkg-config ]
+    ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+
   buildInputs = [
     gfortran
     fftw
@@ -74,7 +84,12 @@ stdenv.mkDerivation rec {
     libint
     libvori
     libxc
+    dftd4
+    mctc-lib
+    mstore
+    multicharge
     libxsmm
+    mpi
     spglib
     scalapack
     blas
@@ -88,8 +103,11 @@ stdenv.mkDerivation rec {
     libvdwxc
   ]
   ++ lib.optional enableElpa elpa
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optional (gpuBackend == "rocm") [
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvrtc
+  ] ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocm-core
     rocmPackages.hipblas
@@ -98,7 +116,7 @@ stdenv.mkDerivation rec {
   ]
   ;
 
-  propagatedBuildInputs = [ mpi ];
+  propagatedBuildInputs = [ (lib.getBin mpi) ];
   propagatedUserEnvPkgs = [ mpi ];
 
   makeFlags = [
@@ -126,7 +144,7 @@ stdenv.mkDerivation rec {
     AR         = ar -r
     ${lib.strings.optionalString (gpuBackend == "cuda") ''
     OFFLOAD_CC = nvcc
-    OFFLOAD_FLAGS = -O3 -g -w --std=c++11
+    OFFLOAD_FLAGS = -O3 -g -w --std=c++11 -arch ${gpuArch}
     OFFLOAD_TARGET = cuda
     GPUVER = ${gpuVersion}
     CXX = mpicxx
@@ -144,16 +162,21 @@ stdenv.mkDerivation rec {
                  -D__MPI_VERSION=3 -D__F2008 -D__LIBXSMM -D__SPGLIB \
                  -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"} \
                  -D__PLUMED2 -D__HDF5 -D__GSL -D__SIRIUS -D__LIBVDWXC -D__SPFFT -D__SPLA \
-                 ${lib.strings.optionalString (gpuBackend == "cuda") "-D__OFFLOAD_CUDA -D__DBCSR_ACC"} \
+                 -D__DFTD4 \
+                 ${lib.strings.optionalString (gpuBackend == "cuda") "-D__OFFLOAD_CUDA -D__ACC -D__DBCSR_ACC -D__NO_OFFLOAD_PW"} \
                  ${lib.strings.optionalString (gpuBackend == "rocm") "-D__OFFLOAD_HIP -D__DBCSR_ACC -D__NO_OFFLOAD_PW"}
-    CFLAGS    = -fopenmp -I${lib.getDev hdf5-fortran}/include -I${lib.getDev gsl}/include
+    CFLAGS    = -fopenmp
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
-                 -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
+                   ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
+                 -I${lib.getDev libint}/include  \
                  -I${lib.getDev sirius}/include/sirius \
-                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -I${lib.getDev libxc}/include \
+                 -I${lib.getDev dftd4}/include/dftd4 \
+                 -I${lib.getDev libxsmm}/include \
+                 -I${lib.getDev hdf5-fortran}/include \
                  -fallow-argument-mismatch
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
@@ -163,7 +186,12 @@ stdenv.mkDerivation rec {
                  -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"} \
                  -lz -ldl ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
                  -lplumed -lhdf5_fortran -lhdf5_hl -lhdf5 -lgsl -lsirius -lspla -lspfft -lvdwxc \
-                 ${lib.strings.optionalString (gpuBackend == "cuda") "-lcudart -lnvrtc -lcuda -lcublas"} \
+                 -ldftd4 -lmstore -lmulticharge -lmctc-lib \
+                 ${lib.strings.optionalString (gpuBackend == "cuda") ''
+                   -L${cudaPackages.cuda_cudart}/lib/stubs/ \
+                   -lcudart -lnvrtc -lcuda -lcublas
+                   ''
+                 } \
                  ${lib.strings.optionalString (gpuBackend == "rocm") "-lamdhip64 -lhipfft -lhipblas -lrocblas"}
     LDFLAGS    = \$(FCFLAGS) \$(LIBS)
     include ${plumed}/lib/plumed/src/lib/Plumed.inc

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schemacrawler";
-  version = "16.20.5";
+  version = "16.22.2";
 
   src = fetchzip {
     url = "https://github.com/schemacrawler/SchemaCrawler/releases/download/v${finalAttrs.version}/schemacrawler-${finalAttrs.version}-bin.zip";
-    hash = "sha256-QgR7r8SXJfostcAEmznZcW+LSTMP0l3GZ8csQl/uPZU=";
+    hash = "sha256-N08lKCTbpX4b05i4UcCEy6wycsiIJu5BRr7EZ3oZ1rA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Database schema discovery and comprehension tool";
+    mainProgram = "schemacrawler";
     homepage = "https://www.schemacrawler.com/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = with licenses; [ epl10 gpl3Only lgpl3Only ];

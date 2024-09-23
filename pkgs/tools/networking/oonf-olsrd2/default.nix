@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An adhoc wireless mesh routing daemon";
+    description = "Adhoc wireless mesh routing daemon";
     license = licenses.bsd3;
     homepage = "http://olsr.org/";
     maintainers = with maintainers; [ mkg20001 ];

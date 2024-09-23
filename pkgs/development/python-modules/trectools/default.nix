@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, pythonOlder
-, pandas
-, python
-, numpy
-, scikit-learn
-, scipy
-, lxml
-, matplotlib
-, sarge
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  pythonOlder,
+  pandas,
+  python,
+  numpy,
+  scikit-learn,
+  scipy,
+  lxml,
+  matplotlib,
+  sarge,
 }:
 
 buildPythonPackage rec {
   pname = "trectools";
   version = "0.0.49";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

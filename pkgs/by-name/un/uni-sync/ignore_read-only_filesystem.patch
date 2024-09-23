@@ -1,0 +1,14 @@
+diff --git a/src/main.rs b/src/main.rs
+index f07cc64..357a33b 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -20,7 +20,7 @@ fn main() -> Result<(), std::io::Error> {
+     configs = serde_json::from_str::<devices::Configs>(&config_content).unwrap();
+ 
+     let new_configs = devices::run(configs);
+-    std::fs::write(&config_path, serde_json::to_string_pretty(&new_configs).unwrap())?;
++    std::fs::write(&config_path, serde_json::to_string_pretty(&new_configs).unwrap());
+ 
+     Ok(())
+ }
+\ No newline at end of file

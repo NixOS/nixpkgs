@@ -9,10 +9,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.1.1";
+  version = "2.1.3";
   src = fetchzip {
-    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.1.1.tar.gz";
-    sha256 = "1k1gdx7yczz7xm096i8lk09zq6yw1yj8izx6czymfd4qqwj2y49l";
+    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.1.3.tar.gz";
+    sha256 = "1xm40pp9lqj2hlwk3ds9zyjd4yqsis2a2ac5kn19z60glxvaijvx";
   };
   isLibrary = true;
   isExecutable = true;

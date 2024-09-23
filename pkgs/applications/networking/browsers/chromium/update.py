@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3 nix nixfmt nix-prefetch-git
+#! nix-shell -i python -p python3Packages.looseversion nix nixfmt-classic nix-prefetch-git
 
 """This script automatically updates chromium, google-chrome, chromedriver, and ungoogled-chromium
 via upstream-info.nix."""
@@ -15,12 +15,11 @@ import sys
 from codecs import iterdecode
 from collections import OrderedDict
 from datetime import datetime
-from distutils.version import LooseVersion
+from looseversion import LooseVersion
 from os.path import abspath, dirname
 from urllib.request import urlopen
 
 RELEASES_URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/all/versions/all/releases'
-DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 
 PIN_PATH = dirname(abspath(__file__)) + '/upstream-info.nix'
 UNGOOGLED_FLAGS_PATH = dirname(abspath(__file__)) + '/ungoogled-flags.toml'
@@ -201,6 +200,8 @@ def print_updates(channels_old, channels_new):
 channels = {}
 last_channels = load_as_json(PIN_PATH)
 
+src_hash_cache = {}
+
 
 print(f'GET {RELEASES_URL}', file=sys.stderr)
 with urlopen(RELEASES_URL) as resp:
@@ -213,7 +214,7 @@ with urlopen(RELEASES_URL) as resp:
         releases.append(get_latest_ungoogled_chromium_build(linux_stable_versions))
 
     for release in releases:
-        channel_name = re.findall("chrome\/platforms\/linux\/channels\/(.*)\/versions\/", release['name'])[0]
+        channel_name = re.findall("chrome/platforms/linux/channels/(.*)/versions/", release['name'])[0]
 
         # If we've already found a newer release for this channel, we're
         # no longer interested in it.
@@ -240,13 +241,23 @@ with urlopen(RELEASES_URL) as resp:
             google_chrome_suffix = channel_name
 
         try:
-            channel['hash'] = prefetch_src_sri_hash(
-                channel_name_to_attr_name(channel_name),
-                release["version"]
-            )
-            channel['hash_deb_amd64'] = nix_prefetch_url(
-                f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
-                f'google-chrome-{google_chrome_suffix}_{release["version"]}-1_amd64.deb')
+            version = release["version"]
+            existing_releases = dict(map(lambda channel: (channel[1]['version'], channel[1]['hash']), last_channels.items()))
+
+            if version in src_hash_cache:
+                print(f'Already got hash {src_hash_cache[version]} for {version}, skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
+
+                channel["hash"] = src_hash_cache[version]
+            elif version in existing_releases:
+                print(f'Already got hash {existing_releases[version]} for {version} (from upstream-info.nix), skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
+
+                channel["hash"] = existing_releases[version]
+            else:
+                channel["hash"] = prefetch_src_sri_hash(
+                    channel_name_to_attr_name(channel_name),
+                    version
+                )
+                src_hash_cache[version] = channel["hash"]
         except subprocess.CalledProcessError:
             # This release isn't actually available yet.  Continue to
             # the next one.

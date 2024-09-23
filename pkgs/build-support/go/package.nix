@@ -37,6 +37,10 @@
 
 , CGO_ENABLED ? go.CGO_ENABLED
 
+, ldflags ? [ ]
+
+, GOFLAGS ? [ ]
+
 # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
@@ -87,9 +91,12 @@ let
 
     GO111MODULE = "off";
     GOTOOLCHAIN = "local";
-    GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
+    GOFLAGS = GOFLAGS ++ lib.optional (!allowGoReference)  "-trimpath" ;
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+
+    # If not set to an explicit value, set the buildid empty for reproducibility.
+    ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -279,5 +286,9 @@ let
   });
 in
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
-  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+  "`buildFlags`/`buildFlagsArray` are deprecated and will be removed in the 24.11 release. Use the `ldflags` and/or `tags` attributes instead"
+lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
+lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+lib.warn '''buildGoPackage' is deprecated and will be removed for the 25.05 release.
+Please use 'buildGoModule' instead. Tips for migration can be found in the Go section of the nixpkgs manual.''
   package

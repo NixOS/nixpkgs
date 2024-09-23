@@ -21,11 +21,7 @@ appimageTools.wrapType2 {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false; # no 32bit needed
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
-
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png \
       $out/share/icons/hicolor/512x512/apps/${pname}.png

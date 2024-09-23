@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "love";
-  version = "11.4";
+  version = "11.5";
 
   src = fetchFromGitHub {
     owner = "love2d";
     repo = "love";
     rev = version;
-    sha256 = "0kpdp6v8m8j0r7ppyy067shr0lfgrlh0dwb7ccws76d389vizwhb";
+    sha256 = "sha256-wZktNh4UB3QH2wAIIlnYUlNoXbjEDwUmPnT4vesZNm0=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf automake ];
@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://love2d.org";
-    description = "A Lua-based 2D game engine/scripting language";
+    description = "Lua-based 2D game engine/scripting language";
+    mainProgram = "love";
     license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.raskin ];

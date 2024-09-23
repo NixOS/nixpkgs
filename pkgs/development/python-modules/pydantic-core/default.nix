@@ -1,57 +1,55 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, cargo
-, rustPlatform
-, rustc
-, libiconv
-, typing-extensions
-, pytestCheckHook
-, hypothesis
-, pytest-timeout
-, pytest-mock
-, dirty-equals
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  rustc,
+  libiconv,
+  typing-extensions,
+  pytestCheckHook,
+  hypothesis,
+  pytest-timeout,
+  pytest-mock,
+  dirty-equals,
 }:
 
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.6.3";
-    format = "pyproject";
+    version = "2.20.1";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-core";
       rev = "refs/tags/v${version}";
-      hash = "sha256-bEVACTlzELXPoCtEHMR1s87KJn/qnE0lO1O4RmdjmPM=";
+      hash = "sha256-iFyCFkFzvTL6es3L96pyq/s6SS7h1mn+bS0SPcsxXxA=";
     };
 
-    patches = [
-      ./01-remove-benchmark-flags.patch
-    ];
+    patches = [ ./01-remove-benchmark-flags.patch ];
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${pname}-${version}";
-      hash = "sha256-h9SmMLg/W11h/SQz8Te5OoCKdyG6Fctc5ftqbVQFSwU=";
+      hash = "sha256-4v4g9/8ZsQUqkwA29/S/BXn2Ea4eSOnMhEbhDvsGuQU=";
     };
 
     nativeBuildInputs = [
       cargo
       rustPlatform.cargoSetupHook
-      rustPlatform.maturinBuildHook
       rustc
+    ];
+
+    build-system = [
+      rustPlatform.maturinBuildHook
       typing-extensions
     ];
 
-    buildInputs = lib.optionals stdenv.isDarwin [
-      libiconv
-    ];
+    buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-    propagatedBuildInputs = [
-      typing-extensions
-    ];
+    dependencies = [ typing-extensions ];
 
     pythonImportsCheck = [ "pydantic_core" ];
 
@@ -78,10 +76,12 @@ let
     ];
 
     meta = with lib; {
+      changelog = "https://github.com/pydantic/pydantic-core/releases/tag/v${version}";
       description = "Core validation logic for pydantic written in rust";
       homepage = "https://github.com/pydantic/pydantic-core";
       license = licenses.mit;
       maintainers = with maintainers; [ blaggacao ];
     };
   };
-in pydantic-core
+in
+pydantic-core

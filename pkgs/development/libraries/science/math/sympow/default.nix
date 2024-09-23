@@ -1,16 +1,17 @@
-{ lib, stdenv
-, fetchFromGitLab
-, fetchpatch
-, makeWrapper
-, which
-, autoconf
-, help2man
-, file
-, pari
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  makeWrapper,
+  which,
+  autoconf,
+  help2man,
+  file,
+  pari,
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.023.6";
+  version = "2.023.7";
   pname = "sympow";
 
   src = fetchFromGitLab {
@@ -18,17 +19,10 @@ stdenv.mkDerivation rec {
     owner = "forks";
     repo = "sympow";
     rev = "v${version}";
-    sha256 = "132l0xv00ld1svvv9wh99wfra4zzjv2885h2sq0dsl98wiyvi5zl";
+    hash = "sha256-sex8gRiBdTcVMV3nSeiTYamAjPoXQdiiZwjRmeKA+mc=";
   };
 
-  patches = [
-    ./clean-extra-logfile-output-from-pari.patch
-    (fetchpatch {
-      name = "null-terminate-dupdirname.patch";
-      url = "https://gitlab.com/rezozer/forks/sympow/-/merge_requests/5.diff";
-      sha256 = "sha256-yKjio+qN9teL8L+mb7WOBN/iv545vRIxW20FJU37oO4=";
-    })
-  ];
+  patches = [ ./clean-extra-logfile-output-from-pari.patch ];
 
   postUnpack = ''
     patchShebangs .
@@ -65,20 +59,27 @@ stdenv.mkDerivation rec {
 
   # Example from the README as a sanity check.
   doInstallCheck = true;
-  installCheckPhase = ''
-    export HOME="$TMP/home"
-    mkdir -p "$HOME"
-    "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
-  '';
+  installCheckPhase =
+    ''
+      export HOME=$TMPDIR
+      "$out/bin/sympow" -curve "[1,2,3,4,5]" -moddeg | grep 'Modular Degree is 464'
+      echo "[1,-1,0,-79,289]" | "$out/bin/sympow" -analrank | grep ^"Analytic Rank is 4"
+      "$out/bin/sympow" -curve "[1,-1,0,-79,289]" -analrank | grep ^"Analytic Rank is 4"
+      "$out/bin/sympow" -curve "[0,1,1,-2,0]" -analrank | grep ^"Analytic Rank is 2"
+    ''
+    + lib.optionalString (!stdenv.isAarch64) ''
+      "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "Compute special values of symmetric power elliptic curve L-functions";
+    mainProgram = "sympow";
     license = {
       shortName = "sympow";
       fullName = "Custom, BSD-like. See COPYING file.";
       free = true;
     };
-    maintainers = teams.sage.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.sage.members;
+    platforms = lib.platforms.unix;
   };
 }

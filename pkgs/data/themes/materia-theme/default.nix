@@ -4,7 +4,8 @@
 , meson
 , ninja
 , sassc
-, gnome
+, gnome-shell
+, gnome-themes-extra
 , gtk-engine-murrine
 , gdk-pixbuf
 , librsvg
@@ -23,12 +24,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja sassc ];
 
-  buildInputs = [ gnome.gnome-themes-extra gdk-pixbuf librsvg ];
+  buildInputs = [ gnome-themes-extra gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   mesonFlags = [
-    "-Dgnome_shell_version=${lib.versions.majorMinor gnome.gnome-shell.version}"
+    "-Dgnome_shell_version=${lib.versions.majorMinor gnome-shell.version}"
   ];
 
   postInstall = ''

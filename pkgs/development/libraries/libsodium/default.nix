@@ -4,18 +4,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
-  version = "1.0.18";
+  version = "1.0.20";
 
   src = fetchurl {
-    url = "https://download.libsodium.org/libsodium/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "1h9ncvj23qbbni958knzsli8dvybcswcjbx0qjjgi922nf848l3g";
+    url = "https://download.libsodium.org/libsodium/releases/libsodium-${finalAttrs.version}.tar.gz";
+    hash = "sha256-67Ze9spDkzPCu0GgwZkFhyiNoH9sf9B8s6GMwY0wzhk=";
   };
 
   outputs = [ "out" "dev" ];
 
-  patches = lib.optional stdenv.hostPlatform.isMinGW ./mingw-no-fortify.patch;
-
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
+  nativeBuildInputs = [ autoreconfHook ];
 
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
@@ -31,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A modern and easy-to-use crypto library";
+    description = "Modern and easy-to-use crypto library";
     homepage = "https://doc.libsodium.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ raskin ];

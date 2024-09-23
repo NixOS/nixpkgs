@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, numpy
-, scipy
-, matplotlib
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  numpy,
+  scipy,
+  matplotlib,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "kneed";
   version = "0.8.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arvkevi";
@@ -20,22 +22,16 @@ buildPythonPackage rec {
     sha256 = "sha256-oakP6NkdvTzMZcoXS6cKNsRo//K+CoPLlhvbQLGij00=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=kneed" ""
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
 
   checkInputs = [
     pytestCheckHook
+    pytest-cov-stub
     matplotlib
   ];
 

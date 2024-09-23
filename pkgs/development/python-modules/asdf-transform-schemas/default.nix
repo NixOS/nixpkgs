@@ -1,15 +1,16 @@
-{ lib
-, asdf-standard
-, buildPythonPackage
-, fetchPypi
-, importlib-resources
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  asdf-standard,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-resources,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asdf-transform-schemas";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,25 +18,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "asdf_transform_schemas";
     inherit version;
-    hash = "sha256-3n/cP+41+5V/wylXh3oOnX3U0uhRvWMaclnxHCvSlMo=";
+    hash = "sha256-gs9MeCV1c0qJUyfyX/WDzpSZ1+K4Nv6IgLLXlhxrRis=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    asdf-standard
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  dependencies = [ asdf-standard ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   # Circular dependency on asdf
   doCheck = false;
 
-  pythonImportsCheck = [
-    "asdf_transform_schemas"
-  ];
+  pythonImportsCheck = [ "asdf_transform_schemas" ];
 
   meta = with lib; {
     description = "ASDF schemas for validating transform tags";

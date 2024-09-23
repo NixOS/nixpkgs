@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "tfsec";
-  version = "1.28.4";
+  version = "1.28.10";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "tfsec";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WMmRCjKBtPT45it6iUQh5D7TBc8glt+dppksBvDhTN4=";
+    hash = "sha256-Dulbo5ZTw4+1XxjpnZ1aIsVPLVEqwQKdNMv+L9/j1wc=";
   };
 
   ldflags = [
@@ -22,7 +23,7 @@ buildGoModule rec {
     # "-extldflags '-fno-PIC -static'"
   ];
 
-  vendorHash = "sha256-7OTMJhW1Q1z/TOFa4oRCEIPF0cN8gZLdaQglqszXHdw=";
+  vendorHash = "sha256-Hu530cBJWGtvMmQ6gbROXf5JBfkOfc4nwznsKBTegUk=";
 
   subPackages = [
     "cmd/tfsec"
@@ -35,6 +36,9 @@ buildGoModule rec {
     homepage = "https://github.com/aquasecurity/tfsec";
     changelog = "https://github.com/aquasecurity/tfsec/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab marsam peterromfeldhk ];
+    maintainers = with maintainers; [
+      fab
+      peterromfeldhk
+    ];
   };
 }

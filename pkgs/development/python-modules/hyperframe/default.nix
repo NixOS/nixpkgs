@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "hyperframe";
   version = "6.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,6 +23,6 @@ buildPythonPackage rec {
     description = "HTTP/2 framing layer for Python";
     homepage = "https://github.com/python-hyper/hyperframe/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

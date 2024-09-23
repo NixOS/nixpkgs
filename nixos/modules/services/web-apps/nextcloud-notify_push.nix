@@ -6,31 +6,31 @@ let
 in
 {
   options.services.nextcloud.notify_push = {
-    enable = lib.mkEnableOption (lib.mdDoc "Notify push");
+    enable = lib.mkEnableOption "Notify push";
 
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.nextcloud-notify_push;
       defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
-      description = lib.mdDoc "Which package to use for notify_push";
+      description = "Which package to use for notify_push";
     };
 
     socketPath = lib.mkOption {
       type = lib.types.str;
       default = "/run/nextcloud-notify_push/sock";
-      description = lib.mdDoc "Socket path to use for notify_push";
+      description = "Socket path to use for notify_push";
     };
 
     logLevel = lib.mkOption {
       type = lib.types.enum [ "error" "warn" "info" "debug" "trace" ];
       default = "error";
-      description = lib.mdDoc "Log level";
+      description = "Log level";
     };
 
     bendDomainToLocalhost = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
 
         This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
@@ -90,7 +90,7 @@ in
         export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
       '' + ''
         export DATABASE_URL="${dbUrl}"
-        ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
+        exec ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
       '';
       serviceConfig = {
         User = "nextcloud";
@@ -98,6 +98,7 @@ in
         RuntimeDirectory = [ "nextcloud-notify_push" ];
         Restart = "on-failure";
         RestartSec = "5s";
+        Type = "notify";
       };
     };
 
@@ -116,7 +117,7 @@ in
       }
 
       (lib.mkIf cfg.bendDomainToLocalhost {
-        nextcloud.extraOptions.trusted_proxies = [ "127.0.0.1" "::1" ];
+        nextcloud.settings.trusted_proxies = [ "127.0.0.1" "::1" ];
       })
     ];
   };

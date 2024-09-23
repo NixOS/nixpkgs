@@ -31,7 +31,8 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An LALR(1) parser generator";
+    description = "LALR(1) parser generator";
+    mainProgram = "lemon";
     longDescription = ''
       The Lemon program is an LALR(1) parser generator that takes a
       context-free grammar and converts it into a subroutine that will parse a

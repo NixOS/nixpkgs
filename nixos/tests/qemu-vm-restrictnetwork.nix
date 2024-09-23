@@ -21,6 +21,8 @@ import ./make-test-python.nix ({
 
     else:
       start_all()
+      unrestricted.systemctl("start network-online.target")
+      restricted.systemctl("start network-online.target")
       unrestricted.wait_for_unit("network-online.target")
       restricted.wait_for_unit("network-online.target")
 

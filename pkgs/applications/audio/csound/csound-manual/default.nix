@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Csound Canonical Reference Manual";
+    description = "Csound Canonical Reference Manual";
     homepage = "https://github.com/csound/manual";
     license = licenses.fdl12Plus;
     maintainers = with maintainers; [ hlolli ];

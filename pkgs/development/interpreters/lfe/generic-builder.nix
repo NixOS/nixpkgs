@@ -3,9 +3,10 @@
 { baseName ? "lfe"
 , version
 , maximumOTPVersion
-, sha256 ? null
+, sha256 ? ""
+, hash ? ""
 , rev ? version
-, src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
+, src ? fetchFromGitHub { inherit hash rev sha256; owner = "lfe"; repo = "lfe"; }
 , patches ? []
 }:
 
@@ -72,7 +73,7 @@ buildRebar3 {
   '';
 
   meta = with lib; {
-    description     = "The best of Erlang and of Lisp; at the same time!";
+    description     = "Best of Erlang and of Lisp; at the same time!";
     longDescription = ''
       LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
       compiler. Code produced with it is compatible with "normal" Erlang

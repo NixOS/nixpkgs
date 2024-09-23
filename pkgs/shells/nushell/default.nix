@@ -13,7 +13,6 @@
 , Security
 , nghttp2
 , libgit2
-, doCheck ? true
 , withDefaultFeatures ? true
 , additionalFeatures ? (p: p)
 , testers
@@ -22,7 +21,7 @@
 }:
 
 let
-  version = "0.87.1";
+  version = "0.98.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -33,10 +32,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     rev = version;
-    hash = "sha256-lPfP0bnMTb+IQoWdf7oHaj96/l68Ic6OmB/Ur9Q65g8=";
+    hash = "sha256-0XN26onR4Tk8Ejc/UntdL+b5FPBOoBmDQM0DRommIMo=";
   };
 
-  cargoHash = "sha256-2xc0IiPCmhFtVXWEpDpRny27/bJZAh/Ke9+LVsrcWF0=";
+  cargoHash = "sha256-43V0TnYGG2tyWRIGaohIaoN7dxnY1fle2Bp5lDiFlWg=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
@@ -50,12 +49,21 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  inherit doCheck;
+  doCheck = ! stdenv.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo test"
-    HOME=$(mktemp -d) cargo test
+    (
+      # The skipped tests all fail in the sandbox because in the nushell test playground,
+      # the tmp $HOME is not set, so nu falls back to looking up the passwd dir of the build
+      # user (/var/empty). The assertions however do respect the set $HOME.
+      set -x
+      HOME=$(mktemp -d) cargo test -j $NIX_BUILD_CORES --offline -- \
+        --test-threads=$NIX_BUILD_CORES \
+        --skip=repl::test_config_path::test_default_config_path \
+        --skip=repl::test_config_path::test_xdg_config_bad \
+        --skip=repl::test_config_path::test_xdg_config_empty
+    )
     runHook postCheck
   '';
 
@@ -68,10 +76,10 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A modern shell written in Rust";
+    description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    maintainers = with maintainers; [ Br1ght0ne johntitor joaquintrinanes ];
     mainProgram = "nu";
   };
 }

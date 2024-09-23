@@ -4,12 +4,10 @@
 #
 # Example usage in a derivation:
 #
-#   { …, pythonPackages, … }:
+#   { …, python3Packages, … }:
 #
-#   pythonPackages.buildPythonPackage {
+#   python3Packages.buildPythonPackage {
 #     …
-#     nativeBuildInputs = [ pythonPackages.pythonRelaxDepsHook ];
-#
 #     # This will relax the dependency restrictions
 #     # e.g.: abc>1,<=2 -> abc
 #     pythonRelaxDeps = [ "abc" ];
@@ -52,7 +50,7 @@ _pythonRelaxDeps() {
     else
         for dep in $pythonRelaxDeps; do
             sed -i "$metadata_file" -r \
-                -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/"
+                -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/i"
         done
     fi
 }
@@ -77,13 +75,12 @@ _pythonRemoveDeps() {
 pythonRelaxDepsHook() {
     pushd dist
 
-    # See https://peps.python.org/pep-0491/#escaping-and-unicode
-    local -r pkg_name="${pname//[^[:alnum:].]/_}"
     local -r unpack_dir="unpacked"
-    local -r metadata_file="$unpack_dir/$pkg_name*/$pkg_name*.dist-info/METADATA"
+    local -r metadata_file="$unpack_dir/*/*.dist-info/METADATA"
 
     # We generally shouldn't have multiple wheel files, but let's be safer here
-    for wheel in "$pkg_name"*".whl"; do
+    for wheel in *".whl"; do
+
         PYTHONPATH="@wheel@/@pythonSitePackages@:$PYTHONPATH" \
             @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
         rm -rf "$wheel"
@@ -98,7 +95,7 @@ pythonRelaxDepsHook() {
         fi
 
         PYTHONPATH="@wheel@/@pythonSitePackages@:$PYTHONPATH" \
-            @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"*
+            @pythonInterpreter@ -m wheel pack "$unpack_dir/"*
     done
 
     # Remove the folder since it will otherwise be in the dist output.

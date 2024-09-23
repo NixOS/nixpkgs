@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "uni";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "uni";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ij/jUbXl3GkeNZmGJ82i++6VkOW46YFI9m83otY6M7Q=";
+    hash = "sha256-LSmQtndWBc7wCYBnyaeDb4Le4PQPcSO8lTp+CSC2jbc=";
   };
 
-  vendorHash = "sha256-88SSrGvZSs6Opi3IKSNNqptuOWMmtTQ4ZDR7ViuGugk=";
+  vendorHash = "sha256-4w5L5Zg0LJX2v4mqLLjAvEdh3Ad69MLa97SR6RY3fT4=";
 
   ldflags = [
     "-s"
@@ -28,5 +28,6 @@ buildGoModule rec {
     changelog = "https://github.com/arp242/uni/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ chvp ];
+    mainProgram = "uni";
   };
 }

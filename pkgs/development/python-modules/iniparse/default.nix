@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "iniparse";
   version = "0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,5 +31,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ danbst ];
   };
-
 }

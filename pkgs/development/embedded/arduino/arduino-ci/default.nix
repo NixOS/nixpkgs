@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CI for Arduino Libraries";
+    mainProgram = "arduino-ci";
     homepage = src.meta.homepage;
     license = licenses.mit;
     maintainers = with maintainers; [ ryantm ];

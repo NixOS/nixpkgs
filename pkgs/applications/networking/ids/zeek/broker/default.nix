@@ -1,9 +1,7 @@
 { stdenv
 , lib
-, callPackage
 , fetchFromGitHub
 , cmake
-, pkg-config
 , python3
 , caf
 , openssl
@@ -14,8 +12,8 @@ let
   src-cmake = fetchFromGitHub {
     owner = "zeek";
     repo = "cmake";
-    rev = "b191c36167bc0d6bd9f059b01ad4c99be98488d9";
-    hash = "sha256-h6xPCcdTnREeDsGQhWt2w4yJofpr7g4a8xCOB2e0/qQ=";
+    rev = "1be78cc8a889d95db047f473a0f48e0baee49f33";
+    hash = "sha256-zcXWP8CHx0RSDGpRTrYD99lHlqSbvaliXrtFowPfhBk=";
   };
   src-3rdparty = fetchFromGitHub {
     owner = "zeek";
@@ -24,12 +22,12 @@ let
     hash = "sha256-AVaKcRjF5ZiSR8aPSLBzSTeWVwGWW/aSyQJcN0Yhza0=";
   };
   caf' = caf.overrideAttrs (old: {
-    version = "unstable-2022-11-17-zeek";
+    version = "unstable-2024-01-07-zeek";
     src = fetchFromGitHub {
       owner = "zeek";
       repo = "actor-framework";
-      rev = "4f580d89f35ae4d475505101623c8b022c0c6aa6";
-      hash = "sha256-8KGXg072lZiq/rC5ZuThDGRjeYvVVFBd3ea8yhUHOYY=";
+      rev = "e3048cdd13e085c97870a55eb1f9de04e25320f3";
+      hash = "sha256-uisoYXiZbFQa/TfWGRrCJ23MX4bg8Ds86ffC8sZSRNQ=";
     };
     cmakeFlags = old.cmakeFlags ++ [
       "-DCAF_ENABLE_TESTING=OFF"
@@ -37,9 +35,9 @@ let
     doCheck = false;
   });
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zeek-broker";
-  version = "unstable-2023-02-01";
+  version = "6.2.0";
   outputs = [ "out" "py" ];
 
   strictDeps = true;
@@ -47,8 +45,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "broker";
-    rev = "3df8d35732d51e3bd41db067260998e79e93f366";
-    hash = "sha256-37JIgbG12zd13YhfgVb4egzi80fUcZVj/s+yvsjcP7E=";
+    rev = "v${version}";
+    hash = "sha256-SG5TzozKvYc7qcEPJgiEtsxgzdZbbJt90lmuUbCPyv0=";
   };
   postUnpack = ''
     rmdir $sourceRoot/cmake $sourceRoot/3rdparty
@@ -64,7 +62,11 @@ stdenv.mkDerivation {
     ./0001-Fix-include-path-in-exported-CMake-targets.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
+  '';
+
+  nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ openssl python3.pkgs.pybind11 ];
   propagatedBuildInputs = [ caf' ];
 
@@ -78,6 +80,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Zeek's Messaging Library";
+    mainProgram = "broker-benchmark";
     homepage = "https://github.com/zeek/broker";
     license = licenses.bsd3;
     platforms = platforms.unix;

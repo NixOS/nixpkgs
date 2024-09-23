@@ -1,15 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, docutils
-, pyparsing
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  docutils,
+  pyparsing,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "amply";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

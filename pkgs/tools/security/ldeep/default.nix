@@ -1,47 +1,54 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ldeep";
-  version = "1.0.49";
-  format = "setuptools";
+  version = "1.0.66";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "franc-pentest";
     repo = "ldeep";
     rev = "refs/tags/${version}";
-    hash = "sha256-R94N9ZvgumxhSf3QBSwh0wHUKuLAuyTDTzcof6JRSkE=";
+    hash = "sha256-zXXTeuEgcGaMkJGWwWQ6DpKPEZp6fjy5i4jRr4AvApQ=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    cython
+  pythonRelaxDeps = [
+    "cryptography"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ pdm-backend ];
+
+  nativeBuildInputs = with python3.pkgs; [ cython ];
+
+  dependencies = with python3.pkgs; [
     commandparse
     cryptography
     dnspython
-    ldap3
+    gssapi
+    ldap3-bleeding-edge
+    oscrypto
+    pycryptodome
     pycryptodomex
     six
     termcolor
     tqdm
   ];
 
-  # no tests are present
+  # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ldeep"
-  ];
+  pythonImportsCheck = [ "ldeep" ];
 
   meta = with lib; {
     description = "In-depth LDAP enumeration utility";
     homepage = "https://github.com/franc-pentest/ldeep";
     changelog = "https://github.com/franc-pentest/ldeep/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ldeep";
   };
 }

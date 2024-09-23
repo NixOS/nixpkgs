@@ -1,4 +1,4 @@
-{ lib, perl, buildEnv, makeBinaryWrapper
+{ lib, perl, buildEnv, makeBinaryWrapper, stdenv
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
@@ -17,7 +17,8 @@ let
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
-    nativeBuildInputs = [ makeBinaryWrapper ];
+    # TODO: remove stdenv.cc as soon as it is added to propagatedNativeBuildInputs of makeBinaryWrapper
+    nativeBuildInputs = [ makeBinaryWrapper stdenv.cc ];
 
     # we create wrapper for the binaries in the different packages
     postBuild = ''

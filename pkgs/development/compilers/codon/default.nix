@@ -132,9 +132,9 @@ stdenv.mkDerivation {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A high-performance, zero-overhead, extensible Python compiler using LLVM";
+    description = "High-performance, zero-overhead, extensible Python compiler using LLVM";
     homepage = "https://docs.exaloop.io/codon";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
     license = lib.licenses.bsl11;
     platforms = lib.platforms.all;
   };

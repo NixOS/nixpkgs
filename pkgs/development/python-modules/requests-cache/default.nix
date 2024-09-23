@@ -1,51 +1,50 @@
-{ lib
-, attrs
-, buildPythonPackage
-, bson
-, boto3
-, botocore
-, cattrs
-, fetchFromGitHub
-, itsdangerous
-, platformdirs
-, poetry-core
-, psutil
-, pymongo
-, pytestCheckHook
-, pytest-rerunfailures
-, pytest-xdist
-, pythonOlder
-, pyyaml
-, redis
-, requests
-, requests-mock
-, responses
-, rich
-, tenacity
-, time-machine
-, timeout-decorator
-, ujson
-, urllib3
-, url-normalize
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  bson,
+  boto3,
+  botocore,
+  cattrs,
+  fetchFromGitHub,
+  itsdangerous,
+  platformdirs,
+  poetry-core,
+  psutil,
+  pymongo,
+  pytestCheckHook,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pythonOlder,
+  pyyaml,
+  redis,
+  requests,
+  requests-mock,
+  responses,
+  rich,
+  tenacity,
+  time-machine,
+  timeout-decorator,
+  ujson,
+  urllib3,
+  url-normalize,
 }:
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "1.1.0";
-  format = "pyproject";
+  version = "1.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kJqy7aK67JFtmsrwMtze/wTM9qch9YYj2eUzGJRJreQ=";
+    hash = "sha256-juRCcBUr+Ko6kVPpUapwRbUGqWLKaRiCqppOc3S5FMU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     attrs
@@ -61,24 +60,12 @@ buildPythonPackage rec {
       boto3
       botocore
     ];
-    mongodbo = [
-      pymongo
-    ];
-    redis = [
-      redis
-    ];
-    bson = [
-      bson
-    ];
-    json = [
-      ujson
-    ];
-    security = [
-      itsdangerous
-    ];
-    yaml = [
-      pyyaml
-    ];
+    mongodbo = [ pymongo ];
+    redis = [ redis ];
+    bson = [ bson ];
+    json = [ ujson ];
+    security = [ itsdangerous ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
@@ -92,9 +79,7 @@ buildPythonPackage rec {
     tenacity
     time-machine
     timeout-decorator
-  ]
-  ++ passthru.optional-dependencies.json
-  ++ passthru.optional-dependencies.security;
+  ] ++ passthru.optional-dependencies.json ++ passthru.optional-dependencies.security;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -113,9 +98,7 @@ buildPythonPackage rec {
     "test_stale_if_error__error_code"
   ];
 
-  pythonImportsCheck = [
-    "requests_cache"
-  ];
+  pythonImportsCheck = [ "requests_cache" ];
 
   meta = with lib; {
     description = "Persistent cache for requests library";

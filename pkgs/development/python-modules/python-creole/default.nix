@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, runtimeShell
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  runtimeShell,
 
-# build
-, poetry-core
+  # build
+  poetry-core,
 
-# propagates
-, docutils
+  # propagates
+  docutils,
 
-# tests
-, pytestCheckHook
-, readme_renderer
-, textile
+  # tests
+  pytestCheckHook,
+  readme-renderer,
+  textile,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -48,17 +47,13 @@ buildPythonPackage rec {
     sed -i "/-cov/d" pytest.ini
   '';
 
-  propagatedBuildInputs = [
-    docutils
-  ];
+  propagatedBuildInputs = [ docutils ];
 
-  pythonImportsCheck = [
-    "creole"
-  ];
+  pythonImportsCheck = [ "creole" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    readme_renderer
+    readme-renderer
     textile
   ];
 
@@ -84,6 +79,15 @@ buildPythonPackage rec {
     # rendering differencenes, likely docutils version mismatch
     "creole/tests/test_cross_compare_rest.py"
     "creole/tests/test_rest2html.py"
+  ];
+
+  pytestFlagsArray = [
+    # fixture mismatch after docutils update
+    "--deselect=creole/rest_tools/clean_writer.py::creole.rest_tools.clean_writer.rest2html"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_at_sign"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_unknown_protocol"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_without_title"
   ];
 
   meta = with lib; {

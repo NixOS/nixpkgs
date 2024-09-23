@@ -7,6 +7,7 @@
 , glib
 , alsaSupport ? stdenv.isLinux
 , alsa-lib
+, udev
 , pulseaudioSupport ? config.pulseaudio or true
 , libpulseaudio
 , ossSupport ? false
@@ -15,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmatemixer";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "SWD1mmufr4KgHUpLjMJgtIaN2ZHv1Kmxe10KFaHToa4=";
+    sha256 = "XXO5Ijl/YGiOPJUw61MrzkbDDiYtsbU1L6MsQNhwoMc=";
   };
 
   nativeBuildInputs = [
@@ -29,9 +30,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-  ]
-  ++ lib.optional alsaSupport alsa-lib
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  ] ++ lib.optionals alsaSupport [
+   alsa-lib
+   udev
+  ] ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
 
   configureFlags = lib.optional ossSupport "--enable-oss";
 

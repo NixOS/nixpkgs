@@ -1,24 +1,24 @@
 { lib, stdenv, fetchFromGitHub, cmake, eigen, avogadrolibs, molequeue, hdf5
-, openbabel, qttools, wrapQtAppsHook
+, openbabel, qttools, wrapQtAppsHook, mesa
 }:
 
 let
   avogadroI18N = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadro-i18n";
-    rev = "3b8a86cc37e988b043d1503d2f11068389b0aca3";
-    sha256 = "9wLY7/EJyIZYnlUAMsViCwD5kGc1vCNbk8vUhb90LMQ=";
+    rev = "7eef0b83ded6221a3ddb85c0118cc26f9a35375c";
+    hash = "sha256-AR/y70zeYR9xBzWDB5JXjJdDM+NLOX6yxCQte2lYN/U=";
   };
 
 in stdenv.mkDerivation rec {
   pname = "avogadro2";
-  version = "1.97.0";
+  version = "1.99.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "avogadroapp";
     rev = version;
-    hash = "sha256-gZpMgFSPz70QNfd8gH5Jb9RTxQfQalWx33LkgXLEqOQ=";
+    hash = "sha256-m8kX4WzOmPE/BZQRePOoUAdMPdWb6pmcqtPvDdEIIao=";
   };
 
   postUnpack = ''
@@ -37,13 +37,14 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ openbabel ];
 
-  qtWrapperArgs = [ "--prefix PATH : ${openbabel}/bin" ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.getBin openbabel}/bin" ];
 
   meta = with lib; {
     description = "Molecule editor and visualizer";
+    mainProgram = "avogadro2";
     maintainers = with maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadroapp";
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     license = licenses.bsd3;
   };
 }

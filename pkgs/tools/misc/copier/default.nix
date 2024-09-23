@@ -1,29 +1,33 @@
-{ lib, git, python3, fetchFromGitHub }:
+{ lib
+, git
+, python3
+, fetchFromGitHub
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
-  version = "8.1.0";
-  format = "pyproject";
+  version = "9.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "copier-org";
     repo = "copier";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     # Conflict on APFS on darwin
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-PxyXlmEZ9cqZgDWcdeNznEC4F1J4NFMiwy0D7g+YZUs=";
+    hash = "sha256-fjZ2ieyyFvm5LdCoKLhOffWZusYbZEGebR8o7PDF8wc=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-    python3.pkgs.poetry-dynamic-versioning
+  build-system = with python3.pkgs; [
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     colorama
     decorator
     dunamai
@@ -51,8 +55,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
+    changelog = "https://github.com/copier-org/copier/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ greg ];
     mainProgram = "copier";
   };
 }

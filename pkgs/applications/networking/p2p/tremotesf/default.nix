@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tremotesf";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "equeim";
     repo = "tremotesf2";
     rev = finalAttrs.version;
-    hash = "sha256-mxk2BRUuet3XSNaKt2Dnnxe5dliazd1ArRSnKyoAp1s=";
+    hash = "sha256-9iV4UsKZWaIxhqtRZXTFHgjOKVFJE2bCJOD2O/qL+DY=";
     # We need this for src/libtremotesf
     fetchSubmodules = true;
   };
@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Remote GUI for transmission-daemon";
+    mainProgram = "tremotesf";
     license = licenses.gpl3Plus;
     homepage = "https://github.com/equeim/tremotesf2";
     maintainers = with maintainers; [ sochotnicky ];

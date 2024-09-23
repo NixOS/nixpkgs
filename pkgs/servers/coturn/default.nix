@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , openssl
 , libevent
 , pkg-config
@@ -50,12 +49,12 @@ stdenv.mkDerivation rec {
   passthru.tests.coturn = nixosTests.coturn;
 
   meta = with lib; {
-    description = "A TURN server";
+    description = "TURN server";
     homepage = "https://coturn.net/";
     changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
     license = with licenses; [ bsd3 ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ ralith _0x4A6F ];
+    maintainers = with maintainers; [ _0x4A6F ];
     broken = stdenv.isDarwin; # 2018-10-21
   };
 }

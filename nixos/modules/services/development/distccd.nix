@@ -1,20 +1,17 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.distccd;
 in
 {
   options = {
     services.distccd = {
-      enable = mkEnableOption (lib.mdDoc "distccd");
+      enable = lib.mkEnableOption "distccd, a distributed C/C++ compiler";
 
-      allowedClients = mkOption {
-        type = types.listOf types.str;
+      allowedClients = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "127.0.0.1" ];
         example = [ "127.0.0.1" "192.168.0.0/24" "10.0.0.0/24" ];
-        description = lib.mdDoc ''
+        description = ''
           Client IPs which are allowed to connect to distccd in CIDR notation.
 
           Anyone who can connect to the distccd server can run arbitrary
@@ -23,85 +20,85 @@ in
         '';
       };
 
-      jobTimeout = mkOption {
-        type = types.nullOr types.int;
+      jobTimeout = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Maximum duration, in seconds, of a single compilation request.
         '';
       };
 
-      logLevel = mkOption {
-        type = types.nullOr (types.enum [ "critical" "error" "warning" "notice" "info" "debug" ]);
+      logLevel = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "critical" "error" "warning" "notice" "info" "debug" ]);
         default = "warning";
-        description = lib.mdDoc ''
+        description = ''
           Set the minimum severity of error that will be included in the log
           file. Useful if you only want to see error messages rather than an
           entry for each connection.
         '';
       };
 
-      maxJobs = mkOption {
-        type = types.nullOr types.int;
+      maxJobs = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
-        description = lib.mdDoc ''
-          Maximum number of tasks distccd should execute at any time.
+        description = ''
+          Maximum number of tasks distccd should execute at lib.any time.
         '';
       };
 
 
-      nice = mkOption {
-        type = types.nullOr types.int;
+      nice = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Niceness of the compilation tasks.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Opens the specified TCP port for distcc.
         '';
       };
 
-      package = mkPackageOption pkgs "distcc" { };
+      package = lib.mkPackageOption pkgs "distcc" { };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 3632;
-        description = lib.mdDoc ''
+        description = ''
           The TCP port which distccd will listen on.
         '';
       };
 
       stats = {
-        enable = mkEnableOption (lib.mdDoc "statistics reporting via HTTP server");
-        port = mkOption {
-          type = types.port;
+        enable = lib.mkEnableOption "statistics reporting via HTTP server";
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 3633;
-          description = lib.mdDoc ''
+          description = ''
             The TCP port which the distccd statistics HTTP server will listen
             on.
           '';
         };
       };
 
-      zeroconf = mkOption {
-        type = types.bool;
+      zeroconf = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to register via mDNS/DNS-SD
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    networking.firewall = mkIf cfg.openFirewall {
+  config = lib.mkIf cfg.enable {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ]
-        ++ optionals cfg.stats.enable [ cfg.stats.port ];
+        ++ lib.optionals cfg.stats.enable [ cfg.stats.port ];
     };
 
     systemd.services.distccd = {
@@ -124,14 +121,14 @@ in
             --daemon \
             --enable-tcp-insecure \
             --port ${toString cfg.port} \
-            ${optionalString (cfg.jobTimeout != null) "--job-lifetime ${toString cfg.jobTimeout}"} \
-            ${optionalString (cfg.logLevel != null) "--log-level ${cfg.logLevel}"} \
-            ${optionalString (cfg.maxJobs != null) "--jobs ${toString cfg.maxJobs}"} \
-            ${optionalString (cfg.nice != null) "--nice ${toString cfg.nice}"} \
-            ${optionalString cfg.stats.enable "--stats"} \
-            ${optionalString cfg.stats.enable "--stats-port ${toString cfg.stats.port}"} \
-            ${optionalString cfg.zeroconf "--zeroconf"} \
-            ${concatMapStrings (c: "--allow ${c} ") cfg.allowedClients}
+            ${lib.optionalString (cfg.jobTimeout != null) "--job-lifetime ${toString cfg.jobTimeout}"} \
+            ${lib.optionalString (cfg.logLevel != null) "--log-level ${cfg.logLevel}"} \
+            ${lib.optionalString (cfg.maxJobs != null) "--jobs ${toString cfg.maxJobs}"} \
+            ${lib.optionalString (cfg.nice != null) "--nice ${toString cfg.nice}"} \
+            ${lib.optionalString cfg.stats.enable "--stats"} \
+            ${lib.optionalString cfg.stats.enable "--stats-port ${toString cfg.stats.port}"} \
+            ${lib.optionalString cfg.zeroconf "--zeroconf"} \
+            ${lib.concatMapStrings (c: "--allow ${c} ") cfg.allowedClients}
         '';
       };
     };

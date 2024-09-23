@@ -16,11 +16,12 @@ stdenv.mkDerivation rec {
   installPhase = "install -D srelay $out/bin/srelay";
 
   meta = {
-    description = "A SOCKS proxy and relay";
+    description = "SOCKS proxy and relay";
     homepage = "http://socks-relay.sourceforge.net/";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;
+    mainProgram = "srelay";
   };
 }

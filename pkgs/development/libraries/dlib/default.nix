@@ -3,29 +3,29 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, fftw
 , libpng
 , libjpeg
 , libwebp
-, openblas
+, blas
+, lapack
+, config
 , guiSupport ? false
 , libX11
-
-  # see http://dlib.net/compile.html
+, enableShared ? !stdenv.hostPlatform.isStatic # dlib has a build system that forces the user to choose between either shared or static libraries. See https://github.com/davisking/dlib/issues/923#issuecomment-2175865174
 , sse4Support ? stdenv.hostPlatform.sse4_1Support
 , avxSupport ? stdenv.hostPlatform.avxSupport
-, cudaSupport ? true
-}:
-
-stdenv.mkDerivation rec {
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+}@inputs:
+(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "19.24.2";
+  version = "19.24.6";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    rev ="v${version}";
-    sha256 = "sha256-Z1fScuaIHjj2L1uqLIvsZ7ARKNjM+iaA8SAtWUTPFZk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-BpE7ZrtiiaDqwy1G4IHOQBJMr6sAadFbRxsdObs1SIY=";
   };
 
   postPatch = ''
@@ -33,23 +33,47 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "USE_DLIB_USE_CUDA" cudaSupport)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
+    (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)))
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_nvcc
+  ]);
 
   buildInputs = [
-    fftw
     libpng
     libjpeg
     libwebp
-    openblas
-  ] ++ lib.optional guiSupport libX11;
+    blas
+    lapack
+  ]
+  ++ lib.optionals guiSupport [ libX11 ]
+  ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cudart
+    cuda_nvcc
+    libcublas
+    libcurand
+    libcusolver
+    cudnn
+    cuda_cccl
+  ]);
+
+  passthru = {
+    inherit
+      cudaSupport cudaPackages
+      sse4Support avxSupport;
+  };
 
   meta = with lib; {
-    description = "A general purpose cross-platform C++ machine learning library";
+    description = "General purpose cross-platform C++ machine learning library";
     homepage = "http://www.dlib.net";
     license = licenses.boost;
     maintainers = with maintainers; [ christopherpoole ];

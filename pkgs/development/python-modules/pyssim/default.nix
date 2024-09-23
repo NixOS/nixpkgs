@@ -1,10 +1,23 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, pillow, fetchpatch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  pillow,
+  fetchpatch,
+}:
 
 buildPythonPackage rec {
   pname = "pyssim";
   version = "0.6";
+  format = "setuptools";
 
-  propagatedBuildInputs = [ numpy scipy pillow ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    pillow
+  ];
 
   # PyPI tarball doesn't contain test images so let's use GitHub
   src = fetchFromGitHub {
@@ -37,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for computing Structured Similarity Image Metric (SSIM) in Python";
+    mainProgram = "pyssim";
     homepage = "https://github.com/jterrace/pyssim";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

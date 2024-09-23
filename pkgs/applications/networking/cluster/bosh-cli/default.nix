@@ -8,13 +8,13 @@
 buildGoModule rec {
   pname = "bosh-cli";
 
-  version = "7.5.0";
+  version = "7.7.2";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LWfS722V0ubh4QaUNuGwrvFsVAzA9Hd5xLlDfTG0PBs=";
+    sha256 = "sha256-orn1pxHefYCp0vPsZ4TI5Y76tpR8dOcEmxA3cHwfYQU=";
   };
   vendorHash = null;
 
@@ -34,7 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A command line interface to CloudFoundry BOSH";
+    description = "Command line interface to CloudFoundry BOSH";
     homepage = "https://bosh.io";
     changelog = "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${version}";
     license = licenses.asl20;

@@ -52,7 +52,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
   # This is convient to have as a parameter so the stdenv "adapters" work better
-  mkDerivationFromStdenv ? import ./make-derivation.nix { inherit lib config; }
+  mkDerivationFromStdenv ? stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation
 }:
 
 let
@@ -109,19 +109,14 @@ let
       # there (yet?) so it goes here until then.
       preHook = preHook + lib.optionalString buildPlatform.isDarwin ''
         export NIX_DONT_SET_RPATH_FOR_BUILD=1
-      '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
+      '' + lib.optionalString (hostPlatform.isDarwin || (!hostPlatform.isElf && !hostPlatform.isMacho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
       '' + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
         export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
-      ''
-      # TODO this should be uncommented, but it causes stupid mass rebuilds. I
-      # think the best solution would just be to fixup linux RPATHs so we don't
-      # need to set `-rpath` anywhere.
-      # + lib.optionalString targetPlatform.isDarwin ''
-      #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
-      # ''
-      ;
+      '' + lib.optionalString targetPlatform.isDarwin ''
+        export NIX_DONT_SET_RPATH_FOR_TARGET=1
+      '';
 
       inherit initialPath shell
         defaultNativeBuildInputs defaultBuildInputs;

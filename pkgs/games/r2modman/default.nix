@@ -2,30 +2,30 @@
 , stdenv
 , yarn
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , electron
 , fetchFromGitHub
-, gitUpdater
+, nix-update-script
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.45";
+  version = "3.1.50";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
-    rev = "v${version}";
-    hash = "sha256-6o6iPDKKqCzt7H0a64HGTvEvwO6hjRh1Drl8o4x+4ew=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WmF7tH5PiaggyvP/klWwNgaLKVhIoApxDtwwLpug52A=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-CXitb/b2tvTfrkFrFv4KP4WdmMg+1sDtC/s2u5ezDfI=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-ntXZ4gRXRqiPQxdwXDsLxGdBqUV5eboy9ntTlJsz9FA=";
   };
 
   patches = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs
     makeWrapper
     copyDesktopItems
@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
         dimensions=''${img#favicon-}
         dimensions=''${dimensions%.png}
         mkdir -p $out/share/icons/hicolor/$dimensions/apps
-        cp $img $out/share/icons/hicolor/$dimensions/apps/${pname}.png
+        cp $img $out/share/icons/hicolor/$dimensions/apps/r2modman.png
       done
     )
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/r2modman" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/r2modman" \
       --inherit-argv0 \
       --add-flags "$out/share/r2modman" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -93,26 +93,25 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      desktopName = pname;
-      comment = meta.description;
+      name = "r2modman";
+      exec = "r2modman";
+      icon = "r2modman";
+      desktopName = "r2modman";
+      comment = finalAttrs.meta.description;
       categories = [ "Game" ];
       keywords = [ "launcher" "mod manager" "thunderstore" ];
     })
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
     description = "Unofficial Thunderstore mod manager";
     homepage = "https://github.com/ebkr/r2modmanPlus";
-    changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aidalgol huantian ];
+    license = lib.licenses.mit;
+    mainProgram = "r2modman";
+    maintainers = with lib.maintainers; [ aidalgol huantian ];
     inherit (electron.meta) platforms;
   };
-}
+})

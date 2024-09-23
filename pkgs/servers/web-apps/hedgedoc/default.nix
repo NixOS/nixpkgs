@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "1.9.9";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     rev = version;
-    hash = "sha256-6eKTgEZ+YLoSmPQWBS95fJ+ioIxeTVlT+moqslByPPw=";
+    hash = "sha256-cRIpcoD9WzLYxKYpkvhRxUmeyJR5z2QyqApzWvQND+s=";
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -42,7 +42,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-Ga+tl4oZlum43tdfez1oWGMHZAfyePGl47S+9NRRvW8=";
+    outputHash = "sha256-RV9xzNVE4//tPVWVaET78ML3ah+hkZ8x6mTAxe5/pdE=";
   };
 
 in stdenv.mkDerivation {
@@ -51,8 +51,12 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    (python3.withPackages (ps: with ps; [ setuptools ])) # required to build sqlite3 bindings
     yarn
-    python3 # needed for sqlite node-gyp
+  ];
+
+  buildInputs = [
+    nodejs # for shebangs
   ];
 
   dontConfigure = true;
@@ -63,18 +67,13 @@ in stdenv.mkDerivation {
     export HOME=$(mktemp -d)
     yarn config set enableTelemetry 0
     yarn config set cacheFolder ${offlineCache}
+    export npm_config_nodedir=${nodejs} # prevent node-gyp from downloading headers
 
-    # This will fail but create the sqlite3 files we can patch
-    yarn --immutable-cache || :
-
-    # Ensure we don't download any node things
-    sed -i 's:--fallback-to-build:--build-from-source --nodedir=${nodejs}/include/node:g' node_modules/sqlite3/package.json
-    export CPPFLAGS="-I${nodejs}/include/node"
-
-    # Perform the actual install
     yarn --immutable-cache
     yarn run build
 
+    # Delete scripts that are not useful for NixOS
+    rm bin/{heroku,setup}
     patchShebangs bin/*
 
     runHook postBuild
@@ -83,13 +82,18 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
+    mkdir -p $out/share/hedgedoc
+    cp -r {app.js,bin,lib,locales,node_modules,package.json,public} $out/share/hedgedoc
 
+    for bin in $out/share/hedgedoc/bin/*; do
+      makeWrapper $bin $out/bin/$(basename $bin) \
+        --set NODE_ENV production \
+        --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
+    done
     makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
-      --add-flags $out/app.js \
+      --add-flags $out/share/hedgedoc/app.js \
       --set NODE_ENV production \
-      --set NODE_PATH "$out/lib/node_modules"
+      --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
 
     runHook postInstall
   '';
@@ -101,7 +105,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Only;
     homepage = "https://hedgedoc.org";
     mainProgram = "hedgedoc";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];

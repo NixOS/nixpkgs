@@ -1,23 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, fixtures
-, future
-, pbr
-, subunit
-, testtools
-, voluptuous
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliff,
+  fixtures,
+  future,
+  pbr,
+  setuptools,
+  subunit,
+  testtools,
+  tomlkit,
+  voluptuous,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "stestr";
-  version = "4.0.1";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wsHHO/x8/KORJxWeP7x0GTrr8s0C2KBCfy5YZI42zyY=";
+    hash = "sha256-X2HDae7OY8KS0TWZ4SqhWK92hZkGQ/JN1vp/q/406Yo=";
   };
 
   postPatch = ''
@@ -26,6 +30,11 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
+  nativeBuildInputs = [
+    pbr
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     cliff
     fixtures
@@ -33,6 +42,7 @@ buildPythonPackage rec {
     pbr
     subunit
     testtools
+    tomlkit
     voluptuous
   ];
 
@@ -46,7 +56,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stestr" ];
 
   meta = with lib; {
-    description = "A parallel Python test runner built around subunit";
+    description = "Parallel Python test runner built around subunit";
+    mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

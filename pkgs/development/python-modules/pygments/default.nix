@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  hatchling,
 
-# tests
-, pytestCheckHook
-, wcag-contrast-ratio
+  # tests
+  pytestCheckHook,
+  wcag-contrast-ratio,
+  pythonOlder
 }:
 
-let pygments = buildPythonPackage
-  rec {
+let
+  pygments = buildPythonPackage rec {
     pname = "pygments";
-    version = "2.16.1";
-    format = "pyproject";
+    version = "2.18.0";
+    pyproject = true;
+
+    disabled = pythonOlder "3.8"; # 2.18.0 requirement
 
     src = fetchPypi {
-      pname = "Pygments";
-      inherit version;
-      hash = "sha256-Ha/wSUggxpvIlB5AeqIPV3N07og2TuEKmP2+Cuzpbik=";
+      inherit pname version;
+      hash = "sha256-eG/4AvMukTEb/ziJ9umoboFQX+mfJzW7bWCuDFAE8Zk=";
     };
 
-    nativeBuildInputs = [
-      setuptools
-    ];
+    nativeBuildInputs = [ hatchling ];
 
     # circular dependencies if enabled by default
     doCheck = false;
@@ -39,21 +40,22 @@ let pygments = buildPythonPackage
       "tests/examplefiles/bash/ltmain.sh"
     ];
 
-    pythonImportsCheck = [
-      "pygments"
-    ];
+    pythonImportsCheck = [ "pygments" ];
 
     passthru.tests = {
-      check = pygments.overridePythonAttrs (_: { doCheck = true; });
+      check = pygments.overridePythonAttrs (_: {
+        doCheck = true;
+      });
     };
 
-    meta = with lib; {
+    meta = {
       changelog = "https://github.com/pygments/pygments/releases/tag/${version}";
       homepage = "https://pygments.org/";
-      description = "A generic syntax highlighter";
+      description = "Generic syntax highlighter";
       mainProgram = "pygmentize";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ ];
+      license = lib.licenses.bsd2;
+      maintainers = with lib.maintainers; [ sigmanificient ];
     };
   };
-in pygments
+in
+pygments

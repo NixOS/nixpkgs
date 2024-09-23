@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex }:
+{ lib, stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
   pname = "libsepol";
-  version = "3.5";
+  version = "3.7";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "${se_url}/${version}/libsepol-${version}.tar.gz";
-    sha256 = "sha256-eP2vaZJNt4C6x4VG5D2cRAdLrXmMLEFdC5u5bQZe6KI=";
+    sha256 = "sha256-zXQeJSROfvbNk01jNhQTGiZsPq6rM9i/pF6Kk7RcyQE=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "SELinux binary policy manipulation library";
     homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ RossComputerGuy ];
     license = lib.licenses.gpl2Plus;
     pkgConfigModules = [ "libselinux" ];
   };

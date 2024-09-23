@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, alsa-lib, libjack2, pkg-config, libpulseaudio, xorg }:
+{ lib, stdenv, fetchurl, alsa-lib, libjack2, pkg-config, libpulseaudio, xorg, copyDesktopItems, makeDesktopItem }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "bristol";
   version = "0.60.11";
 
@@ -9,9 +9,13 @@ stdenv.mkDerivation  rec {
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems ];
   buildInputs = [
-    alsa-lib libjack2 libpulseaudio xorg.libX11 xorg.libXext
+    alsa-lib
+    libjack2
+    libpulseaudio
+    xorg.libX11
+    xorg.libXext
     xorg.xorgproto
   ];
 
@@ -30,11 +34,27 @@ stdenv.mkDerivation  rec {
     sed -e "s@\`which brighton\`@$out/bin/brighton@g" -i bin/startBristol
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/icons/hicolor/scalable/apps/
+    ln -s $out/share/bristol/bitmaps/bicon.svg $out/share/icons/hicolor/scalable/apps/
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Bristol";
+      exec = "bristol";
+      icon = "bicon";
+      desktopName = "Bristol";
+      comment = "Graphical user interface for the Bristol synthesizer emulator";
+      categories = [ "AudioVideo" ];
+    })
+  ];
+
   meta = with lib; {
-    description = "A range of synthesiser, electric piano and organ emulations";
+    description = "Range of synthesiser, electric piano and organ emulations";
     homepage = "https://bristol.sourceforge.net";
     license = licenses.gpl3;
-    platforms = ["x86_64-linux" "i686-linux"];
-    maintainers = [ maintainers.goibhniu ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = [ ];
   };
 }

@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Automated theorem prover for higher-order logic";
+    mainProgram = "satallax";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;

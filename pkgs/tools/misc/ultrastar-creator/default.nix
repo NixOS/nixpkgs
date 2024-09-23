@@ -17,15 +17,15 @@ mkDerivation {
     sha256 = "1rzz04l7s7pxj74xam0cxlq569lfpgig35kpbsplq531d4007pc9";
   };
 
-  postPatch = with lib; ''
+  postPatch = ''
     # we don’t want prebuild binaries checked into version control!
     rm -rf lib include
     sed -e "s|DESTDIR =.*$|DESTDIR = $out/bin|" \
         -e 's|-L".*unix"||' \
         -e "/QMAKE_POST_LINK/d" \
-        -e "s|../include/bass|${getLib libbass}/include|g" \
-        -e "s|../include/bass_fx|${getLib libbass_fx}/include|g" \
-        -e "s|../include/taglib|${getLib taglib}/include|g" \
+        -e "s|../include/bass|${lib.getLib libbass}/include|g" \
+        -e "s|../include/bass_fx|${lib.getLib libbass_fx}/include|g" \
+        -e "s|../include/taglib|${lib.getLib taglib}/include|g" \
         -i src/UltraStar-Creator.pro
   '';
 
@@ -39,7 +39,7 @@ mkDerivation {
   meta = with lib; {
     description = "Ultrastar karaoke song creation tool";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Creator";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ Profpatsch ];
   };
 }

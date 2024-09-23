@@ -7,13 +7,14 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.33.0a1";
+        version = "1.37.0a1";
         pname = "tulir-telethon";
         src = fetchPypi {
           inherit pname version;
-          hash = "sha256-at/MiVXAKFhMH1N1m+K9HmYvxvzYa7xKhIlpDs7Kk3U=";
+          hash = "sha256-FckMHqGaBsqvFbrEnDWqJAQG8j/euY2NooesnxV6Kcc=";
         };
         doCheck = false;
       });
@@ -22,14 +23,14 @@ let
 in
 python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.15.0";
+  version = "0.15.2";
   disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2XPZkBAe15Rf1tv4KGhwRhoRf1wv+moADWDMNmkERtk=";
+    hash = "sha256-uR0vhp7ONyjwMKbgM1iObpFRoQzyQzJLbw4i9P58jTs=";
   };
 
   format = "setuptools";
@@ -42,7 +43,7 @@ python.pkgs.buildPythonPackage rec {
     commonmark
     aiohttp
     yarl
-    mautrix
+    (mautrix.override { withOlm = withE2BE; })
     tulir-telethon
     asyncpg
     mako
@@ -74,7 +75,7 @@ python.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/telegram";
-    description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
+    description = "Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ma27 nickcao ];

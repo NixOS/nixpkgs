@@ -35,7 +35,7 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A git-annex special remote for Google Drive";
+    description = "Git-annex special remote for Google Drive";
     homepage = "https://pypi.org/project/git-annex-remote-googledrive/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ gravndal ];

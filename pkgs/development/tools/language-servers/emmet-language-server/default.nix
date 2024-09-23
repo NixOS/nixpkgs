@@ -22,7 +22,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "A language server for emmet.io";
+    description = "Language server for emmet.io";
     homepage = "https://github.com/olrtg/emmet-language-server";
     changelog = "https://github.com/olrtg/emmet-language-server/releases/tag/v${version}";
     license = licenses.mit;

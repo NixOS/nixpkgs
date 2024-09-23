@@ -1,46 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  flit-core,
+
+  # tests
+  psutil,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "2.2.1";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2JaEuN6eNKKkOzRg+8oH0J1uJc6FjfTVpEJAQDthePU=";
+  src = fetchFromGitHub {
+    owner = "cloudpipe";
+    repo = "cloudpickle";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UeKVwzT0m4fhEVnG7TvQsFR99JsmwwoXmr+rWnTCeJU=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     psutil
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cloudpickle"
-  ];
+  pythonImportsCheck = [ "cloudpickle" ];
 
   disabledTestPaths = [
-    # ModuleNotFoundError: No module named '_cloudpickle_testpkg'
+    # ModuleNotFoundError: No module named 'psutil'
     "tests/cloudpickle_test.py"
   ];
 
-  disabledTests = [
-    # TypeError: cannot pickle 'EncodedFile' object
-    "test_pickling_special_file_handles"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/cloudpipe/cloudpickle/blob/v${version}/CHANGES.md";
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

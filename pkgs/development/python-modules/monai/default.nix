@@ -1,43 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, ninja
-, ignite
-, numpy
-, pybind11
-, torch
-, which
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  ninja,
+  ignite,
+  numpy,
+  pybind11,
+  torch,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.3.0";
+  version = "1.3.2";
+  pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     rev = "refs/tags/${version}";
-    hash = "sha256-h//igmSV1cPAFifE1woIluSyGwZBRByYMLqeY3oLHnk=";
+    hash = "sha256-wm4n3FuIXbE99RRLsGnZDeHtR/Tmj6C0s29pvflZg+o=";
   };
 
-  # Ninja is not detected by setuptools for some reason even though it's present:
-  postPatch = ''
-    substituteInPlace "setup.cfg" --replace "    ninja" ""
-  '';
+  patches = [
+    (fetchpatch {
+      name = "remove-distutils";
+      url = "https://github.com/Project-MONAI/MONAI/commit/87862f0d5730d42d282e779fc1450f18b4869863.patch";
+      hash = "sha256-wApYfugDPWcuxwmd91peNqc0+l+SoMlT8hhx99oI2Co=";
+    })
+  ];
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [ ninja which ];
+  nativeBuildInputs = [
+    ninja
+    which
+  ];
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy torch ignite ];
+  propagatedBuildInputs = [
+    numpy
+    torch
+    ignite
+  ];
 
   BUILD_MONAI = 1;
 
-  doCheck = false;  # takes too long; tries to download data
+  doCheck = false; # takes too long; tries to download data
 
   pythonImportsCheck = [
     "monai"

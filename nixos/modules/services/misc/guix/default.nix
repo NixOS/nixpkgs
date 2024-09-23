@@ -22,10 +22,18 @@ let
       })
       (builtins.genList guixBuildUser numberOfUsers));
 
-  # A set of Guix user profiles to be linked at activation.
+  # A set of Guix user profiles to be linked at activation. All of these should
+  # be default profiles managed by Guix CLI and the profiles are located in
+  # `${cfg.stateDir}/profiles/per-user/$USER/$PROFILE`.
   guixUserProfiles = {
-    # The current Guix profile that is created through `guix pull`.
+    # The default Guix profile managed by `guix pull`. Take note this should be
+    # the profile with the most precedence in `PATH` env to let users use their
+    # updated versions of `guix` CLI.
     "current-guix" = "\${XDG_CONFIG_HOME}/guix/current";
+
+    # The default Guix home profile. This profile contains more than exports
+    # such as an activation script at `$GUIX_HOME_PROFILE/activate`.
+    "guix-home" = "$HOME/.guix-home/profile";
 
     # The default Guix profile similar to $HOME/.nix-profile from Nix.
     "guix-profile" = "$HOME/.guix-profile";
@@ -228,14 +236,8 @@ in
         description = "Guix daemon socket";
         before = [ "multi-user.target" ];
         listenStreams = [ "${cfg.stateDir}/guix/daemon-socket/socket" ];
-        unitConfig = {
-          RequiresMountsFor = [
-            cfg.storeDir
-            cfg.stateDir
-          ];
-          ConditionPathIsReadWrite = "${cfg.stateDir}/guix/daemon-socket";
-        };
-        wantedBy = [ "socket.target" ];
+        unitConfig.RequiresMountsFor = [ cfg.storeDir cfg.stateDir ];
+        wantedBy = [ "sockets.target" ];
       };
 
       systemd.mounts = [{
@@ -262,20 +264,31 @@ in
       # ephemeral setups where only certain part of the filesystem is
       # persistent (e.g., "Erase my darlings"-type of setup).
       system.userActivationScripts.guix-activate-user-profiles.text = let
+        guixProfile = profile: "${cfg.stateDir}/guix/profiles/per-user/\${USER}/${profile}";
+        linkProfile = profile: location: let
+          userProfile = guixProfile profile;
+        in ''
+          [ -d "${userProfile}" ] && ln -sfn "${userProfile}" "${location}"
+        '';
         linkProfileToPath = acc: profile: location: let
-          guixProfile = "${cfg.stateDir}/guix/profiles/per-user/\${USER}/${profile}";
-          in acc + ''
-            [ -d "${guixProfile}" ] && ln -sf "${guixProfile}" "${location}"
-          '';
+          in acc + (linkProfile profile location);
 
-        activationScript = lib.foldlAttrs linkProfileToPath "" guixUserProfiles;
+        # This should contain export-only Guix user profiles. The rest of it is
+        # handled manually in the activation script.
+        guixUserProfiles' = lib.attrsets.removeAttrs guixUserProfiles [ "guix-home" ];
+
+        linkExportsScript = lib.foldlAttrs linkProfileToPath "" guixUserProfiles';
       in ''
         # Don't export this please! It is only expected to be used for this
         # activation script and nothing else.
         XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
 
         # Linking the usual Guix profiles into the home directory.
-        ${activationScript}
+        ${linkExportsScript}
+
+        # Activate all of the default Guix non-exports profiles manually.
+        ${linkProfile "guix-home" "$HOME/.guix-home"}
+        [ -L "$HOME/.guix-home" ] && "$HOME/.guix-home/activate"
       '';
 
       # GUIX_LOCPATH is basically LOCPATH but for Guix libc which in turn used by
@@ -373,7 +386,6 @@ in
         serviceConfig = {
           Type = "oneshot";
 
-          MemoryDenyWriteExecute = true;
           PrivateDevices = true;
           PrivateNetworks = true;
           ProtectControlGroups = true;

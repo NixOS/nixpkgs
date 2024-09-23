@@ -18,10 +18,6 @@ let
 in {
   name = "lxd-virtual-machine";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [adamcstephens];
-  };
-
   nodes.machine = {lib, ...}: {
     virtualisation = {
       diskSize = 4096;

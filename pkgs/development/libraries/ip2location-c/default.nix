@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library to look up locations of host names and IP addresses";
+    mainProgram = "ip2location";
     longDescription = ''
       A C library to find the country, region, city,coordinates,
       zip code, time zone, ISP, domain name, connection type, area code,
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.ip2location.com/developers/c";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

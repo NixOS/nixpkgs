@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,12 +25,11 @@ buildPythonPackage rec {
   # Skipping tests due to most relying on DISPLAY being set
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mss"
-  ];
+  pythonImportsCheck = [ "mss" ];
 
   meta = with lib; {
     description = "Cross-platform multiple screenshots module";
+    mainProgram = "mss";
     homepage = "https://github.com/BoboTiG/python-mss";
     changelog = "https://github.com/BoboTiG/python-mss/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

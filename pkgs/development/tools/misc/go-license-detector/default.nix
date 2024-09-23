@@ -19,7 +19,7 @@ buildGoModule rec {
     description = "Reliable project licenses detector";
     homepage = "https://github.com/go-enry/go-license-detector";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "license-detector";
   };
 }

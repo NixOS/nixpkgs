@@ -1,54 +1,51 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, appdirs
-, ecdsa
-, ms-cv
-, pydantic
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  appdirs,
+  ecdsa,
+  httpx,
+  ms-cv,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "xbox-webapi";
-  version = "2.0.11";
+  version = "2.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "OpenXbox";
     repo = "xbox-webapi-python";
     rev = "v${version}";
-    sha256 = "0li0bq914xizx9fj49s1iwfrv4bpzvl74bwsi5a34r9yizw02cvz";
+    hash = "sha256-9A3gdSlRjBCx5fBW+jkaSWsFuGieXQKvbEbZzGzLf94=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
-    aiohttp
     appdirs
     ecdsa
+    httpx
     ms-cv
     pydantic
   ];
 
   nativeCheckInputs = [
-    aresponses
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
+    respx
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/OpenXbox/xbox-webapi-python/blob/${src.rev}/CHANGELOG.md";
     description = "Library to authenticate with Windows Live/Xbox Live and use their API";
     homepage = "https://github.com/OpenXbox/xbox-webapi-python";
     license = licenses.mit;

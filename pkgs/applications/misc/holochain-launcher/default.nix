@@ -2,30 +2,29 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, pkg-config
 , dpkg
 , openssl
 , webkitgtk
 , libappindicator
-, wrapGAppsHook
+, wrapGAppsHook3
 , shared-mime-info
 , glib-networking
 }:
 
 stdenv.mkDerivation rec {
-  name = "holochain-launcher";
-  version = "0.11.0";
+  pname = "holochain-launcher";
+  version = "0.11.5";
   prerelease = "beta-2";
 
   src = fetchurl {
     url = "https://github.com/holochain/launcher/releases/download/v${version}/holochain-launcher-${prerelease}_${version}_amd64.deb";
-    sha256 = "sha256-yxovSsPyIzFONa1ACeLkZqDCElDI3uTm81YOYW0/FXE=";
+    sha256 = "sha256-MRFQJRfvJ+dLmPDfPQX9wErIwEr07EAUqxic8kbKVdo=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook # required for FileChooser
+    wrapGAppsHook3 # required for FileChooser
   ];
 
   buildInputs = [
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform executable that launches a local Holochain conductor, and installs and opens apps";
+    description = "Cross-platform executable that launches a local Holochain conductor, and installs and opens apps";
     homepage = "https://github.com/holochain/launcher";
     maintainers = [ maintainers.steveej ];
     license = licenses.cal10;

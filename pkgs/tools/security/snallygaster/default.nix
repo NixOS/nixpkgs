@@ -31,8 +31,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to scan for secret files on HTTP servers";
+    mainProgram = "snallygaster";
     homepage = "https://github.com/hannob/snallygaster";
     license = licenses.cc0;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

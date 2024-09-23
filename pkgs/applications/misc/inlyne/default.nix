@@ -6,6 +6,8 @@
 , pkg-config
 , fontconfig
 , xorg
+, libxkbcommon
+, wayland
 , libGL
 , openssl
 , darwin
@@ -13,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.3.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
-    owner = "trimental";
+    owner = "Inlyne-Project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DSi6iS1ySdvGf6FxZpsDOAFpAKx/APcZjxA3Qy0gQBU=";
+    hash = "sha256-j4DEau7LZxIoVIIYwCUgqmkSgdRxWzF5/vOS0lvjgUk=";
   };
 
-  cargoHash = "sha256-UzegSJGAOBUDN8WluN7fLWS7NfHhm9YY0Zuq6DCIqHo=";
+  cargoHash = "sha256-fMovzaP+R0CUwJy1HKATH2tPrIPwzGtubF1WHUoQDRY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libXrandr
     xorg.libxcb
+    wayland
+    libxkbcommon
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
@@ -47,11 +51,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=watcher::tests::the_gauntlet"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd inlyne \
-      --bash <($out/bin/inlyne --gen-completions bash) \
-      --fish <($out/bin/inlyne --gen-completions fish) \
-      --zsh <($out/bin/inlyne --gen-completions zsh)
+      --bash completions/inlyne.bash \
+      --fish completions/inlyne.fish \
+      --zsh completions/_inlyne
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
@@ -60,10 +64,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A GPU powered browserless markdown viewer";
-    homepage = "https://github.com/trimental/inlyne";
-    changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
+    description = "GPU powered browserless markdown viewer";
+    homepage = "https://github.com/Inlyne-Project/inlyne";
+    changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "inlyne";
   };
 }

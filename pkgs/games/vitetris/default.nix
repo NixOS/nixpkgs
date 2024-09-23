@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  makeFlags = [ "INSTALL=install" ];
+  makeFlags = [ "INSTALL=install" "CPPFLAGS=-Wno-implicit-int" ];
 
   meta = {
     description = "Terminal-based Tetris clone by Victor Nilsson";
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ siers ];
     mainProgram = "tetris";
+    platforms = lib.platforms.unix;
 
     longDescription = ''
       vitetris is a terminal-based Tetris clone by Victor Nilsson. Gameplay is much

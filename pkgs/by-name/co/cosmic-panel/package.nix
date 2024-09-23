@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage {
     owner = "pop-os";
     repo = "cosmic-panel";
     rev = "f07cccbd2dc15ede5aeb7646c61c6f62cb32db0c";
-    sha256 = "sha256-uUq+xElZMcG5SWzha9/8COaenycII5aiXmm7sXGgjXE=";
+    hash = "sha256-uUq+xElZMcG5SWzha9/8COaenycII5aiXmm7sXGgjXE=";
   };
 
   cargoLock = {
@@ -55,8 +55,9 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-panel";
     description = "Panel for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-panel";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyanbinary ];
+    maintainers = with maintainers; [ qyliss nyabinary ];
     platforms = platforms.linux;
   };
 }

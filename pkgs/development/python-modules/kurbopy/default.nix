@@ -1,25 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, pytestCheckHook
-, python
-, rustPlatform
-, unzip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  pytestCheckHook,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "kurbopy";
-  version = "0.10.40";
+  version = "0.11.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dhpcDi20Na6SDbRxrC8N3SWdN1J/CWJgCUI3scJX/6s=";
+    hash = "sha256-0TIVx0YH5L8l6at1fcWkj2UZYK0aF1fahTu9/+7MWMI=";
   };
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
@@ -28,13 +26,11 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-V3LeT0dqkfft1ftc+azwvuSzzdUJ7/wAp31fN7te9RQ=";
+    hash = "sha256-W0BebCXC1wqwtQP+zHjISxSJjXHD9U6p9eNS12Nfb2Y=";
   };
 
   doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     # pytestCheckHook puts . at the front of Python's sys.path, due to:
     # https://github.com/NixOS/nixpkgs/issues/255262

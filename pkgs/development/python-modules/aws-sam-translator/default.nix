@@ -1,22 +1,23 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, parameterized
-, pydantic
-, pytest-env
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, typing-extensions
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  parameterized,
+  pydantic,
+  pytest-env,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.81.0";
+  version = "1.89.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,12 +26,12 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ik9ZO7l2dbjJg+PlSRUoMkrjSBeghKN5DZjx7CjDBPg=";
+    hash = "sha256-wqM3n99lD0s/E9nd55q19Us31XgFtU/bBYJR1HTnnvk=";
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
+    # don't try to use --cov or fail on new warnings
+    rm pytest.ini
   '';
 
   propagatedBuildInputs = [
@@ -49,13 +50,14 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "samtranslator"
-  ];
-
   preCheck = ''
-    sed -i '2ienv =\n\tAWS_DEFAULT_REGION=us-east-1' pytest.ini
+    export AWS_DEFAULT_REGION=us-east-1
   '';
+
+  pytestFlagsArray = [
+    "tests"
+    ''-m "not slow"''
+  ];
 
   disabledTests = [
     # urllib3 2.0 compat
@@ -77,11 +79,15 @@ buildPythonPackage rec {
     "test_unexpected_sar_error_stops_processing"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "samtranslator" ];
+
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
     homepage = "https://github.com/aws/serverless-application-model";
     changelog = "https://github.com/aws/serverless-application-model/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

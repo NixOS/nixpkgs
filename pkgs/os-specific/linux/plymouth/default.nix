@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , writeText
+, substituteAll
 , meson
 , pkg-config
 , ninja
@@ -16,11 +17,12 @@
 , pango
 , systemd
 , xorg
+, fontconfig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
-  version = "unstable-2023-06-17";
+  version = "24.004.60";
 
   outputs = [ "out" "dev" ];
 
@@ -28,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "plymouth";
     repo = "plymouth";
-    rev = "b1d5aa9d2a6033bba52cf63643e5878f8a9b68a0";
-    hash = "sha256-8DXcwt8CZTni5Ma+I63LzNejlIB0Cr1ATA7Nl3z9z6I=";
+    rev = finalAttrs.version;
+    hash = "sha256-9JmZCm8bjteJTQrMSJeL4x2CAI6RpKowFUDSCcMS4MM=";
   };
 
   patches = [
@@ -37,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-create-broken-symlink.patch
     # add support for loading plugins from /run to assist NixOS module
     ./add-runtime-plugin-path.patch
+    # fix FHS hardcoded paths
+    (substituteAll {
+      src = ./fix-paths.patch;
+      fcmatch = "${fontconfig}/bin/fc-match";
+    })
   ];
 
   strictDeps = true;
@@ -114,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
     description = "Boot splash and boot logger";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ] ++ teams.gnome.members;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 })

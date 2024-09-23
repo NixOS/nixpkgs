@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.ip2location.com/free/applications";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     platforms = platforms.linux;
+    mainProgram = "ip2location";
   };
 }

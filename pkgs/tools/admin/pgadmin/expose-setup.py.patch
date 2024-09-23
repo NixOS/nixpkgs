@@ -1,64 +1,16 @@
- pkg/pip/setup_pip.py |  5 ++++-
- web/setup.py         | 14 ++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
-
 diff --git a/pkg/pip/setup_pip.py b/pkg/pip/setup_pip.py
-index 5592d1b04..131eaa1ed 100644
+index c65795b10..e56b6a6f3 100644
 --- a/pkg/pip/setup_pip.py
 +++ b/pkg/pip/setup_pip.py
-@@ -95,7 +95,10 @@ setup(
-     },
- 
+@@ -101,7 +101,7 @@ setup(
+
      entry_points={
--        'console_scripts': ['pgadmin4=pgadmin4.pgAdmin4:main'],
-+        'console_scripts': [
-+            'pgadmin4=pgadmin4.pgAdmin4:main',
-+            'pgadmin4-setup=pgadmin4.setup:main'
-+        ],
+         'console_scripts': ['pgadmin4=pgadmin4.pgAdmin4:main',
+-                            'pgadmin4-cli=pgadmin4.setup:main'],
++                            'pgadmin4-cli=pgadmin4.setup:app'],
      },
- 
+
  )
-diff --git a/web/setup.py b/web/setup.py
-index 2204ffb..d5fda9f 100644
---- a/web/setup.py
-+++ b/web/setup.py
-@@ -14,7 +14,6 @@ import argparse
- import os
- import sys
- import builtins
--import config
-
- # Grab the SERVER_MODE if it's been set by the runtime
- if 'SERVER_MODE' in globals():
-@@ -91,6 +90,9 @@ def load_servers(args):
- def setup_db(app):
-     """Setup the configuration database."""
-
-+    # here we need an additional import, since the call to setup_db changed
-+    # https://redmine.postgresql.org/projects/pgadmin4/repository/2/revisions/3a69d50458f57d19948b867aec55c55d635a36e5/diff/web/setup.py
-+    import config
-     create_app_data_directory(config)
-
-     print("pgAdmin 4 - Application Initialisation")
-@@ -139,8 +141,9 @@ def clear_servers():
-         clear_database_servers(load_user, True)
-
-
--if __name__ == '__main__':
-+def main():
-     # Configuration settings
-+    import config
-     parser = argparse.ArgumentParser(description='Setup the pgAdmin config DB')
-
-     exp_group = parser.add_argument_group('Dump server config')
-@@ -191,3 +194,6 @@ if __name__ == '__main__':
-     else:
-         app = create_app()
-         setup_db(app)
-+
-+if __name__ == '__main__':
-+    main()
-
 diff --git a/web/pgadmin/model/__init__.py b/web/pgadmin/model/__init__.py
 index 4c36dd1..a492365 100644
 --- a/web/pgadmin/model/__init__.py

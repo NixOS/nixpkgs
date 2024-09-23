@@ -1,72 +1,67 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, cargo
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python311
-, rustPlatform
-, symlinkJoin
-, rustc
-, wrapGAppsHook4
-, appstream-glib
-, blueprint-compiler
-, cairo
-, cmake
-, desktop-file-utils
-, dmidecode
-, gdk-pixbuf
-, gettext
-, glib
-, graphene
-, gtk4
-, libGL
-, libadwaita
-, libdrm
-, mesa
-, pango
-, sqlite
-, udev
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  cargo,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python311,
+  rustPlatform,
+  symlinkJoin,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  blueprint-compiler,
+  cairo,
+  cmake,
+  dbus,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  graphene,
+  gtk4,
+  libGL,
+  libadwaita,
+  libdrm,
+  mesa,
+  pango,
+  sqlite,
+  udev,
+  wayland,
+  dmidecode,
+  vulkan-loader,
 }:
 
 let
   nvtop = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    rev = "be47f8c560487efc6e6a419d59c69bfbdb819324";
-    hash = "sha256-MdaZYLxCuVX4LvbwBYNfHHoJWqZAy4J8NBK7Guh2whc=";
+    rev = "45a1796375cd617d16167869bb88e5e69c809468";
+    hash = "sha256-1P9pWXhgTHogO0DztxOsFKNwvTRRfDL3nzGmMANMC9w=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.3.3";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-xLyCLKUk21MvswtPUKm41Hr34vTzCMVQNTaAkuhSGLc=";
+    hash = "sha256-84D+CttolY5hleCJbDiN3mlk0+nlwwJUJhGoKGVT/lw=";
   };
 
   cargoDeps = symlinkJoin {
     name = "cargo-vendor-dir";
     paths = [
-      (rustPlatform.importCargoLock {
-        lockFile = ./Cargo.lock;
-        outputHashes = {
-          "pathfinder_canvas-0.5.0" = "sha256-k2Sj69hWA0UzRfv91aG1TAygVIuOX3gmipcDbuZxxc8=";
-        };
-      })
-      (rustPlatform.importCargoLock {
-        lockFile = ./gatherer-Cargo.lock;
-      })
+      (rustPlatform.importCargoLock { lockFile = ./Cargo.lock; })
+      (rustPlatform.importCargoLock { lockFile = ./gatherer-Cargo.lock; })
     ];
   };
-
 
   nativeBuildInputs = [
     blueprint-compiler
@@ -86,8 +81,8 @@ stdenv.mkDerivation rec {
     blueprint-compiler
     cairo
     cmake
+    dbus
     desktop-file-utils
-    dmidecode
     gdk-pixbuf
     gettext
     glib
@@ -104,14 +99,23 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/main.rs \
+    substituteInPlace src/sys_info_v2/gatherer.rs \
+      --replace '"missioncenter-gatherer"' '"${placeholder "out"}/bin/missioncenter-gatherer"'
+
+    substituteInPlace src/sys_info_v2/mem_info.rs \
+      --replace '"dmidecode"' '"${dmidecode}/bin/dmidecode"'
+
+    substituteInPlace $cargoDepsCopy/gl_loader-*/src/glad.c \
       --replace "libGL.so.1" "${libGL}/lib/libGL.so.1"
+
+    substituteInPlace $cargoDepsCopy/ash-*/src/entry.rs \
+      --replace '"libvulkan.so.1"' '"${vulkan-loader}/lib/libvulkan.so.1"'
 
     SRC_GATHERER=$NIX_BUILD_TOP/source/src/sys_info_v2/gatherer
     SRC_GATHERER_NVTOP=$SRC_GATHERER/3rdparty/nvtop
 
     substituteInPlace $SRC_GATHERER_NVTOP/nvtop.json \
-      --replace "nvtop-be47f8c560487efc6e6a419d59c69bfbdb819324" "nvtop-src"
+      --replace "nvtop-45a1796375cd617d16167869bb88e5e69c809468" "nvtop-src"
 
     GATHERER_BUILD_DEST=$NIX_BUILD_TOP/source/build/src/sys_info_v2/gatherer/src/debug/build/native
     mkdir -p $GATHERER_BUILD_DEST
@@ -128,16 +132,13 @@ stdenv.mkDerivation rec {
     patchShebangs data/hwdb/generate_hwdb.py
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/missioncenter --prefix PATH : $out/bin:${dmidecode}/bin
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GaetanLepage ];
-    platforms = platforms.linux;
+    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    platforms = lib.platforms.linux;
     mainProgram = "missioncenter";
   };
 }

@@ -17,8 +17,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Minimal IRC server bridge to Mattermost";
+    mainProgram = "matterircd";
     homepage = "https://github.com/42wim/matterircd";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

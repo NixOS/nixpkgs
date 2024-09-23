@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsv";
@@ -17,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Public domain cross-platform semantic versioning in C99";
     homepage = "https://github.com/uael/sv";
     license = licenses.unlicense;
-    maintainers = [];
+    maintainers = [ lib.maintainers.sigmanificient ];
     platforms = platforms.unix;
   };
 }

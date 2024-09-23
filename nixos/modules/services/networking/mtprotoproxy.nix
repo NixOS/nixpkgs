@@ -37,12 +37,12 @@ in
 
     services.mtprotoproxy = {
 
-      enable = mkEnableOption (lib.mdDoc "mtprotoproxy");
+      enable = mkEnableOption "mtprotoproxy";
 
       port = mkOption {
         type = types.port;
         default = 3256;
-        description = lib.mdDoc ''
+        description = ''
           TCP port to accept mtproto connections on.
         '';
       };
@@ -53,7 +53,7 @@ in
           tg = "00000000000000000000000000000000";
           tg2 = "0123456789abcdef0123456789abcdef";
         };
-        description = lib.mdDoc ''
+        description = ''
           Allowed users and their secrets. A secret is a 32 characters long hex string.
         '';
       };
@@ -61,7 +61,7 @@ in
       secureOnly = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Don't allow users to connect in non-secure mode (without random padding).
         '';
       };
@@ -71,7 +71,7 @@ in
         default = null;
         # Taken from mtproxyproto's repo.
         example = "3c09c680b76ee91a4c25ad51f742267d";
-        description = lib.mdDoc ''
+        description = ''
           Tag for advertising that can be obtained from @MTProxybot.
         '';
       };
@@ -82,7 +82,7 @@ in
         example = {
           STATS_PRINT_PERIOD = 600;
         };
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options for mtprotoproxy.
         '';
       };

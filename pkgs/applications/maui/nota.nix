@@ -39,6 +39,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Multi-platform text editor";
+    mainProgram = "nota";
     homepage = "https://invent.kde.org/maui/nota";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, poetry-core
-, grpcio
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  grpcio,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "grpc-interceptor";
-  version = "0.15.3";
-  format = "pyproject";
+  version = "0.15.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,21 +21,10 @@ buildPythonPackage rec {
     owner = "d5h-foss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tTi1X1r7584ZXa12eLp2G/Am8G6Dnd18eE5wF/Lp/EY=";
+    hash = "sha256-GJkVCslPXShJNDrqhFtCsAK5+VaG8qFJo0RQTsiMIFY=";
   };
 
-  patches = [
-    # https://github.com/d5h-foss/grpc-interceptor/pull/44
-    (fetchpatch {
-      name = "replace-poetry-with-poetry-core.patch";
-      url = "https://github.com/d5h-foss/grpc-interceptor/commit/916cb394acd8dd7abb4f5edcb4e88aee961a32d0.patch";
-      hash = "sha256-W2SF2zyjusTxgvCxBDLpisD03bofzDug1eyd4FLJmKs=";
-    })
-  ];
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     grpcio
@@ -49,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "grpc_interceptor"
-  ];
+  pythonImportsCheck = [ "grpc_interceptor" ];
 
   meta = with lib; {
     description = "Simplified gRPC interceptors";

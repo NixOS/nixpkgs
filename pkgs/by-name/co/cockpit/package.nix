@@ -30,7 +30,6 @@
 , pkg-config
 , polkit
 , python3Packages
-, ripgrep
 , runtimeShell
 , systemd
 , udev
@@ -45,13 +44,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "305";
+  version = "318";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     rev = "refs/tags/${version}";
-    hash = "sha256-fCVnggso/wAvci9sLRVvwEsvZ+CeEfLBDnPPcAy/wGo=";
+    hash = "sha256-1SpSzC5wOsv4Ha0ShtuyPsKLm0fVuPt8KFejJHFU8MY=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     pythonWithGobject.python
     python3Packages.setuptools
     systemd
-    ripgrep
     xmlto
   ];
 
@@ -197,7 +195,6 @@ stdenv.mkDerivation rec {
     glib-networking
     openssh
     python3Packages.pytest
-    python3Packages.vulture
   ];
   checkPhase = ''
     export GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules
@@ -220,6 +217,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Web-based graphical interface for servers";
+    mainProgram = "cockpit-bridge";
     homepage = "https://cockpit-project.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ lucasew ];

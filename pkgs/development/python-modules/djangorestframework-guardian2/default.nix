@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django-guardian
-, djangorestframework
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django-guardian,
+  djangorestframework,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-guardian2";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "johnthagen";

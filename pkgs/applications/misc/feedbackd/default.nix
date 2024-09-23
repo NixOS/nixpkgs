@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch2
 , docbook-xsl-nons
 , docutils
 , gi-docgen
@@ -12,12 +11,14 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gsound
 , json-glib
 , libgudev
 , dbus
+, gmobile
+, umockdev
 }:
 
 let
@@ -25,13 +26,13 @@ let
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd-device-themes";
-    rev = "v0.1.0";
-    sha256 = "sha256-YK9fJ3awmhf1FAhdz95T/POivSO93jsNApm+u4OOZ80=";
+    rev = "v0.4.0";
+    hash = "sha256-kY/+DyRxKEUzq7ctl6Va14AKUCpWU7NRQhJOwhtkJp8=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.2.0";
+  version = "0.4.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -39,9 +40,8 @@ stdenv.mkDerivation rec {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd";
-    rev = "v${version}";
-    hash = "sha256-l5rfMx3ElW25A5WVqzfKBp57ebaNC9msqV7mvnwv10s=";
-    fetchSubmodules = true;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ta14DYqkid8Cp8fx9ZMGOOJroCBszN9/VrTN6mrpTZg=";
   };
 
   depsBuildBuild = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -67,22 +67,26 @@ stdenv.mkDerivation rec {
     gsound
     json-glib
     libgudev
+    gmobile
   ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dman=true"
+    # Make compiling work when doCheck = false
+    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   nativeCheckInputs = [
     dbus
+    umockdev
   ];
 
   doCheck = true;
 
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
-    sed "s|/usr/libexec/|$out/libexec/|" < $src/debian/feedbackd.udev > $out/lib/udev/rules.d/90-feedbackd.rules
+    sed "s|/usr/libexec/|$out/libexec/|" < $src/data/90-feedbackd.rules > $out/lib/udev/rules.d/90-feedbackd.rules
     cp ${themes}/data/* $out/share/feedbackd/themes/
   '';
 
@@ -98,10 +102,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A daemon to provide haptic (and later more) feedback on events";
+    description = "Daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 tomfitzhenry ];
+    maintainers = with maintainers; [ pacman99 ];
     platforms = platforms.linux;
   };
-}
+})

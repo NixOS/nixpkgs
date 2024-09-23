@@ -1,13 +1,15 @@
 { lib
-, stdenv
+, stdenvNoLibc
 , buildPackages
 , fetchurl
+, gitUpdater
 , linuxHeaders
 , libiconvReal
 , extraConfig ? ""
 }:
 
 let
+  stdenv = stdenvNoLibc;
   isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
   configParser = ''
     function parseconfig {
@@ -58,11 +60,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.44";
+  version = "1.0.50";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-ffnZh5VYJzgvHCQA2lE0Vr7Ltvhovf03c3Jl8cvuyZQ=";
+    hash = "sha256-rthnJR9II6dOpeOjmT06fBIygKvhXjjcIGdww5aPIc8=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -112,6 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Derivations may check for the existance of this attribute, to know what to
     # link to.
     libiconv = libiconvReal;
+
+    updateScript = gitUpdater {
+      url = "https://git.uclibc-ng.org/git/uclibc-ng.git";
+      rev-prefix = "v";
+    };
   };
 
   meta = {

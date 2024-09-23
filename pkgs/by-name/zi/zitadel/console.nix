@@ -5,16 +5,23 @@
 
 { mkYarnPackage
 , fetchYarnDeps
-, lib
+, grpc-gateway
+, protoc-gen-grpc-web
+, protoc-gen-js
 }:
 
 let
   protobufGenerated = generateProtobufCode {
     pname = "zitadel-console";
+    nativeBuildInputs = [
+      grpc-gateway
+      protoc-gen-grpc-web
+      protoc-gen-js
+    ];
     workDir = "console";
     bufArgs = "../proto --include-imports --include-wkt";
     outputPath = "src/app/proto";
-    hash = "sha256-NmlKjKWxmqatyR6OitlQ7bfl6U6PS6KWqTALwX42HS4=";
+    hash = "sha256-n6BJ1gSSm66yOGdHcSea/nQbjiHZX2YX2zbFT4o75/4=";
   };
 in
 mkYarnPackage rec {
@@ -26,18 +33,19 @@ mkYarnPackage rec {
   packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-rSKoIznYVDNgrBmut7YSxNhgPJnbIeO+/s0HnrYWPUc=";
+    hash = "sha256-MWATjfhIbo3cqpzOdXP52f/0Td60n99OTU1Qk6oWmXU=";
   };
 
   postPatch = ''
     substituteInPlace src/styles.scss \
-      --replace "/node_modules/flag-icons" "flag-icons"
+      --replace-fail "/node_modules/flag-icons" "flag-icons"
 
     substituteInPlace angular.json \
-      --replace "./node_modules/tinycolor2" "../../node_modules/tinycolor2"
+      --replace-fail "./node_modules/tinycolor2" "../../node_modules/tinycolor2"
   '';
 
   buildPhase = ''
+    ln -s "${zitadelRepo}/docs" deps/docs
     mkdir deps/console/src/app/proto
     cp -r ${protobufGenerated}/* deps/console/src/app/proto/
     yarn --offline build

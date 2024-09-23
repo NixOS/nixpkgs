@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, packr, ... }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kubernetes-polaris";
-  version = "8.5.2";
+  version = "9.4.0";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
     rev = version;
-    sha256 = "sha256-k4t/qCRLUMoFmALt++1sA127D4tacYoDb/fWfoudOc8=";
+    sha256 = "sha256-Vw+4/GVuTM4KioZnFk2RH6rmXD6zQO29NepAr2TwHjI=";
   };
 
-  vendorHash = "sha256-ZWetW+Xar4BXXlR0iG+O/NRqYk41x+PPVCGis2W2Nkk=";
+  vendorHash = "sha256-X0GPKR6l1v5312hOmelrcqp4KT3LwsGkvKoqUfEM0uU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,10 +21,6 @@ buildGoModule rec {
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];
-
-  preBuild = ''
-    ${packr}/bin/packr2 -v --ignore-imports
-  '';
 
   postInstall = ''
     installShellCompletion --cmd polaris \
@@ -45,6 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Validate and remediate Kubernetes resources to ensure configuration best practices are followed";
+    mainProgram = "polaris";
     homepage = "https://www.fairwinds.com/polaris";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ longer ];

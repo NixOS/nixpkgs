@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, testers }:
+{ lib, stdenv, fetchFromGitHub, cmake, testers, python3 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.1.3";
+  version = "9.2.1";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     rev = "release/v${finalAttrs.version}";
-    hash = "sha256-QacjukWkRCuQA4qzUq45521YOBLPuOSKNR1pVxgxe9o=";
+    hash = "sha256-cnEp7Ds32bqu3jeUU/rqJOr/VW3KNmJU4pmNNaTpXRs=";
   };
 
   outputs = [ "out" "dev" ];
@@ -21,8 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_STATIC_LIBS=ON"
   ];
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
+  passthru.tests = {
+    inherit (python3.pkgs) aiohttp;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libllhttp" ];
+    };
   };
 
   meta = with lib; {
@@ -30,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://llhttp.org/";
     changelog = "https://github.com/nodejs/llhttp/releases/tag/release/v${finalAttrs.version}";
     license = licenses.mit;
-    pkgConfigModules = [ "libllhttp" ];
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

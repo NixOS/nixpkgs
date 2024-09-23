@@ -60,6 +60,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Cross platform audio library";
+    mainProgram = "cubeb-test";
     homepage = "https://github.com/mozilla/cubeb";
     license = licenses.isc;
     platforms = platforms.linux ++ platforms.darwin;

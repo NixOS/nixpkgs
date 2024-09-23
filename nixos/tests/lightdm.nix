@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.lightdm.enable = true;
-    services.xserver.displayManager.defaultSession = "none+icewm";
+    services.displayManager.defaultSession = "none+icewm";
     services.xserver.windowManager.icewm.enable = true;
   };
 

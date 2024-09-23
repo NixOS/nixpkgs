@@ -3,13 +3,14 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , fetchurl
-, fixup_yarn_lock
+, fixup-yarn-lock
 , git
 , lib
 , makeDesktopItem
 , nodejs_18
 , stdenvNoCC
 , util-linux
+, yarn
 , zip
 }:
 
@@ -34,7 +35,6 @@ let
     hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
   };
 
-  inherit (nodejs.pkgs) yarn;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
     hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
@@ -51,17 +51,17 @@ let
     pname = "${pname}-unwrapped";
     inherit version src;
 
-    nativeBuildInputs = [ fixup_yarn_lock git nodejs util-linux yarn zip ];
+    nativeBuildInputs = [ fixup-yarn-lock git nodejs util-linux yarn zip ];
 
     configurePhase = ''
       export HOME=$TMPDIR
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
       yarn config --offline set yarn-offline-mirror ${offlineCache}
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules
 
       mkdir -p ~/.cache/electron/${electronDummyHash}
-      cp -ra '${electron}/libexec/electron' "$TMPDIR/electron"
+      cp -ra '${electron.dist}' "$TMPDIR/electron"
       chmod -R u+w "$TMPDIR/electron"
       (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
 
@@ -167,7 +167,7 @@ buildFHSEnv {
     ];
 
   meta = with lib; {
-    description = "The easiest way to get started with Electron";
+    description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
     license = licenses.mit;
     maintainers = with maintainers; [ andersk ];

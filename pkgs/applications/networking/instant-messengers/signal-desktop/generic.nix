@@ -1,13 +1,14 @@
-{ pname
-, dir
-, version
-, hash
-, stdenv
+{ stdenv
 , lib
+, callPackage
 , fetchurl
 , autoPatchelfHook
+, noto-fonts-color-emoji
 , dpkg
-, wrapGAppsHook
+, asar
+, rsync
+, python3
+, wrapGAppsHook3
 , makeWrapper
 , nixosTests
 , gtk3
@@ -51,8 +52,42 @@
 , wayland
 }:
 
+{ pname
+, dir
+, version
+, hash
+, url
+}:
+
+let
+  inherit (stdenv) targetPlatform;
+  ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
+
+  # Noto Color Emoji PNG files for emoji replacement; see below.
+  noto-fonts-color-emoji-png = noto-fonts-color-emoji.overrideAttrs (prevAttrs: {
+    pname = "noto-fonts-color-emoji-png";
+
+    # The build produces 136×128 PNGs by default for arcane font
+    # reasons, but we want square PNGs.
+    buildFlags = prevAttrs.buildFlags or [ ] ++ [ "BODY_DIMENSIONS=128x128" ];
+
+    makeTargets = [ "compressed" ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share
+      mv build/compressed_pngs $out/share/noto-fonts-color-emoji-png
+      python3 add_aliases.py --srcdir=$out/share/noto-fonts-color-emoji-png
+
+      runHook postInstall
+    '';
+  });
+in
 stdenv.mkDerivation rec {
-  inherit pname version; # Please backport all updates to the stable channel.
+  inherit pname version;
+
+  # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -61,14 +96,38 @@ stdenv.mkDerivation rec {
   # few additional steps and might not be the best idea.)
 
   src = fetchurl {
-    url = "https://updates.signal.org/desktop/apt/pool/s/${pname}/${pname}_${version}_amd64.deb";
-    inherit hash;
+    inherit url hash;
+    recursiveHash = true;
+    downloadToTemp = true;
+    nativeBuildInputs = [ dpkg asar ];
+    # Signal ships the Apple emoji set without a licence via an npm
+    # package and upstream does not seem terribly interested in fixing
+    # this; see:
+    #
+    # * <https://github.com/signalapp/Signal-Android/issues/5862>
+    # * <https://whispersystems.discoursehosting.net/t/signal-is-likely-violating-apple-license-terms-by-using-apple-emoji-in-the-sticker-creator-and-android-and-desktop-apps/52883>
+    #
+    # We work around this by replacing it with the Noto Color Emoji
+    # set, which is available under a FOSS licence and more likely to
+    # be used on a NixOS machine anyway. The Apple emoji are removed
+    # during `fetchurl` to ensure that the build doesn’t cache the
+    # unlicensed emoji files, but the rest of the work is done in the
+    # main derivation.
+    postFetch = ''
+      dpkg-deb -x $downloadedFile $out
+      asar extract "$out/opt/${dir}/resources/app.asar" $out/asar-contents
+      rm -r \
+        "$out/opt/${dir}/resources/app.asar"{,.unpacked} \
+        $out/asar-contents/node_modules/emoji-datasource-apple
+    '';
   };
 
   nativeBuildInputs = [
+    rsync
+    asar
+    python3
     autoPatchelfHook
-    dpkg
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -113,18 +172,18 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libdbusmenu
+    pipewire
+    stdenv.cc.cc
     xdg-utils
     wayland
   ];
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   dontBuild = true;
   dontConfigure = true;
-  dontPatchELF = true;
-  # We need to run autoPatchelf manually with the "no-recurse" option, see
-  # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
-  dontAutoPatchelf = true;
+
+  unpackPhase = ''
+    rsync -a --chmod=+w $src/ .
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -134,11 +193,6 @@ stdenv.mkDerivation rec {
     mv usr/share $out/share
     mv "opt/${dir}" "$out/lib/${dir}"
 
-    # Note: The following path contains bundled libraries:
-    # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/sharp/vendor/lib/
-    # We run autoPatchelf with the "no-recurse" option to avoid picking those
-    # up, but resources/app.asar still requires them.
-
     # Symlink to bin
     mkdir -p $out/bin
     ln -s "$out/lib/${dir}/${pname}" $out/bin/${pname}
@@ -146,28 +200,54 @@ stdenv.mkDerivation rec {
     # Create required symlinks:
     ln -s libGLESv2.so "$out/lib/${dir}/libGLESv2.so.2"
 
+    # Copy the Noto Color Emoji PNGs into the ASAR contents. See `src`
+    # for the motivation, and the script for the technical details.
+    emojiPrefix=$(
+      python3 ${./copy-noto-emoji.py} \
+      ${noto-fonts-color-emoji-png}/share/noto-fonts-color-emoji-png \
+      asar-contents
+    )
+
+    # Replace the URL used for fetching large versions of emoji with
+    # the local path to our copied PNGs.
+    substituteInPlace asar-contents/preload.bundle.js \
+      --replace-fail \
+        'emoji://jumbo?emoji=' \
+        "file://$out/lib/${lib.escapeURL dir}/resources/app.asar/$emojiPrefix/"
+
+    # `asar(1)` copies files from the corresponding `.unpacked`
+    # directory when extracting, and will put them back in the modified
+    # archive if you don’t specify them again when repacking. Signal
+    # leaves their native `.node` libraries unpacked, so we match that.
+    asar pack \
+      --unpack '*.node' \
+      asar-contents \
+      "$out/lib/${dir}/resources/app.asar"
+
     runHook postInstall
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
-      # Currently crashes see https://github.com/NixOS/nixpkgs/issues/222043
-      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
-    # Fix the desktop link and fix showing application icon in tray
+    # Fix the desktop link
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
-      ${if pname == "signal-desktop" then "--replace \"bin/signal-desktop\" \"bin/signal-desktop --use-tray-icon\"" else ""}
+      --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
 
-    autoPatchelf --no-recurse -- "$out/lib/${dir}/"
-    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-x64.node"
+    # Note: The following path contains bundled libraries:
+    # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-${ARCH}.node"
   '';
 
-  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
-  passthru.tests.application-launch = nixosTests.signal-desktop;
+  passthru = {
+    # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+    tests.application-launch = nixosTests.signal-desktop;
+    updateScript.command = [ ./update.sh ];
+  };
 
   meta = {
     description = "Private, simple, and secure messenger";
@@ -177,10 +257,22 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://signal.org/";
     changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mic92 equirosa urandom ];
+    license = [
+      lib.licenses.agpl3Only
+
+      # Various npm packages
+      lib.licenses.free
+    ];
+    maintainers = with lib.maintainers; [
+      mic92
+      equirosa
+      urandom
+      bkchr
+      teutat3s
+      emily
+    ];
     mainProgram = pname;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

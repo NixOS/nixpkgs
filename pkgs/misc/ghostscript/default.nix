@@ -43,11 +43,11 @@ let
     srcs = [
       (fetchurl {
         url = "mirror://sourceforge/gs-fonts/ghostscript-fonts-std-8.11.tar.gz";
-        sha256 = "00f4l10xd826kak51wsmaz69szzm2wp8a41jasr4jblz25bg7dhf";
+        hash = "sha256-DrbzVhGfLkmyVjIQhS4X9X+dzFdV81Cmmkag1kGgxAE=";
       })
       (fetchurl {
         url = "mirror://gnu/ghostscript/gnu-gs-fonts-other-6.0.tar.gz";
-        sha256 = "1cxaah3r52qq152bbkiyj2f7dx1rf38vsihlhjmrvzlr8v6cqil1";
+        hash = "sha256-gUbMzEaZ/p2rhBRGvdFwOfR2nJA+zrVECRiLkgdUqrM=";
       })
       # ... add other fonts here
     ];
@@ -61,11 +61,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.02.0";
+  version = "10.03.1";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha512-xJNEFRBj6RWt1VoKhCwqZF2DYqXLymY70HY49L02maCMreN6nv6QWtWkHgFDU+XhsSaLeSXkMSitMNWwMTlrcQ==";
+    hash = "sha256-FXIS7clrjMxAlHXc4uSYM/tEJ/FQxFUlje2WMsEGq+4=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     ./doc-no-ref.diff
   ];
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [ "out" "man" "doc" "fonts" ];
 
   enableParallelBuilding = true;
 
@@ -133,7 +133,9 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    ln -s "${fonts}" "$out/share/ghostscript/fonts"
+    mkdir -p $fonts/share/fonts
+    cp -rv ${fonts}/* "$fonts/share/fonts/"
+    ln -s "$fonts/share/fonts" "$out/share/ghostscript/fonts"
   '' + lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
@@ -188,9 +190,9 @@ stdenv.mkDerivation rec {
       operations in the PostScript language, and (iii) a wide variety
       of output drivers for various file formats and printers.
     '';
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [ lib.maintainers.tobim ];
     mainProgram = "gs";
   };
 }

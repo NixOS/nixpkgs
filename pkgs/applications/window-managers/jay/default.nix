@@ -7,20 +7,30 @@
 , mesa
 , pango
 , udev
+, shaderc
+, libglvnd
+, vulkan-loader
+, autoPatchelfHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jay";
-  version = "unstable-2022-11-20";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = pname;
-    rev = "09b4668a5363a6e93dfb8ba35b244835f4edb0f2";
-    sha256 = "sha256-0IIzXY7AFTGEe0TzJVKOtTPUZee0Wz40yKgEWLeIYJw=";
+    rev = "v${version}";
+    sha256 = "sha256-cuXFkG2YwS0w4xzr7jpjr0QmVA5UJfk5SpjIQKxN/LY=";
   };
 
-  cargoSha256 = "sha256-zSq6YBlm6gJXGlF9xZ8gWSTMewdNqrJzwP58a0x8QIU=";
+  cargoHash = "sha256-w3ARwQlehJq9uNSQmbUjiWik4a2W3Ax/6/BIsdDUfKM=";
+
+  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     libGL
@@ -29,12 +39,21 @@ rustPlatform.buildRustPackage rec {
     pango
     udev
     libinput
+    shaderc
   ];
 
-  RUSTC_BOOTSTRAP = 1;
+  runtimeDependencies = [
+    libglvnd
+    vulkan-loader
+  ];
+
+  postInstall = ''
+    install -D etc/jay.portal $out/usr/share/xdg-desktop-portal/portals/jay.portal
+    install -D etc/jay-portals.conf $out/usr/share/xdg-desktop-portal/jay-portals.conf
+  '';
 
   meta = with lib; {
-    description = "A Wayland compositor written in Rust";
+    description = "Wayland compositor written in Rust";
     homepage = "https://github.com/mahkoh/jay";
     license = licenses.gpl3;
     platforms   = platforms.linux;

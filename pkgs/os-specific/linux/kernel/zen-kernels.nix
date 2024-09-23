@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, variant, ... } @ args:
 
 let
   # comments with variant added for update script
-  # ./update-zen.py zen
-  zenVariant = {
-    version = "6.6.4"; #zen
-    suffix = "zen1"; #zen
-    sha256 = "1zks4fpbw788aaw9rysdpfhmqzr8l5y6afq92md1gizyyl1rjhq1"; #zen
-    isLqx = false;
-  };
-  # ./update-zen.py lqx
-  lqxVariant = {
-    version = "6.6.4"; #lqx
-    suffix = "lqx1"; #lqx
-    sha256 = "049pga9bc5pbnwki5vmnz9pdx0p5r7sssb66b4580h9x9skzi9m2"; #lqx
-    isLqx = true;
+  variants = {
+    # ./update-zen.py zen
+    zen = {
+      version = "6.10.9"; #zen
+      suffix = "zen1"; #zen
+      sha256 = "199362jd1waqri6arb8sdfqrzjkdki5vis2z03cpp2blnbqva10b"; #zen
+      isLqx = false;
+    };
+    # ./update-zen.py lqx
+    lqx = {
+      version = "6.10.9"; #lqx
+      suffix = "lqx1"; #lqx
+      sha256 = "0y7r55iy7ylddv7yrlwkz7ps82j447a6m3khq2w4sfh8f0xy86p7"; #lqx
+      isLqx = true;
+    };
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
     inherit version;
+    pname = "linux-${if isLqx then "lqx" else "zen"}";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
     isZen = true;
 
@@ -30,7 +33,7 @@ let
 
     # This is based on the following sources:
     # - zen: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/blob/main/config
-    # - lqx: https://github.com/damentz/liquorix-package/blob/6.4/master/linux-liquorix/debian/config/kernelarch-x86/config-arch-64
+    # - lqx: https://github.com/damentz/liquorix-package/blob/6.8/master/linux-liquorix/debian/config/kernelarch-x86/config-arch-64
     # - Liquorix features: https://liquorix.net/
     # The list below is not exhaustive, so the kernels probably doesn't match
     # the upstream, but should bring most of the improvements that will be
@@ -42,7 +45,6 @@ let
       # FQ-Codel Packet Scheduling
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_CODEL = yes;
-      DEFAULT_NET_SCH = freeform "fq_codel";
 
       # Preempt (low-latency)
       PREEMPT = lib.mkOverride 60 yes;
@@ -62,30 +64,44 @@ let
       RCU_FANOUT = freeform "64";
       RCU_FANOUT_LEAF = freeform "16";
       RCU_BOOST = yes;
-      RCU_BOOST_DELAY = freeform "500";
+      RCU_BOOST_DELAY = option (freeform "500");
       RCU_NOCB_CPU = yes;
       RCU_LAZY = yes;
+      RCU_DOUBLE_CHECK_CB_TIME = yes;
+
+      # BFQ I/O scheduler
+      IOSCHED_BFQ = lib.mkOverride 60 yes;
 
       # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
       FUTEX = yes;
       FUTEX_PI = yes;
 
+      # NT synchronization primitive emulation
+      NTSYNC = yes;
+
       # Preemptive Full Tickless Kernel at 1000Hz
       HZ = freeform "1000";
       HZ_1000 = yes;
+
+      # Alternative zpool for zswap
+      Z3FOLD = yes;
     } // lib.optionalAttrs (isLqx) {
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
-      DEFAULT_TCP_CONG = freeform "bbr";
 
       # PDS Process Scheduler
       SCHED_ALT = yes;
       SCHED_PDS = yes;
 
+      # https://github.com/damentz/liquorix-package/commit/a7055b936c0f4edb8f6afd5263fe1d2f8a5cd877
+      RCU_BOOST = no;
+      RCU_LAZY = lib.mkOverride 60 no;
+
       # Swap storage is compressed with LZ4 using zswap
-      ZSWAP_COMPRESSOR_DEFAULT_LZ4 = yes;
-      ZSWAP_COMPRESSOR_DEFAULT = freeform "lz4";
+      ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;
+      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = lib.mkDefault no;
+      ZSWAP_ZPOOL_DEFAULT_Z3FOLD = yes;
 
       # Fix error: unused option: XXX.
       CFS_BANDWIDTH = lib.mkForce (option no);
@@ -93,9 +109,8 @@ let
       RT_GROUP_SCHED = lib.mkForce (option no);
       SCHED_AUTOGROUP = lib.mkForce (option no);
       SCHED_CORE = lib.mkForce (option no);
-
-      # ERROR: modpost: "sched_numa_hop_mask" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] undefined!
-      MLX5_CORE = no;
+      UCLAMP_TASK = lib.mkForce (option no);
+      UCLAMP_TASK_GROUP = lib.mkForce (option no);
     };
 
     passthru.updateScript = [ ./update-zen.py (if isLqx then "lqx" else "zen") ];
@@ -110,7 +125,4 @@ let
 
   } // (args.argsOverride or { }));
 in
-{
-  zen = zenKernelsFor zenVariant;
-  lqx = zenKernelsFor lqxVariant;
-}
+zenKernelsFor variants.${variant}

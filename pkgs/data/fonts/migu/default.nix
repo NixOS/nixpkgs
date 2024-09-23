@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   outputHash = "0nbpn21cxdd6gsgr3fadzjsnz84f2swpf81wmscmjgvd56ngndzh";
 
   meta = with lib; {
-    description = "A high-quality Japanese font based on modified M+ fonts and IPA fonts";
+    description = "High-quality Japanese font based on modified M+ fonts and IPA fonts";
     homepage = "http://mix-mplus-ipa.osdn.jp/migu/";
     license = licenses.ipa;
     maintainers = [ maintainers.mikoim ];

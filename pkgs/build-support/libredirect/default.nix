@@ -1,12 +1,5 @@
-{ lib, stdenv, bintools-unwrapped, llvmPackages, llvmPackages_13, coreutils }:
+{ lib, stdenv, bintools-unwrapped, llvmPackages, coreutils }:
 
-let
-  # aarch64-darwin needs a clang that can build arm64e binaries, so make sure a version of LLVM
-  # is used that can do that, but prefer the stdenv one if it is new enough.
-  llvmPkgs = if (lib.versionAtLeast (lib.getVersion llvmPackages.clang) "13")
-    then llvmPackages
-    else llvmPackages_13;
-  in
 if stdenv.hostPlatform.isStatic
 then throw ''
   libredirect is not available on static builds.
@@ -46,11 +39,11 @@ else stdenv.mkDerivation rec {
     # and the library search directory for libdl.
     # We can't build this on x86_64, because the libSystem we point to doesn't
     # like arm64(e).
-    PATH=${bintools-unwrapped}/bin:${llvmPkgs.clang-unwrapped}/bin:$PATH \
+    PATH=${bintools-unwrapped}/bin:${llvmPackages.clang-unwrapped}/bin:$PATH \
       clang -arch x86_64 -arch arm64 -arch arm64e \
-      -isystem ${llvmPkgs.clang.libc}/include \
-      -isystem ${llvmPkgs.libclang.lib}/lib/clang/*/include \
-      -L${llvmPkgs.clang.libc}/lib \
+      -isystem ${llvmPackages.clang.libc}/include \
+      -isystem ${llvmPackages.libclang.lib}/lib/clang/*/include \
+      -L${llvmPackages.clang.libc}/lib \
       -Wl,-install_name,$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
       -shared -o "$libName"
@@ -112,7 +105,7 @@ else stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.unix;
-    description = "An LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
+    description = "LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
     longDescription = ''
       libredirect is an LD_PRELOAD library to intercept and rewrite the paths in
       glibc calls based on the value of $NIX_REDIRECTS, a colon-separated list

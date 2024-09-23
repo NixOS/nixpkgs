@@ -50,12 +50,6 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ gnustep.make ] ++
     lib.optionals stdenv.isDarwin [ xcbuildHook ];
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  # xcbuild links with clang instead of clang++.
-  env = lib.optionalAttrs stdenv.isDarwin {
-    LD_FLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   xcbuildFlags = lib.optionals stdenv.isDarwin [
     "-target unar"
     "-target lsar"
@@ -85,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://theunarchiver.com";
-    description = "An archive unpacker program";
+    description = "Archive unpacker program";
     longDescription = ''
       The Unarchiver is an archive unpacker program with support for the popular
       zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN,
@@ -94,7 +88,8 @@ stdenv.mkDerivation rec {
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ peterhoeg thiagokokada ];
+    maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "unar";
     platforms = platforms.unix;
   };
 }

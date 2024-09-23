@@ -15,12 +15,13 @@ buildDartApplication rec {
   };
   sourceRoot = "${src.name}/protoc_plugin";
 
-  pubspecLockFile = ./pubspec.lock;
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-yNgQLCLDCbA07v9tIwPRks/xPAzLVykNtIk+8C0twYM=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Protobuf plugin for generating Dart code";
+    mainProgram = "protoc-gen-dart";
     homepage = "https://pub.dev/packages/protoc_plugin";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lelgenio ];

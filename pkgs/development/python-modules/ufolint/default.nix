@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, commandlines
-, fonttools
-, fs
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  commandlines,
+  fonttools,
+  fs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ufolint";
   version = "1.2.0";
+  format = "setuptools";
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
@@ -26,15 +28,13 @@ buildPythonPackage rec {
   ];
 
   doCheck = true;
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Linter for Unified Font Object (UFO) source code";
+    mainProgram = "ufolint";
     homepage = "https://github.com/source-foundry/ufolint";
     license = licenses.mit;
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

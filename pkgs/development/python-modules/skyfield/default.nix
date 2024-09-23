@@ -1,10 +1,23 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, certifi, numpy, sgp4, jplephem
-, pandas, ipython, matplotlib, assay
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  certifi,
+  numpy,
+  sgp4,
+  jplephem,
+  pandas,
+  ipython,
+  matplotlib,
+  assay,
 }:
 
 buildPythonPackage rec {
   pname = "skyfield";
   version = "1.45";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skyfielders";
@@ -17,12 +30,24 @@ buildPythonPackage rec {
   # https://github.com/skyfielders/python-skyfield/issues/582#issuecomment-822033858
   postPatch = ''
     substituteInPlace skyfield/tests/test_planetarylib.py \
-      --replace "if IS_32_BIT" "if True"
+      --replace-fail "if IS_32_BIT" "if True"
   '';
 
-  propagatedBuildInputs = [ certifi numpy sgp4 jplephem ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pandas ipython matplotlib assay ];
+  dependencies = [
+    certifi
+    numpy
+    sgp4
+    jplephem
+  ];
+
+  nativeCheckInputs = [
+    pandas
+    ipython
+    matplotlib
+    assay
+  ];
 
   # assay is broken on Python >= 3.11
   # https://github.com/brandon-rhodes/assay/issues/15

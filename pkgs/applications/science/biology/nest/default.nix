@@ -13,20 +13,19 @@
 , boost
 , python3
 , readline
-, autoPatchelfHook
 , withPython ? false
 , withMpi ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "nest";
-  version = "3.6";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
-    hash = "sha256-sXtF4JmHYoLp0t3o4KF6R2E0qLnKrzSPMXOxVJAm+sU=";
+    hash = "sha256-hysOe1ZZpCClVOGo0+UeCP7imAakXrZlnJ4V95zfiyA=";
   };
 
   postPatch = ''

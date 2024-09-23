@@ -2,72 +2,57 @@
 , cargo
 , rustc
 , fetchFromGitHub
-, glib
-, gtk4
 , libadwaita
 , rustPlatform
-, openssl
 , pkg-config
 , lib
 , wrapGAppsHook4
 , meson
 , ninja
-, gdk-pixbuf
-, cmake
 , desktop-file-utils
-, gettext
 , blueprint-compiler
-, appstream-glib
+, glib-networking
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geopard";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ranfdev";
-    repo = pname;
-    rev = version;
-    hash = "sha256-elHxtFEGkdhEPHxuJtcMYwWnvo6vDaHiOyN51EOzym0=";
+    repo = "geopard";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-etx8YPEFGSNyiSLpTNIXTZZiLSgAntQsM93On7dPGI0=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src;
+    hash = "sha256-YVbaXGGwQaqjUkA47ryW1VgJpZTx5ApRGdCcB5aA71M=";
   };
 
   nativeBuildInputs = [
-    openssl
-    gettext
-    glib # for glib-compile-schemas
     meson
     ninja
     pkg-config
     wrapGAppsHook4
-    cmake
     blueprint-compiler
     desktop-file-utils
-    appstream-glib
-    blueprint-compiler
     cargo
     rustc
     rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [
-    desktop-file-utils
-    gdk-pixbuf
-    glib
-    gtk4
     libadwaita
-    openssl
+    glib-networking
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ranfdev/Geopard";
     description = "Colorful, adaptive gemini browser";
-    maintainers = with maintainers; [ jfvillablanca ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ jfvillablanca aleksana ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "geopard";
   };
-}
+})

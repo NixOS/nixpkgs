@@ -1,22 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, python3-openid
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  flask,
+  python3-openid,
 }:
 
 buildPythonPackage rec {
   pname = "flask-openid";
-  version = "1.3.0";
+  version = "1.3.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "Flask-OpenID";
+    pname = "flask_openid";
     inherit version;
-    sha256 = "539289ed2d19af61ae38d8fe46aec9e4de2b56f9f8b46da0b98c0d387f1d975a";
+    hash = "sha256-J2KLwKN+ZTCUiCMZPgaNeQNa2Ulth7dAQEQ+xITHZXo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     python3-openid
   ];

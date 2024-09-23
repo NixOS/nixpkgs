@@ -13,15 +13,18 @@
 , glib
 , gtk4
 , gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
+, desktop-file-utils
 , xvfb-run
 , AppKit
 , Foundation
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.4.2";
+  version = "1.5.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -30,8 +33,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = version;
-    hash = "sha256-SsQbCnNtgiRWMZerEjSSw+CU5m6bGRv8ILY/TITGtL4=";
+    rev = finalAttrs.version;
+    hash = "sha256-NCQCd/QnJg2fEI6q5ys8HQXinGnKaoxhMUHd8rwxAmk=";
   };
 
   depsBuildBuild = [
@@ -46,11 +49,12 @@ stdenv.mkDerivation rec {
     sassc
     vala
     gobject-introspection
+    desktop-file-utils  # for validate-desktop-file
   ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
-  ] ++ lib.optionals (!doCheck) [
+  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     "-Dtests=false"
   ];
 
@@ -67,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeCheckInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
@@ -77,6 +81,7 @@ stdenv.mkDerivation rec {
   # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
   # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
   doCheck = !stdenv.isDarwin;
+  separateDebugInfo = true;
 
   checkPhase = ''
     runHook preCheck
@@ -102,20 +107,30 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
+
+    # Put all resources related to demo app into devdoc output.
+    for d in applications icons metainfo; do
+      moveToOutput "share/$d" "$devdoc"
+    done
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
   meta = with lib; {
-    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${src.rev}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.rev}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
+    mainProgram = "adwaita-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
     platforms = platforms.unix;
+    pkgConfigModules = [ "libadwaita-1" ];
   };
-}
+})

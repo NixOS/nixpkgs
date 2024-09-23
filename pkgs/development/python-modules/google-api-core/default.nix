@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, googleapis-common-protos
-, grpcio
-, grpcio-gcp
-, grpcio-status
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  googleapis-common-protos,
+  grpcio,
+  grpcio-gcp,
+  grpcio-status,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.11.1";
-  format = "setuptools";
+  version = "2.19.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JdKeBaAFjtXxnGHAp4sbU63qTZNktGTQFPvalB9tHJo=";
+    hash = "sha256-zxt8JpQEeIbSrxEooDrpnjkRCKCIBPh8/TWXDknJzRA=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     googleapis-common-protos
@@ -40,12 +44,8 @@ buildPythonPackage rec {
       grpcio
       grpcio-status
     ];
-    grpcgcp = [
-      grpcio-gcp
-    ];
-    grpcio-gcp = [
-      grpcio-gcp
-    ];
+    grpcgcp = [ grpcio-gcp ];
+    grpcio-gcp = [ grpcio-gcp ];
   };
 
   nativeCheckInputs = [
@@ -74,9 +74,7 @@ buildPythonPackage rec {
     "test_exception_with_error_code"
   ];
 
-  pythonImportsCheck = [
-    "google.api_core"
-  ];
+  pythonImportsCheck = [ "google.api_core" ];
 
   meta = with lib; {
     description = "Core Library for Google Client Libraries";
@@ -87,6 +85,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-api-core";
     changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

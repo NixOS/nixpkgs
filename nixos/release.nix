@@ -49,7 +49,7 @@ let
     system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
 
     # At creation time we do not have state yet, so just default to latest.
-    system.stateVersion = config.system.nixos.version;
+    system.stateVersion = config.system.nixos.release;
   };
 
   makeModules = module: rest: [ configuration versionModule module rest ];
@@ -174,6 +174,12 @@ in rec {
   iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
+    inherit system;
+  });
+
+  iso_plasma6 = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix;
+    type = "plasma6";
     inherit system;
   });
 
@@ -312,6 +318,101 @@ in rec {
 
   );
 
+  # An image that can be imported into incus and used for container creation
+  incusContainerImage =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-container-image.nix
+            ];
+          }).config.system.build.squashfs
+        )
+      );
+
+  # Metadata for the incus image
+  incusContainerMeta =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-container-image.nix
+            ];
+          }).config.system.build.metadata
+        )
+      );
+
+  # An image that can be imported into incus and used for container creation
+  incusVirtualMachineImage =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-virtual-machine-image.nix
+            ];
+          }).config.system.build.qemuImage
+        )
+      );
+
+  # Metadata for the incus image
+  incusVirtualMachineImageMeta =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-virtual-machine-image.nix
+            ];
+          }).config.system.build.metadata
+        )
+      );
+
   # An image that can be imported into lxd and used for container creation
   lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
@@ -435,7 +536,7 @@ in rec {
 
     kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
+        services.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 

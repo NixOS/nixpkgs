@@ -143,7 +143,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
@@ -154,7 +154,7 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           {file}`munin-node.conf` extra configuration. See
           <https://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
         '';
@@ -163,7 +163,7 @@ in
       extraPluginConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           {file}`plugin-conf.d` extra plugin configuration. See
           <https://guide.munin-monitoring.org/en/latest/plugin/use.html>
         '';
@@ -176,7 +176,7 @@ in
       extraPlugins = mkOption {
         default = {};
         type = with types; attrsOf path;
-        description = lib.mdDoc ''
+        description = ''
           Additional Munin plugins to activate. Keys are the name of the plugin
           symlink, values are the path to the underlying plugin script. You
           can use the same plugin script multiple times (e.g. for wildcard
@@ -206,7 +206,7 @@ in
       extraAutoPlugins = mkOption {
         default = [];
         type = with types; listOf path;
-        description = lib.mdDoc ''
+        description = ''
           Additional Munin plugins to autoconfigure, using
           `munin-node-configure --suggest`. These should be
           the actual paths to the plugin files (or directories containing them),
@@ -239,7 +239,7 @@ in
         # NaNs in the output.
         default = [ "munin_stats" ];
         type = with types; listOf str;
-        description = lib.mdDoc ''
+        description = ''
           Munin plugins to disable, even if
           `munin-node-configure --suggest` tries to enable
           them. To disable a wildcard plugin, use an actual wildcard, as in
@@ -258,7 +258,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable munin-cron. Takes care of all heavy lifting to collect data from
           nodes and draws graphs to html. Runs munin-update, munin-limits,
           munin-graphs and munin-html in that order.
@@ -271,7 +271,7 @@ in
       extraGlobalConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           {file}`munin.conf` extra global configuration.
           See <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
           Useful to setup notifications, see
@@ -285,7 +285,7 @@ in
       hosts = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
           <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
@@ -301,7 +301,7 @@ in
       extraCSS = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Custom styling for the HTML that munin-cron generates. This will be
           appended to the CSS files used by munin-cron and will thus take
           precedence over the builtin styles.
@@ -374,7 +374,11 @@ in
     };
 
     # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
-    systemd.tmpfiles.rules = [ "d /run/munin 0755 munin munin -" ];
+    systemd.tmpfiles.settings."10-munin"."/run/munin".d = {
+      mode = "0755";
+      user = "munin";
+      group = "munin";
+    };
 
   }) (mkIf cronCfg.enable {
 
@@ -399,11 +403,17 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /run/munin 0755 munin munin -"
-      "d /var/log/munin 0755 munin munin -"
-      "d /var/www/munin 0755 munin munin -"
-      "d /var/lib/munin 0755 munin munin -"
-    ];
+    systemd.tmpfiles.settings."20-munin" = let
+      defaultConfig = {
+        mode = "0755";
+        user = "munin";
+        group = "munin";
+      };
+    in {
+      "/run/munin".d = defaultConfig;
+      "/var/log/munin".d = defaultConfig;
+      "/var/www/munin".d = defaultConfig;
+      "/var/lib/munin".d = defaultConfig;
+    };
   })];
 }

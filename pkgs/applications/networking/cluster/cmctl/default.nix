@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "cmctl";
-  version = "1.13.2";
+  version = "1.14.7";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
     rev = "v${version}";
-    hash = "sha256-TfFdHKXbbi0yqvyQjZArY9GbkwjUq1Z00UuNAldyDuc=";
+    hash = "sha256-ZvrR8k1jiyAMUKM9VA6vKH2uhMKnd22OQe08CIlxXjs=";
   };
 
   sourceRoot = "${src.name}/cmd/ctl";
 
-  vendorHash = "sha256-63XxGvVsIRDpQ0ri6VkjciyD+k7eEMBcg0w8NU8ypYs=";
+  vendorHash = "sha256-qaSzAPNVe25Fbbfqy0OFFnMJ21IlWuoJKwnT7y2wmOs=";
 
   ldflags = [
     "-s"
@@ -49,7 +49,8 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A CLI tool for managing cert-manager service on Kubernetes clusters";
+    description = "CLI tool for managing cert-manager service on Kubernetes clusters";
+    mainProgram = "cmctl";
     longDescription = ''
       cert-manager adds certificates and certificate issuers as resource types
       in Kubernetes clusters, and simplifies the process of obtaining, renewing

@@ -10,49 +10,57 @@
 , shaderc
 , lcms2
 , libGL
-, xorg
+, libX11
 , libunwind
 , libdovi
+, xxHash
+, fast-float
+, vulkanSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "5.264.1";
+  version = "7.349.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YEefuEfJURi5/wswQKskA/J1UGzessQQkBpltJ0Spq8=";
+    hash = "sha256-mIjQvc7SRjE1Orb2BkHK+K1TcRQvzj2oUOCUT4DzIuA=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    vulkan-headers
     python3Packages.jinja2
     python3Packages.glad2
   ];
 
   buildInputs = [
-    vulkan-loader
     shaderc
     lcms2
     libGL
-    xorg.libX11
+    libX11
     libunwind
     libdovi
+    xxHash
+    vulkan-headers
+  ] ++ lib.optionals vulkanSupport [
+    vulkan-loader
+  ] ++ lib.optionals (!stdenv.cc.isGNU) [
+    fast-float
   ];
 
   mesonFlags = [
-    "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
-    "-Ddemos=false" # Don't build and install the demo programs
-    "-Dd3d11=disabled" # Disable the Direct3D 11 based renderer
-    "-Dglslang=disabled" # rely on shaderc for GLSL compilation instead
+    (lib.mesonBool "demos" false) # Don't build and install the demo programs
+    (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+    (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+    (lib.mesonEnable "vk-proc-addr" vulkanSupport)
+    (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
   ] ++ lib.optionals stdenv.isDarwin [
-    "-Dunwind=disabled" # libplacebo doesn’t build with `darwin.libunwind`
+    (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   postPatch = ''
@@ -71,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ primeos tadeokondrak ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.all;
   };
 }

@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "orderedset";
   version = "2.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -10,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "An Ordered Set implementation in Cython";
+    description = "Ordered Set implementation in Cython";
     homepage = "https://pypi.python.org/pypi/orderedset";
     license = licenses.bsd3;
     maintainers = [ ];

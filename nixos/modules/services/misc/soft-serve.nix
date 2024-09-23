@@ -19,7 +19,7 @@ in
       settings = mkOption {
         type = format.type;
         default = { };
-        description = mdDoc ''
+        description = ''
           The contents of the configuration file for soft-serve.
 
           See <${docUrl}>.

@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    addErrorContext
     all
     any
     attrByPath
@@ -13,13 +14,16 @@ let
     elem
     filter
     foldl'
+    functionArgs
     getAttrFromPath
+    genericClosure
     head
     id
     imap1
     isAttrs
     isBool
     isFunction
+    isInOldestRelease
     isList
     isString
     length
@@ -32,9 +36,17 @@ let
     optionalString
     recursiveUpdate
     reverseList sort
+    seq
     setAttrByPath
+    substring
+    throwIfNot
+    trace
+    typeOf
     types
+    unsafeGetAttrPos
+    warn
     warnIf
+    zipAttrs
     zipAttrsWith
     ;
   inherit (lib.options)
@@ -81,16 +93,16 @@ let
                 , # `class`:
                   # A nominal type for modules. When set and non-null, this adds a check to
                   # make sure that only compatible modules are imported.
-                  # This would be remove in the future, Prefer _module.args option instead.
                   class ? null
-                , args ? {}
+                , # This would be remove in the future, Prefer _module.args option instead.
+                  args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
                 }:
     let
       withWarnings = x:
-        lib.warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
-        lib.warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
+        warnIf (evalModulesArgs?args) "The args argument to evalModules is deprecated. Please set config._module.args instead."
+        warnIf (evalModulesArgs?check) "The check argument to evalModules is deprecated. Please set config._module.check instead."
         x;
 
       legacyModules =
@@ -136,7 +148,7 @@ let
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
-            description = lib.mdDoc ''
+            description = ''
               Additional arguments passed to each module in addition to ones
               like `lib`, `config`,
               and `pkgs`, `modulesPath`.
@@ -187,14 +199,14 @@ let
             type = types.bool;
             internal = true;
             default = true;
-            description = lib.mdDoc "Whether to check whether all option definitions have matching declarations.";
+            description = "Whether to check whether all option definitions have matching declarations.";
           };
 
           _module.freeformType = mkOption {
             type = types.nullOr types.optionType;
             internal = true;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               If set, merge all definitions that don't have an associated option
               together using this type. The result then gets combined with the
               values of all declared options to produce the final `
@@ -209,7 +221,7 @@ let
           _module.specialArgs = mkOption {
             readOnly = true;
             internal = true;
-            description = lib.mdDoc ''
+            description = ''
               Externally provided module arguments that can't be modified from
               within a configuration, but can be used in module imports.
             '';
@@ -265,9 +277,9 @@ let
               let
                 optText = showOption (prefix ++ firstDef.prefix);
                 defText =
-                  builtins.addErrorContext
+                  addErrorContext
                     "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
-                    (builtins.addErrorContext
+                    (addErrorContext
                       "while evaluating a definition from `${firstDef.file}'"
                       ( showDefs [ firstDef ])
                     );
@@ -275,6 +287,8 @@ let
                 "The option `${optText}' does not exist. Definition values:${defText}";
           in
             if attrNames options == [ "_module" ]
+              # No options were declared at all (`_module` is built in)
+              # but we do have unmatched definitions, and no freeformType (earlier conditions)
               then
                 let
                   optionName = showOption prefix;
@@ -296,7 +310,7 @@ let
             else throw baseMsg
         else null;
 
-      checked = builtins.seq checkUnmatched;
+      checked = seq checkUnmatched;
 
       extendModules = extendArgs@{
         modules ? [],
@@ -310,7 +324,7 @@ let
             prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
           });
 
-      type = lib.types.submoduleWith {
+      type = types.submoduleWith {
         inherit modules specialArgs class;
       };
 
@@ -342,8 +356,8 @@ let
           else
             throw (
               "Could not load a value as a module, because it is of type ${lib.strings.escapeNixString m._type}"
-              + lib.optionalString (fallbackFile != unknownModule) ", in file ${toString fallbackFile}."
-              + lib.optionalString (m._type == "configuration") " If you do intend to import this configuration, please only import the modules that make up the configuration. You may have to create a `let` binding, file or attribute to give yourself access to the relevant modules.\nWhile loading a configuration into the module system is a very sensible idea, it can not be done cleanly in practice."
+              + optionalString (fallbackFile != unknownModule) ", in file ${toString fallbackFile}."
+              + optionalString (m._type == "configuration") " If you do intend to import this configuration, please only import the modules that make up the configuration. You may have to create a `let` binding, file or attribute to give yourself access to the relevant modules.\nWhile loading a configuration into the module system is a very sensible idea, it can not be done cleanly in practice."
                # Extended explanation: That's because a finalized configuration is more than just a set of modules. For instance, it has its own `specialArgs` that, by the nature of `specialArgs` can't be loaded through `imports` or the the `modules` argument. So instead, we have to ask you to extract the relevant modules and use those instead. This way, we keep the module system comparatively simple, and hopefully avoid a bad surprise down the line.
             )
         else if isList m then
@@ -413,7 +427,7 @@ let
           moduleKey = file: m:
             if isString m
             then
-              if builtins.substring 0 1 m == "/"
+              if substring 0 1 m == "/"
               then m
               else toString modulesPath + "/" + m
 
@@ -431,11 +445,11 @@ let
 
             else if isAttrs m
             then throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
-            else throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${builtins.typeOf m}.";
+            else throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
 
           disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
           keyFilter = filter (attrs: ! elem attrs.key disabledKeys);
-        in map (attrs: attrs.module) (builtins.genericClosure {
+        in map (attrs: attrs.module) (genericClosure {
           startSet = keyFilter modules;
           operator = attrs: keyFilter attrs.modules;
         });
@@ -473,7 +487,7 @@ let
         }
     else
       # shorthand syntax
-      lib.throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
+      throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
       { _file = toString m._file or file;
         _class = m._class or null;
         key = toString m.key or key;
@@ -483,10 +497,10 @@ let
         config = addFreeformType (removeAttrs m ["_class" "_file" "key" "disabledModules" "require" "imports" "freeformType"]);
       };
 
-  applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }:
+  applyModuleArgsIfFunction = key: f: args@{ config, ... }:
     if isFunction f then applyModuleArgs key f args else f;
 
-  applyModuleArgs = key: f: args@{ config, options, lib, ... }:
+  applyModuleArgs = key: f: args@{ config, ... }:
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -501,10 +515,10 @@ let
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
-      extraArgs = builtins.mapAttrs (name: _:
-        builtins.addErrorContext (context name)
+      extraArgs = mapAttrs (name: _:
+        addErrorContext (context name)
           (args.${name} or config._module.args.${name})
-      ) (lib.functionArgs f);
+      ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
       # context on the explicit arguments of "args" too. This update
@@ -545,16 +559,16 @@ let
           (n: concatLists)
           (map
             (module: let subtree = module.options; in
-              if !(builtins.isAttrs subtree) then
+              if !(isAttrs subtree) then
                 throw ''
-                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
-                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  An option declaration for `${concatStringsSep "." prefix}' has type
+                  `${typeOf subtree}' rather than an attribute set.
                   Did you mean to define this outside of `options'?
                 ''
               else
                 mapAttrs
                   (n: option:
-                    [{ inherit (module) _file; pos = builtins.unsafeGetAttrPos n subtree; options = option; }]
+                    [{ inherit (module) _file; pos = unsafeGetAttrPos n subtree; options = option; }]
                   )
                   subtree
               )
@@ -563,17 +577,17 @@ let
       # The root of any module definition must be an attrset.
       checkedConfigs =
         assert
-          lib.all
+          all
             (c:
               # TODO: I have my doubts that this error would occur when option definitions are not matched.
               #       The implementation of this check used to be tied to a superficially similar check for
               #       options, so maybe that's why this is here.
               isAttrs c.config || throw ''
-                In module `${c.file}', you're trying to define a value of type `${builtins.typeOf c.config}'
+                In module `${c.file}', you're trying to define a value of type `${typeOf c.config}'
                 rather than an attribute set for the option
-                `${builtins.concatStringsSep "." prefix}'!
+                `${concatStringsSep "." prefix}'!
 
-                This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                This usually happens if `${concatStringsSep "." prefix}' has option
                 definitions inside that are not matched. Please check how to properly define
                 this option by e.g. referring to `man 5 configuration.nix'!
               ''
@@ -665,7 +679,7 @@ let
                 let
                   nonOptions = filter (m: !isOption m.options) decls;
                 in
-                throw "The option `${showOption loc}' in module `${(lib.head optionDecls)._file}' would be a parent of the following options, but its type `${(lib.head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
+                throw "The option `${showOption loc}' in module `${(head optionDecls)._file}' would be a parent of the following options, but its type `${(head optionDecls).options.type.description or "<no description>"}' does not support nested options.\n${
                   showRawDecls loc nonOptions
                 }"
           else
@@ -804,7 +818,7 @@ let
           "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
 
     in warnDeprecation opt //
-      { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
+      { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
@@ -820,7 +834,7 @@ let
       let
         # Process mkMerge and mkIf properties.
         defs' = concatMap (m:
-          map (value: { inherit (m) file; inherit value; }) (builtins.addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+          map (value: { inherit (m) file; inherit value; }) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
         ) defs;
 
         # Process mkOverride properties.
@@ -847,7 +861,7 @@ let
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
-        throw "The option `${showOption loc}' is used but not defined.";
+        throw "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
 
     isDefined = defsFinal != [];
 
@@ -970,12 +984,12 @@ let
   mergeAttrDefinitionsWithPrio = opt:
         let
             defsByAttr =
-              lib.zipAttrs (
-                lib.concatLists (
-                  lib.concatMap
+              zipAttrs (
+                concatLists (
+                  concatMap
                     ({ value, ... }@def:
                       map
-                        (lib.mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
+                        (mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
                         (pushDownProperties value)
                     )
                     opt.definitionsWithLocations
@@ -983,9 +997,9 @@ let
               );
         in
           assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
-          lib.mapAttrs
+          mapAttrs
                 (k: v:
-                  let merging = lib.mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
+                  let merging = mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
                   in {
                     value = merging.mergedValue;
                     inherit (merging.defsFinal') highestPrio;
@@ -1021,9 +1035,9 @@ let
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
 
-  defaultPriority = lib.warnIf (lib.isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
+  defaultPriority = warnIf (isInOldestRelease 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
 
-  mkFixStrictness = lib.warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
+  mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
   mkOrder = priority: content:
     { _type = "order";
@@ -1119,7 +1133,7 @@ let
     inherit from to;
     visible = false;
     warn = true;
-    use = builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
+    use = trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
   mkRenamedOptionModuleWith = {
@@ -1137,8 +1151,8 @@ let
   }: doRename {
     inherit from to;
     visible = false;
-    warn = lib.isInOldestRelease sinceRelease;
-    use = lib.warnIf (lib.isInOldestRelease sinceRelease)
+    warn = isInOldestRelease sinceRelease;
+    use = warnIf (isInOldestRelease sinceRelease)
       "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
@@ -1254,7 +1268,78 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true }:
+  /*
+    Return a module that help declares an option that has been renamed.
+    When a value is defined for the old option, it is forwarded to the `to` option.
+   */
+  doRename = {
+    # List of strings representing the attribute path of the old option.
+    from,
+    # List of strings representing the attribute path of the new option.
+    to,
+    # Boolean, whether the old option is to be included in documentation.
+    visible,
+    # Whether to warn when a value is defined for the old option.
+    # NOTE: This requires the NixOS assertions module to be imported, so
+    #        - this generally does not work in submodules
+    #        - this may or may not work outside NixOS
+    warn,
+    # A function that is applied to the option value, to form the value
+    # of the old `from` option.
+    #
+    # For example, the identity function can be passed, to return the option value unchanged.
+    # ```nix
+    # use = x: x;
+    # ```
+    #
+    # To add a warning, you can pass the partially applied `warn` function.
+    # ```nix
+    # use = lib.warn "Obsolete option `${opt.old}' is used. Use `${opt.to}' instead.";
+    # ```
+    use,
+    # Legacy option, enabled by default: whether to preserve the priority of definitions in `old`.
+    withPriority ? true,
+    # A boolean that defines the `mkIf` condition for `to`.
+    # If the condition evaluates to `true`, and the `to` path points into an
+    # `attrsOf (submodule ...)`, then `doRename` would cause an empty module to
+    # be created, even if the `from` option is undefined.
+    # By setting this to an expression that may return `false`, you can inhibit
+    # this undesired behavior.
+    #
+    # Example:
+    #
+    # ```nix
+    # { config, lib, ... }:
+    # let
+    #   inherit (lib) mkOption mkEnableOption types doRename;
+    # in
+    # {
+    #   options = {
+    #
+    #     # Old service
+    #     services.foo.enable = mkEnableOption "foo";
+    #
+    #     # New multi-instance service
+    #     services.foos = mkOption {
+    #       type = types.attrsOf (types.submodule …);
+    #     };
+    #   };
+    #   imports = [
+    #     (doRename {
+    #       from = [ "services" "foo" "bar" ];
+    #       to = [ "services" "foos" "" "bar" ];
+    #       visible = true;
+    #       warn = false;
+    #       use = x: x;
+    #       withPriority = true;
+    #       # Only define services.foos."" if needed. (It's not just about `bar`)
+    #       condition = config.services.foo.enable;
+    #     })
+    #   ];
+    # }
+    # ```
+    condition ? true
+  }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1270,7 +1355,7 @@ let
       } // optionalAttrs (toType != null) {
         type = toType;
       });
-      config = mkMerge [
+      config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
             "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
@@ -1278,8 +1363,60 @@ let
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
           else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
-      ];
+      ]);
     };
+
+  /**
+    `importApply file arg :: Path -> a -> Module`,  where `import file :: a -> Module`
+
+    `importApply` imports a Nix expression file much like the module system would,
+    after passing an extra positional argument to the function in the file.
+
+    This function should be used when declaring a module in a file that refers to
+    values from a different scope, such as that in a flake.
+
+    It solves the problems of alternative solutions:
+
+    - While `importApply file arg` is _mostly_ equivalent to
+      `import file arg`, the latter returns a module without a location,
+      as `import` only returns the contained expression. This leads to worse
+      error messages.
+
+    - Using `specialArgs` to provide arguments to all modules. This effectively
+      creates an incomplete module, and requires the user of the module to
+      manually pass the `specialArgs` to the configuration, which is error-prone,
+      verbose, and unnecessary.
+
+    The nix file must contain a function that returns a module.
+    A module may itself be a function, so the file is often a function with two
+    positional arguments instead of one. See the example below.
+
+    This function does not add support for deduplication and `disabledModules`,
+    although that could be achieved by wrapping the returned module and setting
+    the `_key` module attribute.
+    The reason for this omission is that the file path is not guaranteed to be
+    a unique identifier for the module, as two instances of the module may
+    reference different `arg`s in their closures.
+
+    Example
+
+        # lib.nix
+        imports = [
+          (lib.modules.importApply ./module.nix { bar = bar; })
+        ];
+
+        # module.nix
+        { bar }:
+        { lib, config, ... }:
+        {
+          options = ...;
+          config = ... bar ...;
+        }
+
+  */
+  importApply =
+    modulePath: staticArg:
+      lib.setDefaultModuleLocation modulePath (import modulePath staticArg);
 
   /* Use this function to import a JSON file as NixOS configuration.
 
@@ -1299,13 +1436,12 @@ let
     config = lib.importTOML file;
   };
 
-  private = lib.mapAttrs
-    (k: lib.warn "External use of `lib.modules.${k}` is deprecated. If your use case isn't covered by non-deprecated functions, we'd like to know more and perhaps support your use case well, instead of providing access to these low level functions. In this case please open an issue in https://github.com/nixos/nixpkgs/issues/.")
+  private = mapAttrs
+    (k: warn "External use of `lib.modules.${k}` is deprecated. If your use case isn't covered by non-deprecated functions, we'd like to know more and perhaps support your use case well, instead of providing access to these low level functions. In this case please open an issue in https://github.com/nixos/nixpkgs/issues/.")
     {
       inherit
         applyModuleArgsIfFunction
         dischargeProperties
-        evalOptionValue
         mergeModules
         mergeModules'
         pushDownProperties
@@ -1326,10 +1462,12 @@ private //
     defaultPriority
     doRename
     evalModules
+    evalOptionValue  # for use by lib.types
     filterOverrides
     filterOverrides'
     fixMergeModules
     fixupOptionType  # should be private?
+    importApply
     importJSON
     importTOML
     mergeDefinitions

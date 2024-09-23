@@ -2,6 +2,7 @@
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
+, nerdfonts
 , lcms2
 , librsync
 , openssl
@@ -15,9 +16,11 @@
 , UserNotifications
 , libcanberra
 , libicns
+, wayland-scanner
 , libpng
 , python3
 , zlib
+, simde
 , bashInteractive
 , zsh
 , fish
@@ -30,25 +33,26 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.31.0";
+  version = "0.36.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VWWuC4T0pyTgqPNm0gNL1j3FShU5b8S157C1dKLon1g=";
+    hash = "sha256-7+MxxgQQlAje7klfJvvEWe8CfxyN0oTGQJ/QOORFUsY=";
   };
 
   goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-OyZAWefSIiLQO0icxMIHWH3BKgNas8HIxLcse/qWKcU=";
+    vendorHash = "sha256-YN4sSdDNDIVgtcykg60H0bZEryRHJJfZ5rXWUMYXGr4=";
   }).goModules;
 
   buildInputs = [
     harfbuzz
     ncurses
+    simde
     lcms2
     librsync
     openssl.dev
@@ -79,10 +83,15 @@ buildPythonApplication rec {
     sphinxext-opengraph
     sphinx-inline-tabs
     go
+    fontconfig
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   outputs = [ "out" "terminfo" "shell_integration" "kitten" ];
 
@@ -127,6 +136,11 @@ buildPythonApplication rec {
     '';
   in ''
     runHook preBuild
+
+    # Add the font by hand because fontconfig does not finds it in darwin
+    mkdir ./fonts/
+    cp "${(nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})}/share/fonts/truetype/NerdFonts/SymbolsNerdFontMono-Regular.ttf" ./fonts/
+
     ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.isDarwin then ''
       ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
@@ -208,7 +222,10 @@ buildPythonApplication rec {
     cp -r linux-package/{bin,share,lib} "$out"
     cp linux-package/bin/kitten "$kitten/bin/kitten"
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
+
+    # dereference the `kitty` symlink to make sure the actual executable
+    # is wrapped on macOS as well (and not just the symlink)
+    wrapProgram $(realpath "$out/bin/kitty") --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
     installShellCompletion --cmd kitty \
       --bash <("$out/bin/kitty" +complete setup bash) \
@@ -232,17 +249,22 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests.test = nixosTests.terminal-emulators.kitty;
+    tests = lib.optionalAttrs stdenv.isLinux {
+      default = nixosTests.terminal-emulators.kitty;
+    };
     updateScript = nix-update-script {};
   };
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
-    description = "A modern, hackable, featureful, OpenGL based terminal emulator";
+    description = "Modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;
-    changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
+    changelog = [
+      "https://sw.kovidgoyal.net/kitty/changelog/"
+      "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
+    ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi kashw2 ];
   };
 }

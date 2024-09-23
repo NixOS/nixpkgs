@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
+  inherit (lib) mkEnableOption mkPackageOption mkOption types literalExpression mkIf mkDefault;
   cfg = config.services.miniflux;
 
   defaultAddress = "localhost:8080";
@@ -16,19 +16,29 @@ in
 {
   options = {
     services.miniflux = {
-      enable = mkEnableOption (lib.mdDoc "miniflux and creates a local postgres database for it");
+      enable = mkEnableOption "miniflux";
 
       package = mkPackageOption pkgs "miniflux" { };
 
+      createDatabaseLocally = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether a PostgreSQL database should be automatically created and
+          configured on the local host. If set to `false`, you need provision a
+          database yourself and make sure to create the hstore extension in it.
+        '';
+      };
+
       config = mkOption {
-        type = types.attrsOf types.str;
+        type = with types; attrsOf (oneOf [ str int ]);
         example = literalExpression ''
           {
-            CLEANUP_FREQUENCY = "48";
+            CLEANUP_FREQUENCY = 48;
             LISTEN_ADDR = "localhost:8080";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Miniflux, refer to
           <https://miniflux.app/docs/configuration.html>
           for documentation on the supported values.
@@ -38,9 +48,10 @@ in
         '';
       };
 
-      adminCredentialsFile = mkOption  {
-        type = types.path;
-        description = lib.mdDoc ''
+      adminCredentialsFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
           File containing the ADMIN_USERNAME and
           ADMIN_PASSWORD (length >= 6) in the format of
           an EnvironmentFile=, as described by systemd.exec(5).
@@ -51,15 +62,20 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    services.miniflux.config =  {
+    assertions = [
+      { assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
+        message = "services.miniflux.adminCredentialsFile must be set if services.miniflux.config.CREATE_ADMIN is 1";
+      }
+    ];
+    services.miniflux.config = {
       LISTEN_ADDR = mkDefault defaultAddress;
-      DATABASE_URL = "user=miniflux host=/run/postgresql dbname=miniflux";
-      RUN_MIGRATIONS = "1";
-      CREATE_ADMIN = "1";
+      DATABASE_URL = lib.mkIf cfg.createDatabaseLocally "user=miniflux host=/run/postgresql dbname=miniflux";
+      RUN_MIGRATIONS = 1;
+      CREATE_ADMIN = lib.mkDefault 1;
+      WATCHDOG = 1;
     };
 
-    services.postgresql = {
+    services.postgresql = lib.mkIf cfg.createDatabaseLocally {
       enable = true;
       ensureUsers = [ {
         name = "miniflux";
@@ -68,7 +84,7 @@ in
       ensureDatabases = [ "miniflux" ];
     };
 
-    systemd.services.miniflux-dbsetup = {
+    systemd.services.miniflux-dbsetup = lib.mkIf cfg.createDatabaseLocally {
       description = "Miniflux database setup";
       requires = [ "postgresql.service" ];
       after = [ "network.target" "postgresql.service" ];
@@ -82,16 +98,23 @@ in
     systemd.services.miniflux = {
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "miniflux-dbsetup.service" ];
-      after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
+      requires = lib.optional cfg.createDatabaseLocally "miniflux-dbsetup.service";
+      after = [ "network.target" ]
+        ++ lib.optionals cfg.createDatabaseLocally [ "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/miniflux";
+        Type = "notify";
+        ExecStart = lib.getExe cfg.package;
         User = "miniflux";
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
-        RuntimeDirectoryMode = "0700";
-        EnvironmentFile = cfg.adminCredentialsFile;
+        RuntimeDirectoryMode = "0750";
+        EnvironmentFile = lib.mkIf (cfg.adminCredentialsFile != null) cfg.adminCredentialsFile;
+        WatchdogSec = 60;
+        WatchdogSignal = "SIGKILL";
+        Restart = "always";
+        RestartSec = 5;
+
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];
@@ -117,7 +140,7 @@ in
         UMask = "0077";
       };
 
-      environment = cfg.config;
+      environment = lib.mapAttrs (_: toString) cfg.config;
     };
     environment.systemPackages = [ cfg.package ];
 
@@ -130,6 +153,7 @@ in
         include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
         r ${cfg.package}/bin/miniflux,
         r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
+        rw /run/miniflux/**,
       }
     '';
   };

@@ -1,12 +1,13 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
-, typing-extensions
-, msrest
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  typing-extensions,
+  msrest,
 }:
 
 buildPythonPackage rec {
@@ -26,20 +27,14 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     msrest
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  pythonNamespaces = [
-    "azure.mgmt"
-  ];
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.mgmt.maps"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.maps" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Maps Client Library";

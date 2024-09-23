@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libodb";
-  version = "2.5.0-b.23";
+  version = "2.5.0-b.27";
 
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/beta/odb/libodb-${version}.tar.gz";
-    sha256 = "sha256-j+lW9WFdjwIlP24/GUZsezyMf7/31XTfkuY2WGLdaeA=";
+    hash = "sha256-04Et/wHYsWvJPLlcL0J2iOPV2SBFC6J32EleGw38K2Q=";
   };
 
   nativeBuildInputs = [ build2 ];

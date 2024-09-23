@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.5.4";
+  version = "2.5.5";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "sha256-2CkCQAQFzwBoV07z3B/l9ZJiB1Q7oa5vjnoVdjUdy9s=";
+    hash = "sha256-JIosik2bmFiqa69ScSw0r+/PnJ6Ut23OAsHJqiX7M3U=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeCheckInputs = [ util-linuxMinimal which ];
-  doCheck = true;
+  doCheck = !(stdenv.targetPlatform.useLLVM or false);
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";
@@ -37,12 +37,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
+    mainProgram = "scmp_sys_resolver";
     homepage = "https://github.com/seccomp/libseccomp";
     license = licenses.lgpl21Only;
     platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"
       "loongarch64-linux"
+      "m68k-linux"
+      "microblaze-linux"
+      "microblazeel-linux"
       "riscv32-linux"
       "sparc-linux"
       "sparc64-linux"

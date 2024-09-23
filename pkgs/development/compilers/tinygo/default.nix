@@ -1,18 +1,11 @@
 { stdenv
 , lib
-, buildPackages
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
-, substituteAll
 , llvmPackages
 , go
-, libffi
-, zlib
-, ncurses
-, libxml2
 , xar
-, wasi-libc
 , binaryen
 , avrdude
 , gdb
@@ -27,107 +20,72 @@ let
 
   # only doing this because only on darwin placing clang.cc in nativeBuildInputs
   # doesn't build
-  bootstrapTools = runCommand "tinygo-bootstap-tools" { } ''
+  bootstrapTools = runCommand "tinygo-bootstrap-tools" { } ''
     mkdir -p $out
     ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/ld.lld $out/ld.lld-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/wasm-ld $out/wasm-ld-${llvmMajor}
-    # GDB upstream does not support ARM darwin
-    ${lib.optionalString (!(stdenv.isDarwin && stdenv.isAarch64)) "ln -s ${gdb}/bin/gdb $out/gdb-multiarch" }
   '';
 in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.30.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-hOccfMKuvTKYKDRcEgTJ8k/c/H+qNDpvotWIqk6p2u8=";
+    hash = "sha256-YqjMk7EF/fyOhsMLcG56FGHfOZSdaFhUbiiHk+SXajY=";
     fetchSubmodules = true;
+    # The public hydra server on `hydra.nixos.org` is configured with
+    # `max_output_size` of 3GB. The purpose of this `postFetch` step
+    # is to stay below that limit and save 4.1GiB and 428MiB in output
+    # size respectively. These folders are not referenced in tinygo.
+    postFetch = ''
+      rm -r $out/lib/cmsis-svd/data/{SiliconLabs,Freescale}
+    '';
   };
 
-  vendorHash = "sha256-2q3N6QhfRmwbs4CTWrFWr1wyhf2jPS2ECAn/wrrpXdM=";
+  vendorHash = "sha256-cTqrvh0w3KQg3P1lCfAez0kqAMBJHQbqS3sx8uqGvEs=";
 
   patches = [
-    ./0001-Makefile.patch
-
-    # clang.cc does not have any paths in the include path.
-    # For TinyGo, we want to have no include paths, _except_ for the built-in
-    # Clang header files (things like stdint.h). That's why we use -nostdlibinc.
-    # So to make Clang work like we want, we will have to manually add this one
-    # include path.
-    # We can't use a regular clang command (something like
-    # llvmPackages.clangUseLLVM) because there are various bugs, see:
-    # https://github.com/NixOS/nixpkgs/issues/259397
-    # https://github.com/NixOS/nixpkgs/issues/259386
-    (substituteAll {
-      src = ./0002-Add-clang-header-path.patch;
-      clang_include = "${clang.cc.lib}/lib/clang/${llvmMajor}/include";
-    })
-
-    #TODO(muscaln): Find a better way to fix build ID on darwin
-    ./0003-Use-out-path-as-build-id-on-darwin.patch
-    ./0004-fix-darwin-build.patch
+    ./0001-GNUmakefile.patch
   ];
 
   nativeCheckInputs = [ binaryen ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper lld ];
   buildInputs = [ llvm clang.cc ]
-    ++ lib.optionals stdenv.isDarwin [ zlib ncurses libffi libxml2 xar ];
+    ++ lib.optionals stdenv.isDarwin [ xar ];
 
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
 
   allowGoReference = true;
-  tags = [ "llvm${llvmMajor}" ];
-  ldflags = [ "-X github.com/tinygo-org/tinygo/goenv.TINYGOROOT=${placeholder "out"}/share/tinygo" ];
+  ldflags = [
+    "-X github.com/tinygo-org/tinygo/goenv.TINYGOROOT=${placeholder "out"}/share/tinygo"
+    "-X github.com/tinygo-org/tinygo/goenv.clangResourceDir=${clang.cc.lib}/lib/clang/${llvmMajor}"
+  ];
   subPackages = [ "." ];
 
   # Output contains static libraries for different arm cpus
   # and stripping could mess up these so only strip the compiler
   stripDebugList = [ "bin" ];
 
-  postConfigure = lib.optionalString stdenv.isDarwin ''
-    for i in vendor/tinygo.org/x/go-llvm/llvm_config_darwin*; do
-      substituteInPlace $i --replace "curses" "ncurses"
-    done
-  '';
-
   postPatch = ''
-    # Copy wasi-libc, symlink seems not working
-    rm -rf lib/wasi-libc/*
-    mkdir -p lib/wasi-libc/sysroot/lib/wasm32-wasi lib/wasi-libc/sysroot/include
-    cp -a ${wasi-libc}/lib/* lib/wasi-libc/sysroot/lib/wasm32-wasi/
-    cp -a ${wasi-libc.dev}/include/* lib/wasi-libc/sysroot/include/
-
     # Borrow compiler-rt builtins from our source
     # See https://github.com/tinygo-org/tinygo/pull/2471
     mkdir -p lib/compiler-rt-builtins
     cp -a ${compiler-rt.src}/compiler-rt/lib/builtins/* lib/compiler-rt-builtins/
 
-    substituteInPlace Makefile \
-      --replace "\$(TINYGO)" "$(pwd)/build/tinygo" \
-      --replace "@\$(MD5SUM)" "md5sum" \
+    substituteInPlace GNUmakefile \
       --replace "build/release/tinygo/bin" "$out/bin" \
       --replace "build/release/" "$out/share/"
-
-    substituteInPlace builder/buildid.go \
-      --replace "OUT_PATH" "$out"
-
-    # TODO: Fix mingw
-    # Disable windows cross-compile tests
-    sed -i "/GOOS=windows/d" Makefile
-  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace Makefile \
-      --replace "./build/tinygo" "${buildPackages.tinygo}/bin/tinygo"
   '';
 
   preBuild = ''
     export PATH=${bootstrapTools}:$PATH
     export HOME=$TMPDIR
+
+    ldflags=("''$ldflags[@]/\"-buildid=\"")
   '';
 
   postBuild = ''
@@ -135,27 +93,37 @@ buildGoModule rec {
     mkdir -p build
     mv $GOPATH/bin/tinygo build/tinygo
 
+    # Build our own custom wasi-libc.
+    # This is necessary because we modify the build a bit for our needs (disable
+    # heap, enable debug symbols, etc).
+    make wasi-libc \
+      CLANG="${lib.getBin clang.cc}/bin/clang -resource-dir ${clang.cc.lib}/lib/clang/${llvmMajor}" \
+      LLVM_AR=${lib.getBin llvm}/bin/llvm-ar \
+      LLVM_NM=${lib.getBin llvm}/bin/llvm-nm
+
     make gen-device -j $NIX_BUILD_CORES
 
     export TINYGOROOT=$(pwd)
   '';
 
   checkPhase = lib.optionalString (tinygoTests != [ ] && tinygoTests != null) ''
-    make ''${tinygoTests[@]} XTENSA=0
+    make ''${tinygoTests[@]} TINYGO="$(pwd)/build/tinygo" MD5SUM=md5sum XTENSA=0
   '';
+
+  # GDB upstream does not support ARM darwin
+  runtimeDeps = [ go clang.cc lld avrdude openocd binaryen ]
+    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [ gdb ];
 
   installPhase = ''
     runHook preInstall
 
-    make build/release
+    make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
-      --prefix PATH : ${lib.makeBinPath [ go avrdude openocd binaryen ]}:${bootstrapTools}
+      --prefix PATH : ${lib.makeBinPath runtimeDeps }
 
     runHook postInstall
   '';
-
-  disallowedReferences = [ wasi-libc ];
 
   meta = with lib; {
     homepage = "https://tinygo.org/";

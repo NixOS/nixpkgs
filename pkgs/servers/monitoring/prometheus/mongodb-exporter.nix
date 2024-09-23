@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mongodb_exporter";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "mongodb_exporter";
     rev = "v${version}";
-    hash = "sha256-QII93sd/Lh+m6S5HtDsOt2BUnqg+X8I24KoU+MAWWQU=";
+    hash = "sha256-cWXfMi48aF06Prua3n4geG2yP1JzLlHq/xh1HmiJkT4=";
   };
 
-  vendorHash = "sha256-khNkh2LufCE3KdPYRCALz66X+Q1U+sTIILh4uDzhKiI=";
+  vendorHash = "sha256-69YBrDAEruWXaAqLfRVtqmZ0pop3r5cusePSV2Q1MXw=";
 
   ldflags = [
     "-s"
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib;
     {
-      description = "A Prometheus exporter for MongoDB including sharding, replication and storage engines";
+      description = "Prometheus exporter for MongoDB including sharding, replication and storage engines";
       homepage = "https://github.com/percona/mongodb_exporter";
       license = licenses.asl20;
       maintainers = with maintainers; [ undefined-moe ];

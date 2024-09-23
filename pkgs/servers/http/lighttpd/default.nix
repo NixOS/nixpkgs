@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
-, fetchpatch
+, autoreconfHook
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -8,19 +8,21 @@
 , enablePam ? false, linux-pam
 , enableSasl ? false, cyrus_sasl
 , enableWebDAV ? false, sqlite, libuuid
-, enableExtendedAttrs ? false, attr
+, enableExtendedAttrs ? false
 , perl
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.73";
+  version = "1.4.76";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-gYgW0LMUsKqHKKcHZRNDX21esifzthMjRo4fENvoTKg=";
+    sha256 = "sha256-jL9CluNzz9DO3+nZeHYLWwXFj9xASLTivK8KYayPUBE=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs tests
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ pcre2 pcre2.dev libxml2 zlib bzip2 which file openssl ]
              ++ lib.optional enableDbi libdbi
              ++ lib.optional enableMagnet lua5_1
@@ -77,5 +79,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor brecht ];
+    mainProgram = "lighttpd";
   };
 }

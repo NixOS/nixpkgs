@@ -1,30 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20230521.1";
+  version = "20240713.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EEeKYeYnxbjLdpH39+v3IQhFSFMWST0310DCl/ttGEU=";
+    hash = "sha256-KW44LUGgCE+KB3tE9ecYqOansjFN6F4A7TRCoKwOsRs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     "tests/*.py"
@@ -40,12 +37,12 @@ buildPythonPackage rec {
     "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
   ];
 
-  pythonImportsCheck = ["pydal"];
+  pythonImportsCheck = [ "pydal" ];
 
   meta = with lib; {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with licenses; [ bsd3 ] ;
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ wamserma ];
   };
 }

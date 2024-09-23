@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "libubox";
-  version = "unstable-2023-11-03";
+  version = "unstable-2023-12-18";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "f7d1569113110ea8df071d2ea64fd17aaf5b42c9";
-    hash = "sha256-W0+QXI0gJ4WwrlRMPAJOChvilZ4zlAf4kXrfgBAkQAE=";
+    rev = "6339204c212b2c3506554a8842030df5ec6fe9c6";
+    hash = "sha256-QgpORITt6MYgfzUpaI2T0Ge2a0iVHjDhdYI/nZ2HbJ8=";
   };
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" (if with_lua then "-DLUAPATH=${placeholder "out"}/lib/lua" else "-DBUILD_LUA=OFF") ];
@@ -21,6 +21,10 @@ stdenv.mkDerivation {
       ln -s "$fin" "$fout"
     done
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "-Wno-error=gnu-folding-constant"
+  ]);
 
   meta = with lib; {
     description = "C utility functions for OpenWrt";

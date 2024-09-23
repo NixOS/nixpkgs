@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , openssh
 , gitMinimal
-, rsync
 , nix
 , coreutils
 , curl
@@ -12,11 +11,12 @@
 , gnused
 , lib
 , makeWrapper
+, sshpass
+, gnutar
 }:
 let
   runtimeDeps = [
     gitMinimal # for git flakes
-    rsync
     nix
     coreutils
     curl # when uploading tarballs
@@ -24,20 +24,23 @@ let
     gawk
     findutils
     gnused # needed by ssh-copy-id
+    sshpass # used to provide password for ssh-copy-id
+    gnutar # used to upload extra-files
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.1.0";
+  version = "1.4.0";
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-43r1pwWv9SuMEG+Pe5laFsqE1/X0rFQ6s/wpEufPliE=";
+    hash = "sha256-ssx6Y665uoOO3PX6Mp9NAF8sqoGb7Ezfw+bTY69aGlE=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     install -D -m 0755 src/nixos-anywhere.sh $out/bin/nixos-anywhere
+    install -D -m 0755 src/get-facts.sh $out/bin/get-facts.sh
 
     # We prefer the system's openssh over our own, since it might come with features not present in ours:
     # https://github.com/numtide/nixos-anywhere/issues/62

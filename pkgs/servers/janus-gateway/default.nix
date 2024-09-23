@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "janus-gateway";
-  version = "1.2.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "meetecho";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YbY7wcd8YHcPo5w4n54gjOtepYLbboLsrLij7oYzhco=";
+    sha256 = "sha256-3o9XxxTlWppq1mFgIUjstUFz6bT44mvBJa4FBgcc4Pc=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config gengetopt ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     "--enable-post-processing"
   ];
 
-  makeFlagsArray = [
+  makeFlags = [
     "BORINGSSL_LIBS=-L${lib.getLib boringssl}/lib"
   ];
 

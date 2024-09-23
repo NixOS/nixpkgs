@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , aspell
 , groff
 , pkg-config
@@ -10,26 +9,30 @@
 , hspell
 , nuspell
 , unittest-cpp
+
+, withHspell ? true
+, withAspell ? true
+, withHunspell ? true
+, withNuspell ? true
+, withAppleSpell ? stdenv.isDarwin
+
+, Cocoa
 }:
+
+assert withAppleSpell -> stdenv.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.6.2";
+  version = "2.6.9";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-ZoanKOVudg+N7gmiLw+1O0bunb59ZM+eW7NaZYv/fh0=";
+    hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
   };
 
-  patches = [
-    # fix build with clang 16
-    (fetchpatch {
-      url = "https://github.com/AbiWord/enchant/commit/f71eb22e4af7f9917011807a41cf295d3ce0ccbc.patch";
-      hash = "sha256-9WWvpU3HKzPlxNBYQAKPppW6G3kOIC2A+MqX5eheBDA=";
-    })
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     groff
@@ -38,17 +41,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+  ] ++ lib.optionals withHunspell [
     hunspell
+  ] ++ lib.optionals withNuspell [
     nuspell
+  ] ++ lib.optionals withAppleSpell [
+    Cocoa
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     unittest-cpp
   ];
 
   # libtool puts these to .la files
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals withHspell [
     hspell
+  ] ++ lib.optionals withAspell [
     aspell
   ];
 
@@ -58,10 +66,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-relocatable" # needed for tests
-    "--with-aspell"
-    "--with-hspell"
-    "--with-hunspell"
-    "--with-nuspell"
+    (lib.withFeature withAspell "aspell")
+    (lib.withFeature withHspell "hspell")
+    (lib.withFeature withHunspell "hunspell")
+    (lib.withFeature withNuspell "nuspell")
+    (lib.withFeature withAppleSpell "applespell")
   ];
 
   meta = with lib; {

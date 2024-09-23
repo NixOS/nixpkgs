@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchFromGitHub, gerbilPackages, mariadb-connector-c, ... }:
+{ pkgs, lib, fetchFromGitHub, mariadb-connector-c, ... }:
 
 {
   pname = "gerbil-mysql";

@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   preBuild = ''
-    go generate
+    GOOS= GOARCH= go generate
   '';
 
   meta = with lib; {

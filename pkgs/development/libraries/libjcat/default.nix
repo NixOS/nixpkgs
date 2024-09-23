@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.1.14";
+  version = "0.2.1";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "sha256-XN7/ZtWCCO7lSspXM4vNowoWN1U0NGQPUTM9KjTEHjY=";
+    sha256 = "sha256-tCXz62MEqYBnrx2RxlTBwKGTahfhUCVdet4VnXw5klQ=";
   };
 
   patches = [
@@ -70,9 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for reading and writing Jcat files";
+    mainProgram = "jcat-tool";
     homepage = "https://github.com/hughsie/libjcat";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

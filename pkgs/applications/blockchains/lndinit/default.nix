@@ -21,7 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Wallet initializer utility for lnd";
     homepage = "https://github.com/lightninglabs/lndinit";
-    mainProgram = pname;
+    mainProgram = "lndinit";
     license = licenses.mit;
     maintainers = with maintainers; [aldoborrero];
   };

@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, appdirs
-, requests
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  appdirs,
+  httpx,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyradios";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Uqg/owmf2popAhyanAUIdSWpXAGCWkQja4P944BpNhc=";
+    hash = "sha256-XTpw8bgFZo35PJngr9oweU6fY3KAphJsrEhkKzWHLIA=";
   };
 
   propagatedBuildInputs = [
     appdirs
-    requests
+    httpx
     setuptools
   ];
 
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "Python client for the https://api.radio-browser.info";
     homepage = "https://github.com/andreztz/pyradios";
     license = licenses.mit;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
   };
 }

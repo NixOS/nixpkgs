@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitea
-, fetchpatch
 , cmake
 , wxGTK32
 , gtk3
@@ -30,7 +29,7 @@
 , expat
 , libid3tag
 , libopus
-, ffmpeg_5
+, ffmpeg
 , soundtouch
 , pcre
 , portaudio
@@ -105,7 +104,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     expat
-    ffmpeg_5
+    ffmpeg
     file
     flac
     glib
@@ -150,9 +149,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Sound editor with graphical UI";
+    mainProgram = "tenacity";
     homepage = "https://tenacityaudio.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ irenes lheckemann ];
+    maintainers = with maintainers; [ irenes ];
     platforms = platforms.linux;
   };
 }

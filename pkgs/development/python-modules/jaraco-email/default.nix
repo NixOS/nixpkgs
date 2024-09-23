@@ -1,20 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, setuptools-scm
-, jaraco-text
-, jaraco-collections
-, keyring
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  aiosmtpd,
+  jaraco-text,
+  jaraco-collections,
+  keyring,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-email";
-  version = "3.1.0";
+  version = "3.1.1";
 
   disabled = pythonOlder "3.7";
 
@@ -24,30 +24,16 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.email";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MR/SX5jmZvEMULgvQbh0JBZjIosNCPWl1wvEoJbdw4Y=";
+    hash = "sha256-2dU+tbrP86Oy8ej1Xa0+fNRB83tGBTUsOWbZyQsMKu8=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "dos2unix-line-endings.patch";
-      url = "https://github.com/jaraco/jaraco.email/commit/ab9643598e26cca9c9cdbd34b00c972f547b9236.patch";
-      hash = "sha256-Z2WOnR+ELzQciVyUiUq4jaP+Vnc4aseLP7+LWJZoOU8=";
-    })
-    (fetchpatch {
-      name = "jaraco-collections-4-compatibility.patch";
-      url = "https://github.com/jaraco/jaraco.email/commit/e65e5fed0178ddcd009d16883b381c5582f1a9df.patch";
-      hash = "sha256-mKxa0ZU1JFeQPemrjQl94buLNY5gXnMCCRKBxdO870M=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
+    aiosmtpd
     jaraco-text
     jaraco-collections
     keyring
@@ -55,9 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.email" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/jaraco/jaraco.email/blob/${src.rev}/CHANGES.rst";

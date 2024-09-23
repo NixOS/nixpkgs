@@ -17,23 +17,23 @@
 , util-linux
 , xwininfo
 , zenity
-, zig_0_11
+, zig_0_12
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mepo";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mepo";
     rev = finalAttrs.version;
-    hash = "sha256-sxN7yTnk3KDAkP/d3miKa2bEgB3AUaf9/M9ajJyRt3g=";
+    hash = "sha256-Ii5E9TgUxzlVIdkKS/6RtasOETeclMm1yoU86gs4hB8=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    zig_0_11.hook
+    zig_0_12.hook
     makeWrapper
   ];
 
@@ -56,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/bin/mepo_ui_menu_user_pin_updater.sh \
-      --replace /usr/libexec/geoclue-2.0 ${geoclue2-with-demo-agent}/libexec/geoclue-2.0
+      --replace-fail /usr/libexec/geoclue-2.0 ${geoclue2-with-demo-agent}/libexec/geoclue-2.0
     substituteInPlace $out/bin/mepo_ui_central_menu.sh \
-      --replace "grep mepo_" "grep '^\.mepo_\|^mepo_'" \
-      --replace " ls " " ls -a " #circumvent wrapping for script detection
+      --replace-fail "grep mepo_" "grep '^\.mepo_\|^mepo_'" \
+      --replace-fail " ls " " ls -a " #circumvent wrapping for script detection
     for program in $out/bin/* ; do
       wrapProgram $program \
         --suffix PATH : $out/bin:${lib.makeBinPath ([

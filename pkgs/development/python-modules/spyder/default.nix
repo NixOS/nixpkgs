@@ -1,70 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, atomicwrites
-, chardet
-, cloudpickle
-, cookiecutter
-, diff-match-patch
-, intervaltree
-, jedi
-, jellyfish
-, keyring
-, matplotlib
-, nbconvert
-, numpy
-, numpydoc
-, psutil
-, pygments
-, pylint-venv
-, pyls-spyder
-, pyopengl
-, pyqtwebengine
-, python-lsp-black
-, python-lsp-server
-, pyxdg
-, pyzmq
-, qdarkstyle
-, qstylizer
-, qtawesome
-, qtconsole
-, qtpy
-, rope
-, rtree
-, scipy
-, spyder-kernels
-, textdistance
-, three-merge
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # dependencies
+  aiohttp,
+  asyncssh,
+  atomicwrites,
+  chardet,
+  cloudpickle,
+  cookiecutter,
+  diff-match-patch,
+  fzf,
+  intervaltree,
+  jedi,
+  jellyfish,
+  keyring,
+  matplotlib,
+  nbconvert,
+  numpy,
+  numpydoc,
+  pickleshare,
+  psutil,
+  pygithub,
+  pygments,
+  pylint-venv,
+  pyls-spyder,
+  pyopengl,
+  pyqtwebengine,
+  python-lsp-black,
+  python-lsp-server,
+  pyuca,
+  pyzmq,
+  qdarkstyle,
+  qstylizer,
+  qtawesome,
+  qtconsole,
+  qtpy,
+  rope,
+  rtree,
+  scipy,
+  setuptools,
+  spyder-kernels,
+  superqt,
+  textdistance,
+  three-merge,
+  watchdog,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "6.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zjQmUmkqwtXNnZKssNpl24p4FQscZKGiiJj5iwYl2UM=";
+    hash = "sha256-/UUtSpSkt1hJeIZfBLe8owP82jRx02kUF6TdfCsq6CY=";
   };
 
-  patches = [
-    ./dont-clear-pythonpath.patch
-  ];
+  patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [
+  build-system = [
     pyqtwebengine.wrapQtAppsHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
+    asyncssh
     atomicwrites
     chardet
     cloudpickle
     cookiecutter
     diff-match-patch
+    fzf
     intervaltree
     jedi
     jellyfish
@@ -73,7 +84,9 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    pickleshare
     psutil
+    pygithub
     pygments
     pylint-venv
     pyls-spyder
@@ -81,7 +94,7 @@ buildPythonPackage rec {
     pyqtwebengine
     python-lsp-black
     python-lsp-server
-    pyxdg
+    pyuca
     pyzmq
     qdarkstyle
     qstylizer
@@ -92,22 +105,15 @@ buildPythonPackage rec {
     rtree
     scipy
     spyder-kernels
+    superqt
     textdistance
     three-merge
     watchdog
+    yarl
   ] ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
-
-  postPatch = ''
-    # Remove dependency on pyqtwebengine
-    # This is still part of the pyqt 5.11 version we have in nixpkgs
-    sed -i /pyqtwebengine/d setup.py
-    substituteInPlace setup.py \
-      --replace "qdarkstyle>=3.0.2,<3.1.0" "qdarkstyle" \
-      --replace "ipython>=7.31.1,<8.0.0" "ipython"
-  '';
 
   postInstall = ''
     # Add Python libs to env so Spyder subprocesses
@@ -121,8 +127,9 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scientific python development environment";
+    mainProgram = "spyder";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development
       environment for the Python language with advanced editing, interactive
@@ -131,8 +138,8 @@ buildPythonPackage rec {
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.linux;
   };
 }

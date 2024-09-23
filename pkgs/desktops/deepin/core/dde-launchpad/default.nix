@@ -1,58 +1,56 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, dtkdeclarative
-, qtbase
-, appstream-qt
-, kitemmodels
-, qt5integration
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6Packages,
+  qt6integration,
+  qt6platform-plugins,
+  dtk6declarative,
+  dde-shell,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-launchpad";
-  version = "0.2.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-o9YKmtaqa4ykoR75V2OpXm4GRPWHI6WKbxWAzY1b8I0=";
+    hash = "sha256-kczdSd9+ZmMZQ2fWg3SRW+CS/aWktYLz/H+Ky81TwVM=";
   };
 
   nativeBuildInputs = [
     cmake
-    qttools
     pkg-config
-    wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    dtkwidget
-    dtkdeclarative
-    qtbase
-    appstream-qt
-    kitemmodels
-  ];
+  buildInputs =
+    [
+      qt6integration
+      qt6platform-plugins
+      dtk6declarative
+      dde-shell
+    ]
+    ++ (with qt6Packages; [
+      qtbase
+      qtsvg
+      qtwayland
+      appstream-qt
+    ]);
 
-  cmakeFlags = [
-    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
-  ];
+  cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
-
-  meta = with lib; {
-    description = "The 'launcher' or 'start menu' component for DDE";
+  meta = {
+    description = "'launcher' or 'start menu' component for DDE";
+    mainProgram = "dde-launchpad";
     homepage = "https://github.com/linuxdeepin/dde-launchpad";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

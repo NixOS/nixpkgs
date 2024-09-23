@@ -22,6 +22,7 @@
 , expat
 , libdrm
 , libxkbcommon
+, pipewire
 , gtk3
 , pango
 , cairo
@@ -32,6 +33,7 @@
 , libuuid
 , systemd
 , wayland
+, libGL
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
         xorg.libxcb cups.lib dbus.lib expat libdrm
         xorg.libXcomposite xorg.libXdamage xorg.libXext
         xorg.libXfixes xorg.libXrandr libxkbcommon
-        gtk3 pango cairo gdk-pixbuf mesa
+        pipewire gtk3 pango cairo gdk-pixbuf mesa
         alsa-lib at-spi2-core xorg.libxshmfence systemd wayland
       ];
       naclHelper = lib.makeLibraryPath [
@@ -92,10 +94,7 @@ stdenv.mkDerivation rec {
         glib nss nspr
       ];
       libGLESv2 = lib.makeLibraryPath [
-        xorg.libX11 xorg.libXext xorg.libxcb wayland
-      ];
-      libsmartscreenn = lib.makeLibraryPath [
-        libuuid
+        xorg.libX11 xorg.libXext xorg.libxcb wayland libGL
       ];
       liboneauth = lib.makeLibraryPath [
         libuuid xorg.libX11
@@ -116,11 +115,6 @@ stdenv.mkDerivation rec {
       opt/microsoft/${shortName}/msedge_crashpad_handler
 
     patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath.naclHelper}" \
-      opt/microsoft/${shortName}/nacl_helper
-
-    patchelf \
       --set-rpath "${libPath.libwidevinecdm}" \
       opt/microsoft/${shortName}/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
 
@@ -131,10 +125,11 @@ stdenv.mkDerivation rec {
     patchelf \
       --set-rpath "${libPath.liboneauth}" \
       opt/microsoft/${shortName}/liboneauth.so
-  '' + lib.optionalString (lib.versionOlder version "120") ''
+  '' + lib.optionalString (lib.versionOlder version "121") ''
     patchelf \
-      --set-rpath "${libPath.libsmartscreenn}" \
-      opt/microsoft/${shortName}/libsmartscreenn.so
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${libPath.naclHelper}" \
+      opt/microsoft/${shortName}/nacl_helper
   '';
 
   installPhase = ''
@@ -187,11 +182,13 @@ stdenv.mkDerivation rec {
       --add-flags ${lib.escapeShellArg commandLineArgs}
   '';
 
-  passthru.updateScript = ./update.py;
+  # We only want automatic updates for stable, beta and dev will get updated by the same script
+  # and are only used for testing.
+  passthru = lib.optionalAttrs (channel == "stable") { updateScript = ./update.py; };
 
   meta = with lib; {
     homepage = "https://www.microsoft.com/en-us/edge";
-    description = "The web browser from Microsoft";
+    description = "Web browser from Microsoft";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];

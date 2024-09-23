@@ -28,20 +28,20 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
-  postPatch = with lib;
+  postPatch =
     let
       configFile =
-        if isDerivation conf || builtins.isPath conf
+        if lib.isDerivation conf || builtins.isPath conf
         then conf else writeText "config.h" conf;
     in
-    optionalString (conf != null) "cp ${configFile} config.h";
+    lib.optionalString (conf != null) "cp ${configFile} config.h";
 
   makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A dmenu rip-off with contextual completion";
+    description = "Dmenu rip-off with contextual completion";
     longDescription = ''
       XPrompt is a prompt for X. XPrompt features a text input field where the
       user can type in a text subject to tab-completion.

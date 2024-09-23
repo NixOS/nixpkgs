@@ -1,17 +1,20 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, chardet
-, cssselect
-, lxml
-, timeout-decorator
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  chardet,
+  cssselect,
+  lxml,
+  lxml-html-clean,
+  timeout-decorator,
 }:
 
 buildPythonPackage rec {
   pname = "readability-lxml";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "buriy";
@@ -20,7 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-MKdQRety24qOG9xgIdaCJ72XEImP42SlMG6tC7bwzo4=";
   };
 
-  propagatedBuildInputs = [ chardet cssselect lxml ];
+  propagatedBuildInputs = [
+    chardet
+    cssselect
+    lxml
+    lxml-html-clean
+  ];
 
   postPatch = ''
     substituteInPlace setup.py --replace 'sys.platform == "darwin"' "False"

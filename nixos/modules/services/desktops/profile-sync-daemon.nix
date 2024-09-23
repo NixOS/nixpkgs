@@ -1,23 +1,20 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.psd;
 in {
-  options.services.psd = with types; {
-    enable = mkOption {
+  options.services.psd = with lib.types; {
+    enable = lib.mkOption {
       type = bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the Profile Sync daemon.
       '';
     };
-    resyncTimer = mkOption {
+    resyncTimer = lib.mkOption {
       type = str;
       default = "1h";
       example = "1h 30min";
-      description = lib.mdDoc ''
+      description = ''
         The amount of time to wait before syncing browser profiles back to the
         disk.
 
@@ -27,7 +24,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd = {
       user = {
         services = {

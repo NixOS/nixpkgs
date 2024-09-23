@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,20 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-1q6KpKdrZvp8XvxGCkoorlZDDgvGg/imTX8+NEOBbWs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    jinja2
-  ];
+  propagatedBuildInputs = [ jinja2 ];
 
   # Tests are not shipped with PyPi and source is not tagged
   doCheck = false;
 
-  pythonImportsCheck = [
-    "junit2htmlreport"
-  ];
+  pythonImportsCheck = [ "junit2htmlreport" ];
 
   meta = with lib; {
     description = "Generate HTML reports from Junit results";

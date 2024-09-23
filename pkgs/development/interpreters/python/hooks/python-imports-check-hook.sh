@@ -6,8 +6,13 @@ pythonImportsCheckPhase () {
 
     if [ -n "$pythonImportsCheck" ]; then
         echo "Check whether the following modules can be imported: $pythonImportsCheck"
-        export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
-        ( cd $out && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"pythonImportsCheck\"].split()))'" )
+        pythonImportsCheckOutput=$out
+        if [ -n "$python" ]; then
+            echo "Using python specific output \$python for imports check"
+            pythonImportsCheckOutput=$python
+        fi
+        export PYTHONPATH="$pythonImportsCheckOutput/@pythonSitePackages@:$PYTHONPATH"
+        ( cd $pythonImportsCheckOutput && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"pythonImportsCheck\"].split()))'" )
     fi
 }
 

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -36,5 +35,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ flexiondotorg ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "obs-cli";
   };
 }

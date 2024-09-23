@@ -5,7 +5,6 @@
 , thrift
 , cmake
 , pkg-config
-, doxygen
 , swig
 , python
 , logLib
@@ -14,6 +13,7 @@
 , gmp
 , icu
 , limesuite
+, gnuradioAtLeast
 }:
 
 let
@@ -33,7 +33,7 @@ let
 in mkDerivation {
   pname = "gr-limesdr";
   inherit version src;
-  disabledForGRafter = "3.9";
+  disabled = gnuradioAtLeast "3.9";
 
   nativeBuildInputs = [
     cmake

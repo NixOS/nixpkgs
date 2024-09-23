@@ -1,35 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 
-# buildtime
-, setuptools-scm
+  # buildtime
+  setuptools-scm,
 
-# runtime
-, django
-, python-ldap
+  # runtime
+  django,
+  python-ldap,
 
-# tests
-, python
-, pkgs
+  # tests
+  python,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "4.6.0";
+  version = "4.8.0";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-muK/h/m2Nnts/ZSgRRiWy8co5UAO2By/vVjOdDwJCaI=";
+    hash = "sha256-YEJQk43cn9phnyR8elmwsvBuU6fT9GoVbyiqMN1xpzg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     django

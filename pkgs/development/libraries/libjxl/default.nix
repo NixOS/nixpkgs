@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub
-, fetchpatch
 , brotli
 , cmake
 , giflib
@@ -9,19 +8,26 @@
 , libjpeg
 , libpng
 , libwebp
-, openexr
+, gdk-pixbuf
+, openexr_3
 , pkg-config
+, makeWrapper
 , zlib
-, buildDocs ? true
 , asciidoc
 , graphviz
 , doxygen
 , python3
+, lcms2
+, enablePlugins ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
+
+let
+  loadersPath = "${gdk-pixbuf.binaryDir}/jxl-loaders.cache";
+in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.8.2";
+  version = "0.10.3";
 
   outputs = [ "out" "dev" ];
 
@@ -29,31 +35,24 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
+    hash = "sha256-zk/fI1C26K5WC9QBfzS6MqPT9PiR4wmWURjOOIiNsg4=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Add missing <atomic> content to fix gcc compilation for RISCV architecture
-    # https://github.com/libjxl/libjxl/pull/2211
-    (fetchpatch {
-      url = "https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc.patch";
-      hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
-    })
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    gtest
     pkg-config
-  ] ++ lib.optionals buildDocs [
+    gdk-pixbuf
+    makeWrapper
     asciidoc
     doxygen
     python3
   ];
 
-  depsBuildBuild = lib.optionals buildDocs [
+  depsBuildBuild = [
     graphviz
   ];
 
@@ -74,12 +73,15 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
+    lcms2
     giflib
     gperftools # provides `libtcmalloc`
+    gtest
     libjpeg
     libpng
     libwebp
-    openexr
+    gdk-pixbuf
+    openexr_3
     zlib
   ];
 
@@ -105,19 +107,31 @@ stdenv.mkDerivation rec {
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
     # "-DJPEGXL_ENABLE_VIEWERS=ON"
-
-    # TODO: Update this package to enable this (overridably via an option):
+  ] ++ lib.optionals enablePlugins [
     # Enable plugins, such as:
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
-    # "-DJPEGXL_ENABLE_PLUGINS=ON"
+    "-DJPEGXL_ENABLE_PLUGINS=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "-DJPEGXL_STATIC=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     "-DJPEGXL_FORCE_NEON=ON"
   ];
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+  postPatch = ''
+    substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
+      --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
+  '';
+
+  postInstall = lib.optionalString enablePlugins ''
+    GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
+    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+      gdk-pixbuf-query-loaders --update-cache
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
+      --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
+  '';
+
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
 
   # FIXME x86_64-darwin:
@@ -126,7 +140,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";
-    description = "JPEG XL image format reference implementation.";
+    description = "JPEG XL image format reference implementation";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nh2 ];
     platforms = platforms.all;

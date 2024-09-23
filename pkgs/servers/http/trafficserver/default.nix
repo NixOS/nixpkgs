@@ -10,8 +10,6 @@
 , pcre
 , perlPackages
 , python3
-, xz
-, zlib
 , catch2
 # recommended dependencies
 , withHwloc ? true
@@ -49,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.2.3";
+  version = "9.2.5";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-WqRqf10QKYepCoaNzG26O2jv54Do3qFawDupSkrAPKk=";
+    hash = "sha256-RwhTI31LyupkAbXHsNrjcJqUjVoVpX3/2Ofxl2NdasU=";
   };
 
   # NOTE: The upstream README indicates that flex is needed for some features,

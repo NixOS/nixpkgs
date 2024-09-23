@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, packaging
-, py
-, pytestCheckHook
-, pythonOlder
-, termcolor
-, wireshark-cli
+{
+  lib,
+  stdenv,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  packaging,
+  py,
+  pytestCheckHook,
+  pythonOlder,
+  termcolor,
+  wireshark-cli,
 }:
 
 buildPythonPackage rec {
@@ -51,29 +52,27 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # flaky
-    # KeyError: 'Packet of index 0 does not exist in capture'
-    "test_getting_packet_summary"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # fails on darwin
-    # _pickle.PicklingError: logger cannot be pickled
-    "test_iterate_empty_psml_capture"
-  ];
+  disabledTests =
+    [
+      # flaky
+      # KeyError: 'Packet of index 0 does not exist in capture'
+      "test_getting_packet_summary"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # fails on darwin
+      # _pickle.PicklingError: logger cannot be pickled
+      "test_iterate_empty_psml_capture"
+    ];
 
-  pythonImportsCheck = [
-    "pyshark"
-  ];
+  pythonImportsCheck = [ "pyshark" ];
 
-  pytestFlagsArray = [
-    "../tests/"
-  ];
+  pytestFlagsArray = [ "../tests/" ];
 
   meta = with lib; {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
     changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

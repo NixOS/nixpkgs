@@ -1,7 +1,7 @@
 { lib
 , fetchurl
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , dpkg
 , autoPatchelfHook
 , glibc
@@ -15,15 +15,15 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ticktick";
-  version = "1.0.80";
+  version = "6.0.0";
 
   src = fetchurl {
-    url = "https://d2atcrkye2ik4e.cloudfront.net/download/linux/linux_deb_x64/${finalAttrs.pname}-${finalAttrs.version}-amd64.deb";
-    hash = "sha256-EK+8NFEim2gcFj9t6AGYdGVlyFj9Yq7NaOia3XKy3cc=";
+    url = "https://d2atcrkye2ik4e.cloudfront.net/download/linux/linux_deb_x64/ticktick-${finalAttrs.version}-amd64.deb";
+    hash = "sha256-yoskJ7v0RgRZ16gs9UY1xf/PunLoFkNGKmVMkPJDPmM=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     autoPatchelfHook
     dpkg
   ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A powerful to-do & task management app with seamless cloud synchronization across all your devices";
+    description = "Powerful to-do & task management app with seamless cloud synchronization across all your devices";
     homepage = "https://ticktick.com/home/";
     license = licenses.unfree;
     maintainers = with maintainers; [ hbjydev ];

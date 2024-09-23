@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , buildbot
+, stdenv
 
 # patch
 , coreutils
@@ -21,16 +21,12 @@
 , nixosTests
 }:
 
-buildPythonPackage (rec {
-  pname = "buildbot-worker";
-  inherit (buildbot) version;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jI38ZhCcHbjah6lST6YtSZAwaeZPBWsgY3VTUf6s2x8=";
-  };
+buildPythonPackage ({
+  pname = "buildbot_worker";
+  inherit (buildbot) src version;
 
   postPatch = ''
+    cd worker
     substituteInPlace buildbot_worker/scripts/logwatcher.py \
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
@@ -58,7 +54,8 @@ buildPythonPackage (rec {
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = with maintainers; [ ryansydnor lopsided98 ];
+    maintainers = teams.buildbot.members;
     license = licenses.gpl2;
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/243534318/nixlog/6
   };
 })

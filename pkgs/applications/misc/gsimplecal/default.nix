@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.romildo ];
     platforms = lib.platforms.linux;
+    mainProgram = "gsimplecal";
   };
 }

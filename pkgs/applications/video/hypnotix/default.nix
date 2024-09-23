@@ -2,25 +2,25 @@
 , stdenv
 , fetchFromGitHub
 , substituteAll
-, cinnamon
+, xapp
 , circle-flags
 , gettext
 , gobject-introspection
 , mpv
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "4.0";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-0iJzlj5FRDXJdh+vWVvZaBJVNru7CfkvJtZUZYKoqPw=";
+    hash = "sha256-wDzHCrZTbfIb9dpRoh5qYKQNjONOv34FYdOr4svOLEw=";
   };
 
   patches = [
@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;
 
   buildInputs = [
-    cinnamon.xapp
+    xapp
     python3 # for patchShebangs
   ];
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     requests
     setproctitle
     unidecode
-    xapp
+    python-xapp
   ];
 
   installPhase = ''

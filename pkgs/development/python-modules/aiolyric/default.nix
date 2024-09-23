@@ -1,41 +1,52 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  incremental,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LDLpNuwkoPacI/a2NSlqUABRgwy+jAjGwOxmShLskso=";
+    repo = "aiolyric";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pN/F4Rdov06sm1yfJQEzmWyujWVeVU+bNGGkgnN4jYw=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
+  '';
+
+  build-system = [
+    incremental
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
+    incremental
   ];
 
   nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError, https://github.com/timmo001/aiolyric/issues/61
-    "test_priority"
-  ];
-
-  pythonImportsCheck = [
-    "aiolyric"
-  ];
+  pythonImportsCheck = [ "aiolyric" ];
 
   meta = with lib; {
     description = "Python module for the Honeywell Lyric Platform";

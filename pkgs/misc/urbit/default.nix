@@ -10,15 +10,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "urbit";
-  version = "2.12";
+  version = "3.1";
 
   src = fetchzip {
     url = "https://github.com/urbit/vere/releases/download/vere-v${version}/${platform}.tgz";
     sha256 = {
-      x86_64-linux = "sha256-N8RYlafw0HcmtGAQMKQb1cG7AivOpWS/5rU8CESJWAw=";
-      aarch64-linux = "sha256-RsBtwxSdqHVXMk7or1nPAFWd6Ypa0SqjpTihv8riyk4=";
-      x86_64-darwin = "sha256-/QPI66/gl3mlQHc+8zrEyP4/Hv5vwXlEx1cW2mP33IY=";
-      aarch64-darwin = "sha256-+2DYohaBxVcR1ZOjuk6GWcNpzb6aJMXq6BxwWw1OeIY=";
+      x86_64-linux = "sha256-51Zgv9QANQVMk/dc7/heYmCNfeu4k7mrYNke1/oz/94=";
+      aarch64-linux = "sha256-Tdn/ve9iCjsY/b39TZ7ErHV14mIAHdtmycgUPIzRihQ=";
+      x86_64-darwin = "sha256-y/FQIVcEn6dLWXPztC34+7+5eDMO7Xcx25D2+0p7Mxk=";
+      aarch64-darwin = "sha256-YJGRZlpTdm1x4P+GnZiKC1411tcEX+Jdnm+iyxUlsU0=";
     }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://urbit.org";
-    description = "An operating function";
+    description = "Operating function";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     maintainers = [ maintainers.matthew-levan ];
     license = licenses.mit;

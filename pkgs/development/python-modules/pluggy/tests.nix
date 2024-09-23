@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, pluggy
-, pytestCheckHook
+{
+  buildPythonPackage,
+  pluggy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {

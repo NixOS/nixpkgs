@@ -12,6 +12,15 @@ let
     nixpkgs.hostPlatform = "aarch64-linux";
     nixpkgs.buildPlatform = "aarch64-darwin";
   };
+  withSameHostAndBuild = eval {
+    nixpkgs.hostPlatform = "aarch64-linux";
+    nixpkgs.buildPlatform = "aarch64-linux";
+  };
+  externalPkgsWithConfig = {
+    _file = "ext-pkgs-config.nix";
+    nixpkgs.pkgs = pkgs;
+    nixpkgs.config.allowUnfree = true;
+  };
   ambiguous = {
     _file = "ambiguous.nix";
     nixpkgs.hostPlatform = "aarch64-linux";
@@ -81,6 +90,8 @@ lib.recurseIntoAttrs {
     assert withHost._module.args.pkgs.stdenv.buildPlatform.system == "aarch64-linux";
     assert withHostAndBuild._module.args.pkgs.stdenv.hostPlatform.system == "aarch64-linux";
     assert withHostAndBuild._module.args.pkgs.stdenv.buildPlatform.system == "aarch64-darwin";
+    assert withSameHostAndBuild.config.nixpkgs.buildPlatform == withSameHostAndBuild.config.nixpkgs.hostPlatform;
+    assert withSameHostAndBuild._module.args.pkgs.stdenv.buildPlatform == withSameHostAndBuild._module.args.pkgs.stdenv.hostPlatform;
     assert builtins.trace (lib.head (getErrors ambiguous))
       getErrors ambiguous ==
         [''
@@ -101,6 +112,20 @@ lib.recurseIntoAttrs {
 
           For a future proof system configuration, we recommend to remove
           the legacy definitions.
+        ''];
+    assert builtins.trace (lib.head (getErrors externalPkgsWithConfig))
+      getErrors externalPkgsWithConfig ==
+        [''
+          Your system configures nixpkgs with an externally created instance.
+          `nixpkgs.config` options should be passed when creating the instance instead.
+
+          Current value:
+          {
+            allowUnfree = true;
+          }
+
+          Defined in:
+            - ext-pkgs-config.nix
         ''];
     assert getErrors {
         nixpkgs.localSystem = pkgs.stdenv.hostPlatform;

@@ -1,13 +1,12 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , pkg-config
 , cmake
 , ninja
 , python3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
@@ -15,6 +14,7 @@
 , qtsvg
 , qtimageformats
 , gtk3
+, glib-networking
 , boost
 , fmt
 , libdbusmenu
@@ -30,31 +30,15 @@
 , range-v3
 , tl-expected
 , hunspell
-, glibmm_2_68
 , webkitgtk_6_0
 , jemalloc
 , rnnoise
 , protobuf
 , abseil-cpp
-  # Transitive dependencies:
-, util-linuxMinimal
-, pcre
-, libpthreadstubs
-, libXdamage
-, libXdmcp
-, libselinux
-, libsepol
-, libepoxy
-, at-spi2-core
-, libXtst
-, libthai
-, libdatrie
 , xdg-utils
-, libsysprof-capture
-, libpsl
-, brotli
 , microsoft-gsl
 , rlottie
+, ada
 , stdenv
 , darwin
 , lld
@@ -76,18 +60,17 @@ let
       cxxStandard = "20";
     };
   };
-  mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
-  version = "4.12.2";
+  version = "5.5.5";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jIOJ7iFF2SMZOBTVzc0ECEZrkXPY060jk3fxt7kIWSg=";
+    hash = "sha256-LWIOgyHp43bLN4RQtBKH2HitfVI6AKstPK5es2s+wVw=";
   };
 
   patches = [
@@ -95,21 +78,21 @@ stdenv.mkDerivation rec {
     # the generated .desktop files contains references to unwrapped tdesktop, breaking scheme handling
     # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
     # see https://github.com/NixOS/nixpkgs/issues/218370
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
-      hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
-    })
+    ./scheme.patch
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+      --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
-      --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+      --replace-fail '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
+      --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -124,7 +107,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.isLinux [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     extra-cmake-modules
   ] ++ lib.optionals stdenv.isDarwin [
     lld
@@ -148,34 +131,19 @@ stdenv.mkDerivation rec {
     tg_owt
     microsoft-gsl
     rlottie
+    ada
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
     gtk3
+    glib-networking
     fmt
     libdbusmenu
     alsa-lib
     libpulseaudio
     pipewire
     hunspell
-    glibmm_2_68
     webkitgtk_6_0
     jemalloc
-    # Transitive dependencies:
-    util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
-    pcre
-    libpthreadstubs
-    libXdamage
-    libXdmcp
-    libselinux
-    libsepol
-    libepoxy
-    at-spi2-core
-    libXtst
-    libthai
-    libdatrie
-    libsysprof-capture
-    libpsl
-    brotli
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
     CoreFoundation
@@ -208,6 +176,7 @@ stdenv.mkDerivation rec {
     IOSurface
     Metal
     NaturalLanguage
+    LocalAuthentication
     libicns
   ]);
 
@@ -216,12 +185,12 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-Ddisable_autoupdate=ON"
+    (lib.cmakeBool "DESKTOP_APP_DISABLE_AUTOUPDATE" true)
     # We're allowed to used the API ID of the Snap package:
-    "-DTDESKTOP_API_ID=611335"
-    "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
+    (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
+    (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
-    "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
+    (lib.cmakeBool "DESKTOP_APP_USE_PACKAGED_FONTS" false)
   ];
 
   preBuild = ''
@@ -231,19 +200,19 @@ stdenv.mkDerivation rec {
 
   installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    cp -r ${mainProgram}.app $out/Applications
-    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
+    cp -r ${finalAttrs.meta.mainProgram}.app $out/Applications
+    ln -s $out/{Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS,bin}
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/${mainProgram} \
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '' + lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
+    wrapQtApp $out/Applications/${finalAttrs.meta.mainProgram}.app/Contents/MacOS/${finalAttrs.meta.mainProgram}
   '';
 
   passthru = {
@@ -251,17 +220,17 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Telegram Desktop messaging app";
     longDescription = ''
       Desktop client for the Telegram messenger, based on the Telegram API and
       the MTProto secure protocol.
     '';
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
     homepage = "https://desktop.telegram.org/";
-    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ nickcao ];
-    inherit mainProgram;
+    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ nickcao ];
+    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
-}
+})

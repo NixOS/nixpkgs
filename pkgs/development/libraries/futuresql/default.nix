@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, extra-cmake-modules, qtbase }:
+{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, qtbase }:
 stdenv.mkDerivation rec {
   pname = "futuresql";
   version = "0.1.1";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ qtbase ];
+  cmakeFlags = ["-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}"];
 
   # a library, nothing to wrap
   dontWrapQtApps = true;

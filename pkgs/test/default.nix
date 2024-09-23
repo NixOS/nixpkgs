@@ -9,10 +9,15 @@ with pkgs;
       pkgSets = lib.pipe pkgNames [
         (filter (lib.hasPrefix "llvmPackages"))
         (filter (n: n != "rocmPackages.llvm"))
-        # Is a throw alias.
+        # Are throw aliases.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
-        (filter (n: n != "llvmPackages_git"))
+        (filter (n: n != "llvmPackages_6"))
+        (filter (n: n != "llvmPackages_7"))
+        (filter (n: n != "llvmPackages_8"))
+        (filter (n: n != "llvmPackages_9"))
+        (filter (n: n != "llvmPackages_10"))
+        (filter (n: n != "llvmPackages_11"))
       ];
       tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
         clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
@@ -43,7 +48,6 @@ with pkgs;
           sets = lib.pipe gccTests ([
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
             # Broken
-            (filterAttrs (n: _: n != "gcc49Stdenv"))
             (filterAttrs (n: _: n != "gccMultiStdenv"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
             # fails with things like
@@ -63,15 +67,8 @@ with pkgs;
 
             # libcxxStdenv broken
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
-          ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-            # libcxx does not build for some reason on aarch64-linux
-            (filterAttrs (n: _: n != "llvmPackages_7"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            (filterAttrs (n: _: n != "llvmPackages_6"))
-            (filterAttrs (n: _: n != "llvmPackages_7"))
-            (filterAttrs (n: _: n != "llvmPackages_8"))
             (filterAttrs (n: _: n != "llvmPackages_9"))
-            (filterAttrs (n: _: n != "llvmPackages_10"))
           ]);
         in
         toJSON sets;
@@ -83,6 +80,8 @@ with pkgs;
     llvmTests = recurseIntoAttrs llvmTests;
     inherit gccTests;
   };
+
+  devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
 
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
@@ -106,6 +105,8 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  compress-drv = callPackage ../build-support/compress-drv/test.nix { };
+
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchtorrent = callPackages ../build-support/fetchtorrent/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
@@ -114,8 +115,11 @@ with pkgs;
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
+  fetchPypiLegacy = callPackages ../build-support/fetchpypilegacy/tests.nix { };
 
   install-shell-files = callPackage ./install-shell-files {};
+
+  checkpointBuildTools = callPackage ./checkpointBuild {};
 
   kernel-config = callPackage ./kernel.nix {};
 
@@ -123,11 +127,11 @@ with pkgs;
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
-  cross = callPackage ./cross {};
+  cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 
   php = recurseIntoAttrs (callPackages ./php {});
 
-  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // { __recurseIntoDerivationForReleaseJobs = true; };
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
@@ -170,5 +174,15 @@ with pkgs;
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
 
-  nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
+  buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
+
+  nixpkgs-check-by-name = throw "tests.nixpkgs-check-by-name is now specified in a separate repository: https://github.com/NixOS/nixpkgs-check-by-name";
+
+  auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
+
+  systemd = callPackage ./systemd { };
+
+  replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
+
+  substitute = recurseIntoAttrs (callPackage ./substitute { });
 }

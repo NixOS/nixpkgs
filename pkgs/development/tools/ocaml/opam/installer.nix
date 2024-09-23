@@ -1,4 +1,4 @@
-{ lib, unzip, opam, ocamlPackages }:
+{ unzip, opam, ocamlPackages }:
 
 ocamlPackages.buildDunePackage {
   pname = "opam-installer";
@@ -13,5 +13,6 @@ ocamlPackages.buildDunePackage {
 
   meta = opam.meta // {
     description = "Handle (un)installation from opam install files";
+    mainProgram = "opam-installer";
   };
 }

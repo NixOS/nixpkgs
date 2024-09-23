@@ -3,9 +3,9 @@
   automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
-  ncompress,
+  ncompress, updateAutotoolsGnuConfigScriptsHook,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
   xorg, windows
 }:
@@ -45,7 +45,10 @@ self: super:
       postInstallHooks+=(wrapWithXFileSearchPath)
   '')) {};
 
-  appres = addMainProgram super.appres { };
+  appres = super.appres.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
+    meta = attrs.meta // { mainProgram = "appres"; };
+  });
 
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.xorgproto ];
@@ -147,7 +150,8 @@ self: super:
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
-      ++ malloc0ReturnsNullCrossFlag;
+      ++ malloc0ReturnsNullCrossFlag
+      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ] ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -255,7 +259,8 @@ self: super:
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
     configureFlags = attrs.configureFlags or []
-      ++ malloc0ReturnsNullCrossFlag;
+      ++ malloc0ReturnsNullCrossFlag
+      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
@@ -360,13 +365,13 @@ self: super:
 
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
-    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
+    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
-    buildInputs = with xorg; attrs.buildInputs ++ [ utilmacros ];
+    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -396,7 +401,8 @@ self: super:
   });
 
   libXpresent = super.libXpresent.overrideAttrs (attrs: {
-    buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ];
+    buildInputs = attrs.buildInputs ++ [ xorg.libXext xorg.libXfixes xorg.libXrandr ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libXfixes ];
   });
 
   libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
@@ -408,19 +414,24 @@ self: super:
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    patches = attrs.patches or [] ++ [
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/commit/833c86ce15cee2a84a37ae71015f236fd32615d9.patch";
-        hash = "sha256-6koQV+Vse7/OWwuWYrWmBUebHBT+5F32Kkn9V9j+m+Q=";
-      })
-    ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+    buildInputs = attrs.buildInputs ++ [ zlib ]
+      ++ lib.optionals stdenv.hostPlatform.isNetBSD [ netbsd.libarch netbsd.libpci ];
+
+    mesonFlags = [
+      (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
+      (lib.mesonEnable "zlib" true)
+    ];
 
     meta = attrs.meta // {
       # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
       platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
         [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
+      badPlatforms = [
+        # mandatory shared library
+        lib.systems.inspect.platformPatterns.isStatic
+      ];
     };
   });
 
@@ -556,7 +567,6 @@ self: super:
   xf86videoi128    = super.xf86videoi128.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videosavage  = super.xf86videosavage.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videotga     = super.xf86videotga.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
@@ -632,7 +642,7 @@ self: super:
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
     prePatch = ''
-      patchShebangs rules/merge.py rules/compat/map-variants.py rules/xml2lst.pl
+      patchShebangs rules/merge.py rules/compat/map-variants.py rules/generate-options-symbols.py rules/xml2lst.pl
     '';
     nativeBuildInputs = attrs.nativeBuildInputs ++ [
       meson
@@ -658,15 +668,13 @@ self: super:
   xkeyboardconfig_custom = { layouts ? { } }:
   let
     patchIn = name: layout:
-    with layout;
-    with lib;
     ''
         # install layout files
-        ${optionalString (compatFile   != null) "cp '${compatFile}'   'compat/${name}'"}
-        ${optionalString (geometryFile != null) "cp '${geometryFile}' 'geometry/${name}'"}
-        ${optionalString (keycodesFile != null) "cp '${keycodesFile}' 'keycodes/${name}'"}
-        ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
-        ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
+        ${lib.optionalString (layout.compatFile   != null) "cp '${layout.compatFile}'   'compat/${name}'"}
+        ${lib.optionalString (layout.geometryFile != null) "cp '${layout.geometryFile}' 'geometry/${name}'"}
+        ${lib.optionalString (layout.keycodesFile != null) "cp '${layout.keycodesFile}' 'keycodes/${name}'"}
+        ${lib.optionalString (layout.symbolsFile  != null) "cp '${layout.symbolsFile}'  'symbols/${name}'"}
+        ${lib.optionalString (layout.typesFile    != null) "cp '${layout.typesFile}'    'types/${name}'"}
 
         # add model description
         ${ed}/bin/ed -v rules/base.xml <<EOF
@@ -695,7 +703,7 @@ self: super:
             <shortDescription>${name}</shortDescription>
             <description>${layout.description}</description>
             <languageList>
-              ${concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
+              ${lib.concatMapStrings (lang: "<iso639Id>${lang}</iso639Id>\n") layout.languages}
             </languageList>
           </configItem>
           <variantList/>
@@ -707,7 +715,7 @@ self: super:
   in
     xorg.xkeyboardconfig.overrideAttrs (old: {
       buildInputs = old.buildInputs ++ [ automake ];
-      postPatch   = with lib; concatStrings (mapAttrsToList patchIn layouts);
+      postPatch   = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
   xlsfonts = super.xlsfonts.overrideAttrs (attrs: {
@@ -733,7 +741,7 @@ self: super:
     meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
   });
 
-  xorgserver = with xorg; super.xorgserver.overrideAttrs (attrs_passed:
+  xorgserver = super.xorgserver.overrideAttrs (attrs_passed:
     let
       attrs = attrs_passed // {
         buildInputs = attrs_passed.buildInputs ++
@@ -749,14 +757,14 @@ self: super:
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ xtrans libxcvt ];
+      commonBuildInputs = attrs.buildInputs ++ [ xorg.xtrans xorg.libxcvt ];
       commonPropagatedBuildInputs = [
-        dbus libGL libGLU libXext libXfont libXfont2 libepoxy libunwind
-        libxshmfence pixman xorgproto zlib
+        dbus libGL libGLU xorg.libXext xorg.libXfont xorg.libXfont2 libepoxy libunwind
+        xorg.libxshmfence xorg.pixman xorg.xorgproto zlib
       ];
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
-      darwinOtherX = xorgserver.overrideAttrs (oldAttrs: {
+      darwinOtherX = xorg.xorgserver.overrideAttrs (oldAttrs: {
         configureFlags = oldAttrs.configureFlags ++ [
           "--disable-xquartz"
           "--enable-xorg"
@@ -786,7 +794,7 @@ self: super:
           ./dont-create-logdir-during-build.patch
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
         depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -831,9 +839,10 @@ self: super:
         buildInputs = commonBuildInputs ++ [
           bootstrap_cmds automake autoconf
           Xplugin Carbon Cocoa
+          mesa
         ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
-          libAppleWM xorgproto
+          xorg.libAppleWM xorg.xorgproto
         ];
 
         patches = [
@@ -900,8 +909,38 @@ self: super:
         };
       }));
 
+  # xvfb is used by a bunch of things to run tests
+  # and doesn't support hardware accelerated rendering
+  # so remove it from the rebuild heavy path for mesa
+  xvfb = super.xorgserver.overrideAttrs(old: {
+    configureFlags = [
+      "--enable-xvfb"
+      "--disable-xorg"
+      "--disable-xquartz"
+      "--disable-xwayland"
+      "--disable-glamor"
+      "--disable-glx"
+      "--disable-dri"
+      "--disable-dri2"
+      "--disable-dri3"
+      "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
+      "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
+      "--with-xkb-output=$out/share/X11/xkb/compiled"
+    ] ++ lib.optional stdenv.isDarwin [
+      "--without-dtrace"
+    ];
+
+    buildInputs = old.buildInputs ++ [
+      xorg.pixman
+      xorg.libXfont2
+      xorg.xtrans
+      xorg.libxcvt
+    ] ++ lib.optional stdenv.isDarwin [ Xplugin ];
+  });
+
   lndir = super.lndir.overrideAttrs (attrs: {
     buildInputs = [];
+    nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
     preConfigure = ''
       export XPROTO_CFLAGS=" "
       export XPROTO_LIBS=" "
@@ -1141,8 +1180,7 @@ self: super:
       super.${name}.overrideAttrs (attrs: {
         meta = attrs.meta // { inherit license; };
       });
-    mapNamesToAttrs = f: names: with lib;
-      listToAttrs (zipListsWith nameValuePair names (map f names));
+    mapNamesToAttrs = f: names: lib.listToAttrs (lib.zipListsWith lib.nameValuePair names (map f names));
 
   in
     mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist //

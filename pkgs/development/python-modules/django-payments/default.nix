@@ -1,23 +1,25 @@
-{ lib
-, buildPythonPackage
-, braintree
-, cryptography
-, django
-, django-phonenumber-field
-, fetchFromGitHub
-, mercadopago
-, pythonOlder
-, requests
-, setuptools-scm
-, sphinx-rtd-theme
-, stripe
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  braintree,
+  cryptography,
+  django,
+  django-phonenumber-field,
+  fetchFromGitHub,
+  mercadopago,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
+  stripe,
+  suds-community,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "django-payments";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,38 +27,28 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-payments";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6WPV08CV+rko/tRnsT5GyTGYaJbiIKTvpisfRwizBIo=";
+    hash = "sha256-/XsqtExnNtUGqI40XvvcO/nGq56gbC/mPdtHv1QQyGo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "django-phonenumber-field[phonenumberslite]" "django-phonenumber-field"
-  '';
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-phonenumber-field
     requests
-  ] ++ django-phonenumber-field.optional-dependencies.phonenumbers;
+  ] ++ django-phonenumber-field.optional-dependencies.phonenumberslite;
 
   # require internet connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "payments"
-  ];
+  pythonImportsCheck = [ "payments" ];
 
-  passthru.optional-dependencies = {
-    all = [ braintree /* suds-community */ mercadopago cryptography xmltodict stripe ];
+  optional-dependencies = {
     braintree = [ braintree ];
-    cybersource = [ /* suds-community */ ];
-    docs = [ sphinx-rtd-theme ];
+    cybersource = [ suds-community ];
     mercadopago = [ mercadopago ];
     sagepay = [ cryptography ];
     sofort = [ xmltodict ];
@@ -64,9 +56,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Universal payment handling for Django.";
+    description = "Universal payment handling for Django";
     homepage = "https://github.com/jazzband/django-payments/";
-    changelog = "https://github.com/jazzband/django-payments/releases/tag/v${version}";
+    changelog = "https://github.com/jazzband/django-payments/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ derdennisop ];
   };

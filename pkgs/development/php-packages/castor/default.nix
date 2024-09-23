@@ -1,33 +1,33 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, php
-, nix-update-script
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  php,
+  nix-update-script,
+  testers,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "castor";
-  version = "0.10.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/pUo3Lure5N6vsh8o8cQDqlWj8vgOC0ctenO/93K3zQ=";
+    hash = "sha256-ng32vuGlGffpkzf3hXu0sNbj0PCDu4DpZnMnbDV9pZk=";
   };
 
-  vendorHash = "sha256-l/paOQmJs8/7YN/XsY6wklojLE3z3GIV3jrgZvyQp/8=";
+  vendorHash = "sha256-0aDT0hPhoPl0U/QbstiGmUHaqDdQb1ReY2hy9FEnzwM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   # install shell completions
   postInstall = ''
-    echo "yes" | ${php}/bin/php $out/share/php/castor/bin/castor
     installShellCompletion --cmd castor \
-      --bash <(${php}/bin/php $out/share/php/castor/bin/castor completion bash) \
-      --fish <(${php}/bin/php $out/share/php/castor/bin/castor completion fish) \
-      --zsh <(${php}/bin/php $out/share/php/castor/bin/castor completion zsh)
+      --bash <(php $out/bin/castor completion bash) \
+      --fish <(php $out/bin/castor completion fish) \
+      --zsh <(php $out/bin/castor completion zsh)
   '';
 
   passthru = {

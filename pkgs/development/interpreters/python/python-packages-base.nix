@@ -47,9 +47,6 @@ let
     toPythonModule = x: x;  # Application does not provide modules.
   }));
 
-  # See build-setupcfg/default.nix for documentation.
-  buildSetupcfg = import ../../../build-support/build-setupcfg lib self;
-
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
 
@@ -64,6 +61,10 @@ let
 
   removePythonPrefix = lib.removePrefix namePrefix;
 
+  mkPythonEditablePackage = callPackage ./editable.nix { };
+
+  mkPythonMetaPackage = callPackage ./meta-package.nix { };
+
   # Convert derivation to a Python module.
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
@@ -71,7 +72,10 @@ let
       passthru = (oldAttrs.passthru or {})// {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
+        requiredPythonModules =
+          builtins.addErrorContext
+          "while calculating requiredPythonModules for ${drv.name or drv.pname}:"
+          (requiredPythonModules drv.propagatedBuildInputs);
       };
     });
 
@@ -92,19 +96,16 @@ let
   disabledIf = x: drv: if x then disabled drv else drv;
 
 in {
-
   inherit lib pkgs stdenv;
-  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy312 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit buildPythonPackage buildPythonApplication;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
-  inherit buildSetupcfg;
+  inherit mkPythonMetaPackage mkPythonEditablePackage;
 
   python = toPythonModule python;
-  # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
-  pythonPackages = self;
 
-  # Remove?
-  recursivePthLoader = toPythonModule (callPackage ../../../development/python-modules/recursive-pth-loader { });
-
+  # Don't take pythonPackages from "global" pkgs scope to avoid mixing python versions.
+  # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
+  pythonPackages = self // { __attrsFailEvaluation = true; };
 }

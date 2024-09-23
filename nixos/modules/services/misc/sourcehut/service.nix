@@ -133,12 +133,12 @@ let
 in
 {
   options.services.sourcehut.${srv} = {
-    enable = mkEnableOption (lib.mdDoc "${srv} service");
+    enable = mkEnableOption "${srv} service";
 
     user = mkOption {
       type = types.str;
       default = srvsrht;
-      description = lib.mdDoc ''
+      description = ''
         User for ${srv}.sr.ht.
       '';
     };
@@ -146,7 +146,7 @@ in
     group = mkOption {
       type = types.str;
       default = srvsrht;
-      description = lib.mdDoc ''
+      description = ''
         Group for ${srv}.sr.ht.
         Membership grants access to the Git/Mercurial repositories by default,
         but not to the config.ini file (where secrets are).
@@ -156,7 +156,7 @@ in
     port = mkOption {
       type = types.port;
       default = port;
-      description = lib.mdDoc ''
+      description = ''
         Port on which the "${srv}" backend should listen.
       '';
     };
@@ -166,7 +166,7 @@ in
         type = types.str;
         default = "unix:///run/redis-sourcehut-${srvsrht}/redis.sock?db=0";
         example = "redis://shared.wireguard:6379/0";
-        description = lib.mdDoc ''
+        description = ''
           The redis host URL. This is used for caching and temporary storage, and must
           be shared between nodes (e.g. git1.sr.ht and git2.sr.ht), but need not be
           shared between services. It may be shared between services, however, with no
@@ -179,7 +179,7 @@ in
       database = mkOption {
         type = types.str;
         default = "${srv}.sr.ht";
-        description = lib.mdDoc ''
+        description = ''
           PostgreSQL database name for the ${srv}.sr.ht service,
           used if [](#opt-services.sourcehut.postgresql.enable) is `true`.
         '';
@@ -190,7 +190,7 @@ in
       extraArgs = mkOption {
         type = with types; listOf str;
         default = [ "--timeout 120" "--workers 1" "--log-level=info" ];
-        description = lib.mdDoc "Extra arguments passed to Gunicorn.";
+        description = "Extra arguments passed to Gunicorn.";
       };
     };
   } // optionalAttrs webhooks {
@@ -198,12 +198,12 @@ in
       extraArgs = mkOption {
         type = with types; listOf str;
         default = [ "--loglevel DEBUG" "--pool eventlet" "--without-heartbeat" ];
-        description = lib.mdDoc "Extra arguments passed to the Celery responsible for webhooks.";
+        description = "Extra arguments passed to the Celery responsible for webhooks.";
       };
       celeryConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc "Content of the `celeryconfig.py` used by the Celery responsible for webhooks.";
+        description = "Content of the `celeryconfig.py` used by the Celery responsible for webhooks.";
       };
     };
   };
@@ -324,7 +324,8 @@ in
               };
               preStart =
                 let
-                  version = pkgs.sourcehut.${srvsrht}.version;
+                  package = pkgs.sourcehut.${srvsrht};
+                  version = package.version;
                   stateDir = "/var/lib/sourcehut/${srvsrht}";
                 in
                 mkBefore ''
@@ -336,14 +337,14 @@ in
                   if test ! -e ${stateDir}/db; then
                     # Setup the initial database.
                     # Note that it stamps the alembic head afterward
-                    ${cfg.python}/bin/${srvsrht}-initdb
+                    ${package}/bin/${srvsrht}-initdb
                     echo ${version} >${stateDir}/db
                   fi
 
                   ${optionalString cfg.settings.${iniKey}.migrate-on-upgrade ''
                     if [ "$(cat ${stateDir}/db)" != "${version}" ]; then
                       # Manage schema migrations using alembic
-                      ${cfg.python}/bin/${srvsrht}-migrate -a upgrade head
+                      ${package}/bin/${srvsrht}-migrate -a upgrade head
                       echo ${version} >${stateDir}/db
                     fi
                   ''}
@@ -389,7 +390,7 @@ in
               after = [ "network.target" "${srvsrht}.service" ];
               serviceConfig = {
                 Type = "oneshot";
-                ExecStart = "${cfg.python}/bin/${timerName}";
+                ExecStart = "${pkgs.sourcehut.${srvsrht}}/bin/${timerName}";
               };
             }
             (timer.service or { })

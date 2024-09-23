@@ -1,28 +1,42 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.0.4";
+  version = "6.0.5";
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NmaQZJLvt2RTwOe5fyz0WbBoLnQCwEialUhJZdvB2kk=";
+    hash = "sha256-9+MBB17a9QUA8LNBVDxBGU2N865cr0cC8glfPKc92No=";
   };
 
   postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
+    substituteInPlace pytest.ini \
+      --replace-fail "-p pytest_cov" ""
+    sed -i '/--cov/d' pytest.ini
+    # `python3 -I -c "import multidict"` fails with ModuleNotFoundError
+    substituteInPlace tests/test_circular_imports.py \
+      --replace-fail '"-I",' ""
   '';
 
+  nativeBuildInputs = [ setuptools ];
+
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    # import from $out
+    rm -r multidict
+  '';
 
   pythonImportsCheck = [ "multidict" ];
 

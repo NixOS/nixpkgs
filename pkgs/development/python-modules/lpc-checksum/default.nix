@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, intelhex
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  intelhex,
 }:
 
 buildPythonPackage rec {
@@ -23,14 +24,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    intelhex
-  ];
+  propagatedBuildInputs = [ intelhex ];
 
   pythonImportsCheck = [ "lpc_checksum" ];
 
   meta = with lib; {
     description = "Python script to calculate LPC firmware checksums";
+    mainProgram = "lpc_checksum";
     homepage = "https://pypi.org/project/lpc-checksum/";
     license = licenses.mit;
     maintainers = with maintainers; [ otavio ];

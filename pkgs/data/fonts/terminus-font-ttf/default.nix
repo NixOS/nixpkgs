@@ -23,13 +23,13 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A clean fixed width TTF font";
+    description = "Clean fixed width TTF font";
     longDescription = ''
       Monospaced bitmap font designed for long work with computers
       (TTF version, mainly for Java applications)
     '';
     homepage = "https://files.ax86.net/terminus-ttf";
     license = licenses.ofl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

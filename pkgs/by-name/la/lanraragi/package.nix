@@ -2,7 +2,6 @@
 , stdenv
 , buildNpmPackage
 , fetchFromGitHub
-, fetchpatch
 , makeBinaryWrapper
 , perl
 , ghostscript
@@ -11,32 +10,22 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.0";
+  version = "0.9.21";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     rev = "v.${version}";
-    hash = "sha256-euZotpXTUSmxlA5rbTUhHpHH0Ojd3AZjGasxYZ+L7NY=";
+    hash = "sha256-2YdQeBW1MQiUs5nliloISaxG0yhFJ6ulkU/Urx8PN3Y=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-redis-auth.patch";
-      url = "https://github.com/Difegue/LANraragi/commit/1711b39759ad02ab2a8863ce1f35f6479c9a2917.patch";
-      hash = "sha256-WfKeieysIlS64qgVEc75JFKjxXuvZN85M6US/gwjTzw=";
-    })
-    (fetchpatch {
-      name = "fix-ghostscript-device.patch";
-      url = "https://github.com/Difegue/LANraragi/commit/087d63b11c89fda8cb3a30cdb2e86ecd6be66bb7.patch";
-      hash = "sha256-Cu9d/dDlO0yuFCTKOyg5A0gIuiA+FcWD9PjexB/BK0U=";
-    })
     ./install.patch
     ./fix-paths.patch
     ./expose-password-hashing.patch # Used by the NixOS module
   ];
 
-  npmDepsHash = "sha256-/F/lhQIVGbbFxFuQXXwHUVlV2jhHt0hFf94v0FrTKt8=";
+  npmDepsHash = "sha256-RAjZGuK0C6R22fVFq82GPQoD1HpRs3MYMluUAV5ZEc8=";
 
   nativeBuildInputs = [ perl makeBinaryWrapper ];
 
@@ -59,6 +48,7 @@ buildNpmPackage rec {
     MojoliciousPluginTemplateToolkit
     MojoliciousPluginRenderFile
     MojoliciousPluginStatus
+    IOSocketSocks
     IOSocketSSL
     CpanelJSONXS
     Minion
@@ -69,9 +59,9 @@ buildNpmPackage rec {
     FileChangeNotify
     ModulePluggable
     TimeLocal
-    YAMLSyck
+    YAMLPP
     StringSimilarity
-  ] ++ lib.optional stdenv.isLinux LinuxInotify2;
+  ] ++ lib.optionals stdenv.isLinux [ LinuxInotify2 ];
 
   buildPhase = ''
     runHook preBuild
@@ -135,4 +125,3 @@ buildNpmPackage rec {
     platforms = lib.platforms.unix;
   };
 }
-

@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "An APL and BQN font extending on APL386";
+    description = "APL and BQN font extending on APL386";
     homepage = "https://dzaima.github.io/BQN386/";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ skykanin ];

@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/sipwise/sipsak";
     description = "SIP Swiss army knife";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ sheenobu ];
     platforms = with platforms; unix;
+    mainProgram = "sipsak";
   };
 
 }

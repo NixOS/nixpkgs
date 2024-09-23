@@ -47,13 +47,15 @@ stdenv.mkDerivation rec {
     install -Dm644 -t "$out/share/bash-completion/completions/mirtk" share/completion/bash/mirtk
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-changes-meaning";
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     boost
     eigen
     fltk
     itk
-    libGLU.dev
+    libGLU
     python3
     tbb
     vtk
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BioMedIA/MIRTK";
     description = "Medical image registration library and tools";
+    mainProgram = "mirtk";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.linux;
     license = licenses.asl20;

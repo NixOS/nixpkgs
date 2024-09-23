@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pacemaker";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "Pacemaker-${version}";
-    sha256 = "sha256-3+eRQ3NqPusdFhKc0wE7UMMNKsDLRVvh+EhD6zYGoP0=";
+    sha256 = "sha256-J57+NSs4cL3BlEjSaXAoUTEhbMMxhWy8sUZ/K3x2nRM=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-error=strict-prototypes"
+    "-Wno-error=deprecated-declarations"
   ]);
 
   enableParallelBuilding = true;
@@ -94,7 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://clusterlabs.org/pacemaker/";
-    description = "Pacemaker is an open source, high availability resource manager suitable for both small and large clusters.";
+    description = "Pacemaker is an open source, high availability resource manager suitable for both small and large clusters";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ryantm astro ];

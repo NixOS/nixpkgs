@@ -133,10 +133,10 @@ let
       };
 
       meta = with lib; {
-        description = "An enhanced, drop-in replacement for MySQL";
+        description = "Enhanced, drop-in replacement for MySQL";
         homepage    = "https://mariadb.org/";
-        license     = licenses.gpl2;
-        maintainers = with maintainers; [ thoughtpolice ajs124 das_j ];
+        license     = licenses.gpl2Plus;
+        maintainers = with maintainers; [ thoughtpolice ] ++ teams.helsinki-systems.members;
         platforms   = platforms.all;
       };
     };
@@ -234,7 +234,6 @@ let
       '';
 
       CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
-      NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
     });
   in
     server // {
@@ -245,30 +244,26 @@ in
     # see https://mariadb.org/about/#maintenance-policy for EOLs
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.23";
-      hash = "sha256-P3wzsgjLeZ2wFKh09WcY6t/yLulXgfo2Cqa8aWEJrP4=";
-      inherit (self.darwin) cctools;
+      version = "10.5.26";
+      hash = "sha256-3V+ZodMK5HNl/Bix3u/23AqzishOfZ/ZyMBP9rAZYfE=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07-06
-      version = "10.6.16";
-      hash = "sha256-Xvg4Q+eW3Nqa6keyRpDd9thI9D9D4R+dmgzCHHj7uc8=";
-      inherit (self.darwin) cctools;
+      version = "10.6.19";
+      hash = "sha256-vOyw/3t5pBNEc2+plHEHh8FVFtUet3FfJ4w/D8t+hwM=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1011 = self.callPackage generic {
       # Supported until 2028-02-16
-      version = "10.11.6";
-      hash = "sha256-HAFjRj6Y1x9HgHQWEaQJge7ivETTkmAcpJu/lI0E3Wc=";
-      inherit (self.darwin) cctools;
+      version = "10.11.9";
+      hash = "sha256-CgAYCGTNAWGHyYb6q4AQ3iOhF7mnX5HWRWQh+JTkjSA=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
-    mariadb_110 = self.callPackage generic {
-      # Supported until 2024-06-07
-      version = "11.0.4";
-      hash = "sha256-J2ls3zEVnyJUEOtchmW4VkWhxZmBzlr2vP9sll/u3ms=";
-      inherit (self.darwin) cctools;
+    mariadb_114 = self.callPackage generic {
+      # Supported until 2029-05-29
+      version = "11.4.3";
+      hash = "sha256-bwAXuZAbsYl94O7SHK75/6nWbvVZNFoNim8BEwhBPs4=";
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
   }

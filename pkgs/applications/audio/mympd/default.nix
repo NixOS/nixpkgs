@@ -12,17 +12,18 @@
 , gzip
 , perl
 , jq
+, nixosTests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "13.0.0";
+  version = "17.0.4";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cYoGjge2VtU+QqIURGd/EpkSQ4fhvsdnYZYyESAd56U=";
+    sha256 = "sha256-mtAMvaC8W9/o+ccHyvJRZ5Stq82m6IgXk/jOcxaGSXA=";
   };
 
   nativeBuildInputs = [
@@ -57,11 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
   # 5 tests out of 23 fail, probably due to the sandbox...
   doCheck = false;
 
+  passthru.tests = { inherit (nixosTests) mympd; };
+
   meta = {
     homepage = "https://jcorporation.github.io/myMPD";
-    description = "A standalone and mobile friendly web mpd client with a tiny footprint and advanced features";
+    description = "Standalone and mobile friendly web mpd client with a tiny footprint and advanced features";
     maintainers = [ lib.maintainers.doronbehar ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+    mainProgram = "mympd";
   };
 })

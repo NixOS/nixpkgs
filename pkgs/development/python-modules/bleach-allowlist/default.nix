@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, bleach
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bleach,
 }:
 
 buildPythonPackage rec {
   pname = "bleach-allowlist";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-VuIghgeaDmoxAK6Z5NuvIOslhUhlmOsOmUAIoRQo2ps=";
   };
 
-  propagatedBuildInputs = [
-    bleach
-  ];
+  propagatedBuildInputs = [ bleach ];
 
   # No tests
   doCheck = false;

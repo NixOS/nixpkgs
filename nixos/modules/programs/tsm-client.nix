@@ -4,7 +4,7 @@ let optionsGlobal = options; in
 let
 
   inherit (lib.attrsets) attrNames attrValues mapAttrsToList removeAttrs;
-  inherit (lib.lists) all allUnique concatLists elem isList map;
+  inherit (lib.lists) all allUnique concatLists concatMap elem isList map;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatLines match optionalString toLower;
@@ -22,12 +22,12 @@ let
   serverOptions = { name, config, ... }: {
     freeformType = attrsOf (either scalarType (listOf scalarType));
     # Client system-options file directives are explained here:
-    # https://www.ibm.com/docs/en/storage-protect/8.1.20?topic=commands-processing-options
+    # https://www.ibm.com/docs/en/storage-protect/8.1.23?topic=commands-processing-options
     options.servername = mkOption {
       type = servernameType;
       default = name;
       example = "mainTsmServer";
-      description = lib.mdDoc ''
+      description = ''
         Local name of the IBM TSM server,
         must not contain space or more than 64 chars.
       '';
@@ -35,14 +35,14 @@ let
     options.tcpserveraddress = mkOption {
       type = nonEmptyStr;
       example = "tsmserver.company.com";
-      description = lib.mdDoc ''
+      description = ''
         Host/domain name or IP address of the IBM TSM server.
       '';
     };
     options.tcpport = mkOption {
       type = addCheck port (p: p<=32767);
       default = 1500;  # official default
-      description = lib.mdDoc ''
+      description = ''
         TCP port of the IBM TSM server.
         TSM does not support ports above 32767.
       '';
@@ -50,11 +50,11 @@ let
     options.nodename = mkOption {
       type = nonEmptyStr;
       example = "MY-TSM-NODE";
-      description = lib.mdDoc ''
+      description = ''
         Target node name on the IBM TSM server.
       '';
     };
-    options.genPasswd = mkEnableOption (lib.mdDoc ''
+    options.genPasswd = mkEnableOption ''
       automatic client password generation.
       This option does *not* cause a line in
       {file}`dsm.sys` by itself, but generates a
@@ -65,7 +65,7 @@ let
       If this option is enabled and the server forces
       to renew the password (e.g. on first connection),
       a random password will be generated and stored
-    '');
+    '';
     options.passwordaccess = mkOption {
       type = enum [ "generate" "prompt" ];
       visible = false;
@@ -74,7 +74,7 @@ let
       type = nullOr path;
       default = null;
       example = "/home/alice/tsm-password";
-      description = lib.mdDoc ''
+      description = ''
         Directory that holds the TSM
         node's password information.
       '';
@@ -88,7 +88,7 @@ let
         exclude.dir     /nix/store
         include.encrypt /home/.../*
       '';
-      description = lib.mdDoc ''
+      description = ''
         Text lines with `include.*` and `exclude.*` directives
         to be used when sending files to the IBM TSM server,
         or an absolute path pointing to a file with such lines.
@@ -112,11 +112,11 @@ let
   };
 
   options.programs.tsmClient = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
       IBM Storage Protect (Tivoli Storage Manager, TSM)
       client command line applications with a
       client system-options file "dsm.sys"
-    '');
+    '';
     servers = mkOption {
       type = attrsOf (submodule serverOptions);
       default = {};
@@ -125,7 +125,7 @@ let
         nodename = "MY-TSM-NODE";
         compression = "yes";
       };
-      description = lib.mdDoc ''
+      description = ''
         Server definitions ("stanzas")
         for the client system-options file.
         The name of each entry will be used for
@@ -145,7 +145,7 @@ let
       type = nullOr servernameType;
       default = null;
       example = "mainTsmServer";
-      description = lib.mdDoc ''
+      description = ''
         If multiple server stanzas are declared with
         {option}`programs.tsmClient.servers`,
         this option may be used to name a default
@@ -158,7 +158,7 @@ let
     dsmSysText = mkOption {
       type = lines;
       readOnly = true;
-      description = lib.mdDoc ''
+      description = ''
         This configuration key contains the effective text
         of the client system-options file "dsm.sys".
         It should not be changed, but may be
@@ -231,7 +231,7 @@ let
     # Turn a key-value pair from the server options attrset
     # into zero (value==null), one (scalar value) or
     # more (value is list) configuration stanza lines.
-    if isList value then map (makeDsmSysLines key) value else  # recurse into list
+    if isList value then concatMap (makeDsmSysLines key) value else  # recurse into list
     if value == null then [ ] else  # skip `null` value
     [ ("  ${key}${
       if value == true then "" else  # just output key if value is `true`

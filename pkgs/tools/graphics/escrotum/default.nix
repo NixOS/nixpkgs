@@ -3,7 +3,7 @@
 , gtk3
 , pango
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with python3Packages; buildPythonApplication {
@@ -24,7 +24,7 @@ with python3Packages; buildPythonApplication {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [ pygobject3 xcffib pycairo numpy ];

@@ -5,35 +5,36 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.1.7";
-  format = "pyproject";
+  version = "2.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alterakey";
-    repo = pname;
+    repo = "trueseeing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pnIn+Rqun5J3F9cgeBUBX4e9WP5fgbm+vwN3Wqh/yEc=";
+    hash = "sha256-5IHJXlpHZJFKj7rdmRsWA5FXZFJf3usGsLgXx1cYEmU=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     flit-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = true;
+
+  dependencies = with python3.pkgs; [
+    aiohttp
+    asn1crypto
     attrs
-    ipython
+    importlib-metadata
     jinja2
+    lief
     lxml
+    progressbar2
     pypubsub
     pyyaml
-    docker
+    termcolor
+    zstandard
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "attrs~=21.4" "attrs>=21.4" \
-      --replace "docker~=5.0.3" "docker"
-  '';
 
   # Project has no tests
   doCheck = false;
@@ -48,5 +49,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/alterakey/trueseeing/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "trueseeing";
   };
 }

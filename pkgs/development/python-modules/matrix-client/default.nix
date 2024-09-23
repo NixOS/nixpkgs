@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, requests
-, responses
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  requests,
+  responses,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "matrix-client";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "matrix_client";

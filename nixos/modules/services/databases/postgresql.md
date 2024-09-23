@@ -15,9 +15,11 @@ PostgreSQL is an advanced, free relational database.
 ## Configuring {#module-services-postgres-configuring}
 
 To enable PostgreSQL, add the following to your {file}`configuration.nix`:
-```
-services.postgresql.enable = true;
-services.postgresql.package = pkgs.postgresql_15;
+```nix
+{
+  services.postgresql.enable = true;
+  services.postgresql.package = pkgs.postgresql_15;
+}
 ```
 Note that you are required to specify the desired version of PostgreSQL (e.g. `pkgs.postgresql_15`). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for [](#opt-services.postgresql.package) such as the most recent release of PostgreSQL.
 
@@ -35,8 +37,10 @@ alice=>
 -->
 
 By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlSchema`. You can override this using [](#opt-services.postgresql.dataDir), e.g.
-```
-services.postgresql.dataDir = "/data/postgresql";
+```nix
+{
+  services.postgresql.dataDir = "/data/postgresql";
+}
 ```
 
 ## Initializing {#module-services-postgres-initializing}
@@ -95,23 +99,26 @@ databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
 are already created.
 
 ```nix
+  {
     systemd.services.postgresql.postStart = lib.mkAfter ''
       $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
       $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
+  }
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
 
 ```nix
+  {
     systemd.services."migrate-service1-db1" = {
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
       after = "postgresql.service";
       serviceConfig.User = "postgres";
-      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
       path = [ postgresql ];
       script = ''
         $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
@@ -119,6 +126,7 @@ are already created.
         # ....
       '';
     };
+  }
 ```
 
 #### as service user {#module-services-postgres-initializing-extra-permissions-service-user}
@@ -130,25 +138,28 @@ are already created.
 ##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
 
 ```nix
-    environment.PSQL = "psql --port=${toString services.postgresql.port}";
+  {
+    environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
     path = [ postgresql ];
     systemd.services."service1".preStart = ''
       $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
       $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
+  }
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-user-oneshot}
 
 ```nix
+  {
     systemd.services."migrate-service1-db1" = {
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
       after = "postgresql.service";
       serviceConfig.User = "service1";
-      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
       path = [ postgresql ];
       script = ''
         $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
@@ -156,6 +167,7 @@ are already created.
         # ....
       '';
     };
+  }
 ```
 
 ## Upgrading {#module-services-postgres-upgrading}
@@ -174,7 +186,7 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
 "13"
 ```
 For an upgrade, a script like this can be used to simplify the process:
-```
+```nix
 { config, pkgs, ... }:
 {
   environment.systemPackages = [
@@ -232,6 +244,27 @@ The upgrade process is:
      $ ./delete_old_cluster.sh
      ```
 
+## Versioning and End-of-Life {#module-services-postgres-versioning}
+
+PostgreSQL's versioning policy is described [here](https://www.postgresql.org/support/versioning/). TLDR:
+
+- Each major version is supported for 5 years.
+- Every three months there will be a new minor release, containing bug and security fixes.
+- For criticial/security fixes there could be more minor releases inbetween. This happens *very* infrequently.
+- After five years, a final minor version is released. This usually happens in early November.
+- After that a version is considered end-of-life (EOL).
+- Around February each year is the first time an EOL-release will not have received regular updates anymore.
+
+Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in Februrary of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
+
+Thus:
+- In September/October the new major version will be released and added to nixos-unstable.
+- In November the last minor version for the oldest major will be released.
+- Both the current stable .05 release and nixos-unstable should be updated to the latest minor.
+- In November, before branch-off for the .11 release, the EOL-ed major will be removed from nixos-unstable.
+
+This leaves a small gap of a couple of weeks after the latest minor release and the end of our support window for the .05 release, in which there could be an emergency release to other major versions of PostgreSQL - but not the oldest major we have in that branch. In that case: If we can't trivially patch the issue, we will mark the package/version as insecure **immediately**.
+
 ## Options {#module-services-postgres-options}
 
 A complete list of options for the PostgreSQL module may be found [here](#opt-services.postgresql.enable).
@@ -256,16 +289,18 @@ postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 ```
 
 To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
-```
-services.postgresql.package = pkgs.postgresql_12;
-services.postgresql.extraPlugins = with pkgs.postgresql_12.pkgs; [
-  pg_repack
-  postgis
-];
+```nix
+{
+  services.postgresql.package = pkgs.postgresql_12;
+  services.postgresql.extraPlugins = ps: with ps; [
+    pg_repack
+    postgis
+  ];
+}
 ```
 
 You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like:
-```
+```nix
 self: super: {
   postgresql_custom = self.postgresql_12.withPackages (ps: [
     ps.pg_repack
@@ -275,9 +310,9 @@ self: super: {
 ```
 
 Here's a recipe on how to override a particular plugin through an overlay:
-```
+```nix
 self: super: {
-  postgresql_15 = super.postgresql_15.override { this = self.postgresql_15; } // {
+  postgresql_15 = super.postgresql_15// {
     pkgs = super.postgresql_15.pkgs // {
       pg_repack = super.postgresql_15.pkgs.pg_repack.overrideAttrs (_: {
         name = "pg_repack-v20181024";
@@ -327,3 +362,7 @@ postgresql.withJIT.pname
 ```
 
 evaluates to `"foobar"`.
+
+## Notable differences to upstream {#module-services-postgres-upstream-deviation}
+
+- To avoid circular dependencies between default and -dev outputs, the output of the `pg_config` system view has been removed.

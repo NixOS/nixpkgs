@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, libev, buildDunePackage
-, ocaml, cppo, dune-configurator, ocplib-endian
+, cppo, dune-configurator, ocplib-endian
 }:
 
 buildDunePackage rec {
@@ -21,7 +21,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://ocsigen.org/lwt/";
-    description = "A cooperative threads library for OCaml";
+    description = "Cooperative threads library for OCaml";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.mit;
   };

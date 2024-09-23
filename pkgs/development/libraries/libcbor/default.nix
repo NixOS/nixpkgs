@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , cmocka
 
@@ -14,27 +13,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "unstable-2023-01-29"; # Musl fix hasn't been released yet.
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
-    rev = "cb4162f40d94751141b4d43b07c4add83e738a68";
-    sha256 = "sha256-ZTa+wG1g9KsVoqJG/yqxo2fJ7OhPnaI9QcfOmpOT3pg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-N1xYkZw/6lX/nX/TE6/pVuEFgSyDiUJ50msK42NrKwI=";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Pull fix pending upstream inclusion to support
-    # `CMAKE_INSTALL_INCLUDEDIR`:
-    #   https://github.com/PJK/libcbor/pull/297
-    (fetchpatch {
-      name = "includedir.patch";
-      url = "https://github.com/PJK/libcbor/commit/d00a63e6d6858a2ed6be9b431b42799ed2c99ad8.patch";
-      hash = "sha256-kBCSbAHOCGOs/4Yu6Vh0jcmzA/jYPkkPXPGPrptRfyk=";
-    })
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [ cmake ];
@@ -43,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmocka # cmake expects cmocka module
   ];
 
-  cmakeFlags = lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON"
+  cmakeFlags = lib.optional finalAttrs.finalPackage.doCheck "-DWITH_TESTS=ON"
     ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";
 
   # Tests are restricted while pkgsStatic.cmocka is broken. Tracked at:
@@ -66,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 })

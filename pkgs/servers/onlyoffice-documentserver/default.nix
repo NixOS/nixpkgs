@@ -15,12 +15,18 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "7.5.0";
+    version = "8.1.3";
 
-    src = fetchurl {
-      url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))}/onlyoffice-documentserver_amd64.deb";
-      sha256 = "sha256-0rtxKSVIyCzYnhRneLOEu1e1qtAO6dGBAUr/oKq95Hw=";
-    };
+    src = fetchurl ({
+      "aarch64-linux" = {
+        url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
+        sha256 = "sha256-+7hHz1UcnlJNhBAVaYQwK0m2tkgsfbjqY3oa8XU0yxo=";
+      };
+      "x86_64-linux" = {
+        url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
+        sha256 = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
+      };
+    }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
 
     preferLocalBuild = true;
 
@@ -137,13 +143,14 @@ let
 
     meta = with lib; {
       description = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
+      mainProgram = "documentserver-prepare4shutdown.sh";
       longDescription = ''
         ONLYOFFICE Document Server is an online office suite comprising viewers and editors for texts, spreadsheets and presentations,
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
       '';
-      homepage = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
-      license = licenses.agpl3;
-      platforms = [ "x86_64-linux" ];
+      homepage = "https://github.com/ONLYOFFICE/DocumentServer";
+      license = licenses.agpl3Plus;
+      platforms = [ "x86_64-linux" "aarch64-linux" ];
       sourceProvenance = [ sourceTypes.binaryNativeCode ];
       maintainers = with maintainers; [ SuperSandro2000 ];
     };

@@ -5,14 +5,16 @@
 }:
 
 buildDunePackage rec {
-  version = "3.12";
+  version = "3.14";
   pname = "containers";
+
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
     rev = "v${version}";
-    hash = "sha256-15Wd6k/NvjAvTmxlPlZPClODBtFXM6FG3VxniC66u88=";
+    hash = "sha256-+r1zv7tfCS/dqnTSxpWSagTKVRauqgN6Np1Xa+aQT8k=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -24,7 +26,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/c-cube/ocaml-containers";
-    description = "A modular standard library focused on data structures";
+    description = "Modular standard library focused on data structures";
     longDescription = ''
       Containers is a standard library (BSD license) focused on data structures,
       combinators and iterators, without dependencies on unix. Every module is

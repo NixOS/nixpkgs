@@ -41,7 +41,7 @@ in {
         };
         secretFile = "/etc/nextcloud-secrets.json";
 
-        extraOptions = {
+        settings = {
           allow_local_remote_servers = true;
           redis = {
             dbindex = 0;

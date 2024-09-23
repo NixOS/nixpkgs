@@ -41,10 +41,12 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
+  cmakeFlags = [ "-DENABLE_WERROR=OFF" ];
+
   meta = with lib; {
     homepage = "https://www.srslte.com/";
-    description = "Open-source 4G and 5G software radio suite.";
-    license = licenses.agpl3;
+    description = "Open-source 4G and 5G software radio suite";
+    license = licenses.agpl3Plus;
     platforms = with platforms; linux ;
     maintainers = with maintainers; [ hexagonal-sun ];
   };

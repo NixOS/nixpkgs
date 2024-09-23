@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ndg-httpsclient
-, netifaces
-, pyasn1
-, pyopenssl
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ndg-httpsclient,
+  netifaces,
+  pyasn1,
+  pyopenssl,
+  requests,
+  six,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "advocate";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JordanMilne";
@@ -38,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/JordanMilne/Advocate";
-    description = "An SSRF-preventing wrapper around Python's requests library";
+    description = "SSRF-preventing wrapper around Python's requests library";
     license = licenses.asl20;
     maintainers = with maintainers; [ pborzenkov ];
   };

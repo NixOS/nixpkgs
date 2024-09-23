@@ -8,12 +8,12 @@ in
 {
   options = {
     services.readarr = {
-      enable = mkEnableOption (lib.mdDoc "Readarr");
+      enable = mkEnableOption "Readarr, a Usenet/BitTorrent ebook downloader";
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/readarr/";
-        description = lib.mdDoc "The directory where Readarr stores its data files.";
+        description = "The directory where Readarr stores its data files.";
       };
 
       package = mkPackageOption pkgs "readarr" { };
@@ -21,7 +21,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for Readarr
         '';
       };
@@ -29,7 +29,7 @@ in
       user = mkOption {
         type = types.str;
         default = "readarr";
-        description = lib.mdDoc ''
+        description = ''
           User account under which Readarr runs.
         '';
       };
@@ -37,7 +37,7 @@ in
       group = mkOption {
         type = types.str;
         default = "readarr";
-        description = lib.mdDoc ''
+        description = ''
           Group under which Readarr runs.
         '';
       };
@@ -45,9 +45,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-readarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.readarr = {
       description = "Readarr";

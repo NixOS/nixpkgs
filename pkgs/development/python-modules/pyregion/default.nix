@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-# needed to build
-, cython
-, oldest-supported-numpy
-, setuptools
-, setuptools-scm
-, wheel
-# needed to run
-, astropy
-, numpy
-, pyparsing
-# needed to check
-, pytestCheckHook
-, pytest-astropy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # needed to build
+  cython,
+  oldest-supported-numpy,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  # needed to run
+  astropy,
+  numpy,
+  pyparsing,
+  # needed to check
+  pytestCheckHook,
+  pytest-astropy,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-r2STKnZwNvonXATrQ5q9NVD9QftlWI1RWl4F+GZSxVg=";
   };
 
-  env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  } // lib.optionalAttrs stdenv.cc.isClang {
+  env = lib.optionalAttrs stdenv.cc.isClang {
     # Try to remove on next update.  generated code returns a NULL in a
     # function where an int is expected.
     NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
@@ -54,7 +52,10 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-astropy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-astropy
+  ];
 
   # Tests must be run in the build directory
   preCheck = ''

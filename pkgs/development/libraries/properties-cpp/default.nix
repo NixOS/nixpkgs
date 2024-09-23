@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-C/BDEuKNMQHOjATO5aWBptjIlgfv6ykzjFAsHb6uP3Q=";
   };
 
-  postPatch = lib.optionalString (!finalAttrs.doCheck) ''
+  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
   '';
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp";
-    description = "A very simple convenience library for handling properties and signals in C++11";
+    description = "Very simple convenience library for handling properties and signals in C++11";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;

@@ -7,7 +7,7 @@ mkDerivation rec {
     owner = "pholy";
     repo = "OSCAR-code";
     rev = "v${version}";
-    sha256 = "sha256-FBHbPtMZeIgcR1pQflfEWK2FS8bquctXaeY/yaZofHg=";
+    hash = "sha256-FBHbPtMZeIgcR1pQflfEWK2FS8bquctXaeY/yaZofHg=";
   };
 
   buildInputs = [ qtbase qttools qtserialport libGLU ];
@@ -39,6 +39,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.sleepfiles.com/OSCAR/";
     description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
+    mainProgram = "OSCAR";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.roconnor ];
     # Someone needs to create a suitable installPhase for Darwin and Windows.

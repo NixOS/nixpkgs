@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     homepage = "https://lttng.org/urcu";
     changelog = "https://github.com/urcu/userspace-rcu/raw/v${version}/ChangeLog";
     license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    # https://git.liburcu.org/?p=userspace-rcu.git;a=blob;f=include/urcu/arch.h
+    platforms = intersectLists platforms.unix (platforms.x86 ++ platforms.power ++ platforms.s390 ++ platforms.arm ++ platforms.aarch64 ++ platforms.mips ++ platforms.m68k ++ platforms.riscv);
     maintainers = [ maintainers.bjornfor ];
   };
 

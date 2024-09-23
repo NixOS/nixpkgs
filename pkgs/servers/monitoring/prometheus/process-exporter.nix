@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "process-exporter";
-  version = "0.7.10";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "ncabatoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TAgMA9IV3i8dpgOBDmnlt4iyGlmWN5Nj3BexXb5vzlc=";
+    sha256 = "sha256-E14TaxNQ0P/cgs8ZRZ5wxxsdJaXeb7grO+pNaGhz00s=";
   };
 
-  vendorHash = "sha256-LAEnXJ3qShfCGjtsYAGyW5x/TTFQxQxXM0hebJrqiW4=";
+  vendorHash = "sha256-Mmcc7Tp71OH5BQgMYMRhokqNDOqCudaUaCNzjOGoQ68=";
 
   postPatch = ''
     substituteInPlace proc/read_test.go --replace /bin/cat cat

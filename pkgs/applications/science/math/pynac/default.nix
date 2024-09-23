@@ -10,15 +10,15 @@
 , ncurses
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.7.29";
+stdenv.mkDerivation (finalAttrs: {
   pname = "pynac";
+  version = "0.7.29";
 
   src = fetchFromGitHub {
     owner = "pynac";
     repo = "pynac";
-    rev = "pynac-${version}";
-    sha256 = "sha256-ocR7emXtKs+Xe2f6dh4xEDAacgiolY8mtlLnWnNBS8A=";
+    rev = "pynac-${finalAttrs.version}";
+    hash = "sha256-ocR7emXtKs+Xe2f6dh4xEDAacgiolY8mtlLnWnNBS8A=";
   };
 
   patches = [
@@ -27,9 +27,15 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "realpartloop.patch";
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/realpartloop.patch?h=9.4.beta5";
-      sha256 = "sha256-1nj0xtlFN5fZKEiRLD+tiW/ZtxMQre1ziEGA0OVUGE4=";
+      hash = "sha256-1nj0xtlFN5fZKEiRLD+tiW/ZtxMQre1ziEGA0OVUGE4=";
     })
   ];
+
+  # Python 3.11 moved this header file, but is now is imported by default
+  postPatch = ''
+    substituteInPlace ginac/numeric.cpp \
+        --replace-fail "#include <longintrepr.h>" ""
+  '';
 
   buildInputs = [
     flint
@@ -57,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.sage.members;
     platforms   = platforms.unix;
   };
-}
+})

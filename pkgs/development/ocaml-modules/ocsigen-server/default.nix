@@ -1,6 +1,6 @@
 { lib, buildDunePackage, fetchFromGitHub, which, ocaml, lwt_react, ssl, lwt_ssl, findlib
 , bigstringaf, lwt, cstruct, mirage-crypto, zarith, mirage-crypto-ec, ptime, mirage-crypto-rng, mtime, ca-certs
-, cohttp, cohttp-lwt-unix, hmap
+, cohttp, cohttp-lwt-unix
 , lwt_log, re, cryptokit, xml-light, ipaddr
 , camlzip
 , makeWrapper
@@ -17,7 +17,7 @@ let caml_ld_library_path =
 ; in
 
 buildDunePackage rec {
-  version = "5.1.0";
+  version = "6.0.0";
   pname = "ocsigenserver";
 
   minimalOCamlVersion = "4.08";
@@ -26,13 +26,13 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = "refs/tags/${version}";
-    hash = "sha256-6xO+4eYSp6rlgPT09L7cvlaz6kYYuUPRa3K/TgZmaqE=";
+    hash = "sha256-T3bgPZpDO6plgebLJDBtBuR2eR/bN3o24UAUv1VwgtI=";
   };
 
   nativeBuildInputs = [ makeWrapper which ];
   buildInputs = [ lwt_react camlzip findlib ];
 
-  propagatedBuildInputs = [ cohttp cohttp-lwt-unix cryptokit hmap ipaddr lwt_log lwt_ssl
+  propagatedBuildInputs = [ cohttp cohttp-lwt-unix cryptokit ipaddr lwt_log lwt_ssl
     re xml-light
   ];
 
@@ -61,7 +61,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "http://ocsigen.org/ocsigenserver/";
-    description = "A full featured Web server";
+    description = "Full featured Web server";
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';

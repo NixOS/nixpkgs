@@ -1,21 +1,21 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg_4, freetype, libGLU
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg_7, freetype, libGLU
 , libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";
-  version = "0.8.13";
+  version = "0.8.14";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "xjadeo";
     rev = "v${version}";
-    sha256 = "sha256-CSq11hFNmo41VXOndBoPxRc9NNUUBtzfWx14DCUFieQ=";
+    sha256 = "sha256-GTg0W3D0BRSxsmeVsB4On3MfwncScEGFJGVJK7wflCM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg_7
     libjack2
     libX11
     xorg.libXext
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The X Jack Video Monitor";
+    description = "X Jack Video Monitor";
     longDescription = ''
       Xjadeo is a software video player that displays a video-clip in sync with
       an external time source (MTC, LTC, JACK-transport). Xjadeo is useful in

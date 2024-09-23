@@ -45,6 +45,7 @@ Bash-only variables:
  - `postgresqlTestSetupCommands`: bash commands to run after database start, defaults to running `$postgresqlTestSetupSQL` as database administrator.
  - `postgresqlEnableTCP`: set to `1` to enable TCP listening. Flaky; not recommended.
  - `postgresqlStartCommands`: defaults to `pg_ctl start`.
+ - `postgresqlExtraSettings`: Additional configuration to add to `postgresql.conf`
 
 ## Hooks {#sec-postgresqlTestHook-hooks}
 

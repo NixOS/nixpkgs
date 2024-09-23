@@ -59,6 +59,5 @@ in buildGoModule {
     homepage = "https://gg-scm.io/";
     changelog = "https://github.com/gg-scm/gg/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zombiezen ];
   };
 }

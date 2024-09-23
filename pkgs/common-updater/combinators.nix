@@ -89,7 +89,7 @@ let
     in
     [
       "sh"
-      "-c"
+      "-ec"
       (lib.concatMapStringsSep ";" escapeShellArgs' extracted.commands)
       # We need paths as separate arguments so that update.nix can ensure they refer to the local directory
       # rather than a store path.

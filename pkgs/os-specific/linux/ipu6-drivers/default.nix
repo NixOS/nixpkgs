@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "ipu6-drivers";
-  version = "unstable-2023-08-28";
+  version = "unstable-2023-11-24";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-drivers";
-    rev = "7c3d6ab1e9e234563a0af51286b0a8d60445f2a3";
-    hash = "sha256-D782v6hIqAl2EO1+zKeakURD3UGVP3c7p3ba/61yfW4=";
+    rev = "07f0612eabfdc31df36f5e316a9eae115807804f";
+    hash = "sha256-8JRZG6IKJT0qtoqJHm8641kSQMLc4Z+DRzK6FpL9Euk=";
   };
 
   postPatch = ''
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/intel/ipu6-drivers";
     description = "IPU6 kernel driver";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ hexa ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     # requires 6.1.7 https://github.com/intel/ipu6-drivers/pull/84
     broken = kernel.kernelOlder "6.1.7";

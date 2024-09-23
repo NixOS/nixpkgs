@@ -19,19 +19,20 @@
 , systemd
 , wayland
 , wayland-protocols
+, wayland-scanner
 , withXwayland ? true , xwayland
 , wlroots
 }:
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-cJEJ8V9lDbNb07eY3nWmNcT7ULGlcmOeyb9UDOLGWfI=";
+    hash = "sha256-GAANZIEUtuONPBpk0E3fErgOZtm3wB+gWJNwfO6VOTo=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     scdoc
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/project-repo/cagebreak";
-    description = "A Wayland tiling compositor inspired by ratpoison";
+    description = "Wayland tiling compositor inspired by ratpoison";
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;

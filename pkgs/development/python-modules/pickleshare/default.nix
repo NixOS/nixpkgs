@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, path
-, pathlib2
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  path,
 }:
 
 buildPythonPackage rec {
   version = "0.7.5";
+  format = "setuptools";
   pname = "pickleshare";
 
   src = fetchPypi {
@@ -15,8 +15,7 @@ buildPythonPackage rec {
     sha256 = "87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca";
   };
 
-  propagatedBuildInputs = [ path ]
-    ++ lib.optional (pythonOlder "3.4") pathlib2;
+  propagatedBuildInputs = [ path ];
 
   # No proper test suite
   doCheck = false;
@@ -26,5 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/vivainio/pickleshare";
     license = licenses.mit;
   };
-
 }

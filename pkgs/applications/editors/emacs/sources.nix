@@ -4,8 +4,8 @@
 }:
 
 let
-  mkArgs = { pname, version, variant, rev, hash }: {
-    inherit pname version variant;
+  mkArgs = { pname, version, variant, patches ? _: [ ], rev, hash }: {
+    inherit pname version variant patches;
 
     src = {
       "mainline" = (fetchFromSavannah {
@@ -24,7 +24,7 @@ let
         "mainline" = "https://www.gnu.org/software/emacs/";
         "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
       }.${variant};
-      description = "The extensible, customizable GNU text editor"
+      description = "Extensible, customizable GNU text editor"
                     + lib.optionalString (variant == "macport") " - macport variant";
       longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more. At its core
@@ -53,10 +53,10 @@ let
       maintainers = with lib.maintainers; [
         AndersonTorres
         adisbladis
-        atemu
         jwiegley
         lovek323
         matthewbauer
+        # atemu for issues relating to Macport
       ];
       platforms = {
         "mainline" = lib.platforms.all;
@@ -73,14 +73,49 @@ in
     variant = "mainline";
     rev = "28.2";
     hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
+    patches = fetchpatch: [
+      # CVE-2022-45939
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
+        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
+      })
+
+      # https://lists.gnu.org/archive/html/emacs-devel/2024-03/msg00611.html
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/10_all_org-macro-eval.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-OdGt4e9JGjWJPkfJhbYsmQQc6jart4BH5aIKPIbWKFs=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/11_all_untrusted-content.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-wa2bsnCt5yFx0+RAFZGBPI+OoKkbrfkkMer/KBEc/wA=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
+      })
+
+      # security fix from Emacs 29.4
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=c645e1d8205f0f0663ec4a2d27575b238c646c7c";
+        hash = "sha256-G+gGQx5w3KuWMotR1n/sYYL8WyAABYW3fUPeffMMs38=";
+      })
+    ];
   });
 
   emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "29.1";
+    version = "29.4";
     variant = "mainline";
-    rev = "29.1";
-    hash = "sha256-3HDCwtOKvkXwSULf3W7YgTz4GV8zvYnh2RrL28qzGKg=";
+    rev = "29.4";
+    hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
+  });
+
+  emacs30 = import ./make-emacs.nix (mkArgs {
+    pname = "emacs";
+    version = "30.0.91";
+    variant = "mainline";
+    rev = "30.0.91";
+    hash = "sha256-X5J34BUY42JgA1s76eVeGA9WNtesU2c+JyndIHFbONQ=";
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {
@@ -89,6 +124,27 @@ in
     variant = "macport";
     rev = "emacs-28.2-mac-9.1";
     hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
+    patches = fetchpatch: [
+      # CVE-2022-45939
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=d48bb4874bc6cd3e69c7a15fc3c91cc141025c51";
+        hash = "sha256-TiBQkexn/eb6+IqJNDqR/Rn7S7LVdHmL/21A5tGsyJs=";
+      })
+
+      # https://lists.gnu.org/archive/html/emacs-devel/2024-03/msg00611.html
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/10_all_org-macro-eval.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-OdGt4e9JGjWJPkfJhbYsmQQc6jart4BH5aIKPIbWKFs=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/11_all_untrusted-content.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-wa2bsnCt5yFx0+RAFZGBPI+OoKkbrfkkMer/KBEc/wA=";
+      })
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/28.2/12_all_org-remote-unsafe.patch?id=af40e12cb742510e5d40a06ffc6dfca97e340dd6";
+        hash = "sha256-b6WU1o3PfDV/6BTPfPNUFny6oERJCNsDrvflxX3Yvek=";
+      })
+    ];
   });
 
   emacs29-macport = import ./make-emacs.nix (mkArgs {

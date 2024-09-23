@@ -1,47 +1,72 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchPypi
-, flit-core
-, jinja2
-, markdown-it-py
-, mdit-py-plugins
-, pythonOlder
-, pyyaml
-, typing-extensions
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  defusedxml,
+  docutils,
+  fetchFromGitHub,
+  flit-core,
+  jinja2,
+  markdown-it-py,
+  mdit-py-plugins,
+  pytest-param-files,
+  pytest-regressions,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  sphinx-pytest,
+  sphinx,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "myst-docutils";
-  version = "2.0.0";
-  format = "pyproject";
+  version = "4.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "myst_docutils";
-    inherit version;
-    hash = "sha256-WmmPEg+bINmeId+pjR6bbp8qzjfSXfEel+sQEdPIu8Y=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchFromGitHub {
+    owner = "executablebooks";
+    repo = "MyST-Parser";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     jinja2
     markdown-it-py
     mdit-py-plugins
     pyyaml
+    sphinx
     typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    beautifulsoup4
+    defusedxml
+    pytest-param-files
+    pytest-regressions
+    pytestCheckHook
+    sphinx-pytest
   ];
 
   pythonImportsCheck = [ "myst_parser" ];
 
+  disabledTests = [
+    # Tests require linkify
+    "test_cmdline"
+    "test_extended_syntaxes"
+  ];
+
   meta = with lib; {
-    description = "An extended commonmark compliant parser, with bridges to docutils/sphinx.";
+    description = "Extended commonmark compliant parser, with bridges to docutils/sphinx";
     homepage = "https://github.com/executablebooks/MyST-Parser";
+    changelog = "https://github.com/executablebooks/MyST-Parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dpausp ];
-    broken = pythonOlder "3.8"; # dependency networkx requires 3.8
   };
 }

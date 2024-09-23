@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, beziers
-, glyphslib
-, numpy
-, setuptoolsCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beziers,
+  glyphslib,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "glyphtools";
   version = "0.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,12 +24,10 @@ buildPythonPackage rec {
   ];
 
   # A unit test suite does exist, but it only contains a dummy test that
-  # doesn't test anything. It does import the module though so we still run it.
-  doCheck = true;
-  nativeCheckInputs = [
-    # Upstream apparently prefers the deprecated setuptools 'test' command.
-    setuptoolsCheckHook
-  ];
+  # imports the library.
+  doCheck = false;
+
+  pythonImportsCheck = [ "glyphtools" ];
 
   meta = with lib; {
     description = "Python library for extracting information from font glyphs";

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.statmake
     python3.pkgs.ufo2ft
     python3.pkgs.setuptools
-    python3.pkgs.ufoLib2
+    python3.pkgs.ufolib2
     gettext
     appstream-glib
   ];
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     description = "Default typeface used in the user interface of GNOME since version 3.0";
     platforms = lib.platforms.all;
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

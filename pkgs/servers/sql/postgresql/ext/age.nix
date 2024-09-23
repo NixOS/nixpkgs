@@ -2,15 +2,16 @@
 
 let
   hashes = {
-    "15" = "sha256-1vmwoflbU3++PFDcsLt9gyLkuzMRGNCD7vWl7/6Q+SE=";
-    "14" = "sha256-w93Q499sZRk4q85A9yqKQjGUd9Pl8UL8K1D3W7mHRTU=";
-    "13" = "sha256-Sot7FR0oW7kWA680pNCMCmlflu4RfJTSWZn9mrXrpzw=";
-    "12" = "sha256-XezcXoHHLCD1/2OHmKhxome2pdjOsYAfZlpvOoU3aS4=";
+    "16" = "sha256-sXh/vmGyYj00ALfFVdeql2DZ6nCJQDNKyNgzlOZnPAw=";
+    "15" = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
+    "14" = "sha256-jZXhcYBubpjIJ8M5JHXKV5f6VK/2BkypH3P7nLxZz3E=";
+    "13" = "sha256-HR6nnWt/V2a0rD5eHHUsFIZ1y7lmvLz36URt9pPJnCw=";
+    "12" = "sha256-JFNk17ESsIt20dwXrfBkQ5E6DbZzN/Q9eS6+WjCXGd4=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "age";
-  version = "1.4.0-rc0";
+  version = "1.5.0-rc0";
 
   src = fetchFromGitHub {
     owner = "apache";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D -t $out/lib *.so
+    install -D -t $out/lib *${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
   '';
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
       echo -e "include Makefile\nfiles:\n\t@echo \$(REGRESS)" > Makefile.regress
       REGRESS_TESTS=$(make -f Makefile.regress files)
 
-      ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+      ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
         --inputdir=./ \
         --bindir='${postgresqlAge}/bin' \
         --encoding=UTF-8 \
@@ -64,10 +65,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = !builtins.elem (versions.major postgresql.version) (builtins.attrNames hashes);
-    description = "A graph database extension for PostgreSQL";
+    description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
   };

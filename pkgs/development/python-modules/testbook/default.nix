@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, nbformat
-, nbclient
-, ipykernel
-, pandas
-, pytestCheckHook
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  nbformat,
+  nbclient,
+  ipykernel,
+  pandas,
+  pytestCheckHook,
+  setuptools,
+  traitlets,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +31,8 @@ buildPythonPackage rec {
     nbformat
   ];
 
+  nativeBuildInputs = [ setuptools ];
+
   nativeCheckInputs = [
     ipykernel
     pandas
@@ -36,12 +40,10 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  pythonImportsCheck = [
-    "testbook"
-  ];
+  pythonImportsCheck = [ "testbook" ];
 
   meta = with lib; {
-    description = "A unit testing framework extension for testing code in Jupyter Notebooks";
+    description = "Unit testing framework extension for testing code in Jupyter Notebooks";
     homepage = "https://testbook.readthedocs.io/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ djacu ];

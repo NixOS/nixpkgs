@@ -1,30 +1,30 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption mdDoc types literalExpression;
+  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption types literalExpression;
 
   cfg = config.services.meme-bingo-web;
 in {
   options = {
     services.meme-bingo-web = {
-      enable = mkEnableOption (mdDoc ''
+      enable = mkEnableOption ''
         a web app for the meme bingo, rendered entirely on the web server and made interactive with forms.
 
         Note: The application's author suppose to run meme-bingo-web behind a reverse proxy for SSL and HTTP/3
-      '');
+      '';
 
       package = mkPackageOption pkgs "meme-bingo-web" { };
 
       baseUrl = mkOption {
-        description = mdDoc ''
-          URL to be used for the HTML <base> element on all HTML routes.
+        description = ''
+          URL to be used for the HTML \<base\> element on all HTML routes.
         '';
         type = types.str;
         default = "http://localhost:41678/";
         example = "https://bingo.example.com/";
       };
       port = mkOption {
-        description = mdDoc ''
+        description = ''
           Port to be used for the web server.
         '';
         type = types.port;
@@ -36,7 +36,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.meme-bingo-web = {
-      description = "A web app for playing meme bingos.";
+      description = "A web app for playing meme bingos";
       wantedBy = [ "multi-user.target" ];
 
       environment = {
@@ -59,6 +59,7 @@ in {
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "/dev/random" ];
+        InaccessiblePaths = [ "/dev/shm" "/sys" ];
         LockPersonality = true;
         PrivateDevices = true;
         PrivateUsers = true;
@@ -73,6 +74,7 @@ in {
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictFilesystems = [ "@basic-api" "~sysfs" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";

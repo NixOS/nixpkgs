@@ -1,53 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gpytorch
-, linear_operator
-, multipledispatch
-, pyro-ppl
-, setuptools
-, setuptools-scm
-, wheel
-, torch
-, scipy
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gpytorch,
+  linear-operator,
+  multipledispatch,
+  pyro-ppl,
+  setuptools,
+  setuptools-scm,
+  torch,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.9.4";
-  format = "pyproject";
+  version = "0.11.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
-    repo = pname;
+    repo = "botorch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MSbGjv+5/znoUeveePuTrTOMTQMQvsc064G7WoHfBMI=";
+    hash = "sha256-AtRU5KC8KlkxMCU0OUAHDFK7BsPO3TbRmmzDGV7+yVk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gpytorch
-    linear_operator
+    linear-operator
     multipledispatch
     pyro-ppl
     scipy
     torch
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  checkInputs = [
-    pytestCheckHook
+  pythonRelaxDeps = [
+    "gpytorch"
+    "linear-operator"
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [
+    # tests tend to get stuck on busy hosts, increase verbosity to find out
+    # which specific tests get stuck
+    "-vvv"
+  ];
+
+  disabledTests =
+    [ "test_all_cases_covered" ]
+    ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
+      # stuck tests on hydra
+      "test_moo_predictive_entropy_search"
+    ];
+
   pythonImportsCheck = [ "botorch" ];
 
+  # needs lots of undisturbed CPU time or prone to getting stuck
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
+    changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
     license = licenses.mit;

@@ -1,40 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "deprecat";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "2.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mjhajharia";
-    repo = pname;
+    repo = "deprecat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Xl/IC+ImFUxxLry15MIIVRf6aR+gA9K5S2IQomkv+o=";
+    hash = "sha256-CvW4SQ78FG8GqBs6/a0yHWfTAn64sH54GVSETooMa6A=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    wrapt
-  ];
+  dependencies = [ wrapt ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "deprecat"
+  pythonImportsCheck = [ "deprecat" ];
+
+  disabledTestPaths = [
+    # https://github.com/mjhajharia/deprecat/issues/13
+    "tests/test_sphinx.py"
   ];
 
   meta = with lib; {

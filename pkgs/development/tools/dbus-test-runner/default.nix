@@ -4,7 +4,6 @@
 , testers
 , autoreconfHook
 , bash
-, coreutils
 , dbus
 , dbus-glib
 , glib
@@ -68,7 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A small little utility to run a couple of executables under a new DBus session for testing";
+    description = "Small little utility to run a couple of executables under a new DBus session for testing";
+    mainProgram = "dbus-test-runner";
     homepage = "https://launchpad.net/dbus-test-runner";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

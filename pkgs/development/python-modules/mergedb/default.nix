@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchPypi
-, jinja2
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchPypi,
+  jinja2,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     sha256 = "2034c18dca23456c5b166b63d94300bcd8ec9f386e6cd639c2f66e141c0313f9";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     pyyaml
@@ -33,19 +32,15 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mergedb"
-  ];
+  pythonImportsCheck = [ "mergedb" ];
 
   meta = with lib; {
-    description = "A tool/library for deep merging YAML files";
+    description = "Tool/library for deep merging YAML files";
+    mainProgram = "mergedb";
     homepage = "https://github.com/graysonhead/mergedb";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ graysonhead ];
   };
 }
-

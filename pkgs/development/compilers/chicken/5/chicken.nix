@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chicken";
-  version = "5.3.0";
+  version = "5.4.0";
 
   binaryVersion = 11;
 
   src = fetchurl {
     url = "https://code.call-cc.org/releases/${finalAttrs.version}/chicken-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-w62Z2PnhftgQkS75gaw7DC4vRvsOzAM7XDttyhvbDXY=";
+    sha256 = "sha256-PF1KphwRZ79tm/nq+JHadjC6n188Fb8JUVpwOb/N7F8=";
   };
 
   # Disable two broken tests: "static link" and "linking tests"
@@ -35,14 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     "C_COMPILER=$(CC)"
     "CXX_COMPILER=$(CXX)"
-    "TARGET_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "TARGET_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "LINKER_OPTIONS=-headerpad_max_install_names"
     "POSTINSTALL_PROGRAM=install_name_tool"
   ]) ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "HOSTSYSTEM=${stdenv.hostPlatform.config}"
+    "TARGET_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "TARGET_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
   ]);
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ corngood nagy konst-aa ];
     platforms = lib.platforms.unix;
-    description = "A portable compiler for the Scheme programming language";
+    description = "Portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.
       CHICKEN produces portable and efficient C, supports almost all

@@ -5,14 +5,14 @@
 , profile ? "/etc/g810-led/profile"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "g810-led";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "MatMoul";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "g810-led";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-GKHtQ7DinqfhclDdPO94KtTLQhhonAoWS4VOvs6CMhY=";
   };
 
@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
       --replace "/usr" $out \
       --replace "/etc/g810-led/profile" "${profile}"
   '';
+
+  # GCC 13 cannot find `uint16_t` and other similar types by default anymore
+  env.CXXFLAGS = "-include cstdint";
 
   buildInputs = [
     hidapi
@@ -48,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
   };
-}
+})

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,14 +21,12 @@ buildPythonPackage rec {
   # tests auto-discovery
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rjsmin"
-  ];
+  pythonImportsCheck = [ "rjsmin" ];
 
   meta = with lib; {
     description = "Module to minify Javascript";
     homepage = "http://opensource.perlig.de/rjsmin/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

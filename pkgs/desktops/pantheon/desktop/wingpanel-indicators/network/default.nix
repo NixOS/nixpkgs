@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, substituteAll
 , pkg-config
 , meson
 , ninja
@@ -10,6 +9,7 @@
 , gtk3
 , granite
 , networkmanager
+, polkit
 , libnma
 , wingpanel
 , libgee
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "7.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PqTnopacT1/Ctx8VH6b35tiVI+3ZlrdFcRsDpAWm4a0=";
+    sha256 = "sha256-B3loX1yAUQktqNztikUCOHM1DgIu48fMFFol1N4BN7A=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     networkmanager
+    polkit
     libnma
     wingpanel
   ];

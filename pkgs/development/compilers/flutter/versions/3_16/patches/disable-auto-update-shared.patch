@@ -1,0 +1,13 @@
+diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
+index 75d9d3013e..657ad3cb78 100644
+--- a/bin/internal/shared.sh
++++ b/bin/internal/shared.sh
+@@ -245,7 +245,7 @@ function shared::execute() {
+   # and will corrupt each others' downloads.
+   #
+   # SHARED_NAME itself is prepared by the caller script.
+-  upgrade_flutter 7< "$SHARED_NAME"
++  # upgrade_flutter 7< "$SHARED_NAME"
+ 
+   BIN_NAME="$(basename "$PROG_NAME")"
+   case "$BIN_NAME" in

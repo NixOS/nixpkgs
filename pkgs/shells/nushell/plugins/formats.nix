@@ -1,20 +1,24 @@
-{ stdenv
-, lib
-, rustPlatform
-, nushell
-, pkg-config
-, IOKit
-, Foundation
-, nix-update-script
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  nushell,
+  pkg-config,
+  IOKit,
+  Foundation,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_formats";
   inherit (nushell) version src;
-  cargoHash = "sha256-rryKNRCf8i/jlqN5O6+UDvV5tDNxcVxS+KewCaIlZVM=";
+  cargoHash = "sha256-Lcgf6+Li1STl4Sko81oBHAnX09A6F7dwYmHJiF2CZ3s=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit Foundation ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    IOKit
+    Foundation
+  ];
   cargoBuildFlags = [ "--package nu_plugin_formats" ];
 
   checkPhase = ''
@@ -27,10 +31,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A formats plugin for Nushell";
+    description = "Formats plugin for Nushell";
+    mainProgram = "nu_plugin_formats";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_formats";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ viraptor aidalgol ];
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      viraptor
+      aidalgol
+    ];
     platforms = with platforms; all;
   };
 }

@@ -16,6 +16,7 @@
 , process-cpp
 , properties-cpp
 , python3
+, validatePkgConfig
 }:
 
 let
@@ -25,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "net-cpp";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/net-cpp";
     rev = finalAttrs.version;
-    hash = "sha256-qXKuFLmtPjdqTcBIM07xbRe3DnP7AzieCy7Tbjtl0uc=";
+    hash = "sha256-MSqdP3kGI9hDdxFv2a0yd5ZkFkf1lMurB+KDIZLR9jg=";
   };
 
   outputs = [
@@ -41,30 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Enable disabling of Werror
-    # Remove when version > 3.1.0
-    (fetchpatch {
-      name = "0001-net-cpp-Add-ENABLE_WERROR-option.patch";
-      url = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/commit/0945180aa6dd38245688d5ebc11951b272e93dc4.patch";
-      hash = "sha256-91YuEgV+Q9INN4BJXYwWgKUNHHtUYz3CG+ROTy24GIE=";
-    })
-
-    # Enable opting out of tests
-    # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/merge_requests/14
-    (fetchpatch {
-      name = "0002-net-cpp-Make-tests-optional.patch";
-      url = "https://gitlab.com/OPNA2608/net-cpp/-/commit/cfbcd55446a4224a4c913ead3a370cd56d07a71b.patch";
-      hash = "sha256-kt48txzmWNXyxvx3DWAJl7I90c+o3KlgveNQjPkhfxA=";
-    })
-
     # Be more lenient with how quickly HTTP test server must be up, for slower hardware / archs
     (fetchpatch {
       url = "https://salsa.debian.org/ubports-team/net-cpp/-/raw/941d9eceaa66a06eabb1eb79554548b47d4a60ab/debian/patches/1007_wait-for-flask.patch";
       hash = "sha256-nsGkZBuqahsg70PLUxn5EluDjmfZ0/wSnOYimfAI4ag=";
     })
+    # Bump std version to 14 for gtest 1.13+
+    (fetchpatch {
+      url = "https://salsa.debian.org/ubports-team/net-cpp/-/raw/f3a031eb7e4ce7df00781100f16de58a4709afcb/debian/patches/0001-Bump-std-version-to-14-needed-for-googletest-1.13.0.patch";
+      hash = "sha256-3ykqCfZjtTx7zWQ5rkMhVp7D5fkpoCjl0CVFwwEd4U4=";
+    })
   ];
 
-  postPatch = lib.optionalString finalAttrs.doCheck ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # Use wrapped python. Removing just the /usr/bin doesn't seem to work?
     substituteInPlace tests/httpbin.h.in \
       --replace '/usr/bin/python3' '${lib.getExe pythonEnv}'
@@ -76,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     doxygen
     graphviz
+    validatePkgConfig
   ];
 
   buildInputs = [
@@ -98,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/4
-    "-DENABLE_WERROR=OFF"
+    (lib.cmakeBool "ENABLE_WERROR" false)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -114,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Simple yet beautiful networking API for C++11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp";
+    changelog = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.lgpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

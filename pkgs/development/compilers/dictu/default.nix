@@ -47,16 +47,19 @@ stdenv.mkDerivation rec {
     "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
   ];
 
+  postBuild = ''
+    cd .. # move out of cmakeBuildDir
+  '';
+
   doCheck = cliSupport;
 
   preCheck = ''
-    cd ..
     sed -i tests/runTests.du \
         -e '/http/d'
     sed -i tests/path/realpath.du \
         -e 's/usr/build/g'
     sed -i tests/path/isDir.du \
-        -e 's,/usr/bin,/build/source,' \
+        -e "s,/usr/bin,$PWD," \
         -e '/home/d'
   '';
 
@@ -67,15 +70,16 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    cp -r /build/source/src/include $out/include
+    cp -r src/include $out/include
     mkdir -p $out/lib
-    cp /build/source/build/src/libdictu_api* $out/lib
+    cp build/src/libdictu_api* $out/lib
   '' + lib.optionalString cliSupport ''
-    install -Dm755 /build/source/dictu $out/bin/dictu
+    install -Dm755 dictu $out/bin/dictu
   '';
 
   meta = with lib; {
     description = "High-level dynamically typed, multi-paradigm, interpreted programming language";
+    mainProgram = "dictu";
     homepage = "https://dictu-lang.com";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r ];

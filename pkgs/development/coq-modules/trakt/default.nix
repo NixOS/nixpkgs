@@ -11,7 +11,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [ coq.version ] [
-    { cases = [ (range "8.15" "8.18") ]; out = "1.2"; }
+    { cases = [ (range "8.15" "8.17") ]; out = "1.2"; }
     { cases = [ (isEq "8.13") ]; out = "1.2+8.13"; }
     { cases = [ (range "8.13" "8.17") ]; out = "1.1"; }
   ] null;
@@ -19,7 +19,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ coq-elpi ];
 
   meta = with lib; {
-    description = "A generic goal preprocessing tool for proof automation tactics in Coq";
+    description = "Generic goal preprocessing tool for proof automation tactics in Coq";
     maintainers = with maintainers; [ siraben ];
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;

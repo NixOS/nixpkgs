@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap libnet ];
 
   meta = {
-    description = "A traceroute implementation using TCP packets";
+    description = "Traceroute implementation using TCP packets";
     homepage = "https://github.com/mct/tcptraceroute";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
+    mainProgram = "tcptraceroute";
   };
 }

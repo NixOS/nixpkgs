@@ -1,14 +1,16 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
   # Runtime dependencies
-, httplib2
-, six
+  httplib2,
+  six,
 }:
 
 buildPythonPackage {
   pname = "plantuml";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dougn";

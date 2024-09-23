@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wlcs";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YYrhcN1BSJISn/7lxu7Db5YaOK+okdHVJuMwqSDzAIU=";
+    hash = "sha256-BQPRymkbGu4YvTYXTaTMuyP5fHpqMWI4xPwjDRHZNEQ=";
   };
 
   strictDeps = true;
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     gtest
     wayland
+    wayland-scanner # needed by cmake
   ];
 
   passthru = {
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       compositor and back again.
     '';
     homepage = "https://github.com/MirServer/wlcs";
-    changelog = "https://github.com/MirServer/wlcs/releases/tag/v${version}";
+    changelog = "https://github.com/MirServer/wlcs/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;

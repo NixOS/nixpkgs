@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-router";
-  version = "0.6.7";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "garywill";
     repo = "linux-router";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ote/arHCU6qiTXdK2RXv9848aeW6rcBsrb6nfxIzQLs=";
+    hash = "sha256-iIHi434S7+Q9S1EU7Bpa7iYB7MJDTuyMdB/bbTrbl5Q=";
   };
 
   nativeBuildInputs = [
@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = with lib; let
-      binPath = makeBinPath ([ procps iproute2 getopt bash dnsmasq
+  installPhase = let
+      binPath = lib.makeBinPath ([ procps iproute2 getopt bash dnsmasq
         iptables coreutils which flock gnugrep gnused gawk ]
-        ++ optional useNetworkManager                          networkmanager
-        ++ optional useWifiDependencies                        hostapd
-        ++ optional useWifiDependencies                        iw
-        ++ optional (useWifiDependencies && useWirelessTools)  wirelesstools
-        ++ optional (useWifiDependencies && useHaveged)        haveged
-        ++ optional (useWifiDependencies && useQrencode)       qrencode);
+        ++ lib.optional useNetworkManager                          networkmanager
+        ++ lib.optional useWifiDependencies                        hostapd
+        ++ lib.optional useWifiDependencies                        iw
+        ++ lib.optional (useWifiDependencies && useWirelessTools)  wirelesstools
+        ++ lib.optional (useWifiDependencies && useHaveged)        haveged
+        ++ lib.optional (useWifiDependencies && useQrencode)       qrencode);
     in
     ''
       mkdir -p $out/bin/ $out/.bin-wrapped
@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
+    mainProgram = "lnxrouter";
   };
 }

@@ -1,23 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, qtwebengine
-, karchive
-, poppler
-, libchardet
-, libspectre
-, openjpeg
-, djvulibre
-, qtbase
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  qtwebengine,
+  karchive,
+  poppler,
+  libchardet,
+  libspectre,
+  openjpeg,
+  djvulibre,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-G5UZ8lBrUo5G3jMae70p/zi9kOVqHWMNCedOy45L1PA=";
   };
+
+  patches = [ ./0001-build-tests-with-cpp-14.patch ];
 
   # don't use vendored htmltopdf
   postPatch = ''
@@ -61,12 +63,11 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  qmakeFlags = [
-    "DEFINES+=VERSION=${version}"
-  ];
+  qmakeFlags = [ "DEFINES+=VERSION=${version}" ];
 
   meta = with lib; {
-    description = "A simple memo software with texts and voice recordings";
+    description = "Simple memo software with texts and voice recordings";
+    mainProgram = "deepin-reader";
     homepage = "https://github.com/linuxdeepin/deepin-reader";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

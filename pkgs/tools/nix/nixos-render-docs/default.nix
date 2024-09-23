@@ -1,18 +1,11 @@
 { lib
-, stdenv
 , python3
-, python3Minimal
 , runCommand
 }:
 
 let
-  # python3Minimal can't be overridden with packages on Darwin, due to a missing framework.
-  # Instead of modifying stdenv, we take the easy way out, since most people on Darwin will
-  # just be hacking on the Nixpkgs manual (which also uses make-options-doc).
-  python = ((if stdenv.isDarwin then python3 else python3Minimal).override {
+  python = python3.override {
     self = python;
-    includeSiteCustomize = true;
-  }).override {
     packageOverrides = final: prev: {
       markdown-it-py = prev.markdown-it-py.overridePythonAttrs (_: {
         doCheck = false;
@@ -68,6 +61,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Renderer for NixOS manual and option docs";
+    mainProgram = "nixos-render-docs";
     license = licenses.mit;
     maintainers = [ ];
   };

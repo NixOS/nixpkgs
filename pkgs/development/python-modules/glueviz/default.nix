@@ -1,78 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, dill
-, astropy
-, numpy
-, pandas
-, qt6
-, pyqt6
-, pyqt-builder
-, qtconsole
-, setuptools
-, setuptools-scm
-, scipy
-, ipython
-, ipykernel
-, h5py
-, matplotlib
-, xlrd
-, mpl-scatter-density
-, pvextractor
-, openpyxl
-, echo
-, pytest
-, pytest-flakes
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  astropy,
+  dill,
+  echo,
+  fast-histogram,
+  h5py,
+  ipython,
+  matplotlib,
+  mpl-scatter-density,
+  numpy,
+  openpyxl,
+  pandas,
+  pyqt-builder,
+  pytestCheckHook,
+  qt6,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  xlrd,
 }:
 
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.16.0";
+  version = "1.21.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glue";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-jjDa0DxB5AJm+x8P7FiH2kqhhc/bbzjzvdC9INs69Ro=";
+    hash = "sha256-/awIgfKbDFKM2WFlfpo5f/Px/N1aMXkV9eSTXts0aGo=";
   };
 
   buildInputs = [ pyqt-builder ];
-  nativeBuildInputs = [ setuptools setuptools-scm qt6.wrapQtAppsHook ];
-  propagatedBuildInputs = [
+
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     astropy
     dill
-    setuptools
-    scipy
-    numpy
-    matplotlib
-    pandas
-    pyqt6
-    qtconsole
-    ipython
-    ipykernel
-    h5py
-    xlrd
-    mpl-scatter-density
-    pvextractor
-    openpyxl
     echo
+    fast-histogram
+    h5py
+    ipython
+    matplotlib
+    mpl-scatter-density
+    numpy
+    openpyxl
+    pandas
+    scipy
+    setuptools
+    shapely
+    xlrd
   ];
 
   dontConfigure = true;
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   # collecting ... qt.qpa.xcb: could not connect to display
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
   doCheck = false;
 
-  nativeCheckInputs = [ pytest pytest-flakes pytest-cov ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "glue" ];
+
+  dontWrapQtApps = true;
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

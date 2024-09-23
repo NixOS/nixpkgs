@@ -5,15 +5,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gcp-scanner";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gcp_scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mMvAoqwptCA73JiUl8HIhFBO198NnUmvCbf8Rk9dWxA=";
+    hash = "sha256-6bIrSaTqpXQjB64YWAI64DlgQBD2XD+zMvKymMtwpDk=";
   };
+
+  pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
@@ -44,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A comprehensive scanner for Google Cloud";
+    description = "Comprehensive scanner for Google Cloud";
     homepage = "https://github.com/google/gcp_scanner";
     changelog = "https://github.com/google/gcp_scanner/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

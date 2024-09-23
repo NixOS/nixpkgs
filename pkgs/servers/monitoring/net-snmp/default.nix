@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, removeReferencesTo
-, file, openssl, perl, perlPackages, nettools
-, withPerlTools ? false }: let
+{ lib, stdenv, fetchurl, fetchpatch
+, file, openssl, perl, nettools
+, autoreconfHook
+, withPerlTools ? false
+, darwin }: let
 
   perlWithPkgs = perl.withPackages (ps: with ps; [
     JSON
@@ -25,7 +27,11 @@ in stdenv.mkDerivation rec {
   in [
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-    (fetchAlpinePatch "fix-fd_mask.patch" "/i9ve61HjDzqZt+u1wajNtSQoizl+KePvhcAt24HKd0=")
+    (fetchpatch {
+      name = "configure-musl.patch";
+      url = "https://github.com/net-snmp/net-snmp/commit/a62169f1fa358be8f330ea8519ade0610fac525b.patch";
+      hash = "sha256-+vWH095fFL3wE6XLsTaPXgMDya0LRWdlL6urD5AIBUs=";
+    })
   ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
@@ -45,9 +51,22 @@ in stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ nettools removeReferencesTo file ];
+  postConfigure = ''
+    # libraries contain configure options. Mangle store paths out from
+    # ./configure-generated file.
+    sed -i include/net-snmp/net-snmp-config.h \
+      -e "/NETSNMP_CONFIGURE_OPTIONS/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g"
+  '';
+
+  nativeBuildInputs = [ nettools file autoreconfHook ];
   buildInputs = [ openssl ]
-    ++ lib.optional withPerlTools perlWithPkgs;
+    ++ lib.optional withPerlTools perlWithPkgs
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.ApplicationServices
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.DiskArbitration
+    ];
 
   enableParallelBuilding = true;
   # Missing dependencies during relinking:
@@ -61,15 +80,12 @@ in stdenv.mkDerivation rec {
     done
     mkdir $dev/bin
     mv $bin/bin/net-snmp-config $dev/bin
-    # libraries contain configure options
-    find $lib/lib -type f -exec remove-references-to -t $bin '{}' +
-    find $lib/lib -type f -exec remove-references-to -t $dev '{}' +
   '';
 
   meta = with lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
     homepage = "http://www.net-snmp.org/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

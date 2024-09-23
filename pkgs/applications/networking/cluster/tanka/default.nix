@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "tanka";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xKB/SKiw3cKqdpl869Bs/NO1Jbrla8Un0hH4kIGqAPs=";
+    sha256 = "sha256-MDZXnI0FAeQJI7GbPT5/EB4ldOtGSnFEbojXzE9ll+Q=";
   };
 
-  vendorHash = "sha256-+BCUQ+czqWkxbDoSvCaAxewTN0SuI+hCHEQpLOvNGj4=";
+  vendorHash = "sha256-N4zGZ+fYQA7UdPI8ie55gG3FnFrI/XvyJJiZ3D40qlQ=";
 
   doCheck = false;
+  # Required for versions >= 0.28 as they introduce a gowork.sum file. This is only used for tests so we can safely disable GOWORK
+  env.GOWORK = "off";
 
   subPackages = [ "cmd/tk" ];
 
@@ -23,7 +25,30 @@ buildGoModule rec {
 
   postInstall = ''
     echo "complete -C $out/bin/tk tk" > tk.bash
-    installShellCompletion tk.bash
+
+    cat >tk.fish <<EOF
+
+    function __complete_tk
+        set -lx COMP_LINE (commandline -cp)
+        test -z (commandline -ct)
+        and set COMP_LINE "\$COMP_LINE "
+        $out/bin/tk
+    end
+    complete -f -c tk -a "(__complete_tk)"
+
+    EOF
+
+    cat >tk.zsh <<EOF
+    #compdef tk
+    autoload -U +X bashcompinit && bashcompinit
+    complete -o nospace -C $out/bin/tk tk
+    EOF
+
+    installShellCompletion \
+      --cmd tk \
+      --bash tk.bash \
+      --fish tk.fish \
+      --zsh tk.zsh
   '';
 
   meta = with lib; {

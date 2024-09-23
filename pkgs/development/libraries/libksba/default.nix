@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libksba";
-  version = "1.6.4";
+  version = "1.6.7";
 
   src = fetchurl {
     url = "mirror://gnupg/libksba/libksba-${version}.tar.bz2";
-    hash = "sha256-u7Q/AyuRZNhseB/+QiE6g79PL+6RRV7fpGVFIbiwO2s=";
+    hash = "sha256-z3JRC467TrZpPu92V0nYNnegPHkpGjEQQKW/15uqt2M=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
+    mainProgram = "ksba-config";
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.lgpl3;
   };
 }

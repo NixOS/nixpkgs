@@ -14,11 +14,11 @@ file.
 { config, lib, pkgs, ... }:
 {
   options = {
-    ...
+    # ...
   };
 
   config = {
-    ...
+    # ...
   };
 
   meta = {

@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://aajohan.deviantart.com/art/Comfortaa-font-105395949";
-    description = "A clean and modern font suitable for headings and logos";
+    description = "Clean and modern font suitable for headings and logos";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ maintainers.rycee ];

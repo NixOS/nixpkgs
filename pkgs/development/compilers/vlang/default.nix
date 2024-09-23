@@ -1,20 +1,21 @@
 { lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
 let
-  version = "weekly.2023.44";
+  version = "0.4.4";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
   '';
-  # Required for bootstrap.
+  # vc is the V compiler's source translated to C (needed for boostrap).
+  # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "unstable-2023-10-30";
+    version = "0.4.4";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "66b89ab916c13c5781753797d1f4ff08e427bb6b";
-      hash = "sha256-5Y7/rlcoIHjbf79A1rqFysNFc5+p6CY09MRPQalo7Ak=";
+      rev = "66eb8eae253d31fa5622e35a69580d9ad8efcccb";
+      hash = "sha256-YGlzr0Qq7+NtrnbaFPBuclzjOZBOnTe3BOhsuwdsQ5c=";
     };
 
     # patch the ptrace reference for darwin
@@ -30,8 +31,8 @@ let
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "61c47ea0a6c0c79e973a119dcbab3b8fdd0973ca";
-    hash = "sha256-XBD30Pc9CGXzU1Gy6U0pDpTozYVwfgAvZRjIsnXp8ZM=";
+    rev = "0c280130cb7ec410b7d21810d1247956c15b72fc";
+    hash = "sha256-Fmhkrg9DBiWxInostNp+WfA3V5GgEIs5+KIYrqZosqY=";
   };
   boehmgcStatic = boehmgc.override {
     enableStatic = true;
@@ -45,7 +46,7 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    hash = "sha256-1yFuheSyKfvm4GqKIbXycdzKx3XcD9LSmmuKlcJmteg=";
+    hash = "sha256-Aqecw8K+igHx5R34lQiWtdNfeGn+umcjcS4w0vXgpLM=";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
@@ -76,11 +77,6 @@ stdenv.mkDerivation {
     cp -r ${boehmgcStatic}/lib/* ./thirdparty/tcc/lib
   '';
 
-  # vcreate_test.v requires git, so we must remove it when building the tools.
-  preInstall = ''
-    mv cmd/tools/vcreate/vcreate_test.v $HOME/vcreate_test.v
-  '';
-
   installPhase = ''
     runHook preInstall
 
@@ -100,11 +96,6 @@ stdenv.mkDerivation {
     $out/lib/v -v $out/lib/cmd/tools/vcreate
 
     runHook postInstall
-  '';
-
-  # Return vcreate_test.v and vtest.v, so the user can use it.
-  postInstall = ''
-    cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
   '';
 
   meta = with lib; {

@@ -1,47 +1,37 @@
-{ stdenv
+{ buildDunePackage
 , lib
 , fetchFromGitHub
 , which
 , ocsigen_server
-, ocaml
 , lwt_react
-, opaline
-, ocamlbuild
 , ppx_deriving
 , ppx_optcomp
-, findlib
 , js_of_ocaml-ocamlbuild
 , js_of_ocaml-ppx
 , js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
 , lwt_ppx
-, ocamlnet
 , ocsipersist
 }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "eliom";
-  version = "10.1.0";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "eliom";
     rev = version;
-    hash = "sha256-nzrLl8adaRW6c+IQfJ7s+7KtFT8uU27Umyrv0aWXuxw=";
+    hash = "sha256-RgIK3xkKdX+zOurhML4370rsO4blJrWoEla09Nfe9Mw=";
   };
 
   nativeBuildInputs = [
-    ocaml
     which
-    findlib
-    opaline
-    ocamlbuild
   ];
   buildInputs = [
     js_of_ocaml-ocamlbuild
     js_of_ocaml-ppx_deriving_json
-    ocamlnet
     ppx_optcomp
   ];
 
@@ -57,12 +47,6 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-
-  installPhase = ''
-    runHook preInstall
-    opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
-    runHook postInstall
-  '';
 
   setupHook = [ ./setup-hook.sh ];
 

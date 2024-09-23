@@ -1,7 +1,7 @@
 { lib, writeText, haskellPackages, cabal-install }:
 
 (haskellPackages.shellFor {
-  packages = p: [ p.constraints p.linear ];
+  packages = p: [ p.constraints p.cereal ];
   # WARNING: When updating this, make sure that the libraries passed to
   # `extraDependencies` are not actually transitive dependencies of libraries in
   # `packages` above.  We explicitly want to test that it is possible to specify
@@ -14,8 +14,8 @@
     mkdir -p "$sourceRoot"
     cd "$sourceRoot"
     tar -xf ${haskellPackages.constraints.src}
-    tar -xf ${haskellPackages.linear.src}
-    cp ${writeText "cabal.project" "packages: constraints* linear*"} cabal.project
+    tar -xf ${haskellPackages.cereal.src}
+    cp ${writeText "cabal.project" "packages: constraints* cereal*"} cabal.project
   '';
   buildPhase = ''
     export HOME=$(mktemp -d)
@@ -37,7 +37,7 @@
     fi
 
     # Check packages arg
-    cabal v2-build --offline --verbose constraints linear --ghc-options="-O0 -j$NIX_BUILD_CORES"
+    cabal v2-build --offline --verbose constraints cereal --ghc-options="-O0 -j$NIX_BUILD_CORES"
   '';
   installPhase = ''
     touch $out

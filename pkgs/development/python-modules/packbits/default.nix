@@ -1,16 +1,13 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pyparsing
-, six
-, pytest
-, pretend
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "packbits";
   version = "0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

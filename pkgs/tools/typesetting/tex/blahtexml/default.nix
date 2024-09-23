@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace makefile \
       --replace "\$(CXX)" "\$(CXX) -std=c++98"
+  '' +
+  # fix the doc build on TeX Live 2023
+  ''
+    substituteInPlace Documentation/manual.tex \
+      --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
   '';
 
   outputs = [ "out" "doc" ];
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://gva.noekeon.org/blahtexml/";
-    description = "A TeX to MathML converter";
+    description = "TeX to MathML converter";
     longDescription = ''
       Blahtex is a program written in C++, which converts an equation given in
       a syntax close to TeX into MathML. It is designed by David Harvey and is

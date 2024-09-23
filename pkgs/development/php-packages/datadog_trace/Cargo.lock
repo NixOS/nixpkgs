@@ -678,7 +678,7 @@ dependencies = [
 
 [[package]]
 name = "datadog-php-profiling"
-version = "0.94.0"
+version = "0.97.0"
 dependencies = [
  "ahash 0.8.3",
  "anyhow",
@@ -702,6 +702,7 @@ dependencies = [
  "perfcnt",
  "rand 0.8.5",
  "rand_distr",
+ "serde_json",
  "uuid",
 ]
 

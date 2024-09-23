@@ -5,11 +5,11 @@
 }:
 let
   pname = "whisper-ctranslate2";
-  version = "0.3.2";
+  version = "0.4.5";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.6";
 
@@ -17,27 +17,32 @@ python3.pkgs.buildPythonApplication {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     rev = version;
-    hash = "sha256-9Y9y7DihDnbREaeARCGC7ctwwBAoZPpIWDAOdeDnB6E=";
+    hash = "sha256-hnotnEpw+5hVWVKknZHqiBSeDWy9XEjL3ojQD2ZXbAM=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    numpy
-    faster-whisper
-    ctranslate2
-    tqdm
-    sounddevice
-  ];
+  build-system = [ python3.pkgs.setuptools ];
 
-  passthru.updateScript = nix-update-script { };
+  dependencies = with python3.pkgs; [
+    ctranslate2
+    faster-whisper
+    numpy
+    pyannote-audio
+    sounddevice
+    tqdm
+  ];
 
   nativeCheckInputs = with python3.pkgs; [
     nose2
   ];
 
   checkPhase = ''
+    runHook preCheck
     # Note: we are not running the `e2e-tests` because they require downloading models from the internet.
     ${python3.interpreter} -m nose2 -s tests
+    runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Whisper command line client compatible with original OpenAI client based on CTranslate2";

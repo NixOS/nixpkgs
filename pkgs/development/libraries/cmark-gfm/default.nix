@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GitHub's fork of cmark, a CommonMark parsing and rendering library and program in C";
+    mainProgram = "cmark-gfm";
     homepage = "https://github.com/github/cmark-gfm";
     changelog = "https://github.com/github/cmark-gfm/raw/${version}/changelog.txt";
     maintainers = with maintainers; [ cyplo ];

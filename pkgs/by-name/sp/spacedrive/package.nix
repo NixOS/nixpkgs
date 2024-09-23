@@ -1,39 +1,136 @@
-{ lib, appimageTools, fetchurl, pkgs }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  undmg,
+  nix-update-script,
+  #linux required
+  autoPatchelfHook,
+  dpkg,
+  gdk-pixbuf,
+  glib,
+  gst_all_1,
+  libsoup,
+  webkitgtk_4_1,
+  xdotool,
+}:
 
 let
   pname = "spacedrive";
-  version = "0.1.4";
+  version = "0.4.2";
 
-  src = fetchurl {
-    url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.AppImage";
-    hash = "sha256-iBdW8iPuvztP0L5xLyVs7/K8yFe7kD7QwdTuKJLhB+c=";
-  };
+  src =
+    fetchurl
+      {
+        aarch64-darwin = {
+          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
+          hash = "sha256-W0nFNmBgrypTj1Y6r6vstdL0UUaP9jTOH5RgAirwxsY=";
+        };
+        x86_64-darwin = {
+          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
+          hash = "sha256-iX7aUs2k1fjOoDxkgXbePEYXYKFK3rGFlN9b0+gz378=";
+        };
+        x86_64-linux = {
+          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
+          hash = "sha256-SbuL96xNEOPZ3Z5jd0gfJtNkUoEjO4W+P7K9mvyNmHA=";
+        };
+      }
+      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
-in appimageTools.wrapType2 {
-  inherit pname version src;
-
-  extraPkgs = pkgs:
-    (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libthai ];
-
-  extraInstallCommands = ''
-    # Remove version from entrypoint
-    mv $out/bin/spacedrive-"${version}" $out/bin/spacedrive
-
-    # Install .desktop files
-    install -Dm444 ${appimageContents}/spacedrive.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/spacedrive.png -t $out/share/pixmaps
-    substituteInPlace $out/share/applications/spacedrive.desktop \
-      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=spacedrive'
-  '';
-
-  meta = with lib; {
-    description = "An open source file manager, powered by a virtual distributed filesystem";
-    homepage = "https://www.spacedrive.com/";
-    platforms = [ "x86_64-linux" ];
-    license = licenses.agpl3Plus;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ mikaelfangel heisfer ];
+  meta = {
+    description = "Open source file manager, powered by a virtual distributed filesystem";
+    homepage = "https://www.spacedrive.com";
+    changelog = "https://github.com/spacedriveapp/spacedrive/releases/tag/${version}";
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
+    license = lib.licenses.agpl3Plus;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
+      DataHearth
+      heisfer
+      mikaelfangel
+      stepbrobd
+    ];
     mainProgram = "spacedrive";
   };
-}
+
+  passthru.updateScript = nix-update-script { };
+in
+if stdenv.isDarwin then
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      passthru
+      ;
+
+    sourceRoot = "Spacedrive.app";
+
+    nativeBuildInputs = [ undmg ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/Applications/Spacedrive.app"
+      cp -r . "$out/Applications/Spacedrive.app"
+      mkdir -p "$out/bin"
+      ln -s "$out/Applications/Spacedrive.app/Contents/MacOS/Spacedrive" "$out/bin/spacedrive"
+
+      runHook postInstall
+    '';
+  }
+
+else
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      passthru
+      ;
+
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+    ];
+
+    # Depends: libc6, libxdo3, libwebkit2gtk-4.1-0, libgtk-3-0
+    # Recommends: gstreamer1.0-plugins-ugly
+    # Suggests: gstreamer1.0-plugins-bad
+    buildInputs = [
+      xdotool
+      glib
+      libsoup
+      webkitgtk_4_1
+      gdk-pixbuf
+      gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+    ];
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      dpkg-deb -x $src .
+
+      runHook postUnpack
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      cp -r usr/share $out/
+      cp -r usr/lib $out/
+      cp -r usr/bin $out/
+
+      runHook postInstall
+    '';
+  }

@@ -7,10 +7,10 @@ let
 in {
   options = {
     services.infnoise = {
-      enable = mkEnableOption (lib.mdDoc "the Infinite Noise TRNG driver");
+      enable = mkEnableOption "the Infinite Noise TRNG driver";
 
       fillDevRandom = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Whether to run the infnoise driver as a daemon to refill /dev/random.
 
           If disabled, you can use the `infnoise` command-line tool to

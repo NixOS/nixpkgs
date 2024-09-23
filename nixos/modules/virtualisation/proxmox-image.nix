@@ -10,15 +10,15 @@ with lib;
         type = types.str;
         default = "";
         example = "order=scsi0;net0";
-        description = lib.mdDoc ''
+        description = ''
           Default boot device. PVE will try all devices in its default order if this value is empty.
         '';
       };
       scsihw = mkOption {
         type = types.str;
-        default = "virtio-scsi-pci";
+        default = "virtio-scsi-single";
         example = "lsi";
-        description = lib.mdDoc ''
+        description = ''
           SCSI controller type. Must be one of the supported values given in
           <https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines>
         '';
@@ -27,7 +27,7 @@ with lib;
         type = types.str;
         default = "local-lvm:vm-9999-disk-0";
         example = "ceph:vm-123-disk-0";
-        description = lib.mdDoc ''
+        description = ''
           Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target storage.
           This parameter is required by PVE even if it isn't used.
         '';
@@ -35,21 +35,21 @@ with lib;
       ostype = mkOption {
         type = types.str;
         default = "l26";
-        description = lib.mdDoc ''
+        description = ''
           Guest OS type
         '';
       };
       cores = mkOption {
         type = types.ints.positive;
         default = 1;
-        description = lib.mdDoc ''
+        description = ''
           Guest core count
         '';
       };
       memory = mkOption {
         type = types.ints.positive;
         default = 1024;
-        description = lib.mdDoc ''
+        description = ''
           Guest memory in MB
         '';
       };
@@ -65,7 +65,7 @@ with lib;
       name = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}";
-        description = lib.mdDoc ''
+        description = ''
           VM name
         '';
       };
@@ -73,7 +73,7 @@ with lib;
         type = types.str;
         default = "512M";
         example = "2048M";
-        description = lib.mdDoc ''
+        description = ''
           additional disk space to be added to the image if diskSize "auto"
           is used.
         '';
@@ -82,7 +82,7 @@ with lib;
         type = types.str;
         default = "256M";
         example = "512M";
-        description = lib.mdDoc ''
+        description = ''
           Size of the boot partition. Is only used if partitionTableType is
           either "efi" or "hybrid".
         '';
@@ -91,7 +91,7 @@ with lib;
         type = types.str;
         default = "auto";
         example = "20480";
-        description = lib.mdDoc ''
+        description = ''
           The size of the disk, in megabytes.
           if "auto" size is calculated based on the contents copied to it and
           additionalSpace is taken into account.
@@ -100,7 +100,7 @@ with lib;
       net0 = mkOption {
         type = types.commas;
         default = "virtio=00:00:00:00:00:00,bridge=vmbr0,firewall=1";
-        description = lib.mdDoc ''
+        description = ''
           Configuration for the default interface. When restoring from VMA, check the
           "unique" box to ensure device mac is randomized.
         '';
@@ -109,7 +109,7 @@ with lib;
         type = types.str;
         default = "socket";
         example = "/dev/ttyS0";
-        description = lib.mdDoc ''
+        description = ''
           Create a serial device inside the VM (n is 0 to 3), and pass through a host serial device (i.e. /dev/ttyS0),
           or create a unix socket on the host side (use qm terminal to open a terminal connection).
         '';
@@ -118,7 +118,7 @@ with lib;
         type = types.bool;
         apply = x: if x then "1" else "0";
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Expect guest to have qemu agent running
         '';
       };
@@ -132,7 +132,7 @@ with lib;
           onboot = 1;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Additional options appended to qemu-server.conf
       '';
     };
@@ -151,12 +151,37 @@ with lib;
       type = types.str;
       default = config.proxmox.qemuConf.name;
       example = "999-nixos_template";
-      description = lib.mdDoc ''
+      description = ''
         Filename of the image will be vzdump-qemu-''${filenameSuffix}.vma.zstd.
         This will also determine the default name of the VM on restoring the VMA.
         Start this value with a number if you want the VMA to be detected as a backup of
         any specific VMID.
       '';
+    };
+    cloudInit = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether the VM should accept cloud init configurations from PVE.
+        '';
+      };
+      defaultStorage = mkOption {
+        default = "local-lvm";
+        example = "tank";
+        type = types.str;
+        description = ''
+          Default storage name for cloud init drive.
+        '';
+      };
+      device = mkOption {
+        default = "ide2";
+        example = "scsi0";
+        type = types.str;
+        description = ''
+          Bus/device to which the cloud init drive is attached.
+        '';
+      };
     };
   };
 
@@ -216,37 +241,21 @@ with lib;
           seccompSupport = false;
           guestAgentSupport = false;
         }).overrideAttrs ( super: rec {
-
-          version = "7.2.1";
+          # Check https://github.com/proxmox/pve-qemu/tree/master for the version
+          # of qemu and patch to use
+          version = "9.0.0";
           src = pkgs.fetchurl {
-            url= "https://download.qemu.org/qemu-${version}.tar.xz";
-            sha256 = "sha256-jIVpms+dekOl/immTN1WNwsMLRrQdLr3CYqCTReq1zs=";
+            url = "https://download.qemu.org/qemu-${version}.tar.xz";
+            hash = "sha256-MnCKxmww2MiSYz6paMdxwcdtWX1w3erSGg0izPOG2mk=";
           };
           patches = [
             # Proxmox' VMA tool is published as a particular patch upon QEMU
-            (pkgs.fetchpatch {
-              url =
-                let
-                  rev = "abb04bb6272c1202ca9face0827917552b9d06f6";
-                  path = "debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch";
-                in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
-              hash = "sha256-3d0HHdvaExCry6zcULnziYnWIAnn24vECkI4sjj2BMg=";
-            })
-
-            # Proxmox' VMA tool uses O_DIRECT which fails on tmpfs
-            # Filed to upstream issue tracker: https://bugzilla.proxmox.com/show_bug.cgi?id=4710
-            (pkgs.writeText "inline.patch" ''
-                --- a/vma-writer.c   2023-05-01 15:11:13.361341177 +0200
-                +++ b/vma-writer.c   2023-05-01 15:10:51.785293129 +0200
-                @@ -306,7 +306,7 @@
-                             /* try to use O_NONBLOCK */
-                             fcntl(vmaw->fd, F_SETFL, fcntl(vmaw->fd, F_GETFL)|O_NONBLOCK);
-                         } else  {
-                -            oflags = O_NONBLOCK|O_DIRECT|O_WRONLY|O_EXCL;
-                +            oflags = O_NONBLOCK|O_WRONLY|O_EXCL;
-                             vmaw->fd = qemu_create(filename, oflags, 0644, errp);
-                         }
-            '')
+            "${pkgs.fetchFromGitHub {
+              owner = "proxmox";
+              repo = "pve-qemu";
+              rev = "14afbdd55f04d250bd679ca1ad55d3f47cd9d4c8";
+              hash = "sha256-lSJQA5SHIHfxJvMLIID2drv2H43crTPMNIlIT37w9Nc=";
+            }}/debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch"
           ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
@@ -262,7 +271,7 @@ with lib;
         mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
 
         mkdir -p $out/nix-support
-        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
+        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" > $out/nix-support/hydra-build-products
       '';
       inherit (cfg.qemuConf) additionalSpace diskSize bootSize;
       format = "raw";
@@ -298,6 +307,20 @@ with lib;
       fsType = "vfat";
     };
 
-    services.qemuGuest.enable = lib.mkDefault true;
+    networking = mkIf cfg.cloudInit.enable {
+      hostName = mkForce "";
+      useDHCP = false;
+    };
+
+    services = {
+      cloud-init = mkIf cfg.cloudInit.enable {
+        enable = true;
+        network.enable = true;
+      };
+      sshd.enable = mkDefault true;
+      qemuGuest.enable = true;
+    };
+
+    proxmox.qemuExtraConf.${cfg.cloudInit.device} = "${cfg.cloudInit.defaultStorage}:vm-9999-cloudinit,media=cdrom";
   };
 }

@@ -1,22 +1,22 @@
 { lib
 , stdenv
 , fetchurl
-, fetchFromGitHub
-, substituteAll
+, fetchpatch
 , pkg-config
 , meson
 , ninja
 , gnu-efi
 , python3
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "fwupd-efi";
-  version = "1.3";
+  version = "1.6";
 
   src = fetchurl {
-    url = "https://people.freedesktop.org/~hughsient/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1Ys04TwhWYZ8ORJgr04kGO6/lI1I36sC6kcrVoP/r1k=";
+    url = "https://github.com/fwupd/fwupd-efi/releases/download/${version}/fwupd-efi-${version}.tar.xz";
+    hash = "sha256-r9CAWirQgafK/y71vABM46AUe1OAFejsqWY0FxaxJg4=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    python3Packages.pefile
   ];
 
   buildInputs = [
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ amaxine ];
+    maintainers = [ ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

@@ -1,23 +1,18 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.security.sudo-rs;
 
-  inherit (config.security.pam) enableSSHAgentAuth;
-
-  toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
-  toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
+  toUserString = user: if (lib.isInt user) then "#${toString user}" else "${user}";
+  toGroupString = group: if (lib.isInt group) then "%#${toString group}" else "%${group}";
 
   toCommandOptionsString = options:
-    "${concatStringsSep ":" options}${optionalString (length options != 0) ":"} ";
+    "${lib.concatStringsSep ":" options}${lib.optionalString (lib.length options != 0) ":"} ";
 
   toCommandsString = commands:
-    concatStringsSep ", " (
+    lib.concatStringsSep ", " (
       map (command:
-        if (isString command) then
+        if (lib.isString command) then
           command
         else
           "${toCommandOptionsString command.options}${command.command}"
@@ -32,35 +27,35 @@ in
 
   options.security.sudo-rs = {
 
-    defaultOptions = mkOption {
-      type = with types; listOf str;
+    defaultOptions = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [];
-      description = mdDoc ''
+      description = ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
       '';
     };
 
-    enable = mkEnableOption (mdDoc ''
+    enable = lib.mkEnableOption ''
       a memory-safe implementation of the {command}`sudo` command,
-      which allows non-root users to execute commands as root.
-    '');
+      which allows non-root users to execute commands as root
+    '';
 
-    package = mkPackageOption pkgs "sudo-rs" { };
+    package = lib.mkPackageOption pkgs "sudo-rs" { };
 
-    wheelNeedsPassword = mkOption {
-      type = types.bool;
+    wheelNeedsPassword = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = mdDoc ''
+      description = ''
         Whether users of the `wheel` group must
         provide a password to run commands as super user via {command}`sudo`.
       '';
       };
 
-    execWheelOnly = mkOption {
-      type = types.bool;
+    execWheelOnly = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Only allow members of the `wheel` group to execute sudo by
         setting the executable's permissions accordingly.
         This prevents users that are not members of `wheel` from
@@ -68,25 +63,25 @@ in
       '';
     };
 
-    configFile = mkOption {
-      type = types.lines;
+    configFile = lib.mkOption {
+      type = lib.types.lines;
       # Note: if syntax errors are detected in this file, the NixOS
       # configuration will fail to build.
-      description = mdDoc ''
+      description = ''
         This string contains the contents of the
         {file}`sudoers` file.
       '';
     };
 
-    extraRules = mkOption {
-      description = mdDoc ''
+    extraRules = lib.mkOption {
+      description = ''
         Define specific rules to be in the {file}`sudoers` file.
         More specific rules should come after more general ones in order to
-        yield the expected behavior. You can use mkBefore/mkAfter to ensure
+        yield the expected behavior. You can use `lib.mkBefore`/`lib.mkAfter` to ensure
         this is the case when configuration options are merged.
       '';
       default = [];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           # Allow execution of any command by all users in group sudo,
           # requiring a password.
@@ -105,36 +100,36 @@ in
                   { command = '''/home/baz/cmd2.sh ""'''; options = [ "SETENV" ]; } ]; }
         ]
       '';
-      type = with types; listOf (submodule {
+      type = with lib.types; listOf (submodule {
         options = {
-          users = mkOption {
-            type = with types; listOf (either str int);
-            description = mdDoc ''
+          users = lib.mkOption {
+            type = with lib.types; listOf (either str int);
+            description = ''
               The usernames / UIDs this rule should apply for.
             '';
             default = [];
           };
 
-          groups = mkOption {
-            type = with types; listOf (either str int);
-            description = mdDoc ''
+          groups = lib.mkOption {
+            type = with lib.types; listOf (either str int);
+            description = ''
               The groups / GIDs this rule should apply for.
             '';
             default = [];
           };
 
-          host = mkOption {
-            type = types.str;
+          host = lib.mkOption {
+            type = lib.types.str;
             default = "ALL";
-            description = mdDoc ''
+            description = ''
               For what host this rule should apply.
             '';
           };
 
-          runAs = mkOption {
-            type = with types; str;
+          runAs = lib.mkOption {
+            type = with lib.types; str;
             default = "ALL:ALL";
-            description = mdDoc ''
+            description = ''
               Under which user/group the specified command is allowed to run.
 
               A user can be specified using just the username: `"foo"`.
@@ -143,25 +138,25 @@ in
             '';
           };
 
-          commands = mkOption {
-            description = mdDoc ''
+          commands = lib.mkOption {
+            description = ''
               The commands for which the rule should apply.
             '';
-            type = with types; listOf (either str (submodule {
+            type = with lib.types; listOf (either str (submodule {
 
               options = {
-                command = mkOption {
-                  type = with types; str;
-                  description = mdDoc ''
+                command = lib.mkOption {
+                  type = with lib.types; str;
+                  description = ''
                     A command being either just a path to a binary to allow any arguments,
                     the full command with arguments pre-set or with `""` used as the argument,
                     not allowing arguments to the command at all.
                   '';
                 };
 
-                options = mkOption {
-                  type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
-                  description = mdDoc ''
+                options = lib.mkOption {
+                  type = with lib.types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
+                  description = ''
                     Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/man/1.7.10/sudoers.man.html).
                   '';
                   default = [];
@@ -174,10 +169,10 @@ in
       });
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
-      description = mdDoc ''
+      description = ''
         Extra configuration text appended to {file}`sudoers`.
       '';
     };
@@ -186,12 +181,12 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [ {
       assertion = ! config.security.sudo.enable;
       message = "`security.sudo` and `security.sudo-rs` cannot both be enabled";
     }];
-    security.sudo.enable = mkDefault false;
+    security.sudo.enable = lib.mkDefault false;
 
     security.sudo-rs.extraRules =
       let
@@ -202,35 +197,35 @@ in
             options = opts ++ cfg.defaultOptions;
           } ];
         } ];
-      in mkMerge [
-        # This is ordered before users' `mkBefore` rules,
+      in lib.mkMerge [
+        # This is ordered before users' `lib.mkBefore` rules,
         # so as not to introduce unexpected changes.
-        (mkOrder 400 (defaultRule { users = [ "root" ]; }))
+        (lib.mkOrder 400 (defaultRule { users = [ "root" ]; }))
 
         # This is ordered to show before (most) other rules, but
-        # late-enough for a user to `mkBefore` it.
-        (mkOrder 600 (defaultRule {
+        # late-enough for a user to `lib.mkBefore` it.
+        (lib.mkOrder 600 (defaultRule {
           groups = [ "wheel" ];
-          opts = (optional (!cfg.wheelNeedsPassword) "NOPASSWD");
+          opts = (lib.optional (!cfg.wheelNeedsPassword) "NOPASSWD");
         }))
       ];
 
-    security.sudo-rs.configFile = concatStringsSep "\n" (filter (s: s != "") [
+    security.sudo-rs.configFile = lib.concatStringsSep "\n" (lib.filter (s: s != "") [
       ''
         # Don't edit this file. Set the NixOS options ‘security.sudo-rs.configFile’
         # or ‘security.sudo-rs.extraRules’ instead.
       ''
-      (pipe cfg.extraRules [
-        (filter (rule: length rule.commands != 0))
+      (lib.pipe cfg.extraRules [
+        (lib.filter (rule: lib.length rule.commands != 0))
         (map (rule: [
           (map (user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.users)
           (map (group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.groups)
         ]))
-        flatten
-        (concatStringsSep "\n")
+        lib.flatten
+        (lib.concatStringsSep "\n")
       ])
       "\n"
-      (optionalString (cfg.extraConfig != "") ''
+      (lib.optionalString (cfg.extraConfig != "") ''
         # extraConfig
         ${cfg.extraConfig}
       '')

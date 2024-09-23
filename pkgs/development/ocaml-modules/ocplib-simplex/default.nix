@@ -16,7 +16,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "An OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";
+    description = "OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";
     homepage = "https://github.com/OCamlPro-Iguernlala/ocplib-simplex";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];

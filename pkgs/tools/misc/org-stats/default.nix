@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "org-stats";
-  version = "1.11.2";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "org-stats";
     rev = "v${version}";
-    hash = "sha256-b0Cfs4EqQOft/HNAoJvRriCMzNiOgYagBLiPYgsDgJM=";
+    hash = "sha256-QTjJ+4Qu5u+5ZCoIAQBxqdhjNI2CXUB8r2Zx8xfIiGw=";
   };
 
-  vendorHash = "sha256-LKpnEXVfxBR3cebv46QontDVeA64MJe0vNiKSnTjLtQ=";
+  vendorHash = "sha256-0biuv94wGXiME181nlkvozhB+x4waGMgwXD9ColQWPw=";
 
   patches = [
     # patch in version information

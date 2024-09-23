@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , git, irmin, ppx_irmin, git-unix, irmin-watcher
 , digestif, cstruct, fmt, astring, fpath, logs, lwt, uri
 , cohttp-lwt-unix, mimic
@@ -9,8 +9,7 @@ buildDunePackage {
 
   pname = "irmin-git";
 
-  inherit (irmin) version src strictDeps;
-  duneVersion = "3";
+  inherit (irmin) version src;
 
   propagatedBuildInputs = [
     git

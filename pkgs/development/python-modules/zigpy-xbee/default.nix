@@ -1,30 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zigpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.19.0";
-  # https://github.com/Martiusweb/asynctest/issues/152
-  # broken by upstream python bug with asynctest and
-  # is used exclusively by home-assistant with python 3.8
+  version = "0.20.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-KUXXOySuPFNKcW3O08FBYIfm4WwVjOuIF+GefmKnwl0=";
+    hash = "sha256-d5TOX2sKA2E6b6KHvAdhxEknD6fOF4qRjCMpBKEsicA=";
   };
 
-  buildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
     pyserial
     pyserial-asyncio
     zigpy
@@ -42,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/zigpy/zigpy-xbee/releases/tag/${version}";
-    description = "A library which communicates with XBee radios for zigpy";
+    description = "Library which communicates with XBee radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-xbee";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];

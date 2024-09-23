@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation ({
-  pname = "hex-source-${pkg}";
+  pname = pkg;
   inherit version;
   dontBuild = true;
   dontConfigure = true;

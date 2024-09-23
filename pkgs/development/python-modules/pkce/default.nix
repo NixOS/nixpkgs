@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkce";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RomeoDespres";

@@ -1,5 +1,5 @@
-{ lib, buildDunePackage
-, astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
+{ buildDunePackage
+, astring, digestif, fmt, jsonm, logs, ocamlgraph, uri
 , repr, ppx_irmin, bheap, uutf, mtime, lwt, optint
 , vector, hex, alcotest, qcheck-alcotest
 }:
@@ -7,10 +7,9 @@
 buildDunePackage {
   pname = "irmin";
 
-  inherit (ppx_irmin) src version strictDeps;
+  inherit (ppx_irmin) src version;
 
   minimalOCamlVersion = "4.10";
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     astring
@@ -39,6 +38,6 @@ buildDunePackage {
   doCheck = true;
 
   meta = ppx_irmin.meta // {
-    description = "A distributed database built on the same principles as Git";
+    description = "Distributed database built on the same principles as Git";
   };
 }

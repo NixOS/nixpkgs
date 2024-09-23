@@ -1,16 +1,24 @@
-{ lib, buildPythonPackage, fetchgit, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  setuptools,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "python-linux-procfs";
-  version = "0.6.3";
+  version = "0.7.3";
+  pyproject = true;
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/libs/python/${pname}/${pname}.git";
-    rev = "v${version}";
-    hash = "sha256-PPgMlL9oj4HYUsr444ZrGo1LSZBl9hL5SE98IASUpbc=";
+  src = fetchurl {
+    url = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/snapshot/python-linux-procfs-v${version}.tar.gz";
+    hash = "sha256-6js8+PBqMwNYSe74zqZP8CZ5nt1ByjCWnex+wBY/LZU=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   # contains no tests
   doCheck = false;
@@ -18,8 +26,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python classes to extract information from the Linux kernel /proc files";
+    mainProgram = "pflags";
     homepage = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

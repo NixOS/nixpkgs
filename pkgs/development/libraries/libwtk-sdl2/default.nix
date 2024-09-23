@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Simplistic SDL2 GUI framework in early developement";
+    mainProgram = "libwtk-sdl2-test";
     homepage = "https://github.com/muesli4/libwtk-sdl2";
     # See: https://github.com/muesli4/mpd-touch-screen-gui/tree/master/LICENSES
     license = licenses.lgpl3Plus;

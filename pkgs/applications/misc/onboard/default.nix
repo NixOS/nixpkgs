@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , lib
 , substituteAll
 , aspellWithDicts
@@ -23,7 +24,7 @@
 , pkg-config
 , procps
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 , yelp
 }:
@@ -54,13 +55,29 @@ python3.pkgs.buildPythonApplication rec {
     })
     # Allow loading hunspell dictionaries installed in NixOS system path
     ./hunspell-use-xdg-datadirs.patch
+
+    # Python 3.12 fixes (otherwise crashes at startup)
+    (fetchpatch {
+      url = "https://github.com/void-linux/void-packages/raw/1be95325d320122efd5dedf7437839cfcca01f7a/srcpkgs/onboard/patches/python-3.12.patch";
+      hash = "sha256-Lw5wlaWFlP5rFlEWmlPo5Ux8idrmhET/X9yiu+2Akkk=";
+    })
+    (fetchpatch {
+      url = "https://github.com/void-linux/void-packages/raw/1be95325d320122efd5dedf7437839cfcca01f7a/srcpkgs/onboard/patches/thread-state.patch";
+      hash = "sha256-fJfxD7HshroiEVkaKVBGV7py8tdOhbcprcmBQNuxR9U=";
+    })
+
+    # Fix for https://bugs.launchpad.net/onboard/+bug/1948723
+    (fetchpatch {
+      url = "https://github.com/void-linux/void-packages/raw/9ef46bf26ac5acc1af5809f11c97b19c5e2233ed/srcpkgs/onboard/patches/fix-brokenformat.patch";
+      hash = "sha256-r9mvJNWpPR1gsayuSSLpzIuafEKqtADYklre0Ju+KOM=";
+    })
   ];
 
   nativeBuildInputs = [
     gobject-introspection
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -104,10 +121,10 @@ python3.pkgs.buildPythonApplication rec {
     hunspellDicts.en-us
     hunspellDicts.es-es
     hunspellDicts.it-it
-
-    python3.pkgs.nose
   ];
 
+  # Tests have never been enabled, and upstream uses nose as a test
+  # runner (though not as a library).
   doCheck = false;
 
   preBuild = ''
@@ -157,8 +174,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace '"killall",' '"${procps}/bin/pkill", "-x",'
   '';
 
+  # setuptools to get distutils with python 3.12
   installPhase = ''
-    ${python3.interpreter} setup.py install --prefix="$out"
+    ${(python3.withPackages (p: [ p.setuptools ])).interpreter} setup.py install --prefix="$out"
 
     cp onboard-default-settings.gschema.override.example $out/share/glib-2.0/schemas/10_onboard-default-settings.gschema.override
     glib-compile-schemas $out/share/glib-2.0/schemas/

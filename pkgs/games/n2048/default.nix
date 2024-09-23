@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Console implementation of 2048 game";
+    mainProgram = "n2048";
     license = licenses.bsd2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

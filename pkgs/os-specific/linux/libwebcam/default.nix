@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The webcam-tools package";
+    description = "Webcam-tools package";
     platforms = platforms.linux;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jraygauthier ];

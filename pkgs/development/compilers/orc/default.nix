@@ -18,17 +18,14 @@
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "orc";
-  version = "0.4.34";
+  version = "0.4.39";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
-    sha256 = "sha256-j0ers/CXFx5E64B63Nq9hg+6Lv/TfY08T71fNByt1B8=";
+    sha256 = "sha256-M+0jh/Sbgl+hucOwBy4F8lkUG4lUdK0IWuURQ9MEDMA=";
   };
 
-  postPatch = lib.optionalString stdenv.isAarch32 ''
-    # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/20
-    sed -i '/exec_opcodes_sys/d' testsuite/meson.build
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     # This benchmark times out on Hydra.nixos.org
     sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
@@ -56,7 +53,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The Oil Runtime Compiler";
+    description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     changelog = "https://cgit.freedesktop.org/gstreamer/orc/plain/RELEASE?h=${version}";
     # The source code implementing the Marsenne Twister algorithm is licensed

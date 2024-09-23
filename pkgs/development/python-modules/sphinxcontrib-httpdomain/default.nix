@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-httpdomain";
   version = "1.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,5 +28,4 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
     license = licenses.bsd0;
   };
-
 }

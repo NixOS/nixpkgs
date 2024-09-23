@@ -1,18 +1,18 @@
-{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook }:
+{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook3 }:
 let
   libPathNative = { packages }: lib.makeLibraryPath packages;
 in
 stdenv.mkDerivation rec {
   pname = "rocketchat-desktop";
-  version = "3.9.10";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/download/${version}/rocketchat-${version}-linux-amd64.deb";
-    hash = "sha256-VLHkFiIwfjCHr08wTsD8rMWSvHEswZCKl2XJr61cQYE=";
+    hash = "sha256-SMpcsRKxx51O7cagDFIrp70QiAHaoAU5NhLHtog647g=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook #to fully work with gnome also needs programs.dconf.enable = true in your configuration.nix
+    wrapGAppsHook3 #to fully work with gnome also needs programs.dconf.enable = true in your configuration.nix
   ];
 
   buildInputs = with pkgs; [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     atk
     pango
     freetype
-    libgnome-keyring3
+    libgnome-keyring
     fontconfig
     gdk-pixbuf
     cairo
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Official Desktop client for Rocket.Chat";
+    mainProgram = "rocketchat-desktop";
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;

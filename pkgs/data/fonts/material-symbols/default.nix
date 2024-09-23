@@ -1,18 +1,19 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, rename
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  rename,
+  unstableGitUpdater,
 }:
-
 stdenvNoCC.mkDerivation {
   pname = "material-symbols";
-  version = "unstable-2023-11-17";
+  version = "4.0.0-unstable-2024-05-17";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "material-design-icons";
-    rev = "a90037f80d7db37279a7c1d863559e247ed81b05";
-    hash = "sha256-96nEvc9eBuAncPUun3JBeg+KW2GqT3mQNgdOCVdhEM0=";
+    rev = "ace1af08508a6562ef05055a606cf44ea583ce3b";
+    hash = "sha256-d5lojgYCXCcvcSfLWfcSKFsBGKB6Si/XreRqpkEKsa0=";
     sparseCheckout = [ "variablefont" ];
   };
 
@@ -28,12 +29,17 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Material Symbols icons by Google";
     homepage = "https://fonts.google.com/icons";
     downloadPage = "https://github.com/google/material-design-icons";
     license = lib.licenses.asl20;
-    maintainers = with maintainers; [ fufexan ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [
+      fufexan
+      luftmensch-luftmensch
+    ];
+    platforms = lib.platforms.all;
   };
 }

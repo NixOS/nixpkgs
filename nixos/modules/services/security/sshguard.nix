@@ -30,13 +30,13 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to enable the sshguard service.";
+        description = "Whether to enable the sshguard service.";
       };
 
       attack_threshold = mkOption {
         default = 30;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
             Block attackers when their cumulative attack score exceeds threshold. Most attacks have a score of 10.
           '';
       };
@@ -45,7 +45,7 @@ in {
         default = null;
         example = 120;
         type = types.nullOr types.int;
-        description = lib.mdDoc ''
+        description = ''
             Blacklist an attacker when its score exceeds threshold. Blacklisted addresses are loaded from and added to blacklist-file.
           '';
       };
@@ -53,7 +53,7 @@ in {
       blacklist_file = mkOption {
         default = "/var/lib/sshguard/blacklist.db";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
             Blacklist an attacker when its score exceeds threshold. Blacklisted addresses are loaded from and added to blacklist-file.
           '';
       };
@@ -61,7 +61,7 @@ in {
       blocktime = mkOption {
         default = 120;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
             Block attackers for initially blocktime seconds after exceeding threshold. Subsequent blocks increase by a factor of 1.5.
 
             sshguard unblocks attacks at random intervals, so actual block times will be longer.
@@ -71,7 +71,7 @@ in {
       detection_time = mkOption {
         default = 1800;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
             Remember potential attackers for up to detection_time seconds before resetting their score.
           '';
       };
@@ -80,7 +80,7 @@ in {
         default = [ ];
         example = [ "198.51.100.56" "198.51.100.2" ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
             Whitelist a list of addresses, hostnames, or address blocks.
           '';
       };
@@ -89,7 +89,7 @@ in {
         default = [ "sshd" ];
         example = [ "sshd" "exim" ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
             Systemd services sshguard should receive logs of.
           '';
       };

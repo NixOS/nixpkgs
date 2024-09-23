@@ -2,7 +2,6 @@
 , stdenv
 , buildDotnetModule
 , fetchFromGitHub
-, autoPatchelfHook
 , fontconfig
 , xorg
 , libglvnd
@@ -27,7 +26,6 @@ buildDotnetModule rec {
   dotnetFlags = [ "-p:Runtimeidentifier=linux-x64" ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     copyDesktopItems
     graphicsmagick
   ];

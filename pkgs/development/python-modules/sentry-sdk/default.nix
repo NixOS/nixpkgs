@@ -1,158 +1,204 @@
 { lib
-, stdenv
-, aiohttp
-, apache-beam
-, asttokens
-, blinker
-, botocore
-, bottle
 , buildPythonPackage
-, celery
-, certifi
-, chalice
-, django
-, executing
-, falcon
 , fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
+, certifi
+, urllib3
+
+# optional-dependencies
+, aiohttp
+, anthropic
+, asyncpg
+, apache-beam
+, bottle
+, celery
+, celery-redbeat
+, chalice
+, clickhouse-driver
+, django
+, falcon
+, fastapi
 , flask
-, flask-login
-, gevent
+, blinker
+, markupsafe
+, grpcio
+, protobuf
 , httpx
-, jsonschema
-, mock
+, huey
+, huggingface-hub
+, langchain
+, loguru
+, openai
+, tiktoken
 , pure-eval
-, pyramid
-, pyrsistent
+, executing
+, asttokens
+, pymongo
 , pyspark
-, pysocks
-, pytest-forked
-, pytest-localserver
-, pytest-watch
-, pytestCheckHook
-, pythonOlder
+, quart
 , rq
 , sanic
 , sqlalchemy
+, starlette
 , tornado
-, trytond
-, urllib3
-, werkzeug
+
+# checks
+, ipdb
+, jsonschema
+, pip
+, pyrsistent
+, pysocks
+, pytest-asyncio
+, pytestCheckHook
+, pytest-forked
+, pytest-localserver
+, pytest-xdist
+, pytest-watch
+, responses
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.37.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-y1fZe3ql8twSsTl24bP0fqA6myMv71I6IgzOVucbuvM=";
+    hash = "sha256-VrrzM81O3tG2GveP8Eq9kxVPSok7JIj3XjGOauGIlxY=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    sed -i "/addopts =/d" pytest.ini
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     certifi
     urllib3
   ];
 
-  passthru.optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
-    beam = [
-      apache-beam
-    ];
-    bottle = [
-      bottle
-    ];
-    celery = [
-      celery
-    ];
-    chalice = [
-      chalice
-    ];
-    django = [
-      django
-    ];
-    falcon = [
-      falcon
-    ];
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
+    anthropic = [ anthropic ];
+    # TODO: arq
+    asyncpg = [ asyncpg ];
+    beam = [ apache-beam ];
+    bottle = [ bottle ];
+    celery = [ celery ];
+    celery-redbeat = [ celery-redbeat ];
+    chalice = [ chalice ];
+    clickhouse-driver = [ clickhouse-driver ];
+    django = [ django ];
+    falcon = [ falcon ];
+    fastapi = [ fastapi ];
     flask = [
-      flask
       blinker
+      flask
+      markupsafe
     ];
-    httpx = [
-      httpx
+    grpcio = [
+      grpcio
+      protobuf
     ];
-    pyspark = [
-      pyspark
+    httpx = [ httpx ];
+    huey = [ huey ];
+    huggingface-hub = [ huggingface-hub ];
+    langchain = [ langchain ];
+    loguru = [ loguru ];
+    openai = [
+      openai
+      tiktoken
     ];
+    # TODO: opentelemetry
+    # TODO: opentelemetry-experimental
     pure_eval = [
       asttokens
       executing
       pure-eval
     ];
+    pymongo = [ pymongo ];
+    pyspark = [ pyspark ];
     quart = [
-      # quart missing
       blinker
+      quart
     ];
-    rq = [
-      rq
-    ];
-    sanic = [
-      sanic
-    ];
-    sqlalchemy = [
-      sqlalchemy
-    ];
-    tornado = [
-      tornado
-    ];
+    rq = [ rq ];
+    sanic = [ sanic ];
+    sqlalchemy = [ sqlalchemy ];
+    starlette = [ starlette ];
+    # TODO: starlite
+    tornado = [ tornado ];
   };
 
   nativeCheckInputs = [
-    asttokens
-    executing
-    gevent
-    jsonschema
-    mock
-    pure-eval
+    ipdb
     pyrsistent
+    responses
     pysocks
+    setuptools
+    executing
+    jsonschema
+    pip
+    pytest-asyncio
     pytest-forked
     pytest-localserver
+    pytest-xdist
     pytest-watch
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # Issue with the asseration
-    "test_auto_enabling_integrations_catches_import_error"
+    # depends on git revision
+    "test_default_release"
+    # tries to pip install old setuptools version
+    "test_error_has_existing_trace_context_performance_disabled"
+    "test_error_has_existing_trace_context_performance_enabled"
+    "test_error_has_new_trace_context_performance_disabled"
+    "test_error_has_new_trace_context_performance_enabled"
+    "test_traces_sampler_gets_correct_values_in_sampling_context"
+    "test_performance_error"
+    "test_performance_no_error"
+    "test_timeout_error"
+    "test_handled_exception"
+    "test_unhandled_exception"
+    # network access
+    "test_create_connection_trace"
+    "test_crumb_capture"
+    "test_getaddrinfo_trace"
+    "test_omit_url_data_if_parsing_fails"
+    "test_span_origin"
+    # AttributeError: type object 'ABCMeta' has no attribute 'setup_once'
+    "test_ensure_integration_enabled_async_no_original_function_enabled"
+    "test_ensure_integration_enabled_no_original_function_enabled"
+    # sess = envelopes[1]
+    # IndexError: list index out of range
+    "test_session_mode_defaults_to_request_mode_in_wsgi_handler"
+    # assert count_item_types["sessions"] == 1
+    # assert 0 == 1
+    "test_auto_session_tracking_with_aggregates"
+    # timing sensitive
+    "test_profile_captured"
+    "test_continuous_profiler_manual_start_and_stop"
   ];
 
-  disabledTestPaths = [
-    # Varius integration tests fail every once in a while when we
-    # upgrade depencies, so don't bother testing them.
-    "tests/integrations/"
-  ] ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
-    # test crashes on aarch64
-    "tests/test_transport.py"
-  ];
-
-  pythonImportsCheck = [
-    "sentry_sdk"
-  ];
+  pythonImportsCheck = [ "sentry_sdk" ];
 
   meta = with lib; {
-    description = "Python SDK for Sentry.io";
+    description = "Official Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    changelog = "https://github.com/getsentry/sentry-python/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab gebner ];
+    changelog = "https://github.com/getsentry/sentry-python/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
   };
 }

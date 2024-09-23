@@ -1,9 +1,11 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{ lib, bundlerEnv, bundlerUpdateScript, ruby }:
 
-bundlerApp {
+bundlerEnv {
   pname = "compass";
+  version = "1.0.3";
+
+  inherit ruby;
   gemdir = ./.;
-  exes = [ "compass" ];
 
   passthru.updateScript = bundlerUpdateScript "compass";
 
@@ -12,6 +14,7 @@ bundlerApp {
     homepage    = "https://github.com/Compass/compass";
     license     = with licenses; mit;
     maintainers = with maintainers; [ offline manveru nicknovitski ];
+    mainProgram = "compass";
     platforms   = platforms.unix;
   };
 }

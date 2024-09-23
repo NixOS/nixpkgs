@@ -4,47 +4,55 @@
 , setuptools-scm
 , setuptools
 , vdf
-, bash
+, pillow
+, substituteAll
+, writeShellScript
 , steam-run
 , winetricks
 , yad
 , pytestCheckHook
 , nix-update-script
+, extraCompatPaths ? ""
 }:
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gKrdUwX5TzeHHXuwhUyI4REPE6TNiZ6lhonyMCHcBCA=";
+    sha256 = "sha256-a40IAFrzQ0mogMoXKb+Lp0fPc1glYophqtftigk3nAc=";
   };
 
   patches = [
     # Use steam-run to run Proton binaries
-    ./steam-run.patch
+    (substituteAll {
+      src = ./steam-run.patch;
+      steamRun = lib.getExe steam-run;
+      bash = writeShellScript "steam-run-bash" ''
+        exec ${lib.getExe steam-run} bash "$@"
+      '';
+    })
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     setuptools # implicit dependency, used to find data/icon_placeholder.png
     vdf
+    pillow
   ];
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [
-      bash
-      steam-run
       winetricks
       yad
     ]}"
-  ];
+    # Steam Runtime does not work outside of steam-run, so don't use it
+    "--set STEAM_RUNTIME 0"
+  ] ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -59,7 +67,7 @@ buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
+    description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];

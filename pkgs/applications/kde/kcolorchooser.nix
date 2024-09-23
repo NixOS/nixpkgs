@@ -9,6 +9,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kcolorchooser/";
     description = "Color chooser";
+    mainProgram = "kcolorchooser";
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.ttuegel ];
   };

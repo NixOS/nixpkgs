@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, ciso8601
-, fetchPypi
-, httpx
-, pythonOlder
-, zeep
+{
+  lib,
+  buildPythonPackage,
+  ciso8601,
+  fetchPypi,
+  httpx,
+  pythonOlder,
+  zeep,
 }:
 
 buildPythonPackage rec {
@@ -25,15 +26,14 @@ buildPythonPackage rec {
     zeep
   ];
 
-  pythonImportsCheck = [
-    "onvif"
-  ];
+  pythonImportsCheck = [ "onvif" ];
 
   # Tests are not shipped
   doCheck = false;
 
   meta = with lib; {
     description = "ONVIF Client Implementation in Python";
+    mainProgram = "onvif-cli";
     homepage = "https://github.com/hunterjm/python-onvif-zeep-async";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

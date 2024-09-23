@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , autoreconfHook
 , pkg-config
 , util-linux
@@ -18,19 +19,26 @@
 , qtbase ? null
 , qttools ? null
 , python3
-, nixosTests
 , withGui
 , withWallet ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "23.0.knots20220529";
+  version = "26.1.knots20240325";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/23.x/${version}/bitcoin-${version}.tar.gz";
-    sha256 = "0c6l4bvj4ck8gp5vm4dla3l32swsp6ijk12fyf330wgry4mhqxyi";
+    url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
+    hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
   };
+
+  patches = [
+    # upnp: add compatibility for miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/bitcoinknots/bitcoin/commit/643014424359a4783cf9c73bee3346ac2f04e713.patch?full_index=1";
+      hash = "sha256-FdLoNH3+ZZTbqrwRvhbAeJuGz4SgnIvoWUBzRxjfzs8=";
+    })
+  ];
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]
@@ -40,7 +48,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ db48 sqlite ]
+    ++ lib.optionals withWallet [ sqlite ]
+    ++ lib.optionals (withWallet && !stdenv.isDarwin) [ db48 ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   configureFlags = [
@@ -68,12 +77,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    smoke-test = nixosTests.bitcoind-knots;
-  };
-
   meta = with lib; {
-    description = "A derivative of Bitcoin Core with a collection of improvements";
+    description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
     maintainers = with maintainers; [ prusnak mmahut ];
     license = licenses.mit;

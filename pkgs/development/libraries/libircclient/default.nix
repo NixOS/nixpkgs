@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small but extremely powerful library which implements the client IRC protocol";
+    description = "Small but extremely powerful library which implements the client IRC protocol";
     homepage    = "http://www.ulduzsoft.com/libircclient/";
     license     = licenses.lgpl3;
     maintainers = with maintainers; [ obadz ];

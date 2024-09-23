@@ -1,43 +1,35 @@
-{ lib
-, buildPythonPackage
-, cherrypy
-, fetchFromGitHub
-, flit-core
-, filelock
-, mock
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, redis
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cherrypy,
+  fetchFromGitHub,
+  flit-core,
+  filelock,
+  mock,
+  msgpack,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.13.1";
-  format = "pyproject";
+  version = "0.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "ionrock";
-    repo = pname;
+    repo = "cachecontrol";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4N+vk65WxOrT+IJRn+lEnbs5vlWQh9ievVHWWe3BKJ0=";
+    hash = "sha256-myyqiUGna+5S2GJGnwZTOfLh49NhjfHAvpUB49dQbgY=";
   };
 
-  postPatch = ''
-    # https://github.com/ionrock/cachecontrol/issues/297
-    substituteInPlace tests/test_etag.py --replace \
-      "requests.adapters.HTTPResponse.from_httplib" \
-      "urllib3.response.HTTPResponse.from_httplib"
-  '';
-
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     msgpack
@@ -45,12 +37,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    filecache = [
-      filelock
-    ];
-    redis = [
-      redis
-    ];
+    filecache = [ filelock ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
@@ -60,15 +48,14 @@ buildPythonPackage rec {
     requests
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "cachecontrol"
-  ];
+  pythonImportsCheck = [ "cachecontrol" ];
 
   meta = with lib; {
     description = "Httplib2 caching for requests";
+    mainProgram = "doesitcache";
     homepage = "https://github.com/ionrock/cachecontrol";
     changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

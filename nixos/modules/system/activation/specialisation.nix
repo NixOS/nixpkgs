@@ -23,11 +23,17 @@ let
 in
 {
   options = {
+    isSpecialisation = mkOption {
+      type = lib.types.bool;
+      internal = true;
+      default = false;
+      description = "Whether this system is a specialisation of another.";
+    };
 
     specialisation = mkOption {
       default = { };
       example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }; }";
-      description = lib.mdDoc ''
+      description = ''
         Additional configurations to build. If
         `inheritParentConfig` is true, the system
         will be based on the overall system configuration.
@@ -51,12 +57,12 @@ in
           options.inheritParentConfig = mkOption {
             type = types.bool;
             default = true;
-            description = lib.mdDoc "Include the entire system's configuration. Set to false to make a completely differently configured system.";
+            description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
           };
 
           options.configuration = mkOption {
             default = { };
-            description = lib.mdDoc ''
+            description = ''
               Arbitrary NixOS configuration.
 
               Anything you can add to a normal NixOS configuration, you can add

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.heartbeat;
 
@@ -18,45 +15,45 @@ in
 
     services.heartbeat = {
 
-      enable = mkEnableOption (lib.mdDoc "heartbeat");
+      enable = lib.mkEnableOption "heartbeat, uptime monitoring";
 
-      package = mkPackageOption pkgs "heartbeat" {
+      package = lib.mkPackageOption pkgs "heartbeat" {
         example = "heartbeat7";
       };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "heartbeat";
-        description = lib.mdDoc "Name of the beat";
+        description = "Name of the beat";
       };
 
-      tags = mkOption {
-        type = types.listOf types.str;
+      tags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
-        description = lib.mdDoc "Tags to place on the shipped log messages";
+        description = "Tags to place on the shipped log messages";
       };
 
-      stateDir = mkOption {
-        type = types.str;
+      stateDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/heartbeat";
-        description = lib.mdDoc "The state directory. heartbeat's own logs and other data are stored here.";
+        description = "The state directory. heartbeat's own logs and other data are stored here.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           heartbeat.monitors:
           - type: http
             urls: ["http://localhost:9200"]
             schedule: '@every 10s'
         '';
-        description = lib.mdDoc "Any other configuration options you want to add";
+        description = "Any other configuration options you want to add";
       };
 
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - nobody nogroup - -"

@@ -10,7 +10,7 @@ mkDerivation {
   pname = "kpublictransport";
   meta = with lib; {
     license = [ licenses.cc0 ];
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
 

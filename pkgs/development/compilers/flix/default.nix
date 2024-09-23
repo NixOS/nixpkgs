@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "flix";
-  version = "0.42.0";
+  version = "0.50.0";
 
   src = fetchurl {
     url = "https://github.com/flix/flix/releases/download/v${version}/flix.jar";
-    sha256 = "sha256-fkYyJxBlJWUkXGgcszerNKFNEFRIOm6tUyiTZj0q11k=";
+    sha256 = "sha256-fAEt7JsljnEXubYgiF8uEOuoOXHjv9AHgQbPunaEMw4=";
   };
 
   dontUnpack = true;
@@ -25,7 +25,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Flix Programming Language";
+    description = "Flix Programming Language";
+    mainProgram = "flix";
     homepage = "https://github.com/flix/flix";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;

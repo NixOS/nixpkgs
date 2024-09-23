@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "melange";
-  version = "0.5.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3xUSxsY/+66xldkkGahyCun2SoL1njRkJtdqxlMczD8=";
+    hash = "sha256-+G6lSG3iaKWC1SU0cyeU1sU8r9VBUwwtU7D/yjZmu04=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-XrSq55Cz1ixawx9W7jw16tTxyAVZ8h71iA5zO+H8dCg=";
+  vendorHash = "sha256-GNY1ez7qC2aaEm8WAQqGy4vWZEZFQhze15r3QQZBNzA=";
 
   subPackages = [ "." ];
 
@@ -66,6 +66,7 @@ buildGoModule rec {
     homepage = "https://github.com/chainguard-dev/melange";
     changelog = "https://github.com/chainguard-dev/melange/blob/${src.rev}/NEWS.md";
     description = "Build APKs from source code";
+    mainProgram = "melange";
     license = licenses.asl20;
     maintainers = with maintainers; [ developer-guy ];
   };

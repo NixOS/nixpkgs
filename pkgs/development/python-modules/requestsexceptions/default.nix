@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "requestsexceptions";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Import exceptions from potentially bundled packages in requests.";
+    description = "Import exceptions from potentially bundled packages in requests";
     homepage = "https://pypi.python.org/pypi/requestsexceptions";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];

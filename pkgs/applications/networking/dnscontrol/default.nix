@@ -1,26 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, dnscontrol }:
 
 buildGoModule rec {
   pname = "dnscontrol";
-  version = "4.6.2";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = "dnscontrol";
     rev = "v${version}";
-    hash = "sha256-FcEpUNFPwottpuIsO53voucKULTkWOdbDgEXKYLb9LQ=";
+    hash = "sha256-qDCt1Ld3xHPexpCv/0SbvQwGhWE46cVX3BJ0PoBsKcA=";
   };
 
-  vendorHash = "sha256-cW6urAJ3H30HY4Q7JLWFsQebg6YhdGSBgICWMl85v9U=";
+  vendorHash = "sha256-qEIvxQ4PRtDWyIw3MWmyXV4HLraCLSglHivlV7UJ9jM=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
+
+  postInstall = ''
+    installShellCompletion --cmd dnscontrol \
+      --bash <($out/bin/dnscontrol shell-completion bash) \
+      --zsh <($out/bin/dnscontrol shell-completion zsh)
+  '';
 
   preCheck = ''
     # requires network
     rm pkg/spflib/flatten_test.go pkg/spflib/parse_test.go
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      command = "${lib.getExe dnscontrol} version";
+      package = dnscontrol;
+    };
+  };
 
   meta = with lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";

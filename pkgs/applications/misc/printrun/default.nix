@@ -1,14 +1,14 @@
-{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook }:
+{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
-    rev = "printrun-${version}";
-    hash = "sha256-ijJc0CVPiYW5VjTqhY1kO+Fy3dfuPoMn7KRhvcsdAZw=";
+    rev = "refs/tags/printrun-${version}";
+    hash = "sha256-MANgxE3z8xq8ScxdxhwfEVsLMF9lgcdSjJZ0qu5p3ps=";
   };
 
   postPatch = ''
@@ -18,10 +18,10 @@ python3Packages.buildPythonApplication rec {
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
   '';
 
-  nativeBuildInputs = [ glib wrapGAppsHook ];
+  nativeBuildInputs = [ glib wrapGAppsHook3 ];
 
   propagatedBuildInputs = with python3Packages; [
-    appdirs cython dbus-python numpy six wxPython_4_2 psutil pyglet pyopengl pyserial cffi cairosvg lxml
+    appdirs cython dbus-python numpy six wxpython psutil pyglet pyopengl pyserial cffi cairosvg lxml
   ];
 
   # pyglet.canvas.xlib.NoSuchDisplayException: Cannot connect to "None"

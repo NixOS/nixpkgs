@@ -3,7 +3,6 @@
 , cmake
 , enet
 , fetchFromGitHub
-, fetchpatch
 , flac
 , freetype
 , gtk3
@@ -40,13 +39,13 @@
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version = "5.2.9.0";
+  version = "5.2.9.1";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "sha256-lGaHhFlc9zcalRFx0Xcyd0pZdC9lln0ez5hdfRz6Kt8=";
+    sha256 = "sha256-n2OCmZmAqeXjtnCTqJgQ5q4j8/lnPfH+5tpWKIFKle0=";
   };
 
   nativeBuildInputs = [
@@ -99,7 +98,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
   meta = with lib; {
-    description = "A game programming library";
+    description = "Game programming library";
     homepage = "https://liballeg.org/";
     license = licenses.zlib;
     maintainers = [ maintainers.raskin ];

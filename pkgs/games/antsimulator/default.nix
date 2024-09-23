@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/johnBuffer/AntSimulator";
     description = "Simple Ants simulator";
-    license = licenses.free;
-    maintainers = with maintainers; [ ivar ];
+    mainProgram = "antsimulator";
+    license = licenses.mit;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

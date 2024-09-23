@@ -9,25 +9,25 @@
 , gobject-introspection
 , vulkan-tools
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , lsb-release
-, glxinfo
+, mesa-demos
 , vdpauinfo
 , clinfo
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "2.26";
+  version = "3.04";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-3GYJq76g/pU8dt+OMGBeDcw47z5Xv3AGkLsACcBCELs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+FDBHSVBTUHnhu2n7i9W1zIZe2wjY+OuFwQOJZojuzs=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postFixup = ''
     makeWrapper ${python3.interpreter} $out/bin/gpu-viewer \
-      --prefix PATH : "${lib.makeBinPath [ clinfo glxinfo lsb-release vdpauinfo vulkan-tools ]}" \
+      --prefix PATH : "${lib.makeBinPath [ clinfo lsb-release mesa-demos vdpauinfo vulkan-tools ]}" \
       --add-flags "$out/share/gpu-viewer/Files/GPUViewer.py" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --chdir "$out/share/gpu-viewer/Files" \
@@ -66,9 +66,11 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/arunsivaramanneo/GPU-Viewer";
-    description = "A front-end to glxinfo, vulkaninfo, clinfo and es2_info";
+    description = "Front-end to glxinfo, vulkaninfo, clinfo and es2_info";
+    changelog = "https://github.com/arunsivaramanneo/GPU-Viewer/releases/tag/v${version}";
     maintainers = with maintainers; [ GaetanLepage ];
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "gpu-viewer";
   };
 }

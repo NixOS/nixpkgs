@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , perl
 , libiconv
 , zlib
@@ -20,20 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rsync";
-  version = "3.2.7";
+  version = "3.3.0";
 
   src = fetchurl {
     # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
     url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
-    sha256 = "sha256-Tn2dP27RCHjFjF+3JKZ9rPS2qsc0CxPkiPstxBNG8rs=";
+    hash = "sha256-c5nppnCMMtZ4pypjIZ6W8jvgviM25Q/RNISY0HBB35A=";
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook perl ];
 
   patches = [
-    # https://github.com/WayneD/rsync/issues/511#issuecomment-1774612577
-    # original source: https://build.opensuse.org/package/view_file/network/rsync/rsync-fortified-strlcpy-fix.patch?expand=1&rev=3f8dd2f4a404c96c0f69176e60893714
-    ./rsync-fortified-strlcpy-fix.patch
+    # https://github.com/WayneD/rsync/pull/558
+    ./configure.ac-fix-failing-IPv6-check.patch
   ];
 
   buildInputs = [ libiconv zlib popt ]
@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableXXHash xxHash;
 
   configureFlags = [
+    (lib.enableFeature enableLZ4 "lz4")
+    (lib.enableFeature enableOpenSSL "openssl")
+    (lib.enableFeature enableXXHash "xxhash")
+    (lib.enableFeature enableZstd "zstd")
     "--with-nobody-group=nogroup"
 
     # disable the included zlib explicitly as it otherwise still compiles and

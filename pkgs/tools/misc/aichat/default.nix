@@ -4,32 +4,39 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aichat";
-  version = "0.9.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
     rev = "v${version}";
-    hash = "sha256-KY8GUUPZyb89b9mGd+EuYP8M7bKxt7oKQfaaX1R4BTE=";
+    hash = "sha256-khi5B8nYNK7otWZEs5koCzQaYGZwmGxP3zrMYIt3Ds4=";
   };
 
-  cargoHash = "sha256-YTLiJ8/aTN3d2xkEqtiyP47KeDK88I2Raix8kmddDNE=";
+  cargoHash = "sha256-IHGl+Lxa9ZKlyXp59mv72QIvC3hkXPFOUKPVYbN50W4=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
 
+  postInstall = ''
+    installShellCompletion ./scripts/completions/aichat.{bash,fish,zsh}
+  '';
+
   meta = with lib; {
-    description = "Chat with gpt-3.5/chatgpt in terminal.";
+    description = "Use GPT-4(V), Gemini, LocalAI, Ollama and other LLMs in the terminal";
     homepage = "https://github.com/sigoden/aichat";
     license = licenses.mit;
     maintainers = with maintainers; [ mwdomino ];

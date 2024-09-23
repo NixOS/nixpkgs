@@ -13,17 +13,17 @@ unit.  (However, this ignores the fsck unit, so it's not perfect...)
  1 file changed, 4 deletions(-)
 
 diff --git a/rules.d/99-systemd.rules.in b/rules.d/99-systemd.rules.in
-index c0defc31de..8f80235731 100644
+index ad0c7e2fb5..79f3086e78 100644
 --- a/rules.d/99-systemd.rules.in
 +++ b/rules.d/99-systemd.rules.in
-@@ -20,10 +20,6 @@ SUBSYSTEM=="block", TAG+="systemd"
- SUBSYSTEM=="block", ENV{DM_SUSPENDED}=="1", IMPORT{db}="SYSTEMD_READY", GOTO="systemd_end"
- SUBSYSTEM=="block", ACTION=="add", ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", ENV{SYSTEMD_READY}="0"
+@@ -26,10 +26,6 @@ SUBSYSTEM=="block", ACTION=="add", KERNEL=="dm-*", ENV{DM_NAME}!="?*", ENV{SYSTE
+ # Import previous SYSTEMD_READY state.
+ SUBSYSTEM=="block", ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", ENV{SYSTEMD_READY}=="", IMPORT{db}="SYSTEMD_READY"
  
 -# Ignore encrypted devices with no identified superblock on it, since
 -# we are probably still calling mke2fs or mkswap on it.
 -SUBSYSTEM=="block", ENV{DM_UUID}=="CRYPT-*", ENV{ID_PART_TABLE_TYPE}=="", ENV{ID_FS_USAGE}=="", ENV{SYSTEMD_READY}="0"
 -
- # Explicitly set SYSTEMD_READY=1 for DM devices that don't have it set yet, so that we always have something to import above
- SUBSYSTEM=="block", ENV{DM_UUID}=="?*", ENV{SYSTEMD_READY}=="", ENV{SYSTEMD_READY}="1"
- 
+ # add symlink to GPT root disk
+ SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}!="crypto_LUKS", SYMLINK+="gpt-auto-root"
+ SUBSYSTEM=="block", ENV{ID_PART_GPT_AUTO_ROOT}=="1", ENV{ID_FS_TYPE}=="crypto_LUKS", SYMLINK+="gpt-auto-root-luks"

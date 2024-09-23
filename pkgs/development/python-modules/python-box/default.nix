@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, cython_3
-, fetchFromGitHub
-, msgpack
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, ruamel-yaml
-, setuptools
-, toml
-, tomli
-, tomli-w
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  msgpack,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  ruamel-yaml,
+  setuptools,
+  toml,
+  tomli,
+  tomli-w,
 }:
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "7.1.1";
+  version = "7.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,11 +25,11 @@ buildPythonPackage rec {
     owner = "cdgriffith";
     repo = "Box";
     rev = "refs/tags/${version}";
-    hash = "sha256-oxT2y3um6BZ3bwYa+LWBoTgU+9b+V7XtQdCdECU3Gu0=";
+    hash = "sha256-5aORpuh0ezA3mUEpAPANDkdeN8ujNRfCUCV5qamMk68=";
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
   ];
 
@@ -39,35 +39,17 @@ buildPythonPackage rec {
       ruamel-yaml
       toml
     ];
-    yaml = [
-      ruamel-yaml
-    ];
-    ruamel-yaml = [
-      ruamel-yaml
-    ];
-    PyYAML = [
-      pyyaml
-    ];
-    tomli = [
-      tomli-w
-    ] ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
-    toml = [
-      toml
-    ];
-    msgpack = [
-      msgpack
-    ];
+    yaml = [ ruamel-yaml ];
+    ruamel-yaml = [ ruamel-yaml ];
+    PyYAML = [ pyyaml ];
+    tomli = [ tomli-w ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    toml = [ toml ];
+    msgpack = [ msgpack ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
 
-  pythonImportsCheck = [
-    "box"
-  ];
+  pythonImportsCheck = [ "box" ];
 
   meta = with lib; {
     description = "Python dictionaries with advanced dot notation access";

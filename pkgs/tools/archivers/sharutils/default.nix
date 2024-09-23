@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, gettext, coreutils }:
+{ lib, stdenv, fetchurl, fetchpatch, gettext, coreutils, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "sharutils";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   # GNU Gettext is needed on non-GNU platforms.
   buildInputs = [ coreutils gettext ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   # These tests try to hit /etc/passwd to find out your username if pass in a submitter
   # name on the command line. Since we block access to /etc/passwd on the Darwin sandbox
@@ -58,6 +59,9 @@ stdenv.mkDerivation rec {
       substituteInPlace intl/Makefile.in --replace "AR = ar" ""
     '';
 
+  # Workaround to fix the static build on macOS.
+  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+
   doCheck = true;
 
   meta = with lib; {
@@ -80,7 +84,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "https://www.gnu.org/software/sharutils/";
     license = licenses.gpl3Plus;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

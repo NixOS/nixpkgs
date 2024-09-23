@@ -1,4 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, pycrypto }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pycrypto,
+}:
 
 buildPythonPackage rec {
   pname = "python-potr";
@@ -12,9 +17,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pycrypto ];
 
   meta = with lib; {
-    description = "A pure Python OTR implementation";
+    description = "Pure Python OTR implementation";
     homepage = "http://python-otr.pentabarf.de/";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

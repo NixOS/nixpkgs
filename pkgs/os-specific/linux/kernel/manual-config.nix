@@ -1,6 +1,7 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
+, cpio, elfutils, hexdump, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
+, rustc, rust-bindgen, rustPlatform
 }:
 
 let
@@ -19,13 +20,15 @@ let
 in lib.makeOverridable ({
   # The kernel version
   version,
+  # The kernel pname (should be set for variants)
+  pname ? "linux",
   # Position of the Linux build expression
   pos ? null,
   # Additional kernel make flags
   extraMakeFlags ? [],
   # The name of the kernel module directory
   # Needs to be X.Y.Z[-extra], so pad with zeros if needed.
-  modDirVersion ? lib.versions.pad 3 version,
+  modDirVersion ? null /* derive from version */,
   # The kernel source (tarball, git checkout, etc.)
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
@@ -53,20 +56,45 @@ in lib.makeOverridable ({
 }:
 
 let
+  # Provide defaults. Note that we support `null` so that callers don't need to use optionalAttrs,
+  # which can lead to unnecessary strictness and infinite recursions.
+  modDirVersion_ = if modDirVersion == null then lib.versions.pad 3 version else modDirVersion;
+in
+let
+  # Shadow the un-defaulted parameter; don't want null.
+  modDirVersion = modDirVersion_;
   inherit (lib)
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
-  # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = [
-    pahole
-    perl
-    libelf
-    # module makefiles often run uname commands to find out the kernel version
-    (buildPackages.deterministic-uname.override { inherit modDirVersion; })
-  ] ++ optional (lib.versionAtLeast version "5.13") zstd;
-
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
+      # Folding in `ubootTools` in the default nativeBuildInputs is problematic, as
+      # it makes updating U-Boot cumbersome, since it will go above the current
+      # threshold of rebuilds
+      #
+      # To prevent these needless rounds of staging for U-Boot builds, we can
+      # limit the inclusion of ubootTools to target platforms where uImage *may*
+      # be produced.
+      #
+      # This command lists those (kernel-named) platforms:
+      #     .../linux $ grep -l uImage ./arch/*/Makefile | cut -d'/' -f3 | sort
+      #
+      # This is still a guesstimation, but since none of our cached platforms
+      # coincide in that list, this gives us "perfect" decoupling here.
+      linuxPlatformsUsingUImage = [
+        "arc"
+        "arm"
+        "csky"
+        "mips"
+        "powerpc"
+        "sh"
+        "sparc"
+        "xtensa"
+      ];
+      needsUbootTools =
+        lib.elem stdenv.hostPlatform.linuxArch linuxPlatformsUsingUImage
+      ;
+
       config = let attrName = attr: "CONFIG_" + attr; in {
         isSet = attr: hasAttr (attrName attr) config;
 
@@ -84,14 +112,27 @@ let
       } // config_;
 
       isModular = config.isYes "MODULES";
+      withRust = config.isYes "RUST";
 
       buildDTBs = kernelConf.DTB or false;
+
+      # Dependencies that are required to build kernel modules
+      moduleBuildDependencies = [
+        pahole
+        perl
+        elfutils
+        # module makefiles often run uname commands to find out the kernel version
+        (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+      ]
+      ++ optional (lib.versionAtLeast version "5.13") zstd
+      ++ optionals withRust [ rustc rust-bindgen ]
+      ;
 
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
-        inherit isZen isHardened isLibre;
+        inherit isZen isHardened isLibre withRust;
         isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         baseVersion = lib.head (lib.splitString "-rc" version);
         kernelOlder = lib.versionOlder baseVersion;
@@ -99,6 +140,29 @@ let
       };
 
       inherit src;
+
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
+      nativeBuildInputs = [
+        bison
+        flex
+        perl
+        bc
+        nettools
+        openssl
+        rsync
+        gmp
+        libmpc
+        mpfr
+        elfutils
+        zstd
+        python3Minimal
+        kmod
+        hexdump
+      ] ++ optional  needsUbootTools ubootTools
+        ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+        ++ optionals withRust [ rustc rust-bindgen ];
+
+      RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
       patches =
         map (p: p.patch) kernelPatches
@@ -119,12 +183,6 @@ let
       postPatch = ''
         # Ensure that depmod gets resolved through PATH
         sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
-
-        # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
-        # This way kernels can be bit-by-bit reproducible depending on settings
-        # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
-        # See also https://kernelnewbies.org/BuildId
-        sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
         # Some linux-hardened patches now remove certain files in the scripts directory, so the file may not exist.
         [[ -f scripts/ld-version.sh ]] && patchShebangs scripts/ld-version.sh
@@ -149,6 +207,10 @@ let
         for i in $(find arch -name install.sh); do
             patchShebangs "$i"
         done
+
+        # unset $src because the build system tries to use it and spams a bunch of warnings
+        # see: https://github.com/torvalds/linux/commit/b1992c3772e69a6fd0e3fc81cd4d2820c8b6eca0
+        unset src
       '';
 
       configurePhase = ''
@@ -251,11 +313,11 @@ let
         export HOME=${installkernel}
       '';
 
-      # Some image types need special install targets (e.g. uImage is installed with make uinstall)
+      # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
       installTargets = [
         (kernelConf.installTarget or (
-          /**/ if kernelConf.target == "uImage" then "uinstall"
-          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+          /**/ if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then "uinstall"
+          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" || kernelConf.target == "vmlinuz.efi" then "zinstall"
           else "install"))
       ];
 
@@ -354,22 +416,10 @@ let
     };
 in
 
-assert lib.versionOlder version "5.8" -> libelf != null;
-assert lib.versionAtLeast version "5.8" -> elfutils != null;
-
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
-  pname = "linux";
-  inherit version;
+  inherit pname version;
 
   enableParallelBuilding = true;
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ubootTools ]
-      ++ optional  (lib.versionOlder version "5.8") libelf
-      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-      ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 

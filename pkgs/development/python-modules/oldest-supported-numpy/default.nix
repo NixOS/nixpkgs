@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "oldest-supported-numpy";
-  version = "2023.8.3";
+  version = "2023.12.21";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yJp+wzsihagnI3crGPDBo+CqbVO4Xhxulj/o/NitxU0=";
+    hash = "sha256-cdicMbtWeBTkfi4mjrLpK2+Z9c529MPbMIM2JOnvKeA=";
   };
 
   # The purpose of oldest-supported-numpy is to build a project against the
@@ -25,9 +26,7 @@ buildPythonPackage rec {
       --replace 'numpy==' 'numpy>='
   '';
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   # package has no tests
   doCheck = false;

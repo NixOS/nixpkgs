@@ -1,59 +1,66 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, createrepo_c
-, doxygen
-, gettext
-, help2man
-, pkg-config
-, python3Packages
-, cppunit
-, fmt
-, json_c
-, libmodulemd
-, librepo
-, libsmartcols
-, libsolv
-, libxml2
-, libyaml
-, pcre2
-, rpm
-, sdbus-cpp
-, sphinx
-, sqlite
-, systemd
-, testers
-, toml11
-, zchunk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  createrepo_c,
+  doxygen,
+  gettext,
+  help2man,
+  pkg-config,
+  python3Packages,
+  cppunit,
+  fmt,
+  json_c,
+  libmodulemd,
+  librepo,
+  libsmartcols,
+  libsolv,
+  libxml2,
+  libyaml,
+  pcre2,
+  rpm,
+  sdbus-cpp,
+  sphinx,
+  sqlite,
+  systemd,
+  testers,
+  toml11,
+  zchunk,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.1.8";
+  version = "5.2.6.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-1g3g+6EborZd2ppPMZcy0Wjv07zetATHb/sCkuZz5UM=";
+    hash = "sha256-tzGpZ6Pip6SIak0L3npoh31TxVJJ0mn+jVkeNGq24N0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    createrepo_c
-    doxygen
-    gettext
-    help2man
-    pkg-config
-    sphinx
-  ] ++ (with python3Packages; [
-    breathe
-    sphinx-autoapi
-    sphinx-rtd-theme
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      createrepo_c
+      doxygen
+      gettext
+      help2man
+      pkg-config
+      sphinx
+    ]
+    ++ (with python3Packages; [
+      breathe
+      sphinx-autoapi
+      sphinx-rtd-theme
+    ]);
 
   buildInputs = [
     cppunit
@@ -81,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_PERL5=OFF"
     "-DWITH_PYTHON3=OFF"
     "-DWITH_RUBY=OFF"
+    "-DWITH_SYSTEMD=OFF"
     "-DWITH_PLUGIN_RHSM=OFF" # Red Hat Subscription Manager plugin
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
@@ -105,16 +113,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontFixCmake = true;
 
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Next-generation RPM package management system";
     homepage = "https://github.com/rpm-software-management/dnf5";
-    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${version}";
+    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
     license = licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ malt3 katexochen ];
+    maintainers = with lib.maintainers; [
+      malt3
+      katexochen
+    ];
     mainProgram = "dnf5";
     platforms = platforms.linux ++ platforms.darwin;
   };

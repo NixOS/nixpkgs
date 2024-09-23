@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   version = "1.2.10";
 
   src = fetchurl {
-    url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-EEti7H8Cp84WynefSBVhbfHMIZM1A3g6kQe1lE+DBjo=";
+    url = "mirror://alsa/utils/alsa-utils-${version}.tar.bz2";
+    hash = "sha256-EEti7H8Cp84WynefSBVhbfHMIZM1A3g6kQe1lE+DBjo=";
   };
   patches = [
     # Backport fixes for musl libc. Remove on next release

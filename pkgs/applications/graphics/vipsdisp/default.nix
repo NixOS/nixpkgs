@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -12,14 +13,22 @@
 
 stdenv.mkDerivation rec {
   pname = "vipsdisp";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "jcupitt";
     repo = "vipsdisp";
     rev = "v${version}";
-    hash = "sha256-vY3BTbCLf3JOB+eILMvaFUIgG3UBkSdckFAdC4W0OnU=";
+    hash = "sha256-a8wqDTVZnhqk0zHAuGvwjtJTM0irN2tkRIjx6sIteV0=";
   };
+
+  patches = [
+    # Fixes build with clang
+    (fetchpatch2 {
+      url = "https://github.com/jcupitt/vipsdisp/commit/e95888153838d6e58d5b9fd7c08e3d03db38e8b1.patch?full_index=1";
+      hash = "sha256-MtQ9AMvl2MkHSLyOuwFVbmNiCEoPPnrK3EoUdvqEtOo=";
+    })
+  ];
 
   postPatch = ''
     chmod +x ./meson_post_install.py

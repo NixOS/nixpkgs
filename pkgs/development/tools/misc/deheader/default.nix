@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "esr";
     repo = "deheader";
     rev = version;
-    sha256 = "sha256-dYTHvFWlt3aM/fdZFge7GBdd9bfCrEcp7ULJuBl71Xs=";
+    hash = "sha256-dYTHvFWlt3aM/fdZFge7GBdd9bfCrEcp7ULJuBl71Xs=";
   };
 
   buildInputs = [ python3 ];
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to find and optionally remove unneeded includes in C or C++ source files";
+    mainProgram = "deheader";
     longDescription = ''
       This tool takes a list of C or C++ sourcefiles and generates a report
       on which #includes can be omitted from them -- the test, for each foo.c

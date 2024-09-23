@@ -1,41 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, beautifulsoup4
-, requests
-, future
-, pyyaml
-, jsonlines
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  requests,
+  pyyaml,
+  jsonlines,
+  pythonOlder,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "2.12.4";
-  format = "setuptools";
+  version = "2.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UX8ROC6pL8WR82zJupUkPac+aDReUvIh8D1R1ujXhqU=";
+    hash = "sha256-Rq78Od+qI2XWObQjzsLNU1CuERU8ckfT6zVFvc8Bpoo=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    attrs
-    beautifulsoup4
     requests
-    future
     pyyaml
     jsonlines
   ];
 
-  # no tests associated with package
+  # tests require networking
   doCheck = false;
 
-  pythonImportsCheck = [
-    "CloudFlare"
+  pythonImportsCheck = [ "CloudFlare" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytz
   ];
 
   meta = with lib; {
@@ -43,6 +46,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/cloudflare/python-cloudflare";
     changelog = "https://github.com/cloudflare/python-cloudflare/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    mainProgram = "cli4";
+    maintainers = [ ];
   };
 }

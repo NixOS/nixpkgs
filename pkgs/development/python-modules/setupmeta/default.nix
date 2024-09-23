@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, mock
-, pep440
-, pip
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, six
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  mock,
+  pep440,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  six,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "setupmeta";
-  version = "3.5.2";
+  version = "3.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "codrsquad";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-r3pGlcdem+c5I2dKrRueksesqq9HTk0oEr/xJuM7vuc=";
+    hash = "sha256-OI7PU5LQ6w0iAbK7nsP+6RizsEWjKP9nec2J6n0xUhI=";
   };
 
   preBuild = ''
@@ -59,9 +60,7 @@ buildPythonPackage rec {
     "test_brand_new_project"
   ];
 
-  pythonImportsCheck = [
-    "setupmeta"
-  ];
+  pythonImportsCheck = [ "setupmeta" ];
 
   meta = with lib; {
     description = "Python module to simplify setup.py files";

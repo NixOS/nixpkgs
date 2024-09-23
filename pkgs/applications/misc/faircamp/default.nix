@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitea
+, fetchpatch
 , makeWrapper
 , pkg-config
 , glib
@@ -16,20 +17,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faircamp";
-  version = "0.8.0";
+  version = "0.15.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "simonrepp";
     repo = "faircamp";
     rev = version;
-    hash = "sha256-Rz/wMlVNjaGhk26QMnS4+W3oA/RSdB6FuigC84L8eDg=";
+    hash = "sha256-TMN4DLur61bJAPp2kahBAAjf2lto62X/7rhC88nhISg=";
   };
+
+  patches = [
+    # Fix build error in tests
+    (fetchpatch {
+      url = "https://codeberg.org/simonrepp/faircamp/commit/7240dd707f3669d49e755088393d27369ca368c2.patch";
+      hash = "sha256-Ec75Gte2zUp/q912keLdYXUse60QirTQ+DkSaCwEboQ=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "enolib-0.2.1" = "sha256-ryB5Tk90BvsstdXgYw7F0BJymWWetAIijhVpLeVBOa8=";
+      "enolib-0.4.2" = "sha256-FJuWKcwjoi/wKfTzxghobNWblhnKRdUvHOejhpCF7kY=";
     };
   };
 
@@ -59,7 +68,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A self-hostable, statically generated bandcamp alternative";
+    description = "Self-hostable, statically generated bandcamp alternative";
+    mainProgram = "faircamp";
     longDescription = ''
       Faircamp takes a directory on your disk - your Catalog - and from it
       produces a fancy-looking (and technically simple and completely static)

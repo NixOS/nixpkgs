@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
-, requests-toolbelt
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  requests,
+  requests-toolbelt,
+  pyparsing,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
   # nixpkgs yet, and also aren't included in the PyPI bundle.  TODO.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cloudscraper"
-  ];
+  pythonImportsCheck = [ "cloudscraper" ];
 
   meta = with lib; {
     description = "Python module to bypass Cloudflare's anti-bot page";

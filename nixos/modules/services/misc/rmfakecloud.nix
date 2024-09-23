@@ -9,7 +9,7 @@ let
 in {
   options = {
     services.rmfakecloud = {
-      enable = mkEnableOption (lib.mdDoc "rmfakecloud remarkable self-hosted cloud");
+      enable = mkEnableOption "rmfakecloud remarkable self-hosted cloud";
 
       package = mkPackageOption pkgs "rmfakecloud" {
         extraDescription = ''
@@ -22,7 +22,7 @@ in {
       storageUrl = mkOption {
         type = types.str;
         example = "https://local.appspot.com";
-        description = lib.mdDoc ''
+        description = ''
           URL used by the tablet to access the rmfakecloud service.
         '';
       };
@@ -30,7 +30,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 3000;
-        description = lib.mdDoc ''
+        description = ''
           Listening port number.
         '';
       };
@@ -38,7 +38,7 @@ in {
       logLevel = mkOption {
         type = types.enum [ "info" "debug" "warn" "error" ];
         default = "info";
-        description = lib.mdDoc ''
+        description = ''
           Logging level.
         '';
       };
@@ -47,7 +47,7 @@ in {
         type = with types; attrsOf str;
         default = { };
         example = { DATADIR = "/custom/path/for/rmfakecloud/data"; };
-        description = lib.mdDoc ''
+        description = ''
           Extra settings in the form of a set of key-value pairs.
           For tokens and secrets, use `environmentFile` instead.
 
@@ -60,7 +60,7 @@ in {
         type = with types; nullOr path;
         default = null;
         example = "/etc/secrets/rmfakecloud.env";
-        description = lib.mdDoc ''
+        description = ''
           Path to an environment file loaded for the rmfakecloud service.
 
           This can be used to securely store tokens and secrets outside of the

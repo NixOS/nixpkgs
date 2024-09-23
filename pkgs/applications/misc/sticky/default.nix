@@ -1,76 +1,63 @@
-{ lib
-, python3
+{ stdenv
+, lib
 , fetchFromGitHub
-, wrapGAppsHook
-, cinnamon
+, gobject-introspection
+, meson
+, ninja
+, python3
+, wrapGAppsHook3
+, xapp
 , glib
 , gspell
 , gtk3
-, gobject-introspection
 , gitUpdater
 }:
 
-python3.pkgs.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.17";
-  format = "other";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-Am62Azm27irIUQEpZVY8ZP2pslH1eaiyRBdq4eSakQA=";
+    hash = "sha256-JrzBME1d4qvGjF2zdiqCX7h+sFadLsRQqZKnQj7elHs=";
   };
 
   postPatch = ''
+    sed -i -e "s|/usr/lib|$out/lib|" usr/bin/sticky
     sed -i -e "s|/usr/share|$out/share|" usr/lib/sticky/*.py
   '';
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    meson
+    ninja
+    python3.pkgs.wrapPython
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    glib
-    cinnamon.xapp
-    gspell
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
     xapp
+    glib
+    gspell
+    gtk3
+    python3 # for patchShebangs
   ];
 
-  postBuild = ''
-    glib-compile-schemas usr/share/glib-2.0/schemas
-  '';
-
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
-  # no tests
-  doCheck = false;
+  pythonPath = with python3.pkgs; [
+    pygobject3
+    python-xapp
+  ];
 
   dontWrapGApps = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    mv usr/lib $out
-    mv usr/share $out
-    patchShebangs $out/lib/sticky
-    mv $out/lib/sticky/sticky.py $out/bin/sticky
-    sed -i -e "1aimport sys;sys.path.append('$out/lib/sticky')" $out/bin/sticky
-
-    runHook postInstall
-  '';
-
-  # Arguments to be passed to `makeWrapper`, only used by buildPython*
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    buildPythonPath "$out $pythonPath"
+
+    wrapProgram $out/bin/sticky \
+      --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      ''${gappsWrapperArgs[@]}
   '';
 
   passthru = {
@@ -80,7 +67,8 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A sticky notes app for the linux desktop";
+    description = "Sticky notes app for the linux desktop";
+    mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

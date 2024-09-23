@@ -2,16 +2,28 @@
 let
   cfg = config.services.harmonia;
   format = pkgs.formats.toml { };
+
+  signKeyPaths = cfg.signKeyPaths ++ lib.optional (cfg.signKeyPath != null) cfg.signKeyPath;
+  credentials = lib.imap0 (i: signKeyPath: {
+    id = "sign-key-${builtins.toString i}";
+    path = signKeyPath;
+  }) signKeyPaths;
 in
 {
   options = {
     services.harmonia = {
-      enable = lib.mkEnableOption (lib.mdDoc "Harmonia: Nix binary cache written in Rust");
+      enable = lib.mkEnableOption "Harmonia: Nix binary cache written in Rust";
 
       signKeyPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc "Path to the signing key that will be used for signing the cache";
+        description = "DEPRECATED: Use `services.harmonia.signKeyPaths` instead. Path to the signing key to use for signing the cache";
+      };
+
+      signKeyPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
+        description = "Paths to the signing keys to use for signing the cache";
       };
 
       package = lib.mkPackageOption pkgs "harmonia" { };
@@ -19,7 +31,7 @@ in
       settings = lib.mkOption {
         inherit (format) type;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Settings to merge with the default configuration.
           For the list of the default configuration, see <https://github.com/nix-community/harmonia/tree/master#configuration>.
         '';
@@ -28,7 +40,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.optional (cfg.signKeyPath != null)
+      "`services.harmonia.signKeyPath` is deprecated, use `services.harmonia.signKeyPaths` instead";
     nix.settings.extra-allowed-users = [ "harmonia" ];
+    users.users.harmonia = {
+      isSystemUser = true;
+      group = "harmonia";
+    };
+    users.groups.harmonia = { };
 
     systemd.services.harmonia = {
       description = "harmonia binary cache service";
@@ -39,7 +58,9 @@ in
 
       environment = {
         CONFIG_FILE = format.generate "harmonia.toml" cfg.settings;
-        SIGN_KEY_PATH = lib.mkIf (cfg.signKeyPath != null) "%d/sign-key";
+        SIGN_KEY_PATHS = lib.strings.concatMapStringsSep " " (
+          credential: "%d/${credential.id}"
+        ) credentials;
         # Note: it's important to set this for nix-store, because it wants to use
         # $HOME in order to use a temporary cache dir. bizarre failures will occur
         # otherwise
@@ -50,12 +71,12 @@ in
         ExecStart = lib.getExe cfg.package;
         User = "harmonia";
         Group = "harmonia";
-        DynamicUser = true;
+        Restart = "on-failure";
         PrivateUsers = true;
         DeviceAllow = [ "" ];
         UMask = "0066";
         RuntimeDirectory = "harmonia";
-        LoadCredential = lib.mkIf (cfg.signKeyPath != null) [ "sign-key:${cfg.signKeyPath}" ];
+        LoadCredential = builtins.map (credential: "${credential.id}:${credential.path}") credentials;
         SystemCallFilter = [
           "@system-service"
           "~@privileged"

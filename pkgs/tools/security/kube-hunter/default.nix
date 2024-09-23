@@ -14,8 +14,6 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
   ];
@@ -34,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
   ];
@@ -41,8 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "dataclasses" "" \
-      --replace "kubernetes==12.0.1" "kubernetes" \
-      --replace "--cov=kube_hunter" ""
+      --replace "kubernetes==12.0.1" "kubernetes"
   '';
 
   pythonImportsCheck = [

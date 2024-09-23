@@ -8,11 +8,11 @@
 
 buildGoModule rec {
   pname = "honk";
-  version = "1.1.1";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
-    hash = "sha256-kfoSVGm1QKVjDiWvjK4QzAoA/iiU9j6DS3SYFSM+AaA=";
+    hash = "sha256-o9K/ht31nEbx2JmLG3OSIgKZGygpDhZYqCxs6tuSnlc=";
   };
   vendorHash = null;
 
@@ -27,10 +27,10 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   # This susbtitution is not mandatory. It is only existing to have something
-  # working out of the box. This value can be overriden by the user, by
+  # working out of the box. This value can be overridden by the user, by
   # providing the `-viewdir` parameter in the command line.
   postPatch = ''
-    substituteInPlace main.go --replace \
+    substituteInPlace main.go --replace-fail \
       "var viewDir = \".\"" \
       "var viewDir = \"$out/share/honk\""
   '';
@@ -56,7 +56,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";
-    description = "An ActivityPub server with minimal setup and support costs.";
+    description = "ActivityPub server with minimal setup and support costs";
     homepage = "https://humungus.tedunangst.com/r/honk";
     license = lib.licenses.isc;
     mainProgram = "honk";

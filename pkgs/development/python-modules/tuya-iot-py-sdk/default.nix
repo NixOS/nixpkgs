@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pycryptodome
-, pythonOlder
-, requests
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pycryptodome,
+  pythonOlder,
+  requests,
+  websocket-client,
 }:
 
 buildPythonPackage rec {

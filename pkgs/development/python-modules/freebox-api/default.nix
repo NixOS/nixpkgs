@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -26,21 +27,20 @@ buildPythonPackage rec {
     poetry-core
   ];
 
+  pythonRelaxDeps = [ "urllib3" ];
+
   propagatedBuildInputs = [
     aiohttp
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "freebox_api"
-  ];
+  pythonImportsCheck = [ "freebox_api" ];
 
   meta = with lib; {
     description = "Python module to interact with the Freebox OS API";
+    mainProgram = "freebox_api";
     homepage = "https://github.com/hacf-fr/freebox-api";
     changelog = "https://github.com/hacf-fr/freebox-api/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];

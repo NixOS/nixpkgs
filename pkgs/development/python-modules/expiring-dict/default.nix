@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
@@ -14,18 +15,14 @@ buildPythonPackage rec {
     hash = "sha256-PEBK2x5DaUaMt+Ub+8nEcNfi6GPv4qHHXU7XBtDc4aY=";
   };
 
-  propagatedBuildInputs = [
-    sortedcontainers
-  ];
+  propagatedBuildInputs = [ sortedcontainers ];
 
-  pythonImportsCheck = [
-    "expiring_dict"
-  ];
+  pythonImportsCheck = [ "expiring_dict" ];
 
   meta = with lib; {
     description = "Python dict with TTL support for auto-expiring caches";
     homepage = "https://github.com/dparker2/py-expiring-dict";
     license = licenses.mit;
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = [ ];
   };
 }

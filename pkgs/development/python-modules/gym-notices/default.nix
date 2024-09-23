@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "gym-notices";
   version = "0.0.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,4 +23,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ billhuang ];
   };
 }
-

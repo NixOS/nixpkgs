@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "scour";
   version = "0.38.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,9 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An SVG Optimizer / Cleaner ";
-    homepage    = "https://github.com/scour-project/scour";
-    license     = licenses.asl20;
+    description = "SVG Optimizer / Cleaner";
+    mainProgram = "scour";
+    homepage = "https://github.com/scour-project/scour";
+    license = licenses.asl20;
     maintainers = with maintainers; [ worldofpeace ];
   };
 }

@@ -1,17 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.7.1";
+  version = "10.2.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    hash = "sha256-euQiMVPKE1/YG04VKMFUA27OtoGENNhqeE0iiF/X7uc=";
+    hash = "sha256-B+lOohoPH7UkRxRNTzSVt0SDrqEwh4hIvBF3uWliDEI=";
   };
 
-  cargoHash = "sha256-doeZTjFPXmxIPYX3IBtetePoNkIHnl6oPJFtXD1tgZY=";
+  cargoHash = "sha256-H8xkm1cGJUaSgLUfN/vlxsWg5UMClvFhp9pjM0byQPs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -20,11 +20,14 @@ rustPlatform.buildRustPackage rec {
   # skip flaky test
   checkFlags = [
     "--skip=test_owner_current_group"
+    # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
+    "--skip=test_exec_invalid_utf8"
+    "--skip=test_invalid_utf8"
   ];
 
   postInstall = ''
     installManPage doc/fd.1
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fd \
       --bash <($out/bin/fd --gen-completions bash) \
       --fish <($out/bin/fd --gen-completions fish)
@@ -36,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A simple, fast and user-friendly alternative to find";
+    description = "Simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
 

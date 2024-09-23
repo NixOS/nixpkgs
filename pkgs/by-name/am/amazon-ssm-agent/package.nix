@@ -14,7 +14,6 @@
 , nixosTests
 , testers
 , amazon-ssm-agent
-, overrideEtc ? true
 }:
 
 let
@@ -42,13 +41,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.2.1798.0";
+  version = "3.3.859.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-A7M8UbOJT9zvbcwlARMwA7a+LGk8KYmo9j31yzh5FDQ=";
+    hash = "sha256-Qxzq91GXOrssBO9VaQTkLZjVqdpUYoYq3N/rakwewJs=";
   };
 
   vendorHash = null;
@@ -68,15 +67,15 @@ buildGoModule rec {
     darwin.DarwinTools
   ];
 
-  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1630.0/makefile#L120-L138
+  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.2143.0/makefile#L121-L147
   # The updater is not built because it cannot work on NixOS
   subPackages = [
     "core"
     "agent"
     "agent/cli-main"
+    "agent/framework/processor/executer/outofproc/sessionworker"
     "agent/framework/processor/executer/outofproc/worker"
     "agent/session/logging"
-    "agent/framework/processor/executer/outofproc/sessionworker"
   ];
 
   ldflags = [ "-s" "-w" ];
@@ -85,23 +84,20 @@ buildGoModule rec {
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
-      --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
-      --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
-      --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
+      --replace-fail "/usr/bin/uname" "${coreutils}/bin/uname" \
+      --replace-fail '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+      --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \
-      --replace '"script"' '"${util-linux}/bin/script"'
+      --replace-fail '"script"' '"${util-linux}/bin/script"'
 
     substituteInPlace agent/rebooter/rebooter_unix.go \
-      --replace "/sbin/shutdown" "shutdown"
+      --replace-fail "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString overrideEtc ''
-    substituteInPlace agent/appconfig/constants_unix.go \
-      --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
-      --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
+      --replace-fail /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
   '';
 
   preBuild = ''
@@ -166,6 +162,6 @@ buildGoModule rec {
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin manveru anthonyroussel ];
+    maintainers = with maintainers; [ copumpkin manveru anthonyroussel arianvp ];
   };
 }

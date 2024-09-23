@@ -23,17 +23,18 @@
 
 let
   pname = "devpod";
-  version = "0.4.2";
+  version = "0.5.20";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e9sa9LniG5fj3S+x9T91v6ILPI0CD2y3QnZxXcKy6Ik=";
+    sha256 = "sha256-8LbqrOKC1als3Xm6ZuU2AySwT0UWjLN2xh+/CvioYew=";
   };
 
   meta = with lib; {
     description = "Codespaces but open-source, client-only and unopinionated: Works with any IDE and lets you use any cloud, kubernetes or just localhost docker";
+    mainProgram = "devpod";
     homepage = "https://devpod.sh";
     license = licenses.mpl20;
     maintainers = with maintainers; [ maxbrunet ];
@@ -63,7 +64,8 @@ rec {
     '';
 
     passthru.tests.version = testers.testVersion {
-      package = pname;
+      package = devpod;
+      command = "devpod version";
       version = "v${version}";
     };
   };
@@ -78,7 +80,7 @@ rec {
 
         offlineCache = fetchYarnDeps {
           yarnLock = "${src}/desktop/yarn.lock";
-          sha256 = "sha256-Nezh2nGhrxmNLLqZVugJqr895CIa2QWE3CNLjkjrEEs=";
+          hash = "sha256-vUV4yX+UvEKrP0vHxjGwtW2WyONGqHVmFor+WqWbkCc=";
         };
 
         packageJSON = ./package.json;
@@ -94,7 +96,7 @@ rec {
         dontInstall = true;
       };
 
-      rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+      rustTargetPlatformSpec = stdenv.hostPlatform.rust.rustcTarget;
     in
     rustPlatform.buildRustPackage {
       inherit version src;
@@ -105,7 +107,7 @@ rec {
       cargoLock = {
         lockFile = ./Cargo.lock;
         outputHashes = {
-          "tauri-plugin-log-0.1.0" = "sha256-Ei0j7UNzsK45c8fEV8Yw3pyf4oSG5EYgLB4BRfafq6A=";
+          "tauri-plugin-log-0.0.0" = "sha256-tM6oLJe/wwqDDNMKBeMa5nNVvsmi5b104xMOvtm974Y=";
         };
       };
 

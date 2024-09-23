@@ -7,13 +7,13 @@
 , enableSqlite ? true
 }: python3.pkgs.buildPythonApplication rec {
   pname = "mautrix-googlechat";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "googlechat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a/EWz/aCkBE6XdDpmZcx2Q7/xKNwGCiZUhZc9YIIDhU=";
+    hash = "sha256-4H+zUH0GEQ5e/9Bv0BVdf1/pXulx2ihZrhJ+jl/db+U=";
   };
 
   patches = [
@@ -55,7 +55,7 @@
     commonmark
     python-magic
     protobuf
-    mautrix
+    (mautrix.override { withOlm = enableE2be; })
   ] ++ lib.optionals enableE2be passthru.optional-dependencies.e2be
   ++ lib.optionals enableMetrics passthru.optional-dependencies.metrics
   ++ lib.optionals enableSqlite passthru.optional-dependencies.sqlite;
@@ -64,7 +64,7 @@
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/googlechat";
-    description = "A Matrix-Google Chat puppeting bridge";
+    description = "Matrix-Google Chat puppeting bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arcnmx ];

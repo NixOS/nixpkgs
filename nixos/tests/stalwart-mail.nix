@@ -18,8 +18,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
         server.hostname = domain;
 
         certificate."snakeoil" = {
-          cert = "file://${certs.${domain}.cert}";
-          private-key = "file://${certs.${domain}.key}";
+          cert = "%{file:${certs.${domain}.cert}}%";
+          private-key = "%{file:${certs.${domain}.key}}%";
         };
 
         server.tls = {
@@ -40,22 +40,24 @@ in import ./make-test-python.nix ({ lib, ... }: {
           };
         };
 
-        session.auth.mechanisms = [ "PLAIN" ];
-        session.auth.directory = "in-memory";
-        jmap.directory = "in-memory";  # shared with imap
+        session.auth.mechanisms = "[plain]";
+        session.auth.directory = "'in-memory'";
+        storage.directory = "in-memory";
 
-        session.rcpt.directory = "in-memory";
-        queue.outbound.next-hop = [ "local" ];
+        session.rcpt.directory = "'in-memory'";
+        queue.outbound.next-hop = "'local'";
 
         directory."in-memory" = {
           type = "memory";
-          users = [
+          principals = [
             {
+              class = "individual";
               name = "alice";
               secret = "foobar";
               email = [ "alice@${domain}" ];
             }
             {
+              class = "individual";
               name = "bob";
               secret = "foobar";
               email = [ "bob@${domain}" ];
@@ -90,8 +92,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
         with IMAP4('localhost') as imap:
             imap.starttls()
-            imap.login('bob', 'foobar')
-            imap.select('"All Mail"')
+            status, [caps] = imap.login('bob', 'foobar')
+            assert status == 'OK'
+            imap.select()
             status, [ref] = imap.search(None, 'ALL')
             assert status == 'OK'
             [msgId] = ref.split()
@@ -112,6 +115,6 @@ in import ./make-test-python.nix ({ lib, ... }: {
   '';
 
   meta = {
-    maintainers = with lib.maintainers; [ happysalada pacien ];
+    maintainers = with lib.maintainers; [ happysalada pacien onny ];
   };
 })

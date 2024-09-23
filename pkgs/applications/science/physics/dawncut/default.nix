@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to generate a 3D scene data clipped with an arbitrary plane";
+    description = "Tool to generate a 3D scene data clipped with an arbitrary plane";
     license = licenses.unfree;
     homepage = "https://geant4.kek.jp/~tanaka/DAWN/About_DAWNCUT.html";
     platforms = platforms.unix;

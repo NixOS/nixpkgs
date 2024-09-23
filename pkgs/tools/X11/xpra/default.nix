@@ -1,10 +1,10 @@
 { lib
-, fetchurl
+, fetchFromGitHub
 , substituteAll
 , pkg-config
 , runCommand
 , writeText
-, wrapGAppsHook
+, wrapGAppsHook3
 , withNvenc ? false
 , atk
 , cairo
@@ -29,11 +29,13 @@
 , pango
 , pulseaudio
 , python3
+, stdenv
 , util-linux
 , which
 , x264
 , x265
 , xauth
+, xdg-utils
 , xorg
 , xorgserver
 }:
@@ -68,11 +70,13 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.4.6";
+  version = "5.0.9";
 
-  src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-BWf3nypfSrYCzpJ0OfBkecoHGbG1lEgu5jLZhfkIejQ=";
+  src = fetchFromGitHub {
+    owner = "Xpra-org";
+    repo = "xpra";
+    rev = "v${version}";
+    hash = "sha256-gwo5plCAryGC8/BKVEqyMkgB+3FM8HXG6sESomDOtNM=";
   };
 
   patches = [
@@ -84,12 +88,17 @@ in buildPythonApplication rec {
     ./fix-122159.patch # https://github.com/NixOS/nixpkgs/issues/122159
   ];
 
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace xpra/platform/posix/features.py \
+      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+  '';
+
   INCLUDE_DIRS = "${pam}/include";
 
   nativeBuildInputs = [
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     pandoc
   ] ++ lib.optional withNvenc cudatoolkit;
 
@@ -213,7 +222,7 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ offline numinit mvnetbiz ];
   };
 }

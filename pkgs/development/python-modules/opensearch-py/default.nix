@@ -1,45 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, certifi
-, python-dateutil
-, requests
-, six
-, urllib3
+  # dependencies
+  certifi,
+  python-dateutil,
+  requests,
+  six,
+  urllib3,
+  events,
 
-# optional-dependencies
-, aiohttp
+  # optional-dependencies
+  aiohttp,
 
-# tests
-, botocore
-, mock
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pyyaml
-, pytz
+  # tests
+  botocore,
+  mock,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pyyaml,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "2.4.2";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MPuHdjhsrccKYUIDlDYGoXBbBu/V+q43Puf0e5j8vhU=";
+    hash = "sha256-GC0waXxHRiXVXjhTGbet3HvDKmUBKzoufu/J4fmrM+k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     certifi
@@ -47,11 +47,10 @@ buildPythonPackage rec {
     requests
     six
     urllib3
+    events
   ];
 
-  passthru.optional-dependencies.async = [
-    aiohttp
-  ];
+  passthru.optional-dependencies.async = [ aiohttp ];
 
   nativeCheckInputs = [
     botocore

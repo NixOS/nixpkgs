@@ -1,11 +1,13 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "mpyq";
   version = "0.2.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,9 +15,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A Python library for extracting MPQ (MoPaQ) files.";
+    description = "Python library for extracting MPQ (MoPaQ) files";
+    mainProgram = "mpyq";
     homepage = "https://github.com/eagleflo/mpyq";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

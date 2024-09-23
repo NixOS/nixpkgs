@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.dkimproxy-out;
   keydir = "/var/lib/dkimproxy-out";
@@ -11,11 +9,10 @@ in
   ##### interface
   options = {
     services.dkimproxy-out = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description =
-          lib.mdDoc ''
+        description = ''
             Whether to enable dkimproxy_out.
 
             Note that a key will be auto-generated, and can be found in
@@ -23,29 +20,28 @@ in
           '';
       };
 
-      listen = mkOption {
-        type = types.str;
+      listen = lib.mkOption {
+        type = lib.types.str;
         example = "127.0.0.1:10027";
-        description = lib.mdDoc "Address:port DKIMproxy should listen on.";
+        description = "Address:port DKIMproxy should listen on.";
       };
 
-      relay = mkOption {
-        type = types.str;
+      relay = lib.mkOption {
+        type = lib.types.str;
         example = "127.0.0.1:10028";
-        description = lib.mdDoc "Address:port DKIMproxy should forward mail to.";
+        description = "Address:port DKIMproxy should forward mail to.";
       };
 
-      domains = mkOption {
-        type = with types; listOf str;
+      domains = lib.mkOption {
+        type = with lib.types; listOf str;
         example = [ "example.org" "example.com" ];
-        description = lib.mdDoc "List of domains DKIMproxy can sign for.";
+        description = "List of domains DKIMproxy can sign for.";
       };
 
-      selector = mkOption {
-        type = types.str;
+      selector = lib.mkOption {
+        type = lib.types.str;
         example = "selector1";
-        description =
-          lib.mdDoc ''
+        description = ''
             The selector to use for DKIM key identification.
 
             For example, if 'selector1' is used here, then for each domain
@@ -55,11 +51,10 @@ in
           '';
       };
 
-      keySize = mkOption {
-        type = types.int;
+      keySize = lib.mkOption {
+        type = lib.types.int;
         default = 2048;
-        description =
-          lib.mdDoc ''
+        description = ''
             Size of the RSA key to use to sign outgoing emails. Note that the
             maximum mandatorily verified as per RFC6376 is 2048.
           '';
@@ -78,7 +73,7 @@ in
         listen ${cfg.listen}
         relay ${cfg.relay}
 
-        domain ${concatStringsSep "," cfg.domains}
+        domain ${lib.concatStringsSep "," cfg.domains}
         selector ${cfg.selector}
 
         signature dkim(c=relaxed/relaxed)
@@ -86,7 +81,7 @@ in
         keyfile ${privkey}
       '';
   in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       users.groups.dkimproxy-out = {};
       users.users.dkimproxy-out = {
         description = "DKIMproxy_out daemon";

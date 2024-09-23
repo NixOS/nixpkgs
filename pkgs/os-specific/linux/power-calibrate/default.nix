@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "power-calibrate";
-  version = "0.01.34";
+  version = "0.01.37";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-T2fCTE+snNt1ylOpVR0JfT2x0lWrgItpfjtUx/zjaQw=";
+    hash = "sha256-DZ6rXbhaSNy3TEX+lwv3tyKQ7BXOZ9ycrff/7pF60j0=";
   };
 
   installFlags = [
@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to calibrate power consumption";
+    mainProgram = "power-calibrate";
     homepage = "https://github.com/ColinIanKing/power-calibrate";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill ];
   };

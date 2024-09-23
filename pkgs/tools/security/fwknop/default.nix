@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mrash/fwknop/commit/a8214fd58bc46d23b64b3a55db023c7f5a5ea6af.patch";
       sha256 = "0cp1350q66n455hpd3rdydb9anx66bcirza5gyyyy5232zgg58bi";
     })
+
+    # Pull patch pending upstream inclusion for `autoconf-2.72` support:
+    #   https://github.com/mrash/fwknop/pull/357
+    (fetchpatch {
+      name = "autoconf-2.72.patch";
+      url = "https://github.com/mrash/fwknop/commit/bee7958532338499e35c19e75937891c8113f7de.patch";
+      hash = "sha256-lrro5dSDR0Zz9aO3bV5vFFADNJjoDR9z6P5lFYWyLW8=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

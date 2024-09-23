@@ -1,36 +1,33 @@
 {config, pkgs, lib, ...}:
-
-with lib;
-
 let
   cfg = config.services.zwave-js;
   mergedConfigFile = "/run/zwave-js/config.json";
   settingsFormat = pkgs.formats.json {};
 in {
   options.services.zwave-js = {
-    enable = mkEnableOption (mdDoc "the zwave-js server on boot");
+    enable = lib.mkEnableOption "the zwave-js server on boot";
 
-    package = mkPackageOption pkgs "zwave-js-server" { };
+    package = lib.mkPackageOption pkgs "zwave-js-server" { };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 3000;
-      description = mdDoc ''
+      description = ''
         Port for the server to listen on.
       '';
     };
 
-    serialPort = mkOption {
-      type = types.path;
-      description = mdDoc ''
+    serialPort = lib.mkOption {
+      type = lib.types.path;
+      description = ''
         Serial port device path for Z-Wave controller.
       '';
       example = "/dev/ttyUSB0";
     };
 
-    secretsConfigFile = mkOption {
-      type = types.path;
-      description = mdDoc ''
+    secretsConfigFile = lib.mkOption {
+      type = lib.types.path;
+      description = ''
         JSON file containing secret keys. A dummy example:
 
         ```
@@ -62,23 +59,23 @@ in {
       example = "/secrets/zwave-js-keys.json";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
           storage = {
-            cacheDir = mkOption {
-              type = types.path;
+            cacheDir = lib.mkOption {
+              type = lib.types.path;
               default = "/var/cache/zwave-js";
               readOnly = true;
-              description = lib.mdDoc "Cache directory";
+              description = "Cache directory";
             };
           };
         };
       };
       default = {};
-      description = mdDoc ''
+      description = ''
         Configuration settings for the generated config
         file.
       '';
@@ -88,13 +85,13 @@ in {
       type = with lib.types; listOf str;
       default = [ ];
       example = [ "--mock-driver" ];
-      description = lib.mdDoc ''
+      description = ''
         Extra flags to pass to command
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.zwave-js = let
       configFile = settingsFormat.generate "zwave-js-config.json" cfg.settings;
     in {
@@ -110,7 +107,7 @@ in {
           "--config ${mergedConfigFile}"
           "--port ${toString cfg.port}"
           cfg.serialPort
-          (escapeShellArgs cfg.extraFlags)
+          (lib.escapeShellArgs cfg.extraFlags)
         ];
         Restart = "on-failure";
         User = "zwave-js";

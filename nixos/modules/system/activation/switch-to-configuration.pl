@@ -1,5 +1,10 @@
 #! @perl@/bin/perl
 
+# NOTE: This script has an alternative implementation at
+# <nixpkgs/pkgs/by-name/sw/switch-to-configuration-ng>. Any behavioral
+# modifications to this script should also be made to that implementation.
+
+
 # Issue #166838 uncovered a situation in which a configuration not suitable
 # for the target architecture caused a cryptic error message instead of
 # a clean failure. Due to this mismatch, the perl interpreter in the shebang
@@ -472,6 +477,9 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
             $units_to_reload->{$unit} = 1;
             record_unit($reload_list_file, $unit);
         }
+        elsif ($unit eq "dbus.service" || $unit eq "dbus-broker.service") {
+            # dbus service should only ever be reloaded, not started/stoped/restarted as that would break the system.
+        }
         elsif (!parse_systemd_bool(\%new_unit_info, "Service", "X-RestartIfChanged", 1) || parse_systemd_bool(\%new_unit_info, "Unit", "RefuseManualStop", 0) || parse_systemd_bool(\%new_unit_info, "Unit", "X-OnlyManualStart", 0)) {
             $units_to_skip->{$unit} = 1;
         } else {
@@ -889,9 +897,15 @@ while (my $f = <$list_active_users>) {
 
 close($list_active_users) || die("Unable to close the file handle to loginctl");
 
-# Set the new tmpfiles
-print STDERR "setting up tmpfiles\n";
-system("$new_systemd/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+# Restart sysinit-reactivation.target.
+# This target only exists to restart services ordered before sysinit.target. We
+# cannot use X-StopOnReconfiguration to restart sysinit.target because then ALL
+# services of the system would be restarted since all normal services have a
+# default dependency on sysinit.target. sysinit-reactivation.target ensures
+# that services ordered BEFORE sysinit.target get re-started in the correct
+# order. Ordering between these services is respected.
+print STDERR "restarting sysinit-reactivation.target\n";
+system("$new_systemd/bin/systemctl", "restart", "sysinit-reactivation.target") == 0 or $res = 4;
 
 # Before reloading we need to ensure that the units are still active. They may have been
 # deactivated because one of their requirements got stopped. If they are inactive

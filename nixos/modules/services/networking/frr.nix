@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.frr;
@@ -23,10 +20,9 @@ let
     "pbr"
     "bfd"
     "fabric"
-    "mgmt"
   ];
 
-  allServices = services ++ [ "zebra" ];
+  allServices = services ++ [ "zebra" "mgmt" ];
 
   isEnabled = service: cfg.${service}.enable;
 
@@ -52,20 +48,20 @@ let
 
   serviceOptions = service:
     {
-      enable = mkEnableOption (lib.mdDoc "the FRR ${toUpper service} routing protocol");
+      enable = lib.mkEnableOption "the FRR ${lib.toUpper service} routing protocol";
 
-      configFile = mkOption {
-        type = types.nullOr types.path;
+      configFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/etc/frr/${daemonName service}.conf";
-        description = lib.mdDoc ''
+        description = ''
           Configuration file to use for FRR ${daemonName service}.
           By default the NixOS generated files are used.
         '';
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
           let
@@ -87,31 +83,31 @@ let
             };
           in
             examples.${service} or "";
-        description = lib.mdDoc ''
+        description = ''
           ${daemonName service} configuration statements.
         '';
       };
 
-      vtyListenAddress = mkOption {
-        type = types.str;
+      vtyListenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           Address to bind to for the VTY interface.
         '';
       };
 
-      vtyListenPort = mkOption {
-        type = types.nullOr types.int;
+      vtyListenPort = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           TCP Port to bind to for the VTY interface.
         '';
       };
 
-      extraOptions = mkOption {
-        type = types.listOf types.str;
+      extraOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Extra options for the daemon.
         '';
       };
@@ -126,10 +122,10 @@ in
     {
       options.services.frr = {
         zebra = (serviceOptions "zebra") // {
-          enable = mkOption {
-            type = types.bool;
-            default = any isEnabled services;
-            description = lib.mdDoc ''
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = lib.any isEnabled services;
+            description = ''
               Whether to enable the Zebra routing manager.
 
               The Zebra routing manager is automatically enabled
@@ -137,14 +133,28 @@ in
             '';
           };
         };
+        mgmt = (serviceOptions "mgmt") // {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = isEnabled "static";
+            defaultText = lib.literalExpression "config.services.frr.static.enable";
+            description = ''
+              Whether to enable the Configuration management daemon.
+
+              The Configuration management daemon is automatically
+              enabled if needed, at the moment this is when staticd
+              is enabled.
+            '';
+          };
+        };
       };
     }
-    { options.services.frr = (genAttrs services serviceOptions); }
+    { options.services.frr = (lib.genAttrs services serviceOptions); }
   ];
 
   ###### implementation
 
-  config = mkIf (any isEnabled allServices) {
+  config = lib.mkIf (lib.any isEnabled allServices) {
 
     environment.systemPackages = [
       pkgs.frr # for the vtysh tool
@@ -164,12 +174,12 @@ in
 
     environment.etc = let
       mkEtcLink = service: {
-        name = "frr/${service}.conf";
+        name = "frr/${daemonName service}.conf";
         value.source = configFile service;
       };
     in
       (builtins.listToAttrs
-      (map mkEtcLink (filter isEnabled allServices))) // {
+      (map mkEtcLink (lib.filter isEnabled allServices))) // {
         "frr/vtysh.conf".text = "";
       };
 
@@ -184,35 +194,35 @@ in
             scfg = cfg.${service};
             daemon = daemonName service;
           in
-            nameValuePair daemon ({
+            lib.nameValuePair daemon ({
               wantedBy = [ "multi-user.target" ];
               after = [ "network-pre.target" "systemd-sysctl.service" ] ++ lib.optionals (service != "zebra") [ "zebra.service" ];
               bindsTo = lib.optionals (service != "zebra") [ "zebra.service" ];
               wants = [ "network.target" ];
 
               description = if service == "zebra" then "FRR Zebra routing manager"
-                else "FRR ${toUpper service} routing daemon";
+                else "FRR ${lib.toUpper service} routing daemon";
 
               unitConfig.Documentation = if service == "zebra" then "man:zebra(8)"
                 else "man:${daemon}(8) man:zebra(8)";
 
-              restartTriggers = [
+              restartTriggers = lib.mkIf (service != "mgmt") [
                 (configFile service)
               ];
-              reloadIfChanged = true;
+              reloadIfChanged = (service != "mgmt");
 
               serviceConfig = {
                 PIDFile = "frr/${daemon}.pid";
-                ExecStart = "${pkgs.frr}/libexec/frr/${daemon} -f /etc/frr/${service}.conf"
-                  + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
-                  + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}"
-                  + " " + (concatStringsSep " " scfg.extraOptions);
-                ExecReload = "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemonName service} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${service}.conf";
+                ExecStart = "${pkgs.frr}/libexec/frr/${daemon}"
+                  + lib.optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
+                  + lib.optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}"
+                  + " " + (lib.concatStringsSep " " scfg.extraOptions);
+                ExecReload = lib.mkIf (service != "mgmt") "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemon} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${daemon}.conf";
                 Restart = "on-abnormal";
               };
             });
        in
-         listToAttrs (map frrService (filter isEnabled allServices));
+         lib.listToAttrs (map frrService (lib.filter isEnabled allServices));
 
   };
 

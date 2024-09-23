@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "gcp";
     repo = "leela-zero";
     rev = "v${version}";
-    sha256 = "sha256-AQRp2rkL9KCZdsJN6uz2Y+3kV4lyRLYjWn0p7UOjBMw=";
+    hash = "sha256-AQRp2rkL9KCZdsJN6uz2Y+3kV4lyRLYjWn0p7UOjBMw=";
     fetchSubmodules = true;
   };
 

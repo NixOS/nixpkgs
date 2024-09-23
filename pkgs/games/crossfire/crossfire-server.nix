@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchsvn
-, autoreconfHook
 , autoconf
 , automake
 , libtool
@@ -26,6 +25,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
     rev = "r${rev}";
   };
+
+  patches = [
+    ./add-cstdint-include-to-crossfire-server.patch
+  ];
 
   nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python39 ];
   hardeningDisable = [ "format" ];

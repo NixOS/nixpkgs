@@ -10,14 +10,12 @@ in {
     (lib.mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
   ];
 
-  ###### interface
-
   options = {
     virtualisation.lxd = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This option enables lxd, a daemon that manages
           containers. Users in the "lxd" group can interact with
           the daemon (e.g. to start or stop containers) using the
@@ -31,29 +29,20 @@ in {
         '';
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.lxd;
-        defaultText = lib.literalExpression "pkgs.lxd";
-        description = lib.mdDoc ''
-          The LXD package to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "lxd-lts" { };
 
       lxcPackage = lib.mkOption {
         type = lib.types.package;
-        default = pkgs.lxc;
-        defaultText = lib.literalExpression "pkgs.lxc";
-        description = lib.mdDoc ''
-          The LXC package to use with LXD (required for AppArmor profiles).
-        '';
+        default = config.virtualisation.lxc.package;
+        defaultText = lib.literalExpression "config.virtualisation.lxc.package";
+        description = "The lxc package to use.";
       };
 
       zfsSupport = lib.mkOption {
         type = lib.types.bool;
         default = config.boot.zfs.enabled;
         defaultText = lib.literalExpression "config.boot.zfs.enabled";
-        description = lib.mdDoc ''
+        description = ''
           Enables lxd to use zfs as a storage for containers.
 
           This option is enabled by default if a zfs pool is configured
@@ -64,7 +53,7 @@ in {
       recommendedSysctlSettings = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enables various settings to avoid common pitfalls when
           running containers requiring many file operations.
           Fixes errors like "Too many open files" or
@@ -81,7 +70,7 @@ in {
 
         default = null;
 
-        description = lib.mdDoc ''
+        description = ''
           Configuration for LXD preseed, see
           <https://documentation.ubuntu.com/lxd/en/latest/howto/initialize/#initialize-preseed>
           for supported values.
@@ -137,7 +126,7 @@ in {
         type = lib.types.int;
         default = 600;
         apply = toString;
-        description = lib.mdDoc ''
+        description = ''
           Time to wait (in seconds) for LXD to become ready to process requests.
           If LXD does not reply within the configured time, lxd.service will be
           considered failed and systemd will attempt to restart it.
@@ -145,9 +134,9 @@ in {
       };
 
       ui = {
-        enable = lib.mkEnableOption (lib.mdDoc "(experimental) LXD UI");
+        enable = lib.mkEnableOption "(experimental) LXD UI";
 
-        package = lib.mkPackageOption pkgs.lxd-unwrapped "ui" { };
+        package = lib.mkPackageOption pkgs [ "lxd-ui" ] { };
       };
     };
   };
@@ -172,10 +161,6 @@ in {
         '';
       };
     };
-
-    # TODO: remove once LXD gets proper support for cgroupsv2
-    # (currently most of the e.g. CPU accounting stuff doesn't work)
-    systemd.enableUnifiedCgroupHierarchy = false;
 
     systemd.sockets.lxd = {
       description = "LXD UNIX socket";
@@ -221,10 +206,7 @@ in {
         LimitNOFILE = "1048576";
         LimitNPROC = "infinity";
         TasksMax = "infinity";
-
-        Restart = "on-failure";
-        TimeoutStartSec = "${cfg.startTimeout}s";
-        TimeoutStopSec = "30s";
+        Delegate = true; # LXD needs to manage cgroups in its subtree
 
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
@@ -232,6 +214,8 @@ in {
         Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
           "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
+
+      unitConfig.ConditionPathExists = "!/var/lib/incus/.migrated-from-lxd";
     };
 
     systemd.services.lxd-preseed = lib.mkIf (cfg.preseed != null) {

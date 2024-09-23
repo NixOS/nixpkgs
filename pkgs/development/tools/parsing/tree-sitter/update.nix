@@ -77,6 +77,16 @@ let
     "tree-sitter-fluent"
     # to unblock my update
     "csharp-tree-sitter"
+
+    # Non-grammar repositories
+    ".github"
+    "fuzz-action"
+    "parse-action"
+    "parser-setup-action"
+    "parser-test-action"
+    "parser-update-action"
+    "setup-action"
+    "workflows"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -84,9 +94,17 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-bitbake" = {
+      orga = "amaanq";
+      repo = "tree-sitter-bitbake";
+    };
     "tree-sitter-beancount" = {
       orga = "polarmutex";
       repo = "tree-sitter-beancount";
+    };
+    "tree-sitter-bqn" = {
+      orga = "shnarazk";
+      repo = "tree-sitter-bqn";
     };
     "tree-sitter-clojure" = {
       orga = "sogaiu";
@@ -103,6 +121,10 @@ let
     "tree-sitter-elisp" = {
       orga = "wilfred";
       repo = "tree-sitter-elisp";
+    };
+    "tree-sitter-just" = {
+      orga = "IndianBoy42";
+      repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
       orga = "cstrahan";
@@ -148,6 +170,10 @@ let
       orga = "derekstride";
       repo = "tree-sitter-sql";
       branch = "gh-pages";
+    };
+    "tree-sitter-talon" = {
+      orga = "wenkokke";
+      repo = "tree-sitter-talon";
     };
     "tree-sitter-typst" = {
       orga = "uben0";
@@ -378,7 +404,7 @@ let
       repo = "tree-sitter-solidity";
     };
     "tree-sitter-nu" = {
-      orga = "LhKipp";
+      orga = "nushell";
       repo = "tree-sitter-nu";
     };
     "tree-sitter-cue" = {
@@ -391,11 +417,27 @@ let
     };
     "tree-sitter-wing" = {
       orga = "winglang";
-      repo = "wing";
+      repo = "tree-sitter-wing";
     };
     "tree-sitter-wgsl" = {
       orga = "szebniok";
       repo = "tree-sitter-wgsl";
+    };
+    "tree-sitter-templ" = {
+      orga = "vrischmann";
+      repo = "tree-sitter-templ";
+    };
+    "tree-sitter-gleam" = {
+      orga = "gleam-lang";
+      repo = "tree-sitter-gleam";
+    };
+    "tree-sitter-koka" = {
+      orga = "mtoohey31";
+      repo = "tree-sitter-koka";
+    };
+    "tree-sitter-earthfile" = {
+      orga = "glehmann";
+      repo = "tree-sitter-earthfile";
     };
   };
 

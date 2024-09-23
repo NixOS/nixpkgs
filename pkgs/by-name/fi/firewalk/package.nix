@@ -19,6 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Gateway ACL scanner";
+    mainProgram = "firewalk";
     homepage = "http://packetfactory.openwall.net/projects/firewalk/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ tochiaha ];

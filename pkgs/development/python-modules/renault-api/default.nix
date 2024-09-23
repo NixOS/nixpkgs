@@ -1,59 +1,61 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, click
-, dateparser
-, fetchFromGitHub
-, marshmallow-dataclass
-, poetry-core
-, pyjwt
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
-, tabulate
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  click,
+  cryptography,
+  dateparser,
+  fetchFromGitHub,
+  marshmallow-dataclass,
+  poetry-core,
+  pyjwt,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
+  tabulate,
+  typeguard,
 }:
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.2.0";
-  format = "pyproject";
+  version = "0.2.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
-    repo = pname;
+    repo = "renault-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x6+rFstZM7Uplwa8NeRBTb8FYSD/NGjN/3q5earvN7c=";
+    hash = "sha256-tke2bE+djV1N70meMOytYmbPmYDN8fU+Da81Mf6nNAI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    click
-    dateparser
+    cryptography
     marshmallow-dataclass
     pyjwt
-    tabulate
   ];
+
+  optional-dependencies = {
+    cli = [
+      click
+      dateparser
+      tabulate
+    ];
+  };
 
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytestCheckHook
-  ];
+    typeguard
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
-
-  pythonImportsCheck = [
-    "renault_api"
-  ];
+  pythonImportsCheck = [ "renault_api" ];
 
   meta = with lib; {
     description = "Python library to interact with the Renault API";
@@ -61,5 +63,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/hacf-fr/renault-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "renault-api";
   };
 }

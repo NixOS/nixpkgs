@@ -11,24 +11,29 @@
 , mutest
 , nixosTests
 , glib
+, withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform || stdenv.hostPlatform.emulatorAvailable buildPackages
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_43
+, buildPackages
 , gobject-introspection
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , makeWrapper
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphene";
   version = "1.10.8";
 
-  outputs = [ "out" "dev" "devdoc" ]
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals withDocumentation [ "devdoc" ]
     ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "ebassi";
-    repo = pname;
-    rev = version;
+    repo = "graphene";
+    rev = finalAttrs.version;
     sha256 = "P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
   };
 
@@ -51,17 +56,19 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    docbook_xml_dtd_43
-    docbook_xsl
-    gtk-doc
     meson
     ninja
     pkg-config
-    gobject-introspection
     python3
     makeWrapper
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals withDocumentation [
+    docbook_xml_dtd_43
+    docbook_xsl
+    gtk-doc
+  ] ++ lib.optionals (withDocumentation && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -73,8 +80,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
-    "-Dintrospection=enabled"
+    (lib.mesonBool "gtk_doc" withDocumentation)
+    (lib.mesonEnable "introspection" withIntrospection)
     "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
     "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
   ] ++ lib.optionals stdenv.isAarch32 [
@@ -87,31 +94,36 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tests/gen-installed-test.py
+  '' + lib.optionalString withIntrospection ''
     PATH=${python3.withPackages (pp: [ pp.pygobject3 pp.tappy ])}/bin:$PATH patchShebangs tests/introspection.py
   '';
 
   postFixup = let
     introspectionPy = "${placeholder "installedTests"}/libexec/installed-tests/graphene-1.0/introspection.py";
-  in ''
+  in lib.optionalString withIntrospection ''
     if [ -x '${introspectionPy}' ] ; then
       wrapProgram '${introspectionPy}' \
-        --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ glib.out (placeholder "out") ]}"
     fi
   '';
 
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.graphene;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
 
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A thin layer of graphic data types";
+    description = "Thin layer of graphic data types";
     homepage = "https://github.com/ebassi/graphene";
     license = licenses.mit;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
+    pkgConfigModules = [ "graphene-1.0" "graphene-gobject-1.0" ];
   };
-}
+})

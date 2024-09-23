@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, nose
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,29 +12,26 @@ buildPythonPackage rec {
   version = "4.0.1";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mXY9qBv+qNr2s9ItEarMsBqND1LqUh2qs351ikyn0Sg=";
+  src = fetchFromGitHub {
+    owner = "jsocol";
+    repo = "pystatsd";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g830TjFERKUguFKlZeaOhCTlaUs0wcDg4bMdRDr3smw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
   ];
 
-  nativeCheckInputs = [ nose mock ];
-
-  patchPhase = ''
-    # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
-    sed -i 's/test_ipv6_resolution_udp/noop/' statsd/tests.py
-    # well this is a noop, but so it was before
-    sed -i 's/assert_called_once()/called/' statsd/tests.py
-  '';
+  pytestFlagsArray = [ "statsd/tests.py" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
-    description = "A simple statsd client";
+    description = "Simple statsd client";
     license = licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
-
 }

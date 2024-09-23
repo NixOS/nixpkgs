@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pymongo
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pymongo,
+  pythonAtLeast,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,24 +13,19 @@ buildPythonPackage rec {
   version = "1.8.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  # use the removed ssl.wrap_socket function
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-020OW2RF/5FB400BL6K13+WJhHqh4+y413QHSWKvlE4=";
   };
 
-  propagatedBuildInputs = [
-    pymongo
-  ];
+  propagatedBuildInputs = [ pymongo ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mockupdb"
-  ];
+  pythonImportsCheck = [ "mockupdb" ];
 
   disabledTests = [
     # AssertionError: expected to receive Request(), got nothing

@@ -1,44 +1,45 @@
-{ lib
-, stdenv
-, asdf
-, astropy
-, astropy-extension-helpers
-, astropy-helpers
-, beautifulsoup4
-, buildPythonPackage
-, drms
-, fetchPypi
-, glymur
-, h5netcdf
-, hypothesis
-, lxml
-, matplotlib
-, numpy
-, pandas
-, parfive
-, pytest-astropy
-, pytestCheckHook
-, pytest-mock
-, python-dateutil
-, pythonOlder
-, scikit-image
-, scipy
-, setuptools-scm
-, sqlalchemy
-, tqdm
-, zeep
+{
+  lib,
+  stdenv,
+  asdf,
+  astropy,
+  astropy-extension-helpers,
+  astropy-helpers,
+  beautifulsoup4,
+  buildPythonPackage,
+  drms,
+  fetchPypi,
+  glymur,
+  h5netcdf,
+  hypothesis,
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  parfive,
+  pytest-astropy,
+  pytestCheckHook,
+  pytest-mock,
+  python-dateutil,
+  pythonOlder,
+  scikit-image,
+  scipy,
+  setuptools-scm,
+  sqlalchemy,
+  tqdm,
+  zeep,
 }:
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "5.0.1";
+  version = "5.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7tmyywyfQw1T9qr5UbPH/KR+AmmhSaHunkeUGRKDl+Q=";
+    hash = "sha256-y+tw1I+C6wDFlJvObWrOhisrryQCeXulkwFyRCuAgTA=";
   };
 
   nativeBuildInputs = [
@@ -58,9 +59,7 @@ buildPythonPackage rec {
       asdf
       # asdf-astropy
     ];
-    database = [
-      sqlalchemy
-    ];
+    database = [ sqlalchemy ];
     image = [
       scikit-image
       scipy
@@ -85,12 +84,14 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    hypothesis
-    pytest-astropy
-    pytest-mock
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.asdf
+  nativeCheckInputs =
+    [
+      hypothesis
+      pytest-astropy
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.asdf
     ++ passthru.optional-dependencies.database
     ++ passthru.optional-dependencies.image
     ++ passthru.optional-dependencies.net
@@ -158,7 +159,7 @@ buildPythonPackage rec {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = true;
   };
 }

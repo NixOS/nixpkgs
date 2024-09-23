@@ -1,68 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools-scm
-, appdirs
-, colorama
-, configobj
-, distro
-, dpath
-, dvc-azure
-, dvc-data
-, dvc-gs
-, dvc-http
-, dvc-render
-, dvc-s3
-, dvc-ssh
-, dvc-studio-client
-, dvc-task
-, flatten-dict
-, flufl_lock
-, funcy
-, grandalf
-, hydra-core
-, importlib-metadata
-, importlib-resources
-, iterative-telemetry
-, networkx
-, packaging
-, pathspec
-, platformdirs
-, psutil
-, pydot
-, pygtrie
-, pyparsing
-, requests
-, rich
-, ruamel-yaml
-, scmrepo
-, shortuuid
-, shtab
-, tabulate
-, tomlkit
-, tqdm
-, typing-extensions
-, voluptuous
-, zc_lockfile
-, enableGoogle ? false
-, enableAWS ? false
-, enableAzure ? false
-, enableSSH ? false
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  colorama,
+  configobj,
+  distro,
+  dpath,
+  dvc-azure,
+  dvc-data,
+  dvc-gdrive,
+  dvc-gs,
+  dvc-hdfs,
+  dvc-http,
+  dvc-render,
+  dvc-s3,
+  dvc-ssh,
+  dvc-studio-client,
+  dvc-task,
+  fetchFromGitHub,
+  flatten-dict,
+  flufl-lock,
+  funcy,
+  grandalf,
+  gto,
+  hydra-core,
+  importlib-metadata,
+  importlib-resources,
+  iterative-telemetry,
+  networkx,
+  packaging,
+  pathspec,
+  platformdirs,
+  psutil,
+  pydot,
+  pygtrie,
+  pyparsing,
+  pythonOlder,
+  requests,
+  rich,
+  ruamel-yaml,
+  scmrepo,
+  setuptools-scm,
+  shortuuid,
+  shtab,
+  tabulate,
+  tomlkit,
+  tqdm,
+  typing-extensions,
+  voluptuous,
+  zc-lockfile,
+  enableGoogle ? false,
+  enableAWS ? false,
+  enableAzure ? false,
+  enableSSH ? false,
 }:
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.30.3";
-  format = "pyproject";
+  version = "3.55.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc";
     rev = "refs/tags/${version}";
-    hash = "sha256-efj2p5Tj3VWJC7o8/nLpNrkM0eZodLMsFZRcZQpLFws=";
+    hash = "sha256-yNnOSYh4lCefTnIgNstsKaRbrPCgSiWEgKeF66KD66k=";
   };
 
   pythonRelaxDeps = [
@@ -71,67 +75,67 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace dvc/analytics.py --replace 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
+    substituteInPlace dvc/analytics.py \
+      --replace-fail 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    appdirs
-    colorama
-    configobj
-    distro
-    dpath
-    dvc-data
-    dvc-http
-    dvc-render
-    dvc-studio-client
-    dvc-task
-    flatten-dict
-    flufl_lock
-    funcy
-    grandalf
-    hydra-core
-    iterative-telemetry
-    networkx
-    packaging
-    pathspec
-    platformdirs
-    psutil
-    pydot
-    pygtrie
-    pyparsing
-    requests
-    rich
-    ruamel-yaml
-    scmrepo
-    shortuuid
-    shtab
-    tabulate
-    tomlkit
-    tqdm
-    typing-extensions
-    voluptuous
-    zc_lockfile
-  ]
-  ++ lib.optionals enableGoogle passthru.optional-dependencies.gs
-  ++ lib.optionals enableAWS passthru.optional-dependencies.s3
-  ++ lib.optionals enableAzure passthru.optional-dependencies.azure
-  ++ lib.optionals enableSSH passthru.optional-dependencies.ssh
-  ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+
+  dependencies =
+    [
+      appdirs
+      colorama
+      configobj
+      distro
+      dpath
+      dvc-data
+      dvc-http
+      dvc-render
+      dvc-studio-client
+      dvc-task
+      flatten-dict
+      flufl-lock
+      funcy
+      grandalf
+      gto
+      hydra-core
+      iterative-telemetry
+      networkx
+      packaging
+      pathspec
+      platformdirs
+      psutil
+      pydot
+      pygtrie
+      pyparsing
+      requests
+      rich
+      ruamel-yaml
+      scmrepo
+      shortuuid
+      shtab
+      tabulate
+      tomlkit
+      tqdm
+      typing-extensions
+      voluptuous
+      zc-lockfile
+    ]
+    ++ lib.optionals enableGoogle passthru.optional-dependencies.gs
+    ++ lib.optionals enableAWS passthru.optional-dependencies.s3
+    ++ lib.optionals enableAzure passthru.optional-dependencies.azure
+    ++ lib.optionals enableSSH passthru.optional-dependencies.ssh
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   passthru.optional-dependencies = {
     azure = [ dvc-azure ];
+    gdrive = [ dvc-gdrive ];
     gs = [ dvc-gs ];
+    hdfs = [ dvc-hdfs ];
     s3 = [ dvc-s3 ];
     ssh = [ dvc-ssh ];
   };
@@ -139,13 +143,20 @@ buildPythonPackage rec {
   # Tests require access to real cloud services
   doCheck = false;
 
-  pythonImportsCheck = [ "dvc" "dvc.api" ];
+  pythonImportsCheck = [
+    "dvc"
+    "dvc.api"
+  ];
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai fab ];
+    maintainers = with maintainers; [
+      cmcdragonkai
+      fab
+    ];
+    mainProgram = "dvc";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openjdk, glib, dpkg, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, openjdk, glib, dpkg, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "greenfoot";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-wpmgWtx2jTDjt+7p6HcjU/uy1PRmnAHpJ1rOYb+hV+U=";
   };
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook3 ];
   buildInputs = [ glib ];
 
   dontWrapGApps = true;
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple integrated development environment for Java";
+    description = "Simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2ClasspathPlus;
-    mainProgram = pname;
+    mainProgram = "greenfoot";
     maintainers = [ maintainers.chvp ];
     platforms = platforms.linux;
   };

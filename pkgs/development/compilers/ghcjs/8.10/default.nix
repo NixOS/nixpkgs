@@ -17,7 +17,6 @@
 , gcc
 , lib
 , ghcjsDepOverrides ? (_:_:{})
-, haskell
 , linkFarm
 , buildPackages
 }:
@@ -47,6 +46,7 @@ let
     inherit (bootGhcjs) version;
     isGhcjs = true;
 
+    llvmPackages = null;
     enableShared = true;
 
     socket-io = pkgsHostHost.nodePackages."socket.io";

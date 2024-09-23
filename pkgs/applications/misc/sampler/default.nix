@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://sampler.dev";
     license = licenses.gpl3;
     maintainers = with maintainers; [ uvnikita ];
+    mainProgram = "sampler";
   };
 }

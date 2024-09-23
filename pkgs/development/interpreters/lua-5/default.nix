@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
+{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, makeBinaryWrapper }:
 
 
 let
@@ -65,12 +65,13 @@ let
           inherit (luaPackages) requiredLuaModules;
         };
         withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
-        pkgs = luaPackages;
+        pkgs = let lp = luaPackages;
+               in lp // { luaPackages = lp.luaPackages // { __attrsFailEvaluation = true; }; };
         interpreter = "${self}/bin/${executable}";
         inherit executable luaversion;
         luaOnBuild = luaOnBuildForHost.override { inherit packageOverrides; self = luaOnBuild; };
 
-        tests = callPackage ./tests { inherit (luaPackages) wrapLua; };
+        tests = callPackage ./tests { lua = self; inherit (luaPackages) wrapLua; };
 
         inherit luaAttr;
   };
@@ -80,8 +81,8 @@ in
 rec {
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
-    version = "5.4.6";
-    hash = "sha256-fV6huctqoLWco93hxq3LV++DobqOVDLA7NBr9DmzrYg=";
+    version = "5.4.7";
+    hash = "sha256-n79eKO+GxphY9tPTTszDLpEcGii0Eg/z6EqqcM+/HjA=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 

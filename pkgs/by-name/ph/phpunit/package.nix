@@ -1,23 +1,30 @@
-{ lib, fetchFromGitHub, php }:
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, php
+}:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpunit";
-  version = "10.5.1";
+  version = "11.3.1";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-uYSVzKLefcBMqfrHaF6pg4gohAeb6LVg8QGaTS8jwfE=";
+    hash = "sha256-uTH5LlXabhsu86Te/oNnIrvq88MhAqYbVTyKEaPtTuU=";
   };
 
-  vendorHash = "sha256-uUdgz3ZZ+3nU07pUC1sdkNgU1b1beo3sS/yySUzdZwU=";
+  vendorHash = "sha256-cOy5kipPr73LbxmQAsqqR0GfegQp1ARrbqei2zi5JHc=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";
     description = "PHP Unit Testing framework";
     homepage = "https://phpunit.de";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.onny ] ++ lib.teams.php.members;
+    mainProgram = "phpunit";
+    maintainers = with lib.maintainers; [ onny ] ++ lib.teams.php.members;
   };
 })

@@ -1,20 +1,18 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 {
-  options.hardware.usbStorage.manageStartStop = mkOption {
-    type = types.bool;
+  options.hardware.usbStorage.manageStartStop = lib.mkOption {
+    type = lib.types.bool;
     default = true;
-    description = lib.mdDoc ''
+    description = ''
       Enable this option to gracefully spin-down external storage during shutdown.
       If you suspect improper head parking after poweroff, install `smartmontools` and check
       for the `Power-Off_Retract_Count` field for an increment.
     '';
   };
 
-  config = mkIf config.hardware.usbStorage.manageStartStop {
+  config = lib.mkIf config.hardware.usbStorage.manageStartStop {
     services.udev.extraRules = ''
-      ACTION=="add|change", SUBSYSTEM=="scsi_disk", DRIVERS=="usb-storage", ATTR{manage_start_stop}="1"
+      ACTION=="add|change", SUBSYSTEM=="scsi_disk", DRIVERS=="usb-storage", ATTR{manage_system_start_stop}="1"
     '';
   };
 }

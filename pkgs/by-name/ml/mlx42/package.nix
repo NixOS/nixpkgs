@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , glfw
 , darwin
@@ -11,22 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlx42";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JCBV8NWibSugqXkbgP0v3gDfaaMNFYztWpBRfHJUG8E=";
+    hash = "sha256-c4LoTePHhQeZTx33V1K3ZyXmT7vjB6NdkGVAiSuJKfI=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "add-cmake-install.patch";
-      url = "https://github.com/codam-coding-college/MLX42/commit/a51ca8e0ec3fb793fa96d710696dcee8a4fe57d6.patch";
-      hash = "sha256-i+0yHZVvfTG19BGVrz7GuEuBw3B7lylCPEvx07il23M=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./tools
@@ -46,15 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/lib/pkgconfig
     substituteAll ${./mlx42.pc} $out/lib/pkgconfig/mlx42.pc
-
-    # This file was removed after 2.3.2, so the used patch doesn't copy this file
-    # This line can be removed after the next release
-    cp $src/include/MLX42/MLX42_Input.h $out/include/MLX42
   '';
 
   meta = {
     changelog = "https://github.com/codam-coding-college/MLX42/releases/tag/${finalAttrs.src.rev}";
-    description = "A simple cross-platform graphics library that uses GLFW and OpenGL";
+    description = "Simple cross-platform graphics library that uses GLFW and OpenGL";
     homepage = "https://github.com/codam-coding-college/MLX42";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ tomasajt ];

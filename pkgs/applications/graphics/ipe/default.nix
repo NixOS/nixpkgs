@@ -13,6 +13,7 @@
 , libspiro
 , lua5
 , qtbase
+, qtsvg
 , texliveSmall
 , wrapQtAppsHook
 , zlib
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     libspiro
     lua5
     qtbase
+    qtsvg
     zlib
   ] ++ (lib.optionals withTeXLive [
     texliveSmall
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An editor for drawing figures";
+    description = "Editor for drawing figures";
     homepage = "http://ipe.otfried.org"; # https not available
     license = licenses.gpl3Plus;
     longDescription = ''

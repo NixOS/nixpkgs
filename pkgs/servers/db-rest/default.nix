@@ -3,11 +3,11 @@
 , fetchFromGitHub
 , nodejs_18
 , nix-update-script
-, fetchpatch
+, nixosTests
 }:
 buildNpmPackage rec {
   pname = "db-rest";
-  version = "6.0.3";
+  version = "6.0.5";
 
   nodejs = nodejs_18;
 
@@ -15,28 +15,22 @@ buildNpmPackage rec {
     owner = "derhuerst";
     repo = pname;
     rev = version;
-    hash = "sha256-kHT8/8ivqcP6YRBvkZ4jpJ/xBMM1PddLgV1Z/MFmSTM=";
+    hash = "sha256-jMHqJ1whGPz2ti7gn8SPz6o7Fm4oMF6hYjB4wsjKAEU=";
   };
 
-  patches = [
-    # add files and bin property to package.json
-    # keep until https://github.com/derhuerst/db-rest/pull/37 is merged and released
-    (fetchpatch {
-      url = "https://github.com/derhuerst/db-rest/commit/7d2c8bebdd5e8152b181748e3c36683ecf9e71c9.patch";
-      hash = "sha256-KyNcvSJLQrX8BO/4814wefeeC+s0pvM2ng44q6diU24=";
-    })
-  ];
-
-  npmDepsHash = "sha256-d/Qs194TU4ooy6GsBsZhrf5H1iPCUnlieBgtuqfAtkQ=";
+  npmDepsHash = "sha256-rXBIpar5L6fGpDlphr1PqRNxARSccV7Gi+uTNlCqh7I=";
 
   preConfigure = ''
     patchShebangs ./build/index.js
   '';
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests) db-rest;
+  };
 
   meta = {
-    description = "A clean REST API wrapping around the Deutsche Bahn API";
+    description = "Clean REST API wrapping around the Deutsche Bahn API";
     homepage = "https://v6.db.transport.rest/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ marie ];

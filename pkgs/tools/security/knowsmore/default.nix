@@ -1,21 +1,29 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knowsmore";
-  version = "0.1.37";
-  format = "setuptools";
+  version = "0.1.43";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "knowsmore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UxBoWK3L4u9xSQaGGHpzvs/mRlmhF3EqiS/4BYyTKos=";
+    hash = "sha256-rLESaedhEHTMYVbITr3vjyE6urhwl/g1/iTMZ4ruE1c=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "neo4j"
+    "urllib3"
+  ];
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     aioconsole
     ansi2image
     beautifulsoup4
@@ -33,17 +41,11 @@ python3.pkgs.buildPythonApplication rec {
     xmltodict
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "knowsmore"
-  ];
+  pythonImportsCheck = [ "knowsmore" ];
 
-  pytestFlagsArray = [
-    "tests/tests*"
-  ];
+  pytestFlagsArray = [ "tests/tests*" ];
 
   meta = with lib; {
     description = "Tool for pentesting Microsoft Active Directory";
@@ -51,5 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/helviojunior/knowsmore/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "knowsmore";
   };
 }

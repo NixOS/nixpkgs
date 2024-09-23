@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/dtach/dtach/${version}/dtach-${version}.tar.gz";
     sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://dtach.sourceforge.net/";
-    description = "A program that emulates the detach feature of screen";
+    description = "Program that emulates the detach feature of screen";
 
     longDescription = ''
       dtach is a tiny program that emulates the detach feature of

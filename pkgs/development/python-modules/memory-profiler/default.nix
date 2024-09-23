@@ -1,16 +1,18 @@
-{ lib
-, python
-, fetchPypi
+{
+  lib,
+  python,
+  fetchPypi,
 }:
 
 python.pkgs.buildPythonPackage rec {
   pname = "memory-profiler";
   version = "0.61.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "memory_profiler";
     inherit version;
-    sha256 = "sha256-Tltz14ZKHRKS+3agPoKj5475NNBoKKaY2dradtogZ7A=";
+    hash = "sha256-Tltz14ZKHRKS+3agPoKj5475NNBoKKaY2dradtogZ7A=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
@@ -19,7 +21,8 @@ python.pkgs.buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A module for monitoring memory usage of a process";
+    description = "Module for monitoring memory usage of a process";
+    mainProgram = "mprof";
     longDescription = ''
       This is a python module for monitoring memory consumption of a process as
       well as line-by-line analysis of memory consumption for python programs.

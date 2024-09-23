@@ -2,8 +2,9 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , grafana-agent
+, nix-update-script
 , nixosTests
 , nodejs
 , stdenv
@@ -14,28 +15,28 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.38.1";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-caqJE92yEzqU/UQS7Cgxe+4+wGqBqPshhhPAyPP2WPQ=";
+    hash = "sha256-0pwsZONhouGuypGTP64oJd3+nq8VMlyulb/WUJj0qGw=";
   };
 
-  vendorHash = "sha256-aN/vIBbezieMhWG/czwXxx+/M40mDySZmM8pxVVs3Vs=";
+  vendorHash = "sha256-vz65gr56wj6PNiQwmfz1wg9SVmRUnrv7ZeWQkqdA4WI=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/web/ui/yarn.lock";
-    hash = "sha256-rT0UCInISo/p60xzQC7wAJFuKFByIzhNf0RxFFJx+3k=";
+    yarnLock = src + "/internal/web/ui/yarn.lock";
+    hash = "sha256-bnJL7W7VfJIrJKvRt9Q6kdEyjLH/IJoCi0TENxz7SUE=";
   };
 
   ldflags = let
-    prefix = "github.com/grafana/agent/pkg/build";
+    prefix = "github.com/grafana/agent/internal/build";
   in [
     "-s" "-w"
-    # https://github.com/grafana/agent/blob/d672eba4ca8cb010ad8a9caef4f8b66ea6ee3ef2/Makefile#L125
+    # https://github.com/grafana/agent/blob/v0.41.0/Makefile#L132-L137
     "-X ${prefix}.Version=${version}"
     "-X ${prefix}.Branch=v${version}"
     "-X ${prefix}.Revision=v${version}"
@@ -43,7 +44,7 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
-  nativeBuildInputs = [ prefetch-yarn-deps nodejs yarn ];
+  nativeBuildInputs = [ fixup-yarn-lock nodejs yarn ];
 
   tags = [
     "builtinassets"
@@ -55,13 +56,13 @@ buildGoModule rec {
   subPackages = [
     "cmd/grafana-agent"
     "cmd/grafana-agentctl"
-    "web/ui"
+    "internal/web/ui"
   ];
 
   preBuild = ''
     export HOME="$TMPDIR"
 
-    pushd web/ui
+    pushd internal/web/ui
     fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $frontendYarnOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
@@ -89,17 +90,22 @@ buildGoModule rec {
       $out/bin/grafana-agent
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) grafana-agent;
-    version = testers.testVersion {
-      inherit version;
-      command = "${lib.getExe grafana-agent} --version";
-      package = grafana-agent;
+  passthru = {
+    tests = {
+      inherit (nixosTests) grafana-agent;
+      version = testers.testVersion {
+        inherit version;
+        command = "${lib.getExe grafana-agent} --version";
+        package = grafana-agent;
+      };
     };
+    updateScript = nix-update-script { };
+    # alias for nix-update to be able to find and update this attribute
+    offlineCache = frontendYarnOfflineCache;
   };
 
   meta = {
-    description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
+    description = "Lightweight subset of Prometheus and more, optimized for Grafana Cloud";
     license = lib.licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
     changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";

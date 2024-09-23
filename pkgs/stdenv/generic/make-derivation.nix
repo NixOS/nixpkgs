@@ -9,7 +9,6 @@ let
     assertMsg
     attrNames
     boolToString
-    chooseDevOutputs
     concatLists
     concatMap
     concatMapStrings
@@ -19,7 +18,7 @@ let
     extendDerivation
     filter
     findFirst
-    flip
+    getDev
     head
     imap1
     isAttrs
@@ -40,6 +39,33 @@ let
     unique
   ;
 
+  inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
+  inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
+
+  /**
+    This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
+    that refers to the derivation's outputs.
+
+    `mkDerivation` takes many argument attributes, most of which affect the derivation environment,
+    but [`meta`](#chap-meta) and [`passthru`](#var-stdenv-passthru) only directly affect package attributes.
+
+    The `mkDerivation` argument attributes can be made to refer to one another by passing a function to `mkDerivation`.
+    See [Fixed-point argument of `mkDerivation`](#mkderivation-recursive-attributes).
+
+    Reference documentation see: https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
+
+    :::{.note}
+    This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
+
+    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    :::
+  */
+  mkDerivation =
+    fnOrAttrs:
+      if builtins.isFunction fnOrAttrs
+      then makeDerivationExtensible fnOrAttrs
+      else makeDerivationExtensibleConst fnOrAttrs;
+
   checkMeta = import ./check-meta.nix {
     inherit lib config;
     # Nix itself uses the `system` field of a derivation to decide where
@@ -59,26 +85,8 @@ let
       #              ^^^^
 
       overrideAttrs = f0:
-        let
-          f = self: super:
-            # Convert f0 to an overlay. Legacy is:
-            #   overrideAttrs (super: {})
-            # We want to introduce self. We follow the convention of overlays:
-            #   overrideAttrs (self: super: {})
-            # Which means the first parameter can be either self or super.
-            # This is surprising, but far better than the confusion that would
-            # arise from flipping an overlay's parameters in some cases.
-            let x = f0 super;
-            in
-              if builtins.isFunction x
-              then
-                # Can't reuse `x`, because `self` comes first.
-                # Looks inefficient, but `f0 super` was a cheap thunk.
-                f0 self super
-              else x;
-        in
-          makeDerivationExtensible
-            (self: let super = rattrs self; in super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
+        makeDerivationExtensible
+          (lib.extends (lib.toExtension f0) rattrs);
 
       finalPackage =
         mkDerivationSimple overrideAttrs args;
@@ -102,11 +110,45 @@ let
           makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
-  mkDerivationSimple = overrideAttrs:
+  knownHardeningFlags = [
+    "bindnow"
+    "format"
+    "fortify"
+    "fortify3"
+    "shadowstack"
+    "pacret"
+    "pic"
+    "pie"
+    "relro"
+    "stackprotector"
+    "stackclashprotection"
+    "strictoverflow"
+    "trivialautovarinit"
+    "zerocallusedregs"
+  ];
+
+  removedOrReplacedAttrNames = [
+    "checkInputs" "installCheckInputs"
+    "nativeCheckInputs" "nativeInstallCheckInputs"
+    "__contentAddressed"
+    "__darwinAllowLocalNetworking"
+    "__impureHostDeps" "__propagatedImpureHostDeps"
+    "sandboxProfile" "propagatedSandboxProfile"
+  ];
+
+  # Turn a derivation into its outPath without a string context attached.
+  # See the comment at the usage site.
+  unsafeDerivationToUntrackedOutpath = drv:
+    if isDerivation drv
+    then builtins.unsafeDiscardStringContext drv.outPath
+    else drv;
+
+  makeDerivationArgument =
 
 
-# `mkDerivation` wraps the builtin `derivation` function to
-# produce derivations that use this stdenv and its shell.
+# `makeDerivationArgument` is responsible for the `mkDerivation` arguments that
+# affect the actual derivation, excluding a few behaviors that are not
+# essential, and specific to `mkDerivation`: `env`, `cmakeFlags`, `mesonFlags`.
 #
 # See also:
 #
@@ -146,8 +188,6 @@ let
 
 # Configure Phase
 , configureFlags ? []
-, cmakeFlags ? []
-, mesonFlags ? []
 , # Target is not included by default because most programs don't care.
   # Including it then would cause needless mass rebuilds.
   #
@@ -169,14 +209,6 @@ let
 
 , enableParallelBuilding ? config.enableParallelBuildingByDefault
 
-, meta ? {}
-, passthru ? {}
-, pos ? # position used in error messages and for meta.position
-    (if attrs.meta.description or null != null
-      then builtins.unsafeGetAttrPos "description" attrs.meta
-      else if attrs.version or null != null
-      then builtins.unsafeGetAttrPos "version" attrs
-      else builtins.unsafeGetAttrPos "name" attrs)
 , separateDebugInfo ? false
 , outputs ? [ "out" ]
 , __darwinAllowLocalNetworking ? false
@@ -197,8 +229,6 @@ let
 # Experimental.  For simple packages mostly just works,
 # but for anything complex, be prepared to debug if enabling.
 , __structuredAttrs ? config.structuredAttrsByDefault or false
-
-, env ? { }
 
 , ... } @ attrs:
 
@@ -222,13 +252,6 @@ let
   separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
   outputs' = outputs ++ optional separateDebugInfo' "debug";
 
-  # Turn a derivation into its outPath without a string context attached.
-  # See the comment at the usage site.
-  unsafeDerivationToUntrackedOutpath = drv:
-    if isDerivation drv
-    then builtins.unsafeDiscardStringContext drv.outPath
-    else drv;
-
   noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                   ++ depsHostHost ++ depsHostHostPropagated
                                   ++ buildInputs ++ propagatedBuildInputs
@@ -239,32 +262,30 @@ let
     # disabling fortify implies fortify3 should also be disabled
     then unique (hardeningDisable ++ [ "fortify3" ])
     else hardeningDisable;
-  supportedHardeningFlags = [ "fortify" "fortify3" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-  # Musl-based platforms will keep "pie", other platforms will not.
-  # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
-  # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
-      # Except when:
-      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-      #    - static armv7l, where compilation fails.
-      !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-    then supportedHardeningFlags
-    else remove "pie" supportedHardeningFlags;
+  defaultHardeningFlags =
+    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
+      # fallback safe-ish set of flags
+      (if with stdenv.hostPlatform; isOpenBSD && isStatic
+       then knownHardeningFlags # Need pie, in fact
+       else remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
     else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
-  erroneousHardeningFlags = subtractLists supportedHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
+  erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
 
   checkDependencyList = checkDependencyList' [];
-  checkDependencyList' = positions: name: deps: flip imap1 deps (index: dep:
-    if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
-    else if isList dep then checkDependencyList' ([index] ++ positions) name dep
-    else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
+  checkDependencyList' = positions: name: deps:
+    imap1
+      (index: dep:
+        if isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
+        else if isList dep then checkDependencyList' ([index] ++ positions) name dep
+        else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}")
+      deps;
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
-  inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
+  inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
 })
 else let
   doCheck = doCheck';
@@ -280,70 +301,37 @@ else let
 
   outputs = outputs';
 
-  references = nativeBuildInputs ++ buildInputs
-            ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
-
-  dependencies = map (map chooseDevOutputs) [
+  dependencies = [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
+      (map (drv: getDev drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
+      (map (drv: getDev drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
+      (map (drv: getDev drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+      (map (drv: getDev drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
+      (map (drv: getDev drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
+      (map (drv: getDev drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
     ]
   ];
-  propagatedDependencies = map (map chooseDevOutputs) [
+  propagatedDependencies = [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
+      (map (drv: getDev drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
+      (map (drv: getDev drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
+      (map (drv: getDev drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+      (map (drv: getDev drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
+      (map (drv: getDev drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
+      (map (drv: getDev drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
     ]
   ];
-
-  computedSandboxProfile =
-    concatMap (input: input.__propagatedSandboxProfile or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies);
-
-  computedPropagatedSandboxProfile =
-    concatMap (input: input.__propagatedSandboxProfile or [])
-      (concatLists propagatedDependencies);
-
-  computedImpureHostDeps =
-    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-      (stdenv.extraNativeBuildInputs
-       ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies));
-
-  computedPropagatedImpureHostDeps =
-    unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-      (concatLists propagatedDependencies));
-
-  envIsExportable = isAttrs env && !isDerivation env;
 
   derivationArg =
-    (removeAttrs attrs
-      (["meta" "passthru" "pos"
-       "checkInputs" "installCheckInputs"
-       "nativeCheckInputs" "nativeInstallCheckInputs"
-       "__contentAddressed"
-       "__darwinAllowLocalNetworking"
-       "__impureHostDeps" "__propagatedImpureHostDeps"
-       "sandboxProfile" "propagatedSandboxProfile"]
-       ++ optional (__structuredAttrs || envIsExportable) "env"))
+    removeAttrs attrs removedOrReplacedAttrNames
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
@@ -368,10 +356,10 @@ else let
           then attrs.name + hostSuffix
           else
             # we cannot coerce null to a string below
-            assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
+            assert assertMsg (attrs ? version && attrs.version != null) "The `version` attribute cannot be null.";
             "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
-    }) // optionalAttrs __structuredAttrs { env = checkedEnv; } // {
+    }) // {
       builder = attrs.realBuilder or stdenv.shell;
       args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
@@ -409,54 +397,6 @@ else let
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
-      cmakeFlags =
-        cmakeFlags
-        ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-          "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-        ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
-          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-        ] ++ optionals (stdenv.hostPlatform.uname.release != null) [
-          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-        ] ++ optionals (stdenv.hostPlatform.isDarwin) [
-          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-        ] ++ optionals (stdenv.buildPlatform.uname.system != null) [
-          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-        ] ++ optionals (stdenv.buildPlatform.uname.processor != null) [
-          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-        ] ++ optionals (stdenv.buildPlatform.uname.release != null) [
-          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-        ] ++ optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
-        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
-        ]);
-
-      mesonFlags =
-        let
-          # See https://mesonbuild.com/Reference-tables.html#cpu-families
-          cpuFamily = platform: with platform;
-            /**/ if isAarch32 then "arm"
-            else if isx86_32  then "x86"
-            else platform.uname.processor;
-
-          crossFile = builtins.toFile "cross-file.conf" ''
-            [properties]
-            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
-            needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
-
-            [host_machine]
-            system = '${stdenv.targetPlatform.parsed.kernel.name}'
-            cpu_family = '${cpuFamily stdenv.targetPlatform}'
-            cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-            endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-
-            [binaries]
-            llvm-config = 'llvm-config-native'
-            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
-          '';
-          crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ mesonFlags;
-
       inherit patches;
 
       inherit doCheck doInstallCheck;
@@ -476,7 +416,31 @@ else let
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
     } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
-    } // optionalAttrs (stdenv.buildPlatform.isDarwin) {
+    } // optionalAttrs (stdenv.buildPlatform.isDarwin) (
+      let
+        allDependencies = concatLists (concatLists dependencies);
+        allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
+
+        computedSandboxProfile =
+          concatMap (input: input.__propagatedSandboxProfile or [])
+            (stdenv.extraNativeBuildInputs
+            ++ stdenv.extraBuildInputs
+            ++ allDependencies);
+
+        computedPropagatedSandboxProfile =
+          concatMap (input: input.__propagatedSandboxProfile or [])
+            allPropagatedDependencies;
+
+        computedImpureHostDeps =
+          unique (concatMap (input: input.__propagatedImpureHostDeps or [])
+            (stdenv.extraNativeBuildInputs
+            ++ stdenv.extraBuildInputs
+            ++ allDependencies));
+
+        computedPropagatedImpureHostDeps =
+          unique (concatMap (input: input.__propagatedImpureHostDeps or [])
+            allPropagatedDependencies);
+    in {
       inherit __darwinAllowLocalNetworking;
       # TODO: remove `unique` once nix has a list canonicalization primitive
       __sandboxProfile =
@@ -491,7 +455,7 @@ else let
         "/bin/sh"
       ];
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-    } //
+    }) //
     # If we use derivations directly here, they end up as build-time dependencies.
     # This is especially problematic in the case of disallowed*, since the disallowed
     # derivations will be built by nix as build-time dependencies, while those
@@ -527,21 +491,105 @@ else let
         mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
-  meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+in
+  derivationArg;
+
+mkDerivationSimple = overrideAttrs:
+
+# `mkDerivation` wraps the builtin `derivation` function to
+# produce derivations that use this stdenv and its shell.
+#
+# Internally, it delegates most of its behavior to `makeDerivationArgument`,
+# except for the `env`, `cmakeFlags`, and `mesonFlags` attributes, as well
+# as the attributes `meta` and `passthru` that affect [package attributes],
+# and not the derivation itself.
+#
+# See also:
+#
+# * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+#   Details on how to use this mkDerivation function
+#
+# * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
+#   Explanation about derivations in general
+#
+# * [package attributes]: https://nixos.org/manual/nix/stable/glossary#package-attribute-set
+{
+
+# Configure Phase
+  cmakeFlags ? []
+, mesonFlags ? []
+
+, meta ? {}
+, passthru ? {}
+, pos ? # position used in error messages and for meta.position
+    (if attrs.meta.description or null != null
+      then builtins.unsafeGetAttrPos "description" attrs.meta
+      else if attrs.version or null != null
+      then builtins.unsafeGetAttrPos "version" attrs
+      else builtins.unsafeGetAttrPos "name" attrs)
+
+# Experimental.  For simple packages mostly just works,
+# but for anything complex, be prepared to debug if enabling.
+, __structuredAttrs ? config.structuredAttrsByDefault or false
+
+, env ? { }
+
+, ... } @ attrs:
+
+# Policy on acceptable hash types in nixpkgs
+assert attrs ? outputHash -> (
+  let algo =
+    attrs.outputHashAlgo or (head (splitString "-" attrs.outputHash));
+  in
+  if algo == "md5" then
+    throw "Rejected insecure ${algo} hash '${attrs.outputHash}'"
+  else
+    true
+);
+
+let
+  envIsExportable = isAttrs env && !isDerivation env;
+
+  derivationArg = makeDerivationArgument
+    (removeAttrs
+      attrs
+        (["meta" "passthru" "pos"]
+        ++ optional (__structuredAttrs || envIsExportable) "env"
+        )
+    // optionalAttrs __structuredAttrs { env = checkedEnv; }
+    // {
+      cmakeFlags = makeCMakeFlags attrs;
+      mesonFlags = makeMesonFlags attrs;
+    });
+
+  meta = checkMeta.commonMeta {
+    inherit validity attrs pos;
+    references = attrs.nativeBuildInputs or [] ++ attrs.buildInputs or []
+              ++ attrs.propagatedNativeBuildInputs or [] ++ attrs.propagatedBuildInputs or [];
+  };
   validity = checkMeta.assertValidity { inherit meta attrs; };
 
   checkedEnv =
     let
       overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+      prettyPrint = lib.generators.toPretty {};
+      makeError = name: "  - ${name}: in `env`: ${prettyPrint env.${name}}; in derivation arguments: ${prettyPrint derivationArg.${name}}";
+      errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
     in
     assert assertMsg envIsExportable
       "When using structured attributes, `env` must be an attribute set of environment variables.";
     assert assertMsg (overlappingNames == [ ])
-      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${concatStringsSep ", " overlappingNames}";
+      "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
     mapAttrs
       (n: v: assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
-        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+        "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}."; v)
       env;
+
+  # Fixed-output derivations may not reference other paths, which means that
+  # for a fixed-output derivation, the corresponding inputDerivation should
+  # *not* be fixed-output. To achieve this we simply delete the attributes that
+  # would make it fixed-output.
+  deleteFixedOutputRelatedAttrs = lib.flip builtins.removeAttrs [ "outputHashAlgo" "outputHash" "outputHashMode" ];
 
 in
 
@@ -553,7 +601,7 @@ extendDerivation
      # This allows easy building and distributing of all derivations
      # needed to enter a nix-shell with
      #   nix-build shell.nix -A inputDerivation
-     inputDerivation = derivation (derivationArg // {
+     inputDerivation = derivation (deleteFixedOutputRelatedAttrs derivationArg // {
        # Add a name in case the original drv didn't have one
        name = derivationArg.name or "inputDerivation";
        # This always only has one output
@@ -597,7 +645,6 @@ extendDerivation
   (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
 
 in
-  fnOrAttrs:
-    if builtins.isFunction fnOrAttrs
-    then makeDerivationExtensible fnOrAttrs
-    else makeDerivationExtensibleConst fnOrAttrs
+{
+  inherit mkDerivation;
+}

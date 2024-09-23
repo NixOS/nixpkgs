@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "unpackerr";
-  version = "0.12.0";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "davidnewhall";
     repo = "unpackerr";
     rev = "v${version}";
-    sha256 = "sha256-yMmn733j6k9r8I/lvVOZNL6o35eSPJZ5G8jw9xaJZRg=";
+    sha256 = "sha256-uQwpdgV6ksouW9JTuiiuQjxBGOE/ypDW769kNJgWrHw=";
   };
 
-  vendorHash = "sha256-1VMeRB34JS9EwyGhPxFsRIgKaY6NyIMsa132PQKoPYY=";
+  vendorHash = "sha256-wWIw0gNn5tqRq0udzPy/n2OkiIVESpSotOSn2YlBNS4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
     homepage = "https://github.com/davidnewhall/unpackerr";
-    maintainers = with maintainers; [ nullx76 ];
+    maintainers = [ ];
     license = licenses.mit;
     mainProgram = "unpackerr";
   };

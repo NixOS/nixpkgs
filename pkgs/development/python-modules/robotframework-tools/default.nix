@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, robotframework
-, moretools
-, path
-, six
-, zetup
-, modeled
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  robotframework,
+  moretools,
+  path,
+  six,
+  zetup,
+  modeled,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   version = "0.1rc4";
+  format = "setuptools";
   pname = "robotframework-tools";
 
   src = fetchPypi {

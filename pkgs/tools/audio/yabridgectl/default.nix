@@ -38,8 +38,9 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A small, optional utility to help set up and update yabridge for several directories at once";
+    description = "Small, optional utility to help set up and update yabridge for several directories at once";
     homepage = "${yabridge.src.meta.homepage}/tree/${yabridge.version}/tools/yabridgectl";
+    changelog = yabridge.meta.changelog;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = yabridge.meta.platforms;

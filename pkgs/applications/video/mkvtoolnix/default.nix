@@ -25,6 +25,8 @@
 , pugixml
 , qtbase
 , qtmultimedia
+, qtwayland
+, utf8cpp
 , xdg-utils
 , zlib
 , withGUI ? true
@@ -32,7 +34,8 @@
 }:
 
 let
-  inherit (lib) enableFeature optional optionals optionalString;
+  inherit (lib)
+    enableFeature getDev getLib optionals optionalString;
 
   phase = name: args:
     ''
@@ -46,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "80.0";
+  version = "87.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    hash = "sha256-/RqTfnxivghViFryCvj5RXSBziztb1Drb7tT89cGZ3o=";
+    hash = "sha256-UU57ZgH1sxCXspwfKXScw08aJYiv+k526U8q8N1tA+4=";
   };
 
   nativeBuildInputs = [
@@ -64,10 +67,9 @@ stdenv.mkDerivation rec {
     pkg-config
     rake
   ]
-  ++ optional withGUI wrapQtAppsHook;
+  ++ optionals withGUI [ wrapQtAppsHook ];
 
-  # 1. qtbase and qtmultimedia are needed without the GUI
-  # 2. we have utf8cpp in nixpkgs but it doesn't find it
+  # qtbase and qtmultimedia are needed without the GUI
   buildInputs = [
     boost
     expat
@@ -84,11 +86,13 @@ stdenv.mkDerivation rec {
     pugixml
     qtbase
     qtmultimedia
+    utf8cpp
     xdg-utils
     zlib
   ]
-  ++ optional withGUI cmark
-  ++ optional stdenv.isDarwin libiconv;
+  ++ optionals withGUI [ cmark ]
+  ++ optionals stdenv.isLinux [ qtwayland ]
+  ++ optionals stdenv.isDarwin [ libiconv ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''
@@ -103,9 +107,11 @@ stdenv.mkDerivation rec {
     "--disable-static-qt"
     "--disable-update-check"
     "--enable-optimization"
-    "--with-boost-libdir=${lib.getLib boost}/lib"
+    "--with-boost-libdir=${getLib boost}/lib"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"
     "--with-gettext"
+    "--with-extra-includes=${getDev utf8cpp}/include/utf8cpp"
+    "--with-extra-libs=${getLib utf8cpp}/lib"
     (enableFeature withGUI "gui")
   ];
 

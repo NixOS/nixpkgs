@@ -17,9 +17,10 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A webring for static site generators";
+    description = "Webring for static site generators";
     homepage = "https://sr.ht/~sircmpwn/openring";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sumnerevans ];
+    mainProgram = "openring";
   };
 }

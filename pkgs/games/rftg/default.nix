@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://keldon.net/rftg/";
     description = "Implementation of the card game Race for the Galaxy, including an AI";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.falsifian ];
   };
 

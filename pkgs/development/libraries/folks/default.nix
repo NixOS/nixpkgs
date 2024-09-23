@@ -25,15 +25,15 @@
 
 # TODO: enable more folks backends
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folks";
-  version = "0.15.6";
+  version = "0.15.9";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "yGZjDFU/Kc6b4cemAmfLQICmvM9LjVUdxMfmI02EAkg=";
+    url = "mirror://gnome/sources/folks/${lib.versions.majorMinor finalAttrs.version}/folks-${finalAttrs.version}.tar.xz";
+    hash = "sha256-IxGzc1XDUfM/Fj/cOUh0oioKBoLDGUk9bYpuQgcRQV8=";
   };
 
   nativeBuildInputs = [
@@ -78,21 +78,22 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=true"
     "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
-    # For some reason, the tests are getting stuck on 31/32,
-    # even though the one missing test finishes just fine on next run,
-    # when tests are permuted differently. And another test that
-    # previously passed will be stuck instead.
-    "-Dtests=false"
+    "-Dtests=${lib.boolToString (finalAttrs.finalPackage.doCheck && stdenv.isLinux)}"
   ];
 
+  # backends/eds/lib/libfolks-eds.so.26.0.0.p/edsf-persona-store.c:10697:4:
+  # error: call to undeclared function 'folks_persona_store_set_is_user_set_default';
+  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
+
+  # Checks last re-enabled in https://github.com/NixOS/nixpkgs/pull/279843, but timeouts in tests still
+  # occur inconsistently
   doCheck = false;
 
-  # Prevents e-d-s add-contacts-stress-test from timing out
-  checkPhase = ''
-    runHook preCheck
-    meson test --timeout-multiplier 4
-    runHook postCheck
-  '';
+  mesonCheckFlags = [
+    # Prevents e-d-s add-contacts-stress-test from timing out
+    "--timeout-multiplier" "4"
+  ];
 
   postPatch = lib.optionalString telepathySupport ''
     patchShebangs tests/tools/manager-file.py
@@ -100,16 +101,16 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "folks";
       versionPolicy = "none";
     };
   };
 
   meta = with lib; {
-    description = "A library that aggregates people from multiple sources to create metacontacts";
-    homepage = "https://wiki.gnome.org/Projects/Folks";
+    description = "Library that aggregates people from multiple sources to create metacontacts";
+    homepage = "https://gitlab.gnome.org/GNOME/folks";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

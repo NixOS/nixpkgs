@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , runCommand
 , fetchurl
 , perl
@@ -19,9 +20,8 @@
 , gtk3
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libwebp
-, libwpe
-, libwpe-fdo
 , enchant2
 , xorg
 , libxkbcommon
@@ -48,21 +48,24 @@
 , libintl
 , lcms2
 , libmanette
-, openjpeg
 , geoclue2
+, flite
+, openssl
 , sqlite
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
 , bubblewrap
 , libseccomp
+, libbacktrace
 , systemd
 , xdg-dbus-proxy
 , substituteAll
 , glib
 , unifdef
-, addOpenGLRunpath
+, addDriverRunpath
 , enableGeoLocation ? true
+, enableExperimental ? false
 , withLibsecret ? true
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , testers
@@ -70,7 +73,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.42.2";
+  version = "2.44.3";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -81,21 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VyCqPoYn8bn2MlIYfU3w+CM65x1pexeW6/vlynUL0Rg=";
+    hash = "sha256-3ILQQuysqYGkhSNXwG5SNXQzGc8QqUzTatQbl4g6C1Q=";
   };
 
   patches = lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
-      inherit (addOpenGLRunpath) driverLink;
-    })
-
-    # Hardcode path to WPE backend
-    # https://github.com/NixOS/nixpkgs/issues/110468
-    (substituteAll {
-      src = ./fdo-backend-path.patch;
-      wpebackend_fdo = libwpe-fdo;
+      inherit (addDriverRunpath) driverLink;
     })
   ];
 
@@ -123,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # for gdbus-codegen
     unifdef
   ] ++ lib.optionals stdenv.isLinux [
-    wayland # for wayland-scanner
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -150,20 +146,19 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxml2
     libxslt
+    libbacktrace
     nettle
-    openjpeg
     p11-kit
     sqlite
     woff2
-  ] ++ (with xorg; [
-    libXdamage
-    libXdmcp
-    libXt
-    libXtst
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
-  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
+  ] ++ lib.optional (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") (
+    # this can likely be removed as:
+    # "libproc.h is included in the 10.12 SDK Libsystem and should be identical to this one."
+    # but the package is marked broken on darwin so unable to test
+
     # Pull a header that contains a definition of proc_pid_rusage().
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
@@ -175,16 +170,17 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
     libmanette
     wayland
-    libwpe
-    libwpe-fdo
+    xorg.libX11
   ] ++ lib.optionals systemdSupport [
     systemd
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
+  ] ++ lib.optionals enableExperimental [
+    flite
+    openssl
   ] ++ lib.optionals withLibsecret [
     libsecret
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-    xorg.libXcomposite
     wayland-protocols
   ];
 
@@ -193,32 +189,35 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup
   ];
 
-  cmakeFlags = let
-    cmakeBool = x: if x then "ON" else "OFF";
-  in [
-    "-DENABLE_INTROSPECTION=ON"
-    "-DPORT=GTK"
-    "-DUSE_LIBHYPHEN=OFF"
-    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
-    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
-  ] ++ lib.optionals stdenv.isLinux [
-    # Have to be explicitly specified when cross.
-    # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
-    "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
-    "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DENABLE_GAMEPAD=OFF"
-    "-DENABLE_GTKDOC=OFF"
-    "-DENABLE_MINIBROWSER=OFF"
-    "-DENABLE_QUARTZ_TARGET=ON"
-    "-DENABLE_X11_TARGET=OFF"
-    "-DUSE_APPLE_ICU=OFF"
-    "-DUSE_OPENGL_OR_ES=OFF"
-  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-    "-DUSE_GTK4=ON"
-  ] ++ lib.optionals (!systemdSupport) [
-    "-DENABLE_JOURNALD_LOG=OFF"
-  ];
+  cmakeFlags =
+    let
+      cmakeBool = x: if x then "ON" else "OFF";
+    in
+    [
+      "-DENABLE_INTROSPECTION=ON"
+      "-DPORT=GTK"
+      "-DUSE_LIBHYPHEN=OFF"
+      "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+      "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+      "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
+    ] ++ lib.optionals stdenv.isLinux [
+      # Have to be explicitly specified when cross.
+      # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
+      "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
+      "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
+    ] ++ lib.optionals stdenv.isDarwin [
+      "-DENABLE_GAMEPAD=OFF"
+      "-DENABLE_GTKDOC=OFF"
+      "-DENABLE_MINIBROWSER=OFF"
+      "-DENABLE_QUARTZ_TARGET=ON"
+      "-DENABLE_X11_TARGET=OFF"
+      "-DUSE_APPLE_ICU=OFF"
+      "-DUSE_OPENGL_OR_ES=OFF"
+    ] ++ lib.optionals (lib.versionOlder gtk3.version "4.0") [
+      "-DUSE_GTK4=OFF"
+    ] ++ lib.optionals (!systemdSupport) [
+      "-DENABLE_JOURNALD_LOG=OFF"
+    ];
 
   postPatch = ''
     patchShebangs .
@@ -235,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Web content rendering engine, GTK port";
+    mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     pkgConfigModules = [

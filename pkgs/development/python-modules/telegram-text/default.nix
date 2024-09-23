@@ -1,32 +1,28 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "telegram-text";
-  version = "0.1.2";
+  version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SKY-ALIN";
     repo = "telegram-text";
-    rev = "v${version}";
-    hash = "sha256-p8SVQq7IvkVuOFE8VDugROLY5Wk0L2HmXyacTzFFSP4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eUy4kyCmM/5Ag/0s9hYW2IIg+OTX2L7EsoOYivhd0pU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python markup module for Telegram messenger";

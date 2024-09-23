@@ -1,16 +1,20 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, netifaces
-, pyserial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  esptool,
+  fetchFromGitHub,
+  netifaces,
+  pyserial,
+  pythonOlder,
+  replaceVars,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.6.8";
-  format = "setuptools";
+  version = "0.7.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,10 +22,18 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     rev = "refs/tags/${version}";
-    hash = "sha256-MDD0Vs5XIWqxKHbrAa0vXJRd8uYZDlr//hP1NBf4b7U=";
+    hash = "sha256-2UXkfijLeMOpyurR1Bz0dbQxKO7efRp3UcqXIUWRjs0=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (replaceVars ./unvendor-esptool.patch {
+      esptool = lib.getExe esptool;
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     netifaces
     pyserial
@@ -30,9 +42,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "RNS"
-  ];
+  pythonImportsCheck = [ "RNS" ];
 
   meta = with lib; {
     description = "Cryptography-based networking stack for wide-area networks";

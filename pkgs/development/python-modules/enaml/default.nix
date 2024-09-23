@@ -1,17 +1,18 @@
-{ lib
-, atom
-, buildPythonPackage
-, bytecode
-, cppy
-, fetchFromGitHub
-, kiwisolver
-, pegen
-, ply
-, qtpy
-, setuptools
-, setuptools-scm
-, pythonOlder
-, sip
+{
+  lib,
+  atom,
+  buildPythonPackage,
+  bytecode,
+  cppy,
+  fetchFromGitHub,
+  kiwisolver,
+  pegen,
+  ply,
+  qtpy,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
+  sip,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-DYLDQ9QwdK/a8eY0bFX31UNgxm8FUOaeNAnisFcyFNI=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

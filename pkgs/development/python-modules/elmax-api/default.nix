@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pyjwt
-, pythonOlder
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  httpx,
+  pyjwt,
+  pythonOlder,
+  websockets,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "elmax-api";
   version = "0.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,18 +24,19 @@ buildPythonPackage rec {
     hash = "sha256-57pmmH7f893H71CMhdnahvbN/5F2yfrVZ6MFpYQ4+mQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     httpx
     pyjwt
+    websockets
     yarl
   ];
 
   # Test require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "elmax_api"
-  ];
+  pythonImportsCheck = [ "elmax_api" ];
 
   meta = with lib; {
     description = "Python library for interacting with the Elmax cloud";

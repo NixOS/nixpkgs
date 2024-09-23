@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Encrypted personal archives";
+    mainProgram = "enchive";
     homepage = "https://github.com/skeeto/enchive";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;

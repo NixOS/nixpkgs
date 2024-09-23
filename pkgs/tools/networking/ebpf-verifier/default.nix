@@ -54,5 +54,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gaelreyrol ];
+    mainProgram = "ebpf-verifier";
   };
 }

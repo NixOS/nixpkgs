@@ -28,7 +28,6 @@ addMakeFlags() {
 
   # Definitions passed to share/mk/*.mk. Should be pretty simple -
   # eventually maybe move it to a configure script.
-  export DESTDIR=
   export USETOOLS=never
   export NOCLANGERROR=yes
   export NOGCCERROR=yes
@@ -49,7 +48,6 @@ addMakeFlags() {
   makeFlags="LIBDIR=${!outputLib}/lib $makeFlags"
   makeFlags="SHLIBDIR=${!outputLib}/lib $makeFlags"
   makeFlags="SHAREDIR=${!outputLib}/share $makeFlags"
-  makeFlags="MANDIR=${!outputMan}/share/man $makeFlags"
   makeFlags="INFODIR=${!outputInfo}/share/info $makeFlags"
   makeFlags="DOCDIR=${!outputDoc}/share/doc $makeFlags"
   makeFlags="LOCALEDIR=${!outputLib}/share/locale $makeFlags"

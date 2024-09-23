@@ -2,7 +2,8 @@
   bazel
 , bazelTest
 , stdenv
-, darwin
+, cctools
+, extraBazelArgs ? ""
 , lib
 , runLocal
 , runtimeShell
@@ -16,8 +17,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
@@ -70,13 +71,14 @@ let
   ''));
 
   testBazel = bazelTest {
-    name = "bazel-test-builtin-rules";
+    name = "${bazel.pname}-test-builtin-rules";
     inherit workspaceDir;
     bazelPkg = bazel;
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
         --distdir=${distDir} \
+        ${extraBazelArgs} \
         //python:bin
     '';
   };

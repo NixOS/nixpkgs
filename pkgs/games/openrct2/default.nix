@@ -7,6 +7,7 @@
 , curl
 , discord-rpc
 , duktape
+, expat
 , flac
 , fontconfig
 , freetype
@@ -28,48 +29,48 @@
 }:
 
 let
-  openrct2-version = "0.4.5";
+  openrct2-version = "0.4.14";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.3.11";
-  openmsx-version = "1.3.0";
-  opensfx-version = "1.0.3";
-  title-sequences-version = "0.4.0";
+  objects-version = "1.4.7";
+  openmsx-version = "1.6";
+  opensfx-version = "1.0.5";
+  title-sequences-version = "0.4.14";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    sha256 = "sha256-TMtaEqui3gUd+j3LwF7VsHiBtbYZMu6Rvo1aMkkU9LY=";
+    hash = "sha256-d02LXcqoB6lDGdd82IrHi0Br8rjAFpRgQ86344XUeCA=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    sha256 = "sha256-fA2Kz4GALu6IP7ulbwpAFt3dz6NCPgyB0CWy5uOLBQY=";
+    hash = "sha256-XtKhgCahGzhuIdwvoz47rlRthZEhb0w+OuGhZnplHSc=";
   };
 
   openmsx-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenMusic";
     rev = "v${openmsx-version}";
-    sha256 = "sha256-bp+uwTy2ZFMCK8Dq4YVACpQSwo8v1te+NQGwdqViIjU=";
+    hash = "sha256-KjWJSB2tdE0ExswVlz0dLXNPhLJ1kI6VZb3vqXQfx8w=";
   };
 
   opensfx-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenSoundEffects";
     rev = "v${opensfx-version}";
-    sha256 = "sha256-AMuCpq1Hszi2Vikto/cX9g81LwBDskaRMTLxNzU0/Gk=";
+    hash = "sha256-ucADnMLGm36eAo+NiioxEzeMqtu7YbGF9wsydK1mmoE=";
   };
 
   title-sequences-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "title-sequences";
     rev = "v${title-sequences-version}";
-    sha256 = "sha256-anqCZkhYoaxPu3MYCYSsFFngOmPp2wnx2MGb0hj6W5U=";
+    hash = "sha256-ier7sBYJjBIvKVxfaCelJPZ+oF9NEshvR2k/X9JpP+0=";
   };
 in
 stdenv.mkDerivation {
@@ -88,6 +89,7 @@ stdenv.mkDerivation {
     curl
     discord-rpc
     duktape
+    expat
     flac
     fontconfig
     freetype

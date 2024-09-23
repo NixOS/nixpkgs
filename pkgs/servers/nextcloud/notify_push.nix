@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.6.5";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-go41ZIUBj1nj8rDI/c4Pk5cnDbM8Y2+bCZIab4XdhUY=";
+    hash = "sha256-QHVWiH6qkwQay0wffoyDUyVxgxzNp10ieYIsdqoEdCM=";
   };
 
-  cargoHash = "sha256-EuYwPQo2TucAaQw63pESkJGAtyuMhk3JT6mBg6E84Xs=";
+  cargoHash = "sha256-HwE/ql8rJcGIINy+hNnpaTFEJqbmuUDrIvVI8kCpfQ8=";
 
   passthru = rec {
     test_client = rustPlatform.buildRustPackage {
@@ -24,18 +24,28 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-m4FHCrVGAmGIrgnMMleiTRgYGYh+b7EIH1ORE0tiBkY=";
+      cargoHash = "sha256-KybnPzCM9mLF55s5eZ3qr5GRcaaYFpEdNklWEo/72Ts=";
+
+      meta = meta // {
+        mainProgram = "test_client";
+      };
     };
-    tests = {
-      inherit (nixosTests.nextcloud) with-postgresql-and-redis26;
-      inherit test_client;
-    };
+    tests =
+      lib.filterAttrs
+        (key: lib.const (lib.hasPrefix "with-postgresql-and-redis" key))
+        nixosTests.nextcloud
+      // {
+        inherit test_client;
+      };
   };
 
   meta = with lib; {
+    changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
+    mainProgram = "notify_push";
     homepage = "https://github.com/nextcloud/notify_push";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ajs124 ];
+    platforms = platforms.linux;
+    maintainers = teams.helsinki-systems.members;
   };
 }

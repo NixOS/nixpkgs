@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyopenssl
-, tldextract
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyopenssl,
+  tldextract,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "certauth";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,23 +26,24 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "--cov certauth " ""
+      --replace-fail "--cov certauth " ""
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyopenssl
     tldextract
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "certauth"
-  ];
+  pythonImportsCheck = [ "certauth" ];
 
   disabledTests = [
+    # https://github.com/ikreymer/certauth/issues/23
+    "test_ca_cert_in_mem"
+    "test_custom_not_before_not_after"
     # Tests want to download Public Suffix List
     "test_file_wildcard"
     "test_file_wildcard_subdomains"
@@ -51,6 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple CertificateAuthority and host certificate creation, useful for man-in-the-middle HTTPS proxy";
+    mainProgram = "certauth";
     homepage = "https://github.com/ikreymer/certauth";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];

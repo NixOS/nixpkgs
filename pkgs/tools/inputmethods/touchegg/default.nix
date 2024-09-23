@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/JoseExposito/touchegg";
     description = "Linux multi-touch gesture recognizer";
+    mainProgram = "touchegg";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;

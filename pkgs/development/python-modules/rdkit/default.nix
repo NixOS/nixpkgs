@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, comic-neue
-, boost
-, catch2
-, inchi
-, cairo
-, eigen
-, python
-, rapidjson
-, maeparser
-, coordgenlibs
-, numpy
-, pandas
-, pillow
-, memorymappingHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  comic-neue,
+  boost,
+  catch2_3,
+  inchi,
+  cairo,
+  eigen,
+  python,
+  rapidjson,
+  maeparser,
+  coordgenlibs,
+  numpy,
+  pandas,
+  pillow,
+  memorymappingHook,
 }:
 let
   external = {
@@ -42,8 +43,8 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2023.09.1";
-  format = "other";
+  version = "2023.09.5";
+  pyproject = false;
 
   src =
     let
@@ -53,7 +54,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-qaYD/46oCTnso1FbD08zr2JuatKmSSqNBhOYlfeIiAA=";
+      hash = "sha256-ZYNAHNBHQPx8rBJSvEWFEpdSpYyXcoqJ+nBA7tpHwQs=";
     };
 
   unpackPhase = ''
@@ -77,16 +78,13 @@ buildPythonPackage rec {
     ln -s ${comic-neue}/share/fonts/truetype/ComicNeue-Regular.ttf Data/Fonts/
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost
     cairo
-  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
-    memorymappingHook
-  ];
+    catch2_3
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ];
 
   propagatedBuildInputs = [
     numpy
@@ -102,14 +100,13 @@ buildPythonPackage rec {
 
   preConfigure = ''
     # Since we can't expand with bash in cmakeFlags
-    cmakeFlags="$cmakeFlags -DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
-    cmakeFlags="$cmakeFlags -DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
-    cmakeFlags="$cmakeFlags -DFREESASA_SRC_DIR=$PWD/External/FreeSASA/freesasa"
-    cmakeFlags="$cmakeFlags -DAVALONTOOLS_DIR=$PWD/External/AvalonTools/avalon"
+    appendToVar cmakeFlags "-DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
+    appendToVar cmakeFlags "-DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
+    appendToVar cmakeFlags "-DFREESASA_SRC_DIR=$PWD/External/FreeSASA/freesasa"
+    appendToVar cmakeFlags "-DAVALONTOOLS_DIR=$PWD/External/AvalonTools/avalon"
   '';
 
   cmakeFlags = [
-    "-DCATCH_DIR=${catch2}/include/catch2"
     "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
     "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
     "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"
@@ -141,7 +138,7 @@ buildPythonPackage rec {
   checkPhase = ''
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
     (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
   '';
 
@@ -153,7 +150,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = with maintainers; [ rmcgibbo natsukium ];
+    maintainers = with maintainers; [
+      rmcgibbo
+      natsukium
+    ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
     changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";

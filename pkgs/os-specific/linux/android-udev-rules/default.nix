@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "android-udev-rules";
-  version = "20231124";
+  version = "20240829";
 
   src = fetchFromGitHub {
     owner = "M0Rf30";
     repo = "android-udev-rules";
     rev = version;
-    hash = "sha256-pDAAC8RibPtkhVVz5WPj/eUjz0A+8bZt/pjzG8zpaE4=";
+    hash = "sha256-QrWEvNcPKSEJghQc0tqb/L71IqeMUmuJLyA0NtzacyY=";
   };
 
   installPhase = ''

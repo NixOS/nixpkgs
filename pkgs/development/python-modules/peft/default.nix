@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, numpy
-, packaging
-, psutil
-, pyyaml
-, torch
-, transformers
-, accelerate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  numpy,
+  packaging,
+  psutil,
+  pyyaml,
+  torch,
+  transformers,
+  accelerate,
 }:
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.6.2";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hqXHU6PHn2jkWBRRCRuGIGjSCUc6jfUaHgrn3glTwlE=";
+    hash = "sha256-7LYlqWiOPTvQyJgpUZeZ5Wl17RswhYyit0/MaHyN5Ak=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -38,10 +39,8 @@ buildPythonPackage rec {
     accelerate
   ];
 
-  doCheck = false;  # tries to download pretrained models
-  pythonImportsCheck = [
-    "peft"
-  ];
+  doCheck = false; # tries to download pretrained models
+  pythonImportsCheck = [ "peft" ];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/peft";

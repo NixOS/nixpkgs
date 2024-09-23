@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
-  buildInputs = [ zlib fontconfig freetype libpng libjpeg libwebp libtiff libavif ]
-    ++ lib.optional withXorg libXpm;
+  buildInputs = [ zlib freetype libpng libjpeg libwebp libtiff libavif ]
+    ++ lib.optionals withXorg [ fontconfig libXpm ];
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libgd.github.io/";
-    description = "A dynamic image creation library";
+    description = "Dynamic image creation library";
     license = licenses.free; # some custom license
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,38 +1,44 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pyusb,
 }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "py3buddy";
-  version = "unstable-2019-09-29";
+  version = "1.0";
+  pyproject = false; # manually installed
 
   src = fetchFromGitHub {
     owner = "armijnhemel";
-    repo = pname;
-    rev = "2b28908454645117368ca56df67548c93f4e0b03";
-    sha256 = "12ar4kbplavndarkrbibxi5i607f5sfia5myscvalqy78lc33798";
+    repo = "py3buddy";
+    rev = version;
+    hash = "sha256-KJ0xGEXHY6o2074WFZ0u7gATS+wrrjyzanYretckWYk=";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  dependencies = [ pyusb ];
 
   dontConfigure = true;
   dontBuild = true;
-  dontCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D py3buddy.py $out/${python.sitePackages}/py3buddy.py
+
+    runHook postInstall
   '';
 
   postInstall = ''
     install -D 99-ibuddy.rules $out/lib/udev/rules.d/99-ibuddy.rules
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Code to work with the iBuddy MSN figurine";
     homepage = "https://github.com/armijnhemel/py3buddy";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

@@ -10,7 +10,7 @@
 , qtbase
 , qtx11extras
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , xmlto
 , docbook_xsl
@@ -44,8 +44,16 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./0.23.92-CVE-2023-40889.patch
-    ./0.23.92-CVE-2023-40890.patch
+    (fetchpatch {
+      name = "CVE-2023-40889.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0003-CVE-2023-40889-qrdec.c-Fix-array-out-of-bounds-acces.patch";
+      hash = "sha256-z0IADJwUt9PBoox5xJJN//5vrcRbIrWB9H7wtxNVUZU=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-40890.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0004-Add-bounds-check-for-CVE-2023-40890.patch";
+      hash = "sha256-YgiptwXpRpz0qIcXBpARfIzSB8KYmksZR58o5yFPahs=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -54,7 +62,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook_xsl
   ] ++ lib.optionals enableVideo [
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     qtbase
   ];
@@ -134,7 +142,7 @@ stdenv.mkDerivation rec {
       EAN-13/UPC-A, UPC-E, EAN-8, Code 128, Code 39, Interleaved 2 of 5 and QR
       Code.
     '';
-    maintainers = with maintainers; [ delroth raskin ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.lgpl21;
     homepage = "https://github.com/mchehab/zbar";

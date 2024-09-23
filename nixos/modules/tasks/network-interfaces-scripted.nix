@@ -70,7 +70,8 @@ let
         deviceDependency = dev:
           # Use systemd service if we manage device creation, else
           # trust udev when not in a container
-          if (hasAttr dev (filterAttrs (k: v: v.virtual) cfg.interfaces)) ||
+          if (dev == null || dev == "lo") then []
+          else if (hasAttr dev (filterAttrs (k: v: v.virtual) cfg.interfaces)) ||
              (hasAttr dev cfg.bridges) ||
              (hasAttr dev cfg.bonds) ||
              (hasAttr dev cfg.macvlans) ||
@@ -78,7 +79,7 @@ let
              (hasAttr dev cfg.vlans) ||
              (hasAttr dev cfg.vswitches)
           then [ "${dev}-netdev.service" ]
-          else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
+          else optional (!config.boot.isContainer) (subsystemDevice dev);
 
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
@@ -202,10 +203,10 @@ let
                   ''
                     echo "${cidr}" >> $state
                     echo -n "adding address ${cidr}... "
-                    if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
+                    if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
-                    elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
+                    else
+                      echo "'ip addr replace "${cidr}" dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''

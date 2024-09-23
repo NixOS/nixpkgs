@@ -100,7 +100,7 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace hotdoc/extensions/c/c_extension.py \
       --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${llvmPackages.libclang.version}"' \
+      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
       --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${llvmPackages.libclang.lib}"' \
       --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${llvmPackages.libclang.lib}/lib"'
   '';
@@ -118,9 +118,9 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "The tastiest API documentation system";
+    description = "Tastiest API documentation system";
     homepage = "https://hotdoc.github.io/";
     license = [ licenses.lgpl21Plus ];
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

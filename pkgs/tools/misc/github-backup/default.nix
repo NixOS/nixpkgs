@@ -1,19 +1,25 @@
 { lib
-, python3
-, fetchPypi
+, python3Packages
+, fetchFromGitHub
 , git
 , git-lfs
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.43.1";
-  format = "setuptools";
+  version = "0.46.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-S0674oTUsXftXlbP8fbF09FIWnWwq/Mgbv960tg3FNg=";
+  src = fetchFromGitHub {
+    owner = "josegonzalez";
+    repo = "python-github-backup";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kSxkD8vWBvaT7C0sS9rs3CEP2yeWsAJ0kjPlrGezoLU=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [ git git-lfs ])

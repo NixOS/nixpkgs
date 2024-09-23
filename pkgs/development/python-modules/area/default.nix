@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "area";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -13,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Calculate the area inside of any GeoJSON geometry. This is a port of Mapbox’s geojson-area for Python.";
+    description = "Calculate the area inside of any GeoJSON geometry. This is a port of Mapbox’s geojson-area for Python";
     homepage = "https://github.com/scisco/area";
     license = licenses.bsd2;
   };

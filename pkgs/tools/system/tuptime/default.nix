@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuptime";
-  version = "5.2.2";
+  version = "5.2.4";
 
   src = fetchFromGitHub {
     owner = "rfmoz";
     repo = "tuptime";
     rev = version;
-    sha256 = "sha256-YrZP2sovAwwfDBoKoobgkf0+7RmYFUtrV9jfBmDsNL8=";
+    sha256 = "sha256-pYGtgv9hPBG/URD2nOWg6qJYYLtlqLW+t5mCLpzKlEc=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

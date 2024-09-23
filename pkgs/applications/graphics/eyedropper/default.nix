@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Pick and format colors";
+    mainProgram = "eyedropper";
     homepage = "https://github.com/FineFindus/eyedropper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

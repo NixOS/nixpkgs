@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, basemap-data
-, cython
-, geos
-, numpy
-, matplotlib
-, pillow
-, pyproj
-, pyshp
-, python
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  basemap-data,
+  cython,
+  geos,
+  numpy,
+  matplotlib,
+  pillow,
+  pyproj,
+  pyshp,
+  python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.3.8";
+  version = "1.4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QH/pC1WIa0XQaDbAhYwKbCeCyxUprJbNyRfguiLjlHI=";
+    hash = "sha256-0rTGsphwLy2yGvhO7bcmFqdgysIXXkDBmURwRVw3ZHY=";
   };
 
   sourceRoot = "${src.name}/packages/basemap";
@@ -31,7 +31,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     geos
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -68,7 +67,10 @@ buildPythonPackage rec {
       coastlines, lakes, rivers and political boundaries. See
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
-    maintainers = with maintainers; [ ];
-    license = with licenses; [ mit lgpl21 ];
+    maintainers = [ ];
+    license = with licenses; [
+      mit
+      lgpl21
+    ];
   };
 }

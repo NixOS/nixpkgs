@@ -1,11 +1,9 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , glib
 , freetype
-, fontconfig
 , libintl
 , meson
 , ninja
@@ -35,11 +33,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "7.3.0";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IHcHiXSaybqEbfM5g9vaItuDbHDZ9dBQy5qlNHCUqPs=";
+    hash = "sha256-pBsnLO65IMVyY+yFFgRULZ7IXuMDBQbZRmIGfHtquJ4=";
   };
 
   postPatch = ''
@@ -65,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "graphite" withGraphite2)
     (lib.mesonEnable "icu" withIcu)
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonOption "cmakepackagedir" "${placeholder "dev"}/lib/cmake")
   ];
 
   depsBuildBuild = [
@@ -110,12 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An OpenType text shaping engine";
+    description = "OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
-    changelog = "https://github.com/harfbuzz/harfbuzz/raw/${version}/NEWS";
-    maintainers = [ maintainers.eelco ];
+    changelog = "https://github.com/harfbuzz/harfbuzz/raw/${finalAttrs.version}/NEWS";
+    maintainers = [ ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [
       "harfbuzz"
       "harfbuzz-gobject"

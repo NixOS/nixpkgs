@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Docker build wrapper";
+    mainProgram = "dapper";
     homepage = "https://github.com/rancher/dapper";
     license = licenses.asl20;
     platforms = platforms.linux;

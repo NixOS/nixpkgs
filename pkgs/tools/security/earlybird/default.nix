@@ -5,25 +5,22 @@
 
 buildGoModule rec {
   pname = "earlybird";
-  version = "3.16.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "americanexpress";
     repo = "earlybird";
     rev = "v${version}";
-    hash = "sha256-qSW8O13UW5L2eVsqIuqOguhCyZBPqevZ9fJ7qkraa7M=";
+    hash = "sha256-guSm/ha4ICaOcoynvAwFeojE6ikaCykMcdfskD/ehTw=";
   };
 
-  patches = [
-    ./fix-go.mod-dependency.patch
-  ];
-
-  vendorHash = "sha256-ktsQvWc0CTnqOer+9cc0BddrQp0F3Xk7YJP3jxfuw1w=";
+  vendorHash = "sha256-39jXqCXAwg/C+9gEXiS1X58OD61nMNQifnhgVGEF6ck=";
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
+    description = "Sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
+    mainProgram = "earlybird";
     homepage = "https://github.com/americanexpress/earlybird";
     changelog = "https://github.com/americanexpress/earlybird/releases/tag/v${version}";
     license = licenses.asl20;

@@ -1,36 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, duckdb
-, hypothesis
-, ipython-sql
-, poetry-core
-, snapshottest
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  duckdb,
+  hypothesis,
+  pandas,
+  poetry-core,
+  pytest-remotedata,
+  snapshottest,
+  sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.9.2";
-  format = "pyproject";
+  version = "0.13.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T02nGF+YlughRQPinb0I3NC6xsarh4+qRhG8YfhTvhI=";
+    hash = "sha256-zao8kzzQbnjwJqjHyqDkgmXa3E9nlBH2W0wh7Kjk/qw=";
   };
 
-  patches = [ ./remote_data.patch ];
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     duckdb
@@ -41,28 +40,30 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # this test tries to download the httpfs extension
-    "test_preload_extension"
-    "test_motherduck"
-    # test should be skipped based on sqlalchemy version but isn't and fails
-    "test_commit"
-    # rowcount no longer generates an attribute error.
-    "test_rowcount"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  checkInputs = [
     hypothesis
-    ipython-sql
-    # TODO(cpcloud): include pandas here when it supports sqlalchemy 2.0
-    snapshottest
+    pandas
+    pytest-remotedata
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
   ];
 
-  pythonImportsCheck = [
-    "duckdb_engine"
+  pytestFlagsArray = [
+    "-m"
+    "'not remote_data'"
   ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # requires snapshottest
+    "duckdb_engine/tests/test_datatypes.py"
+  ];
+
+  pythonImportsCheck = [ "duckdb_engine" ];
 
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";

@@ -2,24 +2,29 @@
 
 buildGoModule rec {
   pname = "kubecolor";
-  version = "0.0.21";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-d1gtbpeK9vp8bwhsMOPVKmohfyEZtQuvRB36VZCB3sY=";
+    sha256 = "sha256-jOFeTAfV7X8+z+DBOBOFVcspxZ8QssKFWRGK9HnqBO0=";
   };
 
-  vendorHash = "sha256-g5bLi0HQ7LQM+DKn5x8enXn8/9j3LFhgDjQ+YN0M7dM=";
+  vendorHash = "sha256-b99HAM1vsncq9Q5XJiHZHyv7bjQs6GGyNAMONmGpxms=";
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
+  subPackages = [
+    "."
+  ];
+
   meta = with lib; {
     description = "Colorizes kubectl output";
+    mainProgram = "kubecolor";
     homepage = "https://github.com/kubecolor/kubecolor";
     changelog = "https://github.com/kubecolor/kubecolor/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ivankovnatsky SuperSandro2000 ];
+    maintainers = with maintainers; [ ivankovnatsky SuperSandro2000 applejag ];
   };
 }

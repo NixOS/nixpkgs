@@ -2,18 +2,10 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , iconConvTools
 , copyDesktopItems
 , makeDesktopItem
-, libX11
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
 , glew
 , SDL2
 , glfw
@@ -31,7 +23,7 @@
 , gdk-pixbuf
 }:
 let
-  version = "0.24.0";
+  version = "0.28.1";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -44,7 +36,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
-    hash = "sha256-n0OiNxw9QDibX5HBSzq6jdOxyUd0bPkjKd+mtb/S/BY=";
+    hash = "sha256-5g/twJgQ7i6yQBYP7U6bn1UMU09WkJeolgCl+0pGT2Y=";
     fetchSubmodules = true;
   };
 
@@ -63,8 +55,9 @@ buildDotnetModule rec {
     updateScript = ./update.sh;
   };
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_7_0 sdk_6_0 ];
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  # SDK 6.0 required for Robust.LoaderApi
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_8_0 sdk_6_0 ];
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetFlags = [
     "-p:FullRelease=true"
@@ -72,7 +65,7 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook iconConvTools copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 iconConvTools copyDesktopItems ];
 
   runtimeDeps = [
     # Required by the game.
@@ -94,14 +87,6 @@ buildDotnetModule rec {
     gdk-pixbuf
 
     # Avalonia UI dependencies.
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-    fontconfig
     glew
   ];
 
@@ -136,7 +121,7 @@ buildDotnetModule rec {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
     homepage = "https://spacestation14.io";
     license = licenses.mit;
-    maintainers = [ maintainers.zumorica ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
   };

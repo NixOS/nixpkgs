@@ -4,18 +4,17 @@
 , autoreconfHook
 , pkg-config
 , fltk13
-, libsndfile
 , gettext
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flamp";
-  version = "2.2.10";
+  version = "2.2.12";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/fldigi/flamp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-c0Q9QD3O8eQxRqaBhr79iuNVtWGC8kl+YWYS4xMgDN4=";
+    hash = "sha256-Rw75mz3gPQDBl1iECHZAMBxY8iDr/hqSJscJhdboaRw=";
   };
 
   nativeBuildInputs = [
@@ -37,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ stteague ];
     platforms = platforms.unix;
     broken = stdenv.system == "x86_64-darwin";
+    mainProgram = "flamp";
   };
 })

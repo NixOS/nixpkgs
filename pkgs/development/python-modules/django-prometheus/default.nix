@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, prometheus-client
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  prometheus-client,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,22 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-JiLH+4mmNdb9BN81J5YFiMPna/3gaKUK6ARjmCa3fE8=";
   };
 
-  patches = [
-    ./drop-untestable-database-backends.patch
-  ];
+  patches = [ ./drop-untestable-database-backends.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"pytest-runner"' ""
   '';
 
-  propagatedBuildInputs = [
-    prometheus-client
-  ];
+  propagatedBuildInputs = [ prometheus-client ];
 
-  pythonImportsCheck = [
-    "django_prometheus"
-  ];
+  pythonImportsCheck = [ "django_prometheus" ];
 
   nativeCheckInputs = [
     pytest-django

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, writeText, plugins ? [ ], nixosTests }:
 
 let
-  version = "4.3";
+  version = "4.4.1";
 
   versionParts = lib.take 2 (lib.splitVersion version);
   # 4.2 -> 402, 3.11 -> 311
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.moodle.org/download.php/direct/stable${stableVersion}/${pname}-${version}.tgz";
-    hash = "sha256-zLBFUyadpsqGeEhBCPrh3KKWn6f3zCy64YxTBMLIGsk=";
+    hash = "sha256-+pzDrSMm+V4pEze13mJ/eyhaxcvnmG/eno0csCRTisU=";
   };
 
   phpConfig = writeText "config.php" ''

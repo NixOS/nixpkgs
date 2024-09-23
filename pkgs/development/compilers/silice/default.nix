@@ -1,19 +1,21 @@
 { stdenv, fetchFromGitHub, lib
 , cmake, pkg-config, openjdk
 , libuuid, python3
-, silice, yosys, nextpnr, verilator
+, glfw
+, yosys, nextpnr, verilator
 , dfu-util, icestorm, trellis
+, unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "silice";
-  version = "unstable-2022-08-05";
+  version = "0-unstable-2024-07-22";
 
   src = fetchFromGitHub {
     owner = "sylefeb";
-    repo = pname;
-    rev = "e26662ac757151e5dd8c60c45291b44906b1299f";
-    sha256 = "sha256-Q1JdgDlEErutZh0OfxYy5C4aVijFKlf6Hm5Iv+1jsj4=";
+    repo = "silice";
+    rev = "8f56349f8b143d5a4b9686b1782f1ae66e011be4";
+    hash = "sha256-1y2q41XyQLxjUkWKh8Ky/t3uaQXkm0IgMk9r06vKcRg=";
     fetchSubmodules = true;
   };
 
@@ -21,12 +23,16 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     openjdk
+    glfw
   ];
   buildInputs = [
     libuuid
   ];
   propagatedBuildInputs = [
-    (python3.withPackages (p: with p; [ edalize ]))
+    (python3.withPackages (p: [
+      p.edalize
+      p.termcolor
+    ]))
   ];
 
   postPatch = ''
@@ -36,13 +42,18 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install
     mkdir -p $out
     cp -ar ../{bin,frameworks,lib} $out/
+
+    runHook postInstall
   '';
 
   passthru.tests =
     let
+      silice = finalAttrs.finalPackage;
       testProject = project: stdenv.mkDerivation {
         name = "${silice.name}-test-${project}";
         nativeBuildInputs = [
@@ -54,18 +65,24 @@ stdenv.mkDerivation rec {
           icestorm
           trellis
         ];
-        src = "${src}/projects";
+        src = "${silice.src}/projects";
         sourceRoot = "projects/${project}";
         buildPhase = ''
-          targets=$(cut -d " " -f 2 configs | tr -d '\r')
-          for target in $targets ; do
+          targets=()
+          for target in $(cat configs | tr -d '\r') ; do
+            [[ $target != Makefile* ]] || continue
             make $target ARGS="--no_program"
+            targets+=($target)
           done
+          if test "''${#targets[@]}" -eq 0; then
+            >&2 echo "ERROR: no target found!"
+            false
+          fi
         '';
         installPhase = ''
           mkdir $out
-          for target in $targets ; do
-            cp -r BUILD_$target $out/
+          for target in "''${targets[@]}" ; do
+            [[ $target != Makefile* ]] || continue
           done
         '';
       };
@@ -78,10 +95,17 @@ stdenv.mkDerivation rec {
       pipeline_sort = testProject "pipeline_sort";
     };
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Open source language that simplifies prototyping and writing algorithms on FPGA architectures";
     homepage = "https://github.com/sylefeb/Silice";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.bsd2;
+    mainProgram = "silice";
+    maintainers = with lib.maintainers; [
+      astro
+      pbsds
+    ];
+    platforms = lib.platforms.all;
   };
-}
+})

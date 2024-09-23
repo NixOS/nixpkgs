@@ -13,6 +13,9 @@ let
     ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
     ln -s /run/wrappers/bin/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
+    ln -s /run/wrappers/bin/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
+    ln -s /run/wrappers/bin/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
+    ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
   '';
 
   plugins = [
@@ -47,28 +50,29 @@ let
 
   defaultUser = "netdata";
 
+  isThereAnyWireGuardTunnels = config.networking.wireguard.enable || lib.any (c: lib.hasAttrByPath [ "netdevConfig" "Kind" ] c && c.netdevConfig.Kind == "wireguard") (builtins.attrValues config.systemd.network.netdevs);
 in {
   options = {
     services.netdata = {
-      enable = mkEnableOption (lib.mdDoc "netdata");
+      enable = mkEnableOption "netdata";
 
       package = mkPackageOption pkgs "netdata" { };
 
       user = mkOption {
         type = types.str;
         default = "netdata";
-        description = lib.mdDoc "User account under which netdata runs.";
+        description = "User account under which netdata runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "netdata";
-        description = lib.mdDoc "Group under which netdata runs.";
+        description = "Group under which netdata runs.";
       };
 
       configText = mkOption {
         type = types.nullOr types.lines;
-        description = lib.mdDoc "Verbatim netdata.conf, cannot be combined with config.";
+        description = "Verbatim netdata.conf, cannot be combined with config.";
         default = null;
         example = ''
           [global]
@@ -82,8 +86,16 @@ in {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable python-based plugins
+          '';
+        };
+        recommendedPythonPackages = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to enable a set of recommended Python plugins
+            by installing extra Python packages.
           '';
         };
         extraPackages = mkOption {
@@ -97,7 +109,7 @@ in {
               ps.dnspython
             ]
           '';
-          description = lib.mdDoc ''
+          description = ''
             Extra python packages available at runtime
             to enable additional python plugins.
           '';
@@ -110,7 +122,7 @@ in {
         example = literalExpression ''
           [ "/path/to/plugins.d" ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra paths to add to the netdata global "plugins directory"
           option.  Useful for when you want to include your own
           collection scripts.
@@ -125,7 +137,7 @@ in {
       config = mkOption {
         type = types.attrsOf types.attrs;
         default = {};
-        description = lib.mdDoc "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
         example = literalExpression ''
           global = {
             "debug log" = "syslog";
@@ -138,7 +150,7 @@ in {
       configDir = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Complete netdata config directory except netdata.conf.
           The default configuration is merged with changes
           defined in this option.
@@ -158,7 +170,7 @@ in {
       claimTokenFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           If set, automatically registers the agent using the given claim token
           file.
         '';
@@ -167,7 +179,7 @@ in {
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable reporting of anonymous usage statistics to Netdata Inc. via either
           Google Analytics (in versions prior to 1.29.4), or Netdata Inc.'s
           self-hosted PostHog (in versions 1.29.4 and later).
@@ -178,7 +190,7 @@ in {
       deadlineBeforeStopSec = mkOption {
         type = types.int;
         default = 120;
-        description = lib.mdDoc ''
+        description = ''
           In order to detect when netdata is misbehaving, we run a concurrent task pinging netdata (wait-for-netdata-up)
           in the systemd unit.
 
@@ -198,16 +210,45 @@ in {
         }
       ];
 
+    # Includes a set of recommended Python plugins in exchange of imperfect disk consumption.
+    services.netdata.python.extraPackages = lib.mkIf cfg.python.recommendedPythonPackages (ps: [
+      ps.requests
+      ps.pandas
+      ps.numpy
+      ps.psycopg2
+      ps.python-ldap
+      ps.netdata-pandas
+      ps.changefinder
+    ]);
+
+    services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 
     systemd.services.netdata = {
       description = "Real time performance monitoring";
-      after = [ "network.target" ];
+      after = [ "network.target" "suid-sgid-wrappers.service" ];
+      # No wrapper means no "useful" netdata.
+      requires = [ "suid-sgid-wrappers.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk iproute2 which procps bash ])
+      path = (with pkgs; [
+          curl
+          gawk
+          iproute2
+          which
+          procps
+          bash
+          nvme-cli # for go.d
+          iw # for charts.d
+          apcupsd # for charts.d
+          # TODO: firehol # for FireQoS -- this requires more NixOS module support.
+          util-linux # provides logger command; required for syslog health alarms
+      ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
-        ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
+        ++ lib.optional config.virtualisation.libvirtd.enable config.virtualisation.libvirtd.package
+        ++ lib.optional config.virtualisation.docker.enable config.virtualisation.docker.package
+        ++ lib.optionals config.virtualisation.podman.enable [ pkgs.jq config.virtualisation.podman.package ]
+        ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
         NETDATA_PIPENAME = "/run/netdata/ipc";
@@ -247,6 +288,8 @@ in {
         # Configuration directory and mode
         ConfigurationDirectory = "netdata";
         ConfigurationDirectoryMode = "0755";
+        # AmbientCapabilities
+        AmbientCapabilities = lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
         # Capabilities
         CapabilityBoundingSet = [
           "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
@@ -260,7 +303,7 @@ in {
           "CAP_SYS_CHROOT"        # is required for cgroups plugin
           "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
           "CAP_SYSLOG"            # is required for systemd-journal plugin
-        ];
+        ] ++ lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
         # Sandboxing
         ProtectSystem = "full";
         ProtectHome = "read-only";
@@ -294,6 +337,14 @@ in {
       "apps.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/apps.plugin.org";
         capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+
+      "debugfs.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/debugfs.plugin.org";
+        capabilities = "cap_dac_read_search+ep";
         owner = cfg.user;
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
@@ -339,6 +390,14 @@ in {
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
       };
+    } // optionalAttrs (cfg.package.withNetworkViewer) {
+      "network-viewer.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/network-viewer.plugin.org";
+        capabilities = "cap_sys_admin,cap_dac_read_search,cap_sys_ptrace+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
     };
 
     security.pam.loginLimits = [
@@ -350,6 +409,8 @@ in {
       ${defaultUser} = {
         group = defaultUser;
         isSystemUser = true;
+        extraGroups = lib.optional config.virtualisation.docker.enable "docker"
+          ++ lib.optional config.virtualisation.podman.enable "podman";
       };
     };
 

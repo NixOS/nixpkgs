@@ -17,7 +17,7 @@
 , libev
 , libgcrypt
 , libinjection
-, libmicrohttpd_0_9_69
+, libmicrohttpd
 , libuuid
 , lz4
 , nlohmann_json
@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "2.5.5";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = "proxysql";
     rev = finalAttrs.version;
-    hash = "sha256-+3cOEM5b5HBQhuI+92meupvQnrUj8jgbedzPJqMoXc8=";
+    hash = "sha256-vFPTBSp5DPNRuhtSD34ah2074almS+jiYxBE1L9Pz6g=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
           { f = "libdaemon"; p = libdaemon; }
           { f = "libev"; p = libev; }
           { f = "libinjection"; p = libinjection; }
-          { f = "libmicrohttpd"; p = libmicrohttpd_0_9_69; }
+          { f = "libmicrohttpd"; p = libmicrohttpd; }
           { f = "libssl"; p = openssl; }
           { f = "lz4"; p = lz4; }
           { f = "pcre"; p = pcre; }
@@ -163,12 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
+    mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ ajs124 ];
-    platforms = lib.platforms.unix;
+    license = with licenses; [ gpl3Only ];
+    maintainers = teams.helsinki-systems.members;
+    platforms = platforms.unix;
   };
 })

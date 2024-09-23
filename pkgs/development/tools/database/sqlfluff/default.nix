@@ -1,41 +1,47 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "2.3.5";
-  format = "setuptools";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "sqlfluff";
+    repo = "sqlfluff";
     rev = "refs/tags/${version}";
-    hash = "sha256-l9py+qMI8t5L+FcUmJYXwemjUy/pcugbvhdW3oUOZMo=";
+    hash = "sha256-7bCfIWJV7gB+WbvMxmhJW1RM1pd3gA/bCuH+o4FGg/A=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    cached-property
-    chardet
-    click
-    colorama
-    configparser
-    diff-cover
-    jinja2
-    oyaml
-    pathspec
-    pytest
-    regex
-    tblib
-    toml
-    tqdm
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    backports.cached-property
-    importlib_metadata
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies =
+    with python3.pkgs;
+    [
+      appdirs
+      cached-property
+      chardet
+      click
+      colorama
+      configparser
+      diff-cover
+      jinja2
+      oyaml
+      pathspec
+      pytest
+      regex
+      tblib
+      toml
+      tqdm
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      backports.cached-property
+      importlib_metadata
+    ];
 
   nativeCheckInputs = with python3.pkgs; [
     hypothesis
@@ -57,9 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     "test__rules__std_file_dbt"
   ];
 
-  pythonImportsCheck = [
-    "sqlfluff"
-  ];
+  pythonImportsCheck = [ "sqlfluff" ];
 
   meta = with lib; {
     description = "SQL linter and auto-formatter";
@@ -67,5 +71,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/sqlfluff/sqlfluff/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sqlfluff";
   };
 }

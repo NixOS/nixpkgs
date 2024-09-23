@@ -1,8 +1,13 @@
 { lib, stdenv, fetchurl, unzip, graylog-5_1 }:
 
-with lib;
-
 let
+  inherit (lib)
+    licenses
+    maintainers
+    platforms
+    sourceTypes
+    ;
+
   glPlugin = a@{
     pluginName,
     version,
@@ -33,7 +38,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/cvtienhoven/graylog-plugin-aggregates";
-      description = "A plugin that enables users to execute term searches and get notified when the given criteria are met";
+      description = "Plugin that enables users to execute term searches and get notified when the given criteria are met";
     };
   };
   auth_sso = glPlugin rec {
@@ -78,7 +83,7 @@ in {
     meta = {
       homepage = "https://docs.graylog.org/en/3.3/pages/integrations.html#enterprise";
       description = "Integrations are tools that help Graylog work with external systems (unfree enterprise integrations)";
-      license = lib.licenses.unfree;
+      license = licenses.unfree;
     };
   };
   filter-messagesize = glPlugin rec {
@@ -109,7 +114,7 @@ in {
     '';
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-integrations";
-      description = "A collection of open source Graylog integrations that will be released together";
+      description = "Collection of open source Graylog integrations that will be released together";
     };
   };
   internal-logs = glPlugin rec {
@@ -135,7 +140,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-ipanonymizer";
-      description = "A graylog-server plugin that replaces the last octet of IP addresses in messages with xxx";
+      description = "Graylog-server plugin that replaces the last octet of IP addresses in messages with xxx";
     };
   };
   jabber = glPlugin rec {
@@ -161,7 +166,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-metrics";
-      description = "An output plugin for integrating Graphite, Ganglia and StatsD with Graylog";
+      description = "Output plugin for integrating Graphite, Ganglia and StatsD with Graylog";
     };
   };
   mongodb-profiler = glPlugin rec {
@@ -187,7 +192,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-pagerduty";
-      description = "An alarm callback plugin for integrating PagerDuty into Graylog";
+      description = "Alarm callback plugin for integrating PagerDuty into Graylog";
     };
   };
   redis = glPlugin rec {
@@ -226,8 +231,8 @@ in {
     };
     meta = {
       homepage = "https://bitbucket.org/proximus/smseagle-graylog/";
-      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog.";
-      license = lib.licenses.gpl3Only;
+      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog";
+      license = licenses.gpl3Only;
     };
   };
   snmp = glPlugin rec {
@@ -253,7 +258,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-spaceweather";
-      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
+      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate";
     };
   };
   splunk = glPlugin rec {
@@ -266,8 +271,8 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
-      description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP.";
-      license = lib.licenses.gpl3Only;
+      description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP";
+      license = licenses.gpl3Only;
     };
   };
   twiliosms = glPlugin rec {
@@ -280,7 +285,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-twiliosms";
-      description = "An alarm callback plugin for integrating the Twilio SMS API into Graylog";
+      description = "Alarm callback plugin for integrating the Twilio SMS API into Graylog";
     };
   };
   twitter = glPlugin rec {

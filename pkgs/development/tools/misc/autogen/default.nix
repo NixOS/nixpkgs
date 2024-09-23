@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-devel/autogen/files/autogen-5.18.16-guile-3.patch?id=43bcc61c56a5a7de0eaf806efec7d8c0e4c01ae7";
       sha256 = "18d7y1f6164dm1wlh7rzbacfygiwrmbc35a7qqsbdawpkhydm5lr";
     })
+    (fetchpatch {
+      name = "lfs64.patch";
+      url = "https://cygwin.com/cgit/cygwin-packages/autogen/plain/5.16.2-cygwin17.patch?id=6f39882873b3d1290ba3739e0557a84bfe05ba60";
+      stripLen = 1;
+      hash = "sha256-6dk2imqForUHKhI82CTronWaS3KUWW/EKfA/JZZcRe0=";
+    })
   ];
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
@@ -79,6 +85,7 @@ stdenv.mkDerivation rec {
     # If you are curious about the number 78, it has been cargo-culted from
     # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
     "--enable-timeout=78"
+    "CFLAGS=-D_FILE_OFFSET_BITS=64"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # the configure check for regcomp wants to run a host program
     "libopts_cv_with_libregex=yes"

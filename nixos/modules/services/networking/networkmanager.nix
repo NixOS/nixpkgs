@@ -10,49 +10,31 @@ let
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  mkValue = v:
-    if v == true then "yes"
-    else if v == false then "no"
-    else if lib.isInt v then toString v
-    else v;
-
-  mkSection = name: attrs: ''
-    [${name}]
-    ${
-      lib.concatStringsSep "\n"
-        (lib.mapAttrsToList
-          (k: v: "${k}=${mkValue v}")
-          (lib.filterAttrs
-            (k: v: v != null)
-            attrs))
-    }
-  '';
-
-  configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
-    (mkSection "main" {
+  configAttrs = lib.recursiveUpdate {
+    main = {
       plugins = "keyfile";
       inherit (cfg) dhcp dns;
       # If resolvconf is disabled that means that resolv.conf is managed by some other module.
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
-    })
-    (mkSection "keyfile" {
+    };
+    keyfile = {
       unmanaged-devices =
-        if cfg.unmanaged == [ ] then null
-        else lib.concatStringsSep ";" cfg.unmanaged;
-    })
-    (mkSection "logging" {
+      if cfg.unmanaged == [ ] then null
+      else lib.concatStringsSep ";" cfg.unmanaged;
+    };
+    logging = {
       audit = config.security.audit.enable;
       level = cfg.logLevel;
-    })
-    (mkSection "connection" cfg.connectionConfig)
-    (mkSection "device" {
-      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
-      "wifi.backend" = cfg.wifi.backend;
-    })
-    cfg.extraConfig
-  ]);
+    };
+    connection = cfg.connectionConfig;
+    device = {
+        "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
+        "wifi.backend" = cfg.wifi.backend;
+    };
+  } cfg.settings;
+  configFile = ini.generate "NetworkManager.conf" configAttrs;
 
   /*
     [network-manager]
@@ -101,11 +83,27 @@ let
     pre-down = "pre-down.d/";
   };
 
-  macAddressOpt = mkOption {
+  macAddressOptWifi = mkOption {
+    type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" "stable-ssid" ]);
+    default = "preserve";
+    example = "00:11:22:33:44:55";
+    description = ''
+      Set the MAC address of the interface.
+
+      - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
+      - `"permanent"`: Use the permanent MAC address of the device
+      - `"preserve"`: Don’t change the MAC address of the device upon activation
+      - `"random"`: Generate a randomized value upon each connect
+      - `"stable"`: Generate a stable, hashed MAC address
+      - `"stable-ssid"`: Generate a stable MAC addressed based on Wi-Fi network
+    '';
+  };
+
+  macAddressOptEth = mkOption {
     type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
-    description = lib.mdDoc ''
+    description = ''
       Set the MAC address of the interface.
 
       - `"XX:XX:XX:XX:XX:XX"`: MAC address of the interface
@@ -141,7 +139,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use NetworkManager to obtain an IP address and other
           configuration for all network interfaces that are not manually
           configured. If enabled, a group `networkmanager`
@@ -157,7 +155,7 @@ in
           str
         ]));
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
           [
@@ -169,11 +167,11 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = lib.mdDoc ''
-          Configuration appended to the generated NetworkManager.conf.
+      settings = mkOption {
+        type = ini.type;
+        default = {};
+        description = ''
+          Configuration added to the generated NetworkManager.conf, note that you can overwrite settings with this.
           Refer to
           [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
@@ -187,7 +185,7 @@ in
       unmanaged = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
           refer to
@@ -218,7 +216,7 @@ in
           in
           types.listOf networkManagerPluginPackage;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of NetworkManager plug-ins to enable.
           Some plug-ins are enabled by the NetworkManager module by default.
         '';
@@ -227,7 +225,7 @@ in
       dhcp = mkOption {
         type = types.enum [ "dhcpcd" "internal" ];
         default = "internal";
-        description = lib.mdDoc ''
+        description = ''
           Which program (or internal library) should be used for DHCP.
         '';
       };
@@ -235,7 +233,7 @@ in
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
-        description = lib.mdDoc ''
+        description = ''
           Set the default logging verbosity level.
         '';
       };
@@ -243,7 +241,7 @@ in
       appendNameservers = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           A list of name servers that should be appended
           to the ones configured in NetworkManager or received by DHCP.
         '';
@@ -252,21 +250,21 @@ in
       insertNameservers = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
         '';
       };
 
-      ethernet.macAddress = macAddressOpt;
+      ethernet.macAddress = macAddressOptEth;
 
       wifi = {
-        macAddress = macAddressOpt;
+        macAddress = macAddressOptWifi;
 
         backend = mkOption {
           type = types.enum [ "wpa_supplicant" "iwd" ];
           default = "wpa_supplicant";
-          description = lib.mdDoc ''
+          description = ''
             Specify the Wi-Fi backend used for the device.
             Currently supported are {option}`wpa_supplicant` or {option}`iwd` (experimental).
           '';
@@ -275,7 +273,7 @@ in
         powersave = mkOption {
           type = types.nullOr types.bool;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable Wi-Fi power saving.
           '';
         };
@@ -283,7 +281,7 @@ in
         scanRandMacAddress = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable MAC address randomization of a Wi-Fi device
             during scanning.
           '';
@@ -291,9 +289,9 @@ in
       };
 
       dns = mkOption {
-        type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
+        type = types.enum [ "default" "dnsmasq" "systemd-resolved" "none" ];
         default = "default";
-        description = lib.mdDoc ''
+        description = ''
           Set the DNS (`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
@@ -310,7 +308,7 @@ in
           options = {
             source = mkOption {
               type = types.path;
-              description = lib.mdDoc ''
+              description = ''
                 Path to the hook script.
               '';
             };
@@ -318,7 +316,7 @@ in
             type = mkOption {
               type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
-              description = lib.mdDoc ''
+              description = ''
                 Dispatcher hook type. Look up the hooks described at
                 [https://developer.gnome.org/NetworkManager/stable/NetworkManager.html](https://developer.gnome.org/NetworkManager/stable/NetworkManager.html)
                 and choose the type depending on the output folder.
@@ -342,7 +340,7 @@ in
             type = "basic";
           } ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           A list of scripts which will be executed in response to network events.
         '';
       };
@@ -350,7 +348,7 @@ in
       enableStrongSwan = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the StrongSwan plugin.
 
           If you enable this option the
@@ -365,17 +363,17 @@ in
           options = {
             id = mkOption {
               type = types.str;
-              description = lib.mdDoc "vid:pid of either the PCI or USB vendor and product ID";
+              description = "vid:pid of either the PCI or USB vendor and product ID";
             };
             path = mkOption {
               type = types.path;
-              description = lib.mdDoc "Path to the unlock script";
+              description = "Path to the unlock script";
             };
           };
         });
         default = [ ];
-        example = literalExpression ''[{ name = "03f0:4e1d"; script = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
-        description = lib.mdDoc ''
+        example = literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
+        description = ''
           List of FCC unlock scripts to enable on the system, behaving as described in
           https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
         '';
@@ -429,20 +427,21 @@ in
               };
             };
           };
-          description = lib.mdDoc ''
+          description = ''
             Declaratively define NetworkManager profiles. You can find information about the generated file format [here](https://networkmanager.dev/docs/api/latest/nm-settings-keyfile.html) and [here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/assembly_networkmanager-connection-profiles-in-keyfile-format_configuring-and-managing-networking).
             You current profiles which are most likely stored in `/etc/NetworkManager/system-connections` and there is [a tool](https://github.com/janik-haag/nm2nix) to convert them to the needed nix code.
             If you add a new ad-hoc connection via a GUI or nmtui or anything similar it should just work together with the declarative ones.
             And if you edit a declarative profile NetworkManager will move it to the persistent storage and treat it like a ad-hoc one,
             but there will be two profiles as soon as the systemd unit from this option runs again which can be confusing since NetworkManager tools will start displaying two profiles with the same name and probably a bit different settings depending on what you edited.
             A profile won't be deleted even if it's removed from the config until the system reboots because that's when NetworkManager clears it's temp directory.
+            If `networking.resolvconf.enable` is true, attributes affecting the name resolution (such as `ignore-auto-dns`) may not end up changing `/etc/resolv.conf` as expected when other name services (for example `networking.dhcpcd`) are enabled. Run `resolvconf -l` in the terminal to see what each service produces.
           '';
         };
         environmentFiles = mkOption {
           default = [];
           type = types.listOf types.path;
           example = [ "/run/secrets/network-manager.env" ];
-          description = lib.mdDoc ''
+          description = ''
             Files to load as environment file. Environment variables from this file
             will be substituted into the static configuration file using [envsubst](https://github.com/a8m/envsubst).
           '';
@@ -454,8 +453,28 @@ in
   imports = [
     (mkRenamedOptionModule
       [ "networking" "networkmanager" "packages" ]
-      [ "networking" "networkmanager" "plugins" ])
-    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+      [ "networking" "networkmanager" "plugins" ]
+    )
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "useDnsmasq" ]
+      [ "networking" "networkmanager" "dns" ]
+    )
+    (mkRemovedOptionModule [ "networking" "networkmanager" "extraConfig" ] ''
+      This option was removed in favour of `networking.networkmanager.settings`,
+      which accepts structured nix-code equivalent to the ini
+      and allows for overriding settings.
+      Example patch:
+      ```patch
+         networking.networkmanager = {
+      -    extraConfig = '''
+      -      [main]
+      -      no-auto-default=*
+      -    '''
+      +    settings.main.no-auto-default = "*";
+         };
+      ```
+    ''
+    )
     (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
       This option was removed, because using bundled FCC unlock scripts is risky,
       might conflict with vendor-provided unlock scripts, and should
@@ -565,7 +584,10 @@ in
       wantedBy = [ "network-online.target" ];
     };
 
-    systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+    systemd.services.ModemManager = {
+      aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+      path = lib.optionals (cfg.fccUnlockScripts != []) [ pkgs.libqmi pkgs.libmbim ];
+    };
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
@@ -580,6 +602,7 @@ in
       description = "Ensure that NetworkManager declarative profiles are created";
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
+      after = [ "NetworkManager.service" ];
       script = let
         path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
       in ''
@@ -589,9 +612,7 @@ in
           ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
         '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
       + ''
-        if systemctl is-active --quiet NetworkManager; then
-          ${pkgs.networkmanager}/bin/nmcli connection reload
-        fi
+        ${pkgs.networkmanager}/bin/nmcli connection reload
       '';
       serviceConfig = {
         EnvironmentFile = cfg.ensureProfiles.environmentFiles;

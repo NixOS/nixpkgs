@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "frp";
-  meta.maintainers = with lib.maintainers; [ zaldnoay janik ];
+  meta.maintainers = with lib.maintainers; [ zaldnoay ];
   nodes = {
     frps = {
       networking = {
@@ -18,10 +18,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         enable = true;
         role = "server";
         settings = {
-          common = {
-            bind_port = 7000;
-            vhost_http_port = 80;
-          };
+          bindPort = 7000;
+          vhostHTTPPort = 80;
         };
       };
     };
@@ -59,15 +57,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         enable = true;
         role = "client";
         settings = {
-          common = {
-            server_addr = "10.0.0.1";
-            server_port = 7000;
-          };
-          web = {
-            type = "http";
-            local_port = 80;
-            custom_domains = "10.0.0.1";
-          };
+          serverAddr = "10.0.0.1";
+          serverPort = 7000;
+          proxies = [
+            {
+              name = "web";
+              type = "http";
+              localPort = 80;
+              customDomains = [ "10.0.0.1" ];
+            }
+          ];
         };
       };
     };

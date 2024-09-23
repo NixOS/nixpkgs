@@ -16,24 +16,14 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    python310 = {
+    python312 = {
       sourceVersion = {
         major = "3";
-        minor = "10";
-        patch = "13";
+        minor = "12";
+        patch = "5";
         suffix = "";
       };
-      hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
-    };
-
-    python311 = {
-      sourceVersion = {
-        major = "3";
-        minor = "11";
-        patch = "6";
-        suffix = "";
-      };
-      hash = "sha256-D6t4+n8TP084IQxiYNkNfA1ccZhEZBnOBX7HrC5vXzg=";
+      hash = "sha256-+oouEsXmILCfU+ZbzYdVDS5aHi4Ev4upkdzFUROHY5c=";
     };
   };
 
@@ -45,22 +35,9 @@ in {
       major = "2";
       minor = "7";
       patch = "18";
-      suffix = ".7"; # ActiveState's Python 2 extended support
+      suffix = ".8"; # ActiveState's Python 2 extended support
     };
-    hash = "sha256-zcjAoSq6491ePiDySBCKrLIyYoO/5fdH6aBTNg/NH8s=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
-  python38 = callPackage ./cpython {
-    self = __splicedPackages.python38;
-    sourceVersion = {
-      major = "3";
-      minor = "8";
-      patch = "18";
-      suffix = "";
-    };
-    hash = "sha256-P/txzTSaMmunsvrcfn34a6V33ZxJF+UqhAGtvadAXj8=";
+    hash = "sha256-HUOzu3uJbtd+3GbmGD35KOk/CDlwL4S7hi9jJGRFiqI=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -70,38 +47,45 @@ in {
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "18";
+      patch = "20";
       suffix = "";
     };
-    hash = "sha256-AVl9sBMsHPezMe/2iuCbWiNaPDyqnJRMKcrH0cTEwAo=";
+    hash = "sha256-aygSee/YUpTS1pk+FzmDpXRkwBM5Vvu7VTbslka+rww=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python310 = callPackage ./cpython ({
+  python310 = callPackage ./cpython {
     self = __splicedPackages.python310;
-    inherit (darwin) configd;
-    inherit passthruFun;
-  } // sources.python310);
-
-  python311 = callPackage ./cpython ({
-    self = __splicedPackages.python311;
-    inherit (darwin) configd;
-    inherit passthruFun;
-  } // sources.python311);
-
-  python312 = callPackage ./cpython {
-    self = __splicedPackages.python312;
     sourceVersion = {
       major = "3";
-      minor = "12";
-      patch = "0";
+      minor = "10";
+      patch = "15";
       suffix = "";
     };
-    hash = "sha256-eVw09E30Wg6blxDIxxwVxnGHFSTNQSyhTe8hLozLFV0=";
+    hash = "sha256-qrCVCBdzUXJgGHmHLZN8HkkopXxAmuAjaew9kdzOvnk=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
+
+  python311 = callPackage ./cpython {
+    self = __splicedPackages.python311;
+    sourceVersion = {
+      major = "3";
+      minor = "11";
+      patch = "9";
+      suffix = "";
+    };
+    hash = "sha256-mx6JZSP8UQaREmyGRAbZNgo9Hphqy9pZzaV7Wr2kW4c=";
+    inherit (darwin) configd;
+    inherit passthruFun;
+  };
+
+  python312 = callPackage ./cpython ({
+    self = __splicedPackages.python312;
+    inherit (darwin) configd;
+    inherit passthruFun;
+  } // sources.python312);
 
   python313 = callPackage ./cpython {
     self = __splicedPackages.python313;
@@ -109,9 +93,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "a2";
+      suffix = "rc2";
     };
-    hash = "sha256-ttRrRBkMTAJCHraaBC0WsMVUgb3agYxsQW3CRBE6nC0=";
+    hash = "sha256-1g6LfBDeT3HS3/r3x76O+lTcHlMv6THbuE5fYlcJ4jc=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -125,8 +109,8 @@ in {
     readline = null;
     ncurses = null;
     gdbm = null;
-    sqlite = null;
     configd = null;
+    sqlite = null;
     tzdata = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;
@@ -139,7 +123,7 @@ in {
     enableOptimizations = false;
     enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python311)).overrideAttrs(old: {
+  } // sources.python312)).overrideAttrs(old: {
     # TODO(@Artturin): Add this to the main cpython expr
     strictDeps = true;
     pname = "python3-minimal";
@@ -206,7 +190,7 @@ in {
 
   pypy39_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = __splicedPackages.pythonInterpreters.pypy38_prebuilt;
+    self = __splicedPackages.pythonInterpreters.pypy39_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";

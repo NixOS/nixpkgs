@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "bibletime";
-    repo = finalAttrs.pname;
+    repo = "bibletime";
     rev = "v${finalAttrs.version}";
     hash = "sha256-4O8F5/EyoJFJBEWOAs9lzN3TKuu/CEdKfPaOF8gNqps=";
   };
@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://www.bibletime.info/";
-    description = "A powerful cross platform Bible study tool";
+    description = "Powerful cross platform Bible study tool";
+    mainProgram = "bibletime";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

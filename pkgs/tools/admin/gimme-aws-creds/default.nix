@@ -10,6 +10,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
         version = "0.9.3";
@@ -20,41 +21,23 @@ let
           hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
         };
       });
-
-      okta = super.okta.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
-        format = "setuptools";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-U+eSxo02hP9BQLTLHAKvOCEJA2j4EQ/eVMC9tjhEkzI=";
-        };
-        propagatedBuildInputs = [
-          self.six
-          self.python-dateutil
-          self.requests
-        ];
-        pythonImportsCheck = [ "okta" ];
-        doCheck = false; # no tests were included with this version
-      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
-  version = "2.7.2"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.8.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
     rev = "v${version}";
-    hash = "sha256-ydzGaUQ43vvQqU9xvhPJqHG/2PUtBbASIVpZCDnsR60=";
+    hash = "sha256-fsFYcfbLeYV6tpOGgNrFmYjcUAmdsx5zwUbvcctwFVs=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [
@@ -69,6 +52,8 @@ python.pkgs.buildPythonApplication rec {
     requests
     okta
     pyjwt
+    html5lib
+    furl
   ];
 
   preCheck = ''
@@ -109,7 +94,8 @@ python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/Nike-Inc/gimme-aws-creds";
     changelog = "https://github.com/Nike-Inc/gimme-aws-creds/releases";
-    description = "A CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
+    description = "CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
+    mainProgram = "gimme-aws-creds";
     license = licenses.asl20;
     maintainers = with maintainers; [ jbgosselin ];
   };

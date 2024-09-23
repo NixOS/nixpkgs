@@ -11,15 +11,16 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-6cpHDwnxdc/9YPj77JVuT5ZDFjKkF6nBX4RgZr/9fFY=";
+  vendorHash = "sha256-L8mDs9teQJW6P3dhKSLfzbpA7kzhJk61oR2q0ME+u0M=";
 
   # tests try to access the internet to scrape websites
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool for converting websites to rss/atom feeds";
+    description = "Tool for converting websites to rss/atom feeds";
     homepage = "https://git.sr.ht/~ghost08/ratt";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];
+    mainProgram = "ratt";
   };
 }

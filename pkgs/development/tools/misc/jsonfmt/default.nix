@@ -36,5 +36,6 @@ buildGoModule rec {
     changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "jsonfmt";
   };
 }

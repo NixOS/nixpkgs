@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , unzip
 , cmake
-, freeglut
+, libglut
 , libGLU
 , libGL
 , zlib
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "partio";
-  version = "1.17.1";
+  version = "1.17.3";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "partio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3t3y3r4R/ePw2QE747rqumbrYRm1wNkSKN3n8MPPIVg=";
+    hash = "sha256-wV9byR85qwOkoTyLjG0gOLC3Gc19ykwiLpDy4T/MENQ=";
   };
 
   outputs = [ "dev" "out" "lib" ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     unzip
     cmake
     doxygen
+    python3
   ];
 
   buildInputs = [
@@ -38,12 +39,11 @@ stdenv.mkDerivation rec {
     swig
     xorg.libXi
     xorg.libXmu
-    python3
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.GLUT
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    freeglut
+    libglut
     libGLU
     libGL
   ];

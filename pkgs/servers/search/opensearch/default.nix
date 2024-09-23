@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opensearch";
-  version = "2.11.1";
+  version = "2.16.0";
 
   src = fetchurl {
     url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${finalAttrs.version}/opensearch-${finalAttrs.version}-linux-x64.tar.gz";
-    hash = "sha256-km6z+Z9ZLnUY1dweJQrhHRu0XvdmqQIiqN8Ruy7jWpw=";
+    hash = "sha256-7QuyNJnTig472I+Ll1shWmQ2YoWFAKwFYw4pK+BvZbI=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/opensearch-plugin --set JAVA_HOME "${jre_headless}"
-    wrapProgram $out/bin/opensearch-cli --set JAVA_HOME "${jre_headless}"
+
+    rm $out/bin/opensearch-cli
 
     runHook postInstall
   '';

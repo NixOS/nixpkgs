@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 # for passthru.plugins
 , pkgs
@@ -11,6 +10,7 @@
 # Qt
 , qt5compat
 , qtbase
+, qtwayland
 , qtsvg
 , qttools
 , qtwebengine
@@ -22,24 +22,15 @@
 
 let cutter = stdenv.mkDerivation rec {
   pname = "cutter";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "cutter";
     rev = "v${version}";
-    hash = "sha256-88yIqFYIv7o6aC2YSJwWJ46fZJBnOmifv+SirsfS4tw=";
+    hash = "sha256-TSEi1mXVvvaGo4koo3EnN/veXPUHF747g+gifnl4IDQ=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # tracking: https://github.com/rizinorg/cutter/pull/3268
-    (fetchpatch {
-      name = "cutter-simplify-python-binding-include-handling.patch";
-      url = "https://github.com/rizinorg/cutter/compare/7256fbb00e92ab12a24d14a92364db482ed295cb..ca5949d9d7c907185cf3d062d9fa71c34c5960d4.diff";
-      hash = "sha256-bqV2FTA8lMNpHBDXdenNx+1cLYa7MH47XKo1YatmLV4=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -61,6 +52,8 @@ let cutter = stdenv.mkDerivation rec {
     qttools
     qtwebengine
     rizin
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   cmakeFlags = [

@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Provides extra functionality for the Nitrokey Pro and Storage";
+    mainProgram = "nitrokey-app";
     longDescription = ''
       The nitrokey-app provides a QT system tray widget with which you can
       access the extra functionality of a Nitrokey Storage or Nitrokey Pro.

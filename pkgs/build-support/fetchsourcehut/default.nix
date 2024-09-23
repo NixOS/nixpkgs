@@ -1,6 +1,14 @@
 { fetchgit, fetchhg, fetchzip, lib }:
 
-lib.makeOverridable (
+let
+  inherit (lib)
+    assertOneOf
+    makeOverridable
+    optionalString
+    ;
+in
+
+makeOverridable (
 { owner
 , repo, rev
 , domain ? "sr.ht"
@@ -10,9 +18,7 @@ lib.makeOverridable (
 , ... # For hash agility
 } @ args:
 
-with lib;
-
-assert (lib.assertOneOf "vc" vc [ "hg" "git" ]);
+assert (assertOneOf "vc" vc [ "hg" "git" ]);
 
 let
   urlFor = resource: "https://${resource}.${domain}/${owner}/${repo}";

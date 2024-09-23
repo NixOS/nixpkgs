@@ -1,38 +1,33 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, msgpack
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, textual
-, time-machine
-, typing-extensions
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  msgpack,
+  poetry-core,
+  pythonOlder,
+  textual,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "textual-dev";
-  version = "1.2.1";
+  version = "1.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual-dev";
-    # we use rev instead of tag since upstream doesn't use tags
-    rev = "6afa9013a42cb18e9105e49d6a56874097f7c812";
-    hash = "sha256-ef35389ZMU/zih7Se3KkMGECf5o2i5y6up64/1AECas=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QnMKVt1WxnwGnZFNb7Gbus7xewGvyG5xJ0hIKKK5hug=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     click
     msgpack
@@ -40,20 +35,17 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytest-aiohttp
-    pytestCheckHook
-    time-machine
-  ];
+  # Tests require a running textual WS server
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "textual_dev"
-  ];
+  pythonImportsCheck = [ "textual_dev" ];
 
   meta = with lib; {
     description = "Development tools for Textual";
     homepage = "https://github.com/Textualize/textual-dev";
+    changelog = "https://github.com/Textualize/textual-dev/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ yannip ];
+    mainProgram = "textual";
   };
 }

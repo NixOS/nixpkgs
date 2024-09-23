@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     description = ''
       A utility designed to kill a single instance of a wayland compositor
     '';
+    mainProgram = "wayland-logout";
     homepage = "https://github.com/soreau/wayland-logout";
     maintainers = with maintainers; [quantenzitrone];
     license = with licenses; [mit];

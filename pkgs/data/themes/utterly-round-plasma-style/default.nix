@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "HimDek";
     repo = pname;
-    rev = "c3677d5223286f69871f6745cdb3b71367229d40";
-    hash = "sha256-mlqRMz0cAZnnM4xE6p7fMzhGlqCQcM4FxmDlVnbGUgQ=";
+    rev = "6280f69781b7fa9613b7a9c502d8d61e11fefca5";
+    hash = "sha256-b0vah/rkcJH01bnDOGXQ04vrRR1c1Ijgc2HPBmToLuc=";
   };
 
   installPhase = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A rounded desktop theme and window borders for Plasma 5 that follows any color scheme";
+    description = "Rounded desktop theme and window borders for Plasma 5 that follows any color scheme";
     homepage = "https://himdek.com/Utterly-Round-Plasma-Style/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

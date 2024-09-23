@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 texinfo ];
 
   meta = {
-    description = "A GTK enabled dropin replacement for xmessage";
+    description = "GTK enabled dropin replacement for xmessage";
     homepage = "https://trmusson.dreamhosters.com/programs.html#gxmessage";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [jfb];
     platforms = with lib.platforms; linux;
+    mainProgram = "gxmessage";
   };
 }

@@ -52,6 +52,11 @@ in stdenv.mkDerivation rec {
     inherit mpiSupport mpi;
   };
 
+  env.NIX_CFLAGS_COMPILE =
+    # Suppress incompatible function pointer errors when building with newer versions of clang 16.
+    # tracked upstream here: https://github.com/Unidata/netcdf-c/issues/2715
+    lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+
   configureFlags = [
       "--enable-netcdf-4"
       "--enable-dap"
@@ -59,7 +64,7 @@ in stdenv.mkDerivation rec {
       "--disable-dap-remote-tests"
       "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
-  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${lib.getDev mpi}/bin/mpicc" ]);
 
   enableParallelBuilding = true;
 

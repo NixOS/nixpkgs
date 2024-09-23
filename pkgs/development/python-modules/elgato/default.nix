@@ -1,19 +1,21 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "elgato";
-  version = "5.0.0";
+  version = "5.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-elgato";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TI5wu2FYVUMvgDkbktcwPLnTSD8XUSy8qwOCdrsiopk=";
+    hash = "sha256-NAU4tr0oaAPPrOUZYl9WoGOM68MlrBqGewHBIiIv2XY=";
   };
 
   postPatch = ''
@@ -32,13 +34,12 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    mashumaro
+    orjson
     yarl
   ];
 
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "elgato"
-  ];
+  pythonImportsCheck = [ "elgato" ];
 
   meta = with lib; {
     description = "Python client for Elgato Key Lights";

@@ -1,48 +1,52 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, installShellFiles
-, pandoc
-, pythonOlder
-# BuildInputs
-, charset-normalizer
-, defusedxml
-, multidict
-, pygments
-, requests
-, requests-toolbelt
-, setuptools
-, rich
-, pysocks
-# CheckInputs
-, pip
-, pytest-httpbin
-, pytest-lazy-fixture
-, pytest-mock
-, pytestCheckHook
-, responses
-, werkzeug
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  charset-normalizer,
+  defusedxml,
+  fetchFromGitHub,
+  installShellFiles,
+  multidict,
+  pandoc,
+  pip,
+  pygments,
+  pytest-httpbin,
+  pytest-lazy-fixture,
+  pytest-mock,
+  pytestCheckHook,
+  requests-toolbelt,
+  requests,
+  responses,
+  rich,
+  setuptools,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "httpie";
-  version = "3.2.2";
-  format = "setuptools";
+  version = "3.2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
-    rev = version;
-    hash = "sha256-hPsjEpvT6tnPm68AUB2Tv3Gon4DfSzO2VYCGqP8ozSI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ogUqhMVY1fm+hKCMFYqfYsqHX+Gj6y8CMOUsxA3q29g=";
   };
+
+  pythonRelaxDeps = [
+    "defusedxml"
+    "requests"
+  ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     installShellFiles
     pandoc
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
     defusedxml
     multidict
@@ -81,46 +85,37 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [
-    "httpie"
-  ];
+  pythonImportsCheck = [ "httpie" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    # flaky
+  disabledTestPaths = [
+    # Tests are flaky
     "tests/test_plugins_cli.py"
   ];
 
-  disabledTests = [
-    # flaky
-    "test_stdin_read_warning"
-    # Re-evaluate those tests with the next release
-    "test_duplicate_keys_support_from_response"
-    "test_invalid_xml"
-    "test_json_formatter_with_body_preceded_by_non_json_data"
-    "test_pretty_options_with_and_without_stream_with_converter"
-    "test_response_mime_overwrite"
-    "test_terminal_output_response_charset_detection"
-    "test_terminal_output_response_charset_override"
-    "test_terminal_output_response_content_type_charset_with_stream"
-    "test_terminal_output_response_content_type_charset"
-    "test_valid_xml"
-    "test_xml_format_options"
-    "test_xml_xhtm"
-    # httpbin compatibility issues
-    "test_compress_form"
-    "test_binary_suppresses_when_terminal"
-    "test_binary_suppresses_when_not_terminal_but_pretty"
-    "test_binary_included_and_correct_when_suitable"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # flaky
-    "test_daemon_runner"
-  ];
+  disabledTests =
+    [
+      # Test is flaky
+      "test_stdin_read_warning"
+      # httpbin compatibility issues
+      "test_compress_form"
+      "test_binary_suppresses_when_terminal"
+      "test_binary_suppresses_when_not_terminal_but_pretty"
+      "test_binary_included_and_correct_when_suitable"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Test is flaky
+      "test_daemon_runner"
+    ];
 
   meta = with lib; {
-    description = "A command line HTTP client whose goal is to make CLI human-friendly";
+    description = "Command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
     changelog = "https://github.com/httpie/httpie/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ antono relrod schneefux ];
+    maintainers = with maintainers; [
+      antono
+      relrod
+      schneefux
+    ];
   };
 }

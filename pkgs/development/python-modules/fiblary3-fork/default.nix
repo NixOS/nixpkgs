@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, fixtures
-, jsonpatch
-, netaddr
-, prettytable
-, python-dateutil
-, pytestCheckHook
-, requests
-, requests-mock
-, six
-, sphinx
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fixtures,
+  jsonpatch,
+  netaddr,
+  prettytable,
+  python-dateutil,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  six,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "fiblary3-fork";
   version = "0.1.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

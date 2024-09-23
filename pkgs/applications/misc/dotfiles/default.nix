@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dotfiles";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "03qis6m9r2qh00sqbgwsm883s4bj1ibwpgk86yh4l235mdw8jywv";
+    sha256 = "sha256-fke8lNjyYts6cIrONAFd5r2wAlpWqJhd+usFAPCO5J4=";
   };
 
   # No tests in archive
@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Easily manage your dotfiles";
+    mainProgram = "dotfiles";
     homepage = "https://github.com/jbernard/dotfiles";
     license = licenses.isc;
   };

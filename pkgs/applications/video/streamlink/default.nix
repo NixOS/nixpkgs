@@ -1,18 +1,30 @@
 { lib
 , python3Packages
 , fetchPypi
+, substituteAll
 , ffmpeg
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.4.2";
-  format = "pyproject";
+  version = "6.10.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tftxn0JRppLIh4ih1G4s0PoiMZYMUrKBy4IQhxxyLnY=";
+    hash = "sha256-VI1fy8Oo4dXSn6IQoFlT+F9IyucLUqwuvkn5DoWRdSE=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./ffmpeg-path.patch;
+      ffmpeg = lib.getExe ffmpeg;
+    })
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+  ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
@@ -23,7 +35,12 @@ python3Packages.buildPythonApplication rec {
     pytest-trio
   ];
 
-  propagatedBuildInputs = (with python3Packages; [
+  disabledTests = [
+    # requires ffmpeg to be in PATH
+    "test_no_cache"
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     certifi
     isodate
     lxml
@@ -36,11 +53,9 @@ python3Packages.buildPythonApplication rec {
     typing-extensions
     urllib3
     websocket-client
-  ]) ++ [
-    ffmpeg
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     description = "CLI for extracting streams from various websites to video player of your choosing";
     homepage = "https://streamlink.github.io/";
@@ -51,8 +66,8 @@ python3Packages.buildPythonApplication rec {
 
       Streamlink is a fork of the livestreamer project.
     '';
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "streamlink";
-    maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
+    maintainers = with lib.maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

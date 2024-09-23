@@ -15,7 +15,7 @@
   # optional dependencies
 , cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
-, qttranslations ? null
+, withQttranslation ? true, qttranslations ? null
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -152,8 +152,8 @@ stdenv.mkDerivation (finalAttrs: ({
                 --replace "/System/Library/Frameworks/AGL.framework/" "${AGL}/Library/Frameworks/AGL.framework/"
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
-          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${libGL.dev or libGL}/include|" \
-          -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${libGL.out}/lib|"
+          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL}/include|" \
+          -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${lib.getLib libGL}/lib|"
     '' + lib.optionalString (stdenv.hostPlatform.isx86_32 && stdenv.cc.isGNU) ''
       sed -i mkspecs/common/gcc-base-unix.conf \
           -e "/^QMAKE_LFLAGS_SHLIB/ s/-shared/-shared -static-libgcc/"
@@ -351,7 +351,8 @@ stdenv.mkDerivation (finalAttrs: ({
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
-    ] ++ lib.optional (qttranslations != null) [
+    ] ++ lib.optional (withQttranslation && (qttranslations != null)) [
+      # depends on x11
       "-translationdir" "${qttranslations}/translations"
     ]
   );
@@ -396,7 +397,7 @@ stdenv.mkDerivation (finalAttrs: ({
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     pkgConfigModules = [

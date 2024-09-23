@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, lazr-delegates
-, zope_interface
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  lazr-delegates,
+  zope-interface,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,22 +19,16 @@ buildPythonPackage rec {
     hash = "sha256-oU5PbMCa68HUCxdhWK6g7uIlLBQAO40O8LMcfFFMNkQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     lazr-delegates
-    zope_interface
+    zope-interface
   ];
 
-  pythonImportsCheck = [
-    "lazr.config"
-  ];
+  pythonImportsCheck = [ "lazr.config" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # change the directory to avoid a namespace-related problem
   # ModuleNotFoundError: No module named 'lazr.delegates'
@@ -41,9 +36,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pythonNamespaces = [
-    "lazr"
-  ];
+  pythonNamespaces = [ "lazr" ];
 
   meta = with lib; {
     description = "Create configuration schemas, and process and validate configurations";

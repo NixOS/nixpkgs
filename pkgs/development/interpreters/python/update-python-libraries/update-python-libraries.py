@@ -162,7 +162,18 @@ def _fetch_github(url):
 def _hash_to_sri(algorithm, value):
     """Convert a hash to its SRI representation"""
     return (
-        subprocess.check_output(["nix", "hash", "to-sri", "--type", algorithm, value])
+        subprocess.check_output(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command",
+                "hash",
+                "to-sri",
+                "--type",
+                algorithm,
+                value,
+            ]
+        )
         .decode()
         .strip()
     )
@@ -210,12 +221,16 @@ def _determine_latest_version(current_version, target, versions):
     return (max(sorted(versions))).raw_version
 
 
-def _get_latest_version_pypi(package, extension, current_version, target):
+def _get_latest_version_pypi(attr_path, package, extension, current_version, target):
     """Get latest version and hash from PyPI."""
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
 
-    versions = json["releases"].keys()
+    versions = {
+        version
+        for version, releases in json["releases"].items()
+        if not all(release["yanked"] for release in releases)
+    }
     version = _determine_latest_version(current_version, target, versions)
 
     try:
@@ -234,7 +249,7 @@ def _get_latest_version_pypi(package, extension, current_version, target):
     return version, sha256, None
 
 
-def _get_latest_version_github(package, extension, current_version, target):
+def _get_latest_version_github(attr_path, package, extension, current_version, target):
     def strip_prefix(tag):
         return re.sub("^[^0-9]*", "", tag)
 
@@ -242,13 +257,12 @@ def _get_latest_version_github(package, extension, current_version, target):
         matches = re.findall(r"^([^0-9]*)", string)
         return next(iter(matches), "")
 
-    # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
-    # this allows us to work with packages which live outside of python-modules
-    attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{package}")
     try:
         homepage = subprocess.check_output(
             [
                 "nix",
+                "--extra-experimental-features",
+                "nix-command",
                 "eval",
                 "-f",
                 f"{NIXPKGS_ROOT}/default.nix",
@@ -274,16 +288,17 @@ def _get_latest_version_github(package, extension, current_version, target):
     release = next(filter(lambda x: strip_prefix(x["tag_name"]) == version, releases))
     prefix = get_prefix(release["tag_name"])
 
-    # some attributes require using the fetchgit
-    git_fetcher_args = []
-    if _get_attr_value(f"{attr_path}.src.fetchSubmodules"):
-        git_fetcher_args.append("--fetch-submodules")
-    if _get_attr_value(f"{attr_path}.src.fetchLFS"):
-        git_fetcher_args.append("--fetch-lfs")
-    if _get_attr_value(f"{attr_path}.src.leaveDotGit"):
-        git_fetcher_args.append("--leave-dotGit")
+    fetcher = _get_attr_value(f"{attr_path}.src.fetcher")
+    if fetcher is not None and fetcher.endswith("nix-prefetch-git"):
+        # some attributes require using the fetchgit
+        git_fetcher_args = []
+        if _get_attr_value(f"{attr_path}.src.fetchSubmodules"):
+            git_fetcher_args.append("--fetch-submodules")
+        if _get_attr_value(f"{attr_path}.src.fetchLFS"):
+            git_fetcher_args.append("--fetch-lfs")
+        if _get_attr_value(f"{attr_path}.src.leaveDotGit"):
+            git_fetcher_args.append("--leave-dotGit")
 
-    if git_fetcher_args:
         algorithm = "sha256"
         cmd = [
             "nix-prefetch-git",
@@ -318,14 +333,17 @@ def _get_latest_version_github(package, extension, current_version, target):
             tag_url = str(release["tarball_url"]).replace(
                 "tarball", "tarball/refs/tags"
             )
-            hash = (
-                subprocess.check_output(
-                    ["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url],
-                    stderr=subprocess.DEVNULL,
+            try:
+                hash = (
+                    subprocess.check_output(
+                        ["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url],
+                        stderr=subprocess.DEVNULL,
+                    )
+                    .decode("utf-8")
+                    .strip()
                 )
-                .decode("utf-8")
-                .strip()
-            )
+            except subprocess.CalledProcessError:
+                raise ValueError("nix-prefetch-url failed")
 
     return version, hash, prefix
 
@@ -421,13 +439,17 @@ def _update_package(path, target):
     # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
     successful_fetch = False
     for pname in pnames:
-        if BULK_UPDATE and _skip_bulk_update(f"python3Packages.{pname}"):
+        # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
+        # this allows us to work with packages which live outside of python-modules
+        attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{pname}")
+
+        if BULK_UPDATE and _skip_bulk_update(attr_path):
             raise ValueError(f"Bulk update skipped for {pname}")
-        elif _get_attr_value(f"python3Packages.{pname}.cargoDeps") is not None:
+        elif _get_attr_value(f"{attr_path}.cargoDeps") is not None:
             raise ValueError(f"Cargo dependencies are unsupported, skipping {pname}")
         try:
             new_version, new_sha256, prefix = FETCHERS[fetcher](
-                pname, extension, version, target
+                attr_path, pname, extension, version, target
             )
             successful_fetch = True
             break
@@ -452,7 +474,7 @@ def _update_package(path, target):
     sri_hash = _hash_to_sri("sha256", new_sha256)
 
     # retrieve the old output hash for a more precise match
-    if old_hash := _get_attr_value(f"python3Packages.{pname}.src.outputHash"):
+    if old_hash := _get_attr_value(f"{attr_path}.src.outputHash"):
         # fetchers can specify a sha256, or a sri hash
         try:
             text = _replace_value("hash", sri_hash, text, old_hash)

@@ -1,27 +1,28 @@
-{ lib
-, aiohttp
-, aioresponses
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, freezegun
-, httpx
-, isodate
-, lxml
-, mock
-, platformdirs
-, pretend
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, requests-toolbelt
-, requests-file
-, requests-mock
-, xmlsec
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  attrs,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  httpx,
+  isodate,
+  lxml,
+  mock,
+  platformdirs,
+  pretend,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  requests-toolbelt,
+  requests-file,
+  requests-mock,
+  xmlsec,
 }:
 
 buildPythonPackage rec {
@@ -51,17 +52,11 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    async_require = [
-      httpx
-    ];
-    xmlsec_require = [
-      xmlsec
-    ];
+    async_require = [ httpx ];
+    xmlsec_require = [ xmlsec ];
   };
 
-  pythonImportsCheck = [
-    "zeep"
-  ];
+  pythonImportsCheck = [ "zeep" ];
 
   nativeCheckInputs = [
     aiohttp
@@ -73,8 +68,16 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
-  ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    # Failed: External connections not allowed during tests.
+    "test_has_expired"
+    "test_has_not_expired"
+    "test_memory_cache_timeout"
+    "test_bytes_like_password_digest"
+    "test_password_digest"
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -85,6 +88,5 @@ buildPythonPackage rec {
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvl ];
   };
 }

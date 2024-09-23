@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vgmtools";
-  version = "unstable-2023-08-27";
+  version = "0.1-unstable-2023-08-27";
 
   src = fetchFromGitHub {
     owner = "vgmrips";
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/vgmrips/vgmtools";
-    description = "A collection of tools for the VGM file format";
-    license = licenses.gpl2; # Not clarified whether Only or Plus
+    description = "Collection of tools for the VGM file format";
+    license = licenses.gpl2Only; # Not clarified whether Only or Plus
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
   };

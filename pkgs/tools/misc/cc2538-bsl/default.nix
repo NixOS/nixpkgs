@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "cc2538-bsl";
-  version = "unstable-2023-08-14";
+  version = "2.1-unstable-2023-10-03";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "JelmerT";
     repo = "cc2538-bsl";
-    rev = "641305fb5cae98415a28cbfab6e63436c1753abf";
-    hash = "sha256-fPY12kValxbJORi9xNyxzwkGpD9F9u3M1+aa9IlSiaE=";
+    rev = "4d64ac633dbaf29d098842c5937ed6eea2fd7c45";
+    hash = "sha256-NX2jPYAz15bSucj/YR5E/0eJy/cbszSrNxyJHRsbXxo=";
   };
 
   patches = [

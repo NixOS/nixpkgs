@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.nicemice.net/par/";
     description = "Paragraph reflow for email";
+    mainProgram = "par";
     platforms = platforms.unix;
     # See https://fedoraproject.org/wiki/Licensing/Par for license details
     license = licenses.free;

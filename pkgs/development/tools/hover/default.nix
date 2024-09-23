@@ -6,10 +6,9 @@
 , pkg-config
 , fetchFromGitHub
 , roboto
-, writeScript
 , xorg
 , libglvnd
-, addOpenGLRunpath
+, addDriverRunpath
 , makeWrapper
 , gcc
 , go
@@ -37,7 +36,7 @@ let
     inherit pname version;
 
     meta = with lib; {
-      description = "A build tool to run Flutter applications on desktop";
+      description = "Build tool to run Flutter applications on desktop";
       homepage = "https://github.com/go-flutter-desktop/hover";
       license = licenses.bsd3;
       platforms = platforms.linux;
@@ -55,7 +54,7 @@ let
       sha256 = "sha256-ch59Wx4g72u7x99807ppURI4I+5aJ/W8Zr35q8X68v4=";
     };
 
-    nativeBuildInputs = [ addOpenGLRunpath makeWrapper ];
+    nativeBuildInputs = [ addDriverRunpath makeWrapper ];
 
     buildInputs = libs;
 
@@ -79,13 +78,13 @@ let
     '';
 
     postFixup = ''
-      addOpenGLRunpath $out/bin/hover
+      addDriverRunpath $out/bin/hover
     '';
   };
 
 in
 buildFHSEnv rec {
-  name = pname;
+  inherit pname version;
   targetPkgs = pkgs: [
     binutils
     dejavu_fonts

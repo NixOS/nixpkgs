@@ -4,10 +4,12 @@
 , callPackage
 , closureInfo
 , coreutils
+, devShellTools
 , e2fsprogs
 , proot
 , fakeNss
 , fakeroot
+, file
 , go
 , jq
 , jshon
@@ -22,18 +24,20 @@
 , runtimeShell
 , shadow
 , skopeo
+, stdenv
 , storeDir ? builtins.storeDir
 , substituteAll
 , symlinkJoin
 , tarsum
 , util-linux
 , vmTools
-, writeReferencesToFile
+, writeClosure
 , writeScript
 , writeShellScriptBin
 , writeText
 , writeTextDir
 , writePython3
+, zstd
 }:
 
 let
@@ -45,6 +49,10 @@ let
   inherit (lib)
     escapeShellArgs
     toList
+    ;
+
+  inherit (devShellTools)
+    valueToString
     ;
 
   mkDbExtraCommand = contents:
@@ -62,6 +70,8 @@ let
       # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
       export USER=nobody
       ${buildPackages.nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
+      # Reset registration times to make the image reproducible
+      ${buildPackages.sqlite}/bin/sqlite3 nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
       mkdir -p nix/var/nix/gcroots/docker/
       for i in ${lib.concatStringsSep " " contentsList}; do
@@ -75,6 +85,30 @@ let
   # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
   # mapping from the go package.
   defaultArchitecture = go.GOARCH;
+
+  compressors = {
+    none = {
+      ext = "";
+      nativeInputs = [ ];
+      compress = "cat";
+      decompress = "cat";
+    };
+    gz = {
+      ext = ".gz";
+      nativeInputs = [ pigz ];
+      compress = "pigz -p$NIX_BUILD_CORES -nTR";
+      decompress = "pigz -d -p$NIX_BUILD_CORES";
+    };
+    zstd = {
+      ext = ".zst";
+      nativeInputs = [ zstd ];
+      compress = "zstd -T$NIX_BUILD_CORES";
+      decompress = "zstd -d -T$NIX_BUILD_CORES";
+    };
+  };
+
+  compressorForImage = compressor: imageName: compressors.${compressor} or
+    (throw "in docker image ${imageName}: compressor must be one of: [${toString builtins.attrNames compressors}]");
 
 in
 rec {
@@ -487,16 +521,17 @@ rec {
       '';
     };
 
-  buildLayeredImage = lib.makeOverridable ({ name, ... }@args:
+  buildLayeredImage = lib.makeOverridable ({ name, compressor ? "gz", ... }@args:
     let
-      stream = streamLayeredImage args;
+      stream = streamLayeredImage (builtins.removeAttrs args ["compressor"]);
+      compress = compressorForImage compressor name;
     in
-    runCommand "${baseNameOf name}.tar.gz"
+    runCommand "${baseNameOf name}.tar${compress.ext}"
       {
         inherit (stream) imageName;
-        passthru = { inherit (stream) imageTag; };
-        nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nTR > $out"
+        passthru = { inherit (stream) imageTag; inherit stream; };
+        nativeBuildInputs = compress.nativeInputs;
+      } "${stream} | ${compress.compress} > $out"
   );
 
   # 1. extract the base image
@@ -539,6 +574,10 @@ rec {
       buildVMMemorySize ? 512
     , # Time of creation of the image.
       created ? "1970-01-01T00:00:01Z"
+    , # Compressor to use. One of: none, gz, zstd.
+      compressor ? "gz"
+      # Populate the nix database in the image with the dependencies of `copyToRoot`.
+    , includeNixDB ? false
     , # Deprecated.
       contents ? null
     ,
@@ -574,37 +613,45 @@ rec {
         in
         if created == "now" then impure else pure;
 
+      compress = compressorForImage compressor name;
+
+      # TODO: add the dependencies of the config json.
+      extraCommandsWithDB =
+        if includeNixDB then (mkDbExtraCommand rootContents) + extraCommands
+        else extraCommands;
+
       layer =
         if runAsRoot == null
         then
           mkPureLayer
             {
               name = baseName;
-              inherit baseJson keepContentsDirlinks extraCommands uid gid;
+              inherit baseJson keepContentsDirlinks uid gid;
+              extraCommands = extraCommandsWithDB;
               copyToRoot = rootContents;
             } else
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize
-              extraCommands;
+              keepContentsDirlinks runAsRoot diskSize buildVMMemorySize;
+            extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
           };
-      result = runCommand "docker-image-${baseName}.tar.gz"
+      result = runCommand "docker-image-${baseName}.tar${compress.ext}"
         {
-          nativeBuildInputs = [ jshon pigz jq moreutils ];
+          nativeBuildInputs = [ jshon jq moreutils ] ++ compress.nativeInputs;
           # Image name must be lowercase
           imageName = lib.toLower name;
           imageTag = lib.optionalString (tag != null) tag;
           inherit fromImage baseJson;
-          layerClosure = writeReferencesToFile layer;
+          layerClosure = writeClosure [ layer ];
           passthru.buildArgs = args;
           passthru.layer = layer;
           passthru.imageTag =
             if tag != null
             then tag
             else
-              lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
+              lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext result.outPath)));
         } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
@@ -746,7 +793,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
+        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | ${compress.compress} > $out
 
         echo "Finished."
       '';
@@ -761,16 +808,28 @@ rec {
   mergeImages = images: runCommand "merge-docker-images"
     {
       inherit images;
-      nativeBuildInputs = [ pigz jq ];
+      nativeBuildInputs = [ file jq ]
+        ++ compressors.none.nativeInputs
+        ++ compressors.gz.nativeInputs
+        ++ compressors.zstd.nativeInputs;
     } ''
     mkdir image inputs
     # Extract images
     repos=()
     manifests=()
+    last_image_mime="application/gzip"
     for item in $images; do
       name=$(basename $item)
       mkdir inputs/$name
-      tar -I pigz -xf $item -C inputs/$name
+
+      last_image_mime=$(file --mime-type -b $item)
+      case $last_image_mime in
+        "application/x-tar") ${compressors.none.decompress};;
+        "application/zstd") ${compressors.zstd.decompress};;
+        "application/gzip") ${compressors.gz.decompress};;
+        *) echo "error: unexpected layer type $last_image_mime" >&2; exit 1;;
+      esac < $item | tar -xC inputs/$name
+
       if [ -f inputs/$name/repositories ]; then
         repos+=(inputs/$name/repositories)
       fi
@@ -787,7 +846,14 @@ rec {
     mv repositories image/repositories
     mv manifest.json image/manifest.json
     # Create tarball and gzip
-    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
+    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | (
+      case $last_image_mime in
+        "application/x-tar") ${compressors.none.compress};;
+        "application/zstd") ${compressors.zstd.compress};;
+        "application/gzip") ${compressors.gz.compress};;
+        # `*)` not needed; already checked.
+      esac
+    ) > $out
   '';
 
 
@@ -805,6 +871,7 @@ rec {
   '';
 
   # This provides /bin/sh, pointing to bashInteractive.
+  # The use of bashInteractive here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
     ln -s ${bashInteractive}/bin/bash $out/bin/sh
@@ -826,59 +893,43 @@ rec {
   # the container.
   # Be careful since this doesn't work well with multilayer.
   # TODO: add the dependencies of the config json.
-  buildImageWithNixDb = args@{ copyToRoot ? contents, contents ? null, extraCommands ? "", ... }: (
-    buildImage (args // {
-      extraCommands = (mkDbExtraCommand copyToRoot) + extraCommands;
-    })
-  );
+  buildImageWithNixDb = args: buildImage (args // { includeNixDB = true; });
 
-  # TODO: add the dependencies of the config json.
-  buildLayeredImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
-    buildLayeredImage (args // {
-      extraCommands = (mkDbExtraCommand contents) + extraCommands;
-    })
-  );
+  buildLayeredImageWithNixDb = args: buildLayeredImage (args // { includeNixDB = true; });
 
+  # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
   streamLayeredImage = lib.makeOverridable (
     {
-      # Image Name
       name
-    , # Image tag, the Nix's output hash will be used if null
-      tag ? null
-    , # Parent image, to append to.
-      fromImage ? null
-    , # Files to put on the image (a nix store path or list of paths).
-      contents ? [ ]
-    , # Docker config; e.g. what command to run on the container.
-      config ? { }
-    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
-      architecture ? defaultArchitecture
-    , # Time of creation of the image. Passing "now" will make the
-      # created date be the time of building.
-      created ? "1970-01-01T00:00:01Z"
-    , # Optional bash script to run on the files prior to fixturizing the layer.
-      extraCommands ? ""
-    , # Optional bash script to run inside fakeroot environment.
-      # Could be used for changing ownership of files in customisation layer.
-      fakeRootCommands ? ""
-    , # Whether to run fakeRootCommands in fakechroot as well, so that they
-      # appear to run inside the image, but have access to the normal Nix store.
-      # Perhaps this could be enabled on by default on pkgs.stdenv.buildPlatform.isLinux
-      enableFakechroot ? false
-    , # We pick 100 to ensure there is plenty of room for extension. I
-      # believe the actual maximum is 128.
-      maxLayers ? 100
-    , # Whether to include store paths in the image. You generally want to leave
-      # this on, but tooling may disable this to insert the store paths more
-      # efficiently via other means, such as bind mounting the host store.
-      includeStorePaths ? true
-    , # Passthru arguments for the underlying derivation.
-      passthru ? {}
+    , tag ? null
+    , fromImage ? null
+    , contents ? [ ]
+    , config ? { }
+    , architecture ? defaultArchitecture
+    , created ? "1970-01-01T00:00:01Z"
+    , uid ? 0
+    , gid ? 0
+    , uname ? "root"
+    , gname ? "root"
+    , maxLayers ? 100
+    , extraCommands ? ""
+    , fakeRootCommands ? ""
+    , enableFakechroot ? false
+    , includeStorePaths ? true
+    , includeNixDB ? false
+    , passthru ? {}
     ,
     }:
       assert
       (lib.assertMsg (maxLayers > 1)
         "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
+      assert
+      (lib.assertMsg (enableFakechroot -> !stdenv.isDarwin) ''
+        cannot use `enableFakechroot` because `proot` is not portable to Darwin. Workarounds:
+              - use `fakeRootCommands` with the restricted `fakeroot` environment
+              - cross-compile your packages
+              - run your packages in a virtual machine
+              Discussion: https://github.com/NixOS/nixpkgs/issues/327311'');
       let
         baseName = baseNameOf name;
 
@@ -903,7 +954,9 @@ rec {
         customisationLayer = symlinkJoin {
           name = "${baseName}-customisation-layer";
           paths = contentsList;
-          inherit extraCommands fakeRootCommands;
+          extraCommands =
+            (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
+          inherit fakeRootCommands;
           nativeBuildInputs = [
             fakeroot
           ] ++ optionals enableFakechroot [
@@ -915,13 +968,14 @@ rec {
 
             mkdir $out
             ${if enableFakechroot then ''
-              proot -r $PWD/old_out ${bind-paths} --pwd=/ --root-id bash -c '
+              proot -r $PWD/old_out ${bind-paths} --pwd=/ fakeroot bash -c '
                 source $stdenv/setup
                 eval "$fakeRootCommands"
                 tar \
                   --sort name \
                   --exclude=./proc \
                   --exclude=./sys \
+                  --exclude=.${builtins.storeDir} \
                   --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                   --hard-dereference \
                   -cf $out/layer.tar .
@@ -955,14 +1009,14 @@ rec {
 
         conf = runCommand "${baseName}-conf.json"
           {
-            inherit fromImage maxLayers created;
+            inherit fromImage maxLayers created uid gid uname gname;
             imageName = lib.toLower name;
             preferLocalBuild = true;
             passthru.imageTag =
               if tag != null
               then tag
               else
-                lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
+                lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext conf.outPath)));
             paths = buildPackages.referencesByPopularity overallClosure;
             nativeBuildInputs = [ jq ];
           } ''
@@ -1034,23 +1088,35 @@ rec {
               "store_layers": $store_layers[0],
               "customisation_layer", $customisation_layer,
               "repo_tag": $repo_tag,
-              "created": $created
+              "created": $created,
+              "uid": $uid,
+              "gid": $gid,
+              "uname": $uname,
+              "gname": $gname
             }
             ' --arg store_dir "${storeDir}" \
               --argjson from_image ${if fromImage == null then "null" else "'\"${fromImage}\"'"} \
               --slurpfile store_layers store_layers.json \
               --arg customisation_layer ${customisationLayer} \
               --arg repo_tag "$imageName:$imageTag" \
-              --arg created "$created" |
+              --arg created "$created" \
+              --arg uid "$uid" \
+              --arg gid "$gid" \
+              --arg uname "$uname" \
+              --arg gname "$gname" |
             tee $out
         '';
 
         result = runCommand "stream-${baseName}"
           {
+            inherit conf;
             inherit (conf) imageName;
+            inherit streamScript;
             preferLocalBuild = true;
             passthru = passthru // {
               inherit (conf) imageTag;
+              inherit conf;
+              inherit streamScript;
 
               # Distinguish tarballs and exes at the Nix level so functions that
               # take images can know in advance how the image is supposed to be used.
@@ -1058,33 +1124,25 @@ rec {
             };
             nativeBuildInputs = [ makeWrapper ];
           } ''
-          makeWrapper ${streamScript} $out --add-flags ${conf}
+          makeWrapper $streamScript $out --add-flags $conf
         '';
       in
       result
   );
 
   # This function streams a docker image that behaves like a nix-shell for a derivation
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Tests: nixos/tests/docker-tools-nix-shell.nix
   streamNixShellImage =
-    { # The derivation whose environment this docker image should be based on
-      drv
-    , # Image Name
-      name ? drv.name + "-env"
-    , # Image tag, the Nix's output hash will be used if null
-      tag ? null
-    , # User id to run the container as. Defaults to 1000, because many
-      # binaries don't like to be run as root
-      uid ? 1000
-    , # Group id to run the container as, see also uid
-      gid ? 1000
-    , # The home directory of the user
-      homeDirectory ? "/build"
-    , # The path to the bash binary to use as the shell. See `NIX_BUILD_SHELL` in `man nix-shell`
-      shell ? bashInteractive + "/bin/bash"
-    , # Run this command in the environment of the derivation, in an interactive shell. See `--command` in `man nix-shell`
-      command ? null
-    , # Same as `command`, but runs the command in a non-interactive shell instead. See `--run` in `man nix-shell`
-      run ? null
+    { drv
+    , name ? drv.name + "-env"
+    , tag ? null
+    , uid ? 1000
+    , gid ? 1000
+    , homeDirectory ? "/build"
+    , shell ? bashInteractive + "/bin/bash"
+    , command ? null
+    , run ? null
     }:
       assert lib.assertMsg (! (drv.drvAttrs.__structuredAttrs or false))
         "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
@@ -1094,7 +1152,7 @@ rec {
 
         # A binary that calls the command to build the derivation
         builder = writeShellScriptBin "buildDerivation" ''
-          exec ${lib.escapeShellArg (stringValue drv.drvAttrs.builder)} ${lib.escapeShellArgs (map stringValue drv.drvAttrs.args)}
+          exec ${lib.escapeShellArg (valueToString drv.drvAttrs.builder)} ${lib.escapeShellArgs (map valueToString drv.drvAttrs.args)}
         '';
 
         staticPath = "${dirOf shell}:${lib.makeBinPath [ builder ]}";
@@ -1126,33 +1184,16 @@ rec {
         # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
         sandboxBuildDir = "/build";
 
-        # This function closely mirrors what this Nix code does:
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1102
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/eval.cc#L1981-L2036
-        stringValue = value:
-          # We can't just use `toString` on all derivation attributes because that
-          # would not put path literals in the closure. So we explicitly copy
-          # those into the store here
-          if builtins.typeOf value == "path" then "${value}"
-          else if builtins.typeOf value == "list" then toString (map stringValue value)
-          else toString value;
-
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L992-L1004
-        drvEnv = lib.mapAttrs' (name: value:
-          let str = stringValue value;
-          in if lib.elem name (drv.drvAttrs.passAsFile or [])
-          then lib.nameValuePair "${name}Path" (writeText "pass-as-text-${name}" str)
-          else lib.nameValuePair name str
-        ) drv.drvAttrs //
-          # A mapping from output name to the nix store path where they should end up
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1253
-          lib.genAttrs drv.outputs (output: builtins.unsafeDiscardStringContext drv.${output}.outPath);
+        drvEnv =
+          devShellTools.unstructuredDerivationInputEnv { inherit (drv) drvAttrs; }
+          // devShellTools.derivationOutputEnv { outputList = drv.outputs; outputMap = drv; };
 
         # Environment variables set in the image
         envVars = {
 
           # Root certificates for internet access
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
           # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
           # PATH = "/path-not-set";
@@ -1237,14 +1278,17 @@ rec {
       };
 
   # Wrapper around streamNixShellImage to build an image from the result
-  buildNixShellImage = { drv, ... }@args:
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Tests: nixos/tests/docker-tools-nix-shell.nix
+  buildNixShellImage = { drv, compressor ? "gz", ... }@args:
     let
-      stream = streamNixShellImage args;
+      stream = streamNixShellImage (builtins.removeAttrs args ["compressor"]);
+      compress = compressorForImage compressor drv.name;
     in
-    runCommand "${drv.name}-env.tar.gz"
+    runCommand "${drv.name}-env.tar${compress.ext}"
       {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
-        nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nTR > $out";
+        nativeBuildInputs = compress.nativeInputs;
+      } "${stream} | ${compress.compress} > $out";
 }

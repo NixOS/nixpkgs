@@ -9,6 +9,7 @@
 , buildPackages
 , c-ares
 , cmake
+, fixDarwinDylibNames
 , flex
 , gettext
 , glib
@@ -42,19 +43,21 @@
 , spandsp3
 , speexdsp
 , SystemConfiguration
-, wrapGAppsHook
+, wrapGAppsHook3
 , zlib
 , zstd
 
 , withQt ? true
 , qt6 ? null
 }:
-
+let
+  isAppBundle = withQt && stdenv.isDarwin;
+in
 assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.2.0";
+  version = "4.2.6";
 
   outputs = [ "out" "dev" ];
 
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-0ny2x5sGG/T7q8RehCKVH/vrSihWytvUDVYiMnfhh9s=";
+    hash = "sha256-zlFTUgsEKraE9crS5SZ13r93JJzUb6eyBhusJbbGwsE=";
   };
 
   patches = [
@@ -85,7 +88,9 @@ stdenv.mkDerivation rec {
     python3
   ] ++ lib.optionals withQt [
     qt6.wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   buildInputs = [
@@ -139,7 +144,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
+    "-DENABLE_APPLICATION_BUNDLE=${if isAppBundle then "ON" else "OFF"}"
     "-DLEMON_C_COMPILER=cc"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
@@ -163,19 +168,34 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cmake --install . --prefix "''${!outputDev}" --component Development
-  '' + lib.optionalString (stdenv.isDarwin && withQt) ''
+  '' + lib.optionalString isAppBundle ''
     mkdir -p $out/Applications
     mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
+  '' + lib.optionalString stdenv.isDarwin ''
+    local flags=()
+    for file in $out/lib/*.dylib; do
+      flags+=(-change @rpath/"$(basename "$file")" "$file")
+    done
 
-    for f in $(find $out/Applications/Wireshark.app/Contents/PlugIns -name "*.so"); do
-        for dylib in $(otool -L $f | awk '/^\t*lib/ {print $1}'); do
-            install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
-        done
+    for file in $out/lib/wireshark/extcap/*; do
+      if [ -L "$file" ]; then continue; fi
+      echo "$file: fixing dylib references"
+      # note that -id does nothing on binaries
+      install_name_tool -id "$file" "''${flags[@]}" "$file"
     done
   '';
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  # This is done to remove some binary wrappers that wrapQtApps adds in *.app directories.
+  # Copying because unfortunately pointing Wireshark (when built as an appbundle) at $out/lib instead is nontrivial.
+  postFixup = lib.optionalString isAppBundle ''
+    rm -rf $out/Applications/Wireshark.app/Contents/MacOS/extcap $out/Applications/Wireshark.app/Contents/PlugIns
+    mkdir -p $out/Applications/Wireshark.app/Contents/PlugIns/wireshark
+    cp -r $out/lib/wireshark/plugins/4-2 $out/Applications/Wireshark.app/Contents/PlugIns/wireshark/4-2
+    cp -r $out/lib/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
 
   meta = with lib; {
@@ -189,7 +209,7 @@ stdenv.mkDerivation rec {
     changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz paveloom ];
+    maintainers = with maintainers; [ bjornfor fpletz ];
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "sagemath";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
+    hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/sagemath/lcalc";
-    description = "A program for calculating with L-functions";
+    description = "Program for calculating with L-functions";
+    mainProgram = "lcalc";
     license = with licenses; [ gpl2 ];
     maintainers = teams.sage.members;
     platforms = platforms.all;

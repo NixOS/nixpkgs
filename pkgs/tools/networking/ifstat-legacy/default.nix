@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage    = "http://gael.roualland.free.fr/ifstat/";
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
+    mainProgram = "ifstat-legacy";
   };
 }

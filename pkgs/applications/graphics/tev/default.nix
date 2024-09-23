@@ -1,21 +1,21 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, wrapGAppsHook
-, libX11, libzip, glfw, libpng, xorg, gnome
+, cmake, wrapGAppsHook3
+, libX11, libzip, glfw, libpng, xorg, zenity
 }:
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.26";
+  version = "1.27";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-6acFt0fyL0yStUwreGggJ+7Zi+0Fqburj/ytmf+Oi4w=";
+    hash = "sha256-+qCRHP0AbYOQBAE4zK2cmWPHZGWjjxC3DZPNm8sgBzs=";
   };
 
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
+  nativeBuildInputs = [ cmake wrapGAppsHook3 ];
   buildInputs = [ libX11 libzip glfw libpng ]
     ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm libXext ]);
 
@@ -28,11 +28,14 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/tev \
       "''${gappsWrapperArgs[@]}" \
-      --prefix PATH ":" "${gnome.zenity}/bin"
+      --prefix PATH ":" "${zenity}/bin"
   '';
 
+  env.CXXFLAGS = "-include cstdint";
+
   meta = with lib; {
-    description = "A high dynamic range (HDR) image comparison tool";
+    description = "High dynamic range (HDR) image comparison tool";
+    mainProgram = "tev";
     longDescription = ''
       A high dynamic range (HDR) image comparison tool for graphics people. tev
       allows viewing images through various tonemapping operators and inspecting
@@ -49,6 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # needs apple frameworks + SDK fix? see #205247
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

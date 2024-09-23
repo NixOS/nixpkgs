@@ -1,13 +1,17 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, espeak-ng }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "pyttsx3";
-  version = "2.90";
+  version = "2.97";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "a585b6d8cffc19bd92db1e0ccbd8aa9c6528dd2baa5a47045d6fed542a44aa19";
+    sha256 = "sha256-GM4wZDtnutHZc2H7s6PHyo/MdQ7Y6YrCJuu2I7AeSw8=";
     dist = "py3";
     python = "py3";
   };
@@ -16,7 +20,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Offline text-to-speech synthesis library";
     homepage = "https://github.com/nateshmbhat/pyttsx3";
     license = licenses.mpl20;

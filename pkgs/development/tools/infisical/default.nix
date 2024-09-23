@@ -15,7 +15,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.14.3";
+  version = "0.30.0";
 
   # the platform-specific, statically linked binary
   src =
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "The official Infisical CLI";
+    description = "Official Infisical CLI";
     longDescription = ''
       Infisical is the open-source secret management platform:
       Sync secrets across your team/infrastructure and prevent secret leaks.
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
     license = licenses.mit;
     mainProgram = "infisical";
-    maintainers = [ maintainers.ivanmoreau maintainers.jgoux ];
+    maintainers = teams.infisical.members ++ (with maintainers; [ hausken ]);
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "speaklater";
   version = "1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,5 +20,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ matejc ];
   };
-
 }

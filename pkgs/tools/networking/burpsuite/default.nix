@@ -1,16 +1,29 @@
-{ lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem, proEdition ? false }:
-let
-  version = "2023.10.2.4";
+{
+  lib,
+  buildFHSEnv,
+  fetchurl,
+  jdk,
+  makeDesktopItem,
+  proEdition ? false,
+  unzip,
+}:
 
-  product = if proEdition then {
-    productName = "pro";
-    productDesktop = "Burp Suite Professional Edition";
-    hash = "sha256-H5/nxVvAoGzRIAOchv9tAYyFgrodh7XugCTn2oUV9Tw=";
-  } else {
-    productName = "community";
-    productDesktop = "Burp Suite Community Edition";
-    hash = "sha256-en+eay+XL09Vk6H011fYvxGluMAndedtqCo4dQZvbBM=";
-  };
+let
+  version = "2024.6.6";
+
+  product =
+    if proEdition then
+      {
+        productName = "pro";
+        productDesktop = "Burp Suite Professional Edition";
+        hash = "sha256-EpDTxui/6w5RD15vpVXsNRqcajovgQDjlzLqEDdbPgY=";
+      }
+    else
+      {
+        productName = "community";
+        productDesktop = "Burp Suite Community Edition";
+        hash = "sha256-5LyazMNcEOq+F3p7y50x9AogvBKLd6ToS3Wzc+fFpmc=";
+      };
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -30,7 +43,11 @@ let
     icon = pname;
     desktopName = product.productDesktop;
     comment = description;
-    categories = [ "Development" "Security" "System" ];
+    categories = [
+      "Development"
+      "Security"
+      "System"
+    ];
   };
 
 in
@@ -39,30 +56,33 @@ buildFHSEnv {
 
   runScript = "${jdk}/bin/java -jar ${src}";
 
-  targetPkgs = pkgs: with pkgs; [
-    alsa-lib
-    at-spi2-core
-    cairo
-    cups
-    dbus
-    expat
-    glib
-    gtk3
-    libdrm
-    libudev0-shim
-    libxkbcommon
-    mesa.drivers
-    nspr
-    nss
-    pango
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-  ];
+  targetPkgs =
+    pkgs: with pkgs; [
+      alsa-lib
+      at-spi2-core
+      cairo
+      cups
+      dbus
+      expat
+      glib
+      gtk3
+      gtk3-x11
+      jython
+      libcanberra-gtk3
+      libdrm
+      libudev0-shim
+      libxkbcommon
+      nspr
+      nss
+      pango
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+    ];
 
   extraInstallCommands = ''
     mkdir -p "$out/share/pixmaps"
@@ -83,6 +103,7 @@ buildFHSEnv {
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ arcayr bennofs ];
+    maintainers = with maintainers; [ bennofs ];
+    mainProgram = "burpsuite";
   };
 }

@@ -107,7 +107,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A modern replacement for Redis and Memcached";
+    description = "Modern replacement for Redis and Memcached";
     homepage = "https://dragonflydb.io/";
     license = licenses.bsl11;
     platforms = platforms.linux;

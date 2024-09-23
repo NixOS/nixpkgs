@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fonttools
-, git
-, gitpython
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  git,
+  gitpython,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "font-v";
   version = "2.1.0";
+  format = "setuptools";
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
@@ -45,9 +47,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python utility for manipulating font version headers";
+    mainProgram = "font-v";
     homepage = "https://github.com/source-foundry/font-v";
     license = licenses.mit;
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

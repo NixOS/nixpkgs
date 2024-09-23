@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, round
-, graphviz
-, inkscape
-, imagemagick
-, pytestCheckHook
-, typed-ast
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  round,
+  graphviz,
+  inkscape,
+  imagemagick,
+  pytestCheckHook,
+  typed-ast,
 }:
 
 buildPythonPackage rec {
@@ -45,7 +46,8 @@ buildPythonPackage rec {
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
   nativeBuildInputs = [
-    inkscape imagemagick
+    inkscape
+    imagemagick
     jinja2
     poetry-core
     round
@@ -56,13 +58,9 @@ buildPythonPackage rec {
     typed-ast
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "diagrams"
-  ];
+  pythonImportsCheck = [ "diagrams" ];
 
   meta = with lib; {
     description = "Diagram as Code";

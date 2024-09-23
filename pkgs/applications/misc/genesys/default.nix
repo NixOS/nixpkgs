@@ -5,7 +5,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.7";
 
   src = fetchurl {
-    url = "https://github.com/mrlem/genesys/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/mrlem/genesys/releases/download/v${finalAttrs.version}/genesys-${finalAttrs.version}.tar.gz";
     hash = "sha256-I1lEVvwRiGf1f4zUtqKhSb+it/nC8WAmw5S6edquOj8=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A simple family tree generator that scales";
+    description = "Simple family tree generator that scales";
     homepage = "https://github.com/mrlem/genesys";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ rogarb ];

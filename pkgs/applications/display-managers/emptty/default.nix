@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "emptty";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-nReExxLbqlbzx1F1vk8qftWafG8umH988egsalSUals=";
+    hash = "sha256-xZfR4sn20fDaTNAxuxVflpr+8AFg5Z7vesO7P8Jxw6A=";
   };
 
   buildInputs = [ pam libX11 ];
 
-  vendorHash = "sha256-tviPb05puHvBdDkSsRrBExUVxQy+DzmkjB+W9W2CG4M=";
+  vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";
 
   meta = with lib; {
     description = "Dead simple CLI Display Manager on TTY";
@@ -28,5 +28,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ urandom ];
     # many undefined functions
     broken = stdenv.isDarwin;
+    mainProgram = "emptty";
   };
 }

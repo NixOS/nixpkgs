@@ -1,26 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, bearer
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  bearer,
 }:
 
 buildGoModule rec {
   pname = "bearer";
-  version = "1.31.1";
+  version = "1.46.1";
 
   src = fetchFromGitHub {
     owner = "bearer";
     repo = "bearer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GjCb0b8wT1mfk8Od1r5U6+a3yUzliS1ExIYIV6vnUPs=";
+    hash = "sha256-zMQvD6ats1zJ/hK/aZh0LKWdSRqcR0BrAVcD4KnRwMQ=";
   };
 
-  vendorHash = "sha256-QDtjB1h7mNBEpTwoQfex3c6oba/kztKlgQpbmNHvoz0=";
+  vendorHash = "sha256-1wxy/NXZCntVf8Po3Rn+pueadcveE0v3Jc0d4eYkY6s=";
 
-  subPackages = [
-    "cmd/bearer"
-  ];
+  subPackages = [ "cmd/bearer" ];
 
   ldflags = [
     "-s"

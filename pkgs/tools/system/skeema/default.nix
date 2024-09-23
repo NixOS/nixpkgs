@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "skeema";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
-    hash = "sha256-BXjcn9oakTvaWPYIsAsjYRwQ1aKhZ4PAV2AkxSVOF/I=";
+    hash = "sha256-MdaMK65PWreIPTuhsm+2ZVRQ8t/wYijkENk8qvX9oEM=";
   };
 
   vendorHash = null;
@@ -17,32 +17,35 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  preCheck =
+  preCheck = ''
+    # Fix tests expecting /usr/bin/printf and /bin/echo
+    substituteInPlace skeema_cmd_test.go \
+      --replace /usr/bin/printf "${coreutils}/bin/printf"
+
+    substituteInPlace internal/fs/dir_test.go \
+      --replace /bin/echo "${coreutils}/bin/echo" \
+      --replace /usr/bin/printf "${coreutils}/bin/printf"
+
+    substituteInPlace internal/applier/ddlstatement_test.go \
+      --replace /bin/echo "${coreutils}/bin/echo"
+  '';
+
+  checkFlags =
     let
       skippedTests = [
         # Tests requiring network access to gitlab.com
         "TestDirRelPath"
-        "TestParseDirSymlinks"
+        "TestParseDir"
 
         # Flaky tests
         "TestCommandTimeout"
         "TestShellOutTimeout"
+
+        # Fails with 'internal/fs/testdata/cfgsymlinks1/validrel/.skeema is a symlink pointing outside of its repo'.
+        "TestParseDirSymlinks"
       ];
     in
-    ''
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-
-      # Fix tests expecting /usr/bin/printf and /bin/echo
-      substituteInPlace skeema_cmd_test.go \
-        --replace /usr/bin/printf "${coreutils}/bin/printf"
-
-      substituteInPlace internal/fs/dir_test.go \
-        --replace /bin/echo "${coreutils}/bin/echo" \
-        --replace /usr/bin/printf "${coreutils}/bin/printf"
-
-      substituteInPlace internal/applier/ddlstatement_test.go \
-        --replace /bin/echo "${coreutils}/bin/echo"
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.version = testers.testVersion {
     package = skeema;

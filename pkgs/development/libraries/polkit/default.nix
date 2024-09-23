@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchFromGitHub
 , pkg-config
 , glib
 , expat
@@ -9,9 +9,7 @@
 , mesonEmulatorHook
 , ninja
 , perl
-, rsync
 , python3
-, fetchpatch
 , gettext
 , duktape
 , gobject-introspection
@@ -21,6 +19,7 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , coreutils
+, fetchpatch
 , useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , elogind
@@ -39,25 +38,30 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "123";
+  version = "124";
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   # Tarballs do not contain subprojects.
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "polkit";
+  src = fetchFromGitHub {
+    owner = "polkit-org";
     repo = "polkit";
     rev = version;
-    hash = "sha256-/kjWkh6w2FYgtYWzw3g3GlWJKKpkJ3cqwfE0iDqJctw=";
+    hash = "sha256-Vc9G2xK6U1cX+xW2BnKp3oS/ACbSXS/lztbFP5oJOlM=";
   };
 
   patches = [
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
+    ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
+
+    ./elogind.patch
+
+    # FIXME: remove in the next release
+    # https://github.com/NixOS/nixpkgs/issues/18012
     (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
-      sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
+      url = "https://github.com/polkit-org/polkit/commit/f93c7466039ea3403e0576928aeb620b806d0cce.patch";
+      sha256 = "sha256-cF0nNovYmyr+XixpBgQFF0A+oJeSPGZgTkgDQkQuof8=";
     })
   ];
 
@@ -72,7 +76,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     perl
-    rsync
 
     # man pages
     libxslt
@@ -110,10 +113,14 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
+  };
+
   mesonFlags = [
     "--datadir=${system}/share"
     "--sysconfdir=/etc"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "-Dos_type=redhat" # only affects PAM includes
     "-Dintrospection=${lib.boolToString withIntrospection}"
@@ -131,7 +138,7 @@ stdenv.mkDerivation rec {
   # at install time but Meson does not support this
   # so we need to convince it to install all files to a temporary
   # location using DESTDIR and then move it to proper one in postInstall.
-  DESTDIR = "${placeholder "out"}/dest";
+  env.DESTDIR = "dest";
 
   inherit doCheck;
 
@@ -165,26 +172,26 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
-    # We use rsync to merge the directories.
-    rsync --archive "${DESTDIR}/etc" "$out"
-    rm --recursive "${DESTDIR}/etc"
-    rsync --archive "${DESTDIR}${system}"/* "$out"
-    rm --recursive "${DESTDIR}${system}"/*
-    rmdir --parents --ignore-fail-on-non-empty "${DESTDIR}${system}"
+    # We need to be careful with the ordering to merge without conflicts.
     for o in $(getAllOutputNames); do
-        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "${DESTDIR}/''${!o}"
+        mv "$DESTDIR/''${!o}" "''${!o}"
     done
-    # Ensure the DESTDIR is removed.
-    destdirContainer="$(dirname "${DESTDIR}")"
-    pushd "$destdirContainer"; rmdir --parents "''${DESTDIR##$destdirContainer/}${builtins.storeDir}"; popd
+    mv "$DESTDIR/etc" "$out"
+    mv "$DESTDIR${system}/share"/* "$out/share"
+    # Ensure we did not forget to install anything.
+    rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}" "$DESTDIR${system}/share"
+    ! test -e "$DESTDIR"
   '';
 
   meta = with lib; {
-    homepage = "https://gitlab.freedesktop.org/polkit/polkit/";
-    description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
+    homepage = "https://github.com/polkit-org/polkit";
+    description = "Toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
+    badPlatforms = [
+      # mandatory libpolkit-gobject shared library
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
   };
 }

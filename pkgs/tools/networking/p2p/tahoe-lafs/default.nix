@@ -1,10 +1,37 @@
-{ lib, nettools, python3Packages, texinfo, fetchFromGitHub }:
+{ lib, nettools, python311, texinfo, fetchFromGitHub }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
 # store path. The problem appears to be non-fatal, but there's probably
 # some loss of functionality because of it.
 
+let
+  # Tahoe-LAFS unstable-2021-07-09 is incompatible with Python 3.12, and
+  # uses eliot in a way incompatible after version 1.14.0.
+  # These versions should be unpinned, when updating Tahoe-LAFS to a more recent version.
+  python = python311.override {
+    self = python;
+    packageOverrides = self: super: {
+      eliot = super.eliot.overridePythonAttrs (oldAttrs: rec {
+        version = "1.14.0";
+
+        src = fetchFromGitHub {
+          owner = "itamarst";
+          repo = "eliot";
+          rev = "refs/tags/${version}";
+          hash = "sha256-1QE/s8P2g7DGIcuT+/AikAaWMTafNWn4BRZqpBn5ghk=";
+        };
+
+        disabledTests = [
+          "test_default"
+          "test_large_numpy_array"
+          "test_numpy"
+        ];
+      });
+    };
+  };
+  python3Packages = python.pkgs;
+in
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
   version = "unstable-2021-07-09";
@@ -62,7 +89,7 @@ python3Packages.buildPythonApplication rec {
     appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
     html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
     service-identity simplejson sphinx-rtd-theme testtools treq twisted zfec
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls
     ++ twisted.optional-dependencies.conch;
 
@@ -89,6 +116,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tahoe-LAFS, a decentralized, fault-tolerant, distributed storage system";
+    mainProgram = "tahoe";
     longDescription = ''
       Tahoe-LAFS is a secure, decentralized, fault-tolerant filesystem.
       This filesystem is encrypted and spread over multiple peers in

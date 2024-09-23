@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , SDL2
 , aalib
 , alsa-lib
@@ -48,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
-    patchShebangs ./configure *.sh
+    patchShebangs *.sh
   '';
 
   configureFlags = [
@@ -75,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/chernandezba/zesarux";
     description = "ZX Second-Emulator And Released for UniX";
+    mainProgram = "zesarux";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;

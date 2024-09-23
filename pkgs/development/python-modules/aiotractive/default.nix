@@ -1,22 +1,28 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiotractive";
-  version = "0.5.6";
+  version = "0.6.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zhulik";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-jJw1L1++Z/r+E12tA6zoyyy4MmTpaaVVzKwfI6xcDBQ=";
+    repo = "aiotractive";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QwwW/UxRgd4rco80SqQUGt0ArDNT9MXa/U/W2/dHZT0=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp

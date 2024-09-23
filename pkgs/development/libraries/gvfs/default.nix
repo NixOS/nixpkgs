@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -29,10 +28,10 @@
 , libmtp
 , gnomeSupport ? false
 , gnome
-, gcr
+, gcr_4
 , glib-networking
 , gnome-online-accounts
-, wrapGAppsHook
+, wrapGAppsHook3
 , libimobiledevice
 , libbluray
 , libcdio-paranoia
@@ -40,17 +39,18 @@
 , openssh
 , libsecret
 , libgdata
+, libmsgraph
 , python3
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.52.1";
+  version = "1.54.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
-    hash = "sha256-zb1EQPbQh5Km51ISRMFzhuIL1TfTdRFwmfyPto/pF0E=";
+    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VJCPThC18cIx6QMwyMFbfyHyu2EPGUwDSzOON5xQjjw=";
   };
 
   patches = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     python3
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     libxslt
     docbook_xsl
     docbook_xml_dtd_42
@@ -100,11 +100,12 @@ stdenv.mkDerivation rec {
     polkit
     libcdio-paranoia
   ] ++ lib.optionals gnomeSupport [
-    gcr
+    gcr_4
     glib-networking # TLS support
     gnome-online-accounts
     libsecret
     libgdata
+    libmsgraph
   ];
 
   mesonFlags = [
@@ -126,6 +127,7 @@ stdenv.mkDerivation rec {
     "-Dgoa=false"
     "-Dkeyring=false"
     "-Dgoogle=false"
+    "-Donedrive=false"
   ] ++ lib.optionals (avahi == null) [
     "-Ddnssd=false"
   ] ++ lib.optionals (samba == null) [
@@ -134,13 +136,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.finalPackage.doCheck;
 
   separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gvfs";
       versionPolicy = "odd-unstable";
     };
   };
@@ -151,4 +153,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
-}
+})

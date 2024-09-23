@@ -72,7 +72,7 @@
 , enableIscsi ? false
 , openiscsi
 , libiscsi
-, enableXen ? false
+, enableXen ? stdenv.isLinux && stdenv.isx86_64
 , xen
 , enableZfs ? stdenv.isLinux
 , zfs
@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "9.9.0";
+  version = "10.5.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8Tmn99wDkRoA+pnOjeCzHoCeR3P3MwCA1kqY6SZpkqw=";
+    hash = "sha256-Nku4l1f34NOUr23KWDH9uZu72OgMK3KfYjsRRbuTvf8=";
     fetchSubmodules = true;
   };
 
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     sed -i '/commandtest/d' tests/meson.build
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
-    sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+    sed -i '0,/qemuxmlconftest/{/qemuxmlconftest/d;}' tests/meson.build
 
   '' + lib.optionalString isLinux ''
     for binary in mount umount mkfs; do
@@ -159,8 +159,15 @@ stdenv.mkDerivation rec {
     # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
     sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
+    sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
+    sed -i '/domaincapstest/d' tests/meson.build
+  '' + lib.optionalString enableXen ''
+    # Has various hardcoded paths that don't exist outside of a Xen dom0.
+    sed -i '/libxlxml2domconfigtest/d' tests/meson.build
+    substituteInPlace src/libxl/libxl_capabilities.h \
+     --replace-fail /usr/lib/xen ${xen}/libexec/xen
   '';
 
   strictDeps = true;
@@ -250,6 +257,9 @@ stdenv.mkDerivation rec {
       substituteInPlace src/util/virpolkit.h \
         --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
+      substituteInPlace src/util/virpci.c \
+         --replace '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
+
       patchShebangs .
     ''
     + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
@@ -267,7 +277,8 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/var/lib"
       (cfg "install_prefix" (placeholder "out"))
       (cfg "localstatedir" "/var")
-      (cfg "runstatedir" "/run")
+      (cfg "runstatedir" (if isDarwin then "/var/run" else "/run"))
+      (cfg "sshconfdir" "/etc/ssh/ssh_config.d")
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
       (cfg "qemu_datadir" (lib.optionalString isDarwin "${qemu}/share/qemu"))
@@ -298,6 +309,7 @@ stdenv.mkDerivation rec {
       (feat "polkit" isLinux)
       (feat "readline" true)
       (feat "secdriver_apparmor" isLinux)
+      (feat "ssh_proxy" isLinux)
       (feat "tests" true)
       (feat "udev" isLinux)
       (feat "yajl" true)
@@ -372,7 +384,7 @@ stdenv.mkDerivation rec {
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
   meta = with lib; {
-    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
+    description = "Toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
     license = licenses.lgpl2Plus;

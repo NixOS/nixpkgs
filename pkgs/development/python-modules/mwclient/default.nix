@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
-, responses
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
+  responses,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -41,14 +42,12 @@ buildPythonPackage rec {
       --replace " --cov mwclient test" ""
   '';
 
-  pythonImportsCheck = [
-    "mwclient"
-  ];
+  pythonImportsCheck = [ "mwclient" ];
 
   meta = with lib; {
     description = "Python client library to the MediaWiki API";
     license = licenses.mit;
     homepage = "https://github.com/mwclient/mwclient";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

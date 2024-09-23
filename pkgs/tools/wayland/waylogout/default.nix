@@ -6,6 +6,7 @@
 , pkg-config
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , cairo
 , gdk-pixbuf
@@ -28,6 +29,7 @@ stdenv.mkDerivation {
     meson
     ninja
     scdoc
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -39,7 +41,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "A graphical logout/suspend/reboot/shutdown dialog for wayland";
+    description = "Graphical logout/suspend/reboot/shutdown dialog for wayland";
     homepage = "https://github.com/loserMcloser/waylogout";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

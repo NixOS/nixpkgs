@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/community/directfb/0002-Fix-musl-PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP-comp.patch?id=f8158258493fc0c3eb5de2302e40f4bc44ecfb09";
       sha256 = "sha256-j3+mcP6hV9LKuba1GOdcM1cZfmXuJtRgx4vE484jIns=";
     })
+    # This uses POSIX basename() while directfb expects GNU
+    # basename(), but the POSIX behaviour of modifying the input
+    # should be fine since directfb never uses the buffer afterwards.
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/directfb/fix-missing-basename.patch?id=bc049ae1bcf9ef3f66cd12a6fbb7ac4e917764b1";
+      hash = "sha256-BX/C8+nh2fovHx8vKXFqKzBtfiTKUcW2BUCsaDIhodc=";
+    })
   ];
 
   postPatch = ''

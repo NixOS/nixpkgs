@@ -4,8 +4,9 @@
 , fetchYarnDeps
 , makeDesktopItem
 , copyDesktopItems
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , makeWrapper
+, autoSignDarwinBinariesHook
 , nodejs
 , yarn
 , electron
@@ -13,28 +14,35 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "22.1.2";
+  version = "24.7.8";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-4S4N7vfDwzlNutPfHozy/z0LOAr8q8EepXV4tsy+yAU=";
+    hash = "sha256-mpFmUPdgK9S6HcoO5wc6onUkmS6tRbFwLAsMhvIQ8sU=";
   };
+
+  # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
+  postPatch = ''
+    sed -i -e 's/resetAdHocDarwinSignature:.*/resetAdHocDarwinSignature: false,/' build/fuses.cjs
+  '';
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-QM7qazr8Iv4gjO7vF5Wj564D/yB+ZWmMGQDtTFytK00=";
+    hash = "sha256-/3Dn4l5Bao01pcSXuPhq/AbH+gxZzHILP8TiHvplJpw=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     makeWrapper
     nodejs
     yarn
   ] ++ lib.optionals (!stdenv.isDarwin) [
     copyDesktopItems
+  ] ++ lib.optionals stdenv.isDarwin [
+    autoSignDarwinBinariesHook
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = true;
@@ -55,14 +63,14 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
   '' + lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
+    cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   '' + ''
     yarn --offline run electron-builder --dir \
-      --config electron-builder-linux-mac.json \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      ${lib.optionalString stdenv.isDarwin "--config electron-builder-linux-mac.json"} \
+      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -106,11 +114,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A desktop application for creating diagrams";
+    description = "Desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
     license = licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ qyliss darkonion0 ];
     platforms = platforms.darwin ++ platforms.linux;
+    mainProgram = "drawio";
   };
 }

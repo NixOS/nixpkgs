@@ -6,7 +6,7 @@
 , which
 , frei0r
 , opencolorio
-, ffmpeg_4
+, ffmpeg_6
 , CoreFoundation
 , cmake
 , wrapQtAppsHook
@@ -19,6 +19,18 @@
 , qttools
 }:
 
+let
+  # https://github.com/olive-editor/olive/issues/2284
+  # we patch support for 2.3+, but 2.5 fails
+  openimageio' = openimageio.overrideAttrs (old: rec {
+    version = "2.4.15.0";
+    src = (old.src.override {
+      rev = "v${version}";
+      hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
+    });
+  });
+in
+
 stdenv.mkDerivation {
   pname = "olive-editor";
   version = "unstable-2023-06-12";
@@ -28,7 +40,7 @@ stdenv.mkDerivation {
     owner = "olive-editor";
     repo = "olive";
     rev = "2036fffffd0e24b7458e724b9084ae99c9507c64";
-    sha256 = "sha256-qee9/WTvTy5jWLowvZJOwAjrqznRhJR+u9dYsnCN/Qs=";
+    hash = "sha256-qee9/WTvTy5jWLowvZJOwAjrqznRhJR+u9dYsnCN/Qs=";
   };
 
   cmakeFlags = [
@@ -58,10 +70,10 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    ffmpeg_4
+    ffmpeg_6
     frei0r
     opencolorio
-    openimageio
+    openimageio'
     imath
     openexr_3
     portaudio

@@ -6,27 +6,27 @@ let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
 in {
-  meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 mfrw ];
+  meta.maintainers = with maintainers; [ mbaillie mfrw ];
 
   options.services.tailscale = {
-    enable = mkEnableOption (lib.mdDoc "Tailscale client daemon");
+    enable = mkEnableOption "Tailscale client daemon";
 
     port = mkOption {
       type = types.port;
       default = 41641;
-      description = lib.mdDoc "The port to listen on for tunnel traffic (0=autoselect).";
+      description = "The port to listen on for tunnel traffic (0=autoselect).";
     };
 
     interfaceName = mkOption {
       type = types.str;
       default = "tailscale0";
-      description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
+      description = ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
     };
 
     permitCertUid = mkOption {
       type = types.nullOr types.nonEmptyStr;
       default = null;
-      description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
+      description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
     package = lib.mkPackageOption pkgs "tailscale" {};
@@ -34,14 +34,14 @@ in {
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified port.";
     };
 
     useRoutingFeatures = mkOption {
       type = types.enum [ "none" "client" "server" "both" ];
       default = "none";
       example = "server";
-      description = lib.mdDoc ''
+      description = ''
         Enables settings required for Tailscale's routing features like subnet routers and exit nodes.
 
         To use these these features, you will still need to call `sudo tailscale up` with the relevant flags like `--advertise-exit-node` and `--exit-node`.
@@ -55,16 +55,32 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/tailscale_key";
-      description = lib.mdDoc ''
+      description = ''
         A file containing the auth key.
       '';
     };
 
     extraUpFlags = mkOption {
-      description = lib.mdDoc "Extra flags to pass to {command}`tailscale up`.";
+      description = ''
+        Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
+      '';
       type = types.listOf types.str;
       default = [];
       example = ["--ssh"];
+    };
+
+    extraSetFlags = mkOption {
+      description = "Extra flags to pass to {command}`tailscale set`.";
+      type = types.listOf types.str;
+      default = [];
+      example = ["--advertise-exit-node"];
+    };
+
+    extraDaemonFlags = mkOption {
+      description = "Extra flags to pass to {command}`tailscaled`.";
+      type = types.listOf types.str;
+      default = [];
+      example = ["--no-logs-no-support"];
     };
   };
 
@@ -74,14 +90,13 @@ in {
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       path = [
-        config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
         pkgs.getent     # for `getent` to look up user shells
         pkgs.kmod       # required to pass tailscale's v6nat check
-      ];
+      ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
+        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
       ]);
@@ -100,17 +115,35 @@ in {
     };
 
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
-      after = ["tailscale.service"];
-      wants = ["tailscale.service"];
+      after = ["tailscaled.service"];
+      wants = ["tailscaled.service"];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+      script = let
+        statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
+      in ''
+        while [[ "$(${statusCommand})" == "NoState" ]]; do
+          sleep 0.5
+        done
+        status=$(${statusCommand})
+        if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
+          ${lib.getExe cfg.package} up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
+        fi
+      '';
+    };
+
+    systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != []) {
+      after = ["tailscaled.service"];
+      wants = ["tailscaled.service"];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
       };
       script = ''
-        status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
-        if [[ $status != Connected* ]]; then
-          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
-        fi
+        ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
       '';
     };
 

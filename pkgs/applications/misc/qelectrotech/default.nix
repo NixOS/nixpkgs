@@ -69,6 +69,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Free software to create electric diagrams";
+    mainProgram = "qelectrotech";
     homepage = "https://qelectrotech.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ yvesf ];

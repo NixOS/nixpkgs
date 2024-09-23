@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.alanif.se/";
-    description = "The Alan interactive fiction language";
+    description = "Alan interactive fiction language";
     license = licenses.artistic2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ neilmayhew ];

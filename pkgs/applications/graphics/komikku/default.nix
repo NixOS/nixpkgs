@@ -1,5 +1,5 @@
 { lib
-, fetchFromGitLab
+, fetchFromGitea
 , desktop-file-utils
 , gettext
 , glib
@@ -19,15 +19,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.29.0";
+  version = "1.57.0";
 
   format = "other";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-efKYmsDbdDxgOHkv05zwlq88NzW7pYOQOYcJqPeKXkY=";
+    hash = "sha256-b2XoywPnrYnuehR6xHH8BvhbMZFB1AeBN0khFfaLGn0=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +62,8 @@ python3.pkgs.buildPythonApplication rec {
     natsort
     piexif
     pillow
-    pure-protobuf
+    pillow-heif
+    curl-cffi
     pygobject3
     python-magic
     rarfile
@@ -87,9 +89,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Manga reader for GNOME";
-    homepage = "https://valos.gitlab.io/Komikku/";
+    mainProgram = "komikku";
+    homepage = "https://apps.gnome.org/Komikku/";
     license = licenses.gpl3Plus;
-    changelog = "https://gitlab.com/valos/Komikku/-/releases/v${version}";
+    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
     maintainers = with maintainers; [ chuangzhu infinitivewitch ];
   };
 }

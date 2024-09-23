@@ -1,7 +1,5 @@
 { pkgs, config, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.firefox;
 
@@ -62,13 +60,13 @@ let
 in
 {
   options.programs.firefox = {
-    enable = mkEnableOption (mdDoc "the Firefox web browser");
+    enable = lib.mkEnableOption "the Firefox web browser";
 
-    package = mkOption {
-      type = types.package;
+    package = lib.mkOption {
+      type = lib.types.package;
       default = pkgs.firefox;
-      description = mdDoc "Firefox package to use.";
-      defaultText = literalExpression "pkgs.firefox";
+      description = "Firefox package to use.";
+      defaultText = lib.literalExpression "pkgs.firefox";
       relatedPackages = [
         "firefox"
         "firefox-beta-bin"
@@ -78,16 +76,16 @@ in
       ];
     };
 
-    wrapperConfig = mkOption {
-      type = types.attrs;
+    wrapperConfig = lib.mkOption {
+      type = lib.types.attrs;
       default = {};
-      description = mdDoc "Arguments to pass to Firefox wrapper";
+      description = "Arguments to pass to Firefox wrapper";
     };
 
-    policies = mkOption {
+    policies = lib.mkOption {
       type = policyFormat.type;
       default = { };
-      description = mdDoc ''
+      description = ''
         Group policies to install.
 
         See [Mozilla's documentation](https://mozilla.github.io/policy-templates/)
@@ -100,10 +98,10 @@ in
       '';
     };
 
-    preferences = mkOption {
-      type = with types; attrsOf (oneOf [ bool int str ]);
+    preferences = lib.mkOption {
+      type = with lib.types; attrsOf (oneOf [ bool int str ]);
       default = { };
-      description = mdDoc ''
+      description = ''
         Preferences to set from `about:config`.
 
         Some of these might be able to be configured more ergonomically
@@ -113,10 +111,10 @@ in
       '';
     };
 
-    preferencesStatus = mkOption {
-      type = types.enum [ "default" "locked" "user" "clear" ];
+    preferencesStatus = lib.mkOption {
+      type = lib.types.enum [ "default" "locked" "user" "clear" ];
       default = "locked";
-      description = mdDoc ''
+      description = ''
         The status of `firefox.preferences`.
 
         `status` can assume the following values:
@@ -127,9 +125,9 @@ in
       '';
     };
 
-    languagePacks = mkOption {
+    languagePacks = lib.mkOption {
       # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
-      type = types.listOf (types.enum ([
+      type = lib.types.listOf (lib.types.enum ([
         "ach"
         "af"
         "an"
@@ -164,6 +162,7 @@ in
         "ff"
         "fi"
         "fr"
+        "fur"
         "fy-NL"
         "ga-IE"
         "gd"
@@ -206,9 +205,12 @@ in
         "rm"
         "ro"
         "ru"
+        "sat"
+        "sc"
         "sco"
         "si"
         "sk"
+        "skr"
         "sl"
         "son"
         "sq"
@@ -217,6 +219,7 @@ in
         "szl"
         "ta"
         "te"
+        "tg"
         "th"
         "tl"
         "tr"
@@ -230,15 +233,15 @@ in
         "zh-TW"
       ]));
       default = [ ];
-      description = mdDoc ''
+      description = ''
         The language packs to install.
       '';
     };
 
-    autoConfig = mkOption {
-      type = types.lines;
+    autoConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
-      description = mdDoc ''
+      description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
         change user preferences or prevent the end user from modifiying specific
@@ -247,19 +250,19 @@ in
     };
 
     nativeMessagingHosts = ({
-      packages = mkOption {
-        type = types.listOf types.package;
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [];
-        description = mdDoc ''
+        description = ''
           Additional packages containing native messaging hosts that should be made available to Firefox extensions.
         '';
       };
-    }) // (mapAttrs (k: v: mkEnableOption (mdDoc "${v.name} support")) nmhOptions);
+    }) // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
   };
 
   config = let
-    forEachEnabledNmh = fn: flatten (mapAttrsToList (k: v: lib.optional cfg.nativeMessagingHosts.${k} (fn k v)) nmhOptions);
-  in mkIf cfg.enable {
+    forEachEnabledNmh = fn: lib.flatten (lib.mapAttrsToList (k: v: lib.optional cfg.nativeMessagingHosts.${k} (fn k v)) nmhOptions);
+  in lib.mkIf cfg.enable {
     warnings = forEachEnabledNmh (k: v:
       "The `programs.firefox.nativeMessagingHosts.${k}` option is deprecated, " +
       "please add `${v.package.pname}` to `programs.firefox.nativeMessagingHosts.packages` instead."
@@ -278,17 +281,18 @@ in
       let
         policiesJSON = policyFormat.generate "firefox-policies.json" { inherit (cfg) policies; };
       in
-      mkIf (cfg.policies != { }) {
+      lib.mkIf (cfg.policies != { }) {
         "firefox/policies/policies.json".source = "${policiesJSON}";
       };
 
     # Preferences are converted into a policy
     programs.firefox.policies = {
-      Preferences = (mapAttrs
+      DisableAppUpdate = true;
+      Preferences = (builtins.mapAttrs
         (_: value: { Value = value; Status = cfg.preferencesStatus; })
         cfg.preferences);
-      ExtensionSettings = listToAttrs (map
-        (lang: nameValuePair
+      ExtensionSettings = builtins.listToAttrs (builtins.map
+        (lang: lib.attrsets.nameValuePair
           "langpack-${lang}@firefox.mozilla.org"
           {
             installation_mode = "normal_installed";
@@ -299,5 +303,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ danth ];
+  meta.maintainers = with lib.maintainers; [ danth ];
 }

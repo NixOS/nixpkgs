@@ -20,6 +20,7 @@
 , doxygen
 , pkg-config
 , wayland-protocols
+, wayland-scanner
 }:
 
 mkDerivation rec {
@@ -62,6 +63,7 @@ mkDerivation rec {
     doxygen
     pkg-config
     wayland-protocols
+    wayland-scanner
   ];
 
   preConfigure = ''
@@ -70,8 +72,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Core libraries of Maliit and server";
+    mainProgram = "maliit-server";
     homepage = "http://maliit.github.io/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

@@ -34,7 +34,7 @@ let
       # copy additional plugin(s), theme(s) and language(s)
       ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
       ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
-      ${concatMapStringsSep "\n" (language: "cp -r ${language}/* $out/share/wordpress/wp-content/languages/") cfg.languages}
+      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
@@ -70,18 +70,21 @@ let
         require_once(ABSPATH . 'wp-settings.php');
       ?>
     '';
-    checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+    checkPhase = "${pkgs.php}/bin/php --syntax-check $target";
   };
 
   mkPhpValue = v: let
     isHasAttr = s: isAttrs v && hasAttr s v;
+    # "you're escaped" -> "'you\'re escaped'"
+    # https://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.single
+    toPhpString = s: "'${escape [ "'" "\\" ] s}'";
   in
-    if isString v then escapeShellArg v
+    if isString v then toPhpString v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isList v && any lib.strings.isCoercibleToString v then toPhpString (concatMapStringsSep "," toString v)
     else if isInt v then toString v
     else if isBool v then boolToString v
-    else if isHasAttr "_file" then "trim(file_get_contents(${lib.escapeShellArg v._file}))"
+    else if isHasAttr "_file" then "trim(file_get_contents(${toPhpString v._file}))"
     else if isHasAttr "_raw" then v._raw
     else abort "The Wordpress config value ${lib.generators.toPretty {} v} can not be encoded."
   ;
@@ -109,7 +112,7 @@ let
         uploadsDir = mkOption {
           type = types.path;
           default = "/var/lib/wordpress/${name}/uploads";
-          description = lib.mdDoc ''
+          description = ''
             This directory is used for uploads of pictures. The directory passed here is automatically
             created and permissions adjusted as required.
           '';
@@ -118,7 +121,7 @@ let
         fontsDir = mkOption {
           type = types.path;
           default = "/var/lib/wordpress/${name}/fonts";
-          description = lib.mdDoc ''
+          description = ''
             This directory is used to download fonts from a remote location, e.g.
             to host google fonts locally.
           '';
@@ -131,7 +134,7 @@ let
               listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
             (attrsOf path);
           default = {};
-          description = lib.mdDoc ''
+          description = ''
             Path(s) to respective plugin(s) which are copied from the 'plugins' directory.
 
             ::: {.note}
@@ -153,7 +156,7 @@ let
             (attrsOf path);
           default = { inherit (pkgs.wordpressPackages.themes) twentytwentythree; };
           defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentythree; }";
-          description = lib.mdDoc ''
+          description = ''
             Path(s) to respective theme(s) which are copied from the 'theme' directory.
 
             ::: {.note}
@@ -170,26 +173,26 @@ let
         languages = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = lib.mdDoc ''
+          description = ''
             List of path(s) to respective language(s) which are copied from the 'languages' directory.
           '';
           example = literalExpression ''
-            [(
+            [
               # Let's package the German language.
               # For other languages try to replace language and country code in the download URL with your desired one.
               # Reference https://translate.wordpress.org for available translations and
               # codes.
-              language-de = pkgs.stdenv.mkDerivation {
+              (pkgs.stdenv.mkDerivation {
                 name = "language-de";
                 src = pkgs.fetchurl {
                   url = "https://de.wordpress.org/wordpress-''${pkgs.wordpress.version}-de_DE.tar.gz";
                   # Name is required to invalidate the hash when wordpress is updated
-                  name = "wordpress-''${pkgs.wordpress.version}-language-de"
+                  name = "wordpress-''${pkgs.wordpress.version}-language-de";
                   sha256 = "sha256-dlas0rXTSV4JAl8f/UyMbig57yURRYRhTMtJwF9g8h0=";
                 };
                 installPhase = "mkdir -p $out; cp -r ./wp-content/languages/* $out/";
-              };
-            )];
+              })
+            ];
           '';
         };
 
@@ -197,32 +200,32 @@ let
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = lib.mdDoc "Database host address.";
+            description = "Database host address.";
           };
 
           port = mkOption {
             type = types.port;
             default = 3306;
-            description = lib.mdDoc "Database host port.";
+            description = "Database host port.";
           };
 
           name = mkOption {
             type = types.str;
             default = "wordpress";
-            description = lib.mdDoc "Database name.";
+            description = "Database name.";
           };
 
           user = mkOption {
             type = types.str;
             default = "wordpress";
-            description = lib.mdDoc "Database user.";
+            description = "Database user.";
           };
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/run/keys/wordpress-dbpassword";
-            description = lib.mdDoc ''
+            description = ''
               A file containing the password corresponding to
               {option}`database.user`.
             '';
@@ -231,7 +234,7 @@ let
           tablePrefix = mkOption {
             type = types.str;
             default = "wp_";
-            description = lib.mdDoc ''
+            description = ''
               The $table_prefix is the value placed in the front of your database tables.
               Change the value if you want to use something other than wp_ for your database
               prefix. Typically this is changed if you are installing multiple WordPress blogs
@@ -245,13 +248,13 @@ let
             type = types.nullOr types.path;
             default = null;
             defaultText = literalExpression "/run/mysqld/mysqld.sock";
-            description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+            description = "Path to the unix socket file to use for authentication.";
           };
 
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = lib.mdDoc "Create the database and database user locally.";
+            description = "Create the database and database user locally.";
           };
         };
 
@@ -264,7 +267,7 @@ let
               enableACME = true;
             }
           '';
-          description = lib.mdDoc ''
+          description = ''
             Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
           '';
         };
@@ -279,7 +282,7 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = lib.mdDoc ''
+          description = ''
             Options for the WordPress PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
@@ -288,7 +291,7 @@ let
         settings = mkOption {
           type = types.attrsOf types.anything;
           default = {};
-          description = lib.mdDoc ''
+          description = ''
             Structural Wordpress configuration.
             Refer to <https://developer.wordpress.org/apis/wp-config-php>
             for details and supported values.
@@ -316,7 +319,7 @@ let
               AUTOMATIC_UPDATER_DISABLED = true;
             }
           '';
-          description = lib.mdDoc ''
+          description = ''
             Read only representation of the final configuration.
           '';
         };
@@ -324,7 +327,7 @@ let
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Any additional text to be appended to the wp-config.php
             configuration file. This is a PHP script. For configuration
             settings, see <https://codex.wordpress.org/Editing_wp-config.php>.
@@ -351,13 +354,13 @@ in
       sites = mkOption {
         type = types.attrsOf (types.submodule siteOpts);
         default = {};
-        description = lib.mdDoc "Specification of one or more WordPress sites to serve";
+        description = "Specification of one or more WordPress sites to serve";
       };
 
       webserver = mkOption {
         type = types.enum [ "httpd" "nginx" "caddy" ];
         default = "httpd";
-        description = lib.mdDoc ''
+        description = ''
           Whether to use apache2 or nginx for virtual host management.
 
           Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
@@ -426,6 +429,7 @@ in
             # standard wordpress .htaccess contents
             <IfModule mod_rewrite.c>
               RewriteEngine On
+              RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
               RewriteBase /
               RewriteRule ^index\.php$ - [L]
               RewriteCond %{REQUEST_FILENAME} !-f

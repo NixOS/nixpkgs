@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, xvfb-run
-, matplotlib
-, scikit-image
-, numpy
-, pandas
-, imageio
-, snakeviz
-, fn
-, pyopengl
-, seaborn
-, torch
-, pythonOlder
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  xvfb-run,
+  matplotlib,
+  scikit-image,
+  numpy,
+  pandas,
+  imageio,
+  snakeviz,
+  fn,
+  pyopengl,
+  seaborn,
+  torch,
+  pythonOlder,
+  torchvision,
 }:
 
 buildPythonPackage rec {
   pname = "boxx";
-  version = "0.10.12";
+  version = "0.10.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pumkDVyotm8bJEl/rrpNSsP8KZIVIgThGFB/Sy4OdUs=";
+    hash = "sha256-unGnmPksEuqFXHTWJkj9Gv2G/qPDgT6AZXYiG2gtkEA=";
   };
 
   propagatedBuildInputs = [
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  pythonImportsCheck = [
-    "boxx"
-  ];
+  pythonImportsCheck = [ "boxx" ];
 
   checkPhase = ''
     xvfb-run ${python.interpreter} -m unittest

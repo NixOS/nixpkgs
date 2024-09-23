@@ -77,13 +77,18 @@ in
       export QTCOMPOSE=${xorg.libX11}/share/X11/locale
       export LIBARCHIVE=${libarchive.lib}/lib/libarchive.so
       # Allows `conda activate` to work properly
-      source ${installationPath}/etc/profile.d/conda.sh
+      condaSh=${installationPath}/etc/profile.d/conda.sh
+      if [ ! -f $condaSh ]; then
+        conda-install
+      fi
+      source $condaSh
     '';
 
     runScript = "bash -l";
 
     meta = {
       description = "Conda is a package manager for Python";
+      mainProgram = "conda-shell";
       homepage = "https://conda.io/";
       platforms = lib.platforms.linux;
       license = lib.licenses.bsd3;

@@ -5,7 +5,7 @@
     if rev != null
     then "https://gitlab.haskell.org/ghc/ghc.git"
     else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
-
+, postFetch ? null
 }:
 
 { lib
@@ -13,13 +13,13 @@
 , pkgsBuildTarget
 , pkgsHostTarget
 , targetPackages
+, fetchpatch
 
 # build-tools
 , bootPkgs
 , autoconf
 , automake
 , coreutils
-, fetchpatch
 , fetchurl
 , fetchgit
 , perl
@@ -29,6 +29,7 @@
 , xattr
 , autoSignDarwinBinariesHook
 , bash
+, srcOnly
 
 , libiconv ? null, ncurses
 , glibcLocales ? null
@@ -116,8 +117,11 @@
     -- no way to set this via the command line
     finalStage :: Stage
     finalStage = ${
-      if stdenv.hostPlatform == stdenv.targetPlatform
-      then "Stage2" # native compiler
+      # Always build the stage 2 compiler if possible. Note we can currently
+      # assume hostPlatform == buildPlatform.
+      # TODO(@sternenseemann): improve this condition when we can cross-compile GHC
+      if stdenv.hostPlatform.canExecute stdenv.targetPlatform
+      then "Stage2" # native compiler or “native” cross e.g. pkgsStatic
       else "Stage1" # cross compiler
     }
 
@@ -142,33 +146,77 @@
         return $ verbosity >= Verbose
   ''
 
-, ghcSrc ? (if rev != null then fetchgit else fetchurl) ({
-    inherit url sha256;
-  } // lib.optionalAttrs (rev != null) {
-    inherit rev;
-  })
+, ghcSrc ?
+    srcOnly {
+      name = "ghc-${version}"; # -source appended by srcOnly
+      src =
+        (if rev != null then fetchgit else fetchurl) ({
+          inherit url sha256;
+        } // lib.optionalAttrs (rev != null) {
+          inherit rev;
+        } // lib.optionalAttrs (postFetch != null) {
+          inherit postFetch;
+        });
+
+      patches =
+        let
+          # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+          enableHyperlinkedSource =
+            lib.versionAtLeast version "9.8" ||
+            !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+        in
+        [
+          # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+          (if lib.versionAtLeast version "9.8"
+           then ./docs-sphinx-7-ghc98.patch
+           else ./docs-sphinx-7.patch )
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
+          (fetchpatch {
+            name = "fix-fully_static.patch";
+            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1bb24432ff77e11a0340a7d8586e151e15bba2a1.diff";
+            hash = "sha256-MpvTmFFsNiPDoOp9BhZyWeapeibQ77zgEV+xzZ1UAXs=";
+          })
+        ]
+        ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+          # Prevent the paths module from emitting symbols that we don't use
+          # when building with separate outputs.
+          #
+          # These cause problems as they're not eliminated by GHC's dead code
+          # elimination on aarch64-darwin. (see
+          # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+          (if lib.versionOlder version "9.10"
+           then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+           else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
+        ]
+        # Prevents passing --hyperlinked-source to haddock. This is a custom
+        # workaround as we wait for this to be configurable via userSettings or
+        # similar. https://gitlab.haskell.org/ghc/ghc/-/issues/23625
+        ++ lib.optionals (!enableHyperlinkedSource) [
+          # TODO(@sternenseemann): Doesn't apply for GHC >= 9.8
+          ../../tools/haskell/hadrian/disable-hyperlinked-source.patch
+        ]
+        # Incorrect bounds on Cabal in hadrian
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
+        ++ lib.optionals (lib.elem version [ "9.8.1" "9.8.2" ]) [
+          ../../tools/haskell/hadrian/hadrian-9.8.1-allow-Cabal-3.10.patch
+        ];
+    }
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
   # using our bootstrap GHC.
 , hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
-    ghcSrc = ghcSrc;
+    inherit ghcSrc;
     ghcVersion = version;
     userSettings = hadrianUserSettings;
-    # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
-    enableHyperlinkedSource =
-      # TODO(@sternenseemann): Disabling currently doesn't work with GHC >= 9.8
-      lib.versionAtLeast version "9.8" ||
-      !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
   }
 
 , #  Whether to build sphinx documentation.
+  # TODO(@sternenseemann): Hadrian ignores the --docs flag if finalStage = Stage1
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , # Whether to disable the large address space allocator
@@ -219,23 +267,42 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
-  # derivation for certain tools depending on the platform.
-  bintoolsFor = {
-    # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-    # part of the bintools wrapper (due to codesigning requirements), but not on
-    # x86_64-darwin.
-    install_name_tool =
-      if stdenv.targetPlatform.isAarch64
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-    # Same goes for strip.
-    strip =
-      # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-      if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
-      then targetCC.bintools
-      else targetCC.bintools.bintools;
-  };
+  # toolPath calculates the absolute path to the name tool associated with a
+  # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
+  # the tool from (cc, cc.bintools, cc.bintools.bintools) and adds the correct
+  # subpath of the tool.
+  toolPath = name: cc:
+    let
+      tools = {
+        "cc" = cc;
+        "c++" = cc;
+        as = cc.bintools.bintools;
+
+        ar = cc.bintools.bintools;
+        ranlib = cc.bintools.bintools;
+        nm = cc.bintools.bintools;
+        readelf = cc.bintools.bintools;
+
+        ld = cc.bintools;
+        "ld.gold" = cc.bintools;
+
+        otool = cc.bintools.bintools;
+
+        # GHC needs install_name_tool on all darwin platforms. The same one can
+        # be used on both platforms. It is safe to use with linker-generated
+        # signatures because it will update the signatures automatically after
+        # modifying the target binary.
+        install_name_tool = cc.bintools.bintools;
+
+        # strip on darwin is wrapped to enable deterministic mode.
+        strip =
+          # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
+          if stdenv.targetPlatform.isDarwin
+          then cc.bintools
+          else cc.bintools.bintools;
+      }.${name};
+    in
+    "${tools}/bin/${tools.targetPrefix}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -266,12 +333,6 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
-  patches = [
-    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-    (if lib.versionAtLeast version "9.8"
-      then ./docs-sphinx-7-ghc98.patch
-      else ./docs-sphinx-7.patch )
-  ];
   postPatch = ''
     patchShebangs --build .
   '';
@@ -287,19 +348,19 @@ stdenv.mkDerivation ({
     done
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
+    export CC="${toolPath "cc" targetCC}"
+    export CXX="${toolPath "c++" targetCC}"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${bintoolsFor.strip}/bin/${bintoolsFor.strip.targetPrefix}strip"
+    export LD="${toolPath "ld${lib.optionalString useLdGold ".gold"}" targetCC}"
+    export AS="${toolPath "as" targetCC}"
+    export AR="${toolPath "ar" targetCC}"
+    export NM="${toolPath "nm" targetCC}"
+    export RANLIB="${toolPath "ranlib" targetCC}"
+    export READELF="${toolPath "readelf" targetCC}"
+    export STRIP="${toolPath "strip" targetCC}"
   '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
-    export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
-    export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
+    export OTOOL="${toolPath "otool" targetCC}"
+    export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
   '' + lib.optionalString useLLVM ''
     export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
     export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
@@ -343,10 +404,10 @@ stdenv.mkDerivation ({
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   ''
-  # Need to make writable EM_CACHE for emscripten
+  # Need to make writable EM_CACHE for emscripten. The path in EM_CACHE must be absolute.
   # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
   + lib.optionalString targetPlatform.isGhcjs ''
-    export EM_CACHE="$(mktemp -d emcache.XXXXXXXXXX)"
+    export EM_CACHE="$(realpath $(mktemp -d emcache.XXXXXXXXXX))"
     cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
     chmod u+rwX -R "$EM_CACHE"
   ''
@@ -393,8 +454,8 @@ stdenv.mkDerivation ({
     "--disable-large-address-space"
   ] ++ lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
-    "--with-libdw-includes=${lib.getDev elfutils}/include"
-    "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+    "--with-libdw-includes=${lib.getDev targetPackages.elfutils}/include"
+    "--with-libdw-libraries=${lib.getLib targetPackages.elfutils}/lib"
   ] ++ lib.optionals targetPlatform.isDarwin [
     # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
     # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
@@ -507,11 +568,15 @@ stdenv.mkDerivation ({
 
     # Expose hadrian used for bootstrapping, for debugging purposes
     inherit hadrian;
+
+    # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
+    # so haddock isn't available for GHC cross-compilers. Can we fix that?
+    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
   };
 
   meta = {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [
       guibou
     ] ++ lib.teams.haskell.members;

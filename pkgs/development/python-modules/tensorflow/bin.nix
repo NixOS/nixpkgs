@@ -1,62 +1,76 @@
-{ stdenv
-, lib
-, fetchurl
-, buildPythonPackage
-, isPy3k, pythonOlder, pythonAtLeast, astor
-, gast
-, google-pasta
-, wrapt
-, numpy
-, six
-, termcolor
-, packaging
-, protobuf
-, absl-py
-, grpcio
-, mock
-, scipy
-, wheel
-, jax
-, opt-einsum
-, tensorflow-estimator-bin
-, tensorboard
-, config
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
-, zlib
-, python
-, keras-applications
-, keras-preprocessing
-, addOpenGLRunpath
-, astunparse
-, flatbuffers
-, h5py
-, typing-extensions
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  isPy3k,
+  astor,
+  gast,
+  google-pasta,
+  wrapt,
+  numpy,
+  six,
+  termcolor,
+  packaging,
+  protobuf,
+  absl-py,
+  grpcio,
+  mock,
+  scipy,
+  distutils,
+  wheel,
+  jax,
+  ml-dtypes,
+  opt-einsum,
+  tensorflow-estimator-bin,
+  tensorboard,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+  zlib,
+  python,
+  keras-applications,
+  keras-preprocessing,
+  addDriverRunpath,
+  astunparse,
+  flatbuffers,
+  h5py,
+  llvmPackages,
+  typing-extensions,
 }:
 
-# We keep this binary build for two reasons:
+# We keep this binary build for three reasons:
 # - the source build doesn't work on Darwin.
 # - the source build is currently brittle and not easy to maintain
+# - the source build doesn't work on NVIDIA Jetson platforms
 
 # unsupported combination
-assert ! (stdenv.isDarwin && cudaSupport);
+assert !(stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
   inherit (cudaPackages) cudatoolkit cudnn;
-in buildPythonPackage {
+
+  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaX64 = cudaSupport && stdenv.hostPlatform.isx86_64;
+in
+buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
-  inherit (packages) version;
+  version = packages."${"version" + lib.optionalString isCudaJetson "_jetson"}";
   format = "wheel";
 
-  src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
-    platform = if stdenv.isDarwin then "mac" else "linux";
-    unit = if cudaSupport then "gpu" else "cpu";
-    key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl (packages.${key} or {});
+  src =
+    let
+      pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
+      platform = stdenv.system;
+      cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
+      key = "${platform}_${pyVerNoDot}${cuda}";
+    in
+    fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported configuration: ${key}"));
 
-  propagatedBuildInputs = [
+  buildInputs = [ llvmPackages.openmp ];
+
+  dependencies = [
     astunparse
     flatbuffers
     typing-extensions
@@ -64,7 +78,7 @@ in buildPythonPackage {
     protobuf
     numpy
     scipy
-    jax
+    (if isCudaX64 then jax else ml-dtypes)
     termcolor
     grpcio
     six
@@ -81,7 +95,13 @@ in buildPythonPackage {
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 
-  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  build-system =
+    [
+      distutils
+      wheel
+    ]
+    ++ lib.optionals cudaSupport [ addDriverRunpath ]
+    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -91,7 +111,11 @@ in buildPythonPackage {
 
     pushd dist
 
-    orig_name="$(echo ./*.whl)"
+    for f in tensorflow-*+nv*.whl; do
+      # e.g. *nv24.07* -> *nv24.7*
+      mv "$f" "$(sed -E 's/(nv[0-9]+)\.0*([0-9]+)/\1.\2/' <<< "$f")"
+    done
+
     wheel unpack --dest unpacked ./*.whl
     rm ./*.whl
     (
@@ -113,7 +137,6 @@ in buildPythonPackage {
         -e "s/Requires-Dist: numpy (.*)/Requires-Dist: numpy/"
     )
     wheel pack ./unpacked/tensorflow*
-    mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
 
     popd
   '';
@@ -168,6 +191,7 @@ in buildPythonPackage {
         "$out/${python.sitePackages}/tensorflow/python/saved_model"
         "$out/${python.sitePackages}/tensorflow/python/util"
         "$out/${python.sitePackages}/tensorflow/tsl/python/lib/core"
+        "$out/${python.sitePackages}/tensorflow.libs/"
         "${rpath}"
       )
 
@@ -180,7 +204,7 @@ in buildPythonPackage {
         chmod a+rx "$lib"
         patchelf --set-rpath "$rrPath" "$lib"
         ${lib.optionalString cudaSupport ''
-          addOpenGLRunpath "$lib"
+          addDriverRunpath "$lib"
         ''}
       done
     '';
@@ -199,16 +223,15 @@ in buildPythonPackage {
     "tensorflow.python.framework"
   ];
 
-  passthru = {
-    inherit cudaPackages;
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      jyp
+      abbradar
+    ];
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

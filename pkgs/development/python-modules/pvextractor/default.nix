@@ -1,23 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, astropy
-, qtpy
-, pyqt6
-, pyqt-builder
-, setuptools
-, setuptools-scm
-, scipy
-, matplotlib
-, spectral-cube
-, pytestCheckHook
-, pytest-astropy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  astropy,
+  qtpy,
+  pyqt6,
+  pyqt-builder,
+  setuptools,
+  setuptools-scm,
+  scipy,
+  matplotlib,
+  spectral-cube,
+  pytestCheckHook,
+  pytest-astropy,
 }:
 
 buildPythonPackage rec {
   pname = "pvextractor";
   version = "0.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -29,7 +31,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pyqt-builder ];
-  nativeBuildInputs = [ setuptools setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
   propagatedBuildInputs = [
     astropy
     scipy
@@ -38,8 +43,6 @@ buildPythonPackage rec {
     qtpy
     spectral-cube
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   # collecting ... qt.qpa.xcb: could not connect to display
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.

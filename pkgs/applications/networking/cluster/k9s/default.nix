@@ -2,25 +2,28 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.28.2";
+  version = "0.32.5";
 
   src = fetchFromGitHub {
-    owner  = "derailed";
-    repo   = "k9s";
-    rev    = "v${version}";
-    sha256 = "sha256-3ij77aBNufSEP3wf8wtQ/aBehE45fwrgofCmyXxuyPM=";
+    owner = "derailed";
+    repo = "k9s";
+    rev = "v${version}";
+    hash = "sha256-H0PimkPXs2/iirOpN82az3Bge71k1RZOhMtr0UmGOy8=";
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/derailed/k9s/cmd.version=${version}"
     "-X github.com/derailed/k9s/cmd.commit=${src.rev}"
     "-X github.com/derailed/k9s/cmd.date=1970-01-01T00:00:00Z"
   ];
 
-  tags = [ "netgo" ];
+  tags = [ "netcgo" ];
 
-  vendorHash = "sha256-kgi5ZfbjkSiJ/uZkfpeMhonSt/4sO3RKARpoww1FsTo=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-U/tIsYpoog3S8V2yQGGqaQ+Av7TfvCYt3zn74qWuQKs=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
@@ -39,6 +42,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
+    # k9s requires a writeable log directory
+    # Otherwise an error message is printed
+    # into the completion scripts
+    export K9S_LOGS_DIR=$(mktemp -d)
+
     installShellCompletion --cmd k9s \
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \
@@ -48,7 +56,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Kubernetes CLI To Manage Your Clusters In Style";
     homepage = "https://github.com/derailed/k9s";
+    changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
     license = licenses.asl20;
+    mainProgram = "k9s";
     maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
   };
 }

@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, pytestCheckHook
-, numpy
-, decopatch
-, more-itertools
-, nestedtext
-, pyyaml
-, tidyexc
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pytestCheckHook,
+  numpy,
+  decopatch,
+  more-itertools,
+  nestedtext,
+  pyyaml,
+  tidyexc,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "parametrize-from-file";
-  version = "0.18.0";
+  version = "0.20.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "parametrize_from_file";
-    hash = "sha256-mYE8J7XWlvCS2H3kt0bB8dyPHFDqmW8NiH9UCrNccAU=";
+    hash = "sha256-t4WLNDkC/ErBnOGK6FoYIfjoL/zF9MxPThJtGM1nUL4=";
   };
 
   # patch out coveralls since it doesn't provide us value
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace "more_itertools~=8.10" "more_itertools"
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     numpy
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pythonImportsCheck = [
-    "parametrize_from_file"
-  ];
+  pythonImportsCheck = [ "parametrize_from_file" ];
 
   disabledTests = [
     # https://github.com/kalekundert/parametrize_from_file/issues/19

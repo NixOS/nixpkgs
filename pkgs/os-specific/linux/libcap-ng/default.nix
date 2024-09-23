@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libcap-ng";
-  version = "0.8.3";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/libcap-ng/libcap-ng-${version}.tar.gz";
-    sha256 = "sha256-vtb2hI4iuy+Dtfdksq7w7TkwVOgDqOOocRyyo55rSS0=";
+    hash = "sha256-O6UpTRy9+pivqs+8ALavntK4PoohgXGF39hEzIx6xv8=";
   };
 
   outputs = [ "out" "dev" "man" ];

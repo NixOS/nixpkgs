@@ -7,7 +7,7 @@
 , libxml2
 , gtk3
 , libportal-gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     libxml2 # xml-stripblanks preprocessing of GResource
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -46,10 +46,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple color chooser written in GTK3";
+    description = "Simple color chooser written in GTK3";
+    mainProgram = "gcolor3";
     homepage = "https://gitlab.gnome.org/World/gcolor3";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

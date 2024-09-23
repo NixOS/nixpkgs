@@ -1,22 +1,36 @@
 { lib, stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, nodejs
+, jailbreak-cabal, hscolour, cpphs, runCommandCC
 , ghcWithHoogle, ghcWithPackages
+, nodejs
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  # Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
+  # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
+  # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
+  # backend. The latter is a normal cross compilation backend and needs little
+  # special accommodation.
+  outputsJS = ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs;
+
+  # Pass the "wrong" C compiler rather than none at all so packages that just
+  # use the C preproccessor still work, see
+  # https://github.com/haskell/cabal/issues/6466 for details.
+  cc =
+    if stdenv.hasCC then "$CC"
+    else if stdenv.hostPlatform.isGhcjs then "${emscripten}/bin/emcc"
+    else "$CC_FOR_BUILD";
+
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkg-config coreutils gnugrep glibcLocales;
+    pkg-config coreutils gnugrep glibcLocales
+    emscripten;
+
 in
 
 { pname
-# Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
-# ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
-# (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
-# backend. The latter is a normal cross compilation backend and needs little
-# special accommodation.
-, dontStrip ? (ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs)
+, dontStrip ? outputsJS
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
@@ -27,21 +41,22 @@ in
 , buildFlags ? []
 , haddockFlags ? []
 , description ? null
-, doCheck ? !isCross && lib.versionOlder "7.4" ghc.version
+, doCheck ? !isCross
 , doBenchmark ? false
 , doHoogle ? true
-, doHaddockQuickjump ? doHoogle && lib.versionAtLeast ghc.version "8.6"
+, doHaddockQuickjump ? doHoogle
 , doInstallIntermediates ? false
 , editedCabalFile ? null
-, enableLibraryProfiling ? !(ghc.isGhcjs or false)
+, enableLibraryProfiling ? !outputsJS
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
-, enableStaticLibraries ? !(stdenv.hostPlatform.isWindows or stdenv.hostPlatform.isWasm)
-, enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows && lib.versionAtLeast ghc.version "8.4"
+# Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
+, enableStaticLibraries ? !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs)
+, enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 # On macOS, statically linking against system frameworks is not supported;
 # see https://developer.apple.com/library/content/qa/qa1118/_index.html
@@ -98,6 +113,16 @@ in
   # build products from that prior build as a starting point for accelerating
   # this build
 , previousIntermediates ? null
+  # References to these store paths are forbidden in the produced output.
+, disallowedRequisites ? []
+  # Whether to allow the produced output to refer to `ghc`.
+  #
+  # This is used by `haskell.lib.justStaticExecutables` to help prevent static
+  # Haskell binaries from having erroneous dependencies on GHC.
+  #
+  # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
+  # or its source doc/languages-frameworks/haskell.section.md
+, disallowGhcReference ? false
 , # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
   # Requires.private dependencies of pkg-config dependencies to be present in
@@ -125,23 +150,17 @@ assert stdenv.hostPlatform.isWasm -> enableStaticLibraries == false;
 
 let
 
-  inherit (lib) optional optionals optionalString versionOlder versionAtLeast
+  inherit (lib) optional optionals optionalString versionAtLeast
                        concatStringsSep enableFeature optionalAttrs;
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
-  packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" ghc.version
-                  then "package-db"
-                  else "package-conf";
 
   # GHC used for building Setup.hs
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
   # same version, or ghcjs, in which case its the ghc used to build ghcjs.
   nativeGhc = buildHaskellPackages.ghc;
-  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
-                        then "package-db"
-                        else "package-conf";
 
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
@@ -194,10 +213,7 @@ let
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
-    # Pass the "wrong" C compiler rather than none at all so packages that just
-    # use the C preproccessor still work, see
-    # https://github.com/haskell/cabal/issues/6466 for details.
-    "--with-gcc=${if stdenv.hasCC then "$CC" else "$CC_FOR_BUILD"}"
+    "--with-gcc=${cc}"
   ] ++ optionals stdenv.hasCC [
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
     "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
@@ -210,10 +226,7 @@ let
   ] ++ optional (allPkgconfigDepends != [])
     "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
 
-  parallelBuildingFlags = "-j$NIX_BUILD_CORES" + optionalString stdenv.isLinux " +RTS -A64M -RTS";
-
-  crossCabalFlagsString =
-    lib.optionalString isCross (" " + lib.concatStringsSep " " crossCabalFlags);
+  makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
@@ -231,25 +244,22 @@ let
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
-    (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature (enableDeadCodeElimination && !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
+    (optionalString enableParallelBuilding (makeGhcOptions [ "-j$NIX_BUILD_CORES" "+RTS" "-A64M" "-RTS" ]))
+    (optionalString useCpphs ("--with-cpphs=${cpphs}/bin/cpphs " + (makeGhcOptions [ "-cpp"  "-pgmP${cpphs}/bin/cpphs" "-optP--cpp" ])))
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" ghc.version) "--profiling-detail=${profilingDetail}")
-    (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
+    (optionalString (enableExecutableProfiling || enableLibraryProfiling) "--profiling-detail=${profilingDetail}")
+    (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
-    (optionalString (versionAtLeast ghc.version "7.10") (enableFeature doCoverage "coverage"))
-    (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
-    (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
-    (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (enableFeature doCoverage "coverage")
+    (enableFeature enableStaticLibraries "static")
+    (enableFeature enableSharedExecutables "executable-dynamic")
+    (enableFeature doCheck "tests")
     (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     (enableFeature enableLibraryForGhci "library-for-ghci")
-  ] ++ optionals (enableDeadCodeElimination && (lib.versionOlder "8.0.1" ghc.version)) [
-     "--ghc-option=-split-sections"
-  ] ++ optionals dontStrip [
-    "--disable-library-stripping"
-    "--disable-executable-stripping"
+    (enableFeature enableDeadCodeElimination "split-sections")
+    (enableFeature (!dontStrip) "library-stripping")
+    (enableFeature (!dontStrip) "executable-stripping")
   ] ++ optionals isGhcjs [
     "--ghcjs"
   ] ++ optionals isCross ([
@@ -258,16 +268,14 @@ let
   ) ++ optionals enableSeparateBinOutput [
     "--bindir=${binDir}"
   ] ++ optionals (doHaddockInterfaces && isLibrary) [
-    "--ghc-options=-haddock"
+    "--ghc-option=-haddock"
   ];
 
   postPhases = optional doInstallIntermediates "installIntermediatesPhase";
 
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
-    (optionalString enableParallelBuilding parallelBuildingFlags)
+    (optionalString (!coreSetup) "-package-db=$setupPackageConfDir")
     "-threaded"       # https://github.com/haskell/cabal/issues/2398
-    "-rtsopts"        # allow us to pass RTS flags to the generated Setup executable
   ];
 
   isHaskellPkg = x: x ? isHaskellLibrary;
@@ -324,7 +332,7 @@ let
     optionals doBenchmark benchmarkToolDepends;
   nativeBuildInputs =
     [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) (assert pkg-config != null; pkg-config) ++
-    setupHaskellDepends ++ collectedToolDepends;
+    setupHaskellDepends ++ collectedToolDepends ++ optional stdenv.hostPlatform.isGhcjs nodejs;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
     optionals doCheck (testDepends ++ testHaskellDepends) ++
@@ -370,6 +378,34 @@ let
   '';
 
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
+
+  # This is a script suitable for --test-wrapper of Setup.hs' test command
+  # (https://cabal.readthedocs.io/en/3.12/setup-commands.html#cmdoption-runhaskell-Setup.hs-test-test-wrapper).
+  # We use it to set some environment variables that the test suite may need,
+  # e.g. GHC_PACKAGE_PATH to invoke GHC(i) at runtime with build dependencies
+  # available. See the comment accompanying checkPhase below on how to customize
+  # this behavior. We need to use a wrapper script since Cabal forbids setting
+  # certain environment variables since they can alter GHC's behavior (e.g.
+  # GHC_PACKAGE_PATH) and cause failures. While building, Cabal will set
+  # GHC_ENVIRONMENT to make the packages picked at configure time available to
+  # GHC, but unfortunately not at test time. The test wrapper script will be
+  # executed after such environment checks, so we can take some liberties which
+  # is unproblematic since we know our synthetic package db matches what Cabal
+  # will see at configure time exactly. See also
+  # <https://github.com/haskell/cabal/issues/7792>.
+  testWrapperScript = buildPackages.writeShellScript
+    "haskell-generic-builder-test-wrapper.sh"
+    ''
+      set -eu
+
+      # We expect this to be either empty or set by checkPhase
+      if [[ -n "''${NIX_GHC_PACKAGE_PATH_FOR_TEST}" ]]; then
+        export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
+      fi
+
+      exec "$@"
+    '';
+
 in lib.fix (drv:
 
 stdenv.mkDerivation ({
@@ -433,7 +469,7 @@ stdenv.mkDerivation ({
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
       ${buildPkgDb nativeGhc "$setupPackageConfDir"}
     done
-    ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
+    ${nativeGhcCommand}-pkg --package-db="$setupPackageConfDir" recache
   ''
   # For normal components
   + ''
@@ -445,15 +481,17 @@ stdenv.mkDerivation ({
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
-    ''
-    # It is not clear why --extra-framework-dirs does work fine on Linux
-    + optionalString (!stdenv.buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
       if [[ -d "$p/Library/Frameworks" ]]; then
         configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
       fi
   '' + ''
     done
   ''
+  + (optionalString stdenv.hostPlatform.isGhcjs ''
+    export EM_CACHE="$(realpath "$(mktemp -d emcache.XXXXXXXXXX)")"
+    cp -Lr ${emscripten}/share/emscripten/cache/* "$EM_CACHE/"
+    chmod u+rwX -R "$EM_CACHE"
+  '')
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
@@ -490,7 +528,7 @@ stdenv.mkDerivation ({
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," "$f"
     done
   '') + ''
-    ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
+    ${ghcCommand}-pkg --package-db="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
   '';
@@ -526,8 +564,6 @@ stdenv.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
-    unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
-
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     ${lib.optionalString (!allowInconsistentDependencies) ''
@@ -536,7 +572,6 @@ stdenv.mkDerivation ({
         exit 1
       fi
     ''}
-    export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
   '';
@@ -554,7 +589,7 @@ stdenv.mkDerivation ({
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
         ''
     + ''
-      ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
+      ${setupCommand} build ${buildTarget}${buildFlagsString}
       runHook postBuild
       '';
 
@@ -563,12 +598,22 @@ stdenv.mkDerivation ({
   # Run test suite(s) and pass `checkFlags` as well as `checkFlagsArray`.
   # `testFlags` are added to `checkFlagsArray` each prefixed with
   # `--test-option`, so Cabal passes it to the underlying test suite binary.
+  #
+  # We also take care of setting GHC_PACKAGE_PATH during test suite execution,
+  # so it can run GHC(i) with build dependencies available:
+  # - If NIX_GHC_PACKAGE_PATH_FOR_TEST is set, it become the value of GHC_PACKAGE_PATH
+  #   while the test suite is executed.
+  # - If it is empty, it'll be unset during test suite execution.
+  # - Otherwise GHC_PACKAGE_PATH will have the package db used for configuring
+  #   plus GHC's core packages.
   checkPhase = ''
     runHook preCheck
     checkFlagsArray+=(
       "--show-details=streaming"
+      "--test-wrapper=${testWrapperScript}"
       ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
     )
+    export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
     ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
@@ -622,11 +667,6 @@ stdenv.mkDerivation ({
       done
     ''}
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
-    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && lib.versionOlder ghc.version "7.10") ''
-      for exe in "${binDir}/"* ; do
-        install_name_tool -add_rpath "$out/${ghcLibdir}/${pname}-${version}" "$exe"
-      done
-    ''}
 
     ${optionalString enableSeparateDocOutput ''
     for x in ${docdir "$doc"}"/html/src/"*.html; do
@@ -650,7 +690,7 @@ stdenv.mkDerivation ({
 
   passthru = passthru // rec {
 
-    inherit pname version;
+    inherit pname version disallowGhcReference;
 
     compiler = ghc;
 
@@ -750,8 +790,8 @@ stdenv.mkDerivation ({
           lib.optionals (!isCross) setupHaskellDepends);
 
         ghcCommandCaps = lib.toUpper ghcCommand';
-      in stdenv.mkDerivation {
-        inherit name shellHook;
+      in runCommandCC name {
+        inherit shellHook;
 
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;
         nativeBuildInputs =
@@ -759,8 +799,6 @@ stdenv.mkDerivation ({
           collectedToolDepends;
         buildInputs =
           otherBuildInputsSystem;
-        phases = ["installPhase"];
-        installPhase = "echo $nativeBuildInputs $buildInputs > $out";
         LANG = "en_US.UTF-8";
         LOCALE_ARCHIVE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
@@ -770,7 +808,7 @@ stdenv.mkDerivation ({
         "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
           then "${ghcEnv}/lib/HaLVM-${ghc.version}"
           else "${ghcEnv}/${ghcLibdir}";
-      };
+      } "echo $nativeBuildInputs $buildInputs > $out";
 
     env = envFunc { };
 
@@ -811,18 +849,20 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
 // optionalAttrs (postPhases != [])              { inherit postPhases; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (disallowedRequisites != [] || disallowGhcReference) {
+  disallowedRequisites =
+    disallowedRequisites
+    ++ (
+      if disallowGhcReference
+      then [ghc]
+      else []
+    );
+}
 
 # Implicit pointer to integer conversions are errors by default since clang 15.
 # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
-// lib.optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
+// optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
   NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
-}
-
-# Ensure libc++abi is linked even when clang is invoked as just `clang` or `cc`.
-# Works around https://github.com/NixOS/nixpkgs/issues/166205.
-# This can be dropped once a fix has been committed to cc-wrapper.
-// lib.optionalAttrs (stdenv.hasCC && stdenv.cc.isClang && stdenv.cc.libcxx != null) {
-  NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
 }
 )
 )

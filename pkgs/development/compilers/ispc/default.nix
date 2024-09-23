@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
 , testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
@@ -6,13 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.22.0";
+  version = "1.24.0";
+
+  dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-NiBwQ7BzNgRdWLvjOi1fQni+vnYwn0nLHxqAVucmb2k=";
+    sha256 = "sha256-1Ns8w34fXgYrSu3XE89uowjaVoW3MOgKYV1Jb/XRj1Q=";
   };
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
@@ -55,7 +57,6 @@ stdenv.mkDerivation rec {
     "-DFILE_CHECK_EXECUTABLE=${llvmPackages.llvm}/bin/FileCheck"
     "-DLLVM_AS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-as"
     "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
-    "-DLLVM_DIS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-dis"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
@@ -69,6 +70,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage    = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
+    mainProgram = "ispc";
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
     maintainers = with maintainers; [ aristid thoughtpolice athas alexfmpe ];

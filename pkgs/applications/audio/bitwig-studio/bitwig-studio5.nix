@@ -19,7 +19,9 @@
 , pango
 , pipewire
 , pulseaudio
-, wrapGAppsHook
+, vulkan-loader
+, wrapGAppsHook3
+, xcb-imdkit
 , xdg-utils
 , xorg
 , zlib
@@ -27,14 +29,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "5.0.11";
+  version = "5.2.4";
 
   src = fetchurl {
-    url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-c9bRWVWCC9hLxmko6EHgxgmghrxskJP4PQf3ld2BHoY=";
+    url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
+    hash = "sha256-/JEJthaFSdad5Hj5sdBQLLyDdp2Rp4ZAlhIA+RgwXRw=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
 
   unpackCmd = ''
     mkdir -p root
@@ -66,6 +68,8 @@ stdenv.mkDerivation rec {
     pipewire
     pulseaudio
     stdenv.cc.cc.lib
+    vulkan-loader
+    xcb-imdkit
     xcbutil
     xcbutilwm
     zlib
@@ -78,6 +82,11 @@ stdenv.mkDerivation rec {
     cp -r opt/bitwig-studio $out/libexec
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
     cp -r usr/share $out/share
+
+    # Bitwig includes a copy of libxcb-imdkit.
+    # Removing it will force it to use our version.
+    rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
+
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
       --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
@@ -112,7 +121,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A digital audio workstation";
+    description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
       production, performance and DJing, with a focus on flexible

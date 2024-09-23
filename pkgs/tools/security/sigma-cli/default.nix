@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.7.10";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sy9adkmR7Vu7kI75XG0PXihFogPaNwzHH2U5uSz9mZA=";
+    hash = "sha256-bBKNKgS3V/sZ8lZMk2ZwTzOVaVecSR9GhNP2FNkWbw0=";
   };
 
   postPatch = ''
@@ -20,11 +21,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace '= "^' '= ">='
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     click
     colorama
     prettytable
@@ -39,9 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pysigma-pipeline-windows
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     "test_plugin_list"
@@ -61,15 +58,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_exclude"
   ];
 
-  pythonImportsCheck = [
-    "sigma.cli"
-  ];
+  pythonImportsCheck = [ "sigma.cli" ];
 
   meta = with lib; {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
     changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Plus ];
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fab ];
     mainProgram = "sigma";
   };

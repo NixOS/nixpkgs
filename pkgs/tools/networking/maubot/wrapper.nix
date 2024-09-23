@@ -39,7 +39,7 @@ let wrapper = { pythonPackages ? (_: [ ]), plugins ? (_: [ ]), baseConfig ? null
             if builtins.isNull (baseConfig.server.override_resource_path or null)
             then "${unwrapped}/${python3.sitePackages}/maubot/management/frontend/build"
             else baseConfig.server.override_resource_path;
-        })})} $out/${python3.sitePackages}/maubot/example-config.yaml
+        })} $out/${python3.sitePackages}/maubot/example-config.yaml
         rm -rf $out/bin
       ''}
       mkdir -p $out/bin
@@ -64,7 +64,7 @@ let wrapper = { pythonPackages ? (_: [ ]), plugins ? (_: [ ]), baseConfig ? null
       };
     };
 
-    meta.priority = (unwrapped.meta.priority or 0) - 1;
+    meta.priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 in
 wrapper

@@ -1,31 +1,31 @@
 { copyDesktopItems
 , fetchurl
 , glib
-, gnome
+, adwaita-icon-theme
 , gtk3
 , jre
 , lib
 , makeDesktopItem
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepgit";
-  version = "4.3.1";
+  version = "4.4";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/deepgit/deepgit-linux-${lib.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    hash = "sha256-Ovd9MjgpMJvNySW/FPXYVtpLoCSQP1W1nlcNkgI7sgA=";
+    hash = "sha256-ILqwXDyW7/hZzoSxxaxv4bF5xsB/JFaOBYAJFb7xmdk=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gtk3
     jre
   ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to investigate the history of source code";
+    description = "Tool to investigate the history of source code";
     homepage = "https://www.syntevo.com/deepgit";
     changelog = "https://www.syntevo.com/deepgit/changelog.txt";
     license = licenses.unfree;

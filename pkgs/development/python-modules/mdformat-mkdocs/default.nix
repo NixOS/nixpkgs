@@ -1,17 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, mdformat
-, mdformat-gfm
-, mdit-py-plugins
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mdformat,
+  mdformat-admon,
+  mdformat-gfm,
+  mdit-py-plugins,
+  more-itertools,
+  pythonOlder,
+  pytest-snapshot,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "1.1.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,29 +24,33 @@ buildPythonPackage rec {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5MCsXCkYnoLEZZoj9WrO/Z3VzTKagoOrMCuTpA4dGAQ=";
+    hash = "sha256-Af15Xs8K/QSeIxQNgi1n8xZ+SyyzNs5JL3wse0+LoyE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
+    mdformat-admon
     mdformat-gfm
     mdit-py-plugins
+    more-itertools
   ];
 
   nativeCheckInputs = [
+    pytest-snapshot
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mdformat_mkdocs"
+  disabledTestPaths = [
+    # AssertionError: assert ParsedText(lines=[LineResult(parsed=ParsedLine(line_...
+    "tests/format/test_parsed_result.py"
   ];
 
+  pythonImportsCheck = [ "mdformat_mkdocs" ];
+
   meta = with lib; {
-    description = "mdformat plugin for MkDocs";
+    description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
     changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/v${version}";
     license = licenses.mit;

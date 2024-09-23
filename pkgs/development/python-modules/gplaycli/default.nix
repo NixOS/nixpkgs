@@ -1,18 +1,19 @@
-{ lib
-, args
-, buildPythonPackage
-, clint
-, fetchFromGitHub
-, libffi
-, matlink-gpapi
-, ndg-httpsclient
-, protobuf
-, pyasn1
-, pyaxmlparser
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  args,
+  buildPythonPackage,
+  clint,
+  fetchFromGitHub,
+  libffi,
+  matlink-gpapi,
+  ndg-httpsclient,
+  protobuf,
+  pyasn1,
+  pyaxmlparser,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -42,13 +43,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gplaycli"
-  ];
+  pythonImportsCheck = [ "gplaycli" ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -69,9 +66,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Play Downloader via Command line";
+    mainProgram = "gplaycli";
     homepage = "https://github.com/matlink/gplaycli";
     changelog = "https://github.com/matlink/gplaycli/releases/tag/${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

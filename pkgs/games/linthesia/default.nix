@@ -14,7 +14,7 @@
 , python3
 , sqlite
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config python3 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wrapGAppsHook3 ];
   buildInputs = [
     libGL
     libGLU
@@ -46,10 +46,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A game of playing music using a MIDI keyboard following a MIDI file";
+    description = "Game of playing music using a MIDI keyboard following a MIDI file";
+    mainProgram = "linthesia";
     inherit (src.meta) homepage;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
   };
 }

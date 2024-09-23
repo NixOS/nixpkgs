@@ -3,6 +3,7 @@
 , rustPlatform
 , installShellFiles
 , rustfmt
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,10 +14,10 @@ rustPlatform.buildRustPackage rec {
     owner = "flatt-security";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G7sHaDq+F5lXNaF1sSLUecdjZbCejJE79P4AQifKdFY=";
+    hash = "sha256-G7sHaDq+F5lXNaF1sSLUecdjZbCejJE79P4AQifKdFY=";
     fetchSubmodules = true;
   };
-  cargoSha256 = "sha256-xd4andytmDMOIT+3DkmUC9fkxxGJ6yRY2WSdnGB6ZwY=";
+  cargoHash = "sha256-xd4andytmDMOIT+3DkmUC9fkxxGJ6yRY2WSdnGB6ZwY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     rustfmt
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd shisho \
       --bash <($out/bin/shisho completion bash) \
       --fish <($out/bin/shisho completion fish) \
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://docs.shisho.dev/shisho/";
     changelog = "https://docs.shisho.dev/changelog/";
     description = "Lightweight static analyzer for several programming languages";
+    mainProgram = "shisho";
     longDescription = ''
       Shisho is a lightweight static code analyzer designed for developers and
       is the core engine for Shisho products. It is, so to speak, like a

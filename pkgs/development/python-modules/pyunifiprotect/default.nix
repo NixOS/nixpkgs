@@ -1,61 +1,63 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioshutil
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, ipython
-, orjson
-, packaging
-, pillow
-, poetry-core
-, py
-, pydantic
-, pyjwt
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-benchmark
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, pytz
-, setuptools
-, setuptools-scm
-, termcolor
-, typer
-, ffmpeg
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioshutil,
+  async-timeout,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  ffmpeg,
+  hatch-vcs,
+  hatchling,
+  ipython,
+  orjson,
+  packaging,
+  pillow,
+  platformdirs,
+  py,
+  pydantic,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-benchmark,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
+  pytz,
+  termcolor,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.21.0";
-  format = "pyproject";
+  version = "5.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "briis";
-    repo = pname;
+    repo = "pyunifiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BFcICpWq0aBjEww9EuO6UH8oGX8fufernFqh/gihIrM=";
+    hash = "sha256-DtQm6u3O0kdVJ23Ch+hJQ6HTOt5iAMdhCzC1K/oICWk=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pyunifiprotect --cov-append" ""
+      --replace-fail "--strict-markers -ra -Wd --ignore=.* --no-cov-on-fail --cov=pyunifiprotect --cov-append --maxfail=10 -n=auto" ""
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     aioshutil
@@ -63,11 +65,12 @@ buildPythonPackage rec {
     orjson
     packaging
     pillow
+    platformdirs
     pydantic
     pyjwt
     pytz
     typer
-  ] ++ typer.optional-dependencies.all;
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   passthru.optional-dependencies = {
     shell = [
@@ -88,16 +91,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyunifiprotect"
-  ];
+  pythonImportsCheck = [ "pyunifiprotect" ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   meta = with lib; {
     description = "Library for interacting with the Unifi Protect API";
+    mainProgram = "unifi-protect";
     homepage = "https://github.com/briis/pyunifiprotect";
     changelog = "https://github.com/AngellusMortis/pyunifiprotect/releases/tag/v${version}";
     license = with licenses; [ mit ];

@@ -1,38 +1,37 @@
 { lib
+, stdenv
 , fetchFromGitLab
-, mkDerivation
 , breeze-icons
-, breeze-qt5
+, breeze
 , cmake
 , extra-cmake-modules
-, ffmpeg-full
+, ffmpeg-headless
 , kconfig
 , kcoreaddons
 , kfilemetadata
 , ki18n
 , kiconthemes
 , kio
-, kirigami2
+, kirigami
 , kxmlgui
 , kdoctools
-, mpv
+, mpvqt
 , pkg-config
 , wrapQtAppsHook
 , qqc2-desktop-style
 , qtbase
-, qtquickcontrols2
 , yt-dlp
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "haruna";
-  version = "0.12.2";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-6UXgAb42DttNgmO5KRFC5M6kuYrv+GIxQ0EQ4P5cgUI=";
+    hash = "sha256-PjELW0evn53gIbScrM2bYEpb9U/TE/lOCD2DiJ1aodo=";
     domain = "invent.kde.org";
   };
 
@@ -43,23 +42,22 @@ mkDerivation rec {
 
   buildInputs = [
     breeze-icons
-    breeze-qt5
+    breeze
     qqc2-desktop-style
     yt-dlp
 
-    ffmpeg-full
+    ffmpeg-headless
     kconfig
     kcoreaddons
     kfilemetadata
     ki18n
     kiconthemes
     kio
-    kirigami2
+    kirigami
     kxmlgui
     kdoctools
-    mpv
+    mpvqt
     qtbase
-    qtquickcontrols2
   ];
 
   nativeBuildInputs = [

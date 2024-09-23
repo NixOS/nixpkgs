@@ -1,19 +1,19 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "scramp";
-  version = "1.4.4";
-  format = "pyproject";
+  version = "1.4.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,19 +21,15 @@ buildPythonPackage rec {
     owner = "tlocke";
     repo = "scramp";
     rev = version;
-    hash = "sha256-WOyv1fLSXG7p+WKs2QSwlsh8FSK/lxp6I1hPY0VIkKo=";
+    hash = "sha256-KpododRJ+CYRGBR7Sr5cVBhJvUwh9YmPERd/DAJqEcY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  build-system = [
+    hatchling
+    versioningit
   ];
 
-  propagatedBuildInputs = [
-    asn1crypto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  dependencies = [ asn1crypto ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -47,18 +43,14 @@ buildPythonPackage rec {
     sed -i "/dynamic =/d" pyproject.toml
   '';
 
-  pythonImportsCheck = [
-    "scramp"
-  ];
+  pythonImportsCheck = [ "scramp" ];
 
-  disabledTests = [
-    "test_readme"
-  ];
+  disabledTests = [ "test_readme" ];
 
   meta = with lib; {
     description = "Implementation of the SCRAM authentication protocol";
     homepage = "https://github.com/tlocke/scramp";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

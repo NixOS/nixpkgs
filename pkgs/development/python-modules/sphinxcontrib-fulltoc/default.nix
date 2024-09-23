@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sphinx,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-fulltoc";
   version = "1.2.0";
+  format = "setuptools";
 
   # pkgutil namespaces are broken in nixpkgs (because they can't scan multiple
   # directories). But python2 is EOL, so not supporting it, should be ok.

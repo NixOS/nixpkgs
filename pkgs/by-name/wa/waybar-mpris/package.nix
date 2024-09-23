@@ -1,7 +1,7 @@
 { lib
 , fetchgit
 , buildGoModule
-, installShellFiles
+, unstableGitUpdater
 }:
 
 buildGoModule {
@@ -16,18 +16,18 @@ buildGoModule {
 
   vendorHash = "sha256-85jFSAOfNMihv710LtfETmkKRqcdRuFCHVuPkW94X/Y=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  CGO_LDFLAGS = "-s -w";
-
-  GOFLAGS = "-buildmode=pie -trimpath -ldflags=-linkmode=external -mod=readonly -modcacherw";
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
+    description = "Waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
     homepage = "https://git.hrfee.pw/hrfee/waybar-mpris";
     license = licenses.mit;
     mainProgram = "waybar-mpris";
     maintainers = with maintainers; [ khaneliman ];
   };
 }
-

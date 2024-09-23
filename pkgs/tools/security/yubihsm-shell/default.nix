@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yubihsm-shell";
-  version = "2.4.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
     rev = version;
-    hash = "sha256-Un3DNmrD9aC9+A3+NNM21yrH1g14THXPHkJ0SUYrL/M=";
+    hash = "sha256-QTDFL/UTnnG0TuojJ0eVKw8fNEqZz86CXWb6uHvzUbs=";
   };
 
   postPatch = ''
@@ -48,11 +48,15 @@ stdenv.mkDerivation rec {
     curl
     openssl
   ] ++ lib.optionals stdenv.isLinux [
-    pcsclite
+    pcsclite.dev
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.PCSC
     libiconv
   ];
+
+  preBuild = lib.optionalString stdenv.isLinux ''
+    NIX_CFLAGS_COMPILE="$(pkg-config --cflags libpcsclite) $NIX_CFLAGS_COMPILE"
+  '';
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DDISABLE_LTO=ON"

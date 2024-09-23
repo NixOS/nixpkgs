@@ -1,39 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-dependency";
-  version = "0.5.1";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wqiSkGGSZj+FAwpquRME5QjlRs3f5VfWktYexXodlGs=";
+    hash = "sha256-k0sOajnZWZUGLBk/fq7tio/6Bv8bzvS2Kw3HSnCLrME=";
   };
 
-  patches = [
-    # Fix build with pytest >= 6.2.0, https://github.com/RKrahl/pytest-dependency/pull/51
-    (fetchpatch {
-      url = "https://github.com/RKrahl/pytest-dependency/commit/0930889a13e2b9baa7617f05dc9b55abede5209d.patch";
-      hash = "sha256-xRreoIz8+yW0mAUb4FvKVlPjALzMAZDmdpbmDKRISE0=";
-    })
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [ "pytest_dependency" ];
 
   meta = with lib; {
     homepage = "https://github.com/RKrahl/pytest-dependency";
+    changelog = "https://github.com/RKrahl/pytest-dependency/blob/${version}/CHANGES.rst";
     description = "Manage dependencies of tests";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

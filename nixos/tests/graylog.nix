@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "graylog";
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes.machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
-    virtualisation.diskSize = 4096;
+    virtualisation.diskSize = 1024 * 6;
 
     services.mongodb.enable = true;
     services.elasticsearch.enable = true;
@@ -65,8 +65,17 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   in ''
     machine.start()
     machine.wait_for_unit("graylog.service")
+
+    machine.wait_until_succeeds(
+      "journalctl -o cat -u graylog.service | grep 'Started REST API at <127.0.0.1:9000>'"
+    )
+
     machine.wait_for_open_port(9000)
     machine.succeed("curl -sSfL http://127.0.0.1:9000/")
+
+    machine.wait_until_succeeds(
+      "journalctl -o cat -u graylog.service | grep 'Graylog server up and running'"
+    )
 
     session = machine.succeed(
         "curl -X POST "
@@ -85,6 +94,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         + "-H 'Accept: application/json' "
         + "-H 'Content-Type: application/json' "
         + "-H 'x-requested-by: cli' "
+    )
+
+    machine.wait_until_succeeds(
+      "journalctl -o cat -u graylog.service | grep -E 'Input \[GELF UDP/Demo/[[:alnum:]]{24}\] is now RUNNING'"
     )
 
     machine.wait_until_succeeds(

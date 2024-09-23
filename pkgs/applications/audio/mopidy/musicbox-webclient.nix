@@ -22,10 +22,10 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Mopidy frontend extension and web client with additional features for Pi MusicBox";
+    description = "Mopidy frontend extension and web client with additional features for Pi MusicBox";
     homepage = "https://github.com/pimusicbox/mopidy-musicbox-webclient";
     changelog = "https://github.com/pimusicbox/mopidy-musicbox-webclient/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -5,7 +5,7 @@
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
+, enableGtk ? true, gtk2, glib
 }:
 
 let
@@ -20,7 +20,7 @@ let
     powerpc64le-linux = "ppc64le";
   }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
 
-  update = "362";
+  update = "412";
   build = "ga";
 
   # when building a headless jdk, also bootstrap it with a headless jdk
@@ -34,7 +34,7 @@ let
       owner = "openjdk";
       repo = "jdk8u";
       rev = "jdk${version}";
-      sha256 = "sha256-C5dQwfIIpIrLeO3JWERyFCQHUSgG8gARuc3qXAeLkJ4=";
+      sha256 = "sha256-o+H5n5p6JG1giJj9OADgMbQPaoKMzLMFquKH536SHhM=";
     };
     outputs = [ "out" "jre" ];
 
@@ -43,8 +43,8 @@ let
       cpio file which zip perl zlib cups freetype alsa-lib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk2 gnome_vfs GConf glib
+    ] ++ lib.optionals (!headless && enableGtk) [
+      gtk2 glib
     ];
 
     patches = [
@@ -52,7 +52,7 @@ let
       ./read-truststore-from-env-jdk8.patch
       ./currency-date-range-jdk8.patch
       ./fix-library-path-jdk8.patch
-    ] ++ lib.optionals (!headless && enableGnome2) [
+    ] ++ lib.optionals (!headless && enableGtk) [
       ./swing-use-gtk-jdk8.patch
     ];
 
@@ -96,8 +96,8 @@ let
 
     NIX_LDFLAGS= toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+    ] ++ lib.optionals (!headless && enableGtk) [
+      "-lgtk-x11-2.0" "-lgio-2.0"
     ]);
 
     # -j flag is explicitly rejected by the build system:
@@ -211,10 +211,14 @@ let
     meta = with lib; {
       homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
-      description = "The open-source Java Development Kit";
+      description = "Open-source Java Development Kit";
       maintainers = with maintainers; [ edwtjo ];
       platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
       mainProgram = "java";
+      # Broken for musl at 2024-01-17. Tracking issue:
+      # https://github.com/NixOS/nixpkgs/issues/281618
+      # error: ‘isnanf’ was not declared in this scope
+      broken = stdenv.hostPlatform.isMusl;
     };
 
     passthru = {

@@ -1,6 +1,5 @@
 { cmake
 , fetchFromGitHub
-, glfw
 , jazz2-content
 , lib
 , libopenmpt
@@ -10,34 +9,28 @@
 , stdenv
 , testers
 , zlib
-, graphicsLibrary ? "GLFW"
 }:
 
-assert lib.assertOneOf "graphicsLibrary" graphicsLibrary [ "SDL2" "GLFW" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "jazz2";
-  version = "2.3.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
     rev = finalAttrs.version;
-    hash = "sha256-oBDBq2SToab94mK0kIB0H53jJMFZrHvsdPmfAd5ZjCY=";
+    hash = "sha256-qJVT7WCw3nfoLbSqLFfZCI5VLOuoD/iSVfC9B+XEhyg=";
   };
 
   patches = [ ./nocontent.patch ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libopenmpt libvorbis openal zlib ]
-  ++ lib.optionals (graphicsLibrary == "GLFW") [ glfw ]
-  ++ lib.optionals (graphicsLibrary == "SDL2") [ SDL2 ];
+  buildInputs = [ libopenmpt libvorbis openal SDL2 zlib ];
 
   cmakeFlags = [
     "-DLIBOPENMPT_INCLUDE_DIR=${lib.getDev libopenmpt}/include/libopenmpt"
     "-DNCINE_DOWNLOAD_DEPENDENCIES=OFF"
     "-DNCINE_OVERRIDE_CONTENT_PATH=${jazz2-content}"
-  ] ++ lib.optionals (graphicsLibrary == "GLFW") [
-    "-DGLFW_INCLUDE_DIR=${glfw}/include/GLFW"
   ];
 
   passthru.tests.version = testers.testVersion {

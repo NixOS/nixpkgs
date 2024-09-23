@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "amqpcat";
-  version = "0.2.5";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "amqpcat";
     rev = "v${version}";
-    hash = "sha256-AXX4aF5717lSIO0/2jNDPXXLtM/h//BlxO+cX71aWG4=";
+    hash = "sha256-QLVFAcymj7dERbUiRcseiDuuKgrQ8n4LbkdhUyXPcWw=";
   };
 
   format = "shards";
@@ -24,7 +24,8 @@ crystal.buildCrystalPackage rec {
   };
 
   meta = with lib; {
-    description = "A CLI tool for publishing to and consuming from AMQP servers";
+    description = "CLI tool for publishing to and consuming from AMQP servers";
+    mainProgram = "amqpcat";
     homepage = "https://github.com/cloudamqp/amqpcat";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjheng ];

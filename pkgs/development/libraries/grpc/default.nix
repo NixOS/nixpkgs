@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.59.1"; # N.B: if you change this, please update:
+  version = "1.62.1"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-4bou7oFQOgyxjFqJdmiFT8xEMCsOap9v34W6SPrT4WQ=";
+    hash = "sha256-L0bn6Bg36UKIRxznH9o4T7WXUqMwFjr8ybeQfbUi8xM=";
     fetchSubmodules = true;
   };
 
@@ -99,14 +99,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilds = true;
 
   passthru.tests = {
-    inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
     inherit arrow-cpp;
   };
 
   meta = with lib; {
-    description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
+    description = "C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lnl7 marsam ];
+    maintainers = with maintainers; [ lnl7 ];
     homepage = "https://grpc.io/";
     platforms = platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";

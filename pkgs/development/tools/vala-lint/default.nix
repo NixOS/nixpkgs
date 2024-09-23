@@ -9,19 +9,19 @@
 , pkg-config
 , vala
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "vala-lint";
-  version = "unstable-2023-11-12";
+  version = "0-unstable-2024-08-28";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "95cf9e61a73fe4a0f69fd8c275c9548703f79838";
-    sha256 = "sha256-w5jW/JM1sR9gIIVl3WJNK9jpaA4CMr56Wt4AuxUlkW8=";
+    rev = "4ed1443c35a8a84445fb59292d539358365d8263";
+    sha256 = "sha256-NPadBrL2g5w95slwDpp7kNXBgLJ9na8Yd/J7zm28SSo=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

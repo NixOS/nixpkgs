@@ -1,17 +1,17 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "speedtest-go";
-  version = "1.6.9";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "showwin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-VaaUFUkPXAMzT+wyLOrOw85sgJzWCYx5k6oTfRcIHuU=";
+    hash = "sha256-SFdUl06lCf+ObPZanEwvD2rSzPM0ia2J/XSuel5XGqg=";
   };
 
   vendorHash = "sha256-wQqAX7YuxxTiMWmV9LRoXunGMMzs12UyHbf4VvbQF1E=";
@@ -21,11 +21,15 @@ buildGoModule rec {
   # test suite requires network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI and Go API to Test Internet Speed using speedtest.net";
     homepage = "https://github.com/showwin/speedtest-go";
     changelog = "https://github.com/showwin/speedtest-go/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      aleksana
+      luftmensch-luftmensch
+    ];
+    mainProgram = "speedtest-go";
   };
 }

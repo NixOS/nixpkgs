@@ -8,7 +8,7 @@
 , autoPatchelfHook
 , gsettings-desktop-schemas
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , pinegrowVersion ? "7"
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     unzip
     autoPatchelfHook
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

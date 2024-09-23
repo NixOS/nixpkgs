@@ -10,18 +10,18 @@
 , catch2_3
 , spdlog
 , exiv2
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "xpano";
-  version = "0.17.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "krupkat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "aKO9NYHFjb69QopseNOJvUvvVT1povP9tyGSOHJFWVo=";
+    sha256 = "sha256-cb6BJg0wdfhqEFLbQ27NpjJU/cc4SZSk94UHzJfzn5U=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A panorama stitching tool";
+    description = "Panorama stitching tool";
+    mainProgram = "Xpano";
     homepage = "https://krupkat.github.io/xpano/";
     changelog = "https://github.com/krupkat/xpano/releases/tag/v${version}";
     license = licenses.gpl3Plus;

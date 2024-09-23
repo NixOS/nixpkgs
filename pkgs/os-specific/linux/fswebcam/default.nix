@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Neat and simple webcam app";
+    mainProgram = "fswebcam";
     homepage = "http://www.sanslogic.co.uk/fswebcam";
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
   };
 }

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , gitUpdater
 , cmake
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DYAML_CPP_BUILD_TOOLS=false"
-    "-DYAML_BUILD_SHARED_LIBS=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
+    (lib.cmakeBool "YAML_BUILD_SHARED_LIBS" (!static))
     "-DINSTALL_GTEST=false"
   ];
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A YAML parser and emitter for C++";
+    description = "YAML parser and emitter for C++";
     homepage = "https://github.com/jbeder/yaml-cpp";
     license = licenses.mit;
     platforms = platforms.all;

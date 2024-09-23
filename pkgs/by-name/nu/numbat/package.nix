@@ -9,26 +9,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "numbat";
-  version = "1.8.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
     rev = "v${version}";
-    hash = "sha256-mwDpdQEIgvdGbcXEtA3TLP1e2yFNRCdcljaOzDEoKjg=";
+    hash = "sha256-MYoNziQiyppftLPNM8cqEuNwUA4KCmtotQqDhgyef1E=";
   };
 
-  cargoHash = "sha256-hGNfB82m2w9wDiPs8PMUExWOBN9ZQ+XVs1v8jhHuVhA=";
+  cargoHash = "sha256-t6vxJ0UIQJILCGv4PO5V4/QF5de/wtMQDkb8gPtE70E=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
-  env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/${pname}/modules";
+  env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 
   postInstall = ''
-    mkdir -p $out/share/${pname}
-    cp -r $src/${pname}/modules $out/share/${pname}/
+    mkdir -p $out/share/numbat
+    cp -r $src/numbat/modules $out/share/numbat/
   '';
 
   passthru.tests.version = testers.testVersion {

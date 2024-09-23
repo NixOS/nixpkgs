@@ -57,23 +57,25 @@ locations and database, instead of having to copy or rename them.
 Make sure to disable `services.gitea`, when doing this.
 
 ```nix
-services.gitea.enable = false;
+{
+  services.gitea.enable = false;
 
-services.forgejo = {
-  enable = true;
-  user = "gitea";
-  group = "gitea";
-  stateDir = "/var/lib/gitea";
-  database.name = "gitea";
-  database.user = "gitea";
-};
+  services.forgejo = {
+    enable = true;
+    user = "gitea";
+    group = "gitea";
+    stateDir = "/var/lib/gitea";
+    database.name = "gitea";
+    database.user = "gitea";
+  };
 
-users.users.gitea = {
-  home = "/var/lib/gitea";
-  useDefaultShell = true;
-  group = "gitea";
-  isSystemUser = true;
-};
+  users.users.gitea = {
+    home = "/var/lib/gitea";
+    useDefaultShell = true;
+    group = "gitea";
+    isSystemUser = true;
+  };
 
-users.groups.gitea = {};
+  users.groups.gitea = {};
+}
 ```

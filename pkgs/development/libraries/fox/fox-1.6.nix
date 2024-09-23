@@ -13,6 +13,7 @@
 , libXext
 , libXft
 , libXfixes
+, mesa
 , xinput
 , CoreServices
 }:
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = {
     broken = stdenv.isDarwin;
     branch = "1.6";
-    description = "A C++ based class library for building Graphical User Interfaces";
+    description = "C++ based class library for building Graphical User Interfaces";
     longDescription = ''
         FOX stands for Free Objects for X.
         It is a C++ based class library for building Graphical User Interfaces.
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "http://fox-toolkit.org";
     license = lib.licenses.lgpl3;
-    maintainers = [];
-    platforms = lib.platforms.mesaPlatforms;
+    maintainers = [ ];
+    inherit (mesa.meta) platforms;
   };
 }

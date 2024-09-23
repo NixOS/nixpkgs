@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
   doCheck = true;
 
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
+
   meta = with lib; {
     description = "Bindings to Libgcrypt for GNU Guile";
     homepage = "https://notabug.org/cwebber/guile-gcrypt";

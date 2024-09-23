@@ -15,15 +15,16 @@ permissions:
 
 jobs:
   tests:
+    name: basic-eval-checks
     runs-on: ubuntu-latest
     # we don't limit this action to only NixOS repo since the checks are cheap and useful developer feedback
     steps:
-    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-    - uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011 # v24
-    - uses: cachix/cachix-action@6a9a34cdd93d0ae4b4b59fd678660efb08109f2f # v13
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+    - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
+    - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
       with:
         # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
         name: nixpkgs-ci
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     # explicit list of supportedSystems is needed until aarch64-darwin becomes part of the trunk jobset
-    - run: nix-build pkgs/top-level/release.nix -A tarball.nixpkgs-basic-release-checks --arg supportedSystems '[ "aarch64-darwin" "aarch64-linux" "x86_64-linux" "x86_64-darwin"  ]'
+    - run: nix-build pkgs/top-level/release.nix -A release-checks --arg supportedSystems '[ "aarch64-darwin" "aarch64-linux" "x86_64-linux" "x86_64-darwin"  ]'

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hashrat";
-  version = "1.15";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "ColumPaget";
     repo = "Hashrat";
     rev = "v${version}";
-    hash = "sha256-+3IPCJS++7CE0ZrJb62LCRrAn2J4uCF3a1oOzDoOW0w=";
+    hash = "sha256-mjjK315OUUFVdUY+zcCvm7yeo7XxourR1sghWbeFT7c=";
   };
 
   configureFlags = [ "--enable-xattr" ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line hash-generation utility";
+    mainProgram = "hashrat";
     longDescription = ''
       Hashing tool supporting md5,sha1,sha256,sha512,whirlpool,jh and hmac versions of these.
       Includes recursive file hashing and other features.

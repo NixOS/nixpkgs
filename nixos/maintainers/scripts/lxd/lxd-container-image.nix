@@ -20,12 +20,25 @@
     };
   in ''
     if [ ! -e /etc/nixos/configuration.nix ]; then
-      mkdir -p /etc/nixos
-      cp ${config} /etc/nixos/configuration.nix
+      install -m 0644 -D ${config} /etc/nixos/configuration.nix
     fi
   '';
 
-  # Network
-  networking.useDHCP = false;
-  networking.interfaces.eth0.useDHCP = true;
+  networking = {
+    dhcpcd.enable = false;
+    useDHCP = false;
+    useHostResolvConf = false;
+  };
+
+  systemd.network = {
+    enable = true;
+    networks."50-eth0" = {
+      matchConfig.Name = "eth0";
+      networkConfig = {
+        DHCP = "ipv4";
+        IPv6AcceptRA = true;
+      };
+      linkConfig.RequiredForOnline = "routable";
+    };
+  };
 }

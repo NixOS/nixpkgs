@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Unicode-based font family with broad support for writing systems that use the Myanmar script";
+    description = "Unicode-based font family with broad support for writing systems that use the Myanmar script";
     homepage = "https://software.sil.org/padauk";
     license = licenses.ofl;
     maintainers = with maintainers; [ serge ];

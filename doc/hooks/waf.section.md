@@ -20,10 +20,6 @@ If `wafPath` doesn't exist, then `wafHook` will copy the `waf` provided from Nix
 
 Controls the flags passed to waf tool during build and install phases. For settings specific to build or install phases, use `wafBuildFlags` or `wafInstallFlags` respectively.
 
-#### `dontAddWafCrossFlags` {#dont-add-waf-cross-flags}
-
-When set to `true`, don't add cross compilation flags during configure phase.
-
 #### `dontUseWafConfigure` {#dont-use-waf-configure}
 
 When set to true, don't use the predefined `wafConfigurePhase`.

@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "http://www.emhsoft.com/singularity/";
-    description = "A simulation game about strong AI";
+    description = "Simulation game about strong AI";
     longDescription = ''
       A simulation of a true AI. Go from computer to computer, pursued by the
       entire world. Keep hidden, and you might have a chance

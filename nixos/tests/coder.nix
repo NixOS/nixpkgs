@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "coder";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ shyim ghuntley ];
-  };
+  meta.maintainers = pkgs.coder.meta.maintainers;
 
   nodes.machine =
     { pkgs, ... }:

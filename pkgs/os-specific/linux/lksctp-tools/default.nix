@@ -1,18 +1,24 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "lksctp-tools";
-  version = "1.0.17";
+  version = "1.0.19";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/lksctp/lksctp-tools-${version}.tar.gz";
-    sha256 = "05da6c2v3acc18ndvmkrag6x5lf914b7s0xkkr6wkvrbvd621sqs";
+  src = fetchFromGitHub {
+    owner = "sctp";
+    repo = "lksctp-tools";
+    rev = "v${version}";
+    hash = "sha256-QEgk9OPFCI5WknUDkqfswApCFeOF+620frQWMyQq2Mk=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Linux Kernel Stream Control Transmission Protocol Tools";
-    homepage = "https://lksctp.sourceforge.net/";
-    license = with licenses; [ gpl2 lgpl21 ]; # library is lgpl21
+    homepage = "https://github.com/sctp/lksctp-tools/wiki";
+    license = with licenses; [ gpl2Plus lgpl21 ]; # library is lgpl21
     platforms = platforms.linux;
   };
 }

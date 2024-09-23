@@ -1,48 +1,58 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, maison
-, pdm-pep517
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, ruyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  maison,
+  pdm-backend,
+  pytest-freezegun,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  ruyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "1.13.0";
-  format = "pyproject";
+  version = "1.16.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lyz-code";
-    repo = pname;
+    repo = "yamlfix";
     rev = "refs/tags/${version}";
-    hash = "sha256-GoCQtanQHYOFrhRvZjzk/cCPnUFwYUAclZuYGZfNg5E=";
+    hash = "sha256-nadyBIzXHbWm0QvympRaYU38tuPJ3TPJg8EbvVv+4L0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    pdm-pep517
+    pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     maison
     ruyaml
   ];
 
   nativeCheckInputs = [
+    pytest-freezegun
     pytest-xdist
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "yamlfix"
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "yamlfix" ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

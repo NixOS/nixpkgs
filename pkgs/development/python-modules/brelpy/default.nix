@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodome
-, pygithub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycryptodome,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-MYWSKYd7emHZfY+W/UweQtTg62GSUMybpecL9BR8dhg=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodome
-  ];
+  propagatedBuildInputs = [ pycryptodome ];
 
   # Source not tagged and PyPI releases don't contain tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "brelpy"
-  ];
+  pythonImportsCheck = [ "brelpy" ];
 
   meta = with lib; {
     description = "Python to communicate with the Brel hubs";

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, certifi
-, cryptography
-, fetchFromGitHub
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, pretend
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  pretend,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  twisted,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-rVYlnvISGugh9qvf3mdrIyELmeOUU4g6291HeoMkoQc=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatchling
     hatch-fancy-pypi-readme
@@ -44,9 +43,7 @@ buildPythonPackage rec {
     twisted
   ] ++ twisted.optional-dependencies.tls;
 
-  pythonImportsCheck = [
-    "pem"
-  ];
+  pythonImportsCheck = [ "pem" ];
 
   meta = with lib; {
     description = "Easy PEM file parsing in Python";

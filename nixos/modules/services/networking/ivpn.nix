@@ -2,20 +2,19 @@
 let
   cfg = config.services.ivpn;
 in
-with lib;
 {
   options.services.ivpn = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         This option enables iVPN daemon.
         This sets {option}`networking.firewall.checkReversePath` to "loose", which might be undesirable for security.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
     environment.systemPackages = with pkgs; [ ivpn ivpn-service ];
@@ -27,7 +26,7 @@ with lib;
     systemd.services.ivpn-service = {
       description = "iVPN daemon";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" ];
+      wants = [ "network.target" "network-online.target" ];
       after = [
         "network-online.target"
         "NetworkManager.service"
@@ -47,5 +46,5 @@ with lib;
     };
   };
 
-  meta.maintainers = with maintainers; [ ataraxiasjel ];
+  meta.maintainers = with lib.maintainers; [ ataraxiasjel ];
 }

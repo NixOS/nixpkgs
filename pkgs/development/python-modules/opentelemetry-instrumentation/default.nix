@@ -1,40 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, opentelemetry-api
-, opentelemetry-sdk
-, opentelemetry-test-utils
-, setuptools
-, wrapt
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-test-utils,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "opentelemetry-instrumentation";
-  version = "1.16.0";
-  disabled = pythonOlder "3.7";
+  version = "0.47b0";
+  pyproject = true;
 
-  # to avoid breakage, every package in opentelemetry-python-contrib must inherit this version, src, and meta
+  disabled = pythonOlder "3.8";
+
+  # To avoid breakage, every package in opentelemetry-python-contrib must inherit this version, src, and meta
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-python-contrib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6tGQjPBej2zv5yJN0S46le3kyD7q3TELYyDmyxlp5Wo=";
+    hash = "sha256-XtJ4u891vI7wDtReoucm+qk3BkKJ+aZrYy7zfxmqfgk=";
   };
 
   sourceRoot = "${src.name}/opentelemetry-instrumentation";
 
-  format = "pyproject";
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-api
-    opentelemetry-sdk
     setuptools
     wrapt
   ];
@@ -46,10 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentelemetry.instrumentation" ];
 
+  passthru.updateScript = opentelemetry-api.updateScript;
+
   meta = with lib; {
-    homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation";
     description = "Instrumentation Tools & Auto Instrumentation for OpenTelemetry Python";
-    changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/${src.rev}";
+    homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation";
+    changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.asl20;
     maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
   };

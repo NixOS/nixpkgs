@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "utm";
-  version = "4.4.4";
+  version = "4.5.4";
 
   src = fetchurl {
     url = "https://github.com/utmapp/UTM/releases/download/v${version}/UTM.dmg";
-    hash = "sha256-SyrqkNWRUKQS3D17XYsC/dcCKlPLGNNsG5obEiHE1Lk=";
+    hash = "sha256-GzwokK/q8S38lbOVhGgNaqbDAAryHJ9eBAAWGpuOQOE=";
   };
 
   nativeBuildInputs = [ undmg makeWrapper ];
@@ -57,7 +57,7 @@ stdenvNoCC.mkDerivation rec {
       See https://docs.getutm.app/ for more information.
     '';
     homepage = "https://mac.getutm.app/";
-    changelog = "https://github.com/utmapp/${pname}/releases/tag/v${version}";
+    changelog = "https://github.com/utmapp/utm/releases/tag/v${version}";
     mainProgram = "UTM";
     license = licenses.asl20;
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.

@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library to easily check a domain against the Chromium HSTS Preload list";
+    mainProgram = "hsts";
     homepage = "https://gitlab.com/rockdaboot/libhsts";
     license = with licenses; [ mit bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

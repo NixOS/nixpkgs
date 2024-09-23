@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.17.5";
+  version = "1.17.7";
   pname = "bindfs";
 
   src = fetchurl {
     url = "https://bindfs.org/downloads/bindfs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Wj2xu7soSOtDqzapI8mVgx0xmAd/2J6VHbXQt55i2mQ=";
+    hash = "sha256-wLBg6Uw6IxodSqC88mb/GJmBpO845C++IylqfYFxm3o=";
   };
 
   nativeBuildInputs = [
@@ -21,13 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = if stdenv.isDarwin then [ fuse ] else [ fuse3 ];
 
+  configureFlags = lib.optional stdenv.isDarwin "--disable-macos-fs-link";
+
   postFixup = ''
     ln -s $out/bin/bindfs $out/bin/mount.fuse.bindfs
   '';
 
   meta = {
     changelog = "https://github.com/mpartel/bindfs/raw/${finalAttrs.version}/ChangeLog";
-    description = "A FUSE filesystem for mounting a directory to another location";
+    description = "FUSE filesystem for mounting a directory to another location";
     homepage = "https://bindfs.org";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ lovek323 lovesegfault ];

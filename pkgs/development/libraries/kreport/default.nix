@@ -18,7 +18,7 @@ mkDerivation rec {
   buildInputs = [ qtdeclarative qtwebkit kconfig kcoreaddons kwidgetsaddons kguiaddons kproperty marble python3 ];
 
   meta = with lib; {
-    description = "A framework for creation and generation of reports in multiple formats";
+    description = "Framework for creation and generation of reports in multiple formats";
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];

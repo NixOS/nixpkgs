@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchpatch
-, fetchFromGitHub
-, python
-, django
-, packaging
-, nodejs
-, js2py
-, six
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+  python,
+  django,
+  packaging,
+  nodejs,
+  js2py,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "django-js-reverse";
   version = "0.10.1-b1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "BITSOLVER";
@@ -22,11 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-i78UsxVwxyDAc8LrOVEXLG0tdidoQhvUx7GvPDaH0KY=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ] ++ lib.optionals (pythonAtLeast "3.7") [
-    packaging
-  ];
+  propagatedBuildInputs = [ django ] ++ lib.optionals (pythonAtLeast "3.7") [ packaging ];
 
   nativeCheckInputs = [
     nodejs

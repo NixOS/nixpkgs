@@ -24,29 +24,34 @@
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , enableJackrack ? stdenv.isLinux
+, glib
 , ladspa-sdk
 , ladspaPlugins
 , enablePython ? false
 , python3
 , swig
-, enableQt ? false
-, libsForQt5
+, qt ? null
 , enableSDL1 ? stdenv.isLinux
 , SDL
 , enableSDL2 ? true
 , SDL2
 , gitUpdater
+, libarchive
 }:
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "7.22.0";
+  version = "7.26.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    hash = "sha256-vJKpeEdQIWBQRRdDui5ibSZtD8qUlDZBD+UQE+0cQqk=";
+    hash = "sha256-MC7D7bgguDFZi8Dyip1wAa2zxxkpLupl05xFiDc8Byw=";
+    # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
+    # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
+    # submodules until upstream exports glaxnimate as a library: https://gitlab.com/mattbas/glaxnimate/-/issues/545
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -59,11 +64,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enablePython [
     python3
     swig
-  ] ++ lib.optionals enableQt [
-    libsForQt5.wrapQtAppsHook
+  ] ++ lib.optionals (qt != null) [
+    qt.wrapQtAppsHook
   ];
 
   buildInputs = [
+    (opencv4.override { inherit ffmpeg; })
     ffmpeg
     fftw
     frei0r
@@ -73,7 +79,6 @@ stdenv.mkDerivation rec {
     libvorbis
     libxml2
     movit
-    opencv4
     rtaudio
     rubberband
     sox
@@ -83,11 +88,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ] ++ lib.optionals enableJackrack [
+    glib
     ladspa-sdk
     ladspaPlugins
-  ] ++ lib.optionals enableQt [
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+  ] ++ lib.optionals (qt != null) [
+    qt.qtbase
+    qt.qtsvg
+    (qt.qt5compat or null)
+    libarchive
   ] ++ lib.optionals enableSDL1 [
     SDL
   ] ++ lib.optionals enableSDL2 [
@@ -102,13 +110,16 @@ stdenv.mkDerivation rec {
     "-DMOD_OPENCV=ON"
   ] ++ lib.optionals enablePython [
     "-DSWIG_PYTHON=ON"
+  ] ++ lib.optionals (qt != null) [
+    "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
+    "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
   ];
 
   preFixup = ''
     wrapProgram $out/bin/melt \
       --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
       ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
-      ${lib.optionalString enableQt "\${qtWrapperArgs[@]}"}
+      ${lib.optionalString (qt != null) "\${qtWrapperArgs[@]}"}
 
   '';
 
@@ -129,7 +140,7 @@ stdenv.mkDerivation rec {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
     license = with licenses; [ lgpl21Plus gpl2Plus ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

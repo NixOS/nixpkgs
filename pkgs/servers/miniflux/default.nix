@@ -1,29 +1,17 @@
-{ lib, buildGo121Module, fetchFromGitHub, fetchpatch, installShellFiles, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch2, installShellFiles, nixosTests }:
 
-let
+buildGoModule rec {
   pname = "miniflux";
-  version = "2.0.50";
-
-in buildGo121Module {
-  inherit pname version;
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "miniflux";
     repo = "v2";
-    rev = version;
-    sha256 = "sha256-+oNF/Zwc1Z/cu3SQC/ZTekAW5Qef9RKrdszunLomGII=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JE0sHxmvLGvbgOqH5f7OONAvP93dJLWLAbgTnlNHGHE=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/miniflux/v2/pull/2193, remove after 2.0.50
-      name = "miniflux-user-agent-regression.patch";
-      url = "https://github.com/miniflux/v2/commit/7a03291442a4e35572c73a2fcfe809fa8e03063e.patch";
-      hash = "sha256-tJ1l5rqD0x0xtQs+tDwpFHOY+7k6X02bkwVJo6RAdb8=";
-    })
-  ];
-
-  vendorHash = "sha256-jLyjQ+w/QS9uA0pGWF2X6dEfOifcI2gC2sgi1STEzpU=";
+  vendorHash = "sha256-Y5FcKmvYMN9Q9/VpP8IWclFXt7gl61UiyPJ+Rdmlito=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,7 +32,7 @@ in buildGo121Module {
     description = "Minimalist and opinionated feed reader";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs benpye ];
+    maintainers = with maintainers; [ rvolosatovs benpye emilylange ];
     mainProgram = "miniflux";
   };
 }

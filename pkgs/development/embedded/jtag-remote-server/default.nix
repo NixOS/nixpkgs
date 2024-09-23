@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Remote JTAG server for remote debugging";
+    mainProgram = "jtag-remote-server";
     homepage = "https://github.com/jiegec/jtag-remote-server";
     license = licenses.mit;
     maintainers = with maintainers; [ nickcao ];

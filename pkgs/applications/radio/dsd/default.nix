@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/szechyjs/dsd";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = [ ];
+    mainProgram = "dsd";
   };
 }

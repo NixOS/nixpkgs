@@ -35,8 +35,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Audio recorder for Plasma Mobile";
+    mainProgram = "krecorder";
     homepage = "https://invent.kde.org/plasma-mobile/krecorder";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An interactive spell-checking program for Unix";
+    description = "Interactive spell-checking program for Unix";
     homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
     license = licenses.free;
     platforms = platforms.unix;

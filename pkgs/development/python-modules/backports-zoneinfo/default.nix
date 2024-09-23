@@ -1,18 +1,22 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, python
-, substituteAll
-, importlib-resources
-, tzdata
-, hypothesis
-, pytestCheckHook
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  python,
+  substituteAll,
+  importlib-resources,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "backports-zoneinfo";
   version = "0.2.1";
+  format = "setuptools";
 
   disabled = pythonAtLeast "3.9";
 
@@ -45,15 +49,11 @@ buildPythonPackage rec {
     (substituteAll {
       name = "zoneinfo-path";
       src = ./zoneinfo.patch;
-      zoneinfo = "${tzdata}/lib/${python.libPrefix}/site-packages/tzdata/zoneinfo";
+      zoneinfo = "${tzdata}/${python.sitePackages}/tzdata/zoneinfo";
     })
   ];
 
-  propagatedBuildInputs = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  propagatedBuildInputs = [ tzdata ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   pythonImportsCheck = [ "backports.zoneinfo" ];
 
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     description = "Backport of the standard library module zoneinfo";
     homepage = "https://github.com/pganssle/zoneinfo";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

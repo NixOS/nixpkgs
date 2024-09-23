@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, flask
-, pytestCheckHook
-, python-socketio
-, pythonOlder
-, redis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  flask,
+  pytestCheckHook,
+  python-socketio,
+  pythonOlder,
+  redis,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-SocketIO";
-  version = "5.3.6";
+  pname = "flask-socketio";
+  version = "5.3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,12 +21,10 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "Flask-SocketIO";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YjCe34Mvt7tvp3w5yH52lrq4bWi7aIYAUssNqxlQ8CA=";
+    hash = "sha256-3vqhxz+NPrpjTxNt4scZtPxaFfnM3+gyE+jegwgan2E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
@@ -37,13 +36,9 @@ buildPythonPackage rec {
     redis
   ];
 
-  pytestFlagsArray = [
-    "test_socketio.py"
-  ];
+  pytestFlagsArray = [ "test_socketio.py" ];
 
-  pythonImportsCheck = [
-    "flask_socketio"
-  ];
+  pythonImportsCheck = [ "flask_socketio" ];
 
   meta = with lib; {
     description = "Socket.IO integration for Flask applications";

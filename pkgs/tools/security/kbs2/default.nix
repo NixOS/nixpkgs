@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     mkdir -p $out/share/kbs2
     cp -r contrib/ $out/share/kbs2
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kbs2 \
       --bash <($out/bin/kbs2 --completions bash) \
       --fish <($out/bin/kbs2 --completions fish) \
@@ -46,10 +47,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A secret manager backed by age";
+    description = "Secret manager backed by age";
+    mainProgram = "kbs2";
     homepage = "https://github.com/woodruffw/kbs2";
     changelog = "https://github.com/woodruffw/kbs2/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

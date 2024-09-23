@@ -1,0 +1,47 @@
+diff --git a/GNUmakefile b/GNUmakefile
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -14,11 +14,6 @@ LLVM_VERSIONS = 18 17 16 15
+ errifempty = $(if $(1),$(1),$(error $(2)))
+ detect = $(shell which $(call errifempty,$(firstword $(foreach p,$(2),$(shell command -v $(p) 2> /dev/null && echo $(p)))),failed to locate $(1) at any of: $(2)))
+ toolSearchPathsVersion = $(1)-$(2)
+-ifeq ($(shell uname -s),Darwin)
+-	# Also explicitly search Brew's copy, which is not in PATH by default.
+-	BREW_PREFIX := $(shell brew --prefix)
+-	toolSearchPathsVersion += $(BREW_PREFIX)/opt/llvm@$(2)/bin/$(1)-$(2) $(BREW_PREFIX)/opt/llvm@$(2)/bin/$(1)
+-endif
+ # First search for a custom built copy, then move on to explicitly version-tagged binaries, then just see if the tool is in path with its normal name.
+ findLLVMTool = $(call detect,$(1),$(abspath llvm-build/bin/$(1)) $(foreach ver,$(LLVM_VERSIONS),$(call toolSearchPathsVersion,$(1),$(ver))) $(1))
+ CLANG ?= $(call findLLVMTool,clang)
+@@ -848,9 +843,8 @@ endif
+ wasmtest:
+ 	$(GO) test ./tests/wasm
+ 
+-build/release: tinygo gen-device wasi-libc $(if $(filter 1,$(USE_SYSTEM_BINARYEN)),,binaryen)
++build/release:
+ 	@mkdir -p build/release/tinygo/bin
+-	@mkdir -p build/release/tinygo/lib/clang/include
+ 	@mkdir -p build/release/tinygo/lib/CMSIS/CMSIS
+ 	@mkdir -p build/release/tinygo/lib/macos-minimal-sdk
+ 	@mkdir -p build/release/tinygo/lib/mingw-w64/mingw-w64-crt/lib-common
+@@ -871,7 +865,6 @@ build/release: tinygo gen-device wasi-libc $(if $(filter 1,$(USE_SYSTEM_BINARYEN
+ ifneq ($(USE_SYSTEM_BINARYEN),1)
+ 	@cp -p  build/wasm-opt$(EXE)         build/release/tinygo/bin
+ endif
+-	@cp -p $(abspath $(CLANG_SRC))/lib/Headers/*.h build/release/tinygo/lib/clang/include
+ 	@cp -rp lib/CMSIS/CMSIS/Include      build/release/tinygo/lib/CMSIS/CMSIS
+ 	@cp -rp lib/CMSIS/README.md          build/release/tinygo/lib/CMSIS
+ 	@cp -rp lib/macos-minimal-sdk/*      build/release/tinygo/lib/macos-minimal-sdk
+@@ -927,8 +920,7 @@ endif
+ 	@cp -rp lib/wasi-libc/libc-top-half/musl/include                build/release/tinygo/lib/wasi-libc/libc-top-half/musl
+ 	@cp -rp lib/wasi-libc/sysroot                                   build/release/tinygo/lib/wasi-libc/sysroot
+ 	@cp -rp lib/wasi-cli/wit                                        build/release/tinygo/lib/wasi-cli/wit
+-	@cp -rp llvm-project/compiler-rt/lib/builtins build/release/tinygo/lib/compiler-rt-builtins
+-	@cp -rp llvm-project/compiler-rt/LICENSE.TXT  build/release/tinygo/lib/compiler-rt-builtins
++	@cp -rp lib/compiler-rt-builtins     build/release/tinygo/lib/compiler-rt-builtins
+ 	@cp -rp src                          build/release/tinygo/src
+ 	@cp -rp targets                      build/release/tinygo/targets
+ 
+-- 
+2.37.2
+

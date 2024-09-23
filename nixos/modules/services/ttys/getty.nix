@@ -34,7 +34,7 @@ in
       autologinUser = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
         '';
@@ -44,7 +44,7 @@ in
         type = types.path;
         default = "${pkgs.shadow}/bin/login";
         defaultText = literalExpression ''"''${pkgs.shadow}/bin/login"'';
-        description = lib.mdDoc ''
+        description = ''
           Path to the login binary executed by agetty.
         '';
       };
@@ -52,7 +52,7 @@ in
       loginOptions = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Template for arguments to be passed to
           {manpage}`login(1)`.
 
@@ -67,7 +67,7 @@ in
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional arguments passed to agetty.
         '';
         example = [ "--nohostname" ];
@@ -75,7 +75,7 @@ in
 
       greetingLine = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Welcome line printed by agetty.
           The default shows current NixOS version label, machine type and tty.
         '';
@@ -84,7 +84,7 @@ in
       helpLine = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Help line printed by agetty below the welcome line.
           Used by the installation CD to give some hints on
           how to proceed.
@@ -101,7 +101,7 @@ in
   config = {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
-    services.getty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
     services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.services."getty@" =
@@ -158,4 +158,5 @@ in
 
   };
 
+  meta.maintainers = with maintainers; [ RossComputerGuy ];
 }

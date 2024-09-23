@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "tf-summarize";
-  version = "0.3.6";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "dineshba";
     repo = "tf-summarize";
     rev = "v${version}";
-    hash = "sha256-8TRX7gAbBlCIOHbwRIVoke2WBSgwLx9121Fg5h0LPF0=";
+    hash = "sha256-OmGJgy36Jv7/kyGg2y1cNS1r6n1C/plfC0s6q08Wox4=";
   };
 
-  vendorHash = "sha256-YdfZt8SHBJHk5VUC8Em97EzX79EV4hxvo0B05npBA2U=";
+  vendorHash = "sha256-nfontEgMj2qPbrM35iR7b65qrkWHCMY1v944iYdNLG8=";
 
   ldflags = [
     "-s"
@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command-line utility to print the summary of the terraform plan";
+    mainProgram = "tf-summarize";
     homepage = "https://github.com/dineshba/tf-summarize";
     license = licenses.mit;
     maintainers = with maintainers; [ pjrm ];

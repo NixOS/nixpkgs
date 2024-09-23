@@ -7,6 +7,7 @@
 , bzip2
 , openssl
 , jansson
+, gd
 , whereami
 , lua
 , lz4
@@ -23,15 +24,15 @@
 , standalone ? "LF_SAMYRUN"
 }:
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxmark3";
-  version = "4.17511";
+  version = "4.18589";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
-    rev = "v${version}";
-    hash = "sha256-L842Hvdy3M+k67IPiWMcxxpuD0ggCF7j6TDs8YdISZ4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-e/FoyaHU/uH2yovEqtkrCXwHMlF94Acxl2lUA422Pig=";
   };
 
   patches = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     bzip2
     openssl
     jansson
+    gd
     lz4
     whereami
     lua
@@ -84,5 +86,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nyanotech emilytrau ];
     platforms = platforms.unix;
+    mainProgram = "pm3";
   };
-}
+})

@@ -1,67 +1,85 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, cython_3
-, setuptools
+  # build-system
+  cython,
+  setuptools,
 
-# dependencies
-, async-timeout
-, chacha20poly1305-reuseable
-, noiseprotocol
-, protobuf
-, zeroconf
+  # dependencies
+  aiohappyeyeballs,
+  async-interrupt,
+  async-timeout,
+  chacha20poly1305-reuseable,
+  cryptography,
+  noiseprotocol,
+  protobuf,
+  zeroconf,
 
-# tests
-, mock
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "18.5.2";
+  version = "25.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kj4FHsNsGsMxK+EI1jgqBfvldkyAoBkCTGT1yiZMmzY=";
+    hash = "sha256-ITNXPwQTKOyH0TXYr8v/VI5rPNCvKGb/zIE1q+Ja8j0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    cython_3
+    cython
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "cryptography" ];
+
+  dependencies = [
+    aiohappyeyeballs
+    async-interrupt
     chacha20poly1305-reuseable
+    cryptography
     noiseprotocol
     protobuf
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  pythonImportsCheck = [
-    "aioesphomeapi"
-  ];
   nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/esphome/aioesphomeapi/issues/837
+    "test_reconnect_logic_stop_callback"
+    # python3.12.4 regression
+    # https://github.com/esphome/aioesphomeapi/issues/889
+    "test_start_connection_cannot_increase_recv_buffer"
+    "test_start_connection_can_only_increase_buffer_size_to_262144"
+  ];
+
+  pythonImportsCheck = [ "aioesphomeapi" ];
+
   meta = with lib; {
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [
+      fab
+      hexa
+    ];
   };
 }

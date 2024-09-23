@@ -11,15 +11,15 @@ Also, remove /usr and /lib as these don't exist on NixOS.
 
 Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
 ---
- src/basic/path-lookup.c | 17 ++---------------
+ src/basic/path-lookup.c | 18 ++----------------
  src/core/systemd.pc.in  |  8 ++++----
- 2 files changed, 6 insertions(+), 19 deletions(-)
+ 2 files changed, 6 insertions(+), 20 deletions(-)
 
 diff --git a/src/basic/path-lookup.c b/src/basic/path-lookup.c
-index 7d158a8295..f9bd62b631 100644
+index 540256b73b..a115ec09a3 100644
 --- a/src/basic/path-lookup.c
 +++ b/src/basic/path-lookup.c
-@@ -92,11 +92,7 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
+@@ -123,11 +123,7 @@ int runtime_directory(char **ret, RuntimeScope scope, const char *suffix) {
  }
  
  static const char* const user_data_unit_paths[] = {
@@ -31,7 +31,7 @@ index 7d158a8295..f9bd62b631 100644
          NULL
  };
  
-@@ -617,15 +613,13 @@ int lookup_paths_init(
+@@ -634,16 +630,13 @@ int lookup_paths_init(
                                          persistent_config,
                                          SYSTEM_CONFIG_UNIT_DIR,
                                          "/etc/systemd/system",
@@ -44,11 +44,12 @@ index 7d158a8295..f9bd62b631 100644
 -                                        "/usr/local/lib/systemd/system",
                                          SYSTEM_DATA_UNIT_DIR,
 -                                        "/usr/lib/systemd/system",
+-                                        /* To be used ONLY for images which might be legacy split-usr */
 -                                        STRV_IFNOTNULL(flags & LOOKUP_PATHS_SPLIT_USR ? "/lib/systemd/system" : NULL),
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -641,14 +635,11 @@ int lookup_paths_init(
+@@ -659,14 +652,11 @@ int lookup_paths_init(
                                          persistent_config,
                                          USER_CONFIG_UNIT_DIR,
                                          "/etc/systemd/user",
@@ -64,7 +65,7 @@ index 7d158a8295..f9bd62b631 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -808,7 +799,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+@@ -825,7 +815,6 @@ char **generator_binary_paths(RuntimeScope scope) {
                  case RUNTIME_SCOPE_SYSTEM:
                          add = strv_new("/run/systemd/system-generators",
                                         "/etc/systemd/system-generators",
@@ -72,7 +73,7 @@ index 7d158a8295..f9bd62b631 100644
                                         SYSTEM_GENERATOR_DIR);
                          break;
  
-@@ -816,7 +806,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+@@ -833,7 +822,6 @@ char **generator_binary_paths(RuntimeScope scope) {
                  case RUNTIME_SCOPE_USER:
                          add = strv_new("/run/systemd/user-generators",
                                         "/etc/systemd/user-generators",
@@ -80,7 +81,7 @@ index 7d158a8295..f9bd62b631 100644
                                         USER_GENERATOR_DIR);
                          break;
  
-@@ -855,14 +844,12 @@ char **env_generator_binary_paths(RuntimeScope runtime_scope) {
+@@ -872,14 +860,12 @@ char **env_generator_binary_paths(RuntimeScope runtime_scope) {
                  case RUNTIME_SCOPE_SYSTEM:
                          add = strv_new("/run/systemd/system-environment-generators",
                                          "/etc/systemd/system-environment-generators",
@@ -96,10 +97,10 @@ index 7d158a8295..f9bd62b631 100644
                          break;
  
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index 693433b34b..5932a21b5b 100644
+index f3b85b0190..8ae544b495 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
-@@ -38,10 +38,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
+@@ -43,10 +43,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
  systemd_user_conf_dir=${sysconfdir}/systemd/user
  systemduserconfdir=${systemd_user_conf_dir}
  
@@ -111,8 +112,8 @@ index 693433b34b..5932a21b5b 100644
 +systemd_user_unit_path=${systemd_user_conf_dir}:/etc/systemd/user:/nix/var/nix/profiles/default/lib/systemd/user:/run/systemd/user:${systemduserunitdir}
  systemduserunitpath=${systemd_user_unit_path}
  
- systemd_system_generator_dir=${root_prefix}/lib/systemd/system-generators
-@@ -50,10 +50,10 @@ systemdsystemgeneratordir=${systemd_system_generator_dir}
+ systemd_system_generator_dir=${prefix}/lib/systemd/system-generators
+@@ -55,10 +55,10 @@ systemdsystemgeneratordir=${systemd_system_generator_dir}
  systemd_user_generator_dir=${prefix}/lib/systemd/user-generators
  systemdusergeneratordir=${systemd_user_generator_dir}
  
@@ -124,4 +125,4 @@ index 693433b34b..5932a21b5b 100644
 +systemd_user_generator_path=/run/systemd/user-generators:/etc/systemd/user-generators:${systemd_user_generator_dir}
  systemdusergeneratorpath=${systemd_user_generator_path}
  
- systemd_sleep_dir=${root_prefix}/lib/systemd/system-sleep
+ systemd_sleep_dir=${prefix}/lib/systemd/system-sleep

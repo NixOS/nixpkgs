@@ -1,16 +1,16 @@
 { lib, stdenv, csound, desktop-file-utils,
-  fetchFromGitHub, python, python-qt, qmake,
+  fetchFromGitHub, python3, python-qt, qmake,
   qtwebengine, qtxmlpatterns, rtmidi, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "csound-qt";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "CsoundQt";
     repo = "CsoundQt";
     rev = "v${version}";
-    hash = "sha256-PdylVOnunbB36dbZX/wzd9A8CJPDv/xH5HPLAUkRu28=";
+    hash = "sha256-ufjZQnO3H5pwdeEwGqunbXCfx7nvWTzak4cwVYWqvz4=";
   };
 
   patches = [
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
                  "CSOUND_INCLUDE_DIR=${csound}/include/csound"
                  "CSOUND_LIBRARY_DIR=${csound}/lib"
                  "RTMIDI_DIR=${rtmidi.src}"
-                 "PYTHONQT_SRC_DIR=${python-qt}/include/PythonQt"
+                 "PYTHONQT_SRC_DIR=${python-qt.src}"
                  "PYTHONQT_LIB_DIR=${python-qt}/lib"
                  "LIBS+=-L${python-qt}/lib"
-                 "INCLUDEPATH+=${python-qt}/include/PythonQt"
-                 "INCLUDEPATH+=${python}/include/python${python.pythonVersion}"
                  "INSTALL_DIR=${placeholder "out"}"
                  "SHARE_DIR=${placeholder "out"}/share"
+                 "PYTHON_DIR=${python3}"
+                 "PYTHON_VERSION=3.${python3.sourceVersion.minor}"
                  ];
 
   meta = with lib; {

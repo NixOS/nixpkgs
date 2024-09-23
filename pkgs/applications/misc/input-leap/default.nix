@@ -21,22 +21,22 @@
 , pkg-config
 , qtbase
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
   pname = "input-leap";
-  version = "unstable-2023-05-24";
+  version = "unstable-2023-12-27";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "5e2f37bf9ec17627ae33558d99f90b7608ace422";
-    hash = "sha256-55RqdRu/Hi2OTiLjAFJ6Gdgg9iO5NIIJCsOkUQjR9hk=";
+    rev = "ecf1fb6645af7b79e6ea984d3c9698ca0ab6f391";
+    hash = "sha256-TEv1xR1wUG3wXNATLLIZKOtW05X96wsPNOlE77OQK54=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook qttools ];
+  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 qttools ];
   buildInputs = [
     curl qtbase avahi
     libX11 libXext libXtst libXinerama libXrandr libXdmcp libICE libSM
@@ -55,7 +55,7 @@ mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/share/applications/input-leap.desktop \
+    substituteInPlace $out/share/applications/io.github.input_leap.InputLeap.desktop \
       --replace "Exec=input-leap" "Exec=$out/bin/input-leap"
   '';
 

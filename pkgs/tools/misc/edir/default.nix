@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "edir";
-  version = "2.22";
+  version = "2.29";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Z4p16v0J7mgl1Av8tdUZ6vSILgbOpLHs3rWx2P7AH+E=";
+    hash = "sha256-5b86/M8xqzwWMCRtsH1qwmooyfOhORgXgctRjzQEmlU=";
   };
 
   nativeBuildInputs = with python3Packages; [

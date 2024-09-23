@@ -2,14 +2,14 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , unzip
 , zlib
-, pcre
+, pcre2
 , hdf5
 , boost
+, glib
 , gflags
 , protobuf_21
 , config
@@ -35,6 +35,8 @@
 , eigen
 , enableBlas ? true
 , blas
+, enableVA ? !stdenv.isDarwin
+, libva
 , enableContrib ? true
 
 , enableCuda ? config.cudaSupport
@@ -58,7 +60,11 @@
 , enableFfmpeg ? true
 , ffmpeg
 , enableGStreamer ? true
+, elfutils
 , gst_all_1
+, orc
+, libunwind
+, zstd
 , enableTesseract ? false
 , tesseract
 , leptonica
@@ -74,6 +80,12 @@
 , doxygen
 , graphviz-nox
 
+, runAccuracyTests ? true
+, runPerformanceTests ? false
+# Modules to enable via BUILD_LIST to build a customized opencv.
+# An empty lists means this setting is ommited which matches upstreams default.
+, enabledModules ? [ ]
+
 , AVFoundation
 , Cocoa
 , VideoDecodeAcceleration
@@ -85,7 +97,7 @@
 }@inputs:
 
 let
-  version = "4.7.0";
+  version = "4.9.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -96,21 +108,21 @@ let
     owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "sha256-jUeGsu8+jzzCnIFbVMCW8DcUeGv/t1yCY/WXyW+uGDI=";
+    hash = "sha256-3qqu4xlRyMbPKHHTIT+iRRGtpFlcv0NU8GNZpgjdi6k=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     rev = version;
-    sha256 = "sha256-meya0J3RdOIeMM46e/6IOVwrKn3t/c0rhwP2WQaybkE=";
+    hash = "sha256-K74Ghk4uDqj4OWEzDxT2R3ERi+jkAWZszzezRenfuZ8=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     rev = version;
-    sha256 = "sha256-6hAdJdaUgtRGQanQKuY/q6fcXWXFZ3K/oLbGxvksry0=";
+    hash = "sha256-pActKi7aN5EOZq2Fpf5mALnZq71c037/R3Q6wJ4uCfQ=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -121,16 +133,16 @@ let
     src = fetchFromGitHub {
       owner = "opencv";
       repo = "opencv_3rdparty";
-      rev = "a56b6ac6f030c312b2dce17430eef13aed9af274";
-      sha256 = "1msbkc3zixx61rcg6a04i1bcfhw1phgsrh93glq1n80hgsk3nbjq";
+      rev = "0cc4aa06bf2bef4b05d237c69a5a96b9cd0cb85a";
+      hash = "sha256-/kHivOgCkY9YdcRRaVgytXal3ChE9xFfGAB0CfFO5ec=";
     } + "/ippicv";
-    files = let name = platform: "ippicv_2019_${platform}_general_20180723.tgz"; in
+    files = let name = platform: "ippicv_2021.10.0_${platform}_20230919_general.tgz"; in
       if effectiveStdenv.hostPlatform.system == "x86_64-linux" then
-        { ${name "lnx_intel64"} = "c0bd78adb4156bbf552c1dfe90599607"; }
+        { ${name "lnx_intel64"} = "606a19b207ebedfe42d59fd916cc4850"; }
       else if effectiveStdenv.hostPlatform.system == "i686-linux" then
-        { ${name "lnx_ia32"} = "4f38432c30bfd6423164b7a24bbc98a0"; }
+        { ${name "lnx_ia32"} = "ea08487b810baad2f68aca87b74a2db9"; }
       else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
-        { ${name "mac_intel64"} = "fe6b2bb75ae0e3f19ad3ae1a31dfa4a2"; }
+        { ${name "mac_intel64"} = "14f01c5a4780bfae9dde9b0aaf5e56fc"; }
       else
         throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -142,7 +154,7 @@ let
       owner = "opencv";
       repo = "opencv_3rdparty";
       rev = "fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d";
-      sha256 = "0r9fam8dplyqqsd3qgpnnfgf9l7lj44di19rxwbm8mxiw0rlcdvy";
+      hash = "sha256-fjdGM+CxV1QX7zmF2AiR9NDknrP2PjyaxtjT21BVLmU=";
     };
     files = {
       "vgg_generated_48.i" = "e8d0dcd54d1bcfdc29203d011a797179";
@@ -179,7 +191,7 @@ let
       owner = "opencv";
       repo = "opencv_3rdparty";
       rev = "8afa57abc8229d611c4937165d20e2a2d9fc5a12";
-      sha256 = "061lsvqdidq9xa2hwrcvwi9ixflr2c2lfpc8drr159g68zi8bp4v";
+      hash = "sha256-m9yF4kfmpRJybohdRwUTmboeU+SbZQ6F6gm32PDWNBg=";
     };
     files = {
       "face_landmark_model.dat" = "7505c44ca4eb54b4ab1e4777cb96ac05";
@@ -191,10 +203,10 @@ let
   ade = rec {
     src = fetchurl {
       url = "https://github.com/opencv/ade/archive/${name}";
-      sha256 = "sha256-TjLRbFbC7MDY9PxIy560ryviBI58cbQwqgc7A7uOHkg=";
+      hash = "sha256-WG/GudVpkO10kOJhoKXFMj672kggvyRYCIpezal3wcE=";
     };
-    name = "v0.1.2a.zip";
-    md5 = "fa4b3e25167319cb0fa9432ef8281945";
+    name = "v0.1.2d.zip";
+    md5 = "dbb095a8bf3008e91edbbf45d8d34885";
     dst = ".cache/ade";
   };
 
@@ -204,7 +216,7 @@ let
       owner = "opencv";
       repo = "opencv_3rdparty";
       rev = "a8b69ccc738421293254aec5ddb38bd523503252";
-      sha256 = "sha256-/n6zHwf0Rdc4v9o4rmETzow/HTv+81DnHP+nL56XiTY=";
+      hash = "sha256-/n6zHwf0Rdc4v9o4rmETzow/HTv+81DnHP+nL56XiTY=";
     };
     files = {
       "detect.caffemodel" = "238e2b2d6f3c18d6c3a30de0c31e23cf";
@@ -216,9 +228,9 @@ let
   };
 
   # See opencv/cmake/OpenCVDownload.cmake
-  installExtraFiles = extra: with lib; ''
+  installExtraFiles = extra: ''
     mkdir -p "${extra.dst}"
-  '' + concatStrings (flip mapAttrsToList extra.files (name: md5: ''
+  '' + lib.concatStrings (lib.flip lib.mapAttrsToList extra.files (name: md5: ''
     ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
   ''));
   installExtraFile = extra: ''
@@ -228,12 +240,10 @@ let
 
   opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
-  runAccuracyTests = true;
-  runPerformanceTests = false;
   printEnabled = enabled: if enabled then "ON" else "OFF";
   withOpenblas = (enableBlas && blas.provider.pname == "openblas");
   #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
-  #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+  #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
   inherit (cudaPackages) cudaFlags cudaVersion;
@@ -247,8 +257,11 @@ effectiveStdenv.mkDerivation {
 
   outputs = [
     "out"
+    "cxxdev"
+  ] ++ lib.optionals (runAccuracyTests || runPerformanceTests) [
     "package_tests"
   ];
+  cudaPropagateToOutput = "cxxdev";
 
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
@@ -258,20 +271,6 @@ effectiveStdenv.mkDerivation {
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
   ] ++ lib.optionals enableContrib [
-    (fetchpatch {
-      name = "CVE-2023-2617.patch";
-      url = "https://github.com/opencv/opencv_contrib/commit/ccc277247ac1a7aef0a90353edcdec35fbc5903c.patch";
-      stripLen = 2;
-      extraPrefix = [ "opencv_contrib/" ];
-      sha256 = "sha256-drZ+DVn+Pk4zAZJ+LgX5u3Tz7MU0AEI/73EVvxDP3AU=";
-    })
-    (fetchpatch {
-      name = "CVE-2023-2618.patch";
-      url = "https://github.com/opencv/opencv_contrib/commit/ec406fa4748fb4b0630c1b986469e7918d5e8953.patch";
-      stripLen = 2;
-      extraPrefix = [ "opencv_contrib/" ];
-      sha256 = "sha256-cB5Tsh2fDOsc0BNtSzd6U/QoCjkd9yMW1QutUU69JJ0=";
-    })
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
 
   # This prevents cmake from using libraries in impure paths (which
@@ -298,50 +297,97 @@ effectiveStdenv.mkDerivation {
     echo '"(build info elided)"' > modules/core/version_string.inc
   '';
 
-  buildInputs = [ zlib pcre boost gflags protobuf_21 ]
-    ++ lib.optional enablePython pythonPackages.python
-    ++ lib.optional (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) hdf5
-    ++ lib.optional enableGtk2 gtk2
-    ++ lib.optional enableGtk3 gtk3
-    ++ lib.optional enableVtk vtk
-    ++ lib.optional enableJPEG libjpeg
-    ++ lib.optional enablePNG libpng
-    ++ lib.optional enableTIFF libtiff
-    ++ lib.optional enableWebP libwebp
-    ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableJPEG2000 openjpeg
-    ++ lib.optional enableFfmpeg ffmpeg
-    ++ lib.optionals (enableFfmpeg && effectiveStdenv.isDarwin)
-      [ VideoDecodeAcceleration bzip2 ]
-    ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
-    ++ lib.optional enableOvis ogre
-    ++ lib.optional enableGPhoto2 libgphoto2
-    ++ lib.optional enableDC1394 libdc1394
-    ++ lib.optional enableEigen eigen
-    ++ lib.optional enableBlas blas.provider
+  buildInputs = [
+    boost
+    gflags
+    glib
+    pcre2
+    protobuf_21
+    zlib
+  ] ++ lib.optionals enablePython [
+    pythonPackages.python
+  ] ++ lib.optionals (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) [
+    hdf5
+  ] ++ lib.optionals enableGtk2 [
+    gtk2
+  ] ++ lib.optionals enableGtk3 [
+    gtk3
+  ] ++ lib.optionals enableVtk [
+    vtk
+  ] ++ lib.optionals enableJPEG [
+    libjpeg
+  ] ++ lib.optionals enablePNG [
+    libpng
+  ] ++ lib.optionals enableTIFF [
+    libtiff
+  ] ++ lib.optionals enableWebP [
+    libwebp
+  ] ++ lib.optionals enableEXR [
+    openexr
+    ilmbase
+  ] ++ lib.optionals enableJPEG2000 [
+    openjpeg
+  ] ++ lib.optionals enableFfmpeg [
+    ffmpeg
+  ] ++ lib.optionals (enableFfmpeg && effectiveStdenv.isDarwin) [
+    bzip2
+    VideoDecodeAcceleration
+  ] ++ lib.optionals (enableGStreamer && effectiveStdenv.isLinux) [
+    elfutils
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+    libunwind
+    orc
+    zstd
+  ] ++ lib.optionals enableOvis [
+    ogre
+  ] ++ lib.optionals enableGPhoto2 [
+    libgphoto2
+  ] ++ lib.optionals enableDC1394 [
+    libdc1394
+  ] ++ lib.optionals enableEigen [
+    eigen
+  ] ++ lib.optionals enableVA [
+    libva
+  ] ++ lib.optionals enableBlas [
+    blas.provider
+  ] ++ lib.optionals enableTesseract [
     # There is seemingly no compile-time flag for Tesseract.  It's
     # simply enabled automatically if contrib is built, and it detects
     # tesseract & leptonica.
-    ++ lib.optionals enableTesseract [ tesseract leptonica ]
-    ++ lib.optional enableTbb tbb
-    ++ lib.optionals effectiveStdenv.isDarwin [
-      bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
-    ]
-    ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
-    ++ lib.optionals enableCuda  (with cudaPackages; [
-      cuda_cudart
-      cuda_cccl # <thrust/*>
-      libnpp # npp.h
-    ] ++ lib.optionals enableCublas [
-      libcublas # cublas_v2.h
-    ] ++ lib.optionals enableCudnn [
-      cudnn # cudnn.h
-    ] ++ lib.optionals enableCufft [
-      libcufft # cufft.h
-  ]);
+    tesseract
+    leptonica
+  ] ++ lib.optionals enableTbb [
+    tbb
+  ] ++ lib.optionals effectiveStdenv.isDarwin [
+    bzip2
+    AVFoundation
+    Cocoa
+    VideoDecodeAcceleration
+    CoreMedia
+    MediaToolbox
+    Accelerate
+  ] ++ lib.optionals enableDocs [
+    doxygen
+    graphviz-nox
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.libnpp # npp.h
+    nvidia-optical-flow-sdk
+  ] ++ lib.optionals enableCublas [
+    # May start using the default $out instead once
+    # https://github.com/NixOS/nixpkgs/issues/271792
+    # has been addressed
+    cudaPackages.libcublas # cublas_v2.h
+  ] ++ lib.optionals enableCudnn [
+    cudaPackages.cudnn # cudnn.h
+  ] ++ lib.optionals enableCufft [
+    cudaPackages.libcufft # cufft.h
+  ];
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
-    ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
+  propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ]
   ++ lib.optionals enablePython [
@@ -429,6 +475,8 @@ effectiveStdenv.mkDerivation {
     "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
+  ] ++ lib.optionals (enabledModules != [ ]) [
+    "-DBUILD_LIST=${lib.concatStringsSep "," enabledModules}"
   ];
 
   postBuild = lib.optionalString enableDocs ''
@@ -458,6 +506,13 @@ effectiveStdenv.mkDerivation {
   postInstall = ''
     sed -i "s|{exec_prefix}/$out|{exec_prefix}|;s|{prefix}/$out|{prefix}|" \
       "$out/lib/pkgconfig/opencv4.pc"
+    mkdir "$cxxdev"
+  ''
+  # fix deps not progagating from opencv4.cxxdev if cuda is disabled
+  # see https://github.com/NixOS/nixpkgs/issues/276691
+  + lib.optionalString (!enableCuda) ''
+    mkdir -p "$cxxdev/nix-support"
+    echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
   ''
   # install python distribution information, so other packages can `import opencv`
   + lib.optionalString enablePython ''
@@ -476,6 +531,8 @@ effectiveStdenv.mkDerivation {
   '';
 
   passthru = {
+    cudaSupport = enableCuda;
+
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
     }
@@ -492,11 +549,11 @@ effectiveStdenv.mkDerivation {
     };
   } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
-    license = with licenses; if enableUnfree then unfree else bsd3;
-    maintainers = with maintainers; [ basvandijk ];
-    platforms = with platforms; linux ++ darwin;
+    license = if enableUnfree then lib.licenses.unfree else lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ basvandijk ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

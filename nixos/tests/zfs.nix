@@ -7,19 +7,16 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
 
-  makeZfsTest = name:
-    { kernelPackage ? if enableUnstable
-                      then pkgs.zfsUnstable.latestCompatibleLinuxPackages
-                      else pkgs.linuxPackages
-    , enableUnstable ? false
+  makeZfsTest =
+    { kernelPackages
     , enableSystemdStage1 ? false
-    , zfsPackage ? if enableUnstable then pkgs.zfs else pkgs.zfsUnstable
+    , zfsPackage
     , extraTest ? ""
     }:
     makeTest {
-      name = "zfs-" + name;
+      name = zfsPackage.kernelModuleAttribute;
       meta = with pkgs.lib.maintainers; {
-        maintainers = [ adisbladis elvishjerricco ];
+        maintainers = [ elvishjerricco ];
       };
 
       nodes.machine = { config, pkgs, lib, ... }:
@@ -35,7 +32,7 @@ let
         boot.loader.timeout = 0;
         boot.loader.efi.canTouchEfiVariables = true;
         networking.hostId = "deadbeef";
-        boot.kernelPackages = kernelPackage;
+        boot.kernelPackages = kernelPackages;
         boot.zfs.package = zfsPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.initrd.systemd.enable = enableSystemdStage1;
@@ -48,13 +45,13 @@ let
         specialisation.samba.configuration = {
           services.samba = {
             enable = true;
-            extraConfig = ''
-              registry shares = yes
-              usershare path = ${usersharePath}
-              usershare allow guests = yes
-              usershare max shares = 100
-              usershare owner only = no
-            '';
+            settings.global = {
+              "registry shares" = true;
+              "usershare path" = "${usersharePath}";
+              "usershare allow guests" = true;
+              "usershare max shares" = "100";
+              "usershare owner only" = false;
+            };
           };
           systemd.services.samba-smbd.serviceConfig.ExecStartPre =
             "${pkgs.coreutils}/bin/mkdir -m +t -p ${usersharePath}";
@@ -195,22 +192,29 @@ let
 in {
 
   # maintainer: @raitobezarius
-  series_2_1 = makeZfsTest "2.1-series" {
+  series_2_1 = makeZfsTest {
     zfsPackage = pkgs.zfs_2_1;
+    kernelPackages = pkgs.linuxPackages;
   };
 
-  stable = makeZfsTest "stable" { };
-
-  unstable = makeZfsTest "unstable" {
-    enableUnstable = true;
+  series_2_2 = makeZfsTest {
+    zfsPackage = pkgs.zfs_2_2;
+    kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest "unstable" {
-    enableUnstable = true;
+  unstable = makeZfsTest rec {
+    zfsPackage = pkgs.zfs_unstable;
+    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
+  };
+
+  unstableWithSystemdStage1 = makeZfsTest rec {
+    zfsPackage = pkgs.zfs_unstable;
+    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
     enableSystemdStage1 = true;
   };
 
-  installer = (import ./installer.nix { }).zfsroot;
+  installerBoot = (import ./installer.nix { inherit system; }).separateBootZfs;
+  installer = (import ./installer.nix { inherit system; }).zfsroot;
 
   expand-partitions = makeTest {
     name = "multi-disk-zfs";

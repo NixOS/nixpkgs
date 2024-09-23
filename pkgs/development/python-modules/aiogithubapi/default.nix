@@ -1,67 +1,77 @@
-{ lib
-, aiohttp
-, aresponses
-, async-timeout
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sigstore,
 }:
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
-  version = "23.2.1";
-  format = "pyproject";
+  version = "24.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
+    repo = "aiogithubapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-J6kcEVqADmVJZDbU9eqLCL0rohMSA/Ig7FSp/Ye5Sfk=";
+    hash = "sha256-z7l7Qx9Kg1FZ9nM0V2NzTyi3gbE2hakbc/GZ1CzDmKw=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace pyproject.toml \
-      --replace 'version = "0"' 'version = "${version}"' \
-      --replace 'backoff = "^1.10.0"' 'backoff = "*"'
+      --replace-fail 'version = "0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     backoff
   ];
 
+  # Optional dependencies for deprecated-verify are not added
+  # Only sigstore < 2 is supported
+
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
+    sigstore
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "aiogithubapi"
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "aiogithubapi" ];
+
+  disabledTests = [
+    # sigstore.errors.TUFError: Failed to refresh TUF metadata
+    "test_sigstore"
   ];
 
   meta = with lib; {
     description = "Python client for the GitHub API";
     homepage = "https://github.com/ludeeus/aiogithubapi";
     changelog = "https://github.com/ludeeus/aiogithubapi/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

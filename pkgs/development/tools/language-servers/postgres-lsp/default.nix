@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "postgres-lsp";
-  version = "unstable-2023-10-20";
+  version = "0-unstable-2024-03-24";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "postgres_lsp";
-    rev = "88901a987de9a2d8db05c36bcd87c5c877b51460";
-    hash = "sha256-HY83SO2dlXKamIqFEz53A8YDYx9EynX8FCX9EjF+tdw=";
+    rev = "43ca9b675cb152ca7f38cfa6aff6dd2131dfa9a2";
+    hash = "sha256-n7Qbt9fGzC0CcleAtTWDInPz4oaPjI+pvIPrR5EYJ9U=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-m8m0Q3UAq6kV2IoXMFTkP0WKzSXiWPkfOkta639dcj0=";
+  cargoHash = "sha256-UEcHlkbYMA6xETMryWXsDHyAZYtLncRJn2jA6tvw7gQ=";
 
   nativeBuildInputs = [
     protobuf
@@ -26,8 +26,10 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p=postgres_lsp" ];
   cargoTestFlags = cargoBuildFlags;
 
+  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+
   meta = with lib; {
-    description = "A Language Server for Postgres";
+    description = "Language Server for Postgres";
     homepage = "https://github.com/supabase/postgres_lsp";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

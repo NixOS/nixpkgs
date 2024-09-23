@@ -8,7 +8,6 @@
 , freetype
 , libGL
 , xorg
-, darwin
 , AppKit
 }:
 
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-k0WQu1n1sAHVor58jr060vD5/2rDrt1k5zzJlrK9WrU=";
   };
 
-  cargoSha256 = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
+  cargoHash = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config
@@ -41,6 +40,12 @@ rustPlatform.buildRustPackage rec {
     AppKit
   ];
 
+  postInstall = ''
+    install -Dm444 assets/epick.desktop -t $out/share/applications
+    install -Dm444 assets/icon.svg $out/share/icons/hicolor/scalable/apps/epick.svg
+    install -Dm444 assets/icon.png $out/share/icons/hicolor/48x48/apps/epick.png
+  '';
+
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/epick --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
@@ -51,5 +56,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/vv9k/epick/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "epick";
   };
 }

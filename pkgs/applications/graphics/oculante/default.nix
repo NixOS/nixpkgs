@@ -17,33 +17,29 @@
 , gtk3
 , darwin
 , perl
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.7.7";
+  version = "0.8.23";
 
   src = fetchFromGitHub {
     owner = "woelper";
-    repo = pname;
+    repo = "oculante";
     rev = version;
-    hash = "sha256-uDSZ7qwDC/eR0aZN372ju21PBGuBiiYmlx/26Ta3luE=";
+    hash = "sha256-Dg1FFB9WVB4SWInSyOYb1TCPAtCa9gwsFLUX+UhL4DY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-Ze3ACs9WyoxNsaeJlZWhR0g+aFsntwNLLYbw2RnmwfE=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     nasm
     perl
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
-
-  checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
 
   buildInputs = [
     openssl
@@ -64,15 +60,19 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=bench"
+    "--skip=tests::net" # requires network access
   ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libxkbcommon libX11 ]}
+  postInstall = ''
+    install -Dm444 $src/res/oculante.png -t $out/share/icons/hicolor/128x128/apps/
+    install -Dm444 $src/res/oculante.desktop -t $out/share/applications
+    wrapProgram $out/bin/oculante \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL]}
   '';
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A minimalistic crossplatform image viewer written in Rust";
+    description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

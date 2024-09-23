@@ -8,10 +8,13 @@
 , ffmpeg
 , fftw
 , flac
+, gbenchmark
 , glibcLocales
+, gtest
 , hidapi
 , lame
 , libebur128
+, libdjinterop
 , libGLU
 , libid3tag
 , libkeyfinder
@@ -26,6 +29,7 @@
 , libxcb
 , lilv
 , lv2
+, microsoft-gsl
 , mp4v2
 , opusfile
 , pcre
@@ -48,20 +52,23 @@
 , upower
 , vamp-plugin-sdk
 , wavpack
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.3.6";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-VdgCsd/7vMFUleOU0ESoZDQ8yhQSsLZADVi4XI76Ouw=";
+    hash = "sha256-BOdXgA+z3sFE4ngAEhSbp1gDbsti1STJY2Yy6Hp+zTE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     chromaprint
@@ -69,12 +76,15 @@ mkDerivation rec {
     ffmpeg
     fftw
     flac
+    gbenchmark
     glibcLocales
+    gtest
     hidapi
     lame
     libebur128
     libGLU
     libid3tag
+    libdjinterop
     libkeyfinder
     libmad
     libmodplug
@@ -87,6 +97,7 @@ mkDerivation rec {
     libxcb
     lilv
     lv2
+    microsoft-gsl
     mp4v2
     opusfile
     pcre
@@ -110,9 +121,9 @@ mkDerivation rec {
     wavpack
   ];
 
-  qtWrapperArgs = [
-    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-  ];
+  preFixup=''
+    qtWrapperArgs+=(--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive ''${gappsWrapperArgs[@]})
+  '';
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall
@@ -134,8 +145,9 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
+    mainProgram = "mixxx";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu bfortz ];
+    maintainers = with maintainers; [ bfortz benley ];
     platforms = platforms.linux;
   };
 }

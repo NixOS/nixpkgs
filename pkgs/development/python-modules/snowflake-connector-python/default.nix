@@ -1,80 +1,62 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, pythonRelaxDepsHook
-, certifi
-, cffi
-, charset-normalizer
-, fetchPypi
-, filelock
-, idna
-, keyring
-, oscrypto
-, packaging
-, platformdirs
-, pycryptodomex
-, pyjwt
-, pyopenssl
-, pythonOlder
-, pytz
-, requests
-, setuptools
-, sortedcontainers
-, tomlkit
-, typing-extensions
-, wheel
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certifi,
+  cffi,
+  charset-normalizer,
+  cryptography,
+  cython,
+  fetchFromGitHub,
+  filelock,
+  idna,
+  keyring,
+  packaging,
+  pandas,
+  platformdirs,
+  pyarrow,
+  pyjwt,
+  pyopenssl,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
+  sortedcontainers,
+  tomlkit,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.3.1";
-  format = "pyproject";
+  version = "3.12.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-u2ZyK9ZKvNdqarBqZCPWdLy3Kfm6ORBWl375Lzg6rbg=";
+  src = fetchFromGitHub {
+    owner = "snowflakedb";
+    repo = "snowflake-connector-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-A6QnKCROd1vJpFCTrLEoHVo43xojdjpgYS3qQm64gcY=";
   };
 
-  # snowflake-connector-python requires arrow 10.0.1, which we don't have in
-  # nixpkgs, so we cannot build the C extensions that use it. thus, patch out
-  # cython and pyarrow from the build dependencies
-  #
-  # keep an eye on following issue for improvements to this situation:
-  #
-  #   https://github.com/snowflakedb/snowflake-connector-python/issues/1144
-  #
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"cython",' "" \
-      --replace '"pyarrow>=10.0.1,<10.1.0",' ""
-  '';
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
+    cython
     setuptools
-    wheel
   ];
 
-  pythonRelaxDeps = [
-    "pyOpenSSL"
-    "charset-normalizer"
-    "cryptography"
-    "platformdirs"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     certifi
     cffi
     charset-normalizer
+    cryptography
     filelock
     idna
-    oscrypto
     packaging
     platformdirs
-    pycryptodomex
     pyjwt
     pyopenssl
     pytz
@@ -84,13 +66,43 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
+    pandas = [
+      pandas
+      pyarrow
+    ];
     secure-local-storage = [ keyring ];
   };
 
-  # Tests require encrypted secrets, see
-  # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
-  doCheck = false;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Tests require encrypted secrets, see
+    # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
+    "test/extras/simple_select1.py"
+    "test/integ"
+    # error getting schema from stream, error code: 0, error info: Expected to
+    # be able to read 19504 bytes for message body but got 19503
+    "test/unit/test_connection.py"
+    "test/unit/test_cursor.py"
+    "test/unit/test_error_arrow_stream.py"
+    "test/unit/test_ocsp.py"
+    "test/unit/test_retry_network.py"
+    "test/unit/test_s3_util.py"
+  ];
+
+  disabledTests = [
+    # Tests connect to the internet
+    "test_status_when_num_of_chunks_is_zero"
+    "test_test_socket_get_cert"
+  ];
 
   pythonImportsCheck = [
     "snowflake"
@@ -98,10 +110,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

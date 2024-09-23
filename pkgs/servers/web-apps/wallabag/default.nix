@@ -15,7 +15,7 @@
 
 let
   pname = "wallabag";
-  version = "2.6.7";
+  version = "2.6.9";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   # Release tarball includes vendored files
   src = fetchurl {
     url = "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz";
-    hash = "sha256-prk/sF72v5qyBv1Lz/2nY6LPM+on5/gwAMM1u9+X8xA=";
+    hash = "sha256-V4s5/y9fFAmZ+WnUxU03UyRivEihD1ZUKQOOq4TLEKw=";
   };
 
   patches = [

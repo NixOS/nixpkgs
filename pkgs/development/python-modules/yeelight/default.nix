@@ -1,12 +1,13 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitLab
-, flit-core
-, future
-, ifaddr
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitLab,
+  flit-core,
+  future,
+  ifaddr,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,21 +29,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     future
     ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "yeelight/tests.py"
-  ];
+  pytestFlagsArray = [ "yeelight/tests.py" ];
 
-  pythonImportsCheck = [
-    "yeelight"
-  ];
+  pythonImportsCheck = [ "yeelight" ];
 
   meta = with lib; {
     description = "Python library for controlling YeeLight RGB bulbs";

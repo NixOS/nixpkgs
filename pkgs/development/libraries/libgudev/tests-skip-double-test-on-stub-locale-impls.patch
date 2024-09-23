@@ -1,0 +1,41 @@
+From ad8b10870ee2092268f87144d8e5ab7db2011139 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Tue, 30 Jan 2024 20:47:21 +0100
+Subject: [PATCH] tests: Skip double test on stub locale impls
+
+On musl, setlocale() with an unknown locale name will succeed, but
+treat the requested locale as if it were C.UTF-8.  Therefore, to
+properly check whether the locale is supported, we need to actually
+verify whether it works the way we expect when deciding whether to
+skip the test.
+---
+ tests/test-double.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test-double.c b/tests/test-double.c
+index 91e77c9..e9d9232 100644
+--- a/tests/test-double.c
++++ b/tests/test-double.c
+@@ -39,8 +39,6 @@ fixture_teardown (Fixture *f, G_GNUC_UNUSED const void *data)
+ static void
+ test_double (Fixture *f, G_GNUC_UNUSED const void *data)
+ {
+-	g_assert_cmpstr (nl_langinfo(RADIXCHAR), ==, ",");
+-
+ 	umockdev_testbed_add_device (f->testbed, "platform", "dev1", NULL,
+ 				     "in_accel_scale", "0.0000098", NULL,
+ 				     "ID_MODEL", "KoolGadget", "SCALE", "0.0000098", NULL);
+@@ -73,6 +71,10 @@ int main(int argc, char **argv)
+ 	if (setlocale (LC_NUMERIC, "fr_FR.UTF-8") == NULL)
+ 		return GNU_SKIP_RETURNCODE;
+ 
++	/* Skip if locale doesn't work how we expect. */
++	if (strcmp (nl_langinfo(RADIXCHAR), ","))
++		return GNU_SKIP_RETURNCODE;
++
+ 	g_test_init (&argc, &argv, NULL);
+ 
+ 	g_test_add ("/gudev/double", Fixture, NULL,
+-- 
+GitLab
+

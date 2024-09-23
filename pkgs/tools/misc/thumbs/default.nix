@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "thumbs";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "fcsonline";
     repo = "tmux-thumbs";
     rev = version;
-    sha256 = "sha256-PH1nscmVhxJFupS7dlbOb+qEwG/Pa/2P6XFIbR/cfaQ=";
+    sha256 = "sha256-XMz1ZOTz2q1Dt4QdxG83re9PIsgvxTTkytESkgKxhGM=";
   };
 
-  cargoSha256 = "sha256-6htKiXMMyYRFefJzvDnmdx3CJ3XL8zONhGlV2wcbr9g=";
+  cargoHash = "sha256-PfTx6PcW5DESShfr9Ekhbq1asZ0xUGM4Vi9EwmoDv+s";
 
   patches = [ ./fix.patch ];
 
   meta = with lib; {
     homepage = "https://github.com/fcsonline/tmux-thumbs";
-    description = "A lightning fast version copy/pasting like vimium/vimperator";
+    description = "Lightning fast version of tmux-fingers written in Rust, copy/pasting tmux like vimium/vimperator";
     license = licenses.mit;
     maintainers = with maintainers; [ ghostbuster91 ];
   };

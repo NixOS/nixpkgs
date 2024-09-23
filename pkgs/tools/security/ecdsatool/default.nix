@@ -16,11 +16,17 @@ stdenv.mkDerivation {
     ./configure --prefix=$out
   '';
 
+  patches = [
+    ./ctype-header-c99-implicit-function-declaration.patch
+    ./openssl-header-c99-implicit-function-declaration.patch
+  ];
+
   nativeBuildInputs = with pkgs; [openssl autoconf automake];
   buildInputs = with pkgs; [libuecc];
 
   meta = with lib; {
     description = "Create and manipulate ECC NISTP256 keypairs";
+    mainProgram = "ecdsatool";
     homepage = "https://github.com/kaniini/ecdsatool/";
     license = with licenses; [free];
     platforms = platforms.unix;

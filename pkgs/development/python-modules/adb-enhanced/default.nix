@@ -1,42 +1,44 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, jdk11
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  setuptools,
+  jdk11,
+  psutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
-  version = "2.5.22";
-  format = "setuptools";
+  version = "2.5.24";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ashishb";
-    repo = pname;
+    repo = "adb-enhanced";
     rev = "refs/tags/${version}";
-    hash = "sha256-n1CME/swV+NsZdUfWwVY1qQeYzawwy+sm0mkRPQKm6A=";
+    hash = "sha256-0HxeL6VGM+HTiAxs3NFRcEFbmH9q+0/pJdGyF1hl4hU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     psutil
     docopt
   ];
 
   postPatch = ''
     substituteInPlace adbe/adb_enhanced.py \
-      --replace "cmd = 'java" "cmd = '${jdk11}/bin/java"
+      --replace-fail "cmd = 'java" "cmd = '${jdk11}/bin/java"
   '';
 
   # Disable tests because they require a dedicated Android emulator
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adbe"
-  ];
+  pythonImportsCheck = [ "adbe" ];
 
   meta = with lib; {
     description = "Tool for Android testing and development";

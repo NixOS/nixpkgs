@@ -59,24 +59,24 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
-    rustc.config = "armv7-linux-androideabi";
-    sdkVer = "28";
-    ndkVer = "24";
+    rust.rustcTarget = "armv7-linux-androideabi";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
-    rustc.config = "aarch64-linux-android";
-    sdkVer = "28";
-    ndkVer = "24";
+    rust.rustcTarget = "aarch64-linux-android";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "30";
-    ndkVer = "24";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
@@ -207,7 +207,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
-    rustc.config = "aarch64-unknown-none";
+    rust.rustcTarget = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
@@ -232,6 +232,11 @@ rec {
 
   x86_64-embedded = {
     config = "x86_64-elf";
+    libc = "newlib";
+  };
+
+  microblaze-embedded = {
+    config = "microblazeel-none-elf";
     libc = "newlib";
   };
 
@@ -323,7 +328,7 @@ rec {
   # BSDs
 
   x86_64-freebsd = {
-    config = "x86_64-unknown-freebsd13";
+    config = "x86_64-unknown-freebsd";
     useLLVM = true;
   };
 
@@ -337,12 +342,23 @@ rec {
     useLLVM = true;
   };
 
+  x86_64-openbsd = {
+    config = "x86_64-unknown-openbsd";
+    useLLVM = true;
+  };
+
   #
   # WASM
   #
 
   wasi32 = {
     config = "wasm32-unknown-wasi";
+    useLLVM = true;
+  };
+
+  wasm32-unknown-none = {
+    config = "wasm32-unknown-none";
+    rust.rustcTarget = "wasm32-unknown-unknown";
     useLLVM = true;
   };
 

@@ -1,31 +1,51 @@
-{ lib
-, fetchFromGitHub
-, buildGo121Module
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  nix-update-script,
 }:
-buildGo121Module rec {
+
+buildGoModule rec {
   pname = "uplosi";
-  version = "0.1.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "edgelesssys";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9hOeKnjH6r3CPQSe6fQ6PXlVPEJ9NiyXvp5N1krG2XA=";
+    hash = "sha256-AtsFZ92WkVkH8fd0Xa0D6/PR84/dtOH6gpM4mtn32Hk=";
   };
 
-  vendorHash = "sha256-RsjUPLe8omoN+XGyNhHDxzNfZR7VVTkh/f/On1oCRqM=";
+  vendorHash = "sha256-o7PPgW3JL47G6Na5n9h3RasRMfU25FD1U/wCMaydRmc=";
 
   CGO_ENABLED = "0";
-  ldflags = [ "-s" "-w" "-buildid=" "-X main.version=${version}" ];
-  flags = [ "-trimpath" ];
+  ldflags = [
+    "-s"
+    "-X main.version=${version}"
+  ];
 
-  meta = with lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd uplosi \
+      --bash <($out/bin/uplosi completion bash) \
+      --fish <($out/bin/uplosi completion fish) \
+      --zsh <($out/bin/uplosi completion zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Upload OS images to cloud provider";
     homepage = "https://github.com/edgelesssys/uplosi";
     changelog = "https://github.com/edgelesssys/uplosi/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "uplosi";
-    maintainers = with maintainers; [ katexochen malt3 ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      katexochen
+      malt3
+    ];
+    platforms = lib.platforms.unix;
   };
 }
