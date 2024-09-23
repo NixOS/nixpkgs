@@ -42,8 +42,6 @@ let
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = !stdenv.hostPlatform.isMinGW;
         inherit (srcs.qtbase) src version;
-        inherit (darwin.apple_sdk_12_3.frameworks)
-          AGL AVFoundation AppKit Contacts CoreBluetooth EventKit GSS MetalKit;
         patches = [
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
           ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
@@ -55,14 +53,6 @@ let
           ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
           ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
           ./patches/0010-qtbase-derive-plugin-load-path-from-PATH.patch
-          # Revert "macOS: Silence warning about supporting secure state restoration"
-          # fix build with macOS sdk < 12.0
-          (fetchpatch2 {
-            url = "https://github.com/qt/qtbase/commit/fc1549c01445bb9c99d3ba6de8fa9da230614e72.patch";
-            revert = true;
-            hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
-          })
-
           # Backport patch for https://bugs.kde.org/show_bug.cgi?id=493116
           # FIXME: remove for 6.8.1
           (fetchpatch2 {
@@ -119,9 +109,7 @@ let
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
       qtcharts = callPackage ./modules/qtcharts.nix { };
-      qtconnectivity = callPackage ./modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_12_3.frameworks) IOBluetooth PCSC;
-      };
+      qtconnectivity = callPackage ./modules/qtconnectivity.nix { };
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
@@ -134,7 +122,6 @@ let
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
-        inherit (darwin.apple_sdk_12_3.frameworks) VideoToolbox;
       };
       qtmqtt = callPackage ./modules/qtmqtt.nix { };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
@@ -143,9 +130,7 @@ let
       qtserialbus = callPackage ./modules/qtserialbus.nix { };
       qtserialport = callPackage ./modules/qtserialport.nix { };
       qtshadertools = callPackage ./modules/qtshadertools.nix { };
-      qtspeech = callPackage ./modules/qtspeech.nix {
-        inherit (darwin.apple_sdk_12_3.frameworks) Cocoa;
-      };
+      qtspeech = callPackage ./modules/qtspeech.nix { };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
       qtquickeffectmaker = callPackage ./modules/qtquickeffectmaker.nix { };
@@ -159,30 +144,10 @@ let
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
-        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds xnu;
-        inherit (darwin.apple_sdk_12_3) libpm libunwind;
-        inherit (darwin.apple_sdk_12_3.libs) sandbox;
-        inherit (darwin.apple_sdk_12_3.frameworks)
-          AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
-          GameController ImageCaptureCore LocalAuthentication
-          MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
-          ReplayKit SecurityInterface Vision;
-        qtModule = callPackage
-          ({ qtModule }: qtModule.override {
-            stdenv =
-              if stdenv.hostPlatform.isDarwin
-              then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
-              else stdenv;
-          })
-          { };
-        xcbuild = buildPackages.xcbuild.override {
-          productBuildVer = "20A2408";
-        };
+        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds;
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
-      qtwebview = callPackage ./modules/qtwebview.nix {
-        inherit (darwin.apple_sdk_12_3.frameworks) WebKit;
-      };
+      qtwebview = callPackage ./modules/qtwebview.nix { };
 
       wrapQtAppsHook = callPackage
         ({ makeBinaryWrapper }: makeSetupHook
