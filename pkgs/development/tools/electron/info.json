@@ -1858,7 +1858,7 @@
         "version": "31.6.0"
     },
     "32": {
-        "chrome": "128.0.6613.137",
+        "chrome": "128.0.6613.162",
         "chromium": {
             "deps": {
                 "gn": {
@@ -1868,15 +1868,15 @@
                     "version": "2024-06-11"
                 }
             },
-            "version": "128.0.6613.137"
+            "version": "128.0.6613.162"
         },
         "chromium_npm_hash": "sha256-OBUYgjfoEZly8JLTtprfU+hlKNFSnHLheaVWhrirGJk=",
         "deps": {
             "src": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-H+C79mGXUaDYcDoJz25iobN3xWUJz6OplleJlTX3ilg=",
+                "hash": "sha256-52pb9e5XYaiIpUlazoXbmEJ/3l4uPWt9sVmF0+cVBKQ=",
                 "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/third_party/hunspell/tests; rm -r $out/content/test/data; rm -r $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                "rev": "128.0.6613.137",
+                "rev": "128.0.6613.162",
                 "url": "https://chromium.googlesource.com/chromium/src.git"
             },
             "src/chrome/test/data/perf/canvas_bench": {
@@ -1905,10 +1905,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-OErkW4OrDU9WJd8iqWAUZZ5qR4vuX+laLzwTt5OMrOc=",
+                "hash": "sha256-RkSdNjEmXO4xsCRzp5y5suG8svNT5LSI/eVbAUDbi5c=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v32.1.1"
+                "rev": "v32.1.2"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -2788,14 +2788,14 @@
             },
             "src/v8": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-bhGdJhSfvBFUh0PY9xssNinO1CKb36lxKuU3b35aV0M=",
-                "rev": "6f774f929205be0a49cf861b8d73a92655e1dd36",
+                "hash": "sha256-weN8PR9qaRcws9T5PhWyJntrJJ4sKoLwP3gTSLHU574=",
+                "rev": "485b9d9f88ef1c4787b183b8ccc6cdcfbc07ab1a",
                 "url": "https://chromium.googlesource.com/v8/v8.git"
             }
         },
         "electron_yarn_hash": "0jb1rs1in1bp71syim7a7p0n669kbc6as90y3zi6nd0q340cwgqa",
         "modules": "128",
         "node": "20.17.0",
-        "version": "32.1.1"
+        "version": "32.1.2"
     }
 }
