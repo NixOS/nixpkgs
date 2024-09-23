@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, libdrm, json_c, pciutils
-, meson, ninja, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libdrm,
+  json_c,
+  pciutils,
+  meson,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,15 +21,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UTDYLe3QezPCyG9CIp+O+KX716JDTL9mn+OEjjyTwlg=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ libdrm json_c pciutils ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+  buildInputs = [
+    libdrm
+    json_c
+    pciutils
+  ];
 
   meta = with lib; {
     description = "Small utility to dump info about DRM devices";
     mainProgram = "drm_info";
     homepage = "https://github.com/ascent12/drm_info";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kiskae ];
     platforms = platforms.linux;
   };
 }
