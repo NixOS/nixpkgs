@@ -9,13 +9,13 @@
   darwin,
   fastapi,
   fetchFromGitHub,
-  fetchpatch,
   grpcio,
   httpx,
   hypothesis,
   importlib-resources,
   kubernetes,
   mmh3,
+  nixosTests,
   numpy,
   onnxruntime,
   openssl,
@@ -28,6 +28,7 @@
   pkg-config,
   posthog,
   protobuf,
+  psutil,
   pulsar-client,
   pydantic,
   pypika,
@@ -38,8 +39,8 @@
   requests,
   rustc,
   rustPlatform,
-  setuptools,
   setuptools-scm,
+  setuptools,
   tenacity,
   tokenizers,
   tqdm,
@@ -47,12 +48,11 @@
   typing-extensions,
   uvicorn,
   zstd,
-  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.5";
+  version = "0.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -61,28 +61,14 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-e6ZctUFeq9hHXWaxGdVTiqFpwaU7A+EKn2EdQPI7DHE=";
+    hash = "sha256-+wRauCRrTQsGTadA6Ps0fXcpAl6ajsJRjcVEhP2+2ss=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-3FmnQEpknYNzI3WlQ3kc8qa4LFcn1zpxKDbkATU7/48=";
+    hash = "sha256-Y2mkWGgS77sGOOL+S/pw/UmrKDRyO+ZbN2Msj35sIl8=";
   };
-
-  patches = [
-    # Remove these on the next release
-    (fetchpatch {
-      name = "pydantic19-fastapi1.patch";
-      url = "https://github.com/chroma-core/chroma/commit/d62c13da29b7bff77bd7dee887123e3c57e2c19e.patch";
-      hash = "sha256-E3xmh9vQZH3NCfG6phvzM65NGwlcHmPgfU6FERKAJ60=";
-    })
-    (fetchpatch {
-      name = "no-union-types-pydantic1.patch";
-      url = "https://github.com/chroma-core/chroma/commit/2fd5b27903dffcf8bdfbb781a25bcecc17b27672.patch";
-      hash = "sha256-nmiA/lKZVrHKXumc+J4uVRiMwrnFrz2tgMpfcay5hhw=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "chroma-hnswlib"
@@ -141,6 +127,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pytest-asyncio
     pytestCheckHook
   ];
