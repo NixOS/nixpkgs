@@ -964,10 +964,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-pio5G9ATJHsM4ygKkDhmAbpZecS8p1AQUJ7LHavMq6I=",
+                "hash": "sha256-dw2WLjkHCt/uYXT+eZpaJ1bdB6DdMcJLjnscREp4YU8=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v31.4.0"
+                "rev": "v31.6.0"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -1211,10 +1211,10 @@
             },
             "src/third_party/electron_node": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-3pcWLDR1Y6oJUuwtequ5pK7nGwPeOqzALVNGJYskuc0=",
+                "hash": "sha256-fYx771gbZTsgEmHQf4mj3qSqmFHs8YVg4sVyUnfsmqI=",
                 "owner": "nodejs",
                 "repo": "node",
-                "rev": "v20.16.0"
+                "rev": "v20.17.0"
             },
             "src/third_party/emoji-segmenter/src": {
                 "fetcher": "fetchFromGitiles",
@@ -1854,8 +1854,8 @@
         },
         "electron_yarn_hash": "12pcq3zzx6627igdfd5bgyismz9n21093smpd43c4aall2mn6194",
         "modules": "125",
-        "node": "20.16.0",
-        "version": "31.4.0"
+        "node": "20.17.0",
+        "version": "31.6.0"
     },
     "32": {
         "chrome": "128.0.6613.137",
