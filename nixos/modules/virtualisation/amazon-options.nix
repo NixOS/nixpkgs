@@ -54,7 +54,7 @@ in
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
         description = ''
-          Whether the EC2 instance is using EFI.
+          Whether the EC2 instance **only** supports EFI.
         '';
       };
       hvm = lib.mkOption {

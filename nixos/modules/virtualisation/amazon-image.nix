@@ -15,6 +15,11 @@ let
   inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
 
+  # Old instances do not have an ESP as they were booted with a "legacy-bios" AMI.
+  # We do not want these instances to fail upgrading to 24.11 so we need this condition.
+  hasESP =
+    lib.versionAtLeast config.system.stateVersion "24.11" || pkgs.stdenv.hostPlatform.isAarch64;
+
 in
 {
   imports = [
@@ -29,8 +34,6 @@ in
 
   config = {
 
-    assertions = [ ];
-
     boot.growPartition = true;
 
     fileSystems."/" = mkIf (!cfg.zfs.enable) {
@@ -39,7 +42,7 @@ in
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+    fileSystems."/boot" = mkIf hasESP {
       # The ZFS image uses a partition labeled ESP whether or not we're
       # booting with EFI.
       device = "/dev/disk/by-label/ESP";
@@ -68,8 +71,8 @@ in
     ];
 
     boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
-    boot.loader.grub.efiSupport = cfg.efi;
-    boot.loader.grub.efiInstallAsRemovable = cfg.efi;
+    boot.loader.grub.efiSupport = hasESP;
+    boot.loader.grub.efiInstallAsRemovable = hasESP;
     boot.loader.timeout = 1;
     boot.loader.grub.extraConfig = ''
       serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1

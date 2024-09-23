@@ -14,7 +14,7 @@ let
     ;
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
-  amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
+  amiBootMode = if config.ec2.efi then "uefi" else "uefi-preferred";
 
 in
 {
@@ -149,7 +149,7 @@ in
         inherit (cfg) contents format name;
 
         fsType = "ext4";
-        partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
+        partitionTableType = if config.ec2.efi then "efi" else "hybrid";
 
         diskSize = cfg.sizeMB;
 
