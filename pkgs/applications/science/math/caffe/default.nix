@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     # requirements.txt
     let pp = python.pkgs; in ([
       pp.numpy pp.scipy pp.scikit-image pp.h5py
-      pp.matplotlib pp.ipython pp.networkx pp.nose
+      pp.matplotlib pp.ipython pp.networkx
       pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six
     ] ++ lib.optional leveldbSupport pp.leveldb)
