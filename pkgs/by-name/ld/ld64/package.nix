@@ -1,8 +1,11 @@
 {
   lib,
   stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   fetchurl,
+  apple-sdk,
+  cctools,
   darwin,
   libtapi,
   llvm,
@@ -29,14 +32,51 @@ let
     hash = "sha256-0ybVcwHuGEdThv0PPjYQc3SW0YVOyrM3/L9zG/l1Vtk=";
   };
 
+  dyld = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "dyld";
+    rev = "dyld-1162";
+    hash = "sha256-uyFg8QnnP6NWv5lAOTCiFZ0SnFOA/aO/kpjkyvILVsk=";
+  };
+
+  libdispatchPrivate = apple-sdk.sourceRelease "libdispatch";
+
   # First version with all the required definitions. This is used in preference to darwin.xnu to make it easier
   # to support Linux and because the version of darwin.xnu available on x86_64-darwin in the 10.12 SDK is too old.
   xnu = fetchFromGitHub {
-    name = "xnu-src";
     owner = "apple-oss-distributions";
     repo = "xnu";
     rev = "xnu-6153.11.26";
     hash = "sha256-dcnGcp7bIjQxeAn5pXt+mHSYEXb2Ad9Smhd/WUG4kb4=";
+  };
+
+  privateHeaders = stdenvNoCC.mkDerivation {
+    name = "ld64-deps-private-headers";
+
+    buildCommand = ''
+      mkdir -p "$out/include/System"
+      for dir in arm i386 machine; do
+        cp -r '${xnu}/osfmk/'$dir "$out/include/System/$dir"
+      done
+
+      substitute '${crashreporter_h}' "$out/include/CrashReporterClient.h" \
+        --replace-fail 'USE(APPLE_INTERNAL_SDK)' '0'
+
+      cp -r '${libdispatchPrivate}/private' "$out/include/dispatch"
+
+      install -D -t "$out/include/mach-o" \
+        '${dyld}/include/mach-o/dyld_priv.h' \
+        '${cctools.src}/include/mach-o/loader.h'
+
+      install -D -t "$out/include/mach-o/arm" \
+        '${cctools.src}/include/mach-o/arm/reloc.h'
+
+      install -D -t "$out/include/sys" \
+        '${xnu}/bsd/sys/commpage.h'
+
+      substituteInPlace "$out/include/mach-o/dyld_priv.h" \
+        --replace-fail ', bridgeos(3.0)' ""
+    '';
   };
 
   # Avoid pulling in all of Swift just to build libdispatch
@@ -62,8 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
   xcodeHash = "sha256-+j7Ed/6aD46SJnr3DWPfWuYWylb2FNJRPmWsUVxZJHM=";
 
   postUnpack = ''
-    unpackFile '${xnu}'
-
     # Verify that the Xcode project has not changed unexpectedly.
     hashType=$(echo $xcodeHash | cut -d- -f1)
     expectedHash=$(echo $xcodeHash | cut -d- -f2)
@@ -99,19 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var version
     cp ${./meson.options} meson.options
 
-    # Copy headers for certain private APIs
-    mkdir -p include
-    substitute ${crashreporter_h} include/CrashReporterClient.h \
-      --replace-fail 'USE(APPLE_INTERNAL_SDK)' '0'
-
-    # Copy from the source so the headers can be used on Linux and x86_64-darwin
-    mkdir -p include/System
-    for dir in arm i386 machine; do
-      cp -r ../xnu-src/osfmk/$dir include/System/$dir
-    done
-    mkdir -p include/sys
-    cp ../xnu-src/bsd/sys/commpage.h include/sys
-
     # Match the version format used by upstream.
     sed -i src/ld/Options.cpp \
       -e '1iconst char ld_classicVersionString[] = "@(#)PROGRAM:ld PROJECT:ld64-${finalAttrs.version}\\n";'
@@ -132,6 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  env.NIX_CFLAGS_COMPILE = "-DTARGET_OS_BRIDGE=0 -I${privateHeaders}/include";
 
   nativeBuildInputs = [
     meson
