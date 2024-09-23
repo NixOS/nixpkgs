@@ -25140,8 +25140,6 @@ with pkgs;
 
   oidentd = callPackage ../servers/identd/oidentd { };
 
-  softether = callPackage ../servers/softether { };
-
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
   rust-hypervisor-firmware = callPackage ../applications/virtualization/rust-hypervisor-firmware { };
