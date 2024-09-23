@@ -3,11 +3,15 @@
   stdenv,
   fetchurl,
   cmake,
+  pkg-config,
   enableWX ? false,
   wxGTK32,
   Cocoa,
   enableXWin ? false,
   xorg,
+  enablePNG ? false,
+  cairo,
+  pango,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,12 +23,19 @@ stdenv.mkDerivation rec {
     sha256 = "0ywccb6bs1389zjfmc9zwdvdsvlpm7vg957whh6b5a96yvcf8bdr";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs =
     lib.optional enableWX wxGTK32
     ++ lib.optional (enableWX && stdenv.isDarwin) Cocoa
-    ++ lib.optional enableXWin xorg.libX11;
+    ++ lib.optional enableXWin xorg.libX11
+    ++ lib.optionals enablePNG [
+      cairo
+      pango
+    ];
 
   passthru = {
     inherit (xorg) libX11;
