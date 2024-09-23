@@ -64,6 +64,8 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
 
   setupHook = args.setupHook or setupHook;
 
+  inherit turnCompilationWarningToError ignoreCompilationError;
+
   meta = {
     broken = false;
     platforms = emacs.meta.platforms;
@@ -75,8 +77,6 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
 // optionalAttrs (emacs.withNativeCompilation or false) {
 
   addEmacsNativeLoadPath = args.addEmacsNativeLoadPath or true;
-
-  inherit turnCompilationWarningToError ignoreCompilationError;
 
   postInstall = ''
     # Besides adding the output directory to the native load path, make sure
