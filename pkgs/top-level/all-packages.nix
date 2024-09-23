@@ -17997,10 +17997,6 @@ with pkgs;
 
   jake = callPackage ../development/tools/jake { };
 
-  inherit (callPackage ../development/tools/build-managers/jam { })
-    jam
-    ftjam;
-
   javacc = callPackage ../development/tools/parsing/javacc {
     # Upstream doesn't support anything newer than Java 8.
     # https://github.com/javacc/javacc/blob/c708628423b71ce8bc3b70143fa5b6a2b7362b3a/README.md#building-javacc-from-source
