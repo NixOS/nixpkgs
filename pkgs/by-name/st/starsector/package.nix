@@ -9,20 +9,23 @@
   xorg,
   copyDesktopItems,
   makeDesktopItem,
-  writeScript,
+  writeShellApplication,
+  curl,
+  gnugrep,
+  common-updater-scripts,
 }:
 
 let
   openjdk = openjdk8;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "starsector";
   version = "0.97a-RC11";
 
   src = fetchzip {
-    url = "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-${version}.zip";
-    sha256 = "sha256-KT4n0kBocaljD6dTbpr6xcwy6rBBZTFjov9m+jizDW4=";
+    url = "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-${finalAttrs.version}.zip";
+    hash = "sha256-KT4n0kBocaljD6dTbpr6xcwy6rBBZTFjov9m+jizDW4=";
   };
 
   nativeBuildInputs = [
@@ -42,14 +45,14 @@ stdenv.mkDerivation rec {
       name = "starsector";
       exec = "starsector";
       icon = "starsector";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       genericName = "starsector";
       desktopName = "Starsector";
       categories = [ "Game" ];
     })
   ];
 
-  # need to cd into $out in order for classpath to pick up correct jar files
+  # We need to `cd` into $out in order for `classpath` to pick up correct .jar files.
   installPhase = ''
     runHook preInstall
 
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
           xorg.xrandr
         ]
       } \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
       --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector' \
       --chdir "$out/share/starsector"
     ln -s $out/share/starsector/starsector.sh $out/bin/starsector
@@ -77,37 +80,61 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # it tries to run everything with relative paths, which makes it CWD dependent
-  # also point mod, screenshot, and save directory to $XDG_DATA_HOME
-  # additionally, add some GC options to improve performance of the game,
-  # remove flags "PermSize" and "MaxPermSize" that were removed with Java 8 and
-  # pass-through CLI args ($@) to the JVM.
-  postPatch = ''
-    substituteInPlace starsector.sh \
+  postPatch =
+    # Patch the starsector.sh init script.
+    ''
+      substituteInPlace starsector.sh \
+    ''
+    # Starsector tries to run everything with relative paths, which makes it CWD dependent, so we hardcode the relevant store paths here.
+    + ''
       --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
       --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
+    ''
+    # We also point the mod, screenshot, and save directories to $XDG_DATA_HOME.
+    + ''
       --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
+    ''
+    # Additionally, we add some GC options to improve performance of the game.
+    + ''
       --replace-fail "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
+    ''
+    # Furthermore, we remove the "PermSize" and "MaxPermSize" flags, as they were removed with Java 8.
+    + ''
       --replace-quiet " -XX:PermSize=192m -XX:MaxPermSize=192m" "" \
+    ''
+    # Finally, we pass-through CLI args ($@) to the JVM.
+    + ''
       --replace-fail "com.fs.starfarer.StarfarerLauncher" "\"\$@\" com.fs.starfarer.StarfarerLauncher"
-  '';
+    '';
 
-  passthru.updateScript = writeScript "starsector-update-script" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-    set -eou pipefail;
-    version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-\K.*?(?=\.zip)" | head -1)
-    update-source-version ${pname} "$version" --file=./pkgs/by-name/st/starsector/package.nix
-  '';
+  passthru = {
+    updateScript = writeShellApplication {
+      name = "starsector-update-script";
+      runtimeInputs = [
+        curl
+        gnugrep
+        common-updater-scripts
+      ];
+      runtimeEnv = {
+        inherit (finalAttrs) pname;
+      };
+      text = builtins.readFile ./update.sh;
+    };
+  };
 
-  meta = with lib; {
-    description = "Open-world single-player space-combat, roleplaying, exploration, and economic game";
+  meta = {
+    description = "Open-world, single-player space combat, roleplaying, exploration, and economic game";
     homepage = "https://fractalsoftworks.com";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    downloadPage = finalAttrs.meta.homepage + "/preorder";
+    changelog = finalAttrs.meta.homepage + "/blog";
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.unfree;
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isUnix lib.systems.inspect.patterns.isx86_64;
+    badPlatforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isDarwin lib.systems.inspect.patterns.isx86_64;
+    maintainers = with lib.maintainers; [
       bbigras
       rafaelrc
+      sigmasquadron
     ];
   };
-}
+})
