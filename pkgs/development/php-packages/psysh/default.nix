@@ -19,7 +19,7 @@ let
   composerLock = fetchurl {
     name = "composer.lock";
     url = "https://github.com/bobthecow/psysh/releases/download/v${version}/composer-v${version}.lock";
-    hash = "sha256-ur6mzla3uXeFL6aEHAPdpxGdvcgzOgTLW/CKPbNqeCg=";
+    hash = "sha256-PQDWShzvTY8yF+OUPVJAV0HMx0/KnA03TDhZUM7ppXw=";
   };
 in
 php.buildComposerProject2 (finalAttrs: {
@@ -45,7 +45,7 @@ php.buildComposerProject2 (finalAttrs: {
       composer update --lock --no-install
     '';
 
-    vendorHash = "sha256-mW276lzOTCY68EnvSVR+tD+gh3Y61GrWchVJHDZ4dpg=";
+    vendorHash = "sha256-YeQ1x1aK92cwWuM70Aka9x01wLO9EqI6b9UDxQcyFDw=";
   };
 
   meta = {
