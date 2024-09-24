@@ -5195,6 +5195,8 @@ self: super: with self; {
 
   greeclimate = callPackage ../development/python-modules/greeclimate { };
 
+  greek-accentuation = callPackage ../development/python-modules/greek-accentuation { };
+
   green = callPackage ../development/python-modules/green { };
 
   greeneye-monitor = callPackage ../development/python-modules/greeneye-monitor { };
