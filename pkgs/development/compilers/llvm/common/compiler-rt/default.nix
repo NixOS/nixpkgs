@@ -12,7 +12,6 @@
 , cmake
 , ninja
 , python3
-, xcbuild
 , libllvm
 , libcxx
 , linuxHeaders
@@ -79,8 +78,7 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [ python3 libllvm.dev ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild.xcrun;
+    ++ [ python3 libllvm.dev ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include
@@ -141,7 +139,8 @@ stdenv.mkDerivation ({
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) (lib.optionals (lib.versionAtLeast release_version "16") [
     "-DCMAKE_LIPO=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo"
   ] ++ [
-    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
+    "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk'.sdkroot}"
+    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${lib.versions.majorMinor (lib.getVersion apple-sdk)}"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
