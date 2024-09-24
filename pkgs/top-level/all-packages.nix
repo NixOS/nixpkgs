@@ -4278,7 +4278,9 @@ with pkgs;
     '';
   });
 
-  traefik = callPackage ../servers/traefik { };
+  traefik = callPackage ../servers/traefik {
+    buildGoModule = buildGo123Module;
+  };
 
   traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
 
