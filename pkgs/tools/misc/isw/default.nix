@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitLab {
     owner = "thom-cameron";
-    repo = pname;
+    repo = "isw";
     rev = version;
     hash = "sha256-1gbh5Bfv/HW+UmHgdLScodPBY4qoOTJtJwMdkOk9/v4=";
   };
