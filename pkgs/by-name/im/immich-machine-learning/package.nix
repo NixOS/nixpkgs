@@ -1,6 +1,5 @@
 {
   lib,
-  src,
   fetchFromGitHub,
   immich,
   python3,
@@ -31,7 +30,7 @@ in
 python.pkgs.buildPythonApplication {
   pname = "immich-machine-learning";
   inherit (immich) version;
-  src = "${src}/machine-learning";
+  src = "${immich.src}/machine-learning";
   pyproject = true;
 
   postPatch = ''
