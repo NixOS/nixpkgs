@@ -30118,9 +30118,9 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk.override {
+    jdk = jdk21.override {
       enableJavaFX = true;
-      openjfx = openjfx22.override { withWebKit = true; };
+      openjfx = openjfx23.override { withWebKit = true; };
     };
   };
 
