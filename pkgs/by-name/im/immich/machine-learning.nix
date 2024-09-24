@@ -4,33 +4,28 @@
   fetchFromGitHub,
   immich,
   python3,
-  # Override Python packages using
-  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-  # Applied after defaultOverrides
-  packageOverrides ? self: super: { },
 }:
 let
-  defaultOverrides = self: super: {
-    pydantic = super.pydantic_1;
-
-    versioningit = super.versioningit.overridePythonAttrs (_: {
-      doCheck = false;
-    });
-
-    albumentations = super.albumentations.overridePythonAttrs (_: rec {
-      version = "1.4.3";
-      src = fetchFromGitHub {
-        owner = "albumentations-team";
-        repo = "albumentations";
-        rev = version;
-        hash = "sha256-JIBwjYaUP4Sc1bVM/zlj45cz9OWpb/LOBsIqk1m+sQA=";
-      };
-    });
-  };
-
   python = python3.override {
     self = python;
-    packageOverrides = lib.composeExtensions defaultOverrides packageOverrides;
+
+    packageOverrides = self: super: {
+      pydantic = super.pydantic_1;
+
+      versioningit = super.versioningit.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
+      albumentations = super.albumentations.overridePythonAttrs (_: rec {
+        version = "1.4.3";
+        src = fetchFromGitHub {
+          owner = "albumentations-team";
+          repo = "albumentations";
+          rev = version;
+          hash = "sha256-JIBwjYaUP4Sc1bVM/zlj45cz9OWpb/LOBsIqk1m+sQA=";
+        };
+      });
+    };
   };
 in
 python.pkgs.buildPythonApplication {
