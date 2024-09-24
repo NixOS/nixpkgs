@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-LpKiP7bwiNEUXYvQsUG//wqOwGmg2UD3DA0Gb2h7kMw=";
 
-  meta = with lib; {
-    description = "a simple terminal stopwatch application";
+  meta = {
+    description = "Simple terminal stopwatch application";
     homepage = "https://gitlab.com/thom-cameron/isw";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thom-cameron ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ thom-cameron ];
   };
 }
