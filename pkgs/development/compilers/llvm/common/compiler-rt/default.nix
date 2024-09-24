@@ -86,16 +86,21 @@ stdenv.mkDerivation ({
     # This can be removed once the minimum SDK >10.12 on x86_64-darwin.
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) [ apple-sdk' ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
-  ] ++ lib.optionals (!haveLibc) [
-    # The compiler got stricter about this, and there is a usellvm patch below
-    # which patches out the assert include causing an implicit definition of
-    # assert. It would be nicer to understand why compiler-rt thinks it should
-    # be able to #include <assert.h> in the first place; perhaps it's in the
-    # wrong, or perhaps there is a way to provide an assert.h.
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env = {
+    NIX_CFLAGS_COMPILE = toString ([
+      "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+    ] ++ lib.optionals (!haveLibc) [
+      # The compiler got stricter about this, and there is a usellvm patch below
+      # which patches out the assert include causing an implicit definition of
+      # assert. It would be nicer to understand why compiler-rt thinks it should
+      # be able to #include <assert.h> in the first place; perhaps it's in the
+      # wrong, or perhaps there is a way to provide an assert.h.
+      "-Wno-error=implicit-function-declaration"
+    ]);
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
+    NIX_CFLAGS_LINK = "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
+  };
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
