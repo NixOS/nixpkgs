@@ -84,7 +84,7 @@ let
     };
 in
 rustPlatform.buildRustPackage rec {
-  pname = "zed";
+  pname = "zed-editor";
   version = "0.153.6";
 
   src = fetchFromGitHub {
