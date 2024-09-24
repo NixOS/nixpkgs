@@ -38,7 +38,7 @@
 assert withGLES -> stdenv.isLinux;
 
 let
-  executableName = "zed";
+  executableName = "zeditor";
   # Based on vscode.fhs
   # Zed allows for users to download and use extensions
   # which often include the usage of pre-built binaries.
@@ -218,7 +218,7 @@ rustPlatform.buildRustPackage rec {
 
     mkdir -p $out/bin $out/libexec
     cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed $out/libexec/zed-editor
-    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zed
+    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zeditor
 
     install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
     install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
@@ -227,7 +227,7 @@ rustPlatform.buildRustPackage rec {
     # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
     (
       export DO_STARTUP_NOTIFY="true"
-      export APP_CLI="zed"
+      export APP_CLI="zeditor"
       export APP_ICON="zed"
       export APP_NAME="Zed"
       export APP_ARGS="%U"
@@ -262,7 +262,7 @@ rustPlatform.buildRustPackage rec {
       GaetanLepage
       niklaskorz
     ];
-    mainProgram = "zed";
+    mainProgram = "zeditor";
     platforms = lib.platforms.all;
     # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
     broken = stdenv.isDarwin;
