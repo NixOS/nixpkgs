@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, docbook_xsl
-, docbook_xml_dtd_43
-, gtk-doc
-, lzip
-, libidn2
-, libunistring
-, libxslt
-, pkg-config
-, python3
-, buildPackages
-, publicsuffix-list
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gtk-doc,
+  lzip,
+  libidn2,
+  libunistring,
+  libxslt,
+  pkg-config,
+  python3,
+  buildPackages,
+  publicsuffix-list,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +25,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
