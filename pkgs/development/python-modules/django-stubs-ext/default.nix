@@ -3,8 +3,10 @@
   buildPythonPackage,
   django,
   fetchPypi,
+  oracledb,
   pytestCheckHook,
   pythonOlder,
+  redis,
   setuptools,
   typing-extensions,
 }:
@@ -22,12 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-7X1RwLcxZRh5/HXzMfsIBtmLZ7+rRk6W4nJNtrRu+SY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     typing-extensions
   ];
+
+  optional-dependencies = {
+    redis = [ redis ];
+    oracle = [ oracledb ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
