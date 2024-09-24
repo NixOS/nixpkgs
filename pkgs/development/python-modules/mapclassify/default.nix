@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Classification Schemes for Choropleth Maps";
     homepage = "https://pysal.org/mapclassify/";
+    changelog = "https://github.com/pysal/mapclassify/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = lib.teams.geospatial.members;
   };
