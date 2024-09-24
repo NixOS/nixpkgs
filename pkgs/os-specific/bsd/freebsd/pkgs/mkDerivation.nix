@@ -56,20 +56,40 @@ lib.makeOverridable (
       ] ++ attrs.extraNativeBuildInputs or [ ];
       buildInputs = compatIfNeeded;
 
-      HOST_SH = stdenv'.shell;
-
       makeFlags = [
         "STRIP=-s" # flag to install, not command
       ] ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no";
 
-      # amd64 not x86_64 for this on unlike NetBSD
-      MACHINE_ARCH = freebsd-lib.mkBsdArch stdenv';
+      env =
+        {
+          HOST_SH = stdenv'.shell;
 
-      MACHINE = freebsd-lib.mkBsdMachine stdenv';
+          # amd64 not x86_64 for this on unlike NetBSD
+          MACHINE_ARCH = freebsd-lib.mkBsdArch stdenv';
 
-      MACHINE_CPUARCH = freebsd-lib.mkBsdCpuArch stdenv';
+          MACHINE = freebsd-lib.mkBsdMachine stdenv';
 
-      COMPONENT_PATH = attrs.path or null;
+          MACHINE_CPUARCH = freebsd-lib.mkBsdCpuArch stdenv';
+
+          COMPONENT_PATH = attrs.path or null;
+        }
+        // lib.optionalAttrs stdenv'.hasCC {
+          # TODO should CC wrapper set this?
+          CPP = "${stdenv'.cc.targetPrefix}cpp";
+
+          # Since STRIP in `makeFlags` has to be a flag, not the binary itself
+          STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
+        }
+        // lib.optionalAttrs (!stdenv.hostPlatform.isFreeBSD) { BOOTSTRAPPING = true; }
+        // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
+        // lib.optionalAttrs (stdenv'.cc.isClang or false) {
+          HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
+        }
+        // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
+          HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
+        }
+        // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
+        // (attrs.env or { });
 
       strictDeps = true;
 
@@ -82,26 +102,11 @@ lib.makeOverridable (
         license = lib.licenses.bsd2;
       } // attrs.meta or { };
     }
-    // lib.optionalAttrs stdenv'.hasCC {
-      # TODO should CC wrapper set this?
-      CPP = "${stdenv'.cc.targetPrefix}cpp";
-
-      # Since STRIP in `makeFlags` has to be a flag, not the binary itself
-      STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
-    }
-    // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
-    // lib.optionalAttrs (stdenv'.cc.isClang or false) {
-      HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
-    }
-    // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
-      HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
-    }
-    // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
     // lib.optionalAttrs (attrs.headersOnly or false) {
       installPhase = "includesPhase";
       dontBuild = true;
     }
-    // attrs
+    // (builtins.removeAttrs attrs [ "env" ])
     // lib.optionalAttrs (stdenv'.hasCC && stdenv'.cc.isClang or false && attrs.clangFixup or true) {
       preBuild =
         ''
