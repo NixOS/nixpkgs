@@ -93,7 +93,7 @@ in
 
   meta = with lib; {
     # Upstream removed support for PostgreSQL 12 and 13 on 0.3.0: https://github.com/tensorchord/pgvecto.rs/issues/343
-    broken = stdenv.isDarwin || (versionOlder postgresql.version "14");
+    broken = stdenv.hostPlatform.isDarwin || (versionOlder postgresql.version "14");
     description = "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres";
     homepage = "https://github.com/tensorchord/pgvecto.rs";
     license = licenses.asl20;

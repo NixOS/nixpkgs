@@ -35,10 +35,10 @@
 }:
 
 let
-  stdenv' = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   # portaudio propagates Darwin frameworks. Rebuild it using the 11.0 stdenv
   # from Qt and the 11.0 SDK frameworks.
-  portaudio' = if stdenv.isDarwin then portaudio.override {
+  portaudio' = if stdenv.hostPlatform.isDarwin then portaudio.override {
     stdenv = stdenv';
     inherit (darwin.apple_sdk_11_0.frameworks)
       AudioUnit
@@ -94,10 +94,10 @@ in stdenv'.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
-  ] ++ lib.optionals (stdenv.isLinux) [
+    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936
     "--set-default QT_QPA_PLATFORM xcb"
@@ -115,7 +115,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     qttools
     pkg-config
     ninja
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
     # GTK3 is needed for file dialogs. Fixes crash with No GSettings schemas error.
     wrapGAppsHook3
@@ -141,17 +141,17 @@ in stdenv'.mkDerivation (finalAttrs: {
     qtsvg
     qtscxml
     qtnetworkauth
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
   ];
 
   postInstall = ''
     # Remove unneeded bundled libraries and headers
     rm -r $out/{include,lib}
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
@@ -174,8 +174,8 @@ in stdenv'.mkDerivation (finalAttrs: {
   # so we disable it and explicitly use makeQtWrapper.
   #
   # TODO: check if something like this is also needed for macOS.
-  dontWrapQtApps = stdenv.isLinux;
-  postFixup = lib.optionalString stdenv.isLinux ''
+  dontWrapQtApps = stdenv.hostPlatform.isLinux;
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/libexec
     mv $out/bin/mscore $out/libexec
     makeQtWrapper $out/libexec/mscore $out/bin/mscore

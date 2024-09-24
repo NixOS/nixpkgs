@@ -24,13 +24,13 @@ let
 
       inherit cargoHash;
 
-      nativeBuildInputs = lib.optionals stdenv.isLinux [
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         pkg-config
       ];
 
-      buildInputs = lib.optionals stdenv.isLinux [
+      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         openssl
-      ] ++ lib.optionals stdenv.isDarwin [
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         darwin.apple_sdk.frameworks.Security
       ];
 

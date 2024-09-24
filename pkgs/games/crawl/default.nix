@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ++ (with python3.pkgs; [ pyyaml ])
     ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU libGL ]
     ++ lib.optional enableSound SDL2_mixer
-    ++ (lib.optionals stdenv.isDarwin (
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks; [
       AppKit
       AudioUnit

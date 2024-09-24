@@ -49,14 +49,14 @@
 , commandLineArgs ? ""
 
 # Necessary for USB audio devices.
-, pulseSupport ? stdenv.isLinux
+, pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 
 # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
 , libGL
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
-, libvaSupport ? stdenv.isLinux
+, libvaSupport ? stdenv.hostPlatform.isLinux
 , libva
 , enableVideoAcceleration ? libvaSupport
 

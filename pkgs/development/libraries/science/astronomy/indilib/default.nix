@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Socket address collisions between tests
   enableParallelChecking = false;
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
       substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \

@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     qttools
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ] ++ lib.optionals guiSupport [
     dbus
-  ] ++ lib.optionals (guiSupport && stdenv.isLinux) [
+  ] ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [
     qtwayland
   ] ++ lib.optionals trackerSearch [
     python3
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_NAME=qbittorrent${lib.optionalString (!guiSupport) "-nox"}
     mkdir -p $out/{Applications,bin}
     cp -R $APP_NAME.app $out/Applications

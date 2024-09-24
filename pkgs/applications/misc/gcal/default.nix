@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin gettext;
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
   meta = {
     description = "Program for calculating and printing calendars";

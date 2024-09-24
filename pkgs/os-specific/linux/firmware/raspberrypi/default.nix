@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ dezgeg ];
     # Hash mismatch on source, mystery.
     # Maybe due to https://github.com/NixOS/nix/issues/847
-    broken = stdenvNoCC.isDarwin;
+    broken = stdenvNoCC.hostPlatform.isDarwin;
   };
 }

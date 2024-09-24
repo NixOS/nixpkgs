@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-bad
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     Foundation
   ];
@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
     platforms = lib.platforms.all;
     mainProgram = "warp";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

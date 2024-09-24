@@ -16,10 +16,10 @@
   enableMonochromeIcon ? false,
 }:
 
-assert stdenv.isDarwin -> (!enableWlrSupport);
+assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
 let
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 
 stdenv'.mkDerivation {
@@ -49,11 +49,11 @@ stdenv'.mkDerivation {
       (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
       (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
       (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeFeature "Qt5_DIR" "${libsForQt5.qtbase.dev}/lib/cmake/Qt5")
     ];
 
@@ -65,7 +65,7 @@ stdenv'.mkDerivation {
       libsForQt5.wrapQtAppsHook
       makeBinaryWrapper
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       imagemagick
       libicns
     ];
@@ -75,7 +75,7 @@ stdenv'.mkDerivation {
     libsForQt5.kguiaddons
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix icns generation running concurrently with png generation
     sed -E -i '/"iconutil -o/i\
         )\
@@ -89,7 +89,7 @@ stdenv'.mkDerivation {
         src/CMakeLists.txt
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/flameshot.app $out/Applications
 
@@ -106,7 +106,10 @@ stdenv'.mkDerivation {
   postFixup =
     let
       binary =
-        if stdenv.isDarwin then "Applications/flameshot.app/Contents/MacOS/flameshot" else "bin/flameshot";
+        if stdenv.hostPlatform.isDarwin then
+          "Applications/flameshot.app/Contents/MacOS/flameshot"
+        else
+          "bin/flameshot";
     in
     ''
       wrapProgram $out/${binary} \

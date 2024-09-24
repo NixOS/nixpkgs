@@ -120,16 +120,16 @@ in
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
-++ optional (atLeast14 && stdenv.isDarwin && stdenv.isx86_64) ../patches/14/libgcc-darwin-detection.patch
+++ optional (atLeast14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ../patches/14/libgcc-darwin-detection.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
-++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
+++ optional (atLeast12 && stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
 # Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
-++ optional (atLeast14 && stdenv.isDarwin && langAda) ../patches/14/gcc-darwin-remove-coreservices.patch
+++ optional (atLeast14 && stdenv.hostPlatform.isDarwin && langAda) ../patches/14/gcc-darwin-remove-coreservices.patch
 
 # Use absolute path in GNAT dylib install names on Darwin
-++ optionals (stdenv.isDarwin && langAda) ({
+++ optionals (stdenv.hostPlatform.isDarwin && langAda) ({
   "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
   "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
   "12" = [ ./gnat-darwin-dylib-install-name.patch ];
@@ -137,7 +137,7 @@ in
 
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
-++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
   "14" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-14-branch.
     # 04696df09633baf97cdbbdd6e9929b9d472161d3 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.2.0
@@ -170,7 +170,7 @@ in
 }.${majorVersion} or [])
 
 # Work around newer AvailabilityInternal.h when building older versions of GCC.
-++ optionals (stdenv.isDarwin) ({
+++ optionals (stdenv.hostPlatform.isDarwin) ({
   "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
   "8" = [ ../patches/8/AvailabilityInternal.h-fixincludes.patch ];
   "7" = [ ../patches/7/AvailabilityInternal.h-fixincludes.patch ];
@@ -202,7 +202,7 @@ in
 ## gcc 11.0 and older ##############################################################################
 
 # libgcc’s `configure` script misdetects aarch64-darwin, resulting in an invalid deployment target.
-++ optional (is11 && stdenv.isDarwin && stdenv.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
+++ optional (is11 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
 
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
 ++ optionals (is11) [ ./11/gcc-issue-103910.patch ]

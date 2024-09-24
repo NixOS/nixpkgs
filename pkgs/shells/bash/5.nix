@@ -7,7 +7,7 @@
 , util-linux
 
   # patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin
+, interactive ? stdenv.hostPlatform.isCygwin
 , readline
 , withDocs ? false
 , texinfo

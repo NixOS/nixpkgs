@@ -37,7 +37,7 @@ buildPythonPackage rec {
     mnemonic
     requests
     typing-extensions
-  ] ++ lib.optionals stdenv.isLinux [ trezor-udev-rules ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

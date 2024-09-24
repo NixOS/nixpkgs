@@ -3,7 +3,7 @@
 , which, openssh, procps, qrencode, makeWrapper, pass
 
 , xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
+, x11Support ? !stdenv.hostPlatform.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
 , waylandSupport ? false, wl-clipboard ? null
 , ydotool ? null, dmenu-wayland ? null
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./set-correct-program-name-for-sleep.patch
     ./extension-dir.patch
-  ] ++ lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./no-darwin-getopt.patch;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     openssh
     procps
     qrencode
-  ] ++ lib.optional stdenv.isDarwin openssl
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin openssl
     ++ lib.optional x11Support xclip
     ++ lib.optional waylandSupport wl-clipboard
     ++ lib.optionals (waylandSupport && dmenuSupport) [ ydotool dmenu-wayland ]
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
            -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
            -e '/which gpg/ d' \
       tests/setup.sh
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # 'pass edit' uses hdid, which is not available from the sandbox.
     rm -f tests/t0200-edit-tests.sh
     rm -f tests/t0010-generate-tests.sh

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
   dontBuild = true;
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   installPhase = ''
     runHook preInstall

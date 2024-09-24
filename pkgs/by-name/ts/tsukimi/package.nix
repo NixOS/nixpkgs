@@ -91,6 +91,6 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     # libmpv2 crate fail to compile
     # expected raw pointer `*const u8` found raw pointer `*const i8`
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

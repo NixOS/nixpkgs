@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MM6SgVT7Pjdu96A4eWRucEzT7uNPxBqUDgHKl8mH2C0=";
   };
 
-  nativeBuildInputs = [ nodejs yarn fixup-yarn-lock python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ nodejs yarn fixup-yarn-lock python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
   buildInputs = [ sqlite ];
 
   configurePhase = ''

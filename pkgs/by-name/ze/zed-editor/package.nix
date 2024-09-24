@@ -35,7 +35,7 @@
   withGLES ? false,
 }:
 
-assert withGLES -> stdenv.isLinux;
+assert withGLES -> stdenv.hostPlatform.isLinux;
 
 let
   executableName = "zeditor";
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage rec {
     protobuf
     rustPlatform.bindgenHook
     cargo-about
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
 
   buildInputs =
     [
@@ -143,13 +143,13 @@ rustPlatform.buildRustPackage rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libxkbcommon
       wayland
       xorg.libxcb
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit
@@ -196,7 +196,7 @@ rustPlatform.buildRustPackage rec {
     bash script/generate-licenses
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
     patchelf --add-rpath ${wayland}/lib $out/libexec/*
   '';
@@ -265,6 +265,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "zeditor";
     platforms = lib.platforms.all;
     # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

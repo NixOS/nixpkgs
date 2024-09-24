@@ -1,7 +1,7 @@
 { lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad, flac, libopus, opusfile, libogg, libxmp
 , Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
 , copyDesktopItems, makeDesktopItem, pkg-config
-, useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
+, useSDL2 ? stdenv.hostPlatform.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}-${version}/Quake";
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Makes Darwin Makefile use system libraries instead of ones from app bundle
     ./quakespasm-darwin-makefile-improvements.patch
   ];
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gzip libvorbis libmad flac libopus opusfile libogg libxmp
     (if useSDL2 then SDL2 else SDL)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa CoreAudio IOKit OpenGL
-  ] ++ lib.optionals (stdenv.isDarwin && useSDL2) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && useSDL2) [
     CoreFoundation
   ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "USE_SDL2=1"
   ];
 
-  makefile = if (stdenv.isDarwin) then "Makefile.darwin" else "Makefile";
+  makefile = if (stdenv.hostPlatform.isDarwin) then "Makefile.darwin" else "Makefile";
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.darwin --replace "/usr/local/games" "$out/bin"
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Let's build app bundle
     mkdir -p $out/Applications/Quake.app/Contents/MacOS
     mkdir -p $out/Applications/Quake.app/Contents/Resources

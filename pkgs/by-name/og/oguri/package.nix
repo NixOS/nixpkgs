@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.isDarwin; # this should be enfoced by wayland platforms in the future
+    broken = stdenv.hostPlatform.isDarwin; # this should be enfoced by wayland platforms in the future
   };
 }

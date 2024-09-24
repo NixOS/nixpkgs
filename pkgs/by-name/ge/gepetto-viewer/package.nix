@@ -44,8 +44,8 @@ let
     ];
 
     cmakeFlags = [
-      (lib.cmakeBool "BUILD_PY_QCUSTOM_PLOT" (!stdenv.isDarwin))
-      (lib.cmakeBool "BUILD_PY_QGV" (!stdenv.isDarwin))
+      (lib.cmakeBool "BUILD_PY_QCUSTOM_PLOT" (!stdenv.hostPlatform.isDarwin))
+      (lib.cmakeBool "BUILD_PY_QGV" (!stdenv.hostPlatform.isDarwin))
     ];
 
     outputs = [
@@ -61,13 +61,17 @@ let
       libsForQt5.qtbase
     ];
 
-    nativeBuildInputs = [
-      cmake
-      doxygen
-      libsForQt5.wrapQtAppsHook
-      pkg-config
-      python3Packages.python
-    ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ darwin.autoSignDarwinBinariesHook ];
+    nativeBuildInputs =
+      [
+        cmake
+        doxygen
+        libsForQt5.wrapQtAppsHook
+        pkg-config
+        python3Packages.python
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+        darwin.autoSignDarwinBinariesHook
+      ];
 
     propagatedBuildInputs = [
       jrl-cmakemodules
@@ -80,7 +84,7 @@ let
 
     # wrapQtAppsHook uses isMachO, which fails to detect binaries without this
     # ref. https://github.com/NixOS/nixpkgs/pull/138334
-    preFixup = lib.optionalString stdenv.isDarwin "export LC_ALL=C";
+    preFixup = lib.optionalString stdenv.hostPlatform.isDarwin "export LC_ALL=C";
 
     postFixup = ''
       # CMake is not aware exports are in $dev

@@ -6,15 +6,15 @@
   rustPackages,
   pkg-config,
   openssl,
-  withALSA ? stdenv.isLinux,
+  withALSA ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  withJack ? stdenv.isLinux,
+  withJack ? stdenv.hostPlatform.isLinux,
   libjack2,
-  withPulseAudio ? config.pulseaudio or stdenv.isLinux,
+  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  withPortAudio ? stdenv.isDarwin,
+  withPortAudio ? stdenv.hostPlatform.isDarwin,
   portaudio,
-  withMpris ? stdenv.isLinux,
+  withMpris ? stdenv.hostPlatform.isLinux,
   withKeyring ? true,
   dbus,
   nix-update-script,
@@ -38,14 +38,14 @@ rustPackages.rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [ openssl ]
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optional (withALSA || withJack) alsa-lib
     ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     # The `dbus_keying` feature works on other platforms, but only requires
     # `dbus` on Linux
-    ++ lib.optional ((withMpris || withKeyring) && stdenv.isLinux) dbus;
+    ++ lib.optional ((withMpris || withKeyring) && stdenv.hostPlatform.isLinux) dbus;
 
   buildNoDefaultFeatures = true;
   buildFeatures =

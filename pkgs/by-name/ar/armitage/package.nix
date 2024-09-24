@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     gradle
     makeWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     writeDarwinBundle
   ];
 
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ jdk11 metasploit ]}"
 
     install -Dm444 dist/unix/armitage-logo.png $out/share/pixmaps/armitage.png
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/Applications/Armitage.app/Contents/MacOS"
       mkdir -p "$out/Applications/Armitage.app/Contents/Resources"
       cp dist/mac/Armitage.app/Contents/Resources/macIcon.icns $out/Applications/Armitage.app/Contents/Resources

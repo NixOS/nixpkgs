@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # optional only to avoid linux rebuild
-  patches = lib.optionals stdenv.isDarwin [ ./macos-11-sdk-compat.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macos-11-sdk-compat.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
       libyaml
       postgresql
     ]
-    ++ lib.optionals stdenv.isLinux [ systemd ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.IOKit
       darwin.apple_sdk_11_0.frameworks.Foundation
     ];
@@ -49,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFLB_METRICS=ON"
     "-DFLB_HTTP_SERVER=ON"
     "-DFLB_OUT_PGSQL=ON"
-  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # Used by the embedded luajit, but is not predefined on older mac SDKs.
-    lib.optionals stdenv.isDarwin [ "-DTARGET_OS_IPHONE=0" ]
+    lib.optionals stdenv.hostPlatform.isDarwin [ "-DTARGET_OS_IPHONE=0" ]
     # Assumes GNU version of strerror_r, and the posix version has an
     # incompatible return type.
     ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]

@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libburn
     libisofs
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
     attr
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isLinux [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     acl
   ];
 

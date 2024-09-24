@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice gebner ];
-    broken      = stdenv.isAarch64;
+    broken      = stdenv.hostPlatform.isAarch64;
     mainProgram = "lean";
   };
 }

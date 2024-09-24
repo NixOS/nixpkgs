@@ -13,7 +13,7 @@
 , gsl
 , libpng
 , sfml
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio ? null
 , useQt ? false
 , qtbase ? null

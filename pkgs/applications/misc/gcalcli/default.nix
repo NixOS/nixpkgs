@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
         --replace-fail "\"types-requests\"," "" \
         --replace-fail "\"types-vobject\"," ""
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace gcalcli/argparsers.py \
         --replace-fail "'notify-send" "'${lib.getExe libnotify}"
     '';

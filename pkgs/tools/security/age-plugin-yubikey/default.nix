@@ -30,8 +30,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ]
-  ++ lib.optional stdenv.isLinux pcsclite
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optional stdenv.hostPlatform.isLinux pcsclite
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     Foundation
     PCSC

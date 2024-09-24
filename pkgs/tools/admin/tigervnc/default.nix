@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
   };
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
     substituteInPlace vncviewer/vncviewer.cxx \
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=array-bounds"
   ];
 
-  postBuild = lib.optionalString stdenv.isLinux ''
+  postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
     export CXXFLAGS="$CXXFLAGS -fpermissive"
     # Build Xvnc
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
         --with-xkb-output=$out/share/X11/xkb/compiled
     make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES
     popd
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     make dmg
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     pushd unix/xserver/hw/vnc
     make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../../../.. install
     popd
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/vncserver \
       --prefix PATH : ${lib.makeBinPath (with xorg; [ xterm twm xsetroot xauth ]) }
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv 'TigerVNC Viewer ${version}.app' $out/Applications/
     rm $out/bin/vncviewer
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     libjpeg_turbo
     pixman
     gawk
-  ] ++ lib.optionals stdenv.isLinux (with xorg; [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux (with xorg; [
     nettle
     pam
     perl
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     gettext
-  ] ++ lib.optionals stdenv.isLinux (with xorg; [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux (with xorg; [
     fontutil
     libtool
     makeWrapper
@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ xorg.xorgserver.nativeBuildInputs);
 
-  propagatedBuildInputs = lib.optional stdenv.isLinux xorg.xorgserver.propagatedBuildInputs;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg.xorgserver.propagatedBuildInputs;
 
   passthru.tests.tigervnc = nixosTests.tigervnc;
 

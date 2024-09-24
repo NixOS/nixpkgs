@@ -49,13 +49,13 @@ buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     addDriverRunpath
     autoAddDriverRunpath
     autoPatchelfHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux (
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
     with cudaPackages;
     [
       # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
@@ -75,7 +75,7 @@ buildPythonPackage {
     ]
   );
 
-  autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.isLinux [
+  autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.hostPlatform.isLinux [
     # This is the hardware-dependent userspace driver that comes from
     # nvidia_x11 package. It must be deployed at runtime in
     # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
@@ -94,14 +94,14 @@ buildPythonPackage {
     setuptools
     sympy
     typing-extensions
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ triton ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
 
   postInstall = ''
     # ONNX conversion
     rm -rf $out/bin
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
   '';
 
@@ -112,7 +112,7 @@ buildPythonPackage {
   extraRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
     "${lib.getLib cudaPackages.cuda_nvrtc}/lib"
   ];
-  postPhases = lib.optionals stdenv.isLinux [ "postPatchelfPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "postPatchelfPhase" ];
   postPatchelfPhase = ''
     while IFS= read -r -d $'\0' elf ; do
       for extra in $extraRunpaths ; do

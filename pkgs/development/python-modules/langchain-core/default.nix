@@ -118,7 +118,7 @@ buildPythonPackage rec {
       "test_chat_prompt_template_variable_names"
       "test_create_model_v2"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.
       "test_queue_for_streaming_via_sync_call"
       "test_same_event_loop"

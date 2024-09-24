@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-4Uq1MOR7Wv2I8ciiusf4nNj+a0eOItJVxbm923ocV3g=";
   };
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace libz/configure \
         --replace /usr/bin/libtool ar \
         --replace 'AR="libtool"' 'AR="ar"' \
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     install -m 444 -D nselib/data/passwords.lst $out/share/wordlists/nmap.lst
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change liblinear.so.5 ${liblinear.out}/lib/liblinear.5.dylib $out/bin/nmap
   '';
 

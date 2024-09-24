@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = lib.optional stdenv.isDarwin "OPTFLAGS=-O0";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "OPTFLAGS=-O0";
 
   installPhase = ''
     runHook preInstall

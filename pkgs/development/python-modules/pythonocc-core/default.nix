@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libXi
     fontconfig
     rapidjson
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   cmakeFlags = [
     "-Wno-dev"

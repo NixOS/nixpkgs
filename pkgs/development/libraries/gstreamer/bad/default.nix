@@ -104,7 +104,7 @@
 , Foundation
 , MediaToolbox
 , enableGplPlugins ? true
-, bluezSupport ? stdenv.isLinux
+, bluezSupport ? stdenv.hostPlatform.isLinux
 # Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
 , microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals enableDocumentation [
     hotdoc
-  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     wayland-scanner
   ];
 
@@ -214,11 +214,11 @@ stdenv.mkDerivation rec {
     libmicrodns
   ] ++ lib.optionals openh264Support [
     openh264
-  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     mjpegtools
 
@@ -245,9 +245,9 @@ stdenv.mkDerivation rec {
     libGLU
   ] ++ lib.optionals guiSupport [
     gtk3
-  ] ++ lib.optionals (stdenv.isLinux && guiSupport) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && guiSupport) [
     directfb
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
     #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
@@ -306,14 +306,14 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
   ]
-  ++ lib.optionals (!stdenv.isLinux) [
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
-  ] ++ lib.optionals (!stdenv.isLinux || !gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
-  ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !guiSupport) [
     "-Ddirectfb=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Daja=disabled"
     "-Dchromaprint=disabled"
     "-Dflite=disabled"
@@ -327,7 +327,7 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64 || !gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86_64 || !gst-plugins-base.waylandEnabled) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"

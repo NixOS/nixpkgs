@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     aalib ncurses libmikmod
     xorg.libXau xorg.libXdmcp xorg.libX11
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudio;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.CoreAudio;
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i -e '/^#include <malloc.h>$/d' *.c
   '';
 
   # error: 'regparm' is not valid on this platform
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64)
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
     "-D__STRICT_ANSI__";
 
   meta = with lib; {

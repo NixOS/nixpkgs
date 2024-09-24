@@ -35,7 +35,7 @@ buildGoModule rec {
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/vault \
       --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';

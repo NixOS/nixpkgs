@@ -26,7 +26,7 @@
 , libtiff
 , enableWebP ? true
 , libwebp
-, enableEXR ? !stdenv.isDarwin
+, enableEXR ? !stdenv.hostPlatform.isDarwin
 , openexr
 , ilmbase
 , enableJPEG2000 ? true
@@ -35,7 +35,7 @@
 , eigen
 , enableBlas ? true
 , blas
-, enableVA ? !stdenv.isDarwin
+, enableVA ? !stdenv.hostPlatform.isDarwin
 , libva
 , enableContrib ? true
 
@@ -329,10 +329,10 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ] ++ lib.optionals enableFfmpeg [
     ffmpeg
-  ] ++ lib.optionals (enableFfmpeg && effectiveStdenv.isDarwin) [
+  ] ++ lib.optionals (enableFfmpeg && effectiveStdenv.hostPlatform.isDarwin) [
     bzip2
     VideoDecodeAcceleration
-  ] ++ lib.optionals (enableGStreamer && effectiveStdenv.isLinux) [
+  ] ++ lib.optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -360,7 +360,7 @@ effectiveStdenv.mkDerivation {
     leptonica
   ] ++ lib.optionals enableTbb [
     tbb
-  ] ++ lib.optionals effectiveStdenv.isDarwin [
+  ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     bzip2
     AVFoundation
     Cocoa
@@ -457,7 +457,7 @@ effectiveStdenv.mkDerivation {
     "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
 
     "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
-  ] ++ lib.optionals effectiveStdenv.isDarwin [
+  ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
 
@@ -471,7 +471,7 @@ effectiveStdenv.mkDerivation {
     "-DBUILD_JPEG=OFF"
     "-DBUILD_PNG=OFF"
     "-DBUILD_WEBP=OFF"
-  ] ++ lib.optionals (!effectiveStdenv.isDarwin) [
+  ] ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [
     "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
@@ -536,7 +536,7 @@ effectiveStdenv.mkDerivation {
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
     }
-    // lib.optionalAttrs (!effectiveStdenv.isDarwin) { inherit qimgv; }
+    // lib.optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) { inherit qimgv; }
     // lib.optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
     // lib.optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
       opencv4-tests = callPackage ./tests.nix {

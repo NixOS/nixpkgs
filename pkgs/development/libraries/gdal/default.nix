@@ -4,7 +4,7 @@
 , fetchFromGitHub
 
 , useMinimalFeatures ? false
-, useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
+, useTiledb ? (!useMinimalFeatures) && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
 , useLibHEIF ? (!useMinimalFeatures)
 , useLibJXL ? (!useMinimalFeatures)
 , useMysql ? (!useMinimalFeatures)
@@ -107,9 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optionals finalAttrs.doInstallCheck [
     "-DBUILD_TESTING=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ] ++ lib.optionals (!useTiledb) [
     "-DGDAL_USE_TILEDB=OFF"
@@ -145,8 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
       netCdfDeps = lib.optionals useNetCDF [ netcdf ];
       armadilloDeps = lib.optionals useArmadillo [ armadillo ];
 
-      darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
-      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) ([
+      darwinDeps = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+      nonDarwinDeps = lib.optionals (!stdenv.hostPlatform.isDarwin) ([
         # tests for formats enabled by these packages fail on macos
         openexr
         xercesc
@@ -256,10 +256,10 @@ stdenv.mkDerivation (finalAttrs: {
     # failing with PROJ 9.3.1
     # https://github.com/OSGeo/gdal/issues/8908
     "test_osr_esri_28"
-  ] ++ lib.optionals (!stdenv.isx86_64) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky on macos
     "test_rda_download_queue"
   ] ++ lib.optionals (lib.versionOlder proj.version "8") [

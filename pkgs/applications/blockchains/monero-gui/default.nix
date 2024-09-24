@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
       unbound
       zeromq
     ]
-    ++ lib.optionals stdenv.isDarwin [ qtmacextras ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ]
     ++ lib.optionals trezorSupport [
       hidapi
       libusb1
       protobuf_21
       python3
     ]
-    ++ lib.optionals (trezorSupport && stdenv.isLinux) [
+    ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
       udev
     ];
 

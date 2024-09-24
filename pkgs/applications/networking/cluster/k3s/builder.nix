@@ -150,9 +150,9 @@ let
   # a shortcut that provides the images archive for the host platform. Currently only supports
   # aarch64 (arm64) and x86_64 (amd64), aborts on other architectures.
   airgapImages = fetchurl (
-    if stdenv.isAarch64 then
+    if stdenv.hostPlatform.isAarch64 then
       imagesVersions.${findImagesArchive "arm64"}
-    else if stdenv.isx86_64 then
+    else if stdenv.hostPlatform.isx86_64 then
       imagesVersions.${findImagesArchive "amd64"}
     else
       abort "k3s: airgap images cannot be found automatically for architecture ${stdenv.hostPlatform.linuxArch}, consider using an image archive with an explicit architecture."

@@ -52,6 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hheretic-gl";
     maintainers = with lib.maintainers; [ moody ];
     inherit (SDL.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

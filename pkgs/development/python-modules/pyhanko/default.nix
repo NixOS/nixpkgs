@@ -130,6 +130,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     # Most tests fail with:
     # OSError: One or more parameters passed to a function were not valid.
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

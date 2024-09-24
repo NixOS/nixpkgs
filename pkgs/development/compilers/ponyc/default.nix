@@ -37,7 +37,7 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ cmake makeWrapper which python3 ]
-    ++ lib.optionals (stdenv.isDarwin) [ cctools ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools ];
   buildInputs = [ libxml2 z3 ];
 
   # Sandbox disallows network access, so disabling problematic networking tests
@@ -53,7 +53,7 @@ stdenv.mkDerivation (rec {
         hash = "sha256-/FWBSxZESwj/QvdNK5BI2EfonT64DP1eGBZR4O8uJww=";
       };
     })
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (substituteAll {
       src = ./fix-darwin-build.patch;
       libSystem = darwin.Libsystem;
@@ -85,15 +85,15 @@ stdenv.mkDerivation (rec {
   makeFlags = [
     "PONYC_VERSION=${version}"
     "prefix=${placeholder "out"}"
-  ] ++ lib.optionals stdenv.isDarwin ([ "bits=64" ] ++ lib.optional (!lto) "lto=no");
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin ([ "bits=64" ] ++ lib.optional (!lto) "lto=no");
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
 
   # make: *** [Makefile:222: test-full-programs-release] Killed: 9
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   installPhase = "make config=release prefix=$out "
-    + lib.optionalString stdenv.isDarwin ("bits=64 " + (lib.optionalString (!lto) "lto=no "))
+    + lib.optionalString stdenv.hostPlatform.isDarwin ("bits=64 " + (lib.optionalString (!lto) "lto=no "))
     + '' install
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \

@@ -32,7 +32,7 @@
 }:
 
 let
-  stdenv = if clangStdenv.isDarwin
+  stdenv = if clangStdenv.hostPlatform.isDarwin
     then swiftPackages.stdenv
     else clangStdenv;
 
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
   version = release;
 
   # TODO: fix this in the binary sdk packages
-  preHook = lib.optionalString stdenv.isDarwin ''
+  preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
     addToSearchPath DYLD_LIBRARY_PATH "${_icu}/lib"
     export DYLD_LIBRARY_PATH
   '';

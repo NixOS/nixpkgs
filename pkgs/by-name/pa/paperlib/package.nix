@@ -39,7 +39,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
     inherit
       pname

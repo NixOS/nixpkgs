@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ]
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
     ++ lib.optionals openclSupport [ opencl-headers ocl-icd boost ]
     ++ lib.optionals mpiSupport [ openmpi ]
     ++ lib.optionals hdfsSupport [ hadoop ]

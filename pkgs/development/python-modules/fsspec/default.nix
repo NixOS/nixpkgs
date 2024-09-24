@@ -110,7 +110,7 @@ buildPythonPackage rec {
       "test_urlpath_inference_errors"
       "test_mismatch"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # works locally on APFS, fails on hydra with AssertionError comparing timestamps
       # darwin hydra builder uses HFS+ and has only one second timestamp resolution
       # this two tests however, assume nanosecond resolution

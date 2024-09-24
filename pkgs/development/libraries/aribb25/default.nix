@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
-  buildInputs = if stdenv.isDarwin then [ PCSC ] else [ pcsclite ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ PCSC ] else [ pcsclite ];
 
   patches = let
     url = commit: "https://code.videolan.org/videolan/${pname}/-/commit/${commit}.diff";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildFlags =
-    lib.optional stdenv.isDarwin "pcsclite_CFLAGS=-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
+    lib.optional stdenv.hostPlatform.isDarwin "pcsclite_CFLAGS=-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
   meta = with lib; {
     description = "Sample implementation of the ARIB STD-B25 standard";

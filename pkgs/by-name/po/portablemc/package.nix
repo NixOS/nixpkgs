@@ -17,7 +17,7 @@
   openal,
   udev,
 
-  textToSpeechSupport ? stdenv.isLinux,
+  textToSpeechSupport ? stdenv.hostPlatform.isLinux,
   flite,
 }:
 

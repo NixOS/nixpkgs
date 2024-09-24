@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     # Use 'protozero' package.
     (lib.cmakeBool "USE_EXTERNAL_MAPBOX_PROTOZERO" true)
     # macOS builds fail when using memory mapped file cache.
-    (lib.cmakeBool "USE_MEMORY_MAPPED_FILE" (!stdenv.isDarwin))
+    (lib.cmakeBool "USE_MEMORY_MAPPED_FILE" (!stdenv.hostPlatform.isDarwin))
   ];
 
   doCheck = true;

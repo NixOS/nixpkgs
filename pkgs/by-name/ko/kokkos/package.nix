@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ asl20-llvm ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

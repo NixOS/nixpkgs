@@ -43,7 +43,7 @@ buildPythonPackage rec {
     rasterio
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/developmentseed/morecantile/issues/156
     "test_tiles_when_tms_bounds_and_provided_bounds_cross_antimeridian"
   ];

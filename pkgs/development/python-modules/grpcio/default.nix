@@ -58,7 +58,7 @@ buildPythonPackage rec {
         GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
       fi
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       unset AR
     '';
 

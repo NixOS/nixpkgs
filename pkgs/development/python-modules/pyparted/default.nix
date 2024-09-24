@@ -29,7 +29,7 @@ buildPythonPackage rec {
         s|e\.path\.startswith("/tmp/temp-device-")|"temp-device-" in e.path|
       ' tests/test__ped_ped.py
     ''
-    + lib.optionalString stdenv.isi686 ''
+    + lib.optionalString stdenv.hostPlatform.isi686 ''
       # remove some integers in this test case which overflow on 32bit systems
       sed -i -r -e '/class *UnitGetSizeTestCase/,/^$/{/[0-9]{11}/d}' \
         tests/test__ped_ped.py

@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     gpgme
     xorg.libxcb
     nettle
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Security
   ];

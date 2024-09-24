@@ -11,7 +11,7 @@
 , windows
 , enableJemalloc ? false
 , jemalloc
-, enableLiburing ? stdenv.isLinux
+, enableLiburing ? stdenv.hostPlatform.isLinux
 , liburing
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
@@ -87,9 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     mkdir -p $tools/bin
     cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
-  '' + lib.optionalString (stdenv.isLinux && enableShared) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
     ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
   '';
 

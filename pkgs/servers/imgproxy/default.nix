@@ -17,7 +17,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config gobject-introspection ];
 
   buildInputs = [ vips ]
-    ++ lib.optionals stdenv.isDarwin [ libunwind ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libunwind ];
 
   preBuild = ''
     export CGO_LDFLAGS_ALLOW='-(s|w)'

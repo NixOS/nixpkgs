@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals jpipServerSupport [ curl fcgi ]
     ++ lib.optional (jpipLibSupport) jdk;
 
-  doCheck = (!stdenv.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
+  doCheck = (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
   nativeCheckInputs = [ jpylyzer ];
   checkPhase = ''
     substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \

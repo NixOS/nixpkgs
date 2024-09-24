@@ -88,7 +88,7 @@ buildPythonPackage rec {
       "test_rabbitmq_process_10k_fib_with_cli"
       "test_rabbitmq_process_1k_latency_with_cli"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Takes too long for darwin ofborg
       "test_retry_exceptions_can_specify_a_delay"
     ];

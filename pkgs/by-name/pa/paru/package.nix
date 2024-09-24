@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # https://aur.archlinux.org/packages/paru#comment-961914
-  buildFeatures = lib.optionals stdenv.isAarch64 [ "generate" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [ "generate" ];
 
   postBuild = ''
     sh ./scripts/mkmo locale/

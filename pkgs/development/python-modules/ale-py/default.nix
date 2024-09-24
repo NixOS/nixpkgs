@@ -87,6 +87,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
-    broken = stdenv.isDarwin; # fails to link with missing library
+    broken = stdenv.hostPlatform.isDarwin; # fails to link with missing library
   };
 }

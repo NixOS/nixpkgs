@@ -83,7 +83,7 @@ buildPythonPackage rec {
       "test_worker_name_uses_cluster_name"
       "test_wrong_parameter_error"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # ValueError: invalid operation on non-started TCPListener
       "test_header"
       "test_lsf_unit_detection"

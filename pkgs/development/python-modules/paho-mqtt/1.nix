@@ -26,7 +26,7 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (!isPy3k) [ mock ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "paho.mqtt" ];
 

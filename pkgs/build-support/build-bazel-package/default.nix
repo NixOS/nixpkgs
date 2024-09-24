@@ -181,7 +181,7 @@ stdenv.mkDerivation (fBuildAttrs // {
         new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
         rm "$symlink"
         ln -sf "$new_target" "$symlink"
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # on linux symlink permissions cannot be modified, so we modify those on darwin to match the linux ones
         ${chmodder}/bin/chmodder "$symlink"
     '' + ''

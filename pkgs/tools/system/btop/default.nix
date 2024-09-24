@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     autoAddDriverRunpath
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreFoundation
     darwin.apple_sdk_11_0.frameworks.IOKit
   ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildInputs = lib.optional stdenv.isDarwin llvmPackages.openmp;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "CC=$(CXX)"

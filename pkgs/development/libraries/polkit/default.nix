@@ -29,7 +29,7 @@
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
 # or being unrelated to that.
-, doCheck ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
+, doCheck ? (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl)
 }:
 
 let
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     pam
     dbus
     duktape
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
     (if useSystemd then systemdMinimal else elogind)
   ];
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     "-Dtests=${lib.boolToString doCheck}"
     "-Dgtk_doc=${lib.boolToString withIntrospection}"
     "-Dman=true"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
   ];
 

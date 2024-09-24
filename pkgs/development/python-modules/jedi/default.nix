@@ -58,7 +58,7 @@ buildPythonPackage rec {
       # sensitive to platform, causes false negatives on darwin
       "test_import"
     ]
-    ++ lib.optionals (stdenv.isAarch64 && pythonOlder "3.9") [
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && pythonOlder "3.9") [
       # AssertionError: assert 'foo' in ['setup']
       "test_init_extension_module"
     ]

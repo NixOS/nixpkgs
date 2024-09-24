@@ -29,7 +29,7 @@ buildGoModule rec {
   #   even with __darwinAllowLocalNetworking allowed.
   # - CGO_FLAGS warnings break tests' expected stdout/stderr outputs.
   # - DAP test binaries exit prematurely.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     # fortify source breaks build since delve compiles with -O0

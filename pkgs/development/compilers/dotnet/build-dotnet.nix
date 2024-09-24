@@ -61,7 +61,7 @@ let
       <ItemGroup>
         <CustomLinkerArg Include="-Wl,-rpath,'${lib.makeLibraryPath [ icu zlib openssl ]}'" />
       </ItemGroup>
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       <Import Project="${signAppHost}" />
   '' + ''
     </Project>
@@ -74,8 +74,8 @@ mkCommon type rec {
   # Some of these dependencies are `dlopen()`ed.
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook
-  ++ lib.optionals (type == "sdk" && stdenv.isDarwin) [
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+  ++ lib.optionals (type == "sdk" && stdenv.hostPlatform.isDarwin) [
     xmlstarlet
     sigtool
   ];
@@ -87,7 +87,7 @@ mkCommon type rec {
     libkrb5
     curl
     xmlstarlet
-  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
 
   src = fetchurl (
     srcs."${stdenv.hostPlatform.system}" or (throw
@@ -102,7 +102,7 @@ mkCommon type rec {
       -s //_:Project -t elem -n Import \
       -i \$prev -t attr -n Project -v "${extraTargets}" \
       sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
   '') else null;
 
@@ -144,7 +144,7 @@ mkCommon type rec {
   '';
 
   # fixes: Could not load ICU data. UErrorCode: 2
-  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+  propagatedSandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
     (allow file-read* (subpath "/usr/share/icu"))
     (allow file-read* (subpath "/private/var/db/mds/system"))
     (allow mach-lookup (global-name "com.apple.SecurityServer")

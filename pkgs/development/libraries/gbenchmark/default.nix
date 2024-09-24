@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Tests fail on 32-bit due to not enough precision
-  doCheck = stdenv.is64bit;
+  doCheck = stdenv.hostPlatform.is64bit;
 
   passthru.tests = {
     inherit prometheus-cpp;

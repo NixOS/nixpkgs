@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook3 ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
     ] ++ [
       glib

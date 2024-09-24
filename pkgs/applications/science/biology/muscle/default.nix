@@ -20,7 +20,7 @@ gccStdenv.mkDerivation rec {
   installPhase =
     let
       target =
-        if gccStdenv.isDarwin
+        if gccStdenv.hostPlatform.isDarwin
         then "Darwin"
         else "Linux";
     in

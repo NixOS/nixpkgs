@@ -8,13 +8,13 @@ let
   buildMongoDB = callPackage ./mongodb.nix {
     inherit sasl boost Security CoreFoundation cctools;
   };
-  variants = if stdenv.isLinux then
+  variants = if stdenv.hostPlatform.isLinux then
     {
       version = "5.0.29";
       sha256 = "sha256-27+SXo0fjFwJFFm/NhpDhq95dMwiN8RCJO7j5ic49Ls=";
       patches = [ ./fix-build-with-boost-1.79-5_0-linux.patch ];
     }
-  else lib.optionalAttrs stdenv.isDarwin
+  else lib.optionalAttrs stdenv.hostPlatform.isDarwin
     {
       version = "5.0.3"; # at least darwin has to stay on 5.0.3 until the SDK used by nixpkgs is bumped to 10.13
       sha256 = "1p9pq0dfd6lynvnz5p1c8dqp4filzrz86j840xwxwx82dm1zl6p0";

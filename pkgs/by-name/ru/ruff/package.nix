@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   # Failing on darwin for an unclear reason.
   # According to the maintainers, those tests are from an experimental crate that isn't actually
   # used by ruff currently and can thus be safely skipped.
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=changed_file"
     "--skip=changed_metadata"
     "--skip=changed_versions_file"

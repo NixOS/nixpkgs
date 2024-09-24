@@ -81,7 +81,7 @@ buildPythonPackage rec {
       # TODO: Try to re-enable this test at next release
       "test_torch_save"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Failures related to JIT
       # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
       "test_local_param_ok"

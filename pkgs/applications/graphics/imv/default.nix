@@ -32,7 +32,7 @@ let
   # default value of withWindowSystem
   withWindowSystem' =
          if withWindowSystem != null then withWindowSystem
-    else if stdenv.isLinux then "all"
+    else if stdenv.hostPlatform.isLinux then "all"
     else "x11";
 
   windowSystems = {

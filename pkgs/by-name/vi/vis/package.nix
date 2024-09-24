@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libtermkey
     luaEnv
     tre
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
     libselinux
   ];

@@ -100,6 +100,6 @@ buildPythonPackage rec {
     mainProgram = "skytemple_export_maps";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 ];
-    broken = stdenv.isDarwin; # pyobjc is missing
+    broken = stdenv.hostPlatform.isDarwin; # pyobjc is missing
   };
 }

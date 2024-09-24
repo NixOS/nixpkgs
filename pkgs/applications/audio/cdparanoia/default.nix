@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pv4zrajm46za0f6lv162iqffih57a8ly4pc69f7y0gfyigb8p80";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     (fetchpatch {
       url = "https://trac.macports.org/export/70964/trunk/dports/audio/cdparanoia/files/osx_interface.patch";
       sha256 = "0hq3lvfr0h1m3p0r33jij0s1aspiqlpy533rwv19zrfllb39qvr8";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     IOKit
   ];

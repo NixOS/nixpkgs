@@ -91,7 +91,7 @@ buildPythonPackage rec {
       "test_map_iter_interrupt_early"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
     # OpenMP support not found.
     "test/test_compile.py"

@@ -33,7 +33,7 @@
   enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch,
   enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
   enableVncRenderer ? false,
-  enableWayland ? stdenv.isLinux,
+  enableWayland ? stdenv.hostPlatform.isLinux,
   unfreeEnableDiscord ? false,
   unfreeEnableRoms ? false,
 }:
@@ -88,20 +88,20 @@ stdenv.mkDerivation (finalAttrs: {
       libopus.dev
       libmpg123.dev
     ]
-    ++ lib.optional stdenv.isLinux alsa-lib
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
     ++ lib.optional enableVncRenderer libvncserver
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.libs.xpc;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.libs.xpc;
 
   cmakeFlags =
-    lib.optional stdenv.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
+    lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
     ++ lib.optional enableNewDynarec "-DNEW_DYNAREC=ON"
     ++ lib.optional enableVncRenderer "-DVNC=ON"
     ++ lib.optional (!enableDynarec) "-DDYNAREC=OFF"
     ++ lib.optional (!unfreeEnableDiscord) "-DDISCORD=OFF";
 
   postInstall =
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 -t $out/share/applications $src/src/unix/assets/net.86box.86Box.desktop
 
       for size in 48 64 72 96 128 192 256 512; do
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       libPath = lib.makeLibraryPath ([ libpcap ] ++ lib.optional unfreeEnableDiscord discord-gamesdk);
-      libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      libPathVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
       makeWrapperArgs+=(--prefix ${libPathVar} : "${libPath}")

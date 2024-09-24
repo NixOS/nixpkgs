@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     oniguruma
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
     ORANDA_USE_TAILWIND_BINARY = true;
-  } // lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # without this, tailwindcss fails with OpenSSL configuration error
     OPENSSL_CONF = "";
   };

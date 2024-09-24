@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
 
   buildInputs = [ fftwFloat zlib wavpack wxGTK32 yaml-cpp ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
   cmakeFlags = lib.optionals (!jackaudioSupport) [
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     "-DINSTALL_DEPEND=OFF"
   ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DTARGET_OS_IPHONE=0";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}
     mv $out/GrandOrgue.app $out/Applications/
     for lib in $out/Applications/GrandOrgue.app/Contents/Frameworks/lib*; do

@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication {
     export QT_QPA_PLATFORM_PLUGIN_PATH=${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins/platforms
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/{icons,applications,pixmaps,mime/packages}
 
     cp -r setup/data/hicolor $out/share/icons
@@ -68,6 +68,6 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "novelwriter";
 
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.isDarwin; # TODO awaiting build instructions for Darwin
+    broken = stdenv.hostPlatform.isDarwin; # TODO awaiting build instructions for Darwin
   };
 }

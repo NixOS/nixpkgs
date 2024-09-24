@@ -274,7 +274,7 @@ in
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW CAP_SETUID";
         ProtectSystem = true;
         # Doesn't work on i686, causing service to fail
-        MemoryDenyWriteExecute = !pkgs.stdenv.isi686;
+        MemoryDenyWriteExecute = !pkgs.stdenv.hostPlatform.isi686;
         ProtectHome = true;
         PrivateTmp = true;
       };

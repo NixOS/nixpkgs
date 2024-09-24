@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # Note: on x86_64-darwin, clang fails to find AvailabilityVersions.h, so we remove it.
   # Halide uses AvailabilityVersions.h and TargetConditionals.h to determine whether
   # ::aligned_alloc is available. For us, it isn't.
-  + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     substituteInPlace 'src/runtime/HalideBuffer.h' \
       --replace '#ifdef __APPLE__
     #include <AvailabilityVersions.h>
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     libjpeg
     eigen
     openblas
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     mesa
     libGL
   ];

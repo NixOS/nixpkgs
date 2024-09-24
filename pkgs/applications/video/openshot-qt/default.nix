@@ -10,7 +10,7 @@
 , qtsvg
 , qtwayland
 , wayland
-, waylandSupport ? stdenv.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
 , wrapGAppsHook3
 }:
 
@@ -66,7 +66,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     wrapProgram $out/bin/openshot-qt \
   ''
   # Fix toolbar icons on Darwin
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
   '' + ''
     "''${gappsWrapperArgs[@]}" \

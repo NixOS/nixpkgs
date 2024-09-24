@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-T/hnlQMDOZV+QGl7xp29sBGfb4VXcXqN6PDoBFdpp4M=";
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     sed -i "s:amfora:$out/bin/amfora:" amfora.desktop
     install -Dm644 amfora.desktop -t $out/share/applications
   '';

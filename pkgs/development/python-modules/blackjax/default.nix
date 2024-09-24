@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   disabledTestPaths =
     [ "tests/test_benchmarks.py" ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # Assertion errors on numerical values
       "tests/mcmc/test_integrators.py"
     ];
@@ -64,7 +64,7 @@ buildPythonPackage rec {
       # too slow
       "test_adaptive_tempered_smc"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # Numerical test (AssertionError)
       # https://github.com/blackjax-devs/blackjax/issues/668
       "test_chees_adaptation"

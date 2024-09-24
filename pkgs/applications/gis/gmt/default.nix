@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ curl gdal netcdf pcre dcw-gmt gshhg-gmt ]
-    ++ (if stdenv.isDarwin then [
+    ++ (if stdenv.hostPlatform.isDarwin then [
       Accelerate
       CoreGraphics
       CoreVideo

@@ -98,7 +98,7 @@ python.pkgs.buildPythonApplication rec {
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
-  doCheck = !stdenv.isDarwin; # tests are a bit flaky on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin; # tests are a bit flaky on darwin
 
   preCheck = ''
     export TMP=$TMPDIR

@@ -13,7 +13,7 @@
   stdenv,
   testers,
   zlib,
-  withApplePCSC ? stdenv.isDarwin,
+  withApplePCSC ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -63,21 +63,21 @@ in stdenv.mkDerivation {
     stdenv.cc.cc
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
     autoPatchelfHook
     imagemagick
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg
   ];
 
   installPhase = let
-    outPrefix = if stdenv.isDarwin then "$out/UnrealTournament.app/Contents/MacOS" else "$out";
+    outPrefix = if stdenv.hostPlatform.isDarwin then "$out/UnrealTournament.app/Contents/MacOS" else "$out";
   in ''
     runHook preInstall
 
     mkdir -p $out/bin
-    cp -r ${if stdenv.isDarwin then "UnrealTournament.app" else "./*"} $out
+    cp -r ${if stdenv.hostPlatform.isDarwin then "UnrealTournament.app" else "./*"} $out
     chmod -R 755 $out
     cd ${outPrefix}
 
@@ -86,7 +86,7 @@ in stdenv.mkDerivation {
 
     cp -n ${unpackGog}/Textures/* ./Textures || true
     cp -n ${unpackGog}/System/*.{u,int} ./System || true
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
     ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
     ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 

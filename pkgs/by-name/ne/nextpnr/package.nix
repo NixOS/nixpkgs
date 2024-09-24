@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       "-DHIMBAECHEL_GOWIN_DEVICES=all"
     ]
     ++ (lib.optional enableGui "-DBUILD_GUI=ON")
-    ++ (lib.optional (enableGui && stdenv.isDarwin)
+    ++ (lib.optional (enableGui && stdenv.hostPlatform.isDarwin)
         "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
   patchPhase = with builtins; ''
