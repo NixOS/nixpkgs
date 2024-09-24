@@ -35,6 +35,9 @@ python.pkgs.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail 'fastapi-slim' 'fastapi'
+
+    # AttributeError: module 'cv2' has no attribute 'Mat'
+    substituteInPlace app/test_main.py --replace-fail ": cv2.Mat" ""
   '';
 
   pythonRelaxDeps = [ "setuptools" ];
@@ -66,7 +69,12 @@ python.pkgs.buildPythonApplication {
     ]
     ++ uvicorn.optional-dependencies.standard;
 
-  doCheck = false;
+  nativeCheckInputs = with python.pkgs; [
+    httpx
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
 
   postInstall = ''
     mkdir -p $out/share/immich
