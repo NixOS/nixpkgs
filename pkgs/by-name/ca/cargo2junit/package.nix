@@ -13,7 +13,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-R3a87nXCnGhdeyR7409hFR5Cj3TFUWqaLNOtlXPsvto=";
   };
 
-  cargoHash = "sha256-u5Pd967qxjqFl9fV/KkClLDBwKql7p66WqbIVBvWKuM=";
+  cargoPatches = [
+    ./0001-update-time-rs.patch
+  ];
+
+  cargoHash = "sha256-ncRELlbT8Dy8huLgZrroRWohCLeN5cRjMWrIW4JNcCM=";
 
   meta = with lib; {
     description = "Converts cargo's json output (from stdin) to JUnit XML (to stdout)";
