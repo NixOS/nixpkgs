@@ -18185,12 +18185,6 @@
     github = "rosehobgoblin";
     githubId = 84164410;
   };
-  roshaen = {
-    name = "Roshan Kumar";
-    email = "roshaen09@gmail.com";
-    github = "roshaen";
-    githubId = 58213083;
-  };
   RossComputerGuy = {
     name = "Tristan Ross";
     email = "tristan.ross@midstall.com";
@@ -23268,6 +23262,12 @@
     matrix = "@YoshiRulz:matrix.org";
     github = "YoshiRulz";
     githubId = 13409956;
+  };
+  youhaveme9 = {
+    name = "Roshan Kumar";
+    email = "roshaen09@gmail.com";
+    github = "youhaveme9";
+    githubId = 58213083;
   };
   yrashk = {
     email = "yrashk@gmail.com";
