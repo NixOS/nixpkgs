@@ -51,8 +51,6 @@ with self; with super; {
     inherit (pkgs.buildPackages) meson;
   };
 
-  pygobject2 = callPackage ../development/python2-modules/pygobject { };
-
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
