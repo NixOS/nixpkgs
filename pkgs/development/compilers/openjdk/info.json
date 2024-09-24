@@ -3,10 +3,5 @@
     "version": "23-ga",
     "repo":    "jdk23u",
     "hash":    "sha256-lcLnWAiskWindOqWmOWiIHiYKXGSJZK4d20k19QZfrE="
-  },
-  "22": {
-    "version": "22.0.2-ga",
-    "repo":    "jdk22u",
-    "hash":    "sha256-Zo1LOumkt9zTaPqbDcRL8lVJMqVle0QqzThtIz0JRNo="
   }
 }
