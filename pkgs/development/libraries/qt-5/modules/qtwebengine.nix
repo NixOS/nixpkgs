@@ -20,7 +20,7 @@
 , systemd
 , enableProprietaryCodecs ? true
 , gn
-, cctools, cups, bootstrap_cmds, xcbuild, writeScriptBin
+, apple-sdk_13, cctools, cups, bootstrap_cmds, xcbuild, writeScriptBin
 , ffmpeg ? null
 , lib, stdenv
 , version ? null
@@ -51,7 +51,8 @@ let
 
 in
 
-qtModule ({
+# Override the SDK because Qt WebEngine doesn’t seem to build using the 14.4 SDK.
+(qtModule.override { apple-sdk_for_qt = apple-sdk_13; }) ({
   pname = "qtwebengine";
   nativeBuildInputs = [
     bison flex git gperf ninja pkg-config (python.withPackages(ps: [ ps.html5lib ])) which gn nodejs
