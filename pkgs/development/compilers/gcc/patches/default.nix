@@ -76,6 +76,13 @@ in
 
 ## 2. Patches relevant to gcc>=12 on specific platforms ####################################
 
+### aarch64
+
+++ optionals stdenv.targetPlatform.isAarch64 [
+  # Fixes libhwy
+  ./tree-optimization-116274-overzealous-SLP-vectorization.patch
+]
+
 ### Musl+Go+gcc12
 
 # backport fixes to build gccgo with musl libc

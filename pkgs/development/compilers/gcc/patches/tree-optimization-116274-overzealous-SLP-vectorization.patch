@@ -1,0 +1,74 @@
+From d5d4f3bae5a9478dc2189e53da933175a6d7b197 Mon Sep 17 00:00:00 2001
+From: Richard Biener <rguenther@suse.de>
+Date: Thu, 8 Aug 2024 11:36:43 +0200
+Subject: [PATCH] tree-optimization/116274 - overzealous SLP vectorization
+
+The following tries to address that the vectorizer fails to have
+precise knowledge of argument and return calling conventions and
+views some accesses as loads and stores that are not.
+This is mainly important when doing basic-block vectorization as
+otherwise loop indexing would force such arguments to memory.
+
+On x86 the reduction in the number of apparent loads and stores
+often dominates cost analysis so the following tries to mitigate
+this aggressively by adjusting only the scalar load and store
+cost, reducing them to the cost of a simple scalar statement,
+but not touching the vector access cost which would be much
+harder to estimate.  Thereby we error on the side of not performing
+basic-block vectorization.
+
+	PR tree-optimization/116274
+	* tree-vect-slp.cc (vect_bb_slp_scalar_cost): Cost scalar loads
+	and stores as simple scalar stmts when they access a non-global,
+	not address-taken variable that doesn't have BLKmode assigned.
+
+	* gcc.target/i386/pr116274-2.c: New testcase.
+
+(cherry picked from commit b8ea13ebf1211714503fd72f25c04376483bfa53)
+---
+ gcc/testsuite/gcc.target/i386/pr116274-2.c |  9 +++++++++
+ gcc/tree-vect-slp.cc                       | 12 +++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.target/i386/pr116274-2.c
+
+diff --git a/gcc/testsuite/gcc.target/i386/pr116274-2.c b/gcc/testsuite/gcc.target/i386/pr116274-2.c
+new file mode 100644
+index 000000000000..d5811344b935
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/i386/pr116274-2.c
+@@ -0,0 +1,9 @@
++/* { dg-do compile } */
++/* { dg-options "-O2 -fdump-tree-slp2-optimized" } */
++
++struct a { long x,y; };
++long test(struct a a) { return a.x+a.y; }
++
++/* { dg-final { scan-tree-dump-not "basic block part vectorized" "slp2" } } */
++/* { dg-final { scan-assembler-times "addl|leaq" 1 } } */
++/* { dg-final { scan-assembler-not "padd" } } */
+diff --git a/gcc/tree-vect-slp.cc b/gcc/tree-vect-slp.cc
+index 0795605ec527..d0635b7a146c 100644
+--- a/gcc/tree-vect-slp.cc
++++ b/gcc/tree-vect-slp.cc
+@@ -7102,7 +7102,17 @@ next_lane:
+       vect_cost_for_stmt kind;
+       if (STMT_VINFO_DATA_REF (orig_stmt_info))
+ 	{
+-	  if (DR_IS_READ (STMT_VINFO_DATA_REF (orig_stmt_info)))
++	  data_reference_p dr = STMT_VINFO_DATA_REF (orig_stmt_info);
++	  tree base = get_base_address (DR_REF (dr));
++	  /* When the scalar access is to a non-global not address-taken
++	     decl that is not BLKmode assume we can access it with a single
++	     non-load/store instruction.  */
++	  if (DECL_P (base)
++	      && !is_global_var (base)
++	      && !TREE_ADDRESSABLE (base)
++	      && DECL_MODE (base) != BLKmode)
++	    kind = scalar_stmt;
++	  else if (DR_IS_READ (STMT_VINFO_DATA_REF (orig_stmt_info)))
+ 	    kind = scalar_load;
+ 	  else
+ 	    kind = scalar_store;
+-- 
+2.43.5
+
