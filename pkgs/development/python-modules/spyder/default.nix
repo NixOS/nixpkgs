@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # dependencies
   aiohttp,
@@ -52,12 +51,12 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.0.0";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/UUtSpSkt1hJeIZfBLe8owP82jRx02kUF6TdfCsq6CY=";
+    hash = "sha256-cJeC6ICRWIu+YU3m673ntHVEpNbCJeGZ3lrSK3fYsTA=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
