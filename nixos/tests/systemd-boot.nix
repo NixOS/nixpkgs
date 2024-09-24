@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -117,22 +117,24 @@ in
       virtualisation.useSecureBoot = true;
     };
 
-    testScript = let
-      efiArch = pkgs.stdenv.hostPlatform.efiArch;
-    in { nodes, ... }: ''
-      machine.start(allow_reboot=True)
-      machine.wait_for_unit("multi-user.target")
+    testScript =
+      let
+        efiArch = pkgs.stdenv.hostPlatform.efiArch;
+      in
+      { nodes, ... }: ''
+        machine.start(allow_reboot=True)
+        machine.wait_for_unit("multi-user.target")
 
-      machine.succeed("sbctl create-keys")
-      machine.succeed("sbctl enroll-keys --yes-this-might-brick-my-machine")
-      machine.succeed('sbctl sign /boot/EFI/systemd/systemd-boot${efiArch}.efi')
-      machine.succeed('sbctl sign /boot/EFI/BOOT/BOOT${toUpper efiArch}.EFI')
-      machine.succeed('sbctl sign /boot/EFI/nixos/*${nodes.machine.system.boot.loader.kernelFile}.efi')
+        machine.succeed("sbctl create-keys")
+        machine.succeed("sbctl enroll-keys --yes-this-might-brick-my-machine")
+        machine.succeed('sbctl sign /boot/EFI/systemd/systemd-boot${efiArch}.efi')
+        machine.succeed('sbctl sign /boot/EFI/BOOT/BOOT${toUpper efiArch}.EFI')
+        machine.succeed('sbctl sign /boot/EFI/nixos/*${nodes.machine.system.boot.loader.kernelFile}.efi')
 
-      machine.reboot()
+        machine.reboot()
 
-      assert "Secure Boot: enabled (user)" in machine.succeed("bootctl status")
-    '';
+        assert "Secure Boot: enabled (user)" in machine.succeed("bootctl status")
+      '';
   };
 
   basicXbootldr = makeTest {
@@ -400,36 +402,38 @@ in
       };
     };
 
-    testScript = { nodes, ... }: let
-      originalSystem = nodes.machine.system.build.toplevel;
-      baseSystem = nodes.common.system.build.toplevel;
-      finalSystem = nodes.with_netbootxyz.system.build.toplevel;
-    in ''
-      machine.succeed("test -e /boot/efi/fruits/tomato.efi")
-      machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+    testScript = { nodes, ... }:
+      let
+        originalSystem = nodes.machine.system.build.toplevel;
+        baseSystem = nodes.common.system.build.toplevel;
+        finalSystem = nodes.with_netbootxyz.system.build.toplevel;
+      in
+      ''
+        machine.succeed("test -e /boot/efi/fruits/tomato.efi")
+        machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
 
-      with subtest("remove files when no longer needed"):
-          machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
-          machine.fail("test -e /boot/efi/fruits/tomato.efi")
-          machine.fail("test -d /boot/efi/fruits")
-          machine.succeed("test -d /boot/efi/nixos/.extra-files")
-          machine.fail("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
-          machine.fail("test -d /boot/efi/nixos/.extra-files/efi/fruits")
+        with subtest("remove files when no longer needed"):
+            machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+            machine.fail("test -e /boot/efi/fruits/tomato.efi")
+            machine.fail("test -d /boot/efi/fruits")
+            machine.succeed("test -d /boot/efi/nixos/.extra-files")
+            machine.fail("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+            machine.fail("test -d /boot/efi/nixos/.extra-files/efi/fruits")
 
-      with subtest("files are added back when needed again"):
-          machine.succeed("${originalSystem}/bin/switch-to-configuration boot")
-          machine.succeed("test -e /boot/efi/fruits/tomato.efi")
-          machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+        with subtest("files are added back when needed again"):
+            machine.succeed("${originalSystem}/bin/switch-to-configuration boot")
+            machine.succeed("test -e /boot/efi/fruits/tomato.efi")
+            machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
 
-      with subtest("simultaneously removing and adding files works"):
-          machine.succeed("${finalSystem}/bin/switch-to-configuration boot")
-          machine.fail("test -e /boot/efi/fruits/tomato.efi")
-          machine.fail("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
-          machine.succeed("test -e /boot/loader/entries/netbootxyz.conf")
-          machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
-          machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/netbootxyz.conf")
-          machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
-    '';
+        with subtest("simultaneously removing and adding files works"):
+            machine.succeed("${finalSystem}/bin/switch-to-configuration boot")
+            machine.fail("test -e /boot/efi/fruits/tomato.efi")
+            machine.fail("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
+            machine.succeed("test -e /boot/loader/entries/netbootxyz.conf")
+            machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
+            machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/netbootxyz.conf")
+            machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
+      '';
   };
 
   garbage-collect-entry = makeTest {

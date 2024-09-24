@@ -10,9 +10,10 @@ let
   # We check the source code in a derivation that does not depend on the
   # system configuration so that most users don't have to redo the check and require
   # the necessary dependencies.
-  checkedSource = pkgs.runCommand "systemd-boot" {
-    preferLocalBuild = true;
-  } ''
+  checkedSource = pkgs.runCommand "systemd-boot"
+    {
+      preferLocalBuild = true;
+    } ''
     install -m755 -D ${./systemd-boot-builder.py} $out
     ${lib.getExe pkgs.buildPackages.mypy} \
       --no-implicit-optional \
@@ -48,7 +49,8 @@ let
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
-    bootMountPoint = if cfg.xbootldrMountPoint != null
+    bootMountPoint =
+      if cfg.xbootldrMountPoint != null
       then cfg.xbootldrMountPoint
       else efi.efiSysMountPoint;
 
@@ -91,12 +93,14 @@ let
     ${systemdBootBuilder}/bin/systemd-boot "$@"
     ${cfg.extraInstallCommands}
   '';
-in {
+in
+{
 
   meta.maintainers = with lib.maintainers; [ julienmalka ];
 
   imports =
-    [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
+    [
+      (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
       (lib.mkChangedOptionModule
         [ "boot" "loader" "systemd-boot" "memtest86" "entryFilename" ]
         [ "boot" "loader" "systemd-boot" "memtest86" "sortKey" ]
@@ -283,7 +287,7 @@ in {
 
     extraEntries = mkOption {
       type = types.attrsOf types.lines;
-      default = {};
+      default = { };
       example = literalExpression ''
         { "memtest86.conf" = '''
           title Memtest86+
@@ -306,7 +310,7 @@ in {
 
     extraFiles = mkOption {
       type = types.attrsOf types.path;
-      default = {};
+      default = { };
       example = literalExpression ''
         { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
       '';
@@ -373,17 +377,20 @@ in {
         assertion = cfg.installDeviceTree -> config.hardware.deviceTree.enable -> config.hardware.deviceTree.name != null;
         message = "Cannot install devicetree without 'config.hardware.deviceTree.enable' enabled and 'config.hardware.deviceTree.name' set";
       }
-    ] ++ concatMap (filename: [
-      {
-        assertion = !(hasInfix "/" filename);
-        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
-      }
-      {
-        assertion = hasSuffix ".conf" filename;
-        message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
-      }
-    ]) (builtins.attrNames cfg.extraEntries)
-      ++ concatMap (filename: [
+    ] ++ concatMap
+      (filename: [
+        {
+          assertion = !(hasInfix "/" filename);
+          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries within folders are not supported";
+        }
+        {
+          assertion = hasSuffix ".conf" filename;
+          message = "boot.loader.systemd-boot.extraEntries.${lib.strings.escapeNixIdentifier filename} is invalid: entries must have a .conf file extension";
+        }
+      ])
+      (builtins.attrNames cfg.extraEntries)
+    ++ concatMap
+      (filename: [
         {
           assertion = !(hasPrefix "/" filename);
           message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: paths must not begin with a slash";
@@ -396,7 +403,8 @@ in {
           assertion = !(hasInfix "nixos/.extra-files" (toLower filename));
           message = "boot.loader.systemd-boot.extraFiles.${lib.strings.escapeNixIdentifier filename} is invalid: files cannot be placed in the nixos/.extra-files directory";
         }
-      ]) (builtins.attrNames cfg.extraFiles);
+      ])
+      (builtins.attrNames cfg.extraFiles);
 
     boot.loader.grub.enable = mkDefault false;
 
