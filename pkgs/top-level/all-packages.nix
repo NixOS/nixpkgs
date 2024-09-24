@@ -7980,8 +7980,6 @@ with pkgs;
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
-  gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
-
   gokart = callPackage ../development/tools/gokart { };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
