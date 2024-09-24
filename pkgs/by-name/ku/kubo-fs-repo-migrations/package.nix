@@ -58,9 +58,14 @@ let
               cd migration
               go test -mod=vendor
             ''
-          else
+          else if to <= 15 then
             ''
               cd not-sharness
+              ./test.sh
+            ''
+          else
+            ''
+              cd test-e2e
               ./test.sh
             ''
         }
@@ -208,6 +213,12 @@ let
       to = 15;
       release = "1.0.1";
       hash = "sha256-u7PM6kFCQUn07NGpeRYpBDEwc2pP+r5mf44LZU4DV5Y=";
+    }
+    {
+      from = 15;
+      to = 16;
+      release = "1.0.1";
+      hash = "sha256-/TG5GNSyV8gsngRT/0jazkL2n2RzA9h1gCTLqGOrI0A=";
     }
   ];
 
