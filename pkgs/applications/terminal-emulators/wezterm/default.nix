@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "wez";
-    repo = pname;
+    repo = "wezterm";
     rev = version;
     fetchSubmodules = true;
     hash = "sha256-Az+HlnK/lRJpUSGm5UKyma1l2PaBKNCGFiaYnLECMX8=";
@@ -123,6 +123,35 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
+    # the headless variant is useful when deploying wezterm's mux server on remote severs
+    headless = rustPlatform.buildRustPackage {
+      pname = "${pname}-headless";
+      inherit version src postPatch cargoLock;
+
+      nativeBuildInputs = [ pkg-config ];
+
+      buildInputs = [ openssl ];
+
+      cargoBuildFlags = [
+        "--package" "wezterm"
+        "--package" "wezterm-mux-server"
+      ];
+
+      doCheck = false;
+
+      postInstall = ''
+        install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
+        # hash does not work well with NixOS
+        sed -e 's|hash wezterm 2>/dev/null|command type -P wezterm &>/dev/null|g' \
+          -e 's|hash base64 2>/dev/null|command type -P base64 &>/dev/null|g' \
+          -e 's|hash hostname 2>/dev/null|command type -P hostname &>/dev/null|g' \
+          -e 's|hash hostnamectl 2>/dev/null|command type -P hostnamectl &>/dev/null|g' \
+          -i $out/etc/profile.d/wezterm.sh
+
+        install -Dm644 ${passthru.terminfo}/share/terminfo/w/wezterm -t $out/share/terminfo/w
+      '';
+    };
+
     terminfo = runCommand "wezterm-terminfo" {
       nativeBuildInputs = [ ncurses ];
     } ''
