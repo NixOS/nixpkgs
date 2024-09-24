@@ -114,6 +114,7 @@ middleclass,,,,,,
 mimetypes,,,,,,
 mpack,,,,,,
 moonscript,https://raw.githubusercontent.com/leafo/moonscript/master/moonscript-dev-1.rockspec,,,,,arobyn
+neorg,,,,,,GaetanLepage
 neotest,,,,,,mrcjkb
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb

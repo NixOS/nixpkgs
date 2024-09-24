@@ -8,14 +8,17 @@
   cirq-rigetti,
   cirq-web,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cirq";
-  format = "setuptools";
+  pyproject = true;
   inherit (cirq-core) version src meta;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cirq-aqt
     cirq-core
     cirq-ionq

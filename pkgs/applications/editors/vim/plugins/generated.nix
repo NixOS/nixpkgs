@@ -605,6 +605,18 @@ final: prev:
     meta.homepage = "https://github.com/aduros/ai.vim/";
   };
 
+  aider-nvim = buildVimPlugin {
+    pname = "aider.nvim";
+    version = "2023-10-22";
+    src = fetchFromGitHub {
+      owner = "joshuavial";
+      repo = "aider.nvim";
+      rev = "74a01227271d0ea211f2edafa82028b22d4c2022";
+      sha256 = "jkco90IF948LuRILP3Bog3GelUGOQzsEw2jP4f9Ghbw=";
+    };
+    meta.homepage = "https://github.com/joshuavial/aider.nvim/";
+  };
+
   alchemist-vim = buildVimPlugin {
     pname = "alchemist.vim";
     version = "2023-09-01";
@@ -7441,18 +7453,6 @@ final: prev:
       sha256 = "01rzgvl80dzdw64swfvk755kbakcmxv5vdnwhw09dm87ph6ij49w";
     };
     meta.homepage = "https://github.com/ii14/neorepl.nvim/";
-  };
-
-  neorg = buildVimPlugin {
-    pname = "neorg";
-    version = "2024-09-08";
-    src = fetchFromGitHub {
-      owner = "nvim-neorg";
-      repo = "neorg";
-      rev = "ba35900b21921c439e676b063a79c8fad914eac9";
-      sha256 = "12sgvf7zbabxvmdf07cv8rcql6jdgdv5xdcn7v5w42q8lg9mps10";
-    };
-    meta.homepage = "https://github.com/nvim-neorg/neorg/";
   };
 
   neorg-telescope = buildVimPlugin {
