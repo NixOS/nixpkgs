@@ -339,7 +339,7 @@ in
           # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
           rm -vf "$IPFS_PATH/api"
       '' + lib.optionalString cfg.autoMigrate ''
-        ${pkgs.kubo-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
+        '${lib.getExe pkgs.kubo-migrator}' -to '${cfg.package.repoVersion}' -y
       '' + ''
         fi
         ipfs --offline config show |
