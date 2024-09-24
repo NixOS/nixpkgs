@@ -6,7 +6,8 @@ let
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
-      , removeReferencesTo
+
+      , removeReferencesTo, writeShellApplication
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs && !stdenv.hostPlatform.isStatic
@@ -54,6 +55,11 @@ let
         })
       else
         stdenv;
+
+    pg_config = writeShellApplication {
+      name = "pg_config";
+      text = builtins.readFile ./pg_config.sh;
+    };
   in stdenv'.mkDerivation (finalAttrs: {
     inherit version;
     pname = pname + lib.optionalString jitSupport "-jit";
@@ -200,15 +206,10 @@ let
         moveToOutput "lib/pgxs" "$dev"
 
         # Pretend pg_config is located in $out/bin to return correct paths, but
-        # actually have it in -dev to avoid pulling in all other outputs.
+        # actually have it in -dev to avoid pulling in all other outputs. See the
+        # pg_config.sh script's comments for details.
         moveToOutput "bin/pg_config" "$dev"
-        # To prevent a "pg_config: could not find own program executable" error, we fake
-        # pg_config in the default output.
-        cat << EOF > "$out/bin/pg_config" && chmod +x "$out/bin/pg_config"
-        #!${stdenv'.shell}
-        echo The real pg_config can be found in the -dev output.
-        exit 1
-        EOF
+        install -c -m 755 "${pg_config}"/bin/pg_config "$out/bin/pg_config"
         wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
 
         # postgres exposes external symbols get_pkginclude_path and similar. Those

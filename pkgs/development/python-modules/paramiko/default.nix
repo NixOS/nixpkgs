@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "3.4.1";
+  version = "3.5.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ixUwKHCvf2ZS8uA4l1wdKXPwYEbLXX1lNVZos+y+zgw=";
+    hash = "sha256-rRHlQNpPVc7dpSkx8aP4Eqgjinr39ipg3lOM2AuygSQ=";
   };
 
   patches = [
@@ -65,17 +65,17 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paramiko/paramiko/";
     changelog = "https://github.com/paramiko/paramiko/blob/${version}/sites/www/changelog.rst";
     description = "Native Python SSHv2 protocol library";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     longDescription = ''
       Library for making SSH2 connections (client or server). Emphasis is
       on using SSH2 as an alternative to SSL for making secure connections
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = [ ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }
