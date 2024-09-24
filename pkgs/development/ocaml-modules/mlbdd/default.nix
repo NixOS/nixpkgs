@@ -19,17 +19,8 @@ buildDunePackage {
   };
 
   checkInputs = [ ounit ];
-  nativeCheckInputs = [ ];
-  buildInputs = [ ];
-  nativeBuildInputs = [ ];
-  propagatedBuildInputs = [ ];
 
   doCheck = true;
-
-  outputs = [
-    "out"
-    "dev"
-  ];
 
   meta = {
     homepage = "https://github.com/arlencox/mlbdd";
