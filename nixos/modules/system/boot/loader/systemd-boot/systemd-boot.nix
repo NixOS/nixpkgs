@@ -29,6 +29,8 @@ let
           $out
       '';
 
+  edk2ShellEspPath = "efi/edk2-uefi-shell/shell.efi";
+
   systemdBootBuilder = pkgs.substituteAll rec {
     name = "systemd-boot";
 
@@ -71,6 +73,8 @@ let
     memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
 
     netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
+
+    edk2-uefi-shell = optionalString cfg.edk2-uefi-shell.enable pkgs.edk2-uefi-shell;
 
     checkMountpoints = pkgs.writeShellScript "check-mountpoints" ''
       fail() {
@@ -343,6 +347,29 @@ in
       };
     };
 
+    edk2-uefi-shell = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Make the EDK2 UEFI Shell available from the systemd-boot menu.
+          It can be used to manually boot other operating systems or for debugging.
+        '';
+      };
+
+      sortKey = mkOption {
+        type = types.str;
+        default = "o_edk2-uefi-shell";
+        description = ''
+          `systemd-boot` orders the menu entries by their sort keys,
+          so if you want something to appear after all the NixOS entries,
+          it should start with {file}`o` or onwards.
+
+          See also {option}`boot.loader.systemd-boot.sortKey`..
+        '';
+      };
+    };
+
     extraEntries = mkOption {
       type = types.attrsOf types.lines;
       default = { };
@@ -476,6 +503,9 @@ in
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
       })
+      (mkIf cfg.edk2-uefi-shell.enable {
+        ${edk2ShellEspPath} = "${pkgs.edk2-uefi-shell}/shell.efi";
+      })
     ];
 
     boot.loader.systemd-boot.extraEntries = mkMerge [
@@ -491,6 +521,13 @@ in
           title  netboot.xyz
           efi    /efi/netbootxyz/netboot.xyz.efi
           sort-key ${cfg.netbootxyz.sortKey}
+        '';
+      })
+      (mkIf cfg.edk2-uefi-shell.enable {
+        "edk2-uefi-shell.conf" = ''
+          title  EDK2 UEFI Shell
+          efi    /${edk2ShellEspPath}
+          sort-key ${cfg.edk2-uefi-shell.sortKey}
         '';
       })
     ];

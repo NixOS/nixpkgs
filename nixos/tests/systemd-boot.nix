@@ -339,6 +339,21 @@ in
     '';
   };
 
+  edk2-uefi-shell = makeTest {
+    name = "systemd-boot-edk2-uefi-shell";
+    meta.maintainers = with pkgs.lib.maintainers; [ iFreilicht ];
+
+    nodes.machine = { ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
+    };
+
+    testScript = ''
+      machine.succeed("test -e /boot/loader/entries/edk2-uefi-shell.conf")
+      machine.succeed("test -e /boot/efi/edk2-uefi-shell/shell.efi")
+    '';
+  };
+
   memtestSortKey = makeTest {
     name = "systemd-boot-memtest-sortkey";
     meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
