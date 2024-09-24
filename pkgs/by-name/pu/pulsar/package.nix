@@ -228,7 +228,7 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bryango ];
+    maintainers = with lib.maintainers; [ bryango pbsds ];
     knownVulnerabilities = [
       # electron 12.2.3, efforts are in place to bump it
       "CVE-2023-5217"
