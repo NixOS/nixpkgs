@@ -9428,6 +9428,8 @@ self: super: with self; {
 
   osc-lib = callPackage ../development/python-modules/osc-lib { };
 
+  osc-placement = callPackage ../development/python-modules/osc-placement { };
+
   osc-sdk-python = callPackage ../development/python-modules/osc-sdk-python { };
 
   oschmod = callPackage ../development/python-modules/oschmod { };
@@ -12556,6 +12558,8 @@ self: super: with self; {
   python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
+
+  python-aodhclient = callPackage ../development/python-modules/python-aodhclient { };
 
   python-apt = callPackage ../development/python-modules/python-apt { };
 
