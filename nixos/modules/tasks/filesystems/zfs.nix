@@ -516,7 +516,7 @@ in
       };
 
       settings = lib.mkOption {
-        type = with lib.types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        type = let t = lib.types; in t.attrsOf (t.oneOf [ t.str t.int t.bool (t.listOf t.str) ]);
         example = lib.literalExpression ''
           {
             ZED_DEBUG_LOG = "/tmp/zed.debug.log";
