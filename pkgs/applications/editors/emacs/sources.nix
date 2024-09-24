@@ -1,70 +1,102 @@
-{ lib
-, fetchFromBitbucket
-, fetchFromSavannah
+{
+  lib,
+  fetchFromBitbucket,
+  fetchFromSavannah,
 }:
 
 let
-  mkArgs = { pname, version, variant, patches ? _: [ ], rev, hash }: {
-    inherit pname version variant patches;
+  mkArgs =
+    {
+      pname,
+      version,
+      variant,
+      templateNativeCompDriverOptionsPatch,
+      patches ? _: [ ],
+      rev,
+      hash,
+    }:
+    {
+      inherit
+        pname
+        version
+        variant
+        templateNativeCompDriverOptionsPatch
+        patches
+        ;
 
-    src = {
-      "mainline" = (fetchFromSavannah {
-        repo = "emacs";
-        inherit rev hash;
-      });
-      "macport" = (fetchFromBitbucket {
-        owner = "mituharu";
-        repo = "emacs-mac";
-        inherit rev hash;
-      });
-    }.${variant};
+      src =
+        {
+          "mainline" = (
+            fetchFromSavannah {
+              repo = "emacs";
+              inherit rev hash;
+            }
+          );
+          "macport" = (
+            fetchFromBitbucket {
+              owner = "mituharu";
+              repo = "emacs-mac";
+              inherit rev hash;
+            }
+          );
+        }
+        .${variant};
 
-    meta = {
-      homepage = {
-        "mainline" = "https://www.gnu.org/software/emacs/";
-        "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
-      }.${variant};
-      description = "Extensible, customizable GNU text editor"
-                    + lib.optionalString (variant == "macport") " - macport variant";
-      longDescription = ''
-      GNU Emacs is an extensible, customizable text editor—and more. At its core
-      is an interpreter for Emacs Lisp, a dialect of the Lisp programming
-      language with extensions to support text editing.
+      meta = {
+        homepage =
+          {
+            "mainline" = "https://www.gnu.org/software/emacs/";
+            "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
+          }
+          .${variant};
+        description =
+          "Extensible, customizable GNU text editor"
+          + lib.optionalString (variant == "macport") " - macport variant";
+        longDescription =
+          ''
+            GNU Emacs is an extensible, customizable text editor—and more. At
+            its core is an interpreter for Emacs Lisp, a dialect of the Lisp
+            programming language with extensions to support text editing.
 
-      The features of GNU Emacs include: content-sensitive editing modes,
-      including syntax coloring, for a wide variety of file types including
-      plain text, source code, and HTML; complete built-in documentation,
-      including a tutorial for new users; full Unicode support for nearly all
-      human languages and their scripts; highly customizable, using Emacs Lisp
-      code or a graphical interface; a large number of extensions that add other
-      functionality, including a project planner, mail and news reader, debugger
-      interface, calendar, and more. Many of these extensions are distributed
-      with GNU Emacs; others are available separately.
-    '' + lib.optionalString (variant == "macport") ''
-
-      This release is built from Mitsuharu Yamamoto's patched source code
-      tailored for macOS.
-    '';
-      changelog = {
-        "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
-        "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
-      }.${variant};
-      license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [
-        AndersonTorres
-        adisbladis
-        jwiegley
-        lovek323
-        matthewbauer
-        # atemu for issues relating to Macport
-      ];
-      platforms = {
-        "mainline" = lib.platforms.all;
-        "macport" = lib.platforms.darwin;
-      }.${variant};
-      mainProgram = "emacs";
+            The features of GNU Emacs include: content-sensitive editing modes,
+            including syntax coloring, for a wide variety of file types
+            including plain text, source code, and HTML; complete built-in
+            documentation, including a tutorial for new users; full Unicode
+            support for nearly all human languages and their scripts; highly
+            customizable, using Emacs Lisp code or a graphical interface; a
+            large number of extensions that add other functionality, including a
+            project planner, mail and news reader, debugger interface, calendar,
+            and more. Many of these extensions are distributed with GNU Emacs;
+            others are available separately.
+          ''
+          + lib.optionalString (variant == "macport") ''
+            This release is built from Mitsuharu Yamamoto's patched source code
+            tailored for macOS.
+          '';
+        changelog =
+          {
+            "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
+            "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
+          }
+          .${variant};
+        license = lib.licenses.gpl3Plus;
+        maintainers = with lib.maintainers; [
+          AndersonTorres
+          adisbladis
+          jwiegley
+          lovek323
+          matthewbauer
+          # atemu for issues relating to Macport
+        ];
+        platforms =
+          {
+            "mainline" = lib.platforms.all;
+            "macport" = lib.platforms.darwin;
+          }
+          .${variant};
+        mainProgram = "emacs";
+      };
     };
-  };
 in
 {
   emacs28 = import ./make-emacs.nix (mkArgs {
@@ -73,6 +105,10 @@ in
     variant = "mainline";
     rev = "28.2";
     hash = "sha256-4oSLcUDR0MOEt53QOiZSVU8kPJ67GwugmBxdX3F15Ag=";
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-28.patch;
+    };
     patches = fetchpatch: [
       # CVE-2022-45939
       (fetchpatch {
@@ -108,6 +144,10 @@ in
     variant = "mainline";
     rev = "29.4";
     hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-29.patch;
+    };
   });
 
   emacs30 = import ./make-emacs.nix (mkArgs {
@@ -116,6 +156,10 @@ in
     variant = "mainline";
     rev = "30.0.91";
     hash = "sha256-X5J34BUY42JgA1s76eVeGA9WNtesU2c+JyndIHFbONQ=";
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-30.patch;
+    };
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {
@@ -124,6 +168,10 @@ in
     variant = "macport";
     rev = "emacs-28.2-mac-9.1";
     hash = "sha256-Ne2jQ2nVLNiQmnkkOXVc5AkLVkTpm8pFC7VNY2gQjPE=";
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-28.patch;
+    };
     patches = fetchpatch: [
       # CVE-2022-45939
       (fetchpatch {
@@ -153,5 +201,9 @@ in
     variant = "macport";
     rev = "emacs-29.1-mac-10.0";
     hash = "sha256-TE829qJdPjeOQ+kD0SfyO8d5YpJjBge/g+nScwj+XVU=";
+    templateNativeCompDriverOptionsPatch = builtins.path {
+      name = "native-comp-driver-options.patch";
+      path = ./native-comp-driver-options-29.patch;
+    };
   });
 }
