@@ -11,6 +11,7 @@
   gawk,
   coreutils,
   bash,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
@@ -81,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --set JAVA_HOME ${openjdk.home}
   '';
+
+  # versionCheckHook doesn't work as of 2024-09-23.
+  # See https://github.com/NixOS/nixpkgs/pull/339197#issuecomment-2363495060
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "env HOME=$TMPDIR nextflow -version";
+  };
 
   meta = with lib; {
     description = "DSL for data-driven computational pipelines";
