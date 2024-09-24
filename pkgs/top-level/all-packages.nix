@@ -14695,7 +14695,7 @@ with pkgs;
 
   gbforth = callPackage ../development/compilers/gbforth { };
 
-  default-gcc-version = 14;
+  default-gcc-version = 13;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
