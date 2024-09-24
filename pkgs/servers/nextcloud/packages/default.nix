@@ -11,7 +11,7 @@
 }:
 
 let
-  apps = lib.importJSON (../servers/nextcloud/packages/. + (builtins.toPath "${ncVersion}.json"));
+  apps = lib.importJSON (./. + "/${ncVersion}.json");
   packages =
     self:
     let
