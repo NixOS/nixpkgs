@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "a simple terminal stopwatch application";
     homepage = "https://gitlab.com/thom-cameron/isw";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [thom-cameron];
+    maintainers = with maintainers; [ thom-cameron ];
   };
 }
