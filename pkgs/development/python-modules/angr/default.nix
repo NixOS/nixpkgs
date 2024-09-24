@@ -110,5 +110,7 @@ buildPythonPackage rec {
     homepage = "https://angr.io/";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
+    # angr is pining unicorn
+    broken = versionAtLeast unicorn.version "2.0.1.post1";
   };
 }
