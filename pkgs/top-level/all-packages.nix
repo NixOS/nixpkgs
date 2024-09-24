@@ -5047,8 +5047,6 @@ with pkgs;
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
-  tex-match = callPackage ../tools/typesetting/tex/tex-match { };
-
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
   # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
