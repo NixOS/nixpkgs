@@ -501,7 +501,7 @@ writeTextFile {
   text = ''
     Contents of File
   '';
-  destination = "share/my-file";
+  destination = "/share/my-file";
 }
 ```
 
@@ -586,7 +586,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script";
+  destination = "/bin/my-script";
 }
 ```
 
@@ -674,7 +674,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script";
+  destination = "/bin/my-script";
 }
 ```
 

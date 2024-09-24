@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, unittestCheckHook
 , six
 , stdenv
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "38a936c0a6d98a38bcc2d03fdaaedaba9f412879461dd2ceff8d37564d6522e4";
   };
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ unittestCheckHook ];
   propagatedBuildInputs = [ six ];
 
   # iterable = range(10 ** 10)  # Is efficiently reversible

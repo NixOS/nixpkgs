@@ -2,10 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  boost-histogram,
-  dask,
+
+  # build-system
   hatchling,
   hatch-vcs,
+
+  # dependencies
+  boost-histogram,
+  dask,
+
+  # tests
   pytestCheckHook,
 }:
 
