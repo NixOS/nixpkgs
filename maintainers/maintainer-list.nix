@@ -65,6 +65,15 @@
    file located in the root of the Nixpkgs repo.
 */
 {
+
+   ailsa-sun = {
+     name = "Ailsa Sun";
+
+     email = "jjshenw@gmail.com";
+     matrix = "@el125:matrix.org";
+     github = "ailsa-sun";
+     githubId = 135079815;
+   };
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
