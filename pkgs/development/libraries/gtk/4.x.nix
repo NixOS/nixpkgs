@@ -46,6 +46,7 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
+, docutils
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
@@ -69,7 +70,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.14.5";
+  version = "4.16.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-VUfyufAGsTOZPgcLh8F4BOBR79o5E/6soRCPor5B4k0=";
+    hash = "sha256-kmoeq9SB+b+iVTj5UBb9/Pr5Y7L5C0CuaekN71SZIVw=";
   };
 
   depsBuildBuild = [
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     sassc
     gi-docgen
+    docutils # for rst2man, rst2html5
     libxml2 # for xmllint
   ] ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
