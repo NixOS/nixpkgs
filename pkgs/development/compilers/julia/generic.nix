@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
+    "USE_SYSTEM_ZLIB=1"
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
     "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1);x86-64-v4,-rdrnd,base(1)"
