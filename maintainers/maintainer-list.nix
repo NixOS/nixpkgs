@@ -469,6 +469,12 @@
     github = "abysssol";
     githubId = 76763323;
   };
+  aca = {
+    email = "acadx0@gmail.com";
+    github = "aca";
+    githubId = 50316549;
+    name = "rok";
+  };
   acairncross = {
     email = "acairncross@gmail.com";
     github = "acairncross";
