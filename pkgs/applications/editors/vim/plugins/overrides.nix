@@ -1501,6 +1501,11 @@ in
     dependencies = with self; [ nvim-treesitter plenary-nvim ];
   };
 
+  render-markdown-nvim = super.render-markdown-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter ];
+    nvimRequireCheck = "render-markdown";
+  };
+
   # needs  "http" and "json" treesitter grammars too
   rest-nvim = super.rest-nvim.overrideAttrs {
     dependencies = with self; [
