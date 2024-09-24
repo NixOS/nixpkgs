@@ -138,6 +138,11 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_OS_DIR=baremetal"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) (lib.optionals (lib.versionAtLeast release_version "16") [
     "-DCMAKE_LIPO=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo"
+  ] ++ lib.optionals (!haveLibcxx) [
+    # Darwin fails to detect that the compiler supports the `-g` flag when there is no libc++ during the
+    # compiler-rt bootstrap, which prevents compiler-rt from building. The `-g` flag is required by the
+    # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
+    "-DCOMPILER_RT_HAS_G_FLAG=ON"
   ] ++ [
     "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk'.sdkroot}"
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${lib.versions.majorMinor (lib.getVersion apple-sdk)}"
