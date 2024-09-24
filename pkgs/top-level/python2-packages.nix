@@ -47,10 +47,6 @@ with self; with super; {
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
 
-  pycairo = callPackage ../development/python2-modules/pycairo {
-    inherit (pkgs.buildPackages) meson;
-  };
-
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
   pytest = pytest_4;
