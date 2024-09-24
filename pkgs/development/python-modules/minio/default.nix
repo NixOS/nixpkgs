@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "7.2.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "minio";
@@ -39,9 +39,9 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argon2-cffi
     certifi
     urllib3
