@@ -1177,6 +1177,8 @@ let
 
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
+    mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
+
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
