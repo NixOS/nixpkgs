@@ -697,6 +697,8 @@ let
 
     httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
 
+    httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
+
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     ### I ###
