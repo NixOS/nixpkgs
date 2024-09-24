@@ -217,6 +217,7 @@ in
 
   preview-tailor = mkHome super.preview-tailor;
 
+  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=73325
   psgml = ignoreCompilationError super.psgml; # elisp error
 
   # native-ice https://github.com/mattiase/relint/issues/15
