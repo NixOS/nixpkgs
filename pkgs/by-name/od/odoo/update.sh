@@ -21,6 +21,6 @@ fi
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-sed -ri "s| hash.+ # odoo| hash = \"$(nix-prefetch -q fetchzip --url "https://nightly.odoo.com/${VERSION}/nightly/src/odoo_${latestVersion}.zip")\"; # odoo|g" package.nix
+sed -ri "s| hash.+ # odoo| hash = \"$(nix-prefetch -q fetchzip --option extra-experimental-features flakes --url "https://nightly.odoo.com/${VERSION}/nightly/src/odoo_${latestVersion}.zip")\"; # odoo|g" package.nix
 sed -ri "s|, odoo_version \? .+|, odoo_version ? \"$VERSION\"|" package.nix
 sed -ri "s|, odoo_release \? .+|, odoo_release ? \"$RELEASE\"|" package.nix

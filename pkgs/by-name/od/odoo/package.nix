@@ -6,7 +6,7 @@
 , wkhtmltopdf
 , nixosTests
 , odoo_version ? "17.0"
-, odoo_release ? "20240610"
+, odoo_release ? "20240925"
 }:
 
 let
@@ -35,11 +35,8 @@ in python.pkgs.buildPythonApplication rec {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
-    hash = "sha256-blibGJyaz+MxMazOXhPbGBAJWZoGubirwSnjVYyLBJs="; # odoo
+    hash = "sha256-MY8dj0WJOEYVA99vdp+N/xMkUpX7/ThTcIFkhtRRbQA="; # odoo
   };
-
-  # needs some investigation
-  doCheck = false;
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
