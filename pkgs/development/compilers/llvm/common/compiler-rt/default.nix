@@ -7,6 +7,8 @@
 , src ? null
 , monorepoSrc ? null
 , runCommand
+, apple-sdk
+, apple-sdk_10_13
 , cmake
 , ninja
 , python3
@@ -45,6 +47,14 @@ let
 
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
+
+  # Sanitizers require 10.13 or newer. Instead of disabling them for most x86_64-darwin users,
+  # build them with a newer SDK and the default (10.12) deployment target.
+  apple-sdk' =
+    if lib.versionOlder (lib.getVersion apple-sdk) "10.13" then
+      apple-sdk_10_13.override { enableBootstrap = true; }
+    else
+      apple-sdk.override { enableBootstrap = true; };
 
   src' = if monorepoSrc != null then
     runCommand "${baseName}-src-${version}" {} (''
@@ -131,29 +141,20 @@ stdenv.mkDerivation ({
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
+    "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
   ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
     # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
-  ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    "-DSANITIZER_MIN_OSX_VERSION=10.10"
-  ] ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
+  ]) ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
   ] ++ devExtraCmakeFlags;
 
   outputs = [ "out" "dev" ];
 
-  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
-  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
-  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
-  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
-  # a flag and turn the flag off during the stdenv build.
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/config-ix.cmake \
-      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''
     substituteInPlace lib/builtins/aarch64/sme-libc-routines.c \
       --replace "<stdlib.h>" "<stddef.h>"
