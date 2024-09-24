@@ -20,10 +20,6 @@ lib.makeScope pkgs.newScope (self:
 
     emacs28 = callPackage (self.sources.emacs28) inheritedArgs;
 
-    emacs28-gtk2 = self.emacs28.override {
-      withGTK2 = true;
-    };
-
     emacs28-gtk3 = self.emacs28.override {
       withGTK3 = true;
     };
