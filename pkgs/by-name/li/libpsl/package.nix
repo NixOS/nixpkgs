@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
 
-  outputs = [ "out" "dev" ]
-    # bin/psl-make-dafsa brings a large runtime closure through python3
-    ++ lib.optional (!stdenv.hostPlatform.isStatic) "bin";
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -41,15 +39,11 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) python3;
+  ];
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
-
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    patchShebangs src/psl-make-dafsa
-  '';
 
   preAutoreconf = ''
     gtkdocize

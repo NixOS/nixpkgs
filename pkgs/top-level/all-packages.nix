@@ -21718,8 +21718,6 @@ with pkgs;
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
-  libpsl = callPackage ../development/libraries/libpsl { };
-
   libpst = callPackage ../development/libraries/libpst { };
 
   libptytty = callPackage ../development/libraries/libptytty { };
