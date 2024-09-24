@@ -1,0 +1,34 @@
+From 14fca2e93bd783c0ad2362af6d69801c2073765d Mon Sep 17 00:00:00 2001
+From: Tobias Mayer <tobim@fastmail.fm>
+Date: Sun, 23 Jun 2024 20:16:00 +0200
+Subject: [PATCH] Create a unified lz4 target
+
+Includes changes from
+* https://github.com/lz4/lz4/pull/1372
+* https://github.com/lz4/lz4/pull/1413
+---
+ build/cmake/CMakeLists.txt | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/build/cmake/CMakeLists.txt b/build/cmake/CMakeLists.txt
+index eb7007b..07ddd2b 100644
+--- a/build/cmake/CMakeLists.txt
++++ b/build/cmake/CMakeLists.txt
+@@ -130,6 +130,14 @@ if(BUILD_STATIC_LIBS)
+     POSITION_INDEPENDENT_CODE ${LZ4_POSITION_INDEPENDENT_LIB})
+   list(APPEND LZ4_LIBRARIES_BUILT lz4_static)
+ endif()
++# Add unified target.
++add_library(lz4 INTERFACE)
++list(APPEND LZ4_LIBRARIES_BUILT lz4)
++if(BUILD_SHARED_LIBS)
++  target_link_libraries(lz4 INTERFACE lz4_shared)
++else()
++  target_link_libraries(lz4 INTERFACE lz4_static)
++endif()
+ 
+ if(BUILD_STATIC_LIBS)
+   set(LZ4_LINK_LIBRARY lz4_static)
+-- 
+2.45.1
+

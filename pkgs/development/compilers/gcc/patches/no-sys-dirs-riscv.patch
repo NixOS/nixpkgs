@@ -1,0 +1,12 @@
+--- a/gcc/config/riscv/linux.h
++++ b/gcc/config/riscv/linux.h
+@@ -69,8 +69,4 @@
+ 
+ #define TARGET_ASM_FILE_END file_end_indicate_exec_stack
+ 
+-#define STARTFILE_PREFIX_SPEC 			\
+-   "/lib" XLEN_SPEC "/" ABI_SPEC "/ "		\
+-   "/usr/lib" XLEN_SPEC "/" ABI_SPEC "/ "	\
+-   "/lib/ "					\
+-   "/usr/lib/ "
++#define STARTFILE_PREFIX_SPEC ""

@@ -1,0 +1,14 @@
+--- expect5.45.4/tclconfig/tcl.m4.orig	2024-05-29 11:24:56.150656190 -0700
++++ expect5.45.4/tclconfig/tcl.m4	2024-05-29 11:25:22.850790934 -0700
+@@ -1643,11 +1643,6 @@
+ 		LIBS=`echo $LIBS | sed s/-pthread//`
+ 		CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+ 		LDFLAGS="$LDFLAGS $PTHREAD_LIBS"])
+-	    # Version numbers are dot-stripped by system policy.
+-	    TCL_TRIM_DOTS=`echo ${VERSION} | tr -d .`
+-	    UNSHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}.a'
+-	    SHARED_LIB_SUFFIX='${TCL_TRIM_DOTS}\$\{DBGX\}.so.1'
+-	    TCL_LIB_VERSIONS_OK=nodots
+ 	    ;;
+ 	Darwin-*)
+ 	    CFLAGS_OPTIMIZE="-Os"

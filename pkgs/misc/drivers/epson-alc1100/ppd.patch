@@ -1,0 +1,13 @@
+diff --git a/ppd/Epson-AL-C1100-fm3.ppd b/ppd/Epson-AL-C1100-fm3.ppd
+index 75c7fff..ecd04c8 100644
+--- a/ppd/Epson-AL-C1100-fm3.ppd
++++ b/ppd/Epson-AL-C1100-fm3.ppd
+@@ -68,7 +68,7 @@
+ *%*********** Foomatic Configulations ************
+ *%pprRIP:        foomatic-rip other
+ *FoomaticIDs: Epson-AL-C1100 alc1100
+-*FoomaticRIPCommandLine: "pstoalc1100.sh %C"
++*FoomaticRIPCommandLine: "/var/lib/cups/path/bin/pstoalc1100.sh %C"
+ 
+ *%**************** Paper Handling ******************
+ 

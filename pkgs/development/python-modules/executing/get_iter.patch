@@ -1,0 +1,192 @@
+https://github.com/alexmojaki/executing/pull/83#pullrequestreview-2244302661
+
+
+From 0b913873b9db8c157a8dd581e8771242bcb8864b Mon Sep 17 00:00:00 2001
+From: Frank Hoffmann <15r10nk-git@polarbit.de>
+Date: Fri, 16 Aug 2024 22:51:32 +0200
+Subject: [PATCH 1/4] fix: backward compatibility fix for changed source
+ positions in 3.12.5 (#82)
+
+---
+ executing/_position_node_finder.py | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/executing/_position_node_finder.py b/executing/_position_node_finder.py
+index 8ca21a6..9a3f8b3 100644
+--- a/executing/_position_node_finder.py
++++ b/executing/_position_node_finder.py
+@@ -156,6 +156,8 @@ def __init__(self, frame: FrameType, stmts: Set[EnhancedAST], tree: ast.Module,
+                 typ=typ,
+             )
+ 
++        self.result = self.fix_result(self.result, self.instruction(lasti))
++
+         self.known_issues(self.result, self.instruction(lasti))
+ 
+         self.test_for_decorator(self.result, lasti)
+@@ -213,6 +215,31 @@ def test_for_decorator(self, node: EnhancedAST, index: int) -> None:
+                 if sys.version_info < (3, 12):
+                     index += 4
+ 
++    def fix_result(
++        self, node: EnhancedAST, instruction: dis.Instruction
++    ) -> EnhancedAST:
++        if (
++            sys.version_info >= (3, 12, 5)
++            and instruction.opname in ("GET_ITER", "FOR_ITER")
++            and isinstance(node, ast.For)
++        ):
++            # node positions have changed in 3.13
++            # https://github.com/python/cpython/issues/93691#event-13151024246
++            # `for` calls __iter__ and __next__ during execution, the calling
++            # expression of these calls was the ast.For node since cpython 3.11 (see test_iter).
++            # cpython 3.13 changed this to the `iter` node of the loop, to make tracebacks easier to read.
++            # This keeps backward compatibility with older executing versions.
++
++            # there are also cases like:
++            #
++            # for a in iter(l): pass
++            #
++            # where `iter(l)` would be otherwise the resulting node for the `iter()` call and the __iter__ call of the for implementation.
++            # keeping the old behaviour makes it possible to distinguish both cases.
++
++            return self.result.parent
++        return node
++
+     def known_issues(self, node: EnhancedAST, instruction: dis.Instruction) -> None:
+         if instruction.opname in ("COMPARE_OP", "IS_OP", "CONTAINS_OP") and isinstance(
+             node, types_cmp_issue
+
+From d421795d8213abb4fea30067af0149d3a767fed4 Mon Sep 17 00:00:00 2001
+From: Frank Hoffmann <15r10nk-git@polarbit.de>
+Date: Tue, 4 Jun 2024 19:46:57 +0200
+Subject: [PATCH 2/4] feat!: dropped support for 3.5, 3.6 and 3.7
+
+---
+ .github/workflows/test.yml | 2 +-
+ setup.cfg                  | 5 +----
+ tox.ini                    | 4 ++--
+ 3 files changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/.github/workflows/test.yml b/.github/workflows/test.yml
+index 8fca81a..140de04 100644
+--- a/.github/workflows/test.yml
++++ b/.github/workflows/test.yml
+@@ -12,7 +12,7 @@ jobs:
+     runs-on: ubuntu-20.04
+     strategy:
+       matrix:
+-        python-version: [3.5, 3.6, 3.7, 3.8, 3.9, '3.10', 3.11, 3.12-dev, pypy-3.6]
++        python-version: [3.8, 3.9, '3.10', 3.11, 3.12-dev]
+ 
+     steps:
+     - uses: actions/checkout@v2
+diff --git a/setup.cfg b/setup.cfg
+index fdf901f..ed446d0 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -11,9 +11,6 @@ classifiers =
+     License :: OSI Approved :: MIT License
+     Programming Language :: Python
+     Programming Language :: Python :: 3
+-    Programming Language :: Python :: 3.5
+-    Programming Language :: Python :: 3.6
+-    Programming Language :: Python :: 3.7
+     Programming Language :: Python :: 3.8
+     Programming Language :: Python :: 3.9
+     Programming Language :: Python :: 3.10
+@@ -25,7 +22,7 @@ packages = executing
+ zip_safe = False
+ include_package_data = True
+ setup_requires = setuptools; setuptools_scm[toml]
+-python_requires = >=3.5
++python_requires = >=3.8
+ 
+ [options.extras_require]
+ tests=
+diff --git a/tox.ini b/tox.ini
+index 3566691..6c68c4e 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,5 +1,5 @@
+ [tox]
+-envlist = py35,py36,py37,py38,py39,py310,py311,py312,pypy35,pypy36
++envlist = py38,py39,py310,py311,py312,pypy35,pypy36
+ 
+ [testenv]
+ commands =
+@@ -10,7 +10,7 @@ passenv =
+     ADD_EXECUTING_TESTS
+     EXECUTING_SLOW_TESTS
+ 
+-[testenv:generate_small_sample-py{35,36,37,38,39,310,311}]
++[testenv:generate_small_sample-py{38,39,310,311,312}]
+ extras = tests
+ deps = pysource-minimize
+ commands =
+
+From 3c5ae436a4cff833606ce22c637d088481442154 Mon Sep 17 00:00:00 2001
+From: Frank Hoffmann <15r10nk-git@polarbit.de>
+Date: Sat, 17 Aug 2024 11:32:44 +0200
+Subject: [PATCH 3/4] test: skip module tests for python.py
+
+---
+ tests/test_main.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tests/test_main.py b/tests/test_main.py
+index bc015cd..84b1305 100644
+--- a/tests/test_main.py
++++ b/tests/test_main.py
+@@ -810,6 +810,9 @@ def test_module_files(self):
+                         or 'pyparsing.py' in filename
+                         or 'enum' in filename
+                     )
++                    or sys.version_info < (3,11) and (
++                        'python.py' in filename
++                    )   
+             ):
+                 continue
+ 
+
+From f15a55201be20f30664df4381f4a81407e0d25fb Mon Sep 17 00:00:00 2001
+From: Frank Hoffmann <15r10nk-git@polarbit.de>
+Date: Sun, 18 Aug 2024 14:02:30 +0200
+Subject: [PATCH 4/4] refactor: review changes
+
+---
+ executing/_position_node_finder.py | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/executing/_position_node_finder.py b/executing/_position_node_finder.py
+index 9a3f8b3..7a0cca6 100644
+--- a/executing/_position_node_finder.py
++++ b/executing/_position_node_finder.py
+@@ -221,13 +221,14 @@ def fix_result(
+         if (
+             sys.version_info >= (3, 12, 5)
+             and instruction.opname in ("GET_ITER", "FOR_ITER")
+-            and isinstance(node, ast.For)
++            and isinstance(node.parent, ast.For)
++            and node is node.parent.iter
+         ):
+-            # node positions have changed in 3.13
+-            # https://github.com/python/cpython/issues/93691#event-13151024246
++            # node positions have changed in 3.12.5
++            # https://github.com/python/cpython/issues/93691
+             # `for` calls __iter__ and __next__ during execution, the calling
+             # expression of these calls was the ast.For node since cpython 3.11 (see test_iter).
+-            # cpython 3.13 changed this to the `iter` node of the loop, to make tracebacks easier to read.
++            # cpython 3.12.5 changed this to the `iter` node of the loop, to make tracebacks easier to read.
+             # This keeps backward compatibility with older executing versions.
+ 
+             # there are also cases like:
+@@ -237,7 +238,7 @@ def fix_result(
+             # where `iter(l)` would be otherwise the resulting node for the `iter()` call and the __iter__ call of the for implementation.
+             # keeping the old behaviour makes it possible to distinguish both cases.
+ 
+-            return self.result.parent
++            return node.parent
+         return node
+ 
+     def known_issues(self, node: EnhancedAST, instruction: dis.Instruction) -> None:
