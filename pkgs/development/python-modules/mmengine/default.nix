@@ -114,6 +114,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ rxiao ];
-    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
+    broken = stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

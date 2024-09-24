@@ -23,7 +23,7 @@
 , darwin
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
-, enableJackrack ? stdenv.isLinux
+, enableJackrack ? stdenv.hostPlatform.isLinux
 , glib
 , ladspa-sdk
 , ladspaPlugins
@@ -31,7 +31,7 @@
 , python3
 , swig
 , qt ? null
-, enableSDL1 ? stdenv.isLinux
+, enableSDL1 ? stdenv.hostPlatform.isLinux
 , SDL
 , enableSDL2 ? true
 , SDL2
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     rubberband
     sox
     vid-stab
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Accelerate
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart

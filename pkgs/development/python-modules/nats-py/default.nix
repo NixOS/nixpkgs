@@ -58,7 +58,7 @@ buildPythonPackage rec {
       "test_ordered_consumer_larger_streams"
       "test_object_file_basics"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_subscribe_iterate_next_msg"
       "test_buf_size_force_flush_timeout"
     ];

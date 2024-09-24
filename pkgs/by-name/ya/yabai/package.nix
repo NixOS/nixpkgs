@@ -23,7 +23,7 @@ let
     SkyLight
     ;
 
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "yabai";
@@ -40,12 +40,12 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [ installShellFiles ]
-    ++ lib.optionals stdenv.isx86_64 [
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       xcodebuild
       xxd
     ];
 
-  buildInputs = lib.optionals stdenv.isx86_64 [
+  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
     Carbon
     Cocoa
     ScriptingBridge
@@ -53,7 +53,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ];
 
   dontConfigure = true;
-  dontBuild = stdenv.isAarch64;
+  dontBuild = stdenv.hostPlatform.isAarch64;
   enableParallelBuilding = true;
 
   installPhase = ''
@@ -62,14 +62,14 @@ stdenv'.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/icons/hicolor/scalable/apps}
 
     cp ./bin/yabai $out/bin/yabai
-    ${lib.optionalString stdenv.isx86_64 "cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg"}
+    ${lib.optionalString stdenv.hostPlatform.isx86_64 "cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg"}
     installManPage ./doc/yabai.1
 
     runHook postInstall
   '';
 
   postPatch =
-    lib.optionalString stdenv.isx86_64 # bash
+    lib.optionalString stdenv.hostPlatform.isx86_64 # bash
       ''
         # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
         # Since multilib doesn't work on darwin i dont know of a better way of handling this.
@@ -146,6 +146,6 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     sourceProvenance =
       with lib.sourceTypes;
-      lib.optionals stdenv.isx86_64 [ fromSource ] ++ lib.optionals stdenv.isAarch64 [ binaryNativeCode ];
+      lib.optionals stdenv.hostPlatform.isx86_64 [ fromSource ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ binaryNativeCode ];
   };
 })

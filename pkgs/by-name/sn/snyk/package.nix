@@ -31,7 +31,7 @@ buildNpmPackage {
   env.NIX_CFLAGS_COMPILE =
     # Fix error: no member named 'aligned_alloc' in the global namespace
     lib.optionalString (
-      stdenv.isDarwin && stdenv.isx86_64
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
     ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   npmBuildScript = "build:prod";

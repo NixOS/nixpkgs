@@ -24,14 +24,14 @@ in
       sha256 = "1zbygqn0443p0gxwr4kx3m1bkqaj8x9hrpch3s41py7jq08f6x28";
     };
 
-    nativeBuildInputs = [ unzip ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    nativeBuildInputs = [ unzip ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
     outputs = [ "out" "doc" ];
 
     enableParallelBuilding = true;
 
     preConfigure = ''
       cd ./INCHI_API/libinchi/gcc
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace makefile \
         --replace ",--version-script=libinchi.map" "" \
         --replace "LINUX_Z_RELRO = ,-z,relro" "" \
@@ -56,7 +56,7 @@ in
       runHook postInstall
     '';
 
-    preFixup = lib.optionalString stdenv.isDarwin ''
+    preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       fixDarwinDylibNames $(find "$out" -name "*.so.*")
     '';
 

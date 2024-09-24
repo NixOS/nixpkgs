@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildFlags = lib.optionals stdenv.isDarwin [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
+  buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
 
   # Fix the build on macOS with macFUSE installed
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace \
       "/usr/local/lib/pkgconfig" "/nonexistent"
   '';
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config.h --replace \
       "#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1" \
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"

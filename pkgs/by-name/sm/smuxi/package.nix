@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   pname = "smuxi";
   version = "unstable-2023-07-01";
 
-  runtimeLoaderEnvVariableName = if stdenv.isDarwin then
+  runtimeLoaderEnvVariableName = if stdenv.hostPlatform.isDarwin then
                                    "DYLD_FALLBACK_LIBRARY_PATH"
                                  else
                                    "LD_LIBRARY_PATH";
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     cp -a lib/Nini.dll $out/lib/smuxi/
 
     # install GTK+ icon theme on Darwin
-    ${if guiSupport && stdenv.isDarwin then "
+    ${if guiSupport && stdenv.hostPlatform.isDarwin then "
       mkdir -p $out/lib/smuxi/icons/
       cp -a images/Smuxi-Symbolic $out/lib/smuxi/icons/
     " else ""}

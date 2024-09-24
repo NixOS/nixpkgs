@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # cmake
   ];
 
-  doCheck = stdenv.isLinux; # darwin tests are broken for now...
+  doCheck = stdenv.hostPlatform.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
 
   preConfigure = "autoconf";

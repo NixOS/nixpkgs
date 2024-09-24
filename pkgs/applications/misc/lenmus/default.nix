@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeWrapper
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     wxsqlite3
     fluidsynth
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "-DMAN_INSTALL_DIR=${placeholder "out"}/share/man"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/lenmus.app $out/Applications
     mv $out/Resources $out/Applications/lenmus.app/Contents

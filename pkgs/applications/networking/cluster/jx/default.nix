@@ -33,7 +33,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Command line tool for installing and using Jenkins X";
     mainProgram = "jx";
     homepage = "https://jenkins-x.io";

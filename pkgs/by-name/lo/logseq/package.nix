@@ -33,21 +33,21 @@ in {
   src = fetchurl {
     inherit hash;
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-${suffix}";
-    name = lib.optionalString stdenv.isLinux "logseq-${version}.AppImage";
+    name = lib.optionalString stdenv.hostPlatform.isLinux "logseq-${version}.AppImage";
   };
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.isDarwin [ unzip ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
   buildInputs = [ stdenv.cc.cc.lib ];
 
-  dontUnpack = stdenv.isLinux;
+  dontUnpack = stdenv.hostPlatform.isLinux;
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.isLinux (
+  '' + lib.optionalString stdenv.hostPlatform.isLinux (
   let
    appimageContents = appimageTools.extract { inherit pname src version; };
   in
@@ -68,7 +68,7 @@ in {
     substituteInPlace $out/share/applications/logseq.desktop \
       --replace Exec=Logseq Exec=logseq \
       --replace Icon=Logseq Icon=logseq
-  '') + lib.optionalString stdenv.isDarwin ''
+  '') + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications/Logseq.app,bin}
     cp -R . $out/Applications/Logseq.app
     makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
@@ -76,7 +76,7 @@ in {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
     makeWrapper ${electron}/bin/electron $out/bin/logseq \
       --set "LOCAL_GIT_DIRECTORY" ${git} \

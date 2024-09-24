@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ python3Packages.cython cmake ];
 
-  postPatch = lib.optionalString stdenv.isAarch64 ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
       substituteInPlace setup.py \
       --replace "'-msse2'," ""
   '';

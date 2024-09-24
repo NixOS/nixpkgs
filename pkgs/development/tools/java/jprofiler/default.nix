@@ -26,7 +26,7 @@ let
     maintainers = with maintainers; [ catap ];
   };
 
-  src = if stdenv.isLinux then fetchurl {
+  src = if stdenv.hostPlatform.isLinux then fetchurl {
     url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_${lib.replaceStrings ["."] ["_"]  version}.tar.gz";
     hash = "sha256-orjBSaC7NvKcak+RSEa9V05oL3EZIBnp7TyaX/8XFyg=";
   } else fetchurl {
@@ -99,4 +99,4 @@ let
     meta = meta // { platforms = lib.platforms.darwin; };
   };
 in
-if stdenv.isDarwin then darwin else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

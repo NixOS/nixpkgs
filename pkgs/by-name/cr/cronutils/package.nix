@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
     "-D_DARWIN_C_SOURCE"
     # runstat.c:81:81: error: format string is not a string literal
     "-Wno-format-nonliteral"

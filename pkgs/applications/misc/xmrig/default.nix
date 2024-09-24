@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libmicrohttpd
     openssl
     hwloc
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     CoreServices
     OpenCL

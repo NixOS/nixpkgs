@@ -19,7 +19,7 @@
 let
   targets =
     additionalTargets
-    // lib.optionalAttrs stdenv.isx86_64 {
+    // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
       "bin-x86_64-efi/ipxe.efi" = null;
       "bin-x86_64-efi/ipxe.efirom" = null;
       "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
@@ -32,13 +32,13 @@ let
       "bin/ipxe.lkrn" = null;
       "bin/undionly.kpxe" = null;
     }
-    // lib.optionalAttrs stdenv.isAarch32 {
+    // lib.optionalAttrs stdenv.hostPlatform.isAarch32 {
       "bin-arm32-efi/ipxe.efi" = null;
       "bin-arm32-efi/ipxe.efirom" = null;
       "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
       "bin-arm32-efi/snp.efi" = null;
     }
-    // lib.optionalAttrs stdenv.isAarch64 {
+    // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
       "bin-arm64-efi/ipxe.efi" = null;
       "bin-arm64-efi/ipxe.efirom" = null;
       "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";

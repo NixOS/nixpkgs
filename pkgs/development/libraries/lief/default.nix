@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     scikit-build-core
   ];
 
-  env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
+  env.CXXFLAGS = toString (lib.optional stdenv.hostPlatform.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
 
   postBuild = ''
     pushd ../api/python

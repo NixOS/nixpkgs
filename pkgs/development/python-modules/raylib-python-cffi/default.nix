@@ -66,7 +66,7 @@ buildPythonPackage rec {
       physac
       raygui
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       OpenGL
       Cocoa
       IOKit

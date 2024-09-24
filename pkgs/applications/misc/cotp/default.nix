@@ -19,8 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-o9LRXbx77EXXO7rEmpBrx2nommJgG0ikw1YzdeB0Gug=";
 
-  buildInputs = lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   meta = with lib; {
     homepage = "https://github.com/replydev/cotp";

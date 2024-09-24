@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
   ];
 

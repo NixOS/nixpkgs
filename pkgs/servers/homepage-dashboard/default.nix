@@ -50,9 +50,9 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.isDarwin [ cctools ];
+  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
-  buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   env.PYTHON = "${python3}/bin/python";
 
@@ -107,6 +107,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

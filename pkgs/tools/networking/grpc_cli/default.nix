@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl numactl ];
   cmakeFlags = [ "-DgRPC_BUILD_TESTS=ON" ];
   makeFlags = [ "grpc_cli" ];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=format-security";
   installPhase = ''
     runHook preInstall
 

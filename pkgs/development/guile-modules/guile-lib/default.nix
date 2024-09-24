@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     # Make `libgcc_s.so' visible for `pthread_cancel'.

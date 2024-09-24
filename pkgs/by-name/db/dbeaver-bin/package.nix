@@ -41,22 +41,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
-  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
+  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "dbeaver.app";
 
   nativeBuildInputs =
     [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.isDarwin) [
+    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
       gnused
       wrapGAppsHook3
       autoPatchelfHook
     ]
-    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
 
   dontConfigure = true;
   dontBuild = true;
 
   installPhase =
-    if !stdenvNoCC.isDarwin then
+    if !stdenvNoCC.hostPlatform.isDarwin then
       ''
         runHook preInstall
 

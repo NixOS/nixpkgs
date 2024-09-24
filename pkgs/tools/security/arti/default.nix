@@ -23,11 +23,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-I45SaawWAK7iTZDFhJT4YVO439D/3NmWLp3FtFmhLC0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ sqlite ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cargoBuildFlags = [ "--package" "arti" ];
 

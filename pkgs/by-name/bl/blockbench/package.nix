@@ -23,7 +23,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs =
     [ makeWrapper ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       imagemagick # for icon resizing
       copyDesktopItems
     ];
@@ -33,7 +33,7 @@ buildNpmPackage rec {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # disable code signing on Darwin
-  postConfigure = lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" package.json
   '';
@@ -54,13 +54,13 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/Blockbench.app $out/Applications
       makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
     ''}
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p $out/share/blockbench
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
 

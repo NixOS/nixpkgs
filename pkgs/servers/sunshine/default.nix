@@ -139,7 +139,7 @@ stdenv'.mkDerivation rec {
     miniupnpc
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     intel-media-sdk
   ];
 

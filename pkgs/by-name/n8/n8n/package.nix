@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp # required to build sqlite3 bindings
     cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
-  ] ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [
     nodejs

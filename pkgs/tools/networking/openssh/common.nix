@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
     ++ lib.optional withKerberos (assert krb5 != null; "--with-kerberos5=${lib.getDev krb5}")
-    ++ lib.optional stdenv.isDarwin "--disable-libutil"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
     ++ extraConfigureFlags;
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
   enableParallelChecking = false;
-  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
+  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
-  checkTarget = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
+  checkTarget = lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
     # other tests are less demanding of the environment
     ++ [ "unit" "file-tests" "interop-tests" ];
 

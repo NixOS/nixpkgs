@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ OpenGL Cocoa IOKit ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ OpenGL Cocoa IOKit ]);
 
   cmakeFlags = [ "-DDEBUG=${toString enableDebug}" ];
 

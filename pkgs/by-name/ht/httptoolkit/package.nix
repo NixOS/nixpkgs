@@ -29,7 +29,7 @@ buildNpmPackage rec {
     CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isLinux [ copyDesktopItems ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   npmBuildScript = "build:src";
 
@@ -50,7 +50,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/httptoolkit
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/httptoolkit
 
@@ -64,7 +64,7 @@ buildNpmPackage rec {
           --inherit-argv0
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"HTTP Toolkit.app" $out/Applications
 

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_LIBS" true)
   ];
 
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   meta = {
     description = "Tools and library to detect essential for performance optimization information about host CPU";

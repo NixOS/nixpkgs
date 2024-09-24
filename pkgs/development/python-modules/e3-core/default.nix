@@ -49,7 +49,7 @@ buildPythonPackage rec {
       tqdm
       stevedore
     ]
-    ++ lib.optional stdenv.isLinux [
+    ++ lib.optional stdenv.hostPlatform.isLinux [
       # See setup.py:24. These are required only on Linux. Darwin has its own set
       # of requirements.
       psutil

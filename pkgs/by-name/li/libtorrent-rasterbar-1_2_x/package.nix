@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
 
   buildInputs = [ boostPython openssl zlib python311 libiconv ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preConfigure = "./autotool.sh";
 
@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
     description = "C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
     maintainers = [ ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.unix;
   };
 }

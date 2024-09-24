@@ -253,7 +253,7 @@ let
                   pkgs.zlib.dev
                   pkgs.cairo.dev
                 ]
-                ++ lib.optional pkgs.stdenv.isLinux pkgs.stdenv.cc.libc.dev
+                ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.stdenv.cc.libc.dev
               )
             )} server/epdfinfo
           '';
@@ -303,7 +303,7 @@ let
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = pkgs.stdenv.isLinux;
+          doCheck = pkgs.stdenv.hostPlatform.isLinux;
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang ];
           nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
@@ -702,7 +702,7 @@ let
 
         # Build a helper executable that interacts with the macOS Dictionary.app
         osx-dictionary =
-          if pkgs.stdenv.isDarwin
+          if pkgs.stdenv.hostPlatform.isDarwin
           then super.osx-dictionary.overrideAttrs (old: {
             buildInputs =
               old.buildInputs ++

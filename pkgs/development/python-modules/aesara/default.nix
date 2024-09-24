@@ -108,6 +108,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/aesara-devs/aesara/releases/tag/rel-${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Etjean ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

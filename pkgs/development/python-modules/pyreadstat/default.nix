@@ -32,7 +32,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = [
     readstat

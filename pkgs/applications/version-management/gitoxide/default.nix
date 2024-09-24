@@ -32,7 +32,7 @@ in rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
-  buildInputs = [ curl ] ++ (if stdenv.isDarwin
+  buildInputs = [ curl ] ++ (if stdenv.hostPlatform.isDarwin
     then [ libiconv Security SystemConfiguration ]
     else [ openssl ]);
 

@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit system phpMajor;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 

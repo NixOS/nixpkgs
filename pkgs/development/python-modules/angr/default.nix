@@ -88,7 +88,7 @@ buildPythonPackage rec {
     AngrDB = [ sqlalchemy ];
   };
 
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "--plat-name"
     "linux"
   ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   # libtool.m4 only matches macOS 10.*
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace configure \
       --replace "10.*)" "*)"
   '';
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       IOKit
     ]
     # acl relies on attr, which I can't get to build on darwin
-    ++ lib.optional (!stdenv.isDarwin) acl;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"

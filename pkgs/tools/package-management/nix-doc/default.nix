@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   # Due to a Rust bug, setting -C relro-level to anything including "off" on
   # macOS will cause link errors
-  env = lib.optionalAttrs (withPlugin && stdenv.isLinux) {
+  env = lib.optionalAttrs (withPlugin && stdenv.hostPlatform.isLinux) {
     RUSTFLAGS = "-C relro-level=partial";
   };
 

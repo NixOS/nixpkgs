@@ -57,7 +57,7 @@ buildPythonApplication rec {
     librsync
     openssl.dev
     xxHash
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     Kernel
     UniformTypeIdentifiers
@@ -65,9 +65,9 @@ buildPythonApplication rec {
     libpng
     python3
     zlib
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     Libsystem
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus libGL
@@ -84,10 +84,10 @@ buildPythonApplication rec {
     sphinx-inline-tabs
     go
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
 
@@ -141,8 +141,8 @@ buildPythonApplication rec {
     mkdir ./fonts/
     cp "${(nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})}/share/fonts/truetype/NerdFonts/SymbolsNerdFontMono-Regular.ttf" ./fonts/
 
-    ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
-    ${if stdenv.isDarwin then ''
+    ${ lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
+    ${if stdenv.hostPlatform.isDarwin then ''
       ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
       make docs
       ${python.pythonOnBuildForHost.interpreter} setup.py kitty.app ${darwinOptions}
@@ -165,13 +165,13 @@ buildPythonApplication rec {
     bashInteractive
     zsh
     fish
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # integration tests need sudo
     sudo
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_file_get dont_test_file_get \
       --replace test_path_mapping_receive dont_test_path_mapping_receive \
@@ -209,7 +209,7 @@ buildPythonApplication rec {
     runHook preInstall
     mkdir -p "$out"
     mkdir -p "$kitten/bin"
-    ${if stdenv.isDarwin then ''
+    ${if stdenv.hostPlatform.isDarwin then ''
     mkdir "$out/bin"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitten "$out/bin/kitten"
@@ -232,7 +232,7 @@ buildPythonApplication rec {
       --fish <("$out/bin/kitty" +complete setup fish2) \
       --zsh  <("$out/bin/kitty" +complete setup zsh)
 
-    terminfo_src=${if stdenv.isDarwin then
+    terminfo_src=${if stdenv.hostPlatform.isDarwin then
       ''"$out/Applications/kitty.app/Contents/Resources/terminfo"''
       else
       "$out/share/terminfo"}
@@ -249,7 +249,7 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.isLinux {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       default = nixosTests.terminal-emulators.kitty;
     };
     updateScript = nix-update-script {};

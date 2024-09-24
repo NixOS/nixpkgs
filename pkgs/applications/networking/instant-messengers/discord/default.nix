@@ -1,7 +1,7 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
   versions =
-    if stdenv.isLinux then {
+    if stdenv.hostPlatform.isLinux then {
       stable = "0.0.67";
       ptb = "0.0.105";
       canary = "0.0.492";
@@ -65,7 +65,7 @@ let
     mainProgram = "discord";
   };
   package =
-    if stdenv.isLinux
+    if stdenv.hostPlatform.isLinux
     then ./linux.nix
     else ./darwin.nix;
 
@@ -85,17 +85,17 @@ let
         };
         ptb = rec {
           pname = "discord-ptb";
-          binaryName = if stdenv.isLinux then "DiscordPTB" else desktopName;
+          binaryName = if stdenv.hostPlatform.isLinux then "DiscordPTB" else desktopName;
           desktopName = "Discord PTB";
         };
         canary = rec {
           pname = "discord-canary";
-          binaryName = if stdenv.isLinux then "DiscordCanary" else desktopName;
+          binaryName = if stdenv.hostPlatform.isLinux then "DiscordCanary" else desktopName;
           desktopName = "Discord Canary";
         };
         development = rec {
           pname = "discord-development";
-          binaryName = if stdenv.isLinux then "DiscordDevelopment" else desktopName;
+          binaryName = if stdenv.hostPlatform.isLinux then "DiscordDevelopment" else desktopName;
           desktopName = "Discord Development";
         };
       }

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     icu
     cyrus_sasl
     snappy
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security
   ];
 

@@ -67,26 +67,26 @@
 , withAlsaLib ? false
 , withAthena ? false
 , withCsrc ? true
-, withDbus ? stdenv.isLinux
+, withDbus ? stdenv.hostPlatform.isLinux
 , withGTK3 ? withPgtk && !noGui
 , withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
-, withGpm ? stdenv.isLinux
+, withGpm ? stdenv.hostPlatform.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 # Emacs 30+ has native JSON support
 , withJansson ? lib.versionOlder version "30"
 , withMailutils ? true
 , withMotif ? false
-, withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
+, withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui)
 , withPgtk ? false
-, withSelinux ? stdenv.isLinux
+, withSelinux ? stdenv.hostPlatform.isLinux
 , withSQLite3 ? lib.versionAtLeast version "29"
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withToolkitScrollBars ? true
 , withTreeSitter ? lib.versionAtLeast version "29"
 , withWebP ? lib.versionAtLeast version "29"
-, withX ? !(stdenv.isDarwin || noGui || withPgtk)
+, withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
-, withXwidgets ? !stdenv.isDarwin && !noGui && (withGTK3 || withPgtk)
+, withXwidgets ? !stdenv.hostPlatform.isDarwin && !noGui && (withGTK3 || withPgtk)
 , withSmallJaDic ? false
 , withCompressInstall ? true
 
@@ -117,10 +117,10 @@
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
 
 assert noGui -> !(withX || withGTK3 || withNS || variant == "macport");
-assert withAcl -> stdenv.isLinux;
-assert withAlsaLib -> stdenv.isLinux;
-assert withGpm -> stdenv.isLinux;
-assert withNS -> stdenv.isDarwin && !(withX || variant == "macport");
+assert withAcl -> stdenv.hostPlatform.isLinux;
+assert withAlsaLib -> stdenv.hostPlatform.isLinux;
+assert withGpm -> stdenv.hostPlatform.isLinux;
+assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
 assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
 
@@ -229,9 +229,9 @@ mkDerivation (finalAttrs: {
     dbus
   ] ++ lib.optionals withSelinux [
     libselinux
-  ] ++ lib.optionals (!stdenv.isDarwin && withGTK3) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && withGTK3) [
     gsettings-desktop-schemas
-  ] ++ lib.optionals (stdenv.isLinux && withX) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withX) [
     libotf
     m17n_lib
   ] ++ lib.optionals (withX && withGTK3) [
@@ -275,7 +275,7 @@ mkDerivation (finalAttrs: {
     libXi
   ] ++ lib.optionals withXwidgets [
     webkitgtk
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     sigtool
   ] ++ lib.optionals withNS [
     librsvg
@@ -332,7 +332,7 @@ mkDerivation (finalAttrs: {
     (lib.withFeature true "mac")
     (lib.withFeature true "xml2")
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.withFeature withNS "ns")
   ]
   ++ [
@@ -399,7 +399,7 @@ mkDerivation (finalAttrs: {
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 
-  postFixup = lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
+  postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && withX && toolkit == "lucid") ''
       patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
       patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';

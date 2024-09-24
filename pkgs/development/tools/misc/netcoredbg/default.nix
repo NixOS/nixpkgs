@@ -62,8 +62,8 @@ stdenv.mkDerivation {
   # include source here so that autoPatchelfHook can do it's job
   src = managed;
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
-  buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
   installPhase = ''
     mkdir -p $out/share/netcoredbg $out/bin
     cp ${unmanaged}/* $out/share/netcoredbg

@@ -28,7 +28,7 @@ buildDunePackage rec {
     ctypes
     ppx_expect
   ];
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   meta = {
     description = "Js_of_ocaml Javascript stubs for the OCaml ctypes library";

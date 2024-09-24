@@ -16,7 +16,7 @@ buildGoModule {
   nativeCheckInputs = with llvmPackages; [
     clang
     llvm
-  ] ++ lib.optionals stdenv.isDarwin [ getconf ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
 
   meta = with lib; {
     homepage = "https://github.com/SRI-CSL/gllvm";

@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     '';
 
   # One test fails on mips.
-  # doCheck = !stdenv.isMips;
+  # doCheck = !stdenv.hostPlatform.isMips;
   # https://bugzilla.kernel.org/show_bug.cgi?id=203793
   doCheck = false;
 

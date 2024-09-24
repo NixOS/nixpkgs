@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     glib # for glib-compile-schemas
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

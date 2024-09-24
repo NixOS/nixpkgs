@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     quazip
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/bin/texstudio.app" "$out/Applications"
     rm -d "$out/bin"

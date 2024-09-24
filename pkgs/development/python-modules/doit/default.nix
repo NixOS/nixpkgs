@@ -34,7 +34,7 @@ let
       cloudpickle
       importlib-metadata
       toml
-    ] ++ lib.optional stdenv.isLinux pyinotify ++ lib.optional stdenv.isDarwin macfsevents;
+    ] ++ lib.optional stdenv.hostPlatform.isLinux pyinotify ++ lib.optional stdenv.hostPlatform.isDarwin macfsevents;
 
     nativeCheckInputs = [
       configclass
@@ -51,7 +51,7 @@ let
     passthru.tests = {
       # hangs on darwin
       check = doit.overridePythonAttrs (_: {
-        doCheck = !stdenv.isDarwin;
+        doCheck = !stdenv.hostPlatform.isDarwin;
       });
     };
 

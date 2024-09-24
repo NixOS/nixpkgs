@@ -90,9 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     check
     json-glib
     texlive.bin.core
-  ] ++ lib.optional stdenv.isLinux libseccomp ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.updateScript = gitUpdater { };
 

@@ -16,7 +16,7 @@
   # runtime dependencies
 , cups
   # runtime dependencies for GTK+ Look and Feel
-, gtkSupport ? stdenv.isLinux
+, gtkSupport ? stdenv.hostPlatform.isLinux
 , cairo
 , glib
 , gtk2
@@ -48,7 +48,7 @@ let
     gtk3
   ] ++ lib.optionals (gtkSupport && lib.versionOlder dist.jdkVersion "17") [
     gtk2
-  ] ++ lib.optionals (stdenv.isLinux && enableJavaFX) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && enableJavaFX) [
     ffmpeg.lib
   ];
 
@@ -75,12 +75,12 @@ let
 
     nativeBuildInputs = [
       unzip
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
       makeWrapper
     ];
 
-    buildInputs = lib.optionals stdenv.isLinux [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       freetype
@@ -92,9 +92,9 @@ let
       xorg.libXtst
       xorg.libXxf86vm
       zlib
-    ] ++ lib.optionals (stdenv.isLinux && enableJavaFX) runtimeDependencies;
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux && enableJavaFX) runtimeDependencies;
 
-    autoPatchelfIgnoreMissingDeps = if (stdenv.isLinux && enableJavaFX) then [
+    autoPatchelfIgnoreMissingDeps = if (stdenv.hostPlatform.isLinux && enableJavaFX) then [
       "libavcodec*.so.*"
       "libavformat*.so.*"
     ] else null;
@@ -126,7 +126,7 @@ let
       cat <<EOF >> $out/nix-support/setup-hook
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       # We cannot use -exec since wrapProgram is a function but not a command.
       #
       # jspawnhelper is executed from JVM, so it doesn't need to wrap it, and it
@@ -138,14 +138,14 @@ let
       done
     ''
     # FIXME: move all of the above to installPhase.
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       find "$out" -name libfontmanager.so -exec \
         patchelf --add-needed libfontconfig.so {} \;
     '';
 
     # fixupPhase is moving the man to share/man which breaks it because it's a
     # relative symlink.
-    postFixup = lib.optionalString stdenv.isDarwin ''
+    postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
     '';
 

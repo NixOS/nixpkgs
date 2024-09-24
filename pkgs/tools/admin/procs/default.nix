@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-EifER0wt2Nw7WrlVwc49tZHH/av4OkzTPYSzl9mVJI8=";
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv Libsystem ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv Libsystem ];
 
   meta = with lib; {
     description = "Modern replacement for ps written in Rust";

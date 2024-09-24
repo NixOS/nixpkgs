@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rYQxIttuGBGEkYkFtSBl8ce1I/Akm6FxeITJcaIeP6M=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   meta = with lib; {
     description = "Command line utility for batch-renaming files";

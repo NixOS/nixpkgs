@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
   # x86_64-darwin: fails 'stack-overflow' tests on Rosetta 2 emulator
-  doCheck = !stdenv.isCygwin && !stdenv.isFreeBSD && !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64) && !stdenv.buildPlatform.isRiscV64;
+  doCheck = !stdenv.hostPlatform.isCygwin && !stdenv.hostPlatform.isFreeBSD && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) && !stdenv.buildPlatform.isRiscV64;
 
   # On macOS, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.

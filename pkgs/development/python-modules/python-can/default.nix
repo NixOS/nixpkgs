@@ -74,7 +74,7 @@ buildPythonPackage rec {
       "test_pack_unpack"
       "test_receive"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # timing sensitive
       "test_general"
       "test_gap"

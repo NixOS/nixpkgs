@@ -50,7 +50,7 @@ in buildGoModule rec {
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit ];
 
   passthru.tests = { inherit (nixosTests) geth; };
 

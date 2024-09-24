@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     protobuf
     installShellFiles
   ];
-  buildInputs = lib.optionals stdenv.isDarwin (
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     [ libiconv darwin.libobjc ]
     ++ (with darwin.apple_sdk_11_0.frameworks; [
       Security

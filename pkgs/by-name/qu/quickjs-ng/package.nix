@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_QJS_EXE" stdenv.hostPlatform.isStatic)
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     "-Wno-error=stringop-overflow"
   ]);
 

@@ -78,7 +78,7 @@ buildPythonPackage rec {
     "'not network'"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
     "test_is_block_device"
   ];

@@ -74,7 +74,7 @@ let
   packInstall = swiplPath: pack:
     ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/extra-pack\"), silent(true), interactive(false)])." -t "halt."
     '';
-  withGui' = withGui && !stdenv.isDarwin;
+  withGui' = withGui && !stdenv.hostPlatform.isDarwin;
   optionalDependencies = []
                          ++ (lib.optional withDb db)
                          ++ (lib.optional withJava jdk)
@@ -85,7 +85,7 @@ let
                          ++ (lib.optionals withGui' [ libXt libXext libXpm libXft libXinerama
                                                       libjpeg libSM freetype fontconfig
                                                     ])
-                         ++ (lib.optional stdenv.isDarwin Security)
+                         ++ (lib.optional stdenv.hostPlatform.isDarwin Security)
                          ++ extraLibraries';
 in
 stdenv.mkDerivation {
@@ -126,8 +126,8 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DSWIPL_INSTALL_IN_LIB=ON" ]
                ++ lib.optionals (!withNativeCompiler) [
                  # without these options, the build will embed full compiler paths
-                 "-DSWIPL_CC=${if stdenv.isDarwin then "clang" else "gcc"}"
-                 "-DSWIPL_CXX=${if stdenv.isDarwin then "clang++" else "g++"}"
+                 "-DSWIPL_CC=${if stdenv.hostPlatform.isDarwin then "clang" else "gcc"}"
+                 "-DSWIPL_CXX=${if stdenv.hostPlatform.isDarwin then "clang++" else "g++"}"
                ];
 
   preInstall = ''

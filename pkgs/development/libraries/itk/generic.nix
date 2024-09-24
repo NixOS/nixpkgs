@@ -147,7 +147,7 @@ stdenv.mkDerivation {
       libX11
       libuuid
     ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optionals enablePython [ python ]
     ++ lib.optionals withVtk [ vtk ];
   # Due to ITKVtkGlue=ON and the additional dependencies needed to configure VTK 9

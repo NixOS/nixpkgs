@@ -6,8 +6,8 @@
   makeWrapper,
   stdenvNoCC,
 
-  gamemodeSupport ? stdenvNoCC.isLinux,
-  textToSpeechSupport ? stdenvNoCC.isLinux,
+  gamemodeSupport ? stdenvNoCC.hostPlatform.isLinux,
+  textToSpeechSupport ? stdenvNoCC.hostPlatform.isLinux,
   additionalLibs ? [ ],
 
   # dependencies

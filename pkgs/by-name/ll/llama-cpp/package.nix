@@ -20,7 +20,7 @@
 , blas
 
 , pkg-config
-, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport
 , vulkanSupport ? false
 , rpcSupport ? false
 , shaderc
@@ -98,7 +98,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoAddDriverRunpath
   ];
 
-  buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
+  buildInputs = optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
@@ -163,6 +163,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ dit7ya elohmeier philiptaron ];
     platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.isDarwin);
+    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
   };
 })

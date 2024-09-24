@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-blas-libs=-lblas"
     "--without-archnative"
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
     "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"

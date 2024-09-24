@@ -34,9 +34,9 @@ buildGoModule rec {
   tags = ["promtail_journal_enabled"];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev ];
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';

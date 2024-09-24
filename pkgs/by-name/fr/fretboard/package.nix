@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -65,6 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fretboard";
     maintainers = with maintainers; [ michaelgrahamevans ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

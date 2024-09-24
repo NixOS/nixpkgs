@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       qtmultimedia
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
       qtwayland
     ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   qtWrapperArgs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libpcap
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
     ];
 

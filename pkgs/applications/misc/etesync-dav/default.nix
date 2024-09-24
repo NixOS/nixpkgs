@@ -42,6 +42,6 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "etesync-dav";
     license = licenses.gpl3;
     maintainers = with maintainers; [ thyol valodim ];
-    broken = stdenv.isDarwin; # pyobjc-framework-Cocoa is missing
+    broken = stdenv.hostPlatform.isDarwin; # pyobjc-framework-Cocoa is missing
   };
 }

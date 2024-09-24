@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ zlib ] ++ lib.optional stdenv.isLinux util-linux;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkTarget = "tests";
   installPhase = ''
     runHook preInstall

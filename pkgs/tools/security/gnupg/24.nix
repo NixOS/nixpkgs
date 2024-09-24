@@ -4,8 +4,8 @@
 , adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
 , enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
-, guiSupport ? stdenv.isDarwin, pinentry
-, withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
+, guiSupport ? stdenv.hostPlatform.isDarwin, pinentry
+, withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal, tpm2-tss
 , nixosTests
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-    '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
   ++ lib.optional withTpm2Tss "--with-tss=intel"
-  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
   postInstall = if enableMinimal
   then ''

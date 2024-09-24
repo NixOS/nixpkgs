@@ -21,7 +21,7 @@
 let
   # fix for: https://github.com/NixOS/nixpkgs/issues/272156
   buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 in
 buildNpmPackage' rec {
@@ -47,7 +47,7 @@ buildNpmPackage' rec {
       (writeShellScriptBin "phantomjs" "echo 2.1.1")
       pkg-config
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       makeWrapper
       copyDesktopItems
     ];
@@ -58,7 +58,7 @@ buildNpmPackage' rec {
       cairo
       pango
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreText
     ];
 
@@ -100,7 +100,7 @@ buildNpmPackage' rec {
     pushd packages/bruno-electron
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           cp -r ${electron.dist}/Electron.app ./
           find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
@@ -136,7 +136,7 @@ buildNpmPackage' rec {
 
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
 

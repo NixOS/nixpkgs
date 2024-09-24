@@ -30,17 +30,17 @@ stdenv.mkDerivation rec {
 
   # Emulate jplatform64.sh configuration variables
   jplatform =
-    if stdenv.isDarwin then "darwin"
+    if stdenv.hostPlatform.isDarwin then "darwin"
     else if stdenv.hostPlatform.isAarch then "raspberry"
-    else if stdenv.isLinux then "linux"
+    else if stdenv.hostPlatform.isLinux then "linux"
     else "unsupported";
 
   j64x =
-    if stdenv.is32bit then "j32"
-    else if stdenv.isx86_64 then
-      if stdenv.isLinux && avx2Support then "j64avx2" else "j64"
-    else if stdenv.isAarch64 then
-      if stdenv.isDarwin then "j64arm" else "j64"
+    if stdenv.hostPlatform.is32bit then "j32"
+    else if stdenv.hostPlatform.isx86_64 then
+      if stdenv.hostPlatform.isLinux && avx2Support then "j64avx2" else "j64"
+    else if stdenv.hostPlatform.isAarch64 then
+      if stdenv.hostPlatform.isDarwin then "j64arm" else "j64"
     else "unsupported";
 
   env.NIX_LDFLAGS = "-lgmp";
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.all;
     mainProgram = "jconsole";
   };

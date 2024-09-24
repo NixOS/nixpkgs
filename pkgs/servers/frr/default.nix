@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     rtrlib
     zeromq
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
   ] ++ lib.optionals snmpSupport [
     net-snmp

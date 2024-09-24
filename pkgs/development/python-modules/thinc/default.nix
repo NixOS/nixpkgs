@@ -58,7 +58,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Accelerate
     CoreFoundation
     CoreGraphics

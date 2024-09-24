@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./cargo_lock.patch ];
 
   buildInputs = [ kclvm rustc ] ++ (
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

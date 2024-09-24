@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # rustfmt is brought into scope to fix the following
   #   warning: cranelift-codegen@0.108.0:
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     install -d -m0755 $dev/include/wasmtime
     install -m0644 $src/crates/c-api/include/*.h $dev/include
     install -m0644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id \
       $dev/lib/libwasmtime.dylib \
       $dev/lib/libwasmtime.dylib

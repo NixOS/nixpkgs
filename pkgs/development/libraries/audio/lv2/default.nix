@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "-Dtests=disabled"
     # Avoid heavyweight python dependencies.
     "-Ddocs=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Dlv2dir=${placeholder "out"}/lib/lv2"
   ];
 

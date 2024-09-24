@@ -79,12 +79,12 @@ buildGoModule rec {
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isLinux [ "-I${lib.getDev systemd}/include" ]);
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/grafana-agent)" \
       $out/bin/grafana-agent

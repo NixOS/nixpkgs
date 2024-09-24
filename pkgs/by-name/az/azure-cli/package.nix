@@ -191,7 +191,7 @@ py.pkgs.toPythonApplication (
         chardet
         colorama
       ]
-      ++ lib.optional stdenv.isLinux distro
+      ++ lib.optional stdenv.hostPlatform.isLinux distro
       ++ [
         fabric
         javaproperties

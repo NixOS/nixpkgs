@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libexif
     pango
     wxGTK
-  ] ++ lib.optional stdenv.isDarwin Cocoa;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   enableParallelBuilding = true;
 

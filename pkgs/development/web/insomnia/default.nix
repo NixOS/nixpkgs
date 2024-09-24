@@ -29,7 +29,7 @@ let
     maintainers = with maintainers; [ markus1189 kashw2 DataHearth ];
   };
 in
-if stdenv.isDarwin then stdenv.mkDerivation {
+if stdenv.hostPlatform.isDarwin then stdenv.mkDerivation {
   inherit pname version src meta;
     sourceRoot = ".";
 

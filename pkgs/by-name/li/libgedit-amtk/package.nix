@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     dbus # For dbus-run-session
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     runHook preCheck
 

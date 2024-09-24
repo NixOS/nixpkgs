@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     [
       installShellFiles
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
     ];
 

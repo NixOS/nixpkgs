@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   ];
 
   # Ensure that meson can find an Objective-C compiler on Darwin.
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace meson.build \
       --replace-fail "project('gfxstream_backend', 'cpp', 'c'" "project('gfxstream_backend', 'cpp', 'c', 'objc'"
   '';
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ meson ninja pkg-config python3 ];
   buildInputs = [ aemu libglvnd vulkan-headers vulkan-loader xorg.libX11 ]
     ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Cocoa
       darwin.apple_sdk.frameworks.CoreGraphics
       darwin.apple_sdk.frameworks.IOKit
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       darwin.apple_sdk.frameworks.QuartzCore
     ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = toString [
       "-framework Cocoa"
       "-framework IOKit"
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   };
 
   # dlopens libvulkan.
-  preConfigure = lib.optionalString (!stdenv.isDarwin) ''
+  preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mesonFlagsArray=(-Dcpp_link_args="-Wl,--push-state -Wl,--no-as-needed -lvulkan -Wl,--pop-state")
   '';
 

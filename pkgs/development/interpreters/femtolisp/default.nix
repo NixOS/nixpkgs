@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     homepage = "https://git.sr.ht/~ft/femtolisp";
     license = with lib.licenses; [ mit bsd3 ];
     maintainers = with lib.maintainers; [ moody ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.unix;
     mainProgram = "flisp";
   };

@@ -58,18 +58,18 @@ stdenv.mkDerivation {
     sqlite
     git
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     qtmacextras
   ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "TEXMACS_GUI" "Qt")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "./TeXmacs.app/Contents/Resources")
   ];
 
   env.NIX_LDFLAGS = "-lz";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv TeXmacs.app $out/Applications/
     makeWrapper $out/Applications/TeXmacs.app/Contents/MacOS/TeXmacs $out/bin/texmacs
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     ])
   ];
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     wrapQtApp $out/bin/texmacs
   '';
 

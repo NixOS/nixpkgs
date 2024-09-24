@@ -73,7 +73,7 @@ builder rec {
     # Read the header of the patch to more info
     ./eai_system.patch
   ] ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
-  ++ lib.optional stdenv.isDarwin
+  ++ lib.optional stdenv.hostPlatform.isDarwin
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
       sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
@@ -88,7 +88,7 @@ builder rec {
 
   configureFlags = [
     "--with-libreadline-prefix=${lib.getDev readline}"
-  ] ++ lib.optionals stdenv.isSunOS [
+  ] ++ lib.optionals stdenv.hostPlatform.isSunOS [
     # Make sure the right <gmp.h> is found, and not the incompatible
     # /usr/include/mp.h from OpenSolaris.  See
     # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>

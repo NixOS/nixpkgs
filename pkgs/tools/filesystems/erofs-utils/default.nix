@@ -10,7 +10,7 @@
   xz,
   zlib,
   libselinux,
-  fuseSupport ? stdenv.isLinux,
+  fuseSupport ? stdenv.hostPlatform.isLinux,
   selinuxSupport ? false,
   lzmaSupport ? false,
 }:

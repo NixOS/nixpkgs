@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
   ''
   # upstream builds shared library unconditionally. Also, it has no

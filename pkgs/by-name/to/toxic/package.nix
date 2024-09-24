@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtoxcore libsodium ncurses curl gdk-pixbuf libnotify
-  ] ++ lib.optionals (!stdenv.isAarch32) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isAarch32) [
     openal libopus libvpx freealut qrencode
   ];
   nativeBuildInputs = [ pkg-config libconfig ];

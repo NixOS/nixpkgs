@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "introspection" withIntrospection)
     "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
     "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
-  ] ++ lib.optionals stdenv.isAarch32 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     # the box test is failing with SIGBUS on armv7l-linux
     # https://github.com/ebassi/graphene/issues/215
     "-Darm_neon=false"

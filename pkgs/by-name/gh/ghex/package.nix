@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dvapi=true"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # mremap does not exist on darwin
     "-Dmmap-buffer-backend=false"
   ];

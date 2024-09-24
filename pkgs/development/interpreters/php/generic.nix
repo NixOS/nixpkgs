@@ -58,7 +58,7 @@ let
     , zendSignalsSupport ? true
     , zendMaxExecutionTimersSupport ? false
     , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
-    , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    , valgrindSupport ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
 
@@ -213,7 +213,7 @@ let
           enableParallelBuilding = true;
 
           nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c ]
-            ++ lib.optional stdenv.isDarwin xcbuild;
+            ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -285,7 +285,7 @@ let
               if [ -f "scripts/dev/genfiles" ]; then
                 ./scripts/dev/genfiles
               fi
-            '' + lib.optionalString stdenv.isDarwin ''
+            '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
               substituteInPlace configure --replace-fail "-lstdc++" "-lc++"
             '';
 

@@ -54,6 +54,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/aresio/simpful/releases/tag/${version}";
     license = with licenses; [ lgpl3Only ];
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

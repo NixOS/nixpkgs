@@ -33,7 +33,7 @@ let
       '(''${LLVM_MAIN_SRC_DIR}/' '('
     mkdir -p libunwind/include
     tar -xf "${libunwind.src}" --wildcards -C libunwind/include --strip-components=2 "libunwind-*/include/"
-  '' + lib.optionalString (lib.versions.major release_version == "13" && stdenv.isDarwin) ''
+  '' + lib.optionalString (lib.versions.major release_version == "13" && stdenv.hostPlatform.isDarwin) ''
     substituteInPlace MachO/CMakeLists.txt --replace \
       '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';

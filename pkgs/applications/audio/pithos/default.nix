@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
     (with pythonPackages; [ pygobject3 pylast ]);
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
     mainProgram = "pithos";
     homepage = "https://pithos.github.io/";

@@ -79,7 +79,7 @@ buildPythonPackage rec {
       # fails due to type errors
       "test_num_shards"
     ]
-    ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       "test_training"
       "test_training_coca"
       "test_training_unfreezing_vit"

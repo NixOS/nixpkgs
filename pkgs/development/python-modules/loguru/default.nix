@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/test_type_hinting.py" # avoid dependency on mypy
-  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_multiprocessing.py" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_multiprocessing.py" ];
 
   disabledTests =
     [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       # Slow test
       "test_time_rotation"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_rotation_and_retention"
       "test_rotation_and_retention_timed_file"
       "test_renaming"

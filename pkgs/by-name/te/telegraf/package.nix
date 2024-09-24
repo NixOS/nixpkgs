@@ -34,7 +34,7 @@ buildGo123Module rec {
     version = testers.testVersion {
       package = telegraf;
     };
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) telegraf;
   };
 

@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9HLbGC6j0Wq/lG//CeEAfnYzlGG14CnDpmluL1moHWQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Security ];
   nativeBuildInputs = [
     pandoc
     installShellFiles
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
-      nixos = lib.optionalAttrs stdenv.isLinux nixosTests.ntpd-rs;
+      nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.ntpd-rs;
       version = testers.testVersion {
         package = ntpd-rs;
         inherit version;
@@ -84,6 +84,6 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ntp-ctl";
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

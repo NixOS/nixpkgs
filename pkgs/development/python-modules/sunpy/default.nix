@@ -103,7 +103,7 @@ buildPythonPackage rec {
   '';
 
   # darwin has write permission issues
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     export HOME=$(mktemp -d)

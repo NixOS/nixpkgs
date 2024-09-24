@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uode3RZFcJWHle6qcPFIU7/DTMmHH4rd6NpH4SvVRnk=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.GLUT
   ];

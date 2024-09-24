@@ -119,8 +119,8 @@ stdenv.mkDerivation rec {
 
   src = srcs.${system} or throwSystem;
 
-  dontUnpack = stdenv.isLinux;
-  unpackPhase = lib.optionalString stdenv.isDarwin ''
+  dontUnpack = stdenv.hostPlatform.isLinux;
+  unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
     zcat < zoomus.pkg/Payload | cpio -i
   '';
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xar
     cpio
   ];
@@ -151,9 +151,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup =  lib.optionalString stdenv.isDarwin ''
+  postFixup =  lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"

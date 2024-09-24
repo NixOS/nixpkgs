@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     nettle
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
   checkFlags = [
     # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/297

@@ -74,12 +74,12 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
     ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  preCheck = lib.optionalString stdenv.isLinux ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     ${redis-server}/bin/redis-server &
     REDIS_PID=$!
   '';
 
-  postCheck = lib.optionalString stdenv.isLinux ''
+  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     kill $REDIS_PID
   '';
 
@@ -98,7 +98,7 @@ buildPythonPackage rec {
     "test_no_dangling_fds"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/main/test_redis.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/main/test_redis.py" ];
 
   pythonImportsCheck = [ "mocket" ];
 

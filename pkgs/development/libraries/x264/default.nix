@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ./disable-arm-neon-default.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
   '';
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = lib.optional enableShared "--enable-shared"
-    ++ lib.optional (!stdenv.isi686) "--enable-pic"
+    ++ lib.optional (!stdenv.hostPlatform.isi686) "--enable-pic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
   makeFlags = [

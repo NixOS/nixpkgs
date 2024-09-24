@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [ rust-jemalloc-sys' ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security

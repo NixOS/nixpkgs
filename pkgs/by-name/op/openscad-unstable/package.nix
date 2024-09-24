@@ -92,7 +92,7 @@ clangStdenv.mkDerivation rec {
     qtbase
     qtmultimedia
   ]
-  ++ lib.optionals clangStdenv.isLinux [
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     xorg.libXdmcp
     libICE
     libSM
@@ -101,7 +101,7 @@ clangStdenv.mkDerivation rec {
     qtwayland
     libGLU
   ]
-  ++ lib.optional clangStdenv.isDarwin qtmacextras
+  ++ lib.optional clangStdenv.hostPlatform.isDarwin qtmacextras
   ;
   cmakeFlags = [
     "-DEXPERIMENTAL=ON" # enable experimental options

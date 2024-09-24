@@ -16,11 +16,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postPatch = ''
     pushd sourcery_binaries/install
-    rm -r win ${if stdenv.isLinux then "mac" else "linux"}
+    rm -r win ${if stdenv.hostPlatform.isLinux then "mac" else "linux"}
     popd
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     stdenv.cc.cc.lib

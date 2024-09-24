@@ -46,9 +46,9 @@ rustPlatform.buildRustPackage rec {
     gtk3
     gtk-layer-shell
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
   ];
 

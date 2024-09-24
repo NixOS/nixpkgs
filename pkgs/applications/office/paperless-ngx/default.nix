@@ -81,13 +81,13 @@ let
     nativeBuildInputs = [
       pkg-config
       python3
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
     ];
 
     buildInputs = [
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
       darwin.apple_sdk.frameworks.CoreText
     ];
@@ -254,7 +254,7 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     inherit python path frontend tesseract5;

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [ ./fix-pkgconfig.patch ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # Backport patch to support 64-bit inodes on 32-bit systems
       # FIXME: remove in next update
       (fetchpatch {
@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ vulkan-headers ]
-    ++ lib.optionals stdenv.isLinux [ libX11 libxcb libXrandr wayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libxcb libXrandr wayland ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include" ]
-    ++ lib.optional stdenv.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
-    ++ lib.optional stdenv.isLinux "-DSYSCONFDIR=${addDriverRunpath.driverLink}/share"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
+    ++ lib.optional stdenv.hostPlatform.isLinux "-DSYSCONFDIR=${addDriverRunpath.driverLink}/share"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DUSE_GAS=OFF";
 
   outputs = [ "out" "dev" ];

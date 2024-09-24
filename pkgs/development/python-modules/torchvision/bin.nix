@@ -39,13 +39,13 @@ buildPythonPackage {
   # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
   buildInputs =
     with cudaPackages;
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # $out/${sitePackages}/torchvision/_C.so wants libcudart.so.11.0 but torchvision.libs only ships
       # libcudart.$hash.so.11.0
       cuda_cudart
     ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     addDriverRunpath
     autoPatchelfHook
   ];
@@ -60,7 +60,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torchvision" ];
 
-  preInstall = lib.optionalString stdenv.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 

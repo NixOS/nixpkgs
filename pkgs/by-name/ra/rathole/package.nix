@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
 
   __darwinAllowLocalNetworking = true;
 

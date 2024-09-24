@@ -99,7 +99,7 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test_outer_boundless_pixel_fidelity"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_reproject_error_propagation" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
   pythonImportsCheck = [ "rasterio" ];
 

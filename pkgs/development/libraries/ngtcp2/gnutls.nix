@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   nativeCheckInputs = [ cunit ]
-    ++ lib.optional stdenv.isDarwin ncurses;
+    ++ lib.optional stdenv.hostPlatform.isDarwin ncurses;
 
   passthru.tests = knot-dns.passthru.tests; # the only consumer so far
 

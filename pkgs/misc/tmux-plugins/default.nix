@@ -593,7 +593,7 @@ in rec {
       rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
       sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
     };
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
     '';
   };

@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     makeWrapper '${gnvim-unwrapped}/bin/gnvim' "$out/bin/gnvim" \
       --prefix PATH : "${neovim}/bin" \
       --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share"
     ln -s '${gnvim-unwrapped}/share/icons' "$out/share/icons"
 

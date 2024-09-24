@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   # We can handle stripping ourselves.
   # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
-  INSTALLFLAGS = lib.optionals (!stdenv.isDarwin) "-m 555";
+  INSTALLFLAGS = lib.optionals (!stdenv.hostPlatform.isDarwin) "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 

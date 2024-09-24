@@ -72,7 +72,7 @@ stdenv.mkDerivation (
       changelog = "https://www.cendio.com/thinlinc/docs/relnotes/${version}/";
       maintainers = with lib.maintainers; [ felixalbrigtsen ];
       platforms = with lib.platforms; linux ++ darwin ++ windows;
-      broken = !(stdenv.isLinux && stdenv.isx86_64);
+      broken = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
       mainProgram = "tlclient";
     };
   }

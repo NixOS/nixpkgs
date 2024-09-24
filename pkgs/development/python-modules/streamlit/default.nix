@@ -76,7 +76,7 @@ buildPythonPackage rec {
     typing-extensions
     tzlocal
     validators
-  ] ++ lib.optionals (!stdenv.isDarwin) [ watchdog ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub
   doCheck = false;

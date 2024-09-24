@@ -62,8 +62,8 @@ let
   rocmRequested = shouldEnable "rocm" config.rocmSupport;
   cudaRequested = shouldEnable "cuda" config.cudaSupport;
 
-  enableRocm = rocmRequested && stdenv.isLinux;
-  enableCuda = cudaRequested && stdenv.isLinux;
+  enableRocm = rocmRequested && stdenv.hostPlatform.isLinux;
+  enableCuda = cudaRequested && stdenv.hostPlatform.isLinux;
 
   rocmLibs = [
     rocmPackages.clr
@@ -144,12 +144,12 @@ goBuild {
       makeWrapper
       autoAddDriverRunpath
     ]
-    ++ lib.optionals stdenv.isDarwin metalFrameworks;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin metalFrameworks;
 
   buildInputs =
     lib.optionals enableRocm (rocmLibs ++ [ libdrm ])
     ++ lib.optionals enableCuda cudaLibs
-    ++ lib.optionals stdenv.isDarwin metalFrameworks;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin metalFrameworks;
 
   patches = [
     # disable uses of `git` in the `go generate` script
@@ -209,7 +209,7 @@ goBuild {
           package = ollama;
         };
       }
-      // lib.optionalAttrs stdenv.isLinux {
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         inherit ollama-rocm ollama-cuda;
         service = nixosTests.ollama;
         service-cuda = nixosTests.ollama-cuda;

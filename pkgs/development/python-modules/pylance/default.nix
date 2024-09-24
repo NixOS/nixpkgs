@@ -65,7 +65,7 @@ buildPythonPackage rec {
       libiconv
       protobuf
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Security
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     cd python/python/tests
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
     "test_convert_int_tensors"
     "test_ground_truth"
@@ -127,6 +127,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ natsukium ];
     # test_indices.py ...sss.Fatal Python error: Fatal Python error: Illegal instructionIllegal instruction
     # File "/nix/store/wiiccrs0vd1qbh4j6ki9p40xmamsjix3-python3.12-pylance-0.17.0/lib/python3.12/site-packages/lance/indices.py", line 237 in train_ivf
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

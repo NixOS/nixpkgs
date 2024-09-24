@@ -4,7 +4,7 @@
 , postgresql
 , openssl
 , libxcrypt
-, withPam ? stdenv.isLinux
+, withPam ? stdenv.hostPlatform.isLinux
 , pam
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
-  patches = lib.optionals (stdenv.isDarwin) [
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin) [
     # Build checks for strlcpy being available in the system, but doesn't
     # actually exclude its own copy from being built
     ./darwin-strlcpy.patch

@@ -11,8 +11,8 @@
 , makeWrapper
 , pkg-config
 , enableEmacs ? false, emacs
-, enableLout ? stdenv.isLinux, lout
-, enablePloticus ? stdenv.isLinux, ploticus
+, enableLout ? stdenv.hostPlatform.isLinux, lout
+, enablePloticus ? stdenv.hostPlatform.isLinux, ploticus
 , enableTex ? true, texliveSmall
 }:
 

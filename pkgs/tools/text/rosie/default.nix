@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sed -iE '/ld.so.conf.d/d' Makefile
   '';
 
-  preInstall = lib.optionalString stdenv.isDarwin ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath $out/lib build/bin/rosie
     install_name_tool -id $out/lib/librosie.dylib build/lib/librosie.dylib
   '';

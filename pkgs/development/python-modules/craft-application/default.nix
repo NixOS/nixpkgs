@@ -96,7 +96,7 @@ buildPythonPackage rec {
       # Tests expecting pytest-time
       "test_monitor_builds_success"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "test_process_grammar_build_for"
       "test_process_grammar_platform"

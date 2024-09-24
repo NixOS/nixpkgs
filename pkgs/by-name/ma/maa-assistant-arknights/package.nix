@@ -20,7 +20,7 @@ let
   sources = lib.importJSON ./pin.json;
 in
 # https://github.com/NixOS/nixpkgs/issues/314160
-(if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv).mkDerivation (finalAttr: {
+(if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv).mkDerivation (finalAttr: {
   pname = "maa-assistant-arknights" + lib.optionalString isBeta "-beta";
   version = if isBeta then sources.beta.version else sources.stable.version;
 

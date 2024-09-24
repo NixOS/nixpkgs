@@ -7644,7 +7644,7 @@ self: super: with self; {
   matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib {
-    stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
     ghostscript = pkgs.ghostscript_headless;
   };
@@ -10687,7 +10687,7 @@ self: super: with self; {
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = callPackage ../development/python-modules/psutil {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
 

@@ -605,7 +605,7 @@ in
   config = lib.modules.mkIf cfg.enable {
     assertions = [
       {
-        assertion = pkgs.stdenv.isx86_64;
+        assertion = pkgs.stdenv.hostPlatform.isx86_64;
         message = "Xen is currently not supported on ${pkgs.stdenv.hostPlatform.system}.";
       }
       {

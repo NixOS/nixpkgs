@@ -63,7 +63,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
   ];
 
@@ -95,7 +95,7 @@ buildGoModule rec {
       --replace-fail "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
       --replace-fail /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
   '';

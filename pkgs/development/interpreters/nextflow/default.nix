@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   };
 };
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   buildFHSEnv
   {
     name = "nextflow";

@@ -44,8 +44,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
-    ++ lib.optional (stdenv.isDarwin && mysqlSupport) libiconv
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && mysqlSupport) libiconv
     ++ lib.optional sqliteSupport sqlite
     ++ lib.optional postgresqlSupport postgresql
     ++ lib.optionals mysqlSupport [

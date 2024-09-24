@@ -45,7 +45,7 @@ stdenv.mkDerivation(finalAttrs: {
     SDL2
     SDL2_mixer
     timidity
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Cocoa
     CoreVideo
@@ -53,11 +53,11 @@ stdenv.mkDerivation(finalAttrs: {
 
   cmakeFlags = [ "-Wno-dev" ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/corsix-th \
     --set LUA_PATH "$LUA_PATH" \
     --set LUA_CPATH "$LUA_CPATH"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/CorsixTH.app $out/Applications
     wrapProgram $out/Applications/CorsixTH.app/Contents/MacOS/CorsixTH \

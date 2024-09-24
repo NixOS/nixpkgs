@@ -62,7 +62,7 @@ in rec {
     nativeBuildInputs = [ cmake doxygen yq ];
 
     buildInputs = [ getdns libyaml openssl systemd ]
-      ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
 
     postInstall = ''
       rm -r $out/share/doc

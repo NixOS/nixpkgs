@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-LpRUJ6IWdIk7uXYyQB22ITnZHOoe6WE3zHsHrSIZj8c=";
   };
 
-  postPatch = lib.optionalString stdenvNoCC.isLinux ''
+  postPatch = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
       --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
   '';

@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ configd Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ configd Security ];
 
   postInstall = ''
     wrapProgram "$out/bin/dmlive" --prefix PATH : "${lib.makeBinPath [ mpv ffmpeg nodejs ]}"
