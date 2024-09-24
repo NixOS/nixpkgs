@@ -37589,7 +37589,9 @@ with pkgs;
 
   gobuster = callPackage ../tools/security/gobuster { };
 
-  gotestwaf = callPackage ../tools/security/gotestwaf { };
+  gotestwaf = callPackage ../tools/security/gotestwaf {
+    buildGoModule = buildGo123Module;
+  };
 
   gotrue = callPackage ../tools/security/gotrue { };
 
