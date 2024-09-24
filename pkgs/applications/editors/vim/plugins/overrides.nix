@@ -131,6 +131,7 @@
   hurl
 , # must be lua51Packages
   luajitPackages
+, aider-chat
 ,
 }: self: super:
 let
@@ -1238,9 +1239,7 @@ in
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neorg = super.neorg.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
-  };
+  neorg = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.neorg; };
 
   neotest = super.neotest.overrideAttrs {
     dependencies = with self; [ nvim-nio plenary-nvim ];
@@ -1497,13 +1496,17 @@ in
     '';
   };
 
-  refactoring-nvim = super.refactoring-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-treesitter plenary-nvim ];
+  aider-nvim = super.aider-nvim.overrideAttrs {
+    patches = [ ./patches/aider.nvim/fix-paths.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/aider.lua --replace '@aider@' ${aider-chat}/bin/aider
+      substituteInPlace lua/helpers.lua --replace '@aider@' ${aider-chat}/bin/aider
+    '';
   };
 
-  render-markdown-nvim = super.render-markdown-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-treesitter ];
-    nvimRequireCheck = "render-markdown";
+  refactoring-nvim = super.refactoring-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter plenary-nvim ];
   };
 
   # needs  "http" and "json" treesitter grammars too

@@ -565,6 +565,7 @@ with lib.maintainers;
   linux-kernel = {
     members = [
       TredwellGit
+      k900
       ma27
       nequissimus
       qyliss
