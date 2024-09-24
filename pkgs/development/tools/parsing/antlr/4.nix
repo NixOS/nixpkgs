@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, jre
-, fetchFromGitHub, cmake, ninja, pkg-config
+{ lib
+, stdenv
+, fetchurl
+, jre
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
 
 # darwin only
 , CoreFoundation ? null
@@ -8,12 +14,13 @@
 , libuuid
 
 # ANTLR 4.9
-, utf8cpp }:
+, utf8cpp
+}:
 
 let
 
   mkAntlr = {
-    version, sourceSha256, jarSha256,
+    version, sourceHash, jarHash,
     extraCppBuildInputs ? [],
     extraCppCmakeFlags ? [],
     extraPatches ? [ ]
@@ -22,7 +29,7 @@ let
       owner = "antlr";
       repo = "antlr4";
       rev = version;
-      sha256 = sourceSha256;
+      hash = sourceHash;
     };
 
     antlr = stdenv.mkDerivation {
@@ -31,7 +38,7 @@ let
 
       src = fetchurl {
         url = "https://www.antlr.org/download/antlr-${version}-complete.jar";
-        sha256 = jarSha256;
+        hash = jarHash;
       };
 
       dontUnpack = true;
@@ -70,7 +77,7 @@ let
           frameworks. From a grammar, ANTLR generates a parser that can build and
           walk parse trees.
         '';
-        homepage = "https://www.antlr.org/";
+        homepage = "https://www.antlr.org";
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
         license = licenses.bsd3;
         platforms = platforms.unix;
@@ -108,9 +115,9 @@ let
 
 in {
   antlr4_13 = (mkAntlr {
-    version = "4.13.0";
-    sourceSha256 = "sha256-s1yAdScMYg1wFpYNsBAtpifIhQsnSAgJg7JjPDx+htc=";
-    jarSha256 = "sha256-vG9KvA0iWidXASbFFAJWnwAKje2jSHtw52QoQOVw5KY=";
+    version = "4.13.1";
+    sourceHash = "sha256-ky9nTDaS+L9UqyMsGBz5xv+NY1bPavaSfZOeXO1geaA=";
+    jarHash = "sha256-vBOpxXqN19UZaIghHl7eZXy2SjzpaGCGl+T2aCUahIc=";
     extraCppCmakeFlags = [
       # Generate CMake config files, which are not installed by default.
       "-DANTLR4_INSTALL=ON"
@@ -123,8 +130,8 @@ in {
 
   antlr4_12 = (mkAntlr {
     version = "4.12.0";
-    sourceSha256 = "sha256-0JMG8UYFT+IAWvARY2KnuXSr5X6LlVZN4LJHy5d4x08=";
-    jarSha256 = "sha256-iPGKK/rA3eEAntpcfc41ilKHf673ho9WIjpbzBUynkM=";
+    sourceHash = "sha256-0JMG8UYFT+IAWvARY2KnuXSr5X6LlVZN4LJHy5d4x08=";
+    jarHash = "sha256-iPGKK/rA3eEAntpcfc41ilKHf673ho9WIjpbzBUynkM=";
     extraCppCmakeFlags = [
       # Generate CMake config files, which are not installed by default.
       "-DANTLR4_INSTALL=ON"
@@ -137,8 +144,8 @@ in {
 
   antlr4_11 = (mkAntlr {
     version = "4.11.1";
-    sourceSha256 = "sha256-SUeDgfqLjYQorC8r/CKlwbYooTThMOILkizwQV8pocc=";
-    jarSha256 = "sha256-YpdeGStK8mIrcrXwExVT7jy86X923CpBYy3MVeJUc+E=";
+    sourceHash = "sha256-SUeDgfqLjYQorC8r/CKlwbYooTThMOILkizwQV8pocc=";
+    jarHash = "sha256-YpdeGStK8mIrcrXwExVT7jy86X923CpBYy3MVeJUc+E=";
     extraCppCmakeFlags = [
       # Generate CMake config files, which are not installed by default.
       "-DANTLR4_INSTALL=ON"
@@ -151,8 +158,8 @@ in {
 
   antlr4_10 = (mkAntlr {
     version = "4.10.1";
-    sourceSha256 = "sha256-Z1P81L0aPbimitzrHH/9rxsMCA6Qn3i42jFbUmVqu1E=";
-    jarSha256 = "sha256-QZSdQfINMdW4J3GHc13XVRCN9Ss422yGUQjTOCBA+Rg=";
+    sourceHash = "sha256-Z1P81L0aPbimitzrHH/9rxsMCA6Qn3i42jFbUmVqu1E=";
+    jarHash = "sha256-QZSdQfINMdW4J3GHc13XVRCN9Ss422yGUQjTOCBA+Rg=";
     extraCppBuildInputs = lib.optional stdenv.isLinux libuuid;
     extraCppCmakeFlags = [
       "-DANTLR4_INSTALL=ON"
@@ -162,8 +169,8 @@ in {
 
   antlr4_9 = (mkAntlr {
     version = "4.9.3";
-    sourceSha256 = "1af3cfqwk7lq1b5qsh1am0922fyhy7wmlpnrqdnvch3zzza9n1qm";
-    jarSha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
+    sourceHash = "sha256-FQeb1P9/QLZtw9leWvnx0DshEqgqQI3LCpieybFjw6k=";
+    jarHash = "sha256-r81AlG095NgeKNfIjUZyieBYcoXSetsXKuzFSUoX3zY=";
     extraCppBuildInputs = [ utf8cpp ]
       ++ lib.optional stdenv.isLinux libuuid;
     extraCppCmakeFlags = [
@@ -176,8 +183,8 @@ in {
 
   antlr4_8 = (mkAntlr {
     version = "4.8";
-    sourceSha256 = "1qal3add26qxskm85nk7r758arladn5rcyjinmhlhznmpbbv9j8m";
-    jarSha256 = "0nms976cnqyr1ndng3haxkmknpdq6xli4cpf4x4al0yr21l9v93k";
+    sourceHash = "sha256-Fcm017rVfkhhtVF6lottimaFysln2oLq1B0b0ZoaVOE=";
+    jarHash = "sha256-c6SdaBDZA6pIJ+4yEmk3uF076+wKjmebDdljy8xJulo=";
     extraCppBuildInputs = lib.optional stdenv.isLinux libuuid;
     extraCppCmakeFlags = [ "-DANTLR4_INSTALL=ON" ];
   }).antlr;
