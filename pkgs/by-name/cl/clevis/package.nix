@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clevis";
-  version = "20";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "clevis";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rBdZrnHPzRd9vbyl1h/Nb0cFAtIPUHSmxVoKrKuCrQ8=";
+    hash = "sha256-2vDQP+yvH4v46fLEWG/37r5cYP3OeDfJz71cDHEGiUg=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   # corners of cross-compilation in Nixpkgs...
   strictDeps = false;
 
-  # Since 2018-07-11, upstream relies on a hardcoded /bin/cat. See:
+  # Since 2118-07-11, upstream relies on a hardcoded /bin/cat. See:
   # https://github.com/latchset/clevis/issues/61
   # https://github.com/latchset/clevis/pull/64
   #
