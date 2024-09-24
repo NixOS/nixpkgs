@@ -54,6 +54,22 @@
             "version": "22.0.2"
           }
         },
+        "openjdk23": {
+          "aarch64": {
+            "build": "37",
+            "sha256": "7e842c9b8a44a5a21d83a3e38ae3b141cfbdb429dde70ff264d3da4bff44e1c7",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_aarch64_alpine-linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "37",
+            "sha256": "bff4c78f30d8d173e622bf2f40c36113df47337fc6d1ee5105ed2459841165aa",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_x64_alpine-linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          }
+        },
         "openjdk8": {
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -116,6 +132,22 @@
             "sha256": "459342f5210cfd185aeed05abdc052fcd61cf6ff066541919b786236d69c5737",
             "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.2%2B9/OpenJDK22U-jre_x64_alpine-linux_hotspot_22.0.2_9.tar.gz",
             "version": "22.0.2"
+          }
+        },
+        "openjdk23": {
+          "aarch64": {
+            "build": "37",
+            "sha256": "858aa6b255164e535e2fd6cc8dfbf129327a9126ebb9e8f24115c2089efd36f3",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_aarch64_alpine-linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "37",
+            "sha256": "7acbc972b0dd84ca10ec6f192b20e76445a22f4c5558e1657ff393e4868e9343",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_x64_alpine-linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
           }
         },
         "openjdk8": {
@@ -260,6 +292,34 @@
             "sha256": "05cd9359dacb1a1730f7c54f57e0fed47942a5292eb56a3a0ee6b13b87457a43",
             "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.2%2B9/OpenJDK22U-jdk_x64_linux_hotspot_22.0.2_9.tar.gz",
             "version": "22.0.2"
+          }
+        },
+        "openjdk23": {
+          "aarch64": {
+            "build": "37",
+            "sha256": "e8043d1bd9c4f42c5cf7883aca1fc3ef6bcccf4a664f378818ac0fd4fb987b7e",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_aarch64_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "37",
+            "sha256": "4d3b0609c783dea1f6a899bfc8c84b4000d1f48f39e2489d70050bbf2c7f7d9c",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_ppc64le_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "riscv64": {
+            "build": "37",
+            "sha256": "d401699a92469de7bfb72909c1d11019537a0a2c21af01a8dce1831f09ef5165",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_riscv64_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "37",
+            "sha256": "630c4f3870056e7e005736ec1edc34ee63a9b45e2027582c52f53a9bf44314b8",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_x64_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
           }
         },
         "openjdk8": {
@@ -428,6 +488,34 @@
             "version": "22.0.2"
           }
         },
+        "openjdk23": {
+          "aarch64": {
+            "build": "37",
+            "sha256": "ec45f4f9a4a98d8a0af24b508ca84a411ea88fac8abb8ad2cfca85cb3902ab5d",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_aarch64_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "37",
+            "sha256": "9120876c35b904ac041c5a021330a6f11d4e6c7537ce28bdbb7170b944673435",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_ppc64le_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "riscv64": {
+            "build": "37",
+            "sha256": "ca32d942ef5357fb948604cd8aea5c597130cf7fdf6ddee267b4aa99406ee471",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_riscv64_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "37",
+            "sha256": "9c3c3d42ffb2603b328b7154fc9eb449ef87488b3cbeb24a497d46677c7fd44d",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_x64_linux_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          }
+        },
         "openjdk8": {
           "aarch64": {
             "build": "5",
@@ -530,6 +618,22 @@
             "version": "22.0.2"
           }
         },
+        "openjdk23": {
+          "aarch64": {
+            "build": "37",
+            "sha256": "411934ca9ede95671afc1e7e1d9c8912c43247c7e4fba97730f20c0875287d44",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_aarch64_mac_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "37",
+            "sha256": "0b4b14f7cb44cab89083fb72beafa6d4f12ee6722bf682e5dd026dab12cc8d23",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jdk_x64_mac_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          }
+        },
         "openjdk8": {
           "packageType": "jdk",
           "vmType": "hotspot",
@@ -604,6 +708,22 @@
             "sha256": "ab0fe9b4cd5c38ea1ceb1c675b1722d510038f657f79ce97a811b3d13d3882a6",
             "url": "https://github.com/adoptium/temurin22-binaries/releases/download/jdk-22.0.2%2B9/OpenJDK22U-jre_x64_mac_hotspot_22.0.2_9.tar.gz",
             "version": "22.0.2"
+          }
+        },
+        "openjdk23": {
+          "aarch64": {
+            "build": "37",
+            "sha256": "2c96b006080906951fb0ddae8e23ca3ef2bd327b77cac84b4302b8d84c7014f5",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_aarch64_mac_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "37",
+            "sha256": "1f41755494c45a8a88dfed926251f478544c0e51a71a011314fc282e915f804f",
+            "url": "https://github.com/adoptium/temurin23-binaries/releases/download/jdk-23%2B37/OpenJDK23U-jre_x64_mac_hotspot_23_37.tar.gz",
+            "version": "23.0.0"
           }
         },
         "openjdk8": {
