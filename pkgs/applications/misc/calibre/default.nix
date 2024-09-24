@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , fetchurl
+, buildEnv
 , cmake
+, darwin
 , fetchpatch
 , fontconfig
 , hunspell
@@ -24,13 +26,22 @@
 , speechd-minimal
 , sqlite
 , wrapQtAppsHook
+, xcbuild
 , xdg-utils
 , wrapGAppsHook3
 , popplerSupport ? true
 , speechSupport ? true
 , unrarSupport ? false
+, UserNotifications
 }:
 
+let
+  sw = buildEnv {
+    name = "calibre-dependencies";
+    paths = [ hunspell libuchardet ];
+    extraOutputsToInstall = [ "dev" ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
   version = "7.16.0";
@@ -52,8 +63,28 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
     })
-  ]
-  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+
+    # On Darwin, use the Linux-style file layout instead of creating a macOS app
+    # bundle.
+    #
+    # Here are the reasons:
+    #
+    # 1. To avoid bloating the closure size with bundled dependencies
+    # 2. To avoid esoteric dependencies like the macOS framework build of Python
+    # 3. For easier packaging. It would require non-trivial amount of effort to
+    #    try to untangle the build script for macOS app bundles from upstream's
+    #    unique build setup. It requires a macOS VM running on top of a Linux
+    #    environment.
+    #
+    # The build script includes a check to prevent us doing what we want because
+    # the two file layouts are incompatible with each other. So the following
+    # patches remove that restriction from the build script and also removes
+    # special handling for app bundles from the application code.
+    ./lift-build-platform-restrictions.patch
+    ./darwin-use-linux-layout.patch
+  ] ++ lib.optionals (!unrarSupport) [
+    ./dont_build_unrar_plugin.patch
+  ];
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -72,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     qmake
     wrapGAppsHook3
     wrapQtAppsHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild # for plutils
+    python3Packages.pyqt6
   ];
 
   buildInputs = [
@@ -89,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     podofo
     poppler_utils
     qtbase
-    qtwayland
     sqlite
     (python3Packages.python.withPackages
       (ps: with ps; [
@@ -124,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
         xxhash
         # the following are distributed with calibre, but we use upstream instead
         odfpy
-      ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
+      ] ++ lib.optionals (!stdenv.isDarwin) [
         # much of calibre's functionality is usable without a web
         # browser, so we enable building on platforms which qtwebengine
         # does not support by simply omitting qtwebengine.
@@ -132,12 +165,20 @@ stdenv.mkDerivation (finalAttrs: {
       ] ++ lib.optional (unrarSupport) unrardll)
     )
     xdg-utils
-  ] ++ lib.optional (speechSupport) speechd-minimal;
+  ] ++ lib.optional (speechSupport) speechd-minimal
+    ++ lib.optionals stdenv.isDarwin [
+      UserNotifications
+  ];
 
   installPhase = ''
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
+  '' + lib.optionalString stdenv.isDarwin ''
+    # some dependencies have to be placed under ~/sw on Darwin
+    mkdir -p ~
+    ln -s ${sw} ~/sw
+  '' + ''
     export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
     export POPPLER_LIB_DIR=${poppler_utils.out}/lib
     export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
@@ -149,7 +190,8 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    python setup.py install --root=$out \
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install \
+      --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \
@@ -224,6 +266,5 @@ stdenv.mkDerivation (finalAttrs: {
               else lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
   };
 })

@@ -1,0 +1,25 @@
+diff --git a/src/calibre/utils/ipc/launch.py b/src/calibre/utils/ipc/launch.py
+index 533bc7eba5..1d1cd632a6 100644
+--- a/src/calibre/utils/ipc/launch.py
++++ b/src/calibre/utils/ipc/launch.py
+@@ -83,20 +83,10 @@ class Worker:
+ 
+     @property
+     def executable(self):
+-        if ismacos and not hasattr(sys, 'running_from_setup'):
+-            return os.path.join(macos_headless_bundle_path(), self.exe_name)
+         return exe_path(self.exe_name)
+ 
+     @property
+     def gui_executable(self):
+-        if ismacos and not hasattr(sys, 'running_from_setup'):
+-            if self.job_name == 'ebook-viewer':
+-                return os.path.join(macos_viewer_bundle_path(), self.exe_name)
+-            if self.job_name == 'ebook-edit':
+-                return os.path.join(macos_edit_book_bundle_path(), self.exe_name)
+-
+-            return os.path.join(sys.executables_location, self.exe_name)
+-
+         return self.executable
+ 
+     @property

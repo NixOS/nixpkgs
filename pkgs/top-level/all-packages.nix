@@ -28721,7 +28721,9 @@ with pkgs;
   calculix = callPackage ../applications/science/math/calculix { };
 
   calibre = qt6Packages.callPackage ../applications/misc/calibre {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     podofo = podofo010;
+    inherit (darwin.apple_sdk_11_0.frameworks) UserNotifications;
   };
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
