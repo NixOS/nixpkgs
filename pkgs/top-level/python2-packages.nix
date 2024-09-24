@@ -17,23 +17,17 @@ with self; with super; {
 
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
-  coverage = callPackage ../development/python2-modules/coverage { };
-
   enum = callPackage ../development/python2-modules/enum { };
 
   filelock =  callPackage ../development/python2-modules/filelock { };
 
   futures = callPackage ../development/python2-modules/futures { };
 
-  hypothesis = callPackage ../development/python2-modules/hypothesis { };
-
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
 
   markupsafe = callPackage ../development/python2-modules/markupsafe { };
-
-  mock = callPackage ../development/python2-modules/mock { };
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
@@ -47,14 +41,6 @@ with self; with super; {
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
 
-  pycairo = callPackage ../development/python2-modules/pycairo {
-    inherit (pkgs.buildPackages) meson;
-  };
-
-  pygobject2 = callPackage ../development/python2-modules/pygobject { };
-
-  pygtk = callPackage ../development/python2-modules/pygtk { };
-
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
   pytest = pytest_4;
@@ -66,8 +52,6 @@ with self; with super; {
         doCheck = false;
       };
     };
-
-  pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
 
   recoll = disabled super.recoll;
 

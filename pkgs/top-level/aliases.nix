@@ -454,6 +454,8 @@ mapAliases {
 
   ### F ###
 
+  fahcontrol = throw "fahcontrol has been removed because the download is no longer available"; # added 2024-09-24
+  fahviewer = throw "fahviewer has been removed because the download is no longer available"; # added 2024-09-24
   fam = throw "'fam' (aliased to 'gamin') has been removed as it is unmaintained upstream"; # Added 2024-04-19
   fancypp = throw "'fancypp' was removed because it and its dependants are unmaintained"; # Added 2024-02-14
   faustStk = faustPhysicalModeling; # Added 2023-05-16
