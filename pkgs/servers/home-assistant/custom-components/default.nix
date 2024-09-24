@@ -14,6 +14,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  cync_lights = callPackage ./cync_lights {};
+
   dwd = callPackage ./dwd { };
 
   elevenlabs_tts = callPackage ./elevenlabs_tts {};
