@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lxml
     six
   ];
