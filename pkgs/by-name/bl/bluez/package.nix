@@ -56,27 +56,32 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ];
 
-  buildInputs = [
-    alsa-lib
-    dbus
-    ell
-    glib
-    json_c
-    libical
-    readline
-    udev
-  ] ++ lib.optionals withPython [
-    python3Packages.python
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      dbus
+      ell
+      glib
+      json_c
+      libical
+      readline
+      udev
+    ]
+    ++ lib.optionals withPython [
+      python3Packages.python
+    ];
 
-  nativeBuildInputs = [
-    docutils
-    pkg-config
-  ] ++ lib.optionals installTests [
-    python3Packages.wrapPython
-  ] ++ lib.optionals withPython [
-    python3Packages.pygments
-  ];
+  nativeBuildInputs =
+    [
+      docutils
+      pkg-config
+    ]
+    ++ lib.optionals installTests [
+      python3Packages.wrapPython
+    ]
+    ++ lib.optionals withPython [
+      python3Packages.pygments
+    ];
 
   outputs =
     [
