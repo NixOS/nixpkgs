@@ -354,6 +354,51 @@ in
     '';
   };
 
+  windows = makeTest {
+    name = "systemd-boot-windows";
+    meta.maintainers = with pkgs.lib.maintainers; [ iFreilicht ];
+
+    nodes.machine = { ... }: {
+      imports = [ common ];
+      boot.loader.systemd-boot.windows = {
+        "7" = {
+          efiDeviceHandle = "HD0c1";
+          sortKey = "before_all_others";
+        };
+        "Ten".efiDeviceHandle = "FS0";
+        "11" = {
+          title = "Title with-_-punctuation ...?!";
+          efiDeviceHandle = "HD0d4";
+          sortKey = "zzz";
+        };
+      };
+    };
+
+    testScript = ''
+      machine.succeed("test -e /boot/efi/edk2-uefi-shell/shell.efi")
+
+      machine.succeed("test -e /boot/loader/entries/windows_7.conf")
+      machine.succeed("test -e /boot/loader/entries/windows_Ten.conf")
+      machine.succeed("test -e /boot/loader/entries/windows_11.conf")
+
+      machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_7.conf")
+      machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_Ten.conf")
+      machine.succeed("grep 'efi /efi/edk2-uefi-shell/shell.efi' /boot/loader/entries/windows_11.conf")
+
+      machine.succeed("grep 'HD0c1:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_7.conf")
+      machine.succeed("grep 'FS0:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_Ten.conf")
+      machine.succeed("grep 'HD0d4:EFI\\\\Microsoft\\\\Boot\\\\Bootmgfw.efi' /boot/loader/entries/windows_11.conf")
+
+      machine.succeed("grep 'sort-key before_all_others' /boot/loader/entries/windows_7.conf")
+      machine.succeed("grep 'sort-key o_windows_Ten' /boot/loader/entries/windows_Ten.conf")
+      machine.succeed("grep 'sort-key zzz' /boot/loader/entries/windows_11.conf")
+
+      machine.succeed("grep 'title Windows 7' /boot/loader/entries/windows_7.conf")
+      machine.succeed("grep 'title Windows Ten' /boot/loader/entries/windows_Ten.conf")
+      machine.succeed('grep "title Title with-_-punctuation ...?!" /boot/loader/entries/windows_11.conf')
+    '';
+  };
+
   memtestSortKey = makeTest {
     name = "systemd-boot-memtest-sortkey";
     meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
