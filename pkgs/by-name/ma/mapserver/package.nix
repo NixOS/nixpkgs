@@ -2,6 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  writeScript,
+  common-updater-scripts,
+  coreutils,
 
   withPython ? true,
 
@@ -80,6 +83,16 @@ stdenv.mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ] ++ lib.optional withPython "-DWITH_PYTHON=ON";
+
+  passthru.updateScript = writeScript "update.sh" ''
+     #! ${stdenv.shell}
+     set -o errexit
+     set -x
+     # mapserver tags are: rel-MAJOR-MINOR-PATCH
+     # occasionnally, there are rel-MAJOR-MINOR-PATCH-betaN
+     version=$(${common-updater-scripts}/bin/list-git-tags --url=https://github.com/mapserver/mapserver | sed -E -n  "s/rel-([0-9])+-([0-9])+-([0-9])+$/\1.\2.\3/p" | sort --version-sort --reverse | head -n1)
+    ${common-updater-scripts}/bin/update-source-version mapserver "$version"
+  '';
 
   meta = with lib; {
     description = "Platform for publishing spatial data and interactive mapping applications to the web";
