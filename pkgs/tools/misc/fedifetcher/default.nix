@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fedifetcher";
-  version = "7.0.4";
+  version = "7.1.5";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "nanos";
     repo = "FediFetcher";
     rev = "refs/tags/v${version}";
-    hash = "sha256-19ZpOpvDj2/qMufH2qPPAj8hRPlViSuC64WqJp6+xSk=";
+    hash = "sha256-dOo4QQCEGm7nZCC4k1M66wERrw+hKduvEJZIm1pEFqk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://blog.thms.uk/fedifetcher";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.c3d2.members;
     mainProgram = "fedifetcher";
   };
 }

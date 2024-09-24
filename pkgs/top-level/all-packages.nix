@@ -8195,7 +8195,7 @@ with pkgs;
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
-      garage_1_0_0 garage_1_x;
+      garage_1_0_1 garage_1_x;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
@@ -34757,7 +34757,6 @@ with pkgs;
     desktopName = "Thunderbird";
   };
   thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
-    inherit (gnome) adwaita-icon-theme;
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
   };
 
