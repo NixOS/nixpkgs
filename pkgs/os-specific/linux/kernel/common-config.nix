@@ -769,6 +769,10 @@ let
       # Shadow stacks
       X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
 
+      # Enable support for Intel Trust Domain Extensions (TDX)
+      INTEL_TDX_GUEST = whenAtLeast "5.19" yes;
+      TDX_GUEST_DRIVER = whenAtLeast "6.2" module;
+
       # Mitigate straight line speculation at the cost of some file size
       SLS = whenBetween "5.17" "6.9" yes;
       MITIGATION_SLS = whenAtLeast "6.9" yes;
