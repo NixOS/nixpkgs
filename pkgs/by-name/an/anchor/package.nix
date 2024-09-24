@@ -17,6 +17,10 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  cargoPatches = [
+    ./0001-update-time-rs.patch
+  ];
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
