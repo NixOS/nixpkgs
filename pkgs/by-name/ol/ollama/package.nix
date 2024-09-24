@@ -157,6 +157,9 @@ goBuild {
     # this also disables necessary patches contained in `ollama/llm/patches/`
     # those patches are applied in `postPatch`
     ./disable-git.patch
+
+    # we provide our own deps at runtime
+    ./skip-rocm-cp.patch
   ];
 
   postPatch = ''
