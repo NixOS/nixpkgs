@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -43,16 +42,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.8.3";
+  version = "2024.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aOe1U0IWQIgTJgUAs6WZWQmYnOTzdS+hRlK9QgU3qqk=";
+    hash = "sha256-IX9c1EhQfFF2Gsn8atxngJ4gpgrwX5SnolUQ3nphhUY=";
   };
 
   build-system = [
