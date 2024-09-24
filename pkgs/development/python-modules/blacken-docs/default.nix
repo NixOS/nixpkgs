@@ -1,12 +1,16 @@
-{ black
-, fetchFromGitHub
-, lib
-, python3
+{
+  black,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
+  setuptools,
 }:
-python3.pkgs.buildPythonApplication rec {
+
+buildPythonPackage rec {
   pname = "blacken-docs";
   version = "1.15.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
@@ -15,17 +19,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-3FGuFOAHCcybPwujWlh58NWtuF5CebaKTgBWgCGpSL8=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
+  build-system = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     black
   ];
 
   nativeCheckInputs = [
-    black
-    python3.pkgs.pytestCheckHook
+    pytestCheckHook
   ];
 
   meta = with lib; {
