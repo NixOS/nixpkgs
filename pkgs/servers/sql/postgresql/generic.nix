@@ -10,7 +10,6 @@ let
       , removeReferencesTo, writeShellApplication
 
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
-      , enableSystemd ? null
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
@@ -42,8 +41,6 @@ let
     zstdEnabled = atLeast "15";
 
     dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
-
-    systemdSupport' = if enableSystemd == null then systemdSupport else (lib.warn "postgresql: argument enableSystemd is deprecated, please use systemdSupport instead." enableSystemd);
 
     pname = "postgresql";
 
@@ -107,7 +104,7 @@ let
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
-      ++ lib.optionals systemdSupport' [ systemdLibs ]
+      ++ lib.optionals systemdSupport [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ];
@@ -143,7 +140,7 @@ let
       "--sysconfdir=/etc"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
-      (lib.optionalString systemdSupport' "--with-systemd")
+      (lib.optionalString systemdSupport "--with-systemd")
       "--with-uuid=e2fs"
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
