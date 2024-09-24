@@ -1,11 +1,10 @@
-{ config, lib, options, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 #
 # TODO: zfs tunables
 
 let
 
   cfgZfs = config.boot.zfs;
-  optZfs = options.boot.zfs;
   cfgExpandOnBoot = config.services.zfs.expandOnBoot;
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
