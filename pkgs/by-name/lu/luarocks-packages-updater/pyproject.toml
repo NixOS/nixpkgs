@@ -12,7 +12,8 @@ Module to update luarocks-packages"""
 Homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/lu/luarocks-packages-updater"
 
 [project.scripts]
-luarocks-packages-updater = "updater:main"
+luarocks-packages-updater = "nix_updater.luarocks:main"
+neovim-plugins-updater = "nix_updaters.neovim:main"
 
 [tool.ruff]
 line-length = 120
