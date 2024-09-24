@@ -61,89 +61,90 @@ in
     mkMerge [{
       environment.systemPackages = [ package ];
 
-      systemd.services.softether-init = {
-        description = "SoftEther VPN services initial task";
-        wantedBy = [ "network.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = false;
-        };
-        script = ''
-            for d in vpnserver vpnbridge vpnclient vpncmd; do
-                if ! test -e ${cfg.dataDir}/$d; then
-                    ${pkgs.coreutils}/bin/mkdir -m0700 -p ${cfg.dataDir}/$d
-                    install -m0600 ${package}${cfg.dataDir}/$d/hamcore.se2 ${cfg.dataDir}/$d/hamcore.se2
-                fi
-            done
-            rm -rf ${cfg.dataDir}/vpncmd/vpncmd
-            ln -s ${package}${cfg.dataDir}/vpncmd/vpncmd ${cfg.dataDir}/vpncmd/vpncmd
-        '';
-      };
+      systemd.tmpfiles.rules = [
+        "d  ${cfg.dataDir}/vpnserver             755 root root"
+        "L+ ${cfg.dataDir}/vpnserver/hamcore.se2 -   -    -     - ${package}${cfg.dataDir}/vpnserver/hamcore.se2"
+        "L+ ${cfg.dataDir}/vpnserver/vpnserver   -   -    -     - ${package}${cfg.dataDir}/vpnserver/vpnserver"
+        "d  ${cfg.dataDir}/vpnbridge             755 root root"
+        "L+ ${cfg.dataDir}/vpnbridge/hamcore.se2 -   -    -     - ${package}${cfg.dataDir}/vpnbridge/hamcore.se2"
+        "L+ ${cfg.dataDir}/vpnbridge/vpnbridge   -   -    -     - ${package}${cfg.dataDir}/vpnbridge/vpnbridge"
+        "d  ${cfg.dataDir}/vpnclient             755 root root"
+        "L+ ${cfg.dataDir}/vpnclient/hamcore.se2 -   -    -     - ${package}${cfg.dataDir}/vpnclient/hamcore.se2"
+        "L+ ${cfg.dataDir}/vpnclient/vpnclient   -   -    -     - ${package}${cfg.dataDir}/vpnclient/vpnclient"
+        "d  ${cfg.dataDir}/vpncmd                755 root root"
+        "L+ ${cfg.dataDir}/vpncmd/hamcore.se2    -   -    -     - ${package}${cfg.dataDir}/vpncmd/hamcore.se2"
+        "L+ ${cfg.dataDir}/vpncmd/vpncmd         -   -    -     - ${package}${cfg.dataDir}/vpncmd/vpncmd"
+      ];
     }
 
     (mkIf cfg.vpnserver.enable {
       systemd.services.vpnserver = {
         description = "SoftEther VPN Server";
-        after = [ "softether-init.service" ];
-        requires = [ "softether-init.service" ];
         wantedBy = [ "network.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${package}/bin/vpnserver start";
           ExecStop = "${package}/bin/vpnserver stop";
+          KillMode = "process";
+          Restart = "on-failure";
+
+          # Hardening
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          ReadOnlyPaths = [ "/" ];
+          ReadWritePaths = [ "-${cfg.dataDir}/vpnserver" ];
+          CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_BROADCAST" "CAP_NET_RAW" "CAP_SYS_NICE" "CAP_SYSLOG" "CAP_SETUID" ];
         };
-        preStart = ''
-            rm -rf ${cfg.dataDir}/vpnserver/vpnserver
-            ln -s ${package}${cfg.dataDir}/vpnserver/vpnserver ${cfg.dataDir}/vpnserver/vpnserver
-        '';
-        postStop = ''
-            rm -rf ${cfg.dataDir}/vpnserver/vpnserver
-        '';
       };
     })
 
     (mkIf cfg.vpnbridge.enable {
       systemd.services.vpnbridge = {
         description = "SoftEther VPN Bridge";
-        after = [ "softether-init.service" ];
-        requires = [ "softether-init.service" ];
         wantedBy = [ "network.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${package}/bin/vpnbridge start";
           ExecStop = "${package}/bin/vpnbridge stop";
+          KillMode = "process";
+          Restart = "on-failure";
+
+          # Hardening
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          ReadOnlyPaths = [ "/" ];
+          ReadWritePaths = [ "-${cfg.dataDir}/vpnbridge" ];
+          CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_BROADCAST" "CAP_NET_RAW" "CAP_SYS_NICE" "CAP_SYSLOG" "CAP_SETUID" ];
         };
-        preStart = ''
-            rm -rf ${cfg.dataDir}/vpnbridge/vpnbridge
-            ln -s ${package}${cfg.dataDir}/vpnbridge/vpnbridge ${cfg.dataDir}/vpnbridge/vpnbridge
-        '';
-        postStop = ''
-            rm -rf ${cfg.dataDir}/vpnbridge/vpnbridge
-        '';
       };
     })
 
     (mkIf cfg.vpnclient.enable {
       systemd.services.vpnclient = {
         description = "SoftEther VPN Client";
-        after = [ "softether-init.service" ];
-        requires = [ "softether-init.service" ];
         wantedBy = [ "network.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${package}/bin/vpnclient start";
           ExecStop = "${package}/bin/vpnclient stop";
+          KillMode = "process";
+          Restart = "on-failure";
+
+          # Hardening
+          PrivateTmp = true;
+          ProtectHome = true;
+          ProtectSystem = "full";
+          ReadOnlyPaths = [ "/" ];
+          ReadWritePaths = [ "-${cfg.dataDir}/vpnclient" ];
+          CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_BROADCAST" "CAP_NET_RAW" "CAP_SYS_NICE" "CAP_SYSLOG" "CAP_SETUID" ];
         };
-        preStart = ''
-            rm -rf ${cfg.dataDir}/vpnclient/vpnclient
-            ln -s ${package}${cfg.dataDir}/vpnclient/vpnclient ${cfg.dataDir}/vpnclient/vpnclient
-        '';
         postStart = ''
             sleep 1
             ${cfg.vpnclient.up}
         '';
         postStop = ''
-            rm -rf ${cfg.dataDir}/vpnclient/vpnclient
             sleep 1
             ${cfg.vpnclient.down}
         '';
