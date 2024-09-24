@@ -1012,14 +1012,11 @@ let
         let
           # temp rename to avoid infinite recursion
           stdenv =
-            if args.stdenv.hostPlatform.useLLVM or false then
+            # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+            if args.stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+            else if args.stdenv.hostPlatform.useLLVM or false then
               overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-            else if
-              lib.versionAtLeast metadata.release_version "16"
-              && args.stdenv.hostPlatform.isDarwin
-              && args.stdenv.hostPlatform.isStatic
-            then
-              overrideCC args.stdenv buildLlvmTools.clangNoCompilerRtWithLibc
             else
               args.stdenv;
         in
@@ -1038,10 +1035,10 @@ let
         patches = compiler-rtPatches;
         doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
         stdenv =
-          if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform then
-            stdenv
+          # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+          if stdenv.hostPlatform.isDarwin then
+            overrideCC darwin.bootstrapStdenv buildLlvmTools.clangNoLibcNoRt
           else
-            # TODO: make this branch unconditional next rebuild
             overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
       };
 
