@@ -16844,7 +16844,8 @@ self: super: with self; {
   ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
 
   ultralytics_thop = callPackage ../development/python-modules/ultralytics_thop {
-    inherit (self) pythonOlder setuptools wheel buildPythonPackage fetchPypi numpy torch;
+    inherit (self) pythonOlder setuptools wheel buildPythonPackage fetchPypi
+      numpy torch;
   };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
