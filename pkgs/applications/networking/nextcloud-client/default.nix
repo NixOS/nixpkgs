@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
-    description = "Nextcloud themed desktop client";
+    description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kranzes SuperSandro2000 ];
