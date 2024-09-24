@@ -29,7 +29,9 @@ buildNpmPackage rec {
     CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   npmBuildScript = "build:src";
 

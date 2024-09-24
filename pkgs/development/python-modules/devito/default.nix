@@ -127,7 +127,9 @@ buildPythonPackage rec {
       "tests/test_dse.py"
       "tests/test_gradient.py"
     ]
-    ++ lib.optionals ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin) [ "tests/test_dle.py" ];
+    ++ lib.optionals (
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin
+    ) [ "tests/test_dle.py" ];
 
   pythonImportsCheck = [ "devito" ];
 

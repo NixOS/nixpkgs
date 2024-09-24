@@ -67,7 +67,9 @@ buildNpmPackage rec {
     find $out/share/chatd/node_modules -name '*.exe' -or -name '*.dll' -or -name '*.pdb' -delete
     rm -rf ${
       lib.concatStringsSep " " (
-        (lib.optional (!stdenv.hostPlatform.isx86_64) "$out/share/chatd/node_modules/onnxruntime-node/bin/napi-v3/*/x64")
+        (lib.optional (
+          !stdenv.hostPlatform.isx86_64
+        ) "$out/share/chatd/node_modules/onnxruntime-node/bin/napi-v3/*/x64")
         ++ (lib.optional (
           !stdenv.hostPlatform.isAarch64
         ) "$out/share/chatd/node_modules/onnxruntime-node/bin/napi-v3/*/arm64")

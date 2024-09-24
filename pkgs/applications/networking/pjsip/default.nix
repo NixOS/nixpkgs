@@ -59,7 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++11"; }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_CFLAGS_LINK = "-headerpad_max_install_names"; };
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_CFLAGS_LINK = "-headerpad_max_install_names";
+    };
 
   preConfigure = ''
     export LD=$CC

@@ -43,9 +43,11 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isLinux dpkg ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux dpkg ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
 
   installPhase =
     let

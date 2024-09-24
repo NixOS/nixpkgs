@@ -39,7 +39,8 @@
   libdecor,
   pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   pipewire, # NOTE: must be built with SDL2 without pipewire support
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  pulseaudioSupport ?
+    config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libpulseaudio,
   AudioUnit,
   Cocoa,

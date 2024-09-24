@@ -71,6 +71,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ bcdarwin ];
     # x86-linux: test_encode.py::TestEncodeBuffer failures
     # darwin: numerous test failures, seemingly due to issues setting up test data
-    broken = (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
+    broken =
+      (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   };
 }

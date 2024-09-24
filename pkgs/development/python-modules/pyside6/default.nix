@@ -78,7 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   # "Couldn't find libclang.dylib You will likely need to add it manually to PATH to ensure the build succeeds."
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LLVM_INSTALL_DIR = "${llvmPackages.libclang.lib}/lib"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LLVM_INSTALL_DIR = "${llvmPackages.libclang.lib}/lib";
+  };
 
   nativeBuildInputs = [
     cmake

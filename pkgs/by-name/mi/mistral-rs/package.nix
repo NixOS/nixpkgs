@@ -63,7 +63,8 @@ let
 
   metalSupport =
     assert accelIsValid;
-    (acceleration == "metal") || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
+    (acceleration == "metal")
+    || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
 
   darwinBuildInputs =
     with darwin.apple_sdk.frameworks;
@@ -186,7 +187,9 @@ rustPlatform.buildRustPackage rec {
       withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
         mistral-rs.override { acceleration = "mkl"; }
       );
-      withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (mistral-rs.override { acceleration = "cuda"; });
+      withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (
+        mistral-rs.override { acceleration = "cuda"; }
+      );
       withMetal = lib.optionalAttrs (stdenv.hostPlatform == "aarch64-darwin") (
         mistral-rs.override { acceleration = "metal"; }
       );

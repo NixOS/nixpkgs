@@ -46,7 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux { default = nixosTests.terminal-emulators.zutty; };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      default = nixosTests.terminal-emulators.zutty;
+    };
   };
 
   meta = {

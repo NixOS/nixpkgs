@@ -106,7 +106,10 @@ stdenv'.mkDerivation {
   postFixup =
     let
       binary =
-        if stdenv.hostPlatform.isDarwin then "Applications/flameshot.app/Contents/MacOS/flameshot" else "bin/flameshot";
+        if stdenv.hostPlatform.isDarwin then
+          "Applications/flameshot.app/Contents/MacOS/flameshot"
+        else
+          "bin/flameshot";
     in
     ''
       wrapProgram $out/${binary} \

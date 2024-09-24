@@ -52,7 +52,9 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ git ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
-  buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  buildInputs = [
+    nodePackages.node-gyp-build
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   env.PYTHON = "${python3}/bin/python";
 

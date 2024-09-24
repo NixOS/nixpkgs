@@ -57,7 +57,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 build-${if stdenv.hostPlatform.isDarwin then "mac" else "linux"}/release/debase $out/bin/debase
+    install -Dm755 build-${
+      if stdenv.hostPlatform.isDarwin then "mac" else "linux"
+    }/release/debase $out/bin/debase
     runHook postInstall
   '';
 

@@ -60,7 +60,8 @@ buildPythonPackage rec {
     hash = "sha256-akwLIB5YUbnDiaQXX/K5YLXzWlTYWZG51dtxbSFxPt0=";
   };
 
-  stdenv = if python.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
+  stdenv =
+    if python.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 

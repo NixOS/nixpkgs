@@ -146,6 +146,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     sourceProvenance =
       with lib.sourceTypes;
-      lib.optionals stdenv.hostPlatform.isx86_64 [ fromSource ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ binaryNativeCode ];
+      lib.optionals stdenv.hostPlatform.isx86_64 [ fromSource ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ binaryNativeCode ];
   };
 })

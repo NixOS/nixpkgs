@@ -79,18 +79,21 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs = [
-    gtk
-    girara
-    libintl
-    sqlite
-    glib
-    file
-    librsvg
-    check
-    json-glib
-    texlive.bin.core
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  buildInputs =
+    [
+      gtk
+      girara
+      libintl
+      sqlite
+      glib
+      file
+      librsvg
+      check
+      json-glib
+      texlive.bin.core
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

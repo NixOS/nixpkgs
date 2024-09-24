@@ -61,13 +61,17 @@ let
       libsForQt5.qtbase
     ];
 
-    nativeBuildInputs = [
-      cmake
-      doxygen
-      libsForQt5.wrapQtAppsHook
-      pkg-config
-      python3Packages.python
-    ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ darwin.autoSignDarwinBinariesHook ];
+    nativeBuildInputs =
+      [
+        cmake
+        doxygen
+        libsForQt5.wrapQtAppsHook
+        pkg-config
+        python3Packages.python
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+        darwin.autoSignDarwinBinariesHook
+      ];
 
     propagatedBuildInputs = [
       jrl-cmakemodules

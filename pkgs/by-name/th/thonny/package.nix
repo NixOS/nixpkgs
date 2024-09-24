@@ -21,7 +21,9 @@ buildPythonApplication rec {
     hash = "sha256-/ms2RESnV3bsJpK1zYYLHNUu1FtA6PntaseTbKMfUMc=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [
+    copyDesktopItems
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   desktopItems = [
     (makeDesktopItem {

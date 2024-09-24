@@ -25,7 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'debuggerCommand:' 'debuggerCommand: ${gdb}/bin/gdb'
   '';
 
-  nativeBuildInputs = [ imagemagick ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    imagemagick
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     motif

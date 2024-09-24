@@ -103,7 +103,9 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "cherrypy/test/test_config_server.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "cherrypy/test/test_config_server.py"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

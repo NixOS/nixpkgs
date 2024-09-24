@@ -55,7 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
         -e '/cxx_/s,$cc,clang++,'
     '';
 
-  ninjaFlags = [ "-fcompile/ninja/${if stdenv.hostPlatform.isDarwin then "macos" else "linux"}.ninja" ];
+  ninjaFlags = [
+    "-fcompile/ninja/${if stdenv.hostPlatform.isDarwin then "macos" else "linux"}.ninja"
+  ];
 
   postBuild = ''
     popd

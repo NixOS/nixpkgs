@@ -84,8 +84,10 @@
 }:
 
 let
-  embreeSupport = (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
-  openImageDenoiseSupport = (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
+  embreeSupport =
+    (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
+  openImageDenoiseSupport =
+    (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openUsdSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
@@ -328,7 +330,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   blenderExecutable =
     placeholder "out"
-    + (if stdenv.hostPlatform.isDarwin then "/Applications/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        "/Applications/Blender.app/Contents/MacOS/Blender"
+      else
+        "/bin/blender"
+    );
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
