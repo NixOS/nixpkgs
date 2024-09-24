@@ -4976,6 +4976,12 @@ self: super: with self; {
 
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
+  gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
+
+  gepetto-viewer-corba = toPythonModule (pkgs.gepetto-viewer-corba.override { python3Packages = self; });
+
+  gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
+
   gerbonara = callPackage ../development/python-modules/gerbonara { };
 
   getjump = callPackage ../development/python-modules/getjump { };
@@ -9071,6 +9077,8 @@ self: super: with self; {
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
+  python-qt = toPythonModule (pkgs.python-qt.override { python3 = self.python; });
+
   python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
 
   python-tds = callPackage ../development/python-modules/python-tds { };
@@ -9183,6 +9191,10 @@ self: super: with self; {
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
+
+  omniorb = toPythonModule (pkgs.omniorb.override { python3 = self.python; });
+
+  omniorbpy = callPackage ../development/python-modules/omniorbpy { };
 
   omorfi = callPackage ../development/python-modules/omorfi { };
 
