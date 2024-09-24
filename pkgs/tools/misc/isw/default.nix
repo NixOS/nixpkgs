@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/thom-cameron/isw";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ thom-cameron ];
+    mainProgram = "isw";
   };
 }
