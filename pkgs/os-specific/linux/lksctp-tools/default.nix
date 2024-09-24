@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "sctp";
     repo = "lksctp-tools";
     rev = "v${version}";
-    hash = "sha256-z7Je2qwDPr1sp5z8nhYsJIyJxDvHW7lw97JAdPY09NE=";
+    hash = "sha256-h+wMrnx+u/4feNjZr2Gc+y6/80qJ8IVXsrDvHyixMxo=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
