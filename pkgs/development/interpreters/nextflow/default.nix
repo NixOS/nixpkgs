@@ -12,6 +12,7 @@
   coreutils,
   bash,
   testers,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set JAVA_HOME ${openjdk.home}
   '';
 
+  passthru.tests.default = nixosTests.nextflow;
   # versionCheckHook doesn't work as of 2024-09-23.
   # See https://github.com/NixOS/nixpkgs/pull/339197#issuecomment-2363495060
   passthru.tests.version = testers.testVersion {
