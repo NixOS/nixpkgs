@@ -63,6 +63,11 @@ let
   GO111MODULE = "on";
   GOTOOLCHAIN = "local";
 
+  # When building PIE binaries for Linux, we must set CGO_ENABLED and enable external linking.
+  # Otherwise the emitted binary still depends on ld.so but at wrong path
+  linuxGnuPie = builtins.elem "pie" stdenv.cc.bintools.defaultHardeningFlags
+    && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu;
+
 in
 (stdenv.mkDerivation (finalAttrs:
   args
@@ -175,10 +180,14 @@ in
         (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
       ++ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
         (lib.optional (!allowGoReference) "-trimpath");
-    inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
+    inherit enableParallelBuilding GO111MODULE GOTOOLCHAIN;
+
+    CGO_ENABLED = linuxGnuPie || CGO_ENABLED;
 
     # If not set to an explicit value, set the buildid empty for reproducibility.
-    ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
+    ldflags = ldflags
+    ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid="
+    ++ lib.optional linuxGnuPie "-linkmode=external";
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
