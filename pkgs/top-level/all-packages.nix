@@ -37595,7 +37595,9 @@ with pkgs;
 
   gotrue-supabase = callPackage ../tools/security/gotrue/supabase.nix { };
 
-  gowitness = callPackage ../tools/security/gowitness { };
+  gowitness = callPackage ../tools/security/gowitness {
+    buildGoModule = buildGo123Module;
+  };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 
