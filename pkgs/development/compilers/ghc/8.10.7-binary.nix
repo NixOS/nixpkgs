@@ -2,10 +2,12 @@
 , fetchurl, perl, gcc
 , ncurses5
 , ncurses6, gmp, libiconv, numactl
+, freebsd
 , llvmPackages
 , coreutils
 , rcodesign
 , targetPackages
+, updateAutotoolsGnuConfigScriptsHook
 
   # minimal = true; will remove files that aren't strictly necessary for
   # regular builds and GHC bootstrapping.
@@ -121,6 +123,18 @@ let
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
       };
+      x86_64-freebsd = {
+          variantSuffix = "";
+          src = {
+            url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-unknown-freebsd.tar.xz";
+            sha256 = "45e35d24bc700e1093efa39189e9fa01498069881aed2fa8779c011941a80da1";
+          };
+          exePathForLibraryCheck = null;
+          archSpecificLibraries = [
+            { nixPackage = gmp; fileToCheckFor = null; }
+            { nixPackage = freebsd.libncurses; fileToCheckFor = null; }
+          ];
+        };
     };
     # Binary distributions for the musl libc for the respective system.
     musl = {
@@ -191,7 +205,9 @@ stdenv.mkDerivation rec {
   #           https://gitlab.haskell.org/ghc/ghc/-/issues/20059
   #       and update this comment accordingly.
 
-  nativeBuildInputs = [ perl ]
+  # updateAutotoolsGnuConfigScriptsHook is necessary to build on native FreeBSD pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ perl updateAutotoolsGnuConfigScriptsHook ]
     # Upstream binaries may not be linker-signed, which invalidates their signatures
     # because `install_name_tool` will only replace a signature if it is both
     # an ad hoc signature and the signature is flagged as linker-signed.
@@ -285,7 +301,7 @@ stdenv.mkDerivation rec {
           -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isElf ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
     '' +
@@ -347,9 +363,9 @@ stdenv.mkDerivation rec {
   # This is extremely bogus and should be investigated.
   dontStrip = if stdenv.hostPlatform.isMusl then true else false; # `if` for explicitness
 
-  # On Linux, use patchelf to modify the executables so that they can
+  # Use patchelf to modify ELF executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString stdenv.isLinux
+  postFixup = lib.optionalString stdenv.hostPlatform.isElf
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes
@@ -400,6 +416,11 @@ stdenv.mkDerivation rec {
     # legal reasons (retaining the legal notices etc)
     # As a last resort we could unpack the docs separately and symlink them in.
     # They're in $out/share/{doc,man}.
+  '' + lib.optionalString stdenv.isFreeBSD ''
+    # The binary distribution is absolutely convinced that all libraries are in /usr/local/lib
+    # If given a path for libraries, it will append `/usr/local/lib` and break it.
+    # Patching the ELFs with sed is dirty but it works
+    find $out -type f | xargs sed -E -i -e "s_usr/local/lib_/////////////_g"
   '';
 
   # In nixpkgs, musl based builds currently enable `pie` hardening by default

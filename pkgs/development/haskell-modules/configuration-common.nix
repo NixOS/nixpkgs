@@ -567,6 +567,14 @@ self: super: {
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
+  # This fixes the build on FreeBSD. Can be removed when we get a release >0.2.2
+  streamly-core = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/composewell/streamly/commit/437c6332a19580a1fe085d593f6bb60b3d9608f8.patch";
+    hash = "sha256-z5v3MGLq2ELlTEGxfHcg2igAM2PC7whx6KIv1Uj2ujw=";
+    includes = ["src/*" "streamly-core.cabal"];
+    stripLen = 1;
+  }) (doJailbreak super.streamly-core) ;
+
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
 
@@ -1125,6 +1133,14 @@ self: super: {
   # missing dependencies: blaze-html >=0.5 && <0.9, blaze-markup >=0.5 && <0.8
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
   digestive-functors = doJailbreak super.digestive-functors;
+
+  # https://github.com/TeofilC/digest/pull/13
+  # this patch is nixpkgs specific, since we have no "base system"
+  digest = super.digest.overrideAttrs {
+    postPatch = ''
+      sed -E -i -e 's/ && !os\(freebsd\)//' digest.cabal
+    '';
+  };
 
   # Wrap the generated binaries to include their run-time dependencies in
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have

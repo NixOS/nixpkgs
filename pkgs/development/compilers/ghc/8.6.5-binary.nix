@@ -4,6 +4,7 @@
 , llvmPackages
 , coreutils
 , targetPackages
+, updateAutotoolsGnuConfigScriptsHook
 }:
 
 # Prebuilt only does native
@@ -79,7 +80,9 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
 
-  nativeBuildInputs = [ perl ];
+  # updateAutotoolsGnuConfigScriptsHook is necessary to build on native FreeBSD pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ perl updateAutotoolsGnuConfigScriptsHook ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/

@@ -9,6 +9,7 @@
 , configurationNix ? import ./configuration-nix.nix
 , configurationArm ? import ./configuration-arm.nix
 , configurationDarwin ? import ./configuration-darwin.nix
+, configurationFreeBSD ? import ./configuration-freebsd.nix
 , configurationJS ? import ./configuration-ghcjs-9.x.nix
 }:
 
@@ -29,6 +30,8 @@ let
     (configurationArm { inherit pkgs haskellLib; })
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (configurationDarwin { inherit pkgs haskellLib; })
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    (configurationFreeBSD { inherit pkgs haskellLib; })
   ] ++ lib.optionals stdenv.hostPlatform.isGhcjs [
     (configurationJS { inherit pkgs haskellLib; })
   ]
