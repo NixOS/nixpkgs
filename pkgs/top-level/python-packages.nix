@@ -9119,6 +9119,8 @@ self: super: with self; {
 
   py-machineid = callPackage ../development/python-modules/py-machineid { };
 
+  py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
+
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
