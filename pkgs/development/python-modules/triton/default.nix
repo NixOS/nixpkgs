@@ -70,7 +70,7 @@ buildPythonPackage rec {
           new = [
             "-lcuda"
             "-L${addDriverRunpath.driverLink}"
-            "-L${cudaPackages.cuda_cudart}/lib/stubs/"
+            "-L${cudaPackages.cuda_cudart.stubs}/lib/"
           ];
         in
         {
