@@ -15201,7 +15201,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx17 openjfx21 openjfx22;
+  inherit (javaPackages) openjfx11 openjfx17 openjfx21 openjfx22 openjfx23;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -15233,6 +15233,11 @@ with pkgs;
   openjdk22_headless = javaPackages.compiler.openjdk22.headless;
   jdk22 = openjdk22;
   jdk22_headless = openjdk22_headless;
+
+  openjdk23 = javaPackages.compiler.openjdk23;
+  openjdk23_headless = javaPackages.compiler.openjdk23.headless;
+  jdk23 = openjdk23;
+  jdk23_headless = openjdk23_headless;
 
   /* default JDK */
   jdk = jdk21;
