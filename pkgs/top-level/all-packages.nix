@@ -20542,10 +20542,7 @@ with pkgs;
 
   libantlr3c = callPackage ../development/libraries/libantlr3c { };
 
-  libaom = callPackage ../development/libraries/libaom {
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116737
-    stdenv = if stdenv.hostPlatform.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14" then gcc13Stdenv else stdenv;
-  };
+  libaom = callPackage ../development/libraries/libaom { };
 
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
@@ -21728,10 +21725,7 @@ with pkgs;
 
   libvisual = callPackage ../development/libraries/libvisual { };
 
-  libvmaf = callPackage ../development/libraries/libvmaf {
-    # See libaom
-    stdenv = if stdenv.hostPlatform.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14" then gcc13Stdenv else stdenv;
-  };
+  libvmaf = callPackage ../development/libraries/libvmaf { };
 
   libvncserver = callPackage ../development/libraries/libvncserver {
     inherit (darwin.apple_sdk.frameworks) Carbon;
