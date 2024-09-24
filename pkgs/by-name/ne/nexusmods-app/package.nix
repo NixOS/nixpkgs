@@ -9,8 +9,28 @@
   lib,
   runCommand,
   pname ? "nexusmods-app",
+  iKnowItsExperimental ? false,
 }:
-buildDotnetModule (finalAttrs: {
+let
+  # TODO: Remove this warning once upstream stabilises
+  warningText = ''
+    `${pname}` is currently in an unstable and experimental state.
+    In particular, you will usually need to wipe its config & reset any modded games whenever this package updates.
+    This can normally be done by running `NexusMods.App uninstall-app` before updating.
+
+    See the upstream FAQ for more detail:
+    https://nexus-mods.github.io/NexusMods.App/users/faq/#why-do-i-have-to-uninstall-everything-to-update-the-app
+
+    Note: You can silence this warning by overriding the package:
+    pkgs.${pname}.override {
+      iKnowItsExperimental = true;
+    }
+  '';
+
+  # Use a wrapper to avoid unnecessary indentation changes when we eventually remove the warning
+  withWarning = fn: arg: lib.warnIfNot iKnowItsExperimental warningText (fn arg);
+in
+withWarning buildDotnetModule (finalAttrs: {
   inherit pname;
   version = "0.4.1";
 
