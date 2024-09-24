@@ -12,6 +12,7 @@
 , python3
 , buildPackages
 , publicsuffix-list
+, enablePython3 ? python3.availableOn stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ]
     # bin/psl-make-dafsa brings a large runtime closure through python3
-    ++ lib.optional (!stdenv.hostPlatform.isStatic) "bin";
+    ++ lib.optional enablePython3 "bin";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -41,13 +42,13 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) python3;
+  ] ++ lib.optional enablePython3 python3;
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
 
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+  postPatch = lib.optionalString enablePython3 ''
     patchShebangs src/psl-make-dafsa
   '';
 
