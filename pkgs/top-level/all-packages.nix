@@ -1523,8 +1523,7 @@ with pkgs;
   aefs = callPackage ../tools/filesystems/aefs { };
 
   aegisub = callPackage ../by-name/ae/aegisub/package.nix ({
-    boost = boost179;
-    luajit = luajit.override { enable52Compat = true; };
+    ffmpeg = ffmpeg;
     wxGTK = wxGTK32;
   } // (config.aegisub or {}));
 
