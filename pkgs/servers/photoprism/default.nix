@@ -1,4 +1,5 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg_7, libheif, exiftool, imagemagick, makeWrapper, testers
+{ lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg_7, libheif, exiftool, imagemagick, makeWrapper, testers
+, callPackage
 , nixosTests
 , librsvg }:
 
@@ -13,9 +14,9 @@ let
     hash = "sha256-ihDv5c5RUjDbFcAHJjzp/8qCwKfA+rlFXPziaYarzs8=";
   };
 
-  libtensorflow = pkgs.callPackage ./libtensorflow.nix { };
-  backend = pkgs.callPackage ./backend.nix { inherit libtensorflow src version; };
-  frontend = pkgs.callPackage ./frontend.nix { inherit src version; };
+  libtensorflow = callPackage ./libtensorflow.nix { };
+  backend = callPackage ./backend.nix { inherit libtensorflow src version; };
+  frontend = callPackage ./frontend.nix { inherit src version; };
 
   fetchModel = { name, hash }:
     fetchzip {
@@ -41,7 +42,7 @@ let
 
   assets_path = "$out/share/${pname}";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   nativeBuildInputs = [
@@ -78,7 +79,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = pkgs.photoprism; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   passthru.tests.photoprism = nixosTests.photoprism;
 
   meta = with lib; {
@@ -89,4 +90,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ benesim ];
     mainProgram = "photoprism";
   };
-}
+})
