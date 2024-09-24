@@ -1120,7 +1120,11 @@ let
                 )
                 # https://github.com/llvm/llvm-project/issues/64226
                 (metadata.getVersionFile "libcxx/0001-darwin-10.12-mbstate_t-fix.patch");
-          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+          stdenv =
+            if stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
+            else
+              overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
         }
         // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") {
           # TODO: remove this, causes LLVM 13 packages rebuild.
