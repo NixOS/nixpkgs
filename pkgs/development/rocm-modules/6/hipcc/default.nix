@@ -8,14 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcc";
-  version = "6.0.2";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "HIPCC";
+    repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-/LRQN+RSMBPk2jS/tdp3psUL/B0RJZQhRri7e67KsG4=";
+    hash = "sha256-+pe3e65Ri5zOOYvoSUiN0Rto/Ss8OyRfqxRifToAO7g=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/amd/hipcc";
 
   nativeBuildInputs = [ cmake ];
 
