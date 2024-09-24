@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
+, mkNugetDeps
 , sqlite
 , withFFmpeg ? true # replace bundled ffprobe binary with symlink to ffmpeg package.
 , ffmpeg
@@ -15,6 +16,7 @@
 , python3Packages
 , nix
 , prefetch-yarn-deps
+, nuget-to-nix
 }:
 let
   version = "4.0.9.2244";
@@ -24,14 +26,13 @@ let
     rev = "v${version}";
     hash = "sha256-RDhJUf8P2STTug69EGozW0q87qDE40jf5G7n7pezWeY=";
   };
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 in
 buildDotnetModule {
   pname = "sonarr";
   inherit version src;
-
-  patches = [
-    ./nuget-config.patch
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps fixup-yarn-lock ];
@@ -63,12 +64,14 @@ buildDotnetModule {
     ln -s -- Sonarr "$out/bin/NzbDrone"
   '';
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = mkNugetDeps {
+    name = "sonarr";
+    sourceFile = ./deps.nix;
+  };
 
   runtimeDeps = [ sqlite ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  inherit dotnet-sdk dotnet-runtime;
 
   doCheck = true;
 
@@ -96,6 +99,9 @@ buildDotnetModule {
   dotnetFlags = [
     "--property:TargetFramework=net6.0"
     "--property:EnableAnalyzers=false"
+    "--property:SentryUploadSymbols=false"
+    "--property:EnableSourceLink=false"
+    "--property:EnableSourceControlManagerQueries=false"
     # Override defaults in src/Directory.Build.props that use current time.
     "--property:Copyright=Copyright 2014-2024 sonarr.tv (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"
@@ -141,10 +147,18 @@ buildDotnetModule {
       {
         libraries = with python3Packages; [ requests ];
         makeWrapperArgs = [
+          "--set"
+          "NUGET_FALLBACK_PACKAGES"
+          "${dotnet-sdk.packages}/share/nuget/packages"
           "--prefix"
           "PATH"
           ":"
-          (lib.makeBinPath [ nix prefetch-yarn-deps ])
+          (lib.makeBinPath [
+            nix
+            prefetch-yarn-deps
+            dotnet-sdk
+            (nuget-to-nix.override { inherit dotnet-sdk; })
+          ])
         ];
       }
       ./update.py;
