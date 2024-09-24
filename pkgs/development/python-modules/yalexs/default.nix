@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "8.6.4";
+  version = "8.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KUm+e/ZrfkrS4MA0Wb3VAo9URYmC0ucKw3L+yMMoMtU=";
+    hash = "sha256-+1Ff0VttUm9cwrEWNiKQfBmYjrtA3AZxWVm/iU21XCE=";
   };
 
   build-system = [ poetry-core ];
