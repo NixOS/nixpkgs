@@ -561,6 +561,12 @@ in
     dependencies = with self; [ copilot-lua plenary-nvim ];
   };
 
+  copilot-lualine = super.copilot-lualine.overrideAttrs {
+    dependencies = with self; [ copilot-lua lualine-nvim ];
+    doInstallCheck = true;
+    nvimRequireCheck = "copilot-lualine";
+  };
+
   copilot-vim = super.copilot-vim.overrideAttrs (old: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/client.vim \
