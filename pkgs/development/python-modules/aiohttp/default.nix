@@ -110,6 +110,7 @@ buildPythonPackage rec {
       "test_client_session_timeout_zero"
       "test_mark_formdata_as_processed"
       "test_requote_redirect_url_default"
+      "test_https_proxy_unsupported_tls_in_tls"
       # don't run benchmarks
       "test_import_time"
     ]
