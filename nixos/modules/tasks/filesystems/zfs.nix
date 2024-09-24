@@ -592,8 +592,7 @@ in
       };
 
       boot.initrd = mkIf inInitrd {
-        # spl has been removed in ≥ 2.2.0.
-        kernelModules = [ "zfs" ] ++ lib.optional (lib.versionOlder "2.2.0" version) "spl";
+        kernelModules = [ "zfs" ];
         extraUtilsCommands =
           mkIf (!config.boot.initrd.systemd.enable) ''
             copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
