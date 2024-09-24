@@ -444,6 +444,8 @@ let
     eio_main = callPackage ../development/ocaml-modules/eio/main.nix { };
     eio_posix = callPackage ../development/ocaml-modules/eio/posix.nix { };
 
+    eio-ssl = callPackage ../development/ocaml-modules/eio-ssl { };
+
     either = callPackage ../development/ocaml-modules/either { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
