@@ -77,50 +77,63 @@
 
   };
 
-  config = {
+  config = lib.mkIf config.hardware.nvidia-container-toolkit.enable {
+    virtualisation.docker = {
+      daemon.settings = lib.mkIf
+        (lib.versionAtLeast config.virtualisation.docker.package.version "25") {
+          features.cdi = true;
+        };
 
-    virtualisation.docker.daemon.settings = lib.mkIf
-      (config.hardware.nvidia-container-toolkit.enable &&
-       (lib.versionAtLeast config.virtualisation.docker.package.version "25")) {
-         features.cdi = true;
-       };
+      rootless.daemon.settings = lib.mkIf
+        (config.virtualisation.docker.rootless.enable &&
+         (lib.versionAtLeast config.virtualisation.docker.package.version "25")) {
+           features.cdi = true;
+         };
+    };
 
-    hardware.nvidia-container-toolkit.mounts = let
-      nvidia-driver = config.hardware.nvidia.package;
-    in (lib.mkMerge [
-      [{ hostPath = pkgs.addDriverRunpath.driverLink;
-         containerPath = pkgs.addDriverRunpath.driverLink; }
-       { hostPath = "${lib.getLib nvidia-driver}/etc";
-         containerPath = "${lib.getLib nvidia-driver}/etc"; }
-       { hostPath = "${lib.getLib nvidia-driver}/share";
-         containerPath = "${lib.getLib nvidia-driver}/share"; }
-       { hostPath = "${lib.getLib pkgs.glibc}/lib";
-         containerPath = "${lib.getLib pkgs.glibc}/lib"; }
-       { hostPath = "${lib.getLib pkgs.glibc}/lib64";
-         containerPath = "${lib.getLib pkgs.glibc}/lib64"; }]
-      (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-executables
-        [{ hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-control";
-           containerPath = "/usr/bin/nvidia-cuda-mps-control"; }
-         { hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-server";
-           containerPath = "/usr/bin/nvidia-cuda-mps-server"; }
-         { hostPath = lib.getExe' nvidia-driver "nvidia-debugdump";
-           containerPath = "/usr/bin/nvidia-debugdump"; }
-         { hostPath = lib.getExe' nvidia-driver "nvidia-powerd";
-           containerPath = "/usr/bin/nvidia-powerd"; }
-         { hostPath = lib.getExe' nvidia-driver "nvidia-smi";
-           containerPath = "/usr/bin/nvidia-smi"; }])
-      # nvidia-docker 1.0 uses /usr/local/nvidia/lib{,64}
-      #   e.g.
-      #     - https://gitlab.com/nvidia/container-images/cuda/-/blob/e3ff10eab3a1424fe394899df0e0f8ca5a410f0f/dist/12.3.1/ubi9/base/Dockerfile#L44
-      #     - https://github.com/NVIDIA/nvidia-docker/blob/01d2c9436620d7dde4672e414698afe6da4a282f/src/nvidia/volumes.go#L104-L173
-      (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-docker-1-directories
-        [{ hostPath = "${lib.getLib nvidia-driver}/lib";
-           containerPath = "/usr/local/nvidia/lib"; }
-         { hostPath = "${lib.getLib nvidia-driver}/lib";
-           containerPath = "/usr/local/nvidia/lib64"; }])
-    ]);
+    hardware = {
+      graphics.enable = lib.mkIf (!config.hardware.nvidia.datacenter.enable) true;
 
-    systemd.services.nvidia-container-toolkit-cdi-generator = lib.mkIf config.hardware.nvidia-container-toolkit.enable {
+      nvidia-container-toolkit.mounts = let
+        nvidia-driver = config.hardware.nvidia.package;
+      in (lib.mkMerge [
+        [{ hostPath = pkgs.addDriverRunpath.driverLink;
+           containerPath = pkgs.addDriverRunpath.driverLink; }
+         { hostPath = "${lib.getLib nvidia-driver}/etc";
+           containerPath = "${lib.getLib nvidia-driver}/etc"; }
+         { hostPath = "${lib.getLib nvidia-driver}/share";
+           containerPath = "${lib.getLib nvidia-driver}/share"; }
+         { hostPath = "${lib.getLib pkgs.glibc}/lib";
+           containerPath = "${lib.getLib pkgs.glibc}/lib"; }
+         { hostPath = "${lib.getLib pkgs.glibc}/lib64";
+           containerPath = "${lib.getLib pkgs.glibc}/lib64"; }]
+        (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-executables
+          [{ hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-control";
+             containerPath = "/usr/bin/nvidia-cuda-mps-control"; }
+           { hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-server";
+             containerPath = "/usr/bin/nvidia-cuda-mps-server"; }
+           { hostPath = lib.getExe' nvidia-driver "nvidia-debugdump";
+             containerPath = "/usr/bin/nvidia-debugdump"; }
+           { hostPath = lib.getExe' nvidia-driver "nvidia-powerd";
+             containerPath = "/usr/bin/nvidia-powerd"; }
+           { hostPath = lib.getExe' nvidia-driver "nvidia-smi";
+             containerPath = "/usr/bin/nvidia-smi"; }])
+        # nvidia-docker 1.0 uses /usr/local/nvidia/lib{,64}
+        #   e.g.
+        #     - https://gitlab.com/nvidia/container-images/cuda/-/blob/e3ff10eab3a1424fe394899df0e0f8ca5a410f0f/dist/12.3.1/ubi9/base/Dockerfile#L44
+        #     - https://github.com/NVIDIA/nvidia-docker/blob/01d2c9436620d7dde4672e414698afe6da4a282f/src/nvidia/volumes.go#L104-L173
+        (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-docker-1-directories
+          [{ hostPath = "${lib.getLib nvidia-driver}/lib";
+             containerPath = "/usr/local/nvidia/lib"; }
+           { hostPath = "${lib.getLib nvidia-driver}/lib";
+             containerPath = "/usr/local/nvidia/lib64"; }])
+      ]);
+    };
+
+    services.xserver.videoDrivers = lib.mkIf
+      (!config.hardware.nvidia.datacenter.enable) [ "nvidia" ];
+
+    systemd.services.nvidia-container-toolkit-cdi-generator = {
       description = "Container Device Interface (CDI) for Nvidia generator";
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
