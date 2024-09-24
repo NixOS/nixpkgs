@@ -22,8 +22,10 @@
   udev,
   # Boolean flags
   installTests ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    withPython
+    && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withPython ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,16 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     json_c
     libical
-    python3Packages.python
     readline
     udev
+  ] ++ lib.optionals withPython [
+    python3Packages.python
   ];
 
   nativeBuildInputs = [
     docutils
     pkg-config
-    python3Packages.pygments
+  ] ++ lib.optionals installTests [
     python3Packages.wrapPython
+  ] ++ lib.optionals withPython [
+    python3Packages.pygments
   ];
 
   outputs =
