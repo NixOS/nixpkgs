@@ -83,7 +83,10 @@ stdenv.mkDerivation ({
     ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild.xcrun;
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include
+    # Adding the bootstrap SDK to `buildInputs` on static builds  propagates it, breaking `xcrun`.
+    # This can be removed once the minimum SDK >10.12 on x86_64-darwin.
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) [ apple-sdk' ];
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
