@@ -149,14 +149,14 @@ stdenv.mkDerivation rec {
     inherit disableBreakingUpdates;
     updateScript = writeScript "discord-update-script" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
+      #!nix-shell -i bash -p curl jq common-updater-scripts
       set -eou pipefail;
-      url=$(curl -sI "https://discordapp.com/api/download/${
+      api_url="https://discord.com/api/updates/${
         builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
-      }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
-      version=''${url##https://dl*.discordapp.net/apps/linux/}
-      version=''${version%%/*.tar.gz}
-      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
+      }?platform=linux"
+      response=$(curl -s "$api_url")
+      version=$(echo "$response" | jq -r '.name')
+      update-source-version ${lib.optionalString (!stdenv.buildPlatform.isLinux) "pkgsCross.x86_64-linux."}${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
   };
 }

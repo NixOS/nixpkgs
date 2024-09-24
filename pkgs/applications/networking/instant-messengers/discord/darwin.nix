@@ -51,14 +51,13 @@ stdenv.mkDerivation {
     inherit disableBreakingUpdates;
     updateScript = writeScript "discord-update-script" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-      set -x
+      #!nix-shell -i bash -p curl jq common-updater-scripts
       set -eou pipefail;
-      url=$(curl -sI "https://discordapp.com/api/download/${
+      api_url="https://discord.com/api/updates/${
         builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
-      }?platform=osx&format=dmg" | grep -oP 'location: \K\S+')
-      version=''${url##https://dl*.discordapp.net/apps/osx/}
-      version=''${version%%/*.dmg}
+      }?platform=osx"
+      response=$(curl -s "$api_url")
+      version=$(echo "$response" | jq -r '.name')
       update-source-version ${lib.optionalString (!stdenv.buildPlatform.isDarwin) "pkgsCross.aarch64-darwin."}${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
   };
