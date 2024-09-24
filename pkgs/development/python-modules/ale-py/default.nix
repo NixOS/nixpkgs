@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JQG8Db7OEKQ7THkHJ+foUm/L7Ctr0Ur8nb6Zc2Z/MJI=";
+    hash = "sha256-tdxO5eixI2swezhkeSMqeVgdiaa/VmNdwhZYURSzadw=";
   };
 
   build-system = [
