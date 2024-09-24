@@ -86,4 +86,5 @@ assert args ? system -> !(args ? localSystem);
 
 import ./. (builtins.removeAttrs args [ "system" ] // {
   inherit config overlays localSystem;
+  crossSystem = { config = "aarch64-unknown-linux-gnu"; };
 })
