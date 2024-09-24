@@ -13250,8 +13250,6 @@ with pkgs;
 
   tvm = callPackage ../development/compilers/tvm { };
 
-  oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
-
   ttfb = callPackage ../development/tools/ttfb { };
 
   twilight = callPackage ../tools/graphics/twilight {

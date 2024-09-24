@@ -1182,6 +1182,7 @@ mapAliases {
   osxfuse = macfuse-stubs; # Added 2021-03-20
   ovn-lts = throw "ovn-lts has been removed. Please use the latest version available under ovn"; # Added 2024-08-24
   oxen = throw "'oxen' has been removed, because it was broken, outdated and unmaintained"; # Added 2023-12-09
+  oysttyer = throw "oysttyer has been removed; it is no longer maintained because of Twitter disabling free API access"; # Added 2024-09-23
 
   ### P ###
 
