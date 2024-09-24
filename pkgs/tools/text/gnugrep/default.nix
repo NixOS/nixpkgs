@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "info" ]; # the man pages are rather small
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-  buildInputs = [ pcre2 libiconv runtimeShellPackage ];
+  buildInputs = [ pcre2 libiconv ] ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
