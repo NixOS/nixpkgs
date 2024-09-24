@@ -307,11 +307,11 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.isFreeBSD) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.isFreeBSD || stdenv.hostPlatform.isNetBSD)) [
     # Cross compilation only supports a limited number of "known good"
     # configurations. If you're reading this and it's been a long time
     # since this diff, consider submitting this patch upstream!
-    ./freebsd-cross.patch
+    ./bsd-cross.patch
   ] ++ optionals (pythonOlder "3.13") [
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
@@ -684,7 +684,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.psfl;
     pkgConfigModules = [ "python3" ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd ++ platforms.netbsd;
     mainProgram = executable;
   };
 })
