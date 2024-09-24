@@ -11,6 +11,11 @@ buildGoModule rec {
     stripRoot = false;
   };
 
+  patches = [
+    # Rebased onto v3.1.2 from https://github.com/traefik/traefik/pull/11077
+    ./fix-CVE-2024-45410.patch
+  ];
+
   vendorHash = "sha256-xQPDlwu/mRdyvZW0qSCA9eko9pOQAMwh2vVJWzMnyfs=";
 
   subPackages = [ "cmd/traefik" ];
