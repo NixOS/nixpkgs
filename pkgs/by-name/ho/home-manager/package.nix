@@ -66,7 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           less
           ncurses
           nixos-option
-          unixtools.hostname
+          inetutils # for `hostname`
         ]
       }" \
       --subst-var-by HOME_MANAGER_LIB '${placeholder "out"}/share/bash/home-manager.sh' \
