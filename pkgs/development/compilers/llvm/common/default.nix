@@ -540,6 +540,23 @@ let
               libllvmLibdir = "${tools.libllvm.lib}/lib";
             })
           ]
+          # Backport version logic from Clang 16. This is needed by the following patch.
+          ++ lib.optional (lib.versionOlder (lib.versions.major metadata.release_version) "16") (fetchpatch {
+            name = "clang-darwin-Use-consistent-version-define-stringifying-logic.patch";
+            url = "https://github.com/llvm/llvm-project/commit/60a33ded751c86fff9ac1c4bdd2b341fbe4b0649.patch?full_index=1";
+            includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+            stripLen = 1;
+            hash = "sha256-YVTSg5eZLz3po2AUczPNXCK26JA3CuTh6Iqp7hAAKIs=";
+          })
+          # Backport `__ENVIRONMENT_OS_VERSION_MIN_REQUIRED__` support from Clang 17.
+          # This is needed by newer SDKs (14+).
+          ++ lib.optional (lib.versionOlder (lib.versions.major metadata.release_version) "17") (fetchpatch {
+            name = "clang-darwin-An-OS-version-preprocessor-define.patch";
+            url = "https://github.com/llvm/llvm-project/commit/c8e2dd8c6f490b68e41fe663b44535a8a21dfeab.patch?full_index=1";
+            includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+            stripLen = 1;
+            hash = "sha256-Vs32kql7N6qtLqc12FtZHURcbenA7+N3E/nRRX3jdig=";
+          })
           ++ lib.optional (lib.versions.major metadata.release_version == "18") (fetchpatch {
             name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
             url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
