@@ -7,31 +7,11 @@
 }:
 
 let
+  odoo_version = "16.0";
+  odoo_release = "20241010";
   python = python310.override {
     self = python;
-    packageOverrides = self: super: {
-      flask = super.flask.overridePythonAttrs (old: rec {
-        version = "2.3.3";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-CcNHqSqn/0qOfzIGeV8w2CZlS684uHPQdEzVccpgnvw=";
-        };
-      });
-      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
-        version = "2.3.7";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-K4wORHtLnbzIXdl7butNy69si2w74L1lTiVVPgohV9g=";
-        };
-        disabledTests = old.disabledTests ++ [
-          "test_response_body"
-        ];
-      });
-    };
   };
-
-  odoo_version = "16.0";
-  odoo_release = "20231024";
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
@@ -41,12 +21,9 @@ in python.pkgs.buildPythonApplication rec {
   # latest release is at https://github.com/odoo/docker/blob/master/16.0/Dockerfile
   src = fetchzip {
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
-    name = "${pname}-${version}";
-    hash = "sha256-Ux8RfA7kWLKissBBY5wrfL+aKKw++5BxjP3Vw0JAOsk="; # odoo
+    name = "odoo-${version}";
+    hash = "sha256-ICe5UOy+Ga81fE66SnIhRz3+JEEbGfoz7ag53mkG4UM="; # odoo
   };
-
-  # needs some investigation
-  doCheck = false;
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
@@ -66,6 +43,7 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     libsass
     lxml
+    lxml-html-clean
     markupsafe
     num2words
     ofxparse
