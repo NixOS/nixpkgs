@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "zitadel-tools";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel-tools";
     rev = "v${version}";
-    hash = "sha256-r9GEHpfDlpK98/dnsxjhUgWKn6vHQla8Z+jQUVrHGyo=";
+    hash = "sha256-wtCBRsP0b7qPOQfYgvmgDT0t2zZHocokO5J8yLZcsgQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-y2PYj0XRSgfiaYpeqAh4VR/+NKUPKd1c0w9pPCWsUrY=";
+  vendorHash = "sha256-ql5Qw5Va/wLBKsb9bCmPciuVrgORU8nndRkhjoJBIgs=";
 
   ldflags = [
     "-s" "-w"
@@ -36,7 +36,7 @@ buildGoModule rec {
     description = "Helper tools for zitadel";
     homepage = "https://github.com/zitadel/zitadel-tools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "zitadel-tools";
   };
 }

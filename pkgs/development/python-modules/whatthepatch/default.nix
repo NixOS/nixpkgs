@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "whatthepatch";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "cscorley";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1+OIs77Vyx56pgf7VSmi4UsPgkv8qZXFm8L2jK2CTMk=";
+    hash = "sha256-NjlQL+zgN9WKUMxMCl97eXTdM8Prrg3iiY8/zwQ8jyY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cscorley/whatthepatch";
     changelog = "https://github.com/cscorley/whatthepatch/blob/${version}/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
   };
 }

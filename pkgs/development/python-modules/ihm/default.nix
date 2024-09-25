@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ihm";
-  version = "1.2";
+  version = "1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-ihm";
     rev = "refs/tags/${version}";
-    hash = "sha256-lQ7/A/RT8/5gLozsToti+4g1Jc++GtjzOU4XZ+feqDs=";
+    hash = "sha256-Ls0o/PkJlHt9kx0IvR2Tpwo2QgXxug+Y+LVziTXXDpY=";
   };
 
   nativeBuildInputs = [

@@ -1,8 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip, python310, rtlcss, wkhtmltopdf
+{ lib, fetchFromGitHub, fetchzip, python310, rtlcss, wkhtmltopdf
 , nixosTests }:
 
 let
   python = python310.override {
+    self = python;
     packageOverrides = self: super: {
       pypdf2 = super.pypdf2.overridePythonAttrs (old: rec {
         version = "1.28.6";

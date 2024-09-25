@@ -21,19 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
     rev = version;
-    hash = "sha256-cVCq7iVurX5SlCs7A5FSds6KaxMW3Qv/JIhhO69FTrk=";
+    hash = "sha256-ps55DiAsetmdcItZKcfyYDD0q0w1Tkf/U48UR/zQx1g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${src}";
     inherit src;
-    hash = "sha256-J8KOmvSiUNBpt4qSFnNEwSKFJMSaTFd14G2INDYwPUE=";
+    hash = "sha256-StJxWasUMj9kh9rLs4LFI3XaZ1Z5pvFBjEjtp79WZjg=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     pango
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreFoundation
     Foundation
     Security
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   # Darwin needs to link against gettext from nixpkgs instead of the one vendored by gettext-sys
   # because the vendored copy does not build with newer versions of clang.
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
     GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
     GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";

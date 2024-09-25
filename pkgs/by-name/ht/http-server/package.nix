@@ -33,6 +33,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/http-party/http-server";
     license = lib.licenses.mit;
     mainProgram = "http-server";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -21,11 +21,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-VvXzGo8GLtkAJ/ZVOpYOboJeRqZkDbZDu9DMjaHqWus=";
+    hash = "sha256-TxWyUDoBvscKa2ogPrFlzLC2q+5RMyMnAiOpQdpFP4M=";
   };
 
   format = "pyproject";

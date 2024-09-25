@@ -6,13 +6,13 @@
   deprecated,
   dirtyjson,
   fetchFromGitHub,
-  fetchzip,
   fsspec,
   jsonpath-ng,
   llamaindex-py-client,
   nest-asyncio,
   networkx,
   nltk,
+  nltk-data,
   numpy,
   openai,
   pandas,
@@ -22,6 +22,7 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  pyvis,
   pyyaml,
   requests,
   spacy,
@@ -32,21 +33,9 @@
   typing-inspect,
 }:
 
-let
-  stopwords = fetchzip {
-    url = "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip";
-    hash = "sha256-tX1CMxSvFjr0nnLxbbycaX/IBnzHFxljMZceX5zElPY=";
-  };
-
-  punkt = fetchzip {
-    url = "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip";
-    hash = "sha256-SKZu26K17qMUg7iCFZey0GTECUZ+sTTrF/pqeEgJCos=";
-  };
-in
-
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.10.48.post1";
+  version = "0.11.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -55,7 +44,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O8mHttYMRUzWvhydQsOux7tynhDuMKapsSDJQXL0MRQ=";
+    hash = "sha256-6wQs6hB609Du5/n5sKJT5E0OJCj3dMKvpKxJ9C75HpI=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -66,12 +55,12 @@ buildPythonPackage rec {
   # Setting `NLTK_DATA` to a writable path can also solve this problem, but it needs to be done in
   # every package that depends on `llama-index-core` for `pythonImportsCheck` not to fail, so this
   # solution seems more elegant.
-  patchPhase = ''
+  postPatch = ''
     mkdir -p llama_index/core/_static/nltk_cache/corpora/stopwords/
-    cp -r ${stopwords}/* llama_index/core/_static/nltk_cache/corpora/stopwords/
+    cp -r ${nltk-data.stopwords}/corpora/stopwords/* llama_index/core/_static/nltk_cache/corpora/stopwords/
 
     mkdir -p llama_index/core/_static/nltk_cache/tokenizers/punkt/
-    cp -r ${punkt}/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
+    cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
   build-system = [ poetry-core ];
@@ -91,6 +80,7 @@ buildPythonPackage rec {
     openai
     pandas
     pillow
+    pyvis
     pyyaml
     requests
     spacy
@@ -131,6 +121,12 @@ buildPythonPackage rec {
     "tests/text_splitter/"
     "tests/token_predictor/"
     "tests/tools/"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_from_namespaced_persist_dir"
+    "test_from_persist_dir"
   ];
 
   meta = with lib; {

@@ -1,6 +1,7 @@
 { lib, fetchurl, version ? "0.26.2", astring, base, camlp-streams, cmdliner_1_0
 , cmdliner_1_1, csexp, dune-build-info, either, fix, fpath, menhirLib, menhirSdk
-, ocaml-version, ocp-indent, odoc-parser, result, stdio, uuseg, uutf, ... }:
+, ocaml-version, ocp-indent, odoc-parser, result, stdio, uuseg, uutf
+, janeStreet_0_15, ... }:
 
 # The ocamlformat package have been split into two in version 0.25.1:
 # one for the library and one for the executable.
@@ -42,8 +43,12 @@ rec {
   cmdliner_v =
     if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0;
 
-  library_deps = [
-    base
+  base_v = if lib.versionAtLeast version "0.25.1" then base else janeStreet_0_15.base;
+
+  stdio_v =if lib.versionAtLeast version "0.25.1" then stdio else janeStreet_0_15.stdio;
+
+  library_deps= [
+    base_v
     cmdliner_v
     dune-build-info
     fix
@@ -51,7 +56,7 @@ rec {
     menhirLib
     menhirSdk
     ocp-indent
-    stdio
+    stdio_v
     uuseg
     uutf
   ] ++ lib.optionals (lib.versionAtLeast version "0.20.0") [

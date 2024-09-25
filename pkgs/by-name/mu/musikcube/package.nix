@@ -3,7 +3,7 @@
   cmake,
   curl,
   fetchFromGitHub,
-  ffmpeg_7-headless,
+  ffmpeg-headless,
   gnutls,
   lame,
   lib,
@@ -32,17 +32,17 @@
 }:
 
 let
-  ffmpeg = ffmpeg_7-headless;
+  ffmpeg = ffmpeg-headless;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musikcube";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = "musikcube";
     rev = finalAttrs.version;
-    hash = "sha512-Yqh35hyGzGZlh4UoHK0MGYBa+zugYJg3F+8F223saTdDChiX4cSncroSTexRyJVGm7EE8INNJoXg3HU6bZ08lA==";
+    hash = "sha512-ibpSrzbn2yGNgWnjAh4sG9ZRFImxjE2sq6tu9k0w1QAAr/OWSTwtaIuK71ClT6yt4HKyRk1KSaXa+/IzOHI6Kg==";
   };
 
   outputs = [
@@ -72,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
       taglib
     ]
     ++ lib.optionals systemdSupport [ systemd ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       pulseaudio
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Cocoa
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DDISABLE_STRIP=true" ];
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath $out/share/musikcube $out/share/musikcube/musikcube
     install_name_tool -add_rpath $out/share/musikcube $out/share/musikcube/musikcubed
   '';

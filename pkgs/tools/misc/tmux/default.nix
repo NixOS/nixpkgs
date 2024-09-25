@@ -10,7 +10,7 @@
 , runCommand
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
-, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
+, withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl, libutempter
 , withSixel ? true
 }:
 
@@ -54,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/tmux/tmux/commit/aa17f0e0c1c8b3f1d6fc8617613c74f07de66fae.patch";
       hash = "sha256-jhWGnC9tsGqTTA5tU+i4G3wlwZ7HGz4P0UHl17dVRU4=";
     })
+    # https://github.com/tmux/tmux/issues/3905
+    # fix tmux hanging on shutdown
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/3823fa2c577d440649a84af660e4d3b0c095d248.patch";
+      hash = "sha256-FZDy/ZgVdwUAam8g5SfGBSnMhp2nlHHfrO9eJNIhVPo=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -82,13 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/nix-support
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';
 
   passthru = {
-    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (if stdenv.isDarwin then ''
+    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/share/terminfo/74
       cp -v ${ncurses}/share/terminfo/74/tmux $out/share/terminfo/74
       # macOS ships an old version (5.7) of ncurses which does not include tmux-256color so we need to provide it from our ncurses.

@@ -112,7 +112,7 @@ in stdenv.mkDerivation (finalAttrs: {
             echo -e "include Makefile\nprint_regress_files:\n\t@echo \$(REGRESS)" > Makefile.regress
             REGRESS_TESTS=$(make -f Makefile.regress print_regress_files)
 
-            ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+            ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
               --bindir='${postgresqlWithSelf}/bin' \
               --temp-instance=regress-instance \
               --dbname=contrib_regression \
@@ -135,7 +135,7 @@ in stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.postgresql;
     broken = jitSupport;

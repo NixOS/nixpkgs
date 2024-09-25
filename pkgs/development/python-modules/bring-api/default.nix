@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "bring-api";
-  version = "0.7.2";
+  version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "bring-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-941IAVlLwfHCyqUu0AhdIfBjuT3pZpk98ZUssBVjEUA=";
+    hash = "sha256-eXT7H2GGNpSo58eK5f6b5eLWYgjxEV8iLgaVTpkt9EU=";
   };
 
   build-system = [ setuptools ];

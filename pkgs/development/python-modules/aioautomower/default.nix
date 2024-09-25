@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.6.4";
+  version = "2024.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     rev = "refs/tags/${version}";
-    hash = "sha256-v+wg/2JRBJ0VgRYOey92WGwVzHmxU9h/ev2oICefaMg=";
+    hash = "sha256-MdsK+QP8YdMceTiNwhuf84KARIHCyn7/g6WKrDB6yCc=";
   };
 
   postPatch = ''
@@ -58,6 +58,8 @@ buildPythonPackage rec {
   disabledTests = [
     # File is missing
     "test_standard_mower"
+    # Call no found
+    "test_post_commands"
   ];
 
   meta = with lib; {

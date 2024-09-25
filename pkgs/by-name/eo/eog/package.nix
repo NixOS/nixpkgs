@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "45.3";
+  version = "45.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hlD2YtSSHYOnkE9rucokW69zX3F7R/rFs38NkOXokag=";
+    url = "mirror://gnome/sources/eog/${lib.versions.major version}/eog-${version}.tar.xz";
+    hash = "sha256-tQ8yHHCsZK97yqW0Rg3GdbPKYP2tOFYW86x7dw4GZv4=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "eog";
     };
   };
 

@@ -9,20 +9,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-show-asm";
-  version = "0.2.38";
+  version = "0.2.39";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-CYnW6wv4aL/Qs6IwPaRi9w8/iNMo5to0J3z4zTdgHaE=";
+    hash = "sha256-fGUx2SOgs5IF7KTr36fHktykrFkxqLWp4CWVGOZ+MeM=";
   };
 
-  cargoHash = "sha256-jRsxP4b1URTDcnp8VsZvSTaPNOBBwq570eCn2jfQSGg=";
+  cargoHash = "sha256-iCHf4/bqICZ0bTeFFeVopU0Yl8VbxRd+Cr4WucuptVk=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cargo-asm \
       --bash <($out/bin/cargo-asm --bpaf-complete-style-bash) \
       --fish <($out/bin/cargo-asm --bpaf-complete-style-fish) \

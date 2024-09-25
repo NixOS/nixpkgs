@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Efficient signal resampling";
     homepage = "https://github.com/bmcfee/resampy";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     curl
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
     wxGTK
     xz
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa IOKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa IOKit ];
 
   enableParallelBuilding = true;
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm -fr $out/share
   '';
 

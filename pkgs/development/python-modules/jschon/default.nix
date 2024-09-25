@@ -58,6 +58,11 @@ buildPythonPackage rec {
     pytest-xdist # not used upstream, but massive speedup
   ];
 
+  disabledTests = [
+    # flaky, timing sensitive
+    "test_keyword_dependency_resolution"
+  ];
+
   disabledTestPaths = [
     "tests/test_benchmarks.py"
   ];

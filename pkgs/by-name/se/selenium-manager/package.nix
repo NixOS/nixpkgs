@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-1CPUOAfBfUeZt5S8t5SM3oyrNwXKHplhHG5idVy4YrE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     description = "Browser automation framework and ecosystem";
     homepage = "https://github.com/SeleniumHQ/selenium";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "selenium-manager";
     platforms = platforms.all;
   };

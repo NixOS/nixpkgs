@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.0.0.AM26";
 
   src = fetchzip {
-    url = "https://dlcdn.apache.org//directory/apacheds/dist/${version}/apacheds-${version}.zip";
+    url = "mirror://apache/directory/apacheds/dist/${version}/apacheds-${version}.zip";
     sha256 = "sha256-36kDvfSy5rt/3+nivEFTepnIKf6sX0NTgPRm28M+1v4=";
   };
 

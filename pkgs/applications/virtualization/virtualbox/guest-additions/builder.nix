@@ -1,7 +1,7 @@
-{ config, stdenv, kernel, fetchurl, lib, pam, libxslt
-, libX11, libXext, libXcursor, libXmu
+{ stdenv, kernel, fetchurl, lib, pam, libxslt
+, libXext, libXcursor, libXmu
 , glib, libXrandr, dbus, xz
-, pkg-config, which, zlib, xorg
+, pkg-config, which, xorg
 , yasm, patchelf, makeself
 , linuxHeaders, openssl}:
 
@@ -10,11 +10,11 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "VirtualBox-GuestAdditions-builder-${kernel.version}";
-  version = "7.0.18";
+  version = "7.0.20";
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${finalAttrs.version}/VirtualBox-${finalAttrs.version}.tar.bz2";
-    sha256 = "d999513533631674a024762668de999411d8197060c51e68c5faf0a2c0eea1a5";
+    sha256 = "5cf5979bef66ebab3fcd495796b215a940e8a07c469d4bc56d064de44222dd02";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
@@ -37,7 +37,6 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    #../gcc-13.patch
     ## https://www.virtualbox.org/changeset/100258/vbox
     ./no-legacy-xorg.patch
   ];

@@ -1,67 +1,64 @@
 { lib
-, stdenv
+, buildDotnetModule
 , fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, jsoncpp
-, taglib
-, curl
-, curlpp
+, dotnetCorePackages
+, blueprint-compiler
+, chromaprint
 , glib
 , gtk4
 , libadwaita
-, wrapGAppsHook4
-, desktop-file-utils
-, chromaprint # fpcalc
 }:
 
-stdenv.mkDerivation rec {
+let
+  dotnet = dotnetCorePackages.dotnet_8;
+in
+
+buildDotnetModule rec {
   pname = "tagger";
-  version = "2022.11.2";
+  version = "2024.6.0-1";
 
   src = fetchFromGitHub {
     owner = "nlogozzo";
     repo = "NickvisionTagger";
     rev = version;
-    hash = "sha256-gFpnTuUROYwPANrkD+g7a3FHSCVY2oB97flCK+LLowY=";
+    hash = "sha256-4OfByQYhLXmeFWxzhqt8d7pLUyuMLhDM20E2YcA9Q3s=";
   };
 
+  projectFile = "NickvisionTagger.GNOME/NickvisionTagger.GNOME.csproj";
+  dotnet-sdk = dotnet.sdk;
+  dotnet-runtime = dotnet.runtime;
+  nugetDeps = ./deps.nix;
+
   nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook4
-    desktop-file-utils
+    blueprint-compiler
+    libadwaita
   ];
 
   buildInputs = [
+    chromaprint
+  ];
+
+  runtimeDeps = [
     glib
     gtk4
     libadwaita
-    jsoncpp
-    taglib
-    curl
-    curlpp
   ];
 
-  # Don't install compiled binary
-  postPatch = ''
-    sed -i '/fpcalc/d' meson.build
-  '';
+  executables = [ "NickvisionTagger.GNOME" ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ chromaprint ]}"
-    )
+  postInstall = ''
+    substituteInPlace NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in --replace '@EXEC@' "NickvisionTagger.GNOME"
+    install -Dm444 NickvisionTagger.Shared/Resources/org.nickvision.tagger.svg -t $out/share/icons/hicolor/scalable/apps/
+    install -Dm444 NickvisionTagger.Shared/Resources/org.nickvision.tagger-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps/
+    install -Dm444 NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in -T $out/share/applications/org.nickvision.tagger.desktop
   '';
 
   meta = with lib; {
     description = "Easy-to-use music tag (metadata) editor";
-    homepage = "https://github.com/nlogozzo/NickvisionTagger";
-    mainProgram = "org.nickvision.tagger";
-    license = licenses.gpl3Plus;
+    homepage = "https://github.com/NickvisionApps/Tagger";
+    mainProgram = "NickvisionTagger.GNOME";
+    license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [ zendo ratcornu ];
   };
 }

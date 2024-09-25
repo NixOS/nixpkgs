@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ntp";
-  version = "4.2.8p17";
+  version = "4.2.8p18";
 
   src = fetchurl {
     url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
-    hash = "sha256-ED3ScuambFuN8H3OXpoCVV/NbxOXvft4IjcyjonTqGY=";
+    hash = "sha256-z4TF8/saKVKElCYk2CP/+mNBROCWz8T5lprJjvX0aOU=";
   };
 
   configureFlags = [
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     "--with-openssl-incdir=${openssl.dev}/include"
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
-  ] ++ lib.optional stdenv.isLinux "--enable-linuxcaps";
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-linuxcaps";
 
   buildInputs = [ openssl perl ]
-    ++ lib.optionals stdenv.isLinux [ pps-tools libcap ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pps-tools libcap ];
 
   hardeningEnable = [ "pie" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
-    maintainers = with maintainers; [ eelco thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms = platforms.unix;
   };
 }

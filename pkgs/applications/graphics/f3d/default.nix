@@ -12,7 +12,10 @@
 , Cocoa
 , OpenGL
 , python3Packages
-, withManual ? !stdenv.isDarwin
+, opencascade-occt
+, assimp
+, fontconfig
+, withManual ? !stdenv.hostPlatform.isDarwin
 , withPythonBinding ? false
 }:
 
@@ -42,7 +45,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     vtk_9
-  ] ++ lib.optionals stdenv.isDarwin [
+    opencascade-occt
+    assimp
+    fontconfig
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     OpenGL
   ] ++ lib.optionals withPythonBinding [
@@ -58,6 +64,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DF3D_MODULE_EXTERNAL_RENDERING=ON"
+    "-DF3D_PLUGIN_BUILD_ASSIMP=ON"
+    "-DF3D_PLUGIN_BUILD_OCCT=ON"
   ] ++ lib.optionals withManual [
     "-DF3D_LINUX_GENERATE_MAN=ON"
   ] ++ lib.optionals withPythonBinding [

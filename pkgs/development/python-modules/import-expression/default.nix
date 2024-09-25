@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pytestCheckHook,
   astunparse,
   setuptools,
@@ -36,6 +35,6 @@ buildPythonPackage rec {
       psfl
     ];
     mainProgram = "import-expression";
-    maintainers = with lib.maintainers; [ lychee ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

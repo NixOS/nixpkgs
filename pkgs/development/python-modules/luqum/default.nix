@@ -6,6 +6,7 @@
   fetchFromGitHub,
   ply,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
@@ -26,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '--doctest-modules --doctest-glob="test_*.rst" --cov=luqum --cov-branch --cov-report html --no-cov-on-fail' ""
+      --replace '--doctest-modules --doctest-glob="test_*.rst"' ""
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     elastic-transport
     elasticsearch-dsl
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "luqum" ];

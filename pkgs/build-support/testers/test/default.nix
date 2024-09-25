@@ -1,4 +1,4 @@
-{ testers, lib, pkgs, hello, runCommand, ... }:
+{ testers, lib, pkgs, hello, runCommand, emptyFile, emptyDirectory, ... }:
 let
   pkgs-with-overlay = pkgs.extend(final: prev: {
     proof-of-overlay-hello = prev.hello;
@@ -15,6 +15,31 @@ lib.recurseIntoAttrs {
   lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
 
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
+
+  shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
+
+  runCommand = lib.recurseIntoAttrs {
+    bork = pkgs.python3Packages.bork.tests.pytest-network;
+
+    dns-resolution = testers.runCommand {
+      name = "runCommand-dns-resolution-test";
+      nativeBuildInputs = [ pkgs.ldns ];
+      script = ''
+        drill example.com
+        touch $out
+      '';
+    };
+
+    nonDefault-hash = testers.runCommand {
+      name = "runCommand-nonDefaultHash-test";
+      script = ''
+        mkdir $out
+        touch $out/empty
+        echo aaaaaaaaaaicjnrkeflncmrlk > $out/keymash
+      '';
+      hash = "sha256-eMy+6bkG+KS75u7Zt4PM3APhtdVd60NxmBRN5GKJrHs=";
+    };
+  };
 
   runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {
     name = "runNixOSTest-test";
@@ -99,117 +124,135 @@ lib.recurseIntoAttrs {
   };
 
   testEqualContents = lib.recurseIntoAttrs {
-    happy = testers.testEqualContents {
+    equalDir = testers.testEqualContents {
       assertion = "The same directory contents at different paths are recognized as equal";
-      expected = runCommand "expected" {} ''
-        mkdir -p $out/c
-        echo a >$out/a
-        echo b >$out/b
-        echo d >$out/c/d
+      expected = runCommand "expected" { } ''
+        mkdir -p -- "$out/c"
+        echo a >"$out/a"
+        echo b >"$out/b"
+        echo d >"$out/c/d"
+        echo e >"$out/e"
+        chmod a+x -- "$out/e"
       '';
-      actual = runCommand "actual" {} ''
-        mkdir -p $out/c
-        echo a >$out/a
-        echo b >$out/b
-        echo d >$out/c/d
+      actual = runCommand "actual" { } ''
+        mkdir -p -- "$out/c"
+        echo a >"$out/a"
+        echo b >"$out/b"
+        echo d >"$out/c/d"
+        echo e >"$out/e"
+        chmod a+x -- "$out/e"
       '';
     };
 
-    unequalExe =
-      runCommand "testEqualContents-unequalExe" {
-        log = testers.testBuildFailure (testers.testEqualContents {
-          assertion = "The same directory contents at different paths are recognized as equal";
-          expected = runCommand "expected" {} ''
-            mkdir -p $out/c
-            echo a >$out/a
-            chmod a+x $out/a
-            echo b >$out/b
-            echo d >$out/c/d
-          '';
-          actual = runCommand "actual" {} ''
-            mkdir -p $out/c
-            echo a >$out/a
-            echo b >$out/b
-            chmod a+x $out/b
-            echo d >$out/c/d
-          '';
-        });
-      } ''
-        (
-          set -x
-          grep -F -- "executable bits don't match" $log/testBuildFailure.log
-          grep -E -- '+.*-actual/a' $log/testBuildFailure.log
-          grep -E -- '-.*-actual/b' $log/testBuildFailure.log
-          grep -F -- "--- actual-executables" $log/testBuildFailure.log
-          grep -F -- "+++ expected-executables" $log/testBuildFailure.log
-        ) || {
-          echo "Test failed: could not find pattern in build log $log"
-          exit 1
-        }
-        echo 'All good.'
-        touch $out
+    fileMissing = testers.testBuildFailure (
+      testers.testEqualContents {
+        assertion = "Directories with different file list are not recognized as equal";
+        expected = runCommand "expected" { } ''
+          mkdir -p -- "$out/c"
+          echo a >"$out/a"
+          echo b >"$out/b"
+          echo d >"$out/c/d"
+        '';
+        actual = runCommand "actual" { } ''
+          mkdir -p -- "$out/c"
+          echo a >"$out/a"
+          echo d >"$out/c/d"
+        '';
+      }
+    );
+
+    equalExe = testers.testEqualContents {
+      assertion = "The same executable file contents at different paths are recognized as equal";
+      expected = runCommand "expected" { } ''
+        echo test >"$out"
+        chmod a+x -- "$out"
       '';
+      actual = runCommand "actual" { } ''
+        echo test >"$out"
+        chmod a+x -- "$out"
+      '';
+    };
+
+    unequalExe = testers.testBuildFailure (
+      testers.testEqualContents {
+        assertion = "Different file mode bits are not recognized as equal";
+        expected = runCommand "expected" { } ''
+          touch -- "$out"
+          chmod a+x -- "$out"
+        '';
+        actual = runCommand "actual" { } ''
+          touch -- "$out"
+        '';
+      }
+    );
+
+    unequalExeInDir = testers.testBuildFailure (
+      testers.testEqualContents {
+        assertion = "Different file mode bits are not recognized as equal in directory";
+        expected = runCommand "expected" { } ''
+          mkdir -p -- "$out/a"
+          echo b >"$out/b"
+          chmod a+x -- "$out/b"
+        '';
+        actual = runCommand "actual" { } ''
+          mkdir -p -- "$out/a"
+          echo b >"$out/b"
+        '';
+      }
+    );
+
+    nonExistentPath = testers.testBuildFailure (
+      testers.testEqualContents {
+        assertion = "Non existent paths are not recognized as equal";
+        expected = "${emptyDirectory}/foo";
+        actual = "${emptyDirectory}/bar";
+      }
+    );
+
+    emptyFileAndDir = testers.testBuildFailure (
+      testers.testEqualContents {
+        assertion = "Empty file and directory are not recognized as equal";
+        expected = emptyFile;
+        actual = emptyDirectory;
+      }
+    );
 
     fileDiff =
-      runCommand "testEqualContents-fileDiff" {
-        log = testers.testBuildFailure (testers.testEqualContents {
-          assertion = "The same directory contents at different paths are recognized as equal";
-          expected = runCommand "expected" {} ''
-            mkdir -p $out/c
-            echo a >$out/a
-            echo b >$out/b
-            echo d >$out/c/d
-          '';
-          actual = runCommand "actual" {} ''
-            mkdir -p $out/c
-            echo a >$out/a
-            echo B >$out/b
-            echo d >$out/c/d
-          '';
-        });
-      } ''
+      let
+        log = testers.testBuildFailure (
+          testers.testEqualContents {
+            assertion = "Different files are not recognized as equal in subdirectories";
+            expected = runCommand "expected" { } ''
+              mkdir -p -- "$out/b"
+              echo a >"$out/a"
+              echo EXPECTED >"$out/b/c"
+            '';
+            actual = runCommand "actual" { } ''
+              mkdir -p "$out/b"
+              echo a >"$out/a"
+              echo ACTUAL >"$out/b/c"
+            '';
+          }
+        );
+      in
+      runCommand "testEqualContents-fileDiff" { inherit log; } ''
         (
           set -x
-          grep -F -- "Contents must be equal but were not" $log/testBuildFailure.log
-          grep -E -- '+++ .*-actual/b' $log/testBuildFailure.log
-          grep -E -- '--- .*-actual/b' $log/testBuildFailure.log
-          grep -F -- "-B" $log/testBuildFailure.log
-          grep -F -- "+b" $log/testBuildFailure.log
+          # Note: use `&&` operator to chain commands because errexit (set -e)
+          # does not work in this context (even when set explicitly and with
+          # inherit_errexit), otherwise the subshell exits with the status of
+          # the last run command and ignores preceding failures.
+          grep -F -- 'Contents must be equal, but were not!' "$log/testBuildFailure.log" &&
+          grep -E -- '\+\+\+ .*-expected/b/c' "$log/testBuildFailure.log" &&
+          grep -E -- '--- .*-actual/b/c' "$log/testBuildFailure.log" &&
+          grep -F -- -ACTUAL "$log/testBuildFailure.log" &&
+          grep -F -- +EXPECTED "$log/testBuildFailure.log"
         ) || {
           echo "Test failed: could not find pattern in build log $log"
-          exit 1
+          false
         }
         echo 'All good.'
-        touch $out
-      '';
-
-    fileMissing =
-      runCommand "testEqualContents-fileMissing" {
-        log = testers.testBuildFailure (testers.testEqualContents {
-          assertion = "The same directory contents at different paths are recognized as equal";
-          expected = runCommand "expected" {} ''
-            mkdir -p $out/c
-            echo a >$out/a
-            echo b >$out/b
-            echo d >$out/c/d
-          '';
-          actual = runCommand "actual" {} ''
-            mkdir -p $out/c
-            echo a >$out/a
-            echo d >$out/c/d
-          '';
-        });
-      } ''
-        (
-          set -x
-          grep -F -- "Contents must be equal but were not" $log/testBuildFailure.log
-          grep -E -- 'Only in .*-expected: b' $log/testBuildFailure.log
-        ) || {
-          echo "Test failed: could not find pattern in build log $log"
-          exit 1
-        }
-        echo 'All good.'
-        touch $out
+        touch -- "$out"
       '';
   };
 }

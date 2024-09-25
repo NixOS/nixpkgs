@@ -12,22 +12,24 @@
 , pytestCheckHook
 , pytest-benchmark
 , pytest-cov
+, pytest-mock
 , pandas
+, azure-storage-blob
 }:
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "0.18.1";
+  version = "0.19.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qkmCKk1VnROK7luuPlKbIx3S3C8fzGJy8yhTyZWXyGc=";
+    hash = "sha256-Xgn6uyIfuB6YnCg8FieOr/tuhXBtmDZKvNpcDGynNZg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-Dj2vm0l4b/E6tbXgs5iPvbDAsxNW0iPUSRPzT5KaA3Y=";
+    hash = "sha256-ebX51/ztIdhY81sd0fdPsKvaGtCEk8oofrj/Nrt8nfA=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
@@ -39,7 +41,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv
@@ -59,6 +61,8 @@ buildPythonPackage rec {
     pandas
     pytest-benchmark
     pytest-cov
+    pytest-mock
+    azure-storage-blob
   ];
 
   preCheck = ''

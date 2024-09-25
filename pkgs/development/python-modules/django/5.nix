@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   pythonOlder,
   substituteAll,
 
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.0.7";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-g2Y8kcfYUjykZ7Y6JEsNW/jw6chMLLYpQlgdTFt7HmM=";
+    hash = "sha256-4w5MSu3xdF9Pl0iRcD6bOgUF0tLMiZdCWt3JKsx/Rqc=";
   };
 
   patches =
@@ -76,17 +75,13 @@ buildPythonPackage rec {
       })
     ];
 
-  postPatch =
-    ''
-      substituteInPlace tests/utils_tests/test_autoreload.py \
-        --replace "/usr/bin/python" "${python.interpreter}"
-    ''
-    + lib.optionalString (pythonAtLeast "3.12" && stdenv.hostPlatform.system == "aarch64-linux") ''
-      # Test regression after xz was reverted from 5.6.0 to 5.4.6
-      # https://hydra.nixos.org/build/254532197
-      substituteInPlace tests/view_tests/tests/test_debug.py \
-        --replace-fail "test_files" "dont_test_files"
-    '';
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=61.0.0,<69.3.0" setuptools
+
+    substituteInPlace tests/utils_tests/test_autoreload.py \
+      --replace-fail "/usr/bin/python" "${python.interpreter}"
+  '';
 
   build-system = [ setuptools ];
 
@@ -119,14 +114,19 @@ buildPythonPackage rec {
     tzdata
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     # make sure the installed library gets imported
     rm -rf django
 
+    # fails to import github_links from docs/_ext/github_links.py
+    rm tests/sphinx/test_github_links.py
+
     # provide timezone data, works only on linux
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+
+    export PYTHONPATH=$PWD/docs/_ext:$PYTHONPATH
   '';
 
   checkPhase = ''

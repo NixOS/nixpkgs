@@ -25,7 +25,7 @@ buildPythonApplication {
     owner = "ubports";
     repo = "development/core/click";
     rev = "aaf2735e8e6cbeaf2e429c70136733513a81718a";
-    sha256 = "sha256-pNu995/w3tbz15QQVdVYBnWnAoZmqWj1DN/5PZZ0iZw=";
+    hash = "sha256-pNu995/w3tbz15QQVdVYBnWnAoZmqWj1DN/5PZZ0iZw=";
   };
 
   postPatch = ''

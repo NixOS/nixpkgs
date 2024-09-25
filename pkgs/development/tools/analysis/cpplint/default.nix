@@ -1,49 +1,51 @@
-{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
+{ lib, fetchpatch, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "cpplint";
-  version = "1.5.5";
-  format = "setuptools";
+  version = "1.7.0";
+  pyproject = true;
 
   # Fetch from github instead of pypi, since the test cases are not in the pypi archive
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    hash = "sha256-JXz2Ufo7JSceZVqYwCRkuAsOR08znZlIUk8GCLAyiI4=";
+    owner = "cpplint";
+    repo = "cpplint";
+    # Commit where version was bumped to 1.7.0, no tag available
+    rev = "8f62396aff6dc850415cbe5ed7edf9dc95f4a731";
+    hash = "sha256-EKD7vkxJjoKWfPrXEQRA0X3PyAoYXi9wGgUFT1zC4WM=";
   };
 
   patches = [
-    ./0001-Remove-pytest-runner-version-pin.patch
-
-    # The patch below stops using the sre_compile module, which was deprecated
-    # in Python 3.11 and replaces it with re.compile. Upstream is unsure if it
-    # should use re.compile or re._compiler.compile, so we should monitor the
-    # thread for updates.
-    #
-    #   https://github.com/cpplint/cpplint/pull/214
-    #
+    # Whitespace fixes that make the tests pass
     (fetchpatch {
-      name = "python-3.11-compatibility.patch";
-      url = "https://github.com/cpplint/cpplint/commit/e84e84f53915ae2a9214e756cf89c573a73bbcd3.patch";
-      hash = "sha256-u57AFWaVmGFSsvSGq1x9gZmTsuZPqXvTC7mTfyb2164=";
+      url = "https://github.com/cpplint/cpplint/commit/fd257bd78db02888cf6b5985ab8f53d6b765704f.patch";
+      hash = "sha256-BNyW8QEY9fUe2zMG4RZzBHASaIsu4d2FJt5rX3VgkrQ=";
     })
   ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"pytest-runner==5.2"' ""
+
     patchShebangs cpplint_unittest.py
   '';
 
-  nativeCheckInputs = with python3Packages; [ pytest pytest-runner ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytest
+  ];
+
   checkPhase = ''
     ./cpplint_unittest.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cpplint/cpplint";
     description = "Static code checker for C++";
     mainProgram = "cpplint";
-    maintainers = [ maintainers.bhipple ];
-    license = [ licenses.bsd3 ];
+    maintainers = [ lib.maintainers.bhipple ];
+    license = [ lib.licenses.bsd3 ];
   };
 }

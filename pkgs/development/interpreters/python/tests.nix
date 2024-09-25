@@ -38,7 +38,7 @@ let
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.hostPlatform.isDarwin) {
       # Use virtualenv from a Nix env.
       # Fails on darwin with
       #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
@@ -106,7 +106,7 @@ let
   # Integration tests involving the package set.
   # All PyPy package builds are broken at the moment
   integrationTests = lib.optionalAttrs (!python.isPyPy) (
-    lib.optionalAttrs (python.isPy3k && !stdenv.isDarwin) { # darwin has no split-debug
+    lib.optionalAttrs (python.isPy3k && !stdenv.hostPlatform.isDarwin) { # darwin has no split-debug
       cpython-gdb = callPackage ./tests/test_cpython_gdb {
         interpreter = python;
       };
@@ -121,6 +121,43 @@ let
       };
     }
   );
+
+  # Test editable package support
+  editableTests = let
+    testPython = python.override {
+      self = testPython;
+      packageOverrides = pyfinal: pyprev: {
+        # An editable package with a script that loads our mutable location
+        my-editable = pyfinal.mkPythonEditablePackage {
+          pname = "my-editable";
+          version = "0.1.0";
+          root = "$NIX_BUILD_TOP/src"; # Use environment variable expansion at runtime
+          # Inject a script
+          scripts = {
+            my-script = "my_editable.main:main";
+          };
+        };
+      };
+    };
+
+
+  in {
+    editable-script = runCommand "editable-test" {
+      nativeBuildInputs = [ (testPython.withPackages (ps: [ ps.my-editable ])) ];
+    } ''
+      mkdir -p src/my_editable
+
+      cat > src/my_editable/main.py << EOF
+      def main():
+        print("hello mutable")
+      EOF
+
+      test "$(my-script)" == "hello mutable"
+      test "$(python -c 'import sys; print(sys.path[1])')" == "$NIX_BUILD_TOP/src"
+
+      touch $out
+    '';
+  };
 
   # Tests to ensure overriding works as expected.
   overrideTests = let
@@ -185,11 +222,11 @@ let
       }
     ) {};
     pythonWithRequests = requests.pythonModule.withPackages (ps: [ requests ]);
-    in lib.optionalAttrs (python.isPy3k && stdenv.isLinux)
+    in lib.optionalAttrs (python.isPy3k && stdenv.hostPlatform.isLinux)
     {
       condaExamplePackage = runCommand "import-requests" {} ''
         ${pythonWithRequests.interpreter} -c "import requests" > $out
       '';
     };
 
-in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests)
+in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests // editableTests)

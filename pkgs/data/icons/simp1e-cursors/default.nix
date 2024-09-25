@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "cursors";
     repo = "simp1e";
     rev = version;
-    sha256 = "sha256-3DCF6TwxWwYK5pF2Ykr3OwF76H7J03vLNZch/XoZZZk=";
+    hash = "sha256-3DCF6TwxWwYK5pF2Ykr3OwF76H7J03vLNZch/XoZZZk=";
     fetchSubmodules = true;
   };
 

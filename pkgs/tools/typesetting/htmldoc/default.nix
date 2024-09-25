@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib cups libpng libjpeg ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation SystemConfiguration ];
 
   # do not generate universal binary on Darwin
   # because it is not supported by Nix's clang
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://michaelrsweet.github.io/htmldoc";
     changelog   = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
     license     = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.unix;
 
     longDescription = ''

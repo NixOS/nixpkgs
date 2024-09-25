@@ -45,7 +45,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # Tests depend on json-stream, which depends on this package.
   # To avoid infinite recursion, we only enable tests when building passthru.tests.

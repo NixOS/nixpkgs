@@ -35,6 +35,12 @@ let
     shelly = [
       pyswitchbot
     ];
+    songpal = [
+      isal
+    ];
+    system_log = [
+      isal
+    ];
     tilt_ble = [
       ibeacon-ble
     ];
@@ -134,12 +140,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     '';
 
     meta = old.meta // {
-      broken = lib.elem component [
-        # pinned version incompatible with urllib3>=2.0
-        "telegram_bot"
-        # depends on telegram_bot
-        "telegram"
-      ];
+      broken = lib.elem component [ ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;
     };

@@ -8,22 +8,22 @@
 
 buildNpmPackage rec {
   pname = "semantic-release";
-  version = "24.0.0";
+  version = "24.1.1";
 
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
     rev = "v${version}";
-    hash = "sha256-UoxsuCGWgHL7tYrBKS83VUkvGTUMBtpdO8ByKv5Dbrk=";
+    hash = "sha256-BGSe05I1NconPkPCzGOOLPbH/JSlwXvAWbViJVYMU/c=";
   };
 
-  npmDepsHash = "sha256-MmdgUa3j3MD/SCqtMtAGvocHTgv5OIu8RdT27JgNvcg=";
+  npmDepsHash = "sha256-DsBklxeY9RbvFsEA56vkmvVms+W9mr9qA/JVgAgs81k=";
 
   dontNpmBuild = true;
 
   nativeBuildInputs = [
     python3
-  ] ++ lib.optional stdenv.isDarwin cctools;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
 
   # Fixes `semantic-release --version` output
   postPatch = ''

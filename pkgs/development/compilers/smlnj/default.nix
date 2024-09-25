@@ -3,7 +3,7 @@ let
   version = "110.95";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
 
-  arch = if stdenv.is64bit
+  arch = if stdenv.hostPlatform.is64bit
     then "64"
     else "32";
 
@@ -12,7 +12,7 @@ let
   boot64 = { url = "${baseurl}/boot.amd64-unix.tgz";
              sha256 = "1zn96a83kb6bn6228yfjsvb58m2qxw9k4j3qz0p9c8za479w4ch6"; };
 
-  bootBinary = if stdenv.is64bit
+  bootBinary = if stdenv.hostPlatform.is64bit
                then boot64
                else boot32;
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
     sed -i '/PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
     echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
     patch --verbose config/_heap2exec ${./heap2exec.diff}
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Locate standard headers like <unistd.h>
     substituteInPlace base/runtime/config/gen-posix-names.sh \
       --replace "\$SDK_PATH/usr" "${Libsystem}"
@@ -89,6 +89,6 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ thoughtpolice ];
     mainProgram = "sml";
     # never built on x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

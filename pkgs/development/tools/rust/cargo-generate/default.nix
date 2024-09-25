@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.21.1";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-Pza1MK5yWpuNfaaFAJy5/Pf+t0TN1Hzc5wKcpmMpEf0=";
+    sha256 = "sha256-1F/865UgdqwfpITFhXCuL7CmducL7w0lVDyfui9UzjU=";
   };
 
-  cargoHash = "sha256-b6WfsDTAZgxA977JhdlafE+POPvMLl8Z7CzEf+L2+Us=";
+  cargoHash = "sha256-szPO1V09EThpo2N03Ll+ZJUpvjp2b+/C/sviOzFfG+k=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
   checkFlags = [
     "--skip=favorites::favorites_default_to_git_if_not_defined"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=git::utils::should_canonicalize"
   ];
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
     rev = version;
-    hash = "sha256-woyl6HcUGOB3WWiNVMrmrpDAePFTzNtqK9V4UOzDb50=";
+    hash = "sha256-ANtqGFctgOAynDiZS9tmWRASVpB2RqRTG7JSXZIDmP8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     "-DCAF_ENABLE_EXAMPLES:BOOL=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkTarget = "test";
 
   meta = with lib; {

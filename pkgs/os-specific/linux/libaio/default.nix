@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
   ] ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";
 
-  hardeningDisable = lib.optional (stdenv.isi686) "stackprotector";
+  hardeningDisable = lib.optional (stdenv.hostPlatform.isi686) "stackprotector";
 
   checkTarget = "partcheck"; # "check" needs root
 
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lse.sourceforge.net/io/aio.html";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

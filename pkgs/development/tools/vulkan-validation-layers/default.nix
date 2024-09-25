@@ -13,6 +13,7 @@
 , libXdmcp
 , libXrandr
 , spirv-headers
+, spirv-tools
 , vulkan-headers
 , vulkan-utility-libraries
 , wayland
@@ -23,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.283.0";
+  version = "1.3.290.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-OT9VfGg3+NBVV6SCGZ+Hu9FAxGJXXT45yvt2sHDIFTA=";
+    hash = "sha256-FMzQpc7mwZGib544w0Dx6LeGi64cercm5oUW45raasc=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libffi
     libxcb
+    spirv-tools
     vulkan-headers
     vulkan-utility-libraries
     wayland

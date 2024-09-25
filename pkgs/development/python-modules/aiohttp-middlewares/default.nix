@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-middlewares";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "playpauseandstop";
     repo = "aiohttp-middlewares";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/xij16JUtq5T5KYinduEP+o4XxFQPyL7pfwvZnS96+U=";
+    hash = "sha256-jUH1XhkytRwR76wUTsGQGu6m8s+SZ/GO114Lz9atwE8=";
   };
 
   postPatch = ''

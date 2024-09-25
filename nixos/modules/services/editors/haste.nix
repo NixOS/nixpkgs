@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   pkg = pkgs.haste-server;
   cfg = config.services.haste-server;
@@ -10,10 +7,10 @@ let
 in
 {
   options.services.haste-server = {
-    enable = mkEnableOption "haste-server";
-    openFirewall = mkEnableOption "firewall passthrough for haste-server";
+    enable = lib.mkEnableOption "haste-server";
+    openFirewall = lib.mkEnableOption "firewall passthrough for haste-server";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       description = ''
         Configuration for haste-server.
         For documentation see [project readme](https://github.com/toptal/haste-server#settings)
@@ -22,21 +19,21 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
-    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall) [ cfg.settings.port ];
+  config = lib.mkIf (cfg.enable) {
+    networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.settings.port ];
 
     services.haste-server = {
       settings = {
-        host = mkDefault "::";
-        port = mkDefault 7777;
+        host = lib.mkDefault "::";
+        port = lib.mkDefault 7777;
 
-        keyLength = mkDefault 10;
-        maxLength = mkDefault 400000;
+        keyLength = lib.mkDefault 10;
+        maxLength = lib.mkDefault 400000;
 
-        staticMaxAge = mkDefault 86400;
-        recompressStaticAssets = mkDefault false;
+        staticMaxAge = lib.mkDefault 86400;
+        recompressStaticAssets = lib.mkDefault false;
 
-        logging = mkDefault [
+        logging = lib.mkDefault [
           {
             level = "verbose";
             type = "Console";
@@ -44,25 +41,25 @@ in
           }
         ];
 
-        keyGenerator = mkDefault {
+        keyGenerator = lib.mkDefault {
           type = "phonetic";
         };
 
         rateLimits = {
           categories = {
             normal = {
-              totalRequests = mkDefault 500;
-              every = mkDefault 60000;
+              totalRequests = lib.mkDefault 500;
+              every = lib.mkDefault 60000;
             };
           };
         };
 
-        storage = mkDefault {
+        storage = lib.mkDefault {
           type = "file";
         };
 
         documents = {
-          about = mkDefault "${pkg}/share/haste-server/about.md";
+          about = lib.mkDefault "${pkg}/share/haste-server/about.md";
         };
       };
     };

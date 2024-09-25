@@ -17,7 +17,7 @@
 , pciutils
 , sndio
 , libjack2
-, speechd
+, speechd-minimal
 , removeReferencesTo
 }:
 
@@ -86,7 +86,7 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+      libs =   lib.optionals stdenv.hostPlatform.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -98,7 +98,7 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -421,7 +421,7 @@ let
         inherit (browser.meta) description;
         mainProgram = launcherName;
         hydraPlatforms = [];
-        priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
+        priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
     };
 in lib.makeOverridable wrapper

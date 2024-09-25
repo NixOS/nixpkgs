@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     description = "Inventory synchronization tool between Netbox and Netshot";
     homepage = "https://github.com/scaleway/netbox2netshot";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "netbox2netshot";
   };
 }

@@ -157,18 +157,16 @@ let
 
         otool = cc.bintools.bintools;
 
-        # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-        # part of the bintools wrapper (due to codesigning requirements), but not on
-        # x86_64-darwin. We decide based on target platform to have consistent tools
-        # across all GHC stages.
-        install_name_tool =
-          if stdenv.targetPlatform.isAarch64
-          then cc.bintools
-          else cc.bintools.bintools;
-        # Same goes for strip.
+        # GHC needs install_name_tool on all darwin platforms. The same one can
+        # be used on both platforms. It is safe to use with linker-generated
+        # signatures because it will update the signatures automatically after
+        # modifying the target binary.
+        install_name_tool = cc.bintools.bintools;
+
+        # strip on darwin is wrapped to enable deterministic mode.
         strip =
           # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-          if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
+          if stdenv.targetPlatform.isDarwin
           then cc.bintools
           else cc.bintools.bintools;
       }.${name};
@@ -311,13 +309,13 @@ stdenv.mkDerivation (rec {
   ''
   + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "9.2") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "9.2") ''
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
     export XATTR=${lib.getBin xattr}/bin/xattr
@@ -385,11 +383,11 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versions.majorMinor version == "9.0") [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versions.majorMinor version == "9.0") [
     # TODO(@sternenseemann): backport addition of XATTR env var like
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
     xattr

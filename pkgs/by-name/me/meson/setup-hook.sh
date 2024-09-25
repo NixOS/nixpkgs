@@ -21,14 +21,10 @@ mesonConfigurePhase() {
         "--localedir=${!outputLib}/share/locale"
         "-Dauto_features=${mesonAutoFeatures:-enabled}"
         "-Dwrap_mode=${mesonWrapMode:-nodownload}"
-        ${crossMesonFlags}
         "--buildtype=${mesonBuildType:-plain}"
     )
 
-    flagsArray+=(
-        $mesonFlags
-        "${mesonFlagsArray[@]}"
-    )
+    concatTo flagsArray mesonFlags mesonFlagsArray
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
 
@@ -53,7 +49,8 @@ mesonConfigurePhase() {
 mesonCheckPhase() {
     runHook preCheck
 
-    local flagsArray=($mesonCheckFlags "${mesonCheckFlagsArray[@]}")
+    local flagsArray=()
+    concatTo flagsArray mesonCheckFlags mesonCheckFlagsArray
 
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
     meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
@@ -67,12 +64,9 @@ mesonInstallPhase() {
     local flagsArray=()
 
     if [[ -n "$mesonInstallTags" ]]; then
-        flagsArray+=("--tags" "${mesonInstallTags// /,}")
+        flagsArray+=("--tags" "$(concatStringsSep "," mesonInstallTags)")
     fi
-    flagsArray+=(
-        $mesonInstallFlags
-        "${mesonInstallFlagsArray[@]}"
-    )
+    concatTo flagsArray mesonInstallFlags mesonInstallFlagsArray
 
     echoCmd 'mesonInstallPhase flags' "${flagsArray[@]}"
     meson install --no-rebuild "${flagsArray[@]}"

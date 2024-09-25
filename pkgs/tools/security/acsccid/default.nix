@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pcsclite
     libusb1
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = src.meta.homepage;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

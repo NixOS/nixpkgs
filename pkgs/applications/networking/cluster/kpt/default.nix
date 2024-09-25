@@ -23,6 +23,6 @@ buildGoModule rec {
     homepage = "https://googlecontainertools.github.io/kpt/";
     license = licenses.asl20;
     maintainers = with maintainers; [ mikefaille ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

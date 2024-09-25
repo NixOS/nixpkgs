@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, docutils, pkg-config, glib, libpthreadstubs
-, libXau, libXdmcp, xcbutil }:
+, libXau, libXdmcp, xcbutil, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "xss-lock";
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config docutils ];
   buildInputs = [ glib libpthreadstubs libXau libXdmcp xcbutil ];
+
+  passthru.tests = { inherit (nixosTests) xss-lock; };
 
   meta = with lib; {
     description = "Use external locker (such as i3lock) as X screen saver";

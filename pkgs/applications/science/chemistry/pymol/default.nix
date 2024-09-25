@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , makeDesktopItem
-, python3
 , python3Packages
 , netcdf
 , glew
@@ -50,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "self.install_libbase" '"${placeholder "out"}/${python3.sitePackages}"'
+      --replace-fail "self.install_libbase" '"${placeholder "out"}/${python3Packages.python.sitePackages}"'
   '';
 
   build-system = [
@@ -63,10 +62,10 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = with python3Packages; ''
     wrapProgram $out/bin/pymol \
-      --prefix PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages [ pyqt5 pyqt5.pyqt5-sip ]}
+      --prefix PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3Packages.python.sitePackages [ pyqt5 pyqt5.pyqt5-sip ]}
 
     mkdir -p "$out/share/icons/"
-    ln -s $out/${python3.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
+    ln -s $out/${python3Packages.python.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     cp -r "${desktopItem}/share/applications/" "$out/share/"
   '';

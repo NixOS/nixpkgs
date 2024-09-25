@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 let
   cfg = config.services.ddclient;
   boolToStr = bool: if bool then "yes" else "no";
@@ -39,21 +38,17 @@ let
       sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
     '')}
   '';
-
 in
-
-with lib;
-
 {
 
   imports = [
-    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+    (lib.mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
       (config:
-        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in optional (value != "") value))
-    (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
-    (mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
-    (mkRemovedOptionModule [ "services" "ddclient" "ipv6" ] "")
+        let value = lib.getAttrFromPath [ "services" "ddclient" "domain" ] config;
+        in lib.optional (value != "") value))
+    (lib.mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
+    (lib.mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
+    (lib.mkRemovedOptionModule [ "services" "ddclient" "ipv6" ] "")
   ];
 
   ###### interface
@@ -62,7 +57,7 @@ with lib;
 
     services.ddclient = with lib.types; {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
         type = bool;
         description = ''
@@ -70,7 +65,7 @@ with lib;
         '';
       };
 
-      package = mkOption {
+      package = lib.mkOption {
         type = package;
         default = pkgs.ddclient;
         defaultText = lib.literalExpression "pkgs.ddclient";
@@ -79,7 +74,7 @@ with lib;
         '';
       };
 
-      domains = mkOption {
+      domains = lib.mkOption {
         default = [ "" ];
         type = listOf str;
         description = ''
@@ -87,7 +82,7 @@ with lib;
         '';
       };
 
-      username = mkOption {
+      username = lib.mkOption {
         # For `nsupdate` username contains the path to the nsupdate executable
         default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
         defaultText = "";
@@ -97,7 +92,7 @@ with lib;
         '';
       };
 
-      passwordFile = mkOption {
+      passwordFile = lib.mkOption {
         default = null;
         type = nullOr str;
         description = ''
@@ -105,7 +100,7 @@ with lib;
         '';
       };
 
-      interval = mkOption {
+      interval = lib.mkOption {
         default = "10min";
         type = str;
         description = ''
@@ -114,7 +109,7 @@ with lib;
         '';
       };
 
-      configFile = mkOption {
+      configFile = lib.mkOption {
         default = null;
         type = nullOr path;
         description = ''
@@ -124,7 +119,7 @@ with lib;
         example = "/root/nixos/secrets/ddclient.conf";
       };
 
-      protocol = mkOption {
+      protocol = lib.mkOption {
         default = "dyndns2";
         type = str;
         description = ''
@@ -132,7 +127,7 @@ with lib;
         '';
       };
 
-      server = mkOption {
+      server = lib.mkOption {
         default = "";
         type = str;
         description = ''
@@ -140,7 +135,7 @@ with lib;
         '';
       };
 
-      ssl = mkOption {
+      ssl = lib.mkOption {
         default = true;
         type = bool;
         description = ''
@@ -148,7 +143,7 @@ with lib;
         '';
       };
 
-      quiet = mkOption {
+      quiet = lib.mkOption {
         default = false;
         type = bool;
         description = ''
@@ -156,7 +151,7 @@ with lib;
         '';
       };
 
-      script = mkOption {
+      script = lib.mkOption {
         default = "";
         type = str;
         description = ''
@@ -164,21 +159,21 @@ with lib;
         '';
       };
 
-      use = mkOption {
+      use = lib.mkOption {
         default = "";
         type = str;
         description = ''
           Method to determine the IP address to send to the dynamic DNS provider.
         '';
       };
-      usev4 = mkOption {
+      usev4 = lib.mkOption {
         default = "webv4, webv4=checkip.dyndns.com/, webv4-skip='Current IP Address: '";
         type = str;
         description = ''
           Method to determine the IPv4 address to send to the dynamic DNS provider. Only used if `use` is not set.
         '';
       };
-      usev6 = mkOption {
+      usev6 = lib.mkOption {
         default = "webv6, webv6=checkipv6.dyndns.com/, webv6-skip='Current IP Address: '";
         type = str;
         description = ''
@@ -186,7 +181,7 @@ with lib;
         '';
       };
 
-      verbose = mkOption {
+      verbose = lib.mkOption {
         default = false;
         type = bool;
         description = ''
@@ -194,7 +189,7 @@ with lib;
         '';
       };
 
-      zone = mkOption {
+      zone = lib.mkOption {
         default = "";
         type = str;
         description = ''
@@ -202,7 +197,7 @@ with lib;
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
         type = lines;
         description = ''
@@ -219,14 +214,14 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.ddclient.enable {
+  config = lib.mkIf config.services.ddclient.enable {
     warnings = lib.optional (cfg.use != "") "Setting `use` is deprecated, ddclient now supports `usev4` and `usev6` for separate IPv4/IPv6 configuration.";
 
     systemd.services.ddclient = {
       description = "Dynamic DNS Client";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      restartTriggers = optional (cfg.configFile != null) cfg.configFile;
+      restartTriggers = lib.optional (cfg.configFile != null) cfg.configFile;
       path = lib.optional (lib.hasPrefix "if," cfg.use) pkgs.iproute2;
 
       serviceConfig = {

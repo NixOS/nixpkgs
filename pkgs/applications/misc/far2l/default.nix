@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-fFwO06edv2f/remnKc5snAjgmqveVNqxHiUcTlfe+4Y=";
+    sha256 = "sha256-iWZQpLe+shdepCVOHZDp7QEQoqelbHGRJh09KWb6aD0=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config m4 perl makeWrapper ];
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withColorer [ spdlog xercesc ]
     ++ lib.optionals withMultiArc [ libarchive pcre ]
     ++ lib.optionals withNetRocks [ openssl libssh libnfs neon ]
-    ++ lib.optional (withNetRocks && !stdenv.isDarwin) samba # broken on darwin
+    ++ lib.optional (withNetRocks && !stdenv.hostPlatform.isDarwin) samba # broken on darwin
     ++ lib.optionals withPython (with python3Packages; [ python cffi debugpy pcpp ])
-    ++ lib.optionals stdenv.isDarwin [ IOKit Carbon Cocoa AudioToolbox OpenGL System ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit Carbon Cocoa AudioToolbox OpenGL System ];
 
   postPatch = ''
     patchShebangs python/src/prebuild.sh

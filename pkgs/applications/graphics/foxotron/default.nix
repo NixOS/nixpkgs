@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     repo = "Foxotron";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-s1eWZMVitVSP7nJJ5wXvnV8uI6yto7LmvlvocOwVAxw=";
+    hash = "sha256-s1eWZMVitVSP7nJJ5wXvnV8uI6yto7LmvlvocOwVAxw=";
   };
 
   patches = [

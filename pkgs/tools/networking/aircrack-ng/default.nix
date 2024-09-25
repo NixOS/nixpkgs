@@ -34,7 +34,7 @@
 , useGcrypt ? false
 , enableAirolib ? true
 , enableRegex ? true
-, useAirpcap ? stdenv.isCygwin
+, useAirpcap ? stdenv.hostPlatform.isCygwin
 }:
 let
   airpcap-sdk = fetchzip {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-niQDwiqi5GtBW5HIn0endnqPb/MqllcjsjXw4pTyFKY=";
   };
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace lib/osdep/linux.c --replace-warn /usr/local/bin ${lib.escapeShellArg (lib.makeBinPath [
       wirelesstools
     ])}
@@ -72,15 +72,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
   buildInputs =
     lib.singleton (if useGcrypt then libgcrypt else openssl)
-    ++ lib.optionals stdenv.isLinux [ libpcap zlib libnl iw ethtool pciutils ]
-    ++ lib.optional (stdenv.isCygwin && stdenv.isClang) libiconv
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libpcap zlib libnl iw ethtool pciutils ]
+    ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.hostPlatform.isClang) libiconv
     ++ lib.optional enableAirolib sqlite
     ++ lib.optional enableRegex pcre2
     ++ lib.optional useAirpcap airpcap-sdk;
 
   nativeCheckInputs = [ cmocka expect ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram "$out/bin/airmon-ng" --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath [
       ethtool
       iw
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   installCheckTarget = "integration";
-  nativeInstallCheckInputs = [ cmocka expect ] ++ lib.optionals stdenv.isLinux [ tcpdump hostapd wpa_supplicant screen ];
+  nativeInstallCheckInputs = [ cmocka expect ] ++ lib.optionals stdenv.hostPlatform.isLinux [ tcpdump hostapd wpa_supplicant screen ];
 
   meta = {
     description = "WiFi security auditing tools suite";

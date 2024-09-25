@@ -9,7 +9,6 @@
   # is released we can switch to latest binutils.
   libbfd_2_38,
   libopcodes_2_38,
-  buildPackages,
   autoreconfHook
 }:
 
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "eztrace";
     repo = "eztrace";
     rev = "eztrace-${version}";
-    sha256 = "sha256-A6HMr4ib5Ka1lTbbTQOdq3kIdCoN/CwAKRdXdv9wpfU=";
+    hash = "sha256-A6HMr4ib5Ka1lTbbTQOdq3kIdCoN/CwAKRdXdv9wpfU=";
   };
 
   nativeBuildInputs = [ gfortran autoreconfHook ];
@@ -30,6 +29,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
     license = licenses.cecill-b;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

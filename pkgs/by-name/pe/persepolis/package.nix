@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , qt5
 , python3
 , fetchFromGitHub

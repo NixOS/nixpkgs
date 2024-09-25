@@ -21,13 +21,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ DiskArbitration Foundation Security ];
 
   cargoHash = "sha256-b15m5DjTDNWJBHOaKSEMwkO/o+0mV+JMBDBurml7xOs=";
 
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fnm \
       --bash <($out/bin/fnm completions --shell bash) \
       --fish <($out/bin/fnm completions --shell fish) \

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fira-math, python3, stdenvNoCC }:
+{ lib, fetchFromGitHub, python3, stdenvNoCC }:
 
 let
   pname = "fira-math";

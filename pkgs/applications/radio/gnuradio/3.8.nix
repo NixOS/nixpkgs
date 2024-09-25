@@ -103,11 +103,11 @@ let
       runtime = [
         thrift
       ];
-      pythonRuntime = with python.pkgs; [
+      pythonRuntime = [
         python.pkgs.thrift
         # For gr-perf-monitorx
-        matplotlib
-        networkx
+        python.pkgs.matplotlib
+        python.pkgs.networkx
       ];
     };
     gnuradio-companion = {
@@ -150,8 +150,8 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
-        ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libjack2 ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
     };
@@ -296,7 +296,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
     # This is the only python reference worth removing, if needed (3.7 doesn't
     # set that reference).
     + lib.optionalString (!hasFeature "python-support") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
+      remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
 }))

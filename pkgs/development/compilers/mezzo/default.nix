@@ -7,7 +7,7 @@ then throw "mezzo is not available for OCaml ${ocaml.version}"
 else
 
 let
-  check-ocaml-version = with lib; versionAtLeast (getVersion ocaml);
+  check-ocaml-version = lib.versionAtLeast (lib.getVersion ocaml);
 in
 
 assert check-ocaml-version "4";

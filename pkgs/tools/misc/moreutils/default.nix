@@ -8,7 +8,7 @@
 , perlPackages
 , makeWrapper
 , perl # for pod2man
-, darwin
+, cctools
 , gitUpdater
 }:
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper perl libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ];
   buildInputs = [
     (perl.withPackages (p: [ p.IPCRun p.TimeDate p.TimeDuration ]))
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
   ];
 
   makeFlags = [

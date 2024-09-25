@@ -9,52 +9,50 @@
 
   # dependencies
   astroid,
-  anyascii,
   jinja2,
   pyyaml,
   sphinx,
+  stdlib-list,
 
   # tests
   beautifulsoup4,
-  mock,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.1.2";
+  version = "3.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "sphinx_autoapi";
     inherit version;
-    hash = "sha256-+l6xiPZ6454ZsufSUnx10GTg8Lmsf3ejVY7CbMtzHCY=";
+    hash = "sha256-5EoiWCfQ73F4dIIlpm8wyVRU39AO48Iq+9+4BW99/7U=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    anyascii
-    astroid
-    jinja2
-    pyyaml
-    sphinx
-  ];
+  dependencies =
+    [
+      astroid
+      jinja2
+      pyyaml
+      sphinx
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      stdlib-list
+    ];
 
   nativeCheckInputs = [
     beautifulsoup4
-    mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # failing typing assertions
+    # require network access
     "test_integration"
-    "test_annotations"
-    # sphinx.errors.SphinxWarning: cannot cache unpickable configuration value: 'autoapi_prepare_jinja_env' (because it contains a function, class, or module object)
-    "test_custom_jinja_filters"
   ];
 
   pythonImportsCheck = [ "autoapi" ];

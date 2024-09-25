@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ghauri";
-  version = "1.3.4";
+  version = "1.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "r0oth3x49";
     repo = "ghauri";
     rev = "refs/tags/${version}";
-    hash = "sha256-1xrswAxavUz3ybmT0E00pjiR8pmHvuBXE4zhAPnz5MQ=";
+    hash = "sha256-uGRhp77HmLmWMJFyhJoEjwdIR84Wcwv554g9Hi6yW4c=";
   };
 
   build-system = with python3.pkgs; [

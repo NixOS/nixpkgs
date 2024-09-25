@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ]
     # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
-    ++ lib.optionals (!stdenv.isDarwin) [ "man" ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
     (lib.getOutput "cxxdev" opencv4)
   ] ++ (with libsForQt5; [
+    kimageformats
     qtbase
     qtimageformats
     qtsvg
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_QUAZIP" true)
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,lib}
     mv $out/nomacs.app $out/Applications/nomacs.app
     mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib

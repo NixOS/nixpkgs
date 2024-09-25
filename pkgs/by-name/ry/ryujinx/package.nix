@@ -10,13 +10,6 @@
 , sndio
 , pulseaudio
 , vulkan-loader
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
 , glew
 , libGL
 , udev
@@ -26,14 +19,16 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1340"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1398"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "1a0a351a152f837094699e78f51f8970e131bd1a";
-    sha256 = "0vkzbrp1b3ig1gsax6jyr02m1vqxx4xps741y5j77a2wxv8l6zsm";
+    rev = "319507f2a12a6751f3ab833e498a3efd3119f806";
+    hash = "sha256-3DM/kahNhl8EhSIRuqH0trYoR51OrGxSE+GuOKxKr2c=";
   };
+
+  enableParallelBuilding = false;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
@@ -53,13 +48,6 @@ buildDotnetModule rec {
     udev
 
     # Avalonia UI
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-    fontconfig
     glew
 
     # Headless executable

@@ -1,17 +1,17 @@
 { buildGoModule
-, doCheck ? !stdenv.isDarwin # Can't start localhost test server in MacOS sandbox.
+, doCheck ? !stdenv.hostPlatform.isDarwin # Can't start localhost test server in MacOS sandbox.
 , fetchFromGitHub
 , installShellFiles
 , lib
 , stdenv
 }:
 let
-  version = "24.1.9";
+  version = "24.2.5";
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";
     rev = "v${version}";
-    sha256 = "sha256-/A6BzhCdN8e7mV/Tp9TYfOmSAjmaa4S3FNCko4G9Vgs=";
+    sha256 = "sha256-25ijVHEcj0AXLxC1rSbp3Xyv+SMQRRkRq+qgRJgSnAI=";
   };
 in
 buildGoModule rec {
@@ -19,7 +19,7 @@ buildGoModule rec {
   inherit doCheck src version;
   modRoot = "./src/go/rpk";
   runVend = false;
-  vendorHash = "sha256-mpzWKJwE5ghySiiOdJO81w8Jvk1k34lb3Gvj+p5U1FU=";
+  vendorHash = "sha256-JEbIC33J+uUzPN04EtO5XoC0MIkYRXKYNCsFsirJfhY=";
 
   ldflags = [
     ''-X "github.com/redpanda-data/redpanda/src/go/rpk/pkg/cli/cmd/version.version=${version}"''

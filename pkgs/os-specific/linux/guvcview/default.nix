@@ -5,7 +5,7 @@
 , pkg-config
 , portaudio
 , SDL2
-, ffmpeg_4
+, ffmpeg_7
 , udev
 , libusb1
 , libv4l
@@ -13,7 +13,7 @@
 , gsl
 , libpng
 , sfml
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio ? null
 , useQt ? false
 , qtbase ? null
@@ -27,12 +27,12 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "2.0.6";
+  version = "2.1.0";
   pname = "guvcview";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.gz";
-    sha256 = "11byyfpkcik7wvf2qic77zjamfr2rhji97dpj1gy2fg1bvpiqf4m";
+    url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.bz2";
+    hash = "sha256-PZPkyfq40aepveGm278E1s+dNHwTS1EotFhqHZC2PPs=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     alsa-lib
-    ffmpeg_4
+    ffmpeg_7
     libusb1
     libv4l
     portaudio

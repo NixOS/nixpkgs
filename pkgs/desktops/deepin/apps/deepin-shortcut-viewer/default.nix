@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qmake
-, qtbase
-, qttools
-, pkg-config
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  qmake,
+  qtbase,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,4 +51,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.deepin.members;
   };
 }
-

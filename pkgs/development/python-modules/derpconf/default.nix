@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/globocom/derpconf";
     changelog = "https://github.com/globocom/derpconf/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

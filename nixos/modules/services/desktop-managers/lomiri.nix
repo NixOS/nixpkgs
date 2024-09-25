@@ -22,9 +22,12 @@ in {
         libusermetrics
         lomiri
         lomiri-calculator-app
+        lomiri-camera-app
         lomiri-clock-app
+        lomiri-docviewer-app
         lomiri-download-manager
         lomiri-filemanager-app
+        lomiri-gallery-app
         lomiri-polkit-agent
         lomiri-schemas # exposes some required dbus interfaces
         lomiri-session # wrappers to properly launch the session
@@ -39,6 +42,7 @@ in {
         qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
         suru-icon-theme
         telephony-service
+        teleports
       ]);
       variables = {
         # To override the keyboard layouts in Lomiri
@@ -46,7 +50,10 @@ in {
       };
     };
 
-    hardware.pulseaudio.enable = lib.mkDefault true;
+    hardware = {
+      bluetooth.enable = lib.mkDefault true;
+    };
+
     networking.networkmanager.enable = lib.mkDefault true;
 
     systemd.packages = with pkgs.lomiri; [
@@ -62,7 +69,7 @@ in {
 
     fonts.packages = with pkgs; [
       # Applications tend to default to Ubuntu font
-      ubuntu_font_family
+      ubuntu-classic
     ];
 
     # Copy-pasted basic stuff
@@ -84,6 +91,8 @@ in {
         ayatana-indicator-messages
         ayatana-indicator-power
         ayatana-indicator-session
+      ] ++ lib.optionals config.hardware.bluetooth.enable [
+        ayatana-indicator-bluetooth
       ] ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         ayatana-indicator-sound
       ]) ++ (with pkgs.lomiri; [

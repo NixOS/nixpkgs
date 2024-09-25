@@ -4,7 +4,7 @@
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
 , file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
 , binutils, tree, upower, pciutils
-, withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
+, withRecommendedDisplayInformationPrograms ? withRecommends, mesa-demos, xorg
 }:
 
 let
@@ -16,20 +16,20 @@ let
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms
-    ([ glxinfo ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
+    ([ mesa-demos ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
   programs = [ ps dnsutils ] # Core programs
     ++ recommendedSystemPrograms
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.3.34-1";
+  version = "3.3.35-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    hash = "sha256-CAZxQmESCBQ2kpDAbUIkky/eY8KLBsfCJvhOiZjV6Po=";
+    hash = "sha256-wWG/fs+tZIiFI+dcqfwXeh9RxT2zJDiAZoizhAAu60Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/smxi/inxi/blob/${version}/inxi.changelog";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "inxi";
   };
 }

@@ -2,17 +2,20 @@
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.2.0";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     rev = "v${version}";
-    sha256 = "sha256-3+9zOoKk8IdqkxoMzjZofizyx+294mer3t6illXUr2M=";
+    hash = "sha256-wpMENrhfD8+bt66gd29xkfLANcMbPpkzDacj0KPuXT4=";
   };
 
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.nix;
+
+  # [...]Microsoft.NET.Publish.targets(248,5): error MSB3021: Unable to copy file "[...]/NUnit3.TestAdapter.pdb" to "[...]/NUnit3.TestAdapter.pdb". Access to the path '[...]/NUnit3.TestAdapter.pdb' is denied. [[...]/ExecutionEngineTests.csproj]
+  enableParallelBuilding = false;
 
   executables = [ "BoogieDriver" ];
 
@@ -54,4 +57,3 @@ buildDotnetModule rec {
     platforms = with platforms; (linux ++ darwin);
   };
 }
-

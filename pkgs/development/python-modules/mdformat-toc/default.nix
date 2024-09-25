@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   mdformat,
-  mdit-py-plugins,
   poetry-core,
   pytestCheckHook,
   pythonOlder,

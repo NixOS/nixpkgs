@@ -11,8 +11,8 @@ let
     };
   };
 
-  vm-image-metadata = releases.lxdVirtualMachineImageMeta.${pkgs.stdenv.hostPlatform.system};
-  vm-image-disk = releases.lxdVirtualMachineImage.${pkgs.stdenv.hostPlatform.system};
+  vm-image-metadata = releases.incusVirtualMachineImageMeta.${pkgs.stdenv.hostPlatform.system};
+  vm-image-disk = releases.incusVirtualMachineImage.${pkgs.stdenv.hostPlatform.system};
 
   instance-name = "instance1";
 in
@@ -64,10 +64,10 @@ in
         with machine.nested("Waiting for instance to start and be usable"):
           retry(instance_is_up)
 
-    with subtest("lxd-agent is started"):
-        machine.succeed("incus exec ${instance-name} systemctl is-active lxd-agent")
+    with subtest("incus-agent is started"):
+        machine.succeed("incus exec ${instance-name} systemctl is-active incus-agent")
 
-    with subtest("lxd-agent has a valid path"):
+    with subtest("incus-agent has a valid path"):
         machine.succeed("incus exec ${instance-name} -- bash -c 'true'")
 
     with subtest("guest supports cpu hotplug"):

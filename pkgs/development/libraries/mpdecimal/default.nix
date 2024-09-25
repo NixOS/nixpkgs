@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
 
     maintainers = with lib.maintainers; [ kaction ];
 
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

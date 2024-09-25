@@ -6,38 +6,39 @@
   nodejs,
   pnpm,
   python3,
-  nodePackages,
+  node-gyp,
   cacert,
   xcbuild,
   libkrb5,
   libmongocrypt,
   postgresql,
   makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.46.0";
+  version = "1.60.1";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-9T/x2k7XIO+PV0olTQhb4WF1congTbXFvHqaxoaNbp4=";
+    hash = "sha256-G//+9Mucm/yH8XlA8/OO09lg9mKlo1S+Pyfmsp5MQhk=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-oldvZC0B/r3fagI5hCn16wjQsD9n4q9foo73lJBJXeU=";
+    hash = "sha256-61xRNwJUFQrj7aw/+SqMABb8W+sJsVZ6aTgU9N7ssDo=";
   };
 
   nativeBuildInputs = [
     pnpm.configHook
     python3 # required to build sqlite3 bindings
-    nodePackages.node-gyp # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
     cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
-  ] ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [
     nodejs
@@ -53,28 +54,37 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp rebuild
     popd
 
-    pnpm build
+    # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
+    pnpm build --filter=n8n
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    echo "Removing non-deterministic files"
+
+    rm -r $(find -type d -name .turbo)
+    rm node_modules/.modules.yaml
+    rm packages/nodes-base/dist/types/nodes.json
+
+    echo "Removed non-deterministic files"
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{lib,bin}
-    cp -r {packages,node_modules} $out/lib
+    mkdir -p $out/{bin,lib/n8n}
+    mv {packages,node_modules} $out/lib/n8n
 
-    makeWrapper $out/lib/packages/cli/bin/n8n $out/bin/n8n \
+    makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
       --set N8N_RELEASE_TYPE "stable"
 
     runHook postInstall
   '';
 
-  # makes libmongocrypt bindings not look for static libraries in completely wrong places
-  BUILD_TYPE = "dynamic";
-
   passthru = {
     tests = nixosTests.n8n;
+    updateScript = nix-update-script { };
   };
 
   dontStrip = true;
@@ -90,10 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       freezeboy
       gepbird
-      k900
     ];
     license = licenses.sustainableUse;
     mainProgram = "n8n";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 })

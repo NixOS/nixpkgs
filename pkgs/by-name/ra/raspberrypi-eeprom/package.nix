@@ -12,13 +12,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
-  version = "2024.06.05-2712";
+  version = "2024.09.10-2712";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-VcMDDnM0VNr+Y+16ZChZdlEcmlHx6mYNCK0mrPMJHes=";
+    hash = "sha256-SLPLZzSRsPDxGtFnFFu99z3HqGDLDNuMWbgUKdeJyuI=";
   };
 
   buildInputs = [ python3 ];
@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for i in rpi-eeprom-update rpi-eeprom-config; do
       wrapProgram $out/bin/$i \
         --set FIRMWARE_ROOT "$out/lib/firmware/raspberrypi/bootloader" \
-        ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
+        ${lib.optionalString stdenvNoCC.hostPlatform.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
         --prefix PATH : "${lib.makeBinPath ([
           binutils-unwrapped
           findutils
@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           kmod
           pciutils
           (placeholder "out")
-        ] ++ lib.optionals stdenvNoCC.isAarch64 [
+        ] ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [
           libraspberrypi
         ])}"
     done

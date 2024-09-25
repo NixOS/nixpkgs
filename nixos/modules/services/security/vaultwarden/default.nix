@@ -7,6 +7,8 @@ let
 
   StateDirectory = if lib.versionOlder config.system.stateVersion "24.11" then "bitwarden_rs" else "vaultwarden";
 
+  dataDir = "/var/lib/${StateDirectory}";
+
   # Convert name from camel case (e.g. disable2FARemember) to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
   nameToEnvVar = name:
     let
@@ -25,7 +27,7 @@ let
       configEnv = lib.concatMapAttrs (name: value: lib.optionalAttrs (value != null) {
         ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
       }) cfg.config;
-    in { DATA_FOLDER = "/var/lib/${StateDirectory}"; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in { DATA_FOLDER = dataDir; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
@@ -160,10 +162,16 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [ {
-      assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
-      message = "Backups for database backends other than sqlite will need customization";
-    } ];
+    assertions = [
+      {
+        assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
+        message = "Backups for database backends other than sqlite will need customization";
+      }
+      {
+        assertion = cfg.backupDir != null -> !(lib.hasPrefix dataDir cfg.backupDir);
+        message = "Backup directory can not be in ${dataDir}";
+      }
+    ];
 
     users.users.vaultwarden = {
       inherit group;
@@ -224,7 +232,7 @@ in {
     systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = "/var/lib/${StateDirectory}";
+        DATA_FOLDER = dataDir;
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];

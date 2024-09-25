@@ -47,7 +47,7 @@ with lib;
     fileSystems."/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
         device = "../nix-store.squashfs";
-        options = [ "loop" ];
+        options = [ "loop" ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
         neededForBoot = true;
       };
 
@@ -88,8 +88,8 @@ with lib;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
       contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
+        [ { source = config.system.build.squashfsStore;
+            target = "/nix-store.squashfs";
           }
         ];
     };

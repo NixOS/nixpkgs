@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "libpysal";
-  version = "4.11.0";
+  version = "4.12.1";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pysal";
     repo = "libpysal";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1JZ82wO0kisbTrhsn+BYeNZpkMJUEzuflQ6GqpAYH/c=";
+    hash = "sha256-snhCEKeGKKj/bTDYi6ZVv5F4b/2rz/JHIFG2IoINQ+Q=";
   };
 
   build-system = [ setuptools-scm ];
@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   # requires network access
   disabledTestPaths = [
+    "libpysal/graph/tests/test_summary.py"
     "libpysal/cg/tests/test_geoJSON.py"
     "libpysal/examples/tests/test_available.py"
     "libpysal/graph/tests/test_base.py"

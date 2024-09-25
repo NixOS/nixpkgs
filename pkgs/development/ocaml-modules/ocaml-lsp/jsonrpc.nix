@@ -9,7 +9,7 @@
 , ocaml
 , version ?
     if lib.versionAtLeast ocaml.version "4.14" then
-      "1.17.0"
+      "1.18.0"
     else if lib.versionAtLeast ocaml.version "4.13" then
       "1.10.5"
     else if lib.versionAtLeast ocaml.version "4.12" then
@@ -19,6 +19,11 @@
 }:
 
 let params = {
+  "1.18.0" = {
+    name = "lsp";
+    minimalOCamlVersion = "4.14";
+    sha256 = "sha256-tZ2kPM/S/9J3yeX2laDjnHLA144b8svy9iwae32nXwM=";
+  };
   "1.17.0" = {
     name = "lsp";
     minimalOCamlVersion = "4.14";
@@ -54,7 +59,6 @@ buildDunePackage rec {
     inherit (params) sha256;
   };
 
-  duneVersion = "3";
   inherit (params) minimalOCamlVersion;
 
   buildInputs =
@@ -73,6 +77,6 @@ buildDunePackage rec {
     description = "Jsonrpc protocol implementation in OCaml";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,17 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "10.1.0";
+  version = "10.2.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    hash = "sha256-9fL2XV3Vre2uo8Co3tlHYIvpNHNOh5TuvZggkWOxm5A=";
+    hash = "sha256-B+lOohoPH7UkRxRNTzSVt0SDrqEwh4hIvBF3uWliDEI=";
   };
 
-  cargoHash = "sha256-3TbsPfAn/GcGASc0RCcyAeUiD4RUtvTATdTYhKdBxvo=";
+  cargoHash = "sha256-H8xkm1cGJUaSgLUfN/vlxsWg5UMClvFhp9pjM0byQPs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage doc/fd.1
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fd \
       --bash <($out/bin/fd --gen-completions bash) \
       --fish <($out/bin/fd --gen-completions fish)

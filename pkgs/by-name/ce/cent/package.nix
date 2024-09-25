@@ -27,7 +27,7 @@ buildGoModule rec {
     homepage = "https://github.com/xm1k3/cent";
     changelog = "https://github.com/xm1k3/cent/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cent";
   };
 }

@@ -6,7 +6,7 @@
 
 # build
 , scons
-, addOpenGLRunpath
+, addDriverRunpath
 , autoPatchelfHook
 , cmake
 , git
@@ -38,7 +38,7 @@ let
   stdenv = gcc12Stdenv;
 
   # prevent scons from leaking in the default python version
-  scons' = scons.override { python3 = python3Packages.python; };
+  scons' = scons.override { inherit python3Packages; };
 
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     autoPatchelfHook
     cmake
     git
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" stdenv.isx86_64)
+    (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Link to OpenCL
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Cannot find macos sdk
+    broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

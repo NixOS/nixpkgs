@@ -11,7 +11,7 @@
 , readline
 , symlinkJoin
 , tcl
-, verilog
+, iverilog
 , zlib
 , yosys
 , yosys-bluespec
@@ -75,13 +75,13 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.43";
+  version = "0.45";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
-    hash  = "sha256-MJTtQvHsHvuo4aNNYSPxSMbeXCty66q83/sbp1Yiiv4=";
+    rev   = "refs/tags/${finalAttrs.version}";
+    hash  = "sha256-NF4NQ7mCfARuMsMTJVBbJk39puJ8+D41woYEPgthfUI=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -147,7 +147,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "test";
   doCheck = true;
-  nativeCheckInputs = [ verilog ];
+  nativeCheckInputs = [ iverilog ];
 
   setupHook = ./setup-hook.sh;
 

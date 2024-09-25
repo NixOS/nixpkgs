@@ -26,7 +26,7 @@
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.10";
+  version = "0.6.12";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -37,7 +37,7 @@ let
   cargoLock = fetchurl {
     name = "Cargo.lock";
     url = "https://crates.io/api/v1/crates/${pname}/${version}/download";
-    sha256 = "sha256-mlmvM/7FQkhSjLtueEJqZU3D86lL8Kf1EFXiY1+b/Oo=";
+    sha256 = "sha256-QMO5J5c8MQr84w6X74oQrHV99cjSUVfpC8Ub1csQ0gI=";
     downloadToTemp = true;
     postFetch = ''
       tar xzf $downloadedFile ${pname}-${version}/Cargo.lock
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yF4i1V50TpR3pEqHQfAK4VTUW+GmT+XU6WVTWMzCUwo=";
+    sha256 = "sha256-BlXgbCWjGya/I94nqfjBqQPSWnVhyhNn0oSRL9xiS6k=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoSha256 = "sha256-6VQEu38g5a8bfbs8P/nOa3Zg2bSYnEOClzoMF95LAHI=";
+  cargoHash = "sha256-nabO19JePQRuhxsbm5wVIU4+5si6p0VgqR2QLmLeivU=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests
@@ -94,6 +94,6 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ wucke13 matthiasbeyer CobaltCause ];
 
     # The profiler runtime is (currently) disabled on non-Linux platforms
-    broken = !(stdenv.isLinux && !stdenv.targetPlatform.isRedox);
+    broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
   };
 }

@@ -4,7 +4,6 @@
 , testers
 , autoreconfHook
 , bash
-, coreutils
 , dbus
 , dbus-glib
 , glib

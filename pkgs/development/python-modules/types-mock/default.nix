@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Type stub package for the mock package";
     homepage = "https://pypi.org/project/types-mock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

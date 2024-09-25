@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "oink";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "rlado";
     repo = "oink";
     rev = "v${version}";
-    hash = "sha256-ojvuA5IlayPMNajl2+a4lx8NU06Da0vp9TJHCQVMtlo=";
+    hash = "sha256-nA1M+TIj2mWhaftS5y4D2zIs7HAI4eDRjSdmLUifGKg=";
   };
 
   vendorHash = null;

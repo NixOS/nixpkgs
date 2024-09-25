@@ -1,5 +1,4 @@
 { lib
-, pkgs
 , mkDerivation
 , libcanberra
 , pulseaudio

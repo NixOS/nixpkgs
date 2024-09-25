@@ -47,8 +47,8 @@ buildPythonPackage rec {
 
   buildInputs =
     [ nettle ]
-    ++ lib.optionals stdenv.isLinux [ pcsclite ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       PCSC
       libiconv
     ];

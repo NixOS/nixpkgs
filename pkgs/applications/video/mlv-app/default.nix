@@ -18,7 +18,7 @@ mkDerivation rec {
     sha256 = "sha256-RfZXHmWSjZBxNFwQ/bzHppsLS0LauURIdnkAzxAIBcU=";
   };
 
-  patches = if stdenv.isAarch64 then ./aarch64-flags.patch else null;
+  patches = if stdenv.hostPlatform.isAarch64 then ./aarch64-flags.patch else null;
 
   installPhase = ''
     runHook preInstall
@@ -54,7 +54,7 @@ mkDerivation rec {
     description = "All in one MLV processing app that is pretty great";
     homepage = "https://mlv.app";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "mlvapp";
   };

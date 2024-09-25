@@ -1,24 +1,28 @@
 {
   lib,
   stdenv,
-  addOpenGLRunpath,
-  autoPatchelfHook,
   buildPythonPackage,
-  cudaPackages,
+  python,
   fetchurl,
-  ffmpeg_4,
-  ffmpeg_5,
+  pythonOlder,
+  pythonAtLeast,
+
+  # buildInputs
+  cudaPackages,
   ffmpeg_6,
   sox,
-  pythonAtLeast,
-  pythonOlder,
-  python,
+
+  # nativeBuildInputs
+  addDriverRunpath,
+  autoPatchelfHook,
+
+  # dependencies
   torch-bin,
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.1";
+  version = "2.4.1";
   format = "wheel";
 
   src =
@@ -33,13 +37,11 @@ buildPythonPackage rec {
 
   buildInputs =
     [
-      # We need to patch the lib/_torchaudio_ffmpeg[4-6]
-      ffmpeg_4.dev
-      ffmpeg_5.dev
+      # We need to patch lib/torio/_torio_ffmpeg6
       ffmpeg_6.dev
       sox
     ]
-    ++ lib.optionals stdenv.isLinux (
+    ++ lib.optionals stdenv.hostPlatform.isLinux (
       with cudaPackages;
       [
         # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libcudart.so.11.0 but torch/lib only ships
@@ -52,15 +54,21 @@ buildPythonPackage rec {
       ]
     );
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   dependencies = [ torch-bin ];
 
-  preInstall = lib.optionals stdenv.isLinux ''
+  preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
+  '';
+
+  preFixup = ''
+    # TorchAudio loads the newest FFmpeg that works, so get rid of the
+    # old ones.
+    rm $out/${python.sitePackages}/torio/lib/{lib,_}torio_ffmpeg{4,5}.*
   '';
 
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.

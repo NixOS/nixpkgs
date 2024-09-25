@@ -122,7 +122,7 @@ let
           };
 
           sqlite = {
-            services.vaultwarden.backupDir = "/var/lib/vaultwarden/backups";
+            services.vaultwarden.backupDir = "/srv/backups/vaultwarden";
 
             environment.systemPackages = [ pkgs.sqlite ];
           };
@@ -133,7 +133,7 @@ let
             enable = true;
             dbBackend = backend;
             config = {
-              rocketAddress = "0.0.0.0";
+              rocketAddress = "::";
               rocketPort = 8080;
             };
           };
@@ -205,12 +205,12 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
           server.start_job("backup-vaultwarden.service")
 
       with subtest("Check that backup exists"):
-          server.succeed('[ -d "/var/lib/vaultwarden/backups" ]')
-          server.succeed('[ -f "/var/lib/vaultwarden/backups/db.sqlite3" ]')
-          server.succeed('[ -d "/var/lib/vaultwarden/backups/attachments" ]')
-          server.succeed('[ -f "/var/lib/vaultwarden/backups/rsa_key.pem" ]')
+          server.succeed('[ -d "/srv/backups/vaultwarden" ]')
+          server.succeed('[ -f "/srv/backups/vaultwarden/db.sqlite3" ]')
+          server.succeed('[ -d "/srv/backups/vaultwarden/attachments" ]')
+          server.succeed('[ -f "/srv/backups/vaultwarden/rsa_key.pem" ]')
           # Ensure only the db backed up with the backup command exists and not the other db files.
-          server.succeed('[ ! -f "/var/lib/vaultwarden/backups/db.sqlite3-shm" ]')
+          server.succeed('[ ! -f "/srv/backups/vaultwarden/db.sqlite3-shm" ]')
     '';
   };
 }

@@ -15,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-netapp";
-  version = "0.3.11";
+  version = "0.3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VFdqldB85ZP+U2CNk19nSbgRFa0UnUc0kq9oNW5nJqs=";
+    pname = "google_cloud_netapp";
+    inherit version;
+    hash = "sha256-XjhNY4YG51+9OTZBj3jivgA2Del7RafXCIE/ATtyqWE=";
   };
 
   build-system = [ setuptools ];
@@ -50,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-netapp";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-netapp-v${version}/packages/google-cloud-netapp/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,13 @@
-/* This file defines the composition for CRAN (R) packages. */
+/* This file defines the composition for R packages. */
+
+let
+  importJSON = f: builtins.fromJSON (builtins.readFile f);
+
+  biocPackagesGenerated =  importJSON ./bioc-packages.json;
+  biocAnnotationPackagesGenerated = importJSON ./bioc-annotation-packages.json;
+  biocExperimentPackagesGenerated = importJSON ./bioc-experiment-packages.json;
+  cranPackagesGenerated = importJSON ./cran-packages.json;
+in
 
 { R, pkgs, overrides }:
 
@@ -46,7 +55,7 @@ let
   # from the name, version, sha256, and optional per-package arguments above
   #
   deriveBioc = mkDerive {
-    mkHomepage = {name, biocVersion, ...}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
+    mkHomepage = {name, biocVersion}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
     mkUrls = {name, version, biocVersion}: [
       "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
       "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
@@ -68,7 +77,7 @@ let
     hydraPlatforms = [];
   };
   deriveCran = mkDerive {
-    mkHomepage = {name, ...}: "https://cran.r-project.org/web/packages/${name}/";
+    mkHomepage = {name}: "https://cran.r-project.org/web/packages/${name}/";
     mkUrls = {name, version}: [
       "mirror://cran/${name}_${version}.tar.gz"
       "mirror://cran/Archive/${name}/${name}_${version}.tar.gz"
@@ -287,10 +296,18 @@ let
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
   _self = { inherit buildRPackage; } //
-          import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
-          import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
-          import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
-          import ./cran-packages.nix { inherit self; derive = deriveCran; };
+          mkPackageSet deriveBioc biocPackagesGenerated //
+          mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated //
+          mkPackageSet deriveBiocExp biocExperimentPackagesGenerated //
+          mkPackageSet deriveCran cranPackagesGenerated;
+
+  # Takes in a generated JSON file's imported contents
+  # and transforms it by swapping each element of the depends array with the dependency's derivation
+  # and passing this new object to the provided derive function
+  mkPackageSet = derive: packagesJSON: lib.mapAttrs (
+    k: v: derive packagesJSON.extraArgs (v // { depends = lib.map (name: builtins.getAttr name self) v.depends; })
+  ) packagesJSON.packages;
+
 
   # tweaks for the individual packages and "in self" follow
 
@@ -301,6 +318,7 @@ let
     svaNUMT = [ jbedo ];
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
+    RQuantLib = [ kupac ];
   };
 
   packagesWithRDepends = {
@@ -321,7 +339,7 @@ let
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     Apollonius = with pkgs; [ pkg-config gmp.dev mpfr.dev ];
-    arrow = with pkgs; [ pkg-config cmake ] ++ lib.optionals stdenv.isDarwin [ intltool ];
+    arrow = with pkgs; [ pkg-config cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ intltool ];
     audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
@@ -345,7 +363,7 @@ let
     clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
-    data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];
     diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
@@ -405,7 +423,7 @@ let
     rvg = [ pkgs.libpng.dev ];
     MAGEE = [ pkgs.zlib.dev pkgs.bzip2.dev ];
     magick = [ pkgs.imagemagick.dev ];
-    ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+    ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
     mzR = with pkgs; [ zlib netcdf ];
@@ -420,7 +438,7 @@ let
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
-    pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.isDarwin [ pkgs.which ];
+    pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
     pcaL1 = [ pkgs.pkg-config pkgs.clp ];
     pdftools = [ pkgs.poppler.dev ];
     PEPBVS = [ pkgs.gsl ];
@@ -458,6 +476,7 @@ let
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.bwidget ];
     Rpoppler = [ pkgs.poppler ];
+    RPostgres = with pkgs; [ postgresql ];
     RPostgreSQL = with pkgs; [ postgresql postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
@@ -514,7 +533,7 @@ let
     V8 = [ pkgs.nodejs.libv8 ];
     XBRL = with pkgs; [ zlib libxml2.dev ];
     XLConnect = [ pkgs.jdk ];
-    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
+    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     XML = with pkgs; [ libtool libxml2.dev xmlsec libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib.dev ];
@@ -588,8 +607,8 @@ let
     unrtf = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
-    pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
-    bigmemory = lib.optionals stdenv.isLinux [ pkgs.libuuid.dev ];
+    pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
+    bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
     bayesWatch = [ pkgs.boost.dev ];
     clustermq = [  pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
@@ -750,6 +769,7 @@ let
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     markets = [ pkgs.gsl ];
+    rlas = [ pkgs.boost ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     poisbinom = [ pkgs.fftw.dev ];
     PoissonMultinomial = [ pkgs.fftw.dev ];
@@ -772,7 +792,7 @@ let
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
     ijtiff = [ pkgs.libtiff ];
-    ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ] ++ lib.optional stdenv.isDarwin lerc.dev;
+    ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ] ++ lib.optional stdenv.hostPlatform.isDarwin lerc.dev;
     qqconf = [ pkgs.fftw.dev ];
     spFW = [ pkgs.fftw.dev ];
     qspray = with pkgs; [ gmp.dev mpfr.dev ];
@@ -782,6 +802,7 @@ let
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = [ pkgs.eigen ];
+    DGP4LCF = [ pkgs.lapack pkgs.blas ];
   };
 
   packagesRequiringX = [
@@ -1199,7 +1220,7 @@ let
 
     ModelMetrics = old.ModelMetrics.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.isDarwin " -fopenmp";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.hostPlatform.isDarwin " -fopenmp";
       };
     });
 
@@ -1254,9 +1275,9 @@ let
     });
 
     pbdZMQ = old.pbdZMQ.overrideAttrs (attrs: {
-      postPatch = lib.optionalString stdenv.isDarwin ''
+      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
         for file in R/*.{r,r.in}; do
-            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
+            sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.cctools}/bin/\1"#g' $file
         done
       '';
     });

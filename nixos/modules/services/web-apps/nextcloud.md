@@ -144,6 +144,42 @@ Auto updates for Nextcloud apps can be enabled using
     To work around that, please make sure that all directories in question
     are owned by `nextcloud:nextcloud`.
 
+  - **`Failed to open stream: No such file or directory` after deploys**
+
+    Symptoms are errors like this after a deployment that disappear after
+    a few minutes:
+
+    ```
+    Warning: file_get_contents(/run/secrets/nextcloud_db_password): Failed to open stream: No such file or directory in /nix/store/lqw657xbh6h67ccv9cgv104qhcs1i2vw-nextcloud-config.php on line 11
+
+    Warning: http_response_code(): Cannot set response code - headers already sent (output started at /nix/store/lqw657xbh6h67ccv9cgv104qhcs1i2vw-nextcloud-config.php:11) in /nix/store/ikxpaq7kjdhpr4w7cgl1n28kc2gvlhg6-nextcloud-29.0.7/lib/base.php on line 639
+    Cannot decode /run/secrets/nextcloud_secrets, because: Syntax error
+    ```
+
+    This can happen if [](#opt-services.nextcloud.secretFile) or
+    [](#opt-services.nextcloud.config.dbpassFile) are managed by
+    [sops-nix](https://github.com/Mic92/sops-nix/).
+
+    Here, `/run/secrets/nextcloud_secrets` is a symlink to
+    `/run/secrets.d/N/nextcloud_secrets`. The `N` will be incremented
+    when the sops-nix activation script runs, i.e.
+    `/run/secrets.d/N` doesn't exist anymore after a deploy,
+    only `/run/secrets.d/N+1`.
+
+    PHP maintains a [cache for `realpath`](https://www.php.net/manual/en/ini.core.php#ini.realpath-cache-size)
+    that still resolves to the old path which is causing
+    the `No such file or directory` error. Interestingly,
+    the cache isn't used for `file_exists` which is why this warning
+    comes instead of the error from `nix_read_secret` in
+    `override.config.php`.
+
+    One option to work around this is to turn off the cache by setting
+    the cache size to zero:
+
+    ```nix
+    services.nextcloud.phpOptions."realpath_cache_size" = "0";
+    ```
+
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 
 By default, `nginx` is used as reverse-proxy for `nextcloud`.

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-alS6M4sSyyytnzu9RTjDAioqkafEmgt/HpFUQ4MniCI=";
+    hash = "sha256-P9l7J4JMSO40YoFIHlv9kmKJeJGV5Y4hXkKA3rM0lTI=";
     fetchSubmodules = true;
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libev
     nghttp3
     quictls
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
   ] ++ lib.optional withJemalloc jemalloc;
 

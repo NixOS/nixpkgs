@@ -247,7 +247,8 @@ in {
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
         ++ lib.optional config.virtualisation.libvirtd.enable config.virtualisation.libvirtd.package
         ++ lib.optional config.virtualisation.docker.enable config.virtualisation.docker.package
-        ++ lib.optionals config.virtualisation.podman.enable [ pkgs.jq config.virtualisation.podman.package ];
+        ++ lib.optionals config.virtualisation.podman.enable [ pkgs.jq config.virtualisation.podman.package ]
+        ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
         NETDATA_PIPENAME = "/run/netdata/ipc";
@@ -367,14 +368,6 @@ in {
 
       "systemd-journal.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/systemd-journal.plugin.org";
-        capabilities = "cap_dac_read_search,cap_syslog+ep";
-        owner = cfg.user;
-        group = cfg.group;
-        permissions = "u+rx,g+x,o-rwx";
-      };
-
-      "logs-management.plugin" = {
-        source = "${cfg.package}/libexec/netdata/plugins.d/logs-management.plugin.org";
         capabilities = "cap_dac_read_search,cap_syslog+ep";
         owner = cfg.user;
         group = cfg.group;

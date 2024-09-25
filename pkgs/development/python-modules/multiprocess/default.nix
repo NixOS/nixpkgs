@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Multiprocessing and multithreading in Python";
     homepage = "https://github.com/uqfoundation/multiprocess";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

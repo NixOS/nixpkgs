@@ -2,31 +2,25 @@
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
-, libX11
-, libICE
-, libSM
-, fontconfig
 , libsecret
 , git
 , git-credential-manager
 , gnupg
 , pass
 , testers
-, withGuiSupport ? true
 , withLibsecretSupport ? true
 , withGpgSupport ? true
 }:
 
-assert withLibsecretSupport -> withGuiSupport;
 buildDotnetModule rec {
   pname = "git-credential-manager";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
     rev = "v${version}";
-    hash = "sha256-eRSTF9Ldj00cQbUzHzdMihte0+W4nZ9T/qg/L/yes/w=";
+    hash = "sha256-fD/HToyreYS8PG85CHHLPQOUKV1cDYGukxyVOr+7cKk=";
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
@@ -36,9 +30,8 @@ buildDotnetModule rec {
   dotnetInstallFlags = [ "--framework" "net8.0" ];
   executables = [ "git-credential-manager" ];
 
-  runtimeDeps = [ fontconfig ]
-    ++ lib.optionals withGuiSupport [ libX11 libICE libSM ]
-    ++ lib.optional withLibsecretSupport libsecret;
+  runtimeDeps =
+    lib.optional withLibsecretSupport libsecret;
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath ([ git ] ++ lib.optionals withGpgSupport [ gnupg pass ])}"
   ];

@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvme";
-  version = "1.9";
+  version = "1.10";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nXzYbj4BDxFii30yR+aTgqjQfyYMFiAIcV/OHI2y5Ws=";
+    hash = "sha256-guNABLpDKdWDE79gxoNq0ukAUE7CnMw5QRXA3rl3Dk4=";
   };
 
   postPatch = ''
     patchShebangs scripts
-    substituteInPlace test/sysfs/sysfs-tree-diff.sh \
+    substituteInPlace test/sysfs/tree-diff.sh test/config/config-diff.sh \
       --replace-fail /bin/bash ${bash}/bin/bash
   '';
 

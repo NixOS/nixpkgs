@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , libiconv
@@ -9,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuxmux";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "edeneast";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HujdIT55NmXpHDa0a4EmB30va8bNdZ/MHu7+SwF9Nvc=";
+    hash = "sha256-WcHsFKpYexBEg382837NqGgNMTKzVUG3XIER9aa1zK8=";
   };
 
-  cargoHash = "sha256-ceXeYa8MGGc0I8Q/r4GVsR71St/hlNc75a20BN0Haas=";
+  cargoHash = "sha256-ZftnJ6SYfPzwgsS44YgL9tbwL8Y+7PahI0EfFbKdlqA=";
 
   buildInputs = [ libiconv ];
   nativeBuildInputs = [ pkg-config installShellFiles ];

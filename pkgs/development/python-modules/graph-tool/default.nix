@@ -34,12 +34,12 @@ let
 in
 buildPythonPackage rec {
   pname = "graph-tool";
-  version = "2.71";
+  version = "2.77";
   format = "other";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-MVeEEAxvc6fEmQatlTn9XGCOTNkcCv8ouNbYqL69A8U=";
+    hash = "sha256-mu/6r1Uo836ZTxuIL3UdsKvuUz+H1FZY9Y3ZbEBK0LQ=";
   };
 
   # Remove error messages about tput during build process without adding ncurses,
@@ -99,6 +99,6 @@ buildPythonPackage rec {
     homepage = "https://graph-tool.skewed.de";
     changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.mjoerg ];
   };
 }

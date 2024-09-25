@@ -35,7 +35,7 @@ makeSetupHook {
 
     # TODO: remove this, packages should depend on GTK explicitly.
     gtk3
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # It is highly probable that a program will use GSettings,
     # at minimum through GTK file chooser dialogue.
     # Let’s add a GIO module for “dconf” GSettings backend
@@ -68,7 +68,7 @@ makeSetupHook {
       basic-contains-dconf = let
         tested = basic;
       in testLib.runTest "basic-contains-dconf" (
-        testLib.skip stdenv.isDarwin ''
+        testLib.skip stdenv.hostPlatform.isDarwin ''
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
         ''
@@ -77,7 +77,7 @@ makeSetupHook {
       basic-contains-gdk-pixbuf = let
         tested = basic;
       in testLib.runTest "basic-contains-gdk-pixbuf" (
-        testLib.skip stdenv.isDarwin ''
+        testLib.skip stdenv.hostPlatform.isDarwin ''
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${lib.getLib librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"}
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${lib.getLib librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"}
         ''

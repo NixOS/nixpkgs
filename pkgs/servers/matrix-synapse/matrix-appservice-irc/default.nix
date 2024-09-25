@@ -8,23 +8,24 @@
 , matrix-sdk-crypto-nodejs
 , nixosTests
 , nix-update-script
+, yarn
 }:
 
 let
   pname = "matrix-appservice-irc";
-  version = "2.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ue3fOkrEBRI/NRE+uKFR+NaqP8QvzVVeX3LUh4aZYJA=";
+    hash = "sha256-ugnFlvu5kkfTHPD44/F8OvGUx55VcHQvTS99T7Wc2fE=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     name = "${pname}-${version}-offline-cache";
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-hapEbdjvvzeZHfrpYRW9W3vXkQVNyGZ0qydO34+mQqQ=";
+    hash = "sha256-PObpXC8VIdsqhOZLLeHdS9mvXnjNQOrs2vlTeK5keRw=";
   };
 
 in
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     fixup-yarn-lock
     nodejs-slim
-    nodejs.pkgs.yarn
+    yarn
     nodejs.pkgs.node-gyp-build
   ];
 

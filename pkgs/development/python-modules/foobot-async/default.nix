@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "foobot-async";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "foobot_async";
     inherit version;
-    hash = "sha256-+lV6It6SUTnLSiEDT/280B0ovxZsDmgOr4SpkgYyf0A=";
+    hash = "sha256-QQjysk2m8QkOpLBdC8kfuoA9PcljgEwzKyrIAhxHB4c=";
   };
 
   build-system = [ setuptools ];

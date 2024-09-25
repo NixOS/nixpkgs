@@ -56,7 +56,7 @@ let
       readline
       sqlite
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libGL
       libGLU
     ]
@@ -65,7 +65,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.13"; # always change at once with ./minimal.nix
+  version = "8.14"; # always change at once with ./minimal.nix
 
   src =
     (lib.makeOverridable (
@@ -77,13 +77,13 @@ stdenv.mkDerivation rec {
     ))
       {
         name = "${pname}-${version}";
-        hash = "sha256-AB4EkgRAtlic9i1Wd9GMwv9q6Puvd+Y7iozyCJBoX7w=";
+        hash = "sha256-qrjMDbM27S04KAPHCK1VqV/FKkQ2yRL2FvfEnUhFriw=";
       };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
   NIX_LDFLAGS = lib.concatStringsSep " " [
-    (lib.optionalString (stdenv.cc.isGNU && !stdenv.isDarwin) "-lgcc_s")
+    (lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isDarwin) "-lgcc_s")
   ];
 
   nativeBuildInputs = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
       gtk3
       ncurses
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       CoreFoundation
     ];
@@ -141,15 +141,15 @@ stdenv.mkDerivation rec {
       cd src/build
 
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       gappsWrapperArgs+=("--prefix"   "LD_LIBRARY_PATH" ":" ${libPath})
       gappsWrapperArgs+=("--set"      "LOCALE_ARCHIVE" "${glibcLocales}/lib/locale/locale-archive")
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       gappsWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" ${libPath})
     '';
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Cannot set DYLD_LIBRARY_PATH as an attr of this drv, becasue dynamic
     # linker environment variables like this are purged.
     # See: https://apple.stackexchange.com/a/212954/167199
@@ -163,14 +163,14 @@ stdenv.mkDerivation rec {
     export DYLD_FALLBACK_LIBRARY_PATH="${libPath}"
   '';
 
-  shared = if stdenv.isDarwin then "dylib" else "shared";
+  shared = if stdenv.hostPlatform.isDarwin then "dylib" else "shared";
   configureFlags =
     [
       "--enable-${shared}"
       "--enable-lt=${libtool}/bin/libtool"
     ]
     ++ lib.optionals disableDocs [ "--disable-docs" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--disable-strip"
       "--enable-xonx"
     ];
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Programmable programming language";
@@ -198,7 +198,7 @@ stdenv.mkDerivation rec {
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

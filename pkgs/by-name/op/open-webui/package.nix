@@ -7,25 +7,25 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.8";
+  version = "0.3.29";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "v${version}";
-    hash = "sha256-kUdy8zSt8RvGlMKa0gxp0tnZbo7/igDeFV2zsel5LXA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-W1AjHzoQNCoK/Kbu+XX+tZG+aZqngDUkNKBM73kLBB0=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-sjQJn94GmSdOY1B2bmFTsxjLrc7LSBgDpWNrXIHunsg=";
+    npmDepsHash = "sha256-9oe+6kEAGE/pHjBkHf3v/W53XPJAQ7Yfn0VecH3ZiQM=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build" \
+        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
@@ -59,6 +59,9 @@ python3.pkgs.buildPythonApplication rec {
     "opencv-python-headless"
     # using `psycopg2` instead
     "psycopg2-binary"
+    "docker"
+    "pytest"
+    "pytest-docker"
   ];
 
   dependencies = with python3.pkgs; [
@@ -73,8 +76,10 @@ python3.pkgs.buildPythonApplication rec {
     black
     boto3
     chromadb
+    colbert-ai
     docx2txt
     duckduckgo-search
+    einops
     extract-msg
     fake-useragent
     fastapi
@@ -88,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
     langchain-community
     langfuse
     markdown
+    nltk
     openai
     opencv4
     openpyxl
@@ -95,13 +101,16 @@ python3.pkgs.buildPythonApplication rec {
     passlib
     peewee
     peewee-migrate
+    psutil
     psycopg2
     pydub
     pyjwt
+    pymilvus
     pymongo
     pymysql
     pypandoc
     pypdf
+    python-dotenv
     python-jose
     python-multipart
     python-pptx
@@ -113,7 +122,7 @@ python3.pkgs.buildPythonApplication rec {
     redis
     requests
     sentence-transformers
-    sqlalchemy
+    tiktoken
     unstructured
     uvicorn
     validators
@@ -122,7 +131,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python3.pkgs; [ hatchling ];
-
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -133,7 +141,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    description = "Full-stack of open-webui. open-webui is a user-friendly WebUI for LLMs (Formerly Ollama WebUI)";
+    description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
     changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

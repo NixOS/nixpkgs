@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "3.3.1";
+  version = "3.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sy70OQvKx0H8vxRFTEkg+QV9eVij5C9dlAwJ2HTFOi8=";
+    hash = "sha256-0x8nk8F+kg5SSDQI4dOnv67ilyN4z2MZ5phPC3PW4WQ=";
   };
 
   build-system = [ setuptools ];
@@ -35,10 +35,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # -file://///filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
-    # +file:////filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
-    "test_normalize_url_slashes"
-    "test_normalize_url_with_base_unc_path"
+    # Incorrect error message in pickling test for Python 3.12 in Debian
+    # https://github.com/sissaschool/xmlschema/issues/412
+    "test_pickling_subclassed_schema__issue_263"
   ];
 
   pythonImportsCheck = [ "xmlschema" ];
@@ -48,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sissaschool/xmlschema";
     changelog = "https://github.com/sissaschool/xmlschema/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

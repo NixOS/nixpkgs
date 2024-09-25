@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
-  postFixup = if stdenv.isDarwin
+  postFixup = if stdenv.hostPlatform.isDarwin
     then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
     else null;
 

@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "http://jlafon.io/pynamodb.html";
     changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

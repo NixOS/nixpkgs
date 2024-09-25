@@ -13,9 +13,9 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ libsecret ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
 
   ldflags = [
     "-s"
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   buildPhase =
     let
-      cmds = if stdenv.isDarwin then [ "osxkeychain" "pass" ] else [ "secretservice" "pass" ];
+      cmds = if stdenv.hostPlatform.isDarwin then [ "osxkeychain" "pass" ] else [ "secretservice" "pass" ];
     in
     ''
       for cmd in ${builtins.toString cmds}; do
@@ -46,8 +46,8 @@ buildGoModule rec {
     description = "Suite of programs to use native stores to keep Docker credentials safe";
     homepage = "https://github.com/docker/docker-credential-helpers";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-  } // lib.optionalAttrs stdenv.isDarwin {
+    maintainers = [ ];
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     mainProgram = "docker-credential-osxkeychain";
   };
 }

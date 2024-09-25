@@ -12,28 +12,32 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.19.0";
-  format = "setuptools";
+  version = "2.20.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-B/xYcKAmHyVGbFV8E035Wpbf0lN6vQiLnVN/ur6ZuXQ=";
+    pname = "google_cloud_datastore";
+    inherit version;
+    hash = "sha256-B5ULnIhlCHxWX0X6P916BdTD2ZrfeeEMP1lv8Ip9m7o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
   };
 
@@ -70,6 +74,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-datastore";
     changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

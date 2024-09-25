@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config meson ninja jdk_headless ];
-  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.isDarwin
+  buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH lv2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin
     (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo]);
   makeFlags = [ "AR:=$(AR)" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ];
     platforms = platforms.all;
   };
 }

@@ -1,17 +1,16 @@
 { alcotest-lwt
 , buildDunePackage
 , ocaml
+, bigarray-compat
 , dune-site
 , fetchurl
 , gluten-lwt-unix
 , lib
 , logs
-, lwt_ssl
 , magic-mime
 , mrmime
-, pecu
 , psq
-, ssl
+, rresult
 , uri
 }:
 
@@ -21,8 +20,6 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
 buildDunePackage rec {
   pname = "piaf";
   version = "0.1.0";
-
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/anmonteiro/piaf/releases/download/${version}/piaf-${version}.tbz";
@@ -34,10 +31,12 @@ buildDunePackage rec {
   '';
 
   propagatedBuildInputs = [
+    bigarray-compat
     logs
     magic-mime
     mrmime
     psq
+    rresult
     uri
     gluten-lwt-unix
   ];

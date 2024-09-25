@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "JSON RPC client library - Pelix compatible fork";
     homepage = "https://pypi.python.org/pypi/jsonrpclib-pelix/";
     license = lib.licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

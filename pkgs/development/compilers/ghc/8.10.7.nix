@@ -9,7 +9,11 @@
 , libiconv ? null, ncurses
 
 , # GHC can be built with system libffi or a bundled one.
+  # we explicitly use libffi-3.3 here because 3.4 removes a flag that causes
+  # problems for ghc-8.10.7's RTS. See #324384.
+  # Save for aarch_darwin since libffi-3.3 is broken there but the issue isn't present anyway
   libffi ? null
+, libffi_3_3 ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
@@ -56,7 +60,7 @@
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
-}:
+}@args:
 
 assert !enableIntegerSimple -> gmp != null;
 
@@ -65,6 +69,7 @@ assert !enableIntegerSimple -> gmp != null;
 assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
+  libffi_name = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then "libffi" else "libffi_3_3";
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -119,7 +124,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ [args.${libffi_name}]
     ++ lib.optional (!enableIntegerSimple) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -152,18 +157,16 @@ let
 
         otool = cc.bintools.bintools;
 
-        # GHC needs install_name_tool on all darwin platforms. On aarch64-darwin it is
-        # part of the bintools wrapper (due to codesigning requirements), but not on
-        # x86_64-darwin. We decide based on target platform to have consistent tools
-        # across all GHC stages.
-        install_name_tool =
-          if stdenv.targetPlatform.isAarch64
-          then cc.bintools
-          else cc.bintools.bintools;
-        # Same goes for strip.
+        # GHC needs install_name_tool on all darwin platforms. The same one can
+        # be used on both platforms. It is safe to use with linker-generated
+        # signatures because it will update the signatures automatically after
+        # modifying the target binary.
+        install_name_tool = cc.bintools.bintools;
+
+        # strip on darwin is wrapped to enable deterministic mode.
         strip =
           # TODO(@sternenseemann): also use wrapper if linker == "bfd" or "gold"
-          if stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin
+          if stdenv.targetPlatform.isDarwin
           then cc.bintools
           else cc.bintools.bintools;
       }.${name};
@@ -250,7 +253,7 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8f7dd5710b80906ea7a3e15b7bb56a883a49fed8.patch";
       hash = "sha256-C636Nq2U8YOG/av7XQmG3L1rU0bmC9/7m7Hty5pm5+s=";
     })
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release
     (fetchpatch {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
@@ -299,9 +302,9 @@ stdenv.mkDerivation (rec {
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
@@ -334,10 +337,10 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ lib.optionals (libffi != null) [
+  ] ++ lib.optionals (args.${libffi_name} != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetPackages.${libffi_name}.dev}/include"
+    "--with-ffi-libraries=${targetPackages.${libffi_name}.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
@@ -363,7 +366,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoreconfHook autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx

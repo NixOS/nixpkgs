@@ -3,7 +3,8 @@
 set -euo pipefail
 shopt -s nullglob
 
-export PATH="@binPath@"
+export SSL_CERT_FILE=@cacert@/etc/ssl/certs/ca-bundle.crt
+export PATH="@binPath@:$PATH"
 # used for glob ordering of package names
 export LC_ALL=C
 
@@ -22,6 +23,7 @@ export DOTNET_NOLOGO=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
+wait "$!"
 
 declare -a remote_sources
 declare -A base_addresses
@@ -49,17 +51,18 @@ for package in *; do
   [[ -d "$package" ]] || continue
   cd "$package"
   for version in *; do
-    id=$(xq -r .package.metadata.id "$version"/*.nuspec)
+    id=$(xmlstarlet sel -t -v /_:package/_:metadata/_:id "$version"/*.nuspec)
 
     if grep -qxF "$id.$version.nupkg" "$excluded_list"; then
       continue
     fi
 
-    used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
+    # packages in the nix store should have an empty metadata file
+    used_source="$(jq -r 'if has("source") then .source else "" end' "$version"/.nupkg.metadata)"
     found=false
 
-    if [[ -d "$used_source" ]]; then
-        continue
+    if [[ -z "$used_source" || -d "$used_source" ]]; then
+      continue
     fi
 
     for source in "${remote_sources[@]}"; do

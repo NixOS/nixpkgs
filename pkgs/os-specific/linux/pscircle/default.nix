@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "mildlyparallel";
     repo = "pscircle";
     rev = "v${version}";
-    sha256 = "sha256-bqbQBNscNfoqXprhoFUnUQO88YQs9xDhD4d3KHamtG0=";
+    hash = "sha256-bqbQBNscNfoqXprhoFUnUQO88YQs9xDhD4d3KHamtG0=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,6 @@
 , qmake
 , pkg-config
 , qttools
-, qtbase
 , qtwebengine
 , wrapQtAppsHook
 , qmarkdowntextedit

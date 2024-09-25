@@ -10,6 +10,7 @@
   mwoauth,
   pyjwt,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   requests,
   requests-mock,
@@ -21,20 +22,15 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.3.1";
+  version = "17.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gFhhOCcmorkrLxrup9fICh5ueCrc64fxfuZXTQG1tMk=";
+    hash = "sha256-0eRfcuI+GuhgF0myZPy8ZcL4kBCLv6PcGEk+92J+GZ0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=oauthenticator" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -58,6 +54,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     requests-mock
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
@@ -85,6 +82,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

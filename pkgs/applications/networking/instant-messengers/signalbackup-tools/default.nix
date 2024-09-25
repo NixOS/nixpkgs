@@ -1,27 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+
+  cmake,
+  pkg-config,
+
+  darwin,
+  dbus,
+  openssl,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20240708";
+  version = "20240924-2";
 
   src = fetchFromGitHub {
     owner = "bepaald";
-    repo = pname;
+    repo = "signalbackup-tools";
     rev = version;
-    hash = "sha256-UwUygYbmwDdv37mo8rEsHx4mMGdXVfAcscrnn1g0wio=";
+    hash = "sha256-YnblQjZpKsnphbaRQ6FyHhssnns7U5VoNe/r3goQ0g8=";
   };
 
-  postPatch = ''
-    patchShebangs BUILDSCRIPT_MULTIPROC.bash44
-  '';
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl sqlite ];
-
-  buildPhase = ''
-    runHook preBuild
-    ./BUILDSCRIPT_MULTIPROC.bash44${lib.optionalString stdenv.isDarwin " --config nixpkgs-darwin"}
-    runHook postBuild
-  '';
+  buildInputs = [
+    openssl
+    sqlite
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Security
+  ];
 
   installPhase = ''
     runHook preInstall

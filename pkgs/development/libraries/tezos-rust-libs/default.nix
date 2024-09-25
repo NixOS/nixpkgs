@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
     owner = "tezos";
     repo = "tezos-rust-libs";
     rev = "v${version}";
-    sha256 = "sha256-SuCqDZDXmWdGI/GN+3nYcUk66jnW5FQQaeTB76/rvaw=";
+    hash = "sha256-SuCqDZDXmWdGI/GN+3nYcUk66jnW5FQQaeTB76/rvaw=";
   };
 
   nativeBuildInputs = [ llvmPackages_12.llvm cargo ];
   propagatedBuildDeps = [ llvmPackages_12.libllvm ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildPhase = ''
     runHook preBuild

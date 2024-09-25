@@ -1,5 +1,5 @@
 {
-  stdenv, lib, fetchFromGitHub, pkg-config, buildGoModule,
+  lib, fetchFromGitHub, pkg-config, buildGoModule,
   libGL, libX11, libXcursor, libXfixes, libxkbcommon, vulkan-headers, wayland,
 }:
 

@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ascii-draw";
-  version = "0.3.4";
+  version = "0.4.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "ascii-draw";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S5tFK+mJeWtkdS2WjE+lZ2Gfg4N1S0a29AbbcGeKSD0=";
+    hash = "sha256-lBlIZrjzJo9R6KnzUSbqz5c/6UbuTv/pQu5Sans37Hc=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "App to draw diagrams or anything using only ASCII";
+    description = "Draw diagrams or anything using only ASCII";
     homepage = "https://github.com/Nokse22/ascii-draw";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ascii-draw";

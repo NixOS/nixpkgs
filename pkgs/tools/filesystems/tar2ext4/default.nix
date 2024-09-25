@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tar2ext4";
-  version = "0.12.4";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "hcsshim";
     rev = "v${version}";
-    sha256 = "sha256-aK1XZPHZSgTf6MTrJv+5SBr7FCT53VNXSTZQVnHM2GA=";
+    sha256 = "sha256-bgYF1CY5LVZz9dVFjLSMqb8k+kU6AuGRgPbCZ8uI3KA=";
   };
 
   sourceRoot = "${src.name}/cmd/tar2ext4";

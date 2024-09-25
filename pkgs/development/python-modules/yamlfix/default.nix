@@ -7,7 +7,6 @@
   pdm-backend,
   pytest-freezegun,
   pytest-xdist,
-  pytest,
   pytestCheckHook,
   pythonOlder,
   ruyaml,

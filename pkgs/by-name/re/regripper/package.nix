@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
     cp -aR . "$out/share/regripper/"
 
-    cat > "$out/bin/${pname}" << EOF
+    cat > "$out/bin/regripper" << EOF
     #!${runtimeShell}
     exec ${perl}/bin/perl $out/share/regripper/rip.pl "\$@"
     EOF
 
-    chmod u+x  "$out/bin/${pname}"
+    chmod u+x  "$out/bin/regripper"
 
     runHook postInstall
   '';

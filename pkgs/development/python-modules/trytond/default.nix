@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.2.5";
+  version = "7.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ph3S7lwilGMk9tXxmZDIglpLfGmGHV1Dhj4oA8FLjws=";
+    hash = "sha256-Vz1bYIwhvH8SHZnmv9ZuaoOnNe378gtIWK2UQDBQxas=";
   };
 
   build-system = [ setuptools ];
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     homepage = "http://www.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [
       udono
       johbo

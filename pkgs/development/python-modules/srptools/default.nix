@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/idlesign/srptools";
     changelog = "https://github.com/idlesign/srptools/blob/v${version}/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

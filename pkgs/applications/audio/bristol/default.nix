@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://bristol.sourceforge.net";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

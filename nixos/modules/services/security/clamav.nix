@@ -164,6 +164,10 @@ in
     environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
     environment.etc."clamav/clamd.conf".source = clamdConfigFile;
 
+    systemd.slices.system-clamav = {
+      description = "ClamAV slice";
+    };
+
     systemd.services.clamav-daemon = mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       after = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
@@ -181,6 +185,7 @@ in
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -208,6 +213,7 @@ in
         Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -229,6 +235,7 @@ in
         Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -255,6 +262,7 @@ in
         Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+        Slice = "system-clamav.slice";
       };
     };
 
@@ -275,6 +283,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${cfg.package}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
+        Slice = "system-clamav.slice";
       };
     };
   };

@@ -2,7 +2,7 @@
 
 ## Updating the CLI
 
-- Update `version` and `src.hash` in default.nix
+- Update `version` and `src.hash` in package.nix
 - Check out the changes made to the azure-cli [setup.py](https://github.com/Azure/azure-cli/blob/dev/src/azure-cli/setup.py) since the last release
 - Try build the CLI, will likely fail with `ModuleNotFoundError`, for example
   ```
@@ -19,13 +19,12 @@
 
 ## Extensions
 
-There are two sets of extensions: the one in `extensions-generated.nix` is generated with the script
-`query-extension-index.sh`. These are extensions that don't have external requirements and thus can
-be easily maintained and updated. The set should only be manipulated through an update based on the
-script output.
+There are two sets of extensions:
 
-The other set of extensions is in `extensions-manual.nix`. These are extensions with requirements,
-which need to be packaged and maintained manually.
+- `extensions-generated.nix` are extensions with no external requirements, which can be regenerated running:
+  > nix run .#azure-cli.passthru.generate-extensions
+
+- `extensions-manual.nix` are extensions with requirements, which need to be manually packaged and maintained.
 
 ### Adding an extension to `extensions-manual.nix`
 

@@ -3,14 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   psutil,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "command-runner";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     owner = "netinvent";
     repo = "command_runner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QzqkcF2/YExK/dz+b0Uk0Af/rAXRMuRIeEynyFgDql8=";
+    hash = "sha256-rdbZtqNndtIxrLA90eWzR6dB8EyFrBALduBUkOVq4oE=";
   };
 
   build-system = [ setuptools ];

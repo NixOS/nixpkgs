@@ -25,7 +25,7 @@
     isBootstrap
   else false)
 , useOpenSSL ? !isMinimalBuild
-, useSharedLibraries ? (!isMinimalBuild && !stdenv.isCygwin)
+, useSharedLibraries ? (!isMinimalBuild && !stdenv.hostPlatform.isCygwin)
 , uiToolkits ? [] # can contain "ncurses" and/or "qt5"
 , buildDocs ? !(isMinimalBuild || (uiToolkits == []))
 , darwin
@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Add NIXPKGS_CMAKE_PREFIX_PATH to cmake which is like CMAKE_PREFIX_PATH
+    # except it is not searched for programs
+    ./000-nixpkgs-cmake-prefix-path.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
     # Don't depend on frameworks.
@@ -63,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./003-libuv-application-services.diff
   ]
-  ++ lib.optional stdenv.isCygwin ./004-cygwin.diff
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
-  ++ lib.optional (stdenv.isDarwin && isMinimalBuild) ./005-remove-systemconfiguration-dep.diff
+  ++ lib.optional (stdenv.hostPlatform.isDarwin && isMinimalBuild) ./005-remove-systemconfiguration-dep.diff
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
-  ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
-  ++ lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) (
+  ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
     substituteAll {
       src = ./007-darwin-bsd-ps-abspath.diff;
       ps = lib.getExe ps;
@@ -105,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional useOpenSSL openssl
   ++ lib.optional cursesUI ncurses
   ++ lib.optional qt5UI qtbase
-  ++ lib.optional stdenv.isDarwin CoreServices
-  ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
+  ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices
+  ++ lib.optional (stdenv.hostPlatform.isDarwin && !isMinimalBuild) SystemConfiguration;
 
   preConfigure = ''
     fixCmakeFiles .
@@ -204,6 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
     platforms = lib.platforms.all;
     mainProgram = "cmake";
-    broken = (qt5UI && stdenv.isDarwin);
+    broken = (qt5UI && stdenv.hostPlatform.isDarwin);
   };
 })

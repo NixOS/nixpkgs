@@ -2,7 +2,7 @@
 , ppx_sexp_conv
 , mirage-crypto, mirage-crypto-ec, mirage-crypto-rng, mirage-crypto-pk
 , x509, cstruct, cstruct-unix, cstruct-sexp, sexplib, eqaf-cstruct
-, rresult, mtime, logs, fmt, cmdliner, base64
+, mtime, logs, fmt, cmdliner, base64
 , zarith
 }:
 

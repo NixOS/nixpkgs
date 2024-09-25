@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=648272
     maintainers = with lib.maintainers; [ iblech ];
     platforms   = lib.platforms.unix;
-    broken      = stdenv.isDarwin;
+    broken      = stdenv.hostPlatform.isDarwin;
   };
 })

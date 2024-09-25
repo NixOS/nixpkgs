@@ -20,6 +20,7 @@
   libvdpau,
   libxkbcommon,
   wayland,
+  libdrm,
   nix-update-script,
 }:
 
@@ -31,7 +32,7 @@ let
     Cocoa
     VideoToolbox
     ;
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 
 stdenv'.mkDerivation rec {
@@ -42,7 +43,7 @@ stdenv'.mkDerivation rec {
     owner = "moonlight-stream";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zrl8WPXvQ/7FTqFnpwoXEJ85prtgJWoWNsdckw5+JHI=";
+    hash = "sha256-zrl8WPXvQ/7FTqFnpwoXEJ85prtgJWoWNsdckw5+JHI=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +64,7 @@ stdenv'.mkDerivation rec {
 
   buildInputs =
     [
-      (SDL2.override { drmSupport = stdenv.isLinux; })
+      (SDL2.override { drmSupport = stdenv.hostPlatform.isLinux; })
       SDL2_ttf
       ffmpeg
       libopus
@@ -72,7 +73,7 @@ stdenv'.mkDerivation rec {
       qt6.qtsvg
       openssl
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libpulseaudio
       libva
@@ -80,8 +81,9 @@ stdenv'.mkDerivation rec {
       libxkbcommon
       qt6.qtwayland
       wayland
+      libdrm
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       AVFoundation
       AppKit
       AudioUnit
@@ -91,7 +93,7 @@ stdenv'.mkDerivation rec {
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications $out/bin
     mv app/Moonlight.app $out/Applications
     ln -s $out/Applications/Moonlight.app/Contents/MacOS/Moonlight $out/bin/moonlight

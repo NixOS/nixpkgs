@@ -10,15 +10,20 @@
 , glib
 , makeWrapper
 , libcap
-, libunwind
 , elfutils # for libdw
 , bash-completion
 , lib
 , Cocoa
 , CoreServices
-, gobject-introspection
 , rustc
 , testers
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, libunwind
+, withLibunwind ?
+  lib.meta.availableOn stdenv.hostPlatform libunwind &&
+    lib.elem "libunwind" libunwind.meta.pkgConfigModules or []
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
@@ -32,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
+
+  separateDebugInfo = true;
 
   src = let
     inherit (finalAttrs) pname version;
@@ -56,22 +63,24 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     glib
     bash-completion
-    gobject-introspection
     rustc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap # for setcap binary
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
   buildInputs = [
     bash-completion
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-    libunwind
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals withLibunwind [
+    libunwind
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     CoreServices
   ];
@@ -83,11 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-    "-Dlibunwind=disabled"
-    "-Dlibdw=disabled"
+    (lib.mesonEnable "libunwind" withLibunwind)
+    (lib.mesonEnable "libdw" withLibunwind)
   ];
 
   postPatch = ''

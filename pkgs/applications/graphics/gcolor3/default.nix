@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gcolor3";
     homepage = "https://gitlab.gnome.org/World/gcolor3";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

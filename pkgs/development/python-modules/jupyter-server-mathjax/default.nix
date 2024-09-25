@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "MathJax resources as a Jupyter Server Extension";
     homepage = "https://github.com/jupyter-server/jupyter_server_mathjax";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

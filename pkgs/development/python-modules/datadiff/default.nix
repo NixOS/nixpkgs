@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Library to provide human-readable diffs of Python data structures";
     homepage = "https://sourceforge.net/projects/datadiff/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

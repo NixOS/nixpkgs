@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, buildPackages
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
@@ -29,17 +28,24 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.31.2";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-e0zXxIdAtJZXJdP/S6lHRnPm5Rsf638Fhox8XcqOWrk=";
+    hash = "sha256-YqjMk7EF/fyOhsMLcG56FGHfOZSdaFhUbiiHk+SXajY=";
     fetchSubmodules = true;
+    # The public hydra server on `hydra.nixos.org` is configured with
+    # `max_output_size` of 3GB. The purpose of this `postFetch` step
+    # is to stay below that limit and save 4.1GiB and 428MiB in output
+    # size respectively. These folders are not referenced in tinygo.
+    postFetch = ''
+      rm -r $out/lib/cmsis-svd/data/{SiliconLabs,Freescale}
+    '';
   };
 
-  vendorHash = "sha256-HZiyAgsTEBQv+Qp0T9RXTV1lkxvIGh7Q45rd45cfvjo=";
+  vendorHash = "sha256-cTqrvh0w3KQg3P1lCfAez0kqAMBJHQbqS3sx8uqGvEs=";
 
   patches = [
     ./0001-GNUmakefile.patch
@@ -48,7 +54,7 @@ buildGoModule rec {
   nativeCheckInputs = [ binaryen ];
   nativeBuildInputs = [ makeWrapper lld ];
   buildInputs = [ llvm clang.cc ]
-    ++ lib.optionals stdenv.isDarwin [ xar ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
 
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
@@ -106,12 +112,12 @@ buildGoModule rec {
 
   # GDB upstream does not support ARM darwin
   runtimeDeps = [ go clang.cc lld avrdude openocd binaryen ]
-    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [ gdb ];
+    ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
 
   installPhase = ''
     runHook preInstall
 
-    make build/release
+    make build/release USE_SYSTEM_BINARYEN=1
 
     wrapProgram $out/bin/tinygo \
       --prefix PATH : ${lib.makeBinPath runtimeDeps }

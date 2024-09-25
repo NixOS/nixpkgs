@@ -1,18 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, fetchFromGitHub
 , autoPatchelfHook
 , fuse3
 , maven, jdk, makeShellWrapper, glib, wrapGAppsHook3
 , libayatana-appindicator
 }:
 
-
-let
-  mavenJdk = maven.override {
-    jdk = jdk;
-  };
-in
-assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
-mavenJdk.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "cryptomator";
   version = "1.13.0";
 
@@ -23,6 +16,7 @@ mavenJdk.buildMavenPackage rec {
     hash = "sha256-aKj8/yQzNWWV2m+sF2Or59OyPMiBqPeXEHn88w2VUkU=";
   };
 
+  mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
   mvnHash = "sha256-bZGTYkxRXgjGoxAdVkgiZZgVSghKz3Mq9pCBdivMNPQ=";
 

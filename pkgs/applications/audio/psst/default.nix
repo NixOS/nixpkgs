@@ -16,19 +16,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "psst";
-  version = "unstable-2024-05-26";
+  version = "unstable-2024-08-19";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = pname;
-    rev = "6c9cd3f91653764b832ea5136cda04c9e0f8fe50";
-    hash = "sha256-bttF+yX1BT4t1TUmJBs0OZuPD+6uPxHlb8YzRIVNKTQ=";
+    rev = "11bef15e66a3c9b0b991207d09a67c071b3dda02";
+    hash = "sha256-lKxWIUDouUUul7CpuTy30z/cLJAjFE9e0J1zyZ/PnIo=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cubeb-0.10.3" = "sha256-gV1KHOhq678E/Rj+u8jX9Fw+TepPwuZdV5y/D+Iby+o=";
+      "cubeb-0.13.0" = "sha256-l1JkKlq2qvvLwNLJ2DrIpAFYcRQyd6F8pAflmtnaXhU=";
       "druid-0.8.3" = "sha256-hTB9PQf2TAhcLr64VjjQIr18mczwcNogDSRSN5dQULA=";
       "druid-enums-0.1.0" = "sha256-KJvAgKxicx/g+4QRZq3iHt6MGVQbfOpyN+EhS6CyDZk=";
     };

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.3.1";
+  version = "0.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "qdrant";
     repo = "fastembed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bFIikLogTxrwLNR+NOnnRjKGneZ63N7CBuu81z85xZo=";
+    hash = "sha256-IdIGht4RcejXoBTJ8eHi5fNw2ffxIi/chuoQBNjA98g=";
   };
 
   build-system = [ poetry-core ];

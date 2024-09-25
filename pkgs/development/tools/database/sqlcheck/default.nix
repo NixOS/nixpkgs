@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jarulraj";
     repo = "sqlcheck";
     rev = "v${version}";
-    sha256 = "sha256-rGqCtEO2K+OT44nYU93mF1bJ07id+ixPkRSC8DcO6rY=";
+    hash = "sha256-rGqCtEO2K+OT44nYU93mF1bJ07id+ixPkRSC8DcO6rY=";
     fetchSubmodules = true;
   };
 

@@ -17,7 +17,7 @@
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, tzdata
+, dbus, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
@@ -30,7 +30,7 @@
   stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
 }:
 
-assert stdenv.isLinux -> util-linuxMinimal != null;
+assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
 
 let
   # Some packages don't get "Cflags" from pkg-config correctly
@@ -61,14 +61,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.3";
+  version = "2.80.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OUeg6t3Q82E9AjC7JG0MaeRhQsGQIvXEsbLjy6I21Bc=";
+    hash = "sha256-JOApxd/JtE5Fc2l63zMHipgnxIk4VVAEs7kJb6TqA08=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin-compilation.patch
     # FIXME: remove when https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4088 is merged and is in the tagged release
     (fetchpatch {
@@ -142,10 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libselinux
     util-linuxMinimal # for libmount
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]);
 
@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
   ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
     "-Dlibelf=disabled"
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Db_lundef=false"
     "-Dxattr=false"
   ];
@@ -291,7 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/lib/libglib-${librarySuffix}
   '';
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";

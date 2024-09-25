@@ -1,4 +1,5 @@
 {
+  _experimental-update-script-combinators,
   fetchFromSourcehut,
   gitUpdater,
   lib,
@@ -18,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "0.24.0";
+  version = "0.24.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
     rev = finalAttrs.version;
-    hash = "sha256-NOfoCT/wKZ3CXYzXZq7plXcun+MXQicfzBOmetXN7Qs=";
+    hash = "sha256-YCUBdPYr/44stW9k54QoUEhNkti6ULJkVBphx7xhmKo=";
   };
 
   nativeBuildInputs = [ qbe ];
@@ -52,7 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = _experimental-update-script-combinators.sequence (
+      builtins.map (item: item.command) [
+        (gitUpdater {
+          attrPath = "harec";
+          ignoredVersions = [ "-rc[0-9]{1,}" ];
+        })
+        (gitUpdater {
+          attrPath = "hare";
+          url = "https://git.sr.ht/~sircmpwn/hare";
+          ignoredVersions = [ "-rc[0-9]{1,}" ];
+        })
+      ]
+    );
     # To be kept in sync with the hare package.
     inherit qbe;
   };

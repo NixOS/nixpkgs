@@ -13,16 +13,17 @@
 */
 
 let
+  lib = import ../../lib;
   ensureList = x: if builtins.isList x then x else [ x ];
   allowUnfreePredicate =
     p:
     builtins.all (
       license:
       license.free
-      || license.redistributable
       || builtins.elem license.shortName [
         "CUDA EULA"
         "cuDNN EULA"
+        "cuTENSOR EULA"
         "NVidia OptiX EULA"
       ]
     ) (ensureList p.meta.license);
@@ -43,7 +44,8 @@ in
       inHydra = true;
     };
   },
-}:
+  ...
+}@args:
 
 assert builtins.elem variant [
   "cuda"
@@ -52,9 +54,11 @@ assert builtins.elem variant [
 ];
 
 let
-  release-lib = import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
+  mkReleaseLib = import ./release-lib.nix;
+  release-lib = mkReleaseLib (
+    { inherit supportedSystems nixpkgsArgs; } // lib.intersectAttrs (lib.functionArgs mkReleaseLib) args
+  );
 
-  inherit (release-lib) lib;
   inherit (release-lib)
     linux
     mapTestOn
@@ -127,12 +131,11 @@ let
         jax = linux;
         Keras = linux;
         kornia = linux;
-        libgpuarray = linux;
         mmcv = linux;
         mxnet = linux;
         numpy = linux; # Only affected by MKL?
         onnx = linux;
-        openai-triton = linux;
+        triton = linux;
         openai-whisper = linux;
         opencv4 = linux;
         opensfm = linux;

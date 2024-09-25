@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   jinja2,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:

@@ -34,6 +34,8 @@ in {
     gitlab = { ... }: {
       imports = [ common/user-account.nix ];
 
+      environment.systemPackages = with pkgs; [ git ];
+
       virtualisation.memorySize = 6144;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;

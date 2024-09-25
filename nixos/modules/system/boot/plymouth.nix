@@ -219,7 +219,7 @@ in
         # Fonts
         "/etc/plymouth/fonts".source = pkgs.runCommand "plymouth-initrd-fonts" {} ''
           mkdir -p $out
-          cp ${cfg.font} $out
+          cp ${escapeShellArg cfg.font} $out
         '';
         "/etc/fonts/fonts.conf".text = ''
           <?xml version="1.0"?>

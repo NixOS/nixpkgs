@@ -1,4 +1,4 @@
-{ lib, custom, ... }:
+{ custom, ... }:
 
 {
   config = {

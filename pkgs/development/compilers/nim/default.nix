@@ -85,7 +85,7 @@ in {
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
-      ++ lib.optional stdenv.isDarwin Security;
+      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
     patches = [
       ./NIM_CONFIG_DIR.patch
@@ -124,9 +124,9 @@ in {
       "--os:${nimHost.os}"
       "-d:release"
       "-d:useGnuReadline"
-    ] ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
+    ] ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) "-d:nativeStacktrace";
 
-    preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace makefile \
         --replace "aarch64" "arm64"
     '';
@@ -192,7 +192,7 @@ in {
 
         # Needed for any nim package that uses the standard library's
         # 'std/sysrand' module.
-        depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
+        depsTargetTargetPropagated = lib.optional stdenv.hostPlatform.isDarwin Security;
 
         inherit patches;
 
@@ -252,7 +252,7 @@ in {
             runHook postBuild
           '';
 
-        wrapperArgs = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
+        wrapperArgs = lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [
           "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
             placeholder "out"
           }/bin"

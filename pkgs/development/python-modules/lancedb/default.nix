@@ -23,22 +23,20 @@
   polars,
   pytest-asyncio,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.9.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     rev = "refs/tags/python-v${version}";
-    hash = "sha256-RWmvqGm/Bekajb/fs/PQJ2fL0Vo1Mmy+x40PKaDmIEU=";
+    hash = "sha256-6E20WgyoEALdxmiOfgq89dCkqovvIMzc/wy+kvjDWwU=";
   };
-
-  # ratelimiter only support up to python310 and it has been removed from nixpkgs
-  patches = [ ./remove-ratelimiter.patch ];
 
   buildAndTestSubdir = "python";
 
@@ -60,7 +58,7 @@ buildPythonPackage rec {
       libiconv
       protobuf
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         IOKit
@@ -68,8 +66,6 @@ buildPythonPackage rec {
         SystemConfiguration
       ]
     );
-
-  pythonRemoveDeps = [ "ratelimiter" ];
 
   dependencies = [
     attrs
@@ -103,6 +99,10 @@ buildPythonPackage rec {
   disabledTests = [
     # require tantivy which is not packaged in nixpkgs
     "test_basic"
+
+    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
+    # https://github.com/lancedb/lancedb/issues/1539
+    "test_polars"
   ];
 
   disabledTestPaths = [
@@ -110,9 +110,20 @@ buildPythonPackage rec {
     "test_s3.py"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "python-v(.*)"
+      "--generate-lockfile"
+      "--lockfile-metadata-path"
+      "python"
+    ];
+  };
+
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

@@ -7,6 +7,7 @@
   httpx,
   numpy,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -30,10 +31,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-CUnUz2SsXtWaqGzaB1PH+EoHqebSue6e8GXhRZRcXLs=";
   };
-
-  postPatch = ''
-    sed -i -e "/--cov/d" -e "/--no-cov/d" pyproject.toml
-  '';
 
   build-system = [ hatchling ];
 
@@ -61,6 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     time-machine
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);

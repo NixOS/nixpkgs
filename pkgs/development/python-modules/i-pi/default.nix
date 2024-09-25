@@ -4,36 +4,47 @@
   fetchFromGitHub,
   gfortran,
   makeWrapper,
+  setuptools,
   numpy,
-  pytest,
+  scipy,
+  distutils,
+  pytestCheckHook,
   mock,
   pytest-mock,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "2.6.1";
-  format = "setuptools";
+  version = "3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-c1bs8ZI/dfDwKx5Df8ndtsDxESQrdbMkvrjfI6b9JTg=";
+    hash = "sha256-SJ0qTwwdIOR1nXs9MV6O1oxJPR6/6H86wscDy/sLc/g=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     gfortran
     makeWrapper
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    numpy
+    scipy
+  ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     mock
     pytest-mock
-  ];
+  ] ++ lib.optional (pythonAtLeast "3.12") distutils;
+
+  pytestFlagsArray = [ "ipi_tests/unit_tests" ];
 
   postFixup = ''
     wrapProgram $out/bin/i-pi \

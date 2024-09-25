@@ -25,6 +25,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/psy0rz/zfs_autobackup";
     changelog = "https://github.com/psy0rz/zfs_autobackup/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

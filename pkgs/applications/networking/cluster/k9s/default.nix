@@ -19,14 +19,14 @@ buildGoModule rec {
     "-X github.com/derailed/k9s/cmd.date=1970-01-01T00:00:00Z"
   ];
 
-  tags = [ "netgo" ];
+  tags = [ "netcgo" ];
 
   proxyVendor = true;
 
   vendorHash = "sha256-U/tIsYpoog3S8V2yQGGqaQ+Av7TfvCYt3zn74qWuQKs=";
 
   # TODO investigate why some config tests are failing
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
   # Required to workaround test check error:
   preCheck = "export HOME=$(mktemp -d)";
   # For arch != x86

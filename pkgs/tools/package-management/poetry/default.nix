@@ -22,6 +22,7 @@ let
       });
     } // (plugins self);
   python = python3.override (old: {
+    self = python;
     packageOverrides = lib.composeManyExtensions
       ((if old ? packageOverrides then [ old.packageOverrides ] else [ ]) ++ [ newPackageOverrides ]);
   });

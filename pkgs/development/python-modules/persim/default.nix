@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://persim.scikit-tda.org";
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

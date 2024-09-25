@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprnome";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "hyprnome";
     rev = version;
-    hash = "sha256-J/gaAwydSA9fi2qZYrWLpodTltL56yG4VQ2YlIPKJ/U=";
+    hash = "sha256-GZn7qS1J6QSanWdy17sMBbwJ77iMij2jKRgPdrjt6tM=";
   };
 
-  cargoHash = "sha256-Fyst6rwpvVQoeWCOkJwpNuMcnp6Q+kAXtDg+fccTVNM=";
+  cargoHash = "sha256-oxIZTp5ZJRUjXLpMw2nOnPHYHhHN03HWFRhBZ82Ac10=";
 
   nativeBuildInputs = [ installShellFiles ];
 

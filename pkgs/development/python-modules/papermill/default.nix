@@ -91,7 +91,7 @@ buildPythonPackage rec {
       # pytest 8 compat
       "test_read_with_valid_file_extension"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # might fail due to the sandbox
       "test_end2end_autosave_slow_notebook"
     ];
@@ -107,7 +107,7 @@ buildPythonPackage rec {
     description = "Parametrize and run Jupyter and interact with notebooks";
     homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "papermill";
   };
 }

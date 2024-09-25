@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Textlint rule check if write abbreviations within parentheses";
     homepage = "https://github.com/azu/textlint-rule-abbr-within-parentheses";
-    changelog = "https://github.com/azu/textlint-rule-abbr-within-parentheses/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/azu/textlint-rule-abbr-within-parentheses/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = textlint.meta.platforms;

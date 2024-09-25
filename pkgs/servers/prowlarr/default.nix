@@ -6,9 +6,9 @@ let
   unsupported = throw "Unsupported system ${stdenv.hostPlatform.system} for ${pname}";
 
   os =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       "osx"
-    else if stdenv.isLinux then
+    else if stdenv.hostPlatform.isLinux then
       "linux"
     else
       unsupported;
@@ -21,15 +21,15 @@ let
   }.${stdenv.hostPlatform.system} or unsupported;
 
   hash = {
-    aarch64-darwin = "sha256-4bzeHU52XNAZW24P6uKQ0etUCW7dIsVpujrilPrI3hM=";
-    aarch64-linux = "sha256-0IpayOFTxhdbz7R3PhbTsdweMdDyY6J5WJ8JX/6aFbg=";
-    x86_64-darwin = "sha256-6hcuD63xwolT/dDKnrdfosyJy1W5kyPJJf/H4u6XGfw=";
-    x86_64-linux = "sha256-7ZDdXAVdMAArOy7iYaqmS6s70TQaZIknRoLRyTKpULg=";
+    aarch64-darwin = "sha256-ZvkuScsFGlt6Cd6wTtikygCSYAzOuHmJLJa9Bos8VvM=";
+    aarch64-linux = "sha256-Ojf2PjoN+Vcxc0N0durgQOM9aumyggOtYr2rc7+IaZI=";
+    x86_64-darwin = "sha256-Uv4wunz/flGFzxeneW9NRmKLF831HR0Kjfkz6lnmhfA=";
+    x86_64-linux = "sha256-7LdJvJYArfpYMKdAt98jxW08p8a+o5OTjoTRRX74ds8=";
   }.${stdenv.hostPlatform.system} or unsupported;
 
 in stdenv.mkDerivation rec {
   inherit pname;
-  version = "1.19.0.4568";
+  version = "1.23.1.4708";
 
   src = fetchurl {
     url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, lazarus, fpc, pango, cairo, glib
-, atk, gtk2, libX11, gdk-pixbuf, busybox, python3
+, atk, gtk2, libX11, gdk-pixbuf, python3
 , makeWrapper
 }:
 
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     downloadPage = "https://github.com/bgrabitmap/lazpaint/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ aleksana ];
     mainProgram = "lazpaint";
   };
 }

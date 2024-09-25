@@ -18,14 +18,14 @@
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "orc";
-  version = "0.4.38";
+  version = "0.4.39";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pVqY1HclZ6o/rtj7hNVAw9t36roW0+LhCwRPvJIoZo0=";
+    sha256 = "sha256-M+0jh/Sbgl+hucOwBy4F8lkUG4lUdK0IWuURQ9MEDMA=";
   };
 
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     # This benchmark times out on Hydra.nixos.org
     sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   ;
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12");
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12");
 
   passthru.tests = {
     inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
@@ -60,6 +60,6 @@ in stdenv.mkDerivation rec {
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = with licenses; [ bsd3 bsd2 ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -22,6 +22,8 @@
     "x86_64-apple-darwin"
     "x86_64-unknown-linux-gnu"
     "x86_64-unknown-linux-musl"
+    # we can uncomment that once our bootstrap tarballs are fixed
+    #"x86_64-unknown-freebsd"
   ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
@@ -75,9 +77,8 @@ let
 
       release-checks = import ./nixpkgs-basic-release-checks.nix { inherit pkgs nixpkgs supportedSystems; };
 
+      manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-
-      manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
@@ -249,6 +250,16 @@ let
               # TODO: Re-enable once the new bootstrap-tools are in place.
               #inherit (bootstrap.test-pkgs) stdenv;
             }
+          else if hasSuffix "-freebsd" config then
+            let
+              bootstrap = import ../stdenv/freebsd/make-bootstrap-tools.nix {
+                pkgs = import ../.. {
+                  localSystem = { inherit config; };
+                };
+              };
+            in {
+              inherit (bootstrap) build;  # test does't exist yet
+            }
           else
             abort "No bootstrap implementation for system: ${config}"
         );
@@ -280,6 +291,8 @@ let
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsArocc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsZig.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 

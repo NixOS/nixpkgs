@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.4.0";
+  version = "0.4.4";
 
 in
 rustPlatform.buildRustPackage {
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage {
     repo = "systemfd";
     owner = "mitsuhiko";
     rev = version;
-    sha256 = "sha256-HUJgYPD4C9fMUYKpzmIy9gDT6HAZDWw1JLMKLgzRQTY=";
+    sha256 = "sha256-U+pBKuoMhyIOhLl1nzmxk5yFt9nOq/KZ6rx9JhalLmM=";
   };
 
-  cargoSha256 = "sha256-UhfE9Q5E79rN2mjkNB5IAN/J0fbpoy9CmM6ojHQcFP0=";
+  cargoHash = "sha256-k8FgdNVjFYO/lflVzRQUwHvdy4+eCNTnTYImdfy1GaQ=";
 
   meta = {
     description = "Convenient helper for passing sockets into another process";

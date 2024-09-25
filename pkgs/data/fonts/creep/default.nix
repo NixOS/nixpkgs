@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/romeovs/creep";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

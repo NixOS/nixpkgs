@@ -33,6 +33,8 @@ let
     ''
       #!${pkgs.runtimeShell}
 
+      source ${./lib/lib.sh}
+
       systemConfig='@out@'
 
       export PATH=/empty
@@ -168,7 +170,7 @@ in
 
       apply = set: {
         script = ''
-          unset PATH
+          export PATH=
           for i in ${toString path}; do
             PATH=$PATH:$i/bin:$i/sbin
           done

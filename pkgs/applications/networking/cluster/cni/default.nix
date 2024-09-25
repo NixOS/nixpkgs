@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cni";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yM4opOrHH0NQz26yHuzQfiXdWc8LbxAaqxXQDFdUb60=";
+    hash = "sha256-ocSc1fhbBB8YRxVVOvYMombOOkLMdfv9V4GYbf8kwIE=";
   };
 
   vendorHash = "sha256-/aPx8NgGkJ1irU0LGzmYTlsiX2U5or24Vl1PGHWuDyE=";

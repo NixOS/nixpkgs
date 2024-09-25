@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.2.1";
+  version = "24.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tefra";
     repo = "xsdata";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o3G0isXShwNHaOiA4TNml0IhStB3X4jB9CgrVKViBlY=";
+    hash = "sha256-wQSrdAS4E6AmpP+pKviFomLrcSHLROhTWHg/hYGTaeQ=";
   };
 
   patches = [
@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--benchmark-skip" ""
+      --replace-fail "--benchmark-skip" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
   passthru.optional-dependencies = {
     cli = [

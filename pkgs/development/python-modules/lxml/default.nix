@@ -33,7 +33,7 @@ buildPythonPackage rec {
     libxslt.dev
     cython
     setuptools
-  ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
   buildInputs = [
     libxml2
     libxslt
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

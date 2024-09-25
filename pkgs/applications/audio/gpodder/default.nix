@@ -6,13 +6,12 @@
 , gobject-introspection
 , gtk3
 , intltool
-, python3
-, python3Packages
+, python311Packages
 , wrapGAppsHook3
 , xdg-utils
 }:
 
-python3Packages.buildPythonApplication rec {
+python311Packages.buildPythonApplication rec {
   pname = "gpodder";
   version = "3.11.4";
   format = "other";
@@ -28,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     ./disable-autoupdate.patch
   ];
 
-  postPatch = with lib; ''
+  postPatch = ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
@@ -40,21 +39,20 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    python3
     gtk3
     adwaita-icon-theme
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python311Packages; [
     minimock
     pytest
     pytest-httpserver
-    pytest-cov
+    pytest-cov-stub
   ];
 
   doCheck = true;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python311Packages; [
     feedparser
     dbus-python
     mygpoclient

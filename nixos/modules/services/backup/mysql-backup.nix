@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   inherit (pkgs) mariadb gzip;
@@ -12,7 +9,7 @@ let
   backupScript = ''
     set -o pipefail
     failed=""
-    ${concatMapStringsSep "\n" backupDatabaseScript cfg.databases}
+    ${lib.concatMapStringsSep "\n" backupDatabaseScript cfg.databases}
     if [ -n "$failed" ]; then
       echo "Backup of database(s) failed:$failed"
       exit 1
@@ -20,7 +17,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${mariadb}/bin/mysqldump ${lib.optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c ${cfg.gzipOptions} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -37,53 +34,61 @@ in
 
     services.mysqlBackup = {
 
-      enable = mkEnableOption "MySQL backups";
+      enable = lib.mkEnableOption "MySQL backups";
 
-      calendar = mkOption {
-        type = types.str;
+      calendar = lib.mkOption {
+        type = lib.types.str;
         default = "01:15:00";
         description = ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = defaultUser;
         description = ''
           User to be used to perform backup.
         '';
       };
 
-      databases = mkOption {
+      databases = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           List of database names to dump.
         '';
       };
 
-      location = mkOption {
-        type = types.path;
+      location = lib.mkOption {
+        type = lib.types.path;
         default = "/var/backup/mysql";
         description = ''
           Location to put the gzipped MySQL database dumps.
         '';
       };
 
-      singleTransaction = mkOption {
+      singleTransaction = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to create database dump in a single transaction
+        '';
+      };
+
+      gzipOptions = lib.mkOption {
+        default = "--no-name --rsyncable";
+        type = lib.types.str;
+        description = ''
+          Command line options to use when invoking `gzip`.
         '';
       };
     };
 
   };
 
-  config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) {
+  config = lib.mkIf cfg.enable {
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         isSystemUser = true;
         createHome = false;
@@ -97,9 +102,9 @@ in
       ensurePermissions = with lib;
         let
           privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
-          grant = db: nameValuePair "${db}.*" privs;
+          grant = db: lib.nameValuePair "${db}.*" privs;
         in
-          listToAttrs (map grant cfg.databases);
+          lib.listToAttrs (map grant cfg.databases);
     }];
 
     systemd = {

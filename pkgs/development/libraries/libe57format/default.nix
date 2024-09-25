@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # See https://github.com/asmaloney/libE57Format/blob/9372bdea8db2cc0c032a08f6d655a53833d484b8/test/README.md
-    (if finalAttrs.doCheck
+    (if finalAttrs.finalPackage.doCheck
       then "-DE57_TEST_DATA_PATH=${finalAttrs.libE57Format-test-data_src}"
       else "-DE57_BUILD_TEST=OFF"
     )

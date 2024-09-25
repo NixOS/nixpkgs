@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     libxslt
     makeWrapper
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoreconfHook
     gtk-doc
   ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Account manager and channel dispatcher for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fulcio";
-  version = "1.5.0";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QBkb0pwNrzPCA7G+bmAjbBXQDooDDvJZuDMAlD2Gv44=";
+    hash = "sha256-eRf504i9kYQua/p0SNlDGNeXa9ztoyz6M8nukhRyzIY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +20,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-u2CHOrmT9ziLqzfo013Bqn/0XqzGWiweqrhoE3VH28A=";
+  vendorHash = "sha256-VTJhQrsqwGHq8211N3pUf4fmU4H90gRWYJTdEufNGg4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

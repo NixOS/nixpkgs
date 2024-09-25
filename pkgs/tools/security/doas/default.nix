@@ -4,6 +4,7 @@
 , bison
 , pam
 , libxcrypt
+, nixosTests
 
 , withPAM ? true
 , withTimestamp ? true
@@ -47,6 +48,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ]
     ++ lib.optional withPAM pam
     ++ lib.optional (!withPAM) libxcrypt;
+
+  passthru.tests = { inherit (nixosTests) doas; };
 
   meta = with lib; {
     description = "Executes the given command as another user";

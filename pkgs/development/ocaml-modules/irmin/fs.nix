@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, irmin, astring, logs, lwt
+{ buildDunePackage, irmin, astring, logs, lwt
 , alcotest, irmin-test, irmin-watcher
 }:
 

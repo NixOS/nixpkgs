@@ -1,35 +1,36 @@
 {
   lib,
   consult,
-  embark,
+  embark-consult,
   fetchFromGitHub,
   forge,
   gh,
   markdown-mode,
   melpaBuild,
   unstableGitUpdater,
-  writeText,
 }:
 
 melpaBuild {
   pname = "consult-gh";
-  version = "0.12-unstable-2024-04-23";
+  version = "1.0-unstable-2024-08-24";
 
   src = fetchFromGitHub {
     owner = "armindarvish";
     repo = "consult-gh";
-    rev = "3a07139a1f7e38b959ce177a122c8f47c401d7fa";
-    hash = "sha256-BZloG5RuQzC2RwCfvqPPhGcbsCabQWBnRHdU62rwNdo=";
+    rev = "b1d85d179438e4b6469e1b78906a7dde8f07c822";
+    hash = "sha256-VmxuXvO0nl0h9IKU+XWfjW90KG/1B+qHoOVhvYJ8XTs=";
   };
 
   packageRequires = [
     consult
-    embark
+    embark-consult
     forge
     markdown-mode
   ];
 
   propagatedUserEnvPkgs = [ gh ];
+
+  ignoreCompilationError = false;
 
   passthru.updateScript = unstableGitUpdater { };
 

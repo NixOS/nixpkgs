@@ -3,40 +3,42 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   cmake,
   ninja,
   pybind11,
   setuptools,
   wheel,
+
+  # buildInputs
   SDL2,
   zlib,
+
+  # dependencies
   importlib-resources,
   numpy,
   typing-extensions,
   importlib-metadata,
+
+  # checks
   gymnasium,
   pytestCheckHook,
+
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-obZfNQ0+ppnq/BD4IFeMFAqJnCVV3X/2HeRwbdSKRFk=";
+    hash = "sha256-tdxO5eixI2swezhkeSMqeVgdiaa/VmNdwhZYURSzadw=";
   };
-
-  patches = [
-    # don't download pybind11, use local pybind11
-    ./cmake-pybind11.patch
-  ];
 
   build-system = [
     cmake
@@ -57,10 +59,12 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
-  '';
+  postPatch =
+    # Relax the pybind11 version
+    ''
+      substituteInPlace src/ale/python/CMakeLists.txt \
+        --replace-fail 'find_package(pybind11 ''${PYBIND11_VER} QUIET)' 'find_package(pybind11 QUIET)'
+    '';
 
   dontUseCmakeConfigure = true;
 
@@ -83,6 +87,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
-    broken = stdenv.isDarwin; # fails to link with missing library
+    broken = stdenv.hostPlatform.isDarwin; # fails to link with missing library
   };
 }

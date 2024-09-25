@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   # darwin seems to hang
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://ppft.readthedocs.io/";
     changelog = "https://github.com/uqfoundation/ppft/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

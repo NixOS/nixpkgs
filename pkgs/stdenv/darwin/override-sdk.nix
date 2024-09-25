@@ -66,6 +66,12 @@ let
         original = pkgs.darwin.apple_sdk.Libsystem;
         replacement = sdk.Libsystem;
       }
+      # This is different to `pkgs.darwin.apple_sdk.Libsystem` on `aarch64-darwin`.
+      # Isn’t that neat? I think that’s neat. Don’t do macOS SDKs like this.
+      {
+        original = pkgs.darwin.Libsystem;
+        replacement = sdk.Libsystem;
+      }
       # Make sure darwin.CF is mapped to the correct version for the SDK.
       {
         original = pkgs.darwin.CF;
@@ -287,6 +293,7 @@ let
 
         replacements = lib.pipe propagatedInputs [
           (lib.filter (pkg: pkg != null))
+          lib.flatten
           (map (dep: {
             name = builtins.unsafeDiscardStringContext dep;
             value = getReplacement newPackages dep;
@@ -311,6 +318,7 @@ let
     let
       mapPackageDeps = lib.flip lib.pipe [
         (lib.filter (pkg: pkg != null))
+        lib.flatten
         (map (pkg: {
           key = builtins.unsafeDiscardStringContext pkg;
           package = pkg;

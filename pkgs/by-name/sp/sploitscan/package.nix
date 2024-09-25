@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sploitscan";
-  version = "0.10.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xaitax";
     repo = "SploitScan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-86+qX0agtDsEGYaMpP4Rb6OTPZj4KJVDCP8bbiA6K9c=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-d9s0j/78arKnbDCgMJMdUVF/RPfnAl59WAiJ0UvCCUU=";
   };
 
   pythonRelaxDeps = [

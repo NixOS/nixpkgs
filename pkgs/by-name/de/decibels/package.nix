@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base # for GstVideo
     gst_all_1.gst-plugins-bad # for GstPlay
     gst_all_1.gst-plugins-good # for scaletempo
+    gst_all_1.gst-libav
     libadwaita
   ];
 

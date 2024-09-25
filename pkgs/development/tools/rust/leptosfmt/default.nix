@@ -5,16 +5,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leptosfmt";
-  version = "0.1.18";
+  version = "0.1.30";
 
   src = fetchFromGitHub {
     owner = "bram209";
     repo = "leptosfmt";
-    rev = version;
-    hash = "sha256-bNfTZgcru7PJR/9AcaOmW0E8QwdiXcuP7MWXcDPXGso=";
+    rev = "85b06b9a8bb0616b6a03ba43517245c79e1dd4cf";
+    hash = "sha256-PiVPnni7W8SIhO6L9698RSMTD4VVTB+klLrqMzEtWWo=";
+    fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-NQYIq9Wc2mtUGeS3Iv2e0nfQkvcX6hOxZ6FHVcHD5cs=";
+  cargoHash = "sha256-zj81fXjDM648Y8mIb6QMmAh/ck9GGEypzuJIBWZ32r8=";
 
   meta = with lib; {
     description = "Formatter for the leptos view! macro";

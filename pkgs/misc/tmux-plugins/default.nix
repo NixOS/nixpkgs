@@ -140,26 +140,26 @@ in rec {
     };
   };
 
-  copy-toolkit = mkTmuxPlugin rec {
+  copy-toolkit = mkTmuxPlugin {
     pluginName = "copy-toolkit";
     rtpFilePath = "copytk.tmux";
-    version = "1.1";
+    version = "2021-12-20";
     src = fetchFromGitHub {
       owner = "CrispyConductor";
       repo = "tmux-copy-toolkit";
-      rev = "v${version}";
-      sha256 = "MEMC9klm+PH66UHwrB2SqdCaZX0LAujL+Woo/hV84m4=";
+      rev = "c80c2c068059fe04f840ea9f125c21b83cb6f81f";
+      hash = "sha256-cLeOoJ+4MF8lSpwy5lkcPakvB3cpgey0RfLbVTwERNk=";
     };
     postInstall = ''
       sed -i -e 's|python3 |${pkgs.python3}/bin/python3 |g' $target/copytk.tmux
-      sed -i -e 's|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
+      sed -i -e 's|python3|${pkgs.python3}/bin/python3|g;s|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
     '';
     meta = {
       homepage = "https://github.com/CrispyConductor/tmux-copy-toolkit";
       description = "Various copy-mode tools";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ deejayem ];
+      maintainers = with lib.maintainers; [ deejayem sedlund ];
     };
   };
 
@@ -242,29 +242,8 @@ in rec {
     };
   };
 
-  fingers = mkTmuxPlugin rec {
-    pluginName = "tmux-fingers";
-    rtpFilePath = "load-config.tmux";
-    version = "2.1.1";
-    src = fetchFromGitHub {
-      owner = "Morantron";
-      repo = "tmux-fingers";
-      rev = "${version}";
-      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
-    postInstall = ''
-      shards build --production
-      rm -rf $target/* $target/.*
-      cp -r bin $target/bin
-      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
-      chmod +x $target/${rtpFilePath}
-
-      wrapProgram $target/${rtpFilePath} \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
-        )}
-    '';
+  fingers = pkgs.callPackage ./tmux-fingers {
+    inherit mkTmuxPlugin;
   };
 
   fpp = mkTmuxPlugin {
@@ -479,6 +458,35 @@ in rec {
     };
   };
 
+  pass = mkTmuxPlugin {
+    pluginName = "pass";
+    version = "0-unstable-2020-02-28";
+    rtpFilePath = "plugin.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "rafi";
+      repo = "tmux-pass";
+      rev = "76b1c98911d56928063a41bc93a2d9e81818ef4c";
+      sha256 = "sha256-bamz4IZrozo5R7jt+z7YKyrogawPqsZ9cTJi9osjVoA=";
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      rm $target/README.md
+      rm -r $target/test
+
+      wrapProgram $target/scripts/main.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath ( [
+          findutils fzf gnugrep gnused ncurses pkgs.pass tmux
+        ] )}
+    '';
+
+    meta = with lib; {
+      description = "Password-store browser using fzf in tmux";
+      homepage = "https://github.com/rafi/tmux-pass";
+      license = licenses.unlicense;
+    };
+  };
+
   plumb = mkTmuxPlugin rec {
     pluginName = "plumb";
     version = "0.1.1";
@@ -585,7 +593,7 @@ in rec {
       rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
       sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
     };
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
     '';
   };
@@ -704,6 +712,26 @@ in rec {
       repo = "tmux-colors-solarized";
       rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
       sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+    };
+  };
+
+  tmux-floax = mkTmuxPlugin {
+    pluginName = "tmux-floax";
+    rtpFilePath = "floax.tmux";
+    version = "0-unstable-2024-07-24";
+    src = fetchFromGitHub {
+      owner = "omerxx";
+      repo = "tmux-floax";
+      rev = "46c0a6a8c3cf79b83d1b338f547acbbd1d306301";
+      hash = "sha256-bALZfVWcoAzcTeWwkBHhi7TzUQJicOBTNdeJh3O/Bj8=";
+    };
+    meta = {
+      description = "Floating pane for Tmux";
+      homepage = "https://github.com/omerxx/tmux-floax";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ redyf ];
+      mainProgram = "tmux-floax";
+      platforms = lib.platforms.all;
     };
   };
 

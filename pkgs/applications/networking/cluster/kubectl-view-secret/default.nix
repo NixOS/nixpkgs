@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectl-view-secret";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "elsesiy";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5X5rOoERx6HoG3cOBpYm12anMXXDjTtHZzQOOlJeJSs=";
+    hash = "sha256-mdooeKlwoPxiAHaOuhMF+Zx1l0uZ1OYMgDADI7JbYDc=";
   };
 
-  vendorHash = "sha256-oQvmS05nev+ypfkKAlTN+JbzPux5iAzHsojW8SxtB70=";
+  vendorHash = "sha256-5mSS7UWfdk28oXk/ONnnjj4OMGJAtH26xGES4NGZuTc=";
 
   subPackages = [ "./cmd/" ];
 

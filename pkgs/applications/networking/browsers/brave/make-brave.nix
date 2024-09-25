@@ -49,20 +49,20 @@
 , commandLineArgs ? ""
 
 # Necessary for USB audio devices.
-, pulseSupport ? stdenv.isLinux
+, pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 
 # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
 , libGL
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
-, libvaSupport ? stdenv.isLinux
+, libvaSupport ? stdenv.hostPlatform.isLinux
 , libva
 , enableVideoAcceleration ? libvaSupport
 
 # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
 , vulkanSupport ? false
-, addOpenGLRunpath
+, addDriverRunpath
 , enableVulkan ? vulkanSupport
 }:
 
@@ -187,7 +187,7 @@ stdenv.mkDerivation {
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
       ${optionalString vulkanSupport ''
-      --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
+      --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
       ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )

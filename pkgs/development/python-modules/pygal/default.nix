@@ -59,6 +59,6 @@ buildPythonPackage rec {
     mainProgram = "pygal_gen.py";
     homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~cnx/blackshades/refs/${finalAttrs.version}";
     mainProgram = "blackshades";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ McSinyx viric ];
+    maintainers = with lib.maintainers; [ McSinyx ];
     platforms = lib.platforms.linux;
   };
 })

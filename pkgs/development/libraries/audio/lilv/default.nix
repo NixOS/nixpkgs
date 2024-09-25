@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "http://drobilla.net/software/lilv";
     description = "C library to make the use of LV2 plugins";
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -6,12 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "24.2.2";
+  version = "24.9.2";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6ElHbhUC435aRsJijJkyYM5GS995dRljc13MtoMFGX4=";
+    inherit version;
+    pname = "ansible_lint";
+    hash = "sha256-fP9sWvEO+Za3xgEMvUjJFZJ2SuCY8rBUCHJomaEGan8=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     ansible-compat
     black
     filelock
+    importlib-metadata
     jsonschema
     packaging
     pyyaml

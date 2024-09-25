@@ -68,7 +68,6 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        ProtectUser = true;
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

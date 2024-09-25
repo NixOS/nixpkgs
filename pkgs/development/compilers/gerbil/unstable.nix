@@ -1,4 +1,4 @@
-{ callPackage, fetchFromGitHub, gambit-unstable, gambit-support, pkgs, gccStdenv }:
+{ callPackage, fetchFromGitHub, gambit-support }:
 
 callPackage ./build.nix rec {
   version = "unstable-2023-12-06";

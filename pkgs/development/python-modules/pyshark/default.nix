@@ -58,7 +58,7 @@ buildPythonPackage rec {
       # KeyError: 'Packet of index 0 does not exist in capture'
       "test_getting_packet_summary"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fails on darwin
       # _pickle.PicklingError: logger cannot be pickled
       "test_iterate_empty_psml_capture"
@@ -73,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/KimiNewt/pyshark/";
     changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

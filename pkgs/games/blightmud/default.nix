@@ -6,7 +6,7 @@
 , alsa-lib
 , openssl
 , withTTS ? false
-, speechd
+, speechd-minimal
 , darwin
 }:
 let
@@ -15,26 +15,26 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-e9Uo0IJYL9/6/nNL27zfUYnsTwDaOJOcR2CY6t++jDE=";
+    hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
   };
 
-  cargoHash = "sha256-QSgTpmSojZrwZ0RsUL6c2xO310RZX3gkyGl6oNf6pYI=";
+  cargoHash = "sha256-84m5dihmiEGrFCajqaMW05MQtBceLodBzqtjW+zh6kg=";
 
   buildFeatures = lib.optional withTTS "tts";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals (withTTS && stdenv.isLinux) [ speechd ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals (withTTS && stdenv.isDarwin) [ AVFoundation AppKit ]
-    ++ lib.optionals stdenv.isDarwin [ CoreAudio AudioUnit ];
+    ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals (withTTS && stdenv.hostPlatform.isDarwin) [ AVFoundation AppKit ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio AudioUnit ];
 
   checkFlags =
     let

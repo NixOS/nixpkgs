@@ -4,17 +4,17 @@
 
 linkFarm "zig-packages" [
   {
-    name = "1220840390382c88caf9b0887f6cebbba3a7d05960b8b2ee6d80567b2950b71e5017";
+    name = "1220687c8c47a48ba285d26a05600f8700d37fc637e223ced3aa8324f3650bf52242";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.1.0.tar.gz";
-      hash = "sha256-xilmsDGWlkfpTiGff+/nb76jx87ANdr4zqYy6rKOBMg=";
+      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.2.0.tar.gz";
+      hash = "sha256-dvit+yvc0MnipqWjxJdfIsA6fJaJZOaIpx4w4woCxbE=";
     };
   }
   {
-    name = "1220b0f8f822c1625af7aae4cb3ab2c4ec1a4c0e99ef32867b2a8d88bb070b3e7f6d";
+    name = "1220c90b2228d65fd8427a837d31b0add83e9fade1dcfa539bb56fd06f1f8461605f";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.1.0.tar.gz";
-      hash = "sha256-VLEx8nRgmJZWgLNBRqrR7bZEkW0m5HTRv984HKwoIfA=";
+      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.2.0.tar.gz";
+      hash = "sha256-T+EZiStBfmxFUjaX05WhYkFJ8tRok/UQtpc9QY9NxZk=";
     };
   }
 ]

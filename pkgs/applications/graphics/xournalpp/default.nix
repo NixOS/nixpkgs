@@ -6,6 +6,7 @@
 , wrapGAppsHook3
 , pkg-config
 
+, adwaita-icon-theme
 , alsa-lib
 , binutils
 , glib
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook3 ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
     ] ++ [
       glib
@@ -62,6 +63,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLua lua;
 
   buildFlags = [ "translations" ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${adwaita-icon-theme}/share"
+    )
+  '';
 
   meta = with lib; {
     description = "Xournal++ is a handwriting Notetaking software with PDF annotation support";

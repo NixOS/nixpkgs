@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "grpcio-testing";
-  version = "1.64.1";
+  version = "1.65.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "grpcio_testing";
     inherit version;
-    hash = "sha256-Nta9aurAzEg/iUlYE35Jz7uQ+syH4NMnHNuMGq7XEBw=";
+    hash = "sha256-iCbY9Ika+NWuBuFqt+FG+8VZTvQZMj4wMW9NDdBnWcY=";
   };
 
   postPatch = ''

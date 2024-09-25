@@ -15,6 +15,17 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "mlkit" "mlkit_libs" ];
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    echo ==== Running MLKit test suite: test ====
+    make -C test_dev test
+    echo ==== Running MLKit test suite: test_prof ====
+    make -C test_dev test_prof
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Standard ML Compiler and Toolkit";
     homepage = "https://elsman.com/mlkit/";

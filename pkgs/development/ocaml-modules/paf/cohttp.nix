@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , paf
 , cohttp-lwt
 , domain-name
@@ -23,8 +22,6 @@ buildDunePackage {
     version
     src
     ;
-
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     paf

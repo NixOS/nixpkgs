@@ -8,6 +8,7 @@ in
 {
   options.services.scion = {
     enable = mkEnableOption "all of the scion components and services";
+    package = mkPackageOption pkgs "scion" { };
     stateless = mkOption {
       type = types.bool;
       default = true;
@@ -34,13 +35,14 @@ in
   };
   config = mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.scion
+      cfg.package
     ];
     services.scion = {
       scion-dispatcher.enable = true;
       scion-daemon.enable = true;
       scion-router.enable = true;
       scion-control.enable = true;
+      scion-ip-gateway.enable = true;
     };
     assertions = [
       { assertion = cfg.bypassBootstrapWarning == true;

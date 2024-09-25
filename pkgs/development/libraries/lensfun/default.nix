@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake, libxml2, python3 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake, python3 }:
 
 let
   version = "0.3.4";
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ glib zlib libpng ];
 
-  cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" "-DCMAKE_BUILD_TYPE=RELEASE" ];
+  cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" ];
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;

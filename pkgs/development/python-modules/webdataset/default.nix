@@ -17,14 +17,14 @@
 }:
 buildPythonPackage rec {
   pname = "webdataset";
-  version = "0.2.90";
+  version = "0.2.100";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdataset";
     repo = "webdataset";
     rev = "refs/tags/${version}";
-    hash = "sha256-selj7XD7NS831lbPnx/4o46bNpsxuFdSEIIb4S2b7S0=";
+    hash = "sha256-+Rvb4VY4qBcVKM1CUkLZTQdlZklpHcuiMO8r6VNInLc=";
   };
 
   build-system = [
@@ -67,16 +67,16 @@ buildPythonPackage rec {
       "test_unbatched"
       "test_yaml3"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # pickling error
       "test_background_download"
     ]
-    ++ lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
       "test_concurrent_access"
       # fails to patch 'init_process_group' from torch.distributed
       "TestDistributedChunkedSampler"
     ]
-    ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       # segfaults on aarch64-linux
       "test_webloader"
       "test_webloader2"
@@ -84,7 +84,7 @@ buildPythonPackage rec {
       "test_webloader_unbatched"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # AttributeError: <module 'torch.distributed' from /nix/store/...
     "tests/test_wids.py"
 

@@ -1,23 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, variant, ... } @ args:
 
 let
   # These names are how they are designated in https://xanmod.org.
 
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
-  ltsVariant = {
-    version = "6.6.37";
-    hash = "sha256-EoGRWCa0nqokUzhq+WcmY1RRFv9uDvmrGdXCqZxTJ/U=";
-    variant = "lts";
+  variants = {
+    lts = {
+      version = "6.6.52";
+      hash = "sha256-bTsxESXY0uhx9/UjUg9cATC1ErfkxF1gH8TXimYVzX4=";
+    };
+    main = {
+      version = "6.10.11";
+      hash = "sha256-FDWFpiN0VvzdXcS3nZHm1HFgASazNX5+pL/8UJ3hkI8=";
+    };
   };
 
-  mainVariant = {
-    version = "6.9.8";
-    hash = "sha256-rSwvVt+DW7rc//aY6Ho8mllUy/3MKuAs/71UG+p07Iw=";
-    variant = "main";
-  };
-
-  xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
+  xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
     inherit version;
     pname = "linux-xanmod";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
@@ -60,11 +59,8 @@ let
       branch = lib.versions.majorMinor version;
       maintainers = with lib.maintainers; [ moni lovesegfault atemu shawn8901 zzzsy ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
-      broken = stdenv.isAarch64;
+      broken = stdenv.hostPlatform.isAarch64;
     };
   } // (args.argsOverride or { }));
 in
-{
-  lts = xanmodKernelFor ltsVariant;
-  main = xanmodKernelFor mainVariant;
-}
+xanmodKernelFor variants.${variant}

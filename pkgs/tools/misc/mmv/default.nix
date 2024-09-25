@@ -1,15 +1,15 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, gengetopt, m4, gnupg
-, git, perl, autoconf, automake, help2man, boehmgc }:
+, git, perl, autoconf, automake, help2man }:
 
 stdenv.mkDerivation rec {
   pname = "mmv";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "rrthomas";
     repo = "mmv";
     rev = "v${version}";
-    sha256 = "sha256-hYSTENSmkJP5rAemDyTzbzMKFrWYcMpsJDRWq43etTM=";
+    hash = "sha256-uiRKdkBLr3ZSovIqso/F85cfoSrymZpyzGa63wp5XnY=";
     fetchSubmodules = true;
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ gengetopt m4 git gnupg perl autoconf automake help2man pkg-config ];
-  buildInputs = [ boehmgc ];
+
   enableParallelBuilding = true;
 
   env = lib.optionalAttrs stdenv.cc.isClang {

@@ -4,35 +4,40 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
+
+  # buildInputs
   llvmPackages,
-  pytest7CheckHook,
+
+  # build-system
   setuptools,
+
+  # dependencies
   numpy,
   packaging,
   psutil,
   pyyaml,
   safetensors,
   torch,
-  config,
-  cudatoolkit,
+
+  # tests
   evaluate,
   parameterized,
+  pytest7CheckHook,
   transformers,
+  config,
+  cudatoolkit,
 }:
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.31.0";
+  version = "0.34.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1iLTmSyZzOHGeAr2xBW4mebbq1FZdNfJb8blCtbSqsI=";
+    hash = "sha256-4kDNLta6gGev16A4hNOArTpoD8p6LMRwqwHS/DZjtz0=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -91,7 +96,7 @@ buildPythonPackage rec {
       "test_dynamo_extract_model"
       "test_send_to_device_compiles"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
       "CheckpointTest"
       # TypeError: unsupported operand type(s) for /: 'NoneType' and 'int' (it seems cpuinfo doesn't work here)
@@ -101,12 +106,20 @@ buildPythonPackage rec {
       # requires ptxas from cudatoolkit, which is unfree
       "test_dynamo_extract_model"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # RuntimeError: 'accelerate-launch /nix/store/a7vhm7b74a7bmxc35j26s9iy1zfaqjs...
+      "test_accelerate_test"
+      "test_init_trackers"
+      "test_init_trackers"
+      "test_log"
+      "test_log_with_tensor"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # RuntimeError: torch_shm_manager: execl failed: Permission denied
       "CheckpointTest"
     ];
 
-  disabledTestPaths = lib.optionals (!(stdenv.isLinux && stdenv.isx86_64)) [
+  disabledTestPaths = lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
     # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:
     "tests/test_cpu.py"
     "tests/test_grad_sync.py"
@@ -118,12 +131,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://huggingface.co/docs/accelerate";
     description = "Simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision";
     changelog = "https://github.com/huggingface/accelerate/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "accelerate";
   };
 }

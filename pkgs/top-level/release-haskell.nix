@@ -4,7 +4,7 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra_unstable` which prints the jobset description
+  `pkgs.hydra` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
@@ -72,6 +72,7 @@ let
     ghc963
     ghc964
     ghc965
+    ghc966
     ghc981
     ghc982
     ghc9101
@@ -344,6 +345,7 @@ let
         nixfmt-rfc-style
         nota
         nvfetcher
+        oama
         ormolu
         # pakcs broken by set-extra on 2024-03-15
         pandoc
@@ -511,14 +513,26 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = lib.subtractLists [
+        # It is recommended to use pkgs.cabal-install instead of cabal-install
+        # from the package sets. Due to (transitively) requiring recent versions
+        # of core packages, it is not always reasonable to get cabal-install to
+        # work with older compilers.
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc925
+        compilerNames.ghc926
+        compilerNames.ghc927
+        compilerNames.ghc928
+        compilerNames.ghc945
+        compilerNames.ghc946
+        compilerNames.ghc947
+        compilerNames.ghc948
         compilerNames.ghc9101
       ] released;
-      Cabal_3_10_3_0 = lib.subtractLists [
-        compilerNames.ghc9101
-      ] released;
-      Cabal-syntax_3_10_3_0 = lib.subtractLists [
-        compilerNames.ghc9101
-      ] released;
+      Cabal_3_10_3_0 = released;
+      Cabal-syntax_3_10_3_0 = released;
+      Cabal_3_12_1_0 = released;
+      Cabal-syntax_3_12_1_0 = released;
       cabal2nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;

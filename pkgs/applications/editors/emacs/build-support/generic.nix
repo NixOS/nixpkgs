@@ -1,10 +1,9 @@
 # generic builder for Emacs packages
 
-{ lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
+{ lib, stdenv, emacs, texinfo, writeText, ... }:
 
 let
-  inherit (lib) optionalAttrs getLib;
-  handledArgs = [ "buildInputs" "packageRequires" "meta" ];
+  inherit (lib) optionalAttrs;
 
   setupHook = writeText "setup-hook.sh" ''
     source ${./emacs-funcs.sh}
@@ -20,20 +19,28 @@ let
     fi
   '';
 
+  libBuildHelper = import ./lib-build-helper.nix;
+
 in
 
-{ pname
-, version
-, buildInputs ? []
+libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
+
+{ buildInputs ? []
+, nativeBuildInputs ? []
 , packageRequires ? []
+, propagatedBuildInputs ? []
+, propagatedUserEnvPkgs ? []
+, postInstall ? ""
 , meta ? {}
+, turnCompilationWarningToError ? false
+, ignoreCompilationError ? true
 , ...
 }@args:
 
-stdenv.mkDerivation (finalAttrs: ({
-  name = "emacs-${pname}-${finalAttrs.version}";
+{
+  name = args.name or "emacs-${finalAttrs.pname}-${finalAttrs.version}";
 
-  unpackCmd = ''
+  unpackCmd = args.unpackCmd or ''
     case "$curSrc" in
       *.el)
         # keep original source filename without the hash
@@ -49,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: ({
     esac
   '';
 
-  buildInputs = [emacs texinfo] ++ packageRequires ++ buildInputs;
-  propagatedBuildInputs = packageRequires;
-  propagatedUserEnvPkgs = packageRequires;
+  inherit packageRequires;
+  buildInputs = finalAttrs.packageRequires ++ buildInputs;
+  nativeBuildInputs = [ emacs texinfo ] ++ nativeBuildInputs;
+  propagatedBuildInputs = finalAttrs.packageRequires ++ propagatedBuildInputs;
+  propagatedUserEnvPkgs = finalAttrs.packageRequires ++ propagatedUserEnvPkgs;
 
-  inherit setupHook;
-
-  doCheck = false;
+  setupHook = args.setupHook or setupHook;
 
   meta = {
     broken = false;
@@ -67,11 +74,9 @@ stdenv.mkDerivation (finalAttrs: ({
 
 // optionalAttrs (emacs.withNativeCompilation or false) {
 
-  LIBRARY_PATH = "${getLib stdenv.cc.libc}/lib";
+  addEmacsNativeLoadPath = args.addEmacsNativeLoadPath or true;
 
-  nativeBuildInputs = [ gcc ];
-
-  addEmacsNativeLoadPath = true;
+  inherit turnCompilationWarningToError ignoreCompilationError;
 
   postInstall = ''
     # Besides adding the output directory to the native load path, make sure
@@ -82,9 +87,14 @@ stdenv.mkDerivation (finalAttrs: ({
     addEmacsVars "$out"
 
     find $out/share/emacs -type f -name '*.el' -print0 \
-      | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
-          "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
-  '';
+      | xargs --verbose -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
+          "emacs \
+             --batch \
+             --eval '(setq large-file-warning-threshold nil)' \
+             --eval '(setq byte-compile-error-on-warn ${if finalAttrs.turnCompilationWarningToError then "t" else "nil"})' \
+             -f batch-native-compile {} \
+           || exit ${if finalAttrs.ignoreCompilationError then "0" else "\\$?"}"
+  '' + postInstall;
 }
 
-// removeAttrs args handledArgs))
+)

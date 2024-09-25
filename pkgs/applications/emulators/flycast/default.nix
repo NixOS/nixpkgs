@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "flyinghead";
     repo = "flycast";
     rev = "v${version}";
-    sha256 = "sha256-YFLSUaEikwLPglHh3t8sHiKHRn5cchKzzkJlZDdgVsU=";
+    hash = "sha256-YFLSUaEikwLPglHh3t8sHiKHRn5cchKzzkJlZDdgVsU=";
     fetchSubmodules = true;
   };
 

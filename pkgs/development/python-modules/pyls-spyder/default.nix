@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Spyder extensions for the python-language-server";
     homepage = "https://github.com/spyder-ide/pyls-spyder";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

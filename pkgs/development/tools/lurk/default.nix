@@ -1,20 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lurk";
-  version = "0.3.4";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "jakwai01";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7Yi77IsP/tmzrTvBVgIj2+fOXYKCT59pILeEuGuk4Y4=";
+    hash = "sha256-99WdRyE2avoH5Ea277Dx/HNcOdWxOamR41W7dQQadpo=";
   };
 
-  cargoHash = "sha256-Cvtg9msoYkIIlaUw4hxWy2wSrE1uORR/2R2Geq4SI4w=";
+  cargoHash = "sha256-BUIMtJCzK//bZuvn9iptBd7lVMGyWFNJ/0oTfwPu0DE=";
+
+  postPatch = ''
+    substituteInPlace src/lib.rs \
+      --replace-fail '/usr/bin/ls' 'ls'
+  '';
 
   meta = with lib; {
     description = "Simple and pretty alternative to strace";
@@ -23,6 +29,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/jakwai01/lurk/releases/tag/${src.rev}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ figsoda ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

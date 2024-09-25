@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "libeigen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
+    hash = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
   };
 
   patches = [

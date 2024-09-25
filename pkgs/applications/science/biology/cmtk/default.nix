@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     (lib.optionalString stdenv.cc.isGNU "-std=c++11")
     (lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing")
-    (lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite")
+    (lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "-Dfinite=isfinite")
   ];
 
   meta = with lib; {

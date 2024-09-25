@@ -18,14 +18,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.16.1";
+  version = "2.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-M4HrgpbtECjZtCGqQrkQDxmMWH+OM8AF0xplVnALda4=";
+    pname = "google_cloud_firestore";
+    inherit version;
+    hash = "sha256-PbXdQjNLmQTYKzeGcDpaS1doEPtQ9huPqD7PTxe3/a4=";
   };
 
   build-system = [ setuptools ];
@@ -74,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-firestore";
     changelog = "https://github.com/googleapis/python-firestore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

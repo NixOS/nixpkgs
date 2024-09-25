@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "trurl";
-  version = "0.13";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-TkYZk4SoGAc0dxtxil4FjEhA53M+/dRmhc2kJfxWze8=";
+    hash = "sha256-Og7+FVCBWohVd58GVxFN3KChcG0Kts1MokiOQXZ1OTc=";
   };
 
   outputs = [ "out" "dev" "man" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   enableParallelBuilding = true;
 

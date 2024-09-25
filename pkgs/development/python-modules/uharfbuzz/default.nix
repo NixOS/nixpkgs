@@ -32,7 +32,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Streamlined Cython bindings for the harfbuzz shaping engine";
     homepage = "https://github.com/harfbuzz/uharfbuzz";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

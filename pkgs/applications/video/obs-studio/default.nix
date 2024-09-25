@@ -1,9 +1,11 @@
 { config
+, uthash
 , lib
 , stdenv
+, nv-codec-headers-12
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , fdk_aac
 , ffmpeg
@@ -27,19 +29,18 @@
 , wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
-, swig4
+, swig
 , python3
-, alsaSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 , libcef
 , pciutils
-, pipewireSupport ? stdenv.isLinux
+, pipewireSupport ? stdenv.hostPlatform.isLinux
 , withFdk ? true
 , pipewire
 , libdrm
-, libajantv2
 , librist
 , libva
 , srt
@@ -48,6 +49,8 @@
 , nlohmann_json
 , websocketpp
 , asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
 , libdatachannel
 , libvpl
 , qrcodegencpp
@@ -60,13 +63,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "30.1.2";
+  version = "30.2.3";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    sha256 = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
+    hash = "sha256-4bAzW62xX9apKOAJyn3iys1bFdHj4re2reMZtlGsn5s=";
     fetchSubmodules = true;
   };
 
@@ -85,13 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     cmake
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
   ]
-  ++ optional scriptingSupport swig4;
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
@@ -111,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvlc
     mbedtls
     pciutils
-    libajantv2
     librist
     libva
     srt
@@ -122,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdatachannel
     libvpl
     qrcodegencpp
+    uthash
+    nv-codec-headers-12
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
@@ -153,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
+    (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -165,6 +170,8 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libX11
       libvlc
       libGL
+    ] ++ optionals decklinkSupport [
+      blackmagic-desktop-video
     ];
   in ''
     # Remove libcef before patchelf, otherwise it will fail
@@ -176,9 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/lib*.so
-    addOpenGLRunpath $out/lib/obs-plugins/*.so
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    addDriverRunpath $out/lib/lib*.so
+    addDriverRunpath $out/lib/obs-plugins/*.so
 
     # Link libcef again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/
@@ -194,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ eclairevoyant jb55 materus fpletz ];
+    maintainers = with maintainers; [ jb55 materus fpletz ];
     license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

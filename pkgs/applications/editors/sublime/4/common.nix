@@ -61,8 +61,7 @@ let
   ] ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
     sqlite
   ];
-in
-let
+
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;
@@ -89,7 +88,7 @@ let
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
           $binary
       done
 

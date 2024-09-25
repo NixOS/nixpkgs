@@ -51,8 +51,8 @@ in
 
     with subtest("the backend starts and responds"):
         server.wait_for_open_port(${toString backendPort})
-        # wait until succeeds, it just needs few seconds for migrations, but lets give it 10s max
-        server.wait_until_succeeds("curl --fail localhost:${toString backendPort}/api/v3/site", 10)
+        # wait until succeeds, it just needs few seconds for migrations, but lets give it 50s max
+        server.wait_until_succeeds("curl --fail localhost:${toString backendPort}/api/v3/site", 50)
 
     with subtest("the UI starts and responds"):
         server.wait_for_unit("lemmy-ui.service")
@@ -77,7 +77,7 @@ in
         server.execute("systemctl stop lemmy-ui.service")
 
         def assert_http_code(url, expected_http_code, extra_curl_args=""):
-            _, http_code = server.execute(f'curl --silent -o /dev/null {extra_curl_args} --fail --write-out "%{{http_code}}" {url}')
+            _, http_code = server.execute(f'curl --location --silent -o /dev/null {extra_curl_args} --fail --write-out "%{{http_code}}" {url}')
             assert http_code == str(expected_http_code), f"expected http code {expected_http_code}, got {http_code}"
 
         # Caddy responds with HTTP code 502 if it cannot handle the requested path

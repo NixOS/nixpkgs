@@ -26,7 +26,7 @@ in
 
   # Definitions is an attribute set.
 
-  create = { definitions ?  default }: with lib; stdenv.mkDerivation {
+  create = { definitions ?  default }: stdenv.mkDerivation {
 
     name = "jupyter-kernels";
 
@@ -37,14 +37,14 @@ in
     installPhase =  ''
       mkdir kernels
 
-      ${concatStringsSep "\n" (mapAttrsToList (kernelName: unfilteredKernel:
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (kernelName: unfilteredKernel:
         let
           allowedKernelKeys = ["argv" "displayName" "language" "interruptMode" "env" "metadata" "logo32" "logo64" "extraPaths"];
-          kernel = filterAttrs (n: v: (any (x: x == n) allowedKernelKeys)) unfilteredKernel;
+          kernel = lib.filterAttrs (n: v: (lib.any (x: x == n) allowedKernelKeys)) unfilteredKernel;
           config = builtins.toJSON (
             kernel
             // {display_name = if (kernel.displayName != "") then kernel.displayName else kernelName;}
-            // (optionalAttrs (kernel ? interruptMode) { interrupt_mode = kernel.interruptMode; })
+            // (lib.optionalAttrs (kernel ? interruptMode) { interrupt_mode = kernel.interruptMode; })
           );
           extraPaths = kernel.extraPaths or {}
             // lib.optionalAttrs (kernel.logo32 != null) { "logo-32x32.png" = kernel.logo32; }
@@ -64,7 +64,7 @@ in
     meta = {
       description = "Wrapper to create jupyter notebook kernel definitions";
       homepage = "https://jupyter.org/";
-      maintainers = with maintainers; [ aborsu ];
+      maintainers = with lib.maintainers; [ aborsu ];
     };
   };
 }

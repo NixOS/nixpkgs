@@ -18,6 +18,7 @@
 
 let
   python = python310.override {
+    self = python;
     packageOverrides = (self: super: {
       matplotlib = super.matplotlib.override {
         enableGtk3 = true;
@@ -84,7 +85,7 @@ in python.pkgs.buildPythonApplication rec {
       TZ=Europe/Kaliningrad \
       LC_TIME=C \
       xvfb-run -s '-screen 0 800x600x24' \
-      ${python.interpreter} setup.py test
+      ${python.interpreter} -m unittest
   '';
 
   meta = with lib; {

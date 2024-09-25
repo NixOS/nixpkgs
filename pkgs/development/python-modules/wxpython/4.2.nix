@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   setuptools,
-  pythonAtLeast,
   fetchPypi,
   substituteAll,
 
@@ -15,6 +14,7 @@
   python,
   sip,
   which,
+  buildPackages,
 
   # runtime
   cairo,
@@ -44,7 +44,6 @@ buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.1";
   format = "other";
-  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     pname = "wxPython";
@@ -61,6 +60,13 @@ buildPythonPackage rec {
     })
   ];
 
+  # https://github.com/wxWidgets/Phoenix/issues/2575
+  postPatch = ''
+    ln -s ${lib.getExe buildPackages.waf} bin/waf
+    substituteInPlace build.py \
+      --replace-fail "distutils.dep_util" "setuptools.modified"
+  '';
+
   nativeBuildInputs = [
     attrdict
     pkg-config
@@ -69,14 +75,14 @@ buildPythonPackage rec {
     sip
     which
     wxGTK
-  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs =
     [
       wxGTK
       SDL
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
       libGL
@@ -103,6 +109,7 @@ buildPythonPackage rec {
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
     export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
+    export WAF=$PWD/bin/waf
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
 

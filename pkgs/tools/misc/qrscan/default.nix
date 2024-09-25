@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "qrscan";
     homepage = "https://github.com/sayanarijit/qrscan";
     license = licenses.mit;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ maintainers.sayanarijit ];
   };
 }

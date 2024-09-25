@@ -3,14 +3,14 @@
 , zlib, curl, pkg-config, libgcrypt
 , cmake, libobjc, libresolv, libiconv
 , asciidoctor # manpages
-, enableTests ? !stdenv.isDarwin, cpputest
+, enableTests ? !stdenv.hostPlatform.isDarwin, cpputest
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
 , pythonSupport ? true, python3Packages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, phpSupport ? !stdenv.isDarwin, php, systemd, libxml2, pcre2, libargon2
+, phpSupport ? !stdenv.hostPlatform.isDarwin, php, systemd, libxml2, pcre2, libargon2
 , extraBuildInputs ? []
 }:
 
@@ -29,21 +29,21 @@ let
     { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON3"; buildInputs = [ python ]; }
     { name = "php"; enabled = phpSupport; cmakeFlag = "ENABLE_PHP"; buildInputs = [
       php-embed.unwrapped.dev libxml2 pcre2 libargon2
-    ] ++ lib.optional stdenv.isLinux systemd; }
+    ] ++ lib.optional stdenv.hostPlatform.isLinux systemd; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "4.3.4";
+      version = "4.4.2";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-        hash = "sha256-ytRYAi9GmRILfXLgYrNGxNDng1nMl4X6LhaG/XS6f2c=";
+        hash = "sha256-1N8ompxbygOm1PrgBuUgNwZO8Dutb76VnFOPMZdDTew=";
       };
 
       # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -51,30 +51,28 @@ let
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
-      cmakeFlags = with lib; [
+      cmakeFlags = [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
         "-DENABLE_DOC_INCOMPLETE=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
-        ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
       nativeBuildInputs = [ cmake pkg-config asciidoctor ] ++ lib.optional enableTests cpputest;
-      buildInputs = with lib; [
-          ncurses openssl aspell cjson gnutls gettext zlib curl
-          libgcrypt ]
-        ++ optionals stdenv.isDarwin [ libobjc libresolv ]
-        ++ concatMap (p: p.buildInputs) enabledPlugins
+      buildInputs = [ ncurses openssl aspell cjson gnutls gettext zlib curl libgcrypt ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc libresolv ]
+        ++ lib.concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
       env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
-        + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
+        + (lib.optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
-      postInstall = with lib; ''
-        for p in ${concatMapStringsSep " " (p: p.name) enabledPlugins}; do
+      postInstall = ''
+        for p in ${lib.concatMapStringsSep " " (p: p.name) enabledPlugins}; do
           from=$out/lib/weechat/plugins/$p.so
           to=''${!p}/lib/weechat/plugins/$p.so
           mkdir -p $(dirname $to)

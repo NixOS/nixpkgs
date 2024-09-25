@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, apacheHttpd, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  apacheHttpd,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustls-ffi";
@@ -11,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-IDIWN5g1aaE6SDdXSm4WYK6n+BpuypPYQITuDj1WJEc=";
   };
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cargoLock.lockFile = ./Cargo.lock;
   postPatch = ''
@@ -35,7 +42,11 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "C-to-rustls bindings";
     homepage = "https://github.com/rustls/rustls-ffi/";
-    license = with lib.licenses; [ mit asl20 isc ];
+    license = with lib.licenses; [
+      mit
+      asl20
+      isc
+    ];
     maintainers = [ maintainers.lesuisse ];
   };
 }

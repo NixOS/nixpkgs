@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "arti";
-  version = "1.2.4";
+  version = "1.2.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -18,20 +18,26 @@ rustPlatform.buildRustPackage rec {
     owner = "core";
     repo = "arti";
     rev = "arti-v${version}";
-    hash = "sha256-yyb5v5dKgl5/45GNZKNXpJUfj5eAksSKoTOEL6ZL29s=";
+    hash = "sha256-lyko4xwTn03/Es8icOx8GIrjC4XDXvZPDYHYILw8Opo=";
   };
 
-  cargoHash = "sha256-xoZ55ngIKcM9WQZeZUBprJE7tGOmaI2tWlFc/AoRbxA=";
+  cargoHash = "sha256-I45SaawWAK7iTZDFhJT4YVO439D/3NmWLp3FtFmhLC0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ sqlite ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cargoBuildFlags = [ "--package" "arti" ];
 
   cargoTestFlags = [ "--package" "arti" ];
+
+  checkFlags = [
+    # problematic tests that were fixed after the release
+    "--skip=reload_cfg::test::watch_single_file"
+    "--skip=reload_cfg::test::watch_multiple"
+  ];
 
   meta = with lib; {
     description = "Implementation of Tor in Rust";
@@ -39,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "tillitis";
     repo = "tkey-ssh-agent";
     rev = "v${version}";
-    sha256 = "sha256-Uf3VJJfZn4UYX1q79JdaOfrore+L/Mic3whzpP32JV0=";
+    hash = "sha256-Uf3VJJfZn4UYX1q79JdaOfrore+L/Mic3whzpP32JV0=";
   };
 
   vendorHash = "sha256-SFyp1UB6+m7/YllRyY56SwweJ3X175bChXQYiG2M7zM=";

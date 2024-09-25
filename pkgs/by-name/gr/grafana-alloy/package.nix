@@ -16,17 +16,17 @@
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "alloy";
-    hash = "sha256-RwTwwWz5nEk5eeCK/cZivd3r6WmoIqKjNtEQ0RVk1pw=";
+    hash = "sha256-6YjQUIHZmuguzqTeaLgkrM/WdBPZu/KUXUDOmEB7rNQ=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-UYFZmrE0Pm5bdhloaR9zSEvlPWV/uWo85zjmIuN8Jvc=";
+  vendorHash = "sha256-eMtwmADYbvpIm4FHTHieQ1i4xCty5xCwsZ/JD9r94/8=";
 
   nativeBuildInputs = [ fixup-yarn-lock yarn nodejs installShellFiles ];
 
@@ -57,7 +57,7 @@ buildGoModule rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/internal/web/ui/yarn.lock";
-    hash = "sha256-8/siWMFoUokMXJ13QT8050AXynsApiC67TP/7Hvugsk=";
+    hash = "sha256-Jk+zqR/+NBde9ywncIEJM4kgavqiDvcIAjxJCSMrZDc=";
   };
 
   preBuild = ''
@@ -79,7 +79,7 @@ buildGoModule rec {
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isLinux [ "-I${lib.getDev systemd}/include" ];
 
   checkFlags = [
     "-tags nonetwork" # disable network tests
@@ -89,7 +89,7 @@ buildGoModule rec {
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy

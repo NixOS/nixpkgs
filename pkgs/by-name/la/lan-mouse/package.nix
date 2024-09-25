@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lan-mouse";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "feschber";
     repo = "lan-mouse";
     rev = "v${version}";
-    hash = "sha256-s80oaUDuFnbCluImLLliv1b1RDpIKrBWdX4hHy3xUIU=";
+    hash = "sha256-BadpYZnZJcifhe916/X+OGvTQ4FQeTLnoy0gP/i5cLA=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +36,9 @@ rustPlatform.buildRustPackage rec {
     libX11
     libXtst
   ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-pDdpmZPaClU8KjFHO7v3FDQp9D83GQN+SnFg53q2fjs=";
 
   meta = {
     description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";

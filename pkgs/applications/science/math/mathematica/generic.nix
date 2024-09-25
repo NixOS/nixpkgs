@@ -1,4 +1,4 @@
-{ addOpenGLRunpath
+{ addDriverRunpath
 , autoPatchelfHook
 , lib
 , makeWrapper
@@ -57,7 +57,7 @@ let cudaEnv = symlinkJoin {
       ];
       postBuild = ''
         if [ ! -e $out/lib/libcuda.so ]; then
-            ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
+            ln -s ${addDriverRunpath.driverLink}/lib/libcuda.so $out/lib
         fi
         ln -s lib $out/lib64
       '';
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
-  ] ++ lib.optional cudaSupport addOpenGLRunpath;
+  ] ++ lib.optional cudaSupport addDriverRunpath;
 
   buildInputs = [
     alsa-lib
@@ -136,8 +136,8 @@ in stdenv.mkDerivation {
     "--set QT_QPA_PLATFORM wayland;xcb"
   ] ++ lib.optionals cudaSupport [
     "--set CUDA_PATH ${cudaEnv}"
-    "--set NVIDIA_DRIVER_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libnvidia-tls.so"
-    "--set CUDA_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libcuda.so"
+    "--set NVIDIA_DRIVER_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib/libnvidia-tls.so"
+    "--set CUDA_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib/libcuda.so"
   ];
 
   unpackPhase = ''
@@ -157,9 +157,15 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/lib/udev/rules.d"
 
-    # Patch MathInstaller's shebangs and udev rules dir
-    patchShebangs MathInstaller
-    substituteInPlace MathInstaller \
+    # Set name of installer file
+    if [ -f "MathInstaller" ]; then
+      INSTALLER="MathInstaller"
+    else
+      INSTALLER="WolframInstaller"
+    fi
+    # Patch Installer's shebangs and udev rules dir
+    patchShebangs $INSTALLER
+    substituteInPlace $INSTALLER \
       --replace /etc/udev/rules.d $out/lib/udev/rules.d
 
     # Remove PATH restriction, root and avahi daemon checks, and hostname call
@@ -169,13 +175,13 @@ in stdenv.mkDerivation {
       s/^\s*checkAvahiDaemon$/:/
       s/^\s*installBundledInstall$/:/
       s/`hostname`/""/
-    ' MathInstaller
+    ' $INSTALLER
 
     # NOTE: some files placed under HOME may be useful
     XDG_DATA_HOME="$out/share" HOME="$TMPDIR/home" vernierLink=y \
-      ./MathInstaller -execdir="$out/bin" -targetdir="$out/libexec/Mathematica" -auto -verbose -createdir=y
+      ./$INSTALLER -execdir="$out/bin" -targetdir="$out/libexec/Mathematica" -auto -verbose -createdir=y
 
-    # Check if MathInstaller produced any errors
+    # Check if Installer produced any errors
     errLog="$out/libexec/Mathematica/InstallErrors"
     if [ -f "$errLog" ]; then
       echo "Installation errors:"

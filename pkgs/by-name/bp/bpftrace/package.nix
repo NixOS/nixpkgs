@@ -4,18 +4,19 @@
 , cereal, asciidoctor
 , cmake, pkg-config, flex, bison
 , util-linux
+, fetchpatch
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.20.4";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo  = "bpftrace";
     rev   = "v${version}";
-    hash  = "sha256-GJSUHMOp3vCWj8C+1mBHcnUgxLUWUz8Jd8wpq7u0q3s=";
+    hash  = "sha256-/2m+5iFE7R+ZEc/VcgWAhkLD/jEK88roUUOUyYODi0U=";
   };
 
 
@@ -45,16 +46,17 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # https://github.com/bpftrace/bpftrace/pull/3243 (merged)
-    ./override-system-headers.patch
-    # https://github.com/bpftrace/bpftrace/pull/3152 (merged)
-    ./tcp-bt-no-includes.patch
-    # https://github.com/bpftrace/bpftrace/pull/3262 (merged)
-    ./runqlat-bt-no-includes.patch
-    # https://github.com/bpftrace/bpftrace/pull/3242 (merged)
-    ./kheaders-not-found-message-fix.patch
-    # https://github.com/bpftrace/bpftrace/pull/3265
-    ./kheaders-not-found-message-only-on-error.patch
+    (fetchpatch {
+      name = "runqlat-bt-no-includes.patch";
+      url = "https://github.com/bpftrace/bpftrace/pull/3262.patch";
+      hash = "sha256-9yqaZeG1Uf2cC9Aa40c2QUTQRl8n2NO1nq278hf9P4M=";
+    })
+    (fetchpatch {
+      name = "kheaders-not-found-message-only-on-error.patch";
+      url = "https://github.com/bpftrace/bpftrace/pull/3265.patch";
+      hash = "sha256-8AICMzwq5Evy9+hmZhFjccw/HmgZ9t+YIoHApjLv6Uc=";
+      excludes = [ "CHANGELOG.md" ];
+    })
   ];
 
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do

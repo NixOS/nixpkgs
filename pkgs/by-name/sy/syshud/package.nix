@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-07-08";
+  version = "0-unstable-2024-08-27";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "602d3b3062dfe589a00b0debd07c3aaae9b98390";
-    hash = "sha256-rEigWAkzR5ZclsLg/rFMBM0AuSOCVr2/lsPtKk46FYo=";
+    rev = "aa2c153f6aa15962c6b97a77dbe8c45708155fe0";
+    hash = "sha256-SBpufr37K6LC4yc9ircUEBrzuRCKmJzD3C17N34qNGk=";
   };
 
   postPatch = ''
@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"
+    "PREFIX="
   ];
 
   # populate version info used by `syshud -v`:
@@ -51,8 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
+  # syshud manually `dlopen`'s its library component
+  postInstall = ''
+    wrapProgram $out/bin/syshud --prefix LD_LIBRARY_PATH : $out/lib
+  '';
+
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version" "branch" ];
+    extraArgs = [
+      "--version"
+      "branch"
+    ];
   };
 
   meta = {

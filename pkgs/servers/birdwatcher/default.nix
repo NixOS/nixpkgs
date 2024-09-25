@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -18,12 +19,16 @@ buildGoModule rec {
 
   deleteVendor = true;
 
+  passthru.tests = {
+    inherit (nixosTests) birdwatcher;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/alice-lg/birdwatcher";
     description = "Small HTTP server meant to provide an API defined by Barry O'Donovan's birds-eye to the BIRD internet routing daemon";
     changelog = "https://github.com/alice-lg/birdwatcher/blob/master/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "birdwatcher";
   };
 }

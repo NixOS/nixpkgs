@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = "aiostream";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RJ+0o8w92GteMRPOIddCBQ4JApi5gXiwkJRNe9t2E7g=";
+    hash = "sha256-uMK3WFO4IvrI7QBGiu1MOInRfGgdWufe4zefmT1Bjv0=";
   };
 
   postPatch = ''

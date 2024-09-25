@@ -11,7 +11,7 @@
   git,
   hypothesis,
   nix-update-script,
-  pydantic-yaml-0,
+  pydantic-yaml,
   pyfakefs,
   pygit2,
   pytest-check,
@@ -21,13 +21,12 @@
   pyyaml,
   responses,
   setuptools-scm,
-  setuptools,
   snap-helpers,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "2.8.0";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -36,20 +35,19 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-COcZgl2XzPWknSKMUZgZBEMzkDdwK2PouIEuWKOP8dc=";
+    hash = "sha256-2JfCe7FJtuObC/4miA+OC/ctGy1fhdgI7DsowNYjQk8=";
   };
 
   postPatch = ''
-    substituteInPlace craft_application/__init__.py \
-      --replace-fail "dev" "${version}"
-
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>="
+      --replace-fail "setuptools==70.1.0" "setuptools"
   '';
 
-  build-system = [
-    setuptools
-    setuptools-scm
+  build-system = [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "pygit2"
+    "requests"
   ];
 
   dependencies = [
@@ -58,7 +56,7 @@ buildPythonPackage rec {
     craft-grammar
     craft-parts
     craft-providers
-    pydantic-yaml-0
+    pydantic-yaml
     pygit2
     pyyaml
     snap-helpers
@@ -98,7 +96,7 @@ buildPythonPackage rec {
       # Tests expecting pytest-time
       "test_monitor_builds_success"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "test_process_grammar_build_for"
       "test_process_grammar_platform"
@@ -110,7 +108,7 @@ buildPythonPackage rec {
   meta = {
     description = "Basis for Canonical craft applications";
     homepage = "https://github.com/canonical/craft-application";
-    changelog = "https://github.com/canonical/craft-application/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-application/blob/${src.rev}/docs/reference/changelog.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

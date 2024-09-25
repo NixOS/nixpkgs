@@ -8,17 +8,19 @@
 , wayfire
 , libxkbcommon
 , libGL
+, libinput
+, xcbutilwm
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-shadows";
-  version = "unstable-2024-03-28";
+  version = "0-unstable-2024-08-30";
 
   src = fetchFromGitHub {
     owner = "timgott";
     repo = "wayfire-shadows";
-    rev = "81699f6e4be65dcf3f7ad5155dfb4247b37b7997";
-    hash = "sha256-H9pqpHoeDfNBrtVLax57CUXVhU2XT+syAUZTYSJizxw=";
+    rev = "11c8ab63c1cde663a38502c6ecaeec980920c4d1";
+    hash = "sha256-/utqJevG7fn/kX81eDIN/SDvVa3rzNBe1crkHfMx8qo=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayfire
     libxkbcommon
     libGL
+    libinput
+    xcbutilwm
   ];
 
   env = {

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.4.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/filebench/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/filebench/filebench-${version}.tar.gz";
     sha256 = "13hmx67lsz367sn8lrvz1780mfczlbiz8v80gig9kpkpf009yksc";
   };
 

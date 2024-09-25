@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   cmake,
   ninja,
@@ -12,14 +11,13 @@
 
 buildPythonPackage rec {
   pname = "awkward-cpp";
-  version = "35";
+  version = "38";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-H4sRKll70kOHlOGnIaY6phhp+pWYoXrGvYEa1vZADQY=";
+    pname = "awkward_cpp";
+    inherit version;
+    hash = "sha256-l0SVah14fD0hXqE8WqG2EQnIk/Ad0e/i2mj1jt6K0Vs=";
   };
 
   build-system = [
@@ -27,7 +25,7 @@ buildPythonPackage rec {
     ninja
     pybind11
     scikit-build-core
-  ] ++ scikit-build-core.optional-dependencies.pyproject;
+  ];
 
   dependencies = [ numpy ];
 

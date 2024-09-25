@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

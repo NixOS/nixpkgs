@@ -41,13 +41,14 @@
   valgrind,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   xcbutil,
   xcbutilwm,
   xz,
   # Boolean flags
   buildManPages ? true,
   useBuiltinLua ? true,
-  useEspeak ? !stdenv.isDarwin,
+  useEspeak ? !stdenv.hostPlatform.isDarwin,
   useStaticLibuvc ? true,
   useStaticOpenAL ? true,
   useStaticSqlite ? true,
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
+    wayland-scanner
   ] ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [

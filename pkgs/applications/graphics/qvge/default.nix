@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapQtAppsHook qmake ];
 
-  buildInputs = if stdenv.isDarwin then [ qtsvg ] else [ qtx11extras ];
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ qtsvg ] else [ qtx11extras ];
 
   meta = with lib; {
     description = "Qt Visual Graph Editor";

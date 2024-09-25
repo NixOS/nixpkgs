@@ -6,7 +6,6 @@
   decorator,
   fetchPypi,
   numpy,
-  pytestCheckHook,
   pythonOlder,
   scipy,
   six,
@@ -41,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pysptk" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Wrapper for Speech Signal Processing Toolkit (SPTK)";
     homepage = "https://pysptk.readthedocs.io/";
     license = licenses.mit;

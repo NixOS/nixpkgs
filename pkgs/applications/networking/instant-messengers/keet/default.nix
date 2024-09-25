@@ -1,23 +1,30 @@
-{ lib, appimageTools, fetchurl }:
+{ lib, appimageTools, fetchzip }:
 
 let
   pname = "keet";
-  version = "1.2.1";
+  version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://keet.io/downloads/${version}/Keet.AppImage";
-    sha256 = "1f76ccfa16719a24f6d84b88e5ca49fab1c372de309ce74393461903c5c49d98";
+  src = fetchzip {
+    url = "https://keet.io/downloads/${version}/Keet-x64.tar.gz";
+    hash = "sha256-Sd2aCUvgxdbCb8MtWMcznX2efmL1h9wLT29GG7t3Gzc=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
+  appimageContents = appimageTools.extract {
+    inherit pname version;
+    src = "${src}/Keet.AppImage";
+  };
 in appimageTools.wrapType2 {
-  inherit src pname version;
+  inherit pname version;
+
+  src = "${src}/Keet.AppImage";
+
+  extraPkgs = pkgs: with pkgs; [
+    gtk4
+  ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    install -m 444 -D ${appimageContents}/Keet.desktop -t $out/share/applications
+    cp -r ${appimageContents}/*.png $out/share
   '';
 
   meta = with lib; {

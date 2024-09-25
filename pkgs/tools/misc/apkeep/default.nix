@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/EFForg/apkeep";
     changelog = "https://github.com/EFForg/apkeep/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
     mainProgram = "apkeep";
   };
 }

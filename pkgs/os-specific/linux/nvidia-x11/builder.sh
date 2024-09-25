@@ -81,6 +81,9 @@ installPhase() {
         mkdir $i/lib/vdpau
         mv $i/lib/libvdpau* $i/lib/vdpau
 
+        # Compatibility with openssl 1.1, unused
+        rm -f $i/lib/libnvidia-pkcs11.so*
+
         # Install ICDs, make absolute paths.
         # Be careful not to modify any original files because this runs twice.
 
@@ -112,16 +115,17 @@ installPhase() {
 
         # EGL
         if [ "$useGLVND" = "1" ]; then
-            sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
-            sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
+            mkdir -p "$i/share/egl/egl_external_platform.d"
+            for icdname in $(find . -name '*_nvidia*.json')
+            do
+                cat "$icdname" | jq ".ICD.library_path |= \"$i/lib/\(.)\"" | tee "$i/share/egl/egl_external_platform.d/$icdname"
+            done
 
-            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/10_nvidia.json
-            install -Dm644 10_nvidia_wayland.json.fixed $i/share/egl/egl_external_platform.d/10_nvidia_wayland.json
+            # glvnd icd
+            mkdir -p "$i/share/glvnd/egl_vendor.d"
+            mv "$i/share/egl/egl_external_platform.d/10_nvidia.json" "$i/share/glvnd/egl_vendor.d/10_nvidia.json"
 
-            if [[ -f "15_nvidia_gbm.json" ]]; then
-              sed -E "s#(libnvidia-egl-gbm)#$i/lib/\\1#" 15_nvidia_gbm.json > 15_nvidia_gbm.json.fixed
-              install -Dm644 15_nvidia_gbm.json.fixed $i/share/egl/egl_external_platform.d/15_nvidia_gbm.json
-
+            if [[ -f "$i/share/egl/egl_external_platform.d/15_nvidia_gbm.json" ]]; then
               mkdir -p $i/lib/gbm
               ln -s $i/lib/libnvidia-allocator.so $i/lib/gbm/nvidia-drm_gbm.so
             fi
@@ -181,20 +185,27 @@ installPhase() {
         patchelf --set-rpath "$out/lib:$libPath" "$libname"
       fi
 
-      libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
+      # Manually create the right symlinks for the libraries.
+      #
+      # We can't just use ldconfig, because it does not create libfoo.so symlinks,
+      # only libfoo.so.1.
+      # Also, the symlink chain must be libfoo.so -> libfoo.so.1 -> libfoo.so.123.45,
+      # or ldconfig will explode.
+      # See: https://github.com/bminor/glibc/blob/6f3f6c506cdaf981a4374f1f12863b98ac7fea1a/elf/ldconfig.c#L854-L877
 
-      if [[ "$libname" != "$libname_short" ]]; then
-        ln -srnf "$libname" "$libname_short"
-      fi
+      libbase=$(basename "$libname")
+      libdir=$(dirname "$libname")
+      soname=$(patchelf --print-soname "$libname")
+      unversioned=${libbase/\.so\.[0-9\.]*/.so}
 
-      if [[ $libname_short =~ libEGL.so || $libname_short =~ libEGL_nvidia.so || $libname_short =~ libGLX.so || $libname_short =~ libGLX_nvidia.so ]]; then
-          major=0
-      else
-          major=1
-      fi
+      if [[ -n "$soname" ]]; then
+        if [[ "$soname" != "$libbase" ]]; then
+          ln -s "$libbase" "$libdir/$soname"
+        fi
 
-      if [[ "$libname" != "$libname_short.$major" ]]; then
-        ln -srnf "$libname" "$libname_short.$major"
+        if [[ "$soname" != "$unversioned" ]]; then
+          ln -s "$soname" "$libdir/$unversioned"
+        fi
       fi
     done
 

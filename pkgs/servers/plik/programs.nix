@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, runCommand }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, runCommand, nixosTests }:
 
 let
   version = "1.3.8";
@@ -25,12 +25,16 @@ let
       --replace '"0.0.0"' '"${version}"'
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) plikd;
+  };
+
 in
 {
 
   plik = buildGoModule {
     pname = "plik";
-    inherit version meta src vendorHash postPatch;
+    inherit version meta src vendorHash postPatch passthru;
 
     subPackages = [ "client" ];
     postInstall = ''
@@ -40,7 +44,7 @@ in
 
   plikd-unwrapped = buildGoModule {
     pname = "plikd-unwrapped";
-    inherit version src vendorHash postPatch;
+    inherit version src vendorHash postPatch passthru;
 
     subPackages = [ "server" ];
     postFixup = ''

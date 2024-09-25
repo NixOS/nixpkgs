@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bluetooth-devices/convertertools";
     changelog = "https://github.com/bluetooth-devices/convertertools/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

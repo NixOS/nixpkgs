@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };
 
-  cargoSha256 = "sha256-f8Th6SbV66Uukqh1Cb5uQVa844qw1PmBB9W7EMXMU4E=";
+  cargoHash = "sha256-f8Th6SbV66Uukqh1Cb5uQVa844qw1PmBB9W7EMXMU4E=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,13 +28,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # needed for nix-prefetch-url
   postInstall = ''
     wrapProgram $out/bin/nix-template \
       --prefix PATH : ${lib.makeBinPath [ nix ]}
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd nix-template \
       --bash <($out/bin/nix-template completions bash) \
       --fish <($out/bin/nix-template completions fish) \
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonringer/nix-template/";
     changelog = "https://github.com/jonringer/nix-template/releases/tag/v${version}";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "nix-template";
   };
 }

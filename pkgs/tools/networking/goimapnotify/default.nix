@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "shackra";
     repo = "goimapnotify";
     rev = version;
-    sha256 = "sha256-da2Q+glDVWSf574pks6UzvQyzKAU+81ypy5H968Y7HE=";
+    hash = "sha256-da2Q+glDVWSf574pks6UzvQyzKAU+81ypy5H968Y7HE=";
   };
 
   vendorHash = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";

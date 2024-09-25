@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cargoSha256 = "sha256-hCtkR20+xs1UHZP7oJVpJACVGcMQLQmSS1QE2tmIVhs=";
+  cargoHash = "sha256-hCtkR20+xs1UHZP7oJVpJACVGcMQLQmSS1QE2tmIVhs=";
 
   meta = with lib; {
     description = "Tool to identify potentially unused code";

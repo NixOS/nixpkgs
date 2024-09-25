@@ -1,8 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, goatcounter
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  goatcounter,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -13,7 +15,7 @@ buildGoModule rec {
     owner = "arp242";
     repo = "goatcounter";
     rev = "v${version}";
-    sha256 = "sha256-lwiLk/YYxX4QwSDjpU/mAikumGXYMzleRzmPjZGruZU=";
+    hash = "sha256-lwiLk/YYxX4QwSDjpU/mAikumGXYMzleRzmPjZGruZU=";
   };
 
   vendorHash = "sha256-YAb3uBWQc6hWzF1Z5cAg8RzJQSJV+6dkppfczKS832s=";
@@ -31,10 +33,13 @@ buildGoModule rec {
     "-X zgo.at/goatcounter/v2.Version=${src.rev}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = goatcounter;
-    command = "goatcounter version";
-    version = "v${version}";
+  passthru.tests = {
+    moduleTest = nixosTests.goatcounter;
+    version = testers.testVersion {
+      package = goatcounter;
+      command = "goatcounter version";
+      version = "v${version}";
+    };
   };
 
   meta = {

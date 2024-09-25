@@ -74,7 +74,7 @@ let
       ois
       pugixml
       zziplib
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       libglut
       libGL
       libGLU
@@ -88,7 +88,7 @@ let
       libXt
       libXxf86vm
       xorgproto
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Cocoa
     ] ++ lib.optionals withNvidiaCg [
       nvidia_cg_toolkit
@@ -97,7 +97,7 @@ let
     cmakeFlags = [
       (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
       (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
     ];
 
@@ -112,11 +112,11 @@ let
 in
 {
   ogre_14 = common {
-    version = "14.2.6";
-    hash = "sha256-kxvrRigSe6sPa3lAH+6zKTY4YEU9javlKHK8Zf6jxZE=";
-    # https://github.com/OGRECave/ogre/blob/v14.2.5/Components/Overlay/CMakeLists.txt
-    imguiVersion = "1.90.4";
-    imguiHash = "sha256-7+Ay7H97tIO6CUsEyaQv4i9q2FCw98eQUq/KYZyfTAw=";
+    version = "14.3.0";
+    hash = "sha256-SQ0Ij04W/KgonHDLFEPFDhXb/TDkT8I6W8J7hz3gtrg=";
+    # https://github.com/OGRECave/ogre/blob/v14.3.0/Components/Overlay/CMakeLists.txt
+    imguiVersion = "1.91.2";
+    imguiHash = "sha256-B7XXQNuEPcT1ID5nMYbAV+aNCG9gIrC9J7BLnYB8yjI=";
   };
 
   ogre_13 = common {

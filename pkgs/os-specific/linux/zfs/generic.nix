@@ -1,7 +1,8 @@
 let
   genericBuild =
-  { pkgs, lib, stdenv, fetchFromGitHub
+  { lib, stdenv, fetchFromGitHub
   , autoreconfHook269, util-linux, nukeReferences, coreutils
+  , linuxPackages
   , perl
   , configFile ? "all"
 
@@ -27,10 +28,8 @@ let
   , kernelModuleAttribute
   , extraPatches ? []
   , rev ? "zfs-${version}"
-  , isUnstable ? false
-  , latestCompatibleLinuxPackages
   , kernelCompatible ? null
-  , maintainers ? (with lib.maintainers; [ amarshall adamcstephens ])
+  , maintainers ? (with lib.maintainers; [ amarshall ])
   , tests
   }@innerArgs:
 
@@ -183,9 +182,11 @@ let
       # Remove tests because they add a runtime dependency on gcc
       rm -rf $out/share/zfs/zfs-tests
 
-      # Add Bash completions.
-      install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
-      (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ${optionalString (lib.versionOlder version "2.2") ''
+        # Add Bash completions.
+        install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
+        (cd $out/share/bash-completion/completions; ln -s zfs zpool)
+      ''}
     '';
 
     postFixup = let
@@ -199,7 +200,9 @@ let
     outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
     passthru = {
-      inherit enableMail latestCompatibleLinuxPackages kernelModuleAttribute;
+      inherit enableMail kernelModuleAttribute;
+      latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages ;
+
       # The corresponding userspace tools to this instantiation
       # of the ZFS package set.
       userspaceTools = genericBuild (outerArgs // {
@@ -236,7 +239,7 @@ let
       mainProgram = "zfs";
       # If your Linux kernel version is not yet supported by zfs, try zfs_unstable.
       # On NixOS set the option `boot.zfs.package = pkgs.zfs_unstable`.
-      broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
+      broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
     };
   };
 in

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # use openssl_legacy due to burp-2.4.0 not supporting file encryption with openssl 3.0
   # replace with 'openssl' once burp-3.x has been declared stable and this package upgraded
   buildInputs = [ librsync ncurses openssl_legacy zlib uthash ]
-    ++ lib.optional (!stdenv.isDarwin) acl;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
 
   configureFlags = [ "--localstatedir=/var" ];
 

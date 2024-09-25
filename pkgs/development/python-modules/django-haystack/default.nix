@@ -10,6 +10,7 @@
 
   # dependencies
   django,
+  packaging,
 
   # tests
   elasticsearch,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ django ];
+  propagatedBuildInputs = [ packaging ];
 
   optional-dependencies = {
     elasticsearch = [ elasticsearch ];
@@ -63,6 +65,6 @@ buildPythonPackage rec {
     description = "Pluggable search for Django";
     homepage = "http://haystacksearch.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

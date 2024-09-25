@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "8.0.5";
+  version = "8.0.6";
 
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
-    rev = finalAttrs.version;
-    hash = "sha256-o2VwOF46Iq4pwpumOau3bDXJ/CArx6NWBi00s3E4PnE=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-bA+Bm7M6udeZLpFhGa8fCtagfYBeRxWWqFuAj62XwGQ=";
     fetchSubmodules = true;
   };
 
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/HarbourMasters/Shipwright/blob/e46c60a7a1396374e23f7a1f7122ddf9efcadff7/soh/CMakeLists.txt#L736
   gamecontrollerdb = fetchurl {
     name = "gamecontrollerdb.txt";
-    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/b7933e43ca2f8d26d8b668ea8ea52b736221af1e/gamecontrollerdb.txt";
-    hash = "sha256-XIuS9BkWkM9d+SgT1OYTfWtcmzqSUDbMrMLoVnPgidE=";
+    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/075c1549075ef89a397fd7e0663d21e53a2485fd/gamecontrollerdb.txt";
+    hash = "sha256-atjc0t921l6JSUAd/Yk7uup2R7mCp5ivAh6Dr7HBY7I=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     imagemagick
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
     copyDesktopItems
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libicns
     darwin.sigtool
   ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_net
     libpng
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
     libXrandr
     libXinerama
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libpulseaudio
     zenity
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOSurface
     Metal
     QuartzCore
@@ -95,12 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib"
     (lib.cmakeBool "NON_PORTABLE" true)
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
   ];
 
   env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin "-Wno-int-conversion -Wno-implicit-int";
+    lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int";
 
   dontAddPrefix = true;
 
@@ -114,18 +114,18 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  preInstall = lib.optionalString stdenv.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Cmake likes it here for its install paths
     cp ../OTRExporter/soh.otr ..
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp ../OTRExporter/soh.otr soh/soh.otr
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/bin
     ln -s $out/lib/soh.elf $out/bin/soh
     install -Dm644 ../soh/macosx/sohIcon.png $out/share/pixmaps/soh.png
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Recreate the macOS bundle (without using cpack)
     # We mirror the structure of the bundle distributed by the project
 
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     codesign -f -s - $out/Applications/soh.app/Contents/Resources/soh-macos
   '';
 
-  fixupPhase = lib.optionalString stdenv.isLinux ''
+  fixupPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/lib/soh.elf --prefix PATH ":" ${lib.makeBinPath [ zenity ]}
   '';
 

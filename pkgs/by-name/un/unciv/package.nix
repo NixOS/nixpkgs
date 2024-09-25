@@ -10,6 +10,8 @@
 , libXxf86vm
 }:
 let
+  version = "4.13.2-redo";
+
   desktopItem = makeDesktopItem {
     name = "unciv";
     exec = "unciv";
@@ -20,11 +22,11 @@ let
   };
 
   desktopIcon = fetchurl {
-    url = "https://github.com/yairm210/Unciv/blob/4.11.16/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
+    url = "https://github.com/yairm210/Unciv/blob/${version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
     hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
+  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libpulseaudio
     libXxf86vm
@@ -33,11 +35,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.11.17";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-qKLRn9QmB8lZv8vGGX8JS72IRLEDJV5Zj1MVsPr+iSI=";
+    hash = "sha256-bZXBgSjmW+fBdDfG7cqKkF4VLYw7Iq2mw5j6iDh2ZhY=";
   };
 
   dontUnpack = true;

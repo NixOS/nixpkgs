@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional stdenv.isLinux libuuid;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
 
   passthru.updateScript = unstableGitUpdater {
     tagPrefix = "v";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight cross platform C++ GUID/UUID library";
     license = licenses.mit;
     homepage = "https://github.com/graeme-hill/crossguid";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

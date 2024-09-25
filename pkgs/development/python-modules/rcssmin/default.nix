@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "CSS minifier written in pure python";
     homepage = "http://opensource.perlig.de/rcssmin/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

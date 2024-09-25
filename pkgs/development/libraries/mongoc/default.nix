@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.27.4";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-67bAiu40VQDtTJPlg6wOxQs4nyLZQ8aJJ5WJ1J9NNlw=";
+    hash = "sha256-cfet+A2i33iHbVRouPS4Ul8TmHolrcIMTRba6Olqfeg=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     icu
     cyrus_sasl
     snappy
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security
   ];
 

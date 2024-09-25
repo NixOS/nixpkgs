@@ -12,9 +12,14 @@
   - any:
     - changed-files:
       - any-glob-to-any-file:
-        - pkgs/desktops/cinnamon/**/*
         - nixos/modules/services/x11/desktop-managers/cinnamon.nix
         - nixos/tests/cinnamon.nix
+        - nixos/tests/cinnamon-wayland.nix
+        - pkgs/by-name/ci/cinnamon-*/**/*
+        - pkgs/by-name/cj/cjs/**/*
+        - pkgs/by-name/mu/muffin/**/*
+        - pkgs/by-name/ne/nemo/**/*
+        - pkgs/by-name/ne/nemo-*/**/*
 
 "6.topic: dotnet":
   - any:
@@ -265,6 +270,12 @@
     - changed-files:
       - any-glob-to-any-file:
         - .github/**/*
+        - CONTRIBUTING.md
+        - pkgs/README.md
+        - nixos/README.md
+        - maintainers/README.md
+        - lib/README.md
+        - doc/README.md
 
 "6.topic: printing":
   - any:
@@ -345,6 +356,7 @@
         #       *developed in this repo*;
         #       - not individual tests
         #       - not packages for test frameworks
+        - pkgs/build-support/testers/**
         - nixos/lib/testing/**
         - nixos/lib/test-driver/**
         - nixos/tests/nixos-test-driver/**

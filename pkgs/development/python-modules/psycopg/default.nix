@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.19";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Fvg67sGWSNwChZTO5QdLSOKrbGfxzQZJqCjI5Jidcqo=";
+    hash = "sha256-Udysl00lB6rxmQByME6PI3KL4tlzIZ0/CZNWLVKssS8=";
   };
 
   patches = [
@@ -74,9 +74,14 @@ let
 
     nativeBuildInputs = [
       cython
+      # needed to find pg_config with strictDeps
       postgresql
       setuptools
       tomli
+    ];
+
+    buildInputs = [
+      postgresql
     ];
 
     # tested in psycopg
@@ -169,7 +174,7 @@ buildPythonPackage rec {
       pytestCheckHook
       postgresql
     ]
-    ++ lib.optional (stdenv.isLinux) postgresqlTestHook
+    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
     ++ passthru.optional-dependencies.c
     ++ passthru.optional-dependencies.pool;
 
@@ -183,7 +188,7 @@ buildPythonPackage rec {
     ''
       cd ..
     ''
-    + lib.optionalString (stdenv.isLinux) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
     '';
 

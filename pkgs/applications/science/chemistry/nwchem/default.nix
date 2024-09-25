@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, pkgs
 , fetchFromGitHub
 , fetchurl
 , mpiCheckPhaseHook
@@ -14,7 +13,6 @@
 , lapack
 , python3
 , tcsh
-, bash
 , automake
 , autoconf
 , libtool
@@ -34,7 +32,7 @@ let
   };
 
   dftd3Src = fetchurl {
-    url = "https://www.chemiebn.uni-bonn.de/pctc/mulliken-center/software/dft-d3/dftd3.tgz";
+    url = "https://www.chemie.uni-bonn.de/grimme/software/dft-d3/dftd3.tgz";
     hash = "sha256-2Xz5dY9hqoH9hUJUSPv0pujOB8EukjZzmDGjrzKID1k=";
   };
 
@@ -47,20 +45,20 @@ let
   plumedSrc = fetchFromGitHub {
     owner = "edoapra";
     repo = "plumed2";
-    rev = "e7c908da50bde1c6399c9f0e445d6ea3330ddd9b";
-    hash = "sha256-CNlb6MTEkD977hj3xonYqZH1/WlQ1EdVD7cvL//heRM=";
+    rev = "88f06db71173e7893713a582e5ada7193e8ae1c9";
+    hash = "sha256-p5XNxHcE/QkJ5WdQH/xPp2EyrqCNjA/w/e1R2fkwYts=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    hash = "sha256-BcYRqPaPR24OTRY0MJgBxi46HvUG4uFaY0unZmu5b9k=";
+    hash = "sha256-2qc4kLb/WmUJuJGonIyS7pgCfyt8yXdcpDAKU0RMY58=";
   };
 
   nativeBuildInputs = [

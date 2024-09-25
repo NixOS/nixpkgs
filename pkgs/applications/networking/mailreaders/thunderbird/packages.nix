@@ -1,21 +1,19 @@
 { stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu73, fetchpatch2, config }:
 
-rec {
-  thunderbird = thunderbird-115;
-
-  thunderbird-115 = (buildMozillaMach rec {
+let
+  common = { version, sha512, updateScript }: (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "115.12.2";
+    inherit version updateScript;
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "182f35e8e5ece98d18dfefe106c73bc97fbc619f59772d9b3455b7c8af412021ecc5eae97a12515224e91deb814abb7a6ef7f538c450e9e77fdfd84078678038";
+      inherit sha512;
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-      ./no-buildconfig-115.patch
+      ./no-buildconfig.patch
     ];
 
     meta = with lib; {
@@ -23,16 +21,12 @@ rec {
       description = "Full-featured e-mail client";
       homepage = "https://thunderbird.net/";
       mainProgram = "thunderbird";
-      maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
+      maintainers = with maintainers; [ lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = licenses.mpl20;
-    };
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbird-unwrapped";
-      versionPrefix = "115";
     };
   }).override {
     geolocationSupport = false;
@@ -50,6 +44,30 @@ rec {
         hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
       })];
     });
+  };
+
+in rec {
+  thunderbird = thunderbird-128;
+
+  thunderbird-115 = common {
+    version = "115.15.0";
+    sha512 = "b161b99e09b6d1ba833f77264e35034ad199438b4fc88d244a6b68c84693fa2e90fbab60dafb827a2e23b37c484f9843a58751d93826ba7cdd0391114d253de2";
+
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-115";
+      versionPrefix = "115";
+    };
+  };
+
+  thunderbird-128 = common {
+    version = "128.2.3esr";
+    sha512 = "f852d1fe6b8d41aa2f0fbc0fceae93cccf1e5f88d9c0447f504de775283289b82b246b79a01e8eb26e9c87197fb33138fb18c75ecc3f5f1bcfefa3920a7c7512";
+
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-128";
+      versionPrefix = "128";
+      versionSuffix = "esr";
+    };
   };
 }
  // lib.optionalAttrs config.allowAliases {

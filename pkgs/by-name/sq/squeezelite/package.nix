@@ -9,8 +9,8 @@
   libpulseaudio,
   libvorbis,
   mpg123,
-  audioBackend ? if stdenv.isLinux then "alsa" else "portaudio",
-  alsaSupport ? stdenv.isLinux,
+  audioBackend ? if stdenv.hostPlatform.isLinux then "alsa" else "portaudio",
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   dsdSupport ? true,
   faad2Support ? true,
@@ -23,7 +23,7 @@
   soxr,
   sslSupport ? true,
   openssl,
-  portaudioSupport ? stdenv.isDarwin,
+  portaudioSupport ? stdenv.hostPlatform.isDarwin,
   portaudio,
   slimserver,
 }:
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     ++ optional pulseSupport libpulseaudio
     ++ optional alsaSupport alsa-lib
     ++ optional portaudioSupport portaudio
-    ++ optionals stdenv.isDarwin (
+    ++ optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
         CoreVideo
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     ++ optional opusSupport opusfile
     ++ optional resampleSupport soxr
     ++ optional sslSupport openssl
-    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) libgpiod;
+    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
 
   enableParallelBuilding = true;
 
@@ -99,9 +99,9 @@ stdenv.mkDerivation {
     ++ optional pulseSupport "-DPULSEAUDIO"
     ++ optional resampleSupport "-DRESAMPLE"
     ++ optional sslSupport "-DUSE_SSL"
-    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) "-DRPI";
+    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
 
-  env = lib.optionalAttrs stdenv.isDarwin { LDADD = "-lportaudio -lpthread"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDADD = "-lportaudio -lpthread"; };
 
   installPhase = ''
     runHook preInstall

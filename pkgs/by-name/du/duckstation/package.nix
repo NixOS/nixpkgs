@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , SDL2
 , callPackage
 , cmake
@@ -14,13 +13,12 @@
 , ninja
 , pkg-config
 , qt6
-, substituteAll
 , vulkan-loader
 , wayland
 }:
 
 let
-  shaderc-patched = callPackage ./shaderc-patched.nix { };
+  sources = callPackage ./sources.nix { };
   inherit (qt6)
     qtbase
     qtsvg
@@ -30,32 +28,17 @@ let
   ;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "duckstation";
-  version = "0.1-6658";
-
-  src = fetchFromGitHub {
-    owner = "stenzek";
-    repo = "duckstation";
-    rev = "4e0c417add264226b3db065c1466791f0591a1b5";
-    hash = "sha256-fN0bcjqjMmK3qVLlrYmR2VgjK0BjdK4nUj8vNYdFC3I=";
-  };
+  inherit (sources.duckstation) pname version src;
 
   patches = [
     # Tests are not built by default
     ./001-fix-test-inclusion.diff
-    # Patching yet another script that fills data based on git commands...
-    (substituteAll {
-      src = ./002-hardcode-vars.diff;
-      gitHash = finalAttrs.src.rev;
-      gitBranch = "master";
-      gitTag = "${finalAttrs.version}-g4e0c417a";
-      gitDate = "2024-04-16T12:49:54+10:00";
-    })
+    # Patching yet another script that fills data based on git commands . . .
+    ./002-hardcode-vars.diff
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     ninja
     pkg-config
     qttools
@@ -65,24 +48,36 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
+    extra-cmake-modules
     libXrandr
     libbacktrace
     libwebp
     qtbase
     qtsvg
     qtwayland
-    shaderc-patched
+    sources.shaderc-patched
     wayland
   ]
   ++ cubeb.passthru.backendLibs;
-
-  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)
   ];
 
+  strictDeps = true;
+
   doInstallCheck = true;
+
+  postPatch = ''
+    gitHash=$(cat .nixpkgs-auxfiles/git_hash) \
+    gitBranch=$(cat .nixpkgs-auxfiles/git_branch) \
+    gitTag=$(cat .nixpkgs-auxfiles/git_tag) \
+    gitDate=$(cat .nixpkgs-auxfiles/git_date) \
+      substituteAllInPlace src/scmversion/gen_scmversion.sh
+  '';
+
+  # error: cannot convert 'int16x8_t' to '__Int32x4_t'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-flax-vector-conversions";
 
   installCheckPhase = ''
     runHook preCheck

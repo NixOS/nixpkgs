@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/azdavis/millet";
     changelog = "https://github.com/azdavis/millet/blob/v${version}/docs/CHANGELOG.md";
     license = [ licenses.mit /* or */ licenses.asl20 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "millet-ls";
   };
 }

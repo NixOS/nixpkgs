@@ -13,7 +13,7 @@
 , javaBindings ? true, jdk # Almost doesn't affect closure size
 , pythonBindings ? false, python3
 , extensionPack ? null, fakeroot
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux, libpulseaudio
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -29,11 +29,11 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.0.18";
-  virtualboxSha256 = "d999513533631674a024762668de999411d8197060c51e68c5faf0a2c0eea1a5";
+  virtualboxVersion = "7.0.20";
+  virtualboxSha256 = "5cf5979bef66ebab3fcd495796b215a940e8a07c469d4bc56d064de44222dd02";
 
-  kvmPatchVersion = "20240617";
-  kvmPatchHash = "sha256-bOcM9xA1SXB1uTwljpw2vevVeSdHa3omCRon/8DoAUk=";
+  kvmPatchVersion = "20240828";
+  kvmPatchHash = "sha256-g0esJbB1IGyLGZMLFJIY8ZYdHWuiM5IZtLMHZvCY6bs=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.

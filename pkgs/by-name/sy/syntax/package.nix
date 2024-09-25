@@ -25,6 +25,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ h7x4 ];
     mainProgram = "syntax-cli";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

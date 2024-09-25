@@ -6,13 +6,13 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.5.2";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7gW6iqMOcWBaxCFlE5C3K6jjdu5t4lIuL4sXai0Uw9s=";
+    hash = "sha256-zpAKygpxyKYfefa5ag76saTSQNLon/v3rYkl0Nj2+FM=";
   };
 
   vendorHash = "sha256-VNlAzWueF7ZXBpr9RrJghMPrAUof7f1DCh1osFIwFfs=";

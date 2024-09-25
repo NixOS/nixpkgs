@@ -51,7 +51,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # fail due to sandbox environment
     "CacheStamp.expired"
     "userhome"

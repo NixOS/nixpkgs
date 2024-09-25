@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
     # While upstream has `XDG_DESKTOP_PORTAL_DIR`, it is meant for tests and actually blocks
     # any configs from being loaded from anywhere else.
     ./nix-pkgdatadir-env.patch
+
+    # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
+    ./trash-test.patch
   ];
 
   nativeBuildInputs = [

@@ -51,7 +51,7 @@ let
       description = "Jupyter Server Extension Providing Support for Terminals";
       homepage = "https://github.com/jupyter-server/jupyter_server_terminals";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

@@ -13,7 +13,7 @@ in
       owner = "uncenter";
       repo = "kittysay";
       rev = "v${version}";
-      sha256 = "sha256-ZYHrDBJ8cTqJAh2KUGSCsS1bY/emHRodPxZX2vxAhDs=";
+      hash = "sha256-ZYHrDBJ8cTqJAh2KUGSCsS1bY/emHRodPxZX2vxAhDs=";
     };
 
     cargoHash = "sha256-F0WAtpAjBwL5YfzGtPgn7WTL6lgx3bjZFBQdDpjCr3I=";

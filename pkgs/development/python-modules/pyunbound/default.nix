@@ -56,7 +56,7 @@ buildPythonPackage rec {
     rm -r $out/bin $out/share $out/include $out/etc/unbound
   ''
   # patchelf is only available on Linux and no patching is needed on darwin
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --replace-needed libunbound.so.8 $out/${python.sitePackages}/libunbound.so.8 $out/${python.sitePackages}/_unbound.so
   '';
 

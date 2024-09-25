@@ -19,14 +19,22 @@ let
   addToPropagatedBuildInputsWithPkgConfig = pkg: old:
     (addPkgConfig old) // (addToPropagatedBuildInputs pkg old);
   broken = addMetaAttrs { broken = true; };
-  brokenOnDarwin = addMetaAttrs { broken = stdenv.isDarwin; };
+  brokenOnDarwin = addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
   addToCscOptions = opt: old: {
     CSC_OPTIONS = lib.concatStringsSep " " ([ old.CSC_OPTIONS or "" ] ++ lib.toList opt);
   };
 in
 {
-  allegro = addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd ]
-    ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]);
+  allegro = old:
+    ((addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd pkgs.libGLU ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkgs.xorg.libX11 ])) old) // {
+      # depends on 'chicken' egg, which doesn't exist,
+      # so we specify all the deps here
+      propagatedBuildInputs = [
+        chickenEggs.foreigners
+      ];
+    };
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
@@ -35,7 +43,6 @@ in
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
     // (addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 srfi-13 ]) old);
   cmark = addToBuildInputs pkgs.cmark;
-  dbus = addToBuildInputsWithPkgConfig pkgs.dbus;
   epoxy = old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
     // lib.optionalAttrs stdenv.cc.isClang {
@@ -65,12 +72,12 @@ in
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
-  iconv = addToBuildInputs (lib.optional stdenv.isDarwin pkgs.libiconv);
+  iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
   inotify = old:
-    (addToBuildInputs (lib.optional stdenv.isDarwin pkgs.libinotify-kqueue) old)
-    // lib.optionalAttrs stdenv.isDarwin (addToCscOptions "-L -linotify" old);
+    (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
   mdh = old:
@@ -87,7 +94,7 @@ in
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
   opencl = addToBuildInputs ([ pkgs.opencl-headers pkgs.ocl-icd ]
-    ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenCL ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenCL ]);
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.postgresql;
@@ -122,7 +129,8 @@ in
   taglib = old:
     (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old) // (
       # needed for tablib-config to be in PATH
-      addToNativeBuildInputs pkgs.taglib old);
+      addToNativeBuildInputs pkgs.taglib old
+    );
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
@@ -146,8 +154,8 @@ in
   };
   opengl = old:
     (addToBuildInputsWithPkgConfig
-      (lib.optionals (!stdenv.isDarwin) [ pkgs.libGL pkgs.libGLU ]
-      ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Foundation pkgs.darwin.apple_sdk.frameworks.OpenGL ])
+      (lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkgs.libGL pkgs.libGLU ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Foundation pkgs.darwin.apple_sdk.frameworks.OpenGL ])
       old)
     // {
       postPatch = ''
@@ -156,7 +164,7 @@ in
       '';
     };
   posix-shm = old: {
-    postPatch = lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build.scm \
         --replace "-lrt" ""
     '';
@@ -165,6 +173,34 @@ in
   # platform changes
   pledge = addMetaAttrs { platforms = lib.platforms.openbsd; };
   unveil = addMetaAttrs { platforms = lib.platforms.openbsd; };
+
+  # overrides for chicken 5.4
+  dbus = old:
+    (addToBuildInputsWithPkgConfig [ pkgs.dbus ] old) // {
+      # backticks in compiler options
+      # aren't supported anymore as of chicken 5.4, it seems.
+      preBuild = ''
+        substituteInPlace \
+          dbus.egg dbus.setup \
+          --replace '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
+          --replace '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
+      '';
+    };
+  math = old: {
+    # define-values is used but not imported
+    # some breaking change happened now it needs to be done
+    # explicitly?
+    preBuild = ''
+      substituteInPlace *.scm **/*.scm \
+        --replace-quiet 'only chicken.base' 'only chicken.base define-values'
+    '';
+  };
+  socket = old: {
+    # chicken-do checks for changes to a file that doesn't exist
+    preBuild = ''
+      touch socket-config
+    '';
+  };
 
   # mark broken
   "ephem-v1.1" = broken;
@@ -180,7 +216,6 @@ in
   iup = broken;
   kiwi = broken;
   lmdb-ht = broken;
-  lsp-server = broken;
   mpi = broken;
   pyffi = broken;
   qt-light = broken;
@@ -189,7 +224,6 @@ in
   svn-client = broken;
   system = broken;
   tokyocabinet = broken;
-  transducers = broken;
   webview = broken;
 
   # mark broken darwin

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "soundcloud-v2";
-  version = "1.3.8";
+  version = "1.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wcRjzLnPvpz4zWhV7LxAJ6+BDvkI1MexdgL4nBjJwbg=";
+    hash = "sha256-cnM70Yz9xw3TPqGk8VYAag6u1nLjQS2kS7xRBJtFodU=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Python wrapper for the v2 SoundCloud API";
     homepage = "https://github.com/7x11x13/soundcloud.py";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

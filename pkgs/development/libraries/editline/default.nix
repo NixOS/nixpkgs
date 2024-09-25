@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://troglobit.com/projects/editline/";
     description = "Readline() replacement for UNIX without termcap (ncurses)";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ dtzWill oxalica ];
+    maintainers = with maintainers; [ oxalica ];
     platforms = platforms.all;
   };
 }

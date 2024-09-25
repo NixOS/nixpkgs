@@ -5,6 +5,7 @@
 , docutils
 , ell
 , enableExperimental ? false
+, fetchpatch
 , fetchurl
 , glib
 , json_c
@@ -14,21 +15,32 @@
 , readline
 , systemdMinimal
 , udev
+# Test gobject-introspection instead of pygobject because the latter
+# causes an infinite recursion.
+, gobject-introspection
+, buildPackages
+, installTests ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.75";
+  version = "5.76";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mIyzxFUfbjpmdwilePXKn5P8iWUI+Y8IcJvk+KsDPC8=";
+    hash = "sha256-VeLGRZCa2C2DPELOhewgQ04O8AcJQbHqtz+s3SQLvWM=";
   };
 
-  patches =
+  patches = [
+    # hog-lib: Fix passing wrong parameters to bt_uhid_get_report_reply
+    (fetchpatch {
+      url = "https://github.com/bluez/bluez/commit/5ebaeab4164f80539904b9a520d9b7a8307e06e2.patch";
+      hash = "sha256-f1A8DmRPfm+zid4XMj1zsfcLZ0WTEax3YPbydKZF9RE=";
+    })
+  ]
     # Disable one failing test with musl libc, also seen by alpine
     # https://github.com/bluez/bluez/issues/726
-    lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
+    ++ lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
       (fetchurl {
         url = "https://git.alpinelinux.org/aports/plain/main/bluez/disable_aics_unit_testcases.patch?id=8e96f7faf01a45f0ad8449c1cd825db63a8dfd48";
         hash = "sha256-1PJkipqBO3qxxOqRFQKfpWlne1kzTCgtnTFYI1cFQt4=";
@@ -53,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" "test" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional installTests "test";
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
@@ -115,22 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   in
   ''
-    mkdir -p $test/{bin,test}
-    cp -a test $test
-    pushd $test/test
-    for t in \
-            list-devices \
-            monitor-bluetooth \
-            simple-agent \
-            test-adapter \
-            test-device \
-            test-thermometer \
-            ; do
-      ln -s ../test/$t $test/bin/bluez-$t
-    done
-    popd
-    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
-
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -150,6 +147,22 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm755 tools/$filename $out/bin/$filename
     done
     install -Dm755 attrib/gatttool $out/bin/gatttool
+  '' + lib.optionalString installTests ''
+    mkdir -p $test/{bin,test}
+    cp -a test $test
+    pushd $test/test
+    for t in \
+            list-devices \
+            monitor-bluetooth \
+            simple-agent \
+            test-adapter \
+            test-device \
+            test-thermometer \
+            ; do
+      ln -s ../test/$t $test/bin/bluez-$t
+    done
+    popd
+    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
   '';
 
   enableParallelBuilding = true;

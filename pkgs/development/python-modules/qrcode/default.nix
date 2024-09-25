@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lincolnloop/python-qrcode";
     changelog = "https://github.com/lincolnloop/python-qrcode/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -36,19 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "18.3.1";
+  version = "18.4";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-OHhybYXmy+kBXtGA19agK7v9TCK2nvFC+goahogCvbU=";
+    hash = "sha256-BoEFh0lCd2pCIod5sFafnOs/TQHj/SlIAU8P4o+cjyE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-a0KRSrozP4mdsl5NOUfCd9nm+pxzXpXZv+K5vSrdZ7E=";
+    hash = "sha256-1MJ5cP4lyRSZ7VRED8RL5scnqpcy8/avmBKW1Zmt6FU=";
   };
 
   nativeBuildInputs = [
@@ -83,9 +83,9 @@ stdenv.mkDerivation rec {
     vulkan-headers
     glslang
     spirv-tools
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     Cocoa
     OpenGL
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Tests loop forever on Darwin for some reason
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkTarget = "run_tests";
 
   postInstall = lib.optionalString (!buildClient) ''

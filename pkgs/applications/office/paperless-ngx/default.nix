@@ -21,22 +21,24 @@
 , pango
 , pkg-config
 , nltk-data
+, xorg
 }:
 
 let
-  version = "2.10.2";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LwWdgoVlZjL5o+T8zzU9jkYaQbdiZokrCGn8ZTIQ4OQ=";
+    hash = "sha256-txqwVGLUel74ObCqwMWSqa4Nd2eDRf0SqAIes5tlMDg=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
   # https://github.com/NixOS/nixpkgs/issues/298719
   # https://github.com/paperless-ngx/paperless-ngx/issues/5494
   python = python3.override {
+    self = python;
     packageOverrides = final: prev: {
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
@@ -49,18 +51,6 @@ let
           rev = "0.25.0";
           hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
         };
-      });
-
-      djangorestframework = prev.djangorestframework.overridePythonAttrs (oldAttrs: rec {
-        version = "3.14.0";
-        src = oldAttrs.src.override {
-          rev = version;
-          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
-        };
-        nativeCheckInputs = with prev; [
-          pytest7CheckHook
-          pytest-django
-        ];
       });
     };
   };
@@ -86,18 +76,18 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-zmlYwlH2cnGbbKf6jt5zBLh0Iv3C9/xN0iA4xVetRNE=";
+    npmDepsHash = "sha256-hb2z2cPMTN5bHtUldTR5Mvgo4nZL8/S+Uhfis37gF44=";
 
     nativeBuildInputs = [
       pkg-config
       python3
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
     ];
 
     buildInputs = [
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
       darwin.apple_sdk.frameworks.CoreText
     ];
@@ -126,15 +116,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
-  format = "other";
+  pyproject = false;
 
   inherit version src;
 
+  postPatch = ''
+    # pytest-xdist makes the tests flaky
+    substituteInPlace src/setup.cfg \
+      --replace-fail "--numprocesses auto --maxprocesses=16" ""
+  '';
+
   nativeBuildInputs = [
     gettext
+    xorg.lndir
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     bleach
     channels
     channels-redis
@@ -201,18 +198,18 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   installPhase = let
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    pythonPath = python.pkgs.makePythonPath dependencies;
   in ''
     runHook preInstall
 
-    mkdir -p $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx/static/frontend
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
-    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
+    lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "${pythonPath}" \
       --prefix PATH : "${path}"
-    makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
+    makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
       --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
 
@@ -228,11 +225,12 @@ python.pkgs.buildPythonApplication rec {
     daphne
     factory-boy
     imagehash
+    pytest-cov-stub
     pytest-django
     pytest-env
     pytest-httpx
+    pytest-mock
     pytest-rerunfailures
-    pytest-xdist
     pytestCheckHook
   ];
 
@@ -248,10 +246,6 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-
-    # Disable unneeded code coverage test
-    substituteInPlace src/setup.cfg \
-      --replace-fail "--cov --cov-report=html --cov-report=xml" ""
   '';
 
   disabledTests = [
@@ -265,11 +259,11 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     inherit python path frontend tesseract5;
-    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
+    nltkData = with nltk-data; [ punkt_tab snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 
@@ -279,6 +273,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
+    maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
   };
 }

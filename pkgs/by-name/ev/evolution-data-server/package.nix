@@ -30,7 +30,7 @@
 , ninja
 , libkrb5
 , openldap
-, enableOAuth2 ? stdenv.isLinux
+, enableOAuth2 ? stdenv.hostPlatform.isLinux
 , webkitgtk_4_1
 , webkitgtk_6_0
 , json-glib
@@ -50,13 +50,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.52.3";
+  version = "3.52.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-6fbIDBQgM7GAG8yqYiHEU9406tTqCJsghrGQhvmpwuQ=";
+    url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
+    hash = "sha256-GzaoOdscjYmAZuGb54uZWTCgovKohvFJ5PZOF1XwZPc=";
   };
 
   patches = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
+      --subst-var-by EDS ${glib.makeSchemaPath "$out" "evolution-data-server-${version}"} \
       --subst-var-by GDS ${glib.getSchemaPath gsettings-desktop-schemas}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     libphonenumber
     boost
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ] ++ lib.optionals withGtk3 [
     gtk3
@@ -141,15 +141,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/modules/SetupBuildFlags.cmake \
       --replace "-Wl,--no-undefined" ""
     substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
       --replace "G_OS_WIN32" "__APPLE__"
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    ln -s $out/lib/${pname}/*.dylib $out/lib/
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ln -s $out/lib/evolution-data-server/*.dylib $out/lib/
   '';
 
   passthru = {

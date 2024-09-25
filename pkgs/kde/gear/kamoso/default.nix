@@ -1,4 +1,4 @@
-{mkKdeDerivation}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "kamoso";
   # FIXME(qt5)

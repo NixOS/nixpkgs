@@ -94,7 +94,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       Security
     ];
@@ -137,7 +137,7 @@ buildPythonPackage rec {
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     homepage = "https://github.com/huggingface/tokenizers";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Building the ASM/x86 directory creates an empty archive,
     # which fails on darwin, so remove it
     # https://github.com/ckolivas/lrzip/issues/193
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://ck.kolivas.org/apps/lrzip/";
     description = "CK LRZIP compression program (LZMA + RZIP)";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

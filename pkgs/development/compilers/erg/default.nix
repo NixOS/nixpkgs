@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "erg";
-  version = "0.6.39";
+  version = "0.6.44";
 
   src = fetchFromGitHub {
     owner = "erg-lang";
     repo = "erg";
     rev = "v${version}";
-    hash = "sha256-eVf1pQJ0mIZURRDK2k6boZUs+m6hu6lbWqKYWSNC5ng=";
+    hash = "sha256-Pw6q3qmYehTPnB3MyDi8Q5tC018H3zLsZAXWuc+abjE=";
   };
 
-  cargoHash = "sha256-H7JorE6Psg/rndYpNMiyxOfsifBEi4l4bk4CvhDRFjE=";
+  cargoHash = "sha256-uO+j1kmoCLy00P0QHGy30XVPyG1tH4FU6YvTfWxxvWE=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     BUILD_DATE = "1970/01/01 00:00:00";
-    CASE_SENSITIVE = lib.boolToString (!stdenv.isDarwin);
+    CASE_SENSITIVE = lib.boolToString (!stdenv.hostPlatform.isDarwin);
     GIT_HASH_SHORT = src.rev;
   };
 

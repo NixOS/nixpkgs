@@ -9,8 +9,6 @@
 , hex
 , json-data-encoding
 , json-data-encoding-bson
-, alcotest
-, crowbar
 , ppx_expect
 }:
 

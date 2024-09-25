@@ -5,12 +5,12 @@
 , meson
 , ninja
 , pkg-config
-, gnome
 , gnome-desktop
 , glib
 , gtk3
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libbsd
 , libxml2
 , libxkbcommon
@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.38.0";
+  version = "1.41.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZVSnLH2wLPcOHkU2pO0BgIdGmULMNiacIYMRmhN+bZ8=";
+    hash = "sha256-WHGdA0cEB1nu7vJ+pwjdl8aZzccJ232vsbSGmZohFVo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-tcn1tRuRlHVTYvc8T/ePfCEPNjih6B9lo/hdX+WwitQ=";
+    hash = "sha256-CRKaH8cA/EhXQna3zCU0Z06zkB9qu6QxPJ4No3NFcs0=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
-    wayland
+    wayland-scanner
     wrapGAppsHook3
     rustPlatform.cargoSetupHook
     cargo

@@ -103,7 +103,7 @@ buildPythonPackage rec {
   '';
 
   # darwin has write permission issues
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -159,7 +159,7 @@ buildPythonPackage rec {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = true;
   };
 }

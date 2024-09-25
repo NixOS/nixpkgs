@@ -4,9 +4,9 @@
 , rLibrary ? false, cudaPackages, opencl-headers, ocl-icd, boost
 , llvmPackages, openmpi, openjdk, swig, hadoop, R, rPackages, pandoc }:
 
-assert doCheck -> mpiSupport != true;
-assert openclSupport -> cudaSupport != true;
-assert cudaSupport -> openclSupport != true;
+assert doCheck -> !mpiSupport;
+assert openclSupport -> !cudaSupport;
+assert cudaSupport -> !openclSupport;
 
 stdenv.mkDerivation rec {
   pnameBase = "lightgbm";
@@ -23,18 +23,18 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ lgbm ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-i4mtJwSwnbGMXVfQ8a9jZZPUBBibXyQPgMVJ3uXxeGQ=";
+    hash = "sha256-nST6+/c3Y4/hqwgEUhx03gWtjxhlmUu1XKDCy2pSsvU=";
   };
 
   nativeBuildInputs = [ cmake ]
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
     ++ lib.optionals openclSupport [ opencl-headers ocl-icd boost ]
     ++ lib.optionals mpiSupport [ openmpi ]
     ++ lib.optionals hdfsSupport [ hadoop ]
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/lib
       mkdir -p $out/bin
       cp -r ../include $out
-      install -Dm755 ../lib_lightgbm.so $out/lib/lib_lightgbm.so
+      install -Dm755 ../lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/lib_lightgbm${stdenv.hostPlatform.extensions.sharedLibrary}
     '' + lib.optionalString (!rLibrary && !pythonLibrary) ''
       install -Dm755 ../lightgbm $out/bin/lightgbm
     '' + lib.optionalString javaWrapper ''

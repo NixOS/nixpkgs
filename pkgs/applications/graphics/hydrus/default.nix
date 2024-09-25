@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "581";
+  version = "588";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q/EdqwIMCjeDtFAPlYd04NMpEgC6xUDGK5LwxDCiI9Y=";
+    hash = "sha256-0uRoOgpz3FSDedzx728jAPhrCAReVygkb5tZTTUxNEY=";
   };
 
   nativeBuildInputs = [
@@ -82,47 +82,10 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  # tests rely on nose
-  doCheck = pythonOlder "3.12";
-
   nativeCheckInputs = with python3Packages; [
-    nose
     mock
     httmock
   ];
-
-  # most tests are failing, presumably because we are not using test.py
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests $src/hydrus/test  \
-      -e TestClientAPI \
-      -e TestClientConstants \
-      -e TestClientDaemons \
-      -e TestClientData \
-      -e TestClientDB \
-      -e TestClientDBDuplicates \
-      -e TestClientDBTags \
-      -e TestClientImageHandling \
-      -e TestClientImportOptions \
-      -e TestClientListBoxes \
-      -e TestClientMigration \
-      -e TestClientNetworking \
-      -e TestClientTags \
-      -e TestClientThreading \
-      -e TestDialogs \
-      -e TestFunctions \
-      -e TestHydrusNetwork \
-      -e TestHydrusNATPunch \
-      -e TestHydrusSerialisable \
-      -e TestHydrusServer \
-      -e TestHydrusSessions \
-      -e TestServer \
-      -e TestClientMetadataMigration \
-      -e TestClientFileStorage \
-
-    runHook postCheck
-  '';
 
   outputs = [ "out" "doc" ];
 
@@ -143,6 +106,7 @@ python3Packages.buildPythonPackage rec {
     mkdir -p $out/bin
     install -m0755 hydrus_server.py $out/bin/hydrus-server
     install -m0755 hydrus_client.py $out/bin/hydrus-client
+    install -m0755 hydrus_test.py $out/bin/hydrus-test
 
     # desktop item
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
@@ -155,6 +119,16 @@ python3Packages.buildPythonPackage rec {
     ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
   '' + ''
     runHook postInstall
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    export QT_QPA_PLATFORM=offscreen
+    export HOME=$(mktemp -d)
+    $out/bin/hydrus-test
+
+    runHook postCheck
   '';
 
   dontWrapQtApps = true;

@@ -1,8 +1,6 @@
 { lib
 , buildDunePackage
 , fetchFromGitHub
-, pkg-config
-, dune-configurator
 , re
 , xmlplaylist
 }:

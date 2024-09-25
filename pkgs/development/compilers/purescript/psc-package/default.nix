@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   version = "0.6.2";
 
-  src = if stdenv.isDarwin
+  src = if stdenv.hostPlatform.isDarwin
   then fetchurl {
     url = "https://github.com/purescript/psc-package/releases/download/v0.6.2/macos.tar.gz";
     sha256 = "17dh3bc5b6ahfyx0pi6n9qnrhsyi83qdynnca6k1kamxwjimpcq1";
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
     install -D -m555 -T psc-package $PSC_PACKAGE
     chmod u+w $PSC_PACKAGE
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool \
       -change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib \
       -change /usr/lib/libiconv.2.dylib ${libiconv}/libiconv.2.dylib \
       $PSC_PACKAGE
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PSC_PACKAGE
   '' + ''
     chmod u-w $PSC_PACKAGE
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Package manager for PureScript based on package sets";
     mainProgram = "psc-package";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 }

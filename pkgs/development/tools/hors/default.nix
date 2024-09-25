@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1q17i8zg7dwd8al42wfnkn891dy5hdhw4325plnihkarr50avbr0";
   };
 
-  cargoSha256 = "sha256-1PB/JvgfC6qABI+cIePqtsSlZXPqMGQIay9SCXJkV9o=";
+  cargoHash = "sha256-1PB/JvgfC6qABI+cIePqtsSlZXPqMGQIay9SCXJkV9o=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # requires network access
   doCheck = false;

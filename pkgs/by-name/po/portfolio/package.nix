@@ -1,15 +1,15 @@
 {
-  lib,
-  stdenv,
   autoPatchelfHook,
   fetchurl,
+  glib,
   glib-networking,
-  glibc,
-  gcc-unwrapped,
   gtk3,
-  openjdk17,
+  lib,
   libsecret,
   makeDesktopItem,
+  openjdk17,
+  stdenvNoCC,
+  swt,
   webkitgtk,
   wrapGAppsHook3,
   gitUpdater,
@@ -25,17 +25,21 @@ let
   };
 
   runtimeLibs = lib.makeLibraryPath [
+    glib
+    glib-networking
     gtk3
+    libsecret
+    swt
     webkitgtk
   ];
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.69.1";
+  version = "0.71.1";
 
   src = fetchurl {
-    url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-Q36pQkxFMwwb6qHZYqer/em6G4TlFmFwtFhB0YUsOlw=";
+    url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
+    hash = "sha256-bZZTsL2jf4m6Gvc9cXDbAsiPoluljnb1AKshMM4325Q=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +47,8 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gcc-unwrapped
-    glib-networking
-    glibc
-    libsecret
-  ];
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/portfolio
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --prefix CLASSPATH : "${swt}/jars/swt.jar" \
       --prefix PATH : ${openjdk17}/bin
 
     # Create desktop item
@@ -67,12 +68,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.epl10;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [
       kilianar
       oyren
       shawn8901
@@ -80,4 +81,4 @@ stdenv.mkDerivation rec {
     mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

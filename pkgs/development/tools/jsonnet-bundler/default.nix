@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "jsonnet-bundler";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "jsonnet-bundler";
     repo = "jsonnet-bundler";
     rev = "v${version}";
-    sha256 = "sha256-vjb5wEiJw48s7FUarpA94ZauFC7iEgRDAkRTwRIZ8pA=";
+    hash = "sha256-VaYfjDSDst1joN2MnDVdz9SGGMamhYxfNM/a2mJf8Lo=";
   };
 
   vendorHash = null;

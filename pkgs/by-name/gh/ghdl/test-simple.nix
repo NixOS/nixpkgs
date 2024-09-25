@@ -1,4 +1,4 @@
-{ stdenv, lib, ghdl-llvm, ghdl-mcode, ghdl-gcc, backend }:
+{ stdenv, ghdl-llvm, ghdl-mcode, ghdl-gcc, backend }:
 
 let
   ghdl = if backend == "llvm" then ghdl-llvm else if backend == "gcc" then ghdl-gcc else ghdl-mcode;

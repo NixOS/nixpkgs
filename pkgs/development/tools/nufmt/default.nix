@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BwKLl8eMCrqVt9PA5SHAXxu3ypP2ePcSuljKL+wSkvw=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     IOKit
   ]);
 
-  cargoSha256 = "sha256-16Z20opeZpoa7h258um+grL3ktPmY4P0M/tqMTr5hYc=";
+  cargoHash = "sha256-16Z20opeZpoa7h258um+grL3ktPmY4P0M/tqMTr5hYc=";
 
   meta = with lib; {
     description = "Nushell formatter";

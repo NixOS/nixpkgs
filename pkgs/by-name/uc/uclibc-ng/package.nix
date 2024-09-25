@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoLibc
 , buildPackages
 , fetchurl
 , gitUpdater
@@ -9,6 +9,7 @@
 }:
 
 let
+  stdenv = stdenvNoLibc;
   isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
   configParser = ''
     function parseconfig {
@@ -48,7 +49,7 @@ let
     KERNEL_HEADERS "${linuxHeaders}/include"
   '' + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
     UCLIBC_HAS_FPU n
-  '' + lib.optionalString (stdenv.isAarch32 && isCross) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && isCross) ''
     CONFIG_ARM_EABI y
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
@@ -59,11 +60,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
-  version = "1.0.49";
+  version = "1.0.50";
 
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NA+dXdEVnGnDOAZU455WfLswSvzT+d+i6YM/D6E/W74=";
+    hash = "sha256-rthnJR9II6dOpeOjmT06fBIygKvhXjjcIGdww5aPIc8=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency

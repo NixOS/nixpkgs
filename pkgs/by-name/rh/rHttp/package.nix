@@ -12,7 +12,7 @@ buildGoModule {
     owner = "1buran";
     repo = "rHttp";
     rev = "9b7da3a0f7c2e35c9d326e7920ded15f806f8113";
-    sha256 = "1nz3f6zgpbxlwn6c5rqxa8897ygi5r7h7f6624i27rq9kr729cra";
+    hash = "sha256-KrMkTp4J5yMiEca4A08u8fmTEFId58KM5bSv+75x49s=";
   };
 
   vendorHash = "sha256-NR1q44IUSME+x1EOcnXXRoIXw8Av0uH7iXhD+cdd99I=";

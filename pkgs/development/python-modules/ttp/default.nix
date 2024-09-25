@@ -102,6 +102,6 @@ buildPythonPackage rec {
     mainProgram = "ttp";
     homepage = "https://github.com/dmulyalin/ttp";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -21,7 +21,7 @@ mkDerivation rec {
     description = "Interactive post-processing tool for scanned pages (vigri's fork)";
     mainProgram = "scantailor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; gnu ++ linux ++ darwin;
   };
 }

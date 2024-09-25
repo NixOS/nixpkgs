@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.8.1";
+  version = "1.8.2";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    hash = "sha256-dg4JSJx5xXEOLLb5xEgrNeDmh/En9G6qKA9G+3v9PH0=";
+    hash = "sha256-b2uior67RcCCpUE+qx55G1eWiT2wWDVsnosSH9fd3/I=";
   };
 
   vendorHash = "sha256-sly8AJk+jNZG8ijTBF1Pd5AOOUJJxIG8jHwBUdlt8fM=";
@@ -17,7 +17,7 @@ buildGoModule rec {
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation IOKit ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation IOKit ]);
 
   excludedPackages = [ "docs/node-mixin" ];
 

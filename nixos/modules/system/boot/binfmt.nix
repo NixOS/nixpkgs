@@ -141,6 +141,10 @@ let
       magicOrExtension = ''\x00asm'';
       mask = ''\xff\xff\xff\xff'';
     };
+    s390x-linux = {
+      magicOrExtension = ''\x7fELF\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x16'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
+    };
     x86_64-windows.magicOrExtension = "MZ";
     i686-windows.magicOrExtension = "MZ";
   };

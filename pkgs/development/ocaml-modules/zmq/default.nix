@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, czmq, stdint }:
+{ lib, fetchurl, buildDunePackage, dune-configurator, czmq }:
 
 buildDunePackage rec {
   pname = "zmq";

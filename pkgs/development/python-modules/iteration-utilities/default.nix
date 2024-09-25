@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/MSeifert04/iteration_utilities";
     changelog = "https://github.com/MSeifert04/iteration_utilities/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

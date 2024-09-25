@@ -3,6 +3,7 @@
 , fetchurl
 , gmp
 , writeScript
+, updateAutotoolsGnuConfigScriptsHook
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -25,6 +26,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" "info" ];
 
   strictDeps = true;
+  # necessary to build on FreeBSD native pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 

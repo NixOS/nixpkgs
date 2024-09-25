@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
-  python,
   pytestCheckHook,
   six,
   paste,
+  setuptools,
   pastedeploy,
   pythonOlder,
 }:
@@ -14,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pastescript";
   version = "3.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,6 +22,8 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-HCLSt81TUWRr7tKMb3DrSipLklZR2a/Ko1AdBsq7UXE=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     paste
@@ -33,10 +34,7 @@ buildPythonPackage rec {
   # test suite seems to unset PYTHONPATH
   doCheck = false;
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [ "appsetup/testfiles" ];
 
@@ -51,6 +49,6 @@ buildPythonPackage rec {
     mainProgram = "paster";
     homepage = "https://github.com/cdent/pastescript/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

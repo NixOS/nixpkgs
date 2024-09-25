@@ -6,21 +6,25 @@
   fetchPypi,
   isodate,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "9.5.0";
-  format = "setuptools";
+  version = "9.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XSGhl94Is2OOCa2I4y2iEfe7WYt9fP7kjWHVfWmz7dk=";
+    pname = "azure_mgmt_cosmosdb";
+    inherit version;
+    hash = "sha256-Znx9io9UKw55cuYydK9TatmFGH4kpswuPI7vNVYIgfw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     isodate
     azure-common
     azure-mgmt-core

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   asn1crypto,
-  astunparse,
   bincopy,
   bitstring,
   click,
@@ -17,16 +16,14 @@
   hexdump,
   libusbsio,
   oscrypto,
+  packaging,
   platformdirs,
   prettytable,
-  pylink-square,
   pyocd,
-  pyocd-pemicro,
-  pypemicro,
   pyserial,
   requests,
   ruamel-yaml,
-  setuptools,
+  setuptools-scm,
   sly,
   spsdk,
   testers,
@@ -39,31 +36,31 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.1.1";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     rev = "refs/tags/${version}";
-    hash = "sha256-cWz2zML/gb9l2C5VEBti+nX3ZLyGbLFyLZGjk5GfTJw=";
+    hash = "sha256-qFgG9jdF667EtMqXGGk/oxTEi+6J2s/3gKokP+JaFVw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools-scm ];
 
   pythonRelaxDeps = [
-    "click"
     "cryptography"
-    "platformdirs"
     "requests"
+    "packaging"
     "typing-extensions"
   ];
 
-  propagatedBuildInputs = [
+  # Remove unneeded unfree package. pyocd-pemicro is only used when
+  # generating a pyinstaller package, which we don't do.
+  pythonRemoveDeps = [ "pyocd-pemicro" ];
+
+  dependencies = [
     asn1crypto
-    astunparse
     bincopy
     bitstring
     click
@@ -77,12 +74,10 @@ buildPythonPackage rec {
     hexdump
     libusbsio
     oscrypto
+    packaging
     platformdirs
     prettytable
-    pylink-square
     pyocd
-    pyocd-pemicro
-    pypemicro
     pyserial
     requests
     ruamel-yaml
@@ -95,11 +90,6 @@ buildPythonPackage rec {
     pytest-notebook
     pytestCheckHook
     voluptuous
-  ];
-
-  disabledTests = [
-    "test_nxpcrypto_create_signature_algorithm"
-    "test_nxpimage_sb31_kaypair_not_matching"
   ];
 
   pythonImportsCheck = [ "spsdk" ];

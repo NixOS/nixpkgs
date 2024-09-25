@@ -14,12 +14,12 @@
 # CI
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
-/ci @infinisil
+/.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
+/ci @infinisil @philiptaron @NixOS/Security
 
-# Develompent support
+# Development support
 /.editorconfig @Mic92 @zowoq
 /shell.nix @infinisil @NixOS/Security
-/.envrc @infinisil @NixOS/Security
 
 # Libraries
 /lib                        @infinisil
@@ -44,9 +44,12 @@
 /pkgs/top-level/stage.nix                        @Ericson2314
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
+/pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
+/pkgs/stdenv                                     @philiptaron
 /pkgs/stdenv/generic                             @Ericson2314
 /pkgs/stdenv/generic/check-meta.nix              @Ericson2314
 /pkgs/stdenv/cross                               @Ericson2314
+/pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
@@ -56,12 +59,6 @@
 ## Format generators/serializers
 /pkgs/pkgs-lib/formats/libconfig                 @h7x4
 /pkgs/pkgs-lib/formats/hocon                     @h7x4
-
-# pkgs/by-name
-/pkgs/test/check-by-name @infinisil
-/pkgs/by-name/README.md @infinisil
-/pkgs/top-level/by-name-overlay.nix @infinisil
-/.github/workflows/check-by-name.yml @infinisil
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
@@ -74,8 +71,8 @@
 # @raitobezarius is not "code owner", but is listed here to be notified of changes
 # pertaining to the Nix package manager.
 # i.e. no authority over those files.
-pkgs/tools/package-management/nix/                    @raitobezarius
-nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+pkgs/tools/package-management/nix/                    @NixOS/nix-team @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -90,6 +87,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /doc/README.md @infinisil
 /nixos/README.md @infinisil
 /pkgs/README.md @infinisil
+/pkgs/by-name/README.md @infinisil
 /maintainers/README.md @infinisil
 
 # User-facing development documentation
@@ -110,7 +108,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /nixos/virtualisation/qemu-vm.nix           @raitobezarius
 
 # ACME
-/nixos/modules/security/acme                @arianvp @flokli @aanderse # no merge permission: @m1cr0man @emilazy
+/nixos/modules/security/acme                @arianvp @flokli @aanderse @emilazy # no merge permission: @m1cr0man
 
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
@@ -140,13 +138,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /pkgs/top-level/release-python.nix                      @natsukium
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @ncfavier
-/maintainers/scripts/haskell                  @sternenseemann @maralorn @ncfavier
-/pkgs/development/compilers/ghc               @sternenseemann @maralorn @ncfavier
-/pkgs/development/haskell-modules             @sternenseemann @maralorn @ncfavier
-/pkgs/test/haskell                            @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @ncfavier
-/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @sternenseemann @maralorn
+/pkgs/test/haskell                            @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
@@ -164,7 +162,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @RossComputerGuy
+/pkgs/development/compilers/llvm @alyssais @RossComputerGuy
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -253,6 +251,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
+/pkgs/development/compilers/idris2 @mattpolzin
 
 # Bazel
 /pkgs/development/tools/build-managers/bazel @Profpatsch
@@ -267,6 +266,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/emacs/elisp-packages @adisbladis
 /pkgs/applications/editors/emacs                @adisbladis
 /pkgs/top-level/emacs-packages.nix              @adisbladis
+
+# Kakoune
+/pkgs/applications/editors/kakoune     @philiptaron
 
 # Neovim
 /pkgs/applications/editors/neovim      @figsoda @teto
@@ -305,7 +307,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
 
 # Cinnamon
-/pkgs/desktops/cinnamon @mkg20001
+/pkgs/by-name/ci/cinnamon-*    @mkg20001
+/pkgs/by-name/cj/cjs           @mkg20001
+/pkgs/by-name/mu/muffin        @mkg20001
+/pkgs/by-name/ne/nemo          @mkg20001
+/pkgs/by-name/ne/nemo-*        @mkg20001
 
 # nim
 /pkgs/development/compilers/nim   @ehmry
@@ -317,7 +323,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # Forgejo
 nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
-pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @corngood
@@ -329,9 +335,6 @@ pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 /pkgs/build-support/node/build-npm-package      @winterqt
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
-
-# environment.noXlibs option aka NoX
-/nixos/modules/config/no-x-libs.nix  @SuperSandro2000
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid
@@ -361,17 +364,13 @@ nixos/modules/services/web-apps/pretalx.nix @mweinelt
 nixos/tests/web-apps/pretix.nix @mweinelt
 nixos/tests/web-apps/pretalx.nix @mweinelt
 
-# incus/lxc/lxd
-nixos/maintainers/scripts/lxd/          @adamcstephens
+# incus/lxc
+nixos/maintainers/scripts/incus/        @adamcstephens
 nixos/modules/virtualisation/incus.nix  @adamcstephens
 nixos/modules/virtualisation/lxc*       @adamcstephens
-nixos/modules/virtualisation/lxd*       @adamcstephens
 nixos/tests/incus/                      @adamcstephens
-nixos/tests/lxd/                        @adamcstephens
 pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
-pkgs/by-name/lx/lxd*                    @adamcstephens
-pkgs/os-specific/linux/lxc/             @adamcstephens
 
 # ExpidusOS, Flutter
 /pkgs/development/compilers/flutter @RossComputerGuy
@@ -385,3 +384,8 @@ pkgs/os-specific/linux/lxc/             @adamcstephens
 /pkgs/os-specific/linux/checkpolicy @RossComputerGuy
 /pkgs/os-specific/linux/libselinux  @RossComputerGuy
 /pkgs/os-specific/linux/libsepol    @RossComputerGuy
+
+# installShellFiles
+/pkgs/by-name/in/installShellFiles/*     @Ericson2314
+/pkgs/test/install-shell-files/*         @Ericson2314
+/doc/hooks/installShellFiles.section.md  @Ericson2314

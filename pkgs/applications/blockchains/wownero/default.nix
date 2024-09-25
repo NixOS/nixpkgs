@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     readline
     unbound
     zeromq
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
   ];
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wownero.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

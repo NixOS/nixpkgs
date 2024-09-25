@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.10.1";
+  version = "4.10.2";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-CUQ16VthGl2vtixOv8UGI9gCsb6iEVD9XHKAYivWMrw=";
+    hash = "sha256-j7Cjr5R/fN/1C6hR9400Y/hwgG++qjPvo9PYyetzrx0=";
   };
 
   outputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
-  ] ++ lib.optional stdenv.isDarwin xcodebuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "test.basedir"
           "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
           "test.multi_arch"

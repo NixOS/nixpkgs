@@ -5,29 +5,30 @@
 , fetchFromGitHub
 , testers
 , balena-cli
-, nodePackages
+, node-gyp
 , python3
 , udev
+, cctools
 , darwin
 }:
 
 let
   # Fix for: https://github.com/NixOS/nixpkgs/issues/272156
   buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 in buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "18.2.17";
+  version = "19.0.12";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-sWe7D89bL7mWanxCAOAso6J9fuxPFh3PHUL2mR8aOBs=";
+    hash = "sha256-/C83s66vTq60FLfKPb27RBGfBC295qs5WWej9Yz4Cak=";
   };
 
-  npmDepsHash = "sha256-lYgt0du8OfJitVbfWiUqrEGulvs/OxqF4AdxyGCRCJY=";
+  npmDepsHash = "sha256-CdbJqMbBYzy9TfhlXVMJgGr3pLVMX4naRs/rGz96bYo=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
@@ -35,15 +36,15 @@ in buildNpmPackage' rec {
   makeCacheWritable = true;
 
   nativeBuildInputs = [
-    nodePackages.node-gyp
+    node-gyp
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
     darwin.apple_sdk.frameworks.Cocoa
   ];

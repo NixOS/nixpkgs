@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.62.0";
+  version = "0.67.3";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-vubx/8rnUyOtQwykbFT8s/gAhuPorQtmkLJiiGu/pQY=";
+    hash = "sha256-OYtPpy3ig5NMw1Usmi7VnZyqr0hzG71/5R4qOEczZ4Y=";
   };
 
   nativeBuildInputs = [ go-mockery ];
@@ -21,7 +21,7 @@ buildGoModule rec {
     make generate-mocks
   '';
 
-  vendorHash = "sha256-1znEc/WmD3sCUqWxIvV0AdruxpUG7jh2IqTkGGak1VM=";
+  vendorHash = "sha256-NERvQoxT01ew/rCkEXrthsqF1mXjhxZANBL9ApTyd7o=";
 
   doCheck = false;
 

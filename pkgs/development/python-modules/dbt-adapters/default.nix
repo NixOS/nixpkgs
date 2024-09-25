@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.3.3";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-adapters";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M7n+WcHGBMNZ5k9GZRR05g8KzPDWjmB83iZSD16G774=";
+    hash = "sha256-i5sGgkFrW/37PH5XnH2bf/bTNgCZwEgNZT9IMbOJwLQ=";
   };
 
   build-system = [ hatchling ];
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-adapters";
     changelog = "https://github.com/dbt-labs/dbt-adapters/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

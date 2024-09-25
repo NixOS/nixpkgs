@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   pythonOlder,
+  pythonAtLeast,
   fetchFromGitHub,
   substituteAll,
   gdb,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.1";
+  version = "1.8.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2TkieSQYxnlUroSD9wNKNaHUTLRksFWL/6XmSNGTCA4=";
+    hash = "sha256-SmSYhmLnVpBPEPO2o40wIv+e3cBbmZXSz+IKMRcnScw=";
   };
 
   patches =
@@ -57,14 +58,14 @@ buildPythonPackage rec {
       # - https://github.com/NixOS/nixpkgs/issues/251045
       ./skip-attach-pid-tests.patch
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Hard code GDB path (used to attach to process)
       (substituteAll {
         src = ./hardcode-gdb.patch;
         inherit gdb;
       })
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Hard code LLDB path (used to attach to process)
       (substituteAll {
         src = ./hardcode-lldb.patch;
@@ -92,6 +93,9 @@ buildPythonPackage rec {
         }
       )'';
 
+  # Disable tests for unmaintained versions of python
+  doCheck = pythonAtLeast "3.11";
+
   nativeCheckInputs = [
     ## Used to run the tests:
     pytestCheckHook
@@ -115,12 +119,12 @@ buildPythonPackage rec {
       export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
       export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
     ''
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
       export no_proxy='*';
     '';
 
-  postCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
   '';
 

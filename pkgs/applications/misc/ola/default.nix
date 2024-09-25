@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Framework for controlling entertainment lighting equipment";
     homepage = "https://www.openlighting.org/ola/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = with licenses; [ lgpl21 gpl2Plus ];
     platforms = platforms.all;
   };

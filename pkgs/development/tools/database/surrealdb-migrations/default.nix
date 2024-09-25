@@ -10,7 +10,7 @@
 
 let
   pname = "surrealdb-migrations";
-  version = "1.5.0";
+  version = "2.0.0";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -19,15 +19,13 @@ rustPlatform.buildRustPackage rec {
     owner = "Odonno";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-x5WyaVHLVFCHWPqyEuaVSbeIaGXDB0o7h776udcC4DM=";
+    hash = "sha256-MrIawJr8EydfYFVzxODUZ7jDj0B0M1FAuX4Arktbf4Y=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-ELYBEQrh80LdNYNZwcGVh9GE+dSfjF+RuO8fd0PabIw=";
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
    # Error: No such file or directory (os error 2)
    # failures:

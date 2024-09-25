@@ -3,7 +3,7 @@
 , buildNpmPackage
 , fetchFromGitHub
 , python3
-, darwin
+, cctools
 }:
 
 buildNpmPackage rec {
@@ -30,8 +30,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
   ];
 
   meta = {
@@ -39,6 +39,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/LibreScore/dl-librescore";
     license = lib.licenses.mit;
     mainProgram = "dl-librescore";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

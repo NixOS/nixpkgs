@@ -23,6 +23,11 @@ rustPlatform.buildRustPackage {
     hash = "sha256-fPXhayS8OKiiiDvVvBry3njZ74/W6oVL0p85Z5qf3KA==";
   };
 
+  cargoPatches = [
+    # fix build with Rust 1.80
+    ./time-crate.patch
+  ];
+
   cargoBuildFlags = [ "--package=meilisearch" ];
 
   cargoLock = {
@@ -38,7 +43,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];

@@ -12,8 +12,6 @@
 , withDebug ? false
 }:
 
-with lib;
-
 let
   phpConfig = {
     embedSupport = true;
@@ -27,15 +25,16 @@ let
   php81-unit = php81.override phpConfig;
   php82-unit = php82.override phpConfig;
 
+  inherit (lib) optional optionals optionalString;
 in stdenv.mkDerivation rec {
-  version = "1.32.1";
+  version = "1.33.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YqejETJTbnmXoPsYITJ6hSnd1fIWUc1p5FldYkw2HQI=";
+    sha256 = "sha256-Q3RXhWI9+G7oUnHYtVK6WZ9s7eIkQ+yPmdqbjWyatTE=";
   };
 
   nativeBuildInputs = [ which ];
@@ -65,7 +64,7 @@ in stdenv.mkDerivation rec {
   postConfigure = ''
     ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
     ${optionalString withPHP81      "./configure php    --module=php81    --config=${php81-unit.unwrapped.dev}/bin/php-config --lib-path=${php81-unit}/lib"}
-    ${optionalString withPHP82      "./configure php    --module=php81    --config=${php82-unit.unwrapped.dev}/bin/php-config --lib-path=${php82-unit}/lib"}
+    ${optionalString withPHP82      "./configure php    --module=php82    --config=${php82-unit.unwrapped.dev}/bin/php-config --lib-path=${php82-unit}/lib"}
     ${optionalString withPerl536    "./configure perl   --module=perl536  --perl=${perl536}/bin/perl"}
     ${optionalString withPerl538    "./configure perl   --module=perl538  --perl=${perl538}/bin/perl"}
     ${optionalString withRuby_3_1   "./configure ruby   --module=ruby31   --ruby=${ruby_3_1}/bin/ruby"}
@@ -74,7 +73,7 @@ in stdenv.mkDerivation rec {
 
   passthru.tests.unit-php = nixosTests.unit-php;
 
-  meta = {
+  meta = with lib; {
     description = "Dynamic web and application server, designed to run applications in multiple languages";
     mainProgram = "unitd";
     homepage    = "https://unit.nginx.org/";

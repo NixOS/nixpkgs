@@ -38,12 +38,11 @@
 , headless ? stdenv.targetPlatform.isGhcjs
 , enableJavaFX ? false
 , openjfx
-, enableGnome2 ? true
+, enableGtk ? true
 , gtk3
-, gnome_vfs
 , glib
-, GConf
 , writeShellScript
+, versionCheckHook
 }:
 
 let
@@ -101,10 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     fontconfig
     openjdk-bootstrap
-  ] ++ lib.optionals (!headless && enableGnome2) [
+  ] ++ lib.optionals (!headless && enableGtk) [
     gtk3
-    gnome_vfs
-    GConf
     glib
   ];
 
@@ -131,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
       hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
     })
-  ] ++ lib.optionals (!headless && enableGnome2) [
+  ] ++ lib.optionals (!headless && enableGtk) [
     ./swing-use-gtk-jdk13.patch
   ];
 
@@ -160,6 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lcms=system"
     "--with-stdc++lib=dynamic"
   ]
+  ++ lib.optionals stdenv.cc.isClang [
+    "--with-toolchain-type=clang"
+    # Explicitly tell Clang to compile C++ files as C++, see
+    # https://github.com/NixOS/nixpkgs/issues/150655#issuecomment-1935304859
+    "--with-extra-cxxflags=-xc++"
+  ]
   ++ lib.optional headless "--enable-headless-only"
   ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
@@ -173,11 +176,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-lXinerama"
     "-lXrandr"
     "-lmagic"
-  ] ++ lib.optionals (!headless && enableGnome2) [
+  ] ++ lib.optionals (!headless && enableGtk) [
     "-lgtk-3"
     "-lgio-2.0"
-    "-lgnomevfs-2"
-    "-lgconf-2"
   ]);
 
   # -j flag is explicitly rejected by the build system:
@@ -253,6 +254,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   pos = __curPos;
   meta = import ./meta.nix lib featureVersion;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/java";
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript =

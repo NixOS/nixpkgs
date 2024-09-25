@@ -1,56 +1,112 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curlWithGnuTls, alsa-lib
-, libXfixes, atk, gtk3, libXrender, pango, adwaita-icon-theme, cairo, freetype, fontconfig
-, libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, makeDesktopItem, openssl, wrapGAppsHook3, makeShellWrapper, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon, git
-, libGL, zlib, cacert
+{
+  lib,
+  stdenv,
+  libXcomposite,
+  libgnome-keyring,
+  makeWrapper,
+  udev,
+  curlWithGnuTls,
+  alsa-lib,
+  libXfixes,
+  atk,
+  gtk3,
+  libXrender,
+  pango,
+  adwaita-icon-theme,
+  cairo,
+  freetype,
+  fontconfig,
+  libX11,
+  libXi,
+  libxcb,
+  libXext,
+  libXcursor,
+  glib,
+  libXScrnSaver,
+  libxkbfile,
+  libXtst,
+  nss,
+  nspr,
+  cups,
+  fetchzip,
+  expat,
+  gdk-pixbuf,
+  libXdamage,
+  libXrandr,
+  dbus,
+  makeDesktopItem,
+  openssl,
+  wrapGAppsHook3,
+  makeShellWrapper,
+  at-spi2-atk,
+  at-spi2-core,
+  libuuid,
+  e2fsprogs,
+  krb5,
+  libdrm,
+  mesa,
+  unzip,
+  copyDesktopItems,
+  libxshmfence,
+  libxkbcommon,
+  git,
+  libGL,
+  zlib,
+  cacert,
 }:
-
-with lib;
 
 let
   pname = "gitkraken";
-  version = "10.1.0";
+  version = "10.3.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-h10ovuzvZ/QwU8lugSdczUBcMEqe5BCJSUYHvHr9Jzo=";
+      hash = "sha256-5WICLLuv+NL++fgm7p/ScyEvzwVqcXNI6eXGr4e9k20=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-4pTBxgERiMuvQnPv4grIjs9my779G1qv2kgv43OspNY=";
+      hash = "sha256-zkQQR90pdYGIZf3OmAdKc1SlotgdSRGJaYsA1n74aZk=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-iME0813ypZVM1F4TCR68iHrzd+yCKJxYfPPoMiQt6Mo=";
+      hash = "sha256-WYBXupyunpAaoHmA4dHfd/oruP20rYsIq5mO4/dDsoM=";
     };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gitkraken.com/git-client";
     description = "Simplifying Git for any OS";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ xnwdd evanjs arkivm nicolas-goudry ];
+    maintainers = with maintainers; [
+      xnwdd
+      evanjs
+      arkivm
+      nicolas-goudry
+    ];
     mainProgram = "gitkraken";
   };
 
   linux = stdenv.mkDerivation rec {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     dontBuild = true;
     dontConfigure = true;
 
-    libPath = makeLibraryPath [
+    libPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       curlWithGnuTls
       udev
@@ -96,18 +152,26 @@ let
       zlib
     ];
 
-    desktopItems = [ (makeDesktopItem {
-      name = "GitKraken Desktop";
-      exec = "gitkraken";
-      icon = "gitkraken";
-      desktopName = "GitKraken Desktop";
-      genericName = "Git Client";
-      categories = [ "Development" ];
-      comment = "Unleash your repo";
-    }) ];
+    desktopItems = [
+      (makeDesktopItem {
+        name = "GitKraken Desktop";
+        exec = "gitkraken";
+        icon = "gitkraken";
+        desktopName = "GitKraken Desktop";
+        genericName = "Git Client";
+        categories = [ "Development" ];
+        comment = "Unleash your repo";
+      })
+    ];
 
-    nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) ];
-    buildInputs = [ gtk3 adwaita-icon-theme ];
+    nativeBuildInputs = [
+      copyDesktopItems
+      (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; })
+    ];
+    buildInputs = [
+      gtk3
+      adwaita-icon-theme
+    ];
 
     # avoid double-wrapping
     dontWrapGApps = true;
@@ -159,9 +223,17 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
-    nativeBuildInputs = [ unzip makeWrapper ];
+    nativeBuildInputs = [
+      unzip
+      makeWrapper
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -177,6 +249,4 @@ let
     dontFixup = true;
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

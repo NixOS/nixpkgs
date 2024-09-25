@@ -1,28 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "libndp";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchurl {
     url = "http://libndp.org/files/libndp-${version}.tar.gz";
-    sha256 = "sha256-iP+2buLrUn8Ub1wC9cy8OLqX0rDVfrRr+6SIghqwwCs=";
+    hash = "sha256-qKshTgHcOpthUnaQU5VjfzkSmMhNd2UfDL8LEILdLdQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/jpirko/libndp/issues/26
-      name = "CVE-2024-5564.patch";
-      url = "https://github.com/jpirko/libndp/commit/05e4ba7b0d126eea4c04387dcf40596059ee24af.patch";
-      hash = "sha256-O7AHjCqic7iUfMbKYLGgBAU+wdR9/MDWxBWJw+CFn/c=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
   ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/jpirko/libndp.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "http://libndp.org/";

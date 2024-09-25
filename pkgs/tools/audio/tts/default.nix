@@ -7,6 +7,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       torch = super.torch-bin;
       torchvision = super.torchvision-bin;

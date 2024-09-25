@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, libuuid, gnutls, makeWrapper }:
+{ lib, stdenv, fetchurl, cmake, libuuid, gnutls, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "taskserver";
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libuuid gnutls ];
   nativeBuildInputs = [ cmake makeWrapper ];
+
+  passthru.tests = { inherit (nixosTests) taskserver; };
 
   meta = {
     description = "Server for synchronising Taskwarrior clients";

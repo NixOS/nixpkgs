@@ -4,13 +4,15 @@
 , exo
 , gdk-pixbuf
 , gtk3
+, libexif
 , libgudev
 , libnotify
 , libX11
 , libxfce4ui
 , libxfce4util
 , libxslt
-, pcre
+, pcre2
+, xfce4-panel
 , xfconf
 , gobject-introspection
 , makeWrapper
@@ -21,9 +23,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.18.10";
+  version = "4.18.11";
 
-  sha256 = "sha256-jne+jETPmM6VksdwJAxruji/GKH42iftWm74Ok9qX44=";
+  sha256 = "sha256-B417gkrU9EG4ZsEdeuH8P2v4FqYUiTwqgKcO4cSi4SI=";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -36,11 +38,13 @@ let unwrapped = mkXfceDerivation {
     gdk-pixbuf
     gtk3
     libX11
+    libexif # image properties page
     libgudev
     libnotify
     libxfce4ui
     libxfce4util
-    pcre
+    pcre2 # search & replace renamer
+    xfce4-panel # trash panel applet plugin
     xfconf
   ];
 
@@ -54,6 +58,13 @@ let unwrapped = mkXfceDerivation {
   # https://github.com/xfce-mirror/thunar/commit/1ec8ff89ec5a3314fcd6a57f1475654ddecc9875
   postPatch = ''
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # https://github.com/NixOS/nixpkgs/issues/329688
+      --prefix PATH : ${lib.makeBinPath [ exo ]}
+    )
   '';
 
   meta = with lib; {

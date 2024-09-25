@@ -13,7 +13,7 @@
 
   # for tests
   pytestCheckHook,
-  symbiyosys,
+  sby,
   yices,
   yosys,
 }:
@@ -21,14 +21,14 @@
 buildPythonPackage rec {
   pname = "amaranth";
   format = "pyproject";
-  version = "0.5.0";
+  version = "0.5.2";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+EV2NgYSuCbYTQKeBUN+/D0attfrJ3cso7U6RjLEIbg=";
+    hash = "sha256-pf9X1B60FgqTbSw7D80ERHp4GCvCe5lqrlS96xPXLNo=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    symbiyosys
+    sby
     yices
     yosys
   ];

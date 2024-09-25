@@ -656,6 +656,11 @@ in {
   };
 
   config = mkIf (fd_cfg.enable || sd_cfg.enable || dir_cfg.enable) {
+    systemd.slices.system-bacula = {
+      description = "Bacula Slice";
+      documentation = [ "man:bacula(8)" "https://www.bacula.org/" ];
+    };
+
     systemd.services.bacula-fd = mkIf fd_cfg.enable {
       after = [ "network.target" ];
       description = "Bacula File Daemon";
@@ -666,6 +671,7 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LogsDirectory = "bacula";
         StateDirectory = "bacula";
+        Slice = "system-bacula.slice";
       };
     };
 
@@ -679,6 +685,7 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LogsDirectory = "bacula";
         StateDirectory = "bacula";
+        Slice = "system-bacula.slice";
       };
     };
 
@@ -694,6 +701,7 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LogsDirectory = "bacula";
         StateDirectory = "bacula";
+        Slice = "system-bacula.slice";
       };
       preStart = ''
         if ! test -e "${libDir}/db-created"; then

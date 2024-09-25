@@ -861,7 +861,7 @@ let
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)
-        throw "The option `${showOption loc}' is used but not defined.";
+        throw "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
 
     isDefined = defsFinal != [];
 
@@ -1366,6 +1366,58 @@ let
       ]);
     };
 
+  /**
+    `importApply file arg :: Path -> a -> Module`,  where `import file :: a -> Module`
+
+    `importApply` imports a Nix expression file much like the module system would,
+    after passing an extra positional argument to the function in the file.
+
+    This function should be used when declaring a module in a file that refers to
+    values from a different scope, such as that in a flake.
+
+    It solves the problems of alternative solutions:
+
+    - While `importApply file arg` is _mostly_ equivalent to
+      `import file arg`, the latter returns a module without a location,
+      as `import` only returns the contained expression. This leads to worse
+      error messages.
+
+    - Using `specialArgs` to provide arguments to all modules. This effectively
+      creates an incomplete module, and requires the user of the module to
+      manually pass the `specialArgs` to the configuration, which is error-prone,
+      verbose, and unnecessary.
+
+    The nix file must contain a function that returns a module.
+    A module may itself be a function, so the file is often a function with two
+    positional arguments instead of one. See the example below.
+
+    This function does not add support for deduplication and `disabledModules`,
+    although that could be achieved by wrapping the returned module and setting
+    the `_key` module attribute.
+    The reason for this omission is that the file path is not guaranteed to be
+    a unique identifier for the module, as two instances of the module may
+    reference different `arg`s in their closures.
+
+    Example
+
+        # lib.nix
+        imports = [
+          (lib.modules.importApply ./module.nix { bar = bar; })
+        ];
+
+        # module.nix
+        { bar }:
+        { lib, config, ... }:
+        {
+          options = ...;
+          config = ... bar ...;
+        }
+
+  */
+  importApply =
+    modulePath: staticArg:
+      lib.setDefaultModuleLocation modulePath (import modulePath staticArg);
+
   /* Use this function to import a JSON file as NixOS configuration.
 
      modules.importJSON :: path -> attrs
@@ -1415,6 +1467,7 @@ private //
     filterOverrides'
     fixMergeModules
     fixupOptionType  # should be private?
+    importApply
     importJSON
     importTOML
     mergeDefinitions

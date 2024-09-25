@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, ruby
 , bundlerEnv
 , buildPackages
 , fetchFromGitHub

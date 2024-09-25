@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "moonlight-stream";
     repo = "moonlight-embedded";
     rev = "v${version}";
-    sha256 = "sha256-Jc706BjIT3rS9zwntNOdgszP4CHuX+qxvPvWeU68Amg=";
+    hash = "sha256-Jc706BjIT3rS9zwntNOdgszP4CHuX+qxvPvWeU68Amg=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Open source implementation of NVIDIA's GameStream";
     homepage = "https://github.com/moonlight-stream/moonlight-embedded";
     license = licenses.gpl3Plus;
-    maintainers = [];
+    maintainers = [ ];
     mainProgram = "moonlight";
     platforms = platforms.linux;
   };

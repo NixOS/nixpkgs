@@ -17,7 +17,6 @@
 , db
 , libedit
 , pam
-, krb5
 , libmicrohttpd
 , cjson
 
@@ -26,17 +25,17 @@
 , SystemConfiguration
 
 , curl
-, jdk
+, jdk_headless
 , unzip
 , which
 
 , nixosTests
 
 , withCJSON ? true
-, withCapNG ? stdenv.isLinux
+, withCapNG ? stdenv.hostPlatform.isLinux
 # libmicrohttpd should theoretically work for darwin as well, but something is broken.
 # It affects tests check-bx509d and check-httpkadmind.
-, withMicroHTTPD ? stdenv.isLinux
+, withMicroHTTPD ? stdenv.hostPlatform.isLinux
 , withOpenLDAP ? true
 , withOpenLDAPAsHDBModule ? false
 , withOpenSSL ? true
@@ -72,7 +71,7 @@ stdenv.mkDerivation {
   ++ (with perlPackages; [ JSON ]);
 
   buildInputs = [ db libedit pam ]
-    ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ CoreFoundation Security SystemConfiguration ]
     ++ lib.optionals (withCJSON) [ cjson ]
     ++ lib.optionals (withCapNG) [ libcap_ng ]
     ++ lib.optionals (withMicroHTTPD) [ libmicrohttpd ]
@@ -83,7 +82,7 @@ stdenv.mkDerivation {
   doCheck = true;
   nativeCheckInputs = [
     curl
-    jdk
+    jdk_headless
     unzip
     which
   ];
@@ -133,7 +132,7 @@ stdenv.mkDerivation {
 
   # (test_cc) heimdal uses librokens implementation of `secure_getenv` on darwin,
   #           which expects either USER or LOGNAME to be set.
-  preCheck = lib.optionalString (stdenv.isDarwin) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     export USER=nix-builder
   '';
 

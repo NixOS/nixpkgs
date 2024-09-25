@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/Mnoljgp87ML6+3vV1vZTFO0TSY5hr8E8U1fXJq31pE=";
+    hash = "sha256-XK0bH5ru248tSlD3Sdxb07O6i335dfTFvxDzKdc/3GQ=";
   };
 
-  cargoHash = "sha256-xq21cncEYNSwDiKvVSM1J2Jz3TqOkYMK3gckKpM5+6E=";
+  cargoHash = "sha256-DzKxVqE0GMmpkxLH3raASgha9qGGs4kaUdSaviUwvdM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     dbus
     openssl
     samba
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Foundation
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework" "AppKit"
   ]);
 

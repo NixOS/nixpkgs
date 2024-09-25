@@ -2,10 +2,8 @@
 , writeText
 , nodePackages
 , python3
-, python3Packages
 , callPackage
 , neovimUtils
-, vimUtils
 , perl
 , lndir
 }:
@@ -107,7 +105,7 @@ let
       luaRcContent = rcContent;
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
-      postBuild = lib.optionalString stdenv.isLinux ''
+      postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
         rm $out/share/applications/nvim.desktop
         substitute ${neovim-unwrapped}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace-warn 'Name=Neovim' 'Name=Neovim wrapper'
@@ -201,11 +199,20 @@ let
       };
     };
 
-    meta = neovim-unwrapped.meta // {
+    meta = {
+      inherit (neovim-unwrapped.meta)
+        description
+        longDescription
+        homepage
+        mainProgram
+        license
+        maintainers
+        platforms;
+
       # To prevent builds on hydra
       hydraPlatforms = [];
       # prefer wrapper over the package
-      priority = (neovim-unwrapped.meta.priority or 0) - 1;
+      priority = (neovim-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
     };
   });
 in

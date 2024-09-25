@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -14,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.15.2";
+  version = "1.15.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FvKis02e4MK1eMlgoYCMl04oIs959um5xFWqzhCILUU=";
+    hash = "sha256-n5uZBOfDl3WTdKiPTFd4H7qypFjex430s+5ics2fsBA=";
   };
 
   postPatch = ''
@@ -33,11 +32,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/smarie/python-makefun/issues/102
-    "test_args_order_and_kind"
-  ];
 
   pythonImportsCheck = [ "makefun" ];
 

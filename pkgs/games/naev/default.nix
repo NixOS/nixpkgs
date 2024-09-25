@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "naev";
     repo = "naev";
     rev = "v${version}";
-    sha256 = "sha256-vdPkACgLGSTb9E/HZR5KoXn/fro0iHV7hX9kJim1j/M=";
+    hash = "sha256-vdPkACgLGSTb9E/HZR5KoXn/fro0iHV7hX9kJim1j/M=";
     fetchSubmodules = true;
   };
 

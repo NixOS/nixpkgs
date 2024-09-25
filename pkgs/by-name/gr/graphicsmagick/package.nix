@@ -14,6 +14,7 @@
 , libtool
 , libwebp
 , libxml2
+, libheifSupport ? true, libheif
 , nukeReferences
 , pkg-config
 , quantumdepth ? 8
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxml2
     zlib
-  ];
+  ] ++ lib.optionals libheifSupport [ libheif ];
 
   nativeBuildInputs = [
     nukeReferences

@@ -3,42 +3,38 @@
   buildPythonPackage,
   docopt,
   fetchPypi,
-  nose,
   pytz,
-  pythonOlder,
+  setuptools,
   setuptools-scm,
   six,
   sqlalchemy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygtfs";
   version = "0.1.9";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-J5vu51OOMabWd8h60PpvvBiCnwQlhEnBywNXxy9hOuA=";
   };
 
-  postPatch = ''
-    # https://github.com/jarondl/pygtfs/pull/72
-    substituteInPlace setup.py \
-      --replace "pytz>=2012d" "pytz"
-  '';
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     docopt
     pytz
     six
     sqlalchemy
   ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "pygtfs/test/test.py" ];
 
   pythonImportsCheck = [ "pygtfs" ];
 

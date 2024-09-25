@@ -63,14 +63,14 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "2.9.0";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    rev = version;
-    hash = "sha256-0nk5ljHm1bv/Ay0tqR3zrAfw4RKgOVq8a4hJ82w73xo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VrrzM81O3tG2GveP8Eq9kxVPSok7JIj3XjGOauGIlxY=";
   };
 
   postPatch = ''
@@ -187,6 +187,9 @@ buildPythonPackage rec {
     # assert count_item_types["sessions"] == 1
     # assert 0 == 1
     "test_auto_session_tracking_with_aggregates"
+    # timing sensitive
+    "test_profile_captured"
+    "test_continuous_profiler_manual_start_and_stop"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];

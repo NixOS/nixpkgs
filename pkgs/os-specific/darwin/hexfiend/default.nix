@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, undmg }:
+{ stdenv, lib, fetchurl, undmg, nix-update-script }:
 
 let
   urlSuffix = version: if lib.versions.patch == 0 then
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/Applications/Hex Fiend.app"
     cp -R . "$out/Applications/Hex Fiend.app"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Open-source macOS hex editor";

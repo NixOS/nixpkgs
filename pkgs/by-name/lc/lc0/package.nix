@@ -12,20 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "lc0";
-  version = "0.31.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "LeelaChessZero";
     repo = "lc0";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kHLO6xM1q/CQIBcGIFXVkvtGEx75sqA7atGYfvnJcso=";
+    hash = "sha256-VbWNc41CgsS0I64QHNp+k9cM/IEai9b3SyHorfmwvsE=";
     fetchSubmodules = true;
   };
 
   patchPhase = ''
     runHook prePatch
 
-    patchShebangs --build /build/source/scripts/*
+    patchShebangs --build scripts/*
 
     runHook postPatch
   '';

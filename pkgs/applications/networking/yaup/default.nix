@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     # ld: unknown option: --export-dynamic
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "yaup";
   };
 }

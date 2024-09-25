@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, async, async_ssl ? null, ppx_sexp_conv, ppx_here, uri, conduit
+{ buildDunePackage, async, async_ssl ? null, ppx_sexp_conv, ppx_here, uri, conduit
 , core, ipaddr, ipaddr-sexp, sexplib
 }:
 

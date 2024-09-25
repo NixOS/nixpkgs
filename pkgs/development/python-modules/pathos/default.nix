@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://pathos.readthedocs.io/";
     changelog = "https://github.com/uqfoundation/pathos/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

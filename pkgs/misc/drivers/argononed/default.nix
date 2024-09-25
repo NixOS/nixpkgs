@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "DarkElvenAngel";
     repo = pname;
     rev = "97c4fa07fc2c09ffc3bd86e0f6319d50fa639578";
-    sha256 = "sha256-5/xUYbprRiwD+FN8V2cUpHxnTbBkEsFG2wfsEXrCrgQ=";
+    hash = "sha256-5/xUYbprRiwD+FN8V2cUpHxnTbBkEsFG2wfsEXrCrgQ=";
   };
 
   patches = [ ./fix-hardcoded-reboot-poweroff-paths.patch ];

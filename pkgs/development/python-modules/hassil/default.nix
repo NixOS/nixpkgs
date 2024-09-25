@@ -17,7 +17,7 @@
 
 let
   pname = "hassil";
-  version = "1.7.1";
+  version = "1.7.4";
 in
 buildPythonPackage {
   inherit pname version;
@@ -29,7 +29,7 @@ buildPythonPackage {
     owner = "home-assistant";
     repo = "hassil";
     rev = "refs/tags/${version}";
-    hash = "sha256-yrjzsJzyUFqTauEcNEOCQx2YxomkNS4J0JfQEQQ5m3E=";
+    hash = "sha256-FRP5iVE2KBiHVriWhnYxWFff0y4q2/gC9iO8ZzN3AbI=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    changelog = "https://github.com/home-assistant/hassil/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant/hassil/blob/${version}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
     mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";

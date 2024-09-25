@@ -2,13 +2,12 @@
 , stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , Foundation
-, abseil-cpp
+, abseil-cpp_202401
 , cmake
 , cpuinfo
 , eigen
-, flatbuffers
+, flatbuffers_23
 , gbenchmark
 , glibcLocales
 , gtest
@@ -30,6 +29,8 @@
 
 let
   version = "1.18.1";
+
+  abseil-cpp = abseil-cpp_202401;
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
@@ -148,7 +149,7 @@ effectiveStdenv.mkDerivation rec {
     numpy
     pybind11
     packaging
-  ]) ++ lib.optionals effectiveStdenv.isDarwin [
+  ]) ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     Foundation
     libiconv
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
@@ -159,6 +160,7 @@ effectiveStdenv.mkDerivation rec {
     libcufft # cufft.h
     cudnn # cudnn.h
     cuda_cudart
+    nccl
   ]);
 
   nativeCheckInputs = [
@@ -183,7 +185,7 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
     "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
-    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers_23.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"

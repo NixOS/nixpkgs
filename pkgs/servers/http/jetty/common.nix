@@ -1,6 +1,6 @@
 { version, hash }:
 
-{ lib, stdenvNoCC, fetchurl }:
+{ lib, stdenvNoCC, fetchurl, gitUpdater }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "jetty";
@@ -19,9 +19,17 @@ stdenvNoCC.mkDerivation rec {
     mv etc lib modules start.jar $out
   '';
 
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/jetty/jetty.project.git";
+    allowedVersions = "^${lib.versions.major version}\\.";
+    ignoredVersions = "(alpha|beta).*";
+    rev-prefix = "jetty-";
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/jetty/jetty.project/releases/tag/jetty-${version}";
     description = "Web server and javax.servlet container";
-    homepage = "https://eclipse.dev/jetty/";
+    homepage = "https://jetty.org/";
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = with licenses; [ asl20 epl10 ];

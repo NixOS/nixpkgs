@@ -30,6 +30,6 @@ buildPythonPackage rec {
     mainProgram = "gattctl";
     homepage = "https://github.com/getsenic/gatt-python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

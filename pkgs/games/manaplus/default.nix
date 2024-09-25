@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Free OpenSource 2D MMORPG client";
     homepage = "https://manaplus.org/";
     license = lib.licenses.gpl2Plus;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

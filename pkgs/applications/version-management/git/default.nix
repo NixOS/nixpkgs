@@ -3,11 +3,11 @@
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, libiconv
+, libxslt, tcl, tk, makeWrapper, libiconv, libiconvReal
 , svnSupport ? false, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , nlsSupport ? true
-, osxkeychainSupport ? stdenv.isDarwin
+, osxkeychainSupport ? stdenv.hostPlatform.isDarwin
 , guiSupport ? false
 , withManual ? true
 , pythonSupport ? true
@@ -20,16 +20,16 @@
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
 , sysctl
-, doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
+, doInstallCheck ? !stdenv.hostPlatform.isDarwin  # extremely slow on darwin
 , tests
 }:
 
-assert osxkeychainSupport -> stdenv.isDarwin;
+assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.45.2";
+  version = "2.46.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-Ub/ofrHAL+0UhAUYdTZe6rIpgx0w0M7F2JoU+eQOmts=";
+    hash = "sha256-fxI0YqKLfKPr4mB0hfcWhVTCsQ38FVx+xGMAZmrCf5U=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./installCheck-path.patch
   ] ++ lib.optionals withSsh [
     ./ssh-path.patch
-  ] ++ lib.optionals (guiSupport && stdenv.isDarwin) [
+  ] ++ lib.optionals (guiSupport && stdenv.hostPlatform.isDarwin) [
     # Needed to workaround an issue in macOS where gitk shows a empty window
     # https://github.com/Homebrew/homebrew-core/issues/68798
     # https://github.com/git/git/pull/944
@@ -87,16 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gettext perlPackages.perl makeWrapper pkg-config ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
-  buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
+  buildInputs = [ curl openssl zlib expat cpio (if stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv) bash ]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ]
     ++ lib.optionals withLibsecret [ glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
-              + lib.optionalString (stdenv.isFreeBSD) "-lthr";
+              + lib.optionalString (stdenv.hostPlatform.isFreeBSD) "-lthr";
 
   configureFlags = [
     "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"
@@ -118,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
   ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python3}/bin/python"] else ["NO_PYTHON=1"])
-  ++ lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
-  ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
+  ++ lib.optionals stdenv.hostPlatform.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
+  ++ (if stdenv.hostPlatform.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
   ++ lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
   ++ lib.optional withpcre2 "USE_LIBPCRE2=1"
   ++ lib.optional (!nlsSupport) "NO_GETTEXT=1"
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   # acceptable version.
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
-  ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent"
+  ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent"
   ++ lib.optional (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform) "uname_S=FreeBSD";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -302,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PERL_PATH=${buildPackages.perl}/bin/perl"
   ];
 
-  nativeInstallCheckInputs = lib.optional stdenv.isDarwin sysctl;
+  nativeInstallCheckInputs = lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) sysctl;
 
   preInstallCheck = ''
     installCheckFlagsArray+=(
@@ -325,8 +325,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace t/test-lib.sh \
       --replace "test_set_prereq POSIXPERM" ""
     # TODO: Investigate while these still fail (without POSIXPERM):
+    # Tested to fail: 2.46.0
     disable_test t0001-init 'shared overrides system'
+    # Tested to fail: 2.46.0
     disable_test t0001-init 'init honors global core.sharedRepository'
+    # Tested to fail: 2.46.0
     disable_test t1301-shared-repo
     # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
     disable_test t9902-completion
@@ -337,25 +340,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable sendmail tests
     disable_test t9001-send-email
   '' + ''
-    # XXX: I failed to understand why this one fails.
-    # Could someone try to re-enable it on the next release ?
-    # Tested to fail: 2.18.0 and 2.19.0
-    disable_test t1700-split-index "null sha1"
-
     # Flaky tests:
-    disable_test t5319-multi-pack-index
     disable_test t6421-merge-partial-clone
 
     # Fails reproducibly on ZFS on Linux with formD normalization
     disable_test t0021-conversion
     disable_test t3910-mac-os-precompose
-
-  '' + lib.optionalString (!perlSupport) ''
-    # request-pull is a Bash script that invokes Perl, so it is not available
-    # when NO_PERL=1, and the test should be skipped, but the test suite does
-    # not check for the Perl prerequisite.
-    disable_test t5150-request-pull
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.
     disable_test t7816-grep-binary-pattern
@@ -364,7 +355,7 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t6300-for-each-ref
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     disable_test t7527-builtin-fsmonitor
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)

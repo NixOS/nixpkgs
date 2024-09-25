@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Multitran: simple command line utilities for dictionary maintenance";
     mainProgram = "mtquery";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

@@ -21,6 +21,10 @@ in
 
     # Completely removed modules
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
+    (mkRemovedOptionModule [ "environment" "noXlibs" ] ''
+      The environment.noXlibs option was removed, as it often caused surprising breakages for new users.
+      If you need its functionality, you can apply similar overlays in your own config.
+    '')
     (mkRemovedOptionModule [ "fonts" "fontconfig" "penultimate" ] "The corresponding package has removed from nixpkgs.")
     (mkRemovedOptionModule [ "hardware" "brightnessctl" ] ''
       The brightnessctl module was removed because newer versions of
@@ -51,6 +55,8 @@ in
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.
     '')
+    (mkRemovedOptionModule [ "services" "antennas" ] "The antennas package and the corresponding module have been removed as they only work with tvheadend, which nobody was willing to maintain and was stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version.")
+    (mkRemovedOptionModule [ "services" "ankisyncd" ] "`services.ankisyncd` has been replaced by `services.anki-sync-server`.")
     (mkRemovedOptionModule [ "services" "baget" "enable" ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
@@ -59,6 +65,12 @@ in
     (mkRemovedOptionModule [ "services" "couchpotato" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "dd-agent" ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+    (mkRemovedOptionModule [ "services" "dnscrypt-wrapper" ] ''
+      The dnscrypt-wrapper module was removed since the project has been effectively unmaintained since 2018;
+      moreover the NixOS module had to rely on an abandoned version of dnscrypt-proxy v1 for the rotation of keys.
+
+      To wrap a resolver with DNSCrypt you can instead use dnsdist. See options `services.dnsdist.dnscrypt.*`
+    '')
     (mkRemovedOptionModule [ "services" "exhibitor" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
@@ -66,9 +78,12 @@ in
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule [ "services" "globalprotect"] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "homeassistant-satellite"] "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`.")
+    (mkRemovedOptionModule [ "services" "hydron" ] "The `services.hydron` module has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability.")
     (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "lshd" ] "The corresponding package was removed from nixpkgs as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decades.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
@@ -85,12 +100,14 @@ in
     '')
     (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "railcar" ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "replay-sorcery" ] "the corresponding package has been removed from nixpkgs as it is unmaintained upstream. Consider using `gpu-screen-recorder` or `obs-studio` instead.")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
     '')
+    (mkRemovedOptionModule [ "services" "tvheadend" ] "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version.")
     (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "wakeonlan"] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
     (mkRemovedOptionModule [ "services" "winstone" ] "The corresponding package was removed from nixpkgs.")
@@ -106,6 +123,7 @@ in
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xmr-stak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
     (mkRemovedOptionModule [ "services" "racoon" ] ''
       The racoon module has been removed, because the software project was abandoned upstream.
@@ -115,7 +133,6 @@ in
     (mkRemovedOptionModule [ "services" "virtuoso" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "openfire" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
-    (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
     (mkRemovedOptionModule [ "services" "prayer" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "restya-board" ] "The corresponding package was removed from nixpkgs.")

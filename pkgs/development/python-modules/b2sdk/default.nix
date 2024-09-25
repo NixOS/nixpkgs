@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     tqdm
-  ] ++ lib.optionals stdenv.isLinux [ glibcLocales ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

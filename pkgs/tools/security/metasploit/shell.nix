@@ -1,9 +1,11 @@
 # Env to update Gemfile.lock / gemset.nix
-with import <nixpkgs> {};
-stdenv.mkDerivation {
+{
+  pkgs ? import ../../../.. { },
+}:
+pkgs.stdenv.mkDerivation {
   name = "env";
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
+  nativeBuildInputs = [ pkgs.pkg-config ];
+  buildInputs = with pkgs; [
     bundix
     git
     libiconv

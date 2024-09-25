@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
     rev = version;
-    sha256 = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
+    hash = "sha256-sKDDOPpCagk7rBRlMlZhx+RYYbtoLzJsrnL8qKZMKW8=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config python3 wrapGAppsHook3 ];
-  buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ SDL2 fontconfig gtk3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapGApps = true;
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/Applications"
       mv "$out/openboardview.app" "$out/Applications/OpenBoardView.app"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       wrapGApp "$out/bin/${pname}" \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 ]}
   '';

@@ -74,12 +74,12 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
     ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  preCheck = lib.optionalString stdenv.isLinux ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     ${redis-server}/bin/redis-server &
     REDIS_PID=$!
   '';
 
-  postCheck = lib.optionalString stdenv.isLinux ''
+  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     kill $REDIS_PID
   '';
 
@@ -91,13 +91,14 @@ buildPythonPackage rec {
   disabledTests = [
     # tests that require network access (like DNS lookups)
     "test_truesendall_with_dump_from_recording"
+    "test_aiohttp"
     "test_asyncio_record_replay"
     "test_gethostbyname"
     # httpx read failure
     "test_no_dangling_fds"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/main/test_redis.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/main/test_redis.py" ];
 
   pythonImportsCheck = [ "mocket" ];
 
@@ -106,6 +107,6 @@ buildPythonPackage rec {
     description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

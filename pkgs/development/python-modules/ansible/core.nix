@@ -30,11 +30,12 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.16.5";
+  version = "2.17.4";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zdKbDsPyDDVlc1Wi9qnB0M8RMdqZzJpKNAGAGwqzbW0=";
+    pname = "ansible_core";
+    inherit version;
+    hash = "sha256-RKHzAHZ5ZTa6JFXK0Y025ihw8E5jLjyi6+lw176s8k0=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -95,6 +96,6 @@ buildPythonPackage rec {
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

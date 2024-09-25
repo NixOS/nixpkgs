@@ -1,47 +1,48 @@
 {
   lib,
   buildPythonPackage,
-  dask,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+  xarray,
+
+  # optional-dependencies
   matplotlib,
   pint,
   pooch,
-  pytestCheckHook,
-  pythonOlder,
   regex,
   rich,
-  scipy,
-  setuptools,
-  setuptools-scm,
   shapely,
-  wheel,
-  xarray,
+
+  # checks
+  dask,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.9.3";
+  version = "0.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7eL8z2r1+X80QqiL/5XzfA+Jlx+WuKvuxIWG4YLCwfg=";
+    hash = "sha256-Rz0E7GBaN/7zb0dqAxo0SJ4Bd+eQuOOv6x1WubIUh6A=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-    wheel
     xarray
   ];
 
   dependencies = [ xarray ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       matplotlib
       pint
@@ -56,7 +57,7 @@ buildPythonPackage rec {
     dask
     pytestCheckHook
     scipy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cf_xarray" ];
 

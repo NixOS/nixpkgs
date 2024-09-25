@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, parallelSupport ? (!stdenv.isDarwin)
+, parallelSupport ? (!stdenv.hostPlatform.isDarwin)
 }:
 
 let
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of the C++ standard template library STL for external memory (out-of-core) computations";
     homepage = "https://github.com/stxxl/stxxl";
     license = licenses.boost;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "stxxl_tool";
     platforms = platforms.all;
   };

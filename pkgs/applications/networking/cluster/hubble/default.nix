@@ -1,14 +1,14 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "hubble";
-  version = "0.13.5";
+  version = "0.13.6";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0NApMqLjeYOMxEI8tY2zLxccuSD5nHUGNsya+26ghDY=";
+    sha256 = "sha256-evtXuVcaKKuAW+04S+IADKf+wJ1MrnGpHLNUbxWd9ZM=";
   };
 
   vendorHash = null;

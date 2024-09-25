@@ -23,7 +23,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # can't find hostname in our darwin build environment
     "test_fqdn"
   ];

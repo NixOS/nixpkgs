@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ zlib ] ++ lib.optional stdenv.isLinux util-linux;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkTarget = "tests";
   installPhase = ''
     runHook preInstall
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zlib.net/pigz/";
     description = "Parallel implementation of gzip for multi-core machines";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.zlib;
     platforms = platforms.unix;
   };

@@ -18,9 +18,9 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # Tests require a network
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  cargoSha256 = "sha256-RECEeo0uoGO5bBe+r++zpTjYYX3BIkT58uht2MLYkN0=";
+  cargoHash = "sha256-RECEeo0uoGO5bBe+r++zpTjYYX3BIkT58uht2MLYkN0=";
 
   cargoBuildFlags = [
     "--bin" "bindle"
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Bindle: Aggregate Object Storage";
     homepage = "https://github.com/deislabs/bindle";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

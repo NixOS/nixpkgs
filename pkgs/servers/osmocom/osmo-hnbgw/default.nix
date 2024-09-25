@@ -13,7 +13,7 @@
 }:
 
 let
-  inherit (stdenv) isLinux;
+  inherit (stdenv.hostPlatform) isLinux;
 in
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-hnbgw";
     homepage = "https://osmocom.org/projects/osmohnbgw";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

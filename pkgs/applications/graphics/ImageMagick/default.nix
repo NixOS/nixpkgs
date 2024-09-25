@@ -30,11 +30,9 @@
 , ApplicationServices
 , Foundation
 , testers
-, imagemagick
 , nixos-icons
 , perlPackages
 , python3
-, fetchpatch
 }:
 
 assert libXtSupport -> libX11Support;
@@ -51,13 +49,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-34";
+  version = "7.1.1-38";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-rECU/dp8HQKFs1PW6QeTZIMxCIzzh1w7CckapnxdzxU=";
+    hash = "sha256-dyk9kCH1w76Jhy/yBhVFLthTKYaMgXLBn7QGWAFS0XU=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -103,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
     ]
     ++ lib.optional openjpegSupport openjpeg
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ApplicationServices
       Foundation
     ];
@@ -135,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
     inherit nixos-icons;
     inherit (perlPackages) ImageMagick;
-    inherit (python3.pkgs) img2pdf;
+    inherit (python3.pkgs) img2pdf willow;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       version = lib.head (lib.splitString "-" finalAttrs.version);

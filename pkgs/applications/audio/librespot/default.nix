@@ -5,7 +5,7 @@
 , pkg-config
 , stdenv
 , openssl
-, withALSA ? stdenv.isLinux
+, withALSA ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , alsa-plugins
 , withPortAudio ? false
@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-DtF6asSlLdC2m/0JTBo4YUx9HgsojpfiqVdqaIwniKA=";
   };
 
-  cargoSha256 = "sha256-tbDlWP0sUIa0W9HhdYNOvo9cGeqFemclhA7quh7f/Rw=";
+  cargoHash = "sha256-tbDlWP0sUIa0W9HhdYNOvo9cGeqFemclhA7quh7f/Rw=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
   ];
 

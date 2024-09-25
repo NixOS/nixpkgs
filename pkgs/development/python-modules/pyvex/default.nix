@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.110";
+  version = "9.2.118";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-odUalRvkRkS6rqh+x/qjCor629nIQNZnXiHJ4wYxDFU=";
+    hash = "sha256-LRJSecKAQAg5Axfi8h//cc3xozOiPUkZD49VJIE6shE=";
   };
 
   build-system = [ setuptools ];
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     pycparser
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
       --replace-fail '/usr/bin/ar' 'ar'
   '';
 
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "--plat-name"
     "linux"
   ];

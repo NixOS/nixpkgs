@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "nest-cli";
-  version = "10.4.0";
+  version = "10.4.5";
 
   src = fetchFromGitHub {
     owner = "nestjs";
     repo = pname;
     rev = version;
-    hash = "sha256-0zml5gaDL7szlDob7xQOxWcSr1gwp05nhBZHlR2kM70=";
+    hash = "sha256-F/Oi7ra+UE4YKXHZalH5qFk4coaGfHRpWaxamYunRuw=";
   };
 
-  npmDepsHash = "sha256-9Eze3z2eBpE8CtKkqMXrWPyLnpSZEVZN6UmdHhOkO28=";
+  npmDepsHash = "sha256-6yh8TKfq3fuq4QcnA4uM49/G0Kp1sccRyTcV5s9dVck=";
 
   env = {
     npm_config_build_from_source = true;
@@ -27,7 +27,7 @@ buildNpmPackage rec {
     python3
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 

@@ -1,12 +1,10 @@
 { lib
-, writeText
 , fetchurl
 , stdenvNoCC
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , unzip
-, bash
 , electron
 , commandLineArgs ? ""
 }:
@@ -18,10 +16,10 @@ stdenvNoCC.mkDerivation (finalAttrs: let
   };
 in {
   pname = "affine";
-  version = "0.15.2";
+  version = "0.16.0";
   src = fetchurl {
     url = "https://github.com/toeverything/AFFiNE/releases/download/v${finalAttrs.version}/affine-${finalAttrs.version}-stable-linux-x64.zip";
-    hash = "sha256-Nu5s/0sP4exRtfjd058tD5jzDezPHnHjm5CJxOLJvVE=";
+    hash = "sha256-6F6BzEnseqdzkEUVgUa9eu7MkyNsvucK9lGL+dsKhwc=";
   };
   nativeBuildInputs = [
     copyDesktopItems
@@ -31,7 +29,8 @@ in {
   postInstall = ''
     mkdir -p $out/lib
     cp -r ./resources/* -t $out/lib/
-    cp LICENSE* $out/
+    mkdir -p $out/share/doc/affine/
+    cp LICENSE* $out/share/doc/affine/
     install -Dm644 ${icon} $out/share/pixmaps/affine.png
     makeWrapper "${electron}/bin/electron" $out/bin/affine \
       --inherit-argv0 \
@@ -61,7 +60,7 @@ in {
     homepage = "https://affine.pro/";
     downloadPage = "https://affine.pro/download";
     license = licenses.mit;
-    maintainers = with maintainers; [richar];
+    maintainers = with maintainers; [richar redyf];
     mainProgram = "affine";
     platforms = ["x86_64-linux"];
   };

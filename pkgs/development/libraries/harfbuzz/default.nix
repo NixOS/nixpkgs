@@ -33,16 +33,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "8.4.0";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-r06nPiWrdIyMBjt4wviOSIM9ubKsNp4pvRFXAueJdV4=";
+    hash = "sha256-pBsnLO65IMVyY+yFFgRULZ7IXuMDBQbZRmIGfHtquJ4=";
   };
 
   postPatch = ''
     patchShebangs src/*.py test
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
       --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString withIcu ''
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
       ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
     ''}
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
     changelog = "https://github.com/harfbuzz/harfbuzz/raw/${finalAttrs.version}/NEWS";
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [

@@ -1,7 +1,7 @@
 {
   lib,
   SDL2,
-  addOpenGLRunpath,
+  addDriverRunpath,
   boost,
   cmake,
   cubeb,
@@ -29,6 +29,7 @@
   vulkan-headers,
   vulkan-loader,
   wayland,
+  wayland-scanner,
   wrapGAppsHook3,
   wxGTK32,
   zarchive,
@@ -43,18 +44,18 @@ let
       owner = "ocornut";
       repo = "imgui";
       rev = "v${version}";
-      sha256 = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+      hash = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
     };
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.0-88";
+  version = "2.0-92";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZXJrxfTgwDmHUk3UqA4H4MSEvNNq9lXHXxf9rgWqkro=";
+    hash = "sha256-bjt+2RzmG8iKcdyka4HsHM5NEzCwGah4s9eiywSHXbw=";
   };
 
   patches = [
@@ -66,13 +67,14 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     SDL2
-    addOpenGLRunpath
+    addDriverRunpath
     wrapGAppsHook3
     cmake
-    glslang
     nasm
     ninja
     pkg-config
+    wxGTK32
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -82,6 +84,7 @@ in stdenv.mkDerivation (finalAttrs: {
     curl
     fmt_9
     glm
+    glslang
     gtk3
     hidapi
     imgui'

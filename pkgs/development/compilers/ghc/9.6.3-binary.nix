@@ -218,7 +218,7 @@ stdenv.mkDerivation rec {
         ])
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
@@ -235,7 +235,7 @@ stdenv.mkDerivation rec {
           -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib gmpUsed}/lib' -i {} \;
     ''
     # Similar for iconv and libffi on darwin
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       find . -name 'base*.conf' \
           -exec sed -e '/^[a-z-]*library-dirs/a \    ${lib.getLib libiconv}/lib' -i {} \;
 
@@ -252,7 +252,7 @@ stdenv.mkDerivation rec {
           -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
     '';
@@ -267,7 +267,7 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ ];
   configureFlags =
-    lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+    lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
@@ -282,6 +282,12 @@ stdenv.mkDerivation rec {
       isScript "$i" || continue
       sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
     done
+  '' + lib.optionalString stdenv.targetPlatform.isDarwin ''
+    # Work around building with binary GHC on Darwin due to GHC’s use of `ar -L` when it
+    # detects `llvm-ar` even though the resulting archives are not supported by ld64.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    sed -i -e 's/,("ar supports -L", "YES")/,("ar supports -L", "NO")/' "$out/lib/ghc-${version}/lib/settings"
   '';
 
   # Apparently necessary for the ghc Alpine (musl) bindist:
@@ -302,7 +308,7 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString (stdenv.isLinux && !(binDistUsed.isStatic or false))
+  postFixup = lib.optionalString (stdenv.hostPlatform.isLinux && !(binDistUsed.isStatic or false))
     (if stdenv.hostPlatform.isAarch64 then
       # Keep rpath as small as possible on aarch64 for patchelf#244.  All Elfs
       # are 2 directories deep from $out/lib, so pooling symlinks there makes
@@ -330,7 +336,7 @@ stdenv.mkDerivation rec {
           patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
         fi
       done
-    '') + lib.optionalString stdenv.isDarwin ''
+    '') + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isMachO $exe || continue
@@ -403,8 +409,5 @@ stdenv.mkDerivation rec {
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
     maintainers = lib.teams.haskell.members;
-    # packages involving hsc2hs (clock) produce libraries our
-    # ld can't link against
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

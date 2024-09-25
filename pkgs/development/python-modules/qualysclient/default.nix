@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   certifi,
   charset-normalizer,
   fetchFromGitHub,
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "qualysclient";
   version = "0.0.4.8.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -30,10 +31,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=__version__," 'version="${version}",'
+      --replace-fail "version=__version__," 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     charset-normalizer
     idna

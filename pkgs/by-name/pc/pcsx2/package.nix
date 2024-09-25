@@ -6,7 +6,6 @@
   cubeb,
   curl,
   extra-cmake-modules,
-  fetchFromGitHub,
   ffmpeg,
   libXrandr,
   libaio,

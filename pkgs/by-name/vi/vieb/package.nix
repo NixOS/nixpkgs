@@ -1,4 +1,4 @@
-{ stdenv, buildNpmPackage, fetchFromGitHub, electron, makeWrapper, python3, makeDesktopItem, nix-update-script, lib }:
+{ stdenv, buildNpmPackage, fetchFromGitHub, electron, makeWrapper, python3, makeDesktopItem, lib }:
 
 buildNpmPackage rec {
   pname = "vieb";
@@ -20,7 +20,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isAarch64 python3;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isAarch64 python3;
 
   desktopItem = makeDesktopItem {
     name = "vieb";

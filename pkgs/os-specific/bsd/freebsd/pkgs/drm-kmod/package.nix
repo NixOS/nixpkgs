@@ -22,6 +22,9 @@ let
   fetchOptions = (lib.importJSON ./versions.json).${branch};
 in
 mkDerivation {
+  # this derivation is tricky; it is not an in-tree FreeBSD build but it is meant to be built
+  # at the same time as the in-tree FreeBSD code, so it expects the same environment. Therefore,
+  # it is appropriate to use the freebsd mkDerivation.
   pname = "drm-kmod";
   version = branch;
 

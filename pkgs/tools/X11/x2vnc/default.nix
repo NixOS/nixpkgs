@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "00bh9j3m6snyd2fgnzhj5vlkj9ibh69gfny9bfzlxbnivb06s1yw";
   };
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   buildInputs = with xorg; [
-      libX11 xorgproto libXext libXrandr
-    ];
+    libX11 xorgproto libXext libXrandr
+  ];
 
   hardeningDisable = [ "format" ];
 

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tidb";
-  version = "8.1.0";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "pingcap";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i8soETbTWmFZQqKYcRoLXVIgFCQxHDvXZbJNjDmS8Jo=";
+    sha256 = "sha256-dlLT1vwRZ6vbfCRcMxevJQ99T2Aq4qaAVwitmcd9yJ4=";
   };
 
-  vendorHash = "sha256-RNYL5tb6d8NhNiOm3x8sgo1SEc8+uMdWgYor/VL3C6s=";
+  vendorHash = "sha256-NZv4DrPygSNCcK0A7VTGz0wIuHSR+Tf5Dhf5JuqiQ5A=";
 
   ldflags = [
     "-X github.com/pingcap/tidb/pkg/parser/mysql.TiDBReleaseVersion=${version}"

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/G9tvJ4AcBSTmo44xDDKf6et1nSn/FV5m27ztDu10kI=";
+    hash = "sha256-/G9tvJ4AcBSTmo44xDDKf6et1nSn/FV5m27ztDu10kI=";
     fetchSubmodules = true;
   };
 

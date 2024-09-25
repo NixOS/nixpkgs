@@ -39,7 +39,7 @@ buildPythonPackage rec {
     flask
     pillow
     psycopg2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     tkinter
   ];
 
@@ -71,6 +71,6 @@ buildPythonPackage rec {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,20 +2,21 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  pcsx2,
   shaderc,
 }:
 
-{
+let
   pcsx2 = let
     self = {
       pname = "pcsx2";
-      version = "1.7.5919";
+      version = "2.1.127";
       src = fetchFromGitHub {
+        pname = "pcsx2-source";
+        inherit (self) version;
         owner = "PCSX2";
         repo = "pcsx2";
         rev = "v${self.version}";
-        hash = "sha256-cDugEbbz40uLPW64bcDGxfo1Y3ahYnEVaalfMp/J95s=";
+        hash = "sha256-zvvrGxGjIQjSmo18BDG2J3+PoysXj8WxpwtrcXK8LH8=";
       };
     };
   in
@@ -23,16 +24,21 @@
 
   # The pre-zipped files in releases don't have a versioned link, we need to zip
   # them ourselves
-  pcsx2_patches = {
-    pname = "pcsx2_patches";
-    version = "0-unstable-2024-06-23";
-    src = fetchFromGitHub {
-      owner = "PCSX2";
-      repo = "pcsx2_patches";
-      rev = "9e71956797332471010e563a4b75a5934bef9d4e";
-      hash = "sha256-jpaRpvJox78zRGyrVIGYVoSEo/ICBlBfw3dTMz9QGuU=";
+  pcsx2_patches = let
+    self = {
+      pname = "pcsx2_patches";
+      version = "0-unstable-2024-09-05";
+      src = fetchFromGitHub {
+        pname = "pcsx2_patches-source";
+        inherit (self) version;
+        owner = "PCSX2";
+        repo = "pcsx2_patches";
+        rev = "377f30ae19acde655cc412086fa1840d16d54a93";
+        hash = "sha256-g2SMMC/oHSF0G3+zwvk1vOoQgYFrPd3eaZ0jgGJIr5g=";
+      };
     };
-  };
+  in
+    self;
 
   shaderc-patched = let
     pname = "shaderc-patched-for-pcsx2";
@@ -61,4 +67,7 @@
         (lib.cmakeBool "SHADERC_SKIP_TESTS" true)
       ];
     });
+in
+{
+  inherit pcsx2 pcsx2_patches shaderc-patched;
 }

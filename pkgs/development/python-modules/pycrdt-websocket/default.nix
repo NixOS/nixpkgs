@@ -1,17 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   anyio,
+  pycrdt,
+  sqlite-anyio,
+
+  # optional-dependencies
   channels,
+
+  # tests
   httpx-ws,
   hypercorn,
-  pycrdt,
   pytest-asyncio,
   pytestCheckHook,
-  sqlite-anyio,
   trio,
   uvicorn,
   websockets,
@@ -19,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.13.5";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +36,7 @@ buildPythonPackage rec {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dzlmgxrdQ97+DO/vDtoX7PIOpngEE+FGUGq1vdVmhNw=";
+    hash = "sha256-YsAeEUFxCwu7KA2d83J/rb1IlZTQZZecHJAewh+TqWs=";
   };
 
   build-system = [ hatchling ];
@@ -62,11 +70,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "WebSocket Connector for pycrdt";
     homepage = "https://github.com/jupyter-server/pycrdt-websocket";
     changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = teams.jupyter.members;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.jupyter.members;
   };
 }

@@ -58,7 +58,7 @@ buildPythonPackage rec {
         GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
       fi
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       unset AR
     '';
 
@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "HTTP/2-based RPC framework";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

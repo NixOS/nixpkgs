@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   env =
     {
-      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
         "-Wno-error=implicit-function-declaration"
         "-Wno-error=incompatible-pointer-types"
       ]);
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/m2crypto/m2crypto";
     changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

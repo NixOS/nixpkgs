@@ -53,7 +53,7 @@ in {
         Add "get" and "put" as query elements to enable those operations.
       '';
       example = [
-        "bolt+file:///srv/eris.bolt?get&put"
+        "badger+file:///var/db/eris.badger?get&put"
         "coap+tcp://eris.example.com:5683?get"
       ];
     };

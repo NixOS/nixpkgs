@@ -114,14 +114,9 @@ let
         export NIX_NO_SELF_RPATH=1
       '' + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
         export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
-      ''
-      # TODO this should be uncommented, but it causes stupid mass rebuilds. I
-      # think the best solution would just be to fixup linux RPATHs so we don't
-      # need to set `-rpath` anywhere.
-      # + lib.optionalString targetPlatform.isDarwin ''
-      #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
-      # ''
-      ;
+      '' + lib.optionalString targetPlatform.isDarwin ''
+        export NIX_DONT_SET_RPATH_FOR_TARGET=1
+      '';
 
       inherit initialPath shell
         defaultNativeBuildInputs defaultBuildInputs;

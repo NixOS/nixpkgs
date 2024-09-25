@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pam_rssh";
-  version = "1.1.0";
+  version = "1.2.0-rc2";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
     rev = "v${version}";
-    hash = "sha256-SDtMqGy2zhq9jEQVwSEl4EwRp2jgXfTVLrCX7k/kBeU=";
+    hash = "sha256-sXTSICVYSmwr12kRWuhVcag8kY6VAFdCqbe6LtYs4hU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-gNy1tcHDUOG1XduGAIMapvx5dlq+U1LitUQkccGfb9o=";
+  cargoHash = "sha256-QZ1Cs3TZab9wf8l4Fe95LFZhHB6q1uq7JRzEVUMKQSI=";
 
   postPatch = ''
     substituteInPlace src/auth_keys.rs \

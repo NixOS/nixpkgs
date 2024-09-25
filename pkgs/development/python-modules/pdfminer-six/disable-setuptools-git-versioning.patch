@@ -1,13 +1,15 @@
+diff --git a/setup.py b/setup.py
+index 42764e2..e7b93d3 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -7,10 +7,7 @@
+@@ -19,10 +19,7 @@ if sys.version_info < (3, 12):
  
  setup(
      name="pdfminer.six",
 -    setuptools_git_versioning={
 -        "enabled": True,
 -    },
--    setup_requires=["setuptools-git-versioning<2"],
+-    setup_requires=["setuptools-git-versioning<3"],
 +    version="@version@",
      packages=["pdfminer"],
      package_data={"pdfminer": ["cmap/*.pickle.gz", "py.typed"]},

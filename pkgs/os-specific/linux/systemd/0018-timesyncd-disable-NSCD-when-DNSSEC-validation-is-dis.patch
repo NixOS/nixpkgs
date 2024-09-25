@@ -1,4 +1,4 @@
-From 7a27556920fe1feefd17096841c8f3ca1294a1b3 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Yuri Nesterov <yuriy.nesterov@unikie.com>
 Date: Wed, 21 Jun 2023 17:17:38 +0300
 Subject: [PATCH] timesyncd: disable NSCD when DNSSEC validation is disabled
@@ -13,7 +13,7 @@ directly.
  1 file changed, 11 insertions(+)
 
 diff --git a/src/timesync/timesyncd.c b/src/timesync/timesyncd.c
-index 1d8ebecc91..2b0ae361ff 100644
+index 5c308a04bc..81aa3d3334 100644
 --- a/src/timesync/timesyncd.c
 +++ b/src/timesync/timesyncd.c
 @@ -21,6 +21,11 @@
@@ -32,7 +32,7 @@ index 1d8ebecc91..2b0ae361ff 100644
          if (r < 0)
                  return log_error_errno(r, "Failed to parse fallback server strings: %m");
  
-+        r = getenv_bool_secure("SYSTEMD_NSS_RESOLVE_VALIDATE");
++        r = secure_getenv_bool("SYSTEMD_NSS_RESOLVE_VALIDATE");
 +        if (r == 0) {
 +                log_info("Disabling NSCD because DNSSEC validation is turned off");
 +                __nss_disable_nscd(register_traced_file);
@@ -41,6 +41,3 @@ index 1d8ebecc91..2b0ae361ff 100644
          log_debug("systemd-timesyncd running as pid " PID_FMT, getpid_cached());
  
          notify_message = notify_start("READY=1\n"
--- 
-2.34.1
-

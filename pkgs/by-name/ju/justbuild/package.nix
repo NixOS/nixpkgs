@@ -34,17 +34,17 @@ stdenv.mkDerivation rec {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "v${version}";
-    sha256 = "sha256-kv7HpDEYZml5uk06s8Cxt5rEpxaJBz9s+or6Od1q4Io=";
+    hash = "sha256-kv7HpDEYZml5uk06s8Cxt5rEpxaJBz9s+or6Od1q4Io=";
   };
 
   bazelapi = fetchurl {
     url = "https://github.com/bazelbuild/remote-apis/archive/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz";
-    sha256 = "7421abd5352ccf927c2050453a4dbfa1f7b1c7170ec3e8702b6fe2d39b8805fe";
+    hash = "sha256-dCGr1TUsz5J8IFBFOk2/ofexxxcOw+hwK2/i05uIBf4=";
   };
 
   googleapi = fetchurl {
     url = "https://github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz";
-    sha256 = "5bb6b0253ccf64b53d6c7249625a7e3f6c3bc6402abd52d3778bfa48258703a0";
+    hash = "sha256-W7awJTzPZLU9bHJJYlp+P2w7xkAqvVLTd4v6SCWHA6A=";
   };
 
   nativeBuildInputs =
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     mv etc/repos.json.patched etc/repos.json
     jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
     mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
   '';
 
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
     license = licenses.asl20;

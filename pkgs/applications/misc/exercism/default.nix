@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "exercism";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "exercism";
     repo  = "cli";
     rev   = "refs/tags/v${version}";
-    hash  = "sha256-+Tg9b7JZtriF5b+mnLgOeTTLiswH/dSGg3Mj1TBt4Wk=";
+    hash  = "sha256-AqGSwHQdY/m6aJYbjJdt+IYr5n1Jf7LW4paCOxjptjA=";
   };
 
   vendorHash = "sha256-xY3C3emqtPIKyxIN9aEkrLXhTxWNmo0EJXNZVtbtIvs=";

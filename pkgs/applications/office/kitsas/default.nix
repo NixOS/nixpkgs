@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, poppler, libzip, pkg-config, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtsvg, poppler, libzip, pkg-config, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "../kitsas/kitsas.pro" ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv kitsas.app $out/Applications
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     install -Dm755 kitsas -t $out/bin
     install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
     install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps

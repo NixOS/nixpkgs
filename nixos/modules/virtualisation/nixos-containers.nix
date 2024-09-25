@@ -488,9 +488,10 @@ in
                       extraConfig = { options, ... }: {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
                         config = {
-                          nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
-                                    then { inherit (host.config.nixpkgs) hostPlatform; }
-                                    else { inherit (host.config.nixpkgs) localSystem; }
+                          nixpkgs =
+                            if options.nixpkgs?hostPlatform
+                            then { inherit (host.pkgs.stdenv) hostPlatform; }
+                            else { localSystem = host.pkgs.stdenv.hostPlatform; }
                           ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
@@ -842,8 +843,8 @@ in
             optionalAttrs containerConfig.autoStart
               {
                 wantedBy = [ "machines.target" ];
-                wants = [ "network.target" ];
-                after = [ "network.target" ];
+                wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
+                after = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
                 restartTriggers = [
                   containerConfig.path
                   config.environment.etc."${configurationDirectoryName}/${name}.conf".source

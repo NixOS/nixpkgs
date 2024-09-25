@@ -1,20 +1,15 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
 , git
 , bash
 , coreutils
+, compressDrvWeb
 , gitea
 , gzip
 , openssh
-, pam
 , sqliteSupport ? true
-, pamSupport ? true
-, runCommand
-, brotli
-, xorg
 , nixosTests
 , buildNpmPackage
 }:
@@ -24,7 +19,7 @@ let
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    npmDepsHash = "sha256-gXBBiDIIS0aW6qK37HcF0AuJOliblinznRVXoo6DV1s=";
+    npmDepsHash = "sha256-Sp3xBe5IXys2Qro4x4HKs9dQOnlbstAmtIG6xOOktEk=";
 
     # use webpack directly instead of 'make frontend' as the packages are already installed
     buildPhase = ''
@@ -38,16 +33,18 @@ let
   };
 in buildGoModule rec {
   pname = "gitea";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${gitea.version}";
-    hash = "sha256-s7su3gMdXv2sT1uYYtx29n7QDvmPU9QB3QR6ctOlE58=";
+    hash = "sha256-PwA23cbRgw5crzZmngDjAAIODMtguwBCqc9NqWMjF3o=";
   };
 
-  vendorHash = "sha256-nzhjIfQMzSf1nuBMTIe0xn+NMDFbDZ9jRHu8Nwzmp4w=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-rMTKmztQNse/9CK1qFGWmSwqunwh918EvcuIHk6BSTY=";
 
   outputs = [ "out" "data" ];
 
@@ -66,10 +63,7 @@ in buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = lib.optional pamSupport pam;
-
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
 
   ldflags = [
     "-s"
@@ -90,19 +84,7 @@ in buildGoModule rec {
   '';
 
   passthru = {
-    data-compressed = runCommand "gitea-data-compressed" {
-      nativeBuildInputs = [ brotli xorg.lndir ];
-    } ''
-      mkdir -p $out/{options,public,templates}
-      lndir ${frontend}/public $out/public
-      lndir ${gitea.data}/options $out/options
-      lndir ${gitea.data}/templates $out/templates
-
-      # Create static gzip and brotli files
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
-        -exec gzip --best --keep --force {} ';' \
-        -exec brotli --best --keep --no-copy-stat {} ';'
-    '';
+    data-compressed = lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"." (compressDrvWeb gitea.data {});
 
     tests = nixosTests.gitea;
   };
@@ -112,7 +94,6 @@ in buildGoModule rec {
     homepage = "https://about.gitea.com";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
-    broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };
 }

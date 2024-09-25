@@ -17,8 +17,7 @@
 }:
 
 let
-  useGccGoBootstrap = stdenv.buildPlatform.isMusl;
-  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap121.nix { };
+  goBootstrap = buildPackages.callPackage ./bootstrap121.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo121Module; };
 
@@ -47,16 +46,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.21.12";
+  version = "1.21.13";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-MOaK8nvB8d8jHjq3Tz0X07jVKgicebyqtXO08bgH7U8=";
+    hash = "sha256-cfsxYGod5I0SnVkehxemPgxVZf+6CaJOqfiZoTIUw00=";
   };
 
   strictDeps = true;
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];
@@ -115,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
 
-  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild
@@ -184,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux ++ platforms.freebsd;
     mainProgram = "go";
   };
 })

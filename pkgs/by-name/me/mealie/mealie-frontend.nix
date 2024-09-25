@@ -1,5 +1,5 @@
 src: version:
-{ lib, fetchYarnDeps, nodejs_18, fixup-yarn-lock, stdenv }: stdenv.mkDerivation {
+{ lib, fetchYarnDeps, nodejs_18, fixup-yarn-lock, stdenv, yarn }: stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
   src = "${src}/frontend";
@@ -12,7 +12,7 @@ src: version:
   nativeBuildInputs = [
     fixup-yarn-lock
     nodejs_18
-    nodejs_18.pkgs.yarn
+    (yarn.override { nodejs = nodejs_18; })
   ];
 
   configurePhase = ''

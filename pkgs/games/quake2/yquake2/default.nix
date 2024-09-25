@@ -13,25 +13,25 @@ let
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "8.30";
+    version = "8.40";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
       rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "sha256-2x/qxrhvy+An/HitmWAhmwuDJ2djMeTsLhAtijuvbzE=";
+      sha256 = "sha256-licz659DFS56/5P/hmPSE0YuVPTp1r4yrzS7FIg4Okc=";
     };
 
     postPatch = ''
       substituteInPlace src/client/curl/qcurl.c \
         --replace "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
-    '' + lib.optionalString (openalSupport && !stdenv.isDarwin) ''
+    '' + lib.optionalString (openalSupport && !stdenv.hostPlatform.isDarwin) ''
       substituteInPlace Makefile \
         --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
     '';
 
     buildInputs = [ SDL2 libGL curl ]
-      ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa OpenAL ]
       ++ lib.optional openalSupport openal;
 
     makeFlags = [

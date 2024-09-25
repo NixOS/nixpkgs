@@ -134,32 +134,26 @@ let
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
 
-      ${lib.optionalString (cfg.useNixStoreImage)
-        (if cfg.writableStore
-          then ''
-            # Create a writable copy/snapshot of the store image.
-            ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${storeImage}/nixos.qcow2 "$TMPDIR"/store.img
-          ''
-          else ''
-            (
-              cd ${builtins.storeDir}
-              ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
-                --force-uid=0 \
-                --force-gid=0 \
-                -L ${nixStoreFilesystemLabel} \
-                -U eb176051-bd15-49b7-9e6b-462e0b467019 \
-                -T 0 \
-                --exclude-regex="$(
-                  <${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
-                    sed -e 's^.*/^^g' \
-                  | cut -c -10 \
-                  | ${hostPkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
-                "$TMPDIR"/store.img \
-                . \
-                </dev/null >/dev/null
-            )
-          ''
-        )
+      ${lib.optionalString (cfg.useNixStoreImage) ''
+        echo "Creating Nix store image..."
+
+        ${hostPkgs.gnutar}/bin/tar --create \
+          --absolute-names \
+          --verbatim-files-from \
+          --transform 'flags=rSh;s|/nix/store/||' \
+          --files-from ${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
+          | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
+            --quiet \
+            --force-uid=0 \
+            --force-gid=0 \
+            -L ${nixStoreFilesystemLabel} \
+            -U eb176051-bd15-49b7-9e6b-462e0b467019 \
+            -T 0 \
+            --tar=f \
+            "$TMPDIR"/store.img
+
+        echo "Created Nix store image."
+      ''
       }
 
       # Create a directory for exchanging data with the VM.
@@ -282,35 +276,12 @@ let
     onlyNixStore = false;
     label = rootFilesystemLabel;
     partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
-    # Bootloader should be installed on the system image only if we are booting through bootloaders.
-    # Though, if a user is not using our default filesystems, it is possible to not have any ESP
-    # or a strange partition table that's incompatible with GRUB configuration.
-    # As a consequence, this may lead to disk image creation failures.
-    # To avoid this, we prefer to let the user find out about how to install the bootloader on its ESP/disk.
-    # Usually, this can be through building your own disk image.
-    # TODO: If a user is interested into a more fine grained heuristic for `installBootLoader`
-    # by examining the actual contents of `cfg.fileSystems`, please send a PR.
-    installBootLoader = cfg.useBootLoader && cfg.useDefaultFilesystems;
+    installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
     additionalSpace = "0M";
     copyChannel = false;
     OVMF = cfg.efi.OVMF;
-  };
-
-  storeImage = import ../../lib/make-disk-image.nix {
-    name = "nix-store-image";
-    inherit pkgs config lib;
-    additionalPaths = [ regInfo ];
-    format = "qcow2";
-    onlyNixStore = true;
-    label = nixStoreFilesystemLabel;
-    partitionTableType = "none";
-    installBootLoader = false;
-    touchEFIVars = false;
-    diskSize = "auto";
-    additionalSpace = "0M";
-    copyChannel = false;
   };
 
 in
@@ -350,7 +321,7 @@ in
 
     virtualisation.diskSize =
       mkOption {
-        type = types.nullOr types.ints.positive;
+        type = types.ints.positive;
         default = 1024;
         description = ''
             The disk size in megabytes of the virtual machine.
@@ -393,7 +364,7 @@ in
             The path (inside the VM) to the device containing the EFI System Partition (ESP).
 
             If you are *not* booting from a UEFI firmware, this value is, by
-            default, `null`. The ESP is mounted under `/boot`.
+            default, `null`. The ESP is mounted to `boot.loader.efi.efiSysMountpoint`.
           '';
       };
 
@@ -665,6 +636,14 @@ in
         description = "Primary IP address used in /etc/hosts.";
       };
 
+    networking.primaryIPv6Address =
+      mkOption {
+        type = types.str;
+        default = "";
+        internal = true;
+        description = "Primary IPv6 address used in /etc/hosts.";
+      };
+
     virtualisation.host.pkgs = mkOption {
       type = options.nixpkgs.pkgs.type;
       default = pkgs;
@@ -780,10 +759,14 @@ in
           this can drastically improve performance, but at the cost of
           disk space and image build time.
 
-          As an alternative, you can use a bootloader which will provide you
-          with a full NixOS system image containing a Nix store and
-          avoid mounting the host nix store through
-          {option}`virtualisation.mountHostNixStore`.
+          The Nix store image is built just-in-time right before the VM is
+          started. Because it does not produce another derivation, the image is
+          not cached between invocations and never lands in the store or binary
+          cache.
+
+          If you want a full disk image with a partition table and a root
+          filesystem instead of only a store image, enable
+          {option}`virtualisation.useBootLoader` instead.
         '';
       };
 
@@ -847,6 +830,19 @@ in
 
             Check the documentation on {option}`virtualisation.directBoot.enable` for details.
           '';
+      };
+
+    virtualisation.installBootLoader =
+      mkOption {
+        type = types.bool;
+        default = cfg.useBootLoader && cfg.useDefaultFilesystems;
+        defaultText = "cfg.useBootLoader && cfg.useDefaultFilesystems";
+        description = ''
+          Install boot loader to target image.
+
+          This is best-effort and may break with unconventional partition setups.
+          Use `virtualisation.useDefaultFilesystems` for a known-working configuration.
+        '';
       };
 
     virtualisation.useEFIBoot =
@@ -1008,28 +1004,17 @@ in
                 If you have a more advanced usecase, please open an issue or a pull request.
               '';
           }
+          {
+            assertion = cfg.installBootLoader -> config.system.switch.enable;
+            message = ''
+              `system.switch.enable` must be enabled for `virtualisation.installBootLoader` to work.
+              Please enable it in your configuration.
+            '';
+          }
         ];
 
     warnings =
-      optional (
-        cfg.writableStore &&
-        cfg.useNixStoreImage &&
-        opt.writableStore.highestPrio > lib.modules.defaultOverridePriority)
-        ''
-          You have enabled ${opt.useNixStoreImage} = true,
-          without setting ${opt.writableStore} = false.
-
-          This causes a store image to be written to the store, which is
-          costly, especially for the binary cache, and because of the need
-          for more frequent garbage collection.
-
-          If you really need this combination, you can set ${opt.writableStore}
-          explicitly to true, incur the cost and make this warning go away.
-          Otherwise, we recommend
-
-            ${opt.writableStore} = false;
-            ''
-      ++ optional (cfg.directBoot.enable && cfg.useBootLoader)
+      optional (cfg.directBoot.enable && cfg.useBootLoader)
         ''
           You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
           `useBootLoader` useless. You might want to disable one of those options.
@@ -1042,41 +1027,7 @@ in
     boot.loader.grub.device = mkVMOverride (if cfg.useEFIBoot then "nodev" else cfg.bootLoaderDevice);
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
-    boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
-
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
-
-    boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
-      ''
-        # Mark this as a NixOS machine.
-        mkdir -p $targetRoot/etc
-        echo -n > $targetRoot/etc/NIXOS
-
-        # Fix the permissions on /tmp.
-        chmod 1777 $targetRoot/tmp
-
-        mkdir -p $targetRoot/boot
-
-        ${optionalString cfg.writableStore ''
-          echo "mounting overlay filesystem on /nix/store..."
-          mkdir -p -m 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
-          mount -t overlay overlay $targetRoot/nix/store \
-            -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
-        ''}
-      '';
-
-    systemd.tmpfiles.settings."10-qemu-vm" = lib.mkIf config.boot.initrd.systemd.enable {
-      "/etc/NIXOS".f = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
-      "${config.boot.loader.efi.efiSysMountPoint}".d = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
-    };
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
@@ -1093,8 +1044,7 @@ in
       '';
 
     boot.initrd.availableKernelModules =
-      optional cfg.writableStore "overlay"
-      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
       ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
@@ -1102,7 +1052,9 @@ in
     virtualisation.sharedDirectories = {
       nix-store = mkIf cfg.mountHostNixStore {
         source = builtins.storeDir;
-        target = "/nix/store";
+        # Always mount this to /nix/.ro-store because we never want to actually
+        # write to the host Nix Store.
+        target = "/nix/.ro-store";
         securityModel = "none";
       };
       xchg = {
@@ -1194,7 +1146,7 @@ in
         name = "nix-store";
         file = ''"$TMPDIR"/store.img'';
         deviceExtraOpts.bootindex = "2";
-        driveExtraOpts.format = if cfg.writableStore then "qcow2" else "raw";
+        driveExtraOpts.format = "raw";
       }])
       (imap0 (idx: _: {
         file = "$(pwd)/empty${toString idx}.qcow2";
@@ -1212,10 +1164,7 @@ in
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:
         {
-          name =
-            if tag == "nix-store" && cfg.writableStore
-            then "/nix/.ro-store"
-            else share.target;
+          name = share.target;
           value.device = tag;
           value.fsType = "9p";
           value.neededForBoot = true;
@@ -1240,8 +1189,19 @@ in
           # Sync with systemd's tmp.mount;
           options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmp.tmpfsSize}" ];
         };
-        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = lib.mkIf cfg.useNixStoreImage {
+        "/nix/store" = lib.mkIf (cfg.useNixStoreImage || cfg.mountHostNixStore) (if cfg.writableStore then {
+          overlay = {
+            lowerdir = [ "/nix/.ro-store" ];
+            upperdir = "/nix/.rw-store/upper";
+            workdir = "/nix/.rw-store/work";
+          };
+        } else {
+          device = "/nix/.ro-store";
+          options = [ "bind" ];
+        });
+        "/nix/.ro-store" = lib.mkIf cfg.useNixStoreImage {
           device = "/dev/disk/by-label/${nixStoreFilesystemLabel}";
+          fsType = "erofs";
           neededForBoot = true;
           options = [ "ro" ];
         };
@@ -1250,39 +1210,12 @@ in
           options = [ "mode=0755" ];
           neededForBoot = true;
         };
-        "/boot" = lib.mkIf (cfg.useBootLoader && cfg.bootPartition != null) {
+        "${config.boot.loader.efi.efiSysMountPoint}" = lib.mkIf (cfg.useBootLoader && cfg.bootPartition != null) {
           device = cfg.bootPartition;
           fsType = "vfat";
-          noCheck = true; # fsck fails on a r/o filesystem
         };
       }
     ];
-
-    boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
-      mounts = [{
-        where = "/sysroot/nix/store";
-        what = "overlay";
-        type = "overlay";
-        options = "lowerdir=/sysroot/nix/.ro-store,upperdir=/sysroot/nix/.rw-store/store,workdir=/sysroot/nix/.rw-store/work";
-        wantedBy = ["initrd-fs.target"];
-        before = ["initrd-fs.target"];
-        requires = ["rw-store.service"];
-        after = ["rw-store.service"];
-        unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
-      }];
-      services.rw-store = {
-        before = [ "shutdown.target" ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig = {
-          DefaultDependencies = false;
-          RequiresMountsFor = "/sysroot/nix/.rw-store";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "/bin/mkdir -p -m 0755 /sysroot/nix/.rw-store/store /sysroot/nix/.rw-store/work /sysroot/nix/store";
-        };
-      };
-    };
 
     swapDevices = (if cfg.useDefaultFilesystems then mkVMOverride else mkDefault) [ ];
     boot.initrd.luks.devices = (if cfg.useDefaultFilesystems then mkVMOverride else mkDefault) {};

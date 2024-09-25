@@ -4,18 +4,18 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phpstan";
-  version = "1.11.7";
+  version = "1.11.8";
 
   src = fetchFromGitHub {
     owner = "phpstan";
     repo = "phpstan-src";
     rev = finalAttrs.version;
-    hash = "sha256-BJPFZv2CifSH35pP8Z4ahklojxR7DQiNqKc+jpdzty8=";
+    hash = "sha256-wF2OqJ0kg+wEjSq8mAyF5em5RAqjyXqKFkdAjxOrePM=";
   };
 
-  vendorHash = "sha256-UcK7525anAn61y8MCy0RiJlWxOYgs1CMm1+rDk2occI=";
+  vendorHash = "sha256-NLaOxWMhTViv7OfXE5b7NTeL/jD7Fvbx/1ihGlRJCws=";
   composerStrictValidation = false;
 
   meta = {

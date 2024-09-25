@@ -4,6 +4,7 @@
 }:
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
 
       cmd2 = super.cmd2.overridePythonAttrs (oldAttrs: rec {
@@ -46,7 +47,7 @@ buildPythonApplication rec {
     aiocoap
     awsiotpythonsdk
     bluepy
-    can
+    python-can
     cmd2
     cryptography
     paho-mqtt

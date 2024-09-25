@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ICRAR/ijson";
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

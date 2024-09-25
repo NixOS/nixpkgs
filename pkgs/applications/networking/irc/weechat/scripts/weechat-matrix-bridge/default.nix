@@ -40,12 +40,12 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "WeeChat script in Lua that implements the matrix.org chat protocol";
     homepage = "https://github.com/torhve/weechat-matrix-protocol-script";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit; # see https://github.com/torhve/weechat-matrix-protocol-script/blob/0052e7275ae149dc5241226391c9b1889ecc3c6b/matrix.lua#L53
     platforms = platforms.unix;
 
     # As of 2019-06-30, all of the dependencies are available on macOS but the
     # package itself does not build.
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

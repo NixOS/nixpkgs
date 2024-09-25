@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ autumnal ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

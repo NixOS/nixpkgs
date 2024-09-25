@@ -36,12 +36,12 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AG0jn4i/98N7wu/2CgBOJj+vklj3J5GS0Gugyc7WsIA=";
+    hash = "sha256-viVjtcVUe6MzvGYI8EgATI821VYTm/L/49n0HaJ5cAY=";
   };
 
   postPatch =
@@ -52,7 +52,7 @@ buildPythonPackage rec {
         'return "${placeholder "out"}/bin/wormhole"'
     ''
     # fix the location of the ifconfig binary
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
     '';
 
@@ -88,7 +88,7 @@ buildPythonPackage rec {
       pytestCheckHook
     ]
     ++ passthru.optional-dependencies.dilation
-    ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;
 

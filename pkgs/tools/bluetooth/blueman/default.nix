@@ -1,18 +1,18 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
 , obex_data_server, xdg-utils, dnsmasq, dhcpcd, iproute2
 , adwaita-icon-theme, librsvg, wrapGAppsHook3, gobject-introspection
-, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
+, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux, libpulseaudio }:
 
 let
   pythonPackages = python3Packages;
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-B6COCPNtzXxAT9Ve70N5WvWR2VFLKviWPfIg76BLIa0=";
+    sha256 = "sha256-vfxJkJdCy3koj4oR1vZmt1wnE7kcCF5tDdMpQ0eT/oU=";
   };
 
   nativeBuildInputs = [

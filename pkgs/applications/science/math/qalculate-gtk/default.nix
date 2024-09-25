@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ intltool pkg-config autoreconfHook wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
   buildInputs = [ libqalculate gtk3 curl ];
   enableParallelBuilding = true;
 

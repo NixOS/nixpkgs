@@ -90,7 +90,7 @@ buildPythonPackage rec {
       "test_dump_certificate_request"
       "test_export_text"
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # https://github.com/pyca/pyopenssl/issues/974
       "test_verify_with_time"
     ];
@@ -100,6 +100,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyca/pyopenssl";
     changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

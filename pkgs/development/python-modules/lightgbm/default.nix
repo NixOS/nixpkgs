@@ -29,24 +29,24 @@
   boost,
   ocl-icd,
   opencl-headers,
-  gpuSupport ? stdenv.isLinux && !cudaSupport,
+  gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:
 
-assert gpuSupport -> cudaSupport != true;
-assert cudaSupport -> gpuSupport != true;
+assert gpuSupport -> !cudaSupport;
+assert cudaSupport -> !gpuSupport;
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nop2QJEUgRNOYJh9XR4c0Vf0MMO0s43o02/FXDArwpk=";
+    hash = "sha256-4c17rwMY1OMIomV1pjpGNfCN+GatNiKp2OPXHZY3obo=";
   };
 
   nativeBuildInputs = [

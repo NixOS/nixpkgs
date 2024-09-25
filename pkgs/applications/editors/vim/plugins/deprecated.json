@@ -1,18 +1,18 @@
 {
     "TrueZen-nvim": {
-        "date": "2022-09-02",
+        "date": "2022-07-27",
         "new": "true-zen-nvim"
     },
     "compe-tmux": {
-        "date": "2021-12-21",
+        "date": "2021-12-07",
         "new": "cmp-tmux"
     },
     "fern-vim": {
-        "date": "2024-05-28",
+        "date": "2024-05-12",
         "new": "vim-fern"
     },
     "gina-vim": {
-        "date": "2024-07-03",
+        "date": "2024-05-12",
         "new": "vim-gina"
     },
     "gist-vim": {
@@ -24,7 +24,7 @@
         "new": "lspsaga-nvim"
     },
     "lua-dev-nvim": {
-        "date": "2022-10-20",
+        "date": "2022-10-14",
         "new": "neodev-nvim"
     },
     "nvchad-extensions": {
@@ -32,7 +32,7 @@
         "new": "nvchad-ui"
     },
     "nvim-base16": {
-        "date": "2024-03-16",
+        "date": "2024-02-15",
         "new": "base16-nvim"
     },
     "nvim-bufferline-lua": {
@@ -51,6 +51,10 @@
         "date": "2021-11-28",
         "new": "orgmode"
     },
+    "render-markdown": {
+        "date": "2024-09-16",
+        "new": "render-markdown-nvim"
+    },
     "sql-nvim": {
         "date": "2021-09-03",
         "new": "sqlite-lua"
@@ -59,8 +63,12 @@
         "date": "2024-05-12",
         "new": "vim-suda"
     },
+    "taskwarrior": {
+        "date": "2024-08-13",
+        "new": "taskwarrior3 or taskwarrior2"
+    },
     "vim-fsharp": {
-        "date": "2024-07-03",
+        "date": "2024-03-16",
         "new": "zarchive-vim-fsharp"
     },
     "vim-jade": {

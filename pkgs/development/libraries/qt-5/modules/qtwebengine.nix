@@ -1,6 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 , fetchpatch
+, fetchpatch2
 
 , bison, flex, git, gperf, ninja, pkg-config, python, which
 , nodejs, perl
@@ -24,12 +25,12 @@
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
 , MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, xcbuild, writeScriptBin
-, ffmpeg_4 ? null
+, ffmpeg_7 ? null
 , lib, stdenv
 , version ? null
 , qtCompatVersion
-, pipewireSupport ? stdenv.isLinux
-, pipewire_0_2
+, pipewireSupport ? stdenv.hostPlatform.isLinux
+, pipewire
 , postPatch ? ""
 , nspr
 , lndir
@@ -64,7 +65,7 @@ qtModule ({
     pkgsBuildBuild.pkg-config
     (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
     pkg-config-wrapped-without-prefix
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
@@ -76,6 +77,32 @@ qtModule ({
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
+
+  patches = [
+    # Support FFmpeg 5
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/14074e4d789167bd776939037fe6df8d4d7dc0b3/qt5-webengine-ffmpeg5.patch";
+      hash = "sha256-jTbJFXBPwRMzr8IeTxrv9dtS+/xDS/zR4dysV/bRg3I=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+
+    # Support FFmpeg 7
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/e8fb4f86104243b90966b69cdfaa967273d834b6/qt5-webengine-ffmpeg7.patch";
+      hash = "sha256-YNeHmOVp0M5HB+b91AOxxJxl+ktBtLYVdHlq13F7xtY=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+    })
+
+    # Support PipeWire ≥ 0.3
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/c9db2cd9e144bd7a5e9246f5f7a01fe52fd089ba/qt5-webengine-pipewire-0.3.patch";
+      hash = "sha256-mGexRfVDF3yjNzSi9BjavhzPtsXI0BooSr/rZ1z/BDo=";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
+  ];
 
   postPatch = ''
     # Patch Chromium build tools
@@ -108,7 +135,7 @@ qtModule ({
   # Prevent Chromium build script from making the path to `clang` relative to
   # the build directory.  `clang_base_path` is the value of `QMAKE_CLANG_DIR`
   # from `src/core/config/mac_osx.pri`.
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace ./src/3rdparty/chromium/build/toolchain/mac/BUILD.gn \
       --replace 'prefix = rebase_path("$clang_base_path/bin/", root_build_dir)' 'prefix = "$clang_base_path/bin/"'
   ''
@@ -121,13 +148,13 @@ qtModule ({
       src/core/web_engine_library_info.cpp
   ''
   # Patch library paths in Chromium sources
-  + lib.optionalString (!stdenv.isDarwin) ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-  '' + lib.optionalString stdenv.isDarwin (''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin (''
     substituteInPlace src/buildtools/config/mac_osx.pri \
       --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
@@ -146,6 +173,10 @@ qtModule ({
     # ld: fatal warning(s) induced error (-fatal_warnings)
     substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
       --replace "-Wl,-fatal_warnings" ""
+
+    # Use system ffmpeg
+    echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
+    echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
   '') + postPatch;
 
   env = {
@@ -201,8 +232,8 @@ qtModule ({
     harfbuzz icu
 
     libevent
-    ffmpeg_4
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+    ffmpeg_7
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
@@ -221,12 +252,12 @@ qtModule ({
 
   ] ++ lib.optionals pipewireSupport [
     # Pipewire
-    pipewire_0_2
+    pipewire
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
   # around it. Chromium pulls this in while bootstrapping GN.
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
     cctools
 
@@ -256,7 +287,7 @@ qtModule ({
     libunwind
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cups
     libpm
     sandbox
@@ -282,7 +313,7 @@ qtModule ({
 
   postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     mkdir -p $out/libexec
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..

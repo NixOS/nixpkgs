@@ -20,14 +20,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-bnRzXIYairlBjv2JxU16UXYc5BB3VeKZNiJ4+XDzub4=";
   };
 
-  cargoSha256 = "sha256-C/D9EPfifyajrCyXE8w/qRuzWEoyJJIcj4xii94/9l4=";
+  cargoHash = "sha256-C/D9EPfifyajrCyXE8w/qRuzWEoyJJIcj4xii94/9l4=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Security
   ];
@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "finalfrontier";
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -9,7 +9,7 @@ mkDerivation rec {
   version = "2.3.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/kronometer/${version}/src/kronometer-${version}.tar.xz";
     sha256 = "sha256-dbnhom8PRo0Bay3DzS2P0xQSrJaMXD51UadQL3z6xHY=";
   };
 

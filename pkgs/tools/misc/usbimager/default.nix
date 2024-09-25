@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook3
 , withLibui ? true, gtk3
-, withUdisks ? stdenv.isLinux, udisks, glib
+, withUdisks ? stdenv.hostPlatform.isLinux, udisks, glib
 , libX11 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "bztsrc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
+    hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     # feel free add them if you have a machine to test
     platforms = with platforms; linux;
     # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "usbimager";
   };
 }

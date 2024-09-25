@@ -1,6 +1,5 @@
 { lib, stdenv, octave, buildEnv
 , makeWrapper, texinfo
-, octavePackages
 , wrapOctave
 , computeRequiredOctavePackages
 , extraLibs ? []

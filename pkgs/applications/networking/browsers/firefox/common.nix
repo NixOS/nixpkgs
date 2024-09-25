@@ -94,20 +94,20 @@ in
 , debugBuild ? false
 
 # On 32bit platforms, we disable adding "-g" for easier linking.
-, enableDebugSymbols ? !stdenv.is32bit
+, enableDebugSymbols ? !stdenv.hostPlatform.is32bit
 
 ## optional libraries
 
-, alsaSupport ? stdenv.isLinux, alsa-lib
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
-, jackSupport ? stdenv.isLinux, libjack2
+, jackSupport ? stdenv.hostPlatform.isLinux, libjack2
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
+, pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
-, pulseaudioSupport ? stdenv.isLinux, libpulseaudio
-, sndioSupport ? stdenv.isLinux, sndio
+, pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
+, sndioSupport ? stdenv.hostPlatform.isLinux, sndio
 , waylandSupport ? true, libxkbcommon, libdrm
 
 ## privacy-related options
@@ -234,41 +234,24 @@ buildStdenv.mkDerivation {
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "122") [
-    # dbus cflags regression fix
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+  patches = lib.optionals (lib.versionAtLeast version "111") [ ./env_var_for_system_dir-ff111.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [ ./no-buildconfig-ffx96.patch ]
+  ++ lib.optionals (lib.versionAtLeast version "121") [ ./no-buildconfig-ffx121.patch ]
+  ++ lib.optionals (lib.versionOlder version "128.2" || (lib.versionAtLeast version "129" && lib.versionOlder version "130")) [
     (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f1f5f98290b3";
-      hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
+      name = "cbindgen-0.27.0-compat.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
+      hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
-  ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
-  ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "120.0.1") [
-    (fetchpatch {
-      # Do not crash on systems without an expected statically assumed page size.
-      # https://phabricator.services.mozilla.com/D194458
-      name = "mozbz1866025.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
-      hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
-    })
-  ]
-  ++ lib.optionals (lib.versionOlder version "122") [
-    ./bindgen-0.64-clang-18.patch
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
-    ./122.0-libvpx-mozbz1875201.patch
-  ]
+  ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch  ]
   ++ lib.optionals (lib.versionOlder version "123") [
     (fetchpatch {
       name = "clang-18.patch";
       url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
-  ]
-  ++ lib.optionals (lib.versionOlder version "115.12") [
-    ./rust-1.78.patch
   ]
   ++ extraPatches;
 
@@ -380,7 +363,7 @@ buildStdenv.mkDerivation {
     # please get your own set of keys at https://location.services.mozilla.com/api.
     echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
-  '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
+  '' + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
     export MOZILLA_OFFICIAL=1
   '' + lib.optionalString (!requireSigning) ''
     export MOZ_REQUIRE_SIGNING=
@@ -423,7 +406,7 @@ buildStdenv.mkDerivation {
   ]
   # elf-hack is broken when using clang+lld:
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
+  ++ lib.optional (ltoSupport && (buildStdenv.hostPlatform.isAarch32 || buildStdenv.hostPlatform.isi686 || buildStdenv.hostPlatform.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
   ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ [
@@ -441,7 +424,7 @@ buildStdenv.mkDerivation {
     (if debugBuild then "--enable-profiling" else "--enable-optimize")
     # --enable-release adds -ffunction-sections & LTO that require a big amount
     # of RAM, and the 32-bit memory space cannot handle that linking
-    (enableFeature (!debugBuild && !stdenv.is32bit) "release")
+    (enableFeature (!debugBuild && !stdenv.hostPlatform.is32bit) "release")
     (enableFeature enableDebugSymbols "debug-symbols")
   ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
@@ -557,7 +540,7 @@ buildStdenv.mkDerivation {
     install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
     install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
 
-  '' + lib.optionalString buildStdenv.isLinux ''
+  '' + lib.optionalString buildStdenv.hostPlatform.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 

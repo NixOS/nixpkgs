@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, yaml, dune-configurator, ppx_sexp_conv, sexplib
+{ buildDunePackage, yaml, ppx_sexp_conv, sexplib
 , junit_alcotest
 }:
 

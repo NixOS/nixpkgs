@@ -7,6 +7,7 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+, wayland-protocols
 , wayland-scanner
 , wayland
 , gtk4
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4-layer-shell";
-  version = "1.0.2";
+  version = "1.0.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc";
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wmww";
     repo = "gtk4-layer-shell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-decjPkFkYy7kIjyozsB7BEmw33wzq1EQyIBrxO36984=";
+    hash = "sha256-oGtU1H1waA8ZAjaLMdb+x0KIIwgjhdn38ra/eFVWfFI=";
   };
 
   strictDeps = true;
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     vala
     wayland-scanner
+    wayland-protocols
   ];
 
   buildInputs = [

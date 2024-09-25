@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-  '' + (if stdenv.isDarwin then ''
+  '' + (if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/{Applications,bin}
     mv odalaunch/odalaunch.app $out/Applications
     makeWrapper $out/{Applications/odalaunch.app/Contents/MacOS,bin}/odalaunch
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "Client/server port for playing old-school Doom online";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,7 @@
 { lib
 , python3Packages
 , fetchPypi
-, taskwarrior
+, taskwarrior2
 , glibcLocales
 }:
 
@@ -24,7 +24,7 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [ glibcLocales ];
 
-  makeWrapperArgs = [ "--suffix" "PATH" ":" "${taskwarrior}/bin" ];
+  makeWrapperArgs = [ "--suffix" "PATH" ":" "${taskwarrior2}/bin" ];
 
   preCheck = ''
     export TERM=''${TERM-linux}
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
     mainProgram = "vit";
-    maintainers = with maintainers; [ dtzWill arcnmx ];
+    maintainers = with maintainers; [ arcnmx ];
     platforms = platforms.all;
     license = licenses.mit;
   };

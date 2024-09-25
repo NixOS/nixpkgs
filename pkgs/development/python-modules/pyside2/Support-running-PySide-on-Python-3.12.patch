@@ -1,0 +1,298 @@
+From: Christian Tismer <tismer@stackless.com>
+Date: Tue, 14 Feb 2023 14:46:22 +0100
+Subject: Support running PySide on Python 3.12
+
+Builtin types no longer have tp_dict set. We need to
+use PyType_GetDict, instead. This works without Limited API
+at the moment.
+
+With some great cheating, this works with Limited API, too.
+We emulate PyType_GetDict by tp_dict if that is not 0.
+Otherwise we create an empty dict.
+
+Some small changes to Exception handling and longer
+warm-up in leaking tests were found, too.
+
+Pick-to: 6.6 6.5 6.2
+Task-number: PYSIDE-2230
+Change-Id: I8a56de6208ec00979255b39b5784dfc9b4b92def
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit 441ffbd4fc622e67acd81e9c1c6d3a0b0fbcacf0)
+---
+ build_scripts/config.py                            |  3 +-
+ sources/pyside2/PySide2/support/generate_pyi.py    |  8 ++++--
+ sources/pyside2/libpyside/feature_select.cpp       | 10 ++++---
+ sources/pyside2/libpyside/pysideproperty.cpp       |  4 +--
+ sources/pyside2/libpyside/pysidesignal.cpp         |  4 +--
+ sources/pyside2/tests/QtWidgets/bug_662.py         |  3 +-
+ sources/pyside2/tests/signals/bug_79.py            |  5 ++++
+ sources/shiboken2/libshiboken/pep384impl.cpp       | 33 ++++++++++++++++++++++
+ sources/shiboken2/libshiboken/pep384impl.h         |  8 ++++++
+ .../shiboken2/libshiboken/signature/signature.cpp  |  2 +-
+ .../libshiboken/signature/signature_helper.cpp     |  6 ++--
+ .../shibokensupport/signature/errorhandler.py      |  6 ++++
+ sources/shiboken2/tests/samplebinding/enum_test.py |  2 +-
+ 13 files changed, 78 insertions(+), 16 deletions(-)
+
+diff --git a/build_scripts/config.py b/build_scripts/config.py
+index f2b4c40..5fc23d4 100644
+--- a/build_scripts/config.py
++++ b/build_scripts/config.py
+@@ -94,7 +94,8 @@ class Config(object):
+             'Programming Language :: Python :: 3.8',
+             'Programming Language :: Python :: 3.9',
+             'Programming Language :: Python :: 3.10',
+-            'Programming Language :: Python :: 3.11'
++            'Programming Language :: Python :: 3.11',
++            'Programming Language :: Python :: 3.12',
+         ]
+ 
+         self.setup_script_dir = None
+diff --git a/sources/pyside2/PySide2/support/generate_pyi.py b/sources/pyside2/PySide2/support/generate_pyi.py
+index 1956533..fd05b1f 100644
+--- a/sources/pyside2/PySide2/support/generate_pyi.py
++++ b/sources/pyside2/PySide2/support/generate_pyi.py
+@@ -116,8 +116,12 @@ class Formatter(Writer):
+         """
+         def _typevar__repr__(self):
+             return "typing." + self.__name__
+-        typing.TypeVar.__repr__ = _typevar__repr__
+-
++        # This is no longer necessary for modern typing versions.
++        # Ignore therefore if the repr is read-only and cannot be changed.
++        try:
++            typing.TypeVar.__repr__ = _typevar__repr__
++        except TypeError:
++            pass
+         # Adding a pattern to substitute "Union[T, NoneType]" by "Optional[T]"
+         # I tried hard to replace typing.Optional by a simple override, but
+         # this became _way_ too much.
+diff --git a/sources/pyside2/libpyside/feature_select.cpp b/sources/pyside2/libpyside/feature_select.cpp
+index b9e1470..533c09d 100644
+--- a/sources/pyside2/libpyside/feature_select.cpp
++++ b/sources/pyside2/libpyside/feature_select.cpp
+@@ -358,7 +358,8 @@ static bool SelectFeatureSetSubtype(PyTypeObject *type, PyObject *select_id)
+      * This is the selector for one sublass. We need to call this for
+      * every subclass until no more subclasses or reaching the wanted id.
+      */
+-    if (Py_TYPE(type->tp_dict) == Py_TYPE(PyType_Type.tp_dict)) {
++    static const auto *pyTypeType_tp_dict = PepType_GetDict(&PyType_Type);
++    if (Py_TYPE(type->tp_dict) == Py_TYPE(pyTypeType_tp_dict)) {
+         // On first touch, we initialize the dynamic naming.
+         // The dict type will be replaced after the first call.
+         if (!replaceClassDict(type)) {
+@@ -385,7 +386,8 @@ static inline PyObject *SelectFeatureSet(PyTypeObject *type)
+      * Generated functions call this directly.
+      * Shiboken will assign it via a public hook of `basewrapper.cpp`.
+      */
+-    if (Py_TYPE(type->tp_dict) == Py_TYPE(PyType_Type.tp_dict)) {
++    static const auto *pyTypeType_tp_dict = PepType_GetDict(&PyType_Type);
++    if (Py_TYPE(type->tp_dict) == Py_TYPE(pyTypeType_tp_dict)) {
+         // We initialize the dynamic features by using our own dict type.
+         if (!replaceClassDict(type))
+             return nullptr;
+@@ -721,11 +723,11 @@ static bool patch_property_impl()
+     // Turn `__doc__` into a computed attribute without changing writability.
+     auto gsp = property_getset;
+     auto type = &PyProperty_Type;
+-    auto dict = type->tp_dict;
++    AutoDecRef dict(PepType_GetDict(type));
+     AutoDecRef descr(PyDescr_NewGetSet(type, gsp));
+     if (descr.isNull())
+         return false;
+-    if (PyDict_SetItemString(dict, gsp->name, descr) < 0)
++    if (PyDict_SetItemString(dict.object(), gsp->name, descr) < 0)
+         return false;
+     // Replace property_descr_get/set by slightly changed versions
+     return true;
+diff --git a/sources/pyside2/libpyside/pysideproperty.cpp b/sources/pyside2/libpyside/pysideproperty.cpp
+index 86909d3..d2e2c68 100644
+--- a/sources/pyside2/libpyside/pysideproperty.cpp
++++ b/sources/pyside2/libpyside/pysideproperty.cpp
+@@ -445,8 +445,8 @@ namespace {
+ 
+ static PyObject *getFromType(PyTypeObject *type, PyObject *name)
+ {
+-    PyObject *attr = nullptr;
+-    attr = PyDict_GetItem(type->tp_dict, name);
++    AutoDecRef tpDict(PepType_GetDict(type));
++    auto *attr = PyDict_GetItem(tpDict.object(), name);
+     if (!attr) {
+         PyObject *bases = type->tp_bases;
+         int size = PyTuple_GET_SIZE(bases);
+diff --git a/sources/pyside2/libpyside/pysidesignal.cpp b/sources/pyside2/libpyside/pysidesignal.cpp
+index 6824a71..f15d7aa 100644
+--- a/sources/pyside2/libpyside/pysidesignal.cpp
++++ b/sources/pyside2/libpyside/pysidesignal.cpp
+@@ -670,8 +670,8 @@ void updateSourceObject(PyObject *source)
+     Py_ssize_t pos = 0;
+     PyObject *value;
+     PyObject *key;
+-
+-    while (PyDict_Next(objType->tp_dict, &pos, &key, &value)) {
++    Shiboken::AutoDecRef tpDict(PepType_GetDict(objType));
++    while (PyDict_Next(tpDict, &pos, &key, &value)) {
+         if (PyObject_TypeCheck(value, PySideSignalTypeF())) {
+             Shiboken::AutoDecRef signalInstance(reinterpret_cast<PyObject *>(PyObject_New(PySideSignalInstance, PySideSignalInstanceTypeF())));
+             instanceInitialize(signalInstance.cast<PySideSignalInstance *>(), key, reinterpret_cast<PySideSignal *>(value), source, 0);
+diff --git a/sources/pyside2/tests/QtWidgets/bug_662.py b/sources/pyside2/tests/QtWidgets/bug_662.py
+index 7fb97de..ec0e6f9 100644
+--- a/sources/pyside2/tests/QtWidgets/bug_662.py
++++ b/sources/pyside2/tests/QtWidgets/bug_662.py
+@@ -40,7 +40,8 @@ from PySide2.QtWidgets import QTextEdit, QApplication
+ import sys
+ 
+ class testQTextBlock(unittest.TestCase):
+-    def tesIterator(self):
++
++    def testIterator(self):
+         edit = QTextEdit()
+         cursor = edit.textCursor()
+         fmt = QTextCharFormat()
+diff --git a/sources/pyside2/tests/signals/bug_79.py b/sources/pyside2/tests/signals/bug_79.py
+index ca25fb3..b70c8c5 100644
+--- a/sources/pyside2/tests/signals/bug_79.py
++++ b/sources/pyside2/tests/signals/bug_79.py
+@@ -60,6 +60,11 @@ class ConnectTest(unittest.TestCase):
+         gc.collect()
+         # if this is no debug build, then we check at least that
+         # we do not crash any longer.
++        for idx in range(200):
++            # PYSIDE-2230: Warm-up is necessary before measuring, because
++            # the code changes the constant parts after some time.
++            o.selectionModel().destroyed.connect(self.callback)
++            o.selectionModel().destroyed.disconnect(self.callback)
+         if not skiptest:
+             total = gettotalrefcount()
+         for idx in range(1000):
+diff --git a/sources/shiboken2/libshiboken/pep384impl.cpp b/sources/shiboken2/libshiboken/pep384impl.cpp
+index d12dae3..fed2716 100644
+--- a/sources/shiboken2/libshiboken/pep384impl.cpp
++++ b/sources/shiboken2/libshiboken/pep384impl.cpp
+@@ -810,6 +810,39 @@ init_PepRuntime()
+         PepRuntime_38_flag = 1;
+ }
+ 
++#ifdef Py_LIMITED_API
++static PyObject *emulatePyType_GetDict(PyTypeObject *type)
++{
++    if (_PepRuntimeVersion() < 0x030C00 || type->tp_dict) {
++        auto *res = type->tp_dict;
++        Py_XINCREF(res);
++        return res;
++    }
++    // PYSIDE-2230: Here we are really cheating. We don't know how to
++    //              access an internal dict, and so we simply pretend
++    //              it were an empty dict. This works great for our types.
++    // This was an unexpectedly simple solution :D
++    return PyDict_New();
++}
++#endif
++
++// PyType_GetDict: replacement for <static type>.tp_dict, which is
++// zero for builtin types since 3.12.
++PyObject *PepType_GetDict(PyTypeObject *type)
++{
++#if !defined(Py_LIMITED_API)
++#  if PY_VERSION_HEX >= 0x030C0000
++    return PyType_GetDict(type);
++#  else
++    // pre 3.12 fallback code, mimicking the addref-behavior.
++    Py_XINCREF(type->tp_dict);
++    return type->tp_dict;
++#  endif
++#else
++    return emulatePyType_GetDict(type);
++#endif // Py_LIMITED_API
++}
++
+ /*****************************************************************************
+  *
+  * Module Initialization
+diff --git a/sources/shiboken2/libshiboken/pep384impl.h b/sources/shiboken2/libshiboken/pep384impl.h
+index a870d6b..440784e 100644
+--- a/sources/shiboken2/libshiboken/pep384impl.h
++++ b/sources/shiboken2/libshiboken/pep384impl.h
+@@ -567,6 +567,14 @@ extern LIBSHIBOKEN_API PyObject *PepMapping_Items(PyObject *o);
+ 
+ extern LIBSHIBOKEN_API int PepRuntime_38_flag;
+ 
++/*****************************************************************************
++ *
++ * Runtime support for Python 3.12 incompatibility
++ *
++ */
++
++LIBSHIBOKEN_API PyObject *PepType_GetDict(PyTypeObject *type);
++
+ /*****************************************************************************
+  *
+  * Module Initialization
+diff --git a/sources/shiboken2/libshiboken/signature/signature.cpp b/sources/shiboken2/libshiboken/signature/signature.cpp
+index 191af3d..f817e47 100644
+--- a/sources/shiboken2/libshiboken/signature/signature.cpp
++++ b/sources/shiboken2/libshiboken/signature/signature.cpp
+@@ -482,7 +482,7 @@ static PyObject *adjustFuncName(const char *func_name)
+ 
+     // Find the feature flags
+     auto type = reinterpret_cast<PyTypeObject *>(obtype.object());
+-    auto dict = type->tp_dict;
++    AutoDecRef dict(PepType_GetDict(type));
+     int id = SbkObjectType_GetReserved(type);
+     id = id < 0 ? 0 : id;   // if undefined, set to zero
+     auto lower = id & 0x01;
+diff --git a/sources/shiboken2/libshiboken/signature/signature_helper.cpp b/sources/shiboken2/libshiboken/signature/signature_helper.cpp
+index 0246ec6..05eaa14 100644
+--- a/sources/shiboken2/libshiboken/signature/signature_helper.cpp
++++ b/sources/shiboken2/libshiboken/signature/signature_helper.cpp
+@@ -105,7 +105,8 @@ int add_more_getsets(PyTypeObject *type, PyGetSetDef *gsp, PyObject **doc_descr)
+      */
+     assert(PyType_Check(type));
+     PyType_Ready(type);
+-    PyObject *dict = type->tp_dict;
++    AutoDecRef tpDict(PepType_GetDict(type));
++    auto *dict = tpDict.object();
+     for (; gsp->name != nullptr; gsp++) {
+         PyObject *have_descr = PyDict_GetItemString(dict, gsp->name);
+         if (have_descr != nullptr) {
+@@ -346,7 +347,8 @@ static int _build_func_to_type(PyObject *obtype)
+      * We also check for hidden methods, see below.
+      */
+     auto *type = reinterpret_cast<PyTypeObject *>(obtype);
+-    PyObject *dict = type->tp_dict;
++    AutoDecRef tpDict(PepType_GetDict(type));
++    auto *dict = tpDict.object();
+     PyMethodDef *meth = type->tp_methods;
+ 
+     if (meth == nullptr)
+diff --git a/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/errorhandler.py b/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/errorhandler.py
+index 47ab89a..3e1266c 100644
+--- a/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/errorhandler.py
++++ b/sources/shiboken2/shibokenmodule/files.dir/shibokensupport/signature/errorhandler.py
+@@ -113,6 +113,12 @@ def seterror_argument(args, func_name, info):
+             msg = "{func_name}(): {info}".format(**locals())
+             err = AttributeError
+         return err, msg
++    if isinstance(info, Exception):
++        # PYSIDE-2230: Python 3.12 seems to always do normalization.
++        err = type(info)
++        info = info.args[0]
++        msg = f"{func_name}(): {info}"
++        return err, msg
+     if info and type(info) is dict:
+         keyword = tuple(info)[0]
+         msg = "{func_name}(): unsupported keyword '{keyword}'".format(**locals())
+diff --git a/sources/shiboken2/tests/samplebinding/enum_test.py b/sources/shiboken2/tests/samplebinding/enum_test.py
+index 0beb720..f2606a4 100644
+--- a/sources/shiboken2/tests/samplebinding/enum_test.py
++++ b/sources/shiboken2/tests/samplebinding/enum_test.py
+@@ -95,7 +95,7 @@ class EnumTest(unittest.TestCase):
+ 
+     def testEnumConstructorWithTooManyParameters(self):
+         '''Calling the constructor of non-extensible enum with the wrong number of parameters.'''
+-        self.assertRaises(TypeError, SampleNamespace.InValue, 13, 14)
++        self.assertRaises((TypeError, ValueError), SampleNamespace.InValue, 13, 14)
+ 
+     def testEnumConstructorWithNonNumberParameter(self):
+         '''Calling the constructor of non-extensible enum with a string.'''
+

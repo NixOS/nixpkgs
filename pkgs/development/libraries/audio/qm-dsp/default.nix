@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
     rmdir $out/include/qm-dsp
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-I${kissfft}/include/kissfft";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude kissfft}/include/kissfft";
 
   meta = with lib; {
     description = "C++ library of functions for DSP and Music Informatics purposes";
     homepage = "https://code.soundsoftware.ac.uk/projects/qm-dsp";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

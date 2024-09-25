@@ -5,7 +5,7 @@
   zlib,
   defaultMakeFlags,
   coreutils,
-  cctools-port,
+  cctools,
   install,
   bsdSetupHook,
   netbsdSetupHook,
@@ -72,7 +72,7 @@ mkDerivation (
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # GNU objcopy produces broken .a libs which won't link into dependers.
         # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
-        "OBJCOPY=${cctools-port}/bin/strip"
+        "OBJCOPY=${cctools}/bin/strip"
       ];
     RENAME = "-D";
 
@@ -118,7 +118,7 @@ mkDerivation (
         install -D $BSDSRCDIR/common/include/rpc/types.h $dev/include/rpc/types.h
         sed -i '1s;^;#include "nbtool_config.h"\n;' $dev/include/rpc/types.h
       ''
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         mkdir -p $dev/include/ssp
         touch $dev/include/ssp/ssp.h
       ''

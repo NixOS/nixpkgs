@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_EXPAT=ON"
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
-  ] ++ lib.optionals (enableOpenGLX11 && stdenv.isDarwin) [
+  ] ++ lib.optionals (enableOpenGLX11 && stdenv.hostPlatform.isDarwin) [
     "-DXQuartzGL_INCLUDE_DIR=${libGLX.dev}/include"
     "-DXQuartzGL_gl_LIBRARY=${libGLX}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.

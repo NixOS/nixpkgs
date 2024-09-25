@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TIXXNmaNgpIL/b25KsPWa32xEI8JWBp2ndkWCgLe80k=";
   };
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace kccommon.h \
       --replace tr1/unordered_map unordered_map \
       --replace tr1/unordered_set unordered_set \

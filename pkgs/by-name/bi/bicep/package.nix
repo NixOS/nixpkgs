@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.28.1";
+  version = "0.29.47";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-9yWfzYrs7LxVmb+AZUI+G0TQQteJP7gpISJGdY0qKAg=";
+    hash = "sha256-KdaoOejoM/3P1WwDCjDhChOpKA7c4UulPLK7IOVw3o4=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildDotnetModule rec {
 
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64); # mono is not available on aarch64-darwin
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
 
   nativeCheckInputs = [ mono ];
 

@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libnl, openssl, sqlite ? null }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libnl,
+  openssl,
+  nixosTests,
+  sqlite ? null,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IG58eZtnhXLC49EgMCOHhLxKn4IyOwFWtMlGbxSYkV0=";
+    sha256 = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,53 +27,6 @@ stdenv.mkDerivation rec {
       # server's URLs containing semicolons. Using the github mirror instead.
       url = "https://raw.githubusercontent.com/openwrt/openwrt/eefed841b05c3cd4c65a78b50ce0934d879e6acf/package/network/services/hostapd/patches/300-noscan.patch";
       sha256 = "08p5frxhpq1rp2nczkscapwwl8g9nc4fazhjpxic5bcbssc3sb00";
-    })
-
-    # Backported security patches for CVE-2024-3596 (https://blastradius.fail),
-    # these can be removed when updating to 2.11.
-
-    # RADIUS: Allow Message-Authenticator attribute as the first attribute
-    (fetchpatch {
-      url = "https://w1.fi/cgit/hostap/patch/?id=adac846bd0e258a0aa50750bbd2b411fa0085c46";
-      hash = "sha256-1jfSeVGL5tyZn8F2wpQ7KwaQaEKWsCOW/bavovMcdz4=";
-    })
-
-    # RADIUS server: Place Message-Authenticator attribute as the first one
-    (fetchpatch {
-      url = "https://w1.fi/cgit/hostap/patch/?id=54abb0d3cf35894e7d86e3f7555e95b106306803";
-      hash = "sha256-fVhQlOVETttVf1M9iKrXJrv7mxpxSjCt3w8kndRal08=";
-    })
-
-    # hostapd: Move Message-Authenticator attribute to be the first one in req
-    (fetchpatch {
-      url = "https://w1.fi/cgit/hostap/patch/?id=37fe8e48ab44d44fe3cf5dd8f52cb0a10be0cd17";
-      hash = "sha256-3eoAkXhieO3f0R5PTlH6g5wcgo/aLQN6XcPSITGgciE=";
-    })
-
-    # RADIUS DAS: Move Message-Authenticator attribute to be the first one
-    (fetchpatch {
-      url = "https://w1.fi/cgit/hostap/patch/?id=f54157077f799d84ce26bed6ad6b01c4a16e31cf";
-      hash = "sha256-dcaghKbKNFVSN6ONNaFt1s0S35mkqox2aykiExEXyPQ=";
-    })
-
-    # Require Message-Authenticator in Access-Reject even without EAP-Message
-    (fetchpatch {
-      url = "https://w1.fi/cgit/hostap/patch/?id=934b0c3a45ce0726560ccefbd992a9d385c36385";
-      hash = "sha256-9GquP/+lsghF81nMhOuRwlSz/pEnmk+mSex8aM3/qdA=";
-    })
-
-    # RADIUS: Require Message-Authenticator attribute in MAC ACL cases
-    #(fetchpatch {
-    #  url = "https://w1.fi/cgit/hostap/patch/?id=58097123ec5ea6f8276b38cb9b07669ec368a6c1";
-    #  hash = "sha256-mW+PAeAkNcrlFPsjxLvZ/1Smq6H6KXq5Le3HuLA2KKw=";
-    #})
-    # Needed to be fixed to apply correctly:
-    ./0007-RADIUS-Require-Message-Authenticator-attribute-in-MA.patch
-
-    # RADIUS: Check Message-Authenticator if it is present even if not required
-    (fetchpatch {
-      url = "https://w1.fi/cgit/hostap/patch/?id=f302d9f9646704cce745734af21d540baa0da65f";
-      hash = "sha256-6i0cq5YBm2w03yMrdYGaEqe1dTsmokZWOs4WPFX36qo=";
     })
   ];
 
@@ -127,6 +89,7 @@ stdenv.mkDerivation rec {
     CONFIG_IEEE80211N=y
     CONFIG_IEEE80211AC=y
     CONFIG_IEEE80211AX=y
+    CONFIG_IEEE80211BE=y
   '' + lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
@@ -147,6 +110,10 @@ stdenv.mkDerivation rec {
     install -vD hostapd.8 -t $man/share/man/man8
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) wpa_supplicant;
+  };
 
   meta = with lib; {
     homepage = "https://w1.fi/hostapd/";

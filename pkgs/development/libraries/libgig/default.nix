@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.linuxsampler.org";
     description = "Gigasampler file access library";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -6,17 +6,21 @@
 , rustPlatform
 , protobuf
 , capnproto
+, cmake
+, testers
+, veilid
+, gitUpdater
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Gm65fvLImbsAU8kMYQv5VFEjkBQnhBFDqwheddRbtU8=";
+    hash = "sha256-nEJxiox2aoQBV83vlpiBB4In59+lfHF6/a8HqDYcFT4=";
   };
 
   cargoLock = {
@@ -31,14 +35,17 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     capnproto
+    cmake
     protobuf
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Security ];
 
   cargoBuildFlags = [
     "--workspace"
   ];
+
+  RUSTFLAGS = "--cfg tokio_unstable";
 
   doCheck = false;
 
@@ -48,8 +55,18 @@ rustPlatform.buildRustPackage rec {
     moveToOutput "lib" "$lib"
   '';
 
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      veilid-version = testers.testVersion {
+        package = veilid;
+      };
+    };
+  };
+
   meta = with lib; {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
+    mainProgram = "veilid-server";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
     maintainers = with maintainers; [ bbigras qbit ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     repo = "genmap";
     rev = "genmap-v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-7sIKBRMNzyCrZ/c2nXkknb6a5YsXe6DRE2IFhp6AviY=";
+    hash = "sha256-7sIKBRMNzyCrZ/c2nXkknb6a5YsXe6DRE2IFhp6AviY=";
   };
 
   nativeBuildInputs = [ cmake ];

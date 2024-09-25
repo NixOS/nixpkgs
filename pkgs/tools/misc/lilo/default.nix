@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "lilo";
   version = "24.2";
   src = fetchurl {
-    url = "https://www.joonet.de/lilo/ftp/sources/${pname}-${version}.tar.gz";
+    url = "https://www.joonet.de/lilo/ftp/sources/lilo-${version}.tar.gz";
     hash = "sha256-4VjxneRWDJNevgUHwht5v/F2GLkjDYB2/oxf/5/b1bE=";
   };
   nativeBuildInputs = [ dev86 sharutils ];

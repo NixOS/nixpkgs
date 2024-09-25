@@ -2,8 +2,8 @@
   lib,
   fetchPypi,
   fetchFromGitHub,
-  python,
   buildPythonPackage,
+  setuptools,
   absl-py,
   nltk,
   numpy,
@@ -23,7 +23,7 @@ in
 buildPythonPackage rec {
   pname = "rouge-score";
   version = "0.1.2";
-  format = "setuptools";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -36,10 +36,14 @@ buildPythonPackage rec {
   # the tar file from pypi doesn't come with the test data
   postPatch = ''
     substituteInPlace rouge_score/test_util.py \
-      --replace 'os.path.join(os.path.dirname(__file__), "testdata")' '"${testdata}/rouge/testdata/"'
+      --replace-fail \
+        'os.path.join(os.path.dirname(__file__), "testdata")' \
+        '"${testdata}/rouge/testdata/"'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     absl-py
     nltk
     numpy

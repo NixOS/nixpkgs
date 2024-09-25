@@ -17,7 +17,7 @@
   packaging,
   pathspec,
   protobuf,
-  python3,
+  callPackage,
   pythonOlder,
   pytz,
   pyyaml,
@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.8.2";
+  version = "1.8.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W1bD/XUmBYKzx66/rO//lCG+LOwDSlOW/KQPs0+cKTI=";
+    hash = "sha256-1NvdRAr8T2dDgtyj5tUIqhjHIu4sZYS+oj7hOMEqs0A=";
   };
 
   sourceRoot = "${src.name}/core";
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru = {
-    withAdapters = python3.pkgs.callPackage ./with-adapters.nix { };
+    withAdapters = callPackage ./with-adapters.nix { };
   };
 
   meta = with lib; {

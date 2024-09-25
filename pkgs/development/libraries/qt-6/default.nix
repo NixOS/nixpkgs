@@ -28,7 +28,7 @@ let
         inherit (self) qtModule;
         inherit srcs python3;
         stdenv =
-          if stdenv.isDarwin
+          if stdenv.hostPlatform.isDarwin
           then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
           else stdenv;
       });
@@ -106,7 +106,7 @@ let
             qtwebengine
             qtwebsockets
             qtwebview
-          ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ]))
+          ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwayland libglvnd ]))
         { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
@@ -152,7 +152,7 @@ let
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
-        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds cctools xnu;
+        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds xnu;
         inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)
@@ -163,7 +163,7 @@ let
         qtModule = callPackage
           ({ qtModule }: qtModule.override {
             stdenv =
-              if stdenv.isDarwin
+              if stdenv.hostPlatform.isDarwin
               then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
               else stdenv;
           })

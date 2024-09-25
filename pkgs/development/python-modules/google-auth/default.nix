@@ -84,7 +84,7 @@ buildPythonPackage rec {
     "google.oauth2"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Disable tests using pyOpenSSL as it does not build on M1 Macs
     "tests/transport/test__mtls_helper.py"
     "tests/transport/test_requests.py"
@@ -103,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

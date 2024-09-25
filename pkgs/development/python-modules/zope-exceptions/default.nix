@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/zope.exceptions";
     changelog = "https://github.com/zopefoundation/zope.exceptions/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -19,23 +19,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-UAKEyJFdgwJ4Jz3lTG6vmxEkIVLSikWOEBjYV6o72nQ=";
+    hash = "sha256-eMg8DXFtVfYhl6vpg/KRUZUgMU/XsCS29Af1CSIbUsY=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   cmakeFlags = ["-DWITH_LTO=OFF"];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-faligned-allocation"
   ]);
 

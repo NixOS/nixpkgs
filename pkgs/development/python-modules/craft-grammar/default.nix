@@ -5,8 +5,6 @@
   nix-update-script,
   overrides,
   setuptools,
-  pytest-check,
-  pytest-mock,
   pytestCheckHook,
   pydantic_1,
   pyyaml,

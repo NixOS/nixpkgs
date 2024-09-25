@@ -32,17 +32,17 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     perl
   ];
 
   buildInputs =
     [
       oniguruma
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       openssl
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--package" "bws" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd bws \
       --bash <($out/bin/bws completions bash) \
       --fish <($out/bin/bws completions fish) \

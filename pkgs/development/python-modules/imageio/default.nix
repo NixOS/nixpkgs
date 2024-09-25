@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.34.2";
+  version = "2.35.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,10 +41,10 @@ buildPythonPackage rec {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1q/LPEdo9rzcIR1ZD+bIP8MIKe7PmxRd8UX6c5C0V5k=";
+    hash = "sha256-WeoZE2TPBAhzBBcZNQqoiqvribMCLSZWk/XpdMydvCQ=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     bsdf = [ ];
     dicom = [ ];
     feisem = [ ];
@@ -79,14 +79,11 @@ buildPythonPackage rec {
     heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs =
-    [
-      fsspec
-      psutil
-      pytestCheckHook
-    ]
-    ++ fsspec.optional-dependencies.github
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs = [
+    fsspec
+    psutil
+    pytestCheckHook
+  ] ++ fsspec.optional-dependencies.github ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "-m 'not needs_internet'" ];
 
@@ -103,7 +100,7 @@ buildPythonPackage rec {
     "tests/test_swf.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Segmentation fault
     "test_bayer_write"
     # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation

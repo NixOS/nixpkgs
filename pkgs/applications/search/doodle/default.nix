@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = "https://grothoff.org/christian/doodle/";
     description = "Tool to quickly index and search documents on a computer";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
     mainProgram = "doodle";
   };

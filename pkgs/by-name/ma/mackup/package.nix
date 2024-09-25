@@ -6,36 +6,33 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mackup";
-  version = "0.8.40";
+  version = "0.8.41";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lra";
     repo = "mackup";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hAIl9nGFRaROlt764IZg4ejw+b1dpnYpiYq4CB9dJqQ=";
+    rev = "${version}";
+    hash = "sha256-eWSBl8BTg2FLI21DQcnepBFPF08bfm0V8lYB4mMbAiw=";
   };
 
   postPatch = ''
     substituteInPlace mackup/utils.py \
-      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"'
+      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"' \
   '';
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
-    nose
-  ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs = with python3Packages; [
-    six
-    docopt
-  ];
+  dependencies = with python3Packages; [ docopt ];
 
   pythonImportsCheck = [ "mackup" ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests/*.py" ];
+
+  # Disabling tests failing on darwin due to a missing pgrep binary on procps
+  disabledTests = [ "test_is_process_running" ];
 
   meta = {
     description = "A tool to keep your application settings in sync (OS X/Linux)";

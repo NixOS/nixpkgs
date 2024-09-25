@@ -12,17 +12,18 @@
 , wrapGAppsHook4
 , apx
 , gnome-console
+, vte-gtk4
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apx-gui";
-  version = "0.1.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner  = "Vanilla-OS";
     repo   = "apx-gui";
     rev    = "v${finalAttrs.version}";
-    hash = "sha256-orP5kAsoXX0zyDskeIPKKHNt5c757eUm9un4Ws6uFYA=";
+    hash = "sha256-UgDBDk4ChgWFUoz5BAXbn0b4Bngs9/hTmcu1Y4FXLU0=";
   };
 
   strictDeps = true;
@@ -34,12 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    (python3.withPackages (ps: [ ps.pygobject3 ]))
+    (python3.withPackages (ps: [ ps.pygobject3 ps.requests ]))
     wrapGAppsHook4
   ];
 
   buildInputs = [
     libadwaita
+    vte-gtk4
   ];
 
   preFixup = ''

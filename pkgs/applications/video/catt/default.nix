@@ -6,6 +6,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       pychromecast = super.pychromecast.overridePythonAttrs (_: rec {
         version = "13.1.0";
@@ -63,7 +64,7 @@ python.pkgs.buildPythonApplication rec {
     description = "Tool to send media from online sources to Chromecast devices";
     homepage = "https://github.com/skorokithakis/catt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "catt";
   };
 }

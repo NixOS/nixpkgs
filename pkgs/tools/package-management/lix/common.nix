@@ -19,7 +19,6 @@ assert (hash == null) -> (src != null);
 {
   stdenv,
   meson,
-  bash,
   bison,
   boehmgc,
   boost,
@@ -27,29 +26,20 @@ assert (hash == null) -> (src != null);
   busybox-sandbox-shell,
   bzip2,
   callPackage,
-  coreutils,
   curl,
   cmake,
-  docbook_xsl_ns,
-  docbook5,
   doxygen,
   editline,
   flex,
   git,
-  gnutar,
   gtest,
-  gzip,
   jq,
   lib,
   libarchive,
   libcpuid,
-  libgit2,
   libsodium,
-  libxml2,
-  libxslt,
   lowdown,
   lsof,
-  man,
   mercurial,
   mdbook,
   mdbook-linkcheck,
@@ -57,8 +47,8 @@ assert (hash == null) -> (src != null);
   ninja,
   openssl,
   toml11,
+  pegtl,
   python3,
-  perl,
   pkg-config,
   rapidcheck,
   Security,
@@ -75,7 +65,7 @@ assert (hash == null) -> (src != null);
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin),
+  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   aws-sdk-cpp,
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
@@ -85,7 +75,11 @@ assert (hash == null) -> (src != null);
   stateDir,
   storeDir,
 }:
-assert lib.assertMsg (docCargoHash != null || docCargoLock != null) "Either `lix-doc`'s cargoHash using `docCargoHash` or `lix-doc`'s `cargoLock.lockFile` using `docCargoLock` must be set!";
+assert lib.assertMsg (docCargoHash != null || docCargoLock != null)
+  "Either `lix-doc`'s cargoHash using `docCargoHash` or `lix-doc`'s `cargoLock.lockFile` using `docCargoLock` must be set!";
+let
+  isLegacyParser = lib.versionOlder version "2.91";
+in
 stdenv.mkDerivation {
   pname = "lix";
 
@@ -102,6 +96,7 @@ stdenv.mkDerivation {
     ++ lib.optionals enableDocumentation [
       "man"
       "doc"
+      "devdoc"
     ];
 
   strictDeps = true;
@@ -109,14 +104,12 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [
       pkg-config
-      bison
       flex
       jq
       meson
       ninja
       cmake
       python3
-      doxygen
 
       # Tests
       git
@@ -124,12 +117,14 @@ stdenv.mkDerivation {
       jq
       lsof
     ]
-    ++ lib.optionals (enableDocumentation) [
+    ++ lib.optionals isLegacyParser [ bison ]
+    ++ lib.optionals enableDocumentation [
       (lib.getBin lowdown)
       mdbook
       mdbook-linkcheck
+      doxygen
     ]
-    ++ lib.optionals stdenv.isLinux [ util-linuxMinimal ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs =
     [
@@ -149,8 +144,9 @@ stdenv.mkDerivation {
       toml11
       lix-doc
     ]
-    ++ lib.optionals stdenv.isDarwin [ Security ]
-    ++ lib.optionals (stdenv.isx86_64) [ libcpuid ]
+    ++ lib.optionals (!isLegacyParser) [ pegtl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
     ++ lib.optionals withLibseccomp [ libseccomp ]
     ++ lib.optionals withAWS [ aws-sdk-cpp ];
 
@@ -160,7 +156,7 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    patchShebangs --build tests
+    patchShebangs --build tests doc/manual
   '';
 
   preConfigure =
@@ -170,7 +166,7 @@ stdenv.mkDerivation {
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
         patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
       ''}
@@ -184,42 +180,46 @@ stdenv.mkDerivation {
       ''}
     '';
 
-  mesonBuildType = "release";
+  # -O3 seems to anger a gcc bug and provide no performance benefit.
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114360
+  # We use -O2 upstream https://gerrit.lix.systems/c/lix/+/554
+  mesonBuildType = "debugoptimized";
+
   mesonFlags =
     [
-      # LTO optimization
-      (lib.mesonBool "b_lto" (!stdenv.isDarwin))
+      # Enable LTO, since it improves eval performance a fair amount
+      # LTO is disabled on static due to strange linking errors
+      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
-      (lib.mesonBool "enable-embedded-sandbox-shell" (stdenv.isLinux && stdenv.hostPlatform.isStatic))
+      (lib.mesonEnable "internal-api-docs" enableDocumentation)
+      (lib.mesonBool "enable-embedded-sandbox-shell" (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic))
       (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
 
       (lib.mesonOption "store-dir" storeDir)
       (lib.mesonOption "state-dir" stateDir)
       (lib.mesonOption "sysconfdir" confDir)
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
     ];
 
-  # Needed for Meson to find Boost.
-  # https://github.com/NixOS/nixpkgs/issues/86131.
-  env = {
-    BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-  };
+  ninjaFlags = [ "-v" ];
 
   postInstall =
-    ''
+    lib.optionalString enableDocumentation ''
       mkdir -p $doc/nix-support
       echo "doc manual $doc/share/doc/nix/manual" >> $doc/nix-support/hydra-build-products
+
+      mkdir -p $devdoc/nix-support
+      echo "devdoc internal-api $devdoc/share/doc/nix/internal-api" >> $devdoc/nix-support/hydra-build-products
     ''
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       mkdir -p $out/nix-support
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       for lib in liblixutil.dylib liblixexpr.dylib; do
         install_name_tool \
           -change "${lib.getLib boost}/lib/libboost_context.dylib" \
@@ -228,15 +228,27 @@ stdenv.mkDerivation {
       done
     '';
 
+  # This needs to run after _multioutDocs moves the docs to $doc
+  postFixup = lib.optionalString enableDocumentation ''
+    mkdir -p $devdoc/share/doc/nix
+    mv $doc/share/doc/nix/internal-api $devdoc/share/doc/nix
+  '';
+
   doCheck = true;
-  mesonCheckFlags = [ "--suite=check" ];
+  mesonCheckFlags = [
+    "--suite=check"
+    "--print-errorlogs"
+  ];
   checkInputs = [
     gtest
     rapidcheck
   ];
 
   doInstallCheck = true;
-  mesonInstallCheckFlags = [ "--suite=installcheck" ];
+  mesonInstallCheckFlags = [
+    "--suite=installcheck"
+    "--print-errorlogs"
+  ];
 
   preInstallCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # socket path becomes too long otherwise
@@ -252,12 +264,20 @@ stdenv.mkDerivation {
     meson test --no-rebuild "''${flagsArray[@]}"
     runHook postInstallCheck
   '';
-  # strictoverflow is disabled because we trap on signed overflow instead
-  hardeningDisable = [ "strictoverflow" ] ++ lib.optional stdenv.hostPlatform.isStatic "pie";
-  # hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
-  # hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
-  separateDebugInfo = stdenv.isLinux && !enableStatic;
+  hardeningDisable = [
+    "shadowstack"
+    # strictoverflow is disabled because we trap on signed overflow instead
+    "strictoverflow"
+  ]
+  # fortify breaks the build with lto and musl for some reason
+  ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+
+  # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
+  separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
   enableParallelBuilding = true;
+
+  # Used by (1) test which has dynamic port assignment.
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     inherit aws-sdk-cpp boehmgc;
@@ -269,7 +289,7 @@ stdenv.mkDerivation {
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
   pos = builtins.unsafeGetAttrPos "version" args;
-  meta = with lib; {
+  meta = {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
       Lix (a fork of Nix) is a powerful package manager for Linux and other Unix systems that
@@ -279,11 +299,10 @@ stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://lix.systems";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     inherit maintainers;
-    platforms = platforms.unix;
-    outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    platforms = lib.platforms.unix;
+    outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
-    broken = enableStatic;
   };
 }

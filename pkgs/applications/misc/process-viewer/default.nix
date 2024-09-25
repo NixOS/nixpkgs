@@ -13,14 +13,14 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
+    hash = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
   };
 
-  cargoSha256 = "sha256-lgVByl+mpCDbhwlC1Eiw9ZkHIDYJsOR06Ds790pXOMc=";
+  cargoHash = "sha256-lgVByl+mpCDbhwlC1Eiw9ZkHIDYJsOR06Ds790pXOMc=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk4 ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ gtk4 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Foundation
   ];
 

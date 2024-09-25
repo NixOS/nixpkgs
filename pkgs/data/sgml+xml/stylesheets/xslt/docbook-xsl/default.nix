@@ -70,7 +70,7 @@ let
         homepage = "https://github.com/docbook/wiki/wiki/DocBookXslStylesheets";
         description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
         license = lib.licenses.mit;
-        maintainers = [ lib.maintainers.eelco ];
+        maintainers = [ ];
         platforms = lib.platforms.all;
       };
     };

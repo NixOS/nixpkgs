@@ -4,32 +4,30 @@
 , makeWrapper
 , rustPlatform
 , testers
-
 , cachix
 , darwin
 , libgit2
-, nix
+, nixVersions
 , openssl
 , pkg-config
-
 , devenv  # required to run version test
 }:
 
 let
-  devenv_nix = nix.overrideAttrs (old: {
-    version = "2.21-devenv";
+  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
+    version = "2.24-devenv";
     src = fetchFromGitHub {
       owner = "domenkozar";
       repo = "nix";
-      rev = "b24a9318ea3f3600c1e24b4a00691ee912d4de12";
-      hash = "sha256-BGvBhepCufsjcUkXnEEXhEVjwdJAwPglCC2+bInc794=";
+      rev = "1e61e9f40673f84c3b02573145492d8af581bec5";
+      hash = "sha256-uDwWyizzlQ0HFzrhP6rVp2+2NNA+/TM5zT32dR8GUlg=";
     };
     buildInputs = old.buildInputs ++ [ libgit2 ];
     doCheck = false;
     doInstallCheck = false;
   });
 
-  version = "1.0.7";
+  version = "1.2";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -38,14 +36,16 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-eTbBvYwGlKExMSTyHQya6+6kdx1rtva/aVfyAZu2NUU=";
+    hash = "sha256-95MYldiApQ7gqoUa79yolPahudKmFv6B2HnF+ZqWiGI=";
   };
 
-  cargoHash = "sha256-fmxXCOrWRM4ZKwQS9vCIh7LonpifyeNGsj/td1CjedA=";
+  cargoHash = "sha256-A2s+DXq00T0DCVXUHy2ZN6XvqpHy6PmL0H9l1NIfFVU=";
+
+  buildAndTestSubdir = "devenv";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 

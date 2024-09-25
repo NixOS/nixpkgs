@@ -5,10 +5,12 @@
 , elfutils
 , expat
 , fetchCrate
-, fetchurl
+, fetchFromGitLab
+, fetchpatch
 , file
 , flex
 , glslang
+, spirv-tools
 , intltool
 , jdupes
 , libdrm
@@ -39,26 +41,27 @@
 , xorg
 , zstd
 , enablePatentEncumberedCodecs ? true
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light
 
 , galliumDrivers ? [
     "d3d12" # WSL emulated GPU (aka Dozen)
     "iris" # new Intel (Broadwell+)
-    "kmsro" # special "render only" driver for GPUs without a display controller
+    "llvmpipe" # software renderer
     "nouveau" # Nvidia
-    "radeonsi" # new AMD (GCN+)
     "r300" # very old AMD
     "r600" # less old AMD
-    "swrast" # software renderer (aka LLVMPipe)
+    "radeonsi" # new AMD (GCN+)
+    "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
-  ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) [
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "lima" # ARM Mali 4xx
     "panfrost" # ARM Mali Midgard and up (T/G series)
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-  ] ++ lib.optionals stdenv.isAarch64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "tegra" # Nvidia Tegra SoCs
     "v3d" # Broadcom VC5 (Raspberry Pi 4)
   ] ++ lib.optionals stdenv.hostPlatform.isx86 [
@@ -75,7 +78,7 @@
     # QEMU virtualized GPU (aka VirGL)
     # Requires ATOMIC_INT_LOCK_FREE == 2.
     "virtio"
-  ] ++ lib.optionals stdenv.isAarch64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "imagination-experimental" # PowerVR Rogue (currently N/A)
@@ -93,9 +96,6 @@
 , makeSetupHook
 }:
 
-# When updating this package, please verify at least these build (assuming x86_64-linux):
-# nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
-
 let
   rustDeps = [
     {
@@ -105,8 +105,8 @@ let
     }
     {
       pname = "proc-macro2";
-      version = "1.0.70";
-      hash = "sha256-e4ZgyZUTu5nAtaH5QVkLelqJQX/XPj/rWkzf/g2c+1g=";
+      version = "1.0.86";
+      hash = "sha256-9fYAlWRGVIwPp8OKX7Id84Kjt8OoN2cANJ/D9ZOUUZE=";
     }
     {
       pname = "quote";
@@ -115,8 +115,8 @@ let
     }
     {
       pname = "syn";
-      version = "2.0.39";
-      hash = "sha256-Mjen2L/omhVbhU/+Ao65mogs3BP3fY+Bodab3uU63EI=";
+      version = "2.0.68";
+      hash = "sha256-nGLBbxR0DFBpsXMngXdegTm/o13FBS6QsM7TwxHXbgQ=";
     }
     {
       pname = "unicode-ident";
@@ -134,7 +134,7 @@ let
 
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  common = import ./common.nix { inherit lib fetchurl; };
+  common = import ./common.nix { inherit lib fetchFromGitLab; };
 in stdenv.mkDerivation {
   inherit (common) pname version src meta;
 
@@ -203,7 +203,7 @@ in stdenv.mkDerivation {
 
     # Enable Intel RT stuff when available
     (lib.mesonBool "install-intel-clc" true)
-    (lib.mesonEnable "intel-rt" stdenv.isx86_64)
+    (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
     (lib.mesonOption "clang-libdir" "${llvmPackages.clang-unwrapped.lib}/lib")
 
     # Clover, old OpenCL frontend
@@ -216,6 +216,7 @@ in stdenv.mkDerivation {
     # meson auto_features enables this, but we do not want it
     (lib.mesonEnable "android-libbacktrace" false)
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
@@ -228,7 +229,7 @@ in stdenv.mkDerivation {
     directx-headers
     elfutils
     expat
-    glslang
+    spirv-tools
     libglvnd
     libomxil-bellagio
     libunwind
@@ -249,13 +250,14 @@ in stdenv.mkDerivation {
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev
-    valgrind-light
     vulkan-loader
     wayland
     wayland-protocols
     xcbutilkeysyms
     xorgproto
     zstd
+  ] ++ lib.optionals withValgrind [
+    valgrind-light
   ];
 
   depsBuildBuild = [
@@ -276,8 +278,11 @@ in stdenv.mkDerivation {
     python3Packages.pycparser
     python3Packages.mako
     python3Packages.ply
+    python3Packages.pyyaml
     jdupes
-    glslang
+    # Use bin output from glslang to not propagate the dev output at
+    # the build time with the host glslang.
+    (lib.getBin glslang)
     rustc
     rust-bindgen
     rust-cbindgen
@@ -367,7 +372,7 @@ in stdenv.mkDerivation {
     done
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/dri/zink_dri.so
+    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([

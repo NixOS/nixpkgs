@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "sha256-XxpiLojs1TI3qM7yXS+OPcHKo6pLcfJ+Eop7GjQ4HQw=";
+    hash = "sha256-FWOGBXYWLHHZhvC5/BpkDd70ZupzALZ3ks3qTcrtwKQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     asio avahi flac libogg libvorbis libopus
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
-  ++ lib.optional stdenv.isLinux alsa-lib
-  ++ lib.optionals stdenv.isDarwin [ IOKit AudioToolbox ];
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit AudioToolbox ];
 
-  TARGET=lib.optionalString stdenv.isDarwin "MACOS";
+  TARGET=lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

@@ -15,7 +15,6 @@
   minikanren,
   numpy,
   scipy,
-  typing-extensions,
 
   # checks
   jax,
@@ -25,11 +24,13 @@
   pytestCheckHook,
   pythonOlder,
   tensorflow-probability,
+
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.23.0";
+  version = "2.25.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -38,13 +39,12 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-r7ooPwZSEsypYAf+oWu7leuoIK39gFfHZACrxsbcIV0=";
+    hash = "sha256-NPMUfSbujT1qHsdpCazDX2xF54HvFJkOaxHSUG/FQwM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "versioneer[toml]==0.28" "versioneer[toml]"
-  '';
+  pythonRelaxDeps = [
+    "scipy"
+  ];
 
   build-system = [
     cython
@@ -59,7 +59,6 @@ buildPythonPackage rec {
     minikanren
     numpy
     scipy
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -92,6 +91,13 @@ buildPythonPackage rec {
     "tests/tensor/"
     "tests/sparse/sandbox/"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "rel-(.+)"
+    ];
+  };
 
   meta = {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";

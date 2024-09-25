@@ -20,16 +20,25 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 python3 ];
 
   outputs = [ "out" "man" "python" ];
-  postInstall = ''
-    moveToOutput "bin/lsusb.py" "$python"
+
+  postBuild = ''
+    $CC $NIX_CFLAGS -o usbreset usbreset.c
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    moveToOutput "bin/lsusb.py" "$python"
+    install -Dm555 usbreset -t $out/bin
+  '';
+
+  meta = {
     homepage = "http://www.linux-usb.org/";
     description = "Tools for working with USB devices, such as lsusb";
-    maintainers = with maintainers; [ cafkafk ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ cafkafk ];
+    license = with lib.licenses; [
+      gpl2Only # manpages, usbreset
+      gpl2Plus # most of the code
+     ];
+    platforms = lib.platforms.linux;
     mainProgram = "lsusb";
   };
 }

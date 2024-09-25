@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "VERSION=${region}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "OSX_BUILD=1"
   ] ++ compileFlags;
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       '';
     mainProgram = "sm64ex";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   } // extraMeta;
 }

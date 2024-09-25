@@ -10,7 +10,7 @@
 , libiconv
 , enablePython ? false
 , python ? null
-, swig4
+, swig
 , expat
 , libuuid
 , openjpeg
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional stdenv.isDarwin DarwinTools;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools;
 
   buildInputs = [
     expat
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals enableVTK [
     vtk
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     Cocoa
     libiconv
-  ] ++ lib.optionals enablePython [ swig4 python ];
+  ] ++ lib.optionals enablePython [ swig python ];
 
   disabledTests = [
     # require networking:
@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     "TestFind"
     "gdcmscu-echo-dicomserver"
     "gdcmscu-find-dicomserver"
-    # seemingly ought to be be disabled when the test data submodule is not present:
+    # seemingly ought to be disabled when the test data submodule is not present:
     "TestvtkGDCMImageReader2_3"
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
     "TestWrapPython"
-  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "TestRescaler2"
   ];
 

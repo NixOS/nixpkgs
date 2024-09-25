@@ -10,20 +10,19 @@
   pandas,
   pytestCheckHook,
   pythonOlder,
-  setuptools-scm,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.24.0";
-  format = "pyproject";
+  version = "0.25.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-irS13UVHui2ug1SVWkNSEIkqV13/RvMjysbPQGALl2o=";
+    hash = "sha256-lwZ0jpWnBt/9SUJts5MpgZf+GvgZchxdLG5RV2Sh+wE=";
   };
 
   postPatch = ''
@@ -33,12 +32,12 @@ buildPythonPackage rec {
       --replace '"--benchmark-disable",' ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     deprecated
     hepunits
@@ -52,13 +51,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "particle" ];
 
-  disabledTestPaths = [ "tests/particle/test_performance.py" ];
+  disabledTestPaths = [
+    # Requires pytest-benchmark and pytest-cov which we want to avoid using, as
+    # it doesn't really test functionality.
+    "tests/particle/test_performance.py"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Package to deal with particles, the PDG particle data table and others";
     homepage = "https://github.com/scikit-hep/particle";
     changelog = "https://github.com/scikit-hep/particle/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

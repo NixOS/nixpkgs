@@ -1,42 +1,40 @@
-{ lib, stdenv, fetchzip, makeWrapper, mono }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+}:
 
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "juniper";
-  version = "2.3.0";
+  version = "4.0.0";
 
-  src = fetchzip {
-    url = "http://www.juniper-lang.org/installers/Juniper-${version}.zip";
-    sha256 = "10am6fribyl7742yk6ag0da4rld924jphxja30gynzqysly8j0vg";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "calebh";
+    repo = "Juniper";
+    rev = "286050d6be5606db0973feda556d8fbc48b4566c";
+    hash = "sha256-b+aDDz46Hxgt+Oh2fNMiXFfXhuy16mzauousQGq9+dg=";
   };
 
-  doCheck = true;
+  projectFile = "Juniper/Juniper.fsproj";
+  nugetDeps = ./deps.nix;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = [ mono ];
-
-  installPhase = ''
-    runHook preInstall
-    rm juniper # original script with regular Linux assumptions
-    mkdir -p $out/bin
-    cp -r ./* $out
-    makeWrapper ${mono}/bin/mono $out/bin/juniper \
-      --add-flags "$out/Juniper.exe \$@"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Functional reactive programming language for programming Arduino";
-    mainProgram = "juniper";
     longDescription = ''
-      Juniper targets Arduino and supports many features typical of functional programming languages, including algebraic data types, tuples, records,
-      pattern matching, immutable data structures, parametric polymorphic functions, and anonymous functions (lambdas).
-      Some imperative programming concepts are also present in Juniper, such as for, while and do while loops, the ability to mark variables as mutable, and mutable references.
+      The purpose of Juniper is to provide a functional reactive programming
+      platform for designing Arduino projects. FRP's high-level approach to
+      timing-based events fits naturally with Arduino, with which programming
+      almost entirely revolves around reacting to realtime events. Juniper
+      transpiles to Arduino C++, which is then compiled to an Arduino
+      executable.
     '';
     homepage = "https://www.juniper-lang.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AlexSKaye ];
+    mainProgram = "Juniper";
+    inherit (dotnet-sdk.meta) platforms;
   };
 }

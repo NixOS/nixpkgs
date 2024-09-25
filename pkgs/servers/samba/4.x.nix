@@ -45,29 +45,30 @@
 , enableRegedit ? true, ncurses
 , enableCephFS ? false, ceph
 , enableGlusterFS ? false, glusterfs, libuuid
-, enableAcl ? (!stdenv.isDarwin), acl
-, enableLibunwind ? (!stdenv.isDarwin), libunwind
-, enablePam ? (!stdenv.isDarwin), pam
+, enableAcl ? (!stdenv.hostPlatform.isDarwin), acl
+, enableLibunwind ? (!stdenv.hostPlatform.isDarwin), libunwind
+, enablePam ? (!stdenv.hostPlatform.isDarwin), pam
 }:
-
-with lib;
 
 let
   # samba-tool requires libxcrypt-legacy algorithms
   python = python3Packages.python.override {
+    self = python;
     libxcrypt = libxcrypt-legacy;
   };
   wrapPython = python3Packages.wrapPython.override {
     inherit python;
   };
+
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.20.1";
+  version = "4.20.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+Tw69SlTQNCBBsfA3PuF5PhQV9/RRYeqiBe+sxr/iPc=";
+    hash = "sha256-OpLpfq6zRbazIjL1A+FNNPA6eqZMRR/owlihG72pCOU=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -77,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
-    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
     (fetchpatch {
       # workaround for https://github.com/NixOS/nixpkgs/issues/303436
       name = "samba-reproducible-builds.patch";
@@ -100,10 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     buildPackages.stdenv.cc
   ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
-    ++ optionals stdenv.isDarwin [
+    ++ optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -124,16 +124,16 @@ stdenv.mkDerivation (finalAttrs: {
     libtasn1
     tdb
     libxcrypt
-  ] ++ optionals stdenv.isLinux [ liburing systemd ]
-    ++ optionals stdenv.isDarwin [ libiconv ]
+  ] ++ optionals stdenv.hostPlatform.isLinux [ liburing systemd ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
-    ++ optionals (!enableLDAP && stdenv.isLinux) [ ldb talloc tevent ]
-    ++ optional (enablePrinting && stdenv.isLinux) cups
+    ++ optionals (!enableLDAP && stdenv.hostPlatform.isLinux) [ ldb talloc tevent ]
+    ++ optional (enablePrinting && stdenv.hostPlatform.isLinux) cups
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
     ++ optional enableRegedit ncurses
-    ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
-    ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
+    ++ optional (enableCephFS && stdenv.hostPlatform.isLinux) (lib.getDev ceph)
+    ++ optionals (enableGlusterFS && stdenv.hostPlatform.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enableLibunwind libunwind
     ++ optional enablePam pam;
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
-  ] ++ optionals (!enableLDAP && stdenv.isLinux) [
+  ] ++ optionals (!enableLDAP && stdenv.hostPlatform.isLinux) [
     "--bundled-libraries=!ldb,!pyldb-util!talloc,!pytalloc-util,!tevent,!tdb,!pytdb"
   ] ++ optional enableLibunwind "--with-libunwind"
     ++ optional enableProfiling "--with-profiling-data"
@@ -199,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Save asn1_compile and compile_et so they are available to run on the build
   # platform when cross-compiling
-  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p "$dev/bin"
     cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';
@@ -212,12 +212,12 @@ stdenv.mkDerivation (finalAttrs: {
     read -r -d "" SCRIPT << EOF || true
     [ -z "\$SAMBA_LIBS" ] && exit 1;
     BIN='{}';
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     OLD_LIBS="\$(patchelf --print-rpath "\$BIN" 2>/dev/null | tr ':' '\n')";
     ALL_LIBS="\$(echo -e "\$SAMBA_LIBS\n\$OLD_LIBS" | sort | uniq | tr '\n' ':')";
     patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
     patchelf --shrink-rpath "\$BIN";
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id \$BIN \$BIN
     for old_rpath in \$(otool -L \$BIN | grep /private/tmp/ | awk '{print \$1}'); do
       new_rpath=\$(find \$SAMBA_LIBS -name \$(basename \$old_rpath) | head -n 1)

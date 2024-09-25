@@ -2,9 +2,9 @@
 , gpm, openssl, pkg-config, libev # Misc.
 , libpng, libjpeg, libtiff, librsvg, libavif # graphic formats
 , bzip2, zlib, xz # Transfer encodings
-, enableFB ? (!stdenv.isDarwin)
+, enableFB ? (!stdenv.hostPlatform.isDarwin)
 , enableDirectFB ? false, directfb
-, enableX11 ? (!stdenv.isDarwin), libX11, libXt, libXau # GUI support
+, enableX11 ? (!stdenv.hostPlatform.isDarwin), libX11, libXt, libXau # GUI support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,11 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IqqWwLOOGm+PftnXpBZ6R/w3JGCXdZ72BZ7Pj56teZg=";
   };
 
-  buildInputs = with lib;
+  buildInputs =
     [ libev librsvg libpng libjpeg libtiff libavif openssl xz bzip2 zlib ]
-    ++ optionals stdenv.isLinux [ gpm ]
-    ++ optionals enableX11 [ libX11 libXau libXt ]
-    ++ optionals enableDirectFB [ directfb ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ]
+    ++ lib.optionals enableX11 [ libX11 libXau libXt ]
+    ++ lib.optionals enableDirectFB [ directfb ];
 
   nativeBuildInputs = [ pkg-config bzip2 ];
 

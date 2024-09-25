@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   apscheduler,
   bitstring,
   buildPythonPackage,

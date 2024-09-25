@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arkenfox-userjs";
-  version = "126.1";
+  version = "128.0";
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/arkenfox/user.js/${finalAttrs.version}/user.js";
-    hash = "sha256-XRtG0iLKh8uqbeX7Rc2H6VJwZYJoNZPBlAfZEfrSCP4=";
+    hash = "sha256-CJk9sni0+cYC9rBHSL2mDQRtpsQJobQ1u3tq991Oi1c=";
   };
 
   dontUnpack = true;

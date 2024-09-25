@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , callPackage
+, fetchpatch
 
   # Required build tools
 , cmake
@@ -15,7 +16,7 @@
 , zlib
 
   # Optional dependencies
-, alsaSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , dssiSupport ? false
 , dssi
@@ -27,7 +28,7 @@
 , ossSupport ? true
 , portaudioSupport ? true
 , portaudio
-, sndioSupport ? stdenv.isOpenBSD
+, sndioSupport ? stdenv.hostPlatform.isOpenBSD
 , sndio
 
   # Optional GUI dependencies
@@ -64,14 +65,21 @@ in stdenv.mkDerivation rec {
     repo = pname;
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
+    hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
   };
 
   outputs = [ "out" "doc" ];
 
+  patches = [
+    # Lazily expand ZYN_DATADIR to fix builtin banks across updates
+    (fetchpatch {
+      url = "https://github.com/zynaddsubfx/zynaddsubfx/commit/853aa03f4f92a180b870fa62a04685d12fca55a7.patch";
+      hash = "sha256-4BsRZ9keeqKopr6lCQJznaZ3qWuMgD1/mCrdMiskusg=";
+    })
+  ];
+
   postPatch = ''
     patchShebangs rtosc/test/test-port-checker.rb src/Tests/check-ports.rb
-    substituteInPlace src/Misc/Config.cpp --replace /usr $out
   '';
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];
@@ -87,7 +95,11 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals (guiModule == "ntk") [ ntk cairo libXpm ]
     ++ lib.optionals (guiModule == "zest") [ libGL libX11 ];
 
-  cmakeFlags = [ "-DGuiModule=${guiModule}" ]
+  cmakeFlags =
+    [
+      "-DGuiModule=${guiModule}"
+      "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
+    ]
     # OSS library is included in glibc.
     # Must explicitly disable if support is not wanted.
     ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
@@ -110,7 +122,7 @@ in stdenv.mkDerivation rec {
       lib.optionals lashSupport [ "PortChecker" ]
 
       # Tests fail on aarch64
-      ++ lib.optionals stdenv.isAarch64 [ "MessageTest" "UnisonTest" ];
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "MessageTest" "UnisonTest" ];
   in ''
     runHook preCheck
     ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
@@ -148,7 +160,7 @@ in stdenv.mkDerivation rec {
       else "https://zynaddsubfx.sourceforge.io";
 
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu kira-bruneau ];
+    maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.all;
 
     # On macOS:
@@ -156,6 +168,6 @@ in stdenv.mkDerivation rec {
     # - ZynAddSubFX LV2 & VST plugin fail to compile (not setup to use ObjC version of pugl)
     # - TTL generation crashes (`pointer being freed was not allocated`) for all VST plugins using AbstractFX
     # - Zest UI fails to start on pulg_setup: Could not open display, aborting.
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

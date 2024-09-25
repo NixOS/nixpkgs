@@ -12,7 +12,8 @@
 , qemu
 , scribus
 , tigervnc
-, wlroots
+, wlroots_0_17
+, wlroots_0_18
 , xwayland
 
 , gitUpdater
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Diwmmxt=disabled"
   ]
   # Disable until https://gitlab.freedesktop.org/pixman/pixman/-/issues/46 is resolved
-  ++ lib.optional (stdenv.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
+  ++ lib.optional (stdenv.hostPlatform.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
@@ -60,13 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = glib.flattenInclude;
 
   passthru = {
     tests = {
-      inherit cairo qemu scribus tigervnc wlroots xwayland;
+      inherit cairo qemu scribus tigervnc wlroots_0_17 wlroots_0_18 xwayland;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };

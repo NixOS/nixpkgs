@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/FWDekker/mommy/blob/v${version}/CHANGELOG.md";
     license = licenses.unlicense;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "mommy";
   };
 }

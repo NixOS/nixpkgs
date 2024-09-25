@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   ];
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
-  postPatch = if stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform then ''
+  postPatch = lib.optionalString (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform) ''
     rm CHANGELOG
     touch ChangeLog
-  '' else null;
+  '';
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
@@ -35,14 +35,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
   enableParallelBuilding = true;
-
-  preConfigure = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-      # export ac_cv_search_crypt=no
-      # (taken from Alpine linux, apparently insecure but also doesn't build O:))
-      # disable insecure modules
-      # sed -e 's/pam_rhosts//g' -i modules/Makefile.am
-      sed -e 's/pam_rhosts//g' -i modules/Makefile.in
-  '';
 
   configureFlags = [
     "--includedir=${placeholder "out"}/include/security"

@@ -4,7 +4,8 @@
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
-, enableKTLS ? stdenv.isLinux
+, enableMD2 ? false
+, enableKTLS ? stdenv.hostPlatform.isLinux
 , static ? stdenv.hostPlatform.isStatic
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
@@ -87,6 +88,7 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         powerpc64-linux = "./Configure linux-ppc64";
+        riscv32-linux = "./Configure ${if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"}";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
@@ -102,6 +104,7 @@ let
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
           then if stdenv.hostPlatform.isx86_64 then "./Configure linux-x86_64"
+          else if stdenv.hostPlatform.isMicroBlaze then "./Configure linux-latomic"
           else if stdenv.hostPlatform.isMips32 then "./Configure linux-mips32"
           else if stdenv.hostPlatform.isMips64n32 then "./Configure linux-mips64"
           else if stdenv.hostPlatform.isMips64n64 then "./Configure linux64-mips64"
@@ -128,7 +131,8 @@ let
     ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ] ++ lib.optional enableSSL2 "enable-ssl2"
+    ] ++ lib.optional enableMD2 "enable-md2"
+      ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
@@ -227,19 +231,19 @@ let
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.openssl.org/";
       changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
       description = "Cryptographic library that implements the SSL and TLS protocols";
-      license = licenses.openssl;
+      license = lib.licenses.openssl;
       mainProgram = "openssl";
-      maintainers = with maintainers; [ thillux ] ++ lib.teams.stridtech.members;
+      maintainers = with lib.maintainers; [ thillux ] ++ lib.teams.stridtech.members;
       pkgConfigModules = [
         "libcrypto"
         "libssl"
         "openssl"
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     } // extraMeta;
   });
 
@@ -286,6 +290,8 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.3/CVE-2024-5535.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
@@ -293,8 +299,8 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 
@@ -309,6 +315,8 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.3/CVE-2024-5535.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./3.2/use-etc-ssl-certs-darwin.patch
        else ./3.2/use-etc-ssl-certs.patch)
@@ -316,8 +324,8 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 
@@ -332,6 +340,8 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      ./3.3/CVE-2024-5535.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./3.2/use-etc-ssl-certs-darwin.patch
        else ./3.2/use-etc-ssl-certs.patch)
@@ -339,8 +349,8 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 }

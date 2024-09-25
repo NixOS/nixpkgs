@@ -10,6 +10,7 @@
   poetry-core,
   pyjwt,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.20.6";
+  version = "1.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,13 +29,10 @@ buildPythonPackage rec {
     owner = "pyenphase";
     repo = "pyenphase";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gR2VSMAjobecNpAYYoQ/Os3slcLSnLZMblzwDzQeEx8=";
+    hash = "sha256-letF0s/zJKdMT2nGnZpMFufja0bsL0zlwG+dCSK5BA4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=pyenphase --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonRelaxDeps = [ "tenacity" ];
 
   build-system = [ poetry-core ];
 
@@ -50,14 +48,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
     syrupy
   ];
 
-  disabledTests = [
-    # https://github.com/pyenphase/pyenphase/issues/97
-    "test_with_7_x_firmware"
+  disabledTestPaths = [
+    # Tests need network access
+    "tests/test_retries.py"
   ];
 
   pythonImportsCheck = [ "pyenphase" ];

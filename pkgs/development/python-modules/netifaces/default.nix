@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Portable access to network interfaces from Python";
     homepage = "https://github.com/al45tair/netifaces";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

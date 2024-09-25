@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.8.22";
+  version = "0.8.23";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = "oculante";
     rev = version;
-    hash = "sha256-hsXrpHT+B1Oev+ygXj/2Ma3zszMuW6csgQGJGeYCiAM=";
+    hash = "sha256-Dg1FFB9WVB4SWInSyOYb1TCPAtCa9gwsFLUX+UhL4DY=";
   };
 
-  cargoHash = "sha256-X6KR+h+f/mdazqxo8xQK5geeZC12h8uQ3ENMKyaw7aw=";
+  cargoHash = "sha256-Ze3ACs9WyoxNsaeJlZWhR0g+aFsntwNLLYbw2RnmwfE=";
 
   nativeBuildInputs = [
     cmake
@@ -41,12 +41,10 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
-
   buildInputs = [
     openssl
     fontconfig
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libX11
     libXcursor
@@ -56,12 +54,13 @@ rustPlatform.buildRustPackage rec {
 
     libxkbcommon
     wayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 
   checkFlags = [
     "--skip=bench"
+    "--skip=tests::net" # requires network access
   ];
 
   postInstall = ''
@@ -72,7 +71,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";

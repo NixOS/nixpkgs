@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       echo -e "include Makefile\nfiles:\n\t@echo \$(REGRESS)" > Makefile.regress
       REGRESS_TESTS=$(make -f Makefile.regress files)
 
-      ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+      ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
         --inputdir=./ \
         --bindir='${postgresqlAge}/bin' \
         --encoding=UTF-8 \
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
   };

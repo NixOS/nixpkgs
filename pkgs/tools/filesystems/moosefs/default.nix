@@ -5,17 +5,18 @@
 , pkg-config
 , libpcap
 , zlib
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
-  version = "3.0.117";
+  version = "3.0.118";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6zBMAi9ruPPlcnpdgqwl35QZ5u4MyFPUa70yvGTkHpo=";
+    sha256 = "sha256-Sm32VwKlE0V5HZj+VXr66gYKS+fcU1+UVQELiZ64DpU=";
   };
 
   nativeBuildInputs = [
@@ -27,15 +28,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildFlags = lib.optionals stdenv.isDarwin [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
+  buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CPPFLAGS=-UHAVE_STRUCT_STAT_ST_BIRTHTIME" ];
 
   # Fix the build on macOS with macFUSE installed
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace \
       "/usr/local/lib/pkgconfig" "/nonexistent"
   '';
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config.h --replace \
       "#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1" \
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) moosefs; };
 
   meta = with lib; {
     homepage = "https://moosefs.com";

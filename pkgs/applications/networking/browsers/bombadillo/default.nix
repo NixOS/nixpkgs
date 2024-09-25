@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchgit {
     url = "https://tildegit.org/sloum/bombadillo.git";
     rev = version;
-    sha256 = "sha256-FjU9AyRAdGFr1bVpkmj5STkbzCXvpxOaOj7WNQJq7A0=";
+    hash = "sha256-FjU9AyRAdGFr1bVpkmj5STkbzCXvpxOaOj7WNQJq7A0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

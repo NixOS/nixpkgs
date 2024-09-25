@@ -30,15 +30,15 @@ rustPlatform.buildRustPackage {
   # 0.5.6 release has failing tests
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ]
-    ++ lib.optionals stdenv.isLinux [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3. ";
+    description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3.";
     mainProgram = "gptcommit";
     homepage = "https://github.com/zurawiki/gptcommit";
     license = with licenses; [ asl20 ];

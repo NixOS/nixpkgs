@@ -72,14 +72,19 @@ in
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.44.1";
+  version = "1.49.1";
 
   desktopItems = [ desktopItem urlHandlerDesktopItem ];
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
-    url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
-    sha256 = "sha256-6kEV331kt+/7/uWKZmTTkJX4P06CfxC8Ogq052qlUEg=";
+
+    # Url can be found at: https://github.com/microsoft/azuredatastudio/releases
+    # In the downloads table for Linux .tar.gz
+    # This will give a go.microsoft redirect link, I think it's better to use the direct link to which the redirect points.
+    # You can do so by using curl: curl -I <go.microsoft link>
+    url = "https://download.microsoft.com/download/7/8/3/783c2037-8607-43c4-a593-0936e965d38b/azuredatastudio-linux-1.49.1.tar.gz";
+    sha256 = "sha256-0LCrRUTTe8UEDgtGLvxVQL8pA5dwA6SvZEZSDILr7jo=";
   };
 
   nativeBuildInputs = [
@@ -122,7 +127,7 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/4.7.1.6";
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/5.0.20240724.1";
 
   rpath = lib.concatStringsSep ":" [
     (lib.makeLibraryPath [

@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchzip
 , python310
 , rtlcss
@@ -9,6 +8,7 @@
 
 let
   python = python310.override {
+    self = python;
     packageOverrides = self: super: {
       flask = super.flask.overridePythonAttrs (old: rec {
         version = "2.3.3";

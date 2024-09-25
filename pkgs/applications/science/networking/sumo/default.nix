@@ -1,4 +1,4 @@
-{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg_4, fox_1_6, gdal,
+{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg_7, fox_1_6, gdal,
   git, gl2ps, gpp , gtest, jdk, libGL, libGLU, libX11, libjpeg,
   libpng, libtiff, libxcrypt, openscenegraph , proj, python3,
   python3Packages, stdenv, swig, xercesc, xorg, zlib }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-y/bkdDWrb1KB0EOVSJPfPVYHGp/zQ2+Shb6eLsFQRNQ=";
+    hash = "sha256-y/bkdDWrb1KB0EOVSJPfPVYHGp/zQ2+Shb6eLsFQRNQ=";
     fetchSubmodules = true;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2
     eigen
-    ffmpeg_4
+    ffmpeg_7
     fox_1_6
     gdal
     gl2ps

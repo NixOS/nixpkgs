@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # Darwin needs libiconv, tcl; while Linux build don't
   buildInputs = [ openssl ncurses libxcrypt ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv tcl ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv tcl ];
 
   patches = [
     (fetchpatch {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "http://epicsol.org";
     description = "IRC client that offers a great ircII interface";
     license = licenses.bsd3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }
 

@@ -8,6 +8,7 @@
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "airgradient";
-  version = "0.6.1";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,13 +26,8 @@ buildPythonPackage rec {
     owner = "airgradienthq";
     repo = "python-airgradient";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1f5sFpuQgmmAFKdunpuuDuKm9CK1K8iXBV/q2qJoe/o=";
+    hash = "sha256-BBJ9pYE9qAE62FJFwycWBnvsoeobjsg0uIDZffIg18o=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -45,6 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

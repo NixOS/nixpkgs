@@ -25,18 +25,18 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Foundation
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework"
     "AppKit"
   ]);
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd topgrade \
       --bash <($out/bin/topgrade --gen-completion bash) \
       --fish <($out/bin/topgrade --gen-completion fish) \

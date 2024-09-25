@@ -9,7 +9,7 @@
 , gtk3
 , glib
 , gjs
-, enableWebkit2gtk ? stdenv.isLinux
+, enableWebkit2gtk ? stdenv.hostPlatform.isLinux
 , webkitgtk_4_1
 , gobject-introspection
 , wrapGAppsHook3

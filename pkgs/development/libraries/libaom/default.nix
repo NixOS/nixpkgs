@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.9.0";
+  version = "3.9.1";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-ON/BWCO2k7fADW3ZANKjnRE8SrQZpjdyUF1N0fD/xnc=";
+    hash = "sha256-XQ1sekNZDUAiYP/HriYRj4+40PAvE/OiyG9bbrdg63I=";
     stripRoot = false;
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DCONFIG_TUNE_VMAF=1"
   ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
     "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
-  ] ++ lib.optionals stdenv.isAarch32 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     # armv7l-hf-multiplatform does not support NEON
     # see lib/systems/platform.nix
     "-DENABLE_NEON=0"

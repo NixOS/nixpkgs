@@ -12,17 +12,18 @@
   pkg-config,
   python3,
   util-linux,
+  coreutils,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "v${version}";
-    sha256 = "sha256-kJ9QaNI8v03E0//UyU6fsav1YGOlKGMxsbE8Pr1Dtic=";
+    hash = "sha256-5r1X/yUXTMC/2dNhpI+BVYeClIydefg2lurCGt7iA8Y=";
   };
 
   patches = [
@@ -51,8 +52,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # `mount` hook requires access to the `mount` command from `util-linux`:
-    wrapProgram "$out/share/lxcfs/lxc.mount.hook" --prefix PATH : "${util-linux}/bin"
+    # `mount` hook requires access to the `mount` command from `util-linux` and `readlink` from `coreutils`:
+    wrapProgram "$out/share/lxcfs/lxc.mount.hook" --prefix PATH : ${lib.makeBinPath [ coreutils util-linux ]}
   '';
 
   postFixup = ''

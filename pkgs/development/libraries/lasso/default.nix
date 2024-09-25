@@ -1,6 +1,7 @@
 { lib, stdenv
 , autoreconfHook
 , fetchurl
+, fetchpatch
 , glib
 , gobject-introspection
 , gtk-doc
@@ -22,6 +23,14 @@ stdenv.mkDerivation rec {
     url = "https://dev.entrouvert.org/lasso/lasso-${version}.tar.gz";
     hash = "sha256-ahgxv9v49CTHUIq6R7BF1RNB7A/ekSLziwuGsJbvUz4=";
   };
+
+  patches = [
+    # Fix build with xmlsec 1.3.0
+    (fetchpatch {
+      url = "https://git.entrouvert.org/entrouvert/lasso/commit/ffaddeb015a61db3e52c391de00430107a23e2f1.patch";
+      hash = "sha256-D2npxpIuR/KrNYiKO3KXCvHEb/XVXUKIP0HQUd+w56k=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

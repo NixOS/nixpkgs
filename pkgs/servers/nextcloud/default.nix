@@ -18,7 +18,9 @@ let
     };
 
     passthru = {
-      tests = nixosTests.nextcloud;
+      tests = lib.filterAttrs (
+        key: _: (lib.hasSuffix (lib.versions.major version) key)
+      ) nixosTests.nextcloud;
       inherit packages;
     };
 
@@ -42,14 +44,14 @@ let
   };
 in {
   nextcloud28 = generic {
-    version = "28.0.7";
-    hash = "sha256-WOh1S4Ip/UTr1ykmQlaRlbi2R4xArBCaoIbIa1yrp9k=";
+    version = "28.0.10";
+    hash = "sha256-LoAVJtKJHBhf6sWYXL084pLOcKQl9Tb5GfkBuftMwhA=";
     packages = nextcloud28Packages;
   };
 
   nextcloud29 = generic {
-    version = "29.0.3";
-    hash = "sha256-pZludkwSCSf4hE2PWyjHNrji8ygLEgvhOivXcxzbf9Q=";
+    version = "29.0.7";
+    hash = "sha256-9TL/wxvlqDdLXgcrhv/4dl7Bn9oMhQnO45hzCB2yxUQ=";
     packages = nextcloud29Packages;
   };
 

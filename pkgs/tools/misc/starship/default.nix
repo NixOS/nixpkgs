@@ -13,38 +13,38 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.19.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     rev = "v${version}";
-    hash = "sha256-3IO9hHuhzJsCHU/6BA5ylEKQI2ik6ZiRul/iO/vzii4=";
+    hash = "sha256-Y7jX0XXrSMEex1HG0o69Q1rTtnFL0UuIEgfa1e7D1Nc=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security Foundation Cocoa ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security Foundation Cocoa ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
+  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ "-framework" "AppKit" ];
 
   # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
-  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     export HOME=$TMPDIR
   '';
 
   postInstall = ''
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/public/presets/toml/*.toml $presetdir
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd starship \
       --bash <($out/bin/starship completions bash) \
       --fish <($out/bin/starship completions fish) \
       --zsh <($out/bin/starship completions zsh)
-
-    presetdir=$out/share/starship/presets/
-    mkdir -p $presetdir
-    cp docs/public/presets/toml/*.toml $presetdir
   '';
 
-  cargoHash = "sha256-zX04gX40dFYsK+R6gafHNtDevzrWiGufMwrGfhqYVG0=";
+  cargoHash = "sha256-yJ32HFaRpujJ9mQa+07b5cQcl1ATO/56dpm1IeKcbzs=";
 
   nativeCheckInputs = [ git ];
 

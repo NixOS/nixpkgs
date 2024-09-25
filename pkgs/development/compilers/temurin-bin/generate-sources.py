@@ -6,7 +6,7 @@ import re
 import requests
 import sys
 
-feature_versions = (8, 11, 16, 17, 18, 19, 20, 21, 22)
+feature_versions = (8, 11, 17, 21, 22)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
 impls = ("hotspot",)
@@ -16,6 +16,7 @@ arch_to_nixos = {
     "aarch64": ("aarch64",),
     "arm": ("armv6l", "armv7l"),
     "ppc64le": ("powerpc64le",),
+    "riscv64": ("riscv64",),
 }
 
 def generate_sources(assets, feature_version, out):

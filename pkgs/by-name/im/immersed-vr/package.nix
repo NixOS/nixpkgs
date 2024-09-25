@@ -26,11 +26,11 @@ let
     description = "VR coworking platform";
     homepage = "https://immersed.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ haruki7049 ];
+    maintainers = with maintainers; [ haruki7049 pandapip1 ];
     platforms = builtins.attrNames sources;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 
-in if stdenv.isDarwin
+in if stdenv.hostPlatform.isDarwin
 then callPackage ./darwin.nix { inherit pname version src meta; }
 else callPackage ./linux.nix { inherit pname version src meta; }

@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoPatchelfHook
-, addOpenGLRunpath
+, addDriverRunpath
 , makeWrapper
 , ocl-icd
 , vulkan-loader
@@ -21,7 +21,7 @@ let
       hash = "sha256-fbf01qa9wx3k9j8AEqv38fAM3F9tZOcnpH/wa/9rawQ=";
     };
   };
-  geekbench_avx2 = lib.optionalString stdenv.isx86_64 "geekbench_avx2";
+  geekbench_avx2 = lib.optionalString stdenv.hostPlatform.isx86_64 "geekbench_avx2";
 in
 stdenv.mkDerivation {
   inherit version;
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     for f in geekbench6 geekbench_${processor} ${geekbench_avx2} ; do
       wrapProgram $out/bin/$f \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-          addOpenGLRunpath.driverLink
+          addDriverRunpath.driverLink
           ocl-icd
           vulkan-loader
         ]}"

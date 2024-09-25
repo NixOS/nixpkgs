@@ -1,16 +1,13 @@
 {
   lib,
-  buildPythonApplication,
   buildPythonPackage,
   fetchFromGitHub,
   importlib-metadata,
-  makeWrapper,
   markdown-it-py,
   pytestCheckHook,
   pythonOlder,
   setuptools,
   tomli,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {

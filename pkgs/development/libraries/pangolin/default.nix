@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg, ffmpeg_4, libjpeg, libpng, libtiff, eigen
+, xorg, ffmpeg_7, libjpeg, libpng, libtiff, eigen
 , Carbon, Cocoa
 }:
 
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     libGL
     glew
     xorg.libX11
-    ffmpeg_4
+    ffmpeg_7
     libjpeg
     libpng
     libtiff
     eigen
   ]
-  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).

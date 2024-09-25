@@ -26,7 +26,7 @@ buildPythonPackage rec {
     repo = "IfcOpenShell";
     rev = "refs/tags/blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-fCgxSambC01qb14EoZTrVxNNw8H3nX8oMi6gk0O/HmQ=";
+    hash = "sha256-fCgxSambC01qb14EoZTrVxNNw8H3nX8oMi6gk0O/HmQ=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Open source IFC library and geometry engine";
     homepage = "http://ifcopenshell.org/";
     license = licenses.lgpl3;

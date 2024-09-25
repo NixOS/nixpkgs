@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
     owner = "spglib";
     repo = "spglib";
     rev = "v${version}";
-    hash = "sha256-nooN4skbhEoUD+YuBtdI7TJq7PIdH9EN5dYAheILp5w=";
+    hash = "sha256-/PG+ewlxIyf5Au2kVvsAYCfGZgUOOEpA1uATu15ut+M=";
   };
 
   nativeBuildInputs = [ cmake gfortran gtest ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ openmp ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openmp ];
 
   cmakeFlags = [ "-DSPGLIB_WITH_Fortran=On" ];
 

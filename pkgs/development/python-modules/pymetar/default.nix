@@ -4,26 +4,29 @@
   buildPythonPackage,
   isPy3k,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pymetar";
   version = "1.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48dbe6c4929961021cb61e49bb9e0605b54c4b61b9fb9ade51076705a08ecd54";
+    hash = "sha256-SNvmxJKZYQIcth5Ju54GBbVMS2G5+5reUQdnBaCOzVQ=";
   };
+
+  build-system = [ setuptools ];
 
   checkPhase = ''
     cd testing/smoketest
     tar xzf reports.tgz
     mkdir logs
     patchShebangs runtests.sh
-    substituteInPlace runtests.sh --replace "break" "exit 1"  # fail properly
+    substituteInPlace runtests.sh --replace-fail "break" "exit 1"  # fail properly
     export PYTHONPATH="$PYTHONPATH:$out/${python.sitePackages}"
     ./runtests.sh
   '';

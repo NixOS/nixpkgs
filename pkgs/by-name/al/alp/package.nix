@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , runCommand
@@ -8,15 +7,15 @@
 
 buildGoModule rec {
   pname = "alp";
-  version = "1.1.17";
+  version = "1.1.18";
 
   src = fetchFromGitHub {
     owner = "gernotfeichter";
     repo = "alp";
     rev = version;
-    hash = "sha256-7lyWu1bVn7UwLb/Em6VBbg3FrMyxGjebxt5gJhm/xpI=";
+    hash = "sha256-tE8qKNXLKvFcnDULVkJJ/EJyEsvATCk/3YFkZCmpHSo=";
   };
-  vendorHash = "sha256-a2CQZKN/rPWh/Pn9gXfSArTCcGST472tsz1Kqm7M4vM=";
+  vendorHash = "sha256-AHPVhtm6La7HWuxJfpxTsS5wFTUZUJoVyebLGYhNKTg=";
 
   sourceRoot = "${src.name}/linux";
 
@@ -34,7 +33,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
 
-    go build -o $GOPATH/bin/${pname} main.go
+    go build -o $GOPATH/bin/alp main.go
 
     runHook postBuild
   '';

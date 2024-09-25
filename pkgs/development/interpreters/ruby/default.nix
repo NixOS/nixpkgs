@@ -6,6 +6,7 @@
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl
 , linuxPackages, libsystemtap
+, gitUpdater
 } @ args:
 
 let
@@ -13,7 +14,7 @@ let
   ops = lib.optionals;
   opString = lib.optionalString;
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl gitUpdater; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -57,6 +58,7 @@ let
           rubygemsSupport = false;
         }
       , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
+      , gitUpdater
       }:
       stdenv.mkDerivation ( finalAttrs: {
         pname = "ruby";
@@ -76,7 +78,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison removeReferencesTo ]
           ++ (op docSupport groff)
-          ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
+          ++ (ops (dtraceSupport && stdenv.hostPlatform.isLinux) [ systemtap libsystemtap ])
           ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
@@ -90,8 +92,8 @@ let
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ op (!cursesSupport && stdenv.isDarwin) readline
-          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
+          ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
+          ++ ops stdenv.hostPlatform.isDarwin [ libiconv libobjc libunwind Foundation ];
         propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
@@ -154,7 +156,7 @@ let
           # overrides that by enabling `-O2` which is the minimum optimization
           # needed for `_FORTIFY_SOURCE`.
         ] ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3" ++ [
-        ] ++ ops stdenv.isDarwin [
+        ] ++ ops stdenv.hostPlatform.isDarwin [
           # on darwin, we have /usr/include/tk.h -- so the configure script detects
           # that tk is installed
           "--with-out-ext=tk"
@@ -269,6 +271,7 @@ let
           license     = licenses.ruby;
           maintainers = with maintainers; [ manveru ];
           platforms   = platforms.all;
+          mainProgram = "ruby";
           knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
         };
 
@@ -299,8 +302,8 @@ in {
   mkRuby = generic;
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "5" "";
-    hash = "sha256-NoXFHu7hNSwx6gOXBtcZdvU9AKttdzEt5qoauvXNosU=";
+    version = rubyVersion "3" "1" "6" "";
+    hash = "sha256-DQ2vuFnnZ2NDJXGjEJ0VN9l2JmvjCDRFZR3Gje7SXCI=";
   };
 
   ruby_3_2 = generic {
@@ -310,8 +313,8 @@ in {
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "2" "";
-    hash = "sha256-O+HRAOvyoM5gws2NIs2dtNZLPgShlDvixP97Ug8ry1s=";
+    version = rubyVersion "3" "3" "4" "";
+    hash = "sha256-/mow+X1U4Cl2jy3fSSNpnEFs28Om6W2z4tVxbH25ajQ=";
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 

@@ -82,7 +82,7 @@ buildPythonPackage rec {
       "test_guess_format_for_parse"
       "rdflib.extras.infixowl"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Require loopback network access
       "TestGraphHTTP"
     ];
@@ -93,6 +93,6 @@ buildPythonPackage rec {
     description = "Python library for working with RDF";
     homepage = "https://rdflib.readthedocs.io";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

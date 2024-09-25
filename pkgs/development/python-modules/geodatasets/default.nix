@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "geodatasets";
-  version = "2023.12.0";
+  version = "2024.8.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geodatasets";
-    rev = version;
-    hash = "sha256-yecAky3lCKcSgW4kkYTBNnyKyIWnGSBL600wVgGN8CE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GJ7RyFlohlRz0RbQ80EewZUmIX9CJkSfUMY/uMNTtEM=";
   };
 
   build-system = [ setuptools-scm ];

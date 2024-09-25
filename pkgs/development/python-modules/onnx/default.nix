@@ -25,7 +25,7 @@ let
 in
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.16.1";
+  version = "1.16.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-I1wwfn91hdH3jORIKny0Xc73qW2P04MjkVCgcaNnQUE=";
+    hash = "sha256-JmxnsHRrzj2QzPz3Yndw0MmgZJ8MDYxHjuQ7PQkQsDg=";
   };
 
   build-system = [
@@ -123,7 +123,7 @@ buildPythonPackage rec {
       "test_vgg19_cpu"
       "test_zfnet512_cpu"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # AssertionError: Output 0 of test 0 in folder
       "test__pytorch_converted_Conv2d_depthwise_padded"
       "test__pytorch_converted_Conv2d_dilated"

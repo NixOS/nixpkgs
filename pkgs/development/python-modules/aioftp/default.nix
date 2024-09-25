@@ -44,7 +44,7 @@ buildPythonPackage rec {
     trustme
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses 127.0.0.2, which macos doesn't like
     "test_pasv_connection_pasv_forced_response_address"
   ];
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

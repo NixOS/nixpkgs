@@ -76,21 +76,14 @@ import ../make-test-python.nix (
             role = "server";
             package = k3s;
             clusterInit = true;
-            extraFlags = builtins.toString [
-              "--disable"
-              "coredns"
-              "--disable"
-              "local-storage"
-              "--disable"
-              "metrics-server"
-              "--disable"
-              "servicelb"
-              "--disable"
-              "traefik"
-              "--node-ip"
-              "192.168.1.1"
-              "--pause-image"
-              "test.local/pause:local"
+            extraFlags = [
+              "--disable coredns"
+              "--disable local-storage"
+              "--disable metrics-server"
+              "--disable servicelb"
+              "--disable traefik"
+              "--node-ip 192.168.1.1"
+              "--pause-image test.local/pause:local"
             ];
           };
           networking.firewall.allowedTCPPorts = [
@@ -196,15 +189,13 @@ import ../make-test-python.nix (
           m.start()
           m.wait_for_unit("k3s")
 
-      is_aarch64 = "${toString pkgs.stdenv.isAarch64}" == "1"
+      is_aarch64 = "${toString pkgs.stdenv.hostPlatform.isAarch64}" == "1"
 
       # wait for the agent to show up
       server.wait_until_succeeds("k3s kubectl get node agent")
 
       for m in machines:
-          # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
-          if not is_aarch64:
-              m.succeed("k3s check-config")
+          m.succeed("k3s check-config")
           m.succeed(
               "${pauseImage} | k3s ctr image import -"
           )

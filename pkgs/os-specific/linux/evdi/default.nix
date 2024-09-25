@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.4";
+  version = "1.14.6";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-+T2shA6n+A0c20+/ZZoXmspH7uPdIRaHT1Cj7BxpL+U=";
+    hash = "sha256-/XIWacrsB7qBqlLUwIGuDdahvt2dAwiK7dauFaYh7lU=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
     license = with licenses; [ lgpl21Only gpl2Only ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 })

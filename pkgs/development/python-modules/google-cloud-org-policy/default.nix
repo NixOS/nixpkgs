@@ -13,14 +13,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.11.0";
-  format = "setuptools";
+  version = "1.11.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3BJDTwbIDhscHDR8rcjLQP/JYZrktcW+tcK9WFyV2X8=";
+    pname = "google_cloud_org_policy";
+    inherit version;
+    hash = "sha256-E+H/y5UGlWselMwoHU4B9APkmEeQnTLxhMelowEJsa8=";
   };
 
   build-system = [ setuptools ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = ["-fPIC" "-O2" "-w" "-fpermissive"];
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Ignominous Profiler";
 
     longDescription = ''

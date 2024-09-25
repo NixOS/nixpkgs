@@ -7,7 +7,7 @@
 , zlib
 , sqlite
 , ninja
-, darwin
+, cctools
 , fixDarwinDylibNames
 , buildPackages
 , useP11kit ? true
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools fixDarwinDylibNames ];
 
   buildInputs = [ zlib sqlite ];
 
@@ -46,10 +46,6 @@ stdenv.mkDerivation rec {
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
     ./85_security_load_3.85+.patch
     ./fix-cross-compilation.patch
-  ] ++ lib.optionals (lib.versionOlder version "3.91") [
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1836925
-    # https://phabricator.services.mozilla.com/D180068
-    ./remove-c25519-support.patch
   ];
 
   postPatch = ''
@@ -97,7 +93,7 @@ stdenv.mkDerivation rec {
         --enable-libpkix \
         -j $NIX_BUILD_CORES \
         ${lib.optionalString enableFIPS "--enable-fips"} \
-        ${lib.optionalString stdenv.isDarwin "--clang"} \
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "--clang"} \
         ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
       runHook postBuild
@@ -159,7 +155,7 @@ stdenv.mkDerivation rec {
     (lib.optionalString enableFIPS (''
       for libname in freebl3 nssdbm3 softokn3
       do libfile="$out/lib/lib$libname${stdenv.hostPlatform.extensions.sharedLibrary}"'' +
-    (if stdenv.isDarwin
+    (if stdenv.hostPlatform.isDarwin
     then ''
       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
     '' else ''

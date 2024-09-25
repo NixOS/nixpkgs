@@ -26,29 +26,28 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  # use unstable to fix a build error for aarch64.
-  version = "4.0.8-unstable-2024-06-09";
+  version = "4.1.2.1";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "051006e12f7c90281dda4af60871b535b0dcdcb9";
-    hash = "sha256-iCK5soTACQwtCVMmMsFaqXvZtTKX9WbTul0mUeSWC2M=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SlKt+wjzI9QRmMVvbIERuhQuCCaOh7L89WuNUXNhkuI=";
   };
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
   # scripts a workaround below is still required.
   # Relevant: https://github.com/NixOS/nixpkgs/issues/24693
-  makeWrapperArgs = lib.optionals stdenv.isDarwin [
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isDarwin [
     "--set"
     "DYLD_FRAMEWORK_PATH"
     "/System/Library/Frameworks"
   ];
 
   doCheck = true;
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
@@ -69,7 +68,7 @@ buildPythonApplication rec {
     jinja2
     orjson
     prometheus-client
-  ] ++ lib.optional stdenv.isLinux hddtemp;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
   meta = {
     homepage = "https://nicolargo.github.io/glances/";

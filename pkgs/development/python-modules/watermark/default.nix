@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "watermark";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "rasbt";
     repo = "watermark";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4/1Y7cdh1tF33jgPrqdxCGPcRnnxx+Wf8lyztF54Ck0=";
+    hash = "sha256-UR4kV6UoZ/JLO19on+qEH+M05QIsT0SXvXJtTMCKuZM=";
   };
 
   nativeBuildInputs = [ setuptools ];

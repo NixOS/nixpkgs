@@ -3,7 +3,6 @@
   buildPythonPackage,
   click,
   dateutils,
-  dbt-postgres,
   fetchFromGitHub,
   hatchling,
   hypothesis,
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.6.0";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
     rev = "refs/tags/v${version}";
-    hash = "sha256-77WKfegchgHIxgzL3Yhtx/4S5pYi6HeVCQH/19YscWA=";
+    hash = "sha256-V6yMT9Fkug+T3smBEu0Szg5GPMRxEOZc4gtJybWXbrs=";
   };
 
   pythonRelaxDeps = [ "importlib-metadata" ];

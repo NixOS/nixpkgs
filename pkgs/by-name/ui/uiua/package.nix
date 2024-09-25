@@ -18,28 +18,28 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.11.1";
+  version = "0.13.0-dev.1";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-bK5Z6aoyZti46GLulpdxGPxHM+EfEVQgeAUY6fRc7YY=";
+    hash = "sha256-dwiwv24bhn8/WVxrq8uReEPhU/5zn3oaH/AMjNJiA4M=";
   };
 
-  cargoHash = "sha256-iq5V+FGOcK2opmA4ot0KF9ZToYWC82gRsRyVqftuFPA=";
+  cargoHash = "sha256-4XHKcmOeaeSGfl7uvQQdhm29DBWEdZLX021d9+Ebrww=";
 
   nativeBuildInputs =
-    lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ]
+    lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ]
     ++ lib.optionals audioSupport [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       AppKit
       CoreServices
     ]
-    ++ lib.optionals (audioSupport && stdenv.isDarwin) [ AudioUnit ]
-    ++ lib.optionals (audioSupport && stdenv.isLinux) [ alsa-lib ];
+    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isDarwin) [ AudioUnit ]
+    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
   buildFeatures = lib.optional audioSupport "audio";
 

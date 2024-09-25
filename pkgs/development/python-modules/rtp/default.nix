@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python3,
 
   # nativeCheckInputs
   hypothesis,

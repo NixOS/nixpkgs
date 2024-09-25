@@ -10,11 +10,10 @@
 
 { stdenv, lib, version }:
 
-with lib;
 with lib.kernel;
 with (lib.kernel.whenHelpers version);
 
-assert (versionAtLeast version "4.9");
+assert (lib.versionAtLeast version "4.9");
 
 {
   # Mark LSM hooks read-only after init.  SECURITY_WRITABLE_HOOKS n

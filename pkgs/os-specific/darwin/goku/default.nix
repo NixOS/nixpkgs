@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "goku";
   version = "0.6.0";
 
-  src = if stdenv.isAarch64 then
+  src = if stdenv.hostPlatform.isAarch64 then
     fetchurl {
       url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku-arm.zip";
       hash = "sha256-TIoda2kDckK1FBLAmKudsDs3LXO4J0KWiAD2JlFb4rk=";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     joker
   ];
 
-  sourceRoot = if stdenv.isAarch64 then "goku" else ".";
+  sourceRoot = if stdenv.hostPlatform.isAarch64 then "goku" else ".";
 
   installPhase = ''
     chmod +x goku

@@ -17,6 +17,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "silicon";
+  # Remove `postPatch` hack below when updating.
   version = "0.5.2";
 
   src = fetchFromGitHub {
@@ -33,9 +34,14 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  postPatch = ''
+    # Fix build with Rust 1.80; remove when fixed upstream
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
+
   buildInputs = [ expat freetype fira-code fontconfig harfbuzz ]
-    ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       libiconv
       AppKit
       CoreText
@@ -43,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     ]);
 
   nativeBuildInputs = [ cmake pkg-config rustPlatform.bindgenHook ]
-    ++ lib.optionals stdenv.isLinux [ python3 ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
   preCheck = ''
     export HOME=$TMPDIR

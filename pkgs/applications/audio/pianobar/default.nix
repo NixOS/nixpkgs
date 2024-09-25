@@ -1,17 +1,19 @@
-{ fetchurl, lib, stdenv, pkg-config, libao, json_c, libgcrypt, ffmpeg, curl }:
+{ fetchFromGitHub, lib, stdenv, pkg-config, libao, json_c, libgcrypt, ffmpeg_7, curl }:
 
 stdenv.mkDerivation rec {
   pname = "pianobar";
-  version = "2022.04.01";
+  version = "2022.04.01-unstable-2024-08-16";
 
-  src = fetchurl {
-    url = "https://6xq.net/projects/pianobar/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-FnCyiGWouCpXu23+p/FuL6QUXS81SRC7FzgLMsm5R2M=";
+  src = fetchFromGitHub {
+    owner = "PromyLOPh";
+    repo = "pianobar";
+    rev = "41ac06c8585dc535c4b1737b4c2943bb3fe7beb0";
+    hash = "sha256-5LTZ6J9bvfsnpD/bGuojekutFVdH9feWLF+nLFvkeOA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libao json_c libgcrypt ffmpeg curl
+    libao json_c libgcrypt ffmpeg_7 curl
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-5X5WOlf7IqFC2jTziswvwaXIZLwpyhUXqIq8lj5g1uw=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Implementation of the Cassowary constraint solver";
     homepage = "https://github.com/nucleic/kiwi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

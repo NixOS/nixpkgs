@@ -4,27 +4,27 @@ let
   # These settings are found in the Makefile, but there seems to be no
   # way to select one or the other setting other than editing the file
   # manually, so we have to duplicate the know how here.
-  systemFlags = lib.optionalString stdenv.isDarwin ''
+  systemFlags = lib.optionalString stdenv.hostPlatform.isDarwin ''
     CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
     LDFLAGS=
-  '' + lib.optionalString stdenv.isCygwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     CFLAGS="-O2 -Wall -fomit-frame-pointer"
     LDFLAGS=-s
     TREE_DEST=tree.exe
-  '' + lib.optionalString (stdenv.isFreeBSD || stdenv.isOpenBSD) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isOpenBSD) ''
     CFLAGS="-O2 -Wall -fomit-frame-pointer"
     LDFLAGS=-s
   ''; # use linux flags by default
 in
 stdenv.mkDerivation rec {
   pname = "tree";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = version;
-    sha256 = "sha256-1iBGbzNwjUX7kqkk6XzKISO2e6b05MBH08XgIwR+nyI=";
+    hash = "sha256-Adc/BLKIzwjJztNxF4scmnsufoc/++x1F1IaobMn1rc=";
   };
 
   preConfigure = ''
