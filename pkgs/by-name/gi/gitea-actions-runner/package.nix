@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitea
-, buildGoModule
-, testers
-, gitea-actions-runner
+{
+  lib,
+  fetchFromGitea,
+  buildGo123Module,
+  testers,
+  gitea-actions-runner,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "gitea-actions-runner";
-  version = "0.2.10";
+  version = "0.2.11";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "act_runner";
     rev = "v${version}";
-    hash = "sha256-YRWFBMHw9Fcmzkmglh2I1kXJkAAivqvCBcenLTjE/bI=";
+    hash = "sha256-PmDa8XIe1uZ4SSrs9zh5HBmFaOuj+uuLm7jJ4O5V1dI=";
   };
 
-  vendorHash = "sha256-8sdSQhg9DnRLgghDZzWrUMM4vjinhCgu3dTKU7MBVQU=";
+  vendorHash = "sha256-lYJFySGqkhT89vHDp1FcTiiC7DG4ziQ1DaBHLh/kXQc=";
 
   ldflags = [
     "-s"
