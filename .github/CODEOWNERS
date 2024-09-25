@@ -201,6 +201,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 /maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
+# COSMIC Desktop Environment
+/pkgs/by-name/co/cosmic-* @Aleksanaa
+/nixos/modules/services/desktop-managers/cosmic.nix @Aleksanaa
+/nixos/modules/services/display-managers/cosmic-greeter.nix @Aleksanaa
+
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @thoughtpolice
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
