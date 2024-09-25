@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiocache";
-  version = "0.12.2";
+  version = "0.12.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiocache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yvXDNJL8uxReaU81klVWudJwh1hmvg5GeeILcNpm/YA=";
+    hash = "sha256-4QYCRXMWlt9fsiWgUTc2pKzXG7AG/zGmd4HT5ggIZNM=";
   };
 
   postPatch = ''
