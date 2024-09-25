@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-settings-daemon";
     rev = "epoch-${version}";
     hash = "sha256-mtnMqG3aUSgtN3+Blj3w90UsX8NUu/QlzYgr64KPE9s=";
   };
