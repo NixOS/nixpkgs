@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnc";
-  version = "0.16";
+  version = "0.18";
 
   src = fetchurl {
     url = "https://fnc.bsdbox.org/tarball/${finalAttrs.version}/fnc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6I6wtSMHaKdnlUK4pYiaybJeODGu2P+smYW8lQDIWGM=";
+    hash = "sha256-npS+sOxF0S/9TuFjtEFlev0HpIOsaP6zmcfopPNUehk=";
   };
 
   buildInputs = [ libiconv ncurses zlib ];
