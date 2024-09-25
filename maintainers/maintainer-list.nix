@@ -722,6 +722,7 @@
     name = "Ailsa Sun";
     email = "jjshenw@gmail.com";
     github = "ailsa-sun";
+    githubId = 135079815;
   };
   aimpizza = {
     email = "rickomo.us@gmail.com";
