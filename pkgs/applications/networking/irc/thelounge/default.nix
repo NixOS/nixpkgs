@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Distutils was deprecated in 3.10, and removed in 3.12. This build needs it. An alternative could be adding
   # setuptools, but testing with that and 3.12 still fails.
-  nativeBuildInputs = [ nodejs yarn fixup-yarn-lock python311 npmHooks.npmInstallHook ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
+  nativeBuildInputs = [ nodejs yarn fixup-yarn-lock python311 npmHooks.npmInstallHook ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''
