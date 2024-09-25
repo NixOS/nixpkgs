@@ -150,7 +150,7 @@ buildPythonPackage rec {
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     homepage = "https://github.com/huggingface/tokenizers";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.unix;
   };
 }
