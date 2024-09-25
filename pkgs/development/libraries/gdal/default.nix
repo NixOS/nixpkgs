@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
@@ -87,6 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/91e4f55f8f374a75f8f2ecd05670edcfa4c0af84.patch";
+      sha256 = "sha256-C2lkZLsORso7WVxgX79r5swkoVu/APPwQp2C/rmmCAo=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
