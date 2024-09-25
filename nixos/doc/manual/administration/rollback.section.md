@@ -12,7 +12,7 @@ system has booted, you can make the selected configuration the default
 for subsequent boots:
 
 ```ShellSession
-# /run/current-system/bin/switch-to-configuration boot
+# /run/current-system/bin/apply boot
 ```
 
 Second, you can switch to the previous configuration in a running
@@ -25,11 +25,11 @@ system:
 This is equivalent to running:
 
 ```ShellSession
-# /nix/var/nix/profiles/system-N-link/bin/switch-to-configuration switch
+# /nix/var/nix/profiles/system-N-link/bin/apply switch
 ```
 
-where `N` is the number of the NixOS system configuration. To get a
-list of the available configurations, do:
+where `N` is the number of the NixOS system configuration to roll back to.
+To get a list of the available configurations, run:
 
 ```ShellSession
 $ ls -l /nix/var/nix/profiles/system-*-link
