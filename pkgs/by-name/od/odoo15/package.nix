@@ -1,45 +1,18 @@
-{ lib, fetchFromGitHub, fetchzip, python310, rtlcss, wkhtmltopdf
-, nixosTests }:
+{ lib
+, fetchFromGitHub
+, fetchzip
+, python310
+, rtlcss
+, wkhtmltopdf
+, nixosTests
+, odoo_version ? "15.0"
+, odoo_release ? "20240924"
+}:
 
 let
   python = python310.override {
     self = python;
-    packageOverrides = self: super: {
-      pypdf2 = super.pypdf2.overridePythonAttrs (old: rec {
-        version = "1.28.6";
-        format = "setuptools";
-
-        src = fetchFromGitHub {
-          owner = "py-pdf";
-          repo = "pypdf";
-          rev = version;
-          fetchSubmodules = true;
-          hash = "sha256-WnRbsy/PJcotZqY9mJPLadrYqkXykOVifLIbDyNf4s4=";
-        };
-
-        nativeBuildInputs = [ ];
-
-        nativeCheckInputs = with self; [ pytestCheckHook pillow ];
-      });
-      flask = super.flask.overridePythonAttrs (old: rec {
-        version = "2.1.3";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
-        };
-      });
-      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
-        version = "2.1.2";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-HOCOgJPtZ9Y41jh5/Rujc1gX96gN42dNKT9ZhPJftuY=";
-        };
-      });
-    };
   };
-
-  odoo_version = "15.0";
-  odoo_release = "20230816";
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo15";
   version = "${odoo_version}.${odoo_release}";
@@ -50,11 +23,8 @@ in python.pkgs.buildPythonApplication rec {
   src = fetchzip {
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
-    hash = "sha256-h81JA0o44DVtl/bZ52rGQfg54TigwQcNpcMjQbi0zIQ="; # odoo
+    hash = "sha256-v448wQdj8qMDA35wSgBt+SqeX+VfN/hvquf8K6hfleA="; # odoo
   };
-
-  # needs some investigation
-  doCheck = false;
 
   makeWrapperArgs = [
     "--prefix"
@@ -76,6 +46,7 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     libsass
     lxml
+    lxml-html-clean
     markupsafe
     mock
     num2words
