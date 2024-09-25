@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aces-container";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "ampas";
     repo = "aces_container";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-luMqXqlJ6UzoawEDmbK38lm3GHosaZm/mFJntBF54Y4=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     mainProgram = "aces-container";
     platforms = lib.platforms.all;
   };
-}
+})
