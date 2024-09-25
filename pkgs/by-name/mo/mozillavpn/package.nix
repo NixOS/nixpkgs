@@ -3,7 +3,6 @@
   cargo,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   go,
   lib,
   libcap,
@@ -22,21 +21,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.23.1";
+  version = "2.24.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NQM1ZII9owD9ek/Leo6WRfvNybZ5pUjDgvQGXQBrD+0=";
+    hash = "sha256-iTnwx+KPZ5b8qT0fEMUCGQx1UyGVM4VCzooZqslGWtw=";
   };
-  patches = [
-    # Update cargo deps for "time"
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/31d5799a30fc02067ad31d86b6ef63294bb3c3b8.patch";
-      hash = "sha256-ECrIcfhhSuvbqQ/ExPdFkQ6b9Q767lhUKmwPdDz7yxI=";
-    })
-  ];
+  patches = [ ];
 
   netfilterGoModules =
     (buildGoModule {
@@ -52,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src patches;
-    hash = "sha256-JIe6FQL0xm6FYYGoIwwnOxq21sC1y8xPsr8tYPF0Mzo=";
+    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
   };
 
   buildInputs = [
