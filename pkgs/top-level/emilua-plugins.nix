@@ -9,6 +9,7 @@ emilua:
 (lib.makeScope newScope (self: {
   inherit emilua;
   beast = self.callPackage ../development/emilua-plugins/beast { };
+  bech32 = self.callPackage ../development/emilua-plugins/bech32 { };
   botan = self.callPackage ../development/emilua-plugins/botan {
     inherit (pkgs) botan3;
   };
