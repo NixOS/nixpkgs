@@ -236,9 +236,17 @@ let
         isSystemUser = true;
         inherit (conf) group;
       });
-      users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
-        "${name}-exporter" = {};
-      });
+      users.groups = mkMerge [
+        (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
+          "${name}-exporter" = {};
+        })
+        (mkIf (name == "smartctl") {
+          "smartctl-exporter-access" = {};
+        })
+      ];
+      services.udev.extraRules = mkIf (name == "smartctl") ''
+        ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
+      '';
       networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
