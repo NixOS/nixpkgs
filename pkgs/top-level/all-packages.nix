@@ -28573,8 +28573,6 @@ with pkgs;
 
   bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
 
-  bibletime = callPackage ../applications/misc/bibletime { };
-
   bino3d = qt6Packages.callPackage ../applications/video/bino3d { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
