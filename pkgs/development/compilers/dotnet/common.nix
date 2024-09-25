@@ -1,4 +1,3 @@
-# TODO: switch to stdenvNoCC
 {
   stdenv,
   stdenvNoCC,
@@ -21,7 +20,7 @@
   xmlstarlet,
 }:
 type: args:
-stdenv.mkDerivation (
+stdenvNoCC.mkDerivation (
   finalAttrs:
   args
   // {
