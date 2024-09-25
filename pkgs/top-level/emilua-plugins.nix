@@ -18,4 +18,5 @@ emilua:
   secp256k1 = self.callPackage ../development/emilua-plugins/secp256k1 {
     inherit (pkgs) secp256k1;
   };
+  this-thread = self.callPackage ../development/emilua-plugins/this-thread { };
 }))
