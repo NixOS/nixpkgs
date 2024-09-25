@@ -9,14 +9,14 @@
   aces-container,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctl";
   version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "ampas";
     repo = "CTL";
-    rev = "ctl-${version}";
+    rev = "ctl-${finalAttrs.version}";
     hash = "sha256-jG+38jsPw+4CEAbOG+hudfPBPbZLG+Om7PszkFa6DuI=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ctl";
     platforms = lib.platforms.all;
   };
-}
+})
