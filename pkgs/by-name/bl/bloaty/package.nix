@@ -1,22 +1,36 @@
-{ lib, stdenv, cmake, zlib, fetchFromGitHub, re2, abseil-cpp, protobuf, capstone, gtest, pkg-config, lit, llvmPackages_16 }:
-
-stdenv.mkDerivation rec {
-  pname = "bloaty";
-  version = "1.1-unstable-2023-11-06";
-
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "bloaty";
-    rev = "16f9fe54d9cd0e9abe1d25fc1a9b44c214cfaa9f";
-    hash = "sha256-mIVlNMKtJMfH2QdYZ6+oV7619oYzvKkq3fHY6uofqlM=";
-  };
-
+{
+  lib,
+  stdenv,
+  cmake,
+  zlib,
+  fetchFromGitHub,
+  re2,
+  abseil-cpp,
+  protobuf,
+  capstone,
+  gtest,
+  pkg-config,
+  lit,
+  llvmPackages_16,
+}:
+let
   # Old vendored package which has no other use than here, so not packaged in nixpkgs.
   demumble = fetchFromGitHub {
     owner = "nico";
     repo = "demumble";
     rev = "01098eab821b33bd31b9778aea38565cd796aa85";
     hash = "sha256-605SsXd7TSdm3BH854ChHIZbOXcHI/n8RN+pFMz4Ex4=";
+  };
+in
+stdenv.mkDerivation {
+  pname = "bloaty";
+  version = "1.1-unstable-2024-09-23";
+
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "bloaty";
+    rev = "0c89acd7e8b9d91fd1e9c8c129be627b4e47f1ea";
+    hash = "sha256-txZDPytWnkjkiVkPL2SWLwCPEtVvqoI/MVRvbJ2kBGw=";
   };
 
   cmakeFlags = [
@@ -39,9 +53,21 @@ stdenv.mkDerivation rec {
     rm -rf tests/wasm
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ zlib re2 abseil-cpp protobuf capstone gtest lit llvmPackages_16.libllvm ];
+  buildInputs = [
+    zlib
+    re2
+    abseil-cpp
+    protobuf
+    capstone
+    gtest
+    lit
+    llvmPackages_16.libllvm
+  ];
 
   doCheck = true;
 
@@ -54,12 +80,12 @@ stdenv.mkDerivation rec {
     install -Dm755 {.,$out/bin}/bloaty
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Size profiler for binaries";
     mainProgram = "bloaty";
     homepage = "https://github.com/google/bloaty";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
