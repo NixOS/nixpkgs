@@ -55,6 +55,7 @@ dotnetInstallHook() {
                 -p:OverwriteReadOnlyFiles=true \
                 --output "$dotnetInstallPath" \
                 --configuration "$dotnetBuildType" \
+                --no-restore \
                 --no-build \
                 "${runtimeIdFlagsArray[@]}" \
                 "${dotnetInstallFlagsArray[@]}" \
@@ -73,6 +74,7 @@ dotnetInstallHook() {
                    -p:OverwriteReadOnlyFiles=true \
                    --output "$out/share/nuget/source" \
                    --configuration "$dotnetBuildType" \
+                   --no-restore \
                    --no-build \
                    --runtime "$runtimeId" \
                    "${dotnetPackFlagsArray[@]}" \
