@@ -22,7 +22,7 @@ Some common issues when packaging software for Darwin:
   stdenv.mkDerivation {
     name = "libfoo-1.2.3";
     # ...
-    makeFlags = lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libfoo.dylib";
+    makeFlags = lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libfoo.dylib";
   }
   ```
 
