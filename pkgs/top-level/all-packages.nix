@@ -27843,8 +27843,6 @@ with pkgs;
 
   wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
 
-  xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
-
   xits-math = callPackage ../data/fonts/xits-math { };
 
   xkcd-font = callPackage ../data/fonts/xkcd-font { };
