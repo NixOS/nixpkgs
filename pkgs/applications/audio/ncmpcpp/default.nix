@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "BOOST_LIB_SUFFIX="
     (lib.enableFeature outputsSupport "outputs")
-    (lib.enableFeature visualizerSupport "enable-visualizer")
+    (lib.enableFeature visualizerSupport "visualizer")
     (lib.withFeature visualizerSupport "fftw")
     (lib.enableFeature clockSupport "clock")
     (lib.withFeature taglibSupport "taglib")
