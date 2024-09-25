@@ -14,6 +14,7 @@
   proton-vpn-connection,
   proton-vpn-killswitch,
   proton-vpn-killswitch-network-manager,
+  proton-vpn-local-agent,
   proton-vpn-logger,
   proton-vpn-network-manager,
   proton-vpn-session,
@@ -63,6 +64,7 @@ buildPythonApplication rec {
     proton-vpn-connection
     proton-vpn-killswitch
     proton-vpn-killswitch-network-manager
+    proton-vpn-local-agent
     proton-vpn-logger
     proton-vpn-network-manager
     proton-vpn-session

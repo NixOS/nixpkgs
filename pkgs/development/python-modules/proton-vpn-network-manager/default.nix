@@ -8,6 +8,7 @@
   proton-core,
   proton-vpn-api-core,
   proton-vpn-connection,
+  proton-vpn-local-agent,
   pycairo,
   pygobject3,
   pytest-asyncio,
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     proton-core
     proton-vpn-api-core
     proton-vpn-connection
+    proton-vpn-local-agent
     pycairo
     pygobject3
   ];
