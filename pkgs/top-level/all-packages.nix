@@ -25756,7 +25756,7 @@ with pkgs;
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk22.override { enableJavaFX = true; };
+    jdk = jdk23.override { enableJavaFX = true; };
   };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
