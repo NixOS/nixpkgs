@@ -587,19 +587,19 @@ in
 
   cord-nvim =
     let
-      version = "2024-07-19";
+      version = "0-unstable-2024-09-26";
       src = fetchFromGitHub {
         owner = "vyfor";
         repo = "cord.nvim";
-        rev = "cd97c25320fb0a672b11bcd95d8332bb3088ecce";
-        hash = "sha256-66NtKteM1mvHP5wAU4e9JbsF+bq91lmCDcTh/6RPhoo=";
+        rev = "a26b00d58c42174aadf975917b49cec67650545f";
+        hash = "sha256-jUxBvWnj0+axuw2SZ2zLzlhZS0tu+Bk8+wHtXENofkw=";
       };
       extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
       rustPackage = rustPlatform.buildRustPackage {
         pname = "cord.nvim-rust";
         inherit version src;
 
-        cargoHash = "sha256-6FYf4pHEPxvhKHHPmkjQ40zPxaiypnpDxF8kNH+h+tg=";
+        cargoHash = "sha256-M5mTdBACTaUVZhPpMOf1KQ3BcQpEoD2isAKRn+iAWjc=";
 
         installPhase = let
           cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
