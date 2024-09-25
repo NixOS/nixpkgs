@@ -40,7 +40,30 @@ in
     };
   };
 
+  options.system.apply.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = config.system.switch.enable;
+    internal = true;
+    description = ''
+      Whether to include the `bin/apply` script.
+
+      Disabling puts `nixos-rebuild` in a legacy mode that won't be maintained
+      and removes cheap and useful functionality. It's also slower over ssh.
+      This should only be used for testing the `nixos-rebuild` command, to
+      pretend that the configuration is an old NixOS.
+    '';
+  };
+
   config = lib.mkMerge [
+    (lib.mkIf config.system.apply.enable {
+      system.activatableSystemBuilderCommands = ''
+        mkdir -p $out/bin
+        substitute ${./apply/apply.sh} $out/bin/apply \
+          --subst-var-by bash ${lib.getExe pkgs.bash} \
+          --subst-var-by toplevel ''${!toplevelVar}
+        chmod +x $out/bin/apply
+      '';
+    })
     (lib.mkIf (config.system.switch.enable && !config.system.switch.enableNg) {
       warnings = [
         ''
@@ -54,7 +77,7 @@ in
       ];
 
       system.activatableSystemBuilderCommands = ''
-        mkdir $out/bin
+        mkdir -p $out/bin
         substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \
           --subst-var out \
           --subst-var-by toplevel ''${!toplevelVar} \
@@ -86,7 +109,7 @@ in
         (
           source ${pkgs.buildPackages.makeWrapper}/nix-support/setup-hook
 
-          mkdir $out/bin
+          mkdir -p $out/bin
           ln -sf ${lib.getExe pkgs.switch-to-configuration-ng} $out/bin/switch-to-configuration
           wrapProgram $out/bin/switch-to-configuration \
             --set OUT $out \
