@@ -38051,7 +38051,6 @@ with pkgs;
       libmysqlclient = mysql;
     };
     mysql = mysql;
-    pcre = pcre-cpp;
   });
 
   r128gain = callPackage ../applications/audio/r128gain { };
