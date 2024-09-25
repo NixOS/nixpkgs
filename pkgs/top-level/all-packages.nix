@@ -1685,8 +1685,6 @@ with pkgs;
 
   crypto-tracker = callPackage ../tools/misc/crypto-tracker { };
 
-  ejs = callPackage ../development/tools/ejs { };
-
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
@@ -2995,8 +2993,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  amberol = callPackage ../applications/audio/amberol { };
-
   inherit (callPackages ../development/tools/ammonite {})
     ammonite_2_12
     ammonite_2_13;
@@ -3485,7 +3481,9 @@ with pkgs;
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
-  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
+  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod {
+    buildGoModule = buildGo123Module;
+  };
 
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
 
@@ -5213,6 +5211,10 @@ with pkgs;
   grit = callPackage ../tools/misc/grit { };
 
   grobi = callPackage ../tools/X11/grobi { };
+
+  grype = callPackage ../by-name/gr/grype/package.nix {
+    buildGoModule = buildGo123Module;
+  };
 
   gsctl = callPackage ../applications/misc/gsctl { };
 
@@ -7971,8 +7973,6 @@ with pkgs;
   gogs = callPackage ../applications/version-management/gogs { };
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
-
-  gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
   gokart = callPackage ../development/tools/gokart { };
 
@@ -12941,8 +12941,6 @@ with pkgs;
 
   threema-desktop = callPackage ../applications/networking/instant-messengers/threema-desktop { };
 
-  thumbdrives = callPackage ../applications/system/thumbdrives { };
-
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
@@ -15676,8 +15674,6 @@ with pkgs;
   );
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
-  cargo2junit = callPackage ../development/tools/rust/cargo2junit { };
-
   cargo-web = callPackage ../development/tools/rust/cargo-web {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -17319,8 +17315,6 @@ with pkgs;
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
 
   blackmagic = callPackage ../development/embedded/blackmagic { };
-
-  bloaty = callPackage ../development/tools/bloaty { };
 
   bloomrpc = callPackage ../development/web/bloomrpc { };
 
@@ -25113,8 +25107,6 @@ with pkgs;
 
   oidentd = callPackage ../servers/identd/oidentd { };
 
-  softether = callPackage ../servers/softether { };
-
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
   rust-hypervisor-firmware = callPackage ../applications/virtualization/rust-hypervisor-firmware { };
@@ -27102,7 +27094,9 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
 
-  cnspec = callPackage ../tools/security/cnspec { };
+  cnspec = callPackage ../tools/security/cnspec {
+    buildGoModule = buildGo123Module;
+  };
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder { };
 
@@ -37517,8 +37511,6 @@ with pkgs;
   flockit = callPackage ../tools/backup/flockit { };
 
   fahclient = callPackage ../applications/science/misc/foldingathome/client.nix { };
-  fahcontrol = callPackage ../applications/science/misc/foldingathome/control.nix { };
-  fahviewer = callPackage ../applications/science/misc/foldingathome/viewer.nix { };
 
   fbmark = callPackage ../tools/misc/fbmark { };
 
@@ -37558,13 +37550,17 @@ with pkgs;
 
   gobuster = callPackage ../tools/security/gobuster { };
 
-  gotestwaf = callPackage ../tools/security/gotestwaf { };
+  gotestwaf = callPackage ../tools/security/gotestwaf {
+    buildGoModule = buildGo123Module;
+  };
 
   gotrue = callPackage ../tools/security/gotrue { };
 
   gotrue-supabase = callPackage ../tools/security/gotrue/supabase.nix { };
 
-  gowitness = callPackage ../tools/security/gowitness { };
+  gowitness = callPackage ../tools/security/gowitness {
+    buildGoModule = buildGo123Module;
+  };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 

@@ -158,7 +158,7 @@ let
     ];
 
     propagatedBuildInputs = [
-      libapparmor.python
+      (libapparmor.python or null)
 
       # Used by aa-notify
       python.pkgs.notify2

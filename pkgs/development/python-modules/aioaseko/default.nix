@@ -14,11 +14,11 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "milanmeu";
-    repo = pname;
+    repo = "aioaseko";
     rev = "refs/tags/v${version}";
     hash = "sha256-jUvpu/lOFKRUwEuYD1zRp0oODjf4AgH84fnGngtv9jw=";
   };
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "Module to interact with the Aseko Pool Live API";
     homepage = "https://github.com/milanmeu/aioaseko";
     changelog = "https://github.com/milanmeu/aioaseko/releases/tag/v${version}";
-    license = with licenses; [ lgpl3Plus ];
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

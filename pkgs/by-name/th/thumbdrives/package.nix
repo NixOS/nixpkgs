@@ -1,21 +1,22 @@
-{ lib
-, python3
-, fetchFromSourcehut
-, gtk3
-, libhandy_0
-, gobject-introspection
-, meson
-, pkg-config
-, ninja
-, gettext
-, glib
-, desktop-file-utils
-, wrapGAppsHook3
+{
+  lib,
+  python3,
+  fetchFromSourcehut,
+  gtk3,
+  libhandy_0,
+  gobject-introspection,
+  meson,
+  pkg-config,
+  ninja,
+  gettext,
+  glib,
+  desktop-file-utils,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "thumbdrives";
-  version = "0.3.1";
+  version = "0.3.2";
 
   format = "other";
 
@@ -23,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "~martijnbraam";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CPZKswbvsG61A6J512FOCKAntoJ0sUb2s+MKb0rO+Xw=";
+    hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
   };
 
   postPatch = ''
@@ -56,7 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "USB mass storage emulator for Linux handhelds";
     homepage = "https://sr.ht/~martijnbraam/thumbdrives/";
     license = licenses.mit;
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [
+      chuangzhu
+      Luflosi
+    ];
     platforms = platforms.linux;
   };
 }

@@ -13006,8 +13006,6 @@ self: super: with self; {
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
-  pyunifiprotect = callPackage ../development/python-modules/pyunifiprotect { };
-
   pyupdate = callPackage ../development/python-modules/pyupdate { };
 
   pyupgrade = callPackage ../development/python-modules/pyupgrade { };
