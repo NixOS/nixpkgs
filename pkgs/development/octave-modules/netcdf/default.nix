@@ -13,7 +13,7 @@ buildOctavePackage rec {
     sha256 = "sha256-ydgcKFh4uWuSlr7zw+k1JFUSzGm9tiWmOHV1IWvlgwk=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     netcdf
   ];
 
