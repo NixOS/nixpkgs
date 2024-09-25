@@ -37709,7 +37709,7 @@ with pkgs;
 
   moonfire-nvr = callPackage ../misc/moonfire-nvr { };
 
-  mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql80; in {
+  mysql-workbench = callPackage ../by-name/my/mysql-workbench/package.nix (let mysql = mysql80; in {
     gdal = gdal.override {
       libmysqlclient = mysql;
     };
