@@ -1,32 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, autoreconfHook, intltool
-, gtk3, pkg-config, flex }:
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  fetchpatch2,
+  flex,
+  gtk3,
+  intltool,
+  pkg-config,
+  stdenv,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "galculator";
   version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "galculator";
     repo = "galculator";
-    rev = "v${version}";
-    sha256 = "0q0hb62f266709ncyq96bpx4a40a1i6dc5869byvd7x285sx1c2w";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XLDQdUGin7b9SgYV1kwMChBF+l0mYc9sAscY4YRZEGA=";
   };
 
   patches = [
     # Pul patch pending upstream inclusion for -fno-common toolchain support:
     #   https://github.com/galculator/galculator/pull/45
-    (fetchpatch {
+    (fetchpatch2 {
       name = "fno-common.patch";
       url = "https://github.com/galculator/galculator/commit/501a9e3feeb2e56889c0ff98ab6d0ab20348ccd6.patch";
-      sha256 = "08c9d2b49a1mizgk7v37dp8r96x389zc13mzv4dcy16x448lhp67";
+      hash = "sha256-qVJHcfJTtl0hK8pzSp6MjhYAh1NbIIWr3rBDodIYBvk=";
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
-  buildInputs = [ gtk3 flex ];
+  nativeBuildInputs = [
+    autoreconfHook
+    flex
+    intltool
+    pkg-config
+  ];
 
-  meta = with lib; {
+  buildInputs = [
+    gtk3
+  ];
+
+  # BUG: when set as true, complains with:
+  # configure.in:76: error: possibly undefined macro: AM_GLIB_GNU_GETTEXT
+  strictDeps = false;
+
+  meta = {
+    homepage = "http://galculator.sourceforge.net/";
     description = "GTK algebraic and RPN calculator";
     longDescription = ''
       galculator is a GTK-based calculator. Its main features include:
@@ -40,10 +61,9 @@ stdenv.mkDerivation rec {
       - Binary arithmetic of configurable bit length and signedness
       - Quad-precision floating point arithmetic, and 112-bit binary arithmetic
     '';
-    homepage = "http://galculator.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "galculator";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (gtk3.meta) platforms;
   };
-}
+})
