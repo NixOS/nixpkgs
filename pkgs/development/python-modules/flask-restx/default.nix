@@ -65,7 +65,7 @@ buildPythonPackage rec {
       "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
       "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--deselect=tests/test_inputs.py::EmailTest::test_invalid_values_check"
     ];
 

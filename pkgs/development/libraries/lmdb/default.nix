@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
   ]
-    ++ lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so"
     ++ lib.optionals stdenv.hostPlatform.isWindows [ "SOEXT=.dll" "BINEXT=.exe" ];
 
   doCheck = true;

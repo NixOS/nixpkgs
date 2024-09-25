@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optional enableWX wxGTK32
-    ++ lib.optional (enableWX && stdenv.isDarwin) Cocoa
+    ++ lib.optional (enableWX && stdenv.hostPlatform.isDarwin) Cocoa
     ++ lib.optional enableXWin xorg.libX11
     ++ lib.optionals enablePNG [
       cairo

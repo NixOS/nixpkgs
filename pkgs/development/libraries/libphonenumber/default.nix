@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     icu
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
   ];
 

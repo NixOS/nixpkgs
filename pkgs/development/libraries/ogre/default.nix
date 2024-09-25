@@ -74,7 +74,7 @@ let
       ois
       pugixml
       zziplib
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       libglut
       libGL
       libGLU
@@ -88,7 +88,7 @@ let
       libXt
       libXxf86vm
       xorgproto
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Cocoa
     ] ++ lib.optionals withNvidiaCg [
       nvidia_cg_toolkit
@@ -97,7 +97,7 @@ let
     cmakeFlags = [
       (lib.cmakeBool "OGRE_BUILD_DEPENDENCIES" false)
       (lib.cmakeBool "OGRE_BUILD_SAMPLES" withSamples)
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
     ];
 

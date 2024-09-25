@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sarcasticadmin ];
     mainProgram = "pterm";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

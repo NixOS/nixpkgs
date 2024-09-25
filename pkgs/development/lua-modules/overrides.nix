@@ -461,7 +461,7 @@ in
     ];
   });
 
-  luasystem = prev.luasystem.overrideAttrs (oa: lib.optionalAttrs stdenv.isLinux {
+  luasystem = prev.luasystem.overrideAttrs (oa: lib.optionalAttrs stdenv.hostPlatform.isLinux {
     buildInputs = [ glibc.out ];
   });
 
@@ -503,7 +503,7 @@ in
 
     # ld: symbol(s) not found for architecture arm64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    meta.broken = stdenv.isDarwin;
+    meta.broken = stdenv.hostPlatform.isDarwin;
   });
 
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
@@ -644,7 +644,7 @@ in
     buildInputs = [ libuv final.lua ];
 
     nativeBuildInputs = [ pkg-config cmake ]
-      ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
   };
 
   luv = prev.luv.overrideAttrs (oa: {
@@ -785,7 +785,7 @@ in
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
-    doCheck = stdenv.isLinux;
+    doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
     # the plugin loads the library from either the LIBSQLITE env
@@ -835,7 +835,7 @@ in
       hash = "sha256-PLihirhJshcUQI3L1eTcnQiZvocDl29eQHhdBwJQRU8=";
     };
 
-    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
       (if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [

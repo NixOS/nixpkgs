@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 
-  FONTCONFIG_FILE = lib.optional stdenv.isDarwin (makeFontsConf {
+  FONTCONFIG_FILE = lib.optional stdenv.hostPlatform.isDarwin (makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   });
 }

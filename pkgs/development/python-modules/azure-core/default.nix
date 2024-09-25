@@ -75,7 +75,7 @@ buildPythonPackage rec {
     # disable 8 tests failing on some darwin machines with errors:
     # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
     # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
-  ] ++ lib.optionals stdenv.isDarwin [ "location_polling_fail" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "location_polling_fail" ];
 
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies

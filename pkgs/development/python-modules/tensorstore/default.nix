@@ -42,7 +42,7 @@ buildPythonPackage rec {
         or (throw "unsupported system/python version combination");
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   dependencies = [
     ml-dtypes

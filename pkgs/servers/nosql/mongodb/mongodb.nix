@@ -56,7 +56,7 @@ let
     #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
-  ] ++ lib.optionals stdenv.isLinux [ "tcmalloc" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "tcmalloc" ];
   inherit (lib) systems subtractLists;
 
 in stdenv.mkDerivation rec {
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     scons
     python
-  ] ++ lib.optional stdenv.isLinux net-snmp;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux net-snmp;
 
   buildInputs = [
     boost
@@ -87,8 +87,8 @@ in stdenv.mkDerivation rec {
     sasl
     snappy
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ]
-  ++ lib.optional stdenv.isLinux net-snmp
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreFoundation cctools ]
+  ++ lib.optional stdenv.hostPlatform.isLinux net-snmp
   ++ [ xz ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
@@ -107,9 +107,9 @@ in stdenv.mkDerivation rec {
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder version "6.0") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "6.0") ''
     substituteInPlace src/third_party/mozjs-${mozjsVersion}/extract/js/src/jsmath.cpp --replace '${mozjsReplace}' 0
-  '' + lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.hostPlatform.isi686 ''
 
     # don't fail by default on i686
     substituteInPlace src/mongo/db/storage/storage_options.h \
@@ -142,9 +142,9 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     sconsFlags+=" AR=$AR"
-  '' + lib.optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
 

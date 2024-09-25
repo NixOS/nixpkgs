@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl glib zlib ];
 
-  CFLAGS = lib.optionalString stdenv.isDarwin "-D__off_t=off_t";
+  CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D__off_t=off_t";
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook for
     # this change to effect
     substituteInPlace configure.ac --replace \

@@ -94,6 +94,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ dunxen ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

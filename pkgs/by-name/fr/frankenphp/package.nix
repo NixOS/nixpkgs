@@ -19,9 +19,9 @@ let
   phpEmbedWithZts = php.override {
     embedSupport = true;
     ztsSupport = true;
-    staticSupport = stdenv.isDarwin;
+    staticSupport = stdenv.hostPlatform.isDarwin;
     zendSignalsSupport = false;
-    zendMaxExecutionTimersSupport = stdenv.isLinux;
+    zendMaxExecutionTimersSupport = stdenv.hostPlatform.isLinux;
   };
   phpUnwrapped = phpEmbedWithZts.unwrapped;
   phpConfig = "${phpUnwrapped.dev}/bin/php-config";
@@ -45,7 +45,7 @@ in buildGoModule rec {
   vendorHash = "sha256-U2B0ok6TgqUPMwlnkzpPkJLG22S3VpoU80bWwZAeaJo=";
 
   buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config cctools darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkg-config cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];
 
@@ -63,7 +63,7 @@ in buildGoModule rec {
     export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
       $(${phpConfig} --ldflags) \
       $(${phpConfig} --libs)"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # replace hard-code homebrew path
     substituteInPlace ../frankenphp.go \
       --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"

@@ -69,7 +69,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     remarshal
     ttfautohint-nox
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # libtool
     cctools
   ];

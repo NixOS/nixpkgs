@@ -44,7 +44,7 @@ buildPythonPackage rec {
     rtree
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME=$(mktemp -d);

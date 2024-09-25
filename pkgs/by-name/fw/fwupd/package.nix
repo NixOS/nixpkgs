@@ -67,7 +67,7 @@ let
   haveDell = isx86;
 
   # only redfish for x86_64
-  haveRedfish = stdenv.isx86_64;
+  haveRedfish = stdenv.hostPlatform.isx86_64;
 
   # only use msr if x86 (requires cpuid)
   haveMSR = isx86;

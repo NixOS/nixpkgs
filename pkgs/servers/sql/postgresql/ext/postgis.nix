@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     json_c
     protobufc
     pcre2.dev
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
   nativeBuildInputs = [
     perl
     pkg-config
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ln -s ${postgresql}/bin/postgres $out/bin/postgres
   '';
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     substituteInPlace regress/run_test.pl --replace-fail "/share/contrib/postgis" "$out/share/postgresql/contrib/postgis"

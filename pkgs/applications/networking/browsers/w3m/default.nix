@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , ncurses, boehmgc, gettext, zlib
 , sslSupport ? true, openssl
-, graphicsSupport ? !stdenv.isDarwin, imlib2
+, graphicsSupport ? !stdenv.hostPlatform.isDarwin, imlib2
 , x11Support ? graphicsSupport, libX11
-, mouseSupport ? !stdenv.isDarwin, gpm-ncurses
+, mouseSupport ? !stdenv.hostPlatform.isDarwin, gpm-ncurses
 , perl, man, pkg-config, buildPackages, w3m
 , testers, updateAutotoolsGnuConfigScriptsHook
 }:
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     hash = "sha256-upb5lWqhC1jRegzTncIz5e21v4Pw912FyVn217HucFs=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isSunOS "-lsocket -lnsl";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lsocket -lnsl";
 
   # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
   # the correct paths.

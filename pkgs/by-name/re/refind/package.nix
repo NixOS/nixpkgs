@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       "EFICRT0=${gnu-efi}/lib"
       "HOSTARCH=${hostarch}"
       "ARCH=${hostarch}"
-    ] ++ lib.optional stdenv.isAarch64 [
+    ] ++ lib.optional stdenv.hostPlatform.isAarch64 [
       # aarch64 is special for GNU-EFI, see BUILDING.txt
       "GNUEFI_ARM64_TARGET_SUPPORT=y"
     ];

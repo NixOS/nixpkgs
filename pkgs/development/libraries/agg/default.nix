@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     SDL
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
   ];
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (lib.strings.enableFeature stdenv.isLinux "platform")
+    (lib.strings.enableFeature stdenv.hostPlatform.isLinux "platform")
     "--enable-examples=no"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--x-includes=${lib.getDev libX11}/include"
     "--x-libraries=${lib.getLib libX11}/lib"
   ];

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ ffmpeg ] ++ lib.optionals stdenv.isDarwin
+  buildInputs = [ ffmpeg ] ++ lib.optionals stdenv.hostPlatform.isDarwin
     (with darwin.apple_sdk.frameworks; [ Accelerate CoreGraphics CoreVideo zlib ]);
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];

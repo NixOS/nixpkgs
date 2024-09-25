@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
 
   meta = with lib; {
     description = "General Stream I/O";

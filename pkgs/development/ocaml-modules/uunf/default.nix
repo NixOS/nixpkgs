@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  prePatch = lib.optionalString stdenv.isAarch64 "ulimit -s 16384";
+  prePatch = lib.optionalString stdenv.hostPlatform.isAarch64 "ulimit -s 16384";
 
   buildPhase = ''
     runHook preBuild

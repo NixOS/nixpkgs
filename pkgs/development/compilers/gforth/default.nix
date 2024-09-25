@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-lispdir=${lispDir}"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "--build=x86_64-apple-darwin"
   ];
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     description = "Forth implementation of the GNU project";
     homepage = "https://github.com/forthy42/gforth";
     license = lib.licenses.gpl3;
-    broken = stdenv.isDarwin && stdenv.isAarch64; # segfault when running ./gforthmi
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault when running ./gforthmi
     platforms = lib.platforms.all;
   };
 }

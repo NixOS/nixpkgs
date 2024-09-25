@@ -309,13 +309,13 @@ stdenv.mkDerivation (rec {
   ''
   + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "9.2") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "9.2") ''
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
     export XATTR=${lib.getBin xattr}/bin/xattr
@@ -383,11 +383,11 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versions.majorMinor version == "9.0") [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versions.majorMinor version == "9.0") [
     # TODO(@sternenseemann): backport addition of XATTR env var like
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
     xattr

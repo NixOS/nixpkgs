@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage {
     xz
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin (with apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with apple_sdk.frameworks; [
     CoreFoundation
     CoreServices
     IOKit

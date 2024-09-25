@@ -35,10 +35,10 @@
   withGLES ? false,
 }:
 
-assert withGLES -> stdenv.isLinux;
+assert withGLES -> stdenv.hostPlatform.isLinux;
 
 let
-  executableName = "zed";
+  executableName = "zeditor";
   # Based on vscode.fhs
   # Zed allows for users to download and use extensions
   # which often include the usage of pre-built binaries.
@@ -84,7 +84,7 @@ let
     };
 in
 rustPlatform.buildRustPackage rec {
-  pname = "zed";
+  pname = "zed-editor";
   version = "0.153.6";
 
   src = fetchFromGitHub {
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage rec {
     protobuf
     rustPlatform.bindgenHook
     cargo-about
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
 
   buildInputs =
     [
@@ -143,13 +143,13 @@ rustPlatform.buildRustPackage rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libxkbcommon
       wayland
       xorg.libxcb
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit
@@ -196,7 +196,7 @@ rustPlatform.buildRustPackage rec {
     bash script/generate-licenses
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
     patchelf --add-rpath ${wayland}/lib $out/libexec/*
   '';
@@ -218,7 +218,7 @@ rustPlatform.buildRustPackage rec {
 
     mkdir -p $out/bin $out/libexec
     cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed $out/libexec/zed-editor
-    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zed
+    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zeditor
 
     install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
     install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
@@ -227,7 +227,7 @@ rustPlatform.buildRustPackage rec {
     # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
     (
       export DO_STARTUP_NOTIFY="true"
-      export APP_CLI="zed"
+      export APP_CLI="zeditor"
       export APP_ICON="zed"
       export APP_NAME="Zed"
       export APP_ARGS="%U"
@@ -262,9 +262,9 @@ rustPlatform.buildRustPackage rec {
       GaetanLepage
       niklaskorz
     ];
-    mainProgram = "zed";
+    mainProgram = "zeditor";
     platforms = lib.platforms.all;
     # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

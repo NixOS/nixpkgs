@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, openssl, libX11, krb5, libXcursor, libtasn1
 , nettle, gnutls, pkg-config, autoreconfHook, libiconv
-, enableCredssp ? (!stdenv.isDarwin)
+, enableCredssp ? (!stdenv.hostPlatform.isDarwin)
 } :
 
 stdenv.mkDerivation (rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [pkg-config autoreconfHook];
   buildInputs = [openssl libX11 libXcursor libtasn1 nettle gnutls]
     ++ lib.optional enableCredssp krb5
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   configureFlags = [
     "--with-ipv6"

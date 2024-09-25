@@ -89,7 +89,7 @@ buildPythonPackage rec {
       "test/integration/test_runner.py"
       "test/unit/test_runner.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Integration tests on Darwin are not regularly passing in ansible-runner's own CI
       "test/integration"
       # These tests write to `/tmp` which is not writable on Darwin

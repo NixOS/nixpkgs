@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-gJ5go9V8c97pQZICUD1ksLJhOyJXyVXAWssH3fhrRVQ=";
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd twm \

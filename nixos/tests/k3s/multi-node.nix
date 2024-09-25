@@ -189,7 +189,7 @@ import ../make-test-python.nix (
           m.start()
           m.wait_for_unit("k3s")
 
-      is_aarch64 = "${toString pkgs.stdenv.isAarch64}" == "1"
+      is_aarch64 = "${toString pkgs.stdenv.hostPlatform.isAarch64}" == "1"
 
       # wait for the agent to show up
       server.wait_until_succeeds("k3s kubectl get node agent")

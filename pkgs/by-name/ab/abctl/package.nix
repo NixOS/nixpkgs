@@ -27,6 +27,6 @@ buildGoModule {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xelden ];
     mainProgram = "abctl";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

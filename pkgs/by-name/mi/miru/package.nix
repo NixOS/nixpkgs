@@ -36,7 +36,7 @@ let
     updateScript = ./update.sh;
   };
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix {
     inherit
       pname

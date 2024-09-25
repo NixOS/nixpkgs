@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
   preCheck = ''

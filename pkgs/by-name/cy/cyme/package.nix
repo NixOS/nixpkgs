@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
   ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # doctest that requires access outside sandbox
     "--skip=udev::hwdb::get"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # system_profiler is not available in the sandbox
     "--skip=test_run"
   ];

@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wxGTK
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shopt -s extglob
     mkdir -p $out/{share/treesheets,bin}
     mv $out/!(share) $out/share/treesheets

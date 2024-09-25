@@ -53,7 +53,7 @@ buildPythonPackage rec {
       # minor output formatting issue
       "skops/card/_model_card.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Segfaults on darwin
       "skops/io/tests/test_persist.py"
     ];

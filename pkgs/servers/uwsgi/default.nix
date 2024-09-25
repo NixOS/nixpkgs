@@ -9,9 +9,9 @@
 , zlib
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
-, pam, withPAM ? stdenv.isLinux
+, pam, withPAM ? stdenv.hostPlatform.isLinux
 , systemd, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, libcap, withCap ? stdenv.isLinux
+, libcap, withCap ? stdenv.hostPlatform.isLinux
 , python2, python3, ncurses
 , ruby, php
 , makeWrapper, fetchFromGitHub
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =  [ jansson pcre libxcrypt ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ expat zlib ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ expat zlib ]
     ++ lib.optional withPAM pam
     ++ lib.optional withSystemd systemd
     ++ lib.optional withCap libcap

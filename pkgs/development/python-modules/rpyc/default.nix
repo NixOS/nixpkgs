@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpyc" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";

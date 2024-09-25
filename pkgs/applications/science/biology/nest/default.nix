@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     python3
     python3.pkgs.cython
   ] ++ lib.optional withMpi mpi
-    ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = with python3.pkgs; [
     numpy

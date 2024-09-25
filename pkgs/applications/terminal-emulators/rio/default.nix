@@ -17,21 +17,21 @@
 , vulkan-loader
 , libxkbcommon
 
-, withX11 ? !stdenv.isDarwin
+, withX11 ? !stdenv.hostPlatform.isDarwin
 , libX11
 , libXcursor
 , libXi
 , libXrandr
 , libxcb
 
-, withWayland ? !stdenv.isDarwin
+, withWayland ? !stdenv.hostPlatform.isDarwin
 , wayland
 
 , testers
 , rio
 }:
 let
-  rlinkLibs = if stdenv.isDarwin then [
+  rlinkLibs = if stdenv.hostPlatform.isDarwin then [
     darwin.libobjc
     darwin.apple_sdk_11_0.frameworks.AppKit
     darwin.apple_sdk_11_0.frameworks.AVFoundation
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     ncurses
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
     pkg-config
     autoPatchelfHook
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage rec {
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications/
     mv misc/osx/Rio.app/ $out/Applications/
     mkdir $out/Applications/Rio.app/Contents/MacOS/
@@ -130,6 +130,6 @@ rustPlatform.buildRustPackage rec {
     # stderr:
     # thread 'main' panicked at corcovado/src/sys/unix/eventedfd.rs:24:16:
     # called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

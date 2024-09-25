@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "IRC channel management bot written purely in C/C++";
     longDescription = ''
       Wraith is an IRC channel management bot written purely in C/C++. It has

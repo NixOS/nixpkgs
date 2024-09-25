@@ -42,7 +42,7 @@ let
     sourceRoot = "${src.name}/libflux";
     cargoHash = "sha256-oAMoGGdR0QEjSzZ0/J5J9s/ekSlryCcRBSo5N2r70Ko=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
-    buildInputs = lib.optional stdenv.isDarwin libiconv;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}
@@ -56,7 +56,7 @@ let
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
       substitute $pkgcfgPath $out/pkgconfig/flux.pc \
         --replace /out $out
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
   };

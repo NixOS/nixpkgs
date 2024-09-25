@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security SystemConfiguration
   ];
 

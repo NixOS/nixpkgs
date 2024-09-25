@@ -78,7 +78,7 @@ buildPythonPackage rec {
     rm tests/test_greenthreads.py
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "dulwich" ];
 

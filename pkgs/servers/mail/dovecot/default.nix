@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
-    ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ systemd pam libcap inotify-tools ]
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     # DES-encrypted passwords are not supported by NixPkgs anymore
     sed '/test_password_scheme("CRYPT"/d' -i src/auth/test-libpassword.c
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
   '';
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
       hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
     })
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fix timespec calls
     ./timespec.patch
   ];
@@ -86,9 +86,9 @@ stdenv.mkDerivation rec {
     "--with-lucene"
     "--with-icu"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "i_cv_epoll_works=${if stdenv.isLinux then "yes" else "no"}"
-    "i_cv_posix_fallocate_works=${if stdenv.isDarwin then "no" else "yes"}"
-    "i_cv_inotify_works=${if stdenv.isLinux then "yes" else "no"}"
+    "i_cv_epoll_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
+    "i_cv_posix_fallocate_works=${if stdenv.hostPlatform.isDarwin then "no" else "yes"}"
+    "i_cv_inotify_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
     "i_cv_signed_size_t=no"
     "i_cv_signed_time_t=yes"
     "i_cv_c99_vsnprintf=yes"
@@ -100,14 +100,14 @@ stdenv.mkDerivation rec {
     "lib_cv_va_copy=yes"
     "lib_cv___va_copy=yes"
     "lib_cv_va_val_copy=yes"
-  ] ++ lib.optional stdenv.isLinux "--with-systemd"
-    ++ lib.optional stdenv.isDarwin "--enable-static"
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-systemd"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-static"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite"
     ++ lib.optional withLua "--with-lua";
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://dovecot.org/";

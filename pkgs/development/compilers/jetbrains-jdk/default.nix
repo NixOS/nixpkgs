@@ -147,7 +147,7 @@ jdk.overrideAttrs (oldAttrs: rec {
     inherit (jdk.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo ];
 
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
   passthru = oldAttrs.passthru // {

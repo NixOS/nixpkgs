@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       yarnBuildHook
       nodejs
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       copyDesktopItems
       wrapGAppsHook3
     ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       install -Dm644 assets/icons/256x256.png $out/share/icons/hicolor/256x256/apps/koodo-reader.png
       install -Dm644 ${./mime-types.xml} $out/share/mime/packages/koodo-reader.xml
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/lib/koodo-reader
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"Koodo Reader.app" $out/Applications
       makeWrapper "$out/Applications/Koodo Reader.app/Contents/MacOS/Koodo Reader" $out/bin/koodo-reader
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # we use makeShellWrapper instead of the makeBinaryWrapper provided by wrapGAppsHook for proper shell variable expansion
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeShellWrapper ${lib.getExe electron} $out/bin/koodo-reader \
       --add-flags $out/share/lib/koodo-reader/resources/app.asar \
       "''${gappsWrapperArgs[@]}" \

@@ -125,7 +125,7 @@ let
           "skimage/io/tests/test_io.py::test_imread_http_url"
           "skimage/restoration/tests/test_rolling_ball.py::test_ndim"
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # Matplotlib tests are broken inside darwin sandbox
           "skimage/feature/tests/test_util.py::test_plot_matches"
           "skimage/filters/tests/test_thresholding.py::TestSimpleImage::test_try_all_threshold"
@@ -133,7 +133,7 @@ let
           # See https://github.com/scikit-image/scikit-image/issues/7061 and https://github.com/scikit-image/scikit-image/issues/7104
           "skimage/measure/tests/test_fit.py"
         ]
-        ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
           # https://github.com/scikit-image/scikit-image/issues/7104
           "skimage/measure/tests/test_moments.py"
         ]

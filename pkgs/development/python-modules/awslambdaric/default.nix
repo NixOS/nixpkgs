@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;

@@ -47,7 +47,7 @@
       checks = forAllSystems (system: {
         tarball = jobs.${system}.tarball;
         # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
-      } // lib.optionalAttrs (self.legacyPackages.${system}.stdenv.isLinux && !self.legacyPackages.${system}.targetPlatform.isPower64) {
+      } // lib.optionalAttrs (self.legacyPackages.${system}.stdenv.hostPlatform.isLinux && !self.legacyPackages.${system}.targetPlatform.isPower64) {
         # Test that ensures that the nixosSystem function can accept a lib argument
         # Note: prefer not to extend or modify `lib`, especially if you want to share reusable modules
         #       alternatives include: `import` a file, or put a custom library in an option or in `_module.args.<libname>`

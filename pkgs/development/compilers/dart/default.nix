@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out
     cp -R * $out/
     echo $libPath
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
     find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       testCompile = runCommand "dart-test-compile" {
         nativeBuildInputs = [ finalAttrs.finalPackage ]
-          ++ lib.optionals stdenv.isDarwin [ cctools darwin.sigtool ];
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools darwin.sigtool ];
       } ''
         HELLO_MESSAGE="Hello, world!"
         echo "void main() => print('$HELLO_MESSAGE');" > hello.dart

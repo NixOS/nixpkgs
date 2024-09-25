@@ -21,18 +21,18 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--enable-dependency-tracking" ]
-    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
 
   nativeBuildInputs = [ autoreconfHook python3 ];
 
   buildInputs = [ SDL2 ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libXext ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libXext ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   enableParallelBuilding = true;
 
   # Our Darwin SDL2 doesn't have a SDL2main to link against
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure.ac \
       --replace '-lSDL2main' '-lSDL2'
   '';

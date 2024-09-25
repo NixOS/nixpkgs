@@ -47,26 +47,26 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals stdenv.isLinux [ wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.isDarwin [ libicns makeWrapper ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns makeWrapper ];
 
   buildInputs = [ SDL2 libao ]
-    ++ lib.optionals stdenv.isLinux [ libX11 libXv udev gtk3 gtksourceview3 alsa-lib openal libpulseaudio ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXv udev gtk3 gtksourceview3 alsa-lib openal libpulseaudio ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa OpenAL ];
 
   enableParallelBuilding = true;
 
   makeFlags = [ "-C" "bsnes" "prefix=$(out)" ]
-    ++ lib.optionals stdenv.isLinux [ "hiro=gtk3" ]
-    ++ lib.optionals stdenv.isDarwin [ "hiro=cocoa" ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "hiro=gtk3" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "hiro=cocoa" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
     makeWrapper $out/{Applications/bsnes.app/Contents/MacOS,bin}/bsnes
   '';
 
   # https://github.com/bsnes-emu/bsnes/issues/107
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --prefix GDK_BACKEND : x11
     )

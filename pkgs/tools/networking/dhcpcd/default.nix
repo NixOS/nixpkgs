@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     freebsd.libcapsicum
     freebsd.libcasper
   ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optionalString (udev != null && stdenv.isLinux) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString (udev != null && stdenv.hostPlatform.isLinux) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru.tests = {
     inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;

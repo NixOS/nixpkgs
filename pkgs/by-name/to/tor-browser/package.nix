@@ -29,10 +29,10 @@
 , pciutils
 , zlib
 
-, libnotifySupport ? stdenv.isLinux
+, libnotifySupport ? stdenv.hostPlatform.isLinux
 , libnotify
 
-, waylandSupport ? stdenv.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
 , libxkbcommon
 , libdrm
 , libGL

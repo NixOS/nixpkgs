@@ -56,7 +56,7 @@ buildPythonPackage rec {
   preCheck = ''
     rm -r benchmarking
   '';
-  doCheck = !stdenv.isi686;
+  doCheck = !stdenv.hostPlatform.isi686;
 
   pythonImportsCheck = [ "markdown_it" ];
 

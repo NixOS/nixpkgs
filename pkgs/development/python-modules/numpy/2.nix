@@ -90,7 +90,7 @@ buildPythonPackage rec {
       meson-python
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   # we default openblas to build with 64 threads
@@ -144,7 +144,7 @@ buildPythonPackage rec {
       # https://github.com/numpy/numpy/issues/26713
       "test_iter_refcount"
     ]
-    ++ lib.optionals stdenv.isAarch32 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       # https://github.com/numpy/numpy/issues/24548
       "test_impossible_feature_enable" # AssertionError: Failed to generate error
       "test_features" # AssertionError: Failure Detection
@@ -157,7 +157,7 @@ buildPythonPackage rec {
       "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
       "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
       "test_loss_of_precision"
     ];

@@ -39,7 +39,7 @@ let
   # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
   skippedTests = builtins.concatStringsSep "," (
     [ "browser.tests.test_kerberos_with_mocking" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "browser.server_groups.servers.tests.test_all_server_get"
       "browser.server_groups.servers.tests.test_check_connect"
       "browser.server_groups.servers.tests.test_check_ssh_mock_connect"

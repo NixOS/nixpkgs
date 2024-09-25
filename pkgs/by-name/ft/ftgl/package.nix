@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     freetype
-  ] ++ (if stdenv.isDarwin then [
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
     OpenGL
     GLUT
   ] else [

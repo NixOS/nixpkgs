@@ -6,14 +6,14 @@
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, Kernel, rez, setfile, vmnet
 , guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !minimal, numactl
-, seccompSupport ? stdenv.isLinux && !minimal, libseccomp
+, numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal, numactl
+, seccompSupport ? stdenv.hostPlatform.isLinux && !minimal, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !minimal
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, libpulseaudio
-, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, pipewire
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, SDL2, SDL2_image
-, jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !minimal, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !minimal, gtk3, gettext, vte, wrapGAppsHook3
+, pulseSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, libpulseaudio
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, pipewire
+, sdlSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, SDL2, SDL2_image
+, jackSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal, libjack2
+, gtkSupport ? !stdenv.hostPlatform.isDarwin && !xenSupport && !nixosTestRunner && !minimal, gtk3, gettext, vte, wrapGAppsHook3
 , vncSupport ? !nixosTestRunner && !minimal, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner && !minimal, libcacard
 , spiceSupport ? true && !nixosTestRunner && !minimal, spice, spice-protocol
@@ -28,7 +28,7 @@
 , libiscsiSupport ? !minimal, libiscsi
 , smbdSupport ? false, samba
 , tpmSupport ? !minimal
-, uringSupport ? stdenv.isLinux && !userOnly, liburing
+, uringSupport ? stdenv.hostPlatform.isLinux && !userOnly, liburing
 , canokeySupport ? !minimal, canokey-qemu
 , capstoneSupport ? !minimal, capstone
 , pluginsSupport ? !stdenv.hostPlatform.isStatic
@@ -39,7 +39,7 @@
 , hostCpuTargets ? (if toolsOnly
                     then [ ]
                     else if hostCpuOnly
-                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
+                    then (lib.optional stdenv.hostPlatform.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
     ++ lib.optionals enableDocs [ python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
     ++ lib.optionals hexagonSupport [ glib ]
-    ++ lib.optionals stdenv.isDarwin [ sigtool ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ]
     ++ lib.optionals (!userOnly) [ dtc ];
 
   buildInputs = [ zlib glib pixman
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls nettle curl libslirp
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor Kernel rez setfile vmnet ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Cocoa Hypervisor Kernel rez setfile vmnet ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals smartcardSupport [ libcacard ]
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.isLinux [ libcap_ng libcap attr ]
-    ++ lib.optionals (stdenv.isLinux && !userOnly) [ libaio ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap_ng libcap attr ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && !userOnly) [ libaio ]
     ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
-  separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
+  separateDebugInfo = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
 
   patches = [
     ./fix-qemu-ga.patch
@@ -179,8 +179,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optionals stdenv.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
-    ++ lib.optional (stdenv.isLinux && !userOnly) "--enable-linux-aio"
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
+    ++ lib.optional (stdenv.hostPlatform.isLinux && !userOnly) "--enable-linux-aio"
     ++ lib.optional gtkSupport "--enable-gtk"
     ++ lib.optional xenSupport "--enable-xen"
     ++ lib.optional cephSupport "--enable-rbd"
@@ -204,7 +204,7 @@ stdenv.mkDerivation (finalAttrs: {
   # voiding the entitlements and making it non-operational.
   # The alternative is to re-sign with entitlements after stripping:
   # * https://github.com/qemu/qemu/blob/v6.1.0/scripts/entitlement.sh#L25
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     # the .desktop is both invalid and pointless
@@ -260,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
     # xattrs are not allowed in the sandbox
     substituteInPlace ../tests/qtest/virtio-9p-test.c \
       --replace-fail mapped-xattr mapped-file
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
     substituteInPlace ../tests/unit/meson.build \

@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
           glib
           openal
           libglvnd
-        ] ++ lib.optionals stdenv.isLinux [
+        ] ++ lib.optionals stdenv.hostPlatform.isLinux [
           xorg.libX11
           xorg.libXxf86vm
           xorg.libXext

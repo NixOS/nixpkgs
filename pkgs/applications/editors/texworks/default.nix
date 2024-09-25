@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     qttools
   ] ++ lib.optional withLua lua
     ++ lib.optional withPython python3
-    ++ lib.optional stdenv.isLinux qtwayland;
+    ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   cmakeFlags = [
     "-DQT_DEFAULT_MAJOR_VERSION=6"

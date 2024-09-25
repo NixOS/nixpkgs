@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pcre2
     wxGTK32
     xercesc
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

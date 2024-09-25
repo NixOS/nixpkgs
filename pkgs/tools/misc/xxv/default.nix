@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-S8IKBXREJ+0z4Qz9i3RH52btg1Mpk6GjKIJf4ivdt14=";
 
   buildInputs = lib.optionals useNcurses [ ncurses ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ])
+  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security ])
   ;
 
   # I'm picking pancurses for Windows simply because that's the example given in Cursive's

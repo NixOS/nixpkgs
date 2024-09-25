@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # testsuite.tar contains filenames that aren't valid UTF-8. Extraction of
   # testsuite.tar will fail as APFS enforces that filenames are valid UTF-8.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   prePatch =
     lib.optionalString finalAttrs.doCheck ''

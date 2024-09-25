@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jLBid9MDQ2eMhG0knxU1gxbi+eRFlCPYRkzWnjCnyG0=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
   meta = with lib; {
     description = "Terminal-based HTTP/REST client";

@@ -147,7 +147,7 @@ buildPythonApplication rec {
   SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
   # TimeoutErrors on slow machines -> aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
@@ -162,7 +162,7 @@ buildPythonApplication rec {
   passthru = {
     inherit withPlugins;
     updateScript = ./update.sh;
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     tests = {
       inherit (nixosTests) buildbot;
     };
@@ -174,6 +174,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
     maintainers = teams.buildbot.members;
     license = licenses.gpl2Only;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

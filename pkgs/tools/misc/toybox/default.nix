@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
   buildInputs = [
     libxcrypt
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ] ++ optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
     make ${if enableMinimal then
       "allnoconfig"
     else
-      if stdenv.isFreeBSD then
+      if stdenv.hostPlatform.isFreeBSD then
         "freebsd_defconfig"
       else
-        if stdenv.isDarwin then
+        if stdenv.hostPlatform.isDarwin then
           "macos_defconfig"
         else
           "defconfig"

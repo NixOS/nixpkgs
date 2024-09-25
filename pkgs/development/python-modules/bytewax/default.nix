@@ -104,6 +104,6 @@ buildPythonPackage rec {
       kfollesdal
     ];
     # mismatched type expected u8, found i8
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

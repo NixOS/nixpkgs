@@ -51,7 +51,7 @@ buildPythonPackage rec {
     done
   '';
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.hostPlatform.isx86_64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Rounding difference break comparison
     "TestGradientMultiOutputGPModel"
   ];

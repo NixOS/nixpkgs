@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     asio avahi flac libogg libvorbis libopus
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
-  ++ lib.optional stdenv.isLinux alsa-lib
-  ++ lib.optionals stdenv.isDarwin [ IOKit AudioToolbox ];
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit AudioToolbox ];
 
-  TARGET=lib.optionalString stdenv.isDarwin "MACOS";
+  TARGET=lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

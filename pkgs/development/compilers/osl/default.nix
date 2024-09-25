@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     python3.pkgs.pybind11
     util-linux # needed just for hexdump
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libxml2
   ];
 

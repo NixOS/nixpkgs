@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
     "-DPython3_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
-  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
 
   strictDeps = true;
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     python.pythonOnBuildForHost
     swig
     unzip
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DarwinTools
   ] ++ (with python.pythonOnBuildForHost.pkgs; [
     pip

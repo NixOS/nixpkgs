@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
     xorg.libXcursor
     xorg.libXi
@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage rec {
     wayland
     libxkbcommon
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
     "--skip=interpreter::tests::centered_image_with_size_align_and_link"
     "--skip=watcher::tests::the_gauntlet"
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_inlyne
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
       --add-rpath ${lib.makeLibraryPath [ libGL xorg.libX11 ]}
   '';

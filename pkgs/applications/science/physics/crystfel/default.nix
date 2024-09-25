@@ -75,7 +75,7 @@ let
     let
       version = "7.4.0";
       src =
-        if stdenv.isDarwin then
+        if stdenv.hostPlatform.isDarwin then
           fetchurl
             {
               url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-osx-64-noX11.zip";
@@ -86,7 +86,7 @@ let
             url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-linux-64-noX11.zip";
             hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
           };
-      mosflmBinary = if stdenv.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
+      mosflmBinary = if stdenv.hostPlatform.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
     in
     stdenv.mkDerivation {
       pname = "mosflm";
@@ -209,9 +209,9 @@ stdenv.mkDerivation rec {
     xgandalf
     pandoc
   ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     argp-standalone
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
     memorymappingHook
   ]
   ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];

@@ -1,30 +1,34 @@
 { lib
 , fetchFromGitHub
-, python3
+, python3Packages
 , softhsm
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "esptool";
-  version = "4.7.0";
-
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
-    rev = "v${version}";
-    hash = "sha256-yrEwCg0e+8jZorL6jcqeuKUCFoV0oP9HVFh1n/ezjPg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BjoeJxtJ2cin6do82MCBjgAaTF0t7zy6JbzhBqnKAw8=";
   };
 
   postPatch = ''
     patchShebangs ci
 
     substituteInPlace test/test_espsecure_hsm.py \
-      --replace "/usr/lib/softhsm" "${lib.getLib softhsm}/lib/softhsm"
+      --replace-fail "/usr/lib/softhsm" "${lib.getLib softhsm}/lib/softhsm"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    argcomplete
     bitstring
     cryptography
     ecdsa
@@ -32,14 +36,17 @@ python3.pkgs.buildPythonApplication rec {
     pyserial
     reedsolo
     pyyaml
-    python-pkcs11
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  optional-dependencies = with python3Packages; {
+    hsm = [ python-pkcs11 ];
+  };
+
+  nativeCheckInputs = with python3Packages; [
     pyelftools
     pytestCheckHook
     softhsm
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # tests mentioned in `.github/workflows/test_esptool.yml`
   checkPhase = ''
@@ -60,6 +67,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/espressif/esptool/blob/${src.rev}/CHANGELOG.md";
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;

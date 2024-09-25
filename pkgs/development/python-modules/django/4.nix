@@ -118,7 +118,7 @@ buildPythonPackage rec {
     tzdata
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     # make sure the installed library gets imported

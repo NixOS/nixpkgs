@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in "$out"/bin/*; do
       if isELF "$f"; then
         patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"

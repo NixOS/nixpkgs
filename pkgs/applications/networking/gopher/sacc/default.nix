@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libressl ];
 
-  CFLAGS = lib.optionals stdenv.isDarwin [
+  CFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     "-D_DARWIN_C_SOURCE"
   ];
 

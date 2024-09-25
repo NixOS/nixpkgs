@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  nativeBuildInputs = [ gzip ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ gzip ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   dontUnpack = true;
   dontConfigure = true;

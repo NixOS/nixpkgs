@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     testtools
     twisted
-  ] ++ lib.optionals stdenv.isLinux [ daemontools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
 
   __darwinAllowLocalNetworking = true;
 

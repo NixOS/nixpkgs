@@ -17,7 +17,7 @@
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
+  withX = libX11 != null && !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
@@ -38,7 +38,7 @@ in
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
     ++ lib.optional withWxGTK wxGTK32
-    ++ lib.optional (withWxGTK && stdenv.isDarwin) Cocoa;
+    ++ lib.optional (withWxGTK && stdenv.hostPlatform.isDarwin) Cocoa;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
@@ -51,7 +51,7 @@ in
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
   ] ++ lib.optional withCaca "--with-caca";
 
-  CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
+  CXXFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin && withQt) "-std=c++11";
 
   # we'll wrap things ourselves
   dontWrapGApps = true;

@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     [ libcdio ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       IOKit
       DiskArbitration
     ];
 
-  propagatedBuildInputs = lib.optional stdenv.isDarwin DiskArbitration;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin DiskArbitration;
 
-  configureFlags = lib.optionals stdenv.isDarwin [ "--disable-ld-version-script" ];
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-ld-version-script" ];
 
   meta = with lib; {
     description = "CD paranoia on top of libcdio";

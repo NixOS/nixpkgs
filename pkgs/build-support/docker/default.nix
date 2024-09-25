@@ -924,7 +924,7 @@ rec {
       (lib.assertMsg (maxLayers > 1)
         "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
       assert
-      (lib.assertMsg (enableFakechroot -> !stdenv.isDarwin) ''
+      (lib.assertMsg (enableFakechroot -> !stdenv.hostPlatform.isDarwin) ''
         cannot use `enableFakechroot` because `proot` is not portable to Darwin. Workarounds:
               - use `fakeRootCommands` with the restricted `fakeroot` environment
               - cross-compile your packages

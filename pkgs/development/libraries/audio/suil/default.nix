@@ -18,7 +18,7 @@
   gtk3,
   withQt5 ? true,
   qt5,
-  withX11 ? !stdenv.isDarwin,
+  withX11 ? !stdenv.hostPlatform.isDarwin,
 }:
 
 let

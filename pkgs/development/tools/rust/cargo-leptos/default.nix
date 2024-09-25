@@ -10,7 +10,7 @@ let
     SystemConfiguration
     Security;
   inherit (lib) optionals;
-  inherit (stdenv) isDarwin;
+  inherit (stdenv.hostPlatform) isDarwin;
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";

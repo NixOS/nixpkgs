@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   cmakeFlags = ["-DWITH_LTO=OFF"];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-faligned-allocation"
   ]);
 

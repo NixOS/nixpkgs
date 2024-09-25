@@ -85,7 +85,7 @@ buildPythonPackage rec {
       # Exclude tornado tests
       "tests/contrib/asyncio/tornado/tornado_tests.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Flaky tests on Darwin
       "tests/utils/threading_tests.py"
     ];

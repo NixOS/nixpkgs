@@ -53,7 +53,7 @@
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
-  mprisSupport ? stdenv.isLinux,
+  mprisSupport ? stdenv.hostPlatform.isLinux,
   nlSupport ? true,
   pipewireSupport ? true,
   pulseSupport ? true,
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional upowerSupport upower
     ++ lib.optional wireplumberSupport wireplumber
     ++ lib.optional (cavaSupport || pipewireSupport) pipewire
-    ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
+    ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
   doCheck = runTests;

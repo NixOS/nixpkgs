@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     libvorbis
     opusfile
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     moltenvk
     vulkan-headers
   ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
       "-Wno-error=unused-but-set-variable"
       "-Wno-error=implicit-const-int-float-conversion"
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     cp vkquake "$out/bin"
   '';
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchelf $out/bin/vkquake \
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';

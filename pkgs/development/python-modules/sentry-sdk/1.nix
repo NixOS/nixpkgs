@@ -102,7 +102,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Issue with the asseration

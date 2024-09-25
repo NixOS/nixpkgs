@@ -55,7 +55,7 @@ in stdenv.mkDerivation (rec {
     #   ./config.status[1401]: shift: (null): bad number
     # (See <https://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
     # Thus, re-run it with Bash.
-    lib.optionalString stdenv.isSunOS ''
+    lib.optionalString stdenv.hostPlatform.isSunOS ''
       ${stdenv.shell} config.status
     ''
     # ./configure errorneous decides to use weak symbols on pkgsStatic,

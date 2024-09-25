@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
   version = "0.5.26";
 
-  src = if stdenv.isDarwin then
+  src = if stdenv.hostPlatform.isDarwin then
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
       hash = "sha256-RF2Q5sCxT9F3IGM/8UP6bEe9sOjtpMVYHREuAPOzh8g=";
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ gmp ncurses6 zlib ];
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmp ncurses6 zlib ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib}

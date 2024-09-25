@@ -48,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.1.11.39163";
-  versions.x86_64-darwin = "6.1.11.39163";
-  versions.x86_64-linux = "6.1.11.1545";
+  versions.aarch64-darwin = "6.2.0.40111";
+  versions.x86_64-darwin = "6.2.0.40111";
+  versions.x86_64-linux = "6.2.0.1855";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-xWeCiDhYPfTAJttXG5bCwhLu+bmHlcFF/s3+EACeph4=";
+      hash = "sha256-/oi10pi9Xykmfo0UA1cDPzlB4xUQxAr8rkEoUpp1fQM=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-AB+QXx6r3raymVU7rEJ9dO4CqJI9tnRF3l61vuGnqpI=";
+      hash = "sha256-CZm0lrBYGHkPpdLu0sE/V+ADwglk/btSNvdzPRaeysI=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-wkG/fYbn3EdbVJwZQI8EcRPmHFX+4zggmfM4sHUjD8I=";
+      hash = "sha256-Ej8BRySQso62VE7e4XjXFGsvlB9cEVceha/WVhTBG4E=";
     };
   };
 
@@ -119,8 +119,8 @@ stdenv.mkDerivation rec {
 
   src = srcs.${system} or throwSystem;
 
-  dontUnpack = stdenv.isLinux;
-  unpackPhase = lib.optionalString stdenv.isDarwin ''
+  dontUnpack = stdenv.hostPlatform.isLinux;
+  unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
     zcat < zoomus.pkg/Payload | cpio -i
   '';
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xar
     cpio
   ];
@@ -151,9 +151,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup =  lib.optionalString stdenv.isDarwin ''
+  postFixup =  lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"

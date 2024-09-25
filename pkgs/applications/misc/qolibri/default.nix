@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isx86_64; # Looks like a libcxx version mismatch problem.
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; # Looks like a libcxx version mismatch problem.
     mainProgram = "qolibri";
   };
 }

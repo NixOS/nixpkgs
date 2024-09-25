@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # Must come first so that it shadows the 'libtool' command but leaves 'libtoolize'
       cctools
     ]
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-ca-bundle=${
-      if stdenv.isDarwin then "/etc/ssl/cert.pem" else "/etc/ssl/certs/ca-certificates.crt"
+      if stdenv.hostPlatform.isDarwin then "/etc/ssl/cert.pem" else "/etc/ssl/certs/ca-certificates.crt"
     }"
     "--with-ca-path=${cacert}/etc/ssl/certs"
   ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstall
     ''
     + (
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
           mv qtalarm.app $out/Applications

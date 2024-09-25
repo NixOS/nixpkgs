@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     BUILD_DATE = "1970/01/01 00:00:00";
-    CASE_SENSITIVE = lib.boolToString (!stdenv.isDarwin);
+    CASE_SENSITIVE = lib.boolToString (!stdenv.hostPlatform.isDarwin);
     GIT_HASH_SHORT = src.rev;
   };
 

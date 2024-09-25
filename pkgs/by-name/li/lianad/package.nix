@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
       lib.maintainers.plebhash
     ];
     platforms = lib.platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

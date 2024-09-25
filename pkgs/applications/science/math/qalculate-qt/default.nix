@@ -13,14 +13,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ qmake intltool pkg-config qttools wrapQtAppsHook ];
   buildInputs = [ libqalculate qtbase qtsvg ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   postPatch = ''
     substituteInPlace qalculate-qt.pro\
       --replace "LRELEASE" "${qttools.dev}/bin/lrelease"
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/qalculate-qt.app $out/Applications
     makeWrapper $out/{Applications/qalculate-qt.app/Contents/MacOS,bin}/qalculate-qt

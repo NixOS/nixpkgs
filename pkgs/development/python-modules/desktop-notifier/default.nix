@@ -32,7 +32,7 @@ buildPythonPackage rec {
       bidict
       packaging
     ]
-    ++ lib.optionals stdenv.isLinux [ dbus-fast ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ dbus-fast ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
 
   # no tests available, do the imports check instead

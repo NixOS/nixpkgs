@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-TL7ZsRbpRdYymJHuoCUCqe/U3Vacb9mtKFh85IOl+PA=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     wrapProgram "$out/bin/ifwifi" \
@@ -22,8 +22,8 @@ rustPlatform.buildRustPackage rec {
         # `ifwifi` runtime dep
         [ networkmanager ]
         # `wifiscanner` crate's runtime deps
-        ++ (lib.optional stdenv.isLinux iw)
-        # ++ (lib.optional stdenv.isDarwin airport) # airport isn't packaged
+        ++ (lib.optional stdenv.hostPlatform.isLinux iw)
+        # ++ (lib.optional stdenv.hostPlatform.isDarwin airport) # airport isn't packaged
       )}"
   '';
 

@@ -53,7 +53,7 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
   # The Linux installer is placed at linux/universal/tar whereas the MacOS
   # one is at mac/tar.
   gradleBuildTask =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       ":installers:mac:tar:build"
     else ":installers:linux:universal:tar:packageBuildResults";
 

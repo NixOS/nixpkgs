@@ -23,9 +23,9 @@ stdenv.mkDerivation {
     # /usr/include/mp.h from OpenSolaris.  See
     # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
     # for details.
-    ++ lib.optional stdenv.isSunOS "--with-include-path=${gmp.dev}/include";
+    ++ lib.optional stdenv.hostPlatform.isSunOS "--with-include-path=${gmp.dev}/include";
 
-  doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
+  doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.hostPlatform.isDarwin);
 
   enableParallelBuilding = true;
 

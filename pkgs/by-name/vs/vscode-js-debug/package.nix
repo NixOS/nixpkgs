@@ -30,11 +30,11 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     pkg-config
     node-gyp
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs =
-    lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.isDarwin [
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security
       AppKit
     ];

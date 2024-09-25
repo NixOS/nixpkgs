@@ -50,13 +50,13 @@
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableFlight ? true,
-  enableJemalloc ? !stdenv.isDarwin,
+  enableJemalloc ? !stdenv.hostPlatform.isDarwin,
   enableS3 ? true,
-  enableGcs ? !stdenv.isDarwin,
+  enableGcs ? !stdenv.hostPlatform.isDarwin,
 }:
 
 assert lib.asserts.assertMsg (
-  (enableS3 && stdenv.isDarwin)
+  (enableS3 && stdenv.hostPlatform.isDarwin)
   -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
 ) "S3 on Darwin requires Boost != 1.69";
 
@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
     [
       boost
@@ -218,10 +218,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-DPARQUET_REQUIRE_ENCRYPTION=ON"
     ]
     ++ lib.optionals (!enableShared) [ "-DARROW_TEST_LINKAGE=static" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
     ]
-    ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
     ++ lib.optionals enableS3 [
       "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h"
     ];
@@ -247,7 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
           "TestS3FS.*"
           "TestS3FSGeneric.*"
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # TODO: revisit at 12.0.0 or when
           # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
           # is available, see

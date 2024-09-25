@@ -182,7 +182,7 @@ let
 
       # Collect ECC errors and retire pages that fail too often
       RAS_CEC                   = yes;
-    } // lib.optionalAttrs (stdenv.is32bit) {
+    } // lib.optionalAttrs (stdenv.hostPlatform.is32bit) {
       # Enable access to the full memory range (aka PAE) on 32-bit architectures
       # This check isn't super accurate but it's close enough
       HIGHMEM                   = option yes;
@@ -214,7 +214,7 @@ let
     timer = {
       # Enable Full Dynticks System.
       # NO_HZ_FULL depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT
-      NO_HZ_FULL = lib.mkIf stdenv.is64bit yes;
+      NO_HZ_FULL = lib.mkIf stdenv.hostPlatform.is64bit yes;
     };
 
     # Enable NUMA.
@@ -411,7 +411,7 @@ let
     };
 
     video = let
-      whenHasDevicePrivate = lib.mkIf (!stdenv.isx86_32);
+      whenHasDevicePrivate = lib.mkIf (!stdenv.hostPlatform.isx86_32);
     in {
       # compile in DRM so simpledrm can load before initrd if necessary
       AGP = yes;
@@ -836,9 +836,9 @@ let
       KSM = yes;
       VIRT_DRIVERS = yes;
       # We need 64 GB (PAE) support for Xen guest support
-      HIGHMEM64G = { optional = true; tristate = lib.mkIf (!stdenv.is64bit) "y";};
+      HIGHMEM64G = { optional = true; tristate = lib.mkIf (!stdenv.hostPlatform.is64bit) "y";};
 
-      VFIO_PCI_VGA = lib.mkIf stdenv.is64bit yes;
+      VFIO_PCI_VGA = lib.mkIf stdenv.hostPlatform.is64bit yes;
 
       UDMABUF = yes;
 
@@ -940,7 +940,7 @@ let
 
       # Allows soft-dirty tracking on pages, used by CRIU.
       # See https://docs.kernel.org/admin-guide/mm/soft-dirty.html
-      MEM_SOFT_DIRTY = lib.mkIf (!stdenv.isx86_32) yes;
+      MEM_SOFT_DIRTY = lib.mkIf (!stdenv.hostPlatform.isx86_32) yes;
     };
 
     misc = let

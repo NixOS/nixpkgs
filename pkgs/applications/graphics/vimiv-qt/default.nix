@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [ pyqt5 py3exiv2 ];
 
-  buildInputs = [ qt5.qtsvg ] ++ lib.optionals stdenv.isLinux [ qt5.qtwayland ];
+  buildInputs = [ qt5.qtsvg ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ];
 
   postInstall = ''
     install -Dm644 misc/vimiv.desktop $out/share/applications/vimiv.desktop

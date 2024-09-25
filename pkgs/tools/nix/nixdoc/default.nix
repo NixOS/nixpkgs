@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5KV2VDsPmSgrdZIqCuQ5gjgCVs/Ki6uG6GTwjmtKLlQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
 
   meta = with lib; {
     description = "Generate documentation for Nix functions";

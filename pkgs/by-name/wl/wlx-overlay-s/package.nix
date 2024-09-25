@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "wlx-overlay-s";
   };
 }

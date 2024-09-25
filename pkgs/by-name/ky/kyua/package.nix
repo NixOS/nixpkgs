@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'CLI_LIBS = ' 'CLI_LIBS = libutils.a '
     ''
     # These tests fail on Darwin or are unreliable.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.isDarwin) ''
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isDarwin) ''
       sed -i utils/process/Makefile.am.inc -e '/executor_pid_test/d'
       substituteInPlace utils/process/Kyuafile \
         --replace-fail 'atf_test_program{name="executor_pid_test"}' ""
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'atf_add_test_case premature_exit' ""
     ''
     # fchflags and UF_NOUNLINK are not supported on Linux. Other tests also fail.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.isLinux) ''
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isLinux) ''
       sed -i utils/process/Makefile.am.inc -e '/executor_pid_test/d'
       substituteInPlace utils/process/Kyuafile \
         --replace-fail 'atf_test_program{name="executor_pid_test"}' ""

@@ -26,13 +26,13 @@ buildPythonPackage rec {
 
   # needed on non-x86 linux
   setupPyBuildFlags =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       "--plat-name"
       "linux"
     ]
     # aarch64 only available from MacOS SDK 11 onwards, so fix the version tag.
     # otherwise, bdist_wheel may detect "macosx_10_6_arm64" which doesn't make sense.
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       "--plat-name"
       "macosx_11_0"
     ];

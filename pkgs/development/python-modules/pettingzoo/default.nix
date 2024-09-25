@@ -117,7 +117,7 @@ buildPythonPackage rec {
       # ImportError: cannot import name 'pytest_plugins' from 'pettingzoo.classic'
       "test_chess"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Crashes on darwin: `Fatal Python error: Aborted`
       "test_multi_episode_parallel_env_wrapper"
     ];

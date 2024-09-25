@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     openssl
     rapidjson
   ]
-  ++ lib.optional stdenv.isDarwin Security
-  ++ lib.optional (!stdenv.isDarwin) libuuid
+  ++ lib.optional stdenv.hostPlatform.isDarwin Security
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
   ++ lib.optional (enableThirdPartyCopy) gsoap;
 
   # using the url below since the github release page states

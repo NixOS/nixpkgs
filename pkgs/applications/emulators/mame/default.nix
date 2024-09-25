@@ -90,8 +90,8 @@ stdenv.mkDerivation rec {
     sqlite
     qtbase
   ]
-  ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-  ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -195,7 +195,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 gpl2Plus ];
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mame";
   };
 }

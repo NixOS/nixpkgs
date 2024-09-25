@@ -16,11 +16,11 @@ rec {
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
-      , clientOnly ? !stdenv.isLinux, symlinkJoin
+      , clientOnly ? !stdenv.hostPlatform.isLinux, symlinkJoin
       , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-      , withBtrfs ? stdenv.isLinux, btrfs-progs
-      , withLvm ? stdenv.isLinux, lvm2
-      , withSeccomp ? stdenv.isLinux, libseccomp
+      , withBtrfs ? stdenv.hostPlatform.isLinux, btrfs-progs
+      , withLvm ? stdenv.hostPlatform.isLinux, lvm2
+      , withSeccomp ? stdenv.hostPlatform.isLinux, libseccomp
       , knownVulnerabilities ? []
     }:
   let
@@ -80,7 +80,7 @@ rec {
       hash = mobyHash;
     };
 
-    moby = buildGoModule (lib.optionalAttrs stdenv.isLinux rec {
+    moby = buildGoModule (lib.optionalAttrs stdenv.hostPlatform.isLinux rec {
       pname = "moby";
       inherit version;
 
@@ -95,9 +95,9 @@ rec {
         ++ lib.optional withSystemd systemd
         ++ lib.optional withSeccomp libseccomp;
 
-      extraPath = lib.optionals stdenv.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = lib.optionals stdenv.hostPlatform.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
-      extraUserPath = lib.optionals (stdenv.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+      extraUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
       patches = lib.optionals (lib.versionOlder version "23") [
         # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
@@ -188,7 +188,7 @@ rec {
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
 
-    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23" && stdenv.isLinux) [
+    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23" && stdenv.hostPlatform.isLinux) [
       glibc
       glibc.static
     ];

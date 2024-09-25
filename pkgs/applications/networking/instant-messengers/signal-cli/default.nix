@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-OTKXLcLktWiSdRhGe7ioL2ViJQQcCjR1+2LlGoMnSgE=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [ libmatthew_java dbus dbus_java ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libmatthew_java dbus dbus_java ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp -r lib $out/lib
     cp bin/signal-cli $out/bin/signal-cli
-  '' + (if stdenv.isLinux then ''
+  '' + (if stdenv.hostPlatform.isLinux then ''
     makeWrapper ${openjdk21_headless}/bin/java $out/bin/signal-cli \
       --set JAVA_HOME "${openjdk21_headless}" \
       --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   #         /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa: file system sandbox blocked stat()
   #         /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa: file system sandbox blocked stat()
   # /nix/store/in41dz8byyyz4c0w132l7mqi43liv4yr-stdenv-darwin/setup: line 1310:  2231 Abort trap: 6           signal-cli --version
-  doInstallCheck = stdenv.isLinux;
+  doInstallCheck = stdenv.hostPlatform.isLinux;
 
   installCheckPhase = ''
     export PATH=$PATH:$out/bin

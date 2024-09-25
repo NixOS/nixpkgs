@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     apr
     aprutil
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ];
 

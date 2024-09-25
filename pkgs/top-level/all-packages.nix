@@ -737,7 +737,7 @@ with pkgs;
   sea-orm-cli = callPackage ../development/tools/sea-orm-cli { };
 
   vcpkg-tool = callPackage ../by-name/vc/vcpkg-tool/package.nix {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     fmt = fmt_10;
   };
 
@@ -1118,7 +1118,7 @@ with pkgs;
         # So turn gssSupport off there, and on Windows.
         # On other platforms, keep the previous value.
         gssSupport =
-          if stdenv.isDarwin || stdenv.hostPlatform.isWindows
+          if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWindows
             then false
             else old.gssSupport or true; # `? true` is the default
         libkrb5 = buildPackages.krb5.override {
@@ -2094,7 +2094,7 @@ with pkgs;
     guiSupport = true;
     sendEmailSupport = true;
     withSsh = true;
-    withLibsecret = !stdenv.isDarwin;
+    withLibsecret = !stdenv.hostPlatform.isDarwin;
   };
 
   # Git with SVN support, but without GUI.
@@ -2144,7 +2144,7 @@ with pkgs;
   delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta { };
 
   debase = callPackage ../by-name/de/debase/package.nix {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
@@ -2313,7 +2313,7 @@ with pkgs;
   git-radar = callPackage ../applications/version-management/git-radar { };
 
   git-recent = callPackage ../applications/version-management/git-recent {
-    util-linux = if stdenv.isLinux then util-linuxMinimal else util-linux;
+    util-linux = if stdenv.hostPlatform.isLinux then util-linuxMinimal else util-linux;
   };
 
   git-relevant-history = callPackage ../applications/version-management/git-relevant-history { };
@@ -2547,7 +2547,7 @@ with pkgs;
 
   dosbox = callPackage ../applications/emulators/dosbox {
     inherit (darwin.apple_sdk.frameworks ) OpenGL;
-    SDL = if stdenv.isDarwin then SDL else SDL_compat;
+    SDL = if stdenv.hostPlatform.isDarwin then SDL else SDL_compat;
   };
 
   dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
@@ -2705,7 +2705,7 @@ with pkgs;
   ### APPLICATIONS/EMULATORS/DOLPHIN-EMU
 
   dolphin-emu = qt6Packages.callPackage ../applications/emulators/dolphin-emu {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreBluetooth ForceFeedback IOBluetooth IOKit OpenGL VideoToolbox;
     inherit (darwin) moltenvk;
   };
@@ -2843,7 +2843,7 @@ with pkgs;
   contour = qt6.callPackage ../applications/terminal-emulators/contour {
     inherit (darwin.apple_sdk_11_0.libs) utmp;
     inherit (darwin) sigtool;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     catch2 = catch2_3;
     fmt = fmt_9;
   };
@@ -2863,7 +2863,7 @@ with pkgs;
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 { };
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
-    harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
+    harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks)
       Cocoa
@@ -5342,7 +5342,7 @@ with pkgs;
   joystickwake = callPackage ../tools/games/joystickwake { };
 
   juce = callPackage ../development/misc/juce {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   jumppad = callPackage ../tools/virtualization/jumppad { };
@@ -6271,7 +6271,7 @@ with pkgs;
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
   cdrtools = callPackage ../tools/cd-dvd/cdrtools {
-    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_14.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
 
@@ -6673,7 +6673,7 @@ with pkgs;
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
   clamav = callPackage ../tools/security/clamav {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
@@ -7031,7 +7031,7 @@ with pkgs;
 
   dmd = callPackage ../by-name/dm/dmd/package.nix ({
     inherit (darwin.apple_sdk.frameworks) Foundation;
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     # https://github.com/NixOS/nixpkgs/pull/206907#issuecomment-1527034123
     stdenv = gcc11Stdenv;
   });
@@ -8054,12 +8054,12 @@ with pkgs;
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
 
   gnupg22 = callPackage ../tools/security/gnupg/22.nix {
-    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
+    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
     libgcrypt = libgcrypt_1_8;
   };
 
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
-    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry-gtk2;
+    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
   };
   gnupg = gnupg24;
 
@@ -8450,7 +8450,7 @@ with pkgs;
   haste-server = callPackage ../servers/haste-server { };
 
   hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   half = callPackage ../development/libraries/half { };
@@ -8936,7 +8936,7 @@ with pkgs;
   go-jira = callPackage ../applications/misc/go-jira { };
 
   jogl = callPackage ../by-name/jo/jogl/package.nix {
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64 then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then overrideSDK stdenv "11.0" else stdenv;
   };
 
   john = callPackage ../tools/security/john { };
@@ -9224,7 +9224,7 @@ with pkgs;
 
   libcryptui = callPackage ../development/libraries/libcryptui {
     autoreconfHook = buildPackages.autoreconfHook269;
-    gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
+    gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
   };
 
   libshumate = callPackage ../development/libraries/libshumate { };
@@ -9536,7 +9536,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
   netdataCloud = netdata.override {
-    withCloud = !stdenv.isDarwin;
+    withCloud = !stdenv.hostPlatform.isDarwin;
     withCloudUi = true;
   };
 
@@ -9997,7 +9997,7 @@ with pkgs;
   bubblemail = callPackage ../applications/networking/mailreaders/bubblemail { };
 
   mailpit = callPackage ../servers/mail/mailpit {
-    libtool = if stdenv.isDarwin then cctools else libtool;
+    libtool = if stdenv.hostPlatform.isDarwin then cctools else libtool;
   };
 
   mailsend = callPackage ../tools/networking/mailsend { };
@@ -11033,7 +11033,7 @@ with pkgs;
   page = callPackage ../tools/misc/page { };
 
   pageedit = libsForQt5.callPackage ../applications/office/PageEdit {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
@@ -11312,7 +11312,7 @@ with pkgs;
   };
 
   platformioPackages = dontRecurseIntoAttrs (callPackage ../development/embedded/platformio { });
-  platformio = if stdenv.isLinux then platformioPackages.platformio-chrootenv else platformioPackages.platformio-core;
+  platformio = if stdenv.hostPlatform.isLinux then platformioPackages.platformio-chrootenv else platformioPackages.platformio-core;
   platformio-core = platformioPackages.platformio-core;
 
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
@@ -11489,7 +11489,7 @@ with pkgs;
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation AppKit;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   proxychains = callPackage ../tools/networking/proxychains { };
@@ -11694,7 +11694,7 @@ with pkgs;
   qovery-cli = callPackage ../tools/admin/qovery-cli { };
 
   qownnotes = qt6Packages.callPackage ../applications/office/qownnotes {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   qpdf = callPackage ../development/libraries/qpdf { };
@@ -11725,7 +11725,7 @@ with pkgs;
 
   raider = callPackage ../applications/misc/raider { };
 
-  quota = if stdenv.isLinux then linuxquota else unixtools.quota;
+  quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
 
@@ -12439,7 +12439,7 @@ with pkgs;
 
   snapcast = darwin.apple_sdk_11_0.callPackage ../applications/audio/snapcast {
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit AudioToolbox;
-    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+    pulseaudioSupport = config.pulseaudio or stdenv.hostPlatform.isLinux;
   };
 
   snapdragon-profiler = callPackage ../tools/graphics/snapdragon-profiler { };
@@ -12453,7 +12453,7 @@ with pkgs;
   snort = callPackage ../applications/networking/ids/snort { };
 
   soapui = callPackage ../applications/networking/soapui {
-    jdk = if stdenv.isDarwin
+    jdk = if stdenv.hostPlatform.isDarwin
       then (jdk11.override { enableJavaFX = true; })
       else jdk11;
   };
@@ -12895,7 +12895,7 @@ with pkgs;
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     extraFonts = true;
   };
 
@@ -13586,7 +13586,7 @@ with pkgs;
   wasm-tools = callPackage ../tools/misc/wasm-tools { };
 
   wasmedge = callPackage ../development/tools/wasmedge {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else llvmPackages.stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else llvmPackages.stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
@@ -14553,7 +14553,7 @@ with pkgs;
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv buildPackages.clang-sierraHack;
-  libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
+  libcxxStdenv = if stdenv.hostPlatform.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -14642,7 +14642,7 @@ with pkgs;
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
   fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
-    inherit (stdenv) isx86_64;
+    inherit (stdenv.hostPlatform) isx86_64;
   };
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
@@ -14793,7 +14793,7 @@ with pkgs;
         reproducibleBuild = true;
         profiledCompiler = false;
 
-        isl = if !stdenv.isDarwin then isl_0_20 else null;
+        isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
         langCC = false;
@@ -15707,7 +15707,7 @@ with pkgs;
   };
   cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed {
     rustPlatform = makeRustPlatform {
-      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+      stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
       inherit rustc cargo;
     };
   };
@@ -17184,7 +17184,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv
       else if stdenv.cc.isClang then llvmPackages.stdenv
       else if stdenv.cc.isGNU then gcc12Stdenv
       else stdenv;
@@ -17196,7 +17196,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation IOKit;
     buildJdk = jdk17_headless;
     runJdk = jdk17_headless;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv
       else if stdenv.cc.isClang then llvmPackages.stdenv
       else stdenv;
     bazel_self = bazel_7;
@@ -17645,7 +17645,7 @@ with pkgs;
     wrapCC (distcc.links extraConfig)) { };
   distccStdenv = lowPrio (overrideCC stdenv buildPackages.distccWrapper);
 
-  distccMasquerade = if stdenv.isDarwin
+  distccMasquerade = if stdenv.hostPlatform.isDarwin
     then null
     else callPackage ../development/tools/misc/distcc/masq.nix {
       gccRaw = gcc.cc;
@@ -18203,7 +18203,7 @@ with pkgs;
   modd = callPackage ../development/tools/modd { };
 
   mold = callPackage ../by-name/mo/mold/package.nix {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     tbb = tbb_2021_11;
   };
 
@@ -18704,7 +18704,7 @@ with pkgs;
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
 
   c0 = callPackage ../development/compilers/c0 {
-    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
   };
 
   c3c = callPackage ../development/compilers/c3c { };
@@ -18963,25 +18963,25 @@ with pkgs;
 
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix {
     # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64
+    stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
   abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix {
     # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64
+    stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
   abseil-cpp_202401 = callPackage ../development/libraries/abseil-cpp/202401.nix {
     # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64
+    stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
   abseil-cpp_202407 = callPackage ../development/libraries/abseil-cpp/202407.nix {
      # If abseil-cpp doesn’t have a deployment target of 10.13+, arrow-cpp crashes in libgrpc.dylib.
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64
+    stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
@@ -19430,7 +19430,7 @@ with pkgs;
 
   ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
     ssl_implementation = mbedtls_2;
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   uri = callPackage ../development/libraries/uri { };
@@ -19563,7 +19563,7 @@ with pkgs;
 
   eccodes = callPackage ../development/libraries/eccodes {
     pythonPackages = python3Packages;
-    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
   };
 
   eclib = callPackage ../development/libraries/eclib { };
@@ -19912,7 +19912,7 @@ with pkgs;
   ghcid = haskellPackages.ghcid.bin;
 
   gr-framework = callPackage ../by-name/gr/gr-framework/package.nix {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   graphia = qt6Packages.callPackage ../applications/science/misc/graphia { };
@@ -20125,7 +20125,7 @@ with pkgs;
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
   grpc = darwin.apple_sdk_11_0.callPackage ../development/libraries/grpc {
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64
+    stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
       then overrideSDK darwin.apple_sdk_11_0.stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
@@ -20235,7 +20235,7 @@ with pkgs;
   };
 
   pango = callPackage ../development/libraries/pango {
-    harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
+    harfbuzz = harfbuzz.override { withCoreText = stdenv.hostPlatform.isDarwin; };
   };
 
   pangolin = callPackage ../development/libraries/pangolin {
@@ -20364,7 +20364,7 @@ with pkgs;
   };
 
   harfbuzzFull = harfbuzz.override {
-    withCoreText = stdenv.isDarwin;
+    withCoreText = stdenv.hostPlatform.isDarwin;
     withGraphite2 = true;
     withIcu = true;
   };
@@ -20473,7 +20473,7 @@ with pkgs;
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
   imgui = callPackage ../development/libraries/imgui {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   imtui = callPackage ../development/libraries/imtui { };
@@ -20488,8 +20488,8 @@ with pkgs;
   imlib2Full = imlib2.override {
     # Compilation error on Darwin with librsvg. For more information see:
     # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
-    svgSupport = !stdenv.isDarwin;
-    heifSupport = !stdenv.isDarwin;
+    svgSupport = !stdenv.hostPlatform.isDarwin;
+    heifSupport = !stdenv.hostPlatform.isDarwin;
     webpSupport = true;
     jxlSupport = true;
     psSupport = true;
@@ -20533,7 +20533,7 @@ with pkgs;
 
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
-  irrlicht = if !stdenv.isDarwin then
+  irrlicht = if !stdenv.hostPlatform.isDarwin then
     callPackage ../development/libraries/irrlicht { }
   else callPackage ../development/libraries/irrlicht/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL IOKit;
@@ -20628,7 +20628,7 @@ with pkgs;
 
   libjodycode = callPackage ../development/libraries/libjodycode {
     # missing aligned_alloc()
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   libb64 = callPackage ../development/libraries/libb64 { };
@@ -20645,7 +20645,7 @@ with pkgs;
   };
 
   keybinder3 = callPackage ../development/libraries/keybinder3 {
-    gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
+    gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
     automake = automake111x;
   };
 
@@ -21186,7 +21186,7 @@ with pkgs;
   libfabric = callPackage ../development/libraries/libfabric { };
 
   libfive = libsForQt5.callPackage ../development/libraries/libfive {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
   };
 
@@ -21898,7 +21898,7 @@ with pkgs;
   };
 
   libunwind =
-    if stdenv.isDarwin then darwin.libunwind
+    if stdenv.hostPlatform.isDarwin then darwin.libunwind
     else if stdenv.hostPlatform.system == "riscv32-linux" then llvmPackages.libunwind
     else callPackage ../development/libraries/libunwind { };
 
@@ -22244,7 +22244,7 @@ with pkgs;
     else
       freeglut;
 
-  mesa = if stdenv.isDarwin
+  mesa = if stdenv.hostPlatform.isDarwin
     then darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/darwin.nix {
       inherit (darwin.apple_sdk_11_0.libs) Xplugin;
     }
@@ -22291,7 +22291,7 @@ with pkgs;
   minizip-ng = callPackage ../development/libraries/minizip-ng { };
 
   mkvtoolnix = qt6Packages.callPackage ../applications/video/mkvtoolnix {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   mkvtoolnix-cli = mkvtoolnix.override {
@@ -22693,7 +22693,7 @@ with pkgs;
   pcg_c = callPackage ../development/libraries/pcg-c { };
 
   pcl = libsForQt5.callPackage ../development/libraries/pcl {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa AGL OpenGL;
   };
 
@@ -22880,7 +22880,7 @@ with pkgs;
         darwin;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
       inherit config;
-      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+      stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     });
 
   libsForQt5 = (recurseIntoAttrs (import ./qt5-packages.nix {
@@ -22897,7 +22897,7 @@ with pkgs;
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
     inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget kdePackages;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   });
 
   quark-engine = callPackage ../tools/security/quark-engine { };
@@ -23602,7 +23602,7 @@ with pkgs;
   ucommon = callPackage ../development/libraries/ucommon { };
 
   v8 = callPackage ../development/libraries/v8 {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   intel-vaapi-driver = callPackage ../development/libraries/intel-vaapi-driver { };
@@ -24427,7 +24427,7 @@ with pkgs;
 
   directx-shader-compiler = callPackage ../tools/graphics/directx-shader-compiler {
     # https://github.com/NixOS/nixpkgs/issues/216294
-    stdenv = if stdenv.cc.isGNU && stdenv.isi686 then gcc11Stdenv else stdenv;
+    stdenv = if stdenv.cc.isGNU && stdenv.hostPlatform.isi686 then gcc11Stdenv else stdenv;
   };
 
   dkimproxy = callPackage ../servers/mail/dkimproxy { };
@@ -25020,7 +25020,7 @@ with pkgs;
     sasl = cyrus_sasl;
     boost = boost178.override { enableShared = false; };
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    stdenv = if stdenv.isDarwin then
+    stdenv = if stdenv.hostPlatform.isDarwin then
       darwin.apple_sdk_11_0.stdenv.override (old: {
         hostPlatform = old.hostPlatform // { darwinMinVersion = "10.14"; };
         buildPlatform = old.buildPlatform // { darwinMinVersion = "10.14"; };
@@ -25128,7 +25128,7 @@ with pkgs;
     httpSupport = true;
     tpmSupport = true;
     tlsSupport = true;
-    msVarsTemplate = stdenv.isx86_64 || stdenv.isAarch64;
+    msVarsTemplate = stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64;
   };
 
   ops = callPackage ../applications/virtualization/ops { };
@@ -25395,7 +25395,7 @@ with pkgs;
   check-wmiplus = callPackage ../servers/monitoring/plugins/wmiplus { };
 
   shishi = callPackage ../servers/shishi {
-      pam = if stdenv.isLinux then pam else null;
+      pam = if stdenv.hostPlatform.isLinux then pam else null;
       # see also openssl, which has/had this same trick
   };
 
@@ -25549,8 +25549,8 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
       inherit (darwin.apple_sdk.libs) Xplugin;
       inherit (buildPackages.darwin) bootstrap_cmds;
-      udev = if stdenv.isLinux then udev else null;
-      libdrm = if stdenv.isLinux then libdrm else null;
+      udev = if stdenv.hostPlatform.isLinux then udev else null;
+      libdrm = if stdenv.hostPlatform.isLinux then libdrm else null;
     };
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
@@ -25822,7 +25822,7 @@ with pkgs;
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
-  libuuid = if stdenv.isLinux
+  libuuid = if stdenv.hostPlatform.isLinux
     then util-linuxMinimal
     else null;
 
@@ -25868,7 +25868,7 @@ with pkgs;
     util-linux = util-linuxMinimal;
   });
   fuse = fuse2;
-  fuse2 = lowPrio (if stdenv.isDarwin then macfuse-stubs else fusePackages.fuse_2);
+  fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
   fuse3 = fusePackages.fuse_3;
   fuse-common = hiPrio fusePackages.fuse_3.common;
 
@@ -26310,7 +26310,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Foundation;
   });
 
-  nettools = if stdenv.isLinux
+  nettools = if stdenv.hostPlatform.isLinux
     then callPackage ../os-specific/linux/net-tools { }
     else unixtools.nettools;
 
@@ -26474,7 +26474,7 @@ with pkgs;
 
   pagemon = callPackage ../os-specific/linux/pagemon { };
 
-  pam = if stdenv.isLinux then linux-pam else openpam;
+  pam = if stdenv.hostPlatform.isLinux then linux-pam else openpam;
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
@@ -26548,7 +26548,7 @@ with pkgs;
 
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
 
-  procps = if stdenv.isLinux
+  procps = if stdenv.hostPlatform.isLinux
     then callPackage ../os-specific/linux/procps-ng { }
     else unixtools.procps;
 
@@ -26638,7 +26638,7 @@ with pkgs;
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   setools = callPackage ../os-specific/linux/setools { };
@@ -28197,7 +28197,7 @@ with pkgs;
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
 
   grass = callPackage ../applications/gis/grass {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
@@ -28935,7 +28935,7 @@ with pkgs;
   darktable = callPackage ../by-name/da/darktable/package.nix {
     lua = lua5_4;
     pugixml = pugixml.override { shared = true; };
-    stdenv = if stdenv.isDarwin && stdenv.isx86_64 then overrideSDK llvmPackages_18.stdenv { darwinMinVersion = "10.14"; darwinSdkVersion = "11.0"; } else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then overrideSDK llvmPackages_18.stdenv { darwinMinVersion = "10.14"; darwinSdkVersion = "11.0"; } else stdenv;
   };
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };
@@ -29164,7 +29164,6 @@ with pkgs;
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs28
-    emacs28-gtk2
     emacs28-gtk3
     emacs28-nox
 
@@ -29297,7 +29296,7 @@ with pkgs;
 
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassxc {
     inherit (darwin.apple_sdk_11_0.frameworks) LocalAuthentication;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   keepass-diff = callPackage ../applications/misc/keepass-diff { };
@@ -29510,7 +29509,7 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) CoreAudio;
       python = python311;
       volk = volk_2;
-    } // lib.optionalAttrs stdenv.isLinux {
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
     });
   };
@@ -29628,7 +29627,7 @@ with pkgs;
 
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
-    libpcap = libpcap.override { withBluez = stdenv.isLinux; };
+    libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
   };
   wireshark-qt = wireshark;
 
@@ -29637,7 +29636,7 @@ with pkgs;
   tshark = wireshark-cli;
   wireshark-cli = wireshark.override {
     withQt = false;
-    libpcap = libpcap.override { withBluez = stdenv.isLinux; };
+    libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
   };
 
   sngrep = callPackage ../applications/networking/sniffers/sngrep { };
@@ -29807,7 +29806,7 @@ with pkgs;
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
       };
       freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {
-        stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+        stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
         inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
       };
     })
@@ -29895,9 +29894,9 @@ with pkgs;
   lemonade = callPackage ../applications/misc/lemonade { };
 
   librespot = callPackage ../applications/audio/librespot {
-    withALSA = stdenv.isLinux;
-    withPulseAudio = config.pulseaudio or stdenv.isLinux;
-    withPortAudio = stdenv.isDarwin;
+    withALSA = stdenv.hostPlatform.isLinux;
+    withPulseAudio = config.pulseaudio or stdenv.hostPlatform.isLinux;
+    withPortAudio = stdenv.hostPlatform.isDarwin;
   };
 
   limesctl = callPackage ../applications/misc/limesctl { };
@@ -30329,7 +30328,7 @@ with pkgs;
   waylevel = callPackage ../tools/misc/waylevel { };
 
   i3 = callPackage ../applications/window-managers/i3 {
-    xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
+    xcb-util-cursor = if stdenv.hostPlatform.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
 
   i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
@@ -30733,7 +30732,7 @@ with pkgs;
   kondo = callPackage ../applications/misc/kondo { };
 
   kotatogram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop {
-    stdenv = if stdenv.isDarwin
+    stdenv = if stdenv.hostPlatform.isDarwin
       then overrideSDK stdenv "11.0"
       else stdenv;
   };
@@ -30919,7 +30918,7 @@ with pkgs;
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   ladybird = callPackage ../applications/networking/browsers/ladybird {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
   };
 
@@ -31505,7 +31504,7 @@ with pkgs;
   } // (config.mplayer or {}));
 
   mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
-    stdenv = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
     inherit lua;
   };
 
@@ -31849,10 +31848,10 @@ with pkgs;
   ncspot = callPackage ../applications/audio/ncspot {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
 
-    withALSA = stdenv.isLinux;
-    withPulseAudio = config.pulseaudio or stdenv.isLinux;
-    withPortAudio = stdenv.isDarwin;
-    withMPRIS = stdenv.isLinux;
+    withALSA = stdenv.hostPlatform.isLinux;
+    withPulseAudio = config.pulseaudio or stdenv.hostPlatform.isLinux;
+    withPortAudio = stdenv.hostPlatform.isDarwin;
+    withMPRIS = stdenv.hostPlatform.isLinux;
   };
 
   ncview = callPackage ../tools/X11/ncview { } ;
@@ -32159,7 +32158,7 @@ with pkgs;
   phantomsocks = callPackage ../tools/networking/phantomsocks { };
 
   photoqt = callPackage ../by-name/ph/photoqt/package.nix {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
@@ -32423,7 +32422,7 @@ with pkgs;
   quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   quasselClient = quassel.override {
@@ -32573,7 +32572,7 @@ with pkgs;
 
   ries = callPackage ../applications/science/math/ries { };
 
-  ripcord = if stdenv.isLinux then
+  ripcord = if stdenv.hostPlatform.isLinux then
     qt5.callPackage ../applications/networking/instant-messengers/ripcord { }
   else
     callPackage ../applications/networking/instant-messengers/ripcord/darwin.nix { };
@@ -32880,7 +32879,7 @@ with pkgs;
     # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
     # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
     # with --cores 32 on clang).
-    stdenv = if stdenv.isDarwin then overrideSDK llvmPackages.stdenv "11.0" else llvmPackages.stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK llvmPackages.stdenv "11.0" else llvmPackages.stdenv;
   };
 
   super-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
@@ -33065,7 +33064,7 @@ with pkgs;
   };
 
   synergy = libsForQt5.callPackage ../applications/misc/synergy {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver UserNotifications;
   };
 
@@ -33130,7 +33129,7 @@ with pkgs;
   taskopen = callPackage ../applications/misc/taskopen { };
 
   telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
-    stdenv = if stdenv.isDarwin
+    stdenv = if stdenv.hostPlatform.isDarwin
       then overrideSDK stdenv "11.0"
       else stdenv;
   };
@@ -33447,7 +33446,7 @@ with pkgs;
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
   ueberzugpp = callPackage ../by-name/ue/ueberzugpp/package.nix {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   uefi-run = callPackage ../tools/virtualization/uefi-run { };
@@ -33857,7 +33856,7 @@ with pkgs;
   };
 
   chatterino2 = callPackage ../applications/networking/instant-messengers/chatterino2 {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   weston = callPackage ../applications/window-managers/weston { };
@@ -34079,7 +34078,7 @@ with pkgs;
   };
 
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
   xplugd = callPackage ../tools/X11/xplugd { };
@@ -34331,7 +34330,7 @@ with pkgs;
   balanceofsatoshis = callPackage ../tools/misc/balanceofsatoshis { };
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -34642,7 +34641,7 @@ with pkgs;
   keeperrl = callPackage ../games/keeperrl { };
 
   shipwright = callPackage ../games/shipwright {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
   wipeout-rewrite = callPackage ../games/wipeout-rewrite {
@@ -34844,7 +34843,7 @@ with pkgs;
   bsdgames = callPackage ../games/bsdgames { };
 
   bugdom = callPackage ../games/bugdom {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit Foundation OpenGL;
   };
 
@@ -35296,7 +35295,7 @@ with pkgs;
 
   mudlet = libsForQt5.callPackage ../games/mudlet {
     lua = lua5_1;
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
   };
 
@@ -36509,7 +36508,7 @@ with pkgs;
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     inherit (darwin) DarwinTools;
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
     protobuf = protobuf_23;
     # or-tools builds with -std=c++20, so abseil-cpp must
@@ -38091,7 +38090,7 @@ with pkgs;
   pwntools = with python3Packages; toPythonApplication pwntools;
 
   putty = callPackage ../applications/networking/remote/putty {
-    gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
+    gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
   };
 
   qMasterPassword = qt6Packages.callPackage ../applications/misc/qMasterPassword { };
@@ -38542,7 +38541,7 @@ with pkgs;
   winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
     callPackage = newScope self;
     stdenv =
-      if pkgs.stdenv.isDarwin then
+      if pkgs.stdenv.hostPlatform.isDarwin then
         # Match upstream, which builds with the latest SDK and a 10.7 deployment target.
         overrideSDK pkgs.stdenv {
           darwinMinVersion = "10.7";

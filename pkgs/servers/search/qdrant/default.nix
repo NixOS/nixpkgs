@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];

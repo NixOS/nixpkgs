@@ -12,7 +12,7 @@
 , colima
   # use lima-bin on darwin to support native macOS virtualization
   # https://github.com/NixOS/nixpkgs/pull/209171
-, lima-drv ? if stdenv.isDarwin then lima-bin else lima
+, lima-drv ? if stdenv.hostPlatform.isDarwin then lima-bin else lima
 }:
 
 buildGoModule rec {
@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   vendorHash = "sha256-niuBo2YUUYKH0eSApOByNLrcHqr9m5VKGoiGp1fKklg=";
 

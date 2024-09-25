@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # install phase without checking the dependencies. This will prevent
   # triggering the rebuild. Why this only happens on i686 remains a
   # mystery, though. :-(
-  enableParallelBuilding = (!stdenv.isi686);
+  enableParallelBuilding = (!stdenv.hostPlatform.isi686);
 
   meta = with lib; {
     description = "Stress test a computer system";

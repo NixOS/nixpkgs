@@ -95,7 +95,7 @@ in stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     gtk-doc
     libxslt
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
@@ -135,11 +135,11 @@ in stdenv.mkDerivation (finalAttrs: {
     glib-networking
     libmypaint
     mypaint-brushes1
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     gtk-mac-integration-gtk2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libgudev
   ] ++ lib.optionals withPython [
     python
@@ -171,7 +171,7 @@ in stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = toString (
       [ ]
       ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
-      ++ lib.optionals stdenv.isDarwin [ "-DGDK_OSX_BIG_SUR=16" ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DGDK_OSX_BIG_SUR=16" ]
     );
 
     # Check if librsvg was built with --disable-pixbuf-loader.

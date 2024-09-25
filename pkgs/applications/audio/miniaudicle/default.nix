@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # not attempted
+    broken = stdenv.hostPlatform.isDarwin; # not attempted
   };
 })

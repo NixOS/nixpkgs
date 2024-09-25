@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lz4 lzo openssl ]
-    ++ optionals stdenv.isLinux [ libcap_ng libnl pam ]
+    ++ optionals stdenv.hostPlatform.isLinux [ libcap_ng libnl pam ]
     ++ optional useSystemd systemd
     ++ optional pkcs11Support pkcs11helper;
 
   configureFlags = optional useSystemd "--enable-systemd"
     ++ optional pkcs11Support "--enable-pkcs11"
-    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
+    ++ optional stdenv.hostPlatform.isDarwin "--disable-plugin-auth-pam";
 
   # We used to vendor the update-systemd-resolved script inside libexec,
   # but a separate package was made, that uses libexec/openvpn. Copy it

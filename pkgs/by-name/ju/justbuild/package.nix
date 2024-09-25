@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     mv etc/repos.json.patched etc/repos.json
     jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
     mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
   '';
 
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
     license = licenses.asl20;

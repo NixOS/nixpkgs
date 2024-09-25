@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # In procedure bytevector-u8-ref: Argument 2 out of range
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Structured access to bytevector contents";

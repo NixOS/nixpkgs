@@ -31,7 +31,7 @@ let
 
     buildInputs =
       [ openssl ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         libiconv
         CoreServices
         Security

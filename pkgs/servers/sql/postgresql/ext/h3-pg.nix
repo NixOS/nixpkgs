@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(cmake/h3)" "include_directories(${lib.getDev h3_4}/include/h3)"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/AddPostgreSQLExtension.cmake \
       --replace "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
   '';

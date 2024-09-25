@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreFoundation
     darwin.apple_sdk_11_0.frameworks.Security
     darwin.apple_sdk_11_0.frameworks.SystemConfiguration

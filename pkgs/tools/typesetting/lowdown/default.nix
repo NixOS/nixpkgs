@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ which dieHook ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
-  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     echo 'HAVE_SANDBOX_INIT=0' > configure.local
   '';
 
@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
     in
 
     # Check that soVersion is up to date even if we are not on darwin
-    lib.optionalString (enableShared && !stdenv.isDarwin) ''
+    lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
       test -f $lib/lib/liblowdown.so.${soVersion} || \
         die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
     ''
     # Fix lib extension so that fixDarwinDylibNames detects it, see
     # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
-    + lib.optionalString (enableShared && stdenv.isDarwin) ''
+    + lib.optionalString (enableShared && stdenv.hostPlatform.isDarwin) ''
       darwinDylib="$lib/lib/liblowdown.${soVersion}.dylib"
       mv "$lib/lib/liblowdown.so.${soVersion}" "$darwinDylib"
 

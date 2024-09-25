@@ -42,7 +42,7 @@ let
     inherit stdenv;
   };
 
-  mainProgram = if stdenv.isLinux then "kotatogram-desktop" else "Kotatogram";
+  mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
 in
 stdenv.mkDerivation rec {
   pname = "kotatogram-desktop";
@@ -61,20 +61,20 @@ stdenv.mkDerivation rec {
     ./macos-opengl.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
       --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
   # Wrapping the inside of the app bundles, avoiding double-wrapping
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     pkg-config
@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
     python3
     wrapQtAppsHook
     removeReferencesTo
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # to build bundled libdispatch
     clang
     gobject-introspection
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld
   ];
 
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     tg_owt
     microsoft-gsl
     boost
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
     kcoreaddons
     alsa-lib
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     hunspell
     jemalloc
     wayland
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
     CoreFoundation
     CoreServices
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
     "-DTDESKTOP_API_TEST=ON"
   ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -r ${mainProgram}.app $out/Applications
     ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
     remove-references-to -t ${tg_owt.dev} $out/bin/${mainProgram}
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
   '';
 

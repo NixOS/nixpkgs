@@ -4,7 +4,7 @@
 , # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
-, enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
+, enablePerl         ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     ncurses libX11 bzip2 zlib brotli zstd xz
     openssl libidn tre expat libev
   ]
-    ++ lib.optional stdenv.isLinux gpm
+    ++ lib.optional stdenv.hostPlatform.isLinux gpm
     ++ lib.optional enableGuile guile
     ++ lib.optional enablePython python
     ++ lib.optional enablePerl perl

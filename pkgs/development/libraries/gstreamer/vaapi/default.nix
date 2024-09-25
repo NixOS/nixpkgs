@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     xorg.libICE
     nasm
     libvpx
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
   ];

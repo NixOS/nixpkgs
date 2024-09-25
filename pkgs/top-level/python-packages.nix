@@ -2052,6 +2052,8 @@ self: super: with self; {
 
   cattrs = callPackage ../development/python-modules/cattrs { };
 
+  causal-conv1d = callPackage ../development/python-modules/causal-conv1d { };
+
   cbor2 = callPackage ../development/python-modules/cbor2 { };
 
   cbor = callPackage ../development/python-modules/cbor { };
@@ -2523,6 +2525,8 @@ self: super: with self; {
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
   confuse = callPackage ../development/python-modules/confuse { };
+
+  confusable-homoglyphs = callPackage ../development/python-modules/confusable-homoglyphs { };
 
   confight = callPackage ../development/python-modules/confight { };
 
@@ -7415,6 +7419,8 @@ self: super: with self; {
 
   lomond = callPackage ../development/python-modules/lomond { };
 
+  loompy = callPackage ../development/python-modules/loompy { };
+
   loopy = callPackage ../development/python-modules/loopy { };
 
   looseversion = callPackage ../development/python-modules/looseversion { };
@@ -7547,6 +7553,8 @@ self: super: with self; {
 
   malduck = callPackage ../development/python-modules/malduck { };
 
+  mamba-ssm = callPackage ../development/python-modules/mamba-ssm { };
+
   managesieve = callPackage ../development/python-modules/managesieve { };
 
   mando = callPackage ../development/python-modules/mando { };
@@ -7644,7 +7652,7 @@ self: super: with self; {
   matlink-gpapi = callPackage ../development/python-modules/matlink-gpapi { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib {
-    stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
     ghostscript = pkgs.ghostscript_headless;
   };
@@ -10687,7 +10695,7 @@ self: super: with self; {
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = callPackage ../development/python-modules/psutil {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
 
@@ -13863,6 +13871,8 @@ self: super: with self; {
   safety-schemas = callPackage ../development/python-modules/safety-schemas { };
 
   sagemaker = callPackage ../development/python-modules/sagemaker { };
+
+  salib = callPackage ../development/python-modules/salib { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 

@@ -28,7 +28,7 @@ in rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 

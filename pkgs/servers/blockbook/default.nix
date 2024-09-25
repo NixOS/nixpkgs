@@ -54,7 +54,7 @@ buildGoModule rec {
     "-lstdc++"
   ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ulimit -n 8192
   '';
 

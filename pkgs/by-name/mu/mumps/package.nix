@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/coin-or-tools/ThirdParty-Mumps/blob/stable/3.0/get.Mumps#L66
       cp libseq/mpi.h libseq/mumps_mpi.h
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace src/Makefile --replace-fail \
         "-Wl,\''$(SONAME),libmumps_common" \
         "-Wl,-install_name,$out/lib/libmumps_common"
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags =
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       "SONAME="
       "LIBEXT_SHARED=.dylib"
     ]
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     scotch
   ];
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool \
       -change    libmpiseq.dylib \
         $out/lib/libmpiseq.dylib \

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libkate pango cairo ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
 
   meta = {
     homepage = "https://code.google.com/archive/p/libtiger/";

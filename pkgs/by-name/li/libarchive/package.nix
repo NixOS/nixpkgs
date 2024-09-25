@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       # access-time-related tests flakey on some systems
       "cpio/test/test_option_a.c"
       "cpio/test/test_option_t.c"
-    ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       # only on some aarch64-linux systems?
       "cpio/test/test_basic.c"
       "cpio/test/test_format_newc.c"
@@ -82,15 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ] ++ lib.optional stdenv.hostPlatform.isUnix sharutils
-    ++ lib.optionals stdenv.isLinux [ acl attr e2fsprogs ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ acl attr e2fsprogs ]
     ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
-  propagatedBuildInputs = lib.optionals stdenv.isLinux [ attr acl ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ attr acl ];
 
   configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
-  preBuild = lib.optionalString stdenv.isCygwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isCygwin ''
     echo "#include <windows.h>" >> config.h
   '';
 

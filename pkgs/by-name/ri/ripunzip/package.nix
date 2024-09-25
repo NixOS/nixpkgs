@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-QyVhEHm1W4kb5b4dngBui3lT7vKBGDS5ZObMWua96KM=";
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
   nativeBuildInputs = [ pkg-config ];
 
   setupHook = ./setup-hook.sh;

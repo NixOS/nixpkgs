@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     IOKit
   ];

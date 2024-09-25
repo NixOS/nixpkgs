@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ jre ];
 
   installPhase =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/Applications
       ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
     '' else ''

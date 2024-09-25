@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
 
     # Darwin support likely to be fixed upstream in the next release
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

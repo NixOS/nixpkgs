@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-R5p7f+eEMDs0rs+45XNJC4znrJ9BrPBv5+dvMgoHFdA=";
 
   nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
-  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postBuild = ''
     patchShebangs --build ./documentation/build.sh
