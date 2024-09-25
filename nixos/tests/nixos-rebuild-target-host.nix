@@ -28,7 +28,8 @@
 
       system.build.privateKey = snakeOilPrivateKey;
       system.build.publicKey = snakeOilPublicKey;
-      # needed to provide STC implementation for target
+      # We don't switch on `deployer`, but we need it to have the dependencies
+      # available, to be picked up by system.includeBuildDependencies above.
       system.switch.enable = true;
     };
 
@@ -61,6 +62,7 @@
           system.build = {
             inherit targetConfig;
           };
+          system.switch.enable = true;
 
           networking.hostName = "target";
         }
