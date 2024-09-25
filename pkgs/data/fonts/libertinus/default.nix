@@ -1,13 +1,15 @@
-{ lib, stdenvNoCC, fetchurl }:
+{ lib, stdenvNoCC, fetchurl, zstd }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "libertinus";
-  version = "7.040";
+  version = "7.050";
 
   src = fetchurl {
-    url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.xz";
-    hash = "sha256-f+nwInItHBzGfcLCihELO7VbrjV1GWFg0kIsiTM7OFA=";
+    url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.zst";
+    hash = "sha256-y7VMTEgjdusXu2OXSUSJuqz/B1XThk+bXHcuLz1D1Ck=";
   };
+
+  nativeBuildInputs = [ zstd ];
 
   installPhase = ''
     runHook preInstall
