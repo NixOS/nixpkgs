@@ -12,18 +12,11 @@
   libsecret,
   pkg-config,
   python3,
-  qt5compat,
-  qtbase,
-  qtnetworkauth,
-  qtsvg,
-  qttools,
-  qtwayland,
-  qtwebsockets,
+  qt6,
   rustPlatform,
   rustc,
   stdenv,
   wireguard-tools,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
     libsecret
-    qt5compat
-    qtbase
-    qtnetworkauth
-    qtsvg
-    qtwayland
-    qtwebsockets
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtnetworkauth
+    qt6.qtsvg
+    qt6.qtwayland
+    qt6.qtwebsockets
   ];
   nativeBuildInputs = [
     cargo
@@ -82,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.glean-parser
     python3.pkgs.pyyaml
     python3.pkgs.setuptools
-    qttools
+    qt6.qttools
+    qt6.wrapQtAppsHook
     rustPlatform.cargoSetupHook
     rustc
-    wrapQtAppsHook
   ];
 
   postPatch = ''
@@ -101,9 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DQT_LCONVERT_EXECUTABLE=${qttools.dev}/bin/lconvert"
-    "-DQT_LUPDATE_EXECUTABLE=${qttools.dev}/bin/lupdate"
-    "-DQT_LRELEASE_EXECUTABLE=${qttools.dev}/bin/lrelease"
+    "-DQT_LCONVERT_EXECUTABLE=${qt6.qttools.dev}/bin/lconvert"
+    "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
+    "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
   dontFixCmake = true;
 
