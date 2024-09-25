@@ -26,6 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-vRZrlXKI0UDdmDevh3XUngH4X8G3VlOCSP0z/rxhIgw=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_tokencache.py \
+      --replace-fail "assertEquals" "assertEqual" \
+      --replace-fail "assertNotEquals" "assertNotEqual"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
