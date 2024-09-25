@@ -52,7 +52,8 @@
     {
       name = "dotnet-fixup-hook";
       substitutions = {
-        dotnetRuntime = dotnet-runtime;
+        # this is used for DOTNET_ROOT, so we need unwrapped
+        dotnetRuntime = dotnet-runtime.unwrapped;
         wrapperPath = lib.makeBinPath [ which coreutils ];
       };
     }

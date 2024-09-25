@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      # this gets copied into the tree, but we still want the hooks to run
+      # this gets copied into the tree, but we still need the sandbox profile
       bootstrapSdk
       # the propagated build inputs in llvm.dev break swift compilation
       llvm.out
@@ -364,6 +364,7 @@ stdenv.mkDerivation rec {
       cp -Tr ${bootstrapSdk} .dotnet
       chmod -R +w .dotnet
 
+      export HOME=$(mktemp -d)
       ${prepScript} $prepFlags
 
       runHook postConfigure
