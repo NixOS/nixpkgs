@@ -23,9 +23,9 @@
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "fprintd";
-  version = "1.94.3";
+  version = "1.94.4";
   outputs = [
     "out"
     "devdoc"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs:{
     owner = "libfprint";
     repo = "fprintd";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-shH+ctQAx4fpTMWTmo3wB45ZS38Jf8RknryPabfZ6QE=";
+    hash = "sha256-B2g2d29jSER30OUqCkdk3+Hv5T3DA4SUKoyiqHb8FeU=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs:{
     perl # for pod2man
     gettext
     gtk-doc
+    python3
     libxslt
     dbus
     docbook-xsl-nons
