@@ -5,7 +5,6 @@
   rustPlatform,
   just,
   dbus,
-  rust,
   stdenv,
   xdg-desktop-portal-cosmic,
 }:
