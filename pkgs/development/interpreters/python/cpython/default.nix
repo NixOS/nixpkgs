@@ -655,6 +655,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
       nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python-docs-theme ];
     };
 
+    availableOn = platform: !platform.isStatic && lib.meta.availableOn platform self;
+
     tests = passthru.tests // {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
