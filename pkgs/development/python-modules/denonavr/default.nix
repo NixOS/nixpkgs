@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.11.6";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "ol-iver";
     repo = "denonavr";
     rev = "refs/tags/${version}";
-    hash = "sha256-VxoRK1qeGrIunsiCzeZJUHxW/sxk+PFpntInL+G/yI8=";
+    hash = "sha256-/K2pz3B4H205grDeuMWZmEeA4wJqKhP0XdpmbqFguTM=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
