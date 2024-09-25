@@ -5,7 +5,7 @@
 , makeself
 , yasm
 , fuse
-, wxGTK
+, wxGTK32
 , lvm2
 , substituteAll
 , e2fsprogs
@@ -16,13 +16,13 @@
 , wrapGAppsHook3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "veracrypt";
-  version = "1.26.7";
+  version = "1.26.14";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/trunk/${lib.toLower version}/+download/VeraCrypt_${version}_Source.tar.bz2";
-    sha256 = "sha256-920nsYJBTg1P2ba1n76iiyXbb6afK7z/ouwmmxqGX2U=";
+    url = "https://launchpad.net/veracrypt/trunk/${lib.toLower finalAttrs.version}/+download/VeraCrypt_${finalAttrs.version}_Source.tar.bz2";
+    hash = "sha256-2oetZxTXF+vdwlJww4txiVAcKvlxjupkp64bwKPMruE=";
   };
 
   patches = [
@@ -40,16 +40,16 @@ stdenv.mkDerivation rec {
   sourceRoot = "src";
 
   nativeBuildInputs = [ makeself pkg-config yasm wrapGAppsHook3 ];
-  buildInputs = [ fuse lvm2 wxGTK pcsclite ];
+  buildInputs = [ fuse lvm2 wxGTK32 pcsclite ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
-    install -Dm 755 Main/${pname} "$out/bin/${pname}"
-    install -Dm 444 Resources/Icons/VeraCrypt-256x256.xpm "$out/share/pixmaps/${pname}.xpm"
-    install -Dm 444 License.txt -t "$out/share/doc/${pname}/"
+    install -Dm 755 Main/veracrypt "$out/bin/veracrypt"
+    install -Dm 444 Resources/Icons/VeraCrypt-256x256.xpm "$out/share/pixmaps/veracrypt.xpm"
+    install -Dm 444 License.txt -t "$out/share/doc/veracrypt/"
     install -d $out/share/applications
-    substitute Setup/Linux/${pname}.desktop $out/share/applications/${pname}.desktop \
+    substitute Setup/Linux/veracrypt.desktop $out/share/applications/veracrypt.desktop \
       --replace "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
       --replace "Icon=veracrypt" "Icon=veracrypt.xpm"
   '';
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dsferruzza ];
     platforms = platforms.linux;
   };
-}
+})

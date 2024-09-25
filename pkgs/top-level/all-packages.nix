@@ -13885,10 +13885,6 @@ with pkgs;
 
   hitch = callPackage ../servers/hitch { };
 
-  veracrypt = callPackage ../applications/misc/veracrypt {
-    wxGTK = wxGTK32;
-  };
-
   veryfasttree = callPackage ../applications/science/biology/veryfasttree { };
 
   viceroy = callPackage ../development/tools/viceroy {
