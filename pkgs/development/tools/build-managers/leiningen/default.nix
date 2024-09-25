@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, coreutils, jdk, rlwrap, gnupg }:
-
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  coreutils,
+  jdk,
+  rlwrap,
+  gnupg,
+}:
+let
   pname = "leiningen";
   version = "2.11.2";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchurl {
     url = "https://codeberg.org/leiningen/leiningen/raw/tag/${version}/bin/lein-pkg";
@@ -43,7 +53,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/lein \
       --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
     wrapProgram $out/bin/lein \
-      --prefix PATH ":" "${lib.makeBinPath [ rlwrap coreutils ]}" \
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          rlwrap
+          coreutils
+        ]
+      }" \
       --set LEIN_GPG ${gnupg}/bin/gpg \
       --set JAVA_CMD ${jdk}/bin/java
 
@@ -56,7 +71,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
     platforms = jdk.meta.platforms;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ momeemt ];
     mainProgram = "lein";
   };
 }
