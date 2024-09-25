@@ -1096,6 +1096,12 @@ let
       ];
     });
 
+    vapour = old.vapour.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
     rzmq = old.rzmq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
