@@ -9168,6 +9168,12 @@
     githubId = 1817528;
     name = "Igor Polyakov";
   };
+  iosmanthus = {
+    email = "myosmanthustree@gmail.com";
+    github = "iosmanthus";
+    githubId = 16307070;
+    name = "iosmanthus";
+  };
   iquerejeta = {
     github = "iquerejeta";
     githubId = 31273774;
