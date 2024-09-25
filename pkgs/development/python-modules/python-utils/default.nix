@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.8.2";
+  version = "3.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "WoLpH";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2scWyj0Fz39Thu0T0+UirT+he6tPYKGsvmYzzpD+/ls=";
+    hash = "sha256-ZmCT41VMz8BkIqF8Od5PqteyXToA4xASs0qCPD0cNc8=";
   };
 
   postPatch = ''
