@@ -141,16 +141,7 @@ rec {
     (mkDerivationSuper args).overrideAttrs (prevAttrs: {
       NIX_CFLAGS_LINK = toString (prevAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (prevAttrs.nativeBuildInputs or [])
-        ++ lib.optionals stdenv.hasCC [
-          (pkgs.buildPackages.makeSetupHook {
-            name = "darwin-portable-libSystem-hook";
-            substitutions = {
-              libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-              targetPrefix = stdenv.cc.bintools.targetPrefix;
-            };
-          } ./darwin/portable-libsystem.sh)
-        ];
+      nativeBuildInputs = (prevAttrs.nativeBuildInputs or []);
     }));
   });
 
