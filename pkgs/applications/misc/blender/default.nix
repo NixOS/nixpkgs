@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchgit {
       name = "assets";
       url = "https://projects.blender.org/blender/blender-assets.git";
-      rev = "6864f1832e71a31e1e04f72bb7a5a1f53f0cd01c";
+      rev = "v${finalAttrs.version}";
       fetchLFS = true;
       hash = "sha256-vepK0inPMuleAJBSipwoI99nMBBiFaK/eSMHDetEtjY=";
     })
