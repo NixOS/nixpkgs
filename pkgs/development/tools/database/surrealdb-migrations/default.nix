@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-jj1ytX44XoNKR+TCn/MpWk8CFM/DvHSwyfjVe3ca+AA=";
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
    # Error: No such file or directory (os error 2)
    # failures:

@@ -3,7 +3,7 @@
 , ncurses, db , popt, libtool
 , libiconv, CoreServices
 # Sound sub-systems
-, alsaSupport ? (!stdenv.isDarwin), alsa-lib
+, alsaSupport ? (!stdenv.hostPlatform.isDarwin), alsa-lib
 , pulseSupport ? true, libpulseaudio
 , jackSupport ? true, libjack2
 , ossSupport ? true
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     # Misc
     ++ lib.optional curlSupport curl
     ++ lib.optional samplerateSupport libsamplerate
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv CoreServices ];
 
   configureFlags = [
     # Sound sub-systems

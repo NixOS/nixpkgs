@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags =
     [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       "ENABLE_DEDUPE=1"
       "STATIC_DEDUPE_H=1"
     ]

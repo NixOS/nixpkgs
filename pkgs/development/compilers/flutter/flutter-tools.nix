@@ -28,7 +28,7 @@ buildDartApplication.override { inherit dart; } rec {
     popd
   ''
   # Use arm64 instead of arm64e.
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace lib/src/ios/xcodeproj.dart \
       --replace-fail arm64e arm64
   '';

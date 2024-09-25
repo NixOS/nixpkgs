@@ -29,12 +29,12 @@ stdenv.mkDerivation {
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ]
-    ++ lib.optionals stdenv.isLinux [ wayland-scanner ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ];
 
   buildInputs =
-    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon Cocoa Kernel ])
-    ++ lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon Cocoa Kernel ])
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
       wayland-protocols
       libxkbcommon
@@ -48,12 +48,12 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin && !stdenv.hostPlatform.isWindows) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows) [
     "-DCMAKE_C_FLAGS=-D_GLFW_GLX_LIBRARY='\"${lib.getLib libGL}/lib/libGL.so.1\"'"
     "-DCMAKE_C_FLAGS=-D_GLFW_EGL_LIBRARY='\"${lib.getLib libGL}/lib/libEGL.so.1\"'"
   ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/wl_init.c \
       --replace-fail "libxkbcommon.so.0" "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0" \
       --replace-fail "libdecor-0.so.0" "${lib.getLib libdecor}/lib/libdecor-0.so.0" \
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   '';
 
   # glfw may dlopen libwayland-client.so:
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf ''${!outputLib}/lib/libglfw.so --add-rpath ${lib.getLib wayland}/lib
   '';
 

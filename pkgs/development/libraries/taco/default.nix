@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional stdenv.isDarwin llvmPackages.openmp;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enablePython pyEnv;
 

@@ -104,14 +104,14 @@ lib.makeOverridable (
       # TODO should CC wrapper set this?
       CPP = "${stdenv'.cc.targetPrefix}cpp";
     }
-    // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
+    // lib.optionalAttrs stdenv'.hostPlatform.isDarwin { MKRELRO = "no"; }
     // lib.optionalAttrs (stdenv'.cc.isClang or false) {
       HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
     // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
       HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
-    // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
+    // lib.optionalAttrs (stdenv'.hostPlatform.isx86_32) { USE_SSP = "no"; }
     // lib.optionalAttrs (attrs.headersOnly or false) {
       installPhase = "includesPhase";
       dontBuild = true;

@@ -108,7 +108,7 @@ mkDerivation (common "tamarin-prover" src // {
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
   '' + ''
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}

@@ -6,7 +6,7 @@
 }:
 
 let
-  bits = if stdenv.is64bit then "x64" else "ia32";
+  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
   version = "0.91.0";
 in
 stdenv.mkDerivation {

@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-yOSCkOIprQoAGxPi1jsHPmQ9bVaudSNw13jL4jTNehY=";
   nativeBuildInputs = [ git pkg-config ];
   buildInputs = [ openssl dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Security ];
 
   passthru.updateScript = nix-update-script { };
 

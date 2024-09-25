@@ -33,7 +33,7 @@ let
     procps
     gnused
     coreutils # used by helper scripts
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]); # for systemd unit activation check
 in
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
 
   buildInputs = [ erlang elixir libxml2 libxslt glibcLocales ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
 

@@ -10,8 +10,8 @@
 , wayland
 # The themes here are soft dependencies; only icons are missing without them.
 , adwaita-icon-theme
-, withKf5Wallet ? stdenv.isLinux, libsForQt5
-, withLibsecret ? stdenv.isLinux
+, withKf5Wallet ? stdenv.hostPlatform.isLinux, libsForQt5
+, withLibsecret ? stdenv.hostPlatform.isLinux
 , withWebkitGtk ? false, webkitgtk_4_1
 , withVte ? true, vte
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook3 ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     curl
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl adwaita-icon-theme json-glib libsodium
     harfbuzz python3
     wayland
-  ] ++ lib.optionals stdenv.isLinux [ fuse3 libappindicator-gtk3 libdbusmenu-gtk3 ]
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ fuse3 libappindicator-gtk3 libdbusmenu-gtk3 ]
     ++ lib.optionals withLibsecret [ libsecret ]
     ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
     ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
@@ -65,13 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
     "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
     "-DWITH_WEBKIT2GTK=${if withWebkitGtk then "ON" else "OFF"}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DHAVE_LIBAPPINDICATOR=OFF"
     "-DWITH_CUPS=OFF"
     "-DWITH_ICON_CACHE=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
   ]);
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --set-default SSL_CERT_DIR "/etc/ssl/certs/"
       --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
-      ${lib.optionalString stdenv.isDarwin ''
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
       ''}
     )

@@ -21,7 +21,7 @@
   # checks
   pytestCheckHook,
 
-  useOpenmp ? (!stdenv.isDarwin),
+  useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 buildPythonPackage rec {

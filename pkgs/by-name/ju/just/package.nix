@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-X3noVDRnnrR6xuOBfoH4JPdcPLOBHbGQb6opNvzK/TE=";
 
   nativeBuildInputs = [ installShellFiles mdbook ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
     # USER must not be empty

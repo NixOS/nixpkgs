@@ -54,7 +54,7 @@ stdenv.mkDerivation (rec {
 
   # LLDB expects to find the path to `bin` relative to `lib` on Darwin. It can’t be patched with the location of
   # the `lib` output because that would create a cycle between it and the `out` output.
-  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "lib" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "lib" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation (rec {
     # libclang into the rpath of the lldb executables. By putting it into
     # buildInputs cc-wrapper will set up rpath correctly for us.
     (lib.getLib libclang)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
     darwin.apple_sdk.frameworks.Foundation
@@ -123,9 +123,9 @@ stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=OFF"
     "-DClang_DIR=${lib.getDev libclang}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
   ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
     "-DCLANG_RESOURCE_DIR=../../../../${libclang.lib}"

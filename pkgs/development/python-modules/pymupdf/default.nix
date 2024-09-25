@@ -90,7 +90,7 @@ buildPythonPackage rec {
   };
 
   # TODO: manually add mupdf rpath until upstream fixes it
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for lib in */*.so $out/${python.sitePackages}/*/*.so; do
       install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
     done

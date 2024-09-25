@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
     libXext libXft libGLU libGL libXfixes xinput
-  ] ++ lib.optional stdenv.isDarwin CoreServices;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   doCheck = true;
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     branch = "1.6";
     description = "C++ based class library for building Graphical User Interfaces";
     longDescription = ''

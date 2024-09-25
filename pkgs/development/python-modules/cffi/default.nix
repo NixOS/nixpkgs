@@ -49,7 +49,7 @@ else
         ./clang-pointer-substraction-warning.diff
       ];
 
-    postPatch = lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Remove setup.py impurities
       substituteInPlace setup.py \
         --replace "'-iwithsysroot/usr/include/ffi'" "" \

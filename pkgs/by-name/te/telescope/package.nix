@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libgrapheme
     libressl
     ncurses
-  ] ++ lib.optional stdenv.isDarwin memstreamHook;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin memstreamHook;
 
   configureFlags = [
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"

@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ./extensions $out/include/PythonQt
   '';
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id \
       $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
       $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib

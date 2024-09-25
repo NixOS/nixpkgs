@@ -72,7 +72,7 @@ buildPythonPackage rec {
       pytest-xdist
       pytestCheckHook
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # no support for darwin
       jax
       jaxlib
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests-cuda"
     # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
 
   disabledTests = [
     # AssertionError: Regex pattern did not match.

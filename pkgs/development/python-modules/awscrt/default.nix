@@ -22,12 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-fsKmevMPvzhklN8Au9+Zb3AkAA32sBqxYAFK/vK5EAU=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
   ];
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.isDarwin) [ perl ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perl ];
 
   dontUseCmakeConfigure = true;
 

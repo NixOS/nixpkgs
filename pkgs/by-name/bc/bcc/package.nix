@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   pname = "bcc";
   version = "0.31.0";
 
-  disabled = !stdenv.isLinux;
+  disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "iovisor";

@@ -68,7 +68,7 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
     ++ [ python3 libllvm.dev ]
-    ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
+    ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild.xcrun;
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
@@ -133,7 +133,7 @@ stdenv.mkDerivation ({
     # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
     # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
     "-DCOMPILER_RT_ENABLE_IOS=OFF"
-  ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+  ]) ++ lib.optionals (lib.versionAtLeast version "19" && stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-DSANITIZER_MIN_OSX_VERSION=10.10"
   ] ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     "-DCOMPILER_RT_BUILD_CTX_PROFILE=OFF"
@@ -146,10 +146,10 @@ stdenv.mkDerivation ({
   # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
   # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
   # a flag and turn the flag off during the stdenv build.
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (!haveLibc) ((lib.optionalString (lib.versionAtLeast release_version "18") ''

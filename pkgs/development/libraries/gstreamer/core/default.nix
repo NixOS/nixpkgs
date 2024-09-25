@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     glib
     bash-completion
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap # for setcap binary
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
@@ -79,13 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash-completion
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ] ++ lib.optionals withLibunwind [
     libunwind
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     CoreServices
     xpc

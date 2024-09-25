@@ -58,7 +58,7 @@ stdenv.mkDerivation (rec {
   # the libxcrypt port has been installed.
   #
   # Without libxcrypt, Perl will still find FreeBSD's crypt functions.
-  propagatedBuildInputs = lib.optional (enableCrypt && !stdenv.isFreeBSD) libxcrypt;
+  propagatedBuildInputs = lib.optional (enableCrypt && !stdenv.hostPlatform.isFreeBSD) libxcrypt;
 
   disallowedReferences = [ stdenv.cc ];
 
@@ -67,8 +67,8 @@ stdenv.mkDerivation (rec {
     ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
     ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
 
-    ++ lib.optional stdenv.isSunOS ./ld-shared.patch
-    ++ lib.optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
+    ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
     ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
     ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
 
@@ -124,10 +124,10 @@ stdenv.mkDerivation (rec {
       "-Dloclibpth=${libcLib}/lib"
     ]
     ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
-    ++ lib.optional stdenv.isSunOS "-Dcc=gcc"
+    ++ lib.optional stdenv.hostPlatform.isSunOS "-Dcc=gcc"
     ++ lib.optional enableThreading "-Dusethreads"
     ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
-    ++ lib.optionals (stdenv.isFreeBSD && crossCompiling && enableCrypt) [
+    ++ lib.optionals (stdenv.hostPlatform.isFreeBSD && crossCompiling && enableCrypt) [
       # https://github.com/Perl/perl5/issues/22295
       # configure cannot figure out that we have crypt automatically, but we really do
       "-Dd_crypt"
@@ -177,7 +177,7 @@ stdenv.mkDerivation (rec {
     ZLIB_LIB     = ${zlib.out}/lib
   '' + ''
     EOF
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
   '' + lib.optionalString (!enableThreading) ''
     # We need to do this because the bootstrap doesn't have a static libpthread

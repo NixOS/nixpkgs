@@ -113,7 +113,7 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     which
     git
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
 
@@ -230,7 +230,7 @@ buildDotnetModule rec {
 
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
       --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
@@ -256,7 +256,7 @@ buildDotnetModule rec {
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
     mkdir -p $out/lib/github-runner/checkScripts
     install src/Misc/layoutbin/checkScripts/* $out/lib/github-runner/checkScripts/
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Wrap explicitly to, e.g., prevent extra entries for LD_LIBRARY_PATH
     makeWrapperArgs=()
 

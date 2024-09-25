@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     qtwayland
     qtmultimedia
     qttools
-  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreFoundation;
 
   meta = with lib; {
     description = "Professional open-source NLE video editor";
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.balsoft ];
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "olive-editor";
   };
 }

@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_connection_lost" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_connection_lost" ];
 
   __darwinAllowLocalNetworking = true;
 

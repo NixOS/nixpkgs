@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   # FIXME: Workaround Rust 1.80 support by updating time to 0.3.36
   # https://github.com/prisma/prisma-engines/issues/4989

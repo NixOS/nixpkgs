@@ -26,9 +26,11 @@ buildPythonPackage rec {
 
   # force kqueue on x86_64-darwin, because our api version does
   # not support fsevents
-  patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [ ./force-kqueue.patch ];
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
+    ./force-kqueue.patch
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   passthru.optional-dependencies.watchmedo = [ pyyaml ];
 
@@ -50,13 +52,13 @@ buildPythonPackage rec {
       "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
       "--deselect=tests/test_emitter.py::test_close"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # fails to stop process in teardown
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
       # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # FileCreationEvent != FileDeletionEvent
       "--deselect=tests/test_emitter.py::test_separate_consecutive_moves"
       "--deselect=tests/test_observers_polling.py::test___init__"
@@ -66,7 +68,7 @@ buildPythonPackage rec {
       # AttributeError: '_thread.RLock' object has no attribute 'key'"
       "--deselect=tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # segfaults
       "--deselect=tests/test_delayed_queue.py::test_delayed_get"
       "--deselect=tests/test_0_watchmedo.py::test_tricks_from_file"
@@ -89,7 +91,7 @@ buildPythonPackage rec {
       # tests timeout easily
       "tests/test_inotify_buffer.py"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # segfaults the testsuite
       "tests/test_emitter.py"
       # unsupported on x86_64-darwin

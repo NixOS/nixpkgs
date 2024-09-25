@@ -22,23 +22,23 @@
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages
 , gobject-introspection
-, enableX11 ? stdenv.isLinux
+, enableX11 ? stdenv.hostPlatform.isLinux
 , libXext
 , libXi
 , libXv
 , libdrm
-, enableWayland ? stdenv.isLinux
+, enableWayland ? stdenv.hostPlatform.isLinux
 , wayland-scanner
 , wayland
 , wayland-protocols
-, enableAlsa ? stdenv.isLinux
+, enableAlsa ? stdenv.hostPlatform.isLinux
 , alsa-lib
 # TODO: fix once x86_64-darwin sdk updated
-, enableCocoa ? (stdenv.isDarwin && stdenv.isAarch64)
+, enableCocoa ? (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , Cocoa
 , OpenGL
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
-, enableCdparanoia ? (!stdenv.isDarwin)
+, enableCdparanoia ? (!stdenv.hostPlatform.isDarwin)
 , cdparanoia
 , glib
 , testers
@@ -94,11 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     tremor
     pango
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libdrm
     libGL
     libvisual
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     OpenGL
   ] ++ lib.optionals enableAlsa [
     alsa-lib
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     gstreamer
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libdrm
   ];
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableGl) "-Dgl=disabled"
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Ddrm=disabled"
     "-Dlibvisual=disabled"
   ];

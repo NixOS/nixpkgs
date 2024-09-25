@@ -80,14 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://github.com/NixOS/nixpkgs/issues/153528
   # Can't be linked within a 4GB address space.
-  separateDebugInfo = stdenv.isLinux && !stdenv.is32bit;
+  separateDebugInfo = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.is32bit;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
     hash = "sha256-3ILQQuysqYGkhSNXwG5SNXQzGc8QqUzTatQbl4g6C1Q=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     glib # for gdbus-codegen
     unifdef
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
 
@@ -151,10 +151,10 @@ stdenv.mkDerivation (finalAttrs: {
     p11-kit
     sqlite
     woff2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libedit
     readline
-  ] ++ lib.optional (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") (
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") (
     # this can likely be removed as:
     # "libproc.h is included in the 10.12 SDK Libsystem and should be identical to this one."
     # but the package is marked broken on darwin so unable to test
@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "webkitgtk_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
-  ) ++ lib.optionals stdenv.isLinux [
+  ) ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
     libmanette
     wayland
@@ -200,12 +200,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Have to be explicitly specified when cross.
       # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
       "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
       "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DENABLE_GAMEPAD=OFF"
       "-DENABLE_GTKDOC=OFF"
       "-DENABLE_MINIBROWSER=OFF"
@@ -244,6 +244,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

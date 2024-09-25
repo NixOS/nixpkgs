@@ -47,7 +47,7 @@ final: prev: {
 
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.
-    dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
+    dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.hostPlatform.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
   });
 
   fast-cli = prev.fast-cli.override {
@@ -92,7 +92,7 @@ final: prev: {
     nativeBuildInputs = [
       pkgs.pkg-config
       (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pkgs.xcbuild
     ];
     buildInputs = with pkgs; [
@@ -107,7 +107,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
     ];
@@ -128,7 +128,7 @@ final: prev: {
 
     meta = oldAttrs.meta // {
       # ModuleNotFoundError: No module named 'distutils'
-      broken = stdenv.isDarwin; # still broken on darwin
+      broken = stdenv.hostPlatform.isDarwin; # still broken on darwin
     };
   });
 
@@ -151,7 +151,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
@@ -160,7 +160,7 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
+      ${lib.optionalString stdenv.hostPlatform.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
   };
 
@@ -243,10 +243,10 @@ final: prev: {
   in{
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     dependencies = oldAttrs.dependencies
-      ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) esbuild-linux-x64
-      ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) esbuild-linux-arm64
-      ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) esbuild-darwin-x64
-      ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) esbuild-darwin-arm64;
+      ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) esbuild-linux-x64
+      ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) esbuild-linux-arm64
+      ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) esbuild-darwin-x64
+      ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) esbuild-darwin-arm64;
     postInstall = ''
       wrapProgram "$out/bin/postcss" \
         --prefix NODE_PATH : ${final.postcss}/lib/node_modules \
@@ -353,7 +353,7 @@ final: prev: {
       cairo
       pango
       libjpeg
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
@@ -383,7 +383,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };

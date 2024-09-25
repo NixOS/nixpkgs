@@ -1,5 +1,5 @@
 { stdenv, lib, src, pkg-config, tcl, libXft, patches ? []
-, enableAqua ? stdenv.isDarwin, darwin
+, enableAqua ? stdenv.hostPlatform.isDarwin, darwin
 , ... }:
 
 tcl.mkTclDerivation {
@@ -22,7 +22,7 @@ tcl.mkTclDerivation {
       substituteInPlace $file --replace "exec wish" "exec $out/bin/wish"
     done
   ''
-  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
     substituteInPlace unix/configure* \
       --replace " -framework UniformTypeIdentifiers" ""
   '';
@@ -32,13 +32,13 @@ tcl.mkTclDerivation {
     cp ../{unix,generic}/*.h $out/include
     ln -s $out/lib/libtk${tcl.release}${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libtk${stdenv.hostPlatform.extensions.sharedLibrary}
   ''
-  + lib.optionalString (stdenv.isDarwin) ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     cp ../macosx/*.h $out/include
   '';
 
   configureFlags = [
     "--enable-threads"
-  ] ++ lib.optional stdenv.is64bit "--enable-64bit"
+  ] ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit"
     ++ lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkg-config ];

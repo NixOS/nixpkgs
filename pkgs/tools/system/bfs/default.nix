@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ oniguruma ] ++
-    lib.optionals stdenv.isLinux [ acl attr libcap liburing ];
+    lib.optionals stdenv.hostPlatform.isLinux [ acl attr libcap liburing ];
 
   configureFlags = [ "--enable-release" ];
   makeFlags = [ "PREFIX=$(out)" ];

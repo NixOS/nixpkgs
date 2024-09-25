@@ -359,7 +359,7 @@ self: super: ({
     '';
   }) super.di-core;
 
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 
   # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
   # elimination barely works on aarch64-darwin, any package that has a
@@ -429,7 +429,7 @@ self: super: ({
   rivet-adaptor-postgresql = dontCheck super.rivet-adaptor-postgresql;
   tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
 
-} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {  # x86_64-darwin
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9

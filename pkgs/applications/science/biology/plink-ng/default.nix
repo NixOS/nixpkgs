@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zhffjbwpd50dxywccbnv1rxy9njwz73l4awc5j7i28rgj3davcq";
   };
 
-  buildInputs = [ zlib ] ++ (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.Accelerate ] else [ blas lapack ]) ;
+  buildInputs = [ zlib ] ++ (if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.Accelerate ] else [ blas lapack ]) ;
 
   preBuild = ''
     sed -i 's|zlib-1.2.8/zlib.h|zlib.h|g' *.c *.h
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Comprehensive update to the PLINK association analysis toolset";
     mainProgram = "plink";
     homepage = "https://www.cog-genomics.org/plink2";

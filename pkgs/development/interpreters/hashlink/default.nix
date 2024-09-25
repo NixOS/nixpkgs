@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     cp -r other/haxelib/* "${haxelibPath}"
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
   '';
 

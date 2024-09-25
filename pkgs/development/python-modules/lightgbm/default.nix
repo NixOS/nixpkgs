@@ -29,7 +29,7 @@
   boost,
   ocl-icd,
   opencl-headers,
-  gpuSupport ? stdenv.isLinux && !cudaSupport,
+  gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:

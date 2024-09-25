@@ -55,13 +55,13 @@
     "svga" # VMWare virtualized GPU
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
-  ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) [
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "lima" # ARM Mali 4xx
     "panfrost" # ARM Mali Midgard and up (T/G series)
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-  ] ++ lib.optionals stdenv.isAarch64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "tegra" # Nvidia Tegra SoCs
     "v3d" # Broadcom VC5 (Raspberry Pi 4)
   ] ++ lib.optionals stdenv.hostPlatform.isx86 [
@@ -78,7 +78,7 @@
     # QEMU virtualized GPU (aka VirGL)
     # Requires ATOMIC_INT_LOCK_FREE == 2.
     "virtio"
-  ] ++ lib.optionals stdenv.isAarch64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "imagination-experimental" # PowerVR Rogue (currently N/A)
@@ -203,7 +203,7 @@ in stdenv.mkDerivation {
 
     # Enable Intel RT stuff when available
     (lib.mesonBool "install-intel-clc" true)
-    (lib.mesonEnable "intel-rt" stdenv.isx86_64)
+    (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
     (lib.mesonOption "clang-libdir" "${llvmPackages.clang-unwrapped.lib}/lib")
 
     # Clover, old OpenCL frontend

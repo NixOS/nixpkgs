@@ -167,7 +167,7 @@ stdenv.mkDerivation (self: {
     lib.optional self.threadSupport "sb-thread" ++
     lib.optional self.linkableRuntime "sb-linkable-runtime" ++
     lib.optional self.coreCompression "sb-core-compression" ++
-    lib.optional stdenv.isAarch32 "arm" ++
+    lib.optional stdenv.hostPlatform.isAarch32 "arm" ++
     lib.optional self.markRegionGC "mark-region-gc";
 
   disableFeatures =

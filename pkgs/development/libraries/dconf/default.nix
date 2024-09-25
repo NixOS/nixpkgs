@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     dbus # for dbus-daemon
   ];
 
-  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     chmod +x meson_post_install.py tests/test-dconf.py

@@ -48,6 +48,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ qbit ];
     mainProgram = "step-kms-plugin";
     # can't find pcsclite header files
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

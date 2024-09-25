@@ -120,7 +120,7 @@ in maven.buildMavenPackage {
       fromSource
       binaryBytecode  # maven dependencies
     ];
-    broken = stdenv.isDarwin;  # builds, doesn't run
+    broken = stdenv.hostPlatform.isDarwin;  # builds, doesn't run
     mainProgram = "refine";
   };
 }

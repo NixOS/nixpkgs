@@ -59,10 +59,10 @@ qtModule {
     "bin/qthelpconverter"
     "bin/lprodump"
     "bin/qdistancefieldgenerator"
-  ] ++ lib.optionals stdenv.isDarwin [ "bin/macdeployqt" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "bin/macdeployqt" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.isDarwin && qtdeclarative != null
+    stdenv.hostPlatform.isDarwin && qtdeclarative != null
   ) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;

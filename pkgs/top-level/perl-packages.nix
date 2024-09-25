@@ -100,9 +100,9 @@ with self; {
 
     outputs = [ "out" "man" ];
 
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileNext ];
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/ack
     '';
 
@@ -341,7 +341,7 @@ with self; {
     meta = {
       description = "Gumbo parser library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.AlienLibGumbo.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.AlienLibGumbo.x86_64-darwin
     };
   };
 
@@ -680,7 +680,7 @@ with self; {
 
     # Fails because /etc/protocols is not available in sandbox and make
     # getprotobyname('tcp') in ApacheTest fail.
-    doCheck = !stdenv.isLinux;
+    doCheck = !stdenv.hostPlatform.isLinux;
 
     meta = {
       description = "Perl Authentication and Authorization via cookies";
@@ -869,8 +869,8 @@ with self; {
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CPAN02PackagesSearch CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstall ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy Modulecpmfile ModuleCPANfile ParsePMFile ParallelPipes locallib ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/cpm
     '';
     meta = {
@@ -906,8 +906,8 @@ with self; {
     };
     buildInputs = [ ObjectPad ];
     propagatedBuildInputs = [ AppPackager DataPrinter FileLoadLines FileHomeDir IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
-      ++ lib.optionals (!stdenv.isDarwin) [ Wx ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ Wx ];
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
     # Delete tests that fail when version env var is set, see
     # https://github.com/ChordPro/chordpro/issues/293
@@ -915,7 +915,7 @@ with self; {
       rm t/320_subst.t t/321_subst.t t/322_subst.t
     '';
 
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/chordpro
       rm $out/bin/wxchordpro # Wx not supported on darwin
     '';
@@ -1335,7 +1335,7 @@ with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Authen-DecHpwd-2.007.tar.gz";
       hash = "sha256-9DqTuwK0H3Mn2S+eljtpUF9nNQpS6PUHlvmK/E+z8Xc=";
     };
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     propagatedBuildInputs = [ DataInteger DigestCRC ScalarString ];
     meta = {
       description = "DEC VMS password hashing";
@@ -1649,7 +1649,7 @@ with self; {
     '';
     buildInputs =[ ExtUtilsMakeMaker ];
     propagatedBuildInputs = [ pkgs.zbar PerlMagick ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Perl interface to the ZBar Barcode Reader";
       homepage = "https://metacpan.org/pod/Barcode::ZBar";
@@ -2495,7 +2495,7 @@ with self; {
     };
     propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessor ];
     buildInputs = [ TestMockObject TestException NetLDAPServerTest ];
-    doCheck = !stdenv.isDarwin; # t/02-realms_api.t and t/50.auth.case.sensitivity.t
+    doCheck = !stdenv.hostPlatform.isDarwin; # t/02-realms_api.t and t/50.auth.case.sensitivity.t
     meta = {
       description = "Authenticate Users against LDAP Directories";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -3974,7 +3974,7 @@ with self; {
     # Mac OS error -4960 (coreFoundationUnknownErr): The unknown error at lib/Clipboard/MacPasteboard.pm line 3.
     # Mac-Pasteboard-0.009.readme: 'NOTE that Mac OS X appears to restrict pasteboard access to processes that are logged in interactively.
     #     Ssh sessions and cron jobs can not create the requisite pasteboard handles, giving coreFoundationUnknownErr (-4960)'
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Copy and paste with any OS";
       homepage = "https://metacpan.org/release/Clipboard";
@@ -4203,7 +4203,7 @@ with self; {
       EOF
     '';
 
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
 
     meta = {
       description = "Low-Level Interface to zlib or zlib-ng compression library";
@@ -4768,9 +4768,9 @@ with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111017.tar.gz";
       hash = "sha256-8gQpO+JqyEGsyHBEoYjbD1kegIgTFseiiK7A7s4wYVU=";
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileHomeDir LWPProtocolHttps ];
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/minicpan
     '';
 
@@ -5106,7 +5106,7 @@ with self; {
       hash = "sha256-PMcSbVhBEHI3qb4txcf7wWfPPEtM40Z4qESLhQdXAUw=";
     };
     propagatedBuildInputs = [ ClassMix ];
-    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "Eksblowfish block cipher";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5135,9 +5135,9 @@ with self; {
       url = "mirror://cpan/authors/id/B/BA/BARTB/Crypt-HSXKPasswd-v3.6.tar.gz";
       hash = "sha256-lZ3MX58BG/ALha0i31ZrerK/XqHTYrDeD7WuKfvEWLM=";
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ Clone DateTime FileHomeDir FileShare FileShareDir GetoptLong JSON ListMoreUtils MathRound Readonly TextUnidecode TypeTiny ];
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/hsxkpasswd
     '';
 
@@ -5362,7 +5362,7 @@ with self; {
       hash = "sha256-k+vfqu/P6atoPwEhyF8kR12Bl/C87EYBghnkERQ03eM=";
     };
     propagatedBuildInputs = [ DigestSHA1 ];
-    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "Emulate MySQL PASSWORD() function";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5484,8 +5484,8 @@ with self; {
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ AltCryptRSABigInt CryptCAST5_PP CryptDES_EDE3 CryptDSA CryptIDEA CryptRIPEMD160 CryptRijndael CryptTwofish FileHomeDir LWP ];
 
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/pgplet
     '';
     doCheck = false; /* test fails with 'No random source available!' */
@@ -5709,7 +5709,7 @@ with self; {
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.13.tar.gz";
       hash = "sha256-xBnjCM3IKvHCXWuNB7L/JjR6Yit6Y+wghWq+jbQFH4I=";
     };
-    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     buildInputs = [ TestDiagINC ];
     meta = {
       description = "XS based CSS minifier";
@@ -6064,7 +6064,7 @@ with self; {
       homepage = "https://github.com/msgpack/msgpack-perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataMessagePack.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataMessagePack.x86_64-darwin
     };
   };
 
@@ -6338,12 +6338,12 @@ with self; {
       hash = "sha256-tVypHHafgTN8xrCrIMMmg4eOWyZj8cwljFEamZpd/dM=";
     };
     buildInputs = [ HashUtilFieldHashCompat ModuleBuildXSUtil ScopeGuard TestException ];
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Selection of utilities for data and data types";
       homepage = "https://github.com/gfx/Perl-Data-Util";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataUtil.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataUtil.x86_64-darwin
     };
   };
 
@@ -6494,7 +6494,7 @@ with self; {
     patchPhase = ''
       sed -i "s#/bin/date#${pkgs.coreutils}/bin/date#" lib/Date/Manip/TZ.pm
     '';
-    doCheck = !stdenv.isi686; # build freezes during tests on i686
+    doCheck = !stdenv.hostPlatform.isi686; # build freezes during tests on i686
     buildInputs = [ TestInter ];
     meta = {
       description = "Date manipulation routines";
@@ -7228,7 +7228,7 @@ with self; {
     buildInputs = [ pkgs.oracle-instantclient TestNoWarnings ];
     propagatedBuildInputs = [ DBI ];
 
-    postBuild = lib.optionalString stdenv.isDarwin ''
+    postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -add_rpath "${pkgs.oracle-instantclient.lib}/lib" blib/arch/auto/DBD/Oracle/Oracle.bundle
     '';
     meta = {
@@ -7281,7 +7281,7 @@ with self; {
     meta = {
       description = "DBI driver for Sybase datasources";
       license = with lib.licenses; [ artistic1 gpl1Only ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DBDsybase.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DBDsybase.x86_64-darwin
     };
   };
 
@@ -7650,7 +7650,7 @@ with self; {
       hash = "sha256-z/jSTllF45RN6/ITmVprFVuR5YE0aRVrE9Ws819qXZ8=";
     };
     propagatedBuildInputs = [ HashStoredIterator JSONXS PadWalker ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Perl side of the Perl debugger for IntelliJ IDEA and other JetBrains IDEs";
       license = with lib.licenses; [ mit ];
@@ -7748,8 +7748,8 @@ with self; {
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS ];
     buildInputs = [ CaptureTiny TestDifferences ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/*
     '';
     meta = {
@@ -8063,8 +8063,8 @@ with self; {
     };
     buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
     propagatedBuildInputs = [ AppCmd CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PathTiny PerlPrereqScanner SoftwareLicense TermEncoding TermUI YAMLTiny ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/dzil
     '';
     doCheck = false;
@@ -8643,11 +8643,11 @@ with self; {
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailAddressXS EmailSimple ModuleRuntime Moo MooXTypesMooseLike SubExporter Throwable TryTiny ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     postPatch = ''
       patchShebangs --build util
     '';
-    preCheck = lib.optionalString stdenv.isDarwin ''
+    preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang util/sendmail
     '';
     meta = {
@@ -8829,7 +8829,7 @@ with self; {
       url = "mirror://cpan/authors/id/G/GA/GAAS/Encode-Locale-1.05.tar.gz";
       hash = "sha256-F2+gJ3H1QqTvsdvCpMko6PQ5G/QHhHO9YEDY8RrbDsE=";
     };
-    preCheck = if stdenv.isCygwin then ''
+    preCheck = if stdenv.hostPlatform.isCygwin then ''
       sed -i"" -e "s@plan tests => 13@plan tests => 10@" t/env.t
       sed -i"" -e "s@ok(env(\"\\\x@#ok(env(\"\\\x@" t/env.t
       sed -i"" -e "s@ok(\$ENV{\"\\\x@#ok(\$ENV{\"\\\x@" t/env.t
@@ -9196,7 +9196,7 @@ with self; {
       url = "mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.26.tar.gz";
       hash = "sha256-yLNiuGAXKkB2rO4AQ49SuGRk8sUAcCz891J4Ef+aaD4=";
     };
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ CaptureTiny ];
     buildInputs = [ ModuleBuild ];
@@ -9931,7 +9931,7 @@ with self; {
     };
     propagatedBuildInputs = [ FileWhich ];
     preCheck = "export HOME=$TMPDIR";
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Find your home and other directories on any platform";
       homepage = "https://metacpan.org/release/File-HomeDir";
@@ -9961,7 +9961,7 @@ with self; {
       hash = "sha256-oC+/KFQGqKTZOZKE8DLy1VxWl1FUwuFnS9EJg3uAluw=";
     };
     buildInputs = [ ExtUtilsCChecker ];
-    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Modify attributes of symlinks without dereferencing them";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -9985,7 +9985,7 @@ with self; {
       description = "Determine MIME types of data or files using libmagic";
       homepage = "https://metacpan.org/release/File::LibMagic";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.FileLibMagic.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.FileLibMagic.x86_64-darwin
     };
   };
 
@@ -10600,7 +10600,7 @@ with self; {
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ Future XSParseKeyword XSParseSublike ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Deferred subroutine syntax for futures";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -10832,8 +10832,8 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004001.tar.gz";
       hash = "sha256-WroBPI3hOZD1iRoOKjnJcHTQcnvjZTIMLGrxnTbF3aw=";
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/git-autofixup
     '';
     meta = {
@@ -10925,7 +10925,7 @@ with self; {
     postCheck = ''
       rm -r $out/lib
     '';
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Dynamically create Perl language bindings";
       homepage = "https://gtk2-perl.sourceforge.net";
@@ -11217,7 +11217,7 @@ with self; {
     ];
     buildInputs = [ pkgs.gtk2 ];
     # https://rt.cpan.org/Public/Bug/Display.html?id=130742
-    # doCheck = !stdenv.isDarwin;
+    # doCheck = !stdenv.hostPlatform.isDarwin;
     doCheck = false;
     propagatedBuildInputs = [ Pango ];
     meta = {
@@ -11238,7 +11238,7 @@ with self; {
     meta = {
       description = "(DEPRECATED) Perl interface to the EggTrayIcon library";
       license = with lib.licenses; [ gpl2Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2TrayIcon.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2TrayIcon.x86_64-darwin
     };
   };
 
@@ -11289,7 +11289,7 @@ with self; {
     meta = {
       description = "(DEPRECATED) Use single instance applications";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2Unique.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2Unique.x86_64-darwin
     };
   };
 
@@ -11301,7 +11301,7 @@ with self; {
       hash = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
-    preCheck = lib.optionalString stdenv.isDarwin ''
+    preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Currently failing on macOS
       rm t/overrides.t
       rm t/signals.t
@@ -11388,14 +11388,14 @@ with self; {
     };
     buildInputs = [ BotTrainingMegaHAL BotTrainingStarCraft DataSection FileSlurp PodSection TestException TestExpect TestOutput TestScript TestScriptRun ];
     propagatedBuildInputs = [ ClassLoad DBDSQLite DataDump DirSelf FileCountLines GetoptLongDescriptive IOInteractive IPCSystemSimple ListMoreUtils Moose MooseXGetopt MooseXStrictConstructor MooseXTypes RegexpCommon TermSk namespaceclean ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     patches = [
       ../development/perl-modules/Hailo-fix-test-gld.patch
     ];
     postPatch = ''
       patchShebangs bin
     '';
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/hailo
     '';
     meta = {
@@ -11534,12 +11534,12 @@ with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Hash-SharedMem-0.005.tar.gz";
       hash = "sha256-Mkd2gIYC973EStqpN4lTZUVAKakm+mEfMhyb9rlAu14=";
     };
-    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-mno-outline-atomics";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-mno-outline-atomics";
     buildInputs = [ ScalarString ];
     meta = {
       description = "Efficient shared mutable hash";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HashSharedMem.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HashSharedMem.x86_64-darwin
     };
   };
 
@@ -11551,7 +11551,7 @@ with self; {
       hash = "sha256-ucvE3NgjPo0dfxSB3beaSl+dtxgMs+8CtLy+4F5l6gw=";
     };
     buildInputs = [ Test2Suite ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Functions for accessing a hashes internal iterator";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -11635,12 +11635,12 @@ with self; {
       hash = "sha256-Wl7viWUA0epsJKkIXs++mkOr7mjPxmwD+InSostoml0=";
     };
     buildInputs = [ ModuleBuildPluggablePPPort TestRequires ];
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Extremely fast HTML escaping";
       homepage = "https://github.com/tokuhirom/HTML-Escape";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTMLEscape.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTMLEscape.x86_64-darwin
     };
   };
 
@@ -12232,8 +12232,8 @@ with self; {
       description = "XS extension for processing HTTP headers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       broken =
-        stdenv.isi686 # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
-        || stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTTPHeaderParserXS.x86_64-darwin
+        stdenv.hostPlatform.isi686 # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
+        || stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTTPHeaderParserXS.x86_64-darwin
     };
   };
 
@@ -12484,7 +12484,7 @@ with self; {
       description = "Perl interface to libpng";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "pnginspect";
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.ImagePNGLibpng.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.ImagePNGLibpng.x86_64-darwin
     };
   };
 
@@ -12668,8 +12668,8 @@ with self; {
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/treescan
     '';
     meta = {
@@ -12761,7 +12761,7 @@ with self; {
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     # Same as CompressRawZlib
-    doCheck = false && !stdenv.isDarwin;
+    doCheck = false && !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "IO Interface to compressed data files/buffers";
       homepage = "https://github.com/pmqs/IO-Compress";
@@ -12820,7 +12820,7 @@ with self; {
       url = "mirror://cpan/authors/id/L/LD/LDS/IO-Interface-1.09.tar.gz";
       hash = "sha256-5j6BxS6x4OYOwtmD9VUtJJPhFxeZJclnV/I8S9n6cTo=";
     };
-    nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkgs.ld-is-cc-hook ];
+    nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.ld-is-cc-hook ];
     meta = {
       description = "Access and modify network interface card configuration";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -13083,7 +13083,7 @@ with self; {
       hash = "sha256-pfGoMCC8W13WwbVw9Ix1RuCo9/rBCgaHQLA5Ja2eFOg=";
     };
     patches = [ ../development/perl-modules/IO-Tty-fix-makefile.patch ];
-    doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
+    doCheck = !stdenv.hostPlatform.isDarwin;  # openpty fails in the sandbox
     meta = {
       description = "Low-level allocate a pseudo-Tty, import constants";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -13290,7 +13290,7 @@ with self; {
         available to the Perl program as if they had been written in Perl.
       '';
       license = with lib.licenses; [ artistic2 ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.InlineJava.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.InlineJava.x86_64-darwin
     };
   };
 
@@ -13315,7 +13315,7 @@ with self; {
       hash = "sha256-XZsDT1jwtv9bZGR708WpzgWypw7e4zn7wxc67nR8wFA=";
     };
     buildInputs = [ TestDiagINC ];
-    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "XS based JavaScript minifier";
       homepage = "https://metacpan.org/release/JavaScript-Minifier-XS";
@@ -13550,12 +13550,12 @@ with self; {
     };
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
-    nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     makeMakerFlags = [ "TEXMF=\${tex}" "NOMKTEXLSR" ];
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
       patchShebangs bin/
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       for file in bin/*; do
         shortenPerlShebang "$file"
       done
@@ -14018,7 +14018,7 @@ with self; {
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ SubExporter ];
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Linux specific special filehandles";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -14678,7 +14678,7 @@ with self; {
     postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
     '';
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     nativeCheckInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
     meta = {
       description = "World-Wide Web library for Perl";
@@ -15349,7 +15349,7 @@ with self; {
       description = "Manipulate 128 bits integers in Perl";
       homepage = "https://metacpan.org/release/Math-Int128";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.is32bit; # compiler doesn't support a 128-bit integer type
+      broken = stdenv.hostPlatform.is32bit; # compiler doesn't support a 128-bit integer type
     };
   };
 
@@ -15586,7 +15586,7 @@ with self; {
       description = "Fast XS implementation of MaxMind DB reader";
       homepage = "https://metacpan.org/release/MaxMind-DB-Reader-XS";
       license = with lib.licenses; [ artistic2 ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBReaderXS.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBReaderXS.x86_64-darwin
     };
   };
 
@@ -15604,7 +15604,7 @@ with self; {
       description = "Create MaxMind DB database files";
       homepage = "https://metacpan.org/release/MaxMind-DB-Writer";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBWriter.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBWriter.x86_64-darwin
     };
   };
 
@@ -16970,7 +16970,7 @@ with self; {
     };
     buildInputs = [ ModuleInstall ];
     propagatedBuildInputs = [ AlgorithmLCSS CHI DataSerializer DevelStackTrace Mojolicious Readonly StringTruncate ];
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Caching, Non-blocking I/O HTTP, Local file and WebSocket user agent";
       homepage = "https://github.com/nicomen/mojo-useragent-cached";
@@ -18131,8 +18131,8 @@ with self; {
     };
     buildInputs = [ ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny ];
     perlPreHook = "export LD=$CC";
-    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fno-stack-protector";
-    hardeningDisable = lib.optional stdenv.isi686 "stackprotector";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-fno-stack-protector";
+    hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "stackprotector";
     meta = {
       description = "Moose minus the antlers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -18475,7 +18475,7 @@ with self; {
     };
     buildInputs = [ HTTPCookies Test2Suite TestMetricsAny ];
     propagatedBuildInputs = [ Future HTTPMessage IOAsync MetricsAny StructDumb URI ];
-    preCheck = lib.optionalString stdenv.isDarwin ''
+    preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # network tests fail on Darwin/sandbox, so disable these
       rm -f t/20local-connect.t t/22local-connect-pipeline.t t/23local-connect-redir.t
       rm -f t/90rt75615.t t/90rt75616.t t/90rt93232.t
@@ -18528,7 +18528,7 @@ with self; {
       hash = "sha256-DayDQtPHii/syr1GZxRd1a3U+4zRjRVtKXoead/hFgA=";
     };
     propagatedBuildInputs = [ IOAsync ProtocolWebSocket URI ];
-    preCheck = lib.optionalString stdenv.isDarwin ''
+    preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # network tests fail on Darwin/sandbox, so disable these
       rm -f t/02server.t t/03cross.t
     '';
@@ -18741,7 +18741,7 @@ with self; {
     meta = {
       description = "OOP Interface to FreeDB Server(s)";
       license = with lib.licenses; [ artistic1 ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.NetFreeDB.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.NetFreeDB.x86_64-darwin
     };
   };
 
@@ -19520,7 +19520,7 @@ with self; {
       hash = "sha256-EpUKZkwGB+o/ynSA82XfVNF0YpH0XrsO2AkXt0+xXvU=";
     };
     buildInputs = [ Test2Suite TestFatal TestRefcount ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     propagatedBuildInputs = [ XSParseKeyword XSParseSublike ];
     meta = {
       description = "Simple syntax for lexical field-based objects";
@@ -19707,7 +19707,7 @@ with self; {
     # https://github.com/NixOS/nixpkgs/pull/104889#issuecomment-737144513
     preCheck = ''
       rm t/35_log.t
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm t/30_connect.t
       rm t/45_class.t
     '';
@@ -19879,7 +19879,7 @@ with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Params-Classify-0.015.tar.gz";
       hash = "sha256-OY7BXNiZ/Ni+89ueoXSL9jHxX2wyviA+R1tn31EKWRQ=";
     };
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Argument type classification";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -20396,9 +20396,9 @@ with self; {
       hash = "sha256-5c2V3j5DvOcHdRdidLqkBfMm/IdA3wBUu4FpdcyNNJs=";
     };
     buildInputs = [ TestDeep ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ BKeywords ConfigTiny ExceptionClass FileWhich ListSomeUtils ModulePluggable PPI PPIxQuoteLike PPIxRegexp PPIxUtilities PPIxUtils PerlTidy PodSpell Readonly StringFormat ];
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/perlcritic
     '';
     meta = {
@@ -20902,8 +20902,8 @@ with self; {
       hash = "sha256-RVW1J5nBZBXDy/5eMB6gLKDrvDQhTH/lLx19ykUwLik=";
     };
     propagatedBuildInputs = [ Future FutureQueue IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/pls
     '';
     meta = {
@@ -21832,8 +21832,8 @@ with self; {
       url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
       hash = "sha256-TxOa01+q8t4GI9wLsd2J+lpDHlSL/sh97hlM8OJcyX0=";
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/rainbarf
     '';
     meta = {
@@ -22907,8 +22907,8 @@ with self; {
       patchShebangs script
     '';
 
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       for file in $out/bin/*; do
         shortenPerlShebang $file
       done
@@ -22958,7 +22958,7 @@ with self; {
     };
     buildInputs = [ LWP TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ParallelPrefork Plack ServerStarter ];
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Simple, high-performance PSGI/Plack HTTP server";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -22973,9 +22973,9 @@ with self; {
       hash = "sha256-b/q5FfMj9gCJ4+v4Urm5cH1pFyZt+K/XNw+sBL/f7k4=";
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack NetServerSSPrefork IOSocketINET6 ];
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/starman
     '';
 
@@ -23335,7 +23335,7 @@ with self; {
       url = "mirror://cpan/authors/id/R/RO/ROSCH/String-ShellQuote-1.04.tar.gz";
       hash = "sha256-5gY2UDjOINZG0lXIBe/90y+GR18Y1DynVFWwDk2G3TU=";
     };
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Quote strings for passing through the shell";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23643,7 +23643,7 @@ with self; {
       hash = "sha256-oSfa52RcGpVwzZopcMbcST1SL/BzGKNKOeQJCY9pESU=";
     };
     propagatedBuildInputs = [ LexicalSealRequireHints ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Detect undeclared subroutines in compilation";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23685,7 +23685,7 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz";
       hash = "sha256-9PVui70GxP5K4G2xIYbeyt+6wep3XqGMbAKJSB0V7AU=";
     };
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Lib/Safe/Hole.pm";
       homepage = "https://github.com/toddr/Safe-Hole";
@@ -23805,7 +23805,7 @@ with self; {
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ XSParseKeyword ];
-    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "Try/catch/finally syntax for perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23860,8 +23860,8 @@ with self; {
         hash = "sha256-nCypGyi6bZDEXqdb7wlGGzk9cFzmYkWGP1slBpXDfHw=";
       })
     ];
-    buildInputs = lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
-    doCheck = !stdenv.isAarch64;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
+    doCheck = !stdenv.hostPlatform.isAarch64;
     meta = {
       description = "Perl extension for getting CPU information. Currently only number of CPU's supported";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23904,7 +23904,7 @@ with self; {
       url = "mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.23.tar.gz";
       hash = "sha256-xO9sk0VTQDH8u+Ktw0f8cZTUevyUXnpE+sfpVjCV01M=";
     };
-    doCheck = !stdenv.isAarch64; # it hangs on Aarch64
+    doCheck = !stdenv.hostPlatform.isAarch64; # it hangs on Aarch64
     meta = {
       description = "Perl extension for Consistent Signal Handling";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -23950,12 +23950,12 @@ with self; {
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Libvirt Perl API";
       homepage = "https://libvirt.org";
       license = with lib.licenses; [ gpl2Plus artistic1 ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.SysVirt.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.SysVirt.x86_64-darwin
     };
   };
 
@@ -23966,7 +23966,7 @@ with self; {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.36.tar.gz";
       hash = "sha256-B75RUy4GPqxu2OWBUFRw7ryB1VBkQa8tzzK8Dr7pjGc=";
     };
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Stream TAP from pgTAP test scripts";
       homepage = "https://search.cpan.org/dist/Tap-Parser-Sourcehandler-pgTAP";
@@ -24061,9 +24061,9 @@ with self; {
       pkgs.tcl
       pkgs.tix
       pkgs.tk
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreServices ];
-    makeMakerFlags = lib.optionals stdenv.isLinux
+    makeMakerFlags = lib.optionals stdenv.hostPlatform.isLinux
       [ "--tclsh=${pkgs.tcl}/bin/tclsh" "--nousestubs" ];
     meta = {
       description = "Tcl extension module for Perl";
@@ -24091,7 +24091,7 @@ with self; {
       mkdir -p $out/lib/perl5/site_perl
       mv $out/lib/perl5/Tcl $out/lib/perl5/site_perl/
       mv $out/lib/perl5/auto $out/lib/perl5/site_perl/
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mv $out/lib/perl5/darwin-thread-multi-2level $out/lib/perl5/site_perl/
     '';
     meta = {
@@ -24207,7 +24207,7 @@ with self; {
       url = "mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-3.101.tar.gz";
       hash = "sha256-0qMt1sIeSzfGqT34CHyp6IDPrmE6Pl766jB7C9yu21g=";
     };
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     propagatedBuildInputs = [ AppConfig ];
     buildInputs = [ CGI TestLeakTrace ];
     meta = {
@@ -24541,7 +24541,7 @@ with self; {
       description = "New and improved test harness with better Test2 integration";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "yath";
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Test2Harness.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Test2Harness.x86_64-darwin
     };
   };
 
@@ -25347,7 +25347,7 @@ with self; {
     meta = {
       description = "Assert that code does not cause growth in memory usage";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TestMemoryGrowth.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TestMemoryGrowth.x86_64-darwin
     };
   };
 
@@ -25841,7 +25841,7 @@ with self; {
     };
     buildInputs = [ TestRun TestTrap ];
     propagatedBuildInputs = [ MooseXGetopt UNIVERSALrequire YAMLLibYAML ];
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Analyze tests from the command line using Test::Run";
       homepage = "http://web-cpan.berlios.de/modules/Test-Run";
@@ -26398,7 +26398,7 @@ with self; {
     # libbtparse.so: cannot open shared object file
     patches = [ ../development/perl-modules/TextBibTeX-use-lib.patch ];
     perlPreHook = "export LD=$CC";
-    perlPostHook = lib.optionalString stdenv.isDarwin ''
+    perlPostHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
       oldPath="$(pwd)/btparse/src/libbtparse.dylib"
       newPath="$out/lib/libbtparse.dylib"
 
@@ -26590,7 +26590,7 @@ with self; {
     meta = {
       description = "Perl interface to iconv() codeset conversion function";
       license = with lib.licenses; [ artistic1 gpl1Plus ]; # taken from el6
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextIconv.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextIconv.x86_64-darwin
     };
   };
 
@@ -26706,7 +26706,7 @@ with self; {
       hash = "sha256-U6cw/29IgrmavYVW8mqRH1gvZ1tZ8OFnJe0ey8CE7lA=";
     };
     buildInputs = [ Filepushd ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Hoedown for Perl5";
       homepage = "https://github.com/tokuhirom/Text-Markdown-Hoedown";
@@ -27054,7 +27054,7 @@ with self; {
     meta = {
       description = "Remove accents from a string";
       license = with lib.licenses; [ gpl2Only ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextUnaccent.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextUnaccent.x86_64-darwin
     };
   };
 
@@ -27149,7 +27149,7 @@ with self; {
       url = "mirror://cpan/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz";
       hash = "sha256-S9KaF/DCx5LRLBAFs8J28qsPrjnACFmuF0HXlBhGpIg=";
     };
-    buildInputs = lib.optionals (!stdenv.isDarwin) [ pkgs.glibcLocales ];
+    buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ TextCharWidth ];
     preConfigure = ''
       substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.unixtools.locale}/bin/locale'
@@ -27733,7 +27733,7 @@ with self; {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/Unicode-CaseFold-1.01.tar.gz";
       hash = "sha256-QYohKAj50Li7MwrJBQltLdNkl2dT1McVNNq5g2pjGU0=";
     };
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Unicode case-folding for case-insensitive lookups";
       homepage = "https://metacpan.org/release/Unicode-CaseFold";
@@ -28011,7 +28011,7 @@ with self; {
       url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.003.tar.gz";
       hash = "sha256-4S9sgrg1dcORd3O0HA+1HPeDx8bPcuDJkWks4u8Hg2I=";
     };
-    postPatch = lib.optionalString (stdenv.isAarch64) ''
+    postPatch = lib.optionalString (stdenv.hostPlatform.isAarch64) ''
       # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
       # printf SYS_getrandom | gcc -include sys/syscall.h -E -
       substituteInPlace lib/UUID4/Tiny.pm \
@@ -28211,7 +28211,7 @@ with self; {
     meta = {
       description = "Use WWW::Mechanize with CGI applications";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.WWWMechanizeCGI.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.WWWMechanizeCGI.x86_64-darwin
     };
   };
 
@@ -28472,9 +28472,9 @@ with self; {
       url = "mirror://cpan/authors/id/S/SI/SIXTEASE/XML-Entities-1.0002.tar.gz";
       hash = "sha256-wyqk8wlXPXZIqy5Bb2K2sgZS8q2c/T7sgv1REB/nMQ0=";
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ LWP ];
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/download-entities.pl
     '';
     meta = {
@@ -28547,12 +28547,12 @@ with self; {
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Filter-Sort-1.01.tar.gz";
       hash = "sha256-UQWF85pJFszV+o1UXpYXnJHq9vx8l6QBp1aOhBFi+l8=";
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
       XMLSAX
       XMLSAXWriter
     ];
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       shortenPerlShebang $out/bin/xmlsort
     '';
     meta = {
@@ -28604,7 +28604,7 @@ with self; {
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ AlienBuild AlienLibxml2 ]
-      ++ lib.optionals stdenv.isDarwin (with pkgs; [ libiconv zlib ]);
+      ++ lib.optionals stdenv.hostPlatform.isDarwin (with pkgs; [ libiconv zlib ]);
     patches = [
       # https://github.com/shlomif/perl-XML-LibXML/pull/87
       ../development/perl-modules/XML-LibXML-fix-tests-libxml-2.13.0.patch
@@ -28682,7 +28682,7 @@ with self; {
     patches = [ ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch ];
     postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
-    '' + lib.optionalString stdenv.isCygwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
       sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
     '';
     makeMakerFlags = [ "EXPATLIBPATH=${pkgs.expat.out}/lib" "EXPATINCPATH=${pkgs.expat.dev}/include" ];
@@ -28983,7 +28983,7 @@ with self; {
     };
     buildInputs = [ ExtUtilsCChecker Test2Suite ];
     propagatedBuildInputs = [ FileShareDir ];
-    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isDarwin) "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing keyword syntax";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -28999,7 +28999,7 @@ with self; {
       hash = "sha256-Wn0myqMroqQQUZwMJLHYCznvMgdRN224vbef2u/pms0=";
     };
     buildInputs = [ Test2Suite ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing sub-like syntax";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -29061,7 +29061,7 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.34.tar.gz";
       hash = "sha256-zJFWzK69p5jr/i8xthnoBld/hg7RcEJi8X/608bjQVk=";
     };
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
       homepage = "https://github.com/toddr/YAML-Syck";

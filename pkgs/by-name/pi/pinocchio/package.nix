@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
-  prePatch = lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
+  prePatch = lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace unittest/algorithm/utils/CMakeLists.txt \
       --replace-fail "add_pinocchio_unit_test(force)" ""
   '';

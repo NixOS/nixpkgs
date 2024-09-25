@@ -3,9 +3,9 @@
 let
   mkVersionInfo = _: { major, minor, patch, x64hash, x86hash, x64suffix, x86suffix, homepage }:
     { inherit homepage;
-      version = "${major}.${minor}.${patch}.${if stdenv.is64bit then x64suffix else x86suffix}";
-      prefix = "linuxx${if stdenv.is64bit then "64" else "86"}";
-      hash = if stdenv.is64bit then x64hash else x86hash;
+      version = "${major}.${minor}.${patch}.${if stdenv.hostPlatform.is64bit then x64suffix else x86suffix}";
+      prefix = "linuxx${if stdenv.hostPlatform.is64bit then "64" else "86"}";
+      hash = if stdenv.hostPlatform.is64bit then x64hash else x86hash;
     };
 
   # Attribute-set with all actively supported versions of the Citrix workspace app

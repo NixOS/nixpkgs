@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ the-foundation ]
     ++ lib.optionals (!enableTUI) [ fribidi harfbuzz libwebp mpg123 SDL2 ]
     ++ lib.optionals enableTUI [ ncurses sealcurses ]
-    ++ lib.optional stdenv.isDarwin AppKit;
+    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
   cmakeFlags = lib.optionals enableTUI [
     "-DENABLE_TUI=YES"
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
   ];
 
-  installPhase = lib.optionalString (stdenv.isDarwin && !enableTUI) ''
+  installPhase = lib.optionalString (stdenv.hostPlatform.isDarwin && !enableTUI) ''
     mkdir -p $out/Applications
     mv Lagrange.app $out/Applications
   '';

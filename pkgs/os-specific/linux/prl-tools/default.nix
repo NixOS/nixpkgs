@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     undmg $src
     export sourceRoot=prl-tools-build
-    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin${lib.optionalString stdenv.isAarch64 "-arm"}.iso" -o$sourceRoot
+    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm"}.iso" -o$sourceRoot
     ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
 
     runHook postUnpack
@@ -111,12 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp prl_fs/SharedFolders/Guest/Linux/prl_fs/prl_fs.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_fs_freeze/Snapshot/Guest/Linux/prl_freeze/prl_fs_freeze.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_tg/Toolgate/Guest/Linux/prl_tg/prl_tg.ko $out/lib/modules/${kernelVersion}/extra
-      ${lib.optionalString stdenv.isAarch64
+      ${lib.optionalString stdenv.hostPlatform.isAarch64
       "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
     )
 
     ( # tools
-      cd tools/tools${if stdenv.isAarch64 then "-arm64" else if stdenv.isx86_64 then "64" else "32"}
+      cd tools/tools${if stdenv.hostPlatform.isAarch64 then "-arm64" else if stdenv.hostPlatform.isx86_64 then "64" else "32"}
       mkdir -p $out/lib
 
       # prltoolsd contains hardcoded /bin/bash path

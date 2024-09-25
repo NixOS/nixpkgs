@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;

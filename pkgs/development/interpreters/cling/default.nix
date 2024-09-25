@@ -26,7 +26,7 @@
 
 # Build with libc++ (LLVM) rather than stdlibc++ (GCC).
 # This is experimental and not all features work.
-, useLLVMLibcxx ? clangStdenv.isDarwin
+, useLLVMLibcxx ? clangStdenv.hostPlatform.isDarwin
 }:
 
 let
@@ -97,7 +97,7 @@ let
 
     CPPFLAGS = if useLLVMLibcxx then [ "-stdlib=libc++" ] else [];
 
-    postInstall = lib.optionalString (!stdenv.isDarwin) ''
+    postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p $out/share/Jupyter
       cp -r /build/clang/tools/cling/tools/Jupyter/kernel $out/share/Jupyter
     '';

@@ -34,7 +34,7 @@
 # /lib will link to /lib32
 
 let
-  inherit (stdenv) is64bit;
+  inherit (stdenv.hostPlatform) is64bit;
 
   name = if (args ? pname && args ? version)
     then "${args.pname}-${args.version}"

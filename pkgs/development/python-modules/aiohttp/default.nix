@@ -113,8 +113,8 @@ buildPythonPackage rec {
       # don't run benchmarks
       "test_import_time"
     ]
-    ++ lib.optionals stdenv.is32bit [ "test_cookiejar" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
       "test_close"
     ];
@@ -129,7 +129,7 @@ buildPythonPackage rec {
 
       export HOME=$(mktemp -d)
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Work around "OSError: AF_UNIX path too long"
       export TMPDIR="/tmp"
     '';

@@ -86,7 +86,7 @@ rec {
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 
-    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
+    patches = lib.optional stdenv.hostPlatform.isDarwin ./5.4.darwin.patch;
   };
 
   lua5_4_compat = lua5_4.override({
@@ -102,7 +102,7 @@ rec {
     inherit passthruFun;
 
     patches =
-      lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ];
+      lib.optionals stdenv.hostPlatform.isDarwin [ ./5.2.darwin.patch ];
   };
 
   lua5_3_compat = lua5_3.override({
@@ -119,7 +119,7 @@ rec {
     inherit passthruFun;
     patches = [
       ./CVE-2022-28805.patch
-    ] ++ lib.optional stdenv.isDarwin ./5.2.darwin.patch;
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin ./5.2.darwin.patch;
   };
 
   lua5_2_compat = lua5_2.override({
@@ -134,7 +134,7 @@ rec {
     hash = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
-    patches = (lib.optional stdenv.isDarwin ./5.1.darwin.patch)
+    patches = (lib.optional stdenv.hostPlatform.isDarwin ./5.1.darwin.patch)
       ++ [ ./CVE-2014-5461.patch ];
   };
 

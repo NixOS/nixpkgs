@@ -16,7 +16,7 @@ let
   # node-canvas builds code that requires aligned_alloc,
   # which on Darwin requires at least the 10.15 SDK
   stdenv' =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       overrideSDK stdenv {
         darwinMinVersion = "10.15";
         darwinSdkVersion = "11.0";
@@ -42,11 +42,11 @@ buildNpmPackage' rec {
 
   npmBuildScript = [ "build:production" ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs =
     [ pango ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
       darwin.apple_sdk.frameworks.CoreText
     ];

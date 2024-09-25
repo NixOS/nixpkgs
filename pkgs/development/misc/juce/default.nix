@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl # libcurl.so
     stdenv.cc.cc.lib # libstdc++.so libgcc_s.so
     pcre # libpcre2.pc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # libasound.so
     libglvnd # libGL.so
     webkitgtk # webkit2gtk-4.0
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.MetalKit
     darwin.apple_sdk.frameworks.WebKit

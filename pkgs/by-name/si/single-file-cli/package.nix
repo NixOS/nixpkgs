@@ -19,7 +19,7 @@ buildNpmPackage {
   npmDepsHash = "sha256-wiBpWw9nb/pWVGIc4Vl/IxxR5ic0LzLMMr3WxRNvYdM=";
 
   nativeCheckInputs = [chromium];
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   postBuild = ''
     patchShebangs ./single-file

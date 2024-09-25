@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ] ++ lib.optionals enablePython (with pythonPackages; [
     python

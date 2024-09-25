@@ -121,7 +121,7 @@ stdenv.mkDerivation (rec {
   '';
 
   nativeBuildInputs = [ cmake ninja python3 ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
     ++ lib.optional (cxxabi != null) lndir;
 
   buildInputs = [ cxxabi ]

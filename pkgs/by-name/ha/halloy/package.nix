@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
       xorg.libXi
       xorg.libXrandr
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreGraphics
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.QuartzCore
       darwin.apple_sdk.frameworks.Security
     ]
-    ++ lib.optionals stdenv.isLinux [ wayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  postFixup = lib.optional stdenv.isLinux (
+  postFixup = lib.optional stdenv.hostPlatform.isLinux (
     let
       rpathWayland = lib.makeLibraryPath [
         wayland
@@ -106,7 +106,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
     mkdir -p "$APP_DIR/MacOS"

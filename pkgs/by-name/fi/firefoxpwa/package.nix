@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   libs =
     let
       libs =
-        lib.optionals stdenv.isLinux [
+        lib.optionals stdenv.hostPlatform.isLinux [
           cups
           ffmpeg
           libglvnd

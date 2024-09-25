@@ -244,7 +244,7 @@ buildPythonPackage rec {
     # https://github.com/apache/airflow/issues/33854
     substituteInPlace pyproject.toml \
       --replace '[project]' $'[project]\nname = "apache-airflow"\nversion = "${version}"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix failing test on Hydra
     substituteInPlace airflow/utils/db.py \
       --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
@@ -287,7 +287,7 @@ buildPythonPackage rec {
     "tests/core/test_core.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "bash_operator_kill" # psutil.AccessDenied
   ];
 

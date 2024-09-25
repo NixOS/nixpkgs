@@ -49,7 +49,7 @@ in
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
     nativeBuildInputs = [ rake bundler pkg-config ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 atk ];
   };
 
@@ -70,13 +70,13 @@ in
 
   cairo = attrs: {
     nativeBuildInputs = [ pkg-config ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre2 xorg.libpthreadstubs xorg.libXdmcp];
   };
 
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkg-config ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     buildInputs = [ cairo expat pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
@@ -238,13 +238,13 @@ in
 
   gdk_pixbuf2 = attrs: {
     nativeBuildInputs = [ pkg-config bundler rake ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gdk-pixbuf ];
   };
 
   gdk3 = attrs: {
     nativeBuildInputs = [ pkg-config bundler rake ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gdk-pixbuf cairo ];
   };
 
@@ -256,8 +256,8 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkg-config gobject-introspection ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre pcre2 ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    buildInputs = [ gtk2 pcre pcre2 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -345,16 +345,16 @@ in
 
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre2 ];
   };
 
   gtk2 = attrs: {
     nativeBuildInputs = [
       binutils pkg-config
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       util-linux libselinux libsepol
-    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
@@ -368,18 +368,18 @@ in
       xorg.libpthreadstubs
       xorg.libXdmcp
     ];
-    dontStrip = stdenv.isDarwin;
+    dontStrip = stdenv.hostPlatform.isDarwin;
   };
 
   gtk3 = attrs: {
     nativeBuildInputs = [
       binutils
       pkg-config
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       util-linux
       libselinux
       libsepol
-    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
@@ -399,12 +399,12 @@ in
       libxkbcommon
       libepoxy
     ];
-    dontStrip = stdenv.isDarwin;
+    dontStrip = stdenv.hostPlatform.isDarwin;
   };
 
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkg-config pcre2 ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 glib ];
   };
 
@@ -425,8 +425,8 @@ in
 
   grpc = attrs: {
     nativeBuildInputs = [ pkg-config ]
-      ++ lib.optional stdenv.isDarwin cctools
-      ++ lib.optional (lib.versionAtLeast attrs.version "1.53.0" && stdenv.isDarwin && stdenv.isAarch64) autoSignDarwinBinariesHook;
+      ++ lib.optional stdenv.hostPlatform.isDarwin cctools
+      ++ lib.optional (lib.versionAtLeast attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     env.NIX_CFLAGS_COMPILE = toString [
@@ -443,7 +443,7 @@ in
     postPatch = ''
       substituteInPlace Makefile \
         --replace '-Wno-invalid-source-encoding' ""
-    '' + lib.optionalString (lib.versionOlder attrs.version "1.53.0" && stdenv.isDarwin) ''
+    '' + lib.optionalString (lib.versionOlder attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin) ''
       # For < v1.48.0
       substituteInPlace src/ruby/ext/grpc/extconf.rb \
         --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
@@ -454,7 +454,7 @@ in
   };
 
   hitimes = attrs: {
-    buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
   };
 
   hpricot = attrs: {
@@ -467,7 +467,7 @@ in
 
   iconv = attrs: {
     dontBuild = false;
-    buildFlags = lib.optionals stdenv.isDarwin [
+    buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
     ];
@@ -524,7 +524,7 @@ in
     buildFlags = [
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-opt-include=${lib.getDev libiconv}/include"
     ];
@@ -565,7 +565,7 @@ in
 
     # For some reason 'mathematical.so' is missing cairo, glib, and
     # lasem in its RPATH, add them explicitly here
-    postFixup = lib.optionalString stdenv.isLinux ''
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
       soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
       rpath="$(patchelf --print-rpath "$soPath")"
       patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
@@ -618,11 +618,11 @@ in
       "--with-xslt-include=${libxslt.dev}/include"
       "--with-exslt-lib=${libxslt.out}/lib"
       "--with-exslt-include=${libxslt.dev}/include"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--with-iconv-dir=${libiconv}"
       "--with-opt-include=${libiconv}/include"
     ];
-  } // lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     buildInputs = [ libxml2 ];
   });
 
@@ -653,9 +653,9 @@ in
       pcre pcre2
       xorg.libpthreadstubs
       xorg.libXdmcp
-    ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     buildInputs = [ libdatrie libthai ]
-      ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ libselinux libsepol util-linux ];
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gtk2 ];
   };
 
@@ -791,7 +791,7 @@ in
   };
 
   rugged = attrs: {
-    nativeBuildInputs = [ cmake pkg-config which ] ++ lib.optional stdenv.isDarwin libiconv;
+    nativeBuildInputs = [ cmake pkg-config which ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
     buildInputs = [ openssl libssh2 zlib ];
     dontUseCmakeConfigure = true;
   };
@@ -816,7 +816,7 @@ in
     '';
   };
 
-  scrypt = attrs: lib.optionalAttrs stdenv.isDarwin {
+  scrypt = attrs: lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     dontBuild = false;
     postPatch = ''
       sed -i -e "s/-arch i386//" Rakefile ext/scrypt/Rakefile
@@ -919,6 +919,6 @@ in
   };
 
   zookeeper = attrs: {
-    buildInputs = lib.optionals stdenv.isDarwin [ cctools ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   };
 }

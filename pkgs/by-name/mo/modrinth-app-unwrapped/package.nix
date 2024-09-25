@@ -85,11 +85,11 @@ rustPlatform.buildRustPackage {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libsoup
       webkitgtk
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit
@@ -149,13 +149,13 @@ rustPlatform.buildRustPackage {
     ''
       runHook preInstall
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out"/bin
       cp -r target/release/bundle/macos "$out"/Applications
       mv "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App "$out"/bin/modrinth-app
       ln -s "$out"/bin/modrinth-app "$out"/Applications/Modrinth\ App.app/Contents/MacOS/Modrinth\ App
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       cp -r target/release/bundle/"$tauriBundle"/*/data/usr "$out"
       desktop-file-edit \
         --set-comment "Modrinth's game launcher" \
@@ -189,6 +189,6 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ getchoo ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # this builds on architectures like aarch64, but the launcher itself does not support them yet
-    broken = !stdenv.isx86_64;
+    broken = !stdenv.hostPlatform.isx86_64;
   };
 }

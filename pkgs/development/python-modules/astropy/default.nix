@@ -99,7 +99,7 @@ buildPythonPackage rec {
     "test_datetime_to_timedelta"
 
     "test_datetime_difference_agrees_with_timedelta_no_hypothesis"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_sidereal_lat_independent" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";

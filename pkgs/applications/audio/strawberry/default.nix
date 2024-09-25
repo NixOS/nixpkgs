@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     taglib
     qtbase
     qtx11extras
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     libgpod
     libpulseaudio
     libselinux
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qttools
     wrapQtAppsHook
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     util-linux
   ];
 

@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-lU39kj/uz0l7Rodsu6+UMv2o579eu1KUbutUNZni7bM=";
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/ADReaper $out/bin/$pname
   '';
 

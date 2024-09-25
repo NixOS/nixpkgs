@@ -63,17 +63,17 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     zstd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     foundationdb
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   # skip defaults on darwin because foundationdb is not available
-  buildNoDefaultFeatures = stdenv.isDarwin;
-  buildFeatures = lib.optional (stdenv.isDarwin) [ "sqlite" "postgres" "mysql" "rocks" "elastic" "s3" "redis" ];
+  buildNoDefaultFeatures = stdenv.hostPlatform.isDarwin;
+  buildFeatures = lib.optional (stdenv.hostPlatform.isDarwin) [ "sqlite" "postgres" "mysql" "rocks" "elastic" "s3" "redis" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -146,7 +146,7 @@ rustPlatform.buildRustPackage {
     "--skip=smtp::inbound::vrfy::vrfy_expn"
   ];
 
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   passthru = {
     webadmin = callPackage ./webadmin.nix { };

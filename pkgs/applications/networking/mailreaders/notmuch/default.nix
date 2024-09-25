@@ -2,7 +2,6 @@
 , pkg-config, gnupg
 , xapian, gmime3, sfsexp, talloc, zlib
 , doxygen, perl, texinfo
-, notmuch
 , pythonPackages
 , emacs
 , ruby
@@ -157,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
       paths = with ruby.gems; [ mail ];
       pathsToLink = [ "/lib" "/nix-support" ];
     };
-    tests.version = testers.testVersion { package = notmuch; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
     updateScript = gitUpdater {
       url = "https://git.notmuchmail.org/git/notmuch";

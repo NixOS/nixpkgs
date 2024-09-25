@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   # On darwin: Too many open files
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ulimit -n 1024
   '';
 

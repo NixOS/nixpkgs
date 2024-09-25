@@ -42,15 +42,15 @@
   withDBengine ? true,
   withDebug ? false,
   withEbpf ? false,
-  withIpmi ? (stdenv.isLinux),
-  withNetfilter ? (stdenv.isLinux),
-  withNetworkViewer ? (stdenv.isLinux),
+  withIpmi ? (stdenv.hostPlatform.isLinux),
+  withNetfilter ? (stdenv.hostPlatform.isLinux),
+  withNetworkViewer ? (stdenv.hostPlatform.isLinux),
   withSsl ? true,
-  withSystemdJournal ? (stdenv.isLinux),
+  withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   zlib,
 }:
 let
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   version = "1.47.1";
@@ -96,7 +96,7 @@ stdenv'.mkDerivation (finalAttrs: {
       zlib
       libyaml
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         CoreFoundation
@@ -104,7 +104,7 @@ stdenv'.mkDerivation (finalAttrs: {
         libossp_uuid
       ]
     )
-    ++ lib.optionals (stdenv.isLinux) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       libcap
       libuuid
       lm_sensors
@@ -153,7 +153,7 @@ stdenv'.mkDerivation (finalAttrs: {
       # Relocate one folder above.
       mv $out/usr/* $out/
     ''
-    + lib.optionalString (stdenv.isLinux) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       # rename this plugin so netdata will look for setuid wrapper
       mv $out/libexec/netdata/plugins.d/apps.plugin \
          $out/libexec/netdata/plugins.d/apps.plugin.org

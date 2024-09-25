@@ -6,16 +6,16 @@
 }:
 let
   pname = "insomnia";
-  version = "9.0.0";
+  version = "10.0.0";
 
   src = fetchurl {
     x86_64-darwin = {
       url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-      hash = "sha256-QIArPdThQcNTUgrXpWP8JHaZfrZ/6ztekIvzFdoWjsY=";
+      hash = "sha256-HYEZzLDV2T4ugCjIeskS5SkrQlu5nQt1S0RG9R/rlcs=";
     };
     x86_64-linux = {
       url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
-      hash = "sha256-2UiqopYmNxnDcIqQMn/H89ugvOtTWkHH4LrmKkQErSs=";
+      hash = "sha256-hElisKB1C1By8lCCgNqNr6bIOMKqMG3UyBQ6jYu8yNg=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
@@ -29,7 +29,7 @@ let
     maintainers = with maintainers; [ markus1189 kashw2 DataHearth ];
   };
 in
-if stdenv.isDarwin then stdenv.mkDerivation {
+if stdenv.hostPlatform.isDarwin then stdenv.mkDerivation {
   inherit pname version src meta;
     sourceRoot = ".";
 

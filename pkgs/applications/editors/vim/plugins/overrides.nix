@@ -478,7 +478,7 @@ in
 
         buildInputs = [
           libuv.dev
-        ] ++ lib.optionals stdenv.isDarwin [
+        ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
           darwin.apple_sdk.frameworks.AppKit
         ];
       };
@@ -492,7 +492,7 @@ in
       # Note: the destination should be generator.so, even on darwin
       # https://github.com/mistricky/codesnap.nvim/blob/main/scripts/build_generator.sh
       postInstall = let
-        extension = if stdenv.isDarwin then "dylib" else "so";
+        extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
       in ''
         rm -r $out/lua/*.so
         cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
@@ -597,7 +597,7 @@ in
         rev = "cd97c25320fb0a672b11bcd95d8332bb3088ecce";
         hash = "sha256-66NtKteM1mvHP5wAU4e9JbsF+bq91lmCDcTh/6RPhoo=";
       };
-      extension = if stdenv.isDarwin then "dylib" else "so";
+      extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
       rustPackage = rustPlatform.buildRustPackage {
         pname = "cord.nvim-rust";
         inherit version src;
@@ -1003,11 +1003,11 @@ in
         src = LanguageClient-neovim-src;
 
         cargoHash = "sha256-H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
-        buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+        buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
         # FIXME: Use impure version of CoreFoundation because of missing symbols.
         #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
-        preConfigure = lib.optionalString stdenv.isDarwin ''
+        preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
           export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
         '';
       };
@@ -1541,7 +1541,7 @@ in
 
         buildInputs =
           [ openssl ]
-          ++ lib.optionals stdenv.isDarwin [
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
             darwin.apple_sdk.frameworks.Security
             darwin.apple_sdk.frameworks.SystemConfiguration
           ];
@@ -1593,7 +1593,7 @@ in
         pname = "sniprun-bin";
         inherit version src;
 
-        buildInputs = lib.optionals stdenv.isDarwin [
+        buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
           darwin.apple_sdk.frameworks.Security
         ];
 
@@ -1895,7 +1895,7 @@ in
   };
 
   vim-addon-manager = super.vim-addon-manager.overrideAttrs {
-    buildInputs = lib.optional stdenv.isDarwin Cocoa;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Cocoa;
   };
 
   vim-addon-mru = super.vim-addon-mru.overrideAttrs {
@@ -1956,7 +1956,7 @@ in
     src = old.src.overrideAttrs (srcOld: {
       postFetch =
         (srcOld.postFetch or "")
-        + lib.optionalString (!stdenv.isDarwin) ''
+        + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
           rm $out/colors/darkBlue.vim
         '';
     });

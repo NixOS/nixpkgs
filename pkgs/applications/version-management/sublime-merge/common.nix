@@ -85,7 +85,7 @@ let
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
           $binary
       done
 

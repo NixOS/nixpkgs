@@ -105,7 +105,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     install -D tools/llvm-spirv/llvm-spirv $out/bin/llvm-spirv
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool $out/bin/llvm-spirv \
       -change @rpath/libLLVMSPIRVLib.dylib $out/lib/libLLVMSPIRVLib.dylib
   '';

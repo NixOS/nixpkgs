@@ -90,7 +90,7 @@
               src = built;
               nativeBuildInputs = [ built ] ++ runInputs;
               passthru = { inherit built; };
-            } // lib.optionalAttrs (stdenv.isDarwin && runAllowNetworking) {
+            } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && runAllowNetworking) {
               sandboxProfile = ''
                 (allow network-inbound (local ip))
                 (allow mach-lookup (global-name "com.apple.FSEvents"))
@@ -180,12 +180,12 @@
     } // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
       aot = mkDotnetTest {
         name = "aot";
-        stdenv = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
+        stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
         template = "console";
         usePackageSource = true;
         buildInputs =
           [ zlib
-          ] ++ lib.optional stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
+          ] ++ lib.optional stdenv.hostPlatform.isDarwin (with darwin; with apple_sdk.frameworks; [
             swiftPackages.swift
             Foundation
             CryptoKit

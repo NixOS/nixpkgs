@@ -26,7 +26,7 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     btrfs-progs
     lvm2
   ];

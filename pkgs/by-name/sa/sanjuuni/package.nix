@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/MCJack123/sanjuuni/releases/tag/${version}";
     maintainers = [ maintainers.tomodachi94 ];
     license = licenses.gpl2Plus;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sanjuuni";
   };
 }

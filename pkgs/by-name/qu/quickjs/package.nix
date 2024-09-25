@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-PEv4+JW/pUvrSGyNEhgRJ3Hs/FrDvhA2hR70FWghLgM=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace "CONFIG_LTO=y" ""
   '';
 

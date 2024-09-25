@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib udev ]
-    ++ lib.optionals stdenv.isDarwin [ portaudio ]
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ portaudio ]
     ++ lib.optionals gpsdSupport [ gpsd ]
     ++ lib.optionals hamlibSupport [ hamlib ]
     ++ lib.optionals extraScripts [ python3 perl espeak ];

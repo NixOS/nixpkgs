@@ -35,7 +35,7 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? stdenv.isDarwin,
+  mingwSupport ? stdenv.hostPlatform.isDarwin,
   waylandSupport ? false,
   x11Support ? false,
   embedInstallers ? false, # The Mono and Gecko MSI installers

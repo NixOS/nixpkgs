@@ -20,15 +20,15 @@ buildGoModule rec {
   # Linux-only feature. See 'ENABLE_JOURNALD' upstream:
   # https://github.com/kubernetes/node-problem-detector/blob/master/Makefile
   subPackages = [ "cmd/nodeproblemdetector" ] ++
-    lib.optionals stdenv.isLinux [ "cmd/logcounter" ];
+    lib.optionals stdenv.hostPlatform.isLinux [ "cmd/logcounter" ];
 
   preBuild = ''
-    export CGO_ENABLED=${if stdenv.isLinux then "1" else "0"}
+    export CGO_ENABLED=${if stdenv.hostPlatform.isLinux then "1" else "0"}
   '';
 
-  buildInputs = lib.optionals stdenv.isLinux [ systemd ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
-  tags = lib.optionals stdenv.isLinux [ "journald" ];
+  tags = lib.optionals stdenv.hostPlatform.isLinux [ "journald" ];
 
   ldflags = [
     "-X k8s.io/${pname}/pkg/version.version=v${version}"

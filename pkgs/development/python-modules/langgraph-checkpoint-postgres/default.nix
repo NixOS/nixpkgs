@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "psycopg-pool" ];
 
-  doCheck = !(stdenvNoCC.isDarwin);
+  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 

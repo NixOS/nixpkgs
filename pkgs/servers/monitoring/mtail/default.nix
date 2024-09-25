@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   # fails on darwin with: write unixgram -> <tmpdir>/rsyncd.log: write: message too long
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Tool for extracting metrics from application logs";

@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ curl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreServices
       Security
       libiconv

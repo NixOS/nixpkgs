@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
       openssl
       curl
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit
       CoreFoundation
     ];

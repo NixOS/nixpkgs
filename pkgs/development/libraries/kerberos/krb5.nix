@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
-    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=''
+    ++ lib.optional stdenv.hostPlatform.isFreeBSD ''WARN_CFLAGS=''
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
          "ac_cv_func_regcomp=yes"
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ byacc perl pkg-config ]
     # Provides the mig command used by the build scripts
-    ++ lib.optional stdenv.isDarwin bootstrap_cmds;
+    ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds;
 
   buildInputs = [ openssl ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withLibedit [ libedit ]
     ++ lib.optionals withVerto [ libverto ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk; [
     libs.xpc
     frameworks.Kerberos
   ]);

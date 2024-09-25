@@ -79,18 +79,18 @@ with mikutterPaths; stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems wrapGAppsHook3 gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin [ libicns ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns ];
   buildInputs = [
     atk
     gtk2
     libnotify
     which # some plugins use it at runtime
     wrappedRuby
-  ] ++ lib.optionals stdenv.isLinux [ alsa-utils ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-utils ];
 
   scriptPath = lib.makeBinPath (
     [ wrappedRuby libnotify which ]
-    ++ lib.optionals stdenv.isLinux [ alsa-utils ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-utils ]
   );
 
   postUnpack = ''
@@ -123,7 +123,7 @@ with mikutterPaths; stdenv.mkDerivation rec {
     let
       infoPlist = mkInfoPlist { inherit version; };
     in
-    lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p ${appBinDir} ${appResourceDir}
       install -Dm644 ${infoPlist} ${appPrefixDir}/Info.plist
       ln -s $out/bin/mikutter ${appBinDir}/mikutter

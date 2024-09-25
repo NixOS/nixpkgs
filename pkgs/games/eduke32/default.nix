@@ -49,11 +49,11 @@ in stdenv.mkDerivation (finalAttrs: {
     libvpx
     SDL2
     SDL2_mixer
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     gtk2
     libGL
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AGL
     Cocoa
     GLUT
@@ -74,7 +74,7 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace-fail '#include <SDL.h>' '#include <SDL2/SDL.h>' \
       --replace-fail '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
       --replace-fail '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in glad.c glad_wgl.c ; do
       substituteInPlace source/glad/src/$f \
         --replace-fail libGL.so ${libGL}/lib/libGL.so
@@ -117,7 +117,7 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 -t $out/bin eduke32 mapster32 voidsw wangulator
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
       --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
       --add-flags '-g "$EDUKE32_DATA_DIR/DUKE3D.GRP"'
@@ -127,7 +127,7 @@ in stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/icons/hicolor/scalable/apps
     gm convert "./source/duke3d/rsrc/game_icon.ico[10]" $out/share/icons/hicolor/scalable/apps/eduke32.png
     install -Dm644 ./source/sw/rsrc/game_icon.svg $out/share/icons/hicolor/scalable/apps/voidsw.svg
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications/EDuke32.app/Contents/MacOS
     mkdir -p $out/Applications/Mapster32.app/Contents/MacOS
     mkdir -p $out/Applications/VoidSW.app/Contents/MacOS

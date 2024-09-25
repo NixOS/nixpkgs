@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   buildFeatures = lib.optional withCmd "cmd";
 
@@ -62,6 +62,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ bmanuel linj ];
     platforms = platforms.unix;
     mainProgram = "kanata";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

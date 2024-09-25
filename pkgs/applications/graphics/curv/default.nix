@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     xorg.libXi
     xorg.libXinerama
     xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ilmbase
     llvmPackages.openmp
   ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/curv3d/curv";
     license = licenses.asl20;
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "curv";
   };

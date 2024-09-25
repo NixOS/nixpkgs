@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional stdenv.isLinux libuuid;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libuuid;
 
   passthru.updateScript = unstableGitUpdater {
     tagPrefix = "v";

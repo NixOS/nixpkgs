@@ -98,12 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
         # wants http connection
         "test/sql/copy/csv/recursive_query_csv.test"
         "test/sql/copy/csv/test_mixed_lines.test"
-      ] ++ lib.optionals stdenv.isAarch64 [
+      ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
         "test/sql/function/list/aggregates/skewness.test"
       ]);
-      LD_LIBRARY_PATH = lib.optionalString stdenv.isDarwin "DY" + "LD_LIBRARY_PATH";
+      LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstallCheck

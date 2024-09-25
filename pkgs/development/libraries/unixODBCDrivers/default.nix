@@ -39,7 +39,7 @@
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ unixODBC openssl libiconv zlib ]
-      ++ lib.optionals stdenv.isDarwin [ libkrb5 ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libkrb5 ];
 
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"
@@ -50,13 +50,13 @@
       "-DWITH_IODBC=OFF"
     ];
 
-    buildFlags = if stdenv.isDarwin then [ "maodbc" ] else null;
+    buildFlags = if stdenv.hostPlatform.isDarwin then [ "maodbc" ] else null;
 
     env = lib.optionalAttrs stdenv.cc.isGNU {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
     };
 
-    installTargets = if stdenv.isDarwin then [ "install/fast" ] else null;
+    installTargets = if stdenv.hostPlatform.isDarwin then [ "install/fast" ] else null;
 
     # see the top of the file for an explanation
     passthru = {
@@ -174,7 +174,7 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
+      broken = stdenv.hostPlatform.isDarwin;
       description = "ODBC Driver ${versionMajor} for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
@@ -191,7 +191,7 @@
     versionMajor = "18";
     versionMinor = "1";
     versionAdditional = "1.1";
-    versionSuffix = lib.optionalString stdenv.isLinux "-1";
+    versionSuffix = lib.optionalString stdenv.hostPlatform.isLinux "-1";
 
     src = fetchurl {
       url = {
@@ -209,7 +209,7 @@
     };
 
     nativeBuildInputs =
-      if stdenv.isDarwin
+      if stdenv.hostPlatform.isDarwin
       then
         [
           # Fix up the names encoded into the dylib, and make them absolute.
@@ -221,12 +221,12 @@
           patchelf
         ];
 
-    unpackPhase = lib.optionalString stdenv.isLinux ''
+    unpackPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
       dpkg -x $src ./
     '';
 
     installPhase =
-      if stdenv.isDarwin
+      if stdenv.hostPlatform.isDarwin
       then
         ''
           mkdir -p $out
@@ -240,14 +240,14 @@
         '';
 
     # Replace the hard-coded paths in the dylib with nixpkgs equivalents.
-    fixupPhase = lib.optionalString stdenv.isDarwin ''
+    fixupPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
       ${stdenv.cc.bintools.targetPrefix}install_name_tool \
         -change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib \
         -change /opt/homebrew/lib/libodbcinst.2.dylib ${unixODBC}/lib/libodbcinst.2.dylib \
         $out/${finalAttrs.passthru.driver}
     '';
 
-    postFixup = lib.optionalString stdenv.isLinux ''
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
       patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl libkrb5 libuuid stdenv.cc.cc ]} \
         $out/${finalAttrs.passthru.driver}
     '';
@@ -255,7 +255,7 @@
     # see the top of the file for an explanation
     passthru = {
       fancyName = "ODBC Driver ${finalAttrs.versionMajor} for SQL Server";
-      driver = "lib/libmsodbcsql${if stdenv.isDarwin then ".${finalAttrs.versionMajor}.dylib" else "-${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.so.${finalAttrs.versionAdditional}"}";
+      driver = "lib/libmsodbcsql${if stdenv.hostPlatform.isDarwin then ".${finalAttrs.versionMajor}.dylib" else "-${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.so.${finalAttrs.versionAdditional}"}";
     };
 
     meta = with lib; {
@@ -304,7 +304,7 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
+      broken = stdenv.hostPlatform.isDarwin;
       description = "Amazon Redshift ODBC driver";
       homepage = "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];

@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ pongo1231 ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # configure: error: cannot find required auxiliary files: ltmain.sh
+    broken = stdenv.hostPlatform.isDarwin; # configure: error: cannot find required auxiliary files: ltmain.sh
   };
 }

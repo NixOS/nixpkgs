@@ -32,7 +32,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ setuptools ]))
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild.xcrun
   ];

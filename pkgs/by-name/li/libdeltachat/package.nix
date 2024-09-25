@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     pkg-config
     rustPlatform.cargoSetupHook
     cargo
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     openssl
     sqlcipher
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration

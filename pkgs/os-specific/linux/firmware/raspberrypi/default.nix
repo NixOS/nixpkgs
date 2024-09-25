@@ -3,13 +3,13 @@
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20240902";
+  version = "1.20240924";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    hash = "sha256-DN+NlesZ8YfuVwLKQSHckvpNZxqsbKRflOcS3ShO3Ss=";
+    hash = "sha256-r6kte+rZQliLEQMNMT1ZqbvE0oCWjkCYk8NfVHl5lQY=";
   };
 
   installPhase = ''
@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ dezgeg ];
     # Hash mismatch on source, mystery.
     # Maybe due to https://github.com/NixOS/nix/issues/847
-    broken = stdenvNoCC.isDarwin;
+    broken = stdenvNoCC.hostPlatform.isDarwin;
   };
 }

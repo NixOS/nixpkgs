@@ -15,7 +15,7 @@
 , libjpeg
 , darwin
 , gumbo
-, enableX11 ? (!stdenv.isDarwin)
+, enableX11 ? (!stdenv.hostPlatform.isDarwin)
 , libX11
 , libXext
 , libXi
@@ -103,16 +103,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
-    ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
     ++ lib.optionals (enableCxx || enablePython) [ (python3.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ps.libclang ])) ]
     ++ lib.optionals (enablePython) [ which swig ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames xcbuild ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
     ++ lib.optionals enableCurl [ curl openssl ]
     ++ lib.optionals enableGL (
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
       else
         [ freeglut-mupdf libGLU ]
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-  '' + (lib.optionalString (stdenv.isDarwin) ''
+  '' + (lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     for exe in $bin/bin/*; do
       install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
     done
@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/${python3.sitePackages}/mupdf
     cp build/*/_mupdf.so $out/${python3.sitePackages}/mupdf
     cp build/*/mupdf.py $out/${python3.sitePackages}/mupdf/__init__.py
-  '' + lib.optionalString (stdenv.isDarwin) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/mupdf/_mupdf.so
   ''));
 

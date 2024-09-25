@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     # See https://github.com/NixOS/nixpkgs/issues/85306
     (lib.cmakeBool "LICENSING_PROVIDER" false)
     (lib.cmakeBool "Mapper_MANUAL_QTHELP" false)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # FindGDAL is broken and always finds /Library/Framework unless this is
     # specified
     (lib.cmakeFeature "GDAL_INCLUDE_DIR" "${gdal}/include")

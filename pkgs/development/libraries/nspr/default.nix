@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd nspr
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace '@executable_path/' "$out/lib/"
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
-  ] ++ lib.optional stdenv.is64bit "--enable-64bit";
+  ] ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
   postInstall = ''
     find $out -name "*.a" -delete
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 

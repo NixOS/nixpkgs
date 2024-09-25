@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mpc-qt.github.io";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ romildo ];
     mainProgram = "mpc-qt";
   };

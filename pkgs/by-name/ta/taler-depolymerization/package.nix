@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
     cp docs/*.conf $out/share/examples
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin (
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
     [
       CoreFoundation

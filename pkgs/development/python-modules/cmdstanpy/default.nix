@@ -77,7 +77,7 @@ buildPythonPackage rec {
       "test_pathfinder_threads"
       "test_save_profile"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_init_types" # CmdStan error: error during processing Operation not permitted
     ];
 

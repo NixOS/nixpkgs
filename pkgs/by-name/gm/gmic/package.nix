@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
   '';

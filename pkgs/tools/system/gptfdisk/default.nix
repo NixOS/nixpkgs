@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs gdisk_test.sh
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile.mac --replace \
       "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
     substituteInPlace Makefile.mac --replace \
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       "/usr/local/Cellar/ncurses/6.2/lib/libncurses.dylib" "${ncurses.out}/lib/libncurses.dylib"
   '';
 
-  buildPhase = lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
+  buildPhase = lib.optionalString stdenv.hostPlatform.isDarwin "make -f Makefile.mac";
   buildInputs = [ libuuid popt icu ncurses ];
 
   installPhase = ''

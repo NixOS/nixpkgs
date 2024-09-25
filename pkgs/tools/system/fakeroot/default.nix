@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-j1qSMPNCtAxClqYqWkRNQmtxkitYi7g/9KtQ5XqcX3w=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     ./einval.patch
 
     # patches needed for musl libc, borrowed from alpine packaging.
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ autoreconfHook po4a ];
-  buildInputs = lib.optional (!stdenv.isDarwin) libcap;
+  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
 
   postUnpack = ''
     sed -i \

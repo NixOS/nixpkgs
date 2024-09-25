@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=use-after-free"
    ]) ++ lib.optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
+  patchPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
   '';
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Free interpreter for the APL programming language";
     homepage    = "https://www.gnu.org/software/apl/";
     license     = licenses.gpl3Plus;

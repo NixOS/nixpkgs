@@ -44,7 +44,7 @@ buildPythonPackage rec {
     hash = "sha256-WeoZE2TPBAhzBBcZNQqoiqvribMCLSZWk/XpdMydvCQ=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -100,7 +100,7 @@ buildPythonPackage rec {
     "tests/test_swf.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Segmentation fault
     "test_bayer_write"
     # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation

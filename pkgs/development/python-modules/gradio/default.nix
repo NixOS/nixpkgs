@@ -160,7 +160,7 @@ buildPythonPackage rec {
       export HOME=$TMPDIR
       cat ${./conftest-skip-network-errors.py} >> test/conftest.py
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # OSError: [Errno 24] Too many open files
       ulimit -n 4096
     '';
@@ -195,7 +195,7 @@ buildPythonPackage rec {
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky on darwin (depend on port availability)
     "test_all_status_messages"
     "test_async_generators"

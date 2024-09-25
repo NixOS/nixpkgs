@@ -17,7 +17,7 @@ let
   # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
   # Forcing it to clang 12 fixes the issue.
   buildRustPackage =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
     else
       rustPlatform.buildRustPackage;
@@ -44,7 +44,7 @@ buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     libiconv
     Security

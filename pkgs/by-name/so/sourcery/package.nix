@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     inherit (platformInfo) platform hash;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ zlib ];
 

@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
 
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Story and a puzzle game, where you solve a variety of puzzle";
     mainProgram = "syzygy";
     homepage = "https://mdsteele.games/syzygy";

@@ -91,7 +91,7 @@ buildPythonPackage rec {
           "test_verbose_output"
           "test_requirement_installation"
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # Expects Apple's Python and its quirks
           "test_can_get_venv_paths_with_conflicting_default_scheme"
         ];

@@ -8,7 +8,7 @@
 , hackrf_source ? true, hackrf
 , limesdr_source ? true, limesuite
 , perseus_source ? false    # needs libperseus-sdr, not yet available in nixpks
-, plutosdr_source ? stdenv.isLinux, libiio, libad9361
+, plutosdr_source ? stdenv.hostPlatform.isLinux, libiio, libad9361
 , rfspace_source ? true
 , rtl_sdr_source ? true, rtl-sdr-osmocom, libusb1  # osmocom better w/ rtlsdr v4
 , rtl_tcp_source ? true
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ glfw glew fftwFloat volk zstd ]
-    ++ lib.optional stdenv.isDarwin AppKit
-    ++ lib.optional stdenv.isLinux libX11
+    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit
+    ++ lib.optional stdenv.hostPlatform.isLinux libX11
     ++ lib.optional airspy_source airspy
     ++ lib.optional airspyhf_source airspyhf
     ++ lib.optional bladerf_source libbladeRF
