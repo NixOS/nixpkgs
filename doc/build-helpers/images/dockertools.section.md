@@ -516,7 +516,7 @@ This allows the function to produce reproducible images.
 `created` (String; _optional_)
 
 : Specifies the time of creation of the generated image.
-  This date will be used for the image metadata, and as the default value for `mtime`.
+  This date will be used for the image metadata.
   This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
 
   :::{.caution}
@@ -535,7 +535,7 @@ This allows the function to produce reproducible images.
   Using `"now"` also means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
   :::
 
-  _Default value:_ the same value as `created`.
+  _Default value:_ `"1970-01-01T00:00:01Z"`.
 
 `uid` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-uid}
 `gid` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-gid}

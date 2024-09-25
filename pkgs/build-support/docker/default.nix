@@ -907,7 +907,7 @@ rec {
     , config ? { }
     , architecture ? defaultArchitecture
     , created ? "1970-01-01T00:00:01Z"
-    , mtime ? created
+    , mtime ? "1970-01-01T00:00:01Z"
     , uid ? 0
     , gid ? 0
     , uname ? "root"
