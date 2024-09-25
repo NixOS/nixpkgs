@@ -21581,6 +21581,9 @@ with pkgs;
   };
 
   libunwind =
+    # Use the system unwinder in the SDK but provide a compatibility package to:
+    # 1. avoid evaluation errors with setting `unwind` to `null`; and
+    # 2. provide a `.pc` for compatibility with packages that expect to find libunwind that way.
     if stdenv.hostPlatform.isDarwin then darwin.libunwind
     else if stdenv.hostPlatform.system == "riscv32-linux" then llvmPackages.libunwind
     else callPackage ../development/libraries/libunwind { };
