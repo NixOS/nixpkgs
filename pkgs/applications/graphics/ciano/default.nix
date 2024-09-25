@@ -3,17 +3,20 @@
 , fetchFromGitHub
 , desktop-file-utils
 , ffmpeg
-, granite
-, gtk
+, pantheon
+, gtk3
 , imagemagick
 , meson
 , ninja
 , pkg-config
-, python
+, python3
 , vala
 , wrapGAppsHook3
 }:
 
+let
+  inherit (pantheon) granite;
+in
 stdenv.mkDerivation rec {
   pname = "ciano";
   version = "0.2.4";
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python
+    python3
     vala
     wrapGAppsHook3
   ];
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     imagemagick
     granite
-    gtk
+    gtk3
   ];
 
   postPatch = ''

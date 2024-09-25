@@ -4200,11 +4200,7 @@ with pkgs;
 
   burpsuite = callPackage ../tools/networking/burpsuite { };
 
-  ciano = callPackage ../applications/graphics/ciano {
-    inherit (pantheon) granite;
-    python = python3;
-    gtk = gtk3;
-  };
+  ciano = callPackage ../applications/graphics/ciano { };
 
   c3d = callPackage ../applications/graphics/c3d {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
