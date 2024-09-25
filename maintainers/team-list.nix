@@ -172,6 +172,15 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  cosmic = {
+    members = [
+      aleksana
+    ];
+    scope = "Maintain the COSMIC desktop environment.";
+    shortName = "COSMIC";
+    enableFeatureFreezePing = true;
+  };
+
   cuda = {
     members = [
       connorbaker
