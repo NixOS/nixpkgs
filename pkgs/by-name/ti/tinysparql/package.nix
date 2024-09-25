@@ -27,6 +27,7 @@
 , avahi
 , systemd
 , dbus
+, man-db
 , writeText
 , testers
 }:
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    man-db
   ];
 
   mesonFlags = [
@@ -118,6 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
       utils/data-generators/cc/generate \
       docs/reference/libtracker-sparql/embed-files.py \
       docs/reference/libtracker-sparql/generate-svgs.sh
+
+    # File "/build/tinysparql-3.8.0/tests/functional-tests/test_cli.py", line 233, in test_help
+    # self.assertIn("TINYSPARQL-IMPORT(1)", output, "Manpage not found")
+    # AssertionError: 'TINYSPARQL-IMPORT(1)' not found in '\x1b[4mTINYSPARQL-IMPORT\x1b[24m(1) ...'
+    substituteInPlace tests/functional-tests/test_cli.py --replace-fail "TINYSPARQL-IMPORT(1)" "TINYSPARQL-IMPORT"
   '';
 
   preCheck =
