@@ -7742,10 +7742,6 @@ with pkgs;
 
   fpm = callPackage ../tools/package-management/fpm { };
 
-  fprintd = callPackage ../tools/security/fprintd { };
-
-  fprintd-tod = callPackage ../tools/security/fprintd/tod.nix { };
-
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
@@ -21067,8 +21063,6 @@ with pkgs;
   libfm-extra = libfm.override {
     extraOnly = true;
   };
-
-  libfprint = callPackage ../development/libraries/libfprint { };
 
   libfprint-tod = callPackage ../development/libraries/libfprint-tod { };
 

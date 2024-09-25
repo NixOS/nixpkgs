@@ -1,37 +1,42 @@
-{ lib, stdenv
-, fetchFromGitLab
-, pkg-config
-, gobject-introspection
-, meson
-, ninja
-, perl
-, gettext
-, gtk-doc
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, glib
-, gusb
-, dbus
-, polkit
-, nss
-, pam
-, systemd
-, libfprint
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  gobject-introspection,
+  meson,
+  ninja,
+  perl,
+  gettext,
+  gtk-doc,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  glib,
+  gusb,
+  dbus,
+  polkit,
+  nss,
+  pam,
+  systemd,
+  libfprint,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "fprintd";
   version = "1.94.3";
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libfprint";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-shH+ctQAx4fpTMWTmo3wB45ZS38Jf8RknryPabfZ6QE=";
+    repo = "fprintd";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-shH+ctQAx4fpTMWTmo3wB45ZS38Jf8RknryPabfZ6QE=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +86,10 @@ stdenv.mkDerivation rec {
   # FIXME: Ugly hack for tests to find libpam_wrapper.so
   LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
 
-  doCheck = true;
-
   mesonCheckFlags = [
     # PAM related checks are timing out
-    "--no-suite" "fprintd:TestPamFprintd"
+    "--no-suite"
+    "fprintd:TestPamFprintd"
   ];
 
   postPatch = ''
@@ -101,11 +105,11 @@ stdenv.mkDerivation rec {
       --replace "'G_DEBUG=fatal-criticals'," ""
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fprint.freedesktop.org/";
     description = "D-Bus daemon that offers libfprint functionality over the D-Bus interprocess communication bus";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
-}
+})
