@@ -25729,7 +25729,6 @@ with pkgs;
   };
 
   macfuse-stubs = callPackage ../os-specific/darwin/macfuse {
-    inherit (darwin) libtapi;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration;
   };
 
