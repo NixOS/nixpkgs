@@ -220,9 +220,9 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "${@@Q}"
     else
-        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "${@@Q}"
     fi
 }
 
@@ -237,7 +237,7 @@ targetHostCmd() {
     if [ -z "$targetHost" ]; then
         runCmd "${c[@]}" "$@"
     else
-        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
+        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "${@@Q}"
     fi
 }
 
