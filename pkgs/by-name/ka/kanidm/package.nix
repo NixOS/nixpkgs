@@ -14,6 +14,7 @@
 , bashInteractive
 , rust-jemalloc-sys
 , kanidm
+, darwin
 # If this is enabled, kanidm will be built with two patches allowing both
 # oauth2 basic secrets and admin credentials to be provisioned.
 # This is NOT officially supported (and will likely never be),
@@ -25,6 +26,7 @@
 
 let
   arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
+  dylibext = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
@@ -71,11 +73,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    udev
     openssl
     sqlite
     pam
     rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.Security
+    darwin.apple_sdk.frameworks.CoreServices
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
   ];
 
   # The UI needs to be in place before the tests are run.
@@ -101,8 +107,8 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/completions/_*
 
     # PAM and NSS need fix library names
-    mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
-    mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
+    mv $out/lib/libnss_kanidm.${dylibext} $out/lib/libnss_kanidm.${dylibext}.2
+    mv $out/lib/libpam_kanidm.${dylibext} $out/lib/pam_kanidm.${dylibext}
   '';
 
   passthru = {
@@ -130,7 +136,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ adamcstephens erictapen Flakebi ];
   };
 }
