@@ -33219,8 +33219,6 @@ with pkgs;
       else null;
   };
 
-  vivictpp = callPackage ../applications/video/vivictpp { };
-
   primusLib = callPackage ../tools/X11/primus/lib.nix {
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
   };
