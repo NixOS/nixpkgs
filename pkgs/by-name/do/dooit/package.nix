@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchPypi,
   dooit,
   python311,
   testers,
@@ -35,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     (python3.pkgs.textual.overrideAttrs (oldAttrs: rec {
       version = "0.47.0";
-      src = python3.pkgs.fetchPypi {
+      src = fetchPypi {
         pname = "textual";
         version = "0.47.0";
         sha256 = "sha256-YTkSBBqoc55O9yi7KYttAPK/4/5SisZLwMzAb0/2VuA=";
