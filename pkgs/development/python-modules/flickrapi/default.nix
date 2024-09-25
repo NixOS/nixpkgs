@@ -9,23 +9,26 @@
   pytestCheckHook,
   responses,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "flickrapi";
   version = "2.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sybrenstuvel";
-    repo = pname;
+    repo = "flickrapi";
     rev = "version-${version}";
     hash = "sha256-vRZrlXKI0UDdmDevh3XUngH4X8G3VlOCSP0z/rxhIgw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     requests-toolbelt
     requests-oauthlib
@@ -61,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface to the Flickr API";
     homepage = "https://stuvel.eu/flickrapi";
+    changelog = "https://github.com/sybrenstuvel/flickrapi/blob/version-${version}/CHANGELOG.md";
     license = licenses.psfl;
     maintainers = with maintainers; [ obadz ];
   };
