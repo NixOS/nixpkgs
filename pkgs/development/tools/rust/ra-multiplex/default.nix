@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/ra-multiplex \
-      --suffix PATH ${lib.makeBinPath [ rust-analyzer ]}
+      --suffix PATH : ${lib.makeBinPath [ rust-analyzer ]}
   '';
 
   meta = with lib; {
