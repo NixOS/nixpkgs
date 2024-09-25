@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs:{
   pname = "libfprint";
-  version = "1.94.6";
+  version = "1.94.8";
   outputs = [
     "out"
     "devdoc"
@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs:{
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libfprint";
-    repo = pname;
+    repo = "libfprint";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lDnAXWukBZSo8X6UEVR2nOMeVUi/ahnJgx2cP+vykZ8=";
+    hash = "sha256-PZr4ZeVnuCKYfI8CKvRqBwalxsz9Ka17kSuLflwl7mE=";
   };
 
   postPatch = ''
