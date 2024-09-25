@@ -105,13 +105,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.2.1";
+  version = "4.2.2";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-+Y4JbzeK+30fO8WdEmvjOeQjm094ofsUhRFXs9mkcxI=";
+      hash = "sha256-wv9EwB4DXSVS5K+lb+7gU3pTrMDO/ELeV2eErivfsWU=";
     })
     (fetchgit {
       name = "assets";
