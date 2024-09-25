@@ -1028,12 +1028,6 @@
     githubId = 30437811;
     name = "Alex Andrews";
   };
-  alibabzo = {
-    email = "alistair.bill@gmail.com";
-    github = "alistairbill";
-    githubId = 2822871;
-    name = "Alistair Bill";
-  };
   alirezameskin = {
     email = "alireza.meskin@gmail.com";
     github = "alirezameskin";
