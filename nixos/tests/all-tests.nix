@@ -694,7 +694,7 @@ in {
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   nixos-rebuild-install-bootloader = handleTestOn ["x86_64-linux"] ./nixos-rebuild-install-bootloader.nix {};
-  nixos-rebuild-specialisations = handleTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix {};
+  nixos-rebuild-specialisations = runTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix;
   nixos-rebuild-target-host = runTest ./nixos-rebuild-target-host.nix;
   nixos-rebuild-target-host-legacy = runTest {
     name = mkForce "nixos-rebuild-target-host-legacy";
