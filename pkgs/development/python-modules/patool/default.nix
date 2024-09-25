@@ -38,15 +38,15 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "2.1.1";
+  version = "3.0.0";
   format = "setuptools";
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
     repo = pname;
-    rev = "upstream/${version}";
-    hash = "sha256-B2P6JldMOAxr4WS+wST+kRVvEm41zH3Nh5LLKoFOws4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-okJLc79bfvna4nRKfdzwwG7zVfJ53RDkVb4U3rN34c0=";
   };
 
   postPatch = ''
