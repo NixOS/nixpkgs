@@ -37,7 +37,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libinput udev ];
+  buildInputs = [
+    libinput
+    udev
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/polkit-1/rules.d
+    cp data/polkit-1/rules.d/*.rules $out/share/polkit-1/rules.d/
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-settings-daemon";
