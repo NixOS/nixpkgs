@@ -204,8 +204,6 @@ stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = "258";
 
-  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
-  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
