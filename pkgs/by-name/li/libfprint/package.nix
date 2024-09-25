@@ -18,7 +18,7 @@
   docbook_xml_dtd_43,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfprint";
   version = "1.94.8";
   outputs = [
