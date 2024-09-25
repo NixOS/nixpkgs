@@ -1306,7 +1306,7 @@ for example:
   ] ++ lib.optionals (pythonAtLeast "3.8") [
     # broken due to python3.8 async changes
     "async"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
     # can fail when building with other packages
     "socket"
   ];
