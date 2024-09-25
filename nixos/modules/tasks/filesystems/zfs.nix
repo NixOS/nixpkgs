@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 #
 # TODO: zfs tunables
 
@@ -56,7 +56,9 @@ let
   # sufficient amount of time has passed that we can assume it won't be. In the
   # latter case it makes one last attempt at importing, allowing the system to
   # (eventually) boot even with a degraded pool.
-  importLib = {zpoolCmd, awkCmd, cfgZfs}: ''
+  importLib = {zpoolCmd, awkCmd, pool}: let
+    devNodes = if pool != null && cfgZfs.pools ? ${pool} then cfgZfs.pools.${pool}.devNodes else cfgZfs.devNodes;
+  in ''
     # shellcheck disable=SC2013
     for o in $(cat /proc/cmdline); do
       case $o in
@@ -67,7 +69,7 @@ let
     done
     poolReady() {
       pool="$1"
-      state="$("${zpoolCmd}" import -d "${cfgZfs.devNodes}" 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
+      state="$("${zpoolCmd}" import -d "${devNodes}" 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
       if [[ "$state" = "ONLINE" ]]; then
         return 0
       else
@@ -82,7 +84,7 @@ let
     poolImport() {
       pool="$1"
       # shellcheck disable=SC2086
-      "${zpoolCmd}" import -d "${cfgZfs.devNodes}" -N $ZFS_FORCE "$pool"
+      "${zpoolCmd}" import -d "${devNodes}" -N $ZFS_FORCE "$pool"
     }
   '';
 
@@ -143,7 +145,7 @@ let
         # See comments at importLib definition.
         zpoolCmd = "${cfgZfs.package}/sbin/zpool";
         awkCmd = "${pkgs.gawk}/bin/awk";
-        inherit cfgZfs;
+        inherit pool;
       }) + ''
         if ! poolImported "${pool}"; then
           echo -n "importing ZFS pool \"${pool}\"..."
@@ -326,6 +328,23 @@ in
           Timeout in seconds to wait for password entry for decrypt at boot.
 
           Defaults to 0, which waits forever.
+        '';
+      };
+
+      pools = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule {
+          options = {
+            devNodes = lib.mkOption {
+              type = lib.types.path;
+              default = cfgZfs.devNodes;
+              defaultText = "config.boot.zfs.devNodes";
+              description = options.boot.zfs.devNodes.description;
+            };
+          };
+        });
+        default = { };
+        description = ''
+          Configuration for individual pools to override global defaults.
         '';
       };
 
@@ -610,7 +629,7 @@ in
             # See comments at importLib definition.
             zpoolCmd = "zpool";
             awkCmd = "awk";
-            inherit cfgZfs;
+            pool = null;
           })] ++ (map (pool: ''
             echo -n "importing root ZFS pool \"${pool}\"..."
             # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
