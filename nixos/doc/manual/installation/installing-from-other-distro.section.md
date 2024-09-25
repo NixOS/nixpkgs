@@ -247,7 +247,7 @@ The first steps to all these are the same:
 
     ```ShellSession
     $ sudo mv -v /boot /boot.bak &&
-    sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+    sudo /nix/var/nix/profiles/system/bin/apply boot
     ```
 
     Cross your fingers, reboot, hopefully you should get a NixOS prompt!
