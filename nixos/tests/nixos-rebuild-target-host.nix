@@ -16,6 +16,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       environment.systemPackages = [ pkgs.passh ];
 
       system.includeBuildDependencies = true;
+      # Just so that dependencies for the target build are pulled in:
+      system.switch.enable = true;
 
       virtualisation = {
         cores = 2;
@@ -55,6 +57,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           system.build = {
             inherit targetConfig;
           };
+          system.switch.enable = true;
 
           networking.hostName = "target";
         }
