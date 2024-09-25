@@ -33,9 +33,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "defusedxml" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncstdlib
     attrs
     defusedxml
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     description = "Automation Library for Denon AVR receivers";
     homepage = "https://github.com/ol-iver/denonavr";
     changelog = "https://github.com/ol-iver/denonavr/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
   };
 }
