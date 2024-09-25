@@ -6,7 +6,7 @@
   wineRelease,
   patches,
   moltenvk,
-  buildScript ? null, configureFlags ? [], mainProgram ? "wine"
+  buildScript ? null, configureFlags ? [], mainProgram ? "wine",
 }:
 
 with import ./util.nix { inherit lib; };
@@ -23,12 +23,10 @@ let
     };
   } ./setup-hook-darwin.sh;
 
-  darwinFrameworks = lib.optionals stdenv.hostPlatform.isDarwin (
-    toBuildInputs pkgArches (pkgs: with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
-      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
-    ])
-  );
+  # Using the 14.4 SDK allows Wine to use `os_sync_wait_on_address` for its futex implementation on Darwin.
+  # It does an availability check, so older systems will still work.
+  darwinFrameworks = toBuildInputs pkgArches (pkgs: [ pkgs.apple-sdk_14 ]);
+
   # Building Wine with these flags isn’t supported on Darwin. Using any of them will result in an evaluation failures
   # because they will put Darwin in `meta.badPlatforms`.
   darwinUnsupportedFlags = [
