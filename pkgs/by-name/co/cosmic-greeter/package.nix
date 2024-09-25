@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, rust
 , rustPlatform
 , cmake
 , coreutils
