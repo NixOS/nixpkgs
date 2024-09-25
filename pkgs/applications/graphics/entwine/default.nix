@@ -1,20 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , cmake
 , pdal
 , curl
 , openssl
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "entwine";
   version = "unstable-2023-04-27";
 
   src = fetchFromGitHub {
     owner = "connormanning";
     repo = "entwine";
-    rev = "8bd179c38e6da1688f42376b88ff30427672c4e3";
+    rev = version;
     sha256 = "sha256-RlNxTtqxQoniI1Ugj5ot0weu7ji3WqDJZpMu2n8vBkw=";
   };
 
@@ -27,6 +28,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
   ];
+
+  passthru.updateScript = gitUpdater {};
 
   meta = with lib; {
     description = "Point cloud organization for massive datasets";
