@@ -19697,7 +19697,6 @@ with pkgs;
     inherit (stdenv.targetPlatform) libc;
   in     if stdenv.targetPlatform.isMinGW then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsd.headers or netbsd.headers
-    else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else null;
 
   # We can choose:
@@ -19720,7 +19719,7 @@ with pkgs;
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
-      else targetPackages.darwin.LibsystemCross or (throw "don't yet have a `targetPackages.darwin.LibsystemCross for ${stdenv.targetPlatform.config}`")
+      else targetPackages.darwin.libSystem or darwin.libSystem
     else if name == "fblibc" then targetPackages.freebsd.libc or freebsd.libc
     else if name == "oblibc" then targetPackages.openbsd.libc or openbsd.libc
     else if name == "nblibc" then targetPackages.netbsd.libc or netbsd.libc
