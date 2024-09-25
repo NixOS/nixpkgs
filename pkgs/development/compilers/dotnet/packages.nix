@@ -1,17 +1,97 @@
-{ stdenv
-, callPackage
-, vmr
-, xmlstarlet
-, strip-nondeterminism
-, zip
+{
+  stdenvNoCC,
+  lib,
+  callPackage,
+  vmr,
+  xmlstarlet,
+  strip-nondeterminism,
+  zip,
+  nugetPackageHook,
+  fallbackTargetPackages ? { },
 }:
 
 let
-  mkCommon = callPackage ./common.nix {};
+  mkCommon = callPackage ./common.nix { };
   inherit (vmr) targetRid releaseManifest;
 
-in {
-  inherit vmr;
+  # TODO: do this properly
+  hostRid = targetRid;
+
+  mkPackage =
+    pname: version:
+    stdenvNoCC.mkDerivation {
+      inherit pname version;
+
+      src = vmr;
+      dontUnpack = true;
+
+      nativeBuildInputs = [
+        xmlstarlet
+        nugetPackageHook
+      ];
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p "$out"
+
+        pushd "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}
+        pushd ${pname}.${version}.nupkg
+
+        xmlstarlet \
+          sel -t \
+          -m /_:package/_:metadata \
+          -v _:id -nl \
+          -v _:version -nl \
+          *.nuspec | (
+          read id
+          read version
+          id=''${id,,}
+          version=''${version,,}
+          mkdir -p "$out"/share/nuget/packages/"$id"
+          cp -r . "$out"/share/nuget/packages/"$id"/"$version"
+          chmod +w "$out"/share/nuget/packages/"$id"/"$version"
+          echo {} > "$out"/share/nuget/packages/"$id"/"$version"/.nupkg.metadata
+        )
+
+        popd
+        popd
+
+        runHook postInstall
+      '';
+    };
+
+  packages =
+    [
+      (mkPackage "Microsoft.AspNetCore.App.Ref" aspnetcore.version)
+      (mkPackage "Microsoft.NETCore.DotNetAppHost" runtime.version)
+      (mkPackage "Microsoft.NETCore.App.Ref" runtime.version)
+      (mkPackage "Microsoft.DotNet.ILCompiler" runtime.version)
+      (mkPackage "Microsoft.NET.ILLink.Tasks" runtime.version)
+      (mkPackage "Microsoft.NETCore.App.Crossgen2.${hostRid}" runtime.version)
+      (mkPackage "runtime.${hostRid}.Microsoft.DotNet.ILCompiler" runtime.version)
+    ]
+    ++ lib.optionals (lib.versionOlder runtime.version "9") [
+      (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
+      (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+      (mkPackage "Microsoft.NETCore.DotNetHostResolver" runtime.version)
+    ];
+
+  targetPackages = fallbackTargetPackages // {
+    ${targetRid} =
+      [
+        (mkPackage "Microsoft.AspNetCore.App.Runtime.${targetRid}" aspnetcore.version)
+        (mkPackage "Microsoft.NETCore.App.Host.${targetRid}" runtime.version)
+        (mkPackage "Microsoft.NETCore.App.Runtime.${targetRid}" runtime.version)
+        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
+      ]
+      ++ lib.optionals (lib.versionOlder runtime.version "9") [
+        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
+        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+        (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+      ];
+  };
+
   sdk = mkCommon "sdk" rec {
     pname = "dotnet-sdk";
     version = releaseManifest.sdkVersion;
@@ -25,7 +105,10 @@ in {
       zip
     ];
 
-    outputs = [ "out" "packages" "artifacts" ];
+    outputs = [
+      "out"
+      "artifacts"
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -35,41 +118,11 @@ in {
       mkdir "$out"/bin
       ln -s "$out"/dotnet "$out"/bin/dotnet
 
-      mkdir -p "$packages" "$artifacts"
+      mkdir -p "$artifacts"
       cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
       chmod +w -R "$artifacts"
 
       local package
-
-      for package in "$artifacts"/*.nupkg; do
-        local copy
-        case "$(basename "$package")" in
-          *Microsoft.NET.* | \
-          *Microsoft.ILLink.* | \
-          *Microsoft.Tasks.* | \
-          *Microsoft.NETCore.* | \
-          *Microsoft.DotNet.* | \
-          *Microsoft.AspNetCore.*) copy=1 ;;
-          *) copy= ;;
-        esac
-        if [[ -n $copy ]]; then
-          echo copying "$package" to packages
-          xmlstarlet \
-            sel -t \
-            -m /_:package/_:metadata \
-            -v _:id -nl \
-            -v _:version -nl \
-            "$package"/*.nuspec | (
-            read id
-            read version
-            id=''${id,,}
-            version=''${version,,}
-            mkdir -p "$packages"/share/nuget/packages/"$id"
-            cp -r "$package" "$packages"/share/nuget/packages/"$id"/"$version"
-            echo {} > "$packages"/share/nuget/packages/"$id"/"$version"/.nupkg.metadata
-          )
-        fi
-      done
 
       for package in "$artifacts"/{,SourceBuildReferencePackages/}*.nupkg; do
         echo packing "$package" to artifacts
@@ -84,6 +137,8 @@ in {
 
     passthru = {
       inherit (vmr) icu targetRid hasILCompiler;
+
+      inherit packages targetPackages;
     };
 
     meta = vmr.meta // {
@@ -143,4 +198,13 @@ in {
       mainProgram = "dotnet";
     };
   };
+in
+{
+  inherit
+    vmr
+    sdk
+    runtime
+    aspnetcore
+    ;
+
 }
