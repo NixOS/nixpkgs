@@ -790,7 +790,6 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostSudoCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
@@ -841,12 +840,56 @@ else # [ -n "$rollback" ]
 fi
 
 
+hasApplyScript=
+# If we're doing a deployment-like action, we need to know whether the config has
+# an apply script. NixOS versions >= 24.11 should be deployed with toplevel/bin/apply.
+if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+    hasApplyScriptOut="$(targetHostCmd sh -c "if test -e $pathToConfig/bin/apply; then echo __has-apply-script__; elif test -e $pathToConfig/bin; then echo __has-no-apply-script__; else echo $pathToConfig is gone; fi
+    ")"
+    # SSH can be messy (e.g. when user has a shell rc file that prints to stdout)
+    # So we only check for the substring
+    case "$hasApplyScriptOut" in
+        *__has-apply-script__*)
+            hasApplyScript=1
+            ;;
+        *__has-no-apply-script__*)
+            hasApplyScript=
+            ;;
+        *)
+            # Unlikely
+            echo "$hasApplyScriptOut" 1>&2
+            log "error: $pathToConfig could not be read"
+            exit 1
+            ;;
+    esac
+fi
+
+# switch|boot|test|dry-activate
+#
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    # Using systemd-run here to protect against PTY failures/network
-    # disconnections during rebuild.
-    # See: https://github.com/NixOS/nixpkgs/issues/39118
+if [[ -n "$hasApplyScript" ]] \
+    && [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+    cmd=("$pathToConfig/bin/apply" "$action" "--profile" "$profile")
+    if [[ -n "$specialisation" ]]; then
+        cmd+=("--specialisation" "$specialisation")
+    fi
+    if [[ -n "$installBootloader" ]]; then
+        cmd+=("--install-bootloader")
+    fi
+    targetHostSudoCmd "${cmd[@]}"
+elif [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+    # Legacy, without apply script, NixOS < 24.11
+
+    if [[ "$action" = switch || "$action" = boot ]]; then
+        if [[ -z "$rollback" ]]; then
+            : # We've already switched it so that hasApplyScript would check the right $pathToConfig
+        else
+            targetHostSudoCmd nix-env -p "$profile" --set "$pathToConfig"
+        fi
+    fi
+
+    # Legacy logic to support deploying NixOS <24.11; see hasApplyScript
     cmd=(
         "systemd-run"
         "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value
