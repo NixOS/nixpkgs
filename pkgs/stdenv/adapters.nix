@@ -321,17 +321,9 @@ rec {
   # `sdkVersion` can be any of the following:
   # * A version string indicating the requested SDK version; or
   # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
-  overrideSDK = import ./darwin/override-sdk.nix {
-    inherit lib extendMkDerivationArgs;
-    inherit (pkgs)
-      stdenvNoCC
-      pkgsBuildBuild
-      pkgsBuildHost
-      pkgsBuildTarget
-      pkgsHostHost
-      pkgsHostTarget
-      pkgsTargetTarget;
-  };
+  #
+  # Note: `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
+  overrideSDK = pkgs.callPackage ./darwin/override-sdk.nix { inherit lib extendMkDerivationArgs; };
 
   withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
     bintools = let
