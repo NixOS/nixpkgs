@@ -1,19 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, docbook_xml_dtd_45
-, pkg-config
-, boost
-, clucene_core_2
-, docbook_xsl_ns
-, perlPackages
-, sword
-, qt5
+{
+  lib,
+  boost,
+  clucene_core_2,
+  cmake,
+  docbook_xml_dtd_45,
+  docbook_xsl_ns,
+  fetchFromGitHub,
+  perlPackages,
+  pkg-config,
+  qt5,
+  stdenv,
+  sword,
 }:
 
 let
-  inherit (qt5) qtbase qtsvg qttools wrapQtAppsHook;
+  inherit (qt5)
+    qtbase
+    qtsvg
+    qttools
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
@@ -31,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_45
     pkg-config
     wrapQtAppsHook
+    perlPackages.Po4a
   ];
 
   buildInputs = [
     boost
     clucene_core_2
-    perlPackages.Po4a
     qtbase
     qtsvg
     qttools
@@ -49,18 +55,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DBUILD_HOWTO_PDF=OFF"
-    "-DBUILD_HANDBOOK_PDF=OFF"
-    "-DBT_DOCBOOK_XSL_HTML_CHUNK_XSL=${docbook_xsl_ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
-    "-DBT_DOCBOOK_XSL_PDF_DOCBOOK_XSL=${docbook_xsl_ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
+    (lib.cmakeBool "BUILD_HOWTO_PDF" false)
+    (lib.cmakeBool "BUILD_HANDBOOK_PDF" false)
+    (lib.cmakeFeature "BT_DOCBOOK_XSL_HTML_CHUNK_XSL" "${docbook_xsl_ns}/share/xml/docbook-xsl-ns/html/chunk.xsl")
+    (lib.cmakeFeature "BT_DOCBOOK_XSL_PDF_DOCBOOK_XSL" "${docbook_xsl_ns}/share/xml/docbook-xsl-ns/html/chunk.xsl")
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
     homepage = "http://www.bibletime.info/";
     description = "Powerful cross platform Bible study tool";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "bibletime";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 })
