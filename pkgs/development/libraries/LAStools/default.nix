@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "LAStools";
@@ -18,6 +23,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [
     "format"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
 
   nativeBuildInputs = [
     cmake
