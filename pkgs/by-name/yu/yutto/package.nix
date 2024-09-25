@@ -8,21 +8,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0-beta.40";
-  format = "pyproject";
+  version = "2.0.0-beta.43";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.9";
+  pythonRelaxDeps = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
-    rev = "v${version}";
-    hash = "sha256-gopCQ8tEhwtDFs/w+jafD3ZW/4MIrYxPcMh8SbOCwww=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ND3uE4vsFa7gPr1E2UfiebExsrj+ELN0+hqnxxOQu8Y=";
   };
 
-  nativeBuildInputs = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ hatchling ];
 
-  propagatedBuildInputs =
+  dependencies =
     with python3Packages;
     [
       httpx
