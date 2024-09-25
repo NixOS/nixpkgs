@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Collection of utility functions for Python used by mov-cli";
     homepage = "https://github.com/THEGOLDENPRO/devgoldyutils";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ roshaen ];
+    maintainers = with lib.maintainers; [ youhaveme9 ];
   };
 }
