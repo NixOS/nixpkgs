@@ -46,7 +46,8 @@ let
       extraLongDescription ? "",
       extraPatches ? [ ],
       rev ? "zfs-${version}",
-      kernelCompatible ? null,
+      kernelMinSupportedMajorMinor,
+      kernelMaxSupportedMajorMinor,
       maintainers ? (with lib.maintainers; [ amarshall ]),
       tests,
     }@innerArgs:
@@ -72,6 +73,22 @@ let
         "all"
       ];
       isAtLeast22Series = versionAtLeast version "2.2.0";
+      kernelIsCompatible =
+        kernel:
+        let
+          nextMajorMinor =
+            ver:
+            "${lib.versions.major ver}.${
+              lib.pipe ver [
+                lib.versions.minor
+                lib.toInt
+                (x: x + 1)
+                toString
+              ]
+            }";
+        in
+        (lib.versionAtLeast kernel.version kernelMinSupportedMajorMinor)
+        && (lib.versionOlder kernel.version (nextMajorMinor kernelMaxSupportedMajorMinor));
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we
@@ -158,6 +175,14 @@ let
                 systemd
               ]
             }"
+        ''
+        + ''
+          echo 'Supported Kernel versions:'
+          grep '^Linux-' META
+          echo 'Checking kernelMinSupportedMajorMinor is correct...'
+          grep --quiet '^Linux-Minimum: *${lib.escapeRegex kernelMinSupportedMajorMinor}$' META
+          echo 'Checking kernelMaxSupportedMajorMinor is correct...'
+          grep --quiet '^Linux-Maximum: *${lib.escapeRegex kernelMaxSupportedMajorMinor}$' META
         '';
 
       nativeBuildInputs =
@@ -344,7 +369,7 @@ let
 
         inherit maintainers;
         mainProgram = "zfs";
-        broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
+        broken = buildKernel && !(kernelIsCompatible kernel);
       };
     };
 in
