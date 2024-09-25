@@ -11,7 +11,7 @@
 , boost
 , glib
 , gflags
-, protobuf_21
+, protobuf
 , config
 , ocl-icd
 , buildPackages
@@ -302,7 +302,7 @@ effectiveStdenv.mkDerivation {
     gflags
     glib
     pcre2
-    protobuf_21
+    protobuf
     zlib
   ] ++ lib.optionals enablePython [
     pythonPackages.python
@@ -408,7 +408,7 @@ effectiveStdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
-    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf_21}"
+    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=${printEnabled runAccuracyTests}"
