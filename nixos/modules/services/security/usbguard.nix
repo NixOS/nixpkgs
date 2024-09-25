@@ -35,6 +35,7 @@ let
     IPCAllowedGroups=${lib.concatStringsSep " " cfg.IPCAllowedGroups}
     IPCAccessControlFiles=/var/lib/usbguard/IPCAccessControl.d/
     DeviceRulesWithPort=${lib.boolToString cfg.deviceRulesWithPort}
+    AuditBackend=${cfg.AuditBackend}
     # HACK: that way audit logs still land in the journal
     AuditFilePath=/dev/null
   '';
@@ -164,6 +165,15 @@ in
         description = ''
           A list of groupnames that the daemon will accept IPC connections
           from.
+        '';
+      };
+
+      AuditBackend = lib.mkOption {
+        type = lib.types.enum ["FileAudit" "LinuxAudit"];
+        default = "FileAudit";
+        example = "LinuxAudit";
+        description = ''
+          USBGuard audit events log backend.
         '';
       };
 
