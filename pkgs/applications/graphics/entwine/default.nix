@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Point cloud organization for massive datasets";
     homepage = "https://entwine.io/";
     license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ matthewcroughan ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ matthewcroughan ];
     platforms = platforms.linux;
     mainProgram = "entwine";
   };
