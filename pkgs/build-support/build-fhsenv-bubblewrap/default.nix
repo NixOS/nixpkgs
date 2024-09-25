@@ -125,11 +125,12 @@ let
 
   indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ${extraPreBwrapCmds}
     ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
+
+    ${extraPreBwrapCmds}
 
     # loop through all entries of root in the fhs environment, except its /etc.
     for i in ${fhsenv}/*; do
