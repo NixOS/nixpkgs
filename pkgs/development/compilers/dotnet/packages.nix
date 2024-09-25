@@ -12,7 +12,8 @@
 }:
 
 let
-  mkCommon = callPackage ./common.nix { };
+  mkWrapper = callPackage ./wrapper.nix { };
+  mkCommon = type: args: mkWrapper type (stdenvNoCC.mkDerivation args);
   inherit (vmr) targetRid releaseManifest;
 
   # TODO: do this properly

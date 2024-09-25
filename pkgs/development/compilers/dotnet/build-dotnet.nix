@@ -57,7 +57,7 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  mkCommon = callPackage ./common.nix { };
+  mkWrapper = callPackage ./wrapper.nix { };
 
   hostRid = systemToDotnetRid stdenv.hostPlatform.system;
   targetRid = systemToDotnetRid stdenv.targetPlatform.system;
@@ -91,7 +91,7 @@ let
   );
 
 in
-mkCommon type rec {
+mkWrapper type (stdenv.mkDerivation rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
@@ -222,4 +222,4 @@ mkCommon type rec {
       binaryNativeCode
     ];
   };
-}
+})
