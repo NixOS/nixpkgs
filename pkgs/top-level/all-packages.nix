@@ -3485,7 +3485,9 @@ with pkgs;
 
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
-  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod { };
+  cyclonedx-gomod = callPackage ../tools/security/cyclonedx-gomod {
+    buildGoModule = buildGo123Module;
+  };
 
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
 
