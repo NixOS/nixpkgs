@@ -547,6 +547,7 @@
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
   ./services/display-managers/default.nix
+  ./services/display-managers/cosmic-greeter.nix
   ./services/display-managers/greetd.nix
   ./services/display-managers/sddm.nix
   ./services/display-managers/ly.nix
