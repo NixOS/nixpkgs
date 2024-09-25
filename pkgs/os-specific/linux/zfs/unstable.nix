@@ -17,6 +17,7 @@ callPackage ./generic.nix args {
 
   kernelMinSupportedMajorMinor = "4.18";
   kernelMaxSupportedMajorMinor = "6.12";
+  # kernelMaxBuildableMajorMinor = ""; # Optionally use to mark newer unsupported Kernels as non-broken (they should build, though)
 
   # this package should point to a version / git revision compatible with the latest kernel release
   # IMPORTANT: Always use a tagged release candidate or commits from the

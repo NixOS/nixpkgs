@@ -48,6 +48,7 @@ let
       rev ? "zfs-${version}",
       kernelMinSupportedMajorMinor,
       kernelMaxSupportedMajorMinor,
+      kernelMaxBuildableMajorMinor ? kernelMaxSupportedMajorMinor, # Only use for pre-release ZFS
       maintainers ? (with lib.maintainers; [ amarshall ]),
       tests,
     }@innerArgs:
@@ -88,7 +89,7 @@ let
             }";
         in
         (lib.versionAtLeast kernel.version kernelMinSupportedMajorMinor)
-        && (lib.versionOlder kernel.version (nextMajorMinor kernelMaxSupportedMajorMinor));
+        && (lib.versionOlder kernel.version (nextMajorMinor kernelMaxBuildableMajorMinor));
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we
