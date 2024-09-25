@@ -4,17 +4,17 @@
 , cmake
 , docbook_xml_dtd_45
 , pkg-config
-, wrapQtAppsHook
 , boost
 , clucene_core_2
 , docbook_xsl_ns
 , perlPackages
-, qtbase
-, qtsvg
-, qttools
 , sword
+, qt5
 }:
 
+let
+  inherit (qt5) qtbase qtsvg qttools wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
   version = "3.0.3";
