@@ -78,7 +78,10 @@ python3Packages.buildPythonApplication rec {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      pyrox0
+    ];
     mainProgram = "uv";
   };
 }
