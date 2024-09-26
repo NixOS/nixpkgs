@@ -136,7 +136,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GUI for MongoDB";
-    maintainers = with lib.maintainers; [ bryanasdev000 ];
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      friedow
+    ];
     homepage = "https://github.com/mongodb-js/compass";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.sspl;
