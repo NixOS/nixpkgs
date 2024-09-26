@@ -9361,6 +9361,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-psycopg2 = callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg2 { };
 
+  opentelemetry-instrumentation-sqlalchemy = callPackage ../development/python-modules/opentelemetry-instrumentation-sqlalchemy { };
+
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
