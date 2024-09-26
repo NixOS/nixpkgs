@@ -2,7 +2,7 @@
 # XXX: todo: support multiple upstream links
 # see http://yesican.chsoft.biz/lartc/MultihomedLinuxNetworking.html
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -41,12 +41,12 @@ let
     # mark packets coming from the internal interfaces.
     ${concatMapStrings (iface: ''
       ${iptables} -w -t nat -A nixos-nat-pre \
-        -i '${iface}' -j MARK --set-mark 1
+        -i '${iface}' -j MARK --or-mark 1
     '') cfg.internalInterfaces}
 
     # NAT the marked packets.
     ${optionalString (cfg.internalInterfaces != []) ''
-      ${iptables} -w -t nat -A nixos-nat-post -m mark --mark 1 \
+      ${iptables} -w -t nat -A nixos-nat-post -m mark --mark 1/1 \
         ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
     ''}
 
