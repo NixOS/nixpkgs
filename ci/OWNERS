@@ -177,6 +177,12 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/build-support/rust @zowoq @winterqt @figsoda
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
+# Tcl
+/pkgs/development/interpreters/tcl  @fgaz
+/pkgs/development/libraries/tk      @fgaz
+/pkgs/top-level/tcl-packages.nix    @fgaz
+/pkgs/development/tcl-modules       @fgaz
+
 # C compilers
 /pkgs/development/compilers/gcc
 /pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
