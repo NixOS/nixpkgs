@@ -670,6 +670,7 @@ in {
   nginx-etag-compression = handleTest ./nginx-etag-compression.nix {};
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
   nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-media-types = handleTest ./nginx-media-types.nix {};
   nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
   nginx-moreheaders = handleTest ./nginx-moreheaders.nix {};
   nginx-njs = handleTest ./nginx-njs.nix {};
