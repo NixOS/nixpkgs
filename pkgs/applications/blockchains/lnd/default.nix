@@ -2,16 +2,21 @@
 , fetchFromGitHub
 , lib
 , tags ? [
+    # `RELEASE_TAGS` from https://github.com/lightningnetwork/lnd/blob/master/make/release_flags.mk
     "autopilotrpc"
     "chainrpc"
     "invoicesrpc"
     "kvdb_etcd"
     "kvdb_postgres"
+    "kvdb_sqlite"
     "monitoring"
-    "routerrpc"
+    "neutrinorpc"
+    "peersrpc"
     "signrpc"
     "walletrpc"
     "watchtowerrpc"
+    # Extra tags useful for testing
+    "routerrpc"
   ]
 }:
 
