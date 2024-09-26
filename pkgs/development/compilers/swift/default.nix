@@ -5,6 +5,7 @@
 , llvmPackages
 , llvmPackages_15
 , overrideCC
+, overrideLibcxx
 }:
 
 let
@@ -28,25 +29,21 @@ let
     # we'll often run into compilation errors.
     #
     # The following selects the correct Clang version, matching the version
-    # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
-    clang = if pkgs.stdenv.hostPlatform.isDarwin
-      then
-        swiftLlvmPackages.clang.override rec {
-          libc = apple_sdk.Libsystem;
-          bintools = pkgs.bintools.override { inherit libc; };
-          # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
-          # default Darwin stdenv. Using the default libc++ avoids issues (such as crashes)
-          # that can happen when a Swift application dynamically links different versions
-          # of libc++ and libc++abi than libraries it links are using.
-          inherit (llvmPackages) libcxx;
-        }
-      else
-        swiftLlvmPackages.clang;
+    # used in Swift.
+    inherit (swiftLlvmPackages) clang;
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`.
     inherit (clang) bintools;
-    stdenv = overrideCC pkgs.stdenv clang;
+    stdenv =
+      let
+        stdenv' = overrideCC pkgs.stdenv clang;
+      in
+      # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
+      # default clang’s stdenv. Using the default libc++ avoids issues (such as crashes)
+      # that can happen when a Swift application dynamically links different versions
+      # of libc++ and libc++abi than libraries it links are using.
+      if stdenv'.cc.libcxx != null then overrideLibcxx stdenv' else stdenv';
 
     swift-unwrapped = callPackage ./compiler {
       inherit (darwin) DarwinTools sigtool;
