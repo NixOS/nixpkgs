@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, mpi } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mpi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hpcg";
@@ -37,4 +42,3 @@ stdenv.mkDerivation rec {
     mainProgram = "xhpcg";
   };
 }
-
