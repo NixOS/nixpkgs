@@ -4934,6 +4934,8 @@ self: super: with self; {
 
   gensim = callPackage ../development/python-modules/gensim { };
 
+  genson = callPackage ../development/python-modules/genson { };
+
   gentools = callPackage ../development/python-modules/gentools { };
 
   genzshcomp = callPackage ../development/python-modules/genzshcomp { };
