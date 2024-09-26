@@ -25835,8 +25835,6 @@ with pkgs;
     then util-linuxMinimal
     else null;
 
-  light = callPackage ../os-specific/linux/light { };
-
   lightum = callPackage ../os-specific/linux/lightum { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
