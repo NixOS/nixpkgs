@@ -158,7 +158,9 @@ let
     # NOTE: @prog@ needs to be filled elsewhere.
   };
   swiftWrapper = runCommand "swift-wrapper.sh" wrapperParams ''
-    substituteAll '${../wrapper/wrapper.sh}' "$out"
+    # Make empty to avoid adding the SDK’s modules in the bootstrap wrapper. Otherwise, the SDK conflicts with the
+    # shims the wrapper tries to build.
+    darwinMinVersion="" substituteAll '${../wrapper/wrapper.sh}' "$out"
   '';
   makeSwiftcWrapper = writeShellScriptBin "nix-swift-make-swift-wrapper" ''
     set -euo pipefail
@@ -182,8 +184,15 @@ let
     installPhase = ''
       mkdir -p $out/lib/swift
       cp -r \
-        "${MacOSX-SDK}/usr/lib/swift/Swift.swiftmodule" \
-        "${MacOSX-SDK}/usr/lib/swift/libswiftCore.tbd" \
+        "$SDKROOT/usr/lib/swift/Swift.swiftmodule" \
+        "$SDKROOT/usr/lib/swift/CoreFoundation.swiftmodule" \
+        "$SDKROOT/usr/lib/swift/Dispatch.swiftmodule" \
+        "$SDKROOT/usr/lib/swift/ObjectiveC.swiftmodule" \
+        "$SDKROOT/usr/lib/swift/libswiftCore.tbd" \
+        "$SDKROOT/usr/lib/swift/libswiftCoreFoundation.tbd" \
+        "$SDKROOT/usr/lib/swift/libswiftDispatch.tbd" \
+        "$SDKROOT/usr/lib/swift/libswiftFoundation.tbd" \
+        "$SDKROOT/usr/lib/swift/libswiftObjectiveC.tbd" \
         $out/lib/swift/
     '';
   };
@@ -452,14 +461,10 @@ in stdenv.mkDerivation {
     buildProject llvm llvm-project/llvm
 
     '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Add appleSwiftCore to the search paths. We can't simply add it to
-    # buildInputs, because it is potentially an older stdlib than the one we're
-    # building. We have to remove it again after the main Swift build, or later
-    # build steps may fail. (Specific case: Concurrency backdeploy uses the
-    # Sendable protocol, which appears to not be present in the macOS 11 SDK.)
+    # Add appleSwiftCore to the search paths. Adding the whole SDK results in build failures.
     OLD_NIX_SWIFTFLAGS_COMPILE="$NIX_SWIFTFLAGS_COMPILE"
     OLD_NIX_LDFLAGS="$NIX_LDFLAGS"
-    export NIX_SWIFTFLAGS_COMPILE+=" -I ${appleSwiftCore}/lib/swift"
+    export NIX_SWIFTFLAGS_COMPILE=" -I ${appleSwiftCore}/lib/swift"
     export NIX_LDFLAGS+=" -L ${appleSwiftCore}/lib/swift"
     '' + ''
 
