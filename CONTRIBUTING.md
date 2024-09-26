@@ -651,3 +651,23 @@ Names of files and directories should be in lowercase, with dashes between words
 
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
+#### Use of `with`
+
+`with` is a somewhat controversial feature of nix syntax, it can reduce repetition, but easily can make code unreadable or buggy if used carelessly.
+
+recommended uses:
+- `meta.maintainers = with lib.maintainers; [ ... ]`
+- for packages with **multiple** licenses: `meta.license = with lib.licenses; [ ... ]`
+
+acceptable uses:
+- `meta = with lib; { ... }`
+  this allows you to not have to write `lib` twice for `licenses` and `maintainers`, at the cost of nesting `with`.
+
+unacceptable uses:
+- `with lib;` anywhere outside of `meta`
+- nested `with` anywhere outside of `meta`
+- `with` at the top of a file
+- `with` at the start of a longer expression that might not fit onto a single screen.
+
+uses of `with` other than those listed here are left up to the discretion of PR reviewers.
