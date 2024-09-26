@@ -24506,6 +24506,8 @@ with pkgs;
 
   prosody-filer = callPackage ../servers/xmpp/prosody-filer { };
 
+  tdarr-node = callPackage ../servers/tdarr/node.nix { };
+
   tdarr-server = callPackage ../servers/tdarr/server.nix { };
 
   biboumi = callPackage ../servers/xmpp/biboumi { };
