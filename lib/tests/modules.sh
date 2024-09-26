@@ -170,6 +170,15 @@ checkConfigError 'A definition for option .* is not of type .path in the Nix sto
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
 
+checkConfigOutput '"foo"' config.stringOption.ok1 ./merge-equal-options.nix
+checkConfigOutput '"foo"' config.stringOption.ok2 ./merge-equal-options.nix
+checkConfigError 'The option .* has conflicting definition values' config.stringOption.bad1 ./merge-equal-options.nix
+
+checkConfigOutput '"foo"' config.stringPrefixOption.ok1 ./merge-equal-options.nix
+checkConfigOutput '"foo"' config.stringPrefixOption.ok2 ./merge-equal-options.nix
+checkConfigOutput '"foo"' config.stringPrefixOption.ok3 ./merge-equal-options.nix
+checkConfigError 'The option .* has conflicting definition values' config.stringPrefixOption.bad1 ./merge-equal-options.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
