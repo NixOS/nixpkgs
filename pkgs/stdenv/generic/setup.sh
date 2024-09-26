@@ -1374,7 +1374,11 @@ fixLibtool() {
 
 configurePhase() {
     runHook preConfigure
+    scriptConfigure
+    runHook postConfigure
+}
 
+scriptConfigure() {
     # set to empty if unset
     : "${configureScript=}"
 
@@ -1441,14 +1445,16 @@ configurePhase() {
     else
         echo "no configure script, doing nothing"
     fi
-
-    runHook postConfigure
 }
 
 
 buildPhase() {
     runHook preBuild
+    makeBuild
+    runHook postBuild
+}
 
+makeBuild() {
     if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile or custom buildPhase, doing nothing"
     else
@@ -1465,14 +1471,16 @@ buildPhase() {
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
         unset flagsArray
     fi
-
-    runHook postBuild
 }
 
 
 checkPhase() {
     runHook preCheck
+    makeCheck
+    runHook postCheck
+}
 
+makeCheck() {
     if [[ -z "${foundMakefile:-}" ]]; then
         echo "no Makefile or custom checkPhase, doing nothing"
         runHook postCheck
@@ -1512,11 +1520,14 @@ checkPhase() {
 
 installPhase() {
     runHook preInstall
+    makeInstall
+    runHook postInstall
+}
 
+makeInstall() {
     # Dont reuse 'foundMakefile' set in buildPhase, a makefile may have been created in buildPhase
     if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
         echo "no Makefile or custom installPhase, doing nothing"
-        runHook postInstall
         return
     else
         foundMakefile=1
@@ -1537,8 +1548,6 @@ installPhase() {
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
     unset flagsArray
-
-    runHook postInstall
 }
 
 
@@ -1600,7 +1609,11 @@ fixupPhase() {
 
 installCheckPhase() {
     runHook preInstallCheck
+    makeInstallCheck
+    runHook postInstallCheck
+}
 
+makeInstallCheck() {
     if [[ -z "${foundMakefile:-}" ]]; then
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
@@ -1622,14 +1635,15 @@ installCheckPhase() {
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
         unset flagsArray
     fi
-
-    runHook postInstallCheck
 }
 
 
 distPhase() {
     runHook preDist
-
+    makeDist
+    runHook postDist
+}
+makeDist() {
     local flagsArray=()
     concatTo flagsArray distFlags distFlagsArray distTarget=dist
 
@@ -1644,8 +1658,6 @@ distPhase() {
         # shellcheck disable=SC2086
         cp -pvd ${tarballs[*]:-*.tar.gz} "$out/tarballs"
     fi
-
-    runHook postDist
 }
 
 
