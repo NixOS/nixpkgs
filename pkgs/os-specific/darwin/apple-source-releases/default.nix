@@ -231,13 +231,19 @@ let
   macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
   developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
 
-  applePackage' = namePath: version: sdkName: sha256:
+  applePackage'' = extra: namePath: version: sdkName: sha256:
     let
       pname = builtins.head (lib.splitString "/" namePath);
       appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
       appleDerivation = appleDerivation' stdenv;
-      callPackage = self.newScope { inherit appleDerivation' appleDerivation; python3 = pkgs.buildPackages.python3Minimal; };
+      callPackage = self.newScope
+        ({ inherit appleDerivation' appleDerivation;
+           python3 = pkgs.buildPackages.python3Minimal;
+         } // extra
+        );
     in callPackage (./. + "/${namePath}");
+
+  applePackage' = applePackage'' {};
 
   applePackage = namePath: sdkName: sha256: let
     pname = builtins.head (lib.splitString "/" namePath);
@@ -332,4 +338,47 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
     Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
+
+    # To enable splitting up the SDK bump into reviewable chunks before
+    # switching to it wholesale.
+    "10.13.6" = let applePackageMapping = namePath: applePackage''
+                      ( let callDarwin = pathInDarwin:
+                              self.newScope {} (./. + "/../${pathInDarwin}");
+                        in { darwin-stubs =
+                               callDarwin "darwin-stubs/10.13.6.nix" {};
+                        } // self."10.13.6" # Have packages depend on each other
+                                            # rather than previous versions.
+                      )
+                      { CommonCrypto = "CommonCrypto/10.13.6.nix";
+                        Libc = "Libc/10.13.6.nix";
+                        libdispatch = "libdispatch/10.13.6.nix";
+                        libplatform = "libplatform/10.13.6.nix";
+                        Libsystem = "Libsystem/10.13.6.nix";
+                        xnu = "xnu/10.13.6.nix";
+                      }."${namePath}"
+                      or namePath;
+                 in import ./macos-10.13.6.nix
+                      { applePackage' = applePackageMapping; }
+                 // { configdHeaders = applePackageMapping
+                        "configd" "963.50.8" "macos-10.13.6"
+                        "18bfmylqpff3f2davs1g5a9ciawigysrx9pjvrzcrc4b751aqimn"
+                        { headersOnly = true;
+                          Security = null;
+                          xpc = null;
+                        };
+                      # hfs is missing the headers we need from the version
+                      # corresponding to macOS 10.13.3 to 10.15.3.
+                      hfs = applePackageMapping
+                        "hfs" "407.30.1" "macos-10.13.2"
+                        "sha256-YDVwkFWARimNcYdNfDlnDD3QZphO0zvuHwr41dj7SNU="
+                        {};
+                      launchd = applePackageMapping
+                        "launchd" "842.92.1" "macos-10.9.2"
+                        "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs="
+                        {};
+                      Libm = applePackageMapping
+                        "Libm" "2026" "macos-10.7"
+                        "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es="
+                        {};
+                    };
 }

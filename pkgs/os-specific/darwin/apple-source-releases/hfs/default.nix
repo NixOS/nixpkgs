@@ -42,6 +42,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
   meta = {
     # Seems nobody wants its binary, so we didn't implement building.
     broken = !headersOnly;
+    maintainers = with lib.maintainers; [ toonn ];
     platforms = lib.platforms.darwin;
   };
 }
