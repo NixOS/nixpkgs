@@ -845,6 +845,8 @@ with pkgs;
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
+  dotherside = libsForQt5.callPackage ../development/libraries/dotherside { };
+
   # Dotnet
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
