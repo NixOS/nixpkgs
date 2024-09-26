@@ -25,6 +25,7 @@
 , icu
 , openssl
 , zlib
+, wrapGAppsHook
 }:
   let
     pname = "sidequest";
@@ -47,7 +48,7 @@
       };
       dontUnpack = true;
 
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
       installPhase = ''
         mkdir -p "$out/lib/SideQuest" "$out/bin"
