@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faad2 mpg123 SDL2 gtkmm3 pcre ];
 
-  meta = with lib; {
+  meta = {
     description = "Play DAB/DAB+ from ETI-NI aligned stream";
     homepage = "https://github.com/Opendigitalradio/dablin";
-    license = with licenses; [ gpl3Plus lgpl21Only ];
-    platforms = platforms.linux;
-    maintainers = [ maintainers.markuskowa ];
+    license = with lib.licenses; [ gpl3Plus lgpl21Only ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 }
 
