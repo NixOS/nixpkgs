@@ -1,35 +1,30 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   fetchpatch,
   autoreconfHook,
   coreutils,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   version = "1.2.2";
   pname = "light";
-  src = fetchFromGitHub {
-    owner = "haikarainen";
-    repo = "light";
-    rev = "refs/tags/v${version}";
-    sha256 = "1a70zcf88ifsnwll486aicjnh48zisdf8f7vi34ihw61kdadsq9s";
-  };
 
-  patches = [
-    # Pull upstream fix for -fno-common toolchains:
-    #  https://github.com/haikarainen/light/pull/135
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/haikarainen/light/commit/eae912ca7ff3356805e47739114861d2b6ae7ec0.patch";
-      sha256 = "15jp8hm5scl0myiy1jmvd6m52lhx5jscvi3rgb5siwakmnkgzx9j";
-    })
-  ];
+  src = fetchFromGitLab {
+    owner = "dpeukert";
+    repo = "light";
+    rev = "2a54078cbe3814105ee4f565f451b1b5947fbde0";
+    hash = "sha256-OmHdVJvBcBjJiPs45JqOHxFoJYvKIEIpt9pFhBz74Kg=";
+  };
 
   configureFlags = [ "--with-udev" ];
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  patches = [
+    ./0001-fix-build.patch
+  ];
 
   # ensure udev rules can find the commands used
   postPatch = ''
@@ -40,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GNU/Linux application to control backlights";
-    homepage = "https://haikarainen.github.io/light/";
-    license = lib.licenses.gpl3;
+    homepage = "https://gitlab.com/dpeukert/light";
+    license = lib.licenses.gpl3Only;
     mainProgram = "light";
     maintainers = with lib.maintainers; [
       puffnfresh
@@ -49,4 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}
