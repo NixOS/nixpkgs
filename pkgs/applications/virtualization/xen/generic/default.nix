@@ -712,10 +712,8 @@ stdenv.mkDerivation (finalAttrs: {
         ];
 
         # This automatically removes maintainers from EOL versions of Xen, so we aren't bothered about versions we don't explictly support.
-        maintainers = lib.lists.optionals (lib.strings.versionAtLeast version minSupportedVersion) (
-          with lib.maintainers; [ sigmasquadron ]
-        );
         knownVulnerabilities = lib.lists.optional (lib.strings.versionOlder version minSupportedVersion) "Xen ${version} is no longer supported by the Xen Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
+        maintainers = lib.lists.optionals (lib.strings.versionAtLeast version minSupportedVersion) lib.teams.xen.members;
 
         mainProgram = "xl";
 

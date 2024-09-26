@@ -870,5 +870,5 @@ in
       };
     };
   };
-  meta.maintainers = with lib.maintainers; [ sigmasquadron ];
+  meta.maintainers = lib.teams.xen.members;
 }
