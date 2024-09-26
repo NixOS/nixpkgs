@@ -5,6 +5,8 @@
 # 2. Update `version`s and `hash` sums.
 # See also http://www.un4seen.com/forum/?topic=18614.0
 
+# Internet Archive used due to upstream URLs being unstable
+
 let
   allBass = {
     bass = {
@@ -16,7 +18,7 @@ let
         armv7l-linux = "libs/armhf/libbass.so";
         aarch64-linux = "libs/aarch64/libbass.so";
       };
-      urlpath = "bass24-linux.zip";
+      url = "https://web.archive.org/web/20240501180538/http://www.un4seen.com/files/bass24-linux.zip";
       hash = "sha256-/JAlvtZtnzuzZjWy3n1WT8Q5ZVLO0BJJAJT7/dELS3o=";
     };
 
@@ -29,7 +31,7 @@ let
         armv7l-linux = "libs/armhf/libbass_fx.so";
         aarch64-linux = "libs/aarch64/libbass_fx.so";
       };
-      urlpath = "z/0/bass_fx24-linux.zip";
+      url = "https://web.archive.org/web/20240926184106/https://www.un4seen.com/files/z/0/bass_fx24-linux.zip";
       hash = "sha256-Hul2ELwnaDV8TDRMDXoFisle31GATDkf3PdkR2K9QTs=";
     };
   };
@@ -39,9 +41,9 @@ let
     inherit (bass) version;
 
     src = fetchurl {
-      url = "https://www.un4seen.com/files/${bass.urlpath}";
-      inherit (bass) hash;
+      inherit (bass) hash url;
     };
+
     unpackCmd = ''
       mkdir out
       ${unzip}/bin/unzip $curSrc -d out
@@ -65,8 +67,6 @@ let
       license = licenses.unfreeRedistributable;
       platforms = builtins.attrNames bass.so;
       maintainers = with maintainers; [ jacekpoz ];
-      # until upstream has stable URLs, this package is prone to always being broken
-      broken = true;
     };
   };
 
