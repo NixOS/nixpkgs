@@ -14,6 +14,7 @@ let
     mkIf
     mkOption
     mkPackageOption
+    optionals
     types
     ;
 
@@ -76,6 +77,10 @@ in
         assertion = hasAttr "spotifyd" spotifydConf || hasAttr "global" spotifydConf;
         message = "A main spotifyd or global attribute must be set.";
       }
+    ];
+
+    warnings = optionals (cachePath != defaultCachePath) [
+      ''Changing the `cache_path` setting will not ensure that the service will have read/write permissions for that directory.''
     ];
 
     systemd.services.spotifyd = {
