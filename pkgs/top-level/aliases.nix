@@ -200,6 +200,7 @@ mapAliases {
   inherit (libsForQt5.mauiPackages) buho; # added 2022-05-17
   bukut = throw "bukut has been removed since it has been archived by upstream"; # Added 2023-05-24
   butler = throw "butler was removed because it was broken and abandoned upstream"; # added 2024-06-18
+  bwidget = tclPackages.bwidget; # Added 2024-10-02
   # Shorter names; keep the longer name for back-compat. Added 2023-04-11
   buildFHSUserEnv = buildFHSEnv;
   buildFHSUserEnvChroot = buildFHSEnvChroot;
@@ -281,6 +282,7 @@ mapAliases {
   convoy = throw "'convoy' has been removed from nixpkgs, as it was archived upstream"; # Added 2023-12-27
   crackmapexec = throw "'crackmapexec' has been removed as it was unmaintained. Use 'netexec' instead"; # 2024-08-11
   crda = throw "'crda' has been removed from nixpkgs, as it is needed only for kernels before 4.16"; # Added 2024-02-06
+  critcl = tclPackages.critcl; # Added 2024-10-02
   cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
   cvs_fast_export = cvs-fast-export; # Added 2021-06-10
 
@@ -714,6 +716,7 @@ mapAliases {
   imagemagick7 = imagemagick; # Added 2021-02-22
   imagemagick7_light = imagemagick_light; # Added 2021-02-22
   imlib = throw "imlib has been dropped due to the lack of maintenance from upstream since 2004"; # Added 2023-01-04
+  incrtcl = tclPackages.incrtcl; # Added 2024-10-02
   indiepass-desktop = throw "indiepass-desktop has been dropped because it does not work with recent Electron versions"; # Added 2024-03-14
   indigenous-desktop = throw "'indigenous-desktop' has been renamed to/replaced by 'indiepass-desktop'"; # Added 2023-11-08
   input-utils = throw "The input-utils package was dropped since it was unmaintained."; # Added 2024-06-21
@@ -733,6 +736,7 @@ mapAliases {
   isl_0_11 = throw "isl_0_11 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   isl_0_14 = throw "isl_0_14 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   iso-flags-png-320x420 = lib.warn "iso-flags-png-320x420 has been renamed to iso-flags-png-320x240" iso-flags-png-320x240; # Added 2024-07-17
+  itktcl = tclPackages.itktcl; # Added 2024-10-02
 
   ### J ###
 
@@ -1049,6 +1053,7 @@ mapAliases {
   mumble_git = throw "'mumble_git' has been renamed to/replaced by 'pkgs.mumble'"; # Converted to throw 2023-09-10
   mupdf_1_17 = throw "'mupdf_1_17' has been removed due to being outdated and insecure. Consider using 'mupdf' instead."; # Added 2024-08-22
   murmur_git = throw "'murmur_git' has been renamed to/replaced by 'pkgs.murmur'"; # Converted to throw 2023-09-10
+  mustache-tcl = tclPackages.mustache-tcl; # Added 2024-10-02
   mutt-with-sidebar = mutt; # Added 2022-09-17
   mysql-client = hiPrio mariadb.client;
   mysql = mariadb; # moved from top-level 2021-03-14
@@ -1214,6 +1219,7 @@ mapAliases {
   pcsctools = pcsc-tools; # Added 2023-12-07
   pcsxr = throw "pcsxr was removed as it has been abandoned for over a decade; please use DuckStation, Mednafen, or the RetroArch PCSX ReARMed core"; # Added 2024-08-20
   pdf2xml = throw "'pdf2xml' was removed: abandoned for years."; # Added 2023-10-22
+  pdf4tcl = tclPackages.pdf4tcl; # Added 2024-10-02
   peach = asouldocs; # Added 2022-08-28
   pentablet-driver = xp-pen-g430-driver; # Added 2022-06-23
   percona-server_8_0 = percona-server_lts; # Added 2024-05-07
@@ -1540,7 +1546,16 @@ mapAliases {
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
   taro = taproot-assets; # Added 2023-07-04
+  tcl-fcgi = tclPackages.tcl-fcgi; # Added 2024-10-02
+  tclcurl = tclPackages.tclcurl; # Added 2024-10-02
+  tcllib = tclPackages.tcllib; # Added 2024-10-02
+  tclmagick = tclPackages.tclmagick; # Added 2024-10-02
+  tcltls = tclPackages.tcltls; # Added 2024-10-02
+  tcludp = tclPackages.tcludp; # Added 2024-10-02
+  tclvfs = tclPackages.tclvfs; # Added 2024-10-02
+  tclx = tclPackages.tclx; # Added 2024-10-02
   tdesktop = telegram-desktop; # Added 2023-04-07
+  tdom = tclPackages.tdom; # Added 2024-10-02
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   telegram-cli = throw "telegram-cli was removed because it was broken and abandoned upstream"; # Added 2023-07-28
   teleport_11 = throw "teleport 11 has been removed as it is EOL. Please upgrade to Teleport 12 or later"; # Added 2023-11-27
@@ -1563,8 +1578,10 @@ mapAliases {
   timescale-prometheus = promscale; # Added 2020-09-29
   tinygltf = throw "TinyglTF has been embedded in draco due to lack of other users and compatibility breaks."; # Added 2023-06-25
   tightvnc = throw "'tightvnc' has been removed as the version 1.3 is not maintained upstream anymore and is insecure"; # Added 2024-08-22
+  tix = tclPackages.tix; # Added 2024-10-02
   tixati = throw "'tixati' has been removed from nixpkgs as it is unfree and unmaintained"; # Added 2023-03-17
   tkcvs = tkrev; # Added 2022-03-07
+  tkimg = tclPackages.tkimg; # Added 2024-10-02
   toil = throw "toil was removed as it was broken and requires obsolete versions of libraries"; # Added 2024-09-22
   tokodon = plasma5Packages.tokodon;
   tokyo-night-gtk = tokyonight-gtk-theme; # Added 2024-01-28
@@ -1661,6 +1678,7 @@ mapAliases {
   ### W ###
   wakatime = wakatime-cli; # 2024-05-30
   wal_e = throw "wal_e was removed as it is unmaintained upstream and depends on the removed boto package; upstream recommends using wal-g or pgbackrest"; # Added 2024-09-22
+  wapp = tclPackages.wapp; # Added 2024-10-02
   waybar-hyprland = throw "waybar-hyprland has been removed: hyprland support is now built into waybar by default."; # Added 2023-08-21
   wayfireApplications-unwrapped = throw ''
     'wayfireApplications-unwrapped.wayfire' has been renamed to/replaced by 'wayfire'
