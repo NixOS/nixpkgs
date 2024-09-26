@@ -50,11 +50,7 @@ makeScopeWithSplicing' {
   impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
 
   # macOS 10.12 SDK
-  apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk {
-    inherit (buildPackages.darwin) print-reexports;
-    inherit (self) darwin-stubs;
-    fetchurl = fetchurlBoot;
-  };
+  apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk { };
 
   # macOS 11.0 SDK
   apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
@@ -93,14 +89,12 @@ makeScopeWithSplicing' {
   };
 
   stubs = {
-    inherit apple_sdk_11_0 apple_sdk_12_3;
+    inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
   } // lib.genAttrs [
   ] (mkStub apple_sdk.version);
 in
 
 impure-cmds // appleSourcePackages // chooseLibs // stubs // {
-
-  inherit apple_sdk apple_sdk_10_12;
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
