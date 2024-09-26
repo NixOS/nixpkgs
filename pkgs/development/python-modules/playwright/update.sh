@@ -9,7 +9,7 @@ version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.c
 # Playwright version, but that isn't a guarantee, so this needs to be specified
 # as well:
 setup_py_url="https://github.com/microsoft/playwright-python/raw/v${version}/setup.py"
-driver_version=$(curl -Ls "$setup_py_url" | grep '^driver_version =' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+driver_version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright/releases/latest | jq -r '.tag_name | sub("^v"; "")')
 
 # TODO: skip if update-source-version reported the same version
 update-source-version playwright-driver "$driver_version"
