@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, testers
-, ubridge
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  nix-update-script,
+  testers,
+  ubridge,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ubridge";
-  version = "0.9.18";
+  version = "0.9.19";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
-    rev = "v${version}";
-    sha256 = "0jg66jhhpv4c9340fsdp64hf9h253i8r81fknxa0gq241ripp3jn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-utzXLPF0VszMZORoik5/0lKhiyKO9heKuNO4KPsPVsI=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "/usr/local/bin" "$out/bin" \
-      --replace "setcap" "#setcap"
+      --replace-fail "/usr/local/bin" "$out/bin" \
+      --replace-fail "setcap" "#setcap"
   '';
 
   buildInputs = [ libpcap ];
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
       package = ubridge;
       command = "ubridge -v";
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -48,11 +51,14 @@ stdenv.mkDerivation rec {
       various technologies. Currently bridging between UDP tunnels, Ethernet
       and TAP interfaces is supported. Packet capture is also supported.
     '';
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/GNS3/ubridge";
     changelog = "https://github.com/GNS3/ubridge/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     mainProgram = "ubridge";
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [
+      primeos
+      anthonyroussel
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
