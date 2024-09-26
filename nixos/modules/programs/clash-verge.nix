@@ -19,6 +19,7 @@
     };
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
     tunMode = lib.mkEnableOption "Clash Verge TUN mode";
+    serviceModule = lib.mkEnableOption "Clash Verge Service mode";
   };
 
   config =
@@ -36,6 +37,16 @@
           }
         ))
       ];
+
+      systemd.services.clash-verge = lib.mkIf cfg.serviceModule {
+        enable = true;
+        Restart = "on-failure";
+        description = "Clash Verge Service Mode";
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/clash-verge-service";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
 
       security.wrappers.clash-verge = lib.mkIf cfg.tunMode {
         owner = "root";
