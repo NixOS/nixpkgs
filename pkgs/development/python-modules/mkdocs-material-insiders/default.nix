@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.5.36-insiders-4.53.13";
+  version = "9.5.38-insiders-4.53.13";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     repo = "mkdocs-material-insiders";
     private = true;
     rev = "refs/tags/${version}";
-    hash = "sha256-jmu3TftFtNwLTTy1O14+nDQtyqlUB3uUTrFYlEsFM1A=";
+    hash = "sha256-obfepPMQnq8m3P4/kT0nPlIF8w441xqhAWOFro7cHhU=";
   };
 
   disabled = !pythonAtLeast "3.8";
