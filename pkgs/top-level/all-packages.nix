@@ -24506,6 +24506,8 @@ with pkgs;
 
   prosody-filer = callPackage ../servers/xmpp/prosody-filer { };
 
+  tdarr-server = callPackage ../servers/tdarr/server.nix { };
+
   biboumi = callPackage ../servers/xmpp/biboumi { };
 
   elasticmq-server-bin = callPackage ../servers/elasticmq-server-bin {
