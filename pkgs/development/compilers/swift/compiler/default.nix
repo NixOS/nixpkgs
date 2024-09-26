@@ -30,7 +30,6 @@
 # Darwin-specific
 , substituteAll
 , fixDarwinDylibNames
-, runCommandLocal
 , xcbuild
 , cctools # libtool
 , sigtool
@@ -53,19 +52,6 @@ let
   inherit (stdenv) hostPlatform targetPlatform;
 
   sources = callPackage ../sources.nix { };
-
-  # Tools invoked by swift at run-time.
-  runtimeDeps = lib.optionals stdenv.hostPlatform.isDarwin [
-    # libtool is used for static linking. This is part of cctools, but adding
-    # that as a build input puts an unwrapped linker in PATH, and breaks
-    # builds. This small derivation exposes just libtool.
-    # NOTE: The same applies to swift-driver, but that is currently always
-    # invoked via the old `swift` / `swiftc`. May change in the future.
-    (runCommandLocal "libtool" { } ''
-      mkdir -p $out/bin
-      ln -s ${cctools}/bin/libtool $out/bin/libtool
-    '')
-  ];
 
   # There are apparently multiple naming conventions on Darwin. Swift uses the
   # xcrun naming convention. See `configure_sdk_darwin` calls in CMake files.
@@ -717,7 +703,7 @@ in stdenv.mkDerivation {
     done
 
     wrapProgram $out/bin/swift-frontend \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps}
+      --prefix PATH : ${lib.makeBinPath [ cctools.libtool ]}
 
     # Needs to be propagated by the compiler not by its dev output.
     moveToOutput nix-support/propagated-target-target-deps "$out"
