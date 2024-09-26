@@ -13611,6 +13611,8 @@ self: super: with self; {
 
   rfcat = callPackage ../development/python-modules/rfcat { };
 
+  rfeed = callPackage ../development/python-modules/rfeed { };
+
   rflink = callPackage ../development/python-modules/rflink { };
 
   rich = callPackage ../development/python-modules/rich { };
