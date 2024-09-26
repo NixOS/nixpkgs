@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... } :
+{ pkgs, config, lib, ... }:
 
 let
   inherit (lib) mapAttrs;
@@ -45,7 +45,7 @@ in
       variables = env;
     };
 
-    systemd.services.kadmind = {
+    systemd.services.kadmind = lib.mkIf cfg.roles.administrationServer {
       description = "Kerberos Administration Daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
@@ -58,7 +58,7 @@ in
       environment = env;
     };
 
-    systemd.services.kdc = {
+    systemd.services.kdc = lib.mkIf cfg.roles.kdc {
       description = "Key Distribution Center daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
