@@ -438,6 +438,7 @@ in
         ZONEINFO = "${pkgs.tzdata}/share/zoneinfo";
       };
       serviceConfig = {
+        Type = "exec"; # When credentials are used with systemd before v257 this is necessary to make the service start reliably (see systemd/systemd#33953)
         ExecStart = "${cfg.package}/bin/influxd --bolt-path \${STATE_DIRECTORY}/influxd.bolt --engine-path \${STATE_DIRECTORY}/engine";
         StateDirectory = "influxdb2";
         User = "influxdb2";
