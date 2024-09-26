@@ -31,6 +31,8 @@ appimageTools.wrapAppImage {
   # taken from
   # https://github.com/Dygmalab/Bazecor/blob/v1.4.4/src/main/utils/udev.ts#L6
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraPkgs = pkgs: [ pkgs.glib ];
 
   # Also expose the udev rules here, so it can be used as:
@@ -38,7 +40,6 @@ appimageTools.wrapAppImage {
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/bazecor \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 

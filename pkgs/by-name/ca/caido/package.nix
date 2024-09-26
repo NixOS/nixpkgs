@@ -33,13 +33,14 @@ let
     src = desktop;
     inherit pname version;
 
+    nativeBuildInputs = [ makeWrapper ];
+
     extraPkgs = pkgs: [ pkgs.libthai ];
 
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/caido.desktop -t $out/share/applications
       install -m 444 -D ${appimageContents}/caido.png \
         $out/share/icons/hicolor/512x512/apps/caido.png
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/caido \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1
     '';
