@@ -125,7 +125,14 @@ stdenv.mkDerivation rec {
       setuptools
     ]);
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      default = nixosTests.openvswitch;
+      incus = nixosTests.incus-lts.openvswitch;
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
