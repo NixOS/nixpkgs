@@ -27459,6 +27459,8 @@ with pkgs;
 
   khmeros = callPackage ../data/fonts/khmeros { };
 
+  klingon-piqad-hasta = callPackage ../data/fonts/klingon-piqad-hasta {};
+
   knewave = callPackage ../data/fonts/knewave { };
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute { };
