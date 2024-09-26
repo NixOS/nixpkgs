@@ -31729,6 +31729,8 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  r2r = with python3Packages; toPythonApplication r2r;
+
   ragnarwm = callPackage ../applications/window-managers/ragnarwm {};
 
   rime-cli = callPackage ../applications/office/rime-cli { };
