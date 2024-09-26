@@ -27,11 +27,11 @@
         version = "2024-08-19";
       };
       ungoogled-patches = {
-        hash = "sha256-3BK1HZiQ9SnRuMMviC8gm9ZLiu8ImceBlcAp24/aYlM=";
-        rev = "129.0.6668.58-1";
+        hash = "sha256-LKtkNFb0y1v+p6hInulR7CrRO5pPk5J5Jd4nlAwZRwI=";
+        rev = "129.0.6668.70-1";
       };
     };
-    hash = "sha256-8dKWu2/ZKw5ZthH1s5wR+h9b0aIqlDhNsPUrlE9DMQg=";
-    version = "129.0.6668.58";
+    hash = "sha256-L9h9jbwEMcUi/cu7FP2O/6wD0Br/3SzWCazu7m9ua+o=";
+    version = "129.0.6668.70";
   };
 }
