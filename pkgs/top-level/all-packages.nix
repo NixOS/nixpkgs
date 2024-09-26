@@ -27156,8 +27156,6 @@ with pkgs;
   dm-sans = callPackage ../data/fonts/dm-sans { };
   dns-root-data = callPackage ../data/misc/dns-root-data { };
 
-  docbook_sgml_dtd_41 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/4.1.nix { };
-
   docbook_xml_dtd_412 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix { };
 
   docbook_xml_dtd_42 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.2.nix { };
@@ -27179,6 +27177,7 @@ with pkgs;
   docbook_xsl_ns = docbook-xsl-ns;
   docbook5 = docbook-5;
   docbook_sgml_dtd_31 = docbook-sgml-dtd-3_1;
+  docbook_sgml_dtd_41 = docbook-sgml-dtd-4_1;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
