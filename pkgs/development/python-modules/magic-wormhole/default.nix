@@ -58,6 +58,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "spake2"
+  ];
+
   dependencies = [
     attrs
     autobahn
