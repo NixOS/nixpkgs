@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   buildPackages,
   cmake,
   pkg-config,
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-U5QQ7I7ZBNlMm74Vpvv8lvJ4EefM3+jHURFAP03Lmvw=";
     fetchSubmodules = true;
   };
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace configure \
