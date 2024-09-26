@@ -27166,8 +27166,6 @@ with pkgs;
 
   docbook_xml_dtd_45 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.5.nix { };
 
-  docbook_xml_ebnf_dtd = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf { };
-
   inherit (callPackages ../data/sgml+xml/stylesheets/xslt/docbook-xsl { })
     docbook-xsl-nons
     docbook-xsl-ns;
@@ -27178,6 +27176,7 @@ with pkgs;
   docbook5 = docbook-5;
   docbook_sgml_dtd_31 = docbook-sgml-dtd-3_1;
   docbook_sgml_dtd_41 = docbook-sgml-dtd-4_1;
+  docbook_xml_ebnf_dtd = docbook-xml-ebnf-dtd;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 

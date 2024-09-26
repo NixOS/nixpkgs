@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     url = "https://docbook.org/xml/ebnf/${version}/dbebnf.dtd";
     sha256 = "0min5dsc53my13b94g2yd65q1nkjcf4x1dak00bsc4ckf86mrx95";
   };
-  catalog = ./docbook-ebnf.cat;
+
+  catalog = builtins.path {
+    name = "docbook-ebnf.cat";
+    path = ./docbook-ebnf.cat;
+  };
 
   unpackPhase = ''
     mkdir -p $out/xml/dtd/docbook-ebnf
