@@ -14,20 +14,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.6.7";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/${version}";
-    hash = "sha256-1udxvl98RveGJmnG8kwlecWD9V+BPadA/YE8jbt9jNo=";
+    hash = "sha256-guRg35waq6w+P8eaXJFwMtROoXU3d3yURGwzG2SIzhc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-0.18.0" = "sha256-EjpCTOB6E7n5oNn1bvzNyznzs0uRJvAXrNsZggk4hgM=";
+      "salsa-0.18.0" = "sha256-zHXLNK6SCiJ3MmT0PMIauA1eolyJ4wfVWxN6wcvmhts=";
     };
   };
 
