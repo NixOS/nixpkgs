@@ -5928,6 +5928,8 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
+  sscep = callPackage ../tools/security/sscep { };
+
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stacs = callPackage ../tools/security/stacs { };
