@@ -9234,6 +9234,8 @@ self: super: with self; {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onnx2pytorch = callPackage ../development/python-modules/onnx2pytorch { };
+
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
     inherit (pkgs) protobuf;
   };
