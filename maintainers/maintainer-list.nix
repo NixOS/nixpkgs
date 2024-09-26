@@ -2059,6 +2059,12 @@
     githubId = 354741;
     name = "Austin Butler";
   };
+  automathis = {
+    name = "AutoMathïs";
+    email = "automathis@protonmail.com";
+    github = "MathisFederico";
+    githubId = 60117466;
+  };
   autophagy = {
     email = "mail@autophagy.io";
     github = "autophagy";
