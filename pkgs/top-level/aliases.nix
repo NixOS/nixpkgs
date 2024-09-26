@@ -1613,6 +1613,7 @@ mapAliases {
   utahfs = throw "utahfs has been removed, as it is broken and lack of maintenance from upstream"; # Added 2023-09-29
   util-linuxCurses = util-linux; # Added 2022-04-12
   utillinux = util-linux; # Added 2020-11-24
+  uwc = throw "uwc has been removed, as it is broken and lack of maintenance from upstream"; # Added 2024-09-27
 
   ### V ###
 

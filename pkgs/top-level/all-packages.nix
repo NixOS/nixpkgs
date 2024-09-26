@@ -13404,8 +13404,6 @@ with pkgs;
 
   usync = callPackage ../applications/misc/usync { };
 
-  uwc = callPackage ../tools/text/uwc { };
-
   uwsgi = callPackage ../servers/uwsgi { };
 
   uwufetch = callPackage ../tools/misc/uwufetch { };
