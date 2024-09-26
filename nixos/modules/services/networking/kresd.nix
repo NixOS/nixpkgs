@@ -88,14 +88,13 @@ in {
       };
       default = settings_default;
       description = ''
-        Highly experimental!!!
-        Nix-based (RFC 42) configuration for Knot Resolver.
+        Nix-based (RFC 42) configuration for Knot Resolver 6.x.
 
         FIXME many issues, e.g.:
          - old listen{Plain,TLS,DoH} config gets silently ignored
 
-        <link xlink:href="https://example.com/docs/foo"/>
-        for supported values.
+        For configuration reference (described as YAML) see
+        <https://www.knot-resolver.cz/documentation/latest/config-overview.html>
       '';
     };
     extraConfig = lib.mkOption {
