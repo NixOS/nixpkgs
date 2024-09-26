@@ -10993,6 +10993,7 @@ dependencies = [
  "text",
  "theme",
  "ui",
+ "unicode-segmentation",
  "util",
  "windows 0.58.0",
 ]
@@ -14374,7 +14375,7 @@ dependencies = [
 
 [[package]]
 name = "zed"
-version = "0.154.1"
+version = "0.154.2"
 dependencies = [
  "activity_indicator",
  "anyhow",

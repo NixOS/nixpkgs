@@ -135,7 +135,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.38.0";
+  version = "0.39.0";
 
   outputs = [
     "out"
@@ -148,13 +148,8 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dFajnCpGlNqUv33A8eFEn8kjtzIPkcBY5j0gNVlaiIY=";
+    hash = "sha256-BOGh+QBTO7hrHohh+RqjSF8eHQH8jVBPjG/k4eyFaaM=";
   };
-
-  patches = [
-    # Fix build with Darwin SDK 11
-    ./0001-fix-darwin-build.patch
-  ];
 
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
@@ -314,9 +309,6 @@ stdenv'.mkDerivation (finalAttrs: {
       cp mpv_identify.sh umpv $out/bin/
       popd
       pushd $out/share/applications
-
-      # patch out smb protocol reference, since our ffmpeg can't handle it
-      substituteInPlace mpv.desktop --replace-fail "smb," ""
 
       sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
         mpv.desktop > umpv.desktop

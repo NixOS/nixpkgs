@@ -1,46 +1,43 @@
 {
   lib,
-  src,
   fetchFromGitHub,
   immich,
   python3,
-  # Override Python packages using
-  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-  # Applied after defaultOverrides
-  packageOverrides ? self: super: { },
 }:
 let
-  defaultOverrides = self: super: {
-    pydantic = super.pydantic_1;
-
-    versioningit = super.versioningit.overridePythonAttrs (_: {
-      doCheck = false;
-    });
-
-    albumentations = super.albumentations.overridePythonAttrs (_: rec {
-      version = "1.4.3";
-      src = fetchFromGitHub {
-        owner = "albumentations-team";
-        repo = "albumentations";
-        rev = version;
-        hash = "sha256-JIBwjYaUP4Sc1bVM/zlj45cz9OWpb/LOBsIqk1m+sQA=";
-      };
-    });
-  };
-
   python = python3.override {
     self = python;
-    packageOverrides = lib.composeExtensions defaultOverrides packageOverrides;
+
+    packageOverrides = self: super: {
+      pydantic = super.pydantic_1;
+
+      versioningit = super.versioningit.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
+      albumentations = super.albumentations.overridePythonAttrs (_: rec {
+        version = "1.4.3";
+        src = fetchFromGitHub {
+          owner = "albumentations-team";
+          repo = "albumentations";
+          rev = version;
+          hash = "sha256-JIBwjYaUP4Sc1bVM/zlj45cz9OWpb/LOBsIqk1m+sQA=";
+        };
+      });
+    };
   };
 in
 python.pkgs.buildPythonApplication {
   pname = "immich-machine-learning";
   inherit (immich) version;
-  src = "${src}/machine-learning";
+  src = "${immich.src}/machine-learning";
   pyproject = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail 'fastapi-slim' 'fastapi'
+
+    # AttributeError: module 'cv2' has no attribute 'Mat'
+    substituteInPlace app/test_main.py --replace-fail ": cv2.Mat" ""
   '';
 
   pythonRelaxDeps = [ "setuptools" ];
@@ -72,7 +69,12 @@ python.pkgs.buildPythonApplication {
     ]
     ++ uvicorn.optional-dependencies.standard;
 
-  doCheck = false;
+  nativeCheckInputs = with python.pkgs; [
+    httpx
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
 
   postInstall = ''
     mkdir -p $out/share/immich
