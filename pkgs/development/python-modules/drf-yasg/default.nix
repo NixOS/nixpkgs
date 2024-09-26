@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   inflection,
-  ruamel-yaml,
+  pyyaml,
   setuptools-scm,
   six,
   coreapi,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     six
     inflection
-    ruamel-yaml
+    pyyaml
     coreapi
     djangorestframework
   ];
