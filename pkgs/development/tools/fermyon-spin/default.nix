@@ -19,7 +19,7 @@ let
   # TODO: It'd be nice to write an update script that would update all of these
   # hashes together.
   packageHash = {
-    x86_64-linux = "sha256-gYHIfvgofT9tKYCchZoRYvioLCtp2wfaOtuVWxTyujM=";
+    x86_64-linux = "sha256-nUmxrevQQu2OAuNUOQ7ge/Uv7b8NUX8EEbuxamxgnpA=";
     aarch64-linux = "sha256-zW+aeUc67pa6mQQkfazShHKAvGeucswLK1eRCxzXOJM=";
     x86_64-darwin = "sha256-ph+SrrxOIyG9rRS098duhvDFiNGuh0o2uemm++J+zKw=";
     aarch64-darwin = "sha256-eOpRaivRhk841/TCxC4ygw27UrPkqQCMH2mme2qo8V8=";
@@ -27,7 +27,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "fermyon-spin";
-  version = "2.5.1";
+  version = "2.7.0";
 
   # Use fetchurl rather than fetchzip as these tarballs are built by the project
   # and not by GitHub (and thus are stable) - this simplifies the update script
