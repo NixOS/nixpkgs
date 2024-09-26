@@ -227,6 +227,7 @@ mapAliases {
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
   ccloud-cli = throw "ccloud-cli has been removed, please use confluent-cli instead"; # Added 2023-06-09
   certmgr-selfsigned = certmgr; # Added 2023-11-30
+  challenger = taler-challenger; # Added 2024-09-04
   chefdk = throw "chefdk has been removed due to being deprecated upstream by Chef Workstation"; # Added 2023-03-22
   chia = throw "chia has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
   chia-dev-tools = throw "chia-dev-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
@@ -454,6 +455,8 @@ mapAliases {
 
   ### F ###
 
+  fahcontrol = throw "fahcontrol has been removed because the download is no longer available"; # added 2024-09-24
+  fahviewer = throw "fahviewer has been removed because the download is no longer available"; # added 2024-09-24
   fam = throw "'fam' (aliased to 'gamin') has been removed as it is unmaintained upstream"; # Added 2024-04-19
   fancypp = throw "'fancypp' was removed because it and its dependants are unmaintained"; # Added 2024-02-14
   faustStk = faustPhysicalModeling; # Added 2023-05-16
@@ -1514,6 +1517,7 @@ mapAliases {
   swtpm-tpm2 = swtpm; # Added 2021-02-26
   Sylk = sylk; # Added 2024-06-12
   symbiyosys = sby; # Added 2024-08-18
+  sync = taler-sync; # Added 2024-09-04
   syncthing-cli = syncthing; # Added 2021-04-06
   syncthingtray-qt6 = syncthingtray; # Added 2024-03-06
 

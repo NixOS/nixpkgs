@@ -1,28 +1,28 @@
-{ stdenv
-, lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, protobuf
-, installShellFiles
-, libiconv
-, darwin
-, librusty_v8 ? callPackage ./librusty_v8.nix { }
-,
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  protobuf,
+  installShellFiles,
+  libiconv,
+  darwin,
+  librusty_v8 ? callPackage ./librusty_v8.nix { },
 }:
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.46.2";
+  version = "1.46.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6rmAgGX7BnhbyDk0Pmp1uLBDywlK4cptTOfuvNhm0KE=";
+    repo = "deno";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AM6SjcIHo6Koxcnznhkv3cXoKaMy2TEVpiWe/bczDuA=";
   };
 
-  cargoHash = "sha256-B+O2QYQDH+mqbnJhLumFWnv1b7dvnbpR7JG/3IS5tnI=";
+  cargoHash = "sha256-D+CZpb6OTzM5Il0k8GQB7qSONy4myE5yKlaSkLLqHT8=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -39,8 +39,11 @@ rustPlatform.buildRustPackage rec {
     protobuf
     installShellFiles
   ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    [ libiconv darwin.libobjc ]
+  buildInputs = lib.optionals stdenv.isDarwin (
+    [
+      libiconv
+      darwin.libobjc
+    ]
     ++ (with darwin.apple_sdk_11_0.frameworks; [
       Security
       CoreServices
@@ -102,6 +105,14 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     mainProgram = "deno";
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    # NOTE: `aligned_alloc` error on darwin SDK < 10.15. Can't do usual overrideSDK with rust toolchain in current implementation.
+    # Should be fixed with darwin SDK refactor and can be revisited.
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

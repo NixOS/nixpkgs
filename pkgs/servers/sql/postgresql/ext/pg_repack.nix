@@ -4,7 +4,6 @@
 , postgresql
 , postgresqlTestExtension
 , testers
-, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {

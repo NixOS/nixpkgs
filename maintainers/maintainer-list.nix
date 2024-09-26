@@ -3339,6 +3339,12 @@
     githubId = 141733;
     name = "Andrew Bruce";
   };
+  camerondugan = {
+    email = "cameron.dugan@protonmail.com";
+    github = "camerondugan";
+    githubId = 54632731;
+    name = "Cameron Dugan";
+  };
   cameronfyfe = {
     email = "cameron.j.fyfe@gmail.com";
     github = "cameronfyfe";
@@ -9167,6 +9173,12 @@
     github = "iopq";
     githubId = 1817528;
     name = "Igor Polyakov";
+  };
+  iosmanthus = {
+    email = "myosmanthustree@gmail.com";
+    github = "iosmanthus";
+    githubId = 16307070;
+    name = "iosmanthus";
   };
   iquerejeta = {
     github = "iquerejeta";
@@ -18205,12 +18217,6 @@
     github = "rosehobgoblin";
     githubId = 84164410;
   };
-  roshaen = {
-    name = "Roshan Kumar";
-    email = "roshaen09@gmail.com";
-    github = "roshaen";
-    githubId = 58213083;
-  };
   RossComputerGuy = {
     name = "Tristan Ross";
     email = "tristan.ross@midstall.com";
@@ -23294,6 +23300,12 @@
     matrix = "@YoshiRulz:matrix.org";
     github = "YoshiRulz";
     githubId = 13409956;
+  };
+  youhaveme9 = {
+    name = "Roshan Kumar";
+    email = "roshaen09@gmail.com";
+    github = "youhaveme9";
+    githubId = 58213083;
   };
   yrashk = {
     email = "yrashk@gmail.com";

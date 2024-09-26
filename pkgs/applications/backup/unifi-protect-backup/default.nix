@@ -1,25 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pyunifiprotect = super.pyunifiprotect.overridePythonAttrs {
-        version = "unstable-2024-06-08";
-        src = fetchFromGitHub {
-          owner = "ep1cman";
-          repo = "pyunifiprotect";
-          rev = "d967bca2c65e0aa6a7363afb6367c3745c076747";
-          hash = "sha256-gSAK/T9cjIiRC/WjwrdLP+LHzEEUsNbwpXClYqpnMio=";
-        };
-      };
-    };
-  };
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
   version = "0.11.0";
   pyproject = true;
@@ -31,18 +17,25 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-t4AgPFqKS6u9yITIkUUB19/SxVwR7X8Cc01oPx3M+E0=";
   };
 
+  patches = [
+    # Switch to using UIProtect library, https://github.com/ep1cman/unifi-protect-backup/pull/160
+    (fetchpatch {
+      name = "switch-uiprotect.patch";
+      url = "https://github.com/ep1cman/unifi-protect-backup/commit/ccf2cde27229ade5c70ebfa902f289bf1a439f64.patch";
+      hash = "sha256-kogl/crvLE+7t9DLTuZqeW3/WB5/sytWDgbndoBw+RQ=";
+    })
+  ];
+
   pythonRelaxDeps = [
     "aiorun"
     "aiosqlite"
     "click"
-    "pyunifiprotect"
+    "uiprotect"
   ];
 
-  nativeBuildInputs = with python.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiocron
     aiolimiter
     aiorun
@@ -52,12 +45,10 @@ python.pkgs.buildPythonApplication rec {
     click
     expiring-dict
     python-dateutil
-    pyunifiprotect
+    uiprotect
   ];
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python tool to backup unifi event clips in realtime";

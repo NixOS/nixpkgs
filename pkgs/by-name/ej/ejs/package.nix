@@ -1,17 +1,20 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
-
-buildNpmPackage rec {
+let
+  version = "3.1.10";
+in
+buildNpmPackage {
   pname = "ejs";
-  version = "3.1.9";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "mde";
     repo = "ejs";
     rev = "v${version}";
-    hash = "sha256-bOZclhsnV3onxc32ZGfLpuGS5Jz6S12/BmkmwL4M6Dg=";
+    hash = "sha256-3Rq+7oiYJlIY7sGPasx728sz2zj0ndAvKpHGsQX4tlc=";
   };
 
   npmDepsHash = "sha256-829eWfJiMw9KRlhdmzD0ha//bgUQ5nPEzO+ayUPLxXY=";
@@ -29,6 +32,6 @@ buildNpmPackage rec {
     homepage = "http://ejs.co";
     license = lib.licenses.asl20;
     mainProgram = "ejs";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
