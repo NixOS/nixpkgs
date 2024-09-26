@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   buildPackages,
   cmake,
   pkg-config,
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-U5QQ7I7ZBNlMm74Vpvv8lvJ4EefM3+jHURFAP03Lmvw=";
     fetchSubmodules = true;
   };
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace configure \
@@ -122,10 +125,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [
-      hrdinka
-      hummeltech
-    ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        hrdinka
+        hummeltech
+      ];
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
   };

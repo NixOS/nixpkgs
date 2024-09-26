@@ -2,27 +2,30 @@
   lib,
   fetchFromGitHub,
   runCommand,
-  jq,
   buildNpmPackage,
-  python3,
   stdenvNoCC,
   testers,
+  writeText,
+  jq,
+  python3,
   basedpyright,
 }:
 
 let
-  version = "1.17.5";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DaNxPGY0ahTcluCnsEZNL2oP9zKWQlON8i1bxeJ5GnU=";
+    hash = "sha256-o2MHZMUuVnVjdv2b+GLIMjK1FT8KfLUzo7+zH7OU7HI=";
   };
 
+  # To regenerate the patched package-lock.json, copy the patched package.json
+  # and run `nix-shell -p nodejs --command 'npm update --package-lock'`
   patchedPackageJSON = runCommand "package.json" { } ''
     ${jq}/bin/jq '
-      .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
+      .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser" or .key == "@detachhead/ts-helpers"))
       | .scripts =  {  }
       ' ${src}/package.json > $out
   '';
@@ -30,7 +33,7 @@ let
   pyright-root = buildNpmPackage {
     pname = "pyright-root";
     inherit version src;
-    npmDepsHash = "sha256-63kUhKrxtJhwGCRBnxBfOFXs2ARCNn+OOGu6+fSJey4=";
+    npmDepsHash = "sha256-vxfoaShk3ihmhr/5/2GSOuMqeo6rxebO6aiD3DybjW4=";
     dontNpmBuild = true;
     postPatch = ''
       cp ${patchedPackageJSON} ./package.json
@@ -47,7 +50,7 @@ let
     pname = "pyright-internal";
     inherit version src;
     sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-A1XP2IMfQMI1fFk2leuvm/57MsK43Md6Kyag9dQVAdg=";
+    npmDepsHash = "sha256-pavURV/smWxYUWpRjVM08pJqfdNl/fULds66miC2iwg=";
     dontNpmBuild = true;
     # Uncomment this flag when using unreleased peer dependencies
     # npmFlags = [ "--legacy-peer-deps" ];
@@ -94,7 +97,7 @@ buildNpmPackage rec {
   inherit version src;
 
   sourceRoot = "${src.name}/packages/pyright";
-  npmDepsHash = "sha256-wvxwvPdTKcw4X8F5800ft4an7/xwmRPlL1Wzcm5jim8=";
+  npmDepsHash = "sha256-6/OhBbIuFjXTN8N/PitaQ57aYZmpwcUOJ/vlLbhiXAU=";
 
   postPatch = ''
     chmod +w ../../
@@ -113,7 +116,39 @@ buildNpmPackage rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = basedpyright; };
+    tests = {
+      version = testers.testVersion { package = basedpyright; };
+
+      # We are expecting 3 errors. Any other amount would indicate, not working
+      # stub files, for instance.
+      simple = testers.testEqualContents {
+        assertion = "simple type checking";
+        expected = writeText "expected" ''
+          3
+        '';
+        actual =
+          runCommand "actual"
+            {
+              nativeBuildInputs = [
+                jq
+                basedpyright
+              ];
+              base = writeText "base" ''
+                import sys
+
+                if sys.platform == "win32":
+                    a = "a" + 1
+
+                print(3)
+                nonexistentfunction(3)
+              '';
+
+            }
+            ''
+              (basedpyright --outputjson $base || true) | jq -r .summary.errorCount > $out
+            '';
+      };
+    };
   };
 
   meta = {
