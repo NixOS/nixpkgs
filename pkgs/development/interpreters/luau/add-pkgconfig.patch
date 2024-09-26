@@ -1,0 +1,13 @@
+--- /dev/null
++++ b/Luau.pc
+@@ -0,0 +1,10 @@
++prefix=@out@
++exec_prefix=${prefix}
++includedir=${prefix}/include/
++libdir=${prefix}/lib
++
++Name: Luau
++Description: A fast, small, safe, gradually typed embeddable scripting language derived from Lua
++Version: @version@
++Cflags: -I${includedir}/Luau
++Libs: -L${libdir} -lLuau.Analysis -lLuau.Ast -lLuau.Compiler -lLuau.VM
