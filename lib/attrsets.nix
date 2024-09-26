@@ -7,7 +7,7 @@ let
   inherit (builtins) head length;
   inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl imap0 isList;
 in
 
 rec {
@@ -1146,7 +1146,9 @@ rec {
     the second argument of the function will never be an attrset.
     Also, the first argument of the mapping function is a *list* of the attribute names that form the path to the leaf attribute.
 
-    For a function that gives you control over what counts as a leaf, see `mapAttrsRecursiveCond`.
+    For a function that gives you control over what counts as a leaf, see [`lib.attrsets.mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond).
+
+    For a function that recurses on lists too, see [`lib.attrsets.mapDataRecursiveCond`](#function-library-lib.attrsets.mapDataRecursiveCond)
 
     :::{#map-attrs-recursive-example .example}
     # Map over leaf attributes
@@ -1158,6 +1160,28 @@ rec {
     evaluates to
     ```nix
     { n = { a = "n-a-A"; m = { b = "n-m-b-B"; c = "n-m-c-C"; }; }; d = "d-D"; }
+    ```
+    :::
+
+    :::{#map-attrs-recursive-example-list .example}
+    # Map over leaf attributes with lists
+
+    ```nix
+    nix-repl> :p lib.mapAttrsRecursive (path: value: lib.concatStringsSep "-" (path ++ [value])) {
+                f = "F";
+                n = {
+                  a = "A";
+                };
+              }
+    ```
+    evaluates to
+    ```nix
+    {
+      f = "f-F";
+      n = {
+        a = "n-a-A";
+      };
+    }
     ```
     :::
 
@@ -1173,12 +1197,15 @@ rec {
 
 
   /**
-    Like `mapAttrsRecursive`, but it takes an additional predicate that tells it whether to recurse into an attribute set.
+    Like [`lib.attrsets.mapAttrsRecursive`](#function-library-lib.attrsets.mapAttrsRecursive), but
+    it takes an additional predicate that tells it whether to recurse into an attribute set.
     If the predicate returns false, `mapAttrsRecursiveCond` does not recurse, but instead applies the mapping function.
     If the predicate returns true, it does recurse, and does not apply the mapping function.
 
+    For a function that recurses on lists too, see [`lib.attrsets.mapDataRecursiveCond`](#function-library-lib.attrsets.mapDataRecursiveCond)
+
     :::{#map-attrs-recursive-cond-example .example}
-    # Map over an leaf attributes defined by a condition
+    # Map over leaf attributes defined by a condition
 
     Map derivations to their `name` attribute.
     Derivatons are identified as attribute sets that contain `{ type = "derivation"; }`.
@@ -1208,6 +1235,94 @@ rec {
             else f (path ++ [ name ]) value);
     in
     recurse [ ] set;
+
+  /**
+    `lib.attrsets.mapDataRecursiveCond` *`cond`* *`f`* *`data`*
+
+    Recurses on the `data` structure and mutates the leafs by replacing them calling the `f` function is called.
+    `cond` decides if the function recurses in an attrset or list, or stops where it is.
+
+    In other words, this function behaves like [`lib.attrsets.mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) but also recurses on lists.
+
+    # Type
+
+    ```
+    mapDataRecursiveCond :: ([String] -> Data -> Bool) -> ([String] -> a -> b) -> Data -> Data
+    ```
+
+    # Inputs
+
+    *`cond`* ([String] -> Data -> Bool)
+
+    : Takes the current path in the data structure and the current value at that path and returns a boolean.
+    : As long as the returned boolean is `true`, `mapDataRecursiveCond` will continue recursing in the `data` structure.
+    : If `false`, the function will stop there and pass the value as-is to the `f` function.
+
+    *`f`* ([String] -> Data -> Data)
+
+    : Takes the current path in the data structure and the current value at that path and returns a new value.
+    : This new value will replace the given value in the output data structure.
+
+    *`data`* (Data)
+
+    : The input `data` structure which will be recursed on.
+    : Can be an arbitrary nesting of attrsets, lists and simple values.
+
+    :::{.tip}
+
+    The following snippet shows a `data` structure with each item annotated with the `path` and `value` that will be given to the `cond` and `f` functions when recursing on the data structure.
+
+    ```nix
+    # Data         Path           Value
+    { a =       # [ "a" ]        [ "one" { b = 1; } ]
+      [ "one"   # [ "a" 0 ]      "one"
+        { b =   # [ "a" 1 ]      { b = 1; }
+          1 };  # [ "a" 1 "b" ]  1
+      ]
+    }
+    ```
+    :::
+
+    # Output
+
+    *`data`* (Data)
+
+    : The same data structure as given as input, with all leafs replaced by their value after applying the function `f`.
+
+    # Examples
+
+    :::{#map-data-recursive-example-1 .example}
+    # Map over attribute sets having a type attribute.
+
+    Recurse over an arbitrary data structure whose leafs are attribute sets with a type attribute.
+    Those leafs will be replaced by a string being the concatenation of the path of the attribute and the type attribute.
+
+    ```nix
+    nix-repl> :p lib.mapDataRecursiveCond (path: val: !(val ? type)) (path: val: "[ ${toString path} ] ${val.type}") {
+              deriv = { type = "derivation"; name = "deriv"; };
+              list = [ { type = "one"; }
+                       { type = "two"; } ];
+              other = { type = "other"; extra = "extra"; };
+              }
+    { deriv = "[ deriv ] derivation";
+      list = [ "[ list 0 ] one" "[ list 1 ] two" ];
+      other = "[ other ] other"; }
+    ```
+    :::
+  */
+  mapDataRecursiveCond =
+    cond:
+    f:
+    data:
+    let
+      recurse = path: val:
+        if isAttrs val && cond path val
+        then mapAttrs (n: v: recurse (path ++ [n]) v) val
+        else if isList val && cond path val
+        then imap0 (i: v: recurse (path ++ [i]) v) val
+        else f path val;
+    in
+      recurse [] data;
 
 
   /**

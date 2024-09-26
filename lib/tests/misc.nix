@@ -75,6 +75,9 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrsRecursive
+    mapAttrsRecursiveCond
+    mapDataRecursiveCond
     mapCartesianProduct
     matchAttrs
     mergeAttrs
@@ -2499,5 +2502,157 @@ runTests {
       directory = ./packages-from-directory/c;
     };
     expected = "c";
+  };
+
+  testMapAttrRecursiveDoc = {
+    expr = mapAttrsRecursive (path: value: concatStringsSep "-" (path ++ [value])) {
+      n = {
+        a = "A";
+        m = {
+          b = "B";
+          c = "C";
+        };
+      };
+      d = "D";
+    };
+
+    expected = {
+      n = {
+        a = "n-a-A";
+        m = {
+          b = "n-m-b-B";
+          c = "n-m-c-C";
+        };
+      };
+      d = "d-D";
+    };
+  };
+
+  testMapAttrRecursiveCondTraverseAll = {
+    expr =
+      let
+        attr = {
+          a = 0;
+          b = 1;
+          c = [ 0 1 ];
+          d = [ { a = 0; } ];
+          e = { a = 0; };
+        };
+      in
+        mapAttrsRecursiveCond (x: true) (path: x: path) (
+          attr
+          // { nestedAttr = attr; }
+          // { nestedList = [ attr attr ]; }
+        );
+    expected = {
+      a = [ "a" ];
+      b = [ "b" ];
+      c = [ "c" ];
+      d = [ "d" ];
+      e = { a = [ "e" "a" ]; };
+      nestedAttr = {
+        a = [ "nestedAttr" "a" ];
+        b = [ "nestedAttr" "b" ];
+        c = [ "nestedAttr" "c" ];
+        d = [ "nestedAttr" "d" ];
+        e = { a = [ "nestedAttr" "e" "a" ]; };
+      };
+      nestedList = [ "nestedList" ];
+    };
+  };
+
+  testMapDataRecursiveCondTraverseAll = {
+    expr =
+      let
+        attr = {
+          a = 0;
+          b = 1;
+          c = [ 0 1 ];
+          d = [ { a = 0; } ];
+          e = { a = 0; };
+        };
+      in
+        mapDataRecursiveCond (path: x: true) (path: x: path) (
+          attr
+          // { nestedAttr = attr; }
+          // { nestedList = [ attr attr ]; }
+        );
+    expected = {
+      a = [ "a" ];
+      b = [ "b" ];
+      c = [ [ "c" 0 ] [ "c" 1 ] ];
+      d = [ { a = [ "d" 0 "a" ]; } ];
+      e = { a = [ "e" "a" ]; };
+      nestedAttr = {
+        a = [ "nestedAttr" "a" ];
+        b = [ "nestedAttr" "b" ];
+        c = [ [ "nestedAttr" "c" 0 ] [ "nestedAttr" "c" 1 ] ];
+        d = [ { a = [ "nestedAttr" "d" 0 "a" ]; } ];
+        e = { a = [ "nestedAttr" "e" "a" ]; };
+      };
+      nestedList = [
+        {
+          a = [ "nestedList" 0 "a" ];
+          b = [ "nestedList" 0 "b" ];
+          c = [ [ "nestedList" 0 "c" 0 ] [ "nestedList" 0 "c" 1 ] ];
+          d = [ { a = [ "nestedList" 0 "d" 0 "a" ]; } ];
+          e = { a = [ "nestedList" 0 "e" "a" ]; };
+        }
+        {
+          a = [ "nestedList" 1 "a" ];
+          b = [ "nestedList" 1 "b" ];
+          c = [ [ "nestedList" 1 "c" 0 ] [ "nestedList" 1 "c" 1 ] ];
+          d = [ { a = [ "nestedList" 1 "d" 0 "a" ]; } ];
+          e = { a = [ "nestedList" 1 "e" "a" ]; };
+        }
+      ];
+    };
+  };
+
+  testMapDataRecursiveCondTraverseSome = {
+    expr =
+      let
+        attr = {
+          x = { cont = true; x = 0; };
+          y = { cont = false; y = 1; };
+          z = [ { cont = false; z1 = 0; }
+                { cont = true; z2 = 1; } ];
+        };
+      in
+        mapDataRecursiveCond (path: x: if x ? cont then x.cont else true) (path: x: path) (
+          attr
+          // { nestedAttr = attr; }
+          // { nestedList = [ attr attr ]; }
+        );
+    expected = {
+      x = { cont = [ "x" "cont" ]; x = [ "x" "x" ]; };
+      y = [ "y" ];
+      z = [ [ "z" 0 ]
+            { cont = [ "z" 1 "cont" ];
+              z2 = [ "z" 1 "z2" ]; } ];
+      nestedAttr = {
+        x = { cont = [ "nestedAttr" "x" "cont" ]; x = [ "nestedAttr" "x" "x" ]; };
+        y = [ "nestedAttr" "y" ];
+        z = [ [ "nestedAttr" "z" 0 ]
+              { cont = [ "nestedAttr" "z" 1 "cont" ];
+                z2 = [ "nestedAttr" "z" 1 "z2" ]; } ];
+      };
+      nestedList = [
+        {
+          x = { cont = [ "nestedList" 0 "x" "cont" ]; x = [ "nestedList" 0 "x" "x" ]; };
+          y = [ "nestedList" 0 "y" ];
+          z = [ [ "nestedList" 0 "z" 0 ]
+                { cont = [ "nestedList" 0 "z" 1 "cont" ];
+                  z2 = [ "nestedList" 0 "z" 1 "z2" ]; } ];
+        }
+        {
+          x = { cont = [ "nestedList" 1 "x" "cont" ]; x = [ "nestedList" 1 "x" "x" ]; };
+          y = [ "nestedList" 1 "y" ];
+          z = [ [ "nestedList" 1 "z" 0 ]
+                { cont = [ "nestedList" 1 "z" 1 "cont" ];
+                  z2 = [ "nestedList" 1 "z" 1 "z2" ]; } ];
+        }
+      ];
+    };
   };
 }
