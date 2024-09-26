@@ -647,7 +647,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         # Short description for Xen.
         description =
-          "Xen Hypervisor"
+          "Xen Project Hypervisor"
           # The "and related components" addition is automatically hidden if said components aren't being built.
           + lib.strings.optionalString (prefetchedSources != { }) " and related components"
           # To alter the description inside the paranthesis, edit ./packages.nix.
@@ -681,18 +681,18 @@ stdenv.mkDerivation (finalAttrs: {
                 # Originally, this was a call for the complicated withPrefetchedSources. Since there aren't
                 # that many optional components, we just use lib.strings.optionalString, because it's simpler.
                 # Optional components that aren't being built are automatically hidden.
-                + lib.strings.optionalString withEFI "\n* `xen.efi`: Xen's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+                + lib.strings.optionalString withEFI "\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
                 + lib.strings.optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
-                + lib.strings.optionalString withInternalQEMU "\n* `qemu-xen`: Xen's mirror of [QEMU](https://www.qemu.org/)."
-                + lib.strings.optionalString withInternalSeaBIOS "\n* `seabios-xen`: Xen's mirror of [SeaBIOS](https://www.seabios.org/SeaBIOS)."
-                + lib.strings.optionalString withInternalOVMF "\n* `ovmf-xen`: Xen's mirror of [OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF)."
-                + lib.strings.optionalString withInternalIPXE "\n* `ipxe-xen`: Xen's pinned version of [iPXE](https://ipxe.org/)."
+                + lib.strings.optionalString withInternalQEMU "\n* `qemu-xen`: The Xen Project's mirror of [QEMU](https://www.qemu.org/)."
+                + lib.strings.optionalString withInternalSeaBIOS "\n* `seabios-xen`: The Xen Project's mirror of [SeaBIOS](https://www.seabios.org/SeaBIOS)."
+                + lib.strings.optionalString withInternalOVMF "\n* `ovmf-xen`: The Xen Project's mirror of [OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF)."
+                + lib.strings.optionalString withInternalIPXE "\n* `ipxe-xen`: The Xen Project's pinned version of [iPXE](https://ipxe.org/)."
               )
           # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
           # This will hopefully give users the peace of mind that their Xen is secure, without needing
           # to search the source code for the XSA patches.
           + lib.strings.optionalString (writeAdvisoryDescription != [ ]) (
-            "\n\nThis Xen (${version}) has been patched against the following known security vulnerabilities:\n"
+            "\n\nThis Xen Project Hypervisor (${version}) has been patched against the following known security vulnerabilities:\n"
             + lib.strings.removeSuffix "\n" (lib.strings.concatLines writeAdvisoryDescription)
           );
 
@@ -712,8 +712,8 @@ stdenv.mkDerivation (finalAttrs: {
         ];
 
         # This automatically removes maintainers from EOL versions of Xen, so we aren't bothered about versions we don't explictly support.
-        knownVulnerabilities = lib.lists.optional (lib.strings.versionOlder version minSupportedVersion) "Xen ${version} is no longer supported by the Xen Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
         maintainers = lib.lists.optionals (lib.strings.versionAtLeast version minSupportedVersion) lib.teams.xen.members;
+        knownVulnerabilities = lib.lists.optional (lib.strings.versionOlder version minSupportedVersion) "The Xen Project Hypervisor version ${version} is no longer supported by the Xen Project Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
 
         mainProgram = "xl";
 

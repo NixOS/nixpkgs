@@ -15,11 +15,11 @@
   </a>
 </p>
 
-# Xen Hypervisor <a href="https://xenproject.org/"><img src="https://downloads.xenproject.org/Branding/Mascots/Xen-Fu-Panda-2000px.png" width="48px" align="top" alt="Xen Fu Panda"></a>
+# Xen Project Hypervisor <a href="https://xenproject.org/"><img src="https://downloads.xenproject.org/Branding/Mascots/Xen-Fu-Panda-2000px.png" width="48px" align="top" alt="Xen Fu Panda"></a>
 
-This directory includes the build recipes for the [Xen Hypervisor](https://xenproject.org/).
+This directory includes the build recipes for the [Xen Project Hypervisor](https://xenproject.org/).
 
-Some other notable packages that compose the Xen Ecosystem include:
+Some other notable packages that compose the Xen Project Ecosystem include:
 
 - `ocamlPackages.xenstore`: Mirage's `oxenstore` implementation.
 - `ocamlPackages.vchan`: Mirage's `xen-vchan` implementation.
