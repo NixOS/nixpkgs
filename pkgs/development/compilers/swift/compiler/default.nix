@@ -511,12 +511,6 @@ in stdenv.mkDerivation {
     # which requires a special signature.
     #
     # CMAKE_BUILD_WITH_INSTALL_NAME_DIR ensures we don't use rpath on Darwin.
-    #
-    # NOTE: On Darwin, we only want ncurses in the linker search path, because
-    # headers are part of libsystem. Adding its headers to the search path
-    # causes strange mixing and errors. Note that libedit propagates ncurses,
-    # so we add both manually here, instead of relying on setup hooks.
-    # TODO: Find a better way to prevent this conflict.
     cmakeFlags="
       -GNinja
       -DLLDB_SWIFTC=$SWIFT_BUILD_ROOT/swift/bin/swiftc
@@ -534,11 +528,11 @@ in stdenv.mkDerivation {
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
       ''}
-      -DLibEdit_INCLUDE_DIRS=${libedit.dev}/include
-      -DLibEdit_LIBRARIES=${libedit}/lib/libedit${stdenv.hostPlatform.extensions.sharedLibrary}
-      -DCURSES_INCLUDE_DIRS=${if stdenv.hostPlatform.isDarwin then "/var/empty" else ncurses.dev}/include
-      -DCURSES_LIBRARIES=${ncurses}/lib/libncurses${stdenv.hostPlatform.extensions.sharedLibrary}
-      -DPANEL_LIBRARIES=${ncurses}/lib/libpanel${stdenv.hostPlatform.extensions.sharedLibrary}
+      -DLibEdit_INCLUDE_DIRS=${lib.getInclude libedit}/include
+      -DLibEdit_LIBRARIES=${lib.getLib libedit}/lib/libedit${stdenv.hostPlatform.extensions.sharedLibrary}
+      -DCURSES_INCLUDE_DIRS=${lib.getInclude ncurses}/include
+      -DCURSES_LIBRARIES=${lib.getLib ncurses}/lib/libncurses${stdenv.hostPlatform.extensions.sharedLibrary}
+      -DPANEL_LIBRARIES=${lib.getLib ncurses}/lib/libpanel${stdenv.hostPlatform.extensions.sharedLibrary}
     ";
     buildProject lldb llvm-project/lldb
 
