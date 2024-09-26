@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, flac }:
+{ lib, stdenv, fetchpatch, fetchurl, flac }:
 
 stdenv.mkDerivation {
   version = "3.0.10";
@@ -10,6 +10,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ flac ];
+
+  patches = fetchpatch {
+    url = "https://salsa.debian.org/debian/shntool/-/raw/57efcd7b34c2107dd785c11d79dfcd4520b2bc41/debian/patches/950803.patch?inline=false";
+    sha256 = "sha256:0rlybjm6qf3ydqr44ns4yg4hwi4jhq237a5p6ph2v7s0630c90i9";
+  };
 
   meta = {
     description = "Multi-purpose WAVE data processing and reporting utility";
