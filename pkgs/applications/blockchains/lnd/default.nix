@@ -1,7 +1,18 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" "kvdb_postgres" "kvdb_etcd" ]
+, tags ? [
+    "autopilotrpc"
+    "chainrpc"
+    "invoicesrpc"
+    "kvdb_etcd"
+    "kvdb_postgres"
+    "monitoring"
+    "routerrpc"
+    "signrpc"
+    "walletrpc"
+    "watchtowerrpc"
+  ]
 }:
 
 buildGoModule rec {
