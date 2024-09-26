@@ -31,6 +31,13 @@ in
       description = "XSS Lock Daemon";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
+      preStart = ''
+        if [[ -z "$DISPLAY" ]]; then
+          echo "can't run xss-lock without DISPLAY set"
+          echo "if you are using X without a display manager, please see: https://nixos.wiki/wiki/Using_X_without_a_Display_Manager"
+          exit 1
+        fi
+      '';
       serviceConfig.ExecStart =
         builtins.concatStringsSep " " ([
             "${pkgs.xss-lock}/bin/xss-lock" "--session \${XDG_SESSION_ID}"
@@ -40,10 +47,5 @@ in
         ]);
       serviceConfig.Restart = "always";
     };
-
-    warnings = lib.mkIf (config.services.xserver.displayManager.startx.enable) [
-      "xss-lock service only works if a displayManager is set; it doesn't work when services.xserver.displayManager.startx.enable = true"
-    ];
-
   };
 }
