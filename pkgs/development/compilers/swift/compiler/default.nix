@@ -219,6 +219,7 @@ in stdenv.mkDerivation {
       sigtool # codesign
       DarwinTools # sw_vers
       fixDarwinDylibNames
+      cctools.libtool
     ];
 
   buildInputs = [
