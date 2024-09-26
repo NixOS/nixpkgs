@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       # Uses pkg_get_variable, cannot substitute prefix with that
       substituteInPlace data/CMakeLists.txt \
-        --replace "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
+        --replace-fail "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
 
       # Bad concatenation
       substituteInPlace libmessaging-menu/messaging-menu.pc.in \
-        --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
-        --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+        --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
+        --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
 
       # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
       substituteInPlace tests/CMakeLists.txt \
