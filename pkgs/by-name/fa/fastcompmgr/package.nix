@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcompmgr";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "tycho-kirchner";
     repo = "fastcompmgr";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-UKX0gjhbbXSXfyw/NGA31vTOfgd4kdnxO7lIs+mkgFs=";
+    hash = "sha256-FrPM6k4280SNnmi/jiwKU/O2eBue+5h8aNDCiIqZ3+c=";
   };
 
   nativeBuildInputs = [ pkgs.pkg-config ];
