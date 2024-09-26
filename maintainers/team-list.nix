@@ -749,6 +749,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  ngi = {
+    members = [
+      eljamm
+      fricklerhandwerk
+      wegank
+    ];
+    scope = "Maintain NGI-supported software.";
+    shortName = "NGI";
+  };
+
   node = {
     members = [ winter ];
     scope = "Maintain Node.js runtimes and build tooling.";
