@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     description = "Cross-platform build utility based on Lua";
     homepage = "https://xmake.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [
+      rewine
+      rennsax
+    ];
   };
 }
