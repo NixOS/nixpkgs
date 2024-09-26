@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     /usr/bin/xcodebuild -project SwiftFormat.xcodeproj \
       -scheme "SwiftFormat (Command Line Tool)" \
-      CODE_SIGN_IDENTITY= SYMROOT=build OBJROOT=build
+      CODE_SIGN_IDENTITY=- SYMROOT=build OBJROOT=build
   '';
 
   installPhase = ''
