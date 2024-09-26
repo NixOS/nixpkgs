@@ -42,7 +42,10 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${url}`))
 				resolve()
 			})
-                        res.on('error', e => reject(e))
+		}).on("error", (e) => {
+			// error handler needs to be installed here, using res.on() in callback is registered too late for some errors
+			console.error(`Error fetching ${url}:`, e.code, ", retrying")
+			return get(url, redirects + 1)
 		})
 		get(url)
 	})
