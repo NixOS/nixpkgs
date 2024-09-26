@@ -1,0 +1,34 @@
+From b1274301c8276954d1960c8db880fc9c3e659216 Mon Sep 17 00:00:00 2001
+From: Neil Mayhew <neil@mayhew.name>
+Date: Thu, 12 Oct 2023 12:48:35 -0600
+Subject: [PATCH] Fix install error on MinGW
+Content-Type: text/plain; charset=utf-8
+
+---
+ Makefile.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index d28f4be..fa361d5 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -56,6 +56,7 @@ CP          = cp
+ RMDIR       = rmdir
+ SHTOOL      = $(S)/shtool
+ LIBTOOL     = $(C)/libtool
++EXEEXT      = @EXEEXT@
+ TRUE        = true
+ POD2MAN     = pod2man
+ PERL        = @PERL@
+@@ -253,7 +254,7 @@ install:
+ 	-@if [ ".$(WITH_CXX)" = .yes ]; then \
+ 	    $(LIBTOOL) --mode=install $(SHTOOL) install -c -m 644 $(CXX_NAME) $(DESTDIR)$(libdir)/; \
+ 	fi
+-	@$(LIBTOOL) --mode=install $(SHTOOL) install -c -s -m 755 uuid $(DESTDIR)$(bindir)/
++	@$(LIBTOOL) --mode=install $(SHTOOL) install -c -s -m 755 $(PRG_NAME)$(EXEEXT) $(DESTDIR)$(bindir)/
+ 	$(SHTOOL) install -c -m 644 $(S)/uuid.1 $(DESTDIR)$(mandir)/man1/
+ 	-@if [ ".$(WITH_PERL)" = .yes ]; then \
+ 	    (cd $(S)/perl && $(MAKE) $(MFLAGS) install DESTDIR=$(DESTDIR)); \
+-- 
+2.42.0
+

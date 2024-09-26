@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     "ac_cv_va_copy=yes"
   ] ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
-  patches = [ ./shtool.patch ];
+  patches = [ ./shtool.patch ./mingw-install-error.patch ];
 
   meta = with lib; {
     homepage = "http://www.ossp.org/pkg/lib/uuid/";
