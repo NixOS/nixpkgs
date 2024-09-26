@@ -34781,8 +34781,6 @@ with pkgs;
 
   xbill = callPackage ../games/xbill { };
 
-  xmage = callPackage ../games/xmage { };
-
   abbaye-des-morts = callPackage ../games/abbaye-des-morts { };
 
   abuse = callPackage ../games/abuse { };
