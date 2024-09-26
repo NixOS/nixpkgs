@@ -35,14 +35,19 @@
 , cctools # libtool
 , sigtool
 , DarwinTools
-, CoreServices
-, Foundation
-, Combine
-, MacOSX-SDK
-, CLTools_Executables
+, apple-sdk_13
+, darwinMinVersionHook
 }:
 
 let
+  apple-sdk_swift = apple-sdk_13; # Use the SDK that was available when Swift shipped.
+
+  deploymentVersion =
+    if lib.versionOlder (targetPlatform.darwinMinVersion or "0") "10.15" then
+      "10.15"
+    else
+      targetPlatform.darwinMinVersion;
+
   python3 = python3Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
 
   inherit (stdenv) hostPlatform targetPlatform;
@@ -181,6 +186,8 @@ let
     name = "apple-swift-core";
     dontUnpack = true;
 
+    buildInputs = [ apple-sdk_swift ];
+
     installPhase = ''
       mkdir -p $out/lib/swift
       cp -r \
@@ -232,10 +239,15 @@ in stdenv.mkDerivation {
       libuuid
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Foundation
-      Combine
+      apple-sdk_swift
+      (darwinMinVersionHook deploymentVersion)
     ];
+
+  # Will effectively be `buildInputs` when swift is put in `nativeBuildInputs`.
+  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
+    apple-sdk_swift
+    (darwinMinVersionHook deploymentVersion)
+  ];
 
   # This is a partial reimplementation of our setup hook. Because we reuse
   # the Swift wrapper for the Swift build itself, we need to do some of the
@@ -409,9 +421,6 @@ in stdenv.mkDerivation {
     mkdir -p ../build
     cd ../build
     export SWIFT_BUILD_ROOT="$PWD"
-
-    # Most builds set a target, but LLDB doesn't. Harmless on non-Darwin.
-    export MACOSX_DEPLOYMENT_TARGET=10.15
   '';
 
   # These steps are derived from doing a normal build with.
@@ -497,6 +506,7 @@ in stdenv.mkDerivation {
       -DSWIFT_PATH_TO_STRING_PROCESSING_SOURCE=$SWIFT_SOURCE_ROOT/swift-experimental-string-processing
       -DSWIFT_INSTALL_COMPONENTS=${lib.concatStringsSep ";" swiftInstallComponents}
       -DSWIFT_STDLIB_ENABLE_OBJC_INTEROP=${if stdenv.hostPlatform.isDarwin then "ON" else "OFF"}
+      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_OSX=${deploymentVersion}
     "
     buildProject swift
 
@@ -586,7 +596,7 @@ in stdenv.mkDerivation {
       -DSWIFT_DEST_ROOT=$out
       -DSWIFT_HOST_VARIANT_SDK=OSX
 
-      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_OSX=10.15
+      -DSWIFT_DARWIN_DEPLOYMENT_VERSION_OSX=${deploymentVersion}
       -DSWIFT_DARWIN_DEPLOYMENT_VERSION_IOS=13.0
       -DSWIFT_DARWIN_DEPLOYMENT_VERSION_MACCATALYST=13.0
       -DSWIFT_DARWIN_DEPLOYMENT_VERSION_TVOS=13.0
@@ -708,6 +718,9 @@ in stdenv.mkDerivation {
 
     wrapProgram $out/bin/swift-frontend \
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
+
+    # Needs to be propagated by the compiler not by its dev output.
+    moveToOutput nix-support/propagated-target-target-deps "$out"
   '';
 
   passthru = {
