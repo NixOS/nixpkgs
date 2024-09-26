@@ -253,6 +253,28 @@ in
                   Whether to follow all symlinks in archive trees.
                 '';
               };
+              tarsnapper = mkOption
+                {
+                  type = types.submodule {
+                    options = {
+                      enable = mkEnableOption "enable tarsnapper integration";
+                      package = mkPackageOption pkgs "tarsnapper" { };
+                      deltas = mkOption {
+                        type = types.str;
+                        default = "6h 7d 31d";
+                        description = ''
+                          The duration of each generation of backups to keep.
+                          See [How expiring backups works](https://github.com/miracle2k/tarsnapper?tab=readme-ov-file#how-expiring-backups-works)
+                          for details on this value.
+                        '';
+                      };
+                    };
+                  };
+
+                  description = ''
+                    Control the tarsnapper cleanup integration.
+                  '';
+                };
             };
           }
         ));
@@ -314,6 +336,15 @@ in
         # endpoint.
         preStart = ''
           while ! ping -4 -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
+        '';
+
+        postStart = lib.optionalString cfg.tarsnapper.enable ''
+          ${lib.getExe cfg.tarsnapper.package} \
+            -o configfile /etc/tarsnap/${name}.conf \
+            --target '${name}-$date' \
+            --dateformat '%Y%m%d%H%M%S' \
+            --deltas ${cfg.tarsnapper.deltas} - \
+            expire
         '';
 
         script = let
