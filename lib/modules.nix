@@ -354,12 +354,7 @@ let
           else if m._type == "if" || m._type == "override" then
             loadModule args fallbackFile fallbackKey { config = m; }
           else
-            throw (
-              "Could not load a value as a module, because it is of type ${lib.strings.escapeNixString m._type}"
-              + optionalString (fallbackFile != unknownModule) ", in file ${toString fallbackFile}."
-              + optionalString (m._type == "configuration") " If you do intend to import this configuration, please only import the modules that make up the configuration. You may have to create a `let` binding, file or attribute to give yourself access to the relevant modules.\nWhile loading a configuration into the module system is a very sensible idea, it can not be done cleanly in practice."
-               # Extended explanation: That's because a finalized configuration is more than just a set of modules. For instance, it has its own `specialArgs` that, by the nature of `specialArgs` can't be loaded through `imports` or the the `modules` argument. So instead, we have to ask you to extract the relevant modules and use those instead. This way, we keep the module system comparatively simple, and hopefully avoid a bad surprise down the line.
-            )
+            throw (messages.not_a_module { inherit fallbackFile; value = m; _type = m._type; expectedClass = class; })
         else if isList m then
           let defs = [{ file = fallbackFile; value = m; }]; in
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
@@ -1449,6 +1444,110 @@ let
         ;
       collectModules = collectModules null;
     };
+
+  /**
+    Error messages produced by the module system.
+
+    We factor these out to improve the flow when reading the code.
+
+    Functions in `messages` that produce error messages are spelled in
+    lower_snake_case. This goes against the convention in order to make the
+    error message implementation more readable, and to visually distinguish
+    them from other functions in the module system.
+   */
+  messages = let
+    inherit (lib.strings) concatMapStringsSep escapeNixString trim;
+    /** "" or ", in file FOO" */
+    into_fallback_file_maybe = file:
+      optionalString
+        (file != null && file != unknownModule)
+        ", while trying to load a module into ${toString file}";
+
+    /** Format text with one line break between each list item. */
+    lines = concatMapStringsSep "\n" trim;
+
+    /** Format text with two line break between each list item. */
+    paragraphs = concatMapStringsSep "\n\n" trim;
+
+    /**
+      ```
+      optionalMatch
+        { foo = "Foo result";
+          bar = "Bar result";
+        } "foo"
+        ==  [ "Foo result" ]
+
+      optionalMatch { foo = "Foo"; } "baz"  ==  [ ]
+
+      optionalMatch { foo = "Foo"; } true   ==  [ ]
+      ```
+     */
+    optionalMatch = cases: value:
+      if isString value && cases?${value}
+      then [ cases.${value} ]
+      else [];
+
+    # esc = builtins.fromJSON "\"\\u001b\"";
+    esc = builtins.fromJSON "\"\\u001b\"";
+    # Bold purple for warnings
+    warn = s: "${esc}[1;35m${s}${esc}[0m";
+    # Bold green for suggestions
+    good = s: "${esc}[1;32m${s}${esc}[0m";
+    # Bold, default color for code
+    code = s: "${esc}[1m${s}${esc}[0m";
+
+  in {
+
+    /** When load a value with a (wrong) _type as a module  */
+    not_a_module = { fallbackFile, value, _type, expectedClass ? null }:
+      paragraphs (
+        [ ''
+            Expected a module, but found a value of type ${warn (escapeNixString _type)}${into_fallback_file_maybe fallbackFile}.
+            A module is typically loaded by adding it the ${code "imports = [ ... ];"} attribute of an existing module, or in the ${code "modules = [ ... ];"} argument of various functions.
+            Please make sure that each of the list items is a module, and not a different kind of value.
+          ''
+        ]
+        ++ (optionalMatch
+          {
+            "configuration" = trim ''
+              If you really mean to import this configuration, instead please only import the modules that make up the configuration.
+              You may have to create a `let` binding, file or attribute to give yourself access to the relevant modules.
+              While loading a configuration into the module system is a very sensible idea, it can not be done cleanly in practice.
+            '';
+            # ^^ Extended explanation: That's because a finalized configuration is more than just a set of modules. For instance, it has its own `specialArgs` that, by the nature of `specialArgs` can't be loaded through `imports` or the the `modules` argument. So instead, we have to ask you to extract the relevant modules and use those instead. This way, we keep the module system comparatively simple, and hopefully avoid a bad surprise down the line.
+
+            "flake" = lines
+              ([(trim ''
+                Perhaps you forgot to select an attribute name?
+                Instead of, for example,
+                    ${warn "inputs.someflake"}
+                you need to write something like
+                    ${warn "inputs.someflake"}${
+                      if expectedClass == null
+                      then good ".modules.someApp.default"
+                      else good ".modules.${expectedClass}.default"
+
+                    }
+            '')]
+            ++ optionalMatch
+              { # We'll no more than 5 custom suggestions here.
+                # Please switch to `.modules.${class}` in your Module System application.
+                "nixos" = trim ''
+                  or
+                      ${warn "inputs.someflake"}${good ".nixosModules.default"}
+                '';
+                "darwin" = trim ''
+                  or
+                      ${warn "inputs.someflake"}${good ".darwinModules.default"}
+                '';
+              }
+              expectedClass
+            );
+          }
+          _type
+        )
+      );
+  };
 
 in
 private //
