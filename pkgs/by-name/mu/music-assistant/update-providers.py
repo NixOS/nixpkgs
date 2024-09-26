@@ -24,7 +24,7 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
   version = "{{ version }}";
   providers = {
 {%- for provider in providers | sort(attribute='domain') %}
-    {{ provider.domain }} = {% if provider.available %}ps: with ps; {% endif %}[
+    {{ provider.domain }} = {% if provider.available %}ps: with ps;{% else %}ps:{% endif %} [
 {%- for requirement in provider.available | sort %}
       {{ requirement }}
 {%- endfor %}
