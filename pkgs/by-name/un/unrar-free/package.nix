@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libarchive ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description = "Free utility to extract files from RAR archives";
     longDescription = ''
