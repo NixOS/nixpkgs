@@ -26662,6 +26662,8 @@ with pkgs;
 
   sgx-azure-dcap-client = callPackage ../os-specific/linux/sgx/azure-dcap-client { };
 
+  sgx-dcap-default-qpl = callPackage ../os-specific/linux/sgx/dcap-default-qpl { };
+
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
   sgx-ssl = callPackage ../os-specific/linux/sgx/ssl { };
