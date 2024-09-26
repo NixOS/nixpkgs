@@ -47,18 +47,6 @@ let
     # packaging with `swiftPackages.callPackage`.
     inherit (clang) bintools;
     stdenv = overrideCC pkgs.stdenv clang;
-    darwin = pkgs.darwin.overrideScope (_: prev: {
-      inherit apple_sdk;
-      inherit (apple_sdk) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
-      CF = apple_sdk.CoreFoundation // { __attrsFailEvaluation = true; };
-      __attrsFailEvaluation = true;
-    });
-    xcodebuild = pkgs.xcbuild.override {
-      inherit (apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
-      inherit stdenv;
-      sdkVer = "10.15";
-    };
-    xcbuild = xcodebuild;
 
     swift-unwrapped = callPackage ./compiler {
       inherit (darwin) DarwinTools sigtool;
