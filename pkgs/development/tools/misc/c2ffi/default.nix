@@ -3,6 +3,7 @@
 , cmake
 , llvmPackages_16
 , unstableGitUpdater
+, c2ffiHook
 }:
 
 let
@@ -33,11 +34,23 @@ llvmPackages.stdenv.mkDerivation {
     cmake
   ];
 
+  propagatedBuildInputs = [ c2ffiHook ];
+
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.clang
     llvmPackages.libclang
   ];
+
+  postInstall = ''
+    mv $out/bin/c2ffi $out/bin/.c2ffi-wrapped
+    export c2ffi=$out/bin/.c2ffi-wrapped
+    export libc=${llvmPackages.stdenv.cc.libc.dev}
+    export clang=${llvmPackages.stdenv.cc}
+
+    substituteAll ${./c2ffi-wrapper.sh} $out/bin/c2ffi
+    chmod a+x $out/bin/c2ffi
+  '';
 
   # This isn't much, but...
   doInstallCheck = true;
