@@ -272,7 +272,7 @@ in
     environment.systemPackages = [
       (cfg.package.override (old: {
         extraPrefsFiles = old.extraPrefsFiles or [] ++ [(pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig)];
-        nativeMessagingHosts = old.nativeMessagingHosts or [] ++ cfg.nativeMessagingHosts.packages;
+        nativeMessagingHosts = old.nativeMessagingHosts or [] ++ lib.unique cfg.nativeMessagingHosts.packages;
         cfg = (old.cfg or {}) // cfg.wrapperConfig;
       }))
     ];
