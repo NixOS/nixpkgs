@@ -7,7 +7,8 @@ let
   inherit (config.security.acme) certs;
   vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
   acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null) vhostsConfigs;
-  dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
   virtualHosts = mapAttrs (vhostName: vhostConfig:
     let
       serverName = if vhostConfig.serverName != null
@@ -471,7 +472,7 @@ let
     '') authDef)
   );
 
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 
   oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic"));
 in
@@ -1214,10 +1215,10 @@ in
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
-    }) dependentCertNames;
+      services = [ config.systemd.services.nginx ] ++ lib.optional (cfg.enableReload || vhostCertNames != []) config.systemd.services.nginx-config-reload;
+    }) vhostCertNames;
 
     services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
@@ -1240,8 +1241,8 @@ in
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
-      after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
+      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+      after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames;
       # Nginx needs to be started in order to be able to request certificates
       # (it's hosting the acme challenge after all)
       # This fixes https://github.com/NixOS/nixpkgs/issues/81842
@@ -1320,9 +1321,9 @@ in
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload = let
-      sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
-      sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
-    in mkIf (cfg.enableReload || sslServices != []) {
+      sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
+      sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+    in mkIf (cfg.enableReload || vhostCertNames != []) {
       wants = optionals cfg.enableReload [ "nginx.service" ];
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
@@ -1333,7 +1334,7 @@ in
       restartTriggers = optionals cfg.enableReload [ configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);
+      unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames);
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;
