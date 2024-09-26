@@ -9,19 +9,23 @@ stdenv.mkDerivation rec {
     sha256 = "197lw2nwmzsmfsbvgvi8z7kj69n374kgfzzp8pkmk7mp2vkk991k";
   };
 
-  dontConfigure = true;
-
-  enableParallelBuilding = true;
-
   buildInputs = [ mpi ];
 
   makeFlags = [ "arch=Linux_MPI" ];
 
+  enableParallelBuilding = true;
+
+  dontConfigure = true;
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/hpcg
 
     cp bin/xhpcg $out/bin
     cp bin/hpcg.dat $out/share/hpcg
+
+    runHook postInstall
   '';
 
   meta = with lib; {
