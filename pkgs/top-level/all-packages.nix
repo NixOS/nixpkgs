@@ -14558,6 +14558,8 @@ with pkgs;
 
   clean = callPackage ../development/compilers/clean { };
 
+  cleanit = with python3Packages; toPythonApplication cleanit;
+
   closurecompiler = callPackage ../development/compilers/closure { };
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
