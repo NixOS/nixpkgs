@@ -14315,8 +14315,6 @@ with pkgs;
 
   agdsn-zsh-config = callPackage ../shells/zsh/agdsn-zsh-config { };
 
-  nix-your-shell = callPackage ../shells/nix-your-shell { };
-
   bash = lowPrio (callPackage ../shells/bash/5.nix { });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = callPackage ../shells/bash/5.nix {
