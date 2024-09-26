@@ -1,8 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python311,
+  fetchFromGitHub,
 }:
-
+let
+  python3 = python311;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "frogmouth";
   version = "0.9.1";
@@ -15,9 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-0fcCON/M9JklE7X9aRfzTkEFG4ckJqLoQlYCSrWHHGQ=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   propagatedBuildInputs = with python3.pkgs; [
     httpx
