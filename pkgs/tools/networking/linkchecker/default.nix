@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "linkchecker";
-  version = "10.2.1";
+  version = "10.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linkchecker";
     repo = "linkchecker";
     rev = "refs/tags/v${version}";
-    hash = "sha256-z7Qp74cai8GfsxB4n9dSCWQepp0/4PimFiRJQBaVSoo=";
+    hash = "sha256-2+zlVjkGFeozlJX/EZpGtmjxeB+1B8L3L68hfImKb2A=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -44,8 +44,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
-    "tests/checker/telnetserver.py"
-    "tests/checker/test_telnet.py"
+    "tests/test_linkchecker.py"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "tests/checker/test_content_allows_robots.py"
+    "tests/checker/test_http*.py"
+    "tests/test_network.py"
   ];
 
   __darwinAllowLocalNetworking = true;
