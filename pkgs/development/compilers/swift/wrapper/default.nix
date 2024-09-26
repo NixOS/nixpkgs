@@ -18,6 +18,10 @@ stdenv.mkDerivation (swift._wrapperParams // {
     swiftStaticModuleSubdir swiftStaticLibSubdir;
   swiftDriver = lib.optionalString useSwiftDriver "${swift-driver}/bin/swift-driver";
 
+  env.darwinMinVersion = lib.optionalString stdenv.targetPlatform.isDarwin (
+    stdenv.targetPlatform.darwinMinVersion
+  );
+
   passAsFile = [ "buildCommand" ];
   buildCommand = ''
     mkdir -p $out/bin $out/nix-support
@@ -48,6 +52,13 @@ stdenv.mkDerivation (swift._wrapperParams // {
     ln -s ${swift.lib}/lib $out/lib
 
     substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
+
+    # Propagate any propagated inputs from the unwrapped Swift compiler, if any.
+    if [ -e "$swift/nix-support" ]; then
+      for input in "$swift/nix-support/"*propagated*; do
+        cp "$input" "$out/nix-support/$(basename "$input")"
+      done
+    fi
   '';
 
   passthru = {
