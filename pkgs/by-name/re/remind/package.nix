@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   tk,
-  tcllib,
+  tclPackages,
   tcl,
   tkremind ? null,
   withGui ?
@@ -23,7 +23,7 @@ tcl.mkTclDerivation rec {
   };
 
   propagatedBuildInputs = lib.optionals withGui [
-    tcllib
+    tclPackages.tcllib
     tk
   ];
 
