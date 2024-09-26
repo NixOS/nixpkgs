@@ -15,7 +15,11 @@ let
     callPackage = newScope self;
 
     # Current versions of Swift on Darwin require macOS SDK 10.15 at least.
-    # Re-export this so we can rely on the minimum Swift SDK elsewhere.
+    # The Swift compiler propagates the 13.3 SDK and a 10.15 deployment target.
+    # Packages that need a newer version can add it to their build inputs
+    # to use it (as normal).
+
+    # This SDK is included for compatibility with existing packages.
     apple_sdk = pkgs.darwin.apple_sdk_11_0;
 
     # Swift builds its own Clang for internal use. We wrap that clang with a
@@ -40,8 +44,7 @@ let
         swiftLlvmPackages.clang;
 
     # Overrides that create a useful environment for swift packages, allowing
-    # packaging with `swiftPackages.callPackage`. These are similar to
-    # `apple_sdk_11_0.callPackage`, with our clang on top.
+    # packaging with `swiftPackages.callPackage`.
     inherit (clang) bintools;
     stdenv = overrideCC pkgs.stdenv clang;
     darwin = pkgs.darwin.overrideScope (_: prev: {
@@ -67,7 +70,7 @@ let
     };
 
     Dispatch = if stdenv.hostPlatform.isDarwin
-      then null # part of libsystem
+      then null # part of apple-sdk
       else callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
 
     Foundation = if stdenv.hostPlatform.isDarwin
