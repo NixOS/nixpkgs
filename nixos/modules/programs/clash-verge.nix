@@ -18,7 +18,6 @@
       example = "pkgs.clash-verge-rev";
     };
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
-    tunMode = lib.mkEnableOption "Clash Verge TUN mode";
     serviceModule = lib.mkEnableOption "Clash Verge Service mode";
   };
 
@@ -46,13 +45,6 @@
           ExecStart = "${cfg.package}/bin/clash-verge-service";
         };
         wantedBy = [ "multi-user.target" ];
-      };
-
-      security.wrappers.clash-verge = lib.mkIf cfg.tunMode {
-        owner = "root";
-        group = "root";
-        capabilities = "cap_net_bind_service,cap_net_admin=+ep";
-        source = "${lib.getExe cfg.package}";
       };
     };
 
