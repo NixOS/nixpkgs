@@ -8739,6 +8739,13 @@
     githubId = 17255815;
     name = "hulr";
   };
+  humaidq = {
+    name = "Humaid Alqasimi";
+    email = "git@huma.id";
+    github = "humaidq";
+    githubId = 10805493;
+    matrix = "@humaidq:matrix.org";
+  };
   humancalico = {
     email = "humancalico@disroot.org";
     github = "humancalico";
