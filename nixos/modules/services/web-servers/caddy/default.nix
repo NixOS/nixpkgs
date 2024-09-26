@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
@@ -305,6 +306,23 @@ in
       '';
     };
 
+    httpPort = mkOption {
+      default = 80;
+      type = with types; nullOr port;
+      description = ''
+        The default port to listen on for HTTP traffic.
+      '';
+    };
+
+    httpsPort = mkOption {
+      default = 443;
+      type = with types; nullOr port;
+      description = ''
+        The default port to listen on for HTTPS traffic.
+        Will also be used for HTTP/3.
+      '';
+    };
+
     enableReload = mkOption {
       default = true;
       type = types.bool;
@@ -399,6 +417,18 @@ in
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
       ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}
+      ${optionalString (
+        !elem cfg.httpPort [
+          null
+          options.services.caddy.httpPort.default
+        ]
+      ) "http_port ${cfg.httpPort}"}
+      ${optionalString (
+        !elem cfg.httpsPort [
+          null
+          options.services.caddy.httpsPort.default
+        ]
+      ) "https_port ${cfg.httpsPort}"}
       log {
         ${cfg.logFormat}
       }
