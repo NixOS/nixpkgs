@@ -8,32 +8,45 @@ let
   inherit (lib)
     getExe
     hasAttr
-    id
     maintainers
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
     optionals
+    optionalString
+    recursiveUpdate
     types
     ;
 
   cfg = config.services.spotifyd;
   toml = pkgs.formats.toml { };
 
-  warnConfig =
-    if cfg.config != "" then
-      lib.trace "Using the stringly typed .config attribute is discouraged. Use the TOML typed .settings attribute instead."
-    else
-      id;
+  defaultCachePath = "/var/cache/spotifyd";
 
+  # Make sure we have a usable nix attrset to make assertions and warnings
+  parsedSpotifydConf = if cfg.settings != { } then cfg.settings else builtins.fromTOML cfg.config;
+
+  # Modify parsed config according to options
   spotifydConf =
-    if cfg.settings != { } then cfg.settings else warnConfig (builtins.fromTOML cfg.config);
+    if cfg.credentialsFile != null then
+      recursiveUpdate parsedSpotifydConf {
+        ${if hasAttr "spotifyd" parsedSpotifydConf then "spotifyd" else "global"} = {
+          username_cmd = "${getExe pkgs.jq} -r .username ${defaultCachePath}/credentials.json";
+          cache_path = defaultCachePath;
+        };
+      }
+    else
+      parsedSpotifydConf;
 
   spotifydConfFile = toml.generate "spotify.conf" spotifydConf;
 
-  defaultCachePath = "/var/cache/spotifyd";
-  cachePath = (spotifydConf.spotifyd or spotifydConf.global).cache_path or defaultCachePath;
+  # spotifyd takes precedence over global
+  cachePath =
+    if cfg.credentialsFile != null then
+      defaultCachePath
+    else
+      (spotifydConf.spotifyd or spotifydConf.global).cache_path or defaultCachePath;
 in
 {
   options = {
@@ -42,6 +55,21 @@ in
 
       package = mkPackageOption pkgs "spotifyd" {
         example = "pkgs.spotifyd.override { withMpris = false; }";
+      };
+
+      credentialsFile = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        description = ''
+          File that will be used by spotifyd to authenticate itself instead
+          of using `settings.username`, `settings.password`, etc. which do
+          not work anymore.
+
+          This option also sets some settings such as `username_cmd` and `cache_path`
+          in your spotifyd configuration.
+
+          https://github.com/Spotifyd/spotifyd/issues/1293
+        '';
       };
 
       config = mkOption {
@@ -77,11 +105,44 @@ in
         assertion = hasAttr "spotifyd" spotifydConf || hasAttr "global" spotifydConf;
         message = "A main spotifyd or global attribute must be set.";
       }
+      {
+        assertion =
+          !(
+            hasAttr "password" (spotifydConf.spotifyd or spotifydConf.global)
+            && hasAttr "password_cmd" (spotifydConf.spotifyd or spotifydConf.global)
+          );
+        message = "`password` and `password_cmd` cannot be set at the same time.";
+      }
+      {
+        assertion =
+          !(
+            hasAttr "username" (spotifydConf.spotifyd or spotifydConf.global)
+            && hasAttr "username_cmd" (spotifydConf.spotifyd or spotifydConf.global)
+          );
+        message = "`username` and `username_cmd` cannot be set at the same time.";
+      }
+      {
+        assertion =
+          !(
+            cfg.credentialsFile != null
+            && (
+              hasAttr "password" (spotifydConf.spotifyd or spotifydConf.global)
+              || hasAttr "password_cmd" (spotifydConf.spotifyd or spotifydConf.global)
+              || hasAttr "username" (spotifydConf.spotifyd or spotifydConf.global)
+            )
+          );
+      }
     ];
 
-    warnings = optionals (cachePath != defaultCachePath) [
-      ''Changing the `cache_path` setting will not ensure that the service will have read/write permissions for that directory.''
-    ];
+    warnings =
+      optionals (cachePath != defaultCachePath) [
+        ''Changing the `cache_path` setting in `services.spotifyd.settings...` will not ensure that the service will have read/write permissions for that directory${
+          optionalString (cfg.credentialsFile != null) " and will not take care of the credentials file"
+        }.''
+      ]
+      ++ optionals (cfg.config != "") [
+        ''Using the stringly typed `services.spotifyd.config` attribute is discouraged. Use the TOML typed .settings attribute instead.''
+      ];
 
     systemd.services.spotifyd = {
       wantedBy = [ "multi-user.target" ];
@@ -93,7 +154,10 @@ in
       description = "spotifyd, a Spotify playing daemon";
       environment.SHELL = "/bin/sh";
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} --no-daemon --cache-path ${cachePath} --config-path ${spotifydConfFile}";
+        ExecStartPre = mkIf (
+          cfg.credentialsFile != null
+        ) "${pkgs.coreutils}/bin/cp -f ${cfg.credentialsFile} ${defaultCachePath}/credentials.json";
+        ExecStart = "${getExe cfg.package} --no-daemon --config-path ${spotifydConfFile}";
         Restart = "always";
         RestartSec = 12;
         DynamicUser = true;
