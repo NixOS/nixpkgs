@@ -333,6 +333,7 @@ else let
   derivationArg =
     removeAttrs attrs removedOrReplacedAttrNames
     // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
+      pname = attrs.pname or null;
       name =
         let
           # Indicate the host platform of the derivation if cross compiling.
