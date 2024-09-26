@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.3";
+  version = "0.19.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-UJkfAVorALGRqeoGr4136n98iTyPt9qzQxwnhkKgRNM=";
+    hash = "sha256-JvWusDokov8G0UO9oOkGicAI7wYZTnNywbvKMZKQWiQ=";
   };
 
   build-system = [ poetry-core ];
