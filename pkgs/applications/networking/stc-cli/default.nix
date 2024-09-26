@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "stc";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = pname;
     rev = version;
-    sha256 = "sha256-g1zn/CBpLv0oNhp32njeNhhli8aTCECgh92+zn5v+4U=";
+    sha256 = "sha256-Hv8md27LUB/d1MNqNEw7UX7r3tMYdguuGP3xOI2LWBk=";
   };
 
-  vendorHash = "sha256-0OsxCGCJT5k5bHXNSIL6QiJXj72bzYCZiI03gvHQuR8=";
+  vendorHash = "sha256-TnWCviLstm6kS34cNkrVGS9RZ21cVX/jmx8d+KytB0c=";
 
   meta = with lib; {
     description = "Syncthing CLI Tool";
