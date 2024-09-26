@@ -28813,6 +28813,8 @@ with pkgs;
 
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
+  clipboard-inspector = callPackage ../applications/misc/clipboard-inspector { };
+
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
   clipmenu = callPackage ../applications/misc/clipmenu { };
