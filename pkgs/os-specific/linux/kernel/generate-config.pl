@@ -41,7 +41,14 @@ close ANSWERS;
 sub runConfig {
 
     # Run `make config'.
-    my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$buildRoot config SHELL=bash ARCH=$ENV{ARCH} CC=$ENV{CC} HOSTCC=$ENV{HOSTCC} HOSTCXX=$ENV{HOSTCXX} $makeFlags");
+    #
+    # We have to pass through the target toolchain, because `make config` checks them for versions. This is
+    # required to get clang LTO working, among other things.
+    my $pid = open2(\*IN, \*OUT,
+                    "make -C $ENV{SRC} O=$buildRoot config"
+                    . " SHELL=bash ARCH=$ENV{ARCH} CC=$ENV{CC} HOSTCC=$ENV{HOSTCC} HOSTCXX=$ENV{HOSTCXX}"
+                    . " LD=$ENV{LD} NM=$ENV{NM} AR=$ENV{AR} OBJCOPY=$ENV{OBJCOPY}"
+                    . " $makeFlags");
 
     # Parse the output, look for questions and then send an
     # appropriate answer.

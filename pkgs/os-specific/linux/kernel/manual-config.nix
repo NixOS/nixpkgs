@@ -434,6 +434,18 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   makeFlags = [
     "O=$(buildRoot)"
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+    "LD=${if stdenv.isx86_64 && stdenv.cc.bintools.isLLVM
+          then
+            # The wrapper for ld.lld breaks linking the kernel. We use the unwrapped linker as workaround. See:
+            # https://github.com/NixOS/nixpkgs/issues/321667
+            stdenv.cc.bintools.bintools
+          else stdenv.cc}/bin/${stdenv.cc.targetPrefix}ld"
+    "AR=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ar"
+    "NM=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}nm"
+    "STRIP=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+    "OBJCOPY=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objcopy"
+    "OBJDUMP=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objdump"
+    "READELF=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}readelf"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
     "HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
