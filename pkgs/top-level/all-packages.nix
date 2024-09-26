@@ -16624,6 +16624,9 @@ with pkgs;
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
   tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
 
+  # We don't need versioned package sets thanks to the tcl stubs mechanism
+  tclPackages = recurseIntoAttrs (callPackage ./tcl-packages.nix {});
+
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
   eltclsh = callPackage ../development/tools/eltclsh { };
