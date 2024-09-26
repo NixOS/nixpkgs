@@ -10678,6 +10678,10 @@ self: super: with self; {
 
   proton-vpn-network-manager = callPackage ../development/python-modules/proton-vpn-network-manager { };
 
+  proton-vpn-network-manager-openvpn = callPackage ../development/python-modules/proton-vpn-network-manager-openvpn { };
+
+  proton-vpn-network-manager-wireguard = callPackage ../development/python-modules/proton-vpn-network-manager-wireguard { };
+
   proton-vpn-session = callPackage ../development/python-modules/proton-vpn-session { };
 
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
