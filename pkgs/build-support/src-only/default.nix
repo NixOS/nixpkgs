@@ -1,4 +1,5 @@
-{ stdenv }:
+{ lib, stdenv }:
+
 # srcOnly is a utility builder that only fetches and unpacks the given `src`,
 # and optionally patching with `patches` or adding build inputs.
 #
@@ -6,17 +7,28 @@
 #
 # > srcOnly pkgs.hello
 #
+
 attrs:
 let
-  args = if builtins.hasAttr "drvAttrs" attrs then attrs.drvAttrs else attrs;
-  name = if builtins.hasAttr "name" args then args.name else "${args.pname}-${args.version}";
+  args = attrs.drvAttrs or attrs;
+  name = args.name or "${args.pname}-${args.version}";
+  drv = stdenv.mkDerivation (
+    args
+    // {
+      name = "${name}-source";
+
+      phases = [
+        "unpackPhase"
+        "patchPhase"
+        "installPhase"
+      ];
+      separateDebugInfo = false;
+
+      dontUnpack = false;
+
+      dontInstall = false;
+      installPhase = "cp -pr --reflink=auto -- . $out";
+    }
+  );
 in
-stdenv.mkDerivation (args // {
-  name = "${name}-source";
-  installPhase = "cp -pr --reflink=auto -- . $out";
-  outputs = [ "out" ];
-  separateDebugInfo = false;
-  dontUnpack = false;
-  dontInstall = false;
-  phases = ["unpackPhase" "patchPhase" "installPhase"];
-})
+drv
