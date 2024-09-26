@@ -15923,13 +15923,20 @@ with pkgs;
 
   roswell = callPackage ../development/tools/roswell { };
 
-  scala_2_10 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.10"; jre = jdk8; };
-  scala_2_11 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.11"; jre = jdk8; };
-  scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
-  scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
-  scala_3 = callPackage ../development/compilers/scala { };
+  inherit (callPackage ../development/compilers/scala { })
+    scala_2_10
+    scala_2_11
+    scala_2_12
+    scala_2_13
+    scala_3_3
+    scala_3_4;
 
-  scala = scala_3;
+  # Recommended for libraries
+  scala-lts = scala_3_3;
+  # Recommended for applications
+  scala-latest = scala_3_4;
+
+  scala = scala-latest;
   scala-runners = callPackage ../development/compilers/scala-runners {
     coursier = coursier.override { jre = jdk8; };
   };

@@ -1,24 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre, callPackage }:
+{ callPackage
+, jdk8
+}:
 
-let
-  bare = callPackage ./bare.nix {
-    inherit stdenv fetchurl makeWrapper jre;
-  };
-in
-
-stdenv.mkDerivation {
-  pname = "scala";
-  inherit (bare) version;
-
-  dontUnpack = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    ln -s ${bare}/bin/scalac $out/bin/scalac
-    ln -s ${bare}/bin/scaladoc $out/bin/scaladoc
-    ln -s ${bare}/bin/scala $out/bin/scala
-    ln -s ${bare}/bin/common $out/bin/common
-  '';
-
-  inherit (bare) meta;
-} // { inherit bare; }
+{
+  scala_2_10 = callPackage ./package.nix { majorVersion = "2.10"; jre = jdk8; };
+  scala_2_11 = callPackage ./package.nix { majorVersion = "2.11"; jre = jdk8; };
+  scala_2_12 = callPackage ./package.nix { majorVersion = "2.12"; };
+  scala_2_13 = callPackage ./package.nix { majorVersion = "2.13"; };
+  scala_3_3 = callPackage ./package.nix { majorVersion = "3.3"; };
+  scala_3_4 = callPackage ./package.nix { majorVersion = "3.4"; };
+}
