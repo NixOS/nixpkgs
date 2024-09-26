@@ -7931,6 +7931,8 @@ self: super: with self; {
 
   misoc = callPackage ../development/python-modules/misoc { };
 
+  mistral-common = callPackage ../development/python-modules/mistral-common { };
+
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
   mistune = callPackage ../development/python-modules/mistune { };
@@ -9642,6 +9644,8 @@ self: super: with self; {
   partd = callPackage ../development/python-modules/partd { };
 
   parts = callPackage ../development/python-modules/parts { };
+
+  partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
 
   particle = callPackage ../development/python-modules/particle { };
 
@@ -17158,6 +17162,8 @@ self: super: with self; {
   viv-utils = callPackage ../development/python-modules/viv-utils { };
 
   vllm = callPackage ../development/python-modules/vllm { };
+
+  vllm-flash-attn = callPackage ../development/python-modules/vllm-flash-attn { };
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
