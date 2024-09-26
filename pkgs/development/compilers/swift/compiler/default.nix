@@ -668,12 +668,6 @@ in stdenv.mkDerivation {
     # just copying the 3 symlinks inside to smaller closures.
     mkdir $lib/lib/swift/clang
     cp -P ${clang}/resource-root/* $lib/lib/swift/clang/
-
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Install required library for ObjC interop.
-    # TODO: Is there no source code for this available?
-    cp -r ${CLTools_Executables}/usr/lib/arc $out/lib/arc
-    ''}
   '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
