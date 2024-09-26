@@ -24082,9 +24082,9 @@ with self; {
       hash = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
     };
     propagatedBuildInputs = [
-      pkgs.bwidget
+      pkgs.tclPackages.bwidget
       pkgs.tcl
-      pkgs.tix
+      pkgs.tclPackages.tix
       pkgs.tk
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreServices ];

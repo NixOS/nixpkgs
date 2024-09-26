@@ -14,5 +14,8 @@ lib.makeScope newScope (
     inherit tcl tk;
     inherit (tcl) mkTclDerivation tclPackageHook;
 
+    critcl = self.callPackage ../development/tcl-modules/critcl {
+      tcllib = self.tcllib.override { withCritcl = false; };
+    };
   })
 )

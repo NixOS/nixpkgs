@@ -7404,7 +7404,7 @@ with pkgs;
 
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
-  expect = callPackage ../tools/misc/expect { };
+  expect = tclPackages.expect;
 
   expected-lite = callPackage ../development/libraries/expected-lite { };
 
@@ -14439,10 +14439,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  critcl = callPackage ../development/compilers/critcl {
-    tcllib = tcllib.override { withCritcl = false; };
-  };
-
   inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
     crystal_1_2
     crystal_1_7
@@ -16627,7 +16623,7 @@ with pkgs;
   # We don't need versioned package sets thanks to the tcl stubs mechanism
   tclPackages = recurseIntoAttrs (callPackage ./tcl-packages.nix {});
 
-  tclreadline = callPackage ../development/interpreters/tclreadline { };
+  tclreadline = tclPackages.tclreadline;
 
   eltclsh = callPackage ../development/tools/eltclsh { };
 
@@ -18994,8 +18990,6 @@ with pkgs;
 
   bulletml = callPackage ../development/libraries/bulletml { };
 
-  bwidget = callPackage ../development/libraries/bwidget { };
-
   bzrtp = callPackage ../development/libraries/bzrtp { };
 
   c-ares = callPackage ../development/libraries/c-ares { };
@@ -20268,9 +20262,6 @@ with pkgs;
   ineffassign = callPackage ../development/tools/ineffassign { };
 
   ijs = callPackage ../development/libraries/ijs { };
-
-  itktcl  = callPackage ../development/libraries/itktcl { };
-  incrtcl = callPackage ../development/libraries/incrtcl { };
 
   indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
   indicator-application-gtk3 = callPackage ../development/libraries/indicator-application/gtk3.nix { };
@@ -23210,14 +23201,6 @@ with pkgs;
 
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
-  tcllib = callPackage ../development/libraries/tcllib { };
-
-  tcltls = callPackage ../development/libraries/tcltls { };
-
-  tclx = callPackage ../development/libraries/tclx { };
-
-  tcl-fcgi = callPackage ../development/libraries/tcl-fcgi { };
-
   tdb = callPackage ../development/libraries/tdb { };
 
   tdlib = callPackage ../development/libraries/tdlib { };
@@ -23266,15 +23249,11 @@ with pkgs;
 
   tivodecode = callPackage ../applications/video/tivodecode { };
 
-  tix = callPackage ../development/libraries/tix { };
-
   tk = tk-8_6;
 
   tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
-
-  tkimg = callPackage ../development/libraries/tkimg { };
 
   tkrzw = callPackage ../development/libraries/tkrzw { };
 
@@ -23444,8 +23423,6 @@ with pkgs;
   zsa-udev-rules = callPackage ../os-specific/linux/zsa-udev-rules { };
 
   wangle = darwin.apple_sdk_11_0.callPackage ../development/libraries/wangle { };
-
-  wapp = callPackage ../development/libraries/wapp { };
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
@@ -27308,8 +27285,6 @@ with pkgs;
   mro-unicode = callPackage ../data/fonts/mro-unicode { };
 
   mustache-spec = callPackage ../data/documentation/mustache-spec { };
-
-  mustache-tcl = callPackage ../development/libraries/mustache-tcl { };
 
   mustache-go = callPackage ../development/tools/mustache-go { };
 
