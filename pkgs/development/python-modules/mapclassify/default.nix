@@ -7,6 +7,7 @@
 
   geopandas,
   libpysal,
+  matplotlib,
   networkx,
   numpy,
   pandas,
@@ -17,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "mapclassify";
-  version = "2.6.1";
+  version = "2.8.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "mapclassify";
-    rev = "v${version}";
-    hash = "sha256-lb2Ui6zdx6MQBtBrL/Xj9k7cm6De8aLEuBLZDhPPDnE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VClkMOR8P9sX3slVjJ2xYYLVnvZuOgVYZiCGrBxoZEc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -42,16 +43,21 @@ buildPythonPackage rec {
     pytestCheckHook
     geopandas
     libpysal
+    matplotlib
   ];
 
   # requires network access
-  disabledTestPaths = [ "mapclassify/tests/test_greedy.py" ];
+  disabledTestPaths = [
+    "mapclassify/tests/test_greedy.py"
+    "mapclassify/tests/test_rgba.py"
+  ];
 
   pythonImportsCheck = [ "mapclassify" ];
 
   meta = {
     description = "Classification Schemes for Choropleth Maps";
     homepage = "https://pysal.org/mapclassify/";
+    changelog = "https://github.com/pysal/mapclassify/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = lib.teams.geospatial.members;
   };

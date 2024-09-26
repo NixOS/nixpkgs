@@ -60,7 +60,7 @@ let
     "overlength-strings"
     "prefix"
     "suffix"
-  ] makeGoldenTest // lib.optionalAttrs (! stdenv.isDarwin) {
+  ] makeGoldenTest // lib.optionalAttrs (! stdenv.hostPlatform.isDarwin) {
     cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.callPackage ./cross.nix { };
   };
 in

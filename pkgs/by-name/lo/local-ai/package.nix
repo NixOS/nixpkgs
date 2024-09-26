@@ -496,7 +496,7 @@ let
         ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         SHELL=$SHELL
       )
-      _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+      concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
       echoCmd 'build flags' "''${flagsArray[@]}"
       make build "''${flagsArray[@]}"
       unset flagsArray

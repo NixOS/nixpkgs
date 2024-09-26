@@ -16,6 +16,9 @@ let
     "2.4.7" = {
       sha256 = "sha256-aFRNJQNjWs0BXVNMzJsq6faJltQptakGP9Iv8JJQEdI=";
     };
+    "2.4.8" = {
+      sha256 = "sha256-/G7NzFOOgKFKmY1TDMw4SkF5D09Pxs1//oyxJqZ3aUw=";
+    };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -164,7 +167,7 @@ stdenv.mkDerivation (self: {
     lib.optional self.threadSupport "sb-thread" ++
     lib.optional self.linkableRuntime "sb-linkable-runtime" ++
     lib.optional self.coreCompression "sb-core-compression" ++
-    lib.optional stdenv.isAarch32 "arm" ++
+    lib.optional stdenv.hostPlatform.isAarch32 "arm" ++
     lib.optional self.markRegionGC "mark-region-gc";
 
   disableFeatures =

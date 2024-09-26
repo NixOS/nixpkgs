@@ -45,15 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
       or (throw "unsupported system: ${stdenv.hostPlatform.system}")
   );
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   dontStrip = true;
 
   buildInputs = [
-    # Remove this after https://github.com/NixOS/nixpkgs/pull/336712
-    # has landed in `nixpkgs-unstable`
-    (curl.overrideAttrs (old: {
-      configureFlags = old.configureFlags ++ [ "--enable-versioned-symbols" ];
-    })).dev
+    curl.dev
     openssl.dev
     stdenv.cc.cc.lib
   ];

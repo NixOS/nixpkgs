@@ -7,7 +7,6 @@
   hatchling,
   importlib-metadata,
   opentelemetry-test-utils,
-  setuptools,
   pytestCheckHook,
   writeScript,
 }:
@@ -65,7 +64,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
       description = "OpenTelemetry Python API";
-      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${self.src.rev}";
+      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${lib.removePrefix "refs/tags/" self.src.rev}";
       license = licenses.asl20;
       maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
     };

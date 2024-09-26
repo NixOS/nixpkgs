@@ -94,7 +94,7 @@ rustPlatform.buildRustPackage rec {
     description = "Compositor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-comp";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyanbinary ];
+    maintainers = with maintainers; [ qyliss nyabinary ];
     platforms = platforms.linux;
   };
 }

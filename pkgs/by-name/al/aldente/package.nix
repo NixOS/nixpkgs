@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "aldente";
-  version = "1.27.3";
+  version = "1.28.4";
 
   src = fetchurl {
     url = "https://github.com/davidwernhart/aldente-charge-limiter/releases/download/${finalAttrs.version}/AlDente.dmg";
-    hash = "sha256-G6Kpfy1LE1VG/nTks4KU6doTKZeJT6gk6JtKmUEy6FI=";
+    hash = "sha256-ihfTVVc6kM+rOyPG7k2rkLVmCsOlBA7Uik8KrWhrdp0=";
   };
 
   dontBuild = true;
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://apphousekitchen.com";
     changelog = "https://github.com/davidwernhart/aldente-charge-limiter/releases/tag/${finalAttrs.version}";
     license = lib.licenses.unfree;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [
       "aarch64-darwin"

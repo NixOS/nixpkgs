@@ -8,7 +8,7 @@
 , flex
 , git
 , python3
-, swig4
+, swig
 , boost179
 , cbc       # for clp
 , cimg
@@ -51,7 +51,7 @@ mkDerivation rec {
     flex
     git
     pkg-config
-    swig4
+    swig
   ];
 
   buildInputs = [

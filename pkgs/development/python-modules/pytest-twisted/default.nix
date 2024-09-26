@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-twisted";
-  version = "1.14.2";
+  version = "1.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-twisted";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1NkKTdk5D36VngJtBEdT42o1MmMT6stBne9KyC17518=";
+    hash = "sha256-1dAfCa6hON0Vh9StI1Xw69IAwBzUkR6DdjQ0HNyoyME=";
   };
 
   build-system = [ setuptools ];

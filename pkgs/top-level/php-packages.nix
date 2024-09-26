@@ -253,7 +253,7 @@ in {
 
     datadog_trace = callPackage ../development/php-packages/datadog_trace {
       buildPecl = buildPecl.override {
-        stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+        stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
       };
       inherit (pkgs) darwin;
     };
@@ -463,7 +463,7 @@ in {
           name = "iconv";
           buildInputs = [ libiconv ];
           configureFlags = [ "--with-iconv" ];
-          doCheck = stdenv.isLinux;
+          doCheck = stdenv.hostPlatform.isLinux;
         }
         {
           name = "imap";
@@ -484,7 +484,7 @@ in {
             "LDAP_DIR=${openldap.dev}"
             "LDAP_INCDIR=${openldap.dev}/include"
             "LDAP_LIBDIR=${openldap.out}/lib"
-          ] ++ lib.optionals stdenv.isLinux [
+          ] ++ lib.optionals stdenv.hostPlatform.isLinux [
             "--with-ldap-sasl=${cyrus_sasl.dev}"
           ];
           doCheck = false;
@@ -528,11 +528,11 @@ in {
           name = "opcache";
           buildInputs = [ pcre2 ] ++
             lib.optional
-              (!stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
+              (!stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind)
               valgrind.dev;
           configureFlags = lib.optional php.ztsSupport "--disable-opcache-jit";
           zendExtension = true;
-          postPatch = lib.optionalString stdenv.isDarwin ''
+          postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
             # Tests are flaky on darwin
             rm ext/opcache/tests/blacklist.phpt
             rm ext/opcache/tests/bug66338.phpt
@@ -567,7 +567,7 @@ in {
           internalDeps = [ php.extensions.pdo ];
           configureFlags = [ "--with-pdo-dblib=${freetds}" ];
           # Doesn't seem to work on darwin.
-          enable = (!stdenv.isDarwin);
+          enable = (!stdenv.hostPlatform.isDarwin);
           doCheck = false;
         }
         {
@@ -586,7 +586,7 @@ in {
         {
           name = "pdo_pgsql";
           internalDeps = [ php.extensions.pdo ];
-          configureFlags = [ "--with-pdo-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pdo-pgsql=${lib.getDev postgresql}" ];
           doCheck = false;
         }
         {
@@ -599,7 +599,7 @@ in {
         {
           name = "pgsql";
           buildInputs = [ pcre2 ];
-          configureFlags = [ "--with-pgsql=${postgresql}" ];
+          configureFlags = [ "--with-pgsql=${lib.getDev postgresql}" ];
           doCheck = false;
         }
         { name = "posix"; doCheck = false; }
@@ -671,7 +671,7 @@ in {
           buildInputs = [ net-snmp openssl ];
           configureFlags = [ "--with-snmp" ];
           # net-snmp doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
+          enable = (!stdenv.hostPlatform.isDarwin);
           doCheck = false;
         }
         {
@@ -680,7 +680,7 @@ in {
           configureFlags = [
             "--enable-soap"
           ];
-          doCheck = stdenv.isDarwin;  # TODO: a couple tests still fail on *-linux
+          doCheck = stdenv.hostPlatform.isDarwin;  # TODO: a couple tests still fail on *-linux
           internalDeps = [ php.extensions.session ];
           patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
             # Fix tests with libxml2 2.12
@@ -705,6 +705,12 @@ in {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2") [
+            # Fix test 'bug55639.phpt'
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/1b52ecd78ad1a211a4a9db65975df34d2539125b.patch";
+              hash = "sha256-LVk9sfwl5D+rHzyYjfV4pAuhBjSPXj1WjTfnrzBJXhY";
+            })
           ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
@@ -725,7 +731,7 @@ in {
           # The `sqlite3_bind_bug68849.phpt` test is currently broken for i686 Linux systems since sqlite 3.43, cf.:
           # - https://github.com/php/php-src/issues/12076
           # - https://www.sqlite.org/forum/forumpost/abbb95376ec6cd5f
-          patches = lib.optionals (stdenv.isi686 && stdenv.isLinux) [
+          patches = lib.optionals (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isLinux) [
             ../development/interpreters/php/skip-sqlite3_bind_bug68849.phpt.patch
           ];
         }

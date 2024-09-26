@@ -25,7 +25,7 @@
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.15";
+    version = "0.16";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -36,7 +36,7 @@ let
       owner = "simonw";
       repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-PPmbqY9+OYGs4U3z3LHs7a3BjQ0AlRY6J+SKmCY3bXk=";
+      hash = "sha256-ew8080Lv1ObjUaGicaGrj8IXXA7rtdgcWhp41O8gfVE=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
@@ -81,37 +81,18 @@ let
       changelog = "https://github.com/simonw/llm/releases/tag/${version}";
       license = licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [ aldoborrero ];
+      maintainers = with maintainers; [
+        aldoborrero
+        mccartykim
+      ];
     };
   };
 
-  withPlugins =
-    plugins:
-    buildPythonApplication {
-      inherit (llm) pname version;
-      format = "other";
+  withPlugins = throw ''
+    llm.withPlugins was confusing to use and has been removed.
+    Please migrate to using python3.withPackages(ps: [ ps.llm ]) instead.
 
-      disabled = pythonOlder "3.8";
-
-      dontUnpack = true;
-      dontBuild = true;
-      doCheck = false;
-
-      nativeBuildInputs = [ makeWrapper ];
-
-      installPhase = ''
-        makeWrapper ${llm}/bin/llm $out/bin/llm \
-          --prefix PYTHONPATH : "${llm}/${python.sitePackages}:$PYTHONPATH"
-        ln -sfv ${llm}/lib $out/lib
-      '';
-
-      propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
-
-      passthru = llm.passthru // {
-        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
-      };
-
-      inherit (llm) meta;
-    };
+    See https://nixos.org/manual/nixpkgs/stable/#python.withpackages-function for more usage examples.
+  '';
 in
 llm

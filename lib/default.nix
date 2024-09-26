@@ -79,7 +79,8 @@ let
       fromHexString toHexString toBaseDigits inPureEvalMode isBool isInt pathExists
       genericClosure readFile;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
-      composeManyExtensions makeExtensible makeExtensibleWithCustomName;
+      composeManyExtensions makeExtensible makeExtensibleWithCustomName
+      toExtension;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs

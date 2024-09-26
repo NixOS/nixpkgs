@@ -1,78 +1,80 @@
 {
   lib,
+  bash,
   buildPythonPackage,
+  cliff,
+  debtcollector,
   defusedxml,
   fetchPypi,
-  pbr,
-  cliff,
+  fixtures,
+  hacking,
   jsonschema,
-  testtools,
-  paramiko,
   netaddr,
   oslo-concurrency,
   oslo-config,
   oslo-log,
-  stestr,
   oslo-serialization,
   oslo-utils,
-  fixtures,
+  oslotest,
+  paramiko,
+  pbr,
+  prettytable,
+  python,
   pythonOlder,
   pyyaml,
-  subunit,
-  stevedore,
-  prettytable,
-  urllib3,
-  debtcollector,
-  hacking,
-  oslotest,
-  bash,
-  python,
   setuptools,
+  stestr,
+  stevedore,
+  subunit,
+  testscenarios,
+  testtools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "39.0.0";
+  version = "40.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l4qKbTfQRWiRsoHN9fiAAiGMGP+q3gwRH1pMSXV/eSU=";
+    hash = "sha256-s2EvD1TDoRoKrvpRc6h3P7xRyT941nW1hveucXDLB4w=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pbr
+  dependencies = [
     cliff
+    debtcollector
     defusedxml
+    fixtures
     jsonschema
-    testtools
-    paramiko
     netaddr
     oslo-concurrency
     oslo-config
     oslo-log
-    stestr
     oslo-serialization
     oslo-utils
-    fixtures
-    pyyaml
-    subunit
-    stevedore
+    paramiko
+    pbr
     prettytable
+    pyyaml
+    stestr
+    stevedore
+    subunit
+    testscenarios
+    testtools
     urllib3
-    debtcollector
   ];
 
   nativeCheckInputs = [
-    stestr
     hacking
     oslotest
+    stestr
   ];
 
   checkPhase = ''
@@ -94,6 +96,7 @@ buildPythonPackage rec {
     description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
     license = licenses.asl20;
+    mainProgram = "tempest";
     maintainers = teams.openstack.members;
   };
 }

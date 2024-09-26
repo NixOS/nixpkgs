@@ -5,18 +5,23 @@ let
 
   inherit (lib) mkOption types;
 
-  podmanPackage = (pkgs.podman.override {
+  podmanPackage = pkgs.podman.override {
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
       ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-  });
+    extraRuntimes = [ pkgs.runc ]
+      ++ lib.optionals (config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or "" == "slirp4netns") (with pkgs; [
+      slirp4netns
+    ]);
+  };
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}"
     {
       outputs = [ "out" "man" ];
       inherit (podmanPackage) meta;
+      preferLocalBuild = true;
     } ''
     mkdir -p $out/bin
     ln -s ${podmanPackage}/bin/podman $out/bin/docker
@@ -231,7 +236,10 @@ in
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove
         # it and let the systemd socket logic take care of it.
-        (pkgs.runCommand "podman-tmpfiles-nixos" { package = cfg.package; } ''
+        (pkgs.runCommand "podman-tmpfiles-nixos" {
+          package = cfg.package;
+          preferLocalBuild = true;
+        } ''
           mkdir -p $out/lib/tmpfiles.d/
           grep -v 'D! /run/podman 0700 root root' \
             <$package/lib/tmpfiles.d/podman.conf \

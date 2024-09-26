@@ -1,27 +1,8 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
-  fetchPypi
 }:
-let
-  python3' =
-    (python3.override {
-      packageOverrides = final: prev: {
-        wxpython = prev.wxpython.overrideAttrs rec {
-          version = "4.2.0";
-          src = fetchPypi {
-            pname = "wxPython";
-            inherit version;
-            hash = "sha256-ZjzrxFCdfl0RNRiGX+J093+VQ0xdV7w4btWNZc7thsc=";
-          };
-        };
-      };
-    });
-
-  python3Packages = python3'.pkgs;
-
-in
 python3Packages.buildPythonApplication rec {
   pname = "yt-dlg";
   version = "1.8.5";
@@ -34,6 +15,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   pyproject = true;
+  pythonRelaxDeps = [ "wxpython" ];
   build-system = with python3Packages; [
     setuptools
     wheel

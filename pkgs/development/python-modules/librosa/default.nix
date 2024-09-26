@@ -106,7 +106,7 @@ buildPythonPackage rec {
       "test_cite_badversion"
       "test_cite_unreleased"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # crashing the python interpreter
       "test_unknown_time_unit"
       "test_unknown_wavaxis"

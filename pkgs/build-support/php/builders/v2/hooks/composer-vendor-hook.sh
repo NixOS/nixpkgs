@@ -15,7 +15,7 @@ source @phpScriptUtils@
 composerVendorConfigureHook() {
     echo "Executing composerVendorConfigureHook"
 
-    setComposeRootVersion
+    setComposerRootVersion
 
     if [[ -e "$composerLock" ]]; then
         echo -e "\e[32mUsing user provided \`composer.lock\` file from \`$composerLock\`\e[0m"
@@ -59,9 +59,13 @@ composerVendorConfigureHook() {
 composerVendorBuildHook() {
     echo "Executing composerVendorBuildHook"
 
+    setComposerEnvVariables
+
     composer \
-        --apcu-autoloader \
-        --apcu-autoloader-prefix="$(jq -r -c 'try ."content-hash"' < composer.lock)" \
+        `# The acpu-autoloader is not reproducible and has to be disabled.` \
+        `# Upstream PR: https://github.com/composer/composer/pull/12090` \
+        `# --apcu-autoloader` \
+        `# --apcu-autoloader-prefix="$(jq -r -c 'try ."content-hash"' < composer.lock)"` \
         --no-interaction \
         --no-progress \
         --optimize-autoloader \

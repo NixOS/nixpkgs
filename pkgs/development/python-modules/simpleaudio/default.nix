@@ -19,6 +19,8 @@ buildPythonPackage rec {
     sha256 = "12nypzb1m14yip4zrbzin5jc5awyp1d5md5y40g5anj4phb4hx1i";
   };
 
+  patches = [ ./python312-fix.patch ];
+
   buildInputs = [ alsa-lib ];
 
   meta = with lib; {

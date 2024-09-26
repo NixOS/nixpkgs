@@ -64,6 +64,8 @@ let
 
     b0 = callPackage ../development/ocaml-modules/b0 { };
 
+    backoff = callPackage ../development/ocaml-modules/backoff { };
+
     bap = janeStreet_0_15.bap;
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -687,6 +689,8 @@ let
 
     httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
 
+    httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
+
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     ### I ###
@@ -1175,6 +1179,8 @@ let
 
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
+    mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
+
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -1198,6 +1204,10 @@ let
     msat = callPackage ../development/ocaml-modules/msat { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
+
+    multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
+
+    multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
@@ -1777,6 +1787,8 @@ let
     terminal = callPackage ../development/ocaml-modules/terminal { };
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
+
+    terml = callPackage ../development/ocaml-modules/terml { };
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 

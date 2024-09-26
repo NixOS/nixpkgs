@@ -49,6 +49,14 @@ let
     # "-P" CPPFLAG is needed to build Python bindings and subversionClient
     CPPFLAGS = [ "-P" ];
 
+    env = lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+        "-Wno-error=implicit-function-declaration"
+        "-Wno-error=implicit-int"
+        "-Wno-int-conversion"
+      ];
+    };
+
     preConfigure = lib.optionalString needsAutogen ''
       ./autogen.sh
     '';
@@ -119,7 +127,7 @@ let
       platforms = platforms.linux ++ platforms.darwin;
     };
 
-  } // lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     CXX = "clang++";
     CC = "clang";
     CPP = "clang -E";

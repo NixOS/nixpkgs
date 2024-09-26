@@ -39,7 +39,7 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Test is broken on darwin. Fix in master from https://github.com/buriy/python-readability/pull/178
     "test_many_repeated_spaces"
   ];

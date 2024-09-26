@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     tbb
     zlib
     zstd
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     mimalloc
   ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-faligned-allocation"
   ]);
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
       in
       {
         version = testers.testVersion { package = mold; };
-      } // lib.optionalAttrs stdenv.isLinux {
+      } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         adapter-gcc = helloTest "adapter-gcc" (hello.override (old: { stdenv = useMoldLinker gccStdenv; }));
         adapter-llvm = helloTest "adapter-llvm" (hello.override (old: { stdenv = useMoldLinker clangStdenv; }));
         wrapped = helloTest "wrapped" (hello.overrideAttrs (previousAttrs: {

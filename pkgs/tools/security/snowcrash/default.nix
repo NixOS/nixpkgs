@@ -19,7 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  postFixup = lib.optionals (!stdenv.isDarwin) ''
+  postFixup = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/SNOWCRASH $out/bin/${pname}
   '';
 

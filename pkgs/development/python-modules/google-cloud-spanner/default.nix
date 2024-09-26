@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.48.0";
+  version = "3.49.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "python-spanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QgLZQ0rgBEmYDAE16K84bSx4bFWJRviY1WqsVwKcO6w=";
+    hash = "sha256-KwANiuzVyqsz+KKTqNPM1WftuoMtUXRI8xbIdAzZF+s=";
   };
 
   build-system = [ setuptools ];

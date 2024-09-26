@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/jaraco.path";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
-    broken = stdenv.isDarwin; # pyobjc is missing
+    broken = stdenv.hostPlatform.isDarwin; # pyobjc is missing
   };
 }

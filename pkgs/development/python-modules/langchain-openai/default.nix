@@ -2,19 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   langchain-core,
-  langchain-standard-tests,
   openai,
   tiktoken,
+
+  # tests
+  freezegun,
+  langchain-standard-tests,
   lark,
   pandas,
-  poetry-core,
   pytest-asyncio,
+  pytestCheckHook,
   pytest-mock,
   pytest-socket,
-  pytestCheckHook,
-  pythonOlder,
   requests-mock,
   responses,
   syrupy,
@@ -23,16 +28,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.1.22";
+  version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-5UAijSTfQ6nQxdZvKHl2o01wDW6+Jphf38V+dAs7Ffk=";
+    hash = "sha256-3wTSvvPOMZciEqPxpcjrcqEpK//qwsEmvZnlZBfjltQ=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -56,9 +59,9 @@ buildPythonPackage rec {
     lark
     pandas
     pytest-asyncio
+    pytestCheckHook
     pytest-mock
     pytest-socket
-    pytestCheckHook
     requests-mock
     responses
     syrupy
@@ -83,6 +86,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
+
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai==${version}";

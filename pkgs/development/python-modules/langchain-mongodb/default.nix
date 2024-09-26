@@ -2,36 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
-  langchain,
-  langchain-core,
-  pymongo,
-  lark,
-  pandas,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  langchain-core,
+  numpy,
+  pymongo,
+
+  freezegun,
+  httpx,
+  langchain,
   pytest-asyncio,
-  pytest-mock,
-  pytest-socket,
   pytestCheckHook,
-  pythonOlder,
-  requests-mock,
-  responses,
+  pytest-mock,
   syrupy,
-  toml,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.1.8";
+  version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-mongodb==${version}";
-    hash = "sha256-fjSvn9O/CrKBexcwuILXFR7AGx/tZtGDWjA0L6XV4Hk=";
+    hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
@@ -40,27 +38,27 @@ buildPythonPackage rec {
 
   dependencies = [
     langchain-core
+    numpy
     pymongo
   ];
 
   nativeCheckInputs = [
     freezegun
+    httpx
     langchain
-    lark
-    pandas
     pytest-asyncio
-    pytest-mock
-    pytest-socket
     pytestCheckHook
-    requests-mock
-    responses
+    pytest-mock
     syrupy
-    toml
   ];
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_mongodb" ];
+
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-mongodb==${version}";

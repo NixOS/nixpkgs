@@ -52,7 +52,7 @@ in
         # Note: q4_0 and q4_1 models can not be loaded
         parameters.model = fetchurl {
           url = "https://huggingface.co/skeskinen/ggml/resolve/main/all-MiniLM-L6-v2/ggml-model-f16.bin";
-          sha256 = "9c195b2453a4fef60a4f6be3a88a39211366214df6498a4fe4885c9e22314f50";
+          hash = "sha256-nBlbJFOk/vYKT2vjqIo5IRNmIU32SYpP5IhcniIxT1A=";
         };
         backend = "bert-embeddings";
         embeddings = true;
@@ -107,7 +107,7 @@ in
           # https://ai.meta.com/blog/meta-llama-3-1/
           model = fetchurl {
             url = "https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf";
-            sha256 = "f2be3e1a239c12c9f3f01a962b11fb2807f8032fdb63b0a5502ea42ddef55e44";
+            hash = "sha256-8r4+GiOcEsnz8BqWKxH7KAf4Ay/bY7ClUC6kLd71XkQ=";
           };
           # defaults from:
           # https://deepinfra.com/meta-llama/Meta-Llama-3.1-8B-Instruct

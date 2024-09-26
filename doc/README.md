@@ -2,10 +2,20 @@
 
 This directory houses the sources files for the Nixpkgs reference manual.
 
-Going forward, it should only contain [reference](https://nix.dev/contributing/documentation/diataxis#reference) documentation.
-For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
+> [!IMPORTANT]
+> We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
+>
+> Going forward, this directory should **only** contain [reference documentation](https://nix.dev/contributing/documentation/diataxis#reference).
+> For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
+>
+> We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
+> This also provides the benefit of using `:doc` in the `nix repl` to view reference documentation locally on the fly.
 
-For documentation only relevant for contributors, use Markdown files and code comments in the source code.
+For documentation only relevant for contributors, use Markdown files next to the source and regular code comments.
+
+> [!TIP]
+> Feedback for improving support for parsing and rendering doc-comments is highly appreciated.
+> [Open an issue](https://github.com/NixOS/nixpkgs/issues/new?labels=6.topic%3A+documentation&title=Doc%3A+) to request bugfixes or new features.
 
 Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
@@ -285,7 +295,7 @@ You, as the writer of documentation, are still in charge of its content.
   - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
   - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
   - Nix types aren't in code spans, because they are not code
-  - Nix types are capitalized, to distinguish them from the camelCase [Module System](#module-system) types, which _are_ code and behave like functions.
+  - Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
 
 #### Examples
 

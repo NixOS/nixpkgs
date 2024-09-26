@@ -4,7 +4,8 @@
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
-, enableKTLS ? stdenv.isLinux
+, enableMD2 ? false
+, enableKTLS ? stdenv.hostPlatform.isLinux
 , static ? stdenv.hostPlatform.isStatic
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
@@ -87,6 +88,7 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         powerpc64-linux = "./Configure linux-ppc64";
+        riscv32-linux = "./Configure ${if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"}";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
@@ -102,6 +104,7 @@ let
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
           then if stdenv.hostPlatform.isx86_64 then "./Configure linux-x86_64"
+          else if stdenv.hostPlatform.isMicroBlaze then "./Configure linux-latomic"
           else if stdenv.hostPlatform.isMips32 then "./Configure linux-mips32"
           else if stdenv.hostPlatform.isMips64n32 then "./Configure linux-mips64"
           else if stdenv.hostPlatform.isMips64n64 then "./Configure linux64-mips64"
@@ -128,7 +131,8 @@ let
     ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ] ++ lib.optional enableSSL2 "enable-ssl2"
+    ] ++ lib.optional enableMD2 "enable-md2"
+      ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.

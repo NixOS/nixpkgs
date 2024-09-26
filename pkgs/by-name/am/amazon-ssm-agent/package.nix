@@ -41,13 +41,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.3.808.0";
+  version = "3.3.859.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-ig8mr4xfYnj1z1H3Ro6HFmlzW9HsBWMDtbHtpM6BIfg=";
+    hash = "sha256-Qxzq91GXOrssBO9VaQTkLZjVqdpUYoYq3N/rakwewJs=";
   };
 
   vendorHash = null;
@@ -63,7 +63,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
   ];
 
@@ -84,20 +84,20 @@ buildGoModule rec {
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
-      --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
-      --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
-      --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
+      --replace-fail "/usr/bin/uname" "${coreutils}/bin/uname" \
+      --replace-fail '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+      --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \
-      --replace '"script"' '"${util-linux}/bin/script"'
+      --replace-fail '"script"' '"${util-linux}/bin/script"'
 
     substituteInPlace agent/rebooter/rebooter_unix.go \
-      --replace "/sbin/shutdown" "shutdown"
+      --replace-fail "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
-      --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
+      --replace-fail /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
   '';
 
   preBuild = ''

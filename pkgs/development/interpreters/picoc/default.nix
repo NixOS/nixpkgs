@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-Wno-error=implicit-function-declaration"
   ]);
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   # Tests are currently broken on i686 see
   # https://hydra.nixos.org/build/24003763/nixlog/1
-  doCheck = !stdenv.isi686 && !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isAarch64;
   checkTarget = "test";
 
   installPhase = ''

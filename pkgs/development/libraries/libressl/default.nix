@@ -8,7 +8,7 @@
 }:
 
 let
-  ldLibPathEnvName = if stdenv.isDarwin
+  ldLibPathEnvName = if stdenv.hostPlatform.isDarwin
     then "DYLD_LIBRARY_PATH"
     else "LD_LIBRARY_PATH";
 

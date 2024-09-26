@@ -123,10 +123,21 @@ in
             # Import the most important environment variables into the D-Bus and systemd
             # user environments (e.g. required for screen sharing and Pinentry prompts):
             exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+            # enable systemd-integration
+            exec "systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
+            exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
           '';
         } // lib.optionalAttrs (cfg.package != null) {
           "sway/config".source = lib.mkOptionDefault "${cfg.package}/etc/sway/config";
         };
+      };
+
+      systemd.user.targets.sway-session = {
+        description = "sway compositor session";
+        documentation = [ "man:systemd.special(7)" ];
+        bindsTo = [ "graphical-session.target" ];
+        wants = [ "graphical-session-pre.target" ];
+        after = [ "graphical-session-pre.target" ];
       };
 
       # To make a Sway session available if a display manager like SDDM is enabled:

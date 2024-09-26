@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     nix
     boost
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     SystemConfiguration
   ]);
 

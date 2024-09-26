@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost # for tests
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
   ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Tests fail on Darwin, possibly because of sandboxing.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "C++ bindings for the Cairo vector graphics library";

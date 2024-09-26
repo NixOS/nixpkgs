@@ -37,29 +37,29 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.46.5";
+  version = "1.46.8";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-u/2/lCQpUf5bxKPseHz6SFmiW0m9SywuA5Ng3BBnX88=";
+    hash = "sha256-17JhaanYEySoDuLYFMc4vB3wVlCucMh3Jk2Uu9PqUdQ=";
   };
 
-  npmDepsHash = "sha256-jnuSL0yr6E8P0Tev9rMsfCLs59WStaH19DhZe0zthmw=";
+  npmDepsHash = "sha256-+74koym1lL2rk5n06i7JgcXmX+yW4zgqRfdH6ryXe0s=";
 
   nativeBuildInputs = [
     jq
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
 
   buildInputs = [
     deltachat-rpc-server
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 

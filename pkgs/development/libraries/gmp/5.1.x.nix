@@ -24,7 +24,7 @@ let self = stdenv.mkDerivation rec {
 
   patches = [
     ./5.1.3-CVE-2021-43618.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./need-size-t.patch
   ];
 
@@ -36,13 +36,13 @@ let self = stdenv.mkDerivation rec {
     # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    (lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
+    (lib.enableFeature (!stdenv.hostPlatform.isSunOS && stdenv.hostPlatform.isx86) "fat")
     # The config.guess in GMP tries to runtime-detect various
     # ARM optimization flags via /proc/cpuinfo (and is also
     # broken on multicore CPUs). Avoid this impurity.
     "--build=${stdenv.buildPlatform.config}"
-  ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
+  ] ++ optional (cxx && stdenv.hostPlatform.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.is64bit) "ABI=64"
     ;
 
   doCheck = true;
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation rec {
     platforms = platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 };
   in self

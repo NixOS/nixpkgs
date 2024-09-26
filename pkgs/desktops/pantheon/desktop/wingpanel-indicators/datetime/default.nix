@@ -16,7 +16,6 @@
 , libhandy
 , libxml2
 , libsoup
-, libgdata
 , elementary-calendar
 }:
 

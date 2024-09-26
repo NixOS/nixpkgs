@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "uv";
-  version = "0.3.5";
+  version = "0.4.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = "refs/tags/${version}";
-    hash = "sha256-D/BCxA7GOEu26xDkMmchXAMFB1pDewYSiOrNj2oSTyE=";
+    hash = "sha256-a8mN2wag26BSL+2b5i4P1XN34J8jt+lZm2poZQdsAzM=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libiconv
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   dontUseCmakeConfigure = true;
 

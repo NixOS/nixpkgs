@@ -1,57 +1,58 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
   attrs,
+  autoray ? null,
+  buildPythonPackage,
   duet,
+  fetchFromGitHub,
+  freezegun,
   matplotlib,
   networkx,
   numpy,
+  opt-einsum,
   pandas,
+  ply,
+  pylatex ? null,
+  pyquil ? null,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  quimb ? null,
   requests,
   scipy,
+  setuptools,
   sortedcontainers,
   sympy,
   tqdm,
   typing-extensions,
-  # Contrib requirements
   withContribRequires ? false,
-  autoray ? null,
-  opt-einsum,
-  ply,
-  pylatex ? null,
-  pyquil ? null,
-  quimb ? null,
-  # test inputs
-  pytestCheckHook,
-  freezegun,
-  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "1.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KHwVq0qVtc8E9i2lugILYNwk9awq952w0x4DM+HG7Pg=";
+    hash = "sha256-1GcRDVgYF+1igZQFlQbiWZmU1WNIJh4CcOftQe6OP6I=";
   };
 
   sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "matplotlib~=3.0" "matplotlib"
+      --replace-fail "matplotlib~=3.0" "matplotlib"
   '';
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       attrs
       duet
@@ -88,7 +89,7 @@ buildPythonPackage rec {
     "cirq/_version_test.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isAarch64 [
+  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
     # https://github.com/quantumlib/Cirq/issues/5924
     "test_prepare_two_qubit_state_using_sqrt_iswap"
   ];

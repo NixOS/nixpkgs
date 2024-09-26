@@ -129,6 +129,9 @@ self: super: builtins.intersectAttrs super {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
+  # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
+  streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
+
   threadscope = enableSeparateBinOutput super.threadscope;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
@@ -297,7 +300,7 @@ self: super: builtins.intersectAttrs super {
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
     ] ++
-    ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
+    ( if pkgs.stdenv.hostPlatform.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
@@ -582,7 +585,7 @@ self: super: builtins.intersectAttrs super {
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only
-  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = overrideCabal (drv: {
+  ${if pkgs.stdenv.hostPlatform.isDarwin then null else "GLUT"} = overrideCabal (drv: {
     pkg-configDepends = drv.pkg-configDepends or [] ++ [
       pkgs.freeglut
     ];
@@ -820,9 +823,9 @@ self: super: builtins.intersectAttrs super {
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
   }) (super.git-annex.override {
-    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
-    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
-    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+    dbus = if pkgs.stdenv.hostPlatform.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.hostPlatform.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
   });
 
   # The test suite has undeclared dependencies on git.
@@ -1364,10 +1367,12 @@ self: super: builtins.intersectAttrs super {
     }) super)
       gi-javascriptcore
       gi-webkit2webextension
-      gi-gtk_4_0_8
+      gi-gtk_4_0_9
       gi-gdk_4_0_8
       gi-gsk
       gi-adwaita
+      sdl2-ttf
+      sdl2
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [

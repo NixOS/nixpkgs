@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pycontrol4";
-  version = "1.2.0";
+  version = "1.2.1";
 
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "lawtancool";
     repo = "pyControl4";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1gZebYseuEBI0dlXlD72f/uozNuoxHPqVsc8AWJV148=";
+    hash = "sha256-0ZuztqHbrd+kMDGv3xyUYoTF/Ho+oHkycjSrKz8JABM=";
   };
 
   build-system = [ setuptools ];

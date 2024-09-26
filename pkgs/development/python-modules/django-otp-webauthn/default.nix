@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "django_otp_webauthn";
-    sha256 = "sha256-+Y46/PDeXL9zayoZykaU63faQmnLHzYPmqJJeRBx+hs=";
+    hash = "sha256-+Y46/PDeXL9zayoZykaU63faQmnLHzYPmqJJeRBx+hs=";
   };
 
   build-system = [ hatchling ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Passkey support for Django";
     homepage = "https://github.com/Stormbase/django-otp-webauthn";
-    changelog = "https://github.com/Stormbase/django-otp-webauthn/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/Stormbase/django-otp-webauthn/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ erictapen ];
   };

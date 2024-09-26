@@ -12,15 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ libxml2 freetype glew libjpeg qtbase python3 ]
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals stdenv.isLinux [ libGLU libGL ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL ];
 
   qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
     # fatal error: 'Python.h' file not found
     "-I${python3}/include/${python3.libPrefix}"
     # error: format string is not a string literal (potentially insecure)

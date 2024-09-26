@@ -27,7 +27,6 @@
   services.openssh.startWhenNeeded = lib.mkDefault true;
 
   # As this is intended as a standalone image, undo some of the minimal profile stuff
-  environment.noXlibs = false;
   documentation.enable = true;
   documentation.nixos.enable = true;
   services.logrotate.enable = true;

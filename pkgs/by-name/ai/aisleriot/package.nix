@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "aisleriot";
     rev = finalAttrs.version;
-    sha256 = "sha256-HylhDBgkAJrrs/r42v3aDNR8mBJaqnJHyY7T3QW1eWg=";
+    hash = "sha256-HylhDBgkAJrrs/r42v3aDNR8mBJaqnJHyY7T3QW1eWg=";
   };
 
   nativeBuildInputs = [

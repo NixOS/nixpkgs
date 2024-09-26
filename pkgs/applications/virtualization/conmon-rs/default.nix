@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "conmon-rs";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qb7n6AcRkv/nF0BQbPgdFqaklfJeC+PRzMh6EIykobY=";
+    hash = "sha256-1kGAUAmiPI9zE8LE7G2r0Gy0YM+BUy2MxY7IQOu2ZDQ=";
   };
 
   nativeBuildInputs = [ capnproto protobuf ];

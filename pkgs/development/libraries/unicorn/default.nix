@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, IOKit
-, cctools
+{
+  lib,
+  stdenv,
+  cctools,
+  cmake,
+  fetchFromGitHub,
+  IOKit,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "unicorn";
-  version = "2.0.1.post1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Jz5C35rwnDz0CXcfcvWjkwScGNQO1uijF7JrtZhM7mI=";
+    repo = "unicorn";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o2syI3kBmofC9OFkUbUFCMpXGL5JlGviCLum+9Bi0LQ=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      cctools
+    ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    IOKit
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
-  cmakeFlags = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Some x86 tests are interrupted by signal 10
     "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;test_x86"
   ];
@@ -44,6 +45,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.unicorn-engine.org";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice luc65r ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      luc65r
+    ];
   };
 }

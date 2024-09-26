@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  patchPhase = lib.optionalString enableMacOSGuests ''
+  postPatch = lib.optionalString enableMacOSGuests ''
     cp -R "${unlockerSrc}" unlocker/
 
     substituteInPlace unlocker/unlocker.py --replace \
@@ -153,6 +153,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p \
       $out/bin \
       $out/etc/vmware \
@@ -324,7 +326,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s,/sbin/modprobe,${kmod}/bin/modprobe," $out/bin/vmplayer
     sed -i -e "s,@@BINARY@@,$out/bin/vmplayer," $out/share/applications/vmware-player.desktop
 
-    ## VMware OVF Tool compoment
+    ## VMware OVF Tool component
     echo "Installing VMware OVF Tool for Linux"
     unpacked="unpacked/vmware-ovftool"
     mkdir -p $out/lib/vmware-ovftool/
@@ -390,7 +392,7 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/bin/* $out/lib/vmware/bin/* $out/lib/vmware/setup/*
 
-    # Harcoded pkexec hack
+    # Hardcoded pkexec hack
     for lib in "lib/vmware/lib/libvmware-mount.so/libvmware-mount.so" "lib/vmware/lib/libvmwareui.so/libvmwareui.so" "lib/vmware/lib/libvmware-fuseUI.so/libvmware-fuseUI.so"
     do
       sed -i -e "s,/usr/local/sbin,/run/vmware/bin," "$out/$lib"
@@ -405,6 +407,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
     ln -s /run/wrappers/bin/vmware-vmx $out/lib/vmware/bin/vmware-vmx
+
+    runHook postInstall
   '';
 
   meta = with lib; {

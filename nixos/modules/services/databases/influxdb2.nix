@@ -67,16 +67,16 @@ let
     inherit (cfg.provision) organizations users;
   });
 
-  provisioningScript = pkgs.writeShellScript "post-start-provision" ''
-    set -euo pipefail
-    export INFLUX_HOST="http://"${escapeShellArg (
+  influxHost = "http://${escapeShellArg (
       if ! hasAttr "http-bind-address" cfg.settings
         || hasInfix "0.0.0.0" cfg.settings.http-bind-address
       then "localhost:8086"
       else cfg.settings.http-bind-address
-    )}
+    )}";
 
-    # Wait for the influxdb server to come online
+  waitUntilServiceIsReady = pkgs.writeShellScript "wait-until-service-is-ready" ''
+    set -euo pipefail
+    export INFLUX_HOST=${influxHost}
     count=0
     while ! influx ping &>/dev/null; do
       if [ "$count" -eq 300 ]; then
@@ -92,6 +92,11 @@ let
       sleep 0.1
       count=$((count++))
     done
+  '';
+
+  provisioningScript = pkgs.writeShellScript "post-start-provision" ''
+    set -euo pipefail
+    export INFLUX_HOST=${influxHost}
 
     # Do the initial database setup. Pass /dev/null as configs-path to
     # avoid saving the token as the active config.
@@ -447,11 +452,13 @@ in
           "admin-token:${cfg.provision.initialSetup.tokenFile}"
         ];
 
-        ExecStartPost = mkIf cfg.provision.enable (
+        ExecStartPost = [
+          waitUntilServiceIsReady
+        ] ++ (lib.optionals cfg.provision.enable (
           [provisioningScript] ++
           # Only the restarter runs with elevated privileges
           optional anyAuthDefined "+${restarterScript}"
-        );
+        ));
       };
 
       path = [

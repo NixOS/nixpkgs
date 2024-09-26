@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.xe-guest-utilities;
 in {
   options = {
     services.xe-guest-utilities = {
-      enable = mkEnableOption "the Xen guest utilities daemon";
+      enable = lib.mkEnableOption "the Xen guest utilities daemon";
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ pkgs.xe-guest-utilities ];
     systemd.tmpfiles.rules = [ "d /run/xenstored 0755 - - -" ];
 

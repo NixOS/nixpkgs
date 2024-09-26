@@ -2,6 +2,7 @@
 , qtbase
 , qtdeclarative
 , wayland
+, wayland-scanner
 , pkg-config
 , libdrm
 , fetchpatch
@@ -9,8 +10,11 @@
 
 qtModule {
   pname = "qtwayland";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
-  propagatedNativeBuildInputs = [ wayland ];
+  # wayland-scanner needs to be propagated as both build
+  # (for the wayland-scanner binary) and host (for the
+  # actual wayland.xml protocol definition)
+  propagatedBuildInputs = [ qtbase qtdeclarative wayland-scanner ];
+  propagatedNativeBuildInputs = [ wayland wayland-scanner ];
   buildInputs = [ wayland libdrm ];
   nativeBuildInputs = [ pkg-config ];
 

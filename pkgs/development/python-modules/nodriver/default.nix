@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   pythonOlder,
   deprecated,
   mss,
@@ -9,16 +9,14 @@
   setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "nodriver";
-  version = "0.36";
+  version = "0.37";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ultrafunkamsterdam";
-    repo = "nodriver";
-    rev = "e630abfc5dce2023966a61cec739348b18bd465d";
-    hash = "sha256-pUWvHcsEPbRob5DDXBFOzqonSWigNPnPUHIu9omzYII=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-FF/E0hNZvo26Urtgw+nBH5Rmk7UCaqAsckCLDMuCK0A=";
   };
 
   disabled = pythonOlder "3.9";

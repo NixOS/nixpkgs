@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.1";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-gW7LXfXeZ0nXyWchVRyVDDJi725xa4tgYWYnSIhi5Bo=";
+    hash = "sha256-/8Y8hz/rqKc5yZ/pdfy6gikufoSx0au3niv2r7o5cRc=";
   };
 
   nativeBuildInputs = [
@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     quazip
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/bin/texstudio.app" "$out/Applications"
     rm -d "$out/bin"
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       spell checking and support of any compilation chain.
     '';
     homepage = "https://texstudio.org";
-    changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/CHANGELOG.txt";
+    changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/source/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ajs124 cfouche ];

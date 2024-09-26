@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Foundation ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Cocoa Foundation ];
 
   cmakeFlags = [
     "-DHAS_WHATSAPP=OFF" # go module build required

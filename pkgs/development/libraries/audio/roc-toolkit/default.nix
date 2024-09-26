@@ -9,7 +9,7 @@
   openfecSupport ? true,
   openfec,
   speexdsp,
-  libunwindSupport ? true,
+  libunwindSupport ? lib.meta.availableOn stdenv.hostPlatform libunwind,
   libunwind,
   pulseaudioSupport ? true,
   libpulseaudio,
@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional soxSupport sox
     ++ lib.optional libsndfileSupport libsndfile;
 
-  sconsFlags =
+  sconsFlags = lib.optionals (!stdenv.hostPlatform.isDarwin)
     [ "--build=${stdenv.buildPlatform.config}"
-      "--host=${stdenv.hostPlatform.config}"
-      "--prefix=${placeholder "out"}" ] ++
+      "--host=${stdenv.hostPlatform.config}" ] ++
+    [ "--prefix=${placeholder "out"}" ] ++
     lib.optional (!opensslSupport) "--disable-openssl" ++
     lib.optional (!soxSupport) "--disable-sox" ++
     lib.optional (!libunwindSupport) "--disable-libunwind" ++

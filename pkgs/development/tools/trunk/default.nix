@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = if stdenv.isDarwin
+  buildInputs = if stdenv.hostPlatform.isDarwin
     then [ CoreServices SystemConfiguration ]
     else [ openssl ];
   # requires network

@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, pkgs
 , stdenv
 , rustPlatform
 , pkg-config
@@ -30,9 +29,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake ] ++
-    lib.optionals stdenv.isDarwin [ autoconf automake ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ autoconf automake ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Matrix bot which can generate \"This Week in X\" like blog posts ";

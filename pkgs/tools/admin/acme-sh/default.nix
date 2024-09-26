@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
     rev = "refs/tags/${version}";
-    hash = "sha256-ymj97aWWOLen7YEfG72N2nyxlwuB/Su4+pgpWUuckgc=";
+    hash = "sha256-RFybUjBRrpnNCEVKmix2EPiIXrq8p+v4zJaI14NFQQ0=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       gnused
       openssl
       socat
-      (if stdenv.isLinux then iproute2 else unixtools.netstat)
+      (if stdenv.hostPlatform.isLinux then iproute2 else unixtools.netstat)
     ];
   in
     ''

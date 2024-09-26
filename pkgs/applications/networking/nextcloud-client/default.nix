@@ -4,20 +4,20 @@
 , cmake
 , extra-cmake-modules
 , inotify-tools
+, kdePackages
 , libcloudproviders
 , librsvg
 , libsecret
 , openssl
 , pcre
 , pkg-config
+, qt5compat
 , qtbase
 , qtkeychain
+, qtsvg
 , qttools
 , qtwebengine
 , qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, plasma5Packages
 , sphinx
 , sqlite
 , xdg-utils
@@ -26,15 +26,15 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.13.3";
+  version = "3.14.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
-    rev = "v${version}";
-    hash = "sha256-Z2/WllEiz/Yj/GyIczfA4L2+3Hr8Jmo7X2W/hP1PmwI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/jRD0swNs59xugsXLbesGcTtyGdc/y/iwiDVoErW+d4=";
   };
 
   patches = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for file in src/libsync/vfs/*/CMakeLists.txt; do
       substituteInPlace $file \
-        --replace "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
+        --replace-fail "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
     done
   '';
 
@@ -61,17 +61,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     inotify-tools
+    kdePackages.kio
     libcloudproviders
     libsecret
     openssl
     pcre
-    plasma5Packages.kio
+    qt5compat
     qtbase
     qtkeychain
+    qtsvg
     qttools
     qtwebengine
-    qtquickcontrols2
-    qtgraphicaleffects
     qtwebsockets
     sqlite
   ];
@@ -93,7 +93,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Nextcloud themed desktop client";
+    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
+    description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kranzes SuperSandro2000 ];

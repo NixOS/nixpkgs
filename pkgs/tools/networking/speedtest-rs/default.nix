@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-0YPCBzidE1+LgIYk457eSoerLvQuuZs9cTd7uUt1Lr8=";
 
   # Fail for unclear reasons (only on darwin)
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=speedtest::tests::test_get_configuration"
     "--skip=speedtest::tests::test_get_server_list_with_config"
   ];

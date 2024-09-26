@@ -2,9 +2,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   bison,
   flex,
+  libxml2,
+  llvmPackages,
   meson,
   ninja,
   pkg-config,
@@ -14,9 +16,13 @@
   zlib,
 }:
 let
-  common = import ./common.nix { inherit lib fetchurl; };
+  common = import ./common.nix { inherit lib fetchFromGitLab; };
 in stdenv.mkDerivation {
   inherit (common) pname version src meta;
+
+  patches = [
+    ./darwin-build-fix.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -29,9 +35,12 @@ in stdenv.mkDerivation {
     python3Packages.packaging
     python3Packages.python
     python3Packages.mako
+    python3Packages.pyyaml
   ];
 
   buildInputs = [
+    libxml2  # should be propagated from libllvm
+    llvmPackages.libllvm
     Xplugin
     xorg.libX11
     xorg.libXext
@@ -46,6 +55,7 @@ in stdenv.mkDerivation {
     "--datadir=${placeholder "out"}/share"
     (lib.mesonEnable "glvnd" false)
     (lib.mesonEnable "shared-glapi" true)
+    (lib.mesonEnable "llvm" true)
   ];
 
   # Don't need this on Darwin.

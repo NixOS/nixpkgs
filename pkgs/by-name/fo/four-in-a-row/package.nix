@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor version}/four-in-a-row-${version}.tar.xz";
-    sha256 = "10ji60bdfdzb6wk5dkwjc3yww7hqi3yjcx1k1z7x2521h2dpdli1";
+    hash = "sha256-IdJ2m4BBFNHPDzN0Jv2IGB7O/WCSz1YmN+s31xYwUYI=";
   };
 
   nativeBuildInputs = [

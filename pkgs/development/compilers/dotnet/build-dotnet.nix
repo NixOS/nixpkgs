@@ -1,33 +1,45 @@
-{ type
-, version
-, srcs
-, packages ? null
+{
+  type,
+  version,
+  srcs,
+  commonPackages ? null,
+  hostPackages ? null,
+  targetPackages ? null,
 }:
 
-assert builtins.elem type [ "aspnetcore" "runtime" "sdk" ];
-assert if type == "sdk" then packages != null else true;
+assert builtins.elem type [
+  "aspnetcore"
+  "runtime"
+  "sdk"
+];
+assert
+  if type == "sdk" then
+    commonPackages != null && hostPackages != null && targetPackages != null
+  else
+    true;
 
-{ lib
-, stdenv
-, fetchurl
-, writeText
-, autoPatchelfHook
-, makeWrapper
-, libunwind
-, icu
-, libuuid
-, zlib
-, libkrb5
-, openssl
-, curl
-, lttng-ust_2_12
-, testers
-, runCommand
-, writeShellScript
-, mkNugetDeps
-, callPackage
-, dotnetCorePackages
-, xmlstarlet
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  autoPatchelfHook,
+  makeWrapper,
+  libunwind,
+  icu,
+  libuuid,
+  zlib,
+  libkrb5,
+  openssl,
+  curl,
+  lttng-ust_2_12,
+  testers,
+  runCommand,
+  writeShellScript,
+  mkNugetDeps,
+  callPackage,
+  systemToDotnetRid,
+  xmlstarlet,
 }:
 
 let
@@ -45,40 +57,53 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  mkCommon = callPackage ./common.nix {};
+  mkCommon = callPackage ./common.nix { };
 
-  targetRid = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
+  hostRid = systemToDotnetRid stdenv.hostPlatform.system;
+  targetRid = systemToDotnetRid stdenv.targetPlatform.system;
 
-  sigtool = callPackage ./sigtool.nix {};
-  signAppHost = callPackage ./sign-apphost.nix {};
+  sigtool = callPackage ./sigtool.nix { };
+  signAppHost = callPackage ./sign-apphost.nix { };
 
-  hasILCompiler =
-    lib.versionAtLeast version (if targetRid == "osx-arm64" then "8" else "7");
+  hasILCompiler = lib.versionAtLeast version (if hostRid == "osx-arm64" then "8" else "7");
 
-  extraTargets = writeText "extra.targets" (''
-    <Project>
-  '' + lib.optionalString hasILCompiler ''
+  extraTargets = writeText "extra.targets" (
+    ''
+      <Project>
+    ''
+    + lib.optionalString hasILCompiler ''
       <ItemGroup>
-        <CustomLinkerArg Include="-Wl,-rpath,'${lib.makeLibraryPath [ icu zlib openssl ]}'" />
+        <CustomLinkerArg Include="-Wl,-rpath,'${
+          lib.makeLibraryPath [
+            icu
+            zlib
+            openssl
+          ]
+        }'" />
       </ItemGroup>
-  '' + lib.optionalString stdenv.isDarwin ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       <Import Project="${signAppHost}" />
-  '' + ''
-    </Project>
-  '');
+    ''
+    + ''
+      </Project>
+    ''
+  );
 
 in
 mkCommon type rec {
   inherit pname version;
 
   # Some of these dependencies are `dlopen()`ed.
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook
-  ++ lib.optionals (type == "sdk" && stdenv.isDarwin) [
-    xmlstarlet
-    sigtool
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+    ++ lib.optionals (type == "sdk" && stdenv.hostPlatform.isDarwin) [
+      xmlstarlet
+      sigtool
+    ];
 
   buildInputs = [
     stdenv.cc.cc
@@ -87,24 +112,30 @@ mkCommon type rec {
     libkrb5
     curl
     xmlstarlet
-  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
 
   src = fetchurl (
-    srcs."${stdenv.hostPlatform.system}" or (throw
-      "Missing source (url and hash) for host system: ${stdenv.hostPlatform.system}")
+    srcs.${hostRid} or (throw "Missing source (url and hash) for host RID: ${hostRid}")
   );
 
   sourceRoot = ".";
 
-  postPatch = if type == "sdk" then (''
-    xmlstarlet ed \
-      --inplace \
-      -s //_:Project -t elem -n Import \
-      -i \$prev -t attr -n Project -v "${extraTargets}" \
-      sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
-  '' + lib.optionalString stdenv.isDarwin ''
-    codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
-  '') else null;
+  postPatch =
+    if type == "sdk" then
+      (
+        ''
+          xmlstarlet ed \
+            --inplace \
+            -s //_:Project -t elem -n Import \
+            -i \$prev -t attr -n Project -v "${extraTargets}" \
+            sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
+        ''
+        + lib.optionalString stdenv.hostPlatform.isDarwin ''
+          codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
+        ''
+      )
+    else
+      null;
 
   dontPatchELF = true;
   noDumpEnvVars = true;
@@ -132,49 +163,62 @@ mkCommon type rec {
       --add-needed libicuuc.so \
       $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
     patchelf \
       --add-needed libgssapi_krb5.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
     patchelf \
       --add-needed libssl.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
   '';
 
   # fixes: Could not load ICU data. UErrorCode: 2
-  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+  propagatedSandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
     (allow file-read* (subpath "/usr/share/icu"))
     (allow file-read* (subpath "/private/var/db/mds/system"))
     (allow mach-lookup (global-name "com.apple.SecurityServer")
                        (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
-  passthru = {
-    inherit icu hasILCompiler;
-  } // lib.optionalAttrs (type == "sdk") {
-    packages = mkNugetDeps {
-      name = "${pname}-${version}-deps";
-      nugetDeps = packages;
-    };
+  passthru =
+    {
+      inherit icu hasILCompiler;
+    }
+    // lib.optionalAttrs (type == "sdk") {
+      packages = commonPackages ++ hostPackages.${hostRid} ++ targetPackages.${targetRid};
+      inherit targetPackages;
 
-    updateScript =
-      let
-        majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
-      in
-      writeShellScript "update-dotnet-${majorVersion}" ''
-        pushd pkgs/development/compilers/dotnet
-        exec ${./update.sh} "${majorVersion}"
-      '';
-  };
+      updateScript =
+        let
+          majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
+        in
+        writeShellScript "update-dotnet-${majorVersion}" ''
+          pushd pkgs/development/compilers/dotnet
+          exec ${./update.sh} "${majorVersion}"
+        '';
+    };
 
   meta = with lib; {
     description = builtins.getAttr type descriptions;
     homepage = "https://dotnet.github.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ kuznero mdarocha ];
+    maintainers = with maintainers; [
+      kuznero
+      mdarocha
+    ];
     mainProgram = "dotnet";
-    platforms = attrNames srcs;
+    platforms = lib.filter (
+      platform:
+      let
+        e = builtins.tryEval (systemToDotnetRid platform);
+      in
+      e.success && srcs ? "${e.value}"
+    ) lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
   };
 }

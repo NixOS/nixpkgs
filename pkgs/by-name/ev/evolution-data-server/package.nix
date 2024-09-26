@@ -30,7 +30,7 @@
 , ninja
 , libkrb5
 , openldap
-, enableOAuth2 ? stdenv.isLinux
+, enableOAuth2 ? stdenv.hostPlatform.isLinux
 , webkitgtk_4_1
 , webkitgtk_6_0
 , json-glib
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     libphonenumber
     boost
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ] ++ lib.optionals withGtk3 [
     gtk3
@@ -141,14 +141,14 @@ stdenv.mkDerivation rec {
     "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/modules/SetupBuildFlags.cmake \
       --replace "-Wl,--no-undefined" ""
     substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
       --replace "G_OS_WIN32" "__APPLE__"
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/evolution-data-server/*.dylib $out/lib/
   '';
 

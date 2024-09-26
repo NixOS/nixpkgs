@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pytr";
-  version = "0.2.2";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
-    rev = "refs/tags/${version}";
-    hash = "sha256-0ekUpkuyT0TB2YQi7CUMwosLI2tR0owJE2XQBaiy8Iw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9FKG4QgRBU+DaaYJIDMDqqxFMCAguv5iRUUrQr6RMz8=";
   };
 
   build-system = with python3Packages; [

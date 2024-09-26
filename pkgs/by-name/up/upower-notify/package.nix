@@ -18,7 +18,7 @@ buildGoModule {
     owner = "omeid";
     repo = "upower-notify";
     rev = "c05ffbba9b8d475573be0908d75ac7c64d74be2d";
-    sha256 = "sha256-y+Cy3jkIfWiqF2HFopafdNSyGVA2ws4250Lg02rVxmo=";
+    hash = "sha256-y+Cy3jkIfWiqF2HFopafdNSyGVA2ws4250Lg02rVxmo=";
   };
 
   vendorHash = "sha256-58zK6t3rb+19ilaQaNgsMVFQBYKPIV40ww8klrGbpnw=";

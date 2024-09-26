@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.spamassassin;
   spamassassin-local-cf = pkgs.writeText "local.cf" cfg.config;
@@ -12,16 +9,16 @@ in
   options = {
 
     services.spamassassin = {
-      enable = mkEnableOption "the SpamAssassin daemon";
+      enable = lib.mkEnableOption "the SpamAssassin daemon";
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to run the SpamAssassin daemon in debug mode";
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         description = ''
           The SpamAssassin local.cf config
 
@@ -55,8 +52,8 @@ in
         default = "";
       };
 
-      initPreConf = mkOption {
-        type = with types; either str path;
+      initPreConf = lib.mkOption {
+        type = with lib.types; either str path;
         description = "The SpamAssassin init.pre config.";
         apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
@@ -111,7 +108,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."mail/spamassassin/init.pre".source = cfg.initPreConf;
     environment.etc."mail/spamassassin/local.cf".source = spamassassin-local-cf;
 
@@ -185,7 +182,7 @@ in
       serviceConfig = {
         User = "spamd";
         Group = "spamd";
-        ExecStart = "+${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=%S/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
+        ExecStart = "+${pkgs.spamassassin}/bin/spamd ${lib.optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=%S/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
         ExecReload = "+${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         StateDirectory = "spamassassin";
       };

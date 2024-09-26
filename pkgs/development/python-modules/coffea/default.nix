@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -38,20 +37,19 @@
   distributed,
   pyinstrument,
   pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.8.1";
+  version = "2024.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tFNBtjIxcn+Ux+QNWBbRCmCkgMuddodnKmeRCfT3PEs=";
+    hash = "sha256-IX9c1EhQfFF2Gsn8atxngJ4gpgrwX5SnolUQ3nphhUY=";
   };
 
   build-system = [
@@ -90,6 +88,7 @@ buildPythonPackage rec {
     distributed
     pyinstrument
     pytestCheckHook
+    pytest-xdist
   ];
 
   pythonImportsCheck = [ "coffea" ];

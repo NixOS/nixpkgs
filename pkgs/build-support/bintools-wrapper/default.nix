@@ -10,15 +10,15 @@
 , stdenvNoCC
 , runtimeShell
 , bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
-, netbsd ? null, netbsdCross ? null
+, netbsd ? null
 , sharedLibraryLoader ?
   if libc == null then
     null
   else if stdenvNoCC.targetPlatform.isNetBSD then
-    if !(targetPackages ? netbsdCross) then
+    if !(targetPackages ? netbsd) then
       netbsd.ld_elf_so
-    else if libc != targetPackages.netbsdCross.headers then
-      targetPackages.netbsdCross.ld_elf_so
+    else if libc != targetPackages.netbsd.headers then
+      targetPackages.netbsd.ld_elf_so
     else
       null
   else

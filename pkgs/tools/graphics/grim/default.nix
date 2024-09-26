@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emersion/grim";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eclairevoyant ];
+    maintainers = with maintainers; [ ];
     mainProgram = "grim";
   };
 }

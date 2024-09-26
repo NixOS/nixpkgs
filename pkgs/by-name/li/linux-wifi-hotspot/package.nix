@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lakinduakash";
     repo = "linux-wifi-hotspot";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+WHYWQ4EyAt+Kq0LHEgC7Kk5HpIqThz6W3PIdW8Wojk=";
+    hash = "sha256-+WHYWQ4EyAt+Kq0LHEgC7Kk5HpIqThz6W3PIdW8Wojk=";
   };
 
   nativeBuildInputs = [

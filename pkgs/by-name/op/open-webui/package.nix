@@ -7,25 +7,25 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.16";
+  version = "0.3.30";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "v${version}";
-    hash = "sha256-AxD7WHL5fGM0CBKi7zc/gmoSJQBohDh0HgIDU1/BQ7w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zGgCISGpna9L8Eqze0WWagIx26DwhLpeOLCVslpcJ08=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-Ik+wXymso3jdKXQgLydnhhWvpHl0d82pwYSmUR0yfPE=";
+    npmDepsHash = "sha256-508AjFAzQvWPkn+kMv/YQUeG0jikZJJxNkFqfkKi9Ks=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build" \
+        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
@@ -76,8 +76,10 @@ python3.pkgs.buildPythonApplication rec {
     black
     boto3
     chromadb
+    colbert-ai
     docx2txt
     duckduckgo-search
+    einops
     extract-msg
     fake-useragent
     fastapi
@@ -103,6 +105,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pydub
     pyjwt
+    pymilvus
     pymongo
     pymysql
     pypandoc

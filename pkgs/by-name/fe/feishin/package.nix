@@ -11,13 +11,13 @@
 }:
 let
   pname = "feishin";
-  version = "0.7.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${version}";
-    hash = "sha256-UOY0wjWGK7sal/qQbbkHjFUIA49QtbO+Ei6hSTOyHWk=";
+    hash = "sha256-3gQ39GhYPme0kGAtM5DsG9RYwf23OAdkp3uVt7c1SQU=";
   };
 
   electron = electron_31;
@@ -26,7 +26,7 @@ buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-FLo8FCpxvh2Iqd3pkpgwRZ4f2viX4iET64VAuXN362g=";
+  npmDepsHash = "sha256-u+zbPB6u9EYVr9oHnLlKC0AyCLn4nq4TFVPSs2oWsbo=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -34,8 +34,8 @@ buildNpmPackage {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs =
-    lib.optionals (stdenv.isLinux) [ copyDesktopItems ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+    lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
   postPatch =
     ''
@@ -47,7 +47,7 @@ buildNpmPackage {
       substituteInPlace src/main/main.ts \
         --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       # https://github.com/electron/electron/issues/31121
       substituteInPlace src/main/main.ts \
         --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
@@ -60,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-fQV2yqyNZCjeNUekBaXUsND2lIZYYz07YQ6TGoFxT9Q=";
+        npmDepsHash = "sha256-3qUmXRiAloGgLAErR16+BGEUT0ZwHHhCxMDQRCENQB4=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
@@ -77,7 +77,7 @@ buildNpmPackage {
     '';
 
   postBuild =
-    lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
       cp -r ${electron.dist}/Electron.app ./
       find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
@@ -90,7 +90,7 @@ buildNpmPackage {
     + ''
       npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${if stdenv.isDarwin then "./" else electron.dist} \
+        -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
         -c.electronVersion=${electron.version} \
         -c.npmRebuild=false
     '';
@@ -99,12 +99,12 @@ buildNpmPackage {
     ''
       runHook preInstall
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
       cp -r release/build/**/Feishin.app $out/Applications/
       makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/feishin
       pushd release/build/*/
       cp -r locales resources{,.pak} $out/share/feishin

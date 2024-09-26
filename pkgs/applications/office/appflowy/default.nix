@@ -17,11 +17,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-2v7LF53UmVxFzoNHwv+B2zN7I6pSP66x32OplcIR7Fk=";
+        hash = "sha256-sQ3dxwPWHLUoWgnR9+oHaFoDzXxtwKRiBvz2wkFB01g=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-73Do2Jhso6GJsyDiSz3ACN8pEmZbuPNW3vjW3BFLhY4=";
+        hash = "sha256-4bU/qecZBrTr34SZAjDDgwpXAAHDITz6lV6mJGjElko=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -29,7 +29,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.6.6";
+  version = "0.6.8";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     gtk3
@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   installPhase =
-    lib.optionalString stdenvNoCC.isLinux ''
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       runHook preInstall
 
       cd AppFlowy/
@@ -67,7 +67,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       runHook postInstall
     ''
-    + lib.optionalString stdenvNoCC.isDarwin ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       runHook preInstall
 
       mkdir -p $out/{Applications,bin}
@@ -77,17 +77,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
   preFixup =
-    lib.optionalString stdenvNoCC.isLinux ''
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       # Add missing libraries to appflowy using the ones it comes with
       makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
         --set LD_LIBRARY_PATH "$out/opt/lib/" \
         --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
     ''
-    + lib.optionalString stdenvNoCC.isDarwin ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/AppFlowy.app/Contents/MacOS/AppFlowy $out/bin/appflowy
     '';
 
-  desktopItems = lib.optionals stdenvNoCC.isLinux [
+  desktopItems = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "appflowy";
       desktopName = "AppFlowy";

@@ -22,7 +22,7 @@
 
   # extras: mfa
   cryptography,
-  phonenumbers,
+  phonenumberslite,
   webauthn,
   qrcode,
 
@@ -46,6 +46,7 @@
   peewee,
   pony,
   pytestCheckHook,
+  requests,
   zxcvbn,
 }:
 
@@ -62,11 +63,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers
-  '';
 
   build-system = [ flit-core ];
 
@@ -103,7 +99,7 @@ buildPythonPackage rec {
     ];
     mfa = [
       cryptography
-      phonenumbers
+      phonenumberslite
       webauthn
       qrcode
     ];
@@ -119,6 +115,7 @@ buildPythonPackage rec {
       peewee
       pony
       pytestCheckHook
+      requests
       zxcvbn
     ]
     ++ optional-dependencies.babel

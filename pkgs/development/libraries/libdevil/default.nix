@@ -15,6 +15,7 @@
 , runtimeShell
 , withXorg ? true
 , testers
+, mesa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr ]
     ++ lib.optionals withXorg [ libX11 libGL ]
-    ++ lib.optionals stdenv.isDarwin [ OpenGL ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
 
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ilur";
     license = licenses.lgpl2;
     pkgConfigModules = [ "IL" ];
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = [ ];
   };
 })

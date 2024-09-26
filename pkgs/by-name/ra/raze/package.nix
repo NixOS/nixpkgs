@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "Raze";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-R3Sm/cibg+D2QPS4UisRp91xvz3Ine2BUR8jF5Rbj1g=";
     leaveDotGit = true;
     postFetch = ''
@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "DYN_GTK" false)
     (lib.cmakeBool "DYN_OPENAL" false)
   ];
@@ -68,7 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     mv $out/bin/raze $out/share/raze
-    makeWrapper $out/share/raze/raze $out/bin/raze
+    makeWrapper $out/share/raze/raze $out/bin/raze \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
     install -Dm644 ../source/platform/posix/org.zdoom.Raze.256.png $out/share/pixmaps/org.zdoom.Raze.png
     install -Dm644 ../source/platform/posix/org.zdoom.Raze.desktop $out/share/applications/org.zdoom.Raze.desktop
     install -Dm644 ../soundfont/raze.sf2 $out/share/raze/soundfonts/raze.sf2

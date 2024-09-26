@@ -36,21 +36,18 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "1.4.53";
+  version = "1.4.54";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-CpFvL0W/X7/4N/FpufAdud5o11LHBuox8m+8EailqXg=";
+    hash = "sha256-6qAjyqMVrugABHssAQuql3z1YHTAOSm5hARJuJXJJvo=";
   };
 
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=44,<69.3" "setuptools"
   '';
 
   nativeBuildInputs = [ setuptools ];

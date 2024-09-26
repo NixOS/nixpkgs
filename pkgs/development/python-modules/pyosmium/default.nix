@@ -13,6 +13,7 @@
   pythonOlder,
   pytest-httpserver,
   pytestCheckHook,
+  setuptools,
   shapely,
   werkzeug,
   isPyPy,
@@ -22,17 +23,19 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "3.7.0";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6" || isPyPy;
+  disabled = pythonOlder "3.7" || isPyPy;
 
   src = fetchFromGitHub {
     owner = "osmcode";
-    repo = pname;
+    repo = "pyosmium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBFDAKNrD93MRXjoM8dIJQ/HJ9Aj8oMJuPVQxTrKYfI=";
+    hash = "sha256-HYp1MzXSa0tx0hY0JyMf2bmEvm5YuS2R+o25TsO8J6I=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -47,7 +50,7 @@ buildPythonPackage rec {
     lz4
   ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   preBuild = "cd ..";
 
@@ -58,11 +61,13 @@ buildPythonPackage rec {
     pytest-httpserver
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python bindings for libosmium";
     homepage = "https://osmcode.org/pyosmium";
     changelog = "https://github.com/osmcode/pyosmium/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

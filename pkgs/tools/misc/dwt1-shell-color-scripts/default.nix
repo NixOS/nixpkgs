@@ -37,9 +37,12 @@ stdenvNoCC.mkDerivation {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/colorscript \
-      --replace "/opt/shell-color-scripts/colorscripts" \
-                "$out/share/shell-color-scripts/colorscripts"
+    substituteInPlace \
+      $out/bin/colorscript \
+      $out/share/fish/vendor_completions.d/colorscript.fish \
+      $out/share/zsh/site-functions/_colorscript \
+      --replace-fail "/opt/shell-color-scripts/colorscripts" \
+        "$out/share/shell-color-scripts/colorscripts"
   '';
 
   meta = {

@@ -21,6 +21,9 @@ buildMongoDB {
       url = "https://github.com/mongodb/mongo/commit/5435f9585f857f6145beaf6d31daf336453ba86f.patch";
       sha256 = "sha256-gWlE2b/NyGe2243iNCXzjcERIY8/4ZWI4Gjh5SF0tYA=";
     })
+
+    # Fix building with python 3.12 since the imp module was removed
+    ./mongodb-python312.patch
   ];
   # passthru.tests = { inherit (nixosTests) mongodb; }; # currently tests mongodb-5_0
 }

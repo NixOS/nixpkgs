@@ -40,12 +40,12 @@ in stdenv.mkDerivation rec {
     sha256 = cfg.sha256;
   };
 
-  buildInputs = if stdenv.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
 
   CCL_RUNTIME = cfg.runtime;
   CCL_KERNEL = cfg.kernel;
 
-  postPatch = if stdenv.isDarwin then ''
+  postPatch = if stdenv.hostPlatform.isDarwin then ''
     substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
       --replace "M4 = gm4"   "M4 = m4" \
       --replace "dtrace"     "/usr/sbin/dtrace" \
@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
     maintainers = lib.teams.lisp.members;
     platforms   = attrNames options;
     # assembler failures during build, x86_64-darwin broken since 2020-10-14
-    broken      = (stdenv.isDarwin && stdenv.isx86_64);
+    broken      = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     license     = licenses.asl20;
   };
 }

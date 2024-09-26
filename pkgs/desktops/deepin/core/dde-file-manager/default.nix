@@ -2,13 +2,14 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   runtimeShell,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
   dde-qt-dbus-factory,
   docparser,
-  dde-dock,
+  dde-tray-loader,
   cmake,
   qttools,
   qtx11extras,
@@ -44,13 +45,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
-  version = "6.0.51";
+  version = "6.0.57";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-MvrOhdejQPK693wFlqkERuwYM88ALtFNnbyu7H3TI4Q=";
+    hash = "sha256-laM6PgNdUNbsqbzKFGWk7DPuAWR+XHo0eXKG0CDuc9c=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +63,25 @@ stdenv.mkDerivation rec {
   ];
   dontWrapGApps = true;
 
-  patches = [ ./patch_check_v23_interface.diff ];
+  patches = [
+    ./patch_check_v23_interface.diff
+    (fetchpatch {
+      name = "fix-permission-to-execute-dde-file-manager.patch";
+      url = "https://github.com/linuxdeepin/dde-file-manager/commit/b78cc4bd08dd487f67c5a332a2a2f4d20b3798c7.patch";
+      hash = "sha256-Tw3iu6sU0rrsM78WGMBpBgvA9YdRTM1ObjCxyM928F4=";
+    })
+  ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs tests/*.sh \
+                  assets/scripts \
+                  src/*.sh \
+                  src/plugins/daemon/daemonplugin-accesscontrol/help.sh \
+                  src/apps/dde-file-manager/dde-property-dialog \
+                  src/apps/dde-desktop/data/applications/dfm-open.sh
+
+    substituteInPlace assets/scripts/file-manager.sh \
+      --replace-fail "/usr/libexec/dde-file-manager" "$out/libexec/dde-file-manager"
 
     substituteInPlace src/plugins/filemanager/dfmplugin-vault/utils/vaultdefine.h \
       --replace-fail "/usr/bin/deepin-compressor" "deepin-compressor"
@@ -99,7 +115,7 @@ stdenv.mkDerivation rec {
     dde-qt-dbus-factory
     glibmm
     docparser
-    dde-dock
+    dde-tray-loader
     qtx11extras
     qtmultimedia
     kcodecs

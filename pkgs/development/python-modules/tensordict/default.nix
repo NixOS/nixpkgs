@@ -73,6 +73,7 @@ buildPythonPackage rec {
       # torch._dynamo.exc.BackendCompilerFailed
       # Requires a more recent version of triton
       # Re-enable when https://github.com/NixOS/nixpkgs/pull/328247 is merged
+      "test_functional"
       "test_linear"
       "test_seq"
       "test_seq_lmbda"
@@ -90,7 +91,7 @@ buildPythonPackage rec {
       "test_map_iter_interrupt_early"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
     # OpenMP support not found.
     "test/test_compile.py"

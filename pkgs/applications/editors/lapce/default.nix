@@ -25,7 +25,7 @@
 , xorg
 }:
 let
-  rpathLibs = lib.optionals stdenv.isLinux [
+  rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libxkbcommon
     xorg.libX11
@@ -39,20 +39,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Bwo6twEi9m3T5OybWkWGAyTRumusCWW7mkx/OAJkfXs=";
+    sha256 = "sha256-vBBYNHgZiW5JfGeUG6YZObf4oK0hHxTbsZNTfnIX95Y=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "alacritty_terminal-0.24.1-dev" = "sha256-aVB1CNOLjNh6AtvdbomODNrk00Md8yz8QzldzvDo1LI=";
-      "floem-0.1.1" = "sha256-zV2nk3cvmw8lzqL4Xx5SCTX156tiN6sUAEdfy0dJvDY=";
+      "floem-0.1.1" = "sha256-/4Y38VXx7wFVVEzjqZ2D6+jiXCXPfzK44rDiNOR1lAk=";
       "human-sort-0.2.2" = "sha256-tebgIJGXOY7pwWRukboKAzXY47l4Cn//0xMKQTaGu8w=";
       "locale_config-0.3.1-alpha.0" = "sha256-cCEO+dmU05TKkpH6wVK6tiH94b7k2686xyGxlhkcmAM=";
       "lsp-types-0.95.1" = "sha256-+tWqDBM5x/gvQOG7V3m2tFBZB7smgnnZHikf9ja2FfE=";
@@ -89,9 +89,9 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk3
     openssl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
     Security
     CoreServices
@@ -100,7 +100,7 @@ rustPlatform.buildRustPackage rec {
     AppKit
   ];
 
-  postInstall = if stdenv.isLinux then ''
+  postInstall = if stdenv.hostPlatform.isLinux then ''
     install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
     install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
 
@@ -125,6 +125,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ elliot ];
     mainProgram = "lapce";
     # Undefined symbols for architecture x86_64: "_NSPasteboardTypeFileURL"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

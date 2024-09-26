@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ zstd ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];

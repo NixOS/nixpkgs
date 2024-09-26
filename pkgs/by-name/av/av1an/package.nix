@@ -4,7 +4,7 @@
   makeBinaryWrapper,
   av1an-unwrapped,
   ffmpeg,
-  python3Packages,
+  python3,
   libaom,
   svt-av1,
   rav1e,
@@ -12,6 +12,8 @@
   x264,
   x265,
   libvmaf,
+  vapoursynth,
+  mkvtoolnix-cli,
   withAom ? true, # AV1 reference encoder
   withSvtav1 ? false, # AV1 encoder/decoder (focused on speed and correctness)
   withRav1e ? false, # AV1 encoder (focused on speed and safety)
@@ -19,6 +21,7 @@
   withX264 ? true, # H.264/AVC encoder
   withX265 ? true, # H.265/HEVC encoder
   withVmaf ? false, # Perceptual video quality assessment algorithm
+  withMkvtoolnix ? true, # mkv editor, recommended concatenation method
 }:
 
 # av1an requires at least one encoder
@@ -41,19 +44,24 @@ symlinkJoin {
   postBuild =
     let
       runtimePrograms =
-        [ (ffmpeg.override { inherit withVmaf; }) ]
+        [
+          vapoursynth
+          (ffmpeg.override { inherit withVmaf; })
+        ]
         ++ lib.optional withAom libaom
         ++ lib.optional withSvtav1 svt-av1
         ++ lib.optional withRav1e rav1e
         ++ lib.optional withVpx libvpx
         ++ lib.optional withX264 x264
         ++ lib.optional withX265 x265
-        ++ lib.optional withVmaf libvmaf;
+        ++ lib.optional withVmaf libvmaf
+        ++ lib.optional withMkvtoolnix mkvtoolnix-cli;
     in
     ''
       wrapProgram $out/bin/av1an \
+        --prefix LD_LIBRARY_PATH : ${vapoursynth}/lib \
         --prefix PATH : ${lib.makeBinPath runtimePrograms} \
-        --prefix PYTHONPATH : ${python3Packages.makePythonPath [ python3Packages.vapoursynth ]}
+        --prefix PYTHONPATH : ${vapoursynth}/${python3.sitePackages}
     '';
 
   passthru = {

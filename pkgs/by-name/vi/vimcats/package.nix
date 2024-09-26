@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vimcats";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "mrcjkb";
     repo = "vimcats";
     rev = "v${version}";
-    sha256 = "sha256-YZPLZgC0v5zw/+X3r0G1MZ+46c0K8J3ClFQYH5BqbUE=";
+    hash = "sha256-QV/eIy6yd6Lnmo8XV+E37/oCZCC3jlPu31emH0MgiO4=";
   };
 
   buildFeatures = [ "cli" ];
 
-  cargoHash = "sha256-gxCsB8lx9gTEsWV3uCX2TKTzxCUZ9JHo+1+voU7gKhY=";
+  cargoHash = "sha256-LBiuh7OkEoOkoPXCeGnDQLSlRIMkbiWyCv0dk0y7swk=";
 
   passthru.tests.version = testers.testVersion { package = vimcats; };
 

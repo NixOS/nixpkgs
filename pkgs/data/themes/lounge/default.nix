@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, sassc, gtk3, gnome, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, sassc, gtk3, gnome-shell, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "lounge-gtk-theme";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   mesonFlags = [
-    "-D gnome_version=${lib.versions.majorMinor gnome.gnome-shell.version}"
+    "-D gnome_version=${lib.versions.majorMinor gnome-shell.version}"
   ];
 
   postFixup = ''

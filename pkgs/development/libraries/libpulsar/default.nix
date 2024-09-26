@@ -46,13 +46,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "libpulsar";
-  version = "3.5.1";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-cpp";
     rev = "v${version}";
-    hash = "sha256-BSDkF0MAc54N59t7ozMLof0of4sURL3qiksLZhb+6I8=";
+    hash = "sha256-P1LhUH7V3EtWBXwPHQdN11mCjuyUyVdrtZsUItvC8xU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]

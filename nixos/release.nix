@@ -49,7 +49,7 @@ let
     system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
 
     # At creation time we do not have state yet, so just default to latest.
-    system.stateVersion = config.system.nixos.version;
+    system.stateVersion = config.system.nixos.release;
   };
 
   makeModules = module: rest: [ configuration versionModule module rest ];

@@ -17,23 +17,23 @@ let
   # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
   # Forcing it to clang 12 fixes the issue.
   buildRustPackage =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
     else
       rustPlatform.buildRustPackage;
 in
 buildRustPackage rec {
   pname = "fedimint";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-udQxFfLkAysDtD6P3TsW0xEcENA77l+GaDUSnkIBGXo=";
+    hash = "sha256-ih1ZwH8uItplMJU2/XkQseFlYUsf8/TkX8lGyRl7/KU=";
   };
 
-  cargoHash = "sha256-w1yQOEoumyam4JsDarAQffTs8Ype4VUyGJ0vgJfuHaU=";
+  cargoHash = "sha256-scfgUFuS/b4EFfPuhl6uFlTZi4gyTqtEso2a5jhrxno=";
 
   nativeBuildInputs = [
     protobuf
@@ -44,7 +44,7 @@ buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     libiconv
     Security

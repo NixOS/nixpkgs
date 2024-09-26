@@ -30,16 +30,14 @@
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MpumAQ5OW/+fRIvrBlRWkgioxMVceb5LxEH2JjRk5zY=";
+    hash = "sha256-tdxO5eixI2swezhkeSMqeVgdiaa/VmNdwhZYURSzadw=";
   };
 
   build-system = [
@@ -64,12 +62,8 @@ buildPythonPackage rec {
   postPatch =
     # Relax the pybind11 version
     ''
-      substituteInPlace src/python/CMakeLists.txt \
+      substituteInPlace src/ale/python/CMakeLists.txt \
         --replace-fail 'find_package(pybind11 ''${PYBIND11_VER} QUIET)' 'find_package(pybind11 QUIET)'
-    ''
-    + ''
-      substituteInPlace pyproject.toml \
-        --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
     '';
 
   dontUseCmakeConfigure = true;
@@ -93,6 +87,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
-    broken = stdenv.isDarwin; # fails to link with missing library
+    broken = stdenv.hostPlatform.isDarwin; # fails to link with missing library
   };
 }

@@ -15,7 +15,7 @@
   buildPackages,
   qtbase ? null,
   pythonSupport ? false,
-  swig4 ? null,
+  swig ? null,
   # only for passthru.tests
   libsForQt5,
   qt6Packages,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       python3.pkgs.setuptools
       python3.pkgs.wheel
       ncurses
-      swig4
+      swig
       which
     ];
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     # which has a path length limit. Nix on darwin is using a build directory
     # that already has quite a long path and the resulting socket path doesn't
     # fit in the limit. https://github.com/NixOS/nix/pull/1085
-    ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-gpg-test" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless

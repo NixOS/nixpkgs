@@ -184,11 +184,11 @@ let
         pytestCheckHook
       ]
       ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
-      ++ lib.optionals (stdenv.isLinux) [
+      ++ lib.optionals (stdenv.hostPlatform.isLinux) [
         # for locale executable
         glibc
       ]
-      ++ lib.optionals (stdenv.isDarwin) [
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
         # for locale executable
         adv_cmds
       ];
@@ -213,13 +213,13 @@ let
         # AssertionError: Did not see expected warning of class 'FutureWarning'
         "test_parsing_tzlocal_deprecated"
       ]
-      ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
         # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
         "test_binops"
         # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
         "test_rolling"
       ]
-      ++ lib.optional stdenv.is32bit [
+      ++ lib.optional stdenv.hostPlatform.is32bit [
         # https://github.com/pandas-dev/pandas/issues/37398
         "test_rolling_var_numerical_issues"
       ];
@@ -234,7 +234,7 @@ let
       ''
       # TODO: Get locale and clipboard support working on darwin.
       #       Until then we disable the tests.
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # Fake the impure dependencies pbpaste and pbcopy
         echo "#!${runtimeShell}" > pbcopy
         echo "#!${runtimeShell}" > pbpaste
@@ -246,7 +246,7 @@ let
 
     meta = with lib; {
       # pandas devs no longer test i686, it's commonly broken
-      # broken = stdenv.isi686;
+      # broken = stdenv.hostPlatform.isi686;
       changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
       description = "Powerful data structures for data analysis, time series, and statistics";
       downloadPage = "https://github.com/pandas-dev/pandas";

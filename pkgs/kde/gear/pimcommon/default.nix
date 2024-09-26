@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "pimcommon";
 
-  extraBuildInputs = [qttools];
-  extraNativeBuildInputs = [libxslt];
+  extraBuildInputs = [ qttools ];
+  extraNativeBuildInputs = [ libxslt ];
 }

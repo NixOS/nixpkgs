@@ -417,7 +417,7 @@ let
     };
     "tree-sitter-wing" = {
       orga = "winglang";
-      repo = "wing";
+      repo = "tree-sitter-wing";
     };
     "tree-sitter-wgsl" = {
       orga = "szebniok";

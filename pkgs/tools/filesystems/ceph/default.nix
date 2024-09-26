@@ -323,6 +323,11 @@ in rec {
         name = "ceph-reef-ceph-volume-fix-set_dmcrypt_no_workqueue.patch";
         hash = "sha256-r+7hcCz2WF/rJfgKwTatKY9unJlE8Uw3fmOyaY5jVH0=";
       })
+      (fetchpatch {
+        url = "https://github.com/ceph/ceph/commit/607eb34b2c278566c386efcbf3018629cf08ccfd.patch";
+        name = "ceph-volume-fix-set_dmcrypt_no_workqueue-regex.patch";
+        hash = "sha256-q28Q7OIyFoMyMBCPXGA+AdNqp+9/6J/XwD4ODjx+JXY=";
+      })
     ];
 
     postPatch = ''
@@ -377,7 +382,7 @@ in rec {
       utf8proc
       zlib
       zstd
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       keyutils
       libcap_ng
       liburing
@@ -452,7 +457,7 @@ in rec {
       "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
-    ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
+    ] ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     preBuild =
       # The legacy-option-headers target is not correctly empbedded in the build graph.
@@ -487,7 +492,8 @@ in rec {
         inherit (nixosTests)
           ceph-multi-node
           ceph-single-node
-          ceph-single-node-bluestore;
+          ceph-single-node-bluestore
+          ceph-single-node-bluestore-dmcrypt;
       };
     };
   };

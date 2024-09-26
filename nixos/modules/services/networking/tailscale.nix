@@ -60,6 +60,33 @@ in {
       '';
     };
 
+    authKeyParameters = mkOption {
+      type = types.submodule {
+        options = {
+          ephemeral = mkOption {
+            type = types.nullOr types.bool;
+            default = null;
+            description = "Whether to register as an ephemeral node.";
+          };
+          preauthorized = mkOption {
+            type = types.nullOr types.bool;
+            default = null;
+            description = "Whether to skip manual device approval.";
+          };
+          baseURL = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = "Base URL for the Tailscale API.";
+          };
+        };
+      };
+      default = { };
+      description = ''
+        Extra parameters to pass after the auth key.
+        See https://tailscale.com/kb/1215/oauth-clients#registering-new-nodes-using-oauth-credentials
+      '';
+    };
+
     extraUpFlags = mkOption {
       description = ''
         Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
@@ -121,10 +148,25 @@ in {
       serviceConfig = {
         Type = "oneshot";
       };
-      script = ''
-        status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
-        if [[ $status != Connected* ]]; then
-          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
+      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+      script = let
+        statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
+        paramToString = v:
+          if (builtins.isBool v) then (lib.boolToString v)
+          else (toString v);
+        params = lib.pipe cfg.authKeyParameters [
+          (lib.filterAttrs (_: v: v != null))
+          (lib.mapAttrsToList (k: v: "${k}=${paramToString v}"))
+          (builtins.concatStringsSep "&")
+          (params: if params != "" then "?${params}" else "")
+        ];
+      in ''
+        while [[ "$(${statusCommand})" == "NoState" ]]; do
+          sleep 0.5
+        done
+        status=$(${statusCommand})
+        if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
+          ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
         fi
       '';
     };
@@ -137,7 +179,7 @@ in {
         Type = "oneshot";
       };
       script = ''
-        ${cfg.package}/bin/tailscale set ${escapeShellArgs cfg.extraSetFlags}
+        ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
       '';
     };
 

@@ -27,7 +27,6 @@ let
 in
 
 assert pythonSupport -> python3 != null;
-assert lib.asserts.assertMsg (stdenv.targetPlatform.system != "aarch64-darwin") "GDB does not support aarch64-darwin as a target";
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-OCVOrNRXITS8qcWlqk1MpWTLvTDDadiB9zP7a5AzVPI=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin-target-match.patch
   ];
 
@@ -60,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # darwin build fails with format hardening since v7.12
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "format" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "format" ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
@@ -156,6 +155,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ darwin;
+    # upstream does not support targeting aarch64-darwin;
+    # see https://inbox.sourceware.org/gdb/3185c3b8-8a91-4beb-a5d5-9db6afb93713@Spark/
+    badPlatforms = lib.optionals (stdenv.targetPlatform.system == "aarch64-darwin") meta.platforms;
     maintainers = with lib.maintainers; [ pierron globin lsix ];
   };
 }

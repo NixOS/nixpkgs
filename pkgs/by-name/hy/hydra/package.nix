@@ -44,6 +44,7 @@
 , glibcLocales
 , fetchFromGitHub
 , nixosTests
+, unstableGitUpdater
 }:
 
 let
@@ -123,13 +124,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-08-27";
+  version = "0-unstable-2024-09-20";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "2d79b0a4da9e2a8ff97c1173aa56fe92e1f4629b";
-    hash = "sha256-ZU8/LzdZ0nbUxVxTsRZyMpTGEtps9oG0Yx2cpS9J8I4=";
+    rev = "44248d3cf4162944ec2e6a45f8cc058758bf5a86";
+    hash = "sha256-WJ7M/1a8j5gRJJVzCJL6JrkGPckD5ZhKzTlmiKNdtm0=";
   };
 
   buildInputs = [
@@ -172,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
   );
 
   nativeBuildInputs = [
@@ -194,9 +195,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  env.NIX_CFLAGS_COMPILE = "-pthread";
-
-  OPENLDAP_ROOT = openldap;
+  env = {
+    NIX_CFLAGS_COMPILE = "-pthread";
+    OPENLDAP_ROOT = openldap;
+  };
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
@@ -231,6 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra;
+    updateScript = unstableGitUpdater {};
   };
 
   meta = with lib; {

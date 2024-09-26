@@ -33,7 +33,9 @@ let
     attrsets
     customisation
     fixedPoints
+    lists
     strings
+    trivial
     versions
     ;
   # Backbone
@@ -80,6 +82,45 @@ let
     saxpy = final.callPackage ../development/cuda-modules/saxpy { };
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
+
+    tests =
+      let
+        bools = [
+          true
+          false
+        ];
+        configs = {
+          openCVFirst = bools;
+          useOpenCVDefaultCuda = bools;
+          useTorchDefaultCuda = bools;
+        };
+        builder =
+          {
+            openCVFirst,
+            useOpenCVDefaultCuda,
+            useTorchDefaultCuda,
+          }@config:
+          {
+            name = strings.concatStringsSep "-" (
+              [
+                "test"
+                (if openCVFirst then "opencv" else "torch")
+              ]
+              ++ lists.optionals (if openCVFirst then useOpenCVDefaultCuda else useTorchDefaultCuda) [
+                "with-default-cuda"
+              ]
+              ++ [
+                "then"
+                (if openCVFirst then "torch" else "opencv")
+              ]
+              ++ lists.optionals (if openCVFirst then useTorchDefaultCuda else useOpenCVDefaultCuda) [
+                "with-default-cuda"
+              ]
+            );
+            value = final.callPackage ../development/cuda-modules/tests/opencv-and-torch config;
+          };
+      in
+      attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
 
     writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
   });

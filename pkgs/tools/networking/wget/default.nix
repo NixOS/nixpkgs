@@ -31,15 +31,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ libidn2 zlib pcre libuuid ]
     ++ lib.optional withOpenssl openssl
     ++ lib.optional withLibpsl libpsl
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices perlPackages.perl ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices perlPackages.perl ];
 
   configureFlags = [
     (lib.withFeatureAs withOpenssl "ssl" "openssl")
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://lists.gnu.org/archive/html/bug-wget/2021-01/msg00076.html
     "--without-included-regex"
   ];
 
+  __darwinAllowLocalNetworking = true;
   doCheck = true;
   preCheck = ''
     patchShebangs tests fuzz
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     do
       sed -i "$i" -e's/localhost/127.0.0.1/g'
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # depending on the underlying filesystem, some tests
     # creating exotic file names fail
     for f in tests/Test-ftp-iri.px \
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   checkInputs = [
     perlPackages.HTTPDaemon
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     perlPackages.IOSocketSSL
   ];
 

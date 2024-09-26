@@ -37,7 +37,7 @@ buildPythonPackage rec {
   dependencies =
     [ colorlog ]
     ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals stdenv.isLinux [ logging-journald ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
 
   nativeCheckInputs = [
     aiocontextvars

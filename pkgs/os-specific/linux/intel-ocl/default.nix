@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://software.intel.com/en-us/articles/opencl-drivers";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.kierdavis ];
+    maintainers = [ ];
   };
 }

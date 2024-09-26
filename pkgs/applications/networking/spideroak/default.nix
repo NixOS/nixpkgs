@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     name = "SpiderOakONE-${version}-slack_tar_x64.tgz";
-    url = "https://spideroak.com/release/spideroak/slack_tar_x64";
+    url = "https://spideroak-releases.s3.us-east-2.amazonaws.com/SpiderOakONE-${version}-slack_tar_x64.tgz";
     inherit sha256;
   };
 

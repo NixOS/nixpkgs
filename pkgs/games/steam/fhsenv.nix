@@ -46,7 +46,7 @@ let
     sqlite
   ] ++ extraPkgs pkgs;
 
-  ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
+  ldPath = lib.optionals stdenv.hostPlatform.is64bit [ "/lib64" ]
   ++ [ "/lib32" ]
   ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
   ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
@@ -60,8 +60,8 @@ let
   # bootstrap.tar.xz has 444 permissions, which means that simple deletes fail
   # and steam will not be able to start
   fixBootstrap = ''
-    if [ -r $HOME/.local/share/Steam/bootstrap.tar.xz ]; then
-      chmod +w $HOME/.local/share/Steam/bootstrap.tar.xz
+    if [ -r $HOME/.steam/steam/bootstrap.tar.xz ]; then
+      chmod +w $HOME/.steam/steam/bootstrap.tar.xz
     fi
   '';
 
@@ -125,8 +125,7 @@ in buildFHSEnv rec {
     xorg.libXi
     xorg.libSM
     xorg.libICE
-    gnome2.GConf
-    curlWithGnuTls
+    curl
     nspr
     nss
     cups
@@ -300,7 +299,7 @@ in buildFHSEnv rec {
   '' + args.extraPreBwrapCmds or "";
 
   extraBwrapArgs = [
-    "--bind /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
+    "--bind-try /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
     "--bind-try /tmp/dumps /tmp/dumps"
   ] ++ args.extraBwrapArgs or [];
 
@@ -342,6 +341,10 @@ in buildFHSEnv rec {
       description = "Run commands in the same FHS environment that is used for Steam";
       mainProgram = "steam-run";
       name = "steam-run";
+      # steam-run itself is just a script that lives in nixpkgs (which is licensed under MIT).
+      # steam is a dependency and already unfree, so normal steam-run will not install without
+      # allowing unfree packages or appropriate `allowUnfreePredicate` rules.
+      license = lib.licenses.mit;
     };
   };
 }

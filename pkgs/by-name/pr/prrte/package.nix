@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "openpmix";
     repo = "prrte";
     rev = "v${version}";
-    sha256 = "sha256-0JHtUpGFdPKmgUk0+MNxTfZIUDz/vY/CV+Mqbmv0JFw=";
+    hash = "sha256-0JHtUpGFdPKmgUk0+MNxTfZIUDz/vY/CV+Mqbmv0JFw=";
     fetchSubmodules = true;
   };
 

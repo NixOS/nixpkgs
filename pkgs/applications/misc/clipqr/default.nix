@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "clipqr";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     owner = "imatt-foss";
     repo = "clipqr";
     rev = "v${version}";
-    hash = "sha256-gfKCuTZY9VsiXMlw6XX6YylMO4xGoLQU/5QvnDV7GbE=";
+    hash = "sha256-iuA6RqclMm1CWaiM1kpOpgfYvKaYGOIwFQkLr/nCL5M=";
   };
 
   vendorHash = null;
@@ -69,7 +69,7 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ MatthieuBarthel ];
     homepage = "https://gitlab.com/imatt-foss/clipqr";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "clipqr";
   };
 }

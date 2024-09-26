@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.55.3";
+  version = "1.60.1";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-SgDw0je16Qf0ohzrVUjJM6FFovWxM2mvZjvfKkEESos=";
+    hash = "sha256-G//+9Mucm/yH8XlA8/OO09lg9mKlo1S+Pyfmsp5MQhk=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-KvSsWf1EHCQ46M4Z4wqyYb4mW9y9kNwB9e090YC1ZWs=";
+    hash = "sha256-61xRNwJUFQrj7aw/+SqMABb8W+sJsVZ6aTgU9N7ssDo=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp # required to build sqlite3 bindings
     cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
-  ] ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [
     nodejs
@@ -100,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       freezeboy
       gepbird
-      k900
     ];
     license = licenses.sustainableUse;
     mainProgram = "n8n";

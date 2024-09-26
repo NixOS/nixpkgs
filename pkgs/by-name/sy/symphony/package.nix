@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "coin-or";
     repo = "SYMPHONY";
     rev = "releases/${version}";
-    sha256 = "sha256-OdTUMG3iVhjhw5uKtUnsLCZ4DfMjYHm8+/ozfmw7J6c=";
+    hash = "sha256-OdTUMG3iVhjhw5uKtUnsLCZ4DfMjYHm8+/ozfmw7J6c=";
   };
 
   nativeBuildInputs = [ libtool pkg-config glpk gfortran coinmp osi coin-utils ];

@@ -64,7 +64,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.41.0";
+  version = "4.44.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   # We use the Pypi release, since it provides prebuilt webui assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d4li7kQFMzlUVGdm2nTSnj25pTOWIqnZuOvTOtwPLpc=";
+    hash = "sha256-ovjRJ52giPZxVCOv8TuD3kcbgHbDTBqaSBNrrTN1MkE=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
@@ -151,7 +151,7 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
-  ] ++ passthru.optional-dependencies.oauth ++ pydantic.passthru.optional-dependencies.email;
+  ] ++ passthru.optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
@@ -160,7 +160,7 @@ buildPythonPackage rec {
       export HOME=$TMPDIR
       cat ${./conftest-skip-network-errors.py} >> test/conftest.py
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # OSError: [Errno 24] Too many open files
       ulimit -n 4096
     '';
@@ -195,7 +195,7 @@ buildPythonPackage rec {
 
     # tests if pip and other tools are installed
     "test_get_executable_path"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky on darwin (depend on port availability)
     "test_all_status_messages"
     "test_async_generators"

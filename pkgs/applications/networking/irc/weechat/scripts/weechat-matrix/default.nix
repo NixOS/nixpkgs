@@ -56,10 +56,10 @@ in buildPythonPackage {
     attrs
     logbook
     pygments
-    matrix-nio
+    (matrix-nio.override { withOlm = true; })
     aiohttp
     requests
-  ] ++ matrix-nio.optional-dependencies.e2e;
+  ];
 
   passthru.scripts = [ "matrix.py" ];
 

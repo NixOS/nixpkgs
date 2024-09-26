@@ -21,25 +21,25 @@
 let
   # fix for: https://github.com/NixOS/nixpkgs/issues/272156
   buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.25.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-TXEe0ICrkljxfnvW1wv/e1BB7J6p/KW3JklCvYyjqSs=";
+    hash = "sha256-UXxMHTunsKXXt0NX5fuyzQbtp4AUzLXnFHqe8Is6Cmc=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-/1/QPKjSgJJDtmUipgbiVR+Buea9cXO+HvICfKVX/2g=";
+  npmDepsHash = "sha256-p3kdYuDiPZ9SmtrFajXd76Ohd+VUqn/Y8SpAPFrTBZA=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -47,7 +47,7 @@ buildNpmPackage' rec {
       (writeShellScriptBin "phantomjs" "echo 2.1.1")
       pkg-config
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       makeWrapper
       copyDesktopItems
     ];
@@ -58,7 +58,7 @@ buildNpmPackage' rec {
       cairo
       pango
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreText
     ];
 
@@ -79,15 +79,12 @@ buildNpmPackage' rec {
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-
-  # remove giflib dependency
-  npmRebuildFlags = [ "--ignore-scripts" ];
-  preBuild = ''
-    substituteInPlace node_modules/canvas/binding.gyp \
-      --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
-    npm rebuild
+  postConfigure = ''
+    # sh: line 1: /build/source/packages/bruno-common/node_modules/.bin/rollup: cannot execute: required file not found
+    patchShebangs packages/*/node_modules
   '';
+
+  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   dontNpmBuild = true;
   postBuild = ''
@@ -96,12 +93,14 @@ buildNpmPackage' rec {
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
 
+    npm run sandbox:bundle-libraries --workspace=packages/bruno-js
+
     bash scripts/build-electron.sh
 
     pushd packages/bruno-electron
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           cp -r ${electron.dist}/Electron.app ./
           find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
@@ -137,7 +136,7 @@ buildNpmPackage' rec {
 
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
 

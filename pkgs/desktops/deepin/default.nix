@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   libsForQt5,
 }:
@@ -48,7 +47,6 @@ let
       dde-control-center = callPackage ./core/dde-control-center { };
       dde-calendar = callPackage ./core/dde-calendar { };
       dde-clipboard = callPackage ./core/dde-clipboard { };
-      dde-dock = callPackage ./core/dde-dock { };
       dde-file-manager = callPackage ./core/dde-file-manager { };
       dde-launchpad = callPackage ./core/dde-launchpad { };
       dde-network-core = callPackage ./core/dde-network-core { };
@@ -62,6 +60,8 @@ let
       dde-widgets = callPackage ./core/dde-widgets { };
       dde-shell = callPackage ./core/dde-shell { };
       dde-grand-search = callPackage ./core/dde-grand-search { };
+      dde-tray-loader = callPackage ./core/dde-tray-loader { };
+      dde-api-proxy = callPackage ./core/dde-api-proxy { };
 
       #### Dtk Application
       deepin-album = callPackage ./apps/deepin-album { };
@@ -109,6 +109,7 @@ let
     // lib.optionalAttrs config.allowAliases {
       dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
       dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
+      dde-dock = throw "The 'deepin.dde-dock' is no longer maintained. Please use 'deepin.dde-tray-loader' instead."; # added 2024-08-28
       deepin-clone = throw "The 'deepin.deepin-clone' package was removed as it is broken and unmaintained."; # added 2024-08-23
       go-lib = throw "Then 'deepin.go-lib' package was removed, use 'go mod' to manage it"; # added 2024-05-31
       go-gir-generator = throw "Then 'deepin.go-gir-generator' package was removed, use 'go mod' to manage it"; # added 2024-05-31

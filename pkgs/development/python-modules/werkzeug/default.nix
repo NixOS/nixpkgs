@@ -44,7 +44,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ markupsafe ];
 
   passthru.optional-dependencies = {
-    watchdog = lib.optionals (!stdenv.isDarwin) [
+    watchdog = lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # watchdog requires macos-sdk 10.13
       watchdog
     ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "werkzeug" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_get_machine_id" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_get_machine_id" ];
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused

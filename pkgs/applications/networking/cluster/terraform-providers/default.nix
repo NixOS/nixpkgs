@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , fetchFromGitLab
 , callPackage
@@ -24,7 +25,7 @@ let
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderFetcher ? fetchFromGitHub
-     , mkProviderGoModule ? buildGoModule
+     , mkProviderGoModule ? buildGo123Module
        # "https://registry.terraform.io/providers/vancluever/acme"
      , homepage ? ""
        # "registry.terraform.io/vancluever/acme"

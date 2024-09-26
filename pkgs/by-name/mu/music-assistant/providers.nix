@@ -1,13 +1,13 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.2.2";
+  version = "2.2.6";
   providers = {
-    airplay = [
+    airplay = ps: [
     ];
-    apple_music = [
+    apple_music = ps: [
     ]; # missing pywidevine
-    builtin = [
+    builtin = ps: [
     ];
     chromecast = ps: with ps; [
       pychromecast
@@ -18,23 +18,24 @@
     dlna = ps: with ps; [
       async-upnp-client
     ];
-    fanarttv = [
+    fanarttv = ps: [
     ];
-    filesystem_local = [
+    filesystem_local = ps: [
     ];
-    filesystem_smb = [
+    filesystem_smb = ps: [
     ];
     fully_kiosk = ps: with ps; [
       python-fullykiosk
     ];
-    hass = [
-    ]; # missing hass-client
-    hass_players = [
+    hass = ps: with ps; [
+      hass-client
+    ];
+    hass_players = ps: [
     ];
     jellyfin = ps: with ps; [
       aiojellyfin
     ];
-    musicbrainz = [
+    musicbrainz = ps: [
     ];
     opensubsonic = ps: with ps; [
       py-opensonic
@@ -42,7 +43,7 @@
     plex = ps: with ps; [
       plexapi
     ];
-    qobuz = [
+    qobuz = ps: [
     ];
     radiobrowser = ps: with ps; [
       radios
@@ -59,23 +60,23 @@
       soco
       sonos-websocket
     ];
-    soundcloud = [
+    soundcloud = ps: [
     ]; # missing soundcloudpy
     spotify = ps: with ps; [
       pkce
     ];
-    template_player_provider = [
+    template_player_provider = ps: [
     ];
-    test = [
+    test = ps: [
     ];
-    theaudiodb = [
+    theaudiodb = ps: [
     ];
     tidal = ps: with ps; [
       tidalapi
     ];
-    tunein = [
+    tunein = ps: [
     ];
-    ugp = [
+    ugp = ps: [
     ];
     ytmusic = ps: with ps; [
       yt-dlp

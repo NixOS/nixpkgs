@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     runHook prePatch
 
-    patchShebangs --build /build/source/scripts/*
+    patchShebangs --build scripts/*
 
     runHook postPatch
   '';

@@ -23,7 +23,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  tags = lib.optionals stdenv.isLinux [ "netgo" ];
+  tags = lib.optionals stdenv.hostPlatform.isLinux [ "netgo" ];
 
   preCheck = ''
     # Run all tests.

@@ -1,12 +1,8 @@
 # Management of static files in /etc.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
-  etc' = filter (f: f.enable) (attrValues config.environment.etc);
+  etc' = lib.filter (f: f.enable) (lib.attrValues config.environment.etc);
 
   etc = pkgs.runCommandLocal "etc" {
     # This is needed for the systemd module
@@ -51,7 +47,7 @@ let
     }
 
     mkdir -p "$out/etc"
-    ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
+    ${lib.concatMapStringsSep "\n" (etcEntry: lib.escapeShellArgs [
       "makeEtcEntry"
       # Force local source paths to be added to the store
       "${etcEntry.source}"
@@ -62,7 +58,7 @@ let
     ]) etc'}
   '';
 
-  etcHardlinks = filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
+  etcHardlinks = lib.filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
 
 in
 
@@ -75,8 +71,8 @@ in
   options = {
 
     system.etc.overlay = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Mount `/etc` as an overlayfs instead of generating it via a perl script.
@@ -86,8 +82,8 @@ in
         '';
       };
 
-      mutable = mkOption {
-        type = types.bool;
+      mutable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to mount `/etc` mutably (i.e. read-write) or immutably (i.e. read-only).
@@ -98,9 +94,9 @@ in
       };
     };
 
-    environment.etc = mkOption {
+    environment.etc = lib.mkOption {
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";
@@ -112,12 +108,12 @@ in
         Set of files that have to be linked in {file}`/etc`.
       '';
 
-      type = with types; attrsOf (submodule (
+      type = with lib.types; attrsOf (submodule (
         { name, config, options, ... }:
         { options = {
 
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Whether this /etc file should be generated.  This
@@ -125,8 +121,8 @@ in
               '';
             };
 
-            target = mkOption {
-              type = types.str;
+            target = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 Name of symlink (relative to
                 {file}`/etc`).  Defaults to the attribute
@@ -134,19 +130,19 @@ in
               '';
             };
 
-            text = mkOption {
+            text = lib.mkOption {
               default = null;
-              type = types.nullOr types.lines;
+              type = lib.types.nullOr lib.types.lines;
               description = "Text of the file.";
             };
 
-            source = mkOption {
-              type = types.path;
+            source = lib.mkOption {
+              type = lib.types.path;
               description = "Path of the source file.";
             };
 
-            mode = mkOption {
-              type = types.str;
+            mode = lib.mkOption {
+              type = lib.types.str;
               default = "symlink";
               example = "0600";
               description = ''
@@ -156,27 +152,27 @@ in
               '';
             };
 
-            uid = mkOption {
+            uid = lib.mkOption {
               default = 0;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 UID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
                 '';
             };
 
-            gid = mkOption {
+            gid = lib.mkOption {
               default = 0;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 GID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
               '';
             };
 
-            user = mkOption {
+            user = lib.mkOption {
               default = "+${toString config.uid}";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 User name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
@@ -184,9 +180,9 @@ in
               '';
             };
 
-            group = mkOption {
+            group = lib.mkOption {
               default = "+${toString config.gid}";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 Group name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
@@ -197,10 +193,10 @@ in
           };
 
           config = {
-            target = mkDefault name;
-            source = mkIf (config.text != null) (
+            target = lib.mkDefault name;
+            source = lib.mkIf (config.text != null) (
               let name' = "etc-" + lib.replaceStrings ["/"] ["-"] name;
-              in mkDerivedConfig options.text (pkgs.writeText name')
+              in lib.mkDerivedConfig options.text (pkgs.writeText name')
             );
           };
 
@@ -299,7 +295,7 @@ in
       }
 
       mkdir -p "$out"
-      ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
+      ${lib.concatMapStringsSep "\n" (etcEntry: lib.escapeShellArgs [
         "makeEtcEntry"
         # Force local source paths to be added to the store
         "${etcEntry.source}"

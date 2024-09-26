@@ -270,6 +270,12 @@
     - changed-files:
       - any-glob-to-any-file:
         - .github/**/*
+        - CONTRIBUTING.md
+        - pkgs/README.md
+        - nixos/README.md
+        - maintainers/README.md
+        - lib/README.md
+        - doc/README.md
 
 "6.topic: printing":
   - any:
@@ -373,6 +379,17 @@
     - changed-files:
       - any-glob-to-any-file:
         - pkgs/applications/editors/vscode/**/*
+
+"6.topic: xen":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/virtualisation/xen*
+        - pkgs/applications/virtualization/xen/**
+        - pkgs/by-name/xe/xen-guest-agent/*
+        - pkgs/by-name/xt/xtf/*
+        - pkgs/development/ocaml-modules/xen*/*
+        - pkgs/development/ocaml-modules/vchan/*
 
 "6.topic: xfce":
   - any:

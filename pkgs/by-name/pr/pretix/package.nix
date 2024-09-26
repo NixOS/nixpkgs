@@ -90,6 +90,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "django-phonenumber-field"
     "importlib-metadata"
     "kombu"
     "markdown"
@@ -102,8 +103,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "phonenumberslite" # we provide phonenumbers instead
-    "psycopg2-binary" # we provide psycopg2 instead
     "vat-moss-forked" # we provide a patched vat-moss package
   ];
 
@@ -175,11 +174,11 @@ python.pkgs.buildPythonApplication rec {
     paypalrestsdk
     paypal-checkout-serversdk
     pyjwt
-    phonenumbers
+    phonenumberslite
     pillow
     pretix-plugin-build
     protobuf
-    psycopg2
+    psycopg2-binary
     pycountry
     pycparser
     pycryptodome

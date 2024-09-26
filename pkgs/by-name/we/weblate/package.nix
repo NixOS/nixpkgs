@@ -23,18 +23,12 @@ let
         # https://github.com/encode/django-rest-framework/discussions/9342
         disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_inputs" ];
       });
-      celery = prev.celery.overridePythonAttrs (old: {
-        dependencies = old.dependencies ++ prev.celery.optional-dependencies.redis;
-      });
-      python-redis-lock = prev.python-redis-lock.overridePythonAttrs (old: {
-        dependencies = old.dependencies ++ prev.python-redis-lock.optional-dependencies.django;
-      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.7";
+  version = "5.7.2";
 
   pyproject = true;
 
@@ -46,8 +40,8 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    rev = "weblate-${version}";
-    sha256 = "sha256-h5+0lOMD+H0ehtZ0bngA9bI5va1I5KjZH9boaEtXJPo=";
+    rev = "refs/tags/weblate-${version}";
+    hash = "sha256-cIwCNYXbg7l6z9OAkMAGJ783QI/nCOyrhLPURDcDv+Y=";
   };
 
   patches = [
@@ -76,67 +70,71 @@ python.pkgs.buildPythonApplication rec {
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
 
-  dependencies = with python.pkgs; [
-    aeidon
-    ahocorasick-rs
-    borgbackup
-    celery
-    certifi
-    charset-normalizer
-    django-crispy-bootstrap3
-    cryptography
-    cssselect
-    cython
-    cyrtranslit
-    diff-match-patch
-    django-appconf
-    django-celery-beat
-    django-compressor
-    django-cors-headers
-    django-crispy-forms
-    django-filter
-    django-redis
-    django-otp
-    django-otp-webauthn
-    django
-    djangorestframework
-    filelock
-    fluent-syntax
-    gitpython
-    hiredis
-    html2text
-    iniparse
-    jsonschema
-    lxml
-    mistletoe
-    nh3
-    openpyxl
-    packaging
-    phply
-    pillow
-    pycairo
-    pygments
-    pygobject3
-    pyicumessageformat
-    pyparsing
-    python-dateutil
-    python-redis-lock
-    qrcode
-    rapidfuzz
-    redis
-    requests
-    ruamel-yaml
-    sentry-sdk
-    siphashc
-    social-auth-app-django
-    social-auth-core
-    tesserocr
-    translate-toolkit
-    translation-finder
-    user-agents
-    weblate-language-data
-    weblate-schemas
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      aeidon
+      ahocorasick-rs
+      (toPythonModule (borgbackup.override { python3 = python; }))
+      celery
+      certifi
+      charset-normalizer
+      django-crispy-bootstrap3
+      cryptography
+      cssselect
+      cython
+      cyrtranslit
+      diff-match-patch
+      django-appconf
+      django-celery-beat
+      django-compressor
+      django-cors-headers
+      django-crispy-forms
+      django-filter
+      django-redis
+      django-otp
+      django-otp-webauthn
+      django
+      djangorestframework
+      filelock
+      fluent-syntax
+      gitpython
+      hiredis
+      html2text
+      iniparse
+      jsonschema
+      lxml
+      mistletoe
+      nh3
+      openpyxl
+      packaging
+      phply
+      pillow
+      pycairo
+      pygments
+      pygobject3
+      pyicumessageformat
+      pyparsing
+      python-dateutil
+      python-redis-lock
+      qrcode
+      rapidfuzz
+      redis
+      requests
+      ruamel-yaml
+      sentry-sdk
+      siphashc
+      social-auth-app-django
+      social-auth-core
+      tesserocr
+      translate-toolkit
+      translation-finder
+      user-agents
+      weblate-language-data
+      weblate-schemas
+    ]
+    ++ python-redis-lock.optional-dependencies.django
+    ++ celery.optional-dependencies.redis;
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];
@@ -164,7 +162,10 @@ python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    license = licenses.gpl3Plus;
+    license = with licenses; [
+      gpl3Plus
+      mit
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ erictapen ];
   };

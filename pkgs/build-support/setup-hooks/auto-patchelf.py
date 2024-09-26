@@ -197,7 +197,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], extra_args: list[str] = []) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list[Path] = [], keep_libc: bool = False, extra_args: list[str] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -257,17 +257,27 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             # 1. If a candidate is an absolute path, it is already a
             #    valid dependency if that path exists, and nothing needs
             #    to be done. It should be an error if that path does not exist.
-            # 2. If a candidate is found in our library dependencies, that
+            # 2. If a candidate is found within libc, it should be dropped
+            #    and resolved automatically by the dynamic linker, unless
+            #    keep_libc is enabled.
+            # 3. If a candidate is found in our library dependencies, that
             #    dependency should be added to rpath.
-            # 3. If a candidate is found in libc, it will be correctly
-            #    resolved by the dynamic linker automatically.
+            # 4. If all of the above fail, libc dependencies should still be
+            #    considered found. This is in contrast to step 2, because
+            #    enabling keep_libc should allow libc to be found in step 3
+            #    if possible to preserve its presence in rpath.
             #
             # These conditions are checked in this order, because #2
             # and #3 may both be true. In that case, we still want to
             # add the dependency to rpath, as the original binary
             # presumably had it and this should be preserved.
 
+            is_libc = (libc_lib / candidate).is_file()
+
             if candidate.is_absolute() and candidate.is_file():
+                was_found = True
+                break
+            elif is_libc and not keep_libc:
                 was_found = True
                 break
             elif found_dependency := find_dependency(candidate.name, file_arch, file_osabi):
@@ -276,7 +286,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
                 print(f"    {candidate} -> found: {found_dependency}")
                 was_found = True
                 break
-            elif (libc_lib / candidate).is_file():
+            elif is_libc and keep_libc:
                 was_found = True
                 break
 
@@ -306,6 +316,7 @@ def auto_patchelf(
         recursive: bool = True,
         ignore_missing: list[str] = [],
         append_rpaths: list[Path] = [],
+        keep_libc: bool = False,
         extra_args: list[str] = []) -> None:
 
     if not paths_to_patch:
@@ -319,7 +330,7 @@ def auto_patchelf(
     dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, extra_args)
+            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, keep_libc, extra_args)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -378,6 +389,12 @@ def main() -> None:
         help="Paths to append to all runtime paths unconditionally",
     )
     parser.add_argument(
+        "--keep-libc",
+        dest="keep_libc",
+        action="store_true",
+        help="Attempt to search for and relink libc dependencies.",
+    )
+    parser.add_argument(
         "--extra-args",
         # Undocumented Python argparse feature: consume all remaining arguments
         # as values for this one. This means this argument should always be passed
@@ -398,6 +415,7 @@ def main() -> None:
         args.recursive,
         args.ignore_missing,
         append_rpaths=args.append_rpaths,
+        keep_libc=args.keep_libc,
         extra_args=args.extra_args)
 
 

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.128.2";
+  version = "2.134.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "oracle";
     repo = "oci-python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AT4jE4apkZ0uK1Z03nVnMN9CS5uiMwPNsarq7pY+Pnw=";
+    hash = "sha256-EHqXwTsUy2bWQ1OzogL0wQhodgcm4v6T3fz7Y+d4o4w=";
   };
 
   pythonRelaxDeps = [

@@ -30,37 +30,13 @@ in
 
 { lib, pkgs }: variant: self:
 let
-  dontConfigure = pkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        dontConfigure = true;
-      });
-    }) else null;
-
-  markBroken = pkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        meta = (drv.meta or { }) // { broken = true; };
-      });
-    }) else null;
-
-  externalSrc = pkg: epkg:
-    if pkg != null then pkg.override (args: {
-      melpaBuild = drv: args.melpaBuild (drv // {
-        inherit (epkg) src version;
-
-        propagatedUserEnvPkgs = [ epkg ];
-      });
-    }) else null;
-
-  buildWithGit = pkg: pkg.overrideAttrs (attrs: {
-    nativeBuildInputs =
-      (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
-  });
-
-  fix-rtags = pkg:
-    if pkg != null then dontConfigure (externalSrc pkg pkgs.rtags)
-    else null;
+  inherit (import ./lib-override-helper.nix pkgs)
+    buildWithGit
+    dontConfigure
+    externalSrc
+    fix-rtags
+    markBroken
+    ;
 
   generateMelpa = lib.makeOverridable ({ archiveJson ? defaultArchive
                                        }:
@@ -130,7 +106,7 @@ let
         ligo-mode =
           if super.ligo-mode.version == "0.3"
           then markBroken super.ligo-mode
-          else null; # auto-updater is failing; use manual one
+          else super.ligo-mode;
 
         # upstream issue: missing file header
         link = markBroken super.link;
@@ -156,6 +132,13 @@ let
       } // {
         # Expects bash to be at /bin/bash
         ac-rtags = fix-rtags super.ac-rtags;
+
+        age = super.age.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace age.el \
+              --replace-fail 'age-program (executable-find "age")' 'age-program "${lib.getExe pkgs.age}"'
+          '';
+        });
 
         airline-themes = super.airline-themes.override {
           inherit (self.melpaPackages) powerline;
@@ -186,13 +169,13 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
-            cd source/sqlite
+            pushd sqlite
             make
-            cd -
+            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            install -m=755 -D source/sqlite/emacsql-sqlite \
+            install -m=755 -D sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-${old.version}/sqlite/emacsql-sqlite
           '';
 
@@ -203,13 +186,13 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''
-            cd source/sqlite
+            pushd sqlite
             make
-            cd -
+            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            install -m=755 -D source/sqlite/emacsql-sqlite \
+            install -m=755 -D sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
           '';
 
@@ -270,7 +253,7 @@ let
                   pkgs.zlib.dev
                   pkgs.cairo.dev
                 ]
-                ++ lib.optional pkgs.stdenv.isLinux pkgs.stdenv.cc.libc.dev
+                ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.stdenv.cc.libc.dev
               )
             )} server/epdfinfo
           '';
@@ -296,7 +279,7 @@ let
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            install source/hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
+            install hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
           '';
         });
 
@@ -304,23 +287,23 @@ let
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
-            cd server
+            pushd server
           '';
           preBuild = ''
             make
             install -D bin/irony-server $out/bin/irony-server
-            cd ..
+            popd
           '';
           checkPhase = ''
-            cd source/server
+            pushd server
             make check
-            cd ../..
+            popd
           '';
           preFixup = ''
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = pkgs.stdenv.isLinux;
+          doCheck = pkgs.stdenv.hostPlatform.isLinux;
           buildInputs = old.buildInputs ++ [ pkgs.llvmPackages.libclang ];
           nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
@@ -342,18 +325,14 @@ let
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
 
           postBuild = ''
-            pushd working/jinx
             NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
             $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
-            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            pushd source
             outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
             install -m444 --target-directory=$outd jinx-mod${libExt}
             rm $outd/jinx-mod.c $outd/emacs-module.h
-            popd
           '';
 
           meta = old.meta // {
@@ -365,17 +344,13 @@ let
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
 
           postBuild = ''
-            pushd working/sqlite3
             make
-            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
-            pushd source
             outd=$out/share/emacs/site-lisp/elpa/sqlite3-*
             install -m444 -t $outd sqlite3-api.so
             rm $outd/*.c $outd/*.h
-            popd
           '';
 
           meta = old.meta // {
@@ -383,31 +358,25 @@ let
           };
         });
 
-        libgit = super.libgit.overrideAttrs(attrs: {
-          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
-          buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
-          dontUseCmakeBuildDir = true;
-          postPatch = ''
-            sed -i s/'add_subdirectory(libgit2)'// CMakeLists.txt
-          '';
-          postBuild = ''
-            pushd working/libgit
-            make
-            popd
-          '';
-          postInstall = (attrs.postInstall or "") + "\n" + ''
-            outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
-            mkdir $outd/build
-            install -m444 -t $outd/build ./source/src/libegit2.so
-            rm -r $outd/src $outd/Makefile $outd/CMakeLists.txt
-          '';
-        });
-
         evil-magit = buildWithGit super.evil-magit;
 
         eopengrok = buildWithGit super.eopengrok;
 
         forge = buildWithGit super.forge;
+
+        gnuplot = super.gnuplot.overrideAttrs (attrs: {
+           postPatch = attrs.postPatch or "" + ''
+             substituteInPlace gnuplot.el \
+               --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+           '';
+        });
+
+        gnuplot-mode = super.gnuplot-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace gnuplot-mode.el \
+              --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+          '';
+        });
 
         magit = buildWithGit super.magit;
 
@@ -479,6 +448,13 @@ let
 
         orgit-forge = buildWithGit super.orgit-forge;
 
+        ormolu = super.ormolu.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace ormolu.el \
+              --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
+          '';
+        });
+
         ox-rss = buildWithGit super.ox-rss;
 
         python-isort = super.python-isort.overrideAttrs (attrs: {
@@ -512,29 +488,12 @@ let
 
         rime = super.rime.overrideAttrs (old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
-          preBuild = (old.preBuild or "") +
-          (if pkgs.stdenv.isDarwin then
-            ''
-              export MODULE_FILE_SUFFIX=".dylib"
-              make lib
-              mkdir -p /tmp/build/rime-lib
-              cp *.dylib /tmp/build/rime-lib
-            ''
-          else
-          ''
-            make lib
-            mkdir -p /build/rime-lib
-            cp *.so /build/rime-lib
-          '');
-          postInstall = (old.postInstall or "") +
-          (if pkgs.stdenv.isDarwin then
-          ''
-            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /tmp/build/rime-lib/*.dylib
-          ''
-          else
-          ''
-            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
-          '');
+          preBuild = (old.preBuild or "") + ''
+            make lib CC=$CC MODULE_FILE_SUFFIX=${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}
+          '';
+          postInstall = (old.postInstall or "") + ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* librime-emacs.*
+          '';
         });
 
         shm = super.shm.overrideAttrs (attrs: {
@@ -558,14 +517,14 @@ let
           '';
 
           postBuild = ''
-            cd source/server
+            pushd server
             make
-            cd -
+            popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
             mkdir -p $out/bin
-            install -m755 -Dt $out/bin ./source/server/telega-server
+            install -m755 -Dt $out/bin server/telega-server
           '';
         });
 
@@ -589,9 +548,23 @@ let
           '';
         });
 
+        units-mode = super.units-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace units-mode.el \
+              --replace-fail 'units-binary-path "units"' 'units-binary-path "${lib.getExe pkgs.units}"'
+          '';
+        });
+
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
           nativeBuildInputs =
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
+        });
+
+        zig-mode = super.zig-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace zig-mode.el \
+              --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
+          '';
         });
 
         zmq = super.zmq.overrideAttrs (old: {
@@ -695,10 +668,8 @@ let
           # we need the proper out directory to exist, so we do this in the
           # postInstall instead of postBuild
           postInstall = (old.postInstall or "") + "\n" + ''
-            pushd source/build >/dev/null
             make
             install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
-            popd > /dev/null
             rm -rf $out/share/emacs/site-lisp/elpa/vterm-**/{CMake*,build,*.c,*.h}
           '';
         });
@@ -731,14 +702,12 @@ let
 
         # Build a helper executable that interacts with the macOS Dictionary.app
         osx-dictionary =
-          if pkgs.stdenv.isDarwin
+          if pkgs.stdenv.hostPlatform.isDarwin
           then super.osx-dictionary.overrideAttrs (old: {
             buildInputs =
               old.buildInputs ++
               (with pkgs.darwin.apple_sdk.frameworks; [CoreServices Foundation]);
-            dontUnpack = false;
-            buildPhase = (old.buildPhase or "") + ''
-              cd source
+            postBuild = (old.postBuild or "") + ''
               $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
             '';
             postInstall = (old.postInstall or "") + "\n" + ''

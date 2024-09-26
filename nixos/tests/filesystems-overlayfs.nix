@@ -26,7 +26,6 @@ in
 
   nodes.machine = { config, pkgs, ... }: {
     boot.initrd.systemd.enable = true;
-    boot.initrd.availableKernelModules = [ "overlay" ];
 
     virtualisation.fileSystems = {
       "/initrd-overlay" = {

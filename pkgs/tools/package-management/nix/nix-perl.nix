@@ -47,7 +47,7 @@ in stdenv.mkDerivation (finalAttrs: {
     nix
     perl
     xz
-  ] ++ lib.optional (stdenv.isDarwin) Security;
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) Security;
 
   # Not cross-safe since Nix checks for curl/perl via
   # NEED_PROG/find_program, but both seem to be needed at runtime
@@ -65,7 +65,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ]);
 
   # `perlPackages.Test2Harness` is marked broken for Darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     perl.pkgs.Test2Harness
@@ -87,4 +87,6 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = "export NIX_STATE_DIR=$TMPDIR";
+
+  passthru = { inherit perl; };
 })

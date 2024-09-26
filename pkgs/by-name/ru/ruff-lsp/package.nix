@@ -1,9 +1,13 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
-  stdenv,
+
+  # nativeCheckInputs
   ruff,
+
+  # passthru
   nix-update-script,
   testers,
   ruff-lsp,
@@ -11,15 +15,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ruff-lsp";
-  version = "0.0.55";
+  version = "0.0.57";
   pyproject = true;
-  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FFIZ8fDAPK03tnkjd2AUrz7iL8S9FziJQJKOxAisu48=";
+    hash = "sha256-w9NNdsDD+YLrCw8DHDhVx62MdwLhcN8QSmb/2rqlb5g=";
   };
 
   postPatch = ''
@@ -37,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # fails in linux sandbox
-  doCheck = stdenv.isDarwin;
+  doCheck = stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

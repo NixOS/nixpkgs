@@ -157,5 +157,7 @@ in
       license = licenses.bsd3;
       maintainers = with maintainers; [connorbaker];
       platforms = platforms.linux;
+      # g++: error: unrecognized command-line option '-mf16c'
+      broken = stdenv.hostPlatform.isAarch64;
     };
   })

@@ -28,7 +28,6 @@
 , lib
 , config
 , fetchurl
-, gconf
 , gsettings-desktop-schemas
 }:
 
@@ -156,7 +155,7 @@ let
       plasma-mobile = callPackage ./plasma-mobile { };
       plasma-nano = callPackage ./plasma-nano { };
       plasma-nm = callPackage ./plasma-nm { };
-      plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-pa = callPackage ./plasma-pa.nix { };
       plasma-remotecontrollers = callPackage ./plasma-remotecontrollers.nix { };
       plasma-sdk = callPackage ./plasma-sdk.nix { };
       plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };

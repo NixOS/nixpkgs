@@ -40,13 +40,13 @@ let
   source =
     if enablePlumed then
       {
-        version = "2023";
-        hash = "sha256-rJLG2nL7vMpBT9io2Xnlbs8XxMHNq+0tpc+05yd7e6g=";
+        version = "2024.2";
+        hash = "sha256-gCp+M18uiVdw9XsVnk7DaOuw/yzm2sz3BsboAlw2hSs=";
       }
     else
       {
-        version = "2024.2";
-        hash = "sha256-gCp+M18uiVdw9XsVnk7DaOuw/yzm2sz3BsboAlw2hSs=";
+        version = "2024.3";
+        hash = "sha256-u9oFbuWTkL59WNhME6nsDU42NWF63y63RwNJIsuh8Ck=";
       };
 
 in stdenv.mkDerivation rec {
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./pkgconfig.patch ];
 
   postPatch = lib.optionalString enablePlumed ''
-    plumed patch -p -e gromacs-2023
+    plumed patch -p -e gromacs-${source.version}
   '';
 
   outputs = [ "out" "dev" "man" ];
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;

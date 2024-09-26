@@ -13,12 +13,12 @@
   stdenv,
   testers,
   zlib,
-  withApplePCSC ? stdenv.isDarwin,
+  withApplePCSC ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
-  version = "2.6.0";
+  version = "2.6.1";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Yubico";
     repo = "yubico-piv-tool";
     rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
-    hash = "sha256-53cgwXMzVKnouwHhbt6pODhjF2MH0sK5CPWpbZe71jE=";
+    hash = "sha256-RYT/kBlUfVkJG8RNELVQ5gyC+HDteD5xqaI479nsvKw=";
   };
 
   postPatch = ''

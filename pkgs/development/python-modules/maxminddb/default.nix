@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   # The multiprocessing tests fail on Darwin because multiprocessing uses spawn instead of fork,
   # resulting in an exception when it can’t pickle the `lookup` local function.
-  disabledTests = lib.optionals stdenv.isDarwin [ "multiprocessing" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "multiprocessing" ];
 
   meta = with lib; {
     description = "Reader for the MaxMind DB format";

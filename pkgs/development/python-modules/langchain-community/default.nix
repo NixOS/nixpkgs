@@ -2,49 +2,57 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
-  pythonOlder,
+
+  # dependencies
   aiohttp,
   dataclasses-json,
-  langchain,
   langchain-core,
-  langchain-standard-tests,
+  langchain,
   langsmith,
-  httpx,
-  lark,
+  pydantic-settings,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+
+  # optional-dependencies
+  typer,
   numpy,
+
+  # tests
+  httpx,
+  langchain-standard-tests,
+  lark,
   pandas,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pyyaml,
-  requests,
   requests-mock,
   responses,
-  sqlalchemy,
   syrupy,
-  tenacity,
   toml,
-  typer,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.12";
+  version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-HsKWGiWA6uKmRQOMw3efXkjwbBuvDHhf5waNvnvBdG4=";
+    hash = "sha256-8kF7KlXcWbquRtp8EumkFYhGd0onxifVZsts0SU1dzE=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "pydantic-settings" ];
 
   dependencies = [
     aiohttp
@@ -52,6 +60,7 @@ buildPythonPackage rec {
     langchain-core
     langchain
     langsmith
+    pydantic-settings
     pyyaml
     requests
     sqlalchemy
@@ -82,7 +91,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    inherit (langchain-core) updateScript;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -90,6 +99,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_ovhcloud_embed_documents"
+    "test_yandex"
     # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
     # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"

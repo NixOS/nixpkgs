@@ -33,6 +33,7 @@ in
         packages =
           with pkgs;
           [
+            ayatana-indicator-bluetooth
             ayatana-indicator-datetime
             ayatana-indicator-display
             ayatana-indicator-messages
@@ -49,8 +50,6 @@ in
       # Setup needed by some indicators
 
       services.accounts-daemon.enable = true; # messages
-
-      hardware.pulseaudio.enable = true; # sound
 
       # Lomiri-ish setup for Lomiri indicators
       # TODO move into a Lomiri module, once the package set is far enough for the DE to start

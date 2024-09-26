@@ -19,7 +19,7 @@ let
   addToPropagatedBuildInputsWithPkgConfig = pkg: old:
     (addPkgConfig old) // (addToPropagatedBuildInputs pkg old);
   broken = addMetaAttrs { broken = true; };
-  brokenOnDarwin = addMetaAttrs { broken = stdenv.isDarwin; };
+  brokenOnDarwin = addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
   addToCscOptions = opt: old: {
     CSC_OPTIONS = lib.concatStringsSep " " ([ old.CSC_OPTIONS or "" ] ++ lib.toList opt);
   };
@@ -27,8 +27,8 @@ in
 {
   allegro = old:
     ((addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd pkgs.libGLU ]
-    ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]
-    ++ lib.optionals stdenv.isLinux [ pkgs.xorg.libX11 ])) old) // {
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkgs.xorg.libX11 ])) old) // {
       # depends on 'chicken' egg, which doesn't exist,
       # so we specify all the deps here
       propagatedBuildInputs = [
@@ -72,12 +72,12 @@ in
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
-  iconv = addToBuildInputs (lib.optional stdenv.isDarwin pkgs.libiconv);
+  iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
   inotify = old:
-    (addToBuildInputs (lib.optional stdenv.isDarwin pkgs.libinotify-kqueue) old)
-    // lib.optionalAttrs stdenv.isDarwin (addToCscOptions "-L -linotify" old);
+    (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
   mdh = old:
@@ -94,7 +94,7 @@ in
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
   opencl = addToBuildInputs ([ pkgs.opencl-headers pkgs.ocl-icd ]
-    ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenCL ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenCL ]);
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.postgresql;
@@ -154,8 +154,8 @@ in
   };
   opengl = old:
     (addToBuildInputsWithPkgConfig
-      (lib.optionals (!stdenv.isDarwin) [ pkgs.libGL pkgs.libGLU ]
-      ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Foundation pkgs.darwin.apple_sdk.frameworks.OpenGL ])
+      (lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkgs.libGL pkgs.libGLU ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Foundation pkgs.darwin.apple_sdk.frameworks.OpenGL ])
       old)
     // {
       postPatch = ''
@@ -164,7 +164,7 @@ in
       '';
     };
   posix-shm = old: {
-    postPatch = lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build.scm \
         --replace "-lrt" ""
     '';
@@ -216,7 +216,6 @@ in
   iup = broken;
   kiwi = broken;
   lmdb-ht = broken;
-  lsp-server = broken;
   mpi = broken;
   pyffi = broken;
   qt-light = broken;
@@ -225,7 +224,6 @@ in
   svn-client = broken;
   system = broken;
   tokyocabinet = broken;
-  transducers = broken;
   webview = broken;
 
   # mark broken darwin

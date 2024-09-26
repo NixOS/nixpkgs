@@ -7,7 +7,7 @@ buildGoModule rec {
     owner = "tweag";
     repo = "nix-store-gcs-proxy";
     rev = "v${version}";
-    sha256 = "0804p65px4wd7gzxggpdxsazkd1hbz1p15zzaxf9ygc6sh26ncln";
+    hash = "sha256-ljJrBNSGPZ9cV/+XcMNfMLT5le7tvtf/O42Tfou5BCA=";
   };
 
   vendorHash = "sha256-Bm3yFzm2LXOPYWQDk/UBusV0lPfc/BCKIb3pPlWgDFo=";

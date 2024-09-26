@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # Running tests in parallel does not work
   enableParallelChecking = false;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "C client library for Couchbase";

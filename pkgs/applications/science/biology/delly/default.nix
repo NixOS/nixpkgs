@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     htslib
     xz
     zlib
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "EBROOTHTSLIB=${htslib}"

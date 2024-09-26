@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mesonlsp";
-  version = "4.3.3";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "JCWasmx86";
     repo = "mesonlsp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6p+IufgUCZj21ylkZiYS8kVAdFgDZpOST5Lgb0mXDhQ=";
+    hash = "sha256-E2XKnvARq45AjAc0iBVyb2ssNyJOUye4MWOofZV2ahs=";
   };
 
   patches = [ ./disable-tests-that-require-network-access.patch ];
@@ -52,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
       libpkgconf
       nlohmann_json
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libossp_uuid
       pkgsStatic.fmt
     ]
-    ++ lib.optionals stdenv.isLinux [ libuuid ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
 
   mesonFlags = [ "-Dbenchmarks=false" ];
 

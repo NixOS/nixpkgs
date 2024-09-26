@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.23.1";
+  version = "5.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,13 +22,14 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-0kxeBwdhiDRCA4mkvr/wU07mr4bdvegO8sqghrH7dYg=";
+    hash = "sha256-bkLz+4eOS+c1qUC2PbPNcn19sJqUqONSgKhAe1Ga1U8=";
   };
 
   postPatch = ''
     # The dynamic versioning adds a postfix (.dev0) to the version
     substituteInPlace pyproject.toml \
-      --replace-fail '"tomlkit ~= 0.11.6"' '"tomlkit >= 0.11.6"' \
+      --replace-fail "setuptools ==" "setuptools >=" \
+      --replace-fail "tomlkit ==" "tomlkit >=" \
       --replace-fail 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
       --replace-fail '#readme = "README.rst"' 'version = "${version}"'
   '';

@@ -21,15 +21,15 @@
 
 , airtunesSupport ? false
 
-, bluetoothSupport ? stdenv.isLinux
+, bluetoothSupport ? stdenv.hostPlatform.isLinux
 , advancedBluetoothCodecs ? false
 
 , remoteControlSupport ? false
 
 , zeroconfSupport ? false
 
-, alsaSupport ? stdenv.isLinux
-, udevSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, udevSupport ? stdenv.hostPlatform.isLinux
 
 , # Whether to build only the library.
   libOnly ? false
@@ -68,23 +68,23 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
-    ++ lib.optionals stdenv.isLinux [ glib ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ glib ]
     # gstreamer plugin discovery requires wrapping
     ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
   propagatedBuildInputs =
-    lib.optionals stdenv.isLinux [ libcap ];
+    lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   buildInputs =
     [ libtool libsndfile soxr speexdsp fftwFloat check ]
-    ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices CoreAudio libintl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ glib dbus ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AudioUnit Cocoa CoreServices CoreAudio libintl ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing_1 ]
       ++ lib.optional jackaudioSupport libjack2
       ++ lib.optionals x11Support [ xorg.libICE xorg.libSM xorg.libX11 xorg.libXi xorg.libXtst ]
       ++ lib.optional useSystemd systemd
-      ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib udev ]
       ++ lib.optional airtunesSupport openssl
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       # aptX and LDAC codecs are in gst-plugins-bad so far, rtpldacpay is in -good
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "doxygen" false)
     (lib.mesonEnable "elogind" false)
     # gsettings does not support cross-compilation
-    (lib.mesonEnable "gsettings" (stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)))
+    (lib.mesonEnable "gsettings" (stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)))
     (lib.mesonEnable "gstreamer" false)
     (lib.mesonEnable "gtk" false)
     (lib.mesonEnable "jack" (jackaudioSupport && !libOnly))
@@ -128,10 +128,10 @@ stdenv.mkDerivation rec {
     # renaming the unwrapped binaries (see below)
     "--bindir=${placeholder "out"}/.bin-unwrapped"
   ]
-  ++ lib.optionals (stdenv.isLinux && useSystemd) [
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && useSystemd) [
     (lib.mesonOption "systemduserunitdir" "${placeholder "out"}/lib/systemd/user")
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.mesonEnable "consolekit" false)
     (lib.mesonEnable "dbus" false)
     (lib.mesonEnable "glib" false)
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
   ];
 
   # tests fail on Darwin because of timeouts
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
@@ -156,13 +156,13 @@ stdenv.mkDerivation rec {
     cp config.h $dev/include/pulse
   '';
 
-  preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   ''
   # add .so symlinks for modules to be found under macOS
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/pulseaudio/modules/*.dylib; do
       ln -s "''$file" "''${file%.dylib}.so"
       ln -s "''$file" "$out/lib/pulseaudio/''$(basename ''$file .dylib).so"

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildPhase =
     let
-      arch = if stdenv.isx86_64 then "x86_64" else "aarch64";
+      arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "aarch64";
     in
     ''
       runHook preBuild
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/bin $out/lib
     cp -a build/dist/HDFView/bin/HDFView $out/bin/
     cp -a build/dist/HDFView/lib/app $out/lib/
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
     cp src/HDFView.png $out/share/icons/hicolor/32x32/apps/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -a build/dist/HDFView.app $out/Applications/
   '' + ''

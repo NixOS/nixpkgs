@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "NVIDIA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n1k7fnimky67s12p2ycaq9mgk245fchq62vgd7bl3bzfcbg0z4h";
+    hash = "sha256-kHzwFnN/DbpOe1sYDJkrRMxXE1bMiyuCPsbPGq07M9g=";
   };
 
   buildPhase = ''

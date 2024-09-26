@@ -13,7 +13,6 @@
   libusb1,
   openssl,
 
-  ios-webkit-debug-proxy,
   nix-update-script,
   testers,
 }:
@@ -61,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = ios-webkit-debug-proxy; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {

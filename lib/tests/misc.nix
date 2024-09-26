@@ -45,6 +45,7 @@ let
     const
     escapeXML
     evalModules
+    extends
     filter
     fix
     fold
@@ -102,6 +103,7 @@ let
     take
     testAllTrue
     toBaseDigits
+    toExtension
     toHexString
     fromHexString
     toInt
@@ -231,11 +233,6 @@ runTests {
       false
       true
     ];
-  };
-
-  testFix = {
-    expr = fix (x: {a = if x ? a then "a" else "b";});
-    expected = {a = "a";};
   };
 
   testComposeExtensions = {
@@ -470,6 +467,26 @@ runTests {
     expected = [ "A" "B" ];
   };
 
+  testEscapeShellArg = {
+    expr = strings.escapeShellArg "esc'ape\nme";
+    expected = "'esc'\\''ape\nme'";
+  };
+
+  testEscapeShellArgEmpty = {
+    expr = strings.escapeShellArg "";
+    expected = "''";
+  };
+
+  testEscapeShellArgs = {
+    expr = strings.escapeShellArgs ["one" "two three" "four'five"];
+    expected = "one 'two three' 'four'\\''five'";
+  };
+
+  testEscapeShellArgsUnicode = {
+    expr = strings.escapeShellArg "á";
+    expected = "'á'";
+  };
+
   testSplitStringsDerivation = {
     expr = take 3  (strings.splitString "/" (derivation {
       name = "name";
@@ -569,12 +586,12 @@ runTests {
     '';
     expected = ''
       STRing01='just a '\'''string'\''''
-      declare -a _array_=('with' 'more strings')
+      declare -a _array_=(with 'more strings')
       declare -A assoc=(['with some']='strings
       possibly newlines
       ')
-      drv='/drv'
-      path='/path'
+      drv=/drv
+      path=/path
       stringable='hello toString'
     '';
   };
@@ -1217,6 +1234,28 @@ runTests {
     attrsToList { someFunc= a: a + 1;}
   );
 
+# FIXED-POINTS
+
+  testFix = {
+    expr = fix (x: {a = if x ? a then "a" else "b";});
+    expected = {a = "a";};
+  };
+
+  testToExtension = {
+    expr = [
+      (fix (final: { a = 0; c = final.a; }))
+      (fix (extends (toExtension { a = 1; b = 2; }) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (prev: { a = 1; b = prev.a; })) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (final: prev: { a = 1; b = prev.a; c = final.a + 1; })) (final: { a = 0; c = final.a; })))
+    ];
+    expected = [
+      { a = 0; c = 0; }
+      { a = 1; b = 2; c = 1; }
+      { a = 1; b = 0; c = 1; }
+      { a = 1; b = 0; c = 2; }
+    ];
+  };
+
 # GENERATORS
 # these tests assume attributes are converted to lists
 # in alphabetical order
@@ -1754,7 +1793,7 @@ runTests {
       verbose = true;
     };
 
-    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+    expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {

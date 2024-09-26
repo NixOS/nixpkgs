@@ -15,7 +15,7 @@ in buildGoModule rec {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-y831v6ar1RdDvGQMZf2lZKgq2IQzAAQrNwDCL0xbj24=";
+    hash = "sha256-y831v6ar1RdDvGQMZf2lZKgq2IQzAAQrNwDCL0xbj24=";
   };
 
   proxyVendor = true;
@@ -50,7 +50,7 @@ in buildGoModule rec {
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit ];
 
   passthru.tests = { inherit (nixosTests) geth; };
 

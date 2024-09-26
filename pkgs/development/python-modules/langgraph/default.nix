@@ -1,43 +1,49 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  langchain-core,
+  langgraph-checkpoint,
+
+  # tests
   aiosqlite,
   dataclasses-json,
-  fetchFromGitHub,
   grandalf,
   httpx,
-  langchain-core,
-  langgraph-sdk,
-  langgraph-checkpoint,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
-  psycopg,
   langsmith,
-  poetry-core,
+  psycopg,
   pydantic,
   pytest-asyncio,
   pytest-mock,
   pytest-repeat,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   postgresql,
   postgresqlTestHook,
+
+  # passthru
+  langgraph-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.4";
+  version = "0.2.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-jUBaWXrHCXAph8EGEJnH7lbKIyjQ8oPt4eDMyIkbURo=";
+    hash = "sha256-1Ch2V85omAKnXK9rMihNtyjIoOvmVUm8Dbdo5GBoik4=";
   };
 
   postgresqlTestSetupPost = ''
@@ -56,6 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph" ];
 
+  # postgresql doesn't play nicely with the darwin sandbox:
+  # FATAL:  could not create shared memory segment: Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
     aiosqlite
     dataclasses-json
@@ -65,6 +75,7 @@ buildPythonPackage rec {
     langgraph-checkpoint-sqlite
     langsmith
     psycopg
+    psycopg.pool
     pydantic
     pytest-asyncio
     pytest-mock
@@ -91,6 +102,12 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
+  ];
+
+  disabledTestPaths = [
+    # psycopg.errors.InsufficientPrivilege: permission denied to create database
+    "tests/test_pregel_async.py"
+    "tests/test_pregel.py"
   ];
 
   passthru = {

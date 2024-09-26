@@ -16,6 +16,7 @@ arch_to_nixos = {
     "aarch64": ("aarch64",),
     "arm": ("armv6l", "armv7l"),
     "ppc64le": ("powerpc64le",),
+    "riscv64": ("riscv64",),
 }
 
 def generate_sources(assets, feature_version, out):

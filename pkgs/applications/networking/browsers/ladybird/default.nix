@@ -10,9 +10,9 @@
 , cmake
 , ninja
 , pkg-config
+, curl
 , libavif
 , libjxl
-, libtiff
 , libwebp
 , libxcrypt
 , python3
@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-08-12";
+  version = "0-unstable-2024-09-21";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "7e57cc7b090455e93261c847064f12a61d686ff3";
-    hash = "sha256-8rkgxEfRH8ERuC7iplQKOzKb1EJ4+SNGDX5gTGpOmQo=";
+    rev = "44f672bacf6779f6bbe5972d84e210f953f14598";
+    hash = "sha256-Qku6W1kETOXQh8Kxn0wabe0Xc4gkpxrGbDFwIik34eY=";
   };
 
   postPatch = ''
@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = with qt6Packages; [
+    curl
     ffmpeg
     libavif
     libjxl
@@ -144,9 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
     simdutf
     skia
     woff2
-  ] ++ lib.optional stdenv.isLinux [
+  ] ++ lib.optional stdenv.hostPlatform.isLinux [
     qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Foundation
@@ -157,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable network operations
     "-DSERENITY_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
   ];
 
@@ -166,14 +167,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
     mv $out/bundle/Ladybird.app $out/Applications
   '';
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
   # On linux we end up wraping some non-Qt apps, like headless-browser.
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     nixosTest = nixosTests.ladybird;
@@ -187,6 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
     # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

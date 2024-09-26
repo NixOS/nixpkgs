@@ -15,13 +15,13 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "1.9.5";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+rEGDg+/qvjCMhGHccb4p+CKOo/65RpkFT/WnCDlCgU=";
+    hash = "sha256-AcKjh3DAUoIpsMr+K/T0FT5knbBx54pZmJKCK9HRZVQ=";
   };
 
   npmDepsHash = "sha256-vDRFFxkIQo5qU9gmkSwUhPz4FG2XbUNkTw6SCuvMqCc=";
@@ -29,9 +29,9 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     makeWrapper
     versionCheckHook
-  ] ++ lib.optionals (stdenv.isLinux) [ copyDesktopItems ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ];
 
-  doInstallCheck = stdenv.isLinux;
+  doInstallCheck = stdenv.hostPlatform.isLinux;
 
   env = {
     # disable code signing on Darwin
@@ -60,7 +60,7 @@ buildNpmPackage rec {
       runHook preInstall
 
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/{applications,teams-for-linux}
       cp dist/*-unpacked/resources/app.asar $out/share/teams-for-linux/
 
@@ -82,7 +82,7 @@ buildNpmPackage rec {
         --add-flags "$out/share/teams-for-linux/app.asar" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/teams-for-linux.app $out/Applications
       makeWrapper $out/Applications/teams-for-linux.app/Contents/MacOS/teams-for-linux $out/bin/teams-for-linux

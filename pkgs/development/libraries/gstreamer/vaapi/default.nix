@@ -8,6 +8,7 @@
 , libva
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libdrm
 , udev
 , xorg
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     bzip2
-    wayland
+    wayland-scanner
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     xorg.libICE
     nasm
     libvpx
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
   ];

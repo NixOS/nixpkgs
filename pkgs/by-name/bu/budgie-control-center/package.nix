@@ -21,9 +21,11 @@
   glib-networking,
   glibc,
   gnome,
+  gnome-bluetooth_1_0,
   gnome-color-manager,
   gnome-desktop,
   gnome-remote-desktop,
+  gnome-settings-daemon,
   gnome-user-share,
   gsettings-desktop-schemas,
   gsound,
@@ -46,6 +48,7 @@
   libxslt,
   meson,
   modemmanager,
+  mutter,
   networkmanager,
   networkmanagerapplet,
   ninja,
@@ -116,11 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     adwaita-icon-theme
     cheese
-    gnome.gnome-bluetooth_1_0
+    gnome-bluetooth_1_0
     gnome-remote-desktop
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gnome-user-share
-    gnome.mutter
+    mutter
     gsettings-desktop-schemas
     gsound
     gtk3
@@ -174,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       # WM keyboard shortcuts
-      --prefix XDG_DATA_DIRS : "${gnome.mutter}/share"
+      --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
   '';
 

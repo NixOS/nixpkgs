@@ -6,12 +6,12 @@
 }:
 let
   pname = "bazecor";
-  version = "1.4.4";
+  version = "1.5.0";
   src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
-      hash = "sha256-ep+3lqWdktyvbTKxfLcPiVq9/5f0xBHwKG1+BxDDBQA=";
+      hash = "sha256-cxDTNtxy2APAjnHw/cVd1/hUazASJs46rCHNGQ/JbSM=";
     };
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370
@@ -31,6 +31,8 @@ appimageTools.wrapAppImage {
   # taken from
   # https://github.com/Dygmalab/Bazecor/blob/v1.4.4/src/main/utils/udev.ts#L6
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraPkgs = pkgs: [ pkgs.glib ];
 
   # Also expose the udev rules here, so it can be used as:
@@ -38,7 +40,6 @@ appimageTools.wrapAppImage {
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/bazecor \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 

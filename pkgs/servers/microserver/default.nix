@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JGsMtlWuww1rYE4w6i2VlyD6gGHqnLehLDZmW57R+Fo=";
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
 
   meta = with lib; {
     homepage = "https://github.com/robertohuertasm/microserver";

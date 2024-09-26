@@ -2,13 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo123Module,
   substituteAll,
   pandoc,
   nodejs,
   pnpm_9,
   electron,
   makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  nix-update-script,
 }:
 
 let
@@ -20,23 +23,32 @@ let
   };
 
   platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
+
+  desktopEntry = makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.0";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UIPASTSW7YGpxJJHfCq28M/U6CzyqaJiISZGtE0aDPw=";
+    hash = "sha256-xGxZ6xu8R/JoW4X+drEv943y1jah4ZijHB+RNN6hxig=";
   };
 
-  kernel = buildGoModule {
+  kernel = buildGo123Module {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-s4dW43Qy3Lrc5WPpugQpN6BDEFVxqnorXpp40SGFk7I=";
+    vendorHash = "sha256-I57T4/J0pL8/GISi22H1lpE1gkduNXdINvuo+F3YnAs=";
 
     patches = [
       (substituteAll {
@@ -68,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpm.configHook
     makeWrapper
+    copyDesktopItems
   ];
 
   pnpmDeps = pnpm.fetchDeps {
@@ -77,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-QSaBNs0m13Pfrvl8uUVqRpP3m8PoOBIY5VU5Cg/G2jY=";
+    hash = "sha256-3PdmCbaZZjnTCSpBcvG7nP+zTGamoY/ZXjay7c8Zx5w=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -117,11 +130,20 @@ stdenv.mkDerivation (finalAttrs: {
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
         --inherit-argv0
+
+    install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
 
     runHook postInstall
   '';
+
+  desktopItems = [ desktopEntry ];
+
+  passthru = {
+    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Privacy-first personal knowledge management system that supports complete offline usage, as well as end-to-end encrypted data sync";

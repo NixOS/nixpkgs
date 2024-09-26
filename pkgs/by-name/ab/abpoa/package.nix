@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString enablePython "py"}abpoa";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "yangao07";
     repo = "abPOA";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-gS0PO7K4hN+3k2NF8enri1FzM80H2I+a3MNaKsm74xM=";
+    hash = "sha256-90mkXp4cC0Omnx0C7ab7NNs/M2oedIcICTUJl3qhcyo=";
   };
 
   patches = [ ./simd-arch.patch ];
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "SIMD-based C library for fast partial order alignment using adaptive band";
     homepage = "https://github.com/yangao07/abPOA";
-    changelog = "https://github.com/yangao07/abPOA/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/yangao07/abPOA/releases/tag/${lib.removePrefix "refs/tags/" finalAttrs.src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
     mainProgram = "abpoa";

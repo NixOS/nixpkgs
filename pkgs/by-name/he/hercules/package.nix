@@ -6,7 +6,7 @@
 , cmake
 , zlib
 , bzip2
-, enableRexx ? stdenv.isLinux, regina
+, enableRexx ? stdenv.hostPlatform.isLinux, regina
 }:
 let
   herculesCpu =

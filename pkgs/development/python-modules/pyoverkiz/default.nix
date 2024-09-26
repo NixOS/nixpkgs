@@ -7,7 +7,6 @@
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   poetry-core,
   pyhumps,
   pytest-asyncio,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.13.14";
+  version = "1.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,23 +26,8 @@ buildPythonPackage rec {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HlDydPreHe/O+fqVwjkwQlQx0o9UxI/fwA+idB02Gng=";
+    hash = "sha256-mpD8seRGZZ+1Rgg1ADFiFgYZ1JmLRNdscRwfXIK6Pr4=";
   };
-
-  patches = [
-    # https://github.com/iMicknl/python-overkiz-api/pull/1309
-    (fetchpatch2 {
-      url = "https://github.com/iMicknl/python-overkiz-api/commit/9e5bbec3fc88faac9dae0c0c001ed7582c4933e2.patch";
-      excludes = [ "poetry.lock" ];
-      hash = "sha256-KzagDvljkKoUJT+41o7Jv5OPLpPXQDeGmz3O/HOk1YQ=";
-    })
-    # https://github.com/iMicknl/python-overkiz-api/pull/1326
-    (fetchpatch2 {
-      name = "aiohttp-3.10-compat.patch";
-      url = "https://github.com/iMicknl/python-overkiz-api/commit/f745c0a9cd654579135624aa472723f85d301aed.patch";
-      hash = "sha256-FXyWLnbu0Kqe/dWrWdi4cvyttDQqexhHo0nTumfUo4g=";
-    })
-  ];
 
   build-system = [ poetry-core ];
 

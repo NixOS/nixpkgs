@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     minizip
     zlib
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     pulseaudio
     libselinux
@@ -137,6 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
         sugar700
       ];
       platforms = lib.platforms.unix;
-      broken = (withGtk && stdenv.isDarwin);
+      broken = (withGtk && stdenv.hostPlatform.isDarwin);
     };
 })

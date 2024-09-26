@@ -6,12 +6,12 @@
 
 buildGoModule rec {
   pname = "zoraxy";
-  version = "3.1.0";
+  version = "3.1.1";
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-96puPBMrJ2o6jO41KOr2+NnCgq0TEejLoAKRiXsPbEE=";
+    hash = "sha256-ZjsBGtY6M5jIXylzg4k8U4krwqx5d5VuMiVHAeUIbXY=";
   };
 
   sourceRoot = "${src.name}/src";

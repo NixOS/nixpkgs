@@ -9,19 +9,14 @@
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.64.1";
-  format = "setuptools";
+  version = "1.65.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
     inherit version;
-    hash = "sha256-crNVC5GtuDVGVuzw9tHUYRKZBEuuEfsefMHRu2a4wes=";
+    hash = "sha256-JM/+i8kPuCN/C88kC9bHAwQlX+J7adsyYBSZoEP4cb4=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
-  '';
 
   outputs = [
     "out"
@@ -30,7 +25,14 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+    "grpcio"
+  ];
+
+  dependencies = [
     protobuf
     grpcio
     setuptools

@@ -106,6 +106,7 @@ stdenvNoCC.mkDerivation {
       --arg nixpkgsPath "./." \
       --argstr revision ${nixpkgs.rev or "master"} \
       --argstr libsetsJSON ${lib.escapeShellArg (builtins.toJSON libsets)} \
+      --store $(mktemp -d) \
       > locations.json
 
     function docgen {

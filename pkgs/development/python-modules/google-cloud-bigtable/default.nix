@@ -17,14 +17,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.24.0";
+  version = "2.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rOdfYso8UtZhnU/3rtmCEpyuUIuvd22BszMT9PnqXtQ=";
+    pname = "google_cloud_bigtable";
+    inherit version;
+    hash = "sha256-g88QrbMzNISzme+uWk0kEhfBiFxj/bmwTCaTAXYrGLc=";
   };
 
   build-system = [ setuptools ];

@@ -3,27 +3,27 @@
 , fetchFromGitHub
 , pnpm
 , nodejs
-, electron_30
+, electron_31
 , makeWrapper
 , copyDesktopItems
 , makeDesktopItem
 }:
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.8";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "ArmCord";
     repo = "ArmCord";
     rev = "v${version}";
-    hash = "sha256-H/Y3xA7gE24UsUkrxmrRFSvs16qZCVxli9vdnt7ihi8=";
+    hash = "sha256-rCcjanmr4s9Nc5QB3Rb5ptKF/Ge8PSZt0WvgIul3RGs=";
   };
 
   nativeBuildInputs = [ pnpm.configHook nodejs makeWrapper copyDesktopItems ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-hYp1XbWQL5NbIzzUSnZ7y7V+vYQmymRNo+EiSjn5d9E=";
+    hash = "sha256-ZfErOj03NdkviNXV4bvZC8uPOk29RhgmSez/Qvw1sGo=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist="${electron_30.dist}" \
-      -c.electronVersion="${electron_30.version}"
+      -c.electronDist="${electron_31.dist}" \
+      -c.electronVersion="${electron_31.version}"
 
     runHook postBuild
   '';
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/armcord.png"
 
-    makeShellWrapper "${lib.getExe electron_30}" "$out/bin/armcord" \
+    makeShellWrapper "${lib.getExe electron_31}" "$out/bin/armcord" \
       --add-flags "$out/share/lib/armcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

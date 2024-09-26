@@ -25,7 +25,10 @@
 mkKdeDerivation {
   pname = "k3b";
 
-  extraNativeBuildInputs = [pkg-config shared-mime-info];
+  extraNativeBuildInputs = [
+    pkg-config
+    shared-mime-info
+  ];
 
   # FIXME: Musicbrainz 2.x???, musepack
   extraBuildInputs = [
@@ -40,20 +43,27 @@ mkKdeDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
-      cdrdao
-      cdrtools
-      dvdplusrwtools
-      libburn
-      normalize
-      sox
-      transcode
-      vcdimager
-      flac
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        cdrdao
+        cdrtools
+        dvdplusrwtools
+        libburn
+        normalize
+        sox
+        transcode
+        vcdimager
+        flac
+      ]
+    }"
 
     # FIXME: this should really be done with patchelf --add-rpath, but it breaks the binary somehow
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ cdparanoia libdvdcss ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        cdparanoia
+        libdvdcss
+      ]
+    }"
   ];
 
   meta.mainProgram = "k3b";

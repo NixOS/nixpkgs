@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gogup";
-  version = "0.27.4";
+  version = "0.27.5";
 
   src = fetchFromGitHub {
     owner = "nao1215";
     repo = "gup";
     rev = "v${version}";
-    hash = "sha256-vCp513WpB3kWMN0nkohtvpuMN1WBndg1E6pF0Cd5FgE=";
+    hash = "sha256-I4l/sDqafc/ZO8kKc4iOSMFLS0YZrAqRFOXn0N7Myo4=";
   };
 
   vendorHash = "sha256-rtdbPwVZHwofpGccYU8NBiaikzNMIwSDggbRdnGTBu8=";

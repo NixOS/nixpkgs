@@ -4556,7 +4556,7 @@ dependencies = [
 [[package]]
 name = "wlx-capture"
 version = "0.3.12"
-source = "git+https://github.com/galister/wlx-capture?tag=v0.3.12#14d2b8a13dad62849973fe90bed7be262aa07143"
+source = "git+https://github.com/galister/wlx-capture?tag=v0.3.13#c375a7c1d4b57741655a052ebe8af9fb4774f92d"
 dependencies = [
  "ashpd",
  "drm-fourcc",
@@ -4574,7 +4574,7 @@ dependencies = [
 
 [[package]]
 name = "wlx-overlay-s"
-version = "0.4.4"
+version = "0.5.0"
 dependencies = [
  "anyhow",
  "ash",

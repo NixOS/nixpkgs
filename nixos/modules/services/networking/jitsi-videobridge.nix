@@ -1,16 +1,13 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.jitsi-videobridge;
-  attrsToArgs = a: concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") a);
+  attrsToArgs = a: lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${toString v}") a);
 
   format = pkgs.formats.hocon { };
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
-  toVarName = s: "XMPP_PASSWORD_" + stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
+  toVarName = s: "XMPP_PASSWORD_" + lib.stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
 
   defaultJvbConfig = {
     videobridge = {
@@ -25,7 +22,7 @@ let
         enabled = true;
         transports = [ { type = "muc"; } ];
       };
-      apis.xmpp-client.configs = flip mapAttrs cfg.xmppConfigs (name: xmppConfig: {
+      apis.xmpp-client.configs = lib.flip lib.mapAttrs cfg.xmppConfigs (name: xmppConfig: {
         hostname = xmppConfig.hostName;
         domain = xmppConfig.domain;
         username = xmppConfig.userName;
@@ -39,21 +36,21 @@ let
   };
 
   # Allow overriding leaves of the default config despite types.attrs not doing any merging.
-  jvbConfig = recursiveUpdate defaultJvbConfig cfg.config;
+  jvbConfig = lib.recursiveUpdate defaultJvbConfig cfg.config;
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "jitsi-videobridge" "apis" ]
+    (lib.mkRemovedOptionModule [ "services" "jitsi-videobridge" "apis" ]
       "services.jitsi-videobridge.apis was broken and has been migrated into the boolean option services.jitsi-videobridge.colibriRestApi. It is set to false by default, setting it to true will correctly enable the private /colibri rest API."
     )
   ];
-  options.services.jitsi-videobridge = with types; {
-    enable = mkEnableOption "Jitsi Videobridge, a WebRTC compatible video router";
+  options.services.jitsi-videobridge = with lib.types; {
+    enable = lib.mkEnableOption "Jitsi Videobridge, a WebRTC compatible video router";
 
-    config = mkOption {
+    config = lib.mkOption {
       type = attrs;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           videobridge = {
             ice.udp.port = 5000;
@@ -72,14 +69,14 @@ in
       '';
     };
 
-    xmppConfigs = mkOption {
+    xmppConfigs = lib.mkOption {
       description = ''
         XMPP servers to connect to.
 
         See <https://github.com/jitsi/jitsi-videobridge/blob/master/doc/muc.md> for more information.
       '';
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "localhost" = {
             hostName = "localhost";
@@ -92,14 +89,14 @@ in
       '';
       type = attrsOf (submodule ({ name, ... }: {
         options = {
-          hostName = mkOption {
+          hostName = lib.mkOption {
             type = str;
             example = "xmpp.example.org";
             description = ''
               Hostname of the XMPP server to connect to. Name of the attribute set is used by default.
             '';
           };
-          domain = mkOption {
+          domain = lib.mkOption {
             type = nullOr str;
             default = null;
             example = "auth.xmpp.example.org";
@@ -107,28 +104,28 @@ in
               Domain part of JID of the XMPP user, if it is different from hostName.
             '';
           };
-          userName = mkOption {
+          userName = lib.mkOption {
             type = str;
             default = "jvb";
             description = ''
               User part of the JID.
             '';
           };
-          passwordFile = mkOption {
+          passwordFile = lib.mkOption {
             type = str;
             example = "/run/keys/jitsi-videobridge-xmpp1";
             description = ''
               File containing the password for the user.
             '';
           };
-          mucJids = mkOption {
+          mucJids = lib.mkOption {
             type = str;
             example = "jvbbrewery@internal.xmpp.example.org";
             description = ''
               JID of the MUC to join. JiCoFo needs to be configured to join the same MUC.
             '';
           };
-          mucNickname = mkOption {
+          mucNickname = lib.mkOption {
             # Upstream DEBs use UUID, let's use hostname instead.
             type = str;
             description = ''
@@ -136,7 +133,7 @@ in
               nickname (aka resource part of the JID). By default, system hostname is used.
             '';
           };
-          disableCertificateVerification = mkOption {
+          disableCertificateVerification = lib.mkOption {
             type = bool;
             default = false;
             description = ''
@@ -145,8 +142,8 @@ in
           };
         };
         config = {
-          hostName = mkDefault name;
-          mucNickname = mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
+          hostName = lib.mkDefault name;
+          mucNickname = lib.mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
             config.networking.fqdnOrHostName
           ));
         };
@@ -154,7 +151,7 @@ in
     };
 
     nat = {
-      localAddress = mkOption {
+      localAddress = lib.mkOption {
         type = nullOr str;
         default = null;
         example = "192.168.1.42";
@@ -163,7 +160,7 @@ in
         '';
       };
 
-      publicAddress = mkOption {
+      publicAddress = lib.mkOption {
         type = nullOr str;
         default = null;
         example = "1.2.3.4";
@@ -173,7 +170,7 @@ in
       };
     };
 
-    extraProperties = mkOption {
+    extraProperties = lib.mkOption {
       type = attrsOf str;
       default = { };
       description = ''
@@ -181,7 +178,7 @@ in
       '';
     };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       type = bool;
       default = false;
       description = ''
@@ -189,7 +186,7 @@ in
       '';
     };
 
-    colibriRestApi = mkOption {
+    colibriRestApi = lib.mkOption {
       type = bool;
       description = ''
         Whether to enable the private rest API for the COLIBRI control interface.
@@ -199,10 +196,10 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.jitsi-meet = {};
 
-    services.jitsi-videobridge.extraProperties = optionalAttrs (cfg.nat.localAddress != null) {
+    services.jitsi-videobridge.extraProperties = lib.optionalAttrs (cfg.nat.localAddress != null) {
       "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" = cfg.nat.localAddress;
       "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" = cfg.nat.publicAddress;
     };
@@ -215,7 +212,7 @@ in
         "-Dconfig.file" = format.generate "jvb.conf" jvbConfig;
         # Mitigate CVE-2021-44228
         "-Dlog4j2.formatMsgNoLookups" = true;
-      } // (mapAttrs' (k: v: nameValuePair "-D${k}" v) cfg.extraProperties);
+      } // (lib.mapAttrs' (k: v: lib.nameValuePair "-D${k}" v) cfg.extraProperties);
     in
     {
       aliases = [ "jitsi-videobridge.service" ];
@@ -225,7 +222,7 @@ in
 
       environment.JAVA_SYS_PROPS = attrsToArgs jvbProps;
 
-      script = (concatStrings (mapAttrsToList (name: xmppConfig:
+      script = (lib.concatStrings (lib.mapAttrsToList (name: xmppConfig:
         "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
       ) cfg.xmppConfigs))
       + ''
@@ -262,16 +259,16 @@ in
     };
 
     environment.etc."jitsi/videobridge/logging.properties".source =
-      mkDefault "${pkgs.jitsi-videobridge}/etc/jitsi/videobridge/logging.properties-journal";
+      lib.mkDefault "${pkgs.jitsi-videobridge}/etc/jitsi/videobridge/logging.properties-journal";
 
     # (from videobridge2 .deb)
     # this sets the max, so that we can bump the JVB UDP single port buffer size.
-    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 10485760;
-    boot.kernel.sysctl."net.core.netdev_max_backlog" = mkDefault 100000;
+    boot.kernel.sysctl."net.core.rmem_max" = lib.mkDefault 10485760;
+    boot.kernel.sysctl."net.core.netdev_max_backlog" = lib.mkDefault 100000;
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall
       [ jvbConfig.videobridge.ice.tcp.port ];
-    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall
+    networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall
       [ jvbConfig.videobridge.ice.udp.port ];
 
     assertions = [{

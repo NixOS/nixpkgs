@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     tqdm
-  ] ++ lib.optionals stdenv.isLinux [ glibcLocales ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth

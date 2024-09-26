@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "~emersion";
     repo = "libscfg";
     rev = "v${version}";
-    sha256 = "sha256-aTcvs7QuDOx17U/yP37LhvIGxmm2WR/6qFYRtfjRN6w=";
+    hash = "sha256-aTcvs7QuDOx17U/yP37LhvIGxmm2WR/6qFYRtfjRN6w=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

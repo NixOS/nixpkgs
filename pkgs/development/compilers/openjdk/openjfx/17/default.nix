@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_6-headless, python3, ruby
+, ffmpeg_7-headless, python3, ruby
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -27,9 +27,10 @@ in stdenv.mkDerivation {
 
   patches = [
     ../backport-ffmpeg-6-support-jfx11.patch
+    ../backport-ffmpeg-7-support-jfx11.patch
   ];
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_6-headless ];
+  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_7-headless ];
   nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
 
   dontUseCmakeConfigure = true;
@@ -46,6 +47,9 @@ in stdenv.mkDerivation {
     sed -e '1i #include <cstdio>' \
       -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
          modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
+
+    substituteInPlace modules/javafx.web/src/main/native/Source/JavaScriptCore/offlineasm/parser.rb \
+      --replace-fail "File.exists?" "File.exist?"
 
     ln -s $config gradle.properties
   '';

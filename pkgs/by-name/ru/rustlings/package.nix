@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -10,7 +12,7 @@
 }:
 let
   pname = "rustlings";
-  version = "6.2.0";
+  version = "6.3.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -18,10 +20,10 @@ rustPlatform.buildRustPackage {
     owner = "rust-lang";
     repo = "rustlings";
     rev = "v${version}";
-    hash = "sha256-BVmiMIIx8YEO57FO0ZpsCQcim68mn7NHpAOO86dZqlI=";
+    hash = "sha256-te7DYgbEtWWSSvO28ajkJucRb3c9L8La1wfGW0WSxW0=";
   };
 
-  cargoHash = "sha256-ZupwPw/bfeN+s7IWXbY21K/ODXSaYef+IDDpBVCi3Ek=";
+  cargoHash = "sha256-Vq4Os4CKkEz4HggIZhlbIo9Cu+BVJPdybL1CNvz5wEQ=";
 
   # Disabled test that does not work well in an isolated environment
   checkFlags = [
@@ -33,6 +35,10 @@ rustPlatform.buildRustPackage {
     pkg-config
     makeWrapper
   ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks; [ CoreServices ]
+  );
 
   postFixup = ''
     wrapProgram $out/bin/rustlings --suffix PATH : ${

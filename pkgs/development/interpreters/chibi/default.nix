@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     wrapProgram "$out/bin/chibi-scheme" \
       --prefix CHIBI_MODULE_PATH : "$out/share/chibi:$out/lib/chibi" \
-      ${lib.optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib"}
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib"}
 
     for f in chibi-doc chibi-ffi snow-chibi; do
       substituteInPlace "$out/bin/$f" \

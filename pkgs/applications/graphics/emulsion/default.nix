@@ -30,7 +30,7 @@ let
     libXrandr
     libXxf86vm
     libxcb
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon
     wayland
   ];
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     python3
   ];
 
-  buildInputs = rpathLibs ++ lib.optionals stdenv.isDarwin [
+  buildInputs = rpathLibs ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     CoreGraphics
     CoreServices
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     OpenGL
   ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/emulsion
   '';
 

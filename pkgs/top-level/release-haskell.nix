@@ -345,6 +345,7 @@ let
         nixfmt-rfc-style
         nota
         nvfetcher
+        oama
         ormolu
         # pakcs broken by set-extra on 2024-03-15
         pandoc

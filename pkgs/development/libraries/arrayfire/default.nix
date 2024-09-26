@@ -29,7 +29,7 @@
 , cpuSupport ? true
 , cudaSupport ? config.cudaSupport
   # OpenCL needs mesa which is broken on Darwin
-, openclSupport ? !stdenv.isDarwin
+, openclSupport ? !stdenv.hostPlatform.isDarwin
   # This argument lets one run CUDA & OpenCL tests on non-NixOS systems by
   # telling Nix where to find the drivers. If you know the version of the
   # Nvidia driver that is installed on your system, you can do:
@@ -49,6 +49,7 @@
   #       { libsOnly = true; };
   # }
 , nvidiaComputeDrivers ? null
+, fetchpatch
 }:
 
 # ArrayFire compiles with 64-bit BLAS, but some tests segfault or throw
@@ -130,7 +131,15 @@ stdenv.mkDerivation rec {
 
   # ArrayFire have a repo with assets for the examples. Since we don't build
   # the examples anyway, remove the dependency on assets.
-  patches = [ ./no-assets.patch ./no-download.patch ];
+  patches = [
+    ./no-assets.patch
+    ./no-download.patch
+    # Fix for newer opencl-clhpp. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/arrayfire/arrayfire/pull/3562.patch";
+      hash = "sha256-AdWlpcRTn9waNAaVpZfK6sJ/xBQLiBC4nBeEYiGNN50";
+    })
+  ];
 
   postPatch = ''
     mkdir -p ./extern/af_glad-src

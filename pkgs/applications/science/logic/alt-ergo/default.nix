@@ -28,7 +28,7 @@ ocamlPackages.buildDunePackage {
 
   inherit pname version src;
 
-  nativeBuildInputs = [ ocamlPackages.menhir ] ++ lib.optionals stdenv.isDarwin [ darwin.sigtool ];
+  nativeBuildInputs = [ ocamlPackages.menhir ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
   buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ]);
 
   meta = {

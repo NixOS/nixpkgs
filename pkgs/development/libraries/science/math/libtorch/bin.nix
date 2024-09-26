@@ -23,7 +23,7 @@ let
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
-  libcxx-for-libtorch = if stdenv.isDarwin then libcxx else stdenv.cc.cc.lib;
+  libcxx-for-libtorch = if stdenv.hostPlatform.isDarwin then libcxx else stdenv.cc.cc.lib;
 in stdenv.mkDerivation {
   inherit version;
   pname = "libtorch";
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
   src = fetchzip srcs."${stdenv.hostPlatform.system}-${device}" or unavailable;
 
   nativeBuildInputs =
-    if stdenv.isDarwin then [ fixDarwinDylibNames ]
+    if stdenv.hostPlatform.isDarwin then [ fixDarwinDylibNames ]
     else [ patchelf ] ++ lib.optionals cudaSupport [ addDriverRunpath ];
 
   dontBuild = true;
@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
 
   postFixup = let
     rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
-  in lib.optionalString stdenv.isLinux ''
+  in lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
       patchelf --set-rpath "${rpath}:$out/lib" "$lib"
@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
         addDriverRunpath "$lib"
       ''}
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/lib/*.dylib; do
         otool -L $f
     done

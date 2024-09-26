@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "VERSION=${region}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "OSX_BUILD=1"
   ] ++ compileFlags;
 

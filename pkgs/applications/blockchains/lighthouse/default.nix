@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     rust-jemalloc-sys
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
     SystemConfiguration
@@ -121,7 +121,7 @@ rustPlatform.buildRustPackage rec {
     "--skip persist::test_persist_caches"
     "--skip service::tests::tests::test_dht_persistence"
     "--skip time::test::test_reinsertion_updates_timeout"
-  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
     "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"

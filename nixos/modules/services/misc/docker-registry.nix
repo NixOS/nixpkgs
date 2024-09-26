@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.dockerRegistry;
 
@@ -15,7 +12,7 @@ let
     storage = {
       cache.blobdescriptor = blobCache;
       delete.enabled = cfg.enableDelete;
-    } // (optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
+    } // (lib.optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -27,7 +24,7 @@ let
     };
   };
 
-  registryConfig.redis = mkIf cfg.enableRedisCache {
+  registryConfig.redis = lib.mkIf cfg.enableRedisCache {
     addr = "${cfg.redisUrl}";
     password = "${cfg.redisPassword}";
     db = 0;
@@ -44,32 +41,32 @@ let
   configFile = cfg.configFile;
 in {
   options.services.dockerRegistry = {
-    enable = mkEnableOption "Docker Registry";
+    enable = lib.mkEnableOption "Docker Registry";
 
-    package = mkPackageOption pkgs "docker-distribution" {
+    package = lib.mkPackageOption pkgs "docker-distribution" {
       example = "gitlab-container-registry";
     };
 
-    listenAddress = mkOption {
+    listenAddress = lib.mkOption {
       description = "Docker registry host or ip to bind to.";
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       description = "Docker registry port to bind to.";
       default = 5000;
-      type = types.port;
+      type = lib.types.port;
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Opens the port used by the firewall.";
     };
 
-    storagePath = mkOption {
-      type = types.nullOr types.path;
+    storagePath = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = "/var/lib/docker-registry";
       description = ''
         Docker registry storage path for the filesystem storage backend. Set to
@@ -77,50 +74,50 @@ in {
       '';
     };
 
-    enableDelete = mkOption {
-      type = types.bool;
+    enableDelete = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Enable delete for manifests and blobs.";
     };
 
-    enableRedisCache = mkEnableOption "redis as blob cache";
+    enableRedisCache = lib.mkEnableOption "redis as blob cache";
 
-    redisUrl = mkOption {
-      type = types.str;
+    redisUrl = lib.mkOption {
+      type = lib.types.str;
       default = "localhost:6379";
       description = "Set redis host and port.";
     };
 
-    redisPassword = mkOption {
-      type = types.str;
+    redisPassword = lib.mkOption {
+      type = lib.types.str;
       default = "";
       description = "Set redis password.";
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       description = ''
         Docker extra registry configuration via environment variables.
       '';
       default = {};
-      type = types.attrs;
+      type = lib.types.attrs;
     };
 
     configFile = lib.mkOption {
-      default = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
-      defaultText = literalExpression ''pkgs.writeText "docker-registry-config.yml" "# my custom docker-registry-config.yml ..."'';
+      default = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (lib.recursiveUpdate registryConfig cfg.extraConfig));
+      defaultText = lib.literalExpression ''pkgs.writeText "docker-registry-config.yml" "# my custom docker-registry-config.yml ..."'';
       description = ''
        Path to CNCF distribution config file.
 
        Setting this option will override any configuration applied by the extraConfig option.
       '';
-      type =  types.path;
+      type =  lib.types.path;
     };
 
-    enableGarbageCollect = mkEnableOption "garbage collect";
+    enableGarbageCollect = lib.mkEnableOption "garbage collect";
 
-    garbageCollectDates = mkOption {
+    garbageCollectDates = lib.mkOption {
       default = "daily";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Specification (in the format described by
         {manpage}`systemd.time(7)`) of the time at
@@ -129,7 +126,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.docker-registry = {
       description = "Docker Container Registry";
       wantedBy = [ "multi-user.target" ];
@@ -141,7 +138,7 @@ in {
       serviceConfig = {
         User = "docker-registry";
         WorkingDirectory = cfg.storagePath;
-        AmbientCapabilities = mkIf (cfg.port < 1024) "cap_net_bind_service";
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) "cap_net_bind_service";
       };
     };
 
@@ -158,11 +155,11 @@ in {
         /run/current-system/systemd/bin/systemctl restart docker-registry.service
       '';
 
-      startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
+      startAt = lib.optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
     users.users.docker-registry =
-      (optionalAttrs (cfg.storagePath != null) {
+      (lib.optionalAttrs (cfg.storagePath != null) {
         createHome = true;
         home = cfg.storagePath;
       }) // {
@@ -171,7 +168,7 @@ in {
       };
     users.groups.docker-registry = {};
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

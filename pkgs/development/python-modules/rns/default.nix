@@ -2,16 +2,18 @@
   lib,
   buildPythonPackage,
   cryptography,
+  esptool,
   fetchFromGitHub,
   netifaces,
   pyserial,
   pythonOlder,
+  replaceVars,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.7.5";
+  version = "0.7.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +22,14 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     rev = "refs/tags/${version}";
-    hash = "sha256-TWaDRJQ695kjoKjWQeAO+uxSZGgQiHoWYIsS+XnYVOQ=";
+    hash = "sha256-O3dxfO8MrTKaYRCBNygZlXKuIA3rjEr8TCtR/vrUYmo=";
   };
+
+  patches = [
+    (replaceVars ./unvendor-esptool.patch {
+      esptool = lib.getExe esptool;
+    })
+  ];
 
   build-system = [ setuptools ];
 

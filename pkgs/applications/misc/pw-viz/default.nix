@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pw-viz";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ax9d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lw4whdh8tNoS5XUlamQCq8f8z8K59uD90PSSo3skeyo=";
+    sha256 = "sha256-fB7PnWWahCMKhGREg6neLmOZjh2OWLu61Vpmfsl03wA=";
   };
 
   cargoLock = {

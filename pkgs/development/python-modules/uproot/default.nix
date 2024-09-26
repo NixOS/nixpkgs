@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.11";
+  version = "5.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MQdSUB9m1BNg+/ybdNrho0V+LlNKavmFdBdBKLhHt2w=";
+    hash = "sha256-iCyGG4y7cnJqHEaqpzFc/LjWiLZw3HArU5hDtEyLgFo=";
   };
 
   build-system = [
@@ -49,6 +49,7 @@ buildPythonPackage rec {
     numpy
     fsspec
     packaging
+    xxhash
   ];
 
   nativeCheckInputs = [
@@ -57,7 +58,6 @@ buildPythonPackage rec {
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
-    xxhash
   ];
 
   preCheck = ''

@@ -132,6 +132,7 @@ let
 
   weblatePath = with pkgs; [
     gitSVN
+    borgbackup
 
     #optional
     git-review

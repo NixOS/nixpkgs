@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, gsl
-, dieharder, testers }:
+, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dieharder";
   version = "3.31.1";
 
   src = fetchurl {
-    url = "http://webhome.phy.duke.edu/~rgb/General/dieharder/dieharder-${version}.tgz";
+    url = "http://webhome.phy.duke.edu/~rgb/General/dieharder/dieharder-${finalAttrs.version}.tgz";
     hash = "sha256-bP8P+DlMVTVJrHQzNZzPyVX7JnlCYDFGIN+l5M1Lcn8=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gsl ];
 
   passthru = {
-    tests.version = testers.testVersion { package = dieharder; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ zhaofengli ];
     platforms = platforms.unix;
   };
-}
+})

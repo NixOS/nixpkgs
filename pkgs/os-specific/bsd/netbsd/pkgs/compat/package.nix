@@ -118,7 +118,7 @@ mkDerivation (
         install -D $BSDSRCDIR/common/include/rpc/types.h $dev/include/rpc/types.h
         sed -i '1s;^;#include "nbtool_config.h"\n;' $dev/include/rpc/types.h
       ''
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         mkdir -p $dev/include/ssp
         touch $dev/include/ssp/ssp.h
       ''

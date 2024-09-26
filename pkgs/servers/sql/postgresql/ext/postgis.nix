@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.4.2";
+  version = "3.4.3";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    hash = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
+    hash = "sha256-+N7VBdrrj1dlnaK55Xf/ceGDqqCUcI0u7OLFbZM2H2I=";
   };
 
   buildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     json_c
     protobufc
     pcre2.dev
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
   nativeBuildInputs = [
     perl
     pkg-config
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ln -s ${postgresql}/bin/postgres $out/bin/postgres
   '';
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     substituteInPlace regress/run_test.pl --replace-fail "/share/contrib/postgis" "$out/share/postgresql/contrib/postgis"

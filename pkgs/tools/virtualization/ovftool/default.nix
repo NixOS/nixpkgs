@@ -65,15 +65,15 @@ stdenv.mkDerivation {
     libxcrypt-legacy
     xercesc
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     glibc
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.Libsystem
     libxml2
   ];
 
   nativeBuildInputs = [ unzip makeWrapper ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   postUnpack = ''
     # The linux package wraps ovftool.bin with ovftool. Wrapping
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     # Darwin dylibs are under `lib` in the zip.
     install -m 755 -d "$out/lib"
     install -m 644 -t "$out/lib" \
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       libcrypto.so.1.0.2 \
       libcurl.so.4 \
       libgoogleurl.so.59 \
@@ -112,7 +112,7 @@ stdenv.mkDerivation {
       libvim-types.so \
       libvmacore.so \
       libvmomi.so
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       lib/libcrypto.1.0.2.dylib \
       lib/libcurl.4.dylib \
       lib/libgoogleurl.59.0.30.45.2.dylib \
@@ -151,17 +151,17 @@ stdenv.mkDerivation {
     # Install final executable
     install -m 755 -d "$out/bin"
     makeWrapper "$out/libexec/ovftool" "$out/bin/ovftool" \
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       --prefix LD_LIBRARY_PATH : "$out/lib"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       --prefix DYLD_LIBRARY_PATH : "$out/lib"
   '' + ''
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "$out/lib"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     change_args=()
 
     # Change relative @loader_path dylibs to absolute paths.
@@ -208,7 +208,7 @@ stdenv.mkDerivation {
   '';
 
   # These paths are need for install check tests
-  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+  propagatedSandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
     (allow file-read* (subpath "/usr/share/locale"))
     (allow file-read* (subpath "/var/db/timezone"))
     (allow file-read* (subpath "/System/Library/TextEncodings"))
@@ -216,7 +216,7 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
-  postInstallCheck = lib.optionalString stdenv.isDarwin ''
+  postInstallCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export HOME=$TMPDIR
     # Construct a dummy /etc/passwd file - ovftool attempts to determine the
     # user's "real" home using this

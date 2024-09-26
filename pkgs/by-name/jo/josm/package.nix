@@ -3,20 +3,20 @@
 }:
 let
   pname = "josm";
-  version = "19160";
+  version = "19207";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-a0Tu0GkXH/MYR5llmVaVcEBvmr50sX4oSsCZSzo5dkE=";
+      hash = "sha256-dYDJmGXIKd2GhjyKBpQjoIfz9giBsgFdC0TaKplxiPY=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-5sn4Wo4VMIZ79v/FegKrFQ62cngAQLc1luTnvhCO7y8=";
+      hash = "sha256-A34nd+RBipON5zOKBD57L1l2KACYEUHNjxs0N6xqoXc=";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      sha256 = "sha256-L7P6FtqKLB4e+ezPzXePM33qj5esNoRlTFXi0/GhdsA=";
+      hash = "sha256-L7P6FtqKLB4e+ezPzXePM33qj5esNoRlTFXi0/GhdsA=";
     };
   };
 
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ jre ];
 
   installPhase =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/Applications
       ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
     '' else ''

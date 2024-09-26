@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib
     libpng
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
     libglut
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.OpenGL
   ];
 

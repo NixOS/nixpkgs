@@ -9,23 +9,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "aichat";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "aichat";
     rev = "v${version}";
-    hash = "sha256-khi5B8nYNK7otWZEs5koCzQaYGZwmGxP3zrMYIt3Ds4=";
+    hash = "sha256-gUn1NnEbiZbg7zBer1KX8smBCpcL0fQ+TkEoH8kdPws=";
   };
 
-  cargoHash = "sha256-IHGl+Lxa9ZKlyXp59mv72QIvC3hkXPFOUKPVYbN50W4=";
+  cargoHash = "sha256-xbWcH8kkDe3+IEeHqxd8QW1h5oPDJfAkfNzJp8MWLR8=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
