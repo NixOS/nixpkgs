@@ -245,7 +245,10 @@ in {
     xdg.icons.enable = true;
 
     xdg.portal.enable = true;
-    xdg.portal.extraPortals = [kdePackages.xdg-desktop-portal-kde];
+    xdg.portal.extraPortals = [
+      kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gtk
+    ];
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
     services.pipewire.enable = mkDefault true;
 

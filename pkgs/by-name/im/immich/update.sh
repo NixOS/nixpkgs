@@ -41,4 +41,4 @@ for npm_component in cli server web "open-api/typescript-sdk"; do
 done
 
 rm "$lock"
-cp "$sources_tmp" sources.json
+mv "$sources_tmp" sources.json

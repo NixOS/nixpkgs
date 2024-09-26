@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, protobuf
+, protobuf_25
 , zlib
 , buildPackages
 }:
@@ -19,19 +19,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-Dkpcc7ZfvAIVY91trRiHuiRFcUGUbQxbheYKTBcq80I=";
   };
 
-  patches = [
-    # https://github.com/protobuf-c/protobuf-c/issues/709
-    # https://github.com/protobuf-c/protobuf-c/pull/711
-    ./recent_protobuf_compat.patch
-  ];
-
   outputs = [ "out" "dev" "lib" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ protobuf zlib ];
+  buildInputs = [ protobuf_25 zlib ];
 
-  env.PROTOC = lib.getExe buildPackages.protobuf;
+  env.PROTOC = lib.getExe buildPackages.protobuf_25;
 
   meta = with lib; {
     homepage = "https://github.com/protobuf-c/protobuf-c/";
