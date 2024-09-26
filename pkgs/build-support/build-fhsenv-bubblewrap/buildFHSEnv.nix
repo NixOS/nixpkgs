@@ -12,6 +12,7 @@
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
 , multiArch ? false # Whether to include 32bit packages
+, nativeBuildInputs ? []
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -257,6 +258,7 @@ let
   '';
 
 in runCommandLocal "${name}-fhs" {
+  inherit nativeBuildInputs;
   passthru = {
     inherit args baseTargetPaths targetPaths baseMultiPaths ldconfig isMultiBuild;
   };
