@@ -33,6 +33,7 @@ if not in_venv:
 
     if 'PYTHONEXECUTABLE' not in os.environ and executable is not None:
         sys.executable = executable
+        sys._base_executable = executable
     if prefix is not None:
         # Sysconfig does not like it when sys.prefix is set to None
         sys.prefix = sys.exec_prefix = prefix
