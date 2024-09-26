@@ -98,5 +98,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.anderslundstedt ];
+  meta.maintainers = [ maintainers.matt1432 ];
 }
