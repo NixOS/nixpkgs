@@ -34733,7 +34733,7 @@ with pkgs;
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
-  doom-bcc = callPackage ../games/doom-ports/zdoom/bcc-git.nix { };
+  zt-bcc = callPackage ../games/doom-ports/zdoom/zt-bcc.nix { };
 
   zdbsp = callPackage ../games/doom-ports/zdoom/zdbsp.nix { };
 
