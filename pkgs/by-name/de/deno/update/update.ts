@@ -12,8 +12,8 @@ const nixpkgs = Deno.cwd();
 // TODO: Read values from default.nix
 const owner = "denoland";
 const repo = "deno";
-const denoDir = `${nixpkgs}/pkgs/development/web/${repo}`;
-const src = `${denoDir}/default.nix`;
+const denoDir = `${nixpkgs}/pkgs/by-name/de/${repo}`;
+const src = `${denoDir}/package.nix`;
 const librusty_v8 = `${denoDir}/librusty_v8.nix`;
 const architectures: Architecture[] = [
   { nix: "x86_64-linux", rust: "x86_64-unknown-linux-gnu" },
