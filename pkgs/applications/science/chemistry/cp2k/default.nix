@@ -240,11 +240,11 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit mpi; };
 
-  meta = with lib; {
+  meta = {
     description = "Quantum chemistry and solid state physics program";
     homepage = "https://www.cp2k.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.sheepforce ];
     platforms = [ "x86_64-linux" ];
   };
 }
