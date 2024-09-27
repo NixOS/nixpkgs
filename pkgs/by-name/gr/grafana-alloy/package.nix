@@ -55,6 +55,11 @@ buildGoModule rec {
     "."
   ];
 
+  # Skip building the frontend in the goModules FOD
+  overrideModAttrs = (_: {
+    preBuild = null;
+  });
+
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/internal/web/ui/yarn.lock";
     hash = "sha256-Jk+zqR/+NBde9ywncIEJM4kgavqiDvcIAjxJCSMrZDc=";
