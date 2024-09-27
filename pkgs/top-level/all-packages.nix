@@ -36034,8 +36034,6 @@ with pkgs;
 
   avogadro2 = libsForQt5.callPackage ../applications/science/chemistry/avogadro2 { };
 
-  cp2k = callPackage ../applications/science/chemistry/cp2k { };
-
   d-seams = callPackage ../applications/science/chemistry/d-seams { };
 
   ergoscf = callPackage ../applications/science/chemistry/ergoscf { };
