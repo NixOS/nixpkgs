@@ -4,8 +4,10 @@ set -euo pipefail
 
 ip46tables() {
   iptables -w "$@"
-  ip6tables -w "$@"
 
+  if [[ $(< /sys/module/ipv6/parameters/disable) != "1" ]]; then
+    ip6tables -w "$@"
+  fi
 }
 
 show_help() {
