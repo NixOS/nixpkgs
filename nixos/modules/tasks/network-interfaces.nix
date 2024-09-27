@@ -54,6 +54,25 @@ let
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
+  # From https://www.freedesktop.org/software/systemd/man/machine-id.html:
+  # "[The machine] ID uniquely identifies the host.
+  # It should be considered "confidential", and must not be exposed
+  # in untrusted environments, in particular on the network.
+  # If a stable unique identifier that is tied to the machine
+  # is needed for some application, the machine ID
+  # or any part of it must not be used directly.
+  # Instead the machine ID should be hashed with
+  # a cryptographic, keyed hash function, using a fixed,
+  # application-specific key. That way the ID will be properly unique,
+  # and derived in a constant way from the machine ID but there will
+  # be no way to retrieve the original machine ID
+  # from the application-specific one."
+  hashMachineIdToHostId = machineId: let
+    # Application ID generated with systemd-id128 -p new
+    ourApplicationId = "74cc6efc7e6e4745afece542492fd4e6";
+    hash = builtins.hashString "sha256" "${machineId}${ourApplicationId}";
+  in lib.substring 0 8 hash;
+
   addrOpts = v:
     assert v == 4 || v == 6;
     { options = {
@@ -521,23 +540,44 @@ in
     };
 
     networking.hostId = mkOption {
-      default = null;
+      default = if config.networking.machineId != null then hashMachineIdToHostId config.networking.machineId else null;
+      defaultText = literalExpression ''
+        if config.networking.machineId != null then hashMachineIdToHostId config.networking.machineId else null
+      '';
       example = "4e98920d";
-      type = types.nullOr types.str;
+      type = types.nullOr (types.strMatching "[0-9a-f]{8}");
       description = ''
-        The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
+        The 32-bit host ID of the machine, formatted as 8 hexadecimal lowercase characters.
 
-        You should try to make this ID unique among your machines. You can
-        generate a random 32-bit ID using the following commands:
-
-        `head -c 8 /etc/machine-id`
-
-        (this derives it from the machine-id that systemd generates) or
+        You must make this ID unique among your machines. You can
+        generate a random 32-bit ID using the following command:
 
         `head -c4 /dev/urandom | od -A none -t x4`
 
         The primary use case is to ensure when using ZFS that a pool isn't imported
         accidentally on a wrong machine.
+      '';
+    };
+
+    networking.machineId = mkOption {
+      default = null;
+      example = "b23d9f80c4494c00b632f2f6448aaa72";
+      type = types.nullOr (types.strMatching "[0-9a-f]{32}");
+      description = ''
+        The [128-bit machine ID](https://www.freedesktop.org/software/systemd/man/latest/machine-id.html)
+        of the machine, formatted as 32 hexadecimal lowercase characters.
+
+        You must make this ID unique among your machines.
+        The ID is generated randomly on boot, if it does not already exists.
+
+        The current machine ID can be found in `/etc/machine-id`.
+
+        The primary use case is to ensure a unique identifier for the computer, used
+        by e.g. systemd journal.
+        If `networking.machineId` is set, but `networking.hostId` is not set, the
+        hostId will be derived from the machineId.
+
+        You can generate a random id with `openssl rand -hex 16`.
       '';
     };
 
@@ -1370,9 +1410,10 @@ in
         '';
       })) ++ [
         {
-          assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
-          message = "Invalid value given to the networking.hostId option.";
+          assertion = cfg.machineId == null || (cfg.machineId != "b23d9f80c4494c00b632f2f6448aaa72");
+          message = "The networking.machineId option must not be the same as the example. Instead generate a new random ID using `openssl rand -hex 16`.";
         }
+
       ];
 
     boot.kernelModules = [ ]
@@ -1414,6 +1455,8 @@ in
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
     boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };
+    environment.etc.machine-id = mkIf (cfg.machineId != null) { text = cfg.machineId + "\n"; };
+    boot.initrd.systemd.contents."/etc/machine-id" = mkIf (cfg.machineId != null) { text = cfg.machineId + "\n"; };
 
     # static hostname configuration needed for hostnamectl and the
     # org.freedesktop.hostname1 dbus service (both provided by systemd)

@@ -657,6 +657,7 @@ in {
   netbox-upgrade = handleTest ./web-apps/netbox-upgrade.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
+  networkingMachineid = handleTest ./networking-machineid.nix {};
   nextcloud = handleTest ./nextcloud {};
   nextjs-ollama-llm-ui = runTest ./web-apps/nextjs-ollama-llm-ui.nix;
   nexus = handleTest ./nexus.nix {};
