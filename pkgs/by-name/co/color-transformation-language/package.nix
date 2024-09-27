@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Programming language for digital color management";
     homepage = "https://github.com/ampas/CTL";
-    changelog = "https://github.com/ampas/CTL/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/ampas/CTL/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.ampas;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "ctl";
