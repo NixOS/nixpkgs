@@ -286,6 +286,15 @@ with lib;
       '';
     };
 
+    index = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "index.php index.html";
+      description = lib.mdDoc ''
+        Adds index directive.
+      '';
+    };
+
     default = mkOption {
       type = types.bool;
       default = false;
