@@ -5195,8 +5195,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  grim = callPackage ../tools/graphics/grim { };
-
   grit = callPackage ../tools/misc/grit { };
 
   grobi = callPackage ../tools/X11/grobi { };
