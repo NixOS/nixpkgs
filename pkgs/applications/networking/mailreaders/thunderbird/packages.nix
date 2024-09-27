@@ -6,6 +6,8 @@ let
     inherit version updateScript;
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
+    appstreamMetadataSourceFile = "../comm/taskcluster/docker/tb-flatpak/org.mozilla.Thunderbird.appdata.xml.in";
+    appstreamDistributionName = "org.mozilla.Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
