@@ -80,7 +80,6 @@ let
   hash =
     if stdenv.isAarch64 then
       "sha256-s7wrt/7whAvaF0m15bxqhd6g8I7E+tRYLJYrHpTaiwc="
-
     else
       "sha256-R/yHXx29T/7NNc1L1AmevzXp1k98qnmvOEd3cfSlJuA=";
 
