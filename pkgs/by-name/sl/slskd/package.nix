@@ -9,17 +9,17 @@
 }:
 let
   pname = "slskd";
-  version = "0.21.3";
+  version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-qAS8uiXAG0JTOCW/bIVYhv6McUSBihAHFjJu3b5Ttoc=";
+    hash = "sha256-9EKlCmc+zdiuEPa8YNjoQ3QLTy8vt2qcZ+6D0sWgwEU=";
   };
 
   meta = with lib; {
-    description = "A modern client-server application for the Soulseek file sharing network";
+    description = "Modern client-server application for the Soulseek file sharing network";
     homepage = "https://github.com/slskd/slskd";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
@@ -36,7 +36,7 @@ let
     src = "${src}/src/web";
     npmFlags = [ "--legacy-peer-deps" ];
     nodejs = nodejs_18;
-    npmDepsHash = "sha256-06qQ1y870TrkXhkHYADjnWVhdyiLWEqdDt3qrJ1BBFo=";
+    npmDepsHash = "sha256-WANoxgPbBoMx6o8fjhSTsKBRZadO2QaeErMMMXk0tgE=";
     installPhase = ''
       cp -r build $out
     '';
