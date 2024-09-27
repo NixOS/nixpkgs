@@ -136,6 +136,8 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cat > arch/${arch}.${cp2kVersion} << EOF
     CC         = mpicc
     CPP        =
@@ -196,6 +198,8 @@ stdenv.mkDerivation rec {
     LDFLAGS    = \$(FCFLAGS) \$(LIBS)
     include ${plumed}/lib/plumed/src/lib/Plumed.inc
     EOF
+
+    runHook postConfigure
   '';
 
   nativeCheckInputs = [
@@ -213,6 +217,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/cp2k
 
     cp exe/${arch}/* $out/bin
@@ -228,6 +234,8 @@ stdenv.mkDerivation rec {
       --set OMP_NUM_THREADS 1
 
     cp -r data/* $out/share/cp2k
+
+    runHook postInstall
   '';
 
   passthru = { inherit mpi; };
