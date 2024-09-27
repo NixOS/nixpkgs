@@ -9,13 +9,13 @@
 
 flutter324.buildFlutterApplication rec {
   pname = "musicpod";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-flutter-community";
     repo = "musicpod";
-    rev = "v${version}";
-    hash = "sha256-Xs6qDSqd10mYjLNFiPV9Irthd/hK2kE4fC6i03QvOn0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gsreA8ZTLcSvIAtODZ2gopZ78iyoN18gsSi9/IoY5/0=";
   };
 
   postPatch = ''
@@ -30,7 +30,6 @@ flutter324.buildFlutterApplication rec {
     media_kit_native_event_loop = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
     media_kit_video = "sha256-JBtFTYlztDQvN/qQcDxkK27mka2fSG+iiIIxk2mqEpY=";
     phoenix_theme = "sha256-5kgPAnK61vFi/sJ1jr3c5D2UZbxItW8YOk/IJEtHkZo=";
-    yaru = "sha256-3GexoQpwr7pazajAMyPl9rcYhmSgQeialZTvJsadP4k=";
   };
 
   buildInputs = [

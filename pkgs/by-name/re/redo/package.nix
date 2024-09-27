@@ -1,8 +1,14 @@
-{lib, stdenv, fetchFromGitHub, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "redo";
   version = "1.4";
+
   src = fetchFromGitHub {
     owner = "jdebp";
     repo = "redo";
@@ -10,20 +16,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-cA8UN4aQnJ8VyMW3mDOIPna4Ucw1kp8CirZTDhSoCpU=";
   };
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
 
   buildPhase = ''
     package/compile
   '';
+
   installPhase = ''
     package/export $out/
   '';
 
   meta = {
-    homepage = "https://jdebp.eu./Softwares/redo/";
+    homepage = "https://github.com/jdebp/redo";
     description = "System for building target files from source files";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ momeemt ];
+    mainProgram = "redo";
     platforms = lib.platforms.unix;
   };
 }
