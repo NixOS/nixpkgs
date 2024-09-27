@@ -5342,8 +5342,6 @@ with pkgs;
 
   jwx = callPackage ../tools/security/jwx { } ;
 
-  kapacitor = callPackage ../servers/monitoring/kapacitor { };
-
   karma = callPackage ../servers/monitoring/karma { };
 
   kaldi = callPackage ../tools/audio/kaldi {
