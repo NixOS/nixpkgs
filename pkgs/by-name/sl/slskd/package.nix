@@ -7,6 +7,8 @@
   fetchNpmDeps,
   mono,
   nodejs_18,
+  slskd,
+  testers,
 }:
 
 let
@@ -59,6 +61,10 @@ buildDotnetModule rec {
     rm -r $out/lib/slskd/wwwroot
     mv "$npmRoot"/build $out/lib/slskd/wwwroot
   '';
+
+  passthru = {
+    tests.version = testers.testVersion { package = slskd; };
+  };
 
   meta = {
     description = "Modern client-server application for the Soulseek file sharing network";
