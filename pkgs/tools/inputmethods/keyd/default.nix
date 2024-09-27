@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Key remapping daemon for Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ alfarel ];
     platforms = platforms.linux;
   };
 }
