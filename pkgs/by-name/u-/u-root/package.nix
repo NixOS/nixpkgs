@@ -4,6 +4,10 @@
   fetchFromGitHub,
   coreutils,
   bash,
+
+  linuxManualConfig,
+  fetchurl,
+  linux_latest,
 }:
 
 buildGoModule rec {
@@ -37,10 +41,28 @@ buildGoModule rec {
       --replace-fail '-files=/bin/bash' '-files=${bash}/bin/bash'
   '';
 
+  passthru = {
+    # Somewhat minimal kernel config for Go/u-root, used by upstream for testing.
+    # This can be used to quickly run u-root locally with proper serial console output.
+    kernel-amd64 = linuxManualConfig {
+      inherit (linux_latest) version src;
+      configfile = fetchurl {
+        url = "https://raw.githubusercontent.com/hugelgupf/vmtest/5d9f3d34a58dc7b13bca786e8ac32d3e2ce4e95d/images/kernel-amd64/config_linux.txt";
+        hash = "sha256-CjhWWK6YwSOXP10mpnJjG5nwLWs2cDtebvlDBLzN5fI=";
+      };
+      allowImportFromDerivation = true;
+    };
+  };
+
   meta = {
     description = "A fully Go userland with Linux bootloaders";
-    longDescription = "u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go";
-    homepage = "https://github.com/u-root/u-root";
+    longDescription = ''
+      u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go.
+
+      The package exposes `u-root.kernel-amd64` passthru for a minimal and pre-configured kernel to be used locally with QEMU.
+    '';
+    homepage = "https://u-root.org/";
+    downloadPage = "https://github.com/u-root/u-root";
     changelog = "https://github.com/u-root/u-root/blob/${src.rev}/RELEASES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ katexochen ];
