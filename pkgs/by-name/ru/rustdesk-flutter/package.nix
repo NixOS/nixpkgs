@@ -4,7 +4,7 @@
   cargo,
   copyDesktopItems,
   fetchFromGitHub,
-  flutter316,
+  flutter319,
   ffmpeg,
   gst_all_1,
   fuse3,
@@ -29,7 +29,7 @@ let
 
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.3.0/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.3.1/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -49,14 +49,14 @@ let
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-flutter316.buildFlutterApplication rec {
+flutter319.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.3.0";
+  version = "1.3.1";
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     rev = version;
-    hash = "sha256-pDGURsF0eft2BkuXOzaMtNCHp9VFgZZh4bbNRa5NDII=";
+    hash = "sha256-PioaSdvgJ9oXC5DAbl+em7rxcGx1om9+sjCMdrvox90=";
   };
 
   strictDeps = true;
@@ -64,7 +64,7 @@ flutter316.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.0/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.1/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {
     dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
@@ -84,13 +84,13 @@ flutter316.buildFlutterApplication rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "android-wakelock-0.1.0" = "sha256-09EH/U1BBs3l4galQOrTKmPUYBgryUjfc/rqPZhdYc4=";
-      "arboard-3.4.0" = "sha256-lZIG5z115ExR6DcUut1rk9MrYFzSyCYH9kNGIikOPJM=";
+      "arboard-3.4.0" = "sha256-xuMfMakHVj/zjiUr6PVFy+aNQxwsXtAAFlTYxUt12fU=";
       "cacao-0.4.0-beta2" = "sha256-U5tCLeVxjmZCm7ti1u71+i116xmozPaR69pCsA4pxrM=";
       "clipboard-master-4.0.0-beta.6" = "sha256-GZyzGMQOZ0iwGNZa/ZzFp8gU2tQVWZBpAbim8yb6yZA=";
       "confy-0.4.0-2" = "sha256-V7BCKISrkJIxWC3WT5+B5Vav86YTQvdO9TO6A++47FU=";
       "core-foundation-0.9.3" = "sha256-iB4OVmWZhuWbs9RFWvNc+RNut6rip2/50o5ZM6c0c3g=";
       "evdev-0.11.5" = "sha256-aoPmjGi/PftnH6ClEWXHvIj0X3oh15ZC1q7wPC1XPr0=";
-      "hwcodec-0.7.0" = "sha256-pfzcaD7h/U5ou+P7qRLR56iXOkm043rF74y+Q0FsVLo=";
+      "hwcodec-0.7.0" = "sha256-SswZI2BJ4pRXT379cziJlisPsc5sOiOiDqJ5WaPETnA=";
       "impersonate_system-0.1.0" = "sha256-pIV7s2qGoCIUrhaRovBDCJaGQ/pMdJacDXJmeBpkcyI=";
       "keepawake-0.4.3" = "sha256-cqSpkq/PCz+5+ZUyPy5hF6rP3fBzuZDywyxMUQ50Rk4=";
       "machine-uid-0.3.0" = "sha256-rEOyNThg6p5oqE9URnxSkPtzyW8D4zKzLi9pAnzTElE=";
@@ -98,7 +98,7 @@ flutter316.buildFlutterApplication rec {
       "pam-0.7.0" = "sha256-o47tVoFlW9RiL7O8Lvuwz7rMYQHO+5TG27XxkAdHEOE=";
       "pam-sys-1.0.0-alpha4" = "sha256-5HIErVWnanLo5054NgU+DEKC2wwyiJ8AHvbx0BGbyWo=";
       "parity-tokio-ipc-0.7.3-4" = "sha256-PKw2Twd2ap+tRrQxqg8T1FvpoeKn0hvBqn1Z44F1LcY=";
-      "rdev-0.5.0-2" = "sha256-KrzNa4sKyuVw3EV/Ec9VBNRyJy7QFR2Gu4c2WkltwUw=";
+      "rdev-0.5.0-2" = "sha256-G+PvnA5mZyN080uoI5CGj/dQ9B1J4h5iYd7214MKBR8=";
       "reqwest-0.11.23" = "sha256-kEUT+gs4ziknDiGdPMLnj5pmxC5SBpLopZ8jZ34GDWc=";
       "rust-pulsectl-0.2.12" = "sha256-8jXTspWvjONFcvw9/Z8C43g4BuGZ3rsG32tvLMQbtbM=";
       "sciter-rs-0.5.57" = "sha256-5Nd9npdx8yQJEczHv7WmSmrE1lBfvp5z7BubTbYBg3E=";
@@ -172,7 +172,7 @@ flutter316.buildFlutterApplication rec {
   '';
 
   preBuild = ''
-    # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84¶
+    # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
     sed -i 's/static=//g' /build/cargo-vendor-dir/hwcodec-*/build.rs
 
     # Build the Flutter/Rust bridge bindings
@@ -200,7 +200,6 @@ flutter316.buildFlutterApplication rec {
     mkdir -p $out/share/polkit-1/actions $out/share/icons/hicolor/{256x256,scalable}/apps
     cp ../res/128x128@2x.png $out/share/icons/hicolor/256x256/apps/rustdesk.png
     cp ../res/scalable.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
-    cp ../res/com.rustdesk.RustDesk.policy $out/share/polkit-1/actions/
   '';
 
   desktopItems = [
