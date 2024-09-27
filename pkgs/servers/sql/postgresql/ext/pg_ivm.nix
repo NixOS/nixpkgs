@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
+  passthru = {
+    shared_preload_library = "pg_ivm";
+  };
+
   meta = with lib; {
     description = "Materialized views with IVM (Incremental View Maintenance) for PostgreSQL";
     homepage = "https://github.com/sraoss/pg_ivm";

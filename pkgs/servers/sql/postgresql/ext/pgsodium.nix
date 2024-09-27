@@ -35,31 +35,35 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "pgsodium-test";
-    dontUnpack = true;
-    doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
-    failureHook = "postgresqlStop";
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    postgresqlExtraSettings = ''
-      shared_preload_libraries=pgsodium
-    '';
-    passAsFile = [ "sql" ];
-    sql = ''
-      CREATE EXTENSION pgsodium;
+  passthru = {
+    shared_preload_library = "pgsodium";
 
-      SELECT pgsodium.version();
-      SELECT pgsodium.crypto_auth_keygen();
-      SELECT pgsodium.randombytes_random() FROM generate_series(0, 5);
-      SELECT * FROM pgsodium.crypto_box_new_keypair();
-    '';
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -f $sqlPath
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
+    tests.extension = stdenv.mkDerivation {
+      name = "pgsodium-test";
+      dontUnpack = true;
+      doCheck = true;
+      nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
+      failureHook = "postgresqlStop";
+      postgresqlTestUserOptions = "LOGIN SUPERUSER";
+      postgresqlExtraSettings = ''
+        shared_preload_libraries=pgsodium
+      '';
+      passAsFile = [ "sql" ];
+      sql = ''
+        CREATE EXTENSION pgsodium;
+
+        SELECT pgsodium.version();
+        SELECT pgsodium.crypto_auth_keygen();
+        SELECT pgsodium.randombytes_random() FROM generate_series(0, 5);
+        SELECT * FROM pgsodium.crypto_box_new_keypair();
+      '';
+      checkPhase = ''
+        runHook preCheck
+        psql -a -v ON_ERROR_STOP=1 -f $sqlPath
+        runHook postCheck
+      '';
+      installPhase = "touch $out";
+    };
   };
 
   meta = with lib; {

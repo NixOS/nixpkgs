@@ -48,6 +48,10 @@ stdenv.mkDerivation {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
+  passthru = {
+    shared_preload_library = "pg_hint_plan";
+  };
+
   meta = with lib; {
     description = "Extension to tweak PostgreSQL execution plans using so-called 'hints' in SQL comments";
     homepage = "https://github.com/ossc-db/pg_hint_plan";

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, postgresql, protobufc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cstore_fdw";
   version = "unstable-2022-03-08";
 
@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     cp *.sql     $out/share/postgresql/extension
     cp *.control $out/share/postgresql/extension
   '';
+
+  passthru = {
+    shared_preload_library = "cstore_fdw";
+  };
 
   meta = with lib; {
     broken      = versionAtLeast postgresql.version "14";

@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     cp *.control     $out/share/postgresql/extension
   '';
 
+  passthru = {
+    shared_preload_library = "pg_partman_bgw";
+  };
+
   meta = with lib; {
     description = "Partition management extension for PostgreSQL";
     homepage    = "https://github.com/pgpartman/pg_partman";

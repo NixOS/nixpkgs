@@ -20,6 +20,10 @@ stdenv.mkDerivation {
     install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
   '';
 
+  passthru = {
+    shared_preload_library = "pg_similarity";
+  };
+
   meta = {
     description = "Extension to support similarity queries on PostgreSQL";
     longDescription = ''

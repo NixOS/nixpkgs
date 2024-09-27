@@ -113,7 +113,10 @@ stdenv.mkDerivation rec {
     mv doc/* $doc/share/doc/postgis/
   '';
 
-  passthru.tests.postgis = nixosTests.postgis;
+  passthru = {
+    shared_preload_library = "postgis-3";
+    tests.postgis = nixosTests.postgis;
+  };
 
   meta = with lib; {
     description = "Geographic Objects for PostgreSQL";

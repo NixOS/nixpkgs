@@ -45,6 +45,10 @@ stdenv.mkDerivation {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
+  passthru = {
+    shared_preload_library = "pgaudit";
+  };
+
   meta = with lib; {
     description = "Open Source PostgreSQL Audit Logging";
     homepage = "https://github.com/pgaudit/pgaudit";

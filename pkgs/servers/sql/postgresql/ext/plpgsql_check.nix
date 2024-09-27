@@ -19,20 +19,24 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "plpgsql-check-test";
-    dontUnpack = true;
-    doCheck = true;
-    buildInputs = [ postgresqlTestHook ];
-    nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.plpgsql_check ])) ];
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    failureHook = "postgresqlStop";
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION plpgsql_check;"
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
+  passthru = {
+    shared_preload_library = "plpgsql_check";
+
+    tests.extension = stdenv.mkDerivation {
+      name = "plpgsql-check-test";
+      dontUnpack = true;
+      doCheck = true;
+      buildInputs = [ postgresqlTestHook ];
+      nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.plpgsql_check ])) ];
+      postgresqlTestUserOptions = "LOGIN SUPERUSER";
+      failureHook = "postgresqlStop";
+      checkPhase = ''
+        runHook preCheck
+        psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION plpgsql_check;"
+        runHook postCheck
+      '';
+      installPhase = "touch $out";
+    };
   };
 
   meta = with lib; {
