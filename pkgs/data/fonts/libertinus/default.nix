@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "libertinus";
-  version = "7.050";
+  version = "7.051";
 
   src = fetchurl {
     url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.zst";
-    hash = "sha256-y7VMTEgjdusXu2OXSUSJuqz/B1XThk+bXHcuLz1D1Ck=";
+    hash = "sha256-JQZ3ySnTd1owkTZDWUN5ryZKwu8oAQNaody+MLm+I6Y=";
   };
 
   nativeBuildInputs = [ zstd ];
