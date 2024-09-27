@@ -3,6 +3,15 @@
 , fetchFromBitbucket
 , cmake
 , pkg-config
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, lerc
+, libxkbcommon
+, libepoxy
+, libXtst
 , wrapGAppsHook3
 , pixman
 , libpthreadstubs
@@ -10,10 +19,11 @@
 , libXau
 , libXdmcp
 , lcms2
+, libraw
 , libiptcdata
 , fftw
 , expat
-, pcre
+, pcre2
 , libsigcxx
 , lensfun
 , librsvg
@@ -21,6 +31,10 @@
 , exiv2
 , exiftool
 , mimalloc
+, openexr_3
+, ilmbase
+, opencolorio
+, color-transformation-language
 }:
 
 stdenv.mkDerivation rec {
@@ -41,16 +55,26 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    util-linux
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    lerc
+    libxkbcommon
+    libepoxy
+    libXtst
     pixman
     libpthreadstubs
     gtkmm3
     libXau
     libXdmcp
     lcms2
+    libraw
     libiptcdata
     fftw
     expat
-    pcre
+    pcre2
     libsigcxx
     lensfun
     librsvg
@@ -58,11 +82,18 @@ stdenv.mkDerivation rec {
     exiftool
     libcanberra-gtk3
     mimalloc
+    openexr_3
+    ilmbase
+    opencolorio
+    color-transformation-language
   ];
 
   cmakeFlags = [
     "-DPROC_TARGET_NUMBER=2"
     "-DCACHE_NAME_SUFFIX=\"\""
+    "-DENABLE_OCIO=True"
+    "-DENABLE_CTL=1"
+    "-DCTL_INCLUDE_DIR=${color-transformation-language}/include/CTL"
   ];
 
   CMAKE_CXX_FLAGS = toString [
