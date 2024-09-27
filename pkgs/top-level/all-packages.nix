@@ -25575,8 +25575,6 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  xwaylandvideobridge = libsForQt5.callPackage ../tools/wayland/xwaylandvideobridge { };
-
   yaws = callPackage ../servers/http/yaws { };
 
   zabbixFor = version: rec {
