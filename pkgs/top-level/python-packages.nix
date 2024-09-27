@@ -2156,6 +2156,10 @@ self: super: with self; {
 
   cftime = callPackage ../development/python-modules/cftime { };
 
+  cgal = callPackage ../development/python-modules/cgal {
+    inherit (pkgs) cgal;
+  };
+
   cgen = callPackage ../development/python-modules/cgen { };
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils { };
