@@ -272,9 +272,9 @@ let
   #  * [CVE-1999-00003](https://www.cve.org/CVERecord?id=CVE-1999-00003)
   writeAdvisoryDescription =
     if (lib.lists.remove null (retrievePatchAttributes [ "xsa" ]) != [ ]) then
-      lib.lists.zipListsWith (a: b: a + b)
-        (lib.lists.zipListsWith (a: b: a + "**" + b + ".**\n  >")
-          (lib.lists.zipListsWith (a: b: "* [Xen Security Advisory #" + a + "](" + b + "): ")
+      lib.lists.zipListsWith (header: description: header + description) # The full patch description item (the header created below + patch.meta.longDescription)
+        (lib.lists.zipListsWith (item: title: item + "**${title}.**\n  >") # The full `header` (item + XSA title)
+          (lib.lists.zipListsWith (number: link: "* [Xen Security Advisory #${number}](${link}): ") # The `item` (number + link + formatting)
             (lib.lists.remove null (retrievePatchAttributes [ "xsa" ]))
             (
               lib.lists.remove null (retrievePatchAttributes [
@@ -691,10 +691,16 @@ stdenv.mkDerivation (finalAttrs: {
           # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
           # This will hopefully give users the peace of mind that their Xen is secure, without needing
           # to search the source code for the XSA patches.
-          + lib.strings.optionalString (writeAdvisoryDescription != [ ]) (
-            "\n\nThis Xen (${version}) has been patched against the following known security vulnerabilities:\n"
-            + lib.strings.removeSuffix "\n" (lib.strings.concatLines writeAdvisoryDescription)
-          );
+          + lib.strings.optionalString (writeAdvisoryDescription != [ ]) ''
+
+
+            <details>
+              <summary>This Xen (${version}) has been patched against the following known security vulnerabilities:</summary>
+
+            ${builtins.concatStringsSep "\n" writeAdvisoryDescription}
+
+            </details>
+          '';
 
         homepage = "https://xenproject.org/";
         downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
