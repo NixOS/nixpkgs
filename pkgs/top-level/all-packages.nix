@@ -12142,8 +12142,6 @@ with pkgs;
 
   sanctity = callPackage ../tools/misc/sanctity { };
 
-  sasquatch = callPackage ../tools/filesystems/sasquatch { };
-
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
 
   sbs = callPackage ../tools/X11/sbs { };
