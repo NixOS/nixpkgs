@@ -28940,8 +28940,6 @@ with pkgs;
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
-  dablin = callPackage ../applications/radio/dablin { };
-
   daktilo = callPackage ../tools/misc/daktilo { };
 
   darcs = haskell.lib.compose.disableCabalFlag "library"
