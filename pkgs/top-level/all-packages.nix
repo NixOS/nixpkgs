@@ -3170,11 +3170,6 @@ with pkgs;
 
   awscli = callPackage ../tools/admin/awscli { };
 
-  awscli2 = callPackage ../by-name/aw/awscli2/package.nix {
-    # change when https://github.com/aws/aws-cli/issues/8342 resolved
-    python3 = python311;
-  };
-
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
 
   awsebcli = callPackage ../tools/virtualization/awsebcli { };
@@ -13280,8 +13275,6 @@ with pkgs;
   ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
 
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
-
-  ubridge = callPackage ../tools/networking/ubridge { };
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
 
