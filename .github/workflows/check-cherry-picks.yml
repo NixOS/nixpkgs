@@ -6,7 +6,8 @@ on:
      - 'staging-**'
      - '!staging-next'
 
-permissions: {}
+permissions:
+  checks: write
 
 jobs:
   check:
@@ -22,5 +23,8 @@ jobs:
       env:
         BASE_SHA: ${{ github.event.pull_request.base.sha }}
         HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO_API_URL: https://api.github.com/repos/${{ github.repository }}
+        SELF_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
         ./maintainers/scripts/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA"
