@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  system,
 
   autoPatchelfHook,
   dpkg,
@@ -77,12 +76,13 @@ let
     '';
   };
 
-  arch = if system == "x86_64-linux" then "x86_64" else "aarch64";
+  arch = if stdenv.isAarch64 then "aarch64" else "x86_64";
   hash =
-    if system == "x86_64-linux" then
-      "sha256-R/yHXx29T/7NNc1L1AmevzXp1k98qnmvOEd3cfSlJuA="
+    if stdenv.isAarch64 then
+      "sha256-s7wrt/7whAvaF0m15bxqhd6g8I7E+tRYLJYrHpTaiwc="
+
     else
-      "sha256-s7wrt/7whAvaF0m15bxqhd6g8I7E+tRYLJYrHpTaiwc=";
+      "sha256-R/yHXx29T/7NNc1L1AmevzXp1k98qnmvOEd3cfSlJuA=";
 
   linux = stdenv.mkDerivation {
     inherit pname version meta;
