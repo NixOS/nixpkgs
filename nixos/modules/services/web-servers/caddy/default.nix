@@ -336,6 +336,20 @@ in
         :::
       '';
     };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable opening the specified http(s) ports in the firewall.
+        Any port set to `null` will not be opened.
+
+        ::: {.note}
+        If you use other ports for your virtual hosts, you need to open them manually.
+        :::
+      '';
+    };
   };
 
   # implementation
@@ -424,5 +438,10 @@ in
         listToAttrs certCfg;
 
     environment.etc.${etcConfigFile}.source = cfg.configFile;
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = filter (port: port != null) [ cfg.httpPort cfg.httpsPort ];
+      allowedUDPPorts = optional (cfg.httpsPort != null) cfg.httpsPort;
+    };
   };
 }
