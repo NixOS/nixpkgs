@@ -38250,8 +38250,6 @@ with pkgs;
 
   sct = callPackage ../tools/X11/sct { };
 
-  seafile-server = callPackage ../servers/seafile-server { };
-
   seafile-shared = callPackage ../misc/seafile-shared { };
 
   ser2net = callPackage ../servers/ser2net { };
