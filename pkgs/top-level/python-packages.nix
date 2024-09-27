@@ -17902,6 +17902,8 @@ self: super: with self; {
     inherit (pkgs) zopfli;
   };
 
+  zpp = callPackage ../development/python-modules/zpp { };
+
   zstandard = callPackage ../development/python-modules/zstandard { };
 
   zstd = callPackage ../development/python-modules/zstd {
