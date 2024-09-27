@@ -121,6 +121,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "ulauncher";
     maintainers = with maintainers; [ aaronjanse sebtm ];
   };
 }
