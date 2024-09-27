@@ -47,10 +47,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail /usr ""
+      --replace-fail /usr/local ""
 
-    substituteInPlace keyd.service \
-      --replace-fail /usr/bin $out/bin
+    substituteInPlace keyd.service.in \
+      --replace-fail @PREFIX@ $out
   '';
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
