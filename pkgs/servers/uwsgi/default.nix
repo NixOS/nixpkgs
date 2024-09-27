@@ -71,13 +71,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.26";
+  version = "2.0.27";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     rev = finalAttrs.version;
-    hash = "sha256-3nmmVNNDvQ1RzaD5BQFrScHHnmUtMwjo3wodEGIJCvI=";
+    hash = "sha256-GOI92fwTfO/XAvNUHJMX6BtGFSVVOPWa1Jjw/UCJGi4=";
   };
 
   patches = [
