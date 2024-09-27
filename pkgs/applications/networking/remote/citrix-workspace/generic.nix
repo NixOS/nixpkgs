@@ -211,8 +211,8 @@ stdenv.mkDerivation rec {
     echo "Copy .desktop files."
     cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
 
-    # We introduce a dependency on the source file so that it need not be redownloaded everytime
-    echo $src >> "$out/share/workspace_dependencies.pin"
+  # We introduce a dependency on the source file so that it need not be redownloaded everytime
+  echo $src >> "$out/share/workspace_dependencies.pin"
 
     runHook postInstall
   '';
