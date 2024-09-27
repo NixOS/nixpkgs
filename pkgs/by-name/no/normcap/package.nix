@@ -7,6 +7,8 @@
 , wl-clipboard
 , libnotify
 , xorg
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 let
@@ -37,12 +39,6 @@ ps.buildPythonApplication rec {
     hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
   };
 
-  postPatch = ''
-    # disable coverage testing
-    substituteInPlace pyproject.toml \
-      --replace-fail "addopts = [" "addopts_ = ["
-  '';
-
   pythonRemoveDeps = [
     "pyside6-essentials"
   ];
@@ -51,9 +47,13 @@ ps.buildPythonApplication rec {
     "shiboken6"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     ps.hatchling
     ps.babel
+  ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
   ];
 
   dependencies = [
@@ -69,8 +69,15 @@ ps.buildPythonApplication rec {
     )
   '';
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/pixmaps
+    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/pixmaps/
+  '';
+
   nativeCheckInputs = wrapperDeps ++ [
     ps.pytestCheckHook
+    ps.pytest-cov-stub
+    ps.pytest-instafail
     ps.pytest-qt
     ps.toml
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -134,6 +141,20 @@ ps.buildPythonApplication rec {
     "tests/integration/test_tray_menu.py"
     # failure unknown, crashes in first test with `.show()`
     "tests/tests_gui/test_loading_indicator.py"
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.github.dynobo.normcap";
+      desktopName = "NormCap";
+      genericName = "OCR powered screen-capture tool";
+      comment = "Extract text from an image directly into clipboard";
+      exec = "normcap";
+      icon = "normcap";
+      terminal = false;
+      categories = ["Utility" "Office"];
+      keywords = ["Text" "Extraction" "OCR"];
+    })
   ];
 
   meta = with lib; {
