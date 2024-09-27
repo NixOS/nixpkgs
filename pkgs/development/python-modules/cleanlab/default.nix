@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -31,16 +30,14 @@
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.6.6";
+  version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-08ePFTCRuggr4hTCfr/gbzMhLozz4KCywhPFSKYDNng=";
+    hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
   };
 
   build-system = [ setuptools ];

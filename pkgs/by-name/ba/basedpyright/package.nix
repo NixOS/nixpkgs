@@ -4,6 +4,7 @@
   runCommand,
   buildNpmPackage,
   stdenvNoCC,
+  docify,
   testers,
   writeText,
   jq,
@@ -61,32 +62,15 @@ let
     '';
   };
 
-  docify = python3.pkgs.buildPythonApplication {
-    pname = "docify";
-    version = "unstable";
-    format = "pyproject";
-    src = fetchFromGitHub {
-      owner = "AThePeanut4";
-      repo = "docify";
-      rev = "7380a6faa6d1e8a3dc790a00254e6d77f84cbd91";
-      hash = "sha256-BPR1rc/JzdBweiWmdHxgardDDrJZVWkUIF3ZEmEYf/A=";
-    };
-    buildInputs = [ python3.pkgs.setuptools ];
-    propagatedBuildInputs = [
-      python3.pkgs.libcst
-      python3.pkgs.tqdm
-    ];
-  };
-
   docstubs = stdenvNoCC.mkDerivation {
     name = "docstubs";
     inherit src;
-    buildInputs = [ docify ];
+    nativeBuildInputs = [ docify ];
 
     installPhase = ''
       runHook preInstall
       cp -r packages/pyright-internal/typeshed-fallback docstubs
-      ${docify}/bin/docify docstubs/stdlib --builtins-only --in-place
+      docify docstubs/stdlib --builtins-only --in-place
       cp -rv docstubs "$out"
       runHook postInstall
     '';
