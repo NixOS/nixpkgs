@@ -98,6 +98,11 @@ let
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
+                , # This function is used to transform imports.
+                  # It is mapped over all imports recursively and may transform the imported value.
+                  # Defaults to the identity function, which is a no-op.
+                  # Imports can also be filtered by returning `{}` Which is the no-op value.
+                  transformImport ? x: x
                 }:
     let
       withWarnings = x:
@@ -239,6 +244,11 @@ let
 
       merged =
         let collected = collectModules
+          # global Options
+          {
+            inherit transformImport;
+          }
+          # regular Arguments
           class
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
@@ -342,7 +352,7 @@ let
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
-  collectModules = class: let
+  collectModules = {transformImport}: class: let
 
       # Like unifyModuleSyntax, but also imports paths and calls functions if necessary
       loadModule = args: fallbackFile: fallbackKey: m:
@@ -409,8 +419,9 @@ let
           };
         in parentFile: parentKey: initialModules: args: collectResults (imap1 (n: x:
           let
+            finalImports = map transformImport module.imports;
             module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
-            collectedImports = collectStructuredModules module._file module.key module.imports args;
+            collectedImports = collectStructuredModules module._file module.key finalImports args;
           in {
             key = module.key;
             module = module;
