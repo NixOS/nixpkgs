@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-DVvdCt/t7aA2IAs+cL6wT129PX8s3P5gHawcLAvAAGw=";
+    hash = "sha256-IAb9Vj5KwyXpARD2SIgYRXhz1ihwcgCTwx3zbgoN6dE=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ python312 ];
-  env.NIX_CFLAGS_LINK = lib.optionals stdenv.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
 
   meta = with lib; {
     description = "Better hardware description language";

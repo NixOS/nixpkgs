@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
     ]
     ++ lib.optional openjpegSupport openjpeg
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ApplicationServices
       Foundation
     ];

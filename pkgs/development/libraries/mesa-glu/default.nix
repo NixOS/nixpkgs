@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
-  mesonFlags = lib.optionals stdenv.isDarwin [
+  mesonFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-Dgl_provider=gl" # glvnd is default
   ];
 

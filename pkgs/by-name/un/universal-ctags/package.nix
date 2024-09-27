@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     jansson
   ]
-  ++ lib.optional stdenv.isDarwin libiconv
-  ++ lib.optional stdenv.isLinux libseccomp;
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
 

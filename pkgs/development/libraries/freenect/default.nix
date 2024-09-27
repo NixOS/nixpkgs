@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libusb1 libglut libGLU libGL libXi libXmu ]
-    ++ lib.optionals stdenv.isDarwin [ GLUT Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ GLUT Cocoa ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

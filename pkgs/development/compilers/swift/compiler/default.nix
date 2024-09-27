@@ -50,7 +50,7 @@ let
   sources = callPackage ../sources.nix { };
 
   # Tools invoked by swift at run-time.
-  runtimeDeps = lib.optionals stdenv.isDarwin [
+  runtimeDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     # libtool is used for static linking. This is part of cctools, but adding
     # that as a build input puts an unwrapped linker in PATH, and breaks
     # builds. This small derivation exposes just libtool.
@@ -78,7 +78,7 @@ let
     else targetPlatform.parsed.kernel.name;
 
   # Apple Silicon uses a different CPU name in the target triple.
-  swiftArch = if stdenv.isDarwin && stdenv.isAarch64 then "arm64"
+  swiftArch = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then "arm64"
     else targetPlatform.parsed.cpu.name;
 
   # On Darwin, a `.swiftmodule` is a subdirectory in `lib/swift/<OS>`,
@@ -109,7 +109,7 @@ let
     "toolchain-tools"
     "toolchain-dev-tools"
     "license"
-    (if stdenv.isDarwin then "sourcekit-xpc-service" else "sourcekit-inproc")
+    (if stdenv.hostPlatform.isDarwin then "sourcekit-xpc-service" else "sourcekit-inproc")
     "swift-remote-mirror"
     "swift-remote-mirror-headers"
   ];
@@ -205,7 +205,7 @@ in stdenv.mkDerivation {
     makeClangWrapper
     makeSwiftcWrapper
   ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
       sigtool # codesign
       DarwinTools # sw_vers
@@ -218,10 +218,10 @@ in stdenv.mkDerivation {
     swig
     libxml2
   ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libuuid
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreServices
       Foundation
       Combine
@@ -262,7 +262,7 @@ in stdenv.mkDerivation {
     ${copySource "swift-experimental-string-processing"}
     ${copySource "swift-syntax"}
     ${lib.optionalString
-      (!stdenv.isDarwin)
+      (!stdenv.hostPlatform.isDarwin)
       (copySource "swift-corelibs-libdispatch")}
 
     chmod -R u+w .
@@ -272,7 +272,7 @@ in stdenv.mkDerivation {
     # Just patch all the things for now, we can focus this later.
     # TODO: eliminate use of env.
     find -type f -print0 | xargs -0 sed -i \
-    ${lib.optionalString stdenv.isDarwin
+    ${lib.optionalString stdenv.hostPlatform.isDarwin
       "-e 's|/usr/libexec/PlistBuddy|${xcbuild}/bin/PlistBuddy|g'"} \
       -e 's|/usr/bin/env|${coreutils}/bin/env|g' \
       -e 's|/usr/bin/make|${gnumake}/bin/make|g' \
@@ -345,7 +345,7 @@ in stdenv.mkDerivation {
       hash = "sha256-nkRPWx8gNvYr7mlvEUiOAb1rTrf+skCZjAydJVUHrcI=";
     }}
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
       --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
       --replace 'SysRoot + "/usr/lib' '"${glibc}/lib" "' \
@@ -384,7 +384,7 @@ in stdenv.mkDerivation {
 
     patchShebangs .
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # NOTE: This interferes with ABI stability on Darwin, which uses the system
     # libraries in the hardcoded path /usr/lib/swift.
     fixCmakeFiles .
@@ -392,7 +392,7 @@ in stdenv.mkDerivation {
   '';
 
   # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
-  hardeningDisable = lib.optional stdenv.isAarch64 "zerocallusedregs";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isAarch64 "zerocallusedregs";
 
   configurePhase = ''
     export SWIFT_SOURCE_ROOT="$PWD"
@@ -451,7 +451,7 @@ in stdenv.mkDerivation {
     "
     buildProject llvm llvm-project/llvm
 
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Add appleSwiftCore to the search paths. We can't simply add it to
     # buildInputs, because it is potentially an older stdlib than the one we're
     # building. We have to remove it again after the main Swift build, or later
@@ -477,7 +477,7 @@ in stdenv.mkDerivation {
     #   Fixed in: https://github.com/apple/swift/commit/84083afef1de5931904d5c815d53856cdb3fb232
     cmakeFlags="
       -GNinja
-      -DBOOTSTRAPPING_MODE=BOOTSTRAPPING${lib.optionalString stdenv.isDarwin "-WITH-HOSTLIBS"}
+      -DBOOTSTRAPPING_MODE=BOOTSTRAPPING${lib.optionalString stdenv.hostPlatform.isDarwin "-WITH-HOSTLIBS"}
       -DSWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING=ON
       -DSWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY=ON
       -DSWIFT_ENABLE_EXPERIMENTAL_DISTRIBUTED=ON
@@ -490,11 +490,11 @@ in stdenv.mkDerivation {
       -DSWIFT_PATH_TO_SWIFT_SYNTAX_SOURCE=$SWIFT_SOURCE_ROOT/swift-syntax
       -DSWIFT_PATH_TO_STRING_PROCESSING_SOURCE=$SWIFT_SOURCE_ROOT/swift-experimental-string-processing
       -DSWIFT_INSTALL_COMPONENTS=${lib.concatStringsSep ";" swiftInstallComponents}
-      -DSWIFT_STDLIB_ENABLE_OBJC_INTEROP=${if stdenv.isDarwin then "ON" else "OFF"}
+      -DSWIFT_STDLIB_ENABLE_OBJC_INTEROP=${if stdenv.hostPlatform.isDarwin then "ON" else "OFF"}
     "
     buildProject swift
 
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Restore search paths to remove appleSwiftCore.
     export NIX_SWIFTFLAGS_COMPILE="$OLD_NIX_SWIFTFLAGS_COMPILE"
     export NIX_LDFLAGS="$OLD_NIX_LDFLAGS"
@@ -526,18 +526,18 @@ in stdenv.mkDerivation {
       -DLLDB_ENABLE_LUA=OFF
       -DLLDB_INCLUDE_TESTS=OFF
       -DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON
-      ${lib.optionalString stdenv.isDarwin ''
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       -DLLDB_USE_SYSTEM_DEBUGSERVER=ON
       ''}
       -DLibEdit_INCLUDE_DIRS=${libedit.dev}/include
       -DLibEdit_LIBRARIES=${libedit}/lib/libedit${stdenv.hostPlatform.extensions.sharedLibrary}
-      -DCURSES_INCLUDE_DIRS=${if stdenv.isDarwin then "/var/empty" else ncurses.dev}/include
+      -DCURSES_INCLUDE_DIRS=${if stdenv.hostPlatform.isDarwin then "/var/empty" else ncurses.dev}/include
       -DCURSES_LIBRARIES=${ncurses}/lib/libncurses${stdenv.hostPlatform.extensions.sharedLibrary}
       -DPANEL_LIBRARIES=${ncurses}/lib/libpanel${stdenv.hostPlatform.extensions.sharedLibrary}
     ";
     buildProject lldb llvm-project/lldb
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Need to do a standalone build of concurrency for Darwin back deployment.
     # Based on: utils/swift_build_support/swift_build_support/products/backdeployconcurrency.py
     cmakeFlags="
@@ -641,7 +641,7 @@ in stdenv.mkDerivation {
     cd $SWIFT_BUILD_ROOT/swift
     ninjaInstallPhase
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
     cd $SWIFT_BUILD_ROOT/swift-concurrency-backdeploy
     installTargets=install-back-deployment
     ninjaInstallPhase
@@ -669,20 +669,20 @@ in stdenv.mkDerivation {
     mkdir $lib/lib/swift/clang
     cp -P ${clang}/resource-root/* $lib/lib/swift/clang/
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Install required library for ObjC interop.
     # TODO: Is there no source code for this available?
     cp -r ${CLTools_Executables}/usr/lib/arc $out/lib/arc
     ''}
   '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     # This is cheesy, but helps the patchelf hook remove /build from RPATH.
     cd $SWIFT_BUILD_ROOT/..
     mv build buildx
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # These libraries need to use the system install name. The official SDK
     # does the same (as opposed to using rpath). Presumably, they are part of
     # the stable ABI. Not using the system libraries at run-time is known to

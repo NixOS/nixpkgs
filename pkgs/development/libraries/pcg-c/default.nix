@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.linus ];
-    broken = stdenv.isi686; # https://github.com/imneme/pcg-c/issues/11
+    broken = stdenv.hostPlatform.isi686; # https://github.com/imneme/pcg-c/issues/11
   };
 }

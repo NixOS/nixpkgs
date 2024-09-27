@@ -48,7 +48,7 @@
     postPatch = ''
       sed -Ei service/profile/scripts.go \
         -e 's|#!\s*(/usr)?/bin/(env )?bash\b|#! ${runtimeShell}|g'
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       sed -Ei service/profile/scripts.go \
         -e 's|(/usr)?/s?bin/busctl\b|busctl|g' \
         -e 's|(/usr)?/s?bin/resolvectl\b|resolvectl|g' \
@@ -57,7 +57,7 @@
 
     postInstall = ''
       mv $out/bin/service $out/bin/pritunl-client-service
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/lib/systemd/system/
       cp $src/resources_linux/pritunl-client.service $out/lib/systemd/system/
       substituteInPlace $out/lib/systemd/system/pritunl-client.service \
@@ -70,7 +70,7 @@
         which
         gnused
         gnugrep
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         openresolv
         systemd
         iproute2
@@ -83,7 +83,7 @@
           --prefix PATH : ${lib.makeBinPath hookScriptsDeps} \
           --add-flags "--setenv PATH \$PATH"
       '';
-    in lib.optionalString stdenv.isLinux ''
+    in lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/pritunl-client-service \
         --prefix PATH : "${lib.makeBinPath ([ openvpn-wrapped ])}"
     '';
@@ -113,7 +113,7 @@ in stdenv.mkDerivation {
     makeWrapper ${electron}/bin/electron $out/bin/pritunl-client-electron \
       --add-flags $out/lib/pritunl_client_electron
 
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/lib/systemd/system/
     ln -s ${service}/lib/systemd/system/pritunl-client.service $out/lib/systemd/system/
 

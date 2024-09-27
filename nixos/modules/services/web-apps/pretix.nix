@@ -403,6 +403,15 @@ in
       '')
     ];
 
+    services.logrotate.settings.pretix = {
+      files = "${cfg.settings.pretix.logdir}/*.log";
+      su = "${cfg.user} ${cfg.group}";
+      frequency = "weekly";
+      rotate = "12";
+      copytruncate = true;
+      compress = true;
+    };
+
     services = {
       nginx = mkIf cfg.nginx.enable {
         enable = true;

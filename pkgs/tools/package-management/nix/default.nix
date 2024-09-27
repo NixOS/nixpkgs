@@ -68,7 +68,7 @@ let
       rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
       # TestRandomURLMultiThreaded fails
       rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-    '' + lib.optionalString aws-sdk-cpp.stdenv.isi686 ''
+    '' + lib.optionalString aws-sdk-cpp.stdenv.hostPlatform.isi686 ''
       # EPSILON is exceeded
       rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
     '';
@@ -175,8 +175,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.7";
-    hash = "sha256-ZfcL4utJHuxCGILb/zIeXVVbHkskgp70+c2IitkFJwA=";
+    version = "2.18.8";
+    hash = "sha256-0rHRifdjzzxMh/im8pRx6XoY62irDTDUes+Pn0CR65I=";
     self_attribute_name = "nix_2_18";
   };
 
@@ -211,10 +211,10 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_24 = (common {
-    version = "2.24.7";
-    hash = "sha256-NAyc5MR/T70umcSeMv7y3AVt00ZkmDXGm7LfYKTONfE=";
+    version = "2.24.8";
+    hash = "sha256-YPJA0stZucs13Y2DQr3JIL6JfakP//LDbYXNhic/rKk=";
     self_attribute_name = "nix_2_24";
-  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+  }).override (lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix the following error with the default x86_64-darwin SDK:
     #
     #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
@@ -235,7 +235,7 @@ in lib.makeExtensible (self: ({
       hash = "sha256-Hp7dkx7zfB9a4l5QusXUob0b1T2qdZ23LFo5dcp3xrU=";
     };
     self_attribute_name = "git";
-  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+  }).override (lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix the following error with the default x86_64-darwin SDK:
     #
     #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer

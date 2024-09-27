@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs-ng";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4CC7IxA5t+L99H4Rvkx0xkXFHuqNP3HTmS46JEuy7Vs=";
+    hash = "sha256-gULpJhOOmhzq2Ydl4soNBiiONtdt2T4sgcSqIBCo3SM=";
   };
 
   outputs = [ "bin" "out" "dev" "doc" "info" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_QJS_EXE" stdenv.hostPlatform.isStatic)
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     "-Wno-error=stringop-overflow"
   ]);
 

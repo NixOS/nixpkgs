@@ -72,37 +72,37 @@
   zimg,
 
   # Boolean
-  alsaSupport ? stdenv.isLinux,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   archiveSupport ? true,
   bluraySupport ? true,
   bs2bSupport ? true,
   cacaSupport ? true,
   cddaSupport ? false,
   cmsSupport ? true,
-  drmSupport ? stdenv.isLinux,
-  dvbinSupport ? stdenv.isLinux,
-  dvdnavSupport ? stdenv.isLinux,
+  drmSupport ? stdenv.hostPlatform.isLinux,
+  dvbinSupport ? stdenv.hostPlatform.isLinux,
+  dvdnavSupport ? stdenv.hostPlatform.isLinux,
   jackaudioSupport ? false,
   javascriptSupport ? true,
   libpngSupport ? true,
   openalSupport ? true,
-  pipewireSupport ? stdenv.isLinux,
-  pulseSupport ? config.pulseaudio or stdenv.isLinux,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
+  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   rubberbandSupport ? true,
   screenSaverSupport ? true,
-  sdl2Support ? !stdenv.isDarwin,
+  sdl2Support ? !stdenv.hostPlatform.isDarwin,
   sixelSupport ? false,
   speexSupport ? true,
-  swiftSupport ? stdenv.isDarwin,
+  swiftSupport ? stdenv.hostPlatform.isDarwin,
   theoraSupport ? true,
   vaapiSupport ? x11Support || waylandSupport,
   vapoursynthSupport ? false,
   vdpauSupport ? true,
-  vulkanSupport ? stdenv.isLinux,
-  waylandSupport ? stdenv.isLinux,
-  x11Support ? stdenv.isLinux,
-  xineramaSupport ? stdenv.isLinux,
-  xvSupport ? stdenv.isLinux,
+  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
+  x11Support ? stdenv.hostPlatform.isLinux,
+  xineramaSupport ? stdenv.hostPlatform.isLinux,
+  xvSupport ? stdenv.hostPlatform.isLinux,
   zimgSupport ? true,
 }:
 
@@ -124,7 +124,7 @@ let
     platform // lib.optionalAttrs (platform ? darwinMinVersion) { darwinMinVersion = version; };
 
   stdenv' =
-    if swiftSupport && stdenv.isDarwin && stdenv.isx86_64 then
+    if swiftSupport && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
       stdenv.override (old: {
         buildPlatform = overrideSDK old.buildPlatform "11.0";
         hostPlatform = overrideSDK old.hostPlatform "11.0";
@@ -135,7 +135,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.38.0";
+  version = "0.39.0";
 
   outputs = [
     "out"
@@ -148,13 +148,8 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dFajnCpGlNqUv33A8eFEn8kjtzIPkcBY5j0gNVlaiIY=";
+    hash = "sha256-BOGh+QBTO7hrHohh+RqjSF8eHQH8jVBPjG/k4eyFaaM=";
   };
-
-  patches = [
-    # Fix build with Darwin SDK 11
-    ./0001-fix-darwin-build.patch
-  ];
 
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
@@ -194,7 +189,7 @@ stdenv'.mkDerivation (finalAttrs: {
       (lib.mesonEnable "swift-build" swiftSupport)
       (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Toggle explicitly because it fails on darwin
       (lib.mesonEnable "videotoolbox-pl" vulkanSupport)
     ];
@@ -209,7 +204,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ninja
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       buildPackages.darwin.sigtool
       xcbuild.xcrun
     ]
@@ -283,9 +278,9 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals xineramaSupport [ libXinerama ]
     ++ lib.optionals xvSupport [ libXv ]
     ++ lib.optionals zimgSupport [ zimg ]
-    ++ lib.optionals stdenv.isLinux [ nv-codec-headers-11 ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       CoreFoundation
       Cocoa
@@ -293,12 +288,12 @@ stdenv'.mkDerivation (finalAttrs: {
       MediaPlayer
       VideoToolbox
     ]
-    ++ lib.optionals (stdenv.isDarwin && swiftSupport) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && swiftSupport) [
       AVFoundation
       CoreMedia
     ];
 
-  postBuild = lib.optionalString stdenv.isDarwin ''
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
     popd
@@ -315,22 +310,19 @@ stdenv'.mkDerivation (finalAttrs: {
       popd
       pushd $out/share/applications
 
-      # patch out smb protocol reference, since our ffmpeg can't handle it
-      substituteInPlace mpv.desktop --replace-fail "smb," ""
-
       sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
         mpv.desktop > umpv.desktop
       printf "NoDisplay=true\n" >> umpv.desktop
       popd
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r mpv.app $out/Applications
     '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addDriverRunpath.
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addDriverRunpath $out/bin/mpv
     patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';

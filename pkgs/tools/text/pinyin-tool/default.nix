@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jeRKtKv8Lg/ritl42dMbEQpXaNlCIaHTrw0xtPQitMc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Simple command line tool for converting Chinese characters to space-separate pinyin words";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, testers, infisical, installShellFiles }:
+{ stdenv, lib, fetchurl, testers, installShellFiles }:
 
 # this expression is mostly automated, and you are STRONGLY
 # RECOMMENDED to use to nix-update for updating this expression when new
@@ -15,7 +15,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.30.0";
+  version = "0.31.0";
 
   # the platform-specific, statically linked binary
   src =
@@ -36,7 +36,7 @@ let
     fetchurl { inherit name url hash; };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "infisical";
   version = version;
   inherit src;
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = infisical; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
@@ -84,4 +84,4 @@ stdenv.mkDerivation {
       "x86_64-darwin"
     ];
   };
-}
+})

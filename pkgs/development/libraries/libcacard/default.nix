@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+79N6Mt9tb3/XstnL/Db5pOfufNEuQDVG6YpUymjMuc=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/--version-script/d' Makefile.in
     sed -i 's/^vflag = .*$/vflag = ""/' meson.build
   '';

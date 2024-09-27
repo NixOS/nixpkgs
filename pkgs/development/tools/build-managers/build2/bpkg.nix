@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  doCheck = !stdenv.isDarwin; # tests hang
+  doCheck = !stdenv.hostPlatform.isDarwin; # tests hang
 
   # Failing test
   postPatch = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "config.bin.lib=${build2.configSharedStatic enableShared enableStatic}"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath '${lib.getLib build2}/lib' "''${!outputBin}/bin/bpkg"
   '';
 

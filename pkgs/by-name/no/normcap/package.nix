@@ -17,7 +17,7 @@ let
     leptonica
     tesseract4
     libnotify
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wl-clipboard
   ];
 
@@ -73,21 +73,21 @@ ps.buildPythonApplication rec {
     ps.pytestCheckHook
     ps.pytest-qt
     ps.toml
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     ps.pytest-xvfb
     xorg.xvfb
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # setup a virtual x11 display
     export DISPLAY=:$((2000 + $RANDOM % 1000))
     Xvfb $DISPLAY -screen 5 1024x768x8 &
     xvfb_pid=$!
   '';
 
-  postCheck = lib.optionalString stdenv.isLinux ''
+  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     # cleanup the virtual x11 display
     sleep 0.5
     kill $xvfb_pid
@@ -106,7 +106,7 @@ ps.buildPythonApplication rec {
     "test_synchronized_capture"
     # flaky
     "test_normcap_ocr_testcases"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires impure pbcopy
     "test_get_copy_func_with_pbcopy"
     "test_get_copy_func_without_pbcopy"
@@ -128,7 +128,7 @@ ps.buildPythonApplication rec {
     # RuntimeError("Internal C++ object (PySide6.QtGui.QHideEvent) already deleted.")
     # AttributeError("'LoadingIndicator' object has no attribute 'timer'")
     "tests/tests_gui/test_loading_indicator.py"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires a display
     "tests/integration/test_normcap.py"
     "tests/integration/test_tray_menu.py"
@@ -142,6 +142,6 @@ ps.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk pbsds ];
     mainProgram = "normcap";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

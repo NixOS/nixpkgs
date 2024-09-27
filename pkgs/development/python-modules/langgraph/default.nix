@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   # postgresql doesn't play nicely with the darwin sandbox:
   # FATAL:  could not create shared memory segment: Operation not permitted
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     aiosqlite

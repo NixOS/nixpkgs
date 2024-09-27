@@ -71,7 +71,7 @@ buildGoModule rec {
       fontconfig
       freetype
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.Carbon
       darwin.apple_sdk_11_0.frameworks.Cocoa
       darwin.apple_sdk_11_0.frameworks.Kernel
@@ -100,6 +100,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # incompatible vendor/github.com/richardwilkes/unison/internal/skia/libskia_linux.a
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

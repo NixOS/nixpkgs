@@ -107,7 +107,7 @@ in mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   } // lib.optionalAttrs buildServer {
     mainProgram = "drawpile-srv";
   } // lib.optionalAttrs buildClient {

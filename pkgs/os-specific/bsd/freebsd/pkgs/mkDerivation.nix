@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  stdenvNoLibc,
+  stdenvNoLibs,
   overrideCC,
   buildPackages,
   stdenvNoLibcxx ? overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx,
@@ -28,7 +28,7 @@ lib.makeOverridable (
       if attrs.noCC or false then
         stdenvNoCC
       else if attrs.noLibc or false then
-        stdenvNoLibc
+        stdenvNoLibs
       else if attrs.noLibcxx or false then
         stdenvNoLibcxx
       else
@@ -89,14 +89,14 @@ lib.makeOverridable (
       # Since STRIP in `makeFlags` has to be a flag, not the binary itself
       STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
     }
-    // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
+    // lib.optionalAttrs stdenv'.hostPlatform.isDarwin { MKRELRO = "no"; }
     // lib.optionalAttrs (stdenv'.cc.isClang or false) {
       HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
     // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
       HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
-    // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
+    // lib.optionalAttrs (stdenv'.hostPlatform.isx86_32) { USE_SSP = "no"; }
     // lib.optionalAttrs (attrs.headersOnly or false) {
       installPhase = "includesPhase";
       dontBuild = true;

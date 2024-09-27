@@ -36,7 +36,9 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks; [ CoreServices ]
+  );
 
   postFixup = ''
     wrapProgram $out/bin/rustlings --suffix PATH : ${

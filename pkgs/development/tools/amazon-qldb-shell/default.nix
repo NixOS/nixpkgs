@@ -21,7 +21,7 @@ let
     };
 
     nativeBuildInputs = [ cmake rustPlatform.bindgenHook ];
-    buildInputs = lib.optional stdenv.isDarwin Security;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
     cargoLock = {
       lockFile = ./Cargo.lock;

@@ -166,5 +166,5 @@ in
   stdenv.mkDerivation (finalAttrs:
     lib.recursiveUpdate
       (common stdenv.hostPlatform)
-      ((if stdenv.isDarwin then darwin else linux) finalAttrs)
+      ((if stdenv.hostPlatform.isDarwin then darwin else linux) finalAttrs)
   )

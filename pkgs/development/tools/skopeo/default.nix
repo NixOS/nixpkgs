@@ -36,7 +36,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]
-    ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
     runHook preBuild
@@ -49,7 +49,7 @@ buildGoModule rec {
     runHook preInstall
     PREFIX=${placeholder "out"} make install-binary install-completions install-docs
     install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
   '' + ''

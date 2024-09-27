@@ -19,8 +19,8 @@
 , wxGTK32
 , enableSDL2 ? true
 , enableTerm ? true
-, enableWx ? !stdenv.isDarwin
-, enableX11 ? !stdenv.isDarwin
+, enableWx ? !stdenv.hostPlatform.isDarwin
+, enableX11 ? !stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libX11
     libXpm
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableX11 [
     "--with-x"
     "--with-x11"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--enable-e1000"
     "--enable-es1370"
     "--enable-ne2000"

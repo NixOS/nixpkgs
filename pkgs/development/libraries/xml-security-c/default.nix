@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       xercesc
       openssl
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       CoreServices
       SystemConfiguration

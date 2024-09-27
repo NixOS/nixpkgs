@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # typical `ar failure`
+    broken = stdenv.hostPlatform.isDarwin; # typical `ar failure`
     mainProgram = "muon";
   };
 })

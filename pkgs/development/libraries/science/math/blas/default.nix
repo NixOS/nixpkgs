@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libblas64${canonicalExtension} $out/lib/libblas${canonicalExtension}
   '';
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for fn in $(find $out/lib -name "*.so*"); do
       if [ -L "$fn" ]; then continue; fi
       install_name_tool -id "$fn" "$fn"

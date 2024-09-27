@@ -23,7 +23,7 @@
 , pkg-config
 , python311Packages
 , runCommand  # for passthru.tests
-, spaceNavSupport ? stdenv.isLinux
+, spaceNavSupport ? stdenv.hostPlatform.isLinux
 , stdenv
 , swig
 , vtk

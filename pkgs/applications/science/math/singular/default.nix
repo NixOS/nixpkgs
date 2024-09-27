@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     latex2html
     texinfo
     texliveSmall
-  ] ++ lib.optionals stdenv.isDarwin [ getconf ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preAutoreconf = ''
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
       -i '{}' ';'
   '';
 
-  hardeningDisable = lib.optional stdenv.isi686 "stackprotector";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "stackprotector";
 
   doCheck = true; # very basic checks, does not test any libraries
 

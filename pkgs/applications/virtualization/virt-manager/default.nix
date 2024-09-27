@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     gst_all_1.gst-plugins-base

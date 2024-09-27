@@ -88,8 +88,8 @@ rustPlatform.buildRustPackage {
       rdkafka
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       rust-jemalloc-sys
       Security
       libiconv

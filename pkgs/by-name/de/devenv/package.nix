@@ -27,7 +27,7 @@ let
     doInstallCheck = false;
   });
 
-  version = "1.1";
+  version = "1.2";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -36,16 +36,16 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-7o2OBUwE51ZNMCBB4rg5LARc8S6C9vuzRXnqk3d/lN4=";
+    hash = "sha256-95MYldiApQ7gqoUa79yolPahudKmFv6B2HnF+ZqWiGI=";
   };
 
-  cargoHash = "sha256-Yos8iOWfRJcOqbanskUg75cX05dvxWnq42NhmQt/jf4=";
+  cargoHash = "sha256-A2s+DXq00T0DCVXUHy2ZN6XvqpHy6PmL0H9l1NIfFVU=";
 
   buildAndTestSubdir = "devenv";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 

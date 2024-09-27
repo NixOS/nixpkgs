@@ -67,12 +67,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libsoup
       webkitgtk
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit
@@ -144,13 +144,13 @@ rustPlatform.buildRustPackage rec {
     ''
       runHook preInstall
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/bin
       cp -r target/release/bundle/macos $out/Applications
       mv $out/Applications/GitButler.app/Contents/MacOS/GitButler $out/bin/git-butler
       ln -s $out/bin/git-butler $out/Applications/GitButler.app/Contents/MacOS/GitButler
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       cp -r target/release/bundle/"$tauriBundle"/*/data/usr $out
 
       desktop-file-edit \

@@ -440,11 +440,11 @@ stdenv.mkDerivation ({
       else "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
     }"
   '' +
-  lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
+  lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
@@ -554,7 +554,7 @@ stdenv.mkDerivation ({
     python3
     # Tool used to update GHC's settings file in postInstall
     bootPkgs.ghc-settings-edit
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx

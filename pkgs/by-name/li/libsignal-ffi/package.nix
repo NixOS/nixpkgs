@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hQ3iWGLef1y3yyzjWH2MWcs32A7HxUSxGG8fCyMn/KE=";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
 

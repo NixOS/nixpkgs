@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     # Needed with GCC 12
     "-Wno-error=maybe-uninitialized"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # error: 'strtonum' is only available on macOS 11.0 or newer
     "-Wno-error=unguarded-availability-new"
   ]);

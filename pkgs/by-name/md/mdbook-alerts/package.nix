@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-nzVvktweqrow7P/I8DhDoVJNj1COCeEhx6HLY536hYE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = {
     description = "Preprocessor for mdbook to support the inclusion of Markdown alerts";

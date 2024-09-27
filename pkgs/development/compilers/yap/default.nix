@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     # the linux 32 bit build fails.
-    broken = (stdenv.isLinux && stdenv.isAarch64) || !stdenv.is64bit;
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || !stdenv.hostPlatform.is64bit;
     homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";
     description = "ISO-compatible high-performance Prolog compiler";
     license = lib.licenses.artistic2;

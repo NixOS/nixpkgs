@@ -14,17 +14,17 @@
   # upstream conduwuit enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
   rust-jemalloc-sys,
-  enableLiburing ? stdenv.isLinux,
+  enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
-    unprefixed = !stdenv.isDarwin;
+    unprefixed = !stdenv.hostPlatform.isDarwin;
   };
   rocksdb' = rocksdb.override {
     inherit enableLiburing;
     # rocksdb does not support prefixed jemalloc, which is required on darwin
-    enableJemalloc = enableJemalloc && !stdenv.isDarwin;
+    enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
     jemalloc = rust-jemalloc-sys';
   };
 in
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optional enableJemalloc rust-jemalloc-sys'
     ++ lib.optional enableLiburing liburing
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
     ];
 

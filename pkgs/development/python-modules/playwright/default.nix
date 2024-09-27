@@ -74,7 +74,7 @@ buildPythonPackage rec {
     git
     setuptools-scm
     setuptools
-  ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
   pythonRelaxDeps = [ "pyee" ];
 
@@ -99,7 +99,7 @@ buildPythonPackage rec {
         driver = playwright-driver;
         browsers = playwright-driver.browsers;
       }
-      // lib.optionalAttrs stdenv.isLinux {
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         inherit (nixosTests) playwright-python;
       };
     updateScript = ./update.sh;

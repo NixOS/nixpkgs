@@ -52,6 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ moody djanatyn ];
     mainProgram = "hhexen-gl";
     inherit (SDL.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

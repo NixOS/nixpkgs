@@ -14,12 +14,12 @@
 , withAspell ? true
 , withHunspell ? true
 , withNuspell ? true
-, withAppleSpell ? stdenv.isDarwin
+, withAppleSpell ? stdenv.hostPlatform.isDarwin
 
 , Cocoa
 }:
 
-assert withAppleSpell -> stdenv.isDarwin;
+assert withAppleSpell -> stdenv.hostPlatform.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "enchant";

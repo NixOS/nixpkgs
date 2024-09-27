@@ -20,7 +20,7 @@
 , blas
 
 , pkg-config
-, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport
 , vulkanSupport ? false
 , rpcSupport ? false
 , shaderc
@@ -69,13 +69,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "3672";
+  version = "3772";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-m9mMmvIasoJkj0DAx/6TLdt5Qflbe1JqaU1VQ/8bEG0=";
+    hash = "sha256-gJFCFhppaXs/9GReEjEZiU/BZ51pjl7IBsUN04uTls0=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -98,7 +98,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoAddDriverRunpath
   ];
 
-  buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
+  buildInputs = optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
@@ -163,6 +163,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ dit7ya elohmeier philiptaron ];
     platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.isDarwin);
+    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
   };
 })

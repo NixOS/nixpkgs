@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ johnazoidberg ];
     # ./xutils.h:31:10: fatal error: 'gdk/gdkx.h' file not found
     # #include <gdk/gdkx.h>
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

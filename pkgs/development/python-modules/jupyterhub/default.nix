@@ -171,6 +171,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = teams.jupyter.members;
     # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

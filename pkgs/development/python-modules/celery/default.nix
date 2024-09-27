@@ -97,7 +97,7 @@ buildPythonPackage rec {
       "test_stamping_headers_in_options"
       "test_stamping_with_replace"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Too many open files on hydra
       "test_cleanup"
       "test_with_autoscaler_file_descriptor_safety"

@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
   pname = "qbittorrent"
     + lib.optionalString (guiSupport && qtVersion == "5") "-qt5"
     + lib.optionalString (!guiSupport) "-nox";
-  version = "4.6.5";
+  version = "4.6.7";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    hash = "sha256-umJObvPv4VjdAZdQEuhqFCRvi1eZQViu1IO88oeTTq8=";
+    hash = "sha256-vUC8YIuyoGnl46FajfJG/XFXG+2lM9EaHWl2Hfo3T7c=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     qttools
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ] ++ lib.optionals guiSupport [
     dbus
-  ] ++ lib.optionals (guiSupport && stdenv.isLinux) [
+  ] ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [
     qtwayland
   ] ++ lib.optionals trackerSearch [
     python3
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_NAME=qbittorrent${lib.optionalString (!guiSupport) "-nox"}
     mkdir -p $out/{Applications,bin}
     cp -R $APP_NAME.app $out/Applications

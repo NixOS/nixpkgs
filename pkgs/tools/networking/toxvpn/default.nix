@@ -22,11 +22,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libtoxcore nlohmann_json libsodium zeromq ]
-    ++ lib.optionals stdenv.isLinux [ libcap systemd ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap systemd ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optionals stdenv.isLinux [ "-DSYSTEMD=1" ];
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DSYSTEMD=1" ];
 
   postInstall = "$out/bin/toxvpn -h";
 

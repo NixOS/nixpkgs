@@ -1,24 +1,32 @@
 {
   lib,
-  addict,
+  stdenv,
   buildPythonPackage,
-  coverage,
   fetchFromGitHub,
-  lmdb,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  addict,
   matplotlib,
-  mlflow,
   numpy,
   opencv4,
-  parameterized,
-  pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
-  setuptools,
-  stdenv,
   termcolor,
-  torch,
   yapf,
+
+  # checks
+  bitsandbytes,
+  coverage,
+  dvclive,
+  lion-pytorch,
+  lmdb,
+  mlflow,
+  parameterized,
+  pytestCheckHook,
+  transformers,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +34,11 @@ buildPythonPackage rec {
   version = "0.10.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+YDtYHp3BwKvzhmHC6hAZ3Qtc9uRZMo/TpWqdpm2hn0=";
+    hash = "sha256-bZ6O4UOYUCwq11YmgRWepOIngYxYD/fNfM/VmcyUv9k=";
   };
 
   build-system = [ setuptools ];
@@ -49,12 +55,15 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    # bitsandbytes (broken as of 2024-07-06)
     coverage
+    dvclive
+    lion-pytorch
     lmdb
     mlflow
     parameterized
     pytestCheckHook
-    torch
+    transformers
   ];
 
   preCheck =
@@ -108,12 +117,13 @@ buildPythonPackage rec {
     "test_close"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ rxiao ];
-    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ rxiao ];
+    broken =
+      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

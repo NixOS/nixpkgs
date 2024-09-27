@@ -63,7 +63,8 @@ let
 
   metalSupport =
     assert accelIsValid;
-    (acceleration == "metal") || (stdenv.isDarwin && stdenv.isAarch64 && (acceleration == null));
+    (acceleration == "metal")
+    || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
 
   darwinBuildInputs =
     with darwin.apple_sdk.frameworks;
@@ -114,7 +115,7 @@ rustPlatform.buildRustPackage rec {
       cudaPackages.libcurand
     ]
     ++ lib.optionals mklSupport [ mkl ]
-    ++ lib.optionals stdenv.isDarwin darwinBuildInputs;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinBuildInputs;
 
   cargoBuildFlags =
     [
@@ -125,7 +126,7 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals cudaSupport [ "--features=cuda" ]
     ++ lib.optionals mklSupport [ "--features=mkl" ]
-    ++ lib.optionals (stdenv.isDarwin && metalSupport) [ "--features=metal" ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && metalSupport) [ "--features=metal" ];
 
   env =
     {
@@ -186,7 +187,9 @@ rustPlatform.buildRustPackage rec {
       withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
         mistral-rs.override { acceleration = "mkl"; }
       );
-      withCuda = lib.optionalAttrs stdenv.isLinux (mistral-rs.override { acceleration = "cuda"; });
+      withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (
+        mistral-rs.override { acceleration = "cuda"; }
+      );
       withMetal = lib.optionalAttrs (stdenv.hostPlatform == "aarch64-darwin") (
         mistral-rs.override { acceleration = "metal"; }
       );

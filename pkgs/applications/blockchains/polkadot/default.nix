@@ -69,8 +69,8 @@ rustPlatform.buildRustPackage rec {
 
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ] ++
-    lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ] ++
+    lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
   # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
   # available for `rustc-wasm32`

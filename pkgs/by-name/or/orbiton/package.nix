@@ -15,7 +15,7 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace "-Wl,--as-needed" ""
 

@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ cmake makeBinaryWrapper pkg-config ];
 
   buildInputs = [ libopus openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     wrapProgram $out/bin/parrot \

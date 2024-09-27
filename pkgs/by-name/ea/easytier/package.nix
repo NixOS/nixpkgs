@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
-  buildNoDefaultFeatures = stdenv.isMips;
-  buildFeatures = lib.optional stdenv.isMips "mips" ++ lib.optional withQuic "quic";
+  buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
+  buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
 
   doCheck = false; # tests failed due to heavy rely on network
 

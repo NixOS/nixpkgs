@@ -64,7 +64,7 @@ buildPythonPackage rec {
       # https://github.com/pyqtgraph/pyqtgraph/issues/2110
       "test_PolyLineROI"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # https://github.com/pyqtgraph/pyqtgraph/issues/2645
       "test_rescaleData"
     ];

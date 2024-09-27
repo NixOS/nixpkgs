@@ -455,6 +455,7 @@ in {
   icingaweb2 = handleTest ./icingaweb2.nix {};
   ifm = handleTest ./ifm.nix {};
   iftop = handleTest ./iftop.nix {};
+  immich = handleTest ./web-apps/immich.nix {};
   incron = handleTest ./incron.nix {};
   incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; inherit (pkgs) incus; });
   incus-lts = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; });
@@ -669,6 +670,7 @@ in {
   nginx-etag-compression = handleTest ./nginx-etag-compression.nix {};
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
   nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-mime = handleTest ./nginx-mime.nix {};
   nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
   nginx-moreheaders = handleTest ./nginx-moreheaders.nix {};
   nginx-njs = handleTest ./nginx-njs.nix {};
@@ -856,6 +858,7 @@ in {
   redlib = handleTest ./redlib.nix {};
   redmine = handleTest ./redmine.nix {};
   renovate = handleTest ./renovate.nix {};
+  replace-dependencies = handleTest ./replace-dependencies {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
   restic-rest-server = handleTest ./restic-rest-server.nix {};
   restic = handleTest ./restic.nix {};

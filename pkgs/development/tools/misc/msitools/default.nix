@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   # WiX tests fail on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     patchShebangs subprojects/bats-core/{bin,libexec}

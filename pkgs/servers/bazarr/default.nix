@@ -8,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.4.3";
+  version = "1.4.4";
 
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    sha256 = "sha256-tmTdmUfRBRlB14juNxUo65Re+9agUBX0BBSuNu3pSC0=";
+    sha256 = "sha256-YVg9pHk7KB4FjtmsFV4INSIKdLFiHHN8FHxeVDz2SlU=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       ps.gevent-websocket
       ps.pillow
       ps.setuptools
+      ps.psycopg2
     ]))
   ] ++ runtimeProgDeps;
 

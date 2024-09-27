@@ -24,7 +24,7 @@
 }:
 
 let
-  arch = if stdenv.isx86_64 then "x86_64" else "generic";
+  arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       profile = {
         admin_bind_path = "/run/kanidmd/sock";
-        cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
+        cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
         default_config_path = "/etc/kanidm/server.toml";
         default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
         htmx_ui_pkg_path = "@htmx_ui_pkg_path@";

@@ -33,7 +33,7 @@ stdenv.mkDerivation ({
   pname = product;
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
     ++ extraNativeBuildInputs;
 
   buildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation ({
     zlib
     libxcrypt-legacy # libcrypt.so.1 (default is .2 now)
   ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation
   ++ extraBuildInputs;
 
   unpackPhase = ''

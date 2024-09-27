@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = [ "--features=freeze-stdlib" ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration ];
 
   nativeCheckInputs = [ python3 ];
 
@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     #       "_utimensat", referenced from:
     #           rustpython_vm::function::builtin::IntoPyNativeFn::into_func::... in
     #           rustpython-10386d81555652a7.rustpython_vm-f0b5bedfcf056d0b.rustpython_vm.7926b68e665728ca-cgu.08.rcgu.o.rcgu.o
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

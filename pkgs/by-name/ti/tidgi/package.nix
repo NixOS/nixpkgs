@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.9.6";
 
   src =
-    if stdenv.isAarch64
+    if stdenv.hostPlatform.isAarch64
     then
       fetchurl
       {

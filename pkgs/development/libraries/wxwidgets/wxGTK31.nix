@@ -18,8 +18,8 @@
 , withCurl ? false
 , withPrivateFonts ? false
 , withEGL ? true
-, withMesa ? !stdenv.isDarwin
-, withWebKit ? stdenv.isDarwin
+, withMesa ? !stdenv.hostPlatform.isDarwin
+, withWebKit ? stdenv.hostPlatform.isDarwin
 , webkitgtk
 , setfile
 , AGL
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
     libSM
     libXinerama
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCurl curl
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && !stdenv.isDarwin) webkitgtk
-  ++ lib.optional (withWebKit && stdenv.isDarwin) WebKit
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk
+  ++ lib.optional (withWebKit && stdenv.hostPlatform.isDarwin) WebKit
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     setfile
     Carbon
     Cocoa
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     WebKit
   ];
 
-  propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin AGL;
 
   configureFlags = [
     "--disable-precomp-headers"
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withCurl "--enable-webrequest"
   ++ lib.optional withPrivateFonts "--enable-privatefonts"
   ++ lib.optional withMesa "--with-opengl"
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-osx_cocoa"
     "--with-libiconv"
   ] ++ lib.optionals withWebKit [
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = lib.optionalString (!stdenv.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib ";
+  SEARCH_LIB = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = ''
     substituteInPlace configure --replace \
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       'SEARCH_LIB=' 'DUMMY_SEARCH_LIB='
     substituteInPlace configure --replace \
       /usr /no-such-path
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace \
       'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
       'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'

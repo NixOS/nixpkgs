@@ -56,7 +56,7 @@ stdenv.mkDerivation {
       (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
       (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_ZSTD" true)
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "10.14") # For aligned allocation
     ];
 

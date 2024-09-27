@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, cmake
-, pkg-config
-, substituteAll
-, boost
-, cairo
-, freetype
-, gdal
-, harfbuzz
-, icu
-, libjpeg
-, libpng
-, libtiff
-, libwebp
-, libxml2
-, proj
-, python3
-, sqlite
-, zlib
-, catch2
-, postgresql
-, protozero
-, sparsehash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  buildPackages,
+  cmake,
+  pkg-config,
+  boost,
+  cairo,
+  freetype,
+  gdal,
+  harfbuzz,
+  icu,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  libxml2,
+  proj,
+  python3,
+  sqlite,
+  zlib,
+  catch2,
+  postgresql,
+  protozero,
+  sparsehash,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-U5QQ7I7ZBNlMm74Vpvv8lvJ4EefM3+jHURFAP03Lmvw=";
     fetchSubmodules = true;
   };
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace configure \
@@ -56,18 +59,16 @@ stdenv.mkDerivation rec {
     # Upstream HarfBuzz wants to drop CMake support anyway.
     # See discussion: https://github.com/mapnik/mapnik/issues/4265
     ./cmake-harfbuzz.patch
-    # prevent CMake from trying to get libraries on the Internet
-    (substituteAll {
-      src = ./catch2-src.patch;
-      catch2_src = catch2.src;
-    })
     # Account for full paths when generating libmapnik.pc
     ./export-pkg-config-full-paths.patch
     # Use 'sparsehash' package.
     ./use-sparsehash-package.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
@@ -99,7 +100,9 @@ stdenv.mkDerivation rec {
     # Use 'protozero' package.
     (lib.cmakeBool "USE_EXTERNAL_MAPBOX_PROTOZERO" true)
     # macOS builds fail when using memory mapped file cache.
-    (lib.cmakeBool "USE_MEMORY_MAPPED_FILE" (!stdenv.isDarwin))
+    (lib.cmakeBool "USE_MEMORY_MAPPED_FILE" (!stdenv.hostPlatform.isDarwin))
+    # don't try to download sources for catch2, use our own
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CATCH2" "${catch2.src}")
   ];
 
   doCheck = true;
@@ -122,7 +125,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [ hrdinka hummeltech ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        hrdinka
+        hummeltech
+      ];
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
   };

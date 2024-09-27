@@ -12,28 +12,28 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.10.4";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     rev = "v${version}";
-    hash = "sha256-TjT93nx52PxuHuW4NONTfI3G7+Dl0NFX2aKpZDEF8+8=";
+    hash = "sha256-SmG8JMHdFTGkxLCTTbD1IhjQgmsRMvxQsB4rluHy6yI=";
   };
 
   nativeBuildInputs =
     [ makeWrapper ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       imagemagick # for icon resizing
       copyDesktopItems
     ];
 
-  npmDepsHash = "sha256-WkOn1bLJ9xmJdQcY6ak+hs/YW+crIXhTWA6tjMSVq9I=";
+  npmDepsHash = "sha256-vbwoKijDt7TbXfU8Il5dwnfyGc2HsbLdAJhQzYuq6eo=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # disable code signing on Darwin
-  postConfigure = lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" package.json
   '';
@@ -54,13 +54,13 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/Blockbench.app $out/Applications
       makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
     ''}
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p $out/share/blockbench
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
 

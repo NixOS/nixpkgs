@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
 
   desktopItems = [
     (makeDesktopItem {

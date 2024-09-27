@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-raSz/+u7P04qHmvdfYoWKOKtNtaFlgmT8Nw0ImhCMkU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru.tests = {
     version = testers.testVersion { package = igrep; command = "ig --version"; };

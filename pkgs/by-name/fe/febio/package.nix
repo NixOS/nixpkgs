@@ -14,7 +14,7 @@
 }:
 
 let
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 
 stdenv'.mkDerivation (finalAttrs: {
@@ -56,7 +56,7 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs =
     [ zlib ]
     ++ lib.optionals mklSupport [ mkl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreGraphics
       darwin.apple_sdk.frameworks.CoreVideo
       darwin.apple_sdk.frameworks.Accelerate

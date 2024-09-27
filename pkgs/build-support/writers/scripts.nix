@@ -131,7 +131,7 @@ rec {
             # On darwin a script cannot be used as an interpreter in a shebang but
             # there doesn't seem to be a limit to the size of shebang and multiple
             # arguments to the interpreter are allowed.
-            if [[ -n "${toString pkgs.stdenvNoCC.isDarwin}" ]] && isScript $interpreter
+            if [[ -n "${toString pkgs.stdenvNoCC.hostPlatform.isDarwin}" ]] && isScript $interpreter
             then
               wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
               # Get first word from the line (note: xargs echo remove leading spaces)
@@ -753,7 +753,7 @@ rec {
       strip ? true,
     }:
     let
-      darwinArgs = lib.optionals stdenv.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
+      darwinArgs = lib.optionals stdenv.hostPlatform.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
     in
     makeBinWriter {
       compileScript = ''

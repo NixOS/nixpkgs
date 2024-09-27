@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs fixtures/.rustscan_scripts/*
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     perl

@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ ninja python3 ];
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin; with apple_sdk.frameworks; [
     libobjc
     cctools
 

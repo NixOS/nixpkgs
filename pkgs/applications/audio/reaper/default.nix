@@ -15,14 +15,14 @@
 , xdotool
 , which
 
-, jackSupport ? stdenv.isLinux
+, jackSupport ? stdenv.hostPlatform.isLinux
 , jackLibrary
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 }:
 
 let
-  url_for_platform = version: arch: if stdenv.isDarwin
+  url_for_platform = version: arch: if stdenv.hostPlatform.isDarwin
     then "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_universal.dmg"
     else "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${arch}.tar.xz";
 in
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
-    hash = if stdenv.isDarwin then "sha256-dIRZCUIfqnGTxBaLzczwzD6hA/PyAxPqfa+FfCRKdu0=" else {
+    hash = if stdenv.hostPlatform.isDarwin then "sha256-dIRZCUIfqnGTxBaLzczwzD6hA/PyAxPqfa+FfCRKdu0=" else {
       x86_64-linux = "sha256-aa2KcL8yZYG+Dki7J6U473E2BQgdACAIzRLtD9zuHV0=";
       aarch64-linux = "sha256-NECEEUKtTQajl0MZK8/NsbhcuyihHOo0Q5Y5UpAAgrM=";
     }.${stdenv.hostPlatform.system};
@@ -40,24 +40,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     which
     autoPatchelfHook
     xdg-utils # Required for desktop integration
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg
   ];
 
-  sourceRoot = lib.optionalString stdenv.isDarwin "Reaper.app";
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Reaper.app";
 
   buildInputs = [
     stdenv.cc.cc.lib # reaper and libSwell need libstdc++.so.6
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     alsa-lib
   ];
 
-  runtimeDependencies = lib.optionals stdenv.isLinux [
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3 # libSwell needs libgdk-3.so.0
   ]
   ++ lib.optional jackSupport jackLibrary
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     runHook preInstall
     mkdir -p "$out/Applications/Reaper.app"
     cp -r * "$out/Applications/Reaper.app/"

@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
     makeWrapper
     nodejs
     yarn
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     autoSignDarwinBinariesHook
   ];
 
@@ -62,15 +62,15 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   '' + ''
     yarn --offline run electron-builder --dir \
-      ${lib.optionalString stdenv.isDarwin "--config electron-builder-linux-mac.json"} \
-      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "--config electron-builder-linux-mac.json"} \
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv dist/mac*/draw.io.app $out/Applications
 
     # Symlinking `draw.io` doesn't work; seems to look for files in the wrong place.
     makeWrapper $out/Applications/draw.io.app/Contents/MacOS/draw.io $out/bin/drawio
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share/lib/drawio"
     cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/drawio"
 

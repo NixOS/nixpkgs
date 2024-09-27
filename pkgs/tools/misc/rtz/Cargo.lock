@@ -524,9 +524,9 @@ dependencies = [
 
 [[package]]
 name = "cities-json"
-version = "0.4.0"
+version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4720186a8069da0585af9ec1e2f9e815d7d1bbe47dc817b8597e31a609f898f"
+checksum = "b182994ec23e201f9bd45d2e4f6756dc176f9fc12aa957842bf01348725d1e66"
 dependencies = [
  "lazy_static",
  "rand 0.8.5",
@@ -2470,7 +2470,7 @@ dependencies = [
 
 [[package]]
 name = "rtz"
-version = "0.7.0"
+version = "0.7.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -3568,8 +3568,15 @@ dependencies = [
  "serde_json",
  "url",
  "utoipa",
+ "utoipa-swagger-ui-vendored",
  "zip 1.1.4",
 ]
+
+[[package]]
+name = "utoipa-swagger-ui-vendored"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c20d6689d3a5693eec4d21f6b9d7c54f37468b856da8e98a7bb316f7b32df6e3"
 
 [[package]]
 name = "uuid"

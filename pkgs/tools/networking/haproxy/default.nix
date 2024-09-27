@@ -42,9 +42,9 @@ in stdenv.mkDerivation (finalAttrs: {
   # TODO: make it work on bsd as well
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    ("TARGET=" + (if stdenv.isSunOS then "solaris"
-    else if stdenv.isLinux then "linux-glibc"
-    else if stdenv.isDarwin then "osx"
+    ("TARGET=" + (if stdenv.hostPlatform.isSunOS then "solaris"
+    else if stdenv.hostPlatform.isLinux then "linux-glibc"
+    else if stdenv.hostPlatform.isDarwin then "osx"
     else "generic"))
   ];
 
@@ -66,7 +66,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "LUA_LIB_NAME=lua"
     "LUA_LIB=${lua5_4}/lib"
     "LUA_INC=${lua5_4}/include"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"
   ] ++ lib.optionals withPrometheusExporter [

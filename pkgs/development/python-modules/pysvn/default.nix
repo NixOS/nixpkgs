@@ -29,15 +29,18 @@ buildPythonPackage rec {
 
   patches = [ ./replace-python-first.patch ];
 
-  buildInputs = [
-    bash
-    subversion
-    apr
-    aprutil
-    expat
-    neon
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [ e2fsprogs ] ++ lib.optionals stdenv.isDarwin [ gcc ];
+  buildInputs =
+    [
+      bash
+      subversion
+      apr
+      aprutil
+      expat
+      neon
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ e2fsprogs ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
@@ -84,6 +87,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
     # g++: command not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

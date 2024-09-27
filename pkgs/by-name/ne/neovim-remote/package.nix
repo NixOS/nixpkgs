@@ -35,7 +35,7 @@ with python3.pkgs; buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME="$(mktemp -d)"

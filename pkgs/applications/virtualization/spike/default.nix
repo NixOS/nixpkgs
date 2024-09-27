@@ -1,30 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, dtc, pkgsCross }:
+{ lib, stdenv, fetchFromGitHub, dtc, pkgsCross }:
 
 stdenv.mkDerivation rec {
   pname = "spike";
-  version = "1.1.0";
+  version = "1.1.0-unstable-2024-09-21";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "riscv-isa-sim";
-    rev = "v${version}";
-    sha256 = "sha256-4D2Fezej0ioOOupw3kgMT5VLs+/jXQjwvek6v0AVMzI=";
+    rev = "de5094a1a901d77ff44f89b38e00fefa15d4018e";
+    sha256 = "sha256-mAgR2VzDgeuIdmPEgrb+MaA89BnWfmNanOVidqn0cgc=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fesvr-fix-compilation-with-gcc-13.patch";
-      url = "https://github.com/riscv-software-src/riscv-isa-sim/commit/0a7bb5403d0290cea8b2356179d92e4c61ffd51d.patch";
-      hash = "sha256-JUMTbGawvLkoOWKkruzLzUFQytVR3wqTlGu/eegRFEE=";
-    })
-  ];
 
   nativeBuildInputs = [ dtc ];
   enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs scripts/*.sh
-    patchShebangs tests/ebreak.py
   '';
 
   doCheck = true;

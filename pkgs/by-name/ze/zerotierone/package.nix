@@ -77,7 +77,7 @@ in stdenv.mkDerivation {
     lzo
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.SystemConfiguration
     darwin.apple_sdk.frameworks.CoreServices
@@ -88,7 +88,7 @@ in stdenv.mkDerivation {
   # Ensure Rust compiles for the right target
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
 
-  preBuild = if stdenv.isDarwin then ''
+  preBuild = if stdenv.hostPlatform.isDarwin then ''
     makeFlagsArray+=("ARCH_FLAGS=") # disable multi-arch build
     if ! grep -q MACOS_VERSION_MIN=10.13 make-mac.mk; then
       echo "You may need to update MACOSX_DEPLOYMENT_TARGET to match the value in make-mac.mk"

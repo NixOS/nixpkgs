@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       "tcp_bind6_error_addrinuse" "tcp_bind_error_addrinuse_listen"
       # https://github.com/libuv/libuv/pull/4075#issuecomment-1935572237
       "thread_priority"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
         # be much more robust.
@@ -71,10 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
         "fs_event_watch_dir_recursive" "fs_event_watch_file"
         "fs_event_watch_file_current_dir" "fs_event_watch_file_exact_path"
         "process_priority" "udp_create_early_bad_bind"
-    ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
         # fail on macos < 10.15 (starting in libuv 1.47.0)
         "fs_write_alotof_bufs_with_offset" "fs_write_multiple_bufs" "fs_read_bufs"
-    ] ++ lib.optionals stdenv.isAarch32 [
+    ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       # I observe this test failing with some regularity on ARMv7:
       # https://github.com/libuv/libuv/issues/1871
       "shutdown_close_pipe"

@@ -85,8 +85,13 @@ let
 
   startScript = cfg:
     ''
-      mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-      mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
+      # Declare root explicitly to avoid shellcheck warnings, it comes from the env
+      declare root
+
+      mkdir -p "$root/etc" "$root/var/lib"
+      chmod 0755 "$root/etc" "$root/var/lib"
+      mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
+      chmod 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
       if ! [ -e "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
@@ -95,7 +100,10 @@ let
         touch "$root/etc/machine-id"
       fi
 
-      mkdir -p -m 0755 \
+      mkdir -p \
+        "/nix/var/nix/profiles/per-container/$INSTANCE" \
+        "/nix/var/nix/gcroots/per-container/$INSTANCE"
+      chmod 0755 \
         "/nix/var/nix/profiles/per-container/$INSTANCE" \
         "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
@@ -137,7 +145,7 @@ let
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
       ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
-        if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
+        if [ "$(< "''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system")" = i686-linux ]; then
           extraFlags+=" --personality=x86"
         fi
       ''}
@@ -203,33 +211,33 @@ let
         if cfg.${attribute} == null then
           ''
             if [ -n "${variable}" ]; then
-              ${ipcmd} add ${variable} dev $ifaceHost
+              ${ipcmd} add "${variable}" dev "$ifaceHost"
             fi
           ''
         else
-          "${ipcmd} add ${cfg.${attribute}} dev $ifaceHost";
+          ''${ipcmd} add ${cfg.${attribute}} dev "$ifaceHost"'';
       renderExtraVeth = name: cfg:
         if cfg.hostBridge != null then
           ''
             # Add ${name} to bridge ${cfg.hostBridge}
-            ip link set dev ${name} master ${cfg.hostBridge} up
+            ip link set dev "${name}" master "${cfg.hostBridge}" up
           ''
         else
           ''
             echo "Bring ${name} up"
-            ip link set dev ${name} up
+            ip link set dev "${name}" up
             # Set IPs and routes for ${name}
             ${optionalString (cfg.hostAddress != null) ''
-              ip addr add ${cfg.hostAddress} dev ${name}
+              ip addr add ${cfg.hostAddress} dev "${name}"
             ''}
             ${optionalString (cfg.hostAddress6 != null) ''
-              ip -6 addr add ${cfg.hostAddress6} dev ${name}
+              ip -6 addr add ${cfg.hostAddress6} dev "${name}"
             ''}
             ${optionalString (cfg.localAddress != null) ''
-              ip route add ${cfg.localAddress} dev ${name}
+              ip route add ${cfg.localAddress} dev "${name}"
             ''}
             ${optionalString (cfg.localAddress6 != null) ''
-              ip -6 route add ${cfg.localAddress6} dev ${name}
+              ip -6 route add ${cfg.localAddress6} dev "${name}"
             ''}
           '';
     in
@@ -238,7 +246,7 @@ let
            [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
           if [ -z "$HOST_BRIDGE" ]; then
             ifaceHost=ve-$INSTANCE
-            ip link set dev $ifaceHost up
+            ip link set dev "$ifaceHost" up
 
             ${ipcall cfg "ip addr" "$HOST_ADDRESS" "hostAddress"}
             ${ipcall cfg "ip -6 addr" "$HOST_ADDRESS6" "hostAddress6"}

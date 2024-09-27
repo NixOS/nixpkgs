@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # fails in linux sandbox
-  doCheck = stdenv.isDarwin;
+  doCheck = stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

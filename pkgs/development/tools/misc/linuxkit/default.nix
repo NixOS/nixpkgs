@@ -24,8 +24,8 @@ buildGoModule rec {
   #   able to use the Virtualization framework at runtime.
   # - sigtool is allows us to validly sign such executables with a dummy
   #   authority.
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ sigtool ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Virtualization ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Virtualization ];
 
   ldflags = [
     "-s"
@@ -43,7 +43,7 @@ buildGoModule rec {
   # - Finally, at the start of the fixup phase, the working directory is
   #   $sourceRoot/src/cmd/linuxkit, so it's simpler to use the sign target from
   #   the Makefile in that directory rather than $sourceRoot/Makefile.
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     make sign LOCAL_TARGET=$out/bin/linuxkit
   '';
   passthru.tests.version = testers.testVersion {

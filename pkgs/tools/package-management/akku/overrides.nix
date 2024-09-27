@@ -11,8 +11,8 @@ let
   # debugging
   showLibs = pkg: old: { preCheck = "echo $CHEZSCHEMELIBDIRS"; };
   runTests = pkg: old: { doCheck = true; };
-  brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.isAarch64; };
-  brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.isDarwin && stdenv.isx86_64; };
+  brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.hostPlatform.isAarch64; };
+  brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; };
 in
 {
   chez-srfi = joinOverrides [

@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , stdenv
-, withSpeech ? !stdenv.isDarwin
+, withSpeech ? !stdenv.hostPlatform.isDarwin
 , makeWrapper
 , espeak-ng
 }:

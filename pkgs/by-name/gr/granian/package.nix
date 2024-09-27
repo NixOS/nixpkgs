@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "granian";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     rev = "v${version}";
-    hash = "sha256-3kwdPLOkKKSY1w42av3ejarrRKNtai8KB80ZrujSjPo=";
+    hash = "sha256-ZIwZrLl7goweYUj3t5e0yaOqeppFHXvK9PL3chNZZRw=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

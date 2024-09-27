@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libX11 ]
-    ++ lib.optional stdenv.isDarwin IOKit;
+    ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   configureFlags = [ "--disable-debug" ];
 

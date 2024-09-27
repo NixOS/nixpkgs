@@ -11,7 +11,7 @@
 , pkg-config
 }:
 
-let buildToxAV = !stdenv.isAarch32;
+let buildToxAV = !stdenv.hostPlatform.isAarch32;
 in stdenv.mkDerivation rec {
   pname = "libtoxcore";
   version = "0.2.19";

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     lapack
   ] ++ lib.optional hdf5-support hdf5 ++ lib.optional petsc-withp4est p4est ++ lib.optionals withParmetis [ metis parmetis ];
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config/install.py \
       --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
   '';

@@ -171,3 +171,6 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
+
+# fetchurl: nixfmt-rfc-style
+ce21e97a1f20dee15da85c084f9d1148d84f853b

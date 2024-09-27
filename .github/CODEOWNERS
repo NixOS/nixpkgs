@@ -120,7 +120,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Images and installer media
-/nixos/modules/installer/cd-dvd/
+/nixos/modules/profiles/installation-device.nix @ElvishJerricco
+/nixos/modules/installer/cd-dvd/                @ElvishJerricco
 /nixos/modules/installer/sd-card/
 
 # Updaters

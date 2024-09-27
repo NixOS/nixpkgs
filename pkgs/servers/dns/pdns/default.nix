@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ mic92 disassembler nickcao ];
   };

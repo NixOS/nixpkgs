@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     install -Dm755 src/wtwitch $out/bin/wtwitch
     wrapProgram $out/bin/wtwitch \
       --set-default LANG en_US.UTF-8 \
-      --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.isLinux [ vlc ] ++ [
+      --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ vlc ] ++ [
         bash
         coreutils-prefixed
         curl

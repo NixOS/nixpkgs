@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
   buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # This is a temporary workaround for missing headers in the 10.12 SDK to avoid a mass rebuild.
     # A commit to revert this change will be included in the fix PR targeting staging.
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "--disable-rsh"
     "--disable-rlogin"
     "--disable-rexec"
-  ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin  "--disable-servers";
 
   doCheck = true;
 

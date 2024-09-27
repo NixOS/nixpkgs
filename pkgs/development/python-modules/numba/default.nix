@@ -78,7 +78,7 @@ buildPythonPackage rec {
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   build-system = [
     setuptools

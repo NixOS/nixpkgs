@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   # fails 1 out of 1 tests with "BAD GLOBAL SYMBOLS" on i686
   # which can also be fixed with
-  # hardeningDisable = lib.optional stdenv.isi686 "pic";
+  # hardeningDisable = lib.optional stdenv.hostPlatform.isi686 "pic";
   # but it's better to disable tests than loose ASLR on i686
-  doCheck = !stdenv.isi686;
+  doCheck = !stdenv.hostPlatform.isi686;
 
   meta = with lib; {
     description = "ATSC A/52 stream decoder";

@@ -70,7 +70,7 @@
 , enableNoSemanticInterposition ? true
 
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
-, enableLTO ? stdenv.isDarwin || (stdenv.is64bit && stdenv.isLinux)
+, enableLTO ? stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux)
 
 # enable asserts to ensure the build remains reproducible
 , reproducibleBuild ? false
@@ -95,7 +95,7 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-assert lib.assertMsg (enableFramework -> stdenv.isDarwin)
+assert lib.assertMsg (enableFramework -> stdenv.hostPlatform.isDarwin)
   "Framework builds are only supported on Darwin.";
 
 assert lib.assertMsg (reproducibleBuild -> stripBytecode)
@@ -152,7 +152,7 @@ let
 
   nativeBuildInputs = [
     nukeReferences
-  ] ++ optionals (!stdenv.isDarwin) [
+  ] ++ optionals (!stdenv.hostPlatform.isDarwin) [
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
     autoreconfHook
     pkg-config
@@ -181,7 +181,7 @@ let
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     configd
   ] ++ optionals tzdataSupport [
     tzdata
@@ -293,9 +293,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     bash # only required for patchShebangs
   ] ++ buildInputs;
 
-  prePatch = optionalString stdenv.isDarwin ''
+  prePatch = optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
-  '' + optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
+  '' + optionalString (pythonOlder "3.9" && stdenv.hostPlatform.isDarwin && x11Support) ''
     # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
     substituteInPlace setup.py --replace-fail /Library/Frameworks /no-such-path
   '';
@@ -307,7 +307,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.isFreeBSD) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
     # Cross compilation only supports a limited number of "known good"
     # configurations. If you're reading this and it's been a long time
     # since this diff, consider submitting this patch upstream!
@@ -327,7 +327,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonAtLeast "3.11") [
     ./3.11/darwin-libutil.patch
-  ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
+  ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
   ] ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
@@ -384,7 +384,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   env = {
     CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
     LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
-    LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
+    LIBS = "${optionalString (!stdenv.hostPlatform.isDarwin) "-lcrypt"}";
     NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
       "glibc" = "-lgcc_s";
       "musl" = "-lgcc_eh";
@@ -414,7 +414,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ optionals (stdenv.isDarwin && configd == null) [
+  ] ++ optionals (stdenv.hostPlatform.isDarwin && configd == null) [
     # Make conditional on Darwin for now to avoid causing Linux rebuilds.
     "py_cv_module__scproxy=n/a"
   ] ++ optionals (sqlite != null) [
@@ -467,16 +467,16 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     for path in /usr /sw /opt /pkg; do
       substituteInPlace ./setup.py --replace-warn $path /no-such-path
     done
-  '' + optionalString stdenv.isDarwin ''
+  '' + optionalString stdenv.hostPlatform.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
-    export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
+    export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}
     # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
     sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
   '' + optionalString (pythonAtLeast "3.11") ''
     # Also override the auto-detection in `configure`.
     substituteInPlace configure \
-      --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${if stdenv.isAarch64 then "uint128" else "x64"}'
-  '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
+      --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${if stdenv.hostPlatform.isAarch64 then "uint128" else "x64"}'
+  '' + optionalString (stdenv.hostPlatform.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
   '' + optionalString stdenv.hostPlatform.isMusl ''

@@ -37,7 +37,7 @@ buildGoModule rec {
 
   postInstall = let
     runtimeDependencies = [ bash getent ]
-      ++ lib.optionals stdenv.isLinux [ systemd ];
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
   in ''
     wrapProgram $out/bin/goss \
       --prefix PATH : "${lib.makeBinPath runtimeDependencies}"

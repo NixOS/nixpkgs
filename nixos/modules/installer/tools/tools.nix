@@ -216,7 +216,7 @@ in
   imports = let
     mkToolModule = { name, package ? pkgs.${name} }: { config, ... }: {
       options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
-        default = true;
+        default = config.nix.enable;
         internal = true;
       };
 

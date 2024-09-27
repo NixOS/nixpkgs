@@ -58,14 +58,14 @@ buildPythonPackage rec {
       # - https://github.com/NixOS/nixpkgs/issues/251045
       ./skip-attach-pid-tests.patch
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Hard code GDB path (used to attach to process)
       (substituteAll {
         src = ./hardcode-gdb.patch;
         inherit gdb;
       })
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Hard code LLDB path (used to attach to process)
       (substituteAll {
         src = ./hardcode-lldb.patch;
@@ -119,12 +119,12 @@ buildPythonPackage rec {
       export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
       export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
     ''
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
       export no_proxy='*';
     '';
 
-  postCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
   '';
 

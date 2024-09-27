@@ -37,8 +37,6 @@ let
       "cryptsetup.target"
       "cryptsetup-pre.target"
       "remote-cryptsetup.target"
-    ] ++ optionals cfg.package.withTpm2Tss [
-      "tpm2.target"
     ] ++ [
       "sigpwr.target"
       "timers.target"
@@ -679,7 +677,7 @@ in
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226
-    boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
+    boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.hostPlatform.is64bit (lib.mkDefault 4194304);
 
     services.logrotate.settings = {
       "/var/log/btmp" = mapAttrs (_: mkDefault) {

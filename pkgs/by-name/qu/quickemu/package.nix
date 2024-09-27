@@ -48,7 +48,7 @@ let
       xrandr
       zsync
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       mesa-demos
       usbutils
       xdg-user-dirs

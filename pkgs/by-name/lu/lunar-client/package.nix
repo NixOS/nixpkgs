@@ -13,10 +13,11 @@ appimageTools.wrapType2 rec {
     hash = "sha512-hzW7khHfWEYPtzMmedy/dXqKh7LPniqI7/0F1FtBtrlDnEIEQUq/7VUcygsVTBI6kuj8vTG5+PYcLez+cYAjqg==";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/lunarclient \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/

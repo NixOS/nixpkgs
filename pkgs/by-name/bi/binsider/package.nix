@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [ samueltardieu ];
     mainProgram = "binsider";
-    broken = stdenv.isDarwin || stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 }

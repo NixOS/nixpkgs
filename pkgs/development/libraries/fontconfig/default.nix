@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     expat
-  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreFoundation;
 
   propagatedBuildInputs = [
     freetype

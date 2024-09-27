@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
     ncurses
   ];
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Unexplained fail
     # https://github.com/NixOS/nixpkgs/pull/298527#issuecomment-2053758845
     "--skip=first_run_prompt_accept"

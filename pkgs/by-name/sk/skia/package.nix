@@ -18,7 +18,7 @@
 , vulkan-memory-allocator
 , xcbuild
 
-, enableVulkan ? !stdenv.isDarwin
+, enableVulkan ? !stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     python3
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   buildInputs = [
     expat
@@ -145,6 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64;
     pkgConfigModules = [ "skia" ];
     # https://github.com/NixOS/nixpkgs/pull/325871#issuecomment-2220610016
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

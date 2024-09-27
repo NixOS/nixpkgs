@@ -131,6 +131,7 @@
   hurl
 , # must be lua51Packages
   luajitPackages
+, aider-chat
 ,
 }: self: super:
 let
@@ -381,12 +382,12 @@ in
 
   codeium-nvim = let
     # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-    codeiumVersion = "1.8.80";
+    codeiumVersion = "1.16.18";
     codeiumHashes = {
-      x86_64-linux = "sha256-ULHO7NrbW0DDlOYiSHGXwJ+NOa68Ma+HMHgq2WyAKBA=";
-      aarch64-linux = "sha256-WVqPV/D9jPADkxt5XmydqXjSG8461URPsk1+W/kyZV0=";
-      x86_64-darwin = "sha256-0P/eYZp0Wieza0btOA+yxqKtoIYlUN6MhN0dI6R8GEg=";
-      aarch64-darwin = "sha256-2Cv22+Ii+otKLDQ404l9R/x42PkKTEzPB72/gc9wfig=";
+      x86_64-linux = "sha256-/m+t4abPgVWeGpfDkPm5DGCIXm1LoM5znHfES9lotAo=";
+      aarch64-linux = "sha256-0kR799yuxSFmyedJ14f5/EqOiFHs9cWjeJKvDIpIRl0=";
+      x86_64-darwin = "sha256-7Go5qZVAe2UHn547HZG4fmh84iF2r15+0IIlJK72Fqg=";
+      aarch64-darwin = "sha256-fe4GrgLRr66Qmme3p0X5BEwvKZhqG1aiE8xs5A1Dt6E=";
     };
 
     codeium' = codeium.overrideAttrs rec {
@@ -477,7 +478,7 @@ in
 
         buildInputs = [
           libuv.dev
-        ] ++ lib.optionals stdenv.isDarwin [
+        ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
           darwin.apple_sdk.frameworks.AppKit
         ];
       };
@@ -491,7 +492,7 @@ in
       # Note: the destination should be generator.so, even on darwin
       # https://github.com/mistricky/codesnap.nvim/blob/main/scripts/build_generator.sh
       postInstall = let
-        extension = if stdenv.isDarwin then "dylib" else "so";
+        extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
       in ''
         rm -r $out/lua/*.so
         cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
@@ -596,7 +597,7 @@ in
         rev = "cd97c25320fb0a672b11bcd95d8332bb3088ecce";
         hash = "sha256-66NtKteM1mvHP5wAU4e9JbsF+bq91lmCDcTh/6RPhoo=";
       };
-      extension = if stdenv.isDarwin then "dylib" else "so";
+      extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
       rustPackage = rustPlatform.buildRustPackage {
         pname = "cord.nvim-rust";
         inherit version src;
@@ -1002,11 +1003,11 @@ in
         src = LanguageClient-neovim-src;
 
         cargoHash = "sha256-H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
-        buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+        buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
         # FIXME: Use impure version of CoreFoundation because of missing symbols.
         #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
-        preConfigure = lib.optionalString stdenv.isDarwin ''
+        preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
           export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
         '';
       };
@@ -1238,9 +1239,7 @@ in
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neorg = super.neorg.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
-  };
+  neorg = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.neorg; };
 
   neotest = super.neotest.overrideAttrs {
     dependencies = with self; [ nvim-nio plenary-nvim ];
@@ -1497,6 +1496,15 @@ in
     '';
   };
 
+  aider-nvim = super.aider-nvim.overrideAttrs {
+    patches = [ ./patches/aider.nvim/fix-paths.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/aider.lua --replace '@aider@' ${aider-chat}/bin/aider
+      substituteInPlace lua/helpers.lua --replace '@aider@' ${aider-chat}/bin/aider
+    '';
+  };
+
   refactoring-nvim = super.refactoring-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter plenary-nvim ];
   };
@@ -1533,7 +1541,7 @@ in
 
         buildInputs =
           [ openssl ]
-          ++ lib.optionals stdenv.isDarwin [
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
             darwin.apple_sdk.frameworks.Security
             darwin.apple_sdk.frameworks.SystemConfiguration
           ];
@@ -1585,7 +1593,7 @@ in
         pname = "sniprun-bin";
         inherit version src;
 
-        buildInputs = lib.optionals stdenv.isDarwin [
+        buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
           darwin.apple_sdk.frameworks.Security
         ];
 
@@ -1887,7 +1895,7 @@ in
   };
 
   vim-addon-manager = super.vim-addon-manager.overrideAttrs {
-    buildInputs = lib.optional stdenv.isDarwin Cocoa;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Cocoa;
   };
 
   vim-addon-mru = super.vim-addon-mru.overrideAttrs {
@@ -1948,7 +1956,7 @@ in
     src = old.src.overrideAttrs (srcOld: {
       postFetch =
         (srcOld.postFetch or "")
-        + lib.optionalString (!stdenv.isDarwin) ''
+        + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
           rm $out/colors/darkBlue.vim
         '';
     });

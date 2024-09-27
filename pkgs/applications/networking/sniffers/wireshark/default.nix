@@ -51,7 +51,7 @@
 , qt6 ? null
 }:
 let
-  isAppBundle = withQt && stdenv.isDarwin;
+  isAppBundle = withQt && stdenv.hostPlatform.isDarwin;
 in
 assert withQt -> qt6 != null;
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withQt [
     qt6.wrapQtAppsHook
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -126,13 +126,13 @@ stdenv.mkDerivation rec {
     qtmultimedia
     qtsvg
     qttools
-  ]) ++ lib.optionals (withQt && stdenv.isLinux) [
+  ]) ++ lib.optionals (withQt && stdenv.hostPlatform.isLinux) [
     qt6.qtwayland
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
     libnl
     sbc
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     gmp
     SystemConfiguration
@@ -171,7 +171,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString isAppBundle ''
     mkdir -p $out/Applications
     mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     local flags=()
     for file in $out/lib/*.dylib; do
       flags+=(-change @rpath/"$(basename "$file")" "$file")

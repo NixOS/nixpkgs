@@ -36,7 +36,7 @@ buildGoModule rec {
     xorg.libXext
     xorg.libXxf86vm
     libglvnd
-  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa Kernel UserNotifications ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa Kernel UserNotifications ];
 
   ldflags = [
     "-s"

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
-  qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.isDarwin [
+  qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "PGSQL_INC=${lib.getDev postgresql}/include"
     "PGSQL_LIB=${lib.getLib postgresql}/lib/libpq.dylib"
     "XML_INC=${libxml2.dev}/include/libxml2"
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
 
   # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
   buildInputs = [ postgresql qtsvg ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ]
-    ++ lib.optionals stdenv.isDarwin [ cups libxml2 ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups libxml2 ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
     for item in pgmodeler pgmodeler-{cli,se,ch}
     do
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Database modeling tool for PostgreSQL";

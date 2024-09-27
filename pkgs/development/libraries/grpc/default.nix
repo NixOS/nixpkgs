@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
   buildInputs = [ openssl protobuf ]
-    ++ lib.optionals stdenv.isLinux [ libnsl ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
 
   cmakeFlags = [
     "-DgRPC_ZLIB_PROVIDER=package"
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Workaround for https://github.com/llvm/llvm-project/issues/48757
     "-Wno-elaborated-enum-base"
   ]);
