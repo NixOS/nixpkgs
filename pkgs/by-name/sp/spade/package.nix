@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.10.0";
+  version = "0.10.0^{}";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
