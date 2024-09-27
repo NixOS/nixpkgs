@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   biometryd,
@@ -22,28 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-filemanager-app";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-filemanager-app";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KZzkD+h2yUeBvNFn9xLLtc4Iukk6maimFjIdpGCWLOE=";
+    hash = "sha256-XA1Gdb0Kpc3BEifmgHhQ38moKkCkYbhpr8wptnddZlk=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-filemanager-app/-/merge_requests/117 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-filemanager-app-Install-content-hub-and-url-dispatcher-files.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-filemanager-app/-/commit/e15dc7c5b4dd0b9e5df3e4e99da8f28bd760e093.patch";
-      hash = "sha256-MXuQXpZcf5fJP4aenl5KDOtdaDFTTnkzIfem9BpE5ig=";
-    })
-    (fetchpatch {
-      name = "0002-lomiri-filemanager-app-Let-desktop-icon-be-found-via-lookup.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-filemanager-app/-/commit/8c38f30ac099609379b95079fac771a61d73e7d6.patch";
-      hash = "sha256-I3hB+W/5JW08HcLiNrSpZ7rTeQyKNoMNINVrFbF/Uiw=";
-    })
-  ];
 
   postPatch = ''
     # Use correct QML install path, don't pull in autopilot test code (we can't run that system)
