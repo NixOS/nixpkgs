@@ -1,27 +1,28 @@
 { lib
-, fetchFromGitHub
-, nix-update-script
-, cmake
-, pkg-config
-, mkDerivation
-, qtbase
-, qtx11extras
-, qtsvg
-, makeWrapper
-, vulkan-loader
-, libglvnd
-, xorg
-, python311
-, python311Packages
-, bison
-, pcre
-, automake
-, autoconf
 , addDriverRunpath
-, waylandSupport ? false
+, autoconf
+, automake
+, bison
+, cmake
+, fetchFromGitHub
+, libglvnd
+, makeWrapper
+, nix-update-script
+, pcre
+, pkg-config
+, python311Packages
+, vulkan-loader
 , wayland
+, xorg
+, qt5
+, stdenv
+# Boolean flags
+, waylandSupport ? true
 }:
+
 let
+  inherit (qt5) qtbase qtsvg qtx11extras wrapQtAppsHook;
+
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
@@ -29,7 +30,7 @@ let
     sha256 = "15r2m5kcs0id64pa2fsw58qll3jyh71jzc04wy20pgsh2326zis6";
   };
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "renderdoc";
   version = "1.34";
 
@@ -41,13 +42,13 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python311
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader
   ] ++ (with python311Packages; [
-    pyside2 pyside2-tools shiboken2
+    python pyside2 pyside2-tools shiboken2
   ])
   ++ lib.optional waylandSupport wayland;
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addDriverRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addDriverRunpath wrapQtAppsHook ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
