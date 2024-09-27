@@ -331,6 +331,13 @@ in
           not reside within /tmp - it won't be visible to the systemd service.
       '';
     } {
+      assertion =
+        cfg.restic.enable -> ((cfg.restic.repository == null) != (cfg.restic.repositoryFile == null));
+      message = ''
+        Please specify either 'services.prometheus.exporters.restic.repository'
+          or 'services.prometheus.exporters.restic.repositoryFile'.
+      '';
+    } {
       assertion = cfg.snmp.enable -> (
         (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
       );
