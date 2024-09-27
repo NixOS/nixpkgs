@@ -584,7 +584,7 @@ rec {
       lazy ? false,
     }:
     let
-      typeName = "attrsOf";
+      typeName = if lazy then "lazyAttrsOf" else "attrsOf";
       lazyMergeFn = loc: defs:
         zipAttrsWith (name: defs:
           let merged = mergeDefinitions (loc ++ [name]) elemType defs;
@@ -596,7 +596,7 @@ rec {
 
       mergeFn = loc: defs:
         mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
+            (mergeDefinitions (loc ++ [name]) elemType (defs)).optionalValue
           )
         # Push down position info.
         (pushPositions defs)));
@@ -613,7 +613,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${name}>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit name lazy; };
-      functor = (defaultFunctor typeName) // { wrapped = elemType; };
+      functor = (defaultFunctor typeName) // { wrapped = elemType; type = t: attrsWith { elemType = t; inherit name lazy; }; };
       nestedTypes.elemType = elemType;
     };
 
