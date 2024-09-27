@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonPackage {
   pname = "x509-limbo";
-  version = "unstable-2024-03-13";
+  version = "unstable-2024-09-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "C2SP";
     repo = "x509-limbo";
-    rev = "a04fb05cf132e1405f71c12616cf0aead829909a";
-    hash = "sha256-TA4ciHkXg/RKzcIs2bwpx7CxsQDyQMG636Rr74xPsBA=";
+    rev = "4d87f8fcb080ca175389dab8fac34ccb3821ad01";
+    hash = "sha256-uPbynIRwpwogVXlZ2j16Ap1zeJfNbc4d8LDxcp2rXHs=";
   };
 
   dependencies = with python3.pkgs; [
