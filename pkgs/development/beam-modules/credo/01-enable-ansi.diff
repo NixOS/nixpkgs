@@ -1,0 +1,8 @@
+diff --git a/config/config.exs b/config/config.exs
+index e69de29b..0d6ef317 100644
+--- a/config/config.exs
++++ b/config/config.exs
+@@ -0,0 +1,3 @@
++import Config
++
++config :elixir, ansi_enabled: true
