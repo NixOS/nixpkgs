@@ -1,9 +1,9 @@
-{ mkDerivation, lib, fetchurl
-, pkg-config, libtool, qmake
-, rsync, ssh
+{ stdenv, lib, fetchurl
+, pkg-config, libtool, qt5
+, rsync, openssh
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "luckybackup";
   version = "0.5.0";
 
@@ -12,9 +12,9 @@ mkDerivation rec {
     sha256 = "0nwjsk1j33pm8882jbj8h6nxn6n5ab9dxqpqkay65pfbhcjay0g8";
   };
 
-  buildInputs = [ rsync ssh ];
+  buildInputs = [ rsync openssh ];
 
-  nativeBuildInputs = [ pkg-config libtool qmake ];
+  nativeBuildInputs = [ pkg-config libtool qt5.qmake qt5.wrapQtAppsHook ];
 
   prePatch = ''
     for File in luckybackup.pro menu/luckybackup-pkexec \
