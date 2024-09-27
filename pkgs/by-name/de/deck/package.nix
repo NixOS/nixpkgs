@@ -34,6 +34,7 @@ buildGoModule rec {
     description = "Configuration management and drift detection tool for Kong";
     homepage = "https://github.com/Kong/deck";
     license = licenses.asl20;
+    mainProgram = "deck";
     maintainers = with maintainers; [ liyangau ];
   };
 }
