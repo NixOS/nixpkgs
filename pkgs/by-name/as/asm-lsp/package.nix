@@ -1,8 +1,11 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
+, darwin
+, libiconv
 }:
 let
   pname = "asm-lsp";
@@ -24,6 +27,9 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+    libiconv
   ];
 
   cargoHash = "sha256-AtCnYOOtViMpg+rz8miuBZg1pENBPaf9kamSPaVUyiw=";
@@ -39,6 +45,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "asm-lsp";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
