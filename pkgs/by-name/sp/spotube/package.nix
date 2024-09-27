@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  system,
 
   autoPatchelfHook,
   dpkg,
@@ -38,6 +39,7 @@ let
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
@@ -75,12 +77,19 @@ let
     '';
   };
 
+  arch = if system == "x86_64-linux" then "x86_64" else "aarch64";
+  hash =
+    if system == "x86_64-linux" then
+      "sha256-R/yHXx29T/7NNc1L1AmevzXp1k98qnmvOEd3cfSlJuA="
+    else
+      "sha256-s7wrt/7whAvaF0m15bxqhd6g8I7E+tRYLJYrHpTaiwc=";
+
   linux = stdenv.mkDerivation {
     inherit pname version meta;
 
     src = fetchArtifact {
-      filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-R/yHXx29T/7NNc1L1AmevzXp1k98qnmvOEd3cfSlJuA=";
+      filename = "Spotube-linux-${arch}.deb";
+      inherit hash;
     };
 
     nativeBuildInputs = [
