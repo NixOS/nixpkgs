@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "3.3.1";
+  version = "3.4";
 in
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/SRI-CSL/Maude/archive/refs/tags/Maude${version}.tar.gz";
-    sha256 = "ueM8qi3fLogWT8bA+ZyBnd9Zr9oOKuoiu2YpG6o5J1E=";
+    sha256 = "sha256-IXWEWAmh388NpNSt9wnOpLkzhZ09N+AStO2wn5dRT8o=";
   };
 
   nativeBuildInputs = [ flex bison unzip makeWrapper ];
