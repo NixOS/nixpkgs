@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.7";
+  version = "1.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "SasView";
     repo = "sasmodels";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GZQYVvQ4bEBizTmJ+o5fIfGr8gn2/4uD3PxIswEjzSE=";
+    hash = "sha256-fa6/13z11AuTRItZOEmTbjpU1aT6Ur7evi6UvVvXQck=";
   };
 
   buildInputs = [ opencl-headers ];
