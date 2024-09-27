@@ -83,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
+  # Avoid flakiness like https://gitlab.com/libtiff/libtiff/-/commit/94f6f7315b1
+  # - except that we have many x86_64-linux binaries depending on this already
+  enableParallelChecking = stdenv.system == "x86_64-linux";
 
   passthru = {
     tests = {
