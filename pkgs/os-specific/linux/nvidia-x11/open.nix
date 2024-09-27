@@ -4,6 +4,7 @@
 , kernel
 , nvidia_x11
 , hash
+, patches ? [ ]
 , broken ? false
 }:
 
@@ -17,6 +18,8 @@ stdenv.mkDerivation ({
     rev = nvidia_x11.version;
     inherit hash;
   };
+
+  inherit patches;
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
