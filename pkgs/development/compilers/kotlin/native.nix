@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-native";
-  version = "1.9.23";
+  version = "1.9.24";
 
   src = let
     getArch = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     getHash = arch: {
       "macos-aarch64" = "1v1ld4nxa77vjxiz4jw5h29s8i4ghfbmq0d01r15i75pr46md8r7";
       "macos-x86_64" = "05ywdhagj3qzjaw5sd94sgjk89dysky7d7lfqpwvc8s35v77rv8f";
-      "linux-x86_64" = "1j2lpl1r7r30dgard6ia29n3qrsr98wb3qwpc80z4jh6k42qn6id";
+      "linux-x86_64" = "sha256-sEvljAwLSzBxUxxpRAPxtlDnKlwH4FGQTDaQI+XcGaE=";
     }.${arch};
   in
     fetchurl {
