@@ -1,31 +1,59 @@
-{ stdenv, lib, fetchurl
-, pkg-config, libtool, qt5
-, rsync, openssh
+{
+  lib,
+  fetchurl,
+  libtool,
+  openssh,
+  pkg-config,
+  qt5,
+  rsync,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luckybackup";
   version = "0.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/luckybackup/${version}/source/${pname}-${version}.tar.gz";
-    sha256 = "0nwjsk1j33pm8882jbj8h6nxn6n5ab9dxqpqkay65pfbhcjay0g8";
+    url = "mirror://sourceforge/project/luckybackup/${finalAttrs.version}/source/luckybackup-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6AGvJIPL3WK8mvji3tJSxRrbrYFILikQQvWOIcPUkls=";
   };
 
-  buildInputs = [ rsync openssh ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
-  nativeBuildInputs = [ pkg-config libtool qt5.qmake qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    libtool
+    pkg-config
+    qt5.qmake
+    qt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    rsync
+    openssh
+  ];
+
+  strictDeps = true;
 
   prePatch = ''
-    for File in luckybackup.pro menu/luckybackup-pkexec \
-        menu/luckybackup-su.desktop menu/luckybackup.desktop \
-        menu/net.luckybackup.su.policy src/functions.cpp \
-        src/global.cpp src/scheduleDialog.cpp; do
-      substituteInPlace $File --replace "/usr" "$out"
+    for File in \
+      luckybackup.pro \
+      menu/luckybackup-pkexec \
+      menu/luckybackup-su.desktop \
+      menu/luckybackup.desktop \
+      menu/net.luckybackup.su.policy \
+      src/functions.cpp \
+      src/global.cpp \
+      src/scheduleDialog.cpp; do
+        substituteInPlace $File --replace "/usr" "$out"
     done
   '';
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://luckybackup.sourceforge.net/";
     description = "Powerful, fast and reliable backup & sync tool";
     longDescription = ''
       luckyBackup is an application for data back-up and synchronization
@@ -36,9 +64,9 @@ stdenv.mkDerivation rec {
       before proceeding in any data manipulation), reliable and fully
       customizable.
     '';
-    homepage = "https://luckybackup.sourceforge.net/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "luckybackup";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})
