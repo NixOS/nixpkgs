@@ -68,6 +68,7 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [
       ppom
       melvyn2
+      getchoo
     ];
     mainProgram = "slskd";
     platforms = lib.platforms.linux;
