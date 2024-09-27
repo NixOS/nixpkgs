@@ -1700,6 +1700,7 @@ mapAliases {
   xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = xvfb-run; # Added 2021-05-07
+  xwaylandvideobridge = libsForQt5.xwaylandvideobridge; # Added 2024-09-27
 
   ### Y ###
 
