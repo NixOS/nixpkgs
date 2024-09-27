@@ -2186,15 +2186,7 @@ with pkgs;
     humanfriendly;
   };
 
-  git-annex-remote-googledrive = callPackage ../applications/version-management/git-annex-remote-googledrive {
-    inherit (python3Packages)
-    buildPythonApplication
-    annexremote
-    drivelib
-    gitpython
-    tenacity
-    humanfriendly;
-  };
+  git-annex-remote-googledrive = python3Packages.callPackage ../applications/version-management/git-annex-remote-googledrive { };
 
   git-annex-remote-rclone = callPackage ../applications/version-management/git-annex-remote-rclone { };
 
