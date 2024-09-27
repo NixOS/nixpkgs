@@ -143,6 +143,7 @@ in {
         kate
         khelpcenter
         dolphin
+        baloo-widgets  # baloo information in Dolphin
         dolphin-plugins
         spectacle
         ffmpegthumbs
