@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "tlsh";
-  version = "4.10.0";
+  version = "4.12.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
-    rev = version;
-    hash = "sha256-9Vkj7a5xU/coFyM/8i8JB0DdnbgDAEMOjmmMF8ckKuE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ht4LkcNmxPEvzFHXeS/XhPt/xo+0sE4RBcLCn9N/zwE=";
   };
 
   nativeBuildInputs = [ cmake ];
