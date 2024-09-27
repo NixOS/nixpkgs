@@ -11875,8 +11875,6 @@ with pkgs;
 
   renameutils = callPackage ../tools/misc/renameutils { };
 
-  renderdoc = callPackage ../development/tools/renderdoc { };
-
   repgrep = callPackage ../tools/text/repgrep { };
 
   replace = callPackage ../tools/text/replace { };
