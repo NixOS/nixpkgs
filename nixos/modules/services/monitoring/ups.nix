@@ -309,6 +309,7 @@ let
         defaultText = lib.literalMD ''
           {
             MINSUPPLIES = 1;
+            MONITOR = <generated from config.power.ups.upsmon.monitor>
             NOTIFYCMD = "''${pkgs.nut}/bin/upssched";
             RUN_AS_USER = "root";
             SHUTDOWNCMD = "''${pkgs.systemd}/bin/shutdown now";
