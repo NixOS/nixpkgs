@@ -7176,9 +7176,7 @@ with pkgs;
 
   evtx = callPackage ../tools/security/evtx { };
 
-  luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
-    ssh = openssh;
-  };
+  luckybackup = callPackage ../tools/backup/luckybackup { };
 
   kics = callPackage ../tools/admin/kics { };
 
