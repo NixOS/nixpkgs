@@ -30,7 +30,7 @@
 , libXcursor
 , libXrandr
 , fontconfig
-, openjdk22-bootstrap
+, openjdk23-bootstrap
 , ensureNewerSourcesForZipFilesHook
 , setJavaClassPath
   # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
@@ -51,13 +51,13 @@ let
   # $FEATURE.$INTERIM.$UPDATE.$PATCH
   # See
   # https://openjdk.org/jeps/223
-  # https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Runtime.Version.html
-  featureVersion = "22";
+  # https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Runtime.Version.html
+  featureVersion = "23";
   info = builtins.getAttr featureVersion (lib.importJSON ./info.json);
   version = info.version;
 
   # when building a headless jdk, also bootstrap it with a headless jdk
-  openjdk-bootstrap = openjdk22-bootstrap.override { gtkSupport = !headless; };
+  openjdk-bootstrap = openjdk23-bootstrap.override { gtkSupport = !headless; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -108,18 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix-java-home-jdk21.patch
     ./read-truststore-from-env-jdk10.patch
-    ./currency-date-range-jdk10.patch
     ./increase-javadoc-heap-jdk13.patch
     ./ignore-LegalNoticeFilePlugin-jdk18.patch
-
-    # -Wformat etc. are stricter in newer gccs, per
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
-    # so grab the work-around from
-    # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
-    (fetchurl {
-      url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
-      sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
-    })
 
     # Fix build for gnumake-4.4.1:
     #   https://github.com/openjdk/jdk/pull/12992
@@ -274,7 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
         ${finalAttrs.finalPackage}/bin/java \
           -cp ${java-json} \
           ${./JavaUpdater.java} \
-          22 pkgs/development/compilers/openjdk/info.json
+          ${featureVersion} pkgs/development/compilers/openjdk/info.json
       '';
 
     home = "${finalAttrs.finalPackage}/lib/openjdk";

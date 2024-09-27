@@ -96,5 +96,7 @@ maven.buildMavenPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bachp ];
     platforms = [ "x86_64-linux" ];
+    # Uses abandoned JEP 430 string template preview, removed in JDK 23
+    broken = true;
   };
 }

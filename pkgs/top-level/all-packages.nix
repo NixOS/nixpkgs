@@ -14375,8 +14375,8 @@ with pkgs;
 
   ### DEVELOPMENT / COMPILERS
 
-  temurin-bin-22 = javaPackages.compiler.temurin-bin.jdk-22;
-  temurin-jre-bin-22 = javaPackages.compiler.temurin-bin.jre-22;
+  temurin-bin-23 = javaPackages.compiler.temurin-bin.jdk-23;
+  temurin-jre-bin-23 = javaPackages.compiler.temurin-bin.jre-23;
 
   temurin-bin-21 = javaPackages.compiler.temurin-bin.jdk-21;
   temurin-jre-bin-21 = javaPackages.compiler.temurin-bin.jre-21;
@@ -14386,11 +14386,12 @@ with pkgs;
 
   temurin-bin-11 = javaPackages.compiler.temurin-bin.jdk-11;
   temurin-jre-bin-11 = javaPackages.compiler.temurin-bin.jre-11;
+
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-22;
-  temurin-jre-bin = temurin-jre-bin-22;
+  temurin-bin = temurin-bin-21;
+  temurin-jre-bin = temurin-jre-bin-21;
 
   semeru-bin-21 = javaPackages.compiler.semeru-bin.jdk-21;
   semeru-jre-bin-21 = javaPackages.compiler.semeru-bin.jre-21;
@@ -15184,7 +15185,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx17 openjfx21 openjfx22;
+  inherit (javaPackages) openjfx11 openjfx17 openjfx21 openjfx23;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -15212,10 +15213,10 @@ with pkgs;
   jdk21 = openjdk21;
   jdk21_headless = openjdk21_headless;
 
-  openjdk22 = javaPackages.compiler.openjdk22;
-  openjdk22_headless = javaPackages.compiler.openjdk22.headless;
-  jdk22 = openjdk22;
-  jdk22_headless = openjdk22_headless;
+  openjdk23 = javaPackages.compiler.openjdk23;
+  openjdk23_headless = javaPackages.compiler.openjdk23.headless;
+  jdk23 = openjdk23;
+  jdk23_headless = openjdk23_headless;
 
   /* default JDK */
   jdk = jdk21;
@@ -16120,6 +16121,7 @@ with pkgs;
   zulu11 = callPackage ../development/compilers/zulu/11.nix { };
   zulu17 = callPackage ../development/compilers/zulu/17.nix { };
   zulu21 = callPackage ../development/compilers/zulu/21.nix { };
+  zulu23 = callPackage ../development/compilers/zulu/23.nix { };
   zulu = zulu21;
 
   ### DEVELOPMENT / INTERPRETERS
@@ -25727,7 +25729,7 @@ with pkgs;
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk22.override { enableJavaFX = true; };
+    jdk = jdk23.override { enableJavaFX = true; };
   };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
@@ -30547,9 +30549,9 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk.override {
+    jdk = jdk21.override {
       enableJavaFX = true;
-      openjfx = openjfx22.override { withWebKit = true; };
+      openjfx = openjfx23.override { withWebKit = true; };
     };
   };
 

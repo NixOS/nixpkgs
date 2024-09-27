@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , fetchpatch2
 , writeText
-, openjdk21_headless
+, openjdk23_headless
 , gradle
 , pkg-config
 , perl
@@ -25,11 +25,11 @@
 
 let
   pname = "openjfx-modular-sdk";
-  major = "22";
-  update = ".0.2";
+  major = "23";
+  update = "";
   build = "-ga";
   repover = "${major}${update}${build}";
-  jdk = openjdk21_headless;
+  jdk = openjdk23_headless;
 
 in stdenv.mkDerivation {
   inherit pname;
@@ -37,17 +37,17 @@ in stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "openjdk";
-    repo = "jfx22u";
+    repo = "jfx23u";
     rev = repover;
-    hash = "sha256-7Q9nZ2p3KfQPt1A2ULwk64OU/5/ghEkcsf9ECD6Ln2g=";
+    hash = "sha256-a/ev91Rq7D3z9O56ZZQCgvvbfj5GBt5Lonow2NH3s/E=";
   };
 
   patches = [
     # 8338701: Provide media support for libavcodec version 61
-    # <https://github.com/openjdk/jfx/pull/1552>
+    # <https://github.com/openjdk/jfx23u/pull/18>
     (fetchpatch2 {
-      url = "https://github.com/openjdk/jfx/commit/6115b396bacf62f39dcaa93c7c0adcd60b428b8c.patch?full_index=1";
-      hash = "sha256-6EES4qsumFgXePZSDEetJC1Li65zquz3UjwRbq/6YJM=";
+      url = "https://github.com/openjdk/jfx23u/commit/aba60fda1c82f00e8e685107592305c403a31287.patch?full_index=1";
+      hash = "sha256-+aRhTwi4VQthAq1SH1jxPl0mTosNMKoTY52jm+jiKso=";
     })
   ];
 
