@@ -6751,6 +6751,8 @@ self: super: with self; {
 
   kitchen = callPackage ../development/python-modules/kitchen { };
 
+  kiui = callPackage ../development/python-modules/kiui { };
+
   kivy = callPackage ../development/python-modules/kivy {
     inherit (pkgs) mesa;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate ApplicationServices AVFoundation;
@@ -9151,6 +9153,8 @@ self: super: with self; {
     # requires both the graphviz package and python package
     graphvizPkgs = pkgs.graphviz;
   };
+
+  objprint = callPackage ../development/python-modules/objprint { };
 
   obspy = callPackage ../development/python-modules/obspy { };
 
@@ -17064,6 +17068,8 @@ self: super: with self; {
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
+
+  varname = callPackage ../development/python-modules/varname { };
 
   vat-moss = callPackage ../development/python-modules/vat-moss { };
 
