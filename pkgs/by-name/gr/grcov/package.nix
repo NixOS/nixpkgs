@@ -15,7 +15,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-1t+hzB9sSApLScCkjBnLk9i2dsoEwZmWCFukEOvHhZI=";
   };
 
-  cargoHash = "sha256-4KzFbfUqnGmle2fwSaHMPIJHQFDq8H2Qzm4FdYdqpuM=";
+  cargoPatches = [
+    ./0001-update-time-rs.patch
+  ];
+
+  cargoHash = "sha256-zbraeXyuXgif46tRFQpEZVZ6bInrgKbrqRArmjFIgU8=";
 
   # tests do not find grcov path correctly
   checkFlags =
