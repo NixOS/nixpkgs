@@ -1,0 +1,44 @@
+From 83907314b1b6a6d314976f6217cc9c53667973e2 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 3 Apr 2024 01:00:07 +0200
+Subject: [PATCH] libftdi: Fix doc parallelism
+
+---
+ python/CMakeLists.txt | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
+index 5b6f420..b89f96a 100644
+--- a/python/CMakeLists.txt
++++ b/python/CMakeLists.txt
+@@ -25,7 +25,7 @@ link_directories ( ${CMAKE_CURRENT_BINARY_DIR}/../src )
+ if ( DOCUMENTATION )
+   set(CMAKE_SWIG_FLAGS -DDOXYGEN=${DOXYGEN_FOUND})
+   # manually add dependency for new cmake / swig versions
+-  set_property(SOURCE ftdi1.i PROPERTY DEPENDS ftdi1_doc.i)
++  set_property(SOURCE ftdi1.i PROPERTY DEPENDS doc_i)
+ endif()
+ if(NOT CMAKE_VERSION VERSION_LESS 3.8.0)
+   swig_add_library ( ftdi1 LANGUAGE python SOURCES ftdi1.i )
+@@ -62,15 +62,16 @@ if ( DOCUMENTATION )
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+         DEPENDS ${c_headers};${c_sources};${cpp_sources};${cpp_headers}
+     )
++    add_custom_target ( generated-ftdi_8c-xml DEPENDS ${CMAKE_BINARY_DIR}/doc/xml/ftdi_8c.xml)
+ 
+     # generate .i from doxygen .xml
+     add_custom_command ( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ftdi1_doc.i
+         COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doxy2swig.py -n
+             ${CMAKE_BINARY_DIR}/doc/xml/ftdi_8c.xml
+             ${CMAKE_CURRENT_BINARY_DIR}/ftdi1_doc.i
+-        DEPENDS ${CMAKE_BINARY_DIR}/doc/xml/ftdi_8c.xml
++        DEPENDS generated-ftdi_8c-xml
+     )
+-    add_custom_target ( doc_i DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ftdi1_doc.i )
++    add_custom_target ( doc_i DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ftdi1_doc.i generated-ftdi_8c-xml)
+     add_dependencies( ${SWIG_MODULE_ftdi1_REAL_NAME} doc_i )
+ 
+ endif ()
+-- 
+2.42.0
+
