@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -36,6 +37,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-ncYE2dCIAQxCMCe/5zrDU9iHTIkw+iO/IQl8+pfTvLI=";
   };
+
+  patches = [
+    # keybindings: Ignore shift-f10 (alternate menu popup shortcut).
+    # https://github.com/linuxmint/cinnamon-screensaver/issues/462
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon-screensaver/commit/bda58ec0226e94dfe388863f7a9438414a5e110f.patch";
+      hash = "sha256-IIQhIQtOlJZqGMebCB1phqcQMb+aXbgB4Wzl0CpVJEQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
