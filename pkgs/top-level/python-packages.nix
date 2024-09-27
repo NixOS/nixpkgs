@@ -2282,6 +2282,8 @@ self: super: with self; {
 
   cleanlab = callPackage ../development/python-modules/cleanlab { };
 
+  cleanvision = callPackage ../development/python-modules/cleanvision { };
+
   cleo = callPackage ../development/python-modules/cleo { };
 
   clevercsv = callPackage ../development/python-modules/clevercsv { };
