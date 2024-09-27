@@ -63,13 +63,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "1.0rc1";
+  version = "1.0rc2";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-CQWLYGgcz/up1SVc2V7nOX0deGBSEEs2RwbA7pr5kc4=";
+    hash = "sha256-kPmfx/C1fCYwBqh6ZOKZAVNVR9m3VryPmBKu3ksDD5E=";
     fetchSubmodules = true;
   };
 
