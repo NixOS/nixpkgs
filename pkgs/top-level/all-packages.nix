@@ -4133,8 +4133,6 @@ with pkgs;
 
   bfetch = callPackage ../tools/misc/bfetch { };
 
-  bless = callPackage ../applications/editors/bless { };
-
   blink = darwin.apple_sdk_11_0.callPackage ../applications/emulators/blink { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
@@ -29578,10 +29576,6 @@ with pkgs;
 
   gpa = callPackage ../applications/misc/gpa { };
 
-  gpicview = callPackage ../applications/graphics/gpicview {
-    gtk2 = gtk2-x11;
-  };
-
   gpx = callPackage ../applications/misc/gpx { };
 
   gqrx = qt6Packages.callPackage ../applications/radio/gqrx { };
@@ -29831,8 +29825,6 @@ with pkgs;
 
   vcal = callPackage ../applications/misc/vcal { };
 
-  gcolor2 = callPackage ../applications/graphics/gcolor2 { };
-
   gcolor3 = callPackage ../applications/graphics/gcolor3 { };
 
   get_iplayer = callPackage ../applications/misc/get_iplayer { };
@@ -30012,8 +30004,6 @@ with pkgs;
   geeqie = callPackage ../applications/graphics/geeqie { };
 
   gigedit = callPackage ../applications/audio/gigedit { };
-
-  gqview = callPackage ../applications/graphics/gqview { };
 
   gnomecast = callPackage ../applications/video/gnomecast { };
 
