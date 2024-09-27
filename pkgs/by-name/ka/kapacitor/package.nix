@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, libiconv
-, buildGoModule
-, pkg-config
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  libiconv,
+  buildGoModule,
+  pkg-config,
 }:
 
 let
   libflux_version = "0.171.0";
   flux = rustPlatform.buildRustPackage rec {
     pname = "libflux";
-    version = "v${libflux_version}";
+    version = "${libflux_version}";
     src = fetchFromGitHub {
       owner = "influxdata";
       repo = "flux";
-      rev = "v${libflux_version}";
+      rev = "refs/tags/v${libflux_version}";
       hash = "sha256-v9MUR+PcxAus91FiHYrMN9MbNOTWewh7MT6/t/QWQcM=";
     };
     patches = [
@@ -45,20 +46,22 @@ let
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
     pkgcfg = ''
       Name: flux
-      Version: ${libflux_version}
+      Version: v${libflux_version}
       Description: Library for the InfluxData Flux engine
       Cflags: -I/out/include
       Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
-    postInstall = ''
-      mkdir -p $out/include $out/pkgconfig
-      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-        --replace /out $out
-    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-    '';
+    postInstall =
+      ''
+        mkdir -p $out/include $out/pkgconfig
+        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+          --replace /out $out
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+      '';
   };
 in
 buildGoModule rec {
@@ -68,7 +71,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "kapacitor";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-vDluZZrct1x+OMVU8MNO56YBZq7JNlpW68alOrAGYSM=";
   };
 
@@ -98,12 +101,15 @@ buildGoModule rec {
   # See also https://github.com/NixOS/nix/pull/1646
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Open source framework for processing, monitoring, and alerting on time series data";
     homepage = "https://influxdata.com/time-series-platform/kapacitor/";
     downloadPage = "https://github.com/influxdata/kapacitor/releases";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
-    maintainers = with maintainers; [ offline totoroot ];
+    maintainers = with lib.maintainers; [
+      offline
+      totoroot
+    ];
   };
 }
