@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1b0ylnnrhdax4kwjq64r1fk0i24n5ss6zfzf4hxwgslny01xiwrk";
   };
 
+  patches = [
+    # https://github.com/jpbarrette/curlpp/pull/171
+    ./curl_8_10_build_failure.patch
+  ];
+
   buildInputs = [ curl ];
   nativeBuildInputs = [ cmake ];
 
