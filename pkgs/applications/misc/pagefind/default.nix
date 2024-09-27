@@ -1,7 +1,10 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , fetchNpmDeps
+, fetchurl
+, httplz
 , npmHooks
 , binaryen
 , gzip
@@ -9,7 +12,6 @@
 , rustc
 , wasm-bindgen-cli
 , wasm-pack
-, fetchpatch
 }:
 
 let
@@ -20,28 +22,28 @@ let
     cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
   };
 
+  # the lindera-unidic v0.32.2 crate uses [1] an outdated unidic-mecab fork [2] and builds it in pure rust
+  # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
+  # [2] https://github.com/lindera/unidic-mecab
+  lindera-unidic-src = fetchurl {
+    url = "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz";
+    hash = "sha256-JKx1/k5E2XO1XmWEfDX6Suwtt6QaB7ScoSUUbbn8EYk=";
+  };
+
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "pagefind";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "cloudcannon";
     repo = "pagefind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pcgcu9zylSTjj5rxNff+afFBWVpN5sGtlpadG1wb93M=";
+    hash = "sha256-4NfosDp5Wwz2lnqaFNcaIbWpjWiaQ4WCL6TcKEkfPck=";
   };
 
-  cargoPatches = [
-    (fetchpatch { # https://github.com/CloudCannon/pagefind/pull/680
-      name = "cargo-update-time.patch";
-      url = "https://github.com/CloudCannon/pagefind/commit/e6778572d225316803180db822f5cc12a936acd2.patch";
-      hash = "sha256-XHpHA1hPIe+wjDQ6LE9hn2jn3eMBOK9Yoo920jfH9do=";
-    })
-  ];
-
-  cargoHash = "sha256-KWWln7QCRo02cOgHy5JNERGS0CvvgsPISwkTZeeNEkg=";
+  cargoHash = "sha256-hnT9w3j8/YuN00x0LBPr75BKGWSnIYUNFTWIgtghJP4";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
@@ -78,7 +80,23 @@ rustPlatform.buildRustPackage rec {
       cargoDeps=$cargoDeps_web cargoSetupPostUnpackHook
       cargoDeps=$cargoDeps_web cargoSetupPostPatchHook
     )
+
+    # patch a build-time dependency download
+    (
+      cd $cargoDepsCopy/lindera-unidic
+      oldHash=$(sha256sum build.rs | cut -d " " -f 1)
+
+      # file:// does not work
+      substituteInPlace build.rs --replace-fail \
+          "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz" \
+          "http://localhost:34567/unidic-mecab-2.1.2.tar.gz"
+
+      newHash=$(sha256sum build.rs | cut -d " " -f 1)
+      substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
+    )
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     binaryen
@@ -88,12 +106,19 @@ rustPlatform.buildRustPackage rec {
     rustc.llvmPackages.lld
     wasm-bindgen-92
     wasm-pack
+    httplz
   ];
 
   # build wasm and js assets
   # based on "test-and-build" in https://github.com/CloudCannon/pagefind/blob/main/.github/workflows/release.yml
   preBuild = ''
     export HOME=$(mktemp -d)
+
+    # serve lindera-unidic on localhost
+    mkdir .lindera-http-plz
+    ln -s ${lindera-unidic-src} .lindera-http-plz/unidic-mecab-2.1.2.tar.gz
+    httplz --port 34567 -- .lindera-http-plz/ &
+    httplz_pid=$!
 
     echo entering pagefind_web_js...
     (
@@ -118,6 +143,11 @@ rustPlatform.buildRustPackage rec {
       cd pagefind_ui/modular
       npm run build
     )
+  '';
+
+  # the file is also fetched during checkPhase
+  preInstall = ''
+    kill ${lib.optionalString stdenv.hostPlatform.isDarwin "-9"} $httplz_pid
   '';
 
   buildFeatures = [ "extended" ];
