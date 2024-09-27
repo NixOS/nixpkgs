@@ -159,8 +159,8 @@ let
       # containerInit and stage2 have to handle this as well.
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
-        -M "$INSTANCE" -D "$root" "$extraFlags" \
-        "$EXTRA_NSPAWN_FLAGS" \
+        -M "$INSTANCE" -D "$root" $extraFlags \
+        $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
         --bind-ro=/nix/store \
