@@ -69,6 +69,7 @@ buildDotnetModule rec {
       ppom
       melvyn2
     ];
+    mainProgram = "slskd";
     platforms = lib.platforms.linux;
   };
 }
