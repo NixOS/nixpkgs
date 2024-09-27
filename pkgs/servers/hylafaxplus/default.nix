@@ -32,8 +32,8 @@
 let
 
   pname = "hylafaxplus";
-  version = "7.0.8";
-  hash = "sha512-6wTLVcaHpASy+2i+jeoJ1cM2aLgI5vznGrLd4NCkLHiOxlfCh/ASRaj2Nxt9ZZ5NN/deEwf9tNSZ7MkFZHVsqA==";
+  version = "7.0.9";
+  hash = "sha512-3OJwM4vFC9pzPozPobFLiNNx/Qnkl8BpNNziRUpJNBDLBxjtg/eDm3GnprS2hpt7VUoV4PCsFvp1hxhNnhlUwQ==";
 
   configSite = substituteAll {
     name = "${pname}-config.site";
