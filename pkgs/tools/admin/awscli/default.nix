@@ -12,13 +12,13 @@ let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "awscli";
     # N.B: if you change this, change botocore and boto3 to a matching version too
-    # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.33.13";
+    # check e.g. https://github.com/aws/aws-cli/blob/1.34.10/setup.py
+    version = "1.34.10";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-utRALEoP+CWlmkPnbgByFSSX9Nr39iyTdv5uABT6Kps=";
+      hash = "sha256-afq8Dn6LNcAeHnhcz9hDzsPbRZg/UI+SmPZax2oCo9o=";
     };
 
     pythonRelaxDeps = [
