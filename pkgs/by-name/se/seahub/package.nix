@@ -1,47 +1,30 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
-, makeWrapper
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  makeWrapper,
+  nixosTests,
+  seafile-server,
 }:
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      django = super.django_3;
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "10.0.1";
+  version = "11.0.12";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "e8c02236c0eaca6dde009872745f089da4b77e6e"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-7JXWKEFqCsC+ZByhvyP8AmDpajT3hpgyYDNUqc3wXyg=";
+    rev = "d998361dd890cac3f6d6ebec3af47a589e0332bc"; # using a fixed revision because upstream may re-tag releases :/
+    hash = "sha256-n56sRZ9TVb37JA0+12ZoF2Mt7dADjaYk7V0PmdBY0EU=";
   };
-
-  patches = [
-    (fetchpatch {
-      # PIL update fix
-      url = "https://patch-diff.githubusercontent.com/raw/haiwen/seahub/pull/5570.patch";
-      sha256 = "sha256-7V2aRlacJ7Qhdi9k4Bs+t/Emx+EAM/NNCI+K40bMwLA=";
-    })
-  ];
 
   dontBuild = true;
 
   doCheck = false; # disabled because it requires a ccnet environment
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     django
     future
     django-compressor
@@ -50,6 +33,7 @@ python.pkgs.buildPythonApplication rec {
     django-simple-captcha
     django-picklefield
     django-formtools
+    djangosaml2
     mysqlclient
     pillow
     python-dateutil
@@ -60,13 +44,20 @@ python.pkgs.buildPythonApplication rec {
     chardet
     pyjwt
     pycryptodome
+    pyopenssl
+    python-ldap
     qrcode
     pysearpc
-    seaserv
     gunicorn
     markdown
     bleach
+
+    (seafile-server.override { inherit python3; })
   ];
+
+  postPatch = ''
+    substituteInPlace seahub/settings.py --replace-fail "SEAFILE_VERSION = '6.3.3'" "SEAFILE_VERSION = '${version}'"
+  '';
 
   installPhase = ''
     cp -dr --no-preserve='ownership' . $out/
@@ -75,18 +66,23 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit python;
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    inherit python3;
+    pythonPath = "${python3.pkgs.makePythonPath propagatedBuildInputs}:${seafile-server}/${python3.sitePackages}";
     tests = {
       inherit (nixosTests) seafile;
     };
+    inherit seafile-server;
   };
 
   meta = with lib; {
     description = "Web end of seafile server";
     homepage = "https://github.com/haiwen/seahub";
     license = licenses.asl20;
-    maintainers = with maintainers; [ greizgh schmittlauch ];
+    maintainers = with maintainers; [
+      greizgh
+      schmittlauch
+      melvyn2
+    ];
     platforms = platforms.linux;
   };
 }
