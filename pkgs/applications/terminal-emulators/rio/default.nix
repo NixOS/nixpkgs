@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # Fail to run in sandbox environment.
-    "--skip=screen::context::test"
+    "--skip=sys::unix::eventedfd::EventedFd"
   ];
 
   postInstall = ''
@@ -125,11 +125,5 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
     mainProgram = "rio";
-    # ---- corcovado/src/sys/unix/eventedfd.rs - sys::unix::eventedfd::EventedFd (line 31) stdout ----
-    # Test executable failed (exit status: 101).
-    # stderr:
-    # thread 'main' panicked at corcovado/src/sys/unix/eventedfd.rs:24:16:
-    # called `Result::unwrap()` on an `Err` value: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
