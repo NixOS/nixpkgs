@@ -148,6 +148,7 @@ in {
         spectacle
         ffmpegthumbs
         krdp
+        xwaylandvideobridge  # exposes Wayland windows to X11 screen capture
       ] ++ lib.optionals config.services.flatpak.enable [
         # Since PackageKit Nix support is not there yet,
         # only install discover if flatpak is enabled.

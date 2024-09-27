@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   name = "regal";
-  version = "0.26.2";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "StyraInc";
     repo = "regal";
     rev = "v${version}";
-    hash = "sha256-QfxgfwBGAib+mqT2v/8/rhl5Ufjwjf9BouCTYqs6wlw=";
+    hash = "sha256-IGf7iIL2q3w7qIJ0oxDILxcNjexuEr4bsYK+v24Ae+c=";
   };
 
-  vendorHash = "sha256-5ImRjMPl+qc2iQEXg9OzKphPpRXhjYvu+1q1ol3M8Yg=";
+  vendorHash = "sha256-Yl8ZFEiAJRAetc3e2ZdrbTdYhx/Ek9nr3mMQ0H7+aGM=";
 
   meta = with lib; {
     description = "Linter and language server for Rego";
