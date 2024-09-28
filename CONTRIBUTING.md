@@ -93,6 +93,8 @@ This section describes in some detail how changes can be made and proposed with 
 7. Respond to review comments, potential CI failures and potential merge conflicts by updating the pull request.
    Always keep the pull request in a mergeable state.
 
+   This process is covered in more detail from the non-technical side in [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
+
    The custom [OfBorg](https://github.com/NixOS/ofborg) CI system will perform various checks to help ensure code quality, whose results you can see at the bottom of the pull request.
    See [the OfBorg Readme](https://github.com/NixOS/ofborg#readme) for more details.
 
@@ -306,7 +308,7 @@ If you consider having enough knowledge and experience in a topic and would like
 
 Container system, boot system and library changes are some examples of the pull requests fitting this category.
 
-## How to merge pull requests
+## How to merge pull requests yourself
 [pr-merge]: #how-to-merge-pull-requests
 
 To streamline automated updates, leverage the nixpkgs-merge-bot by simply commenting `@NixOS/nixpkgs-merge-bot merge`. The bot will verify if the following conditions are met, refusing to merge otherwise:
@@ -316,10 +318,7 @@ To streamline automated updates, leverage the nixpkgs-merge-bot by simply commen
 
 Further, nixpkgs-merge-bot will ensure all ofBorg checks (except the Darwin-related ones) are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofBorg to finish before attempting the merge again.
 
-For other pull requests, the *Nixpkgs committers* are people who have been given
-permission to merge.
-
-It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
+For other pull requests, please see [I opened a PR, how do I get it merged?](#i-opened-a-pr-how-do-i-get-it-merged).
 
 In case the PR is stuck waiting for the original author to apply a trivial
 change (a typo, capitalisation change, etc.) and the author allowed the members
@@ -516,6 +515,7 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
   - [Commit conventions](./doc/README.md#commit-conventions) for changes to `doc`, the Nixpkgs manual.
 
 ### Writing good commit messages
+[writing-good-commit-messages]: #writing-good-commit-messages
 
 In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
 
@@ -614,3 +614,123 @@ Names of files and directories should be in lowercase, with dashes between words
 
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
+## I opened a PR, how do I get it merged?
+[i-opened-a-pr-how-do-i-get-it-merged]:#i-opened-a-pr-how-do-i-get-it-merged
+
+In order for your PR to be merged, someone with merge permissions on the repository ("committer") needs to review and merge it.
+Because the group of people with merge permissions is mostly a collection of independent unpaid volunteers who do this in their own free time, this can take some time to happen.
+It is entirely normal for your PR to sit around without any feedback for days, weeks or sometimes even months.
+We strive to avoid the latter cases of course but the reality of it is that this does happen quite frequently.
+Even when you get feedback, follow-up feedback may take similarly long.
+Don't be intimidated by this and kindly ask for feedback again every so often.
+If your change is good it will eventually be merged at some point.
+
+There are some things you can do to help speed up the process of your PR being merged though.
+In order to speed the process up, you need to know what needs to happen before a committer will actually hit the merge button.
+This section intends to give a little overview and insight of what happens after you create your PR.
+
+### The committer's perspective
+
+PRs have varying quality and even the best people make mistakes.
+It is the role of the committer team to assess whether any PR's changes are good changes or not.
+In order for any PR to be merged, at least one committer needs to be convinced of its quality enough to merge it.
+
+Committers typically assess three aspects of your PR:
+
+1. Whether the change's intention is necessary and desirable
+2. Whether the code quality of your changes is good
+3. Whether the artefacts produced by the code are good
+
+If you want your PR to get merged quickly and smoothly, it is in your best interest to help convince committers in these three aspects.
+
+### How to help committers assess your PR
+
+For the committer to judge your intention, it's best to explain why you've made your change.
+This does not apply to trivial changes like version updates because the intention is obvious (though linking the changelog is appreciated).
+For any more nuanced changed or even major version upgrades, it helps if you explain the background behind your change a bit.
+E.g. if you're adding a package, explain what it is and why it should be in Nixpkgs.
+This goes hand in hand with [Writing good commit messages](#writing-good-commit-messages).
+
+For the code quality assessment, you cannot do anything yourself as only the committer can do this and they already have your code to look at.
+In order to minimise the need for back and forth though, do take a look over your code changes yourself and try to put yourself into the shoes of someone who didn't just write that code.
+Would you immediately know what the code does by glancing at it?
+If not, reviewers will notice this and will ask you to clarify the code by refactoring it and/or adding a few explanations in code comments.
+Doing this preemptively can save you and the committer a lot of time.
+
+The code artefacts are the hardest for committers to assess because PRs touch all sorts of components: applications, libraries, NixOS modules, editor plugins and many many other things.
+Any individual committer can only really assess components that they themselves know how to use however and yet they must still be convinced somehow.
+There isn't a good generic solution to this but there are some ways easing the committer's job here:
+
+- Provide smoke tests that the committer can run without much research or setup.
+
+  Committers usually don't have the time or interest to learn how your component works and how they could test its functionality.
+  If you can provide a quick guide on how to use the component in a meaningful way or a ready-made command that demonstrates that the component works as expected, the committer can easily convince themselves that your change is good.
+  If it can be automated, you could even turn this smoke test into an automated NixOS test which reviewers could simply run via Nix.
+- Invite other users of the component to try it out and report their findings.
+
+  If a committer sees the testimonials of other users trying your change and it works as expected for them, that too can convince the committer of your PR's quality.
+- Describe what you have done to test your PR.
+
+  If you can convince the committer that you have done sufficient quality assurance on your changes and they trust your report, this too can convince them of your PR's quality, albeit not as strongly as the methods above.
+- Become a maintainer of the component.
+
+  This isn't something you can do on your first few PRs touching a component but listed maintainers generally receive more trust when it comes to changes to their maintained components and committers may opt to merge changes without deeper review when they see they're done by their respective maintainer.
+
+Even if you adhere to all of these recommendations, it is still quite possible for your PR to be forgotten or abandoned by any given committer.
+Please remain mindful of the fact that they are doing this on their own volition and unpaid in their free time and therefore [owe you nothing](https://mikemcquaid.com/open-source-maintainers-owe-you-nothing/).
+Causing a stink in such a situation is a surefire way to get any other potential committer to not want to look at your PR either.
+Ask them nicely whether they still intend to review your PR and find yourself another committer to look at your PR if not.
+
+### How can I get a committer to look at my PR?
+
+- Simply wait. Reviewers frequently browse open PRs and may happen to run across yours and take a look.
+- Get non-committers to review/approve. Many committers filter open PRs for low-hanging fruit that are already been reviewed.
+- [@-mention](https://github.blog/news-insights/mention-somebody-they-re-notified/) someone and ask them nicely
+- Post in one of the channels made for this purpose if there has been no activity for at least one week
+  - The current "PRs ready for review" or "PRs already reviewed" threads in the [NixOS Discourse](https://discourse.nixos.org/c/dev/14) (of course choose the one that applies to your situation)
+  - The [Nixpkgs Review Requests Matrix room](https://matrix.to/#/#review-requests:nixos.org).
+
+### CI failed or got stuck on my PR, what do I do?
+
+First ensure that the failure is actually related to your change.
+Sometimes, the CI system simply has a hiccup or the check was broken by someone else before you made your changes.
+Read through the error message; it's usually quite easy to tell whether it is caused by anything you did by checking whether it mentions the component you touched anywhere.
+If it is indeed caused by your change, obviously try to fix it.
+Don't be afraid of asking for advice if you're uncertain how to do that, others have likely fixed such issues dozens of times and can help you out.
+Your PR is unlikely to be merged if it has a known issue and it is the purpose of CI to alert you aswell as reviewers to these issues.
+
+ofBorg builds can often get stuck, particularly in PRs targeting `staging` and in builders for the Darwin platform. Reviewers will know how to handle them or when to ignore them.
+Don't worry about it.
+If there is a build failure however and it happened due to a package related to your change, you need to investigate it of course.
+If ofBorg reveals the build to be broken on some platform and you don't have access to that platform, you should set your package's `meta.broken` accordingly.
+
+When in any doubt, please simply ask via a comment in your PR or through one of the help channels.
+
+### A reviewer requested a bunch of insubstantial changes on my PR
+
+The people involved in Nixpkgs care about code quality because, once in Nixpkgs, it needs to be maintained for many years to come.
+It is therefore likely that other people will ask you to do some things in another way or adhere to some standard.
+Sometimes however, they also care a bit too much and may ask you to adhere to a personal preference of theirs.
+It's not always easy to tell which is which and whether the requests are critically important to merging the PR.
+Sometimes another reviewer may also come along with totally different opinions on some points too.
+
+It is convention to mark review comments that are not critical to the PR as nitpicks but this is not always followed.
+As the PR author, you should still take a look at these as they will often reveal best practices and unwritten rules that usually have good reasons behind them and you may want to incorporate them into your modus operandi.
+
+Please keep in mind that reviewers almost always mean well here.
+Their intent is not to denounce your code, they simply want your code to be as good as it can be.
+Through their experience, they may also take notice of a seemingly insignificant issues that have caused significant burden before.
+
+Sometimes however, they can also get a bit carried away and become too perfectionistic.
+If you feel some of the requests are unreasonable or merely a matter of personal preference, try to nicely remind the reviewers that you may not intend this code to be 100% perfect or that you have different taste in some regards and press them on whether they think that these requests are *critical* to the PR's success.
+
+While we do have a set of [official standards for the Nix community](https://github.com/NixOS/rfcs/), we don't have standards for everything and there are often multiple valid ways to achieve the same goal.
+Unless there are standards forbidding the patterns used in your code or there are serious technical, maintainability or readability issues with your code, you can insist to keep the code the way you made it and disregard the requests.
+Please communicate this clearly though; a simple "I prefer it this way and see no major issue with it" can save you a lot of arguing.
+
+If you are unsure about some change requests, please ask reviewers *why* they requested them.
+This will usually reveal how important they deem it to be and will help educate you about standards, best practices, unwritten rules aswell as preferences people have and why.
+
+Some committers may have stronger opinions on some things and therefore (understandably) may not want to merge your PR if you don't follow their requests.
+It is totally fine to get yourself a second or third opinion in such a case.
