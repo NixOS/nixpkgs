@@ -11367,6 +11367,12 @@
     githubId = 787421;
     name = "Kevin Quick";
   };
+  kraanzu = {
+    name = "Murli Tawari";
+    email = "kraanzu@gmail.com";
+    github = "kraanzu";
+    githubId = 97718086;
+  };
   kradalby = {
     name = "Kristoffer Dalby";
     email = "kristoffer@dalby.cc";
