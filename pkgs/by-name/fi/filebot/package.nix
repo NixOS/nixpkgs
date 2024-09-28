@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   coreutils,
+  chromaprint,
   openjdk17,
   makeWrapper,
   autoPatchelfHook,
@@ -14,6 +15,10 @@
   glib,
   genericUpdater,
   writeShellScript,
+  openjfx,
+  p7zip,
+  unrar,
+  zenity,
 }:
 
 let
@@ -36,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     autoPatchelfHook
+    zenity
   ];
 
   buildInputs = [
@@ -45,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     curlWithGnuTls
     libmms
     glib
+    zenity
   ];
 
   postPatch = ''
@@ -63,7 +70,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license' \
       --replace '-jar "$FILEBOT_HOME/jar/filebot.jar"' '-Dcom.googlecode.lanterna.terminal.UnixTerminal.sttyCommand=${coreutils}/bin/stty -jar "$FILEBOT_HOME/jar/filebot.jar"'
     wrapProgram $out/opt/filebot.sh \
-      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          chromaprint
+          libmediainfo
+          openjdk17
+          openjfx
+          p7zip
+          unrar
+          zenity
+        ]
+      }
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
   '';
