@@ -1,10 +1,17 @@
 { lib
 , stdenv
+, pkgsHostTarget
 , fetchFromGitHub
 , autoreconfHook
 , gmp
 , libffi
 }:
+
+let
+
+  hostCC = pkgsHostTarget.gcc;
+
+in
 
 stdenv.mkDerivation rec {
   pname = "polyml";
@@ -37,6 +44,11 @@ stdenv.mkDerivation rec {
     runHook preCheck
     make check
     runHook postCheck
+  '';
+
+  preInstall = ''
+    substituteInPlace polyc \
+      --replace-fail "LINK=\"$CXX\"" "LINK=\"${lib.getExe' hostCC "c++"}\""
   '';
 
   meta = with lib; {
