@@ -105,6 +105,11 @@ fi
     '';
   };
 
+  default-toolchain = runCommand "xcodebuild-xctoolchain-${xcbuild.version}" {} ''
+    mkdir -p $out
+    cp -r ${toolchains}/XcodeDefault.xctoolchain/* $out
+  '';
+
 in
 
 runCommand "xcodebuild-${xcbuild.version}" {
@@ -112,11 +117,11 @@ runCommand "xcodebuild-${xcbuild.version}" {
   inherit (xcbuild) meta;
 
   # ensure that the toolchain goes in PATH
-  propagatedBuildInputs = [ "${toolchains}/XcodeDefault.xctoolchain" ];
+  propagatedBuildInputs = [ default-toolchain ];
 
   passthru = {
     inherit xcbuild xcrun;
-    toolchain = "${toolchains}/XcodeDefault.xctoolchain";
+    toolchain = default-toolchain;
     sdk = "${sdks}/${sdkName}";
     platform = "${platforms}/${xcodePlatform}.platform";
   };
