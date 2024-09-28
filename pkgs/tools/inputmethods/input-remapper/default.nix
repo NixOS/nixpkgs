@@ -117,8 +117,10 @@ in
   ];
 
   postInstall = ''
-    sed -r "s#RUN\+\=\"/bin/input-remapper-control#RUN\+\=\"$out/bin/input-remapper-control#g" -i data/99-input-remapper.rules
-    sed -r "s#ExecStart\=/usr/bin/input-remapper-service#ExecStart\=$out/bin/input-remapper-service#g" -i data/input-remapper.service
+    substituteInPlace data/99-input-remapper.rules \
+      --replace-fail 'RUN+="/bin/input-remapper-control' "RUN+=\"$out/bin/input-remapper-control"
+    substituteInPlace data/input-remapper.service \
+      --replace-fail 'ExecStart=/usr/bin/input-remapper-service' "ExecStart=$out/bin/input-remapper-service"
 
     install -m644 -D -t $out/share/applications/ data/*.desktop
     install -m644 -D -t $out/share/polkit-1/actions/ data/input-remapper.policy
