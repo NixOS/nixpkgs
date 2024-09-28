@@ -1,38 +1,26 @@
-{ lib, bundlerEnv, ruby, buildGoModule, fetchFromGitHub }:
-let
-  # needed for manpage generation
-  gems = bundlerEnv {
-    name = "ejson-gems";
-    gemdir = ./.;
-    inherit ruby;
-  };
-in
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
+
 buildGoModule rec {
   pname = "ejson";
-  version = "1.3.3";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson";
     rev = "v${version}";
-    sha256 = "sha256-M2Gk+/l1tNlIAe1/fR1WLEOey+tjCUmMAujc76gmeZA=";
+    sha256 = "sha256-Pv0eoFf/E+PE/C+0wsSQxhVTlymOMAYk5UVQP2udpnA=";
   };
 
-  vendorHash = "sha256-9+x7HrbXRoS/7ZADWwhsbynQLr3SyCbcsp9QnSubov0=";
+  vendorHash = "sha256-N2vcj3STkaZO2eRr8VztZTWOBUTI+wOri0HYDJ1KiN8=";
 
-  nativeBuildInputs = [ gems ];
-
-  ldflags = [ "-s" "-w" ];
-
-  # set HOME, otherwise bundler will insert stuff in the manpages
-  postBuild = ''
-    HOME=$PWD make man SHELL=$SHELL
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share
-    cp -r build/man $out/share
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Small library to manage encrypted secrets using asymmetric encryption";
