@@ -28668,8 +28668,6 @@ with pkgs;
     calicoctl
     confd-calico;
 
-  calligra = libsForQt5.callPackage ../applications/office/calligra { };
-
   perkeep = callPackage ../applications/misc/perkeep { };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
