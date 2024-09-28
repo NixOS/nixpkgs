@@ -26,13 +26,13 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2024.8.6";
+  version = "2024.9.27";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-6FUfJryL9nuZwSNzzIftIHNDbDQ35TKQh40PS0ux9mM=";
+    hash = "sha256-hmBVQuF+LiOtIxRbY37DCBM3YqFaXe2sSuULeXMjcCY=";
   };
 
   build-system = [
@@ -46,12 +46,15 @@ buildPythonPackage rec {
     mutagen
     pycryptodomex
     requests
-    secretstorage  # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
+    secretstorage # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
     urllib3
     websockets
   ];
 
-  pythonRelaxDeps = [ "requests" ];
+  pythonRelaxDeps = [
+    "requests"
+    "websockets"
+  ];
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
@@ -59,12 +62,15 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath = []
+      packagesToBinPath =
+        [ ]
         ++ lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump;
-    in lib.optionals (packagesToBinPath != [])
-    [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+    in
+    lib.optionals (packagesToBinPath != [ ]) [
+      ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
+    ];
 
   setupPyBuildFlags = [
     "build_lazy_extractors"
@@ -77,7 +83,10 @@ buildPythonPackage rec {
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
-  passthru.updateScript = [ update-python-libraries (toString ./.) ];
+  passthru.updateScript = [
+    update-python-libraries
+    (toString ./.)
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
@@ -92,7 +101,10 @@ buildPythonPackage rec {
     '';
     changelog = "https://github.com/yt-dlp/yt-dlp/releases/tag/${version}";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ mkg20001 SuperSandro2000 ];
+    maintainers = with maintainers; [
+      mkg20001
+      SuperSandro2000
+    ];
     mainProgram = "yt-dlp";
   };
 }
