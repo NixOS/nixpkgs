@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Client for the Meilisearch API";
+    description = "Module to convert strings from snake case to camel case or camel case to snake case";
     homepage = "https://github.com/sanders41/camel-converter";
     changelog = "https://github.com/sanders41/camel-converter/releases/tag/v${version}";
     license = licenses.mit;
