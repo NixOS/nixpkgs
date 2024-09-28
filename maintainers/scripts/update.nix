@@ -214,6 +214,10 @@ let
 
   args = [ packagesJson ] ++ optionalArgs;
 
+  python = pkgs.python3.withPackages (pp: [
+    pp.pydantic
+  ]);
+
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
   buildCommand = ''
@@ -228,6 +232,6 @@ in pkgs.stdenv.mkDerivation {
   '';
   shellHook = ''
     unset shellHook # do not contaminate nested shells
-    exec ${pkgs.python3.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
+    exec ${python.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
   '';
 }
