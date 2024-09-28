@@ -663,11 +663,11 @@
         "src": {
             "owner": "hrydgard",
             "repo": "ppsspp",
-            "rev": "0bb69a0ccf5655310de1a41af96fde50cdc85840",
-            "hash": "sha256-h5edSaaqu0YEqKeMEY4iGWmp0w2AbqbEHergd0DsCGI=",
+            "rev": "64ce72e81df48f78db5d5b192bd68eca218bd0a1",
+            "hash": "sha256-DRodUtFcHt+t8GAHI+3+WDltbUzkWZ/ahunOPELabTI=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-09-17"
+        "version": "unstable-2024-09-28"
     },
     "prboom": {
         "fetcher": "fetchFromGitHub",
