@@ -24550,6 +24550,8 @@ with pkgs;
 
   grafana-dash-n-grab = callPackage ../servers/monitoring/grafana-dash-n-grab { };
 
+  grakn = callPackage ../servers/grakn/grakn.nix { };
+
   gerbera = callPackage ../servers/gerbera { };
 
   gobetween = callPackage ../servers/gobetween { };
