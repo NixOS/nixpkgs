@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kyoheiu";
     repo = "felix";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-7KuL3YkKhjcZSMSipbNITaA9/MGo54f3lz3fVOgy52s=";
   };
 
@@ -58,12 +58,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Tui file manager with vim-like key mapping";
     homepage = "https://github.com/kyoheiu/felix";
     changelog = "https://github.com/kyoheiu/felix/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "fx";
   };
 }
