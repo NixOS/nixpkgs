@@ -1,0 +1,56 @@
+From 3d56e8b0f177f98914cecbe0d45afefa22c952ec Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Mon, 16 Sep 2024 18:54:21 +0200
+Subject: [PATCH 5/6] fix: data_percent might be empty
+
+Qubes skips any volume, for which data_percent is reported as empty
+string. This is, however, the correct behavior for inactive volume
+group, and qubes already checks if volume is active.
+
+Allowing Qubes to see this volume makes it possible to provide better
+errors to the user, instead of "volume XXX does not exists", user will
+now see "volume XXX is not active", which makes it clear what does he
+need to change in his configuration.
+---
+ qubes/storage/lvm.py | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/qubes/storage/lvm.py b/qubes/storage/lvm.py
+index ccb1aba6..459621b0 100644
+--- a/qubes/storage/lvm.py
++++ b/qubes/storage/lvm.py
+@@ -211,7 +211,7 @@ _init_cache_cmd = [_lvm, 'lvs', '--noheadings', '-o',
+ if os.getuid() != 0:
+     _init_cache_cmd.insert(0, _sudo)
+ 
+-def _parse_lvm_cache(lvm_output):
++def _parse_lvm_cache(lvm_output, log=logging.getLogger('qubes.storage.lvm')):
+     # Assume that LVM produces correct JSON.
+     out_list = json.loads(lvm_output)["report"][0]["lv"]
+     result = {}
+@@ -220,12 +220,21 @@ def _parse_lvm_cache(lvm_output):
+             pool_name, name = row['vg_name'], row['lv_name']
+             size, usage_percent = row['lv_size'], row['data_percent']
+         except KeyError:
++            log.warning("key error in row %s", row)
+             continue
+-        if '' in [pool_name, name, size, usage_percent]:
++        if '' in [pool_name, name, size]: #, usage_percent]:
++            log.warning("empty field error in row %s", row)
+             continue
+         pool_lv, attr, origin = row['pool_lv'], row['lv_attr'], row['origin']
+         metadata_size = row['lv_metadata_size']
+         metadata_percent = row['metadata_percent']
++
++        # LVM returns empty strings in some cases, this needs to be dealt with.
++        if usage_percent == '':
++            usage_percent = '0'
++        if metadata_percent == '':
++            metadata_percent = '0'
++
+         name = pool_name + "/" + name
+         size = int(size[:-1])  # Remove 'B' suffix
+         usage = int(size / 100 * float(usage_percent))
+-- 
+2.45.2
+
