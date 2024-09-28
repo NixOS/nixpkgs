@@ -59,16 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   configureFlags = [
-    "--disable-silent-rules"
-    "--enable-dns-over-tls"
-    "--enable-unit-tests"
-    "--enable-reproducible"
-    "--enable-tools"
-    "--enable-ixfrdist"
-    "--enable-systemd"
-    "--with-libsodium"
-    "--with-sqlite3"
-    "--with-libcrypto=${openssl.dev}"
+    (lib.enableFeature false "silent-rules")
+    (lib.enableFeature true "dns-over-tls")
+    (lib.enableFeature true "unit-tests")
+    (lib.enableFeature true "reproducible")
+    (lib.enableFeature true "tools")
+    (lib.enableFeature true "ixfrdist")
+    (lib.enableFeature true "systemd")
+    (lib.withFeature true "libsodium")
+    (lib.withFeature true "sqlite3")
+    (lib.withFeatureAs true "libcrypto" (lib.getDev openssl))
     "sysconfdir=/etc/pdns"
   ];
 
