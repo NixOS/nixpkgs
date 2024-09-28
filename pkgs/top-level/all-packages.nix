@@ -21132,8 +21132,6 @@ with pkgs;
 
   liboping = callPackage ../development/libraries/liboping { };
 
-  libplist = callPackage ../development/libraries/libplist { };
-
   libqtdbusmock = libsForQt5.callPackage ../development/libraries/libqtdbusmock {
     inherit (lomiri) cmake-extras;
   };
