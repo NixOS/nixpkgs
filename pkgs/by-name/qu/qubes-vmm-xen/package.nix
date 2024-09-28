@@ -6,6 +6,7 @@
   xen,
   python3,
   qubes-seabios,
+  qubes-vmm-stubdom-linux,
   ...
 }@genericDefinition:
 
