@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, ruby, gnugrep, diffutils, git, darcs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  gnugrep,
+  diffutils,
+  git,
+  darcs,
+}:
 
 stdenv.mkDerivation {
   pname = "darcs-to-git";
@@ -11,18 +20,20 @@ stdenv.mkDerivation {
     sha256 = "sha256-UQI3av+0zj1SNwEonwuk5n2RjZN3+tSJFJuFCjrorFM=";
   };
 
-  patchPhase = let
-    matchExecution = ''(\<(output_of|system|run)\([^"%]*("|%w\()|^[^"`]*`)'';
-  in ''
-    sed -r -i \
-      -e '1s|^#!.*|#!${ruby}/bin/ruby|' \
-      -e 's!${matchExecution}git\>!\1${git}/bin/git!' \
-      -e 's!${matchExecution}darcs\>!\1${darcs}/bin/darcs!' \
-      -e 's!${matchExecution}diff\>!\1${diffutils}/bin/diff!' \
-      -e 's!\<egrep\>!${gnugrep}/bin/egrep!g' \
-      -e 's!%w\(darcs init\)!%w(${darcs}/bin/darcs init)!' \
-      darcs-to-git
-  '';
+  patchPhase =
+    let
+      matchExecution = ''(\<(output_of|system|run)\([^"%]*("|%w\()|^[^"`]*`)'';
+    in
+    ''
+      sed -r -i \
+        -e '1s|^#!.*|#!${ruby}/bin/ruby|' \
+        -e 's!${matchExecution}git\>!\1${git}/bin/git!' \
+        -e 's!${matchExecution}darcs\>!\1${darcs}/bin/darcs!' \
+        -e 's!${matchExecution}diff\>!\1${diffutils}/bin/diff!' \
+        -e 's!\<egrep\>!${gnugrep}/bin/egrep!g' \
+        -e 's!%w\(darcs init\)!%w(${darcs}/bin/darcs init)!' \
+        darcs-to-git
+    '';
 
   installPhase = ''
     install -vD darcs-to-git "$out/bin/darcs-to-git"
