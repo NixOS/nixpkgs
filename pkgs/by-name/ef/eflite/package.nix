@@ -1,15 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch, flite, alsa-lib, debug ? false }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  flite,
+  alsa-lib,
+  debug ? false,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "eflite";
   version = "0.4.1";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/eflite/files/eflite/${version}/${pname}-${version}.tar.gz";
-    sha256 = "088p9w816s02s64grfs28gai3lnibzdjb9d1jwxzr8smbs2qbbci";
+    url = "mirror://sourceforge/eflite/eflite/${finalAttrs.version}/eflite-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ka2FhV5Vo/w7l6GlJdtf0dIR1UNCu/yI0QJoExBPFyE=";
   };
 
-  buildInputs = [ flite alsa-lib ];
+  buildInputs = [
+    flite
+    alsa-lib
+  ];
 
   configureFlags = [
     "flite_dir=${flite}"
@@ -46,7 +57,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "eflite";
   };
-}
+})
