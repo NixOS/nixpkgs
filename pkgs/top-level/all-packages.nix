@@ -38581,6 +38581,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  wraith-master = callPackage ../applications/misc/wraith-master { };
+
   wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
     wxGTK = wxGTK32;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
