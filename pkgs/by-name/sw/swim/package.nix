@@ -8,8 +8,6 @@
   stdenv,
   darwin,
   git,
-  _experimental-update-script-combinators,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,10 +54,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=plugin::test::deny_changes_to_plugins::restores_work"
   ];
 
-  passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script { extraArgs = [ "spade" "--commit" "--use-update-script" "--update-script-args" "--argstr skip-prompt true" ]; })
-    (nix-update-script { extraArgs = [ "swim" ]; })
-  ];
+  passthru = {
+    inherit (spade) updateScript;
+  };
 
   meta = {
     description = "Build tool for spade";
