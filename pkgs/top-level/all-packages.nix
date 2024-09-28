@@ -21262,8 +21262,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  libirecovery = callPackage ../development/libraries/libirecovery { };
-
   libivykis = callPackage ../development/libraries/libivykis { };
 
   libkqueue = callPackage ../development/libraries/libkqueue { };
