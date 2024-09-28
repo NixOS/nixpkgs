@@ -151,7 +151,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
-  liblastfm = callPackage ../development/libraries/liblastfm { };
+  liblastfm = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/liblastfm {
+    inherit (libsForQt5) qtbase;
+  };
 
   libopenshot = callPackage ../development/libraries/libopenshot {
     stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
