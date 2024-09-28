@@ -6023,6 +6023,8 @@ self: super: with self; {
 
   imgdiff = callPackage ../development/python-modules/imgdiff { };
 
+  imgkit = callPackage ../development/python-modules/imgkit { };
+
   imgsize = callPackage ../development/python-modules/imgsize { };
 
   imgtool = callPackage ../development/python-modules/imgtool { };
