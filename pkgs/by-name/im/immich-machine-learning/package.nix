@@ -3,6 +3,7 @@
   fetchFromGitHub,
   immich,
   python3,
+  nixosTests,
 }:
 let
   python = python3.override {
@@ -95,6 +96,10 @@ python.pkgs.buildPythonApplication rec {
         -t \"\$MACHINE_LEARNING_WORKER_TIMEOUT\"
         --log-config-json $out/share/immich/log_conf.json"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) immich;
+  };
 
   meta = {
     description = "Self-hosted photo and video backup solution (machine learning component)";
