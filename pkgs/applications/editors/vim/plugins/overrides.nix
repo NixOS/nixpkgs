@@ -1239,7 +1239,12 @@ in
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neorg = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.neorg; };
+  neorg = neovimUtils.buildNeovimPlugin {
+    luaAttr = luaPackages.neorg;
+
+    doInstallCheck = true;
+    nvimRequireCheck = "neorg";
+  };
 
   neotest = super.neotest.overrideAttrs {
     dependencies = with self; [ nvim-nio plenary-nvim ];
