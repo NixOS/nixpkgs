@@ -9389,6 +9389,12 @@
     githubId = 7558482;
     name = "Jack Gerrits";
   };
+  jackwiseman = {
+    email = "jackwiseman4@gmail.com";
+    github = "jackwiseman";
+    githubId = 40647382;
+    name = "Jack Wiseman";
+  };
   jaduff = {
     email = "jdduffpublic@proton.me";
     github = "jaduff";
