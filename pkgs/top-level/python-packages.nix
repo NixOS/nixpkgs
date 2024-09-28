@@ -10068,6 +10068,8 @@ self: super: with self; {
 
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 
+  pocketlint = callPackage ../development/python-modules/pocketlint { };
+
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   ppk2-api = callPackage ../development/python-modules/ppk2-api { };
@@ -11478,6 +11480,8 @@ self: super: with self; {
   };
 
   pykeyatome = callPackage ../development/python-modules/pykeyatome { };
+
+  pykickstart = callPackage ../development/python-modules/pykickstart { };
 
   pykira = callPackage ../development/python-modules/pykira { };
 
@@ -15787,6 +15791,8 @@ self: super: with self; {
   translatehtml = callPackage ../development/python-modules/translatehtml { };
 
   translatepy = callPackage ../development/python-modules/translatepy { };
+
+  translation-canary = callPackage ../development/python-modules/translation-canary { };
 
   translationstring = callPackage ../development/python-modules/translationstring { };
 
