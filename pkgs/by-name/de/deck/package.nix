@@ -3,6 +3,7 @@
   lib,
   installShellFiles,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -12,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-qLWDZEYO/0as2+4OM6/FAJcN+vnRBrcx59uHRkougLQ=";
   };
 
@@ -35,11 +36,13 @@ buildGoModule rec {
       --zsh <($out/bin/deck completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Configuration management and drift detection tool for Kong";
     homepage = "https://github.com/Kong/deck";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "deck";
-    maintainers = with maintainers; [ liyangau ];
+    maintainers = with lib.maintainers; [ liyangau ];
   };
 }
