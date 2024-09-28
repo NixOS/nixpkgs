@@ -156,10 +156,10 @@ in
 
         ${gitWithRepo} checkout FETCH_HEAD
 
-        nix-build${renderNixArgs cfg.nixArgs} ${lib.cli.toGNUCommandLineShell { } {
+        SYSTEM="$(nix-build${renderNixArgs cfg.nixArgs} ${lib.cli.toGNUCommandLineShell { } {
           attr = cfg.nixAttribute;
           out-link = outPath;
-        }} ${lib.escapeShellArg "${repositoryDirectory}${cfg.nixFile}"}
+        }} ${lib.escapeShellArg "${repositoryDirectory}${cfg.nixFile}"})"
 
         ${lib.optionalString (cfg.switchCommand != "test")
           "nix-env --profile /nix/var/nix/profiles/system --set ${outPath}"}
@@ -170,7 +170,13 @@ in
 
         ${gitWithRepo} gc --prune=all
 
-        ${lib.optionalString (cfg.switchCommand == "boot") "systemctl reboot"}
+        ${lib.optionalString (cfg.switchCommand == "boot")
+          ''
+          if [[ /run/current-system -ef "$SYSTEM" ]]; then
+              systemctl reboot
+          fi
+          ''
+        }
       '';
     };
   };
