@@ -620,8 +620,6 @@ with pkgs;
 
   fh = callPackage ../tools/nix/fh { };
 
-  figma-agent = callPackage ../applications/graphics/figma-agent { };
-
   figma-linux = callPackage ../applications/graphics/figma-linux { };
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };

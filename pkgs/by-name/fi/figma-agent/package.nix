@@ -1,23 +1,19 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, fontconfig
-, freetype
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  fontconfig,
+  freetype,
 }:
-let
-  inherit (rustPlatform) buildRustPackage bindgenHook;
-
-  version = "0.3.2";
-in
-buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "figma-agent";
-  inherit version;
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "neetly";
     repo = "figma-agent-linux";
-    rev = version;
+    rev = "refs/tags/${version}";
     sha256 = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
   };
 
@@ -25,7 +21,7 @@ buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
-    bindgenHook
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -33,13 +29,11 @@ buildRustPackage {
     freetype
   ];
 
-  doCheck = true;
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/neetly/figma-agent-linux";
     description = "Figma Agent for Linux (a.k.a. Font Helper)";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ercao ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ercao ];
     mainProgram = "figma-agent";
   };
 }
