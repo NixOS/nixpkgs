@@ -7742,6 +7742,7 @@ self: super: with self; {
   mdutils = callPackage ../development/python-modules/mdutils { };
 
   mdp = callPackage ../development/python-modules/mdp { };
+  mdp-toolkit = callPackage ../development/python-modules/mdp-toolkit { };
 
   measurement = callPackage ../development/python-modules/measurement { };
 
