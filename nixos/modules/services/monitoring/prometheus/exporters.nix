@@ -40,6 +40,7 @@ let
     "flow"
     "fritz"
     "fritzbox"
+    "fronius"
     "graphite"
     "idrac"
     "imap-mailstat"
