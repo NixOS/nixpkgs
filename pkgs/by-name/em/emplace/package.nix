@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "emplace";
@@ -6,18 +10,18 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "tversteeg";
-    repo = pname;
-    rev = "v${version}";
+    repo = "emplace";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-FZ+lvf5HRSruUdmkm/Hqz0aRa95SjfIa43WQczRCGNg=";
   };
 
   cargoHash = "sha256-0bKLN0l3ldHJizqWuSoBUxQ8I114BQz6ZTtsro3eYEI=";
 
-  meta = with lib; {
+  meta = {
     description = "Mirror installed software on multiple machines";
     homepage = "https://github.com/tversteeg/emplace";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "emplace";
   };
 }
