@@ -53,7 +53,7 @@ buildGoModule rec {
     outputHash = rec {
       x86_64-linux = "sha256-rz/IP6wi4VKWgO8P4Mov3oviwsDe5iBSKamArVR/+T0=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-C2zo+ykk5Zr5DDO4AB9wkc8jgn82VY8WlTR3XiqbD/0=";
+      aarch64-darwin = "sha256-9J9wD8nJ4JEUKroxCEBYZytywzjGkGhujdj9FcNe0rM=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
