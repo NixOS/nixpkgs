@@ -689,6 +689,8 @@ in
       # References:
       # https://www.debian.org/doc/debian-policy/ch-opersys.html#uid-and-gid-classes
 
+      qubes = 999; # Qubes dom0 expects gid 999
+
       onepassword = 31001; # 1Password requires that its GID be larger than 1000
       onepassword-cli = 31002; # 1Password requires that its GID be larger than 1000
 
