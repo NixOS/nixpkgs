@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch2
-, pkg-config
-, bzip2
-, libgit2
-, nix-update-script
-, zlib
-, zstd
-, zoxide
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch2,
+  pkg-config,
+  bzip2,
+  libgit2,
+  nix-update-script,
+  zlib,
+  zstd,
+  zoxide,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,9 +30,10 @@ rustPlatform.buildRustPackage rec {
       url = "https://github.com/kyoheiu/felix/commit/5085b147103878ee8138d4fcf7b204223ba2c3eb.patch";
       hash = "sha256-7Bga9hcJCXExA/jnrR/HuZgOOVBbWs1tdTwxldcvdU8=";
     })
+    ./0001-update-time.patch
   ];
 
-  cargoHash = "sha256-FX3AsahU5ZLMuylwo1jihP9G4Dw1SFv1oMXcuOqDTF8=";
+  cargoHash = "sha256-QVk7yyldGrzkcgQvJpXq55+mcguKkXasDGV5bjKNQjg=";
 
   nativeBuildInputs = [ pkg-config ];
 
