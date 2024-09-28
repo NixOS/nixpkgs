@@ -1,0 +1,36 @@
+From 08b26522e48dfd7b645b90f03b744d92f1a3c29f Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Wed, 11 Sep 2024 23:04:11 +0200
+Subject: [PATCH] fix: cmd name parsing
+
+---
+ qubesdb-cmd.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/qubesdb-cmd.c b/qubesdb-cmd.c
+index fc2c961..0c6d909 100644
+--- a/qubesdb-cmd.c
++++ b/qubesdb-cmd.c
+@@ -287,7 +287,18 @@ int main(int argc, char **argv) {
+     int last_optind;
+     qdb_handle_t h;
+ 
+-    if ((cmd_argv0=strchr(argv[0], '-'))) {
++    char *cmd_argv0_tmp;
++
++    // qubesdb-cmd tries to parse first argument by removing part before first -, and then taking the rest
++    // in QubesOS that works well: /bin/qubesdb-read => read, however in nixos, path before can contain a -:
++    // /nix/store/aaaaaa-qubesdb/qubesdb-read => qubesdb/qubesdb-read, which is not a valid qubesdb command.
++    // Fix it by first taking a filename (=removing all components ending in /) of a path.
++    cmd_argv0 = argv[0];
++    while ((cmd_argv0_tmp=strchr(cmd_argv0, '/'))) {
++        cmd_argv0 = cmd_argv0_tmp + 1;
++    }
++
++    if ((cmd_argv0=strchr(cmd_argv0, '-'))) {
+         cmd_argv0++;
+         do_cmd = parse_cmd(cmd_argv0);
+     }
+-- 
+2.45.2
+

@@ -13278,6 +13278,17 @@ self: super: with self; {
 
   quaternion = callPackage ../development/python-modules/quaternion { };
 
+  qubes-core-admin = callPackage ../development/python-modules/qubes-core-admin { };
+
+  qubes-core-admin-client = callPackage ../development/python-modules/qubes-core-admin-client { };
+
+  qubes-core-qrexec = callPackage ../development/python-modules/qubes-core-qrexec { };
+
+  qubes-core-qubesdb = (pkgs.qubes-core-qubesdb.override {
+    inherit python;
+    withPython = true;
+  }).pythonModule;
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
