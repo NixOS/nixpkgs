@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "hred";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "danburzo";
     repo = "hred";
     rev = "v${version}";
-    hash = "sha256-rnobJG9Z1lXEeFm+c0f9OsbiTzxeP3+zut5LYpGzWfc=";
+    hash = "sha256-+0+WQRI8rdIMbPN0eBUdsWUMWDCxZhTRLiFo1WRd2xc=";
   };
 
-  npmDepsHash = "sha256-POxlGWK0TJMwNWDpiK5+OXLGtAx4lFJO3imoe/h+7Sc=";
+  npmDepsHash = "sha256-kNNvSxZqN6cDZIG+lvqxgjAVCJUJrCvZThxrur5kozU=";
 
   dontNpmBuild = true;
 
