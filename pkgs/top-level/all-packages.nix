@@ -540,6 +540,10 @@ with pkgs;
 
   dcgm = callPackage ../os-specific/linux/dcgm { };
 
+  deck = callPackage ../by-name/de/deck/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
