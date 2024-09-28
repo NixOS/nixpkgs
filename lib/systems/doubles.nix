@@ -5,6 +5,10 @@ let
   inherit (lib.systems.inspect) predicates;
   inherit (lib.attrsets) matchAttrs;
 
+  # The platform doubles for which we build Nixpkgs.
+  # See `pkgs/top-level/release.nix` for where this value is consumed.
+  builtOnNixosHydra = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+
   all = [
     # Cygwin
     "i686-cygwin" "x86_64-cygwin"
@@ -63,7 +67,7 @@ let
   filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
 
 in {
-  inherit all;
+  inherit all builtOnNixosHydra;
 
   none = [];
 
