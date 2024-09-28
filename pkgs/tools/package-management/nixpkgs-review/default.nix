@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 
   installShellFiles,
@@ -15,7 +15,7 @@
   withNom ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
   version = "2.10.5";
   pyproject = true;
@@ -28,11 +28,11 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   build-system = [
-    python3.pkgs.setuptools
+    python3Packages.setuptools
   ];
 
   dependencies = lib.optionals withAutocomplete [
-    python3.pkgs.argcomplete
+    python3Packages.argcomplete
   ];
 
   nativeBuildInputs =
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
       installShellFiles
     ]
     ++ lib.optionals withAutocomplete [
-      python3.pkgs.argcomplete
+      python3Packages.argcomplete
     ];
 
   makeWrapperArgs =
