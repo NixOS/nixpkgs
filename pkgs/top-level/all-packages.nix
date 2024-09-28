@@ -3695,6 +3695,8 @@ with pkgs;
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
+  hiprompt-gtk-py = callPackage ../tools/security/hiprompt-gtk-py { };
+
   hostctl = callPackage ../tools/system/hostctl { };
 
   hp2p = callPackage ../tools/networking/hp2p { };
