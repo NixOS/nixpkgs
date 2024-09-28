@@ -1,4 +1,4 @@
-{ lib, stdenv }:
+{ lib, stdenvNoCC }:
 
 # srcOnly is a utility builder that only fetches and unpacks the given `src`,
 # and optionally patching with `patches` or adding build inputs.
@@ -12,6 +12,7 @@ attrs:
 let
   args = attrs.drvAttrs or attrs;
   name = args.name or "${args.pname}-${args.version}";
+  stdenv = args.stdenv or (lib.warn "srcOnly: stdenv not provided, using stdenvNoCC" stdenvNoCC);
   drv = stdenv.mkDerivation (
     args
     // {
