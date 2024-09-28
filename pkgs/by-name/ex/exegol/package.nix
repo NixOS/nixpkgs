@@ -43,6 +43,9 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
     license = licenses.gpl3Only;
     mainProgram = "exegol";
-    maintainers = with maintainers; [ _0b11stan ];
+    maintainers = with maintainers; [
+      _0b11stan
+      charB66
+    ];
   };
 }
