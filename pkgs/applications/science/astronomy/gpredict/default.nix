@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, intltool, autoreconfHook
-, gtk3, glib, curl, goocanvas2, gpsd
-, hamlib, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  intltool,
+  autoreconfHook,
+  gtk3,
+  glib,
+  curl,
+  goocanvas2,
+  gpsd,
+  hamlib,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,8 +44,20 @@ stdenv.mkDerivation rec {
 
   ];
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 autoreconfHook ];
-  buildInputs = [ curl glib gtk3 goocanvas2 gpsd hamlib ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    wrapGAppsHook3
+    autoreconfHook
+  ];
+  buildInputs = [
+    curl
+    glib
+    gtk3
+    goocanvas2
+    gpsd
+    hamlib
+  ];
 
   meta = {
     description = "Real time satellite tracking and orbit prediction";
@@ -48,6 +72,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
-    maintainers = with lib.maintainers; [ markuskowa cmcdragonkai ];
+    maintainers = with lib.maintainers; [
+      markuskowa
+      cmcdragonkai
+    ];
   };
 }
