@@ -15,10 +15,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-atari800",
-            "rev": "173edee31172db46f46512918cda11192a2bd977",
-            "hash": "sha256-liZKtoiAlA/CFFY0AsfxUkWUQCXIgtLlJCaNydvYCXE="
+            "rev": "39380a6e028589e850ecdfd2a5a19307b475d667",
+            "hash": "sha256-Rw6eTaKHZaCEgvnIqctaKCYQ+W8cHLtckLK8U5Ugck4="
         },
-        "version": "unstable-2024-09-13"
+        "version": "unstable-2024-09-24"
     },
     "beetle-gba": {
         "fetcher": "fetchFromGitHub",
