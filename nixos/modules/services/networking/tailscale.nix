@@ -115,6 +115,7 @@ in {
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
+      after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [
         (builtins.dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
