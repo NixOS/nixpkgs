@@ -69,16 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature true "libsodium")
     (lib.withFeature true "sqlite3")
     (lib.withFeatureAs true "libcrypto" (lib.getDev openssl))
+    (lib.withFeatureAs true "modules" "")
+    (lib.withFeatureAs true "dynmodules" (lib.concatStringsSep " " [
+      "bind" "geoip" "gmysql" "godbc" "gpgsql" "gsqlite3" "ldap" "lmdb" "lua2" "pipe" "remote" "tinydns"
+    ]))
     "sysconfdir=/etc/pdns"
   ];
-
-  # nix destroy with-modules arguments, when using configureFlags
-  preConfigure = ''
-    configureFlagsArray+=(
-      "--with-modules="
-      "--with-dynmodules=bind geoip gmysql godbc gpgsql gsqlite3 ldap lmdb lua2 pipe remote tinydns"
-    )
-  '';
 
   # We want the various utilities to look for the powerdns config in
   # /etc/pdns, but to actually install the sample config file in
@@ -91,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     nixos = nixosTests.powerdns;
   };
+
+  __structuredAttrs = true;
 
   meta = with lib; {
     description = "Authoritative DNS server";
