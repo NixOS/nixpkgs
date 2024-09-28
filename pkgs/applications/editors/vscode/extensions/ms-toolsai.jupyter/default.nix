@@ -9,8 +9,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "jupyter";
     publisher = "ms-toolsai";
-    version = "2024.8.1";
-    hash = "sha256-eFInKB1xwVVJFIsXHxsuRJeLKTe3Cb8svquHJOW0P+I=";
+    version = "2024.9.0";
+    hash = "sha256-44L7K8JGpmKmH3aoNCalse8QRKJ/2wvA76gs0Z18zpc=";
   };
 
   nativeBuildInputs = [
