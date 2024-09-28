@@ -3,7 +3,6 @@
   cargo,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   go,
   lib,
   libcap,
@@ -12,37 +11,24 @@
   libsecret,
   pkg-config,
   python3,
-  qt5compat,
-  qtbase,
-  qtnetworkauth,
-  qtsvg,
-  qttools,
-  qtwayland,
-  qtwebsockets,
+  qt6,
   rustPlatform,
   rustc,
   stdenv,
   wireguard-tools,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.23.1";
+  version = "2.24.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NQM1ZII9owD9ek/Leo6WRfvNybZ5pUjDgvQGXQBrD+0=";
+    hash = "sha256-iTnwx+KPZ5b8qT0fEMUCGQx1UyGVM4VCzooZqslGWtw=";
   };
-  patches = [
-    # Update cargo deps for "time"
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/31d5799a30fc02067ad31d86b6ef63294bb3c3b8.patch";
-      hash = "sha256-ECrIcfhhSuvbqQ/ExPdFkQ6b9Q767lhUKmwPdDz7yxI=";
-    })
-  ];
+  patches = [ ];
 
   netfilterGoModules =
     (buildGoModule {
@@ -58,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src patches;
-    hash = "sha256-JIe6FQL0xm6FYYGoIwwnOxq21sC1y8xPsr8tYPF0Mzo=";
+    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
   };
 
   buildInputs = [
@@ -66,12 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
     libsecret
-    qt5compat
-    qtbase
-    qtnetworkauth
-    qtsvg
-    qtwayland
-    qtwebsockets
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtnetworkauth
+    qt6.qtsvg
+    qt6.qtwayland
+    qt6.qtwebsockets
   ];
   nativeBuildInputs = [
     cargo
@@ -82,10 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.glean-parser
     python3.pkgs.pyyaml
     python3.pkgs.setuptools
-    qttools
+    qt6.qttools
+    qt6.wrapQtAppsHook
     rustPlatform.cargoSetupHook
     rustc
-    wrapQtAppsHook
   ];
 
   postPatch = ''
@@ -101,9 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DQT_LCONVERT_EXECUTABLE=${qttools.dev}/bin/lconvert"
-    "-DQT_LUPDATE_EXECUTABLE=${qttools.dev}/bin/lupdate"
-    "-DQT_LRELEASE_EXECUTABLE=${qttools.dev}/bin/lrelease"
+    "-DQT_LCONVERT_EXECUTABLE=${qt6.qttools.dev}/bin/lconvert"
+    "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
+    "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
   dontFixCmake = true;
 

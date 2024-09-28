@@ -2,13 +2,13 @@
 let
   standard = {
     meta = {
-      description = "Standard Xen";
+      description = "Standard";
       longDescription = ''
-        Standard version of Xen. Uses forks of QEMU, SeaBIOS, OVMF and iPXE provided
-        by the Xen Project. This provides the vanilla Xen experince, but wastes space
-        and build time. A typical NixOS setup that runs lots of VMs will usually need
-        to build two different versions of QEMU when using this Xen derivation (one
-        fork and upstream).
+        Standard version of the Xen Project Hypervisor. Uses forks of QEMU, SeaBIOS,
+        OVMF and iPXE provided by the Xen Project. This provides the vanilla Xen
+        experience, but wastes space and build time. A typical NixOS setup that runs
+        lots of VMs will usually need to build two different versions of QEMU when using
+        this Xen derivation (one fork and upstream).
       '';
     };
   };
@@ -16,11 +16,11 @@ let
     meta = {
       description = "Without Internal Components";
       longDescription = ''
-        Slimmed-down version of Xen that reuses nixpkgs packages as much as possible.
-        Instead of using the Xen forks for various internal components, this version uses
-        `seabios`, `ovmf` and `ipxe` from nixpkgs. These components may ocasionally get
-        out of sync with the hypervisor itself, but this builds faster and uses less space
-        than the default derivation.
+        Slimmed-down version of the Xen Project Hypervisor that reuses nixpkgs packages
+        as much as possible. Instead of using the Xen Project forks for various internal
+        components, this version uses `seabios`, `ovmf` and `ipxe` from Nixpkgs. These
+        components may ocasionally get out of sync with the hypervisor itself, but this
+        builds faster and uses less space than the default derivation.
       '';
     };
   };
