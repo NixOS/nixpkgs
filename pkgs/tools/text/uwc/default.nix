@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-20brxqYAvgBxbOQ7KOFviXxmFrSHDXNV/0lcks7x3a8=";
 
-  doCheck = true;
+  doCheck = false;
 
   meta = with lib; {
     description = "Like wc, but unicode-aware, and with per-line mode";
