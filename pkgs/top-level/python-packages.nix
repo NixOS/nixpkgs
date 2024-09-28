@@ -13278,6 +13278,8 @@ self: super: with self; {
 
   quaternion = callPackage ../development/python-modules/quaternion { };
 
+  qubes-app-linux-usb-proxy = callPackage ../development/python-modules/qubes-app-linux-usb-proxy { };
+
   qubes-core-admin = callPackage ../development/python-modules/qubes-core-admin { };
 
   qubes-core-admin-client = callPackage ../development/python-modules/qubes-core-admin-client { };
