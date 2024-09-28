@@ -61,6 +61,6 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ rapiteanu ];
   };
 }
