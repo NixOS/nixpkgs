@@ -26557,6 +26557,8 @@ with pkgs;
   qemu_xen_4_17 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_17-slim; });
   qemu_xen = qemu_xen_4_19;
 
+  qemu_qubes = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = qubes-vmm-xen; });
+
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
   quick-lint-js = callPackage ../development/tools/quick-lint-js { };
