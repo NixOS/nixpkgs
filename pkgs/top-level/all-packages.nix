@@ -6141,6 +6141,7 @@ with pkgs;
 
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
+  beetcamp = beetsPackages.beetcamp.override({propagateBeets = true;});
 
   bento4 = callPackage ../tools/video/bento4 { };
 
