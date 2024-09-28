@@ -8,6 +8,7 @@
   pytestCheckHook,
   # fetchers
   fetchFromGitHub,
+  gitUpdater,
   # build tools
   cmake,
   swig,
@@ -178,8 +179,11 @@ buildPythonPackage rec {
     popd
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { command = "IfcConvert --version"; };
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "ifcopenshell-python-"; };
+    tests = {
+      version = testers.testVersion { command = "IfcConvert --version"; };
+    };
   };
 
   meta = with lib; {
