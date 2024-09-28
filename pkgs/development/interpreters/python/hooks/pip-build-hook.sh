@@ -31,7 +31,7 @@ pipShellHook() {
     if [ -e pyproject.toml ]; then
       tmp_path=$(mktemp -d)
       export PATH="$tmp_path/bin:$PATH"
-      export PYTHONPATH="$tmp_path/@pythonSitePackages@:$PYTHONPATH"
+      export NIX_PYTHONPATH="$tmp_path/@pythonSitePackages@:$NIX_PYTHONPATH"
       mkdir -p "$tmp_path/@pythonSitePackages@"
       @pythonInterpreter@ -m pip install -e . --prefix "$tmp_path" \
          --no-build-isolation >&2
