@@ -25,7 +25,8 @@ let
       };
       aarch64-darwin = x86_64-darwin;
     }
-    ."${stdenvNoCC.hostPlatform.system}";
+    ."${stdenvNoCC.hostPlatform.system}"
+      or (throw "appflowy: No source for system: ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";

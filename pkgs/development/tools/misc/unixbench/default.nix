@@ -9,6 +9,7 @@
 , libGLX
 , coreutils
 , unixtools
+, runtimeShell
 , targetPackages
 , gnugrep
 , gawk
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     substituteInPlace $out/libexec/pgms/multi.sh \
-      --replace '/bin/sh "$' '${targetPackages.runtimeShell} "$'
+      --replace '/bin/sh "$' '${runtimeShell} "$'
 
     substituteInPlace $out/bin/ubench \
       --subst-var out
