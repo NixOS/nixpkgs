@@ -3,11 +3,9 @@
 , hamlib, wrapGAppsHook3
 }:
 
-let
-  version = "2.2.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gpredict";
-  inherit version;
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://github.com/csete/gpredict/releases/download/v${version}/gpredict-${version}.tar.bz2";
@@ -27,7 +25,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 ];
   buildInputs = [ curl glib gtk3 goocanvas2 gpsd hamlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Real time satellite tracking and orbit prediction";
     mainProgram = "gpredict";
     longDescription = ''
@@ -37,9 +35,9 @@ in stdenv.mkDerivation {
       well. Gpredict uses the SGP4/SDP4 algorithms, which are compatible with the
       NORAD Keplerian elements.
     '';
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
-    maintainers = [ maintainers.markuskowa maintainers.cmcdragonkai ];
+    maintainers = with lib.maintainers; [ markuskowa cmcdragonkai ];
   };
 }
