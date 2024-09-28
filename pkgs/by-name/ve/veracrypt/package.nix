@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veracrypt";
-  version = "1.26.14";
+  version = "1.26.15";
 
   src = fetchurl {
-    url = "https://launchpad.net/veracrypt/trunk/${lib.toLower finalAttrs.version}/+download/VeraCrypt_${finalAttrs.version}_Source.tar.bz2";
-    hash = "sha256-2oetZxTXF+vdwlJww4txiVAcKvlxjupkp64bwKPMruE=";
+    url = "https://launchpad.net/veracrypt/trunk/${finalAttrs.version}/+download/VeraCrypt_${finalAttrs.version}_Source.tar.bz2";
+    hash = "sha256-upcCUDDiG5sjMbfrCJcBFjwyr0t+BFNfM1uvjXSnSRY=";
   };
 
   patches = [
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm 444 License.txt -t "$out/share/doc/veracrypt/"
     install -d $out/share/applications
     substitute Setup/Linux/veracrypt.desktop $out/share/applications/veracrypt.desktop \
-      --replace "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
-      --replace "Icon=veracrypt" "Icon=veracrypt.xpm"
+      --replace-fail "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
+      --replace-fail "Icon=veracrypt" "Icon=veracrypt.xpm"
   '';
 
   meta = {
