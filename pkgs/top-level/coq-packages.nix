@@ -136,6 +136,7 @@ let
       stalmarck = self.stalmarck-tactic.stalmarck;
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
+      tactician = callPackage ../development/coq-modules/tactician { };
       tlc = callPackage ../development/coq-modules/tlc {};
       topology = callPackage ../development/coq-modules/topology {};
       trakt = callPackage ../development/coq-modules/trakt {};
