@@ -13812,6 +13812,10 @@ with pkgs;
 
   unshield = callPackage ../tools/archivers/unshield { };
 
+  unxip = swiftPackages.callPackage ../tools/archivers/unxip {
+    inherit (darwin.apple_sdk_11_0.frameworks) Compression;
+  };
+
   unzip = callPackage ../tools/archivers/unzip { };
 
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
