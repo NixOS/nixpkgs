@@ -227,6 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
     moveToOutput "share/glib-2.0/gdb" "$out"
+    moveToOutput "share/glib-2.0/valgrind" "$out"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
