@@ -14,6 +14,7 @@
   pandas,
 
   # test dependencies
+  cleanvision,
   datasets,
   fasttext,
   hypothesis,
@@ -58,6 +59,7 @@ buildPythonPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
+    cleanvision
     datasets
     fasttext
     hypothesis
