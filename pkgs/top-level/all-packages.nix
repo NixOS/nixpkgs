@@ -13355,8 +13355,6 @@ with pkgs;
 
   ursadb = callPackage ../servers/ursadb { };
 
-  usbmuxd = callPackage ../tools/misc/usbmuxd { };
-
   usbmuxd2 = callPackage ../tools/misc/usbmuxd2 { };
 
   usort = with python3Packages; toPythonApplication usort;
