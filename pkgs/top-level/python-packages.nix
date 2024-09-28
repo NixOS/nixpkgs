@@ -13289,6 +13289,11 @@ self: super: with self; {
     withPython = true;
   }).pythonModule;
 
+  qubes-imgconverter = (pkgs.qubes-linux-utils.override {
+    inherit python;
+    withPython = true;
+  }).imgconverter;
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
