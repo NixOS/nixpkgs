@@ -83,6 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
       }
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
+
+    # Delete the built-in libmediainfo so the program has to use the nixpkgs version
+    rm $out/opt/lib/**/libmediainfo.so
+    ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-aarch64/libmediainfo.so
+    ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-armv7l/libmediainfo.so
+    ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-x86_64/libmediainfo.so
   '';
 
   passthru.updateScript = genericUpdater {
