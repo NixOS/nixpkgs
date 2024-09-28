@@ -17550,6 +17550,10 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+  xen = toPythonModule (pkgs.xen-slim.override {
+    python3Packages = self;
+  });
+
   xformers = callPackage ../development/python-modules/xformers { };
 
   xgboost = callPackage ../development/python-modules/xgboost {
