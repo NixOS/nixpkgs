@@ -7,6 +7,7 @@
   icoutils,
   lib,
   makeDesktopItem,
+  nixosTests,
   wrapGAppsHook3,
   zlib,
 }:
@@ -71,7 +72,10 @@ buildDotnetModule rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = nixosTests.scarab;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Hollow Knight mod installer and manager";
