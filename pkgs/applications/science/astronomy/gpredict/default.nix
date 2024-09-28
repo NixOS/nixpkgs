@@ -22,6 +22,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/csete/gpredict/commit/c565bb3d48777bfe17114b5d01cd81150521f056.patch";
       sha256 = "1jhy9hpqlachq32bkij60q3dxkgi1kkr80rm29jjxqpmambf406a";
     })
+    # Updates URLs for TLE files
+    # https://github.com/csete/gpredict/pull/305
+    (fetchpatch {
+      name = "TLE-urls.patch";
+      url = "https://github.com/csete/gpredict/commit/8f60f856921e8ee143cd6e2d34a9183778cb0fbf.patch";
+      hash = "sha256-X/nKrqh5sjxDMLhA9LQek8AsJFqhvK/k8Ep3ug/0rMI=";
+    })
+
   ];
 
   nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 autoreconfHook ];
