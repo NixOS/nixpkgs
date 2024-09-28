@@ -63,6 +63,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       oluceps
       pokon548
+      luochen1990
     ];
     platforms = platforms.linux;
     mainProgram = "dae";
