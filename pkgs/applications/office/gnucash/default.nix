@@ -131,6 +131,8 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/finance-quote-wrapper \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
+
+    chmod +x $out/share/applications/gnucash.desktop
   '';
 
   passthru.updateScript = ./update.sh;
