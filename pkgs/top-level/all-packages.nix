@@ -15551,6 +15551,8 @@ with pkgs;
   ocaml-ng = callPackage ./ocaml-packages.nix { } // { __attrsFailEvaluation = true; };
   ocaml = ocamlPackages.ocaml;
 
+  camlboot = callPackage ../development/compilers/ocaml/camlboot.nix { };
+
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
