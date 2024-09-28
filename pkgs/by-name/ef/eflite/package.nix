@@ -8,7 +8,7 @@
   debug ? false,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "eflite";
   version = "0.4.1";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs:{
   ];
 
   configureFlags = [
-    "flite_dir=${flite}"
+    "flite_dir=${flite.dev}"
     "--with-audio=alsa"
     "--with-vox=cmu_us_kal16"
   ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs:{
     '';
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "eflite";
   };
 })
