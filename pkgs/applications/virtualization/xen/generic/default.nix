@@ -25,7 +25,7 @@ versionDefinition:
   ncurses,
   ocamlPackages,
   perl,
-  python311Packages,
+  python3,
   systemdMinimal,
   xz,
   yajl,
@@ -323,6 +323,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc" # The full Xen documentation in HTML format.
     "dev" # Development headers.
     "boot" # xen.gz kernel, policy file if Flask is enabled, xen.efi if EFI is enabled.
+    # TODO: Python package to be in separate output/package.
   ];
 
   # Main Xen source.
@@ -345,10 +346,11 @@ stdenv.mkDerivation (finalAttrs: {
       flex
       pandoc
       pkg-config
+      python3.pkgs.setuptools
     ]
     ++ lib.lists.optionals withInternalQEMU [
       ninja
-      python311Packages.sphinx
+      python3.pkgs.sphinx
     ];
   buildInputs =
     [
@@ -362,7 +364,7 @@ stdenv.mkDerivation (finalAttrs: {
       lzo
       ncurses
       perl
-      python311Packages.python
+      python3
       xz
       yajl
       zlib
@@ -373,7 +375,7 @@ stdenv.mkDerivation (finalAttrs: {
       ocamlPackages.ocaml
 
       # Python Fixes
-      python311Packages.wrapPython
+      python3.pkgs.wrapPython
     ]
     ++ lib.lists.optionals withInternalQEMU [
       glib

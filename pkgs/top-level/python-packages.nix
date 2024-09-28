@@ -17543,6 +17543,15 @@ self: super: with self; {
 
   xattr = callPackage ../development/python-modules/xattr { };
 
+  # I don't think it is worth to have different versions of this library,
+  # xen api promises to be good enough to believe that newer library will
+  # work with older xen for some time.
+  # It should at least be a separate output for python.
+  # FIXME: Broken with python 3.12+ due to https://github.com/NixOS/nixpkgs/issues/253751
+  xen = toPythonModule (pkgs.xen.override {
+    python3 = python;
+  });
+
   xbox-webapi = callPackage ../development/python-modules/xbox-webapi { };
 
   xboxapi = callPackage ../development/python-modules/xboxapi { };

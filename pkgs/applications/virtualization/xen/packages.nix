@@ -1,4 +1,4 @@
-{ callPackage }:
+{ python311, callPackage }:
 let
   standard = {
     meta = {
@@ -24,10 +24,12 @@ let
       '';
     };
   };
+  # FIXME: Broken with python 3.12+ due to https://github.com/NixOS/nixpkgs/issues/253751
+  python = python311;
 in
 # TODO: generalise this to automatically generate both Xen variants for each ./<version>/default.nix.
 rec {
-  xen_4_19 = callPackage ./4.19/default.nix { inherit (standard) meta; };
+  xen_4_19 = callPackage ./4.19/default.nix { inherit (standard) meta; inherit python; };
   xen_4_19-slim = xen_4_19.override {
     withInternalQEMU = false;
     withInternalSeaBIOS = false;
@@ -36,7 +38,7 @@ rec {
     inherit (slim) meta;
   };
 
-  xen_4_18 = callPackage ./4.18/default.nix { inherit (standard) meta; };
+  xen_4_18 = callPackage ./4.18/default.nix { inherit (standard) meta; inherit python; };
   xen_4_18-slim = xen_4_18.override {
     withInternalQEMU = false;
     withInternalSeaBIOS = false;
@@ -45,7 +47,7 @@ rec {
     inherit (slim) meta;
   };
 
-  xen_4_17 = callPackage ./4.17/default.nix { inherit (standard) meta; };
+  xen_4_17 = callPackage ./4.17/default.nix { inherit (standard) meta; inherit python; };
   xen_4_17-slim = xen_4_17.override {
     withInternalQEMU = false;
     withInternalSeaBIOS = false;
