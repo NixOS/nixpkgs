@@ -13289,6 +13289,8 @@ self: super: with self; {
     withPython = true;
   }).pythonModule;
 
+  qubes-desktop-linux-common = callPackage ../development/python-modules/qubes-desktop-linux-commons { };
+
   qubes-imgconverter = (pkgs.qubes-linux-utils.override {
     inherit python;
     withPython = true;
