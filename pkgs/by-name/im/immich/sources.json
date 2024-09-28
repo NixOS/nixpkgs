@@ -1,22 +1,22 @@
 {
-  "version": "1.115.0",
-  "hash": "sha256-H2FCR55redomrDjnnCQys47AaYbWEmlxO5NJEcVMBwY=",
+  "version": "1.116.2",
+  "hash": "sha256-vbLUHNgUHnKAO424j/MwKDv0GZhBZ2T6vwjLsIHhMxM=",
   "components": {
     "cli": {
-      "npmDepsHash": "sha256-+zKtPHXjBd1KAKvI5xaY2/9qzVUg+8Ho/wrV9+TlU64=",
-      "version": "2.2.19"
+      "npmDepsHash": "sha256-M0A+B9qHmRRb6XW0P57Huo85cL8PUpLGe32IJzJgZhY=",
+      "version": "2.2.22"
     },
     "server": {
-      "npmDepsHash": "sha256-6CehRhPepspDpQW1h0Bx7EpH7hn42Ygqma/6wim14jA=",
-      "version": "1.115.0"
+      "npmDepsHash": "sha256-1gOJxg+OXG4t6jZdia5+1Ie5gOjtZhqpqOgPi3I/U+k=",
+      "version": "1.116.2"
     },
     "web": {
-      "npmDepsHash": "sha256-ZmXfYktgOmMkDjfqSGyyflr2CmnC9yVnJ1gAcmd6A00=",
-      "version": "1.115.0"
+      "npmDepsHash": "sha256-mI/hMDf7mBV1oMkJIh6IYVzqGv+h+sc9wiGJsL0Rmog=",
+      "version": "1.116.2"
     },
     "open-api/typescript-sdk": {
-      "npmDepsHash": "sha256-l1mLYFpFQjYxytY0ZWLq+ldUhZA6so0HqPgCABt0s9k=",
-      "version": "1.115.0"
+      "npmDepsHash": "sha256-lfqk/2YBbB6qiFXjeTYqnkslVmI8fXTvHe/wGCSD8Ok=",
+      "version": "1.116.2"
     }
   }
 }
