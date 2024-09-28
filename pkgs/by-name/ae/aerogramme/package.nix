@@ -6,16 +6,19 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage {
-  RUSTC_BOOTSTRAP = true;
-
+rustPlatform.buildRustPackage rec {
   pname = "aerogramme";
   version = "0.3.0";
 
   src = fetchgit {
     url = "https://git.deuxfleurs.fr/Deuxfleurs/aerogramme/";
+    rev = "refs/tags/${version}";
     hash = "sha256-ER+P/XGqNzTLwDLK5EBZq/Dl29ZZKl2FdxDb+oLEJ8Y=";
   };
+
+  cargoPatches = [
+    ./0001-update-time-rs.patch
+  ];
 
   # must use our own Cargo.lock due to git dependencies
   cargoLock = {
@@ -31,8 +34,11 @@ rustPlatform.buildRustPackage {
   # disable network tests as Nix sandbox breaks them
   doCheck = false;
 
-  # get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR = 1;
+  env = {
+    # get openssl-sys to use pkg-config
+    OPENSSL_NO_VENDOR = true;
+    RUSTC_BOOTSTRAP = true;
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

@@ -1,7 +1,6 @@
 {
   lib,
-  go_1_23,
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   installShellFiles,
   restic,
@@ -10,11 +9,7 @@
   resticprofile,
 }:
 
-let
-  # can be removed when the default go version is at least 1.23
-  buildGoModule' = buildGoModule.override { go = go_1_23; };
-in
-buildGoModule' rec {
+buildGo123Module rec {
   pname = "resticprofile";
   version = "0.28.0";
 

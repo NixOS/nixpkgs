@@ -9,22 +9,17 @@
 buildPythonPackage rec {
   pname = "unicorn";
   version = lib.getVersion unicorn-emu;
-  format = "setuptools";
+  pyproject = true;
 
   src = unicorn-emu.src;
 
   sourceRoot = "${src.name}/bindings/python";
 
-  patches = [
-    # Python 3.12 compatibility: Drop removed `distutils` import in favor of `sysconfig`
-    ./avoid-distutils-python312.patch
-  ];
-
   prePatch = ''
     ln -s ${unicorn-emu}/lib/libunicorn.* prebuilt/
   '';
 
-  # needed on non-x86 linux
+  # Needed on non-x86 linux
   setupPyBuildFlags =
     lib.optionals stdenv.hostPlatform.isLinux [
       "--plat-name"
@@ -37,7 +32,7 @@ buildPythonPackage rec {
       "macosx_11_0"
     ];
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   checkPhase = ''
     runHook preCheck

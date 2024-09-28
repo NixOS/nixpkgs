@@ -7,7 +7,6 @@
   setuptools,
   numpy,
   hdf5,
-  pythonRelaxDepsHook,
   cython_0,
   pkgconfig,
   mpi4py ? null,
@@ -15,7 +14,6 @@
   pytestCheckHook,
   pytest-mpi,
   cached-property,
-  stdenv,
 }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
@@ -67,7 +65,6 @@ buildPythonPackage rec {
   preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     cython_0
     pkgconfig
     setuptools

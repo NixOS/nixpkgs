@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -103,6 +104,9 @@ buildPythonPackage rec {
     "test_plot_kde_2d"
     "test_plot_pair"
   ];
+
+  # Tests segfault on darwin
+  doCheck = !stdenv.isDarwin;
 
   pythonImportsCheck = [ "arviz" ];
 

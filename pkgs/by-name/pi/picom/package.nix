@@ -1,4 +1,4 @@
-{ asciidoc
+{ asciidoctor
 , dbus
 , docbook_xml_dtd_45
 , docbook_xsl
@@ -33,20 +33,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picom";
-  version = "11.2";
+  version = "12";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7ohtI890CutwprPEY5njqWou0fD6T9eu51EBSQ2/lWs=";
+    hash = "sha256-7XpZEYQtjsBAcMMEJXlfSaZ1jdDxDBnzkSAtTbW7Br4=";
     fetchSubmodules = true;
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    asciidoc
+    asciidoctor
     docbook_xml_dtd_45
     docbook_xsl
     makeWrapper

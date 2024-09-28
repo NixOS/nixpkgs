@@ -175,8 +175,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.7";
-    hash = "sha256-ZfcL4utJHuxCGILb/zIeXVVbHkskgp70+c2IitkFJwA=";
+    version = "2.18.8";
+    hash = "sha256-0rHRifdjzzxMh/im8pRx6XoY62irDTDUes+Pn0CR65I=";
     self_attribute_name = "nix_2_18";
   };
 
@@ -211,8 +211,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_24 = (common {
-    version = "2.24.7";
-    hash = "sha256-NAyc5MR/T70umcSeMv7y3AVt00ZkmDXGm7LfYKTONfE=";
+    version = "2.24.8";
+    hash = "sha256-YPJA0stZucs13Y2DQr3JIL6JfakP//LDbYXNhic/rKk=";
     self_attribute_name = "nix_2_24";
   }).override (lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix the following error with the default x86_64-darwin SDK:

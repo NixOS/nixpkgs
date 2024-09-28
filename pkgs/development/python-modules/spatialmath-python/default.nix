@@ -17,7 +17,6 @@
   pytest-xvfb,
   sympy,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     oldest-supported-numpy
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [ "pre-commit" ];

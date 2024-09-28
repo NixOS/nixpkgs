@@ -5,7 +5,6 @@
 , flex
 , curl
 , json_c
-, libxcrypt
 }:
 
 stdenv.mkDerivation rec {

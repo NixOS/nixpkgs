@@ -9,7 +9,6 @@ let
   cfg = config.services.printing;
   cups = cfg.package;
 
-  avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
 
   additionalBackends = pkgs.runCommand "additional-cups-backends" {
@@ -99,7 +98,7 @@ let
       cupsdFile
       (writeConf "client.conf" cfg.clientConf)
       (writeConf "snmp.conf" cfg.snmpConf)
-    ] ++ optional avahiEnabled browsedFile
+    ] ++ optional cfg.browsed.enable browsedFile
       ++ cfg.drivers;
     pathsToLink = [ "/etc/cups" ];
     ignoreCollisions = true;
@@ -270,6 +269,15 @@ in
         '';
       };
 
+      browsed.enable = mkOption {
+        type = types.bool;
+        default = config.services.avahi.enable;
+        defaultText = literalExpression "config.services.avahi.enable";
+        description = ''
+          Whether to enable the CUPS Remote Printer Discovery (browsed) daemon.
+        '';
+      };
+
       browsedConf = mkOption {
         type = types.lines;
         default = "";
@@ -339,7 +347,7 @@ in
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
     services.udev.packages = cfg.drivers;
 
-    # Allow asswordless printer admin for members of wheel group
+    # Allow passwordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''
       polkit.addRule(function(action, subject) {
           if (action.id == "org.opensuse.cupspkhelper.mechanism.all-edit" &&
@@ -419,7 +427,7 @@ in
           serviceConfig.PrivateTmp = true;
       };
 
-    systemd.services.cups-browsed = mkIf avahiEnabled
+    systemd.services.cups-browsed = mkIf cfg.browsed.enable
       { description = "CUPS Remote Printer Discovery";
 
         wantedBy = [ "multi-user.target" ];

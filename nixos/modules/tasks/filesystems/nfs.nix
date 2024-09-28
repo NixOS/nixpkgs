@@ -16,7 +16,7 @@ let
     lib.optionalAttrs (cfg.server.nproc != null) {
       nfsd.threads = cfg.server.nproc;
     } // lib.optionalAttrs (cfg.server.hostName != null) {
-      nfsd.host= cfg.hostName;
+      nfsd.host = cfg.server.hostName;
     } // lib.optionalAttrs (cfg.server.mountdPort != null) {
       mountd.port = cfg.server.mountdPort;
     } // lib.optionalAttrs (cfg.server.statdPort != null) {

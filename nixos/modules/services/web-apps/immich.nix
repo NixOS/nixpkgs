@@ -290,7 +290,7 @@ in
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
-        ExecStart = lib.getExe cfg.package.machine-learning;
+        ExecStart = lib.getExe (cfg.package.machine-learning.override { immich = cfg.package; });
         CacheDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;
