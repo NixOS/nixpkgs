@@ -1,0 +1,25 @@
+From bdc4bea56e3e034e9b117bc1fdd5aeb601caf5f1 Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Wed, 25 Sep 2024 23:34:35 +0200
+Subject: [PATCH] fix: make shmoverride initfirst
+
+---
+ shmoverride/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/shmoverride/Makefile b/shmoverride/Makefile
+index 854742f..e3f9b70 100644
+--- a/shmoverride/Makefile
++++ b/shmoverride/Makefile
+@@ -37,7 +37,7 @@ all: shmoverride.so X-wrapper-qubes
+ 
+ shmoverride.so: shmoverride.o ./list.o
+ 	$(CC) $(CFLAGS) $(extra_cflags) -shared -o shmoverride.so \
+-		shmoverride.o list.o -ldl -lxenctrl -lxengnttab -Wl,-Bsymbolic
++		shmoverride.o list.o -ldl -lxenctrl -lxengnttab -Wl,-Bsymbolic -Wl,-z,initfirst
+ 
+ vpath %.c ../common
+ 
+-- 
+2.46.0
+
