@@ -34312,6 +34312,8 @@ with pkgs;
 
   balanceofsatoshis = callPackage ../tools/misc/balanceofsatoshis { };
 
+  bchn = callPackage ../applications/blockchains/bchn { };
+
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
     stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     withGui = true;
