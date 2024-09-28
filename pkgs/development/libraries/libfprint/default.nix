@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.94.6";
+  version = "1.94.7";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-lDnAXWukBZSo8X6UEVR2nOMeVUi/ahnJgx2cP+vykZ8=";
+    hash = "sha256-OM26B9mQLNyjBKMgA3DMrvfWQ8K6aIaJLdiTXXMYvXA=";
   };
 
   postPatch = ''
