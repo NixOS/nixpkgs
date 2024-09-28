@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-opendata-transport";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_opendata_transport";
     inherit version;
-    hash = "sha256-2lEKPu5vjyqNUqz1NGmZ5b6YP3oWnCgoubDdiQCbdps=";
+    hash = "sha256-CtYsks7Q33ww0Mr9ehhq7+fJhCsj4gxKytiCZ6G4Aqc=";
   };
 
   nativeBuildInputs = [ setuptools ];
