@@ -10942,6 +10942,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  oregano = callPackage ../applications/science/electronics/oregano { };
+
   org-stats = callPackage ../tools/misc/org-stats { };
 
   orz = callPackage ../tools/compression/orz { };
