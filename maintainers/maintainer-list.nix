@@ -10686,6 +10686,11 @@
     githubId = 7183441;
     name = "Justin Lovinger";
   };
+  justinrubek = {
+    github = "justinrubek";
+    githubId = 25621857;
+    name = "Justin Rubek";
+  };
   justinwoo = {
     email = "moomoowoo@gmail.com";
     github = "justinwoo";
