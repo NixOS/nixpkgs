@@ -1,4 +1,10 @@
-{ expect, fetchFromGitHub, lib, rustPlatform, stdenv }:
+{
+  expect,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fcp";
@@ -6,8 +12,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "svetlitski";
-    repo = pname;
-    rev = "v${version}";
+    repo = "fcp";
+    rev = "refs/tags/v${version}";
     sha256 = "0f242n8w88rikg1srimdifadhggrb2r1z0g65id60ahb4bjm8a0x";
   };
 
@@ -22,13 +28,13 @@ rustPlatform.buildRustPackage rec {
     patchShebangs tests/*.exp
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Significantly faster alternative to the classic Unix cp(1) command";
     homepage = "https://github.com/svetlitski/fcp";
     changelog = "https://github.com/svetlitski/fcp/releases/tag/v${version}";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "fcp";
   };
 }

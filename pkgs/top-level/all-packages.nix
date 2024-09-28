@@ -29360,8 +29360,6 @@ with pkgs;
 
   fclones-gui = darwin.apple_sdk_11_0.callPackage ../tools/misc/fclones/gui.nix { };
 
-  fcp = callPackage ../tools/misc/fcp { };
-
   fdupes = callPackage ../tools/misc/fdupes { };
 
   feh = callPackage ../applications/graphics/feh {
