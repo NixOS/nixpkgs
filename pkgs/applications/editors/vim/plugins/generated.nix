@@ -8492,12 +8492,12 @@ final: prev:
 
   nvim-dap-rego = buildVimPlugin {
     pname = "nvim-dap-rego";
-    version = "2024-09-15";
+    version = "2024-09-28";
     src = fetchFromGitHub {
       owner = "rinx";
       repo = "nvim-dap-rego";
-      rev = "1fa446e7e482d193a8c0cf089a3bc422d71cb47a";
-      sha256 = "14ml164dca4ks1hm6d7hd6wsafr5kp17y0n46mphvvhqfrgs09cg";
+      rev = "ab13103327b5e336a0d059ec2d9f1022c26ffadf";
+      sha256 = "05ainkya2z6hm02glz2xcnd39y3fvkdmsgnl6la7kchin227l6w4";
     };
     meta.homepage = "https://github.com/rinx/nvim-dap-rego/";
   };
