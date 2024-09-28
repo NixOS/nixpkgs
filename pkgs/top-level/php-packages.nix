@@ -619,7 +619,38 @@ in {
           configureFlags = [
             "--enable-soap"
           ];
-          doCheck = false;
+           doCheck = stdenv.hostPlatform.isDarwin;  # TODO: a couple tests still fail on *-linux
+           internalDeps = [ php.extensions.session ];
+           patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
+             # Fix tests with libxml2 2.12
+             (fetchpatch {
+               url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+               hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+               excludes = [
+                 "NEWS"
+               ];
+             })
+             # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
+             # Required for libxml2 2.13 compatibility patch.
+             ../development/interpreters/php/php81-fix-libxml2-2.13-compatibility.patch
+             # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
+             (fetchpatch {
+               url = "https://github.com/php/php-src/commit/9b4f6b09d58a4e54ee60443bf9a8b166852c03e0.patch";
+               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+             })
+           ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+             # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+             (fetchpatch {
+               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+             })
+           ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+             (fetchpatch {
+               url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+               hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+               excludes = [ "NEWS" ];
+             })
+           ];
         }
         {
           name = "sockets";
