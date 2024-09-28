@@ -40,6 +40,7 @@ versionDefinition:
   withInternalSeaBIOS ? true,
   withSeaBIOS ? !withInternalSeaBIOS,
   seabios,
+  seabiosBinary ? "Csm16.bin",
 
   withInternalOVMF ? true,
   withOVMF ? !withInternalOVMF,
@@ -390,7 +391,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.lists.optional (!withInternalQEMU) "--with-system-qemu"
 
-    ++ lib.lists.optional withSeaBIOS "--with-system-seabios=${seabios}/share/seabios"
+    ++ lib.lists.optional withSeaBIOS "--with-system-seabios=${seabios}/share/seabios/${seabiosBinary}"
     ++ lib.lists.optional (!withInternalSeaBIOS && !withSeaBIOS) "--disable-seabios"
 
     ++ lib.lists.optional withOVMF "--with-system-ovmf=${OVMF.firmware}"
