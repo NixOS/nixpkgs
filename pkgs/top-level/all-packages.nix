@@ -2409,8 +2409,6 @@ with pkgs;
 
   gut = callPackage ../applications/version-management/gut { };
 
-  hred = callPackage ../development/tools/hred { };
-
   hub = callPackage ../applications/version-management/hub { };
 
   hut = callPackage ../applications/version-management/hut { };
