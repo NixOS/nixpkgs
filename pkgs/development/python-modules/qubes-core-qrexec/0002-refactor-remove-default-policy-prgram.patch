@@ -1,0 +1,44 @@
+From 7cbd328359af3a79b799dc2f099183f29baa83f4 Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Sun, 14 Sep 2024 11:45:07 +0200
+Subject: refactor: remove default policy prgram
+
+---
+ daemon/qrexec-daemon.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/daemon/qrexec-daemon.c b/daemon/qrexec-daemon.c
+index 61c1004..3da967b 100644
+--- a/daemon/qrexec-daemon.c
++++ b/daemon/qrexec-daemon.c
+@@ -113,7 +113,7 @@ static const char default_user_keyword[] = "DEFAULT:";
+ 
+ static int opt_quiet = 0;
+ 
+-static const char *policy_program = QREXEC_POLICY_PROGRAM;
++static const char *policy_program = NULL;
+ 
+ #ifdef __GNUC__
+ #  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
+@@ -1535,8 +1535,7 @@ static _Noreturn void usage(const char *argv0)
+     fprintf(stderr, "  -q, --quiet - quiet mode\n");
+     fprintf(stderr, "  --socket-dir=PATH - directory for qrexec socket, default: %s\n",
+             QREXEC_DAEMON_SOCKET_DIR);
+-    fprintf(stderr, "  -p, --policy-program=PATH - program to execute to check policy, default: %s\n",
+-            QREXEC_POLICY_PROGRAM);
++    fprintf(stderr, "  -p, --policy-program=PATH - program to execute to check policy\n");
+     fprintf(stderr, "  -D, --direct - run directly, don't daemonize, log to stderr\n");
+     exit(1);
+ }
+@@ -1580,7 +1579,7 @@ int main(int argc, char **argv)
+                 usage(argv[0]);
+         }
+     }
+-    if (argc - optind < 2 || argc - optind > 3) {
++    if (argc - optind < 2 || argc - optind > 3 || policy_program == NULL) {
+         usage(argv[0]);
+     }
+     remote_domain_id = atoi(argv[optind]);
+-- 
+2.45.2
+

@@ -13284,7 +13284,7 @@ self: super: with self; {
 
   qubes-core-qrexec = callPackage ../development/python-modules/qubes-core-qrexec { };
 
-  qubes-core-qubesdb = (pkgs.qubes-core-qubesdb.override {
+  qubes-core-qubesdb = toPythonModule (pkgs.qubes-core-qubesdb.override {
     inherit python;
     withPython = true;
   }).pythonModule;
