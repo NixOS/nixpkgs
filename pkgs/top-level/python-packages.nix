@@ -13282,6 +13282,11 @@ self: super: with self; {
 
   qubes-core-admin-client = callPackage ../development/python-modules/qubes-core-admin-client { };
 
+  qubes-core-libvirt = callPackage ../development/python-modules/libvirt {
+    libvirt = pkgs.qubes-core-libvirt;
+    # FIXME: Override maintainers
+  };
+
   qubes-core-qrexec = callPackage ../development/python-modules/qubes-core-qrexec { };
 
   qubes-core-qubesdb = toPythonModule (pkgs.qubes-core-qubesdb.override {
