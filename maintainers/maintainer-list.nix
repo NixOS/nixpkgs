@@ -22611,6 +22611,12 @@
     githubId = 24979302;
     name = "Vladimír Zahradník";
   };
+  wgunderwood = {
+    email = "wg.underwood13@gmail.com";
+    github = "WGUNDERWOOD";
+    githubId = 42812654;
+    name = "William Underwood";
+  };
   wheelsandmetal = {
     email = "jakob@schmutz.co.uk";
     github = "wheelsandmetal";
