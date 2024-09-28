@@ -11,6 +11,10 @@
     "hash": "sha256-CvpMLFNCEQ05t3nkzDyA9nsm3cmRgXG/QxbyiLpSpIs=",
     "version": "74221"
   },
+  "IOKitTools": {
+    "hash": "sha256-Oknsvzn4nv77WU7f0WPS446iwR2BM2q4iw46r/qctAE=",
+    "version": "125"
+  },
   "PowerManagement": {
     "hash": "sha256-bYGtYnBOcE5W03AZzfVTJXPZ6GgryGAMt/LgLPxFkVk=",
     "version": "572.50.1"
