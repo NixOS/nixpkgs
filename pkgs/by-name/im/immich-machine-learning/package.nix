@@ -15,7 +15,7 @@ let
         doCheck = false;
       });
 
-      albumentations = super.albumentations.overridePythonAttrs (_: rec {
+      albumentations = super.albumentations.overridePythonAttrs (old: rec {
         version = "1.4.3";
         src = fetchFromGitHub {
           owner = "albumentations-team";
@@ -23,6 +23,9 @@ let
           rev = version;
           hash = "sha256-JIBwjYaUP4Sc1bVM/zlj45cz9OWpb/LOBsIqk1m+sQA=";
         };
+        dependencies = old.dependencies ++ [
+          self.scikit-learn
+        ];
       });
     };
   };
