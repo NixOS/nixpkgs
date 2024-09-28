@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, fetchNpmDeps
-, fetchurl
-, httplz
-, npmHooks
-, binaryen
-, gzip
-, nodejs
-, rustc
-, wasm-bindgen-cli
-, wasm-pack
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  fetchurl,
+  httplz,
+  binaryen,
+  gzip,
+  nodejs,
+  npmHooks,
+  python3,
+  rustc,
+  wasm-bindgen-cli,
+  wasm-pack,
 }:
 
 let
@@ -86,10 +88,22 @@ rustPlatform.buildRustPackage rec {
       cd $cargoDepsCopy/lindera-unidic
       oldHash=$(sha256sum build.rs | cut -d " " -f 1)
 
+      # serve lindera-unidic on localhost vacant port
+      httplz_port="${
+        if stdenv.buildPlatform.isDarwin then
+          ''$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')''
+        else
+          "34567"
+      }"
+      mkdir .lindera-http-plz
+      ln -s ${lindera-unidic-src} .lindera-http-plz/unidic-mecab-2.1.2.tar.gz
+      httplz --port "$httplz_port" -- .lindera-http-plz/ &
+      echo $! >$TMPDIR/.httplz_pid
+
       # file:// does not work
       substituteInPlace build.rs --replace-fail \
           "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz" \
-          "http://localhost:34567/unidic-mecab-2.1.2.tar.gz"
+          "http://localhost:$httplz_port/unidic-mecab-2.1.2.tar.gz"
 
       newHash=$(sha256sum build.rs | cut -d " " -f 1)
       substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
@@ -98,27 +112,25 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    binaryen
-    gzip
-    nodejs
-    rustc
-    rustc.llvmPackages.lld
-    wasm-bindgen-92
-    wasm-pack
-    httplz
-  ];
+  nativeBuildInputs =
+    [
+      binaryen
+      gzip
+      nodejs
+      rustc
+      rustc.llvmPackages.lld
+      wasm-bindgen-92
+      wasm-pack
+      httplz
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      python3
+    ];
 
   # build wasm and js assets
   # based on "test-and-build" in https://github.com/CloudCannon/pagefind/blob/main/.github/workflows/release.yml
   preBuild = ''
     export HOME=$(mktemp -d)
-
-    # serve lindera-unidic on localhost
-    mkdir .lindera-http-plz
-    ln -s ${lindera-unidic-src} .lindera-http-plz/unidic-mecab-2.1.2.tar.gz
-    httplz --port 34567 -- .lindera-http-plz/ &
-    httplz_pid=$!
 
     echo entering pagefind_web_js...
     (
@@ -147,17 +159,17 @@ rustPlatform.buildRustPackage rec {
 
   # the file is also fetched during checkPhase
   preInstall = ''
-    kill ${lib.optionalString stdenv.hostPlatform.isDarwin "-9"} $httplz_pid
+    kill ${lib.optionalString stdenv.hostPlatform.isDarwin "-9"} $(cat $TMPDIR/.httplz_pid)
   '';
 
   buildFeatures = [ "extended" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate low-bandwidth search index for your static website";
     homepage = "https://pagefind.app/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
+    platforms = lib.platforms.unix;
     mainProgram = "pagefind";
   };
 }
