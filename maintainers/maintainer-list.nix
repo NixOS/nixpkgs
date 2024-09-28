@@ -1016,6 +1016,12 @@
     githubId = 50754358;
     name = "Alex Winter";
   };
+  alfarel = {
+    email = "alfarelcynthesis@proton.me";
+    github = "alfarelcynthesis";
+    githubId = 104072649;
+    name = "Cynth";
+  };
   algram = {
     email = "aliasgram@gmail.com";
     github = "Algram";
