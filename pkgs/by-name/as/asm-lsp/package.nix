@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
     description = "Language server for NASM/GAS/GO Assembly";
     homepage = "https://github.com/bergercookie/asm-lsp";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ NotAShelf ];
+    maintainers = with lib.maintainers; [ NotAShelf CaiqueFigueiredo ];
     mainProgram = "asm-lsp";
     platforms = lib.platforms.unix;
   };
