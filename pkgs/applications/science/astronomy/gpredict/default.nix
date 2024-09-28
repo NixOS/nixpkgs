@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, intltool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, intltool, autoreconfHook
 , gtk3, glib, curl, goocanvas2, gpsd
 , hamlib, wrapGAppsHook3
 }:
@@ -7,9 +7,11 @@ stdenv.mkDerivation rec {
   pname = "gpredict";
   version = "2.2.1";
 
-  src = fetchurl {
-    url = "https://github.com/csete/gpredict/releases/download/v${version}/gpredict-${version}.tar.bz2";
-    sha256 = "0hwf97kng1zy8rxyglw04x89p0bg07zq30hgghm20yxiw2xc8ng7";
+  src = fetchFromGitHub {
+    owner = "csete";
+    repo = "gpredict";
+    rev = "v${version}";
+    hash = "sha256-+hgjImfT3nWMBYwde7+KC/hzd84pwQbpoJvaJSNG4E8=";
   };
 
   patches = [
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 ];
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook3 autoreconfHook ];
   buildInputs = [ curl glib gtk3 goocanvas2 gpsd hamlib ];
 
   meta = {
