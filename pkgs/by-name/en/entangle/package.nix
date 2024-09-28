@@ -28,6 +28,7 @@
   libraw,
   libselinux,
   libsepol,
+  lerc,
   libthai,
   libunwind,
   libxkbcommon,
@@ -38,6 +39,7 @@
   util-linux,
   xorg,
   zstd,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "entangle";
     repo = "entangle";
-    rev = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     sha256 = "hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
   };
 
@@ -71,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkgconf
     wrapGAppsHook3
     gobject-introspection
+    cmake
   ];
 
   buildInputs =
@@ -81,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       elfutils
       gexiv2
       glib
+      lerc
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
       gtk3
