@@ -5,11 +5,11 @@
 }:
 
 let
-  pname = "act";
   version = "0.2.67";
 in
 buildGoModule {
-  inherit pname version;
+  pname = "act";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "nektos";
