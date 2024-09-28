@@ -86,10 +86,16 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}'        0750 ${cfg.user} ${cfg.user} - -"
-      "d '${cfg.dataDir}/config' 0750 ${cfg.user} ${cfg.user} - -"
-    ];
+    systemd.tmpfiles.settings."10-kavita" = {
+      ${cfg.dataDir}.d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      "${cfg.dataDir}/config".d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+    };
 
     users = {
       users.${cfg.user} = {
