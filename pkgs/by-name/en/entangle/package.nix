@@ -1,53 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, itstool
-, libxml2
-, meson
-, ninja
-, perl
-, python3
-, pkgconf
-, wrapGAppsHook3
-, at-spi2-core
-, dbus
-, elfutils
-, libepoxy
-, gexiv2
-, glib
-, gobject-introspection
-, gst-plugins-base
-, gstreamer
-, gtk3
-, lcms2
-, libdatrie
-, libgphoto2
-, libgudev
-, libpeas
-, libraw
-, libselinux
-, libsepol
-, libthai
-, libunwind
-, libxkbcommon
-, orc
-, pcre
-, pcre2
-, udev
-, util-linux
-, xorg
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  itstool,
+  libxml2,
+  meson,
+  ninja,
+  perl,
+  python3,
+  pkgconf,
+  wrapGAppsHook3,
+  at-spi2-core,
+  dbus,
+  elfutils,
+  libepoxy,
+  gexiv2,
+  glib,
+  gobject-introspection,
+  gst_all_1,
+  gtk3,
+  lcms2,
+  libdatrie,
+  libgphoto2,
+  libgudev,
+  libpeas,
+  libraw,
+  libselinux,
+  libsepol,
+  libthai,
+  libunwind,
+  libxkbcommon,
+  orc,
+  pcre,
+  pcre2,
+  udev,
+  util-linux,
+  xorg,
+  zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "entangle";
   version = "3.0";
 
   src = fetchFromGitLab {
     owner = "entangle";
     repo = "entangle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
   };
 
@@ -73,37 +73,39 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    at-spi2-core
-    dbus
-    libepoxy
-    elfutils
-    gexiv2
-    glib
-    gst-plugins-base
-    gstreamer
-    gtk3
-    lcms2
-    libdatrie
-    libgphoto2
-    libgudev
-    libpeas
-    libraw
-    libselinux
-    libsepol
-    libthai
-    libunwind
-    libxkbcommon
-    orc
-    pcre # required by libselinux before we USE_PCRE2
-    pcre2 # required by glib-2.0
-    udev
-    util-linux
-    zstd
-  ] ++ (with xorg; [
-    libXdmcp
-    libXtst
-  ]);
+  buildInputs =
+    [
+      at-spi2-core
+      dbus
+      libepoxy
+      elfutils
+      gexiv2
+      glib
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      gtk3
+      lcms2
+      libdatrie
+      libgphoto2
+      libgudev
+      libpeas
+      libraw
+      libselinux
+      libsepol
+      libthai
+      libunwind
+      libxkbcommon
+      orc
+      pcre # required by libselinux before we USE_PCRE2
+      pcre2 # required by glib-2.0
+      udev
+      util-linux
+      zstd
+    ]
+    ++ (with xorg; [
+      libXdmcp
+      libXtst
+    ]);
 
   # Disable building of doc/reference since it requires network connection to render XML to HTML
   # Patch build script shebangs
@@ -120,7 +122,7 @@ stdenv.mkDerivation rec {
       --replace "Exec=entangle" "Exec=$out/bin/entangle"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tethered camera control and capture";
     longDescription = ''
       Entangle uses GTK and libgphoto2 to provide a graphical interface
@@ -130,9 +132,9 @@ stdenv.mkDerivation rec {
       This app can also serve as a camera app for mobile devices.
     '';
     homepage = "https://gitlab.com/entangle/entangle";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "entangle";
   };
-}
+})
