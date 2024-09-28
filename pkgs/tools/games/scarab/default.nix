@@ -78,6 +78,6 @@ buildDotnetModule rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ huantian ];
     mainProgram = "Scarab";
-    platforms = platforms.linux;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }
