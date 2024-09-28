@@ -7289,6 +7289,11 @@
     githubId = 134872;
     name = "Sergei Lukianov";
   };
+  FrothyMarrow = {
+    github = "FrothyMarrow";
+    githubId = 76622149;
+    name = "FrothyMarrow";
+  };
   fryuni = {
     name = "Luiz Ferraz";
     email = "luiz@lferraz.com";
