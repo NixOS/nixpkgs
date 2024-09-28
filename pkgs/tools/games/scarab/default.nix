@@ -1,14 +1,14 @@
 {
-  lib,
   buildDotnetModule,
+  copyDesktopItems,
   fetchFromGitHub,
   glibc,
-  zlib,
   gtk3,
-  copyDesktopItems,
   icoutils,
-  wrapGAppsHook3,
+  lib,
   makeDesktopItem,
+  wrapGAppsHook3,
+  zlib,
 }:
 
 buildDotnetModule rec {
