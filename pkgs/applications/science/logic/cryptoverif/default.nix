@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptoverif";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${finalAttrs.version}.tar.gz";
-    hash = "sha256-Gg7PYMB5cYWk9+xuxxcFY9L9vynHX2xYyMDo/0DauPM=";
+    hash = "sha256-duc7t0Qpr1Z2FZEoufdQ7kcBlLbXHO+r9ivEgUxqK9s=";
   };
 
   /* Fix up the frontend to load the 'default' cryptoverif library
