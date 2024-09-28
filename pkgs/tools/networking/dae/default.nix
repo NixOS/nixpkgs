@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
+  gitUpdater,
 }:
 buildGoModule rec {
   pname = "dae";
@@ -49,6 +50,10 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) dae;
+  };
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   meta = with lib; {
