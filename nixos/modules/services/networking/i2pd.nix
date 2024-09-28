@@ -1,17 +1,17 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkIf mkOption mkEnableOption types optional optionals;
+  inherit (lib.types) nullOr bool listOf str;
 
   cfg = config.services.i2pd;
 
   homeDir = "/var/lib/i2pd";
 
   strOpt = k: v: k + " = " + v;
-  boolOpt = k: v: k + " = " + boolToString v;
+  boolOpt = k: v: k + " = " + lib.boolToString v;
   intOpt = k: v: k + " = " + toString v;
-  lstOpt = k: xs: k + " = " + concatStringsSep "," xs;
+  lstOpt = k: xs: k + " = " + lib.concatStringsSep "," xs;
   optionalNullString = o: s: optional (s != null) (strOpt o s);
   optionalNullBool = o: b: optional (b != null) (boolOpt o b);
   optionalNullInt = o: i: optional (i != null) (intOpt o i);
@@ -54,7 +54,7 @@ let
   mkKeyedEndpointOpt = name: addr: port: keyloc:
     (mkEndpointOpt name addr port) // {
       keys = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = keyloc;
         description = ''
           File to persist ${lib.toUpper name} keys.
@@ -162,8 +162,8 @@ let
       (sec "meshnets")
       (boolOpt "yggdrasil" cfg.yggdrasil.enable)
     ] ++ (optionalNullString "yggaddress" cfg.yggdrasil.address)
-      ++ (flip map
-      (collect (proto: proto ? port && proto ? address) cfg.proto)
+      ++ (lib.flip map
+      (lib.collect (proto: proto ? port && proto ? address) cfg.proto)
       (proto: let protoOpts = [
         (sec proto.name)
         (boolOpt "enabled" proto.enable)
@@ -178,10 +178,10 @@ let
         ++ (optionals (proto ? outproxy) (optionalNullString "outproxy" proto.outproxy))
         ++ (optionals (proto ? outproxyPort) (optionalNullInt "outproxyport" proto.outproxyPort))
         ++ (optionals (proto ? outproxyEnable) (optionalNullBool "outproxy.enabled" proto.outproxyEnable));
-        in (concatStringsSep "\n" protoOpts)
+        in (lib.concatStringsSep "\n" protoOpts)
       ));
   in
-    pkgs.writeText "i2pd.conf" (concatStringsSep "\n" opts);
+    pkgs.writeText "i2pd.conf" (lib.concatStringsSep "\n" opts);
 
   tunnelConf = let
     mkOutTunnel = tun:
@@ -200,7 +200,7 @@ let
           ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
           ++ (optionals (tun ? crypto.tagsToSend) (optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend));
       in
-        concatStringsSep "\n" outTunOpts;
+        lib.concatStringsSep "\n" outTunOpts;
 
     mkInTunnel = tun:
       let
@@ -214,16 +214,16 @@ let
           ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
           ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
       in
-        concatStringsSep "\n" inTunOpts;
+        lib.concatStringsSep "\n" inTunOpts;
 
-    allOutTunnels = collect (tun: tun ? port && tun ? destination) cfg.outTunnels;
-    allInTunnels = collect (tun: tun ? port && tun ? address) cfg.inTunnels;
+    allOutTunnels = lib.collect (tun: tun ? port && tun ? destination) cfg.outTunnels;
+    allInTunnels = lib.collect (tun: tun ? port && tun ? address) cfg.inTunnels;
 
     opts = [ notice ] ++ (map mkOutTunnel allOutTunnels) ++ (map mkInTunnel allInTunnels);
   in
-    pkgs.writeText "i2pd-tunnels.conf" (concatStringsSep "\n" opts);
+    pkgs.writeText "i2pd-tunnels.conf" (lib.concatStringsSep "\n" opts);
 
-  i2pdFlags = concatStringsSep " " (
+  i2pdFlags = lib.concatStringsSep " " (
     optional (cfg.address != null) ("--host=" + cfg.address) ++ [
     "--service"
     ("--conf=" + i2pdConf)
@@ -235,7 +235,7 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [ "services" "i2pd" "address" ])
+    (lib.mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [ "services" "i2pd" "address" ])
   ];
 
   ###### interface
@@ -252,7 +252,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "i2pd" { };
+      package = lib.mkPackageOption pkgs "i2pd" { };
 
       logLevel = mkOption {
         type = types.enum ["debug" "info" "warn" "error"];
@@ -269,7 +269,7 @@ in
       logCLFTime = mkEnableOption "full CLF-formatted date and time to log";
 
       address = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Your external IP or hostname.
@@ -277,7 +277,7 @@ in
       };
 
       family = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Specify a family the router belongs to.
@@ -285,7 +285,7 @@ in
       };
 
       dataDir = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Alternative path to storage of i2pd data (RI, keys, peer profiles, ...)
@@ -301,7 +301,7 @@ in
       };
 
       ifname = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Network interface to bind to.
@@ -309,7 +309,7 @@ in
       };
 
       ifname4 = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           IPv4 interface to bind to.
@@ -317,7 +317,7 @@ in
       };
 
       ifname6 = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           IPv6 interface to bind to.
@@ -325,7 +325,7 @@ in
       };
 
       ntcpProxy = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Proxy URL for NTCP transport.
@@ -399,7 +399,7 @@ in
       reseed.verify = mkEnableOption "SU3 signature verification";
 
       reseed.file = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Full path to SU3 file to reseed from.
@@ -407,7 +407,7 @@ in
       };
 
       reseed.urls = mkOption {
-        type = with types; listOf str;
+        type = listOf str;
         default = [];
         description = ''
           Reseed URLs.
@@ -415,7 +415,7 @@ in
       };
 
       reseed.floodfill = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Path to router info of floodfill to reseed from.
@@ -423,7 +423,7 @@ in
       };
 
       reseed.zipfile = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Path to local .zip file to reseed from.
@@ -431,7 +431,7 @@ in
       };
 
       reseed.proxy = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           URL for reseed proxy, supports http/socks.
@@ -446,7 +446,7 @@ in
         '';
       };
      addressbook.subscriptions = mkOption {
-        type = with types; listOf str;
+        type = listOf str;
         default = [
           "http://inr.i2p/export/alive-hosts.txt"
           "http://i2p-projekt.i2p/hosts.txt"
@@ -460,7 +460,7 @@ in
       trust.enable = mkEnableOption "explicit trust options";
 
       trust.family = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Router Family to trust for first hops.
@@ -468,7 +468,7 @@ in
       };
 
       trust.routers = mkOption {
-        type = with types; listOf str;
+        type = listOf str;
         default = [];
         description = ''
           Only connect to the listed routers.
@@ -543,7 +543,7 @@ in
       yggdrasil.enable = mkEnableOption "Yggdrasil";
 
       yggdrasil.address = mkOption {
-        type = with types; nullOr str;
+        type = nullOr str;
         default = null;
         description = ''
           Your local yggdrasil address. Specify it if you want to bind your router to a
@@ -572,7 +572,7 @@ in
         };
 
         strictHeaders = mkOption {
-          type = with types; nullOr bool;
+          type = nullOr bool;
           default = null;
           description = ''
             Enable strict host checking on WebUI.
@@ -580,7 +580,7 @@ in
         };
 
         hostname = mkOption {
-          type = with types; nullOr str;
+          type = nullOr str;
           default = null;
           description = ''
             Expected hostname for WebUI.
@@ -591,7 +591,7 @@ in
       proto.httpProxy = (mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4444 "httpproxy-keys.dat")
       // {
         outproxy = mkOption {
-          type = with types; nullOr str;
+          type = nullOr str;
           default = null;
           description = "Upstream outproxy bind address.";
         };
@@ -648,7 +648,7 @@ in
                 description = "Service port. Default to the tunnel's listen port.";
               };
               accessList = mkOption {
-                type = with types; listOf str;
+                type = listOf str;
                 default = [];
                 description = "I2P nodes that are allowed to connect to this service.";
               };
