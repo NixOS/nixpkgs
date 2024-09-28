@@ -8661,8 +8661,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  idevicerestore = callPackage ../tools/misc/idevicerestore { };
-
   inherit (callPackages ../tools/filesystems/irods rec {
     stdenv = llvmPackages_13.libcxxStdenv;
     libcxx = llvmPackages_13.libcxx;
