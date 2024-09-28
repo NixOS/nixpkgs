@@ -11477,6 +11477,8 @@ self: super: with self; {
     krb5-c = pkgs.krb5;
   };
 
+  pykep = callPackage ../development/python-modules/pykep { };
+
   pykeyatome = callPackage ../development/python-modules/pykeyatome { };
 
   pykira = callPackage ../development/python-modules/pykira { };
