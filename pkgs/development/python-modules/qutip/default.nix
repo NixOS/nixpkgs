@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.0.2";
+  version = "5.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-lMPzgmUaoEQB5TzmqEJFiFTuS3AGpyMMjPHlPUKTLvk=";
+    hash = "sha256-KT5Mk0w6EKTUZzGRnQ6XQPZfH5ZXVuiD+EwSflNqHNo=";
   };
 
   nativeBuildInputs = [
