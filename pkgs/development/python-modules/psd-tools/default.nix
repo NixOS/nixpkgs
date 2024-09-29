@@ -12,7 +12,7 @@
   numpy,
   aggdraw,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   ipython,
   cython,
 }:
@@ -31,10 +31,6 @@ buildPythonPackage rec {
     hash = "sha256-H3Szd8/NjXCkWyG/q+6O5L0Iq5u/g4UNdEmhDqQsAY8=";
   };
 
-  postPatch = ''
-    sed -i "/addopts =/d" pyproject.toml
-  '';
-
   build-system = [
     setuptools
     cython
@@ -44,7 +40,6 @@ buildPythonPackage rec {
     aggdraw
     attrs
     docopt
-    ipython
     numpy
     pillow
     scikit-image
@@ -53,7 +48,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
+    ipython
   ];
 
   pythonImportsCheck = [ "psd_tools" ];
