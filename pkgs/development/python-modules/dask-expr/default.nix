@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.14";
+  version = "1.1.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yDNkIATN6AuGzcxTwAQyaQaDQ48v45hTC2fUqEThl/g=";
+    hash = "sha256-b5nY3srMADzYZ0GYCeyUfxhJLm7E4dTbM7qrsCR9d7A=";
   };
 
   postPatch = ''
