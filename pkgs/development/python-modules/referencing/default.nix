@@ -15,7 +15,7 @@
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.34.0";
+    version = "0.35.1";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ let
       repo = "referencing";
       rev = "refs/tags/v${version}";
       fetchSubmodules = true;
-      hash = "sha256-Vx+WVgt09I04Z/sIYsLLtPCwuo5wW0Z2o2OTH2V17UY=";
+      hash = "sha256-Ix0cpdOs7CtersdfW9daF/+BEJaV/na1WRTlYywUJV8=";
     };
 
     build-system = [
