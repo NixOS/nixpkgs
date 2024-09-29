@@ -139,9 +139,6 @@ let
 in
 {
   alpha-nvim = super.alpha-nvim.overrideAttrs {
-    dependencies = [
-      self.nvim-web-devicons # required by the startify theme
-    ];
     nvimRequireCheck = "alpha";
   };
 
