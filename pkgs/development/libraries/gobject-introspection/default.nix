@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , glib
 , flex
 , bison
@@ -59,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
+    })
+    (fetchpatch2 {
+      name = "setuptools-74.0-compat.patch";
+      url = "https://github.com/GNOME/gobject-introspection/commit/a2139dba59eac283a7f543ed737f038deebddc19.patch";
+      hash = "sha256-n++wpQuJhAEYtcu8LZDC4+Tx1MYuFIMysFgrvz68jWU=";
     })
   ] ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
