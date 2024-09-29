@@ -61,6 +61,7 @@
   version,
   hash,
   url,
+  withUnfree ? false,
 }:
 
 let
@@ -131,6 +132,7 @@ stdenv.mkDerivation rec {
     # main derivation.
     postFetch = ''
       ${extractPkg}
+    '' + lib.optionalString (!withUnfree) ''
       asar extract "$out/${libdir}/resources/app.asar" $out/asar-contents
       rm -r \
         "$out/${libdir}/resources/app.asar"{,.unpacked} \
@@ -224,6 +226,7 @@ stdenv.mkDerivation rec {
     cwebp -progress -mt -preset icon -alpha_filter best -alpha_q 20 -pass 10 -q 75 ${noto-emoji-sheet-32} -o asar-contents/images/emoji-sheet-32.webp
     cwebp -progress -mt -preset icon -alpha_filter best -alpha_q 20 -pass 10 -q 75 ${noto-emoji-sheet-64} -o asar-contents/images/emoji-sheet-64.webp
 
+  '' + lib.optionalString (!withUnfree) ''
     # Copy the Noto Color Emoji PNGs into the ASAR contents. See `src`
     # for the motivation, and the script for the technical details.
     emojiPrefix=$(
@@ -247,6 +250,7 @@ stdenv.mkDerivation rec {
       --unpack '*.node' \
       asar-contents \
       "$out/lib/signal-desktop/resources/app.asar"
+  '' + ''
 
     runHook postInstall
   '';
@@ -291,7 +295,7 @@ stdenv.mkDerivation rec {
 
       lib.licenses.asl20 # noto-emoji
       lib.licenses.mit # emoji-data
-    ];
+    ] ++ lib.optional withUnfree lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       mic92
       equirosa
