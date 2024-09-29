@@ -72,6 +72,8 @@ stdenv.mkDerivation {
     "zerocallusedregs"
   ];
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs =
     [
       llvmPackages.libllvm

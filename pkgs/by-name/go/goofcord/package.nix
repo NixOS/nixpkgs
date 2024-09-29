@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ly0HkDFofdOgXOmlUW1za4u2INopiPs6B2kTC217/T0=";
+    hash = "sha256-fx/RKnUhXhaWVd/KYPVxr19/Q8o1ovm2TgMTcTYjE3Q=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm'.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-455MGicIaC9WSUiwsbhdXxc8Cs3oqaneyOrMDPWsABw=";
+    hash = "sha256-8i/ip0ZIo80bLb7UNO/h856CD7i3DV9QaPaNrxhViqE=";
   };
 
   env = {

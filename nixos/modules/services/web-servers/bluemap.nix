@@ -13,6 +13,9 @@ let
         (format.generate "${name}.conf" value))
       cfg.maps);
 
+  addonsFolder = pkgs.linkFarm "addons"
+    (lib.attrsets.mapAttrs' (name: value: lib.nameValuePair "${name}.jar" value) cfg.addons);
+
   storageFolder = pkgs.linkFarm "storage"
     (lib.attrsets.mapAttrs' (name: value:
       lib.nameValuePair "${name}.conf"
@@ -25,11 +28,16 @@ let
     "core.conf" = coreConfig;
     "webapp.conf" = webappConfig;
     "webserver.conf" = webserverConfig;
-    "resourcepacks" = pkgs.linkFarm "resourcepacks" cfg.resourcepacks;
+    "packs" = pkgs.linkFarm "packs" cfg.resourcepacks;
+    "addons" = addonsFolder;
   };
 
   inherit (lib) mkOption;
 in {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "bluemap" "resourcepacks" ] [ "services" "bluemap" "packs" ])
+  ];
+
   options.services.bluemap = {
     enable = lib.mkEnableOption "bluemap";
 
@@ -219,6 +227,26 @@ in {
       '';
     };
 
+    addons = mkOption {
+      type = lib.types.attrsOf lib.types.pathInStore;
+      default = { };
+      description = ''
+        A set of jar addons to be loaded.
+
+        See <https://bluemap.bluecolored.de/3rdPartySupport.html> for a list of officially recognized addons.
+      '';
+
+      example = lib.literalExpression ''
+        {
+          blueBridge = ./blueBridge.jar;
+          blueBorder = pkgs.fetchurl {
+            url = "https://github.com/pop4959/BlueBorder/releases/download/1.1.1/BlueBorder-1.1.1.jar";
+            hash = "...";
+          };
+        }
+      '';
+    };
+
     storage = mkOption {
       type = lib.types.attrsOf (lib.types.submodule {
         freeformType = format.type;
@@ -249,10 +277,13 @@ in {
       '';
     };
 
-    resourcepacks = mkOption {
+    packs = mkOption {
       type = lib.types.attrsOf lib.types.pathInStore;
       default = { };
-      description = "A set of resourcepacks to use, loaded in alphabetical order";
+      description = ''
+        A set of resourcepacks, datapacks, and mods to extract resources from,
+        loaded in alphabetical order.
+      '';
     };
   };
 
@@ -293,11 +324,12 @@ in {
       "${cfg.host}" = {
         root = config.services.bluemap.webRoot;
         locations = {
-          "~* ^/maps/[^/]*/tiles/[^/]*.json$".extraConfig = ''
-            error_page 404 =200 /assets/emptyTile.json;
+          "@empty".return = "204";
+
+          "~* ^/maps/[^/]*/tiles/".extraConfig = ''
+            error_page 404 = @empty;
             gzip_static always;
           '';
-          "~* ^/maps/[^/]*/tiles/[^/]*.png$".tryFiles = "$uri =204";
         };
       };
     };

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.6.3";
+  version = "0.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JWf8MXwYKUF0brS+NcsPZkMS5XBtpZyFPD7dOS3g/6M=";
+    hash = "sha256-t8MmezVqXXodgMxaeulUueN3BFrv7TXgfKM/TagR/rE=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];

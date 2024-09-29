@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bartender";
-  version = "5.1.5";
+  version = "5.1.8";
 
   src = fetchurl {
     name = "Bartender ${lib.versions.major finalAttrs.version}.dmg";
     url = "https://www.macbartender.com/B2/updates/${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}/Bartender%20${lib.versions.major finalAttrs.version}.dmg";
-    hash = "sha256-G1zbvCZtWCPsBonfRZSZat7s44ZxJAL7wod5460w+oM=";
+    hash = "sha256-8ypSGbgnfbUv1zZlEihBjiW3UEwU8GwBT4FGiuEpLfU=";
   };
 
   dontPatch = true;
@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://www.macbartender.com/Bartender${lib.versions.major finalAttrs.version}/release_notes/";
     license = [ lib.licenses.unfree ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ stepbrobd ];
+    maintainers = with lib.maintainers; [ stepbrobd DimitarNestorov ];
     platforms = [ "aarch64-darwin" "x86_64-darwin" ];
   };
 })

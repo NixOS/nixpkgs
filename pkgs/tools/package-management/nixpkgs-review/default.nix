@@ -1,23 +1,24 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 
-, installShellFiles
-, bubblewrap
-, nix-output-monitor
-, cacert
-, git
-, nix
+  installShellFiles,
+  bubblewrap,
+  nix-output-monitor,
+  cacert,
+  git,
+  nix,
 
-, withAutocomplete ? true
-, withSandboxSupport ? false
-, withNom ? false
+  withAutocomplete ? true,
+  withSandboxSupport ? false,
+  withNom ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
   version = "2.10.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
@@ -26,20 +27,28 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-dRTKE8gkV298ZmMokyy3Ufer/Lp1GQYdEhIBoLhloEQ=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    python3.pkgs.setuptools
-  ] ++ lib.optionals withAutocomplete [
-    python3.pkgs.argcomplete
+  build-system = [
+    python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = [ python3.pkgs.argcomplete ];
+  dependencies = lib.optionals withAutocomplete [
+    python3Packages.argcomplete
+  ];
+
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals withAutocomplete [
+      python3Packages.argcomplete
+    ];
 
   makeWrapperArgs =
     let
-      binPath = [ nix git ]
-        ++ lib.optional withSandboxSupport bubblewrap
-        ++ lib.optional withNom nix-output-monitor;
+      binPath = [
+        nix
+        git
+      ] ++ lib.optional withSandboxSupport bubblewrap ++ lib.optional withNom nix-output-monitor;
     in
     [
       "--prefix PATH : ${lib.makeBinPath binPath}"
@@ -65,6 +74,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = licenses.mit;
     mainProgram = "nixpkgs-review";
-    maintainers = with maintainers; [ figsoda mic92 ];
+    maintainers = with maintainers; [
+      figsoda
+      mic92
+    ];
   };
 }

@@ -7167,8 +7167,6 @@ with pkgs;
 
   eff = callPackage ../development/interpreters/eff { };
 
-  eflite = callPackage ../applications/audio/eflite { };
-
   eid-mw = callPackage ../tools/security/eid-mw {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -17853,8 +17851,6 @@ with pkgs;
   gradle_7 = wrapGradle gradle_7-unwrapped;
   gradle_8 = wrapGradle gradle_8-unwrapped;
   gradle = wrapGradle gradle-unwrapped;
-
-  grcov = callPackage ../development/tools/misc/grcov { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
