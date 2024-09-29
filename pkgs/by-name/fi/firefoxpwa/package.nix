@@ -28,13 +28,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.12.4";
+  version = "2.12.5";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-VNCQUF/Xep/PkrNd9Mzbm3NWPToqXpJM6SzDoqBXbNY=";
+    hash = "sha256-WAAZ35AkKzufhDm8RNTpSsGJjqCIm84THEOmXemvv2o=";
   };
 
   sourceRoot = "${src.name}/native";
