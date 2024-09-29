@@ -30,54 +30,8 @@ Some other notable packages that compose the Xen Project Ecosystem include:
 
 ## Updating
 
-### Automatically
-
-An automated update script is available in this directory. To produce up-to-date
-files for all supported Xen branches, simply run `./update.sh`, and follow the
-instructions given to you by the script. Notably, it will request that you verify
-the Xen Project code signing PGP key. This README understands that the fingerprint
-of that key is [`23E3 222C 145F 4475 FA80 60A7 83FE 14C9 57E8 2BD9`](https://keys.openpgp.org/search?q=pgp%40xen.org),
-but you should verify this information by seeking the fingerprint from other trusted
-sources, as this document may be compromised. Once the PGP key is verified, it will
-use `git verify-tag` to ascertain the validity of the cloned Xen sources.
-
-After the script is done, follow the steps in
-[**For Both Update Methods**](#for-both-update-methods) below.
-
-#### Downstream Patch Names
-
-The script expects local patch names to follow a certain specification.
-Please name any required patches using the template below:
-
-```console
-0000-project-description-branch.patch
-```
-
-Where:
-
-1. The first four numbers define the patch order.
-   **0001** will be applied after **0000**, and so on.
-1. `project` means the name of the source the patch should be applied to.
-   - If you are applying patches to the main Xen sources, use `xen`.
-   - For the pre-fetched QEMU, use `qemu`.
-   - For SeaBIOS, use `seabios`.
-   - For OVMF, use `ovmf`.
-   - For iPXE, use `ipxe`.
-1. `description` is a string with uppercase and lowercase letters, numbers and
-   dashes. It describes the patch name and what it does to the upstream code.
-1. `branch` is the branch for which this patch is supposed to patch.
-   It should match the name of the directory it is in.
-
-For example, a patch fixing `xentop`'s output in the 4.15 branch should have
-the following name: `0000-xen-xentop-output-4.15.patch`, and it should be added
-to the `4.15/` directory.
-
 ### Manually
 
-The script is not infallible, and it may break in the future. If that happens,
-open a PR fixing the script, and update Xen manually:
-
-1. Check the support matrix to see which branches are security-supported.
 1. Create one directory per branch.
 1. [Update](https://xenbits.xenproject.org/gitweb/) the `default.nix` files for
    the branches that already exist and copy a new one to any branches that do
@@ -86,11 +40,6 @@ open a PR fixing the script, and update Xen manually:
      each of the `default.nix` files.
    - The revisions are preferably commit hashes, but tag names are acceptable
      as well.
-
-### For Both Update Methods
-
-1. Update `packages.nix` and `../../../top-level/all-packages.nix` with the new
-   versions. Don't forget the `slim` packages!
 1. Make sure all branches build. (Both the `standard` and `slim` versions)
 1. Use the NixOS module to test if dom0 boots successfully on all new versions.
 1. Make sure the `meta` attributes evaluate to something that makes sense. The
