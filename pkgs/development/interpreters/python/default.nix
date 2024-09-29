@@ -38,7 +38,6 @@ in {
       suffix = ".8"; # ActiveState's Python 2 extended support
     };
     hash = "sha256-HUOzu3uJbtd+3GbmGD35KOk/CDlwL4S7hi9jJGRFiqI=";
-    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -51,7 +50,6 @@ in {
       suffix = "";
     };
     hash = "sha256-aygSee/YUpTS1pk+FzmDpXRkwBM5Vvu7VTbslka+rww=";
-    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -64,7 +62,6 @@ in {
       suffix = "";
     };
     hash = "sha256-qrCVCBdzUXJgGHmHLZN8HkkopXxAmuAjaew9kdzOvnk=";
-    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -77,13 +74,11 @@ in {
       suffix = "";
     };
     hash = "sha256-B6Q1bpEpAOYaFcsJSaBsSgUBLiE+zWtOhND2equ+43I=";
-    inherit (darwin) configd;
     inherit passthruFun;
   };
 
   python312 = callPackage ./cpython ({
     self = __splicedPackages.python312;
-    inherit (darwin) configd;
     inherit passthruFun;
   } // sources.python312);
 
@@ -96,7 +91,6 @@ in {
       suffix = "";
     };
     hash = "sha256-CG3liC48sxDU3KSEV1IuLkgBjs1D2pzfgn9qB1nvsH0=";
-    inherit (darwin) configd;
     inherit passthruFun;
   };
   # Minimal versions of Python (built without optional dependencies)
@@ -109,7 +103,6 @@ in {
     readline = null;
     ncurses = null;
     gdbm = null;
-    configd = null;
     sqlite = null;
     tzdata = null;
     libffi = libffiBoot; # without test suite
