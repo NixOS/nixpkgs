@@ -13,8 +13,8 @@ let
     sha256Hash = "sha256-aIxlXCMPKYZ6Eq44LMJuxnBr9/ML1Nl/LxXI+WDLG5s=";
   };
   betaVersion = {
-    version = "2024.2.1.7"; # "Android Studio Ladybug | 2024.2.1 Beta 2"
-    sha256Hash = "sha256-YNUtRsKwXHfb7McJmTTT39/wW1rHjzw4kFQRwa12kJE=";
+    version = "2024.2.1.8"; # "Android Studio Ladybug | 2024.2.1 RC 1"
+    sha256Hash = "sha256-Kb/1+g9rIuU/pAO1ue5h0+BU7OCE09QqV9XFoiJxBL4=";
   };
   latestVersion = {
     version = "2024.2.2.4"; # "Android Studio Ladybug Feature Drop | 2024.2.2 Canary 4"

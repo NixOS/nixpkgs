@@ -217,12 +217,15 @@ let
     meta.platforms = lib.platforms.darwin;
   };
 
-  browsers-linux =
+  browsers-linux = lib.makeOverridable (
     {
       withChromium ? true,
       withFirefox ? true,
       withWebkit ? true,
       withFfmpeg ? true,
+      fontconfig_file ? makeFontsConf {
+        fontDirectories = [ ];
+      },
     }:
     let
       browsers =
@@ -242,14 +245,20 @@ let
             # TODO check platform for revisionOverrides
             "${name}-${value.revision}"
             (
-              callPackage ./${name}.nix {
-                inherit suffix system throwSystem;
-                inherit (value) revision;
-              }
+              callPackage ./${name}.nix (
+                {
+                  inherit suffix system throwSystem;
+                  inherit (value) revision;
+                }
+                // lib.optionalAttrs (name == "chromium") {
+                  inherit fontconfig_file;
+                }
+              )
             )
         ) browsers
       )
-    );
+    )
+  );
 in
 {
   playwright-core = playwright-core;
