@@ -146,8 +146,11 @@ let
     isFromBootstrapFiles = true;
   };
 
-  getLibc = stage: stage.${localSystem.libc};
+  fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
+    inherit system;
+  };
 
+  getLibc = stage: stage.${localSystem.libc};
 
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
@@ -173,9 +176,7 @@ let
         shell = "${bootstrapTools}/bin/bash";
         initialPath = [bootstrapTools];
 
-        fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
-          inherit system;
-        };
+        inherit fetchurlBoot;
 
         cc = if prevStage.gcc-unwrapped == null
              then null
@@ -202,7 +203,7 @@ let
           '';
         });
 
-        overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
+        inherit overrides;
       };
 
     in {
@@ -268,6 +269,7 @@ in
       };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
+      fetchurl = fetchurlBoot;
     };
   })
 
@@ -309,6 +311,8 @@ in
       # won't be included in the final stdenv and won't be exported to
       # top-level pkgs as an override either.
       perl = super.perl.override { enableThreading = false; enableCrypt = false; };
+
+      fetchurl = fetchurlBoot;
     };
 
     # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
@@ -397,6 +401,8 @@ in
               find $lib/lib/ -name \*.so\* -exec patchelf --shrink-rpath {} \; || true
             '';
           });
+
+        fetchurl = fetchurlBoot;
       };
 
       # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
@@ -481,6 +487,7 @@ in
           NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or "") + " -static-libstdc++";
         });
 
+      fetchurl = fetchurlBoot;
     };
 
     # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
@@ -522,6 +529,7 @@ in
         # so we can add them to allowedRequisites below
         passthru = a.passthru // { inherit (self) gmp mpfr libmpc isl; };
       });
+      fetchurl = fetchurlBoot;
     };
     extraNativeBuildInputs = [
       prevStage.patchelf
@@ -601,6 +609,7 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     {
     inherit config overlays;
+
     stdenv = import ../generic rec {
       name = "stdenv-linux";
 
@@ -624,7 +633,7 @@ in
 
       shell = cc.shell;
 
-      inherit (prevStage.stdenv) fetchurlBoot;
+      inherit fetchurlBoot;
 
       extraAttrs = {
         inherit bootstrapTools;

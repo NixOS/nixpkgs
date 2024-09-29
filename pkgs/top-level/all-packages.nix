@@ -181,6 +181,25 @@ with pkgs;
     autoconf = autoconf271;
   };
 
+  gnulibBootstrapHook = callPackage (
+    {
+      makeSetupHook,
+      gnulib,
+      autoconf,
+      automake,
+    }:
+    makeSetupHook {
+      name = "gnulib-bootstrap-hook";
+      propagatedBuildInputs = [
+        autoconf
+        automake
+      ];
+      substitutions = {
+        inherit gnulib;
+      };
+    } ../build-support/setup-hooks/gnulib-bootstrap.sh
+  ) { };
+
   autorestic = callPackage ../tools/backup/autorestic { };
 
   autoPatchelfHook = makeSetupHook {
@@ -8019,8 +8038,6 @@ with pkgs;
   gnugrep = callPackage ../tools/text/gnugrep { };
 
   gnulib = callPackage ../development/tools/gnulib { };
-
-  gnupatch = callPackage ../tools/text/gnupatch { };
 
   gnupg1orig = callPackage ../tools/security/gnupg/1.nix { };
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
