@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "5.1.0";
+  version = "5.1.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TXR3DIjE/K+BNNKmqdhj5A8IJV/32OKss8u9V9Jfbp0=";
+    hash = "sha256-mqCCUTnAKzQ02RNUXHuEeiHINeEVl/UlWELUV9ojIts=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
