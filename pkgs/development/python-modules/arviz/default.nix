@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -10,7 +9,6 @@
   setuptools,
 
   # dependencies
-  dm-tree,
   h5netcdf,
   matplotlib,
   numpy,
@@ -40,16 +38,14 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fwDCl1KWClIOBWIL/ETw3hJUyHdpVpLnRmZoZXL3QXI=";
+    hash = "sha256-6toqOGwk8YbatfiDCTEG4r0z3zZAA8zcNVZJqqssYrY=";
   };
 
   build-system = [
@@ -58,7 +54,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    dm-tree
     h5netcdf
     matplotlib
     numpy
