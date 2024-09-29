@@ -90,7 +90,7 @@ if [ "@darwinMinVersion@" ]; then
 
     # Allow wrapped compilers to do something useful when no `DEVELOPER_DIR` is set, which can happen when
     # the compiler is run outside of a stdenv or intentionally in an environment with no environment variables set.
-    DEVELOPER_DIR=${DEVELOPER_DIR_@suffixSalt@}
+    DEVELOPER_DIR=${DEVELOPER_DIR_@suffixSalt@:-@fallback_sdk@}
 
     # xcbuild needs `SDKROOT` to be the name of the SDK, which it sets in its own wrapper,
     # but compilers expect it to point to the absolute path.

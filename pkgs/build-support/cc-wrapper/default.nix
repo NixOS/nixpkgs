@@ -10,6 +10,7 @@
 , stdenvNoCC
 , runtimeShell
 , cc ? null, libc ? null, bintools, coreutils ? null
+, apple-sdk ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -749,6 +750,9 @@ stdenvNoCC.mkDerivation {
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+  } // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =
