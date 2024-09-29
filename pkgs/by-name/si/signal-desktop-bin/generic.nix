@@ -60,6 +60,7 @@
   version,
   hash,
   url,
+  withUnfree ? false,
 }:
 
 let
@@ -121,6 +122,7 @@ stdenv.mkDerivation rec {
     # main derivation.
     postFetch = ''
       ${extractPkg}
+    '' + lib.optionalString (!withUnfree) ''
       asar extract "$out/${libdir}/resources/app.asar" $out/asar-contents
       rm -r \
         "$out/${libdir}/resources/app.asar"{,.unpacked} \
@@ -207,7 +209,7 @@ stdenv.mkDerivation rec {
 
     # Create required symlinks:
     ln -s libGLESv2.so "$out/lib/signal-desktop/libGLESv2.so.2"
-
+  '' + lib.optionalString (!withUnfree) ''
     # Copy the Noto Color Emoji PNGs into the ASAR contents. See `src`
     # for the motivation, and the script for the technical details.
     emojiPrefix=$(
@@ -231,6 +233,7 @@ stdenv.mkDerivation rec {
       --unpack '*.node' \
       asar-contents \
       "$out/lib/signal-desktop/resources/app.asar"
+  '' + ''
 
     runHook postInstall
   '';
@@ -270,7 +273,7 @@ stdenv.mkDerivation rec {
 
       # Various npm packages
       lib.licenses.free
-    ];
+    ] ++ lib.optional withUnfree lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       mic92
       equirosa
