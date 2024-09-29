@@ -12916,6 +12916,13 @@
     github = "marijanp";
     githubId = 13599169;
   };
+  mariunaise = {
+    email = "marius@nixfunktioniert.de";
+    name = "Marius";
+    github = "mariunaise";
+    githubId = 120025370;
+    keys = [ { fingerprint = "D2B5 E3FB 7214 46C0 6D51  B565 56D4 131B A310 4777"; } ];
+  };
   marius851000 = {
     email = "mariusdavid@laposte.net";
     name = "Marius David";
