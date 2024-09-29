@@ -22,6 +22,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.tests = nixosTests.privatebin;
+
   meta = {
     changelog = "https://github.com/PrivateBin/PrivateBin/releases/tag/${finalAttrs.version}";
     description = "Minimalist, open source online pastebin where the server has zero knowledge of pasted data.";
