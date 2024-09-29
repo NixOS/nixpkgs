@@ -167,7 +167,7 @@ in
   };
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
+    dependencies = with self; [ nvim-lspconfig nvim-navic ];
     meta = {
       description = "VS Code like winbar for Neovim";
       homepage = "https://github.com/utilyre/barbecue.nvim";
