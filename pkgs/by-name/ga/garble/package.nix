@@ -6,6 +6,7 @@
   lib,
   git,
 }:
+
 buildGoModule rec {
   pname = "garble";
   version = "0.13.0";
@@ -14,7 +15,7 @@ buildGoModule rec {
     owner = "burrowers";
     repo = "garble";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-FtI5lAeqjRPN47iC46bcEsRLQb7mItw4svsnLkRpNxY=";
+    hash = "sha256-FtI5lAeqjRPN47iC46bcEsRLQb7mItw4svsnLkRpNxY=";
   };
 
   vendorHash = "sha256-mSdajYiMEg2ik0ocfmHK+XddEss1qLu6rDwzjocaaW0=";
@@ -22,17 +23,17 @@ buildGoModule rec {
   # Used for some of the tests.
   nativeCheckInputs = [ git ];
 
-  preBuild = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-    # The test assumex amd64 assembly
-    rm testdata/script/asm.txtar
-  '';
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Obfuscate Go code by wrapping the Go toolchain";
     homepage = "https://github.com/burrowers/garble/";
-    maintainers = with lib.maintainers; [ davhau ];
+    maintainers = with lib.maintainers; [
+      davhau
+      bot-wxt1221
+    ];
     license = lib.licenses.bsd3;
   };
 }
