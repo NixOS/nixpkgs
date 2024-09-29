@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "GMAKE_NOWARN=true" "INS_BASE=/" "INS_RBASE=/" "DESTDIR=${placeholder "out"}" ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-fpermissive";
-  };
-
   enableParallelBuilding = false; # parallel building fails on some linux machines
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";

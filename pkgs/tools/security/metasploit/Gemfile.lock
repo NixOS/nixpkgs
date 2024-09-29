@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 4ec7d1be72158642c17b18dcb9e66e44c1bb5a5a
-  ref: refs/tags/6.4.26
+  revision: 86efc784b8598197cfb817ad4e4d0eb75fd59063
+  ref: refs/tags/6.4.27
   specs:
-    metasploit-framework (6.4.26)
+    metasploit-framework (6.4.28)
       aarch64
       abbrev
       actionpack (~> 7.0.0)

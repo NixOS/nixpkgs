@@ -705,12 +705,6 @@ in {
               url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2") [
-            # Fix test 'bug55639.phpt'
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/1b52ecd78ad1a211a4a9db65975df34d2539125b.patch";
-              hash = "sha256-LVk9sfwl5D+rHzyYjfV4pAuhBjSPXj1WjTfnrzBJXhY";
-            })
           ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";

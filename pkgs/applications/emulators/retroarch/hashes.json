@@ -297,21 +297,21 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-fceumm",
-            "rev": "744f5d9c8b976a431dcb5417a520c0c709b17fbe",
-            "hash": "sha256-ENkG4H2PiZFHRBbX5GRN/kCFTCZDzbJAV5CplThqaEE="
+            "rev": "e226068f979cd8fbfc3be9780d16cfb1405095b0",
+            "hash": "sha256-2G5EzcDJkEhaN+nXi/wu3+Ejim04ZzOr+LW69cLAEuM="
         },
-        "version": "unstable-2024-07-20"
+        "version": "unstable-2024-09-23"
     },
     "flycast": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "flyinghead",
             "repo": "flycast",
-            "rev": "38de2868a09a015186d692eb01d5fd89308c8128",
-            "hash": "sha256-eC2BH/3c+2/kktWtYiq6MeI2I5bAkOfwOsTSjkPNqlg=",
+            "rev": "343021a8c507f4723b3f56a3bb817206912fcb36",
+            "hash": "sha256-DMbhCHW2VHEle0oihaz1GEPOGDCXxfdZoL8MdPZT4d0=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-09-16"
+        "version": "unstable-2024-09-27"
     },
     "fmsx": {
         "fetcher": "fetchFromGitHub",
@@ -348,20 +348,20 @@
         "src": {
             "owner": "libretro",
             "repo": "gambatte-libretro",
-            "rev": "f775ef92c93c495432bbd51d854568c686ec711b",
-            "hash": "sha256-0WnrCN1F8S+Zy4Mxygm+cc1cSVc6Q91a+VVv7EbmgjA="
+            "rev": "e9a1941276e932813dc742796ffd1d0939c5d1d5",
+            "hash": "sha256-4FFYocOa2fuBT8UFKM87Fn5E6pjkfe4tUVDtpEchtJo="
         },
-        "version": "unstable-2024-09-06"
+        "version": "unstable-2024-09-27"
     },
     "genesis-plus-gx": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "libretro",
             "repo": "Genesis-Plus-GX",
-            "rev": "1eb04313cdd1d4d79e166d9f3e75c4b3223b142c",
-            "hash": "sha256-lAMVsw0NBFPrG3CRsj6IGKDrVUhH2vDUuAzl2rEEhdk="
+            "rev": "7de0f0b6cde9bda1235b448aa607044b3f80ab3c",
+            "hash": "sha256-W06vSrGKbXMcXIouW9/fD93sBfwREqIL8HvB3kan0tM="
         },
-        "version": "unstable-2024-09-15"
+        "version": "unstable-2024-09-18"
     },
     "gpsp": {
         "fetcher": "fetchFromGitHub",
