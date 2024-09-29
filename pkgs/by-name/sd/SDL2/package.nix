@@ -65,7 +65,7 @@ let
   inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   dlopenPropagatedBuildInputs =
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
-    lib.optional (openglSupport && !stdenv.isDarwin) libGL
+    lib.optionals (openglSupport && !stdenv.isDarwin) [ libGL ]
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
     ++ lib.optionals x11Support [ libX11 ];
 
@@ -74,11 +74,11 @@ let
       alsa-lib
       audiofile
     ]
-    ++ lib.optional dbusSupport dbus
-    ++ lib.optional libdecorSupport libdecor
-    ++ lib.optional pipewireSupport pipewire
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional udevSupport udev
+    ++ lib.optionals dbusSupport [ dbus ]
+    ++ lib.optionals libdecorSupport [ libdecor ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals udevSupport [ udev ]
     ++ lib.optionals waylandSupport [
       wayland
       libxkbcommon
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ libiconv ]
     ++ dlopenBuildInputs
-    ++ lib.optional ibusSupport ibus
+    ++ lib.optionals ibusSupport [ ibus ]
     ++ lib.optionals waylandSupport [ wayland-protocols ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       AudioUnit
@@ -159,10 +159,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     [ "--disable-oss" ]
-    ++ lib.optional (!x11Support) "--without-x"
-    ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
-    ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
+    ++ lib.optionals (!x11Support) [ "--without-x" ]
+    ++ lib.optionals alsaSupport [ "--with-alsa-prefix=${alsa-lib.out}/lib" ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ "--disable-video-opengles" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-sdltest" ];
 
   dontDisableStatic = withStatic;
 
