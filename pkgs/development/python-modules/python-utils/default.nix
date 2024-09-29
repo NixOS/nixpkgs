@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   loguru,
   pytest-asyncio,
   pytestCheckHook,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "python-utils";
   version = "3.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -29,16 +30,18 @@ buildPythonPackage rec {
       -e '/--mypy/d'
   '';
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  dependencies = [ typing-extensions ];
+
+  optional-dependencies = {
     loguru = [ loguru ];
   };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.loguru;
+  ] ++ optional-dependencies.loguru;
 
   pythonImportsCheck = [ "python_utils" ];
 
