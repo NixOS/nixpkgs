@@ -22,14 +22,14 @@
 }:
 buildPythonPackage rec {
   pname = "libmambapy";
-  version = "2024.09.20";
+  version = "2024.09.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "refs/tags/${version}";
-    hash = "sha256-/mfZEfpB4CQ2f8zyzYbnjvBgK4VEPngTNQJT4Oh62Qs=";
+    hash = "sha256-65XyIlIiUxLGoj11p9fNjauknlVyHPmaTK3LxY+XRV4=";
   };
 
   nativeBuildInputs = [
