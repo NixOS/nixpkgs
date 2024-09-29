@@ -187,7 +187,7 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
 ```
 For an upgrade, a script like this can be used to simplify the process:
 ```nix
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   environment.systemPackages = [
     (let
@@ -211,7 +211,7 @@ For an upgrade, a script like this can be used to simplify the process:
 
       install -d -m 0700 -o postgres -g postgres "$NEWDATA"
       cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA" ${builtins.concatStringsSep " " cfg.initdbArgs}
+      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
 
       sudo -u postgres $NEWBIN/pg_upgrade \
         --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
