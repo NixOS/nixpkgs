@@ -12,6 +12,7 @@
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };
   grafana-worldmap-panel = callPackage ./grafana-worldmap-panel { };
+  marcusolsson-dynamictext-panel = callPackage ./marcusolsson-dynamictext-panel { };
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
