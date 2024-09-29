@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pkgs,
   qtbase,
   qmake,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pivy";
   version = "0.6.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coin3d";
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-wWM8eKTehWCIbRxxWkZ4YrYyeIJuzQaBOUMrW9a5MVo=";
   };
+
+  build-system = [ setuptools ];
 
   dontUseCmakeConfigure = true;
 
