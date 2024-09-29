@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.10.1";
+  version = "3.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "prettytable";
     rev = "refs/tags/${version}";
-    hash = "sha256-S23nUCA2WTxnCKKKFrtN9HYjP0SHUBPPsVNAc4SYlVg=";
+    hash = "sha256-LtphoD5gCMgWgDcFghinq9zjUD69XudEeGIToqqmVPs=";
   };
 
   nativeBuildInputs = [
