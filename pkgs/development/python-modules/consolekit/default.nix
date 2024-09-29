@@ -12,12 +12,12 @@
 }:
 buildPythonPackage rec {
   pname = "consolekit";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dqi84qeUGirw4z1ay3burLeHESeNK2DDPtPnpJzD/Qw=A";
+    hash = "sha256-TU5sufqJ0znCD/QOidrT7jB1NCXJ1p8Z7FPFNPp97qg=";
   };
 
   build-system = [ flit-core ];
