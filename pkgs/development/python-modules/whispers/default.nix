@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "whispers";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "adeptex";
     repo = "whispers";
     rev = "refs/tags/${version}";
-    hash = "sha256-YPfTe2txQY/sVEIGSMTA1b3Ye3j8qT+YdWp3AVqpdLI=";
+    hash = "sha256-tjDog8+oWTNuK1eK5qUEFspiilB0riUSTX5ugTIiP3M=";
   };
 
   postPatch = ''
