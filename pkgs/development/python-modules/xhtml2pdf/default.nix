@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.15";
+  version = "0.2.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "xhtml2pdf";
     repo = "xhtml2pdf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JXxh/n1kUsy3O4P/6WTfa5p+mYy/t4ZBUhlHp+ypoQc=";
+    hash = "sha256-sva1Oqz4FsLz/www8IPVxol3D0hx5F5hQ0I/rSRP9sE=";
   };
 
   patches = [
