@@ -6,7 +6,9 @@ let
     concatMapStrings
     concatStringsSep
     const
+    any
     elem
+    toLower
     filterAttrs
     isString
     literalExpression
@@ -155,7 +157,33 @@ in
       };
 
       ensureDatabases = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf (types.oneOf [types.str (types.submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                Name of the database to ensure.
+              '';
+            };
+            withOptions = mkOption {
+              type = types.attrsOf types.str;
+              description = ''
+                The options to pass to the `CREATE DATABASE` statement.
+                The keys are the options and the values are the values to pass.
+
+                See: https://www.postgresql.org/docs/current/sql-createdatabase.html
+              '';
+              example = {
+                template = "template0";
+                encoding = "UTF8";
+                locale = "en_US.UTF-8";
+                lc_collate = "en_US.UTF-8";
+                lc_ctype = "en_US.UTF-8";
+              };
+              default = {};
+            };
+          };
+        })]);
         default = [];
         description = ''
           Ensures that the specified databases exist.
@@ -166,7 +194,17 @@ in
         example = [
           "gitea"
           "nextcloud"
+          {
+            name = "matrix-synapse";
+            withOptions = {
+              owner = "matrix-synapse";
+              template = "template0";
+              encoding = "UTF8";
+              locale = "C";
+            };
+          }
         ];
+        apply = dbs: map (db: if isString db then { name = db; withOptions = {}; } else db) dbs;
       };
 
       ensureUsers = mkOption {
@@ -462,7 +500,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = map ({ name, ensureDBOwnership, ... }: {
-      assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
+      assertion = ensureDBOwnership -> any (db: db.name == name) cfg.ensureDatabases;
       message = ''
         For each database user defined with `services.postgresql.ensureUsers` and
         `ensureDBOwnership = true;`, a database with the same name must be defined
@@ -575,9 +613,22 @@ in
               rm -f "${cfg.dataDir}/.first_startup"
             fi
           '' + optionalString (cfg.ensureDatabases != []) ''
-            ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-            '') cfg.ensureDatabases}
+            ${concatMapStrings (database:
+              let
+                pg-ident = s: "\\\"${builtins.replaceStrings ["\""] ["\"\""] s}\\\"";
+                pg-str = s: "'${builtins.replaceStrings ["'"] ["''"] s}'";
+                name = database.name;
+                options = lib.mapAttrsToList (k: v: "${k} = ${
+                  if elem (toLower k) ["owner" "template" "tablespace"] then (pg-ident v)
+                  else if elem (toLower k) ["connection limit" "oid"] then "${v}" # int
+                  else (pg-str v) # for ["encoding" "strategy" "locale" "lc_collate" "lc_ctype" "icu_locale" "icu_rules" "locale_provider" "collation_version"]
+                }") database.withOptions;
+                optionsStr = if builtins.length options > 0 then "WITH " + lib.concatStringsSep " " options else "";
+              in
+              ''
+                $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${name}'" | grep -q 1 || $PSQL -tAc "CREATE DATABASE \"${name}\" ${optionsStr}"
+              ''
+            ) cfg.ensureDatabases}
           '' + ''
             ${
               concatMapStrings
