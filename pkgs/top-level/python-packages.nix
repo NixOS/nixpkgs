@@ -750,13 +750,7 @@ self: super: with self; {
 
   area = callPackage ../development/python-modules/area { };
 
-  arelle = callPackage ../development/python-modules/arelle {
-    gui = true;
-  };
-
-  arelle-headless = callPackage ../development/python-modules/arelle {
-    gui = false;
-  };
+  arelle = callPackage ../development/python-modules/arelle { };
 
   aresponses = callPackage ../development/python-modules/aresponses { };
 
@@ -14765,6 +14759,8 @@ self: super: with self; {
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
   sphinx-autodoc-typehints = callPackage ../development/python-modules/sphinx-autodoc-typehints { };
+
+  sphinx-autodoc2 = callPackage ../development/python-modules/sphinx-autodoc2 { };
 
   sphinx-basic-ng = callPackage ../development/python-modules/sphinx-basic-ng { };
 
