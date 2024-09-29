@@ -2,19 +2,20 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, openssl
 , postgresql
 , postgresqlTestHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "postgresql-lantern";
-  version = "0.2.4";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d5CdS11Z0u8+oPvjH6gVx6k8y05SS6wU3PnafcEgQeY=";
+    hash = "sha256-aw003Y2T9/yNJ5dkCD+qQsUO2V7Q63I/E2IFaZAPd90=";
     fetchSubmodules = true;
   };
 
@@ -23,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    openssl
     postgresql
   ];
 
