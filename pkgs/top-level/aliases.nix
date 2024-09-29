@@ -1701,6 +1701,12 @@ mapAliases {
   xcodebuild6 = throw "'xcodebuild6' has been renamed to/replaced by 'xcodebuild'"; # Added 2023-12-10
   xdg_utils = xdg-utils; # Added 2021-02-01
   xen-light = throw "'xen-light' has been renamed to/replaced by 'xen-slim'"; # Added 2024-06-30
+  xen-slim = throw "'xen-slim' has been renamed to 'xen'. The old Xen package with built-in components no longer exists"; # Added 2024-10-05
+  xen_4_16 = throw "While Xen 4.16 was still security-supported when it was removed from Nixpkgs, it would have reached its End of Life a couple of days after NixOS 24.11 released. To avoid shipping an insecure version of Xen, the Xen Project Hypervisor Maintenance Team decided to delete the derivation entirely"; # Added 2024-10-05
+  xen_4_17 = throw "Due to technical challenges involving building older versions of Xen with newer dependencies, the Xen Project Hypervisor Maintenance Team decided to switch to a latest-only support cycle. As Xen 4.17 would have been the 'n-2' version, it was removed"; # Added 2024-10-05
+  xen_4_18 = throw "Due to technical challenges involving building older versions of Xen with newer dependencies, the Xen Project Hypervisor Maintenance Team decided to switch to a latest-only support cycle. As Xen 4.18 would have been the 'n-1' version, it was removed"; # Added 2024-10-05
+  xen_4_19 = throw "Use 'xen' instead"; # Added 2024-10-05
+  xenPackages = throw "The attributes in the xenPackages set have been promoted to the top-level. (xenPackages.xen_4_19 -> xen)";
   xineLib = xine-lib; # Added 2021-04-27
   xineUI = xine-ui; # Added 2021-04-27
   xmlada = gnatPackages.xmlada; # Added 2024-02-25
