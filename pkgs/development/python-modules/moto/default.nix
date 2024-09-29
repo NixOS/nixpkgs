@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.15";
+  version = "5.0.16";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V6qMKvQXzGSg3f5j5bzRrakPUHm3PN0fdMTp+zChp+Y=";
+    hash = "sha256-9K+xdqlkzXpw2pvF4FPUMQlhTOPKsmBEvLtTYQQ13/Q=";
   };
 
   build-system = [ setuptools ];
