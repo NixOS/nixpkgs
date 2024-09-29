@@ -67,6 +67,7 @@ let
       lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
+      lomiri-sync-monitor = callPackage ./services/lomiri-sync-monitor { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
       lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
       mediascanner2 = callPackage ./services/mediascanner2 { };
