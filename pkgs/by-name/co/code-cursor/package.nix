@@ -4,18 +4,15 @@
   fetchurl,
   appimageTools,
   makeWrapper,
-  writeShellApplication,
-  curl,
-  yq,
-  common-updater-scripts,
+  writeScript,
 }:
 let
   pname = "cursor";
-  version = "0.41.1";
+  version = "0.41.3";
   appKey = "230313mzl4w4u92";
   src = fetchurl {
-    url = "https://download.todesktop.com/${appKey}/cursor-0.41.1-build-2409189xe3envg5-x86_64.AppImage";
-    hash = "sha256-9zqktOR5UOMLkKLD1uJ8eNSujWnnyKAN9H8ejrgcfVU=";
+    url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.41.3-build-240925fkhcqg263-x86_64.AppImage";
+    hash = "sha256-WtfyiNGnUn8g1HR0TQPyn3SMJmjqe+otAYeyokMIO+w=";
   };
   appimageContents = appimageTools.extractType2 { inherit version pname src; };
 in
@@ -46,23 +43,21 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-cursor";
-      runtimeInputs = [
-        curl
-        yq
-        common-updater-scripts
-      ];
-      text = ''
-        set -o errexit
-        latestLinux="$(curl -s https://download.todesktop.com/${appKey}/latest-linux.yml)"
-        version="$(echo "$latestLinux" | yq -r .version)"
-        filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-        update-source-version code-cursor "$version" "" "https://download.todesktop.com/${appKey}/$filename" --source-key=src.src
-      '';
-    });
-  };
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl yq coreutils gnused common-updater-scripts
+    set -eu -o pipefail
+    latestLinux="$(curl -s https://download.todesktop.com/${appKey}/latest-linux.yml)"
+    version="$(echo "$latestLinux" | yq -r .version)"
+    filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
+    url="https://download.todesktop.com/${appKey}/$filename"
+    currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
+
+    if [[ "$version" != "$currentVersion" ]]; then
+      hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
+      update-source-version code-cursor "$version" "$hash" "$url" --source-key=src.src
+    fi
+  '';
 
   meta = {
     description = "AI-powered code editor built on vscode";
