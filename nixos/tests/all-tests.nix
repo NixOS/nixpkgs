@@ -825,6 +825,7 @@ in {
   printing-socket = handleTest ./printing.nix { socket = true; };
   printing-service = handleTest ./printing.nix { socket = false; };
   private-gpt = handleTest ./private-gpt.nix {};
+  privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix {};
   prometheus = handleTest ./prometheus {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
