@@ -523,7 +523,7 @@ in {
           for o in $(< /proc/cmdline); do
               case $o in
                   init=*)
-                      IFS== read -r -a initParam <<< "$o"
+                      IFS="=" read -r -a initParam <<< "$o"
                       closure="''${initParam[1]}"
                       ;;
               esac
@@ -559,7 +559,7 @@ in {
 
           # Initialize the system
           export IN_NIXOS_SYSTEMD_STAGE1=true
-          exec chroot /sysroot $closure/prepare-root
+          exec chroot /sysroot "$closure/prepare-root"
         '';
       };
 

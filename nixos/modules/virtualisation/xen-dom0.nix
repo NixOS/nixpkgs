@@ -1,4 +1,4 @@
-# Xen hypervisor (Dom0) support.
+# Xen Project Hypervisor (Dom0) support.
 
 {
   config,
@@ -123,7 +123,7 @@ in
 
   options.virtualisation.xen = {
 
-    enable = lib.options.mkEnableOption "the Xen Hypervisor, a virtualisation technology defined as a *type-1 hypervisor*, which allows multiple virtual machines, known as *domains*, to run concurrently on the physical machine. NixOS runs as the privileged *Domain 0*. This option requires a reboot into a Xen kernel to take effect";
+    enable = lib.options.mkEnableOption "the Xen Project Hypervisor, a virtualisation technology defined as a *type-1 hypervisor*, which allows multiple virtual machines, known as *domains*, to run concurrently on the physical machine. NixOS runs as the privileged *Domain 0*. This option requires a reboot into a Xen kernel to take effect";
 
     debug = lib.options.mkEnableOption "Xen debug features for Domain 0. This option enables some hidden debugging tests and features, and should not be used in production";
 
@@ -141,7 +141,7 @@ in
       defaultText = lib.options.literalExpression "pkgs.xen";
       example = lib.options.literalExpression "pkgs.xen-slim";
       description = ''
-        The package used for Xen Hypervisor.
+        The package used for Xen Project Hypervisor.
       '';
       relatedPackages = [
         "xen"
@@ -207,7 +207,7 @@ in
 
           - `quiet` supresses all messages.
 
-          - `default` adds a simple "Installing Xen Hypervisor boot entries...done." message to the script.
+          - `default` adds a simple "Installing Xen Project Hypervisor boot entries...done." message to the script.
 
           - `info` is the same as `default`, but it also prints a diff with information on which generations were altered.
             - This option adds two extra dependencies to the script: `diffutils` and `bat`.
@@ -870,5 +870,5 @@ in
       };
     };
   };
-  meta.maintainers = with lib.maintainers; [ sigmasquadron ];
+  meta.maintainers = lib.teams.xen.members;
 }

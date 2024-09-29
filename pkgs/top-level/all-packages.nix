@@ -2409,8 +2409,6 @@ with pkgs;
 
   gut = callPackage ../applications/version-management/gut { };
 
-  hred = callPackage ../development/tools/hred { };
-
   hub = callPackage ../applications/version-management/hub { };
 
   hut = callPackage ../applications/version-management/hut { };
@@ -7207,8 +7205,6 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon { };
 
-  mozillavpn = qt6Packages.callPackage ../tools/networking/mozillavpn { };
-
   mozwire = callPackage ../tools/networking/mozwire {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -11339,8 +11335,8 @@ with pkgs;
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
   pleroma = callPackage ../servers/pleroma {
-    elixir = elixir_1_14;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_14; });
+    elixir = elixir_1_17;
+    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
   };
 
   plfit = callPackage ../tools/misc/plfit {
@@ -28696,8 +28692,6 @@ with pkgs;
     calico-typha
     calicoctl
     confd-calico;
-
-  calligra = libsForQt5.callPackage ../applications/office/calligra { };
 
   perkeep = callPackage ../applications/misc/perkeep { };
 
