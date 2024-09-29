@@ -12,6 +12,7 @@
 , systemd
 , pam
 , fuse
+, libdrm
 , libjpeg
 , libopus
 , nasm
@@ -38,7 +39,7 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
 
-    buildInputs = [ xorg.xorgserver ];
+    buildInputs = [ xorg.xorgserver libdrm ];
 
     postPatch = ''
       # patch from Debian, allows to run xrdp daemon under unprivileged user
@@ -50,9 +51,10 @@ let
         --replace 'sysconfdir="/etc"' "sysconfdir=$out/etc"
     '';
 
-    preConfigure = "./bootstrap";
-
-    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common"  ];
+    preConfigure = ''
+      ./bootstrap
+      export XRDP_CFLAGS="-I${xrdp.src}/common -I${libdrm.dev}/include -I${libdrm.dev}/include/libdrm"
+    '';
 
     enableParallelBuilding = true;
 
