@@ -245,6 +245,7 @@ in {
     systemd.services."drkonqi-coredump-processor@".wantedBy = ["systemd-coredump@.service"];
 
     xdg.icons.enable = true;
+    xdg.icons.fallbackCursorThemes = mkDefault ["breeze_cursors"];
 
     xdg.portal.enable = true;
     xdg.portal.extraPortals = [

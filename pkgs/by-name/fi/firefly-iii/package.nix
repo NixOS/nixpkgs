@@ -12,7 +12,7 @@
 
 let
   pname = "firefly-iii";
-  version = "6.1.20";
+  version = "6.1.21";
   phpPackage = php83;
   npmDepsHash = "sha256-N4o7FKdya6bGakNKNq2QUV8HKRfuov5ahvbjR/rsimU=";
 
@@ -20,7 +20,7 @@ let
     owner = "firefly-iii";
     repo = "firefly-iii";
     rev = "v${version}";
-    hash = "sha256-vb9pGupa4cRy/p9iHJT7SMNchRQSU9Nnh6FphEcvt+k=";
+    hash = "sha256-jadxzUhOb3G/DwJk8IV4IcwjmxgrrriVMVwj1cYFHEA=";
   };
 in
 

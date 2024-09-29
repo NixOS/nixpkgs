@@ -176,6 +176,8 @@ buildPythonPackage rec {
       happysalada
       lach
     ];
-    broken = !cudaSupport && !rocmSupport;
+    # RuntimeError: Unknown runtime environment
+    broken = true;
+    # broken = !cudaSupport && !rocmSupport;
   };
 }

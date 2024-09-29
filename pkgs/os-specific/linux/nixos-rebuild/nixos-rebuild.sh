@@ -564,7 +564,9 @@ getVersion() {
         fi
     fi
 
-    echo ".git.$rev"
+    if [ -n "$rev" ]; then
+        echo ".git.$rev"
+    fi
 }
 
 

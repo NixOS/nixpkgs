@@ -32,6 +32,7 @@ let
     { hyprgrass = import ./hyprgrass.nix; }
     { hyprscroller = import ./hyprscroller.nix; }
     { hyprspace = import ./hyprspace.nix; }
+    { hyprsplit = import ./hyprsplit.nix; }
     (import ./hyprland-plugins.nix)
   ];
 in

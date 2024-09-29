@@ -33,6 +33,10 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+  tags = [
+    "kvformat"
+  ];
+
   postInstall = ''
     tar xf ${web-assets}
     mkdir -p $out/share/gotosocial
