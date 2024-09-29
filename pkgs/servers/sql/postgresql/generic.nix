@@ -253,6 +253,8 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
+    # Tests don't run on darwin because of System Integrity Protection (SIP), which
+    # disallows LD_LIBRARY_PATH to be set.
     doCheck = !(stdenv'.hostPlatform.isDarwin || stdenv'.hostPlatform.isStatic);
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check-world";
