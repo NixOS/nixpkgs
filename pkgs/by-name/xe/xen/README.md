@@ -17,7 +17,7 @@
 
 # Xen Project Hypervisor <a href="https://xenproject.org/"><img src="https://downloads.xenproject.org/Branding/Mascots/Xen-Fu-Panda-2000px.png" width="48px" align="top" alt="Xen Fu Panda"></a>
 
-This directory includes the build recipes for the [Xen Project Hypervisor](https://xenproject.org/).
+This directory begins the [Xen Project Hypervisor](https://xenproject.org/) build process.
 
 Some other notable packages that compose the Xen Project Ecosystem include:
 
@@ -32,81 +32,56 @@ Some other notable packages that compose the Xen Project Ecosystem include:
 
 ### Manually
 
-1. Create one directory per branch.
-1. [Update](https://xenbits.xenproject.org/gitweb/) the `default.nix` files for
-   the branches that already exist and copy a new one to any branches that do
-   not yet exist in Nixpkgs.
-   - Do not forget to set the `branch`, `version`, and `latest` attributes for
-     each of the `default.nix` files.
+1. [Update](https://xenbits.xenproject.org/gitweb/) the `package.nix` file for
+   the latest branch of Xen.
+   - Do not forget to set the `branch`, `version`, and `latest` attributes.
    - The revisions are preferably commit hashes, but tag names are acceptable
      as well.
-1. Make sure all branches build. (Both the `standard` and `slim` versions)
-1. Use the NixOS module to test if dom0 boots successfully on all new versions.
+1. Make sure it builds.
+1. Use the NixOS module to test if dom0 boots successfully on the new version.
 1. Make sure the `meta` attributes evaluate to something that makes sense. The
    following one-line command is useful for testing this:
 
    ```console
-   xenToEvaluate=xen; echo -e "\033[1m$(nix eval .#"$xenToEvaluate".meta.description --raw 2> /dev/null)\033[0m\n\n$(nix eval .#"$xenToEvaluate".meta.longDescription --raw 2> /dev/null)"
+   echo -e "\033[1m$(nix eval .#xen.meta.description --raw 2> /dev/null)\033[0m\n\n$(nix eval .#xen.meta.longDescription --raw 2> /dev/null)"
    ```
 
-   Change the value of `xenToEvaluate` to evaluate all relevant Xen packages.
 1. Run `xtf --all --host` as root when booted into the Xen update, and make
-   sure no tests fail.
+   sure no important tests fail.
 1. Clean up your changes and commit them, making sure to follow the
    [Nixpkgs Contribution Guidelines](../../../../CONTRIBUTING.md).
 1. Open a PR and await a review from the current maintainers.
 
 ## Features
 
-### Pre-fetched Sources
+### Generic Builder
 
-On a typical Xen build, the Xen Makefiles will fetch more required sources with
-`git` and `wget`. Due to the Nix Sandbox, build-time fetching will fail, so we
-pre-fetch the required sources before building.[^1] To accomplish this, we have
-a `prefetchedSources` attribute that contains the required derivations, if they
-are requested by the main Xen build.
+`buildXenPackage` is a helpful utility capable of building Xen when passed
+certain attributes. The `package.nix` file on this directory includes all
+important attributes for building a Xen package with Nix. Downstreams can
+pin their Xen revision or include extra patches if the default Xen package
+does not meet their needs.
 
 ### EFI
 
 Building `xen.efi` requires an `ld` with PE support.[^2]
 
 We use a `makeFlag` to override the `$LD` environment variable to point to our
-patched `efiBinutils`. For more information, see the comment in `./generic/default.nix`.
+patched `efiBinutils`. For more information, see the comment in `pkgs/build-support/xen/default.nix`.
 
 > [!TIP]
 > If you are certain you will not be running Xen in an x86 EFI environment, disable
 the `withEFI` flag with an [override](https://nixos.org/manual/nixpkgs/stable/#chap-overrides)
 to save you the need to compile `efiBinutils`.
 
-### Default Overrides
-
-By default, Xen also builds
-[QEMU](https://www.qemu.org/),
-[SeaBIOS](https://www.seabios.org/SeaBIOS),
-[OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF) and
-[iPXE](https://ipxe.org/).
-
-- QEMU is used for stubdomains and handling devices.
-- SeaBIOS is the default legacy BIOS ROM for HVM domains.
-- OVMF is the default UEFI ROM for HVM domains.
-- iPXE provides a PXE boot environment for HVMs.
-
-However, those packages are already available on Nixpkgs, and Xen does not
-necessarily need to build them into the main hypervisor build. For this reason,
-we also have the `withInternal<Component>` flags, which enables and disables
-building those built-in components. The two most popular Xen configurations will
-be the default build, with all built-in components, and a `slim` build, with none
-of those components. To simplify this process, the `./packages.nix` file includes
-the `xen-slim` package overrides that have all `withInternal<Component>` flags
-disabled. See the `meta.longDescription` attribute for the `xen-slim` packages
-for more information.
-
 ## Security
 
-We aim to support all **security-supported** versions of Xen at any given time.
+We aim to support the **latest** version of Xen at any given time.
 See the [Xen Support Matrix](https://xenbits.xen.org/docs/unstable/support-matrix.html)
-for a list of versions. As soon as a version is no longer **security-supported**,
-it should be removed from Nixpkgs.
+for a list of versions. As soon as a version is no longer the newest, it should
+be removed from Nixpkgs (`master`). If you need earlier versions of Xen, consider
+building your own Xen by following the instructions in the **Generic Builder**
+section.
 
 > [!CAUTION]
 > Pull requests that introduce XSA patches
