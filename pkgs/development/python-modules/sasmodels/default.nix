@@ -3,13 +3,15 @@
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
-  pytest,
+  pytestCheckHook,
   numpy,
   scipy,
-  matplotlib,
+  bumps,
   docutils,
-  pyopencl,
+  matplotlib,
   opencl-headers,
+  pycuda,
+  pyopencl,
   pythonOlder,
 }:
 
@@ -32,19 +34,26 @@ buildPythonPackage rec {
   buildInputs = [ opencl-headers ];
 
   dependencies = [
-    docutils
-    matplotlib
     numpy
     scipy
-    pyopencl
   ];
 
-  # Note: the 1.0.5 release should be compatible with pytest6, so this can
-  # be set back to 'pytest' at that point
-  nativeCheckInputs = [ pytest ];
+  optional-dependencies = {
+    full = [
+      docutils
+      bumps
+      matplotlib
+      # columnize
+    ];
+    server = [ bumps ];
+    opencl = [ pyopencl ];
+    cuda = [ pycuda ];
+  };
 
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test -c ./pytest.ini
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
   pythonImportsCheck = [ "sasmodels" ];
