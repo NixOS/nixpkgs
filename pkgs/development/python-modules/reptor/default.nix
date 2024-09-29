@@ -69,14 +69,14 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ghostwriter = [ gql ] ++ gql.optional-dependencies.aiohttp;
     translate = [ deepl ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)

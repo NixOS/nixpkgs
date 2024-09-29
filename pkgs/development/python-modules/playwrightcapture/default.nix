@@ -61,7 +61,7 @@ buildPythonPackage rec {
     w3lib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     recaptcha = [
       speechrecognition
       pydub

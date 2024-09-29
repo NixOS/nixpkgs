@@ -52,7 +52,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       typer
       zeroconf

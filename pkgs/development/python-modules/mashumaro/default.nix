@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     orjson = [ orjson ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pendulum
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "mashumaro" ];
 

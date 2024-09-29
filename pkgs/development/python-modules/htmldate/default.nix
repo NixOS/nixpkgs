@@ -38,7 +38,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     speed =
       [
         faust-cchardet

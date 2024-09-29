@@ -57,7 +57,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       bottleneck
       gwcs

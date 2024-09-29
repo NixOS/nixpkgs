@@ -48,14 +48,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ] ++ passthru.optional-dependencies.pandas;
+  ] ++ optional-dependencies.pandas;
 
   pythonImportsCheck = [ "coinmetrics.api_client" ];
 
-  passthru = {
-    optional-dependencies = {
-      pandas = [ pandas ];
-    };
+  optional-dependencies = {
+    pandas = [ pandas ];
   };
 
   meta = with lib; {

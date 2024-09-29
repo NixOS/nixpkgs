@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   dependencies = [ httpx ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     redis = [ redis ];
     s3 = [ boto3 ];
     sqlite = [ anysqlite ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "hishel" ];
 

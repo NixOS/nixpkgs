@@ -57,7 +57,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     requests-mocker = [ requests-mock ];
     web-api = [
       jinja2
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     requests
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # pyhanko_certvalidator.errors.DisallowedAlgorithmError

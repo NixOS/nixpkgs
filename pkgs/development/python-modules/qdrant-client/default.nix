@@ -52,7 +52,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fastembed = [ fastembed ];
   };
 

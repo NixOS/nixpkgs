@@ -65,7 +65,7 @@ buildPythonPackage rec {
     safetensors
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flax = [
       flax
       jax
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     sentencepiece
     torchsde
     transformers
-  ] ++ passthru.optional-dependencies.torch;
+  ] ++ optional-dependencies.torch;
 
   preCheck =
     let

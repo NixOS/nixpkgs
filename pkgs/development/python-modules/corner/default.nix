@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   dependencies = [ matplotlib ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arviz = [ arviz ];
     docs = [
       arviz
@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "corner" ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ corner.passthru.optional-dependencies.test;
+  nativeCheckInputs = [ pytestCheckHook ] ++ corner.optional-dependencies.test;
 
   # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
   disabledTests = [

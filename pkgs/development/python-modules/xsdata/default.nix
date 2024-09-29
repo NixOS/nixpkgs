@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       click-default-group
@@ -59,11 +59,9 @@ buildPythonPackage rec {
     soap = [ requests ];
   };
 
-  nativeCheckInputs =
-    [ pytestCheckHook ]
-    ++ passthru.optional-dependencies.cli
-    ++ passthru.optional-dependencies.lxml
-    ++ passthru.optional-dependencies.soap;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ optional-dependencies.cli ++ optional-dependencies.lxml ++ optional-dependencies.soap;
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 

@@ -61,7 +61,7 @@ buildPythonPackage rec {
       pkgutil-resolve-name
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     format = [
       fqdn
       idna

@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-  ] ++ passthru.optional-dependencies.pydantic;
+  ] ++ optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "camel_converter" ];
 

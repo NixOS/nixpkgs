@@ -125,7 +125,7 @@ buildPythonPackage rec {
     pytest-snapshot
     pytest-timeout
     pytest-xdist
-  ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
+  ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
   pytestFlagsArray = [
     "--dist=loadgroup"
@@ -167,54 +167,52 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ibis" ] ++ map (backend: "ibis.backends.${backend}") testBackends;
 
-  passthru = {
-    optional-dependencies = {
-      bigquery = [
-        db-dtypes
-        google-cloud-bigquery
-        google-cloud-bigquery-storage
-        pydata-google-auth
-      ];
-      clickhouse = [ clickhouse-connect ];
-      dask = [
-        dask
-        regex
-        packaging
-      ];
-      datafusion = [ datafusion ];
-      druid = [ pydruid ];
-      duckdb = [ duckdb ];
-      flink = [ ];
-      geospatial = [
-        geopandas
-        shapely
-      ];
-      mssql = [ pyodbc ];
-      mysql = [ pymysql ];
-      oracle = [
-        oracledb
-        packaging
-      ];
-      pandas = [
-        regex
-        packaging
-      ];
-      polars = [
-        polars
-        packaging
-      ];
-      postgres = [ psycopg2 ];
-      pyspark = [
-        pyspark
-        packaging
-      ];
-      snowflake = [ snowflake-connector-python ];
-      sqlite = [ regex ];
-      trino = [ trino-python-client ];
-      visualization = [ graphviz ];
-      decompiler = [ black ];
-      examples = [ pins ] ++ pins.optional-dependencies.gcs;
-    };
+  optional-dependencies = {
+    bigquery = [
+      db-dtypes
+      google-cloud-bigquery
+      google-cloud-bigquery-storage
+      pydata-google-auth
+    ];
+    clickhouse = [ clickhouse-connect ];
+    dask = [
+      dask
+      regex
+      packaging
+    ];
+    datafusion = [ datafusion ];
+    druid = [ pydruid ];
+    duckdb = [ duckdb ];
+    flink = [ ];
+    geospatial = [
+      geopandas
+      shapely
+    ];
+    mssql = [ pyodbc ];
+    mysql = [ pymysql ];
+    oracle = [
+      oracledb
+      packaging
+    ];
+    pandas = [
+      regex
+      packaging
+    ];
+    polars = [
+      polars
+      packaging
+    ];
+    postgres = [ psycopg2 ];
+    pyspark = [
+      pyspark
+      packaging
+    ];
+    snowflake = [ snowflake-connector-python ];
+    sqlite = [ regex ];
+    trino = [ trino-python-client ];
+    visualization = [ graphviz ];
+    decompiler = [ black ];
+    examples = [ pins ] ++ pins.optional-dependencies.gcs;
   };
 
   meta = with lib; {
