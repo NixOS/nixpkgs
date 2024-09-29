@@ -70,7 +70,7 @@ buildPythonPackage rec {
     description = "portable archive file manager";
     mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 ];
   };
 }
