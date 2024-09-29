@@ -1,22 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   fuse,
   ncurses,
   python3,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbde";
-  version = "0-unstable-20221031";
+  version = "20240502";
 
-  src = fetchFromGitHub {
-    owner = "libyal";
-    repo = "libbde";
-    rev = "a7bf86d0907b84dfb551fdd3f6f548bd687fdcac";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  src = fetchurl {
+    url = "https://github.com/libyal/libbde/releases/download/${finalAttrs.version}/libbde-alpha-${finalAttrs.version}.tar.gz";
+    hash = "sha256-La6rzBOfyBIXDn78vXb8GUt8jgQkzsqM38kRZ7t3Fp0=";
   };
 
   buildInputs = [
@@ -25,9 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  preInstall = ''
+    substituteInPlace pybde/Makefile \
+      --replace-fail '$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install' ' '
+  '';
+
   configureFlags = [ "--enable-python" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library to access the BitLocker Drive Encryption (BDE) format";
