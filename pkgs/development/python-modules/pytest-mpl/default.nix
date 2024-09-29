@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-mpl";
-  version = "0.16.1";
+  version = "0.17.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LVcWgRJOj/X04rnA0EfTfQSZ1rbY8vSaG1DN2ZMQRGk=";
+    hash = "sha256-++8F1+ZktLM0UvtpisGI5SJ5HzJ9405+o329/p1SysY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
