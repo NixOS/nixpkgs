@@ -14,6 +14,7 @@ in {
       systemPackages = (with pkgs; [
         glib # XDG MIME-related tools identify it as GNOME, add gio for MIME identification to work
         libayatana-common
+        syncevolution
         ubports-click
       ]) ++ (with pkgs.lomiri; [
         content-hub
@@ -22,6 +23,7 @@ in {
         libusermetrics
         lomiri
         lomiri-calculator-app
+        lomiri-calendar-app
         lomiri-camera-app
         lomiri-clock-app
         lomiri-docviewer-app
@@ -29,10 +31,12 @@ in {
         lomiri-filemanager-app
         lomiri-gallery-app
         lomiri-online-accounts
+        lomiri-online-accounts-plugins
         lomiri-polkit-agent
         lomiri-schemas # exposes some required dbus interfaces
         lomiri-session # wrappers to properly launch the session
         lomiri-sounds
+        lomiri-sync-monitor
         lomiri-system-settings
         lomiri-terminal-app
         lomiri-thumbnailer
@@ -130,6 +134,8 @@ in {
     };
 
     environment.pathsToLink = [
+      # Paths for accountsservice service, applications, providers etc (TODO should this be enabled by services.accounts-daemon.enable?)
+      "/share/accounts"
       # Configs for inter-app data exchange system
       "/share/content-hub/peers"
       # Configs for inter-app URL requests
@@ -169,6 +175,19 @@ in {
           Restart = "always";
           ExecStart = "${pkgs.lomiri.lomiri-polkit-agent}/libexec/lomiri-polkit-agent/policykit-agent";
         };
+      };
+
+      # Alias doesn't get registered automatically
+      "lomiri-sync-monitor" = rec {
+        description = "Lomiri online account sync monitor plugin";
+        partOf = [ "graphical-session.target" ];
+        wants = [ "address-book-service.service" ];
+        serviceConfig = {
+          BusName = "com.lomiri.SyncMonitor";
+          ExecStart = "${pkgs.lomiri.lomiri-sync-monitor}/libexec/lomiri-sync-monitor/lomiri-sync-monitor";
+        };
+        aliases = [ "dbus-com.lomiri.SyncMonitor.service" ];
+        wantedBy = [ "graphical-session.target" ];
       };
     };
 
