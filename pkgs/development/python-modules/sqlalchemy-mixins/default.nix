@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-mixins";
-  version = "2.0.5";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "absent1706";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-iJrRlV/M0Z1IOdrwWSblefm6wjvdk4/v0am+It8VeWI=";
+    hash = "sha256-0uB3x7RQSNEq3DyTSiOIGajwPQQEBjXK8HOyuXCNa/E=";
   };
 
   build-system = [ setuptools ];
