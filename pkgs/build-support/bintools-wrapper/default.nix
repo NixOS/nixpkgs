@@ -10,6 +10,7 @@
 , stdenvNoCC
 , runtimeShell
 , bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
+, apple-sdk ? null
 , netbsd ? null
 , sharedLibraryLoader ?
   if libc == null then
@@ -405,6 +406,9 @@ stdenvNoCC.mkDerivation {
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+  } // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
   meta =

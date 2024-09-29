@@ -84,7 +84,7 @@ mangleVarSingle DEVELOPER_DIR ${role_suffixes[@]+"${role_suffixes[@]}"}
 
 # Allow wrapped bintools to do something useful when no `DEVELOPER_DIR` is set, which can happen when
 # the compiler is run outside of a stdenv or intentionally in an environment with no environment variables set.
-DEVELOPER_DIR=${DEVELOPER_DIR_@suffixSalt@}
+DEVELOPER_DIR=${DEVELOPER_DIR_@suffixSalt@:-@fallback_sdk@}
 
 # Darwin looks for frameworks in the SDK located at `DEVELOPER_DIR`.
 extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
