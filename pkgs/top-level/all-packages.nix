@@ -19450,8 +19450,6 @@ with pkgs;
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../development/tools/garble { };
-
   gcab = callPackage ../development/libraries/gcab { };
 
   gcovr = with python3Packages; toPythonApplication gcovr;
