@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   p7zip,
   cabextract,
@@ -39,7 +40,7 @@ in
 buildPythonPackage rec {
   pname = "patool";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
@@ -53,6 +54,8 @@ buildPythonPackage rec {
     substituteInPlace patoolib/util.py \
       --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
   '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 
