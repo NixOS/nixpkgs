@@ -1,39 +1,36 @@
 {
+  withDPDK ? false,
+
   lib,
   stdenv,
-  fetchFromGitHub,
+
   autoconf,
   automake,
+  dpdk,
+  fetchFromGitHub,
   installShellFiles,
   iproute2,
-  kernel ? null,
   libcap_ng,
+  libpcap,
   libtool,
+  makeWrapper,
   nix-update-script,
+  nixosTests,
+  numactl,
   openssl,
   perl,
   pkg-config,
   procps,
   python3,
-  tcpdump,
   sphinxHook,
+  tcpdump,
   util-linux,
   which,
-  makeWrapper,
-  withDPDK ? false,
-  dpdk,
-  numactl,
-  libpcap,
 }:
 
-let
-  _kernel = kernel;
-in
 stdenv.mkDerivation rec {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
   version = "3.4.0";
-
-  kernel = lib.optional (_kernel != null) _kernel.dev;
 
   src = fetchFromGitHub {
     owner = "openvswitch";
@@ -84,14 +81,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./boot.sh";
 
-  configureFlags =
-    [
-      "--localstatedir=/var"
-      "--sharedstatedir=/var"
-      "--sbindir=$(out)/bin"
-    ]
-    ++ (lib.optionals (_kernel != null) [ "--with-linux" ])
-    ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sharedstatedir=/var"
+    "--sbindir=$(out)/bin"
+  ] ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -131,7 +125,14 @@ stdenv.mkDerivation rec {
       setuptools
     ]);
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      default = nixosTests.openvswitch;
+      incus = nixosTests.incus-lts.openvswitch;
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";

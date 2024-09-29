@@ -14,7 +14,7 @@ let
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "graphics" "extraPackages" ])
     (lib.mkRemovedOptionModule [ "hardware" "opengl" "s3tcSupport" ] "S3TC support is now always enabled in Mesa.")
     (lib.mkRemovedOptionModule [ "hardware" "opengl" "driSupport"] "The setting can be removed.")
 

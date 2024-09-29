@@ -44,13 +44,13 @@ let
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version src meta;
+    nativeBuildInputs = [ makeWrapper ];
 
     profile = ''
       export LC_ALL=C.UTF-8
     '';
 
     extraInstallCommands = ''
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications

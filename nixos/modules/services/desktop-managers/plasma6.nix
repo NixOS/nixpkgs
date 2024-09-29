@@ -58,6 +58,7 @@ in {
     ];
 
     qt.enable = true;
+    programs.xwayland.enable = true;
     environment.systemPackages = with kdePackages; let
       requiredPackages = [
         qtwayland # Hack? To make everything run on Wayland
@@ -87,7 +88,6 @@ in {
 
         # Core Plasma parts
         kwin
-        pkgs.xwayland
         kscreen
         libkscreen
         kscreenlocker
@@ -143,10 +143,12 @@ in {
         kate
         khelpcenter
         dolphin
+        baloo-widgets  # baloo information in Dolphin
         dolphin-plugins
         spectacle
         ffmpegthumbs
         krdp
+        xwaylandvideobridge  # exposes Wayland windows to X11 screen capture
       ] ++ lib.optionals config.services.flatpak.enable [
         # Since PackageKit Nix support is not there yet,
         # only install discover if flatpak is enabled.
@@ -245,7 +247,10 @@ in {
     xdg.icons.enable = true;
 
     xdg.portal.enable = true;
-    xdg.portal.extraPortals = [kdePackages.xdg-desktop-portal-kde];
+    xdg.portal.extraPortals = [
+      kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gtk
+    ];
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
     services.pipewire.enable = mkDefault true;
 

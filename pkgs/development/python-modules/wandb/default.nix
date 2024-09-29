@@ -31,7 +31,6 @@
   nbformat,
   pandas,
   parameterized,
-  pathtools,
   protobuf,
   psutil,
   pydantic,
@@ -85,7 +84,6 @@ buildPythonPackage rec {
     click
     docker-pycreds
     gitpython
-    pathtools
     protobuf
     psutil
     pyyaml

@@ -8,7 +8,7 @@
   node-gyp,
   runCommand,
   nixosTests,
-  callPackage,
+  immich-machine-learning,
   # build-time deps
   glib,
   pkg-config,
@@ -210,7 +210,7 @@ buildNpmPackage' {
       inherit (nixosTests) immich;
     };
 
-    machine-learning = callPackage ./machine-learning.nix { inherit src; };
+    machine-learning = immich-machine-learning;
 
     inherit
       src

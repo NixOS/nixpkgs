@@ -7,6 +7,8 @@
 , wl-clipboard
 , libnotify
 , xorg
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 let
@@ -37,12 +39,6 @@ ps.buildPythonApplication rec {
     hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
   };
 
-  postPatch = ''
-    # disable coverage testing
-    substituteInPlace pyproject.toml \
-      --replace-fail "addopts = [" "addopts_ = ["
-  '';
-
   pythonRemoveDeps = [
     "pyside6-essentials"
   ];
@@ -51,9 +47,15 @@ ps.buildPythonApplication rec {
     "shiboken6"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     ps.hatchling
     ps.babel
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ps.toml
+  ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
   ];
 
   dependencies = [
@@ -69,8 +71,15 @@ ps.buildPythonApplication rec {
     )
   '';
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/pixmaps
+    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/pixmaps/
+  '';
+
   nativeCheckInputs = wrapperDeps ++ [
     ps.pytestCheckHook
+    ps.pytest-cov-stub
+    ps.pytest-instafail
     ps.pytest-qt
     ps.toml
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -107,10 +116,15 @@ ps.buildPythonApplication rec {
     # flaky
     "test_normcap_ocr_testcases"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # requires display
+    "test_send_via_qt_tray"
+    "test_screens"
     # requires impure pbcopy
     "test_get_copy_func_with_pbcopy"
     "test_get_copy_func_without_pbcopy"
     "test_perform_pbcopy"
+    "test_pbcopy"
+    "test_copy"
     # NSXPCSharedListener endpointForReply:withListenerName:replyErrorCode:
     # while obtaining endpoint 'ClientCallsAuxiliary': Connection interrupted
     # since v5.0.0
@@ -132,8 +146,30 @@ ps.buildPythonApplication rec {
     # requires a display
     "tests/integration/test_normcap.py"
     "tests/integration/test_tray_menu.py"
+    "tests/integration/test_settings_menu.py"
+    "tests/tests_clipboard/test_handlers/test_qtclipboard.py"
+    "tests/tests_gui/test_tray.py"
+    "tests/tests_gui/test_window.py"
+    "tests/tests_screengrab/"
     # failure unknown, crashes in first test with `.show()`
     "tests/tests_gui/test_loading_indicator.py"
+    "tests/tests_gui/test_menu_button.py"
+    "tests/tests_gui/test_resources.py"
+    "tests/tests_gui/test_update_check.py"
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.github.dynobo.normcap";
+      desktopName = "NormCap";
+      genericName = "OCR powered screen-capture tool";
+      comment = "Extract text from an image directly into clipboard";
+      exec = "normcap";
+      icon = "normcap";
+      terminal = false;
+      categories = ["Utility" "Office"];
+      keywords = ["Text" "Extraction" "OCR"];
+    })
   ];
 
   meta = with lib; {
@@ -142,6 +178,5 @@ ps.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk pbsds ];
     mainProgram = "normcap";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

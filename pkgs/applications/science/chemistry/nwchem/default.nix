@@ -164,6 +164,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/nwchem
 
     cp $NWCHEM_TOP/bin/LINUX64/nwchem $out/bin/nwchem
@@ -186,6 +188,8 @@ stdenv.mkDerivation rec {
     charmm_s $out/share/nwchem/data/charmm_s/
     charmm_x $out/share/nwchem/data/charmm_x/
     EOF
+
+    runHook postInstall
   '';
 
   doCheck = false;

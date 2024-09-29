@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set PHOTOPRISM_ASSETS_PATH ${assets_path} \
       --set PHOTOPRISM_DARKTABLE_BIN ${darktable}/bin/darktable-cli \
       --set PHOTOPRISM_RAWTHERAPEE_BIN ${rawtherapee}/bin/rawtherapee-cli \
-      --set PHOTOPRISM_HEIFCONVERT_BIN ${libheif}/bin/heif-convert \
+      --set PHOTOPRISM_HEIFCONVERT_BIN ${libheif}/bin/heif-dec \
       --set PHOTOPRISM_RSVGCONVERT_BIN ${librsvg}/bin/rsvg-convert \
       --set PHOTOPRISM_FFMPEG_BIN ${ffmpeg_7}/bin/ffmpeg \
       --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool \
