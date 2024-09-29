@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyramid-multiauth";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "pyramid_multiauth";
     rev = "refs/tags/${version}";
-    hash = "sha256-+Aa+Vc4qCqDe/W5m/RBpYAyOMJkBv+ZGSqElJlkHqs4=";
+    hash = "sha256-Bz53iCGsl6WZASIvBQ1pFfcGLra82vA2OLWjhLVdkrw=";
   };
 
   nativeBuildInputs = [ setuptools ];
