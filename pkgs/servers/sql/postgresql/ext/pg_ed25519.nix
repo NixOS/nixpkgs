@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.renzo ];
     platforms = postgresql.meta.platforms;
     license = licenses.mit;
+    # Broken on darwin and linux (JIT) with no upstream fix available.
+    broken = lib.versionAtLeast postgresql.version "16" && stdenv.cc.isClang;
   };
 }
 
