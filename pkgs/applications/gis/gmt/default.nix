@@ -86,18 +86,10 @@ in stdenv.mkDerivation (finalAttrs: {
       "-DGSHHG_ROOT=${gshhg-gmt.out}/share/gshhg-gmt"
       "-DCOPY_DCW:BOOL=FALSE"
       "-DDCW_ROOT=${dcw-gmt.out}/share/dcw-gmt"
-      "-DGDAL_ROOT=${gdal.out}"
-      "-DNETCDF_ROOT=${netcdf'.out}"
-      "-DPCRE_ROOT=${pcre.out}"
       "-DGMT_INSTALL_TRADITIONAL_FOLDERNAMES:BOOL=FALSE"
       "-DGMT_ENABLE_OPENMP:BOOL=TRUE"
       "-DGMT_INSTALL_MODULE_LINKS:BOOL=FALSE"
       "-DLICENSE_RESTRICTED=LGPL" # "GPL" and "no" also valid
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "-DFFTW3_ROOT=${fftwSinglePrec.dev}"
-      "-DLAPACK_LIBRARY=${lapack}/lib/liblapack.so"
-      "-DBLAS_LIBRARY=${blas}/lib/libblas.so"
     ];
 
   meta = {
