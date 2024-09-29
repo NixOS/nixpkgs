@@ -36,12 +36,12 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gmt";
-  version = "6.4.0";
+  version = "6.5.0";
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "gmt";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-rRNEo7dGkmgrkhNCBacyfBYrl7zHnE0KMWQHT0Ekbo0=";
+    hash = "sha256-KKIYhljCtk9t9CuvTLsSGvUkUwazWTm9ymBB3wLwSoI=";
   };
 
   nativeBuildInputs = [
