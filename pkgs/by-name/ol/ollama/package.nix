@@ -93,7 +93,7 @@ let
     ];
   };
 
-  metalFrameworks = with darwin.apple_sdk_11_0.frameworks; [
+  metalFrameworks = with darwin.apple_sdk.frameworks; [
     Accelerate
     Metal
     MetalKit
