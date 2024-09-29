@@ -9,25 +9,22 @@
   autoconf,
   automake,
   darwin,
+  unstableGitUpdater,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hebbot";
-  version = "2.1";
+  version = "2.1-unstable-2024-09-20";
 
   src = fetchFromGitHub {
     owner = "haecker-felix";
     repo = "hebbot";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-zcsoTWpNonkgJLTC8S9Nubnzdhj5ROL/UGNWUsLxLgs=";
+    rev = "4c7152a3ce88ecfbac06f823abd4fd849e0c30d1";
+    hash = "sha256-y+KpxiEzVAggFoPvTOy0IEmAo2V6mOpM0VzEScUOtsM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "matrix-qrcode-0.1.0" = "sha256-g78Ql+r5NYNcnkoirH9E6AHagZgBCgxBfweaX1D0z0E=";
-    };
-  };
+  cargoHash = "sha256-7AEWQIUHpeK4aNFzzU10YeJErD0fJ6yQSHwFe4utOFo=";
 
   nativeBuildInputs =
     [
@@ -39,9 +36,25 @@ rustPlatform.buildRustPackage rec {
       automake
     ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
+
+  NIX_CFLAGS_LINK = [
+    "-L${lib.getLib openssl}/lib"
+    "-L${lib.getLib sqlite}/lib"
+  ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Matrix bot which can generate \"This Week in X\" like blog posts ";
