@@ -51,6 +51,7 @@ in
             --port ${toString cfg.listenPort} \
             --no-update True
         '';
+        KillSignal = "SIGINT";
         Restart = "on-failure";
       };
     };
