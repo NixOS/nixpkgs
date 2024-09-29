@@ -33852,6 +33852,7 @@ with pkgs;
 
   xen = xenPackages.xen_4_19;
   xen-slim = xenPackages.xen_4_19-slim;
+  buildXenPackage = callPackage ../build-support/xen { };
 
   xkbset = callPackage ../tools/X11/xkbset { };
 
