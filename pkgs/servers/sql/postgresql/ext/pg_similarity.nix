@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, gcc, postgresql }:
+{ stdenv, lib, fetchFromGitHub, gcc, postgresql, unstableGitUpdater }:
 
 stdenv.mkDerivation {
-
   pname = "pg_similarity";
-  version = "1.0";
+  version = "1.0-unstable-2021-01-12";
+
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "pg_similarity";
-    rev = "be1a8b08c8716e59b89982557da9ea68cdf868c5";
-    sha256 = "1z4v4r2yccdr8kz3935fnk1bc5vj0qj0apscldyap4wxlyi89xim";
+    rev = "b9cb0a2d501b91e33cd1ef550b05483ca3563f71";
+    sha256 = "sha256-L04ANvyfzHgW7fINeJEY6T77Vojq3SI8P1TWiCRSPs0=";
   };
 
   buildInputs = [ postgresql gcc ];
@@ -19,6 +19,8 @@ stdenv.mkDerivation {
     install -D pg_similarity${postgresql.dlSuffix} -t $out/lib/
     install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
   '';
+
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = {
     description = "Extension to support similarity queries on PostgreSQL";
