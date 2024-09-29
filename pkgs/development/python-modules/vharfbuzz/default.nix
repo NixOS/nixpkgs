@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   fonttools,
-  pythonImportsCheckHook,
   uharfbuzz,
 }:
 
@@ -21,7 +20,6 @@ buildPythonPackage rec {
     fonttools
     uharfbuzz
   ];
-  nativeBuildInputs = [ pythonImportsCheckHook ];
 
   # Package has no tests.
   doCheck = false;
