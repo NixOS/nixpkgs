@@ -15,10 +15,8 @@
   glib,
   genericUpdater,
   writeShellScript,
-  openjfx,
   p7zip,
   unrar,
-  zenity,
 }:
 
 let
@@ -41,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     autoPatchelfHook
-    zenity
   ];
 
   buildInputs = [
@@ -51,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     curlWithGnuTls
     libmms
     glib
-    zenity
   ];
 
   postPatch = ''
@@ -75,10 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
           chromaprint
           libmediainfo
           openjdk17
-          openjfx
           p7zip
           unrar
-          zenity
         ]
       }
     # Expose the binary in bin to make runnable.
