@@ -29,6 +29,8 @@ buildPythonPackage rec {
     cd ../py_ext
   '';
 
+  pythonImportsCheck = [ "tlsh" ];
+
   meta = with lib; {
     description = "Trend Micro Locality Sensitive Hash";
     homepage = "https://tlsh.org/";
