@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "vulcan-api";
-  version = "2.3.2";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "kapi2289";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
+    hash = "sha256-RtB67Pme/qtKG0T3rzm0OeewNZPg2e3aebL5YnSWWFQ=";
   };
 
   pythonRemoveDeps = [ "faust-cchardet" ];
