@@ -20,12 +20,20 @@ signal-desktop)
     --system x86_64-linux \
     --override-filename "$SCRIPT_DIR/signal-desktop.nix" \
   signal-desktop
+  nix-update --version "$latestVersion" \
+    --system x86_64-linux \
+    --override-filename "$SCRIPT_DIR/signal-desktop-apple-emoji.nix" \
+  signal-desktop-apple-emoji
 
   echo "Updating signal-desktop for aarch64-linux"
   nix-update --version "$latestVersionAarch64" \
     --system aarch64-linux \
     --override-filename "$SCRIPT_DIR/signal-desktop-aarch64.nix" \
     signal-desktop
+  nix-update --version "$latestVersionAarch64" \
+    --system aarch64-linux \
+    --override-filename "$SCRIPT_DIR/signal-desktop-aarch64-apple-emoji.nix" \
+    signal-desktop-apple-emoji
 
   echo "Updating signal-desktop for darwin"
   nix-update --version "$latestVersion" \

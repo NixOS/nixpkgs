@@ -1,7 +1,16 @@
-{ stdenv, callPackage }:
+{
+  stdenv,
+  callPackage,
+  withUnfree ? false,
+}:
 if stdenv.hostPlatform.system == "aarch64-linux" then
-  callPackage ./signal-desktop-aarch64.nix { }
+  if !withUnfree then
+    callPackage ./signal-desktop-aarch64.nix { }
+  else
+    callPackage ./signal-desktop-aarch64-apple-emoji.nix { }
 else if stdenv.hostPlatform.isDarwin then
   callPackage ./signal-desktop-darwin.nix { }
-else
+else if !withUnfree then
   callPackage ./signal-desktop.nix { }
+else
+  callPackage ./signal-desktop-apple-emoji.nix { }
