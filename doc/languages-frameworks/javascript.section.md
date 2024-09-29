@@ -524,8 +524,8 @@ An example usage of the above attributes is:
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
+  yarnInstallHook,
   nodejs,
-  npmHooks,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -541,7 +541,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-mo8urQaWIHu33+r0Y7mL9mJ/aSe/5CihuIetTeDHEUQ=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [
