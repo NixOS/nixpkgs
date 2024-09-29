@@ -700,4 +700,92 @@ in
     }
   );
 
+  keymap =
+    let
+      pwInput = "qwerty";
+      pwOutput = "qwertz";
+    in
+    makeTest (
+      { pkgs, lib, ... }:
+      {
+        name = "lomiri-keymap";
+
+        meta = {
+          maintainers = lib.teams.lomiri.members;
+        };
+
+        nodes.machine =
+          { config, ... }:
+          {
+            imports = [ ./common/user-account.nix ];
+
+            virtualisation.memorySize = 2047;
+
+            users.users.${user} = {
+              inherit description;
+              password = lib.mkForce pwOutput;
+            };
+
+            services.desktopManager.lomiri.enable = lib.mkForce true;
+            services.displayManager.defaultSession = lib.mkForce "lomiri";
+
+            # Help with OCR
+            fonts.packages = [ pkgs.inconsolata ];
+
+            # Non-QWERTY keymap to test keymap patch
+            services.xserver.xkb.layout = "de";
+          };
+
+        enableOCR = true;
+
+        testScript =
+          { nodes, ... }:
+          ''
+            def wait_for_text(text):
+                """
+                Wait for on-screen text, and try to optimise retry count for slow hardware.
+                """
+                machine.sleep(10)
+                machine.wait_for_text(text)
+
+            start_all()
+            machine.wait_for_unit("multi-user.target")
+
+            # Lomiri in greeter mode should use the correct keymap
+            with subtest("lomiri greeter keymap works"):
+                machine.wait_for_unit("display-manager.service")
+                machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
+
+                # Start page shows current time
+                wait_for_text(r"(AM|PM)")
+                machine.screenshot("lomiri_greeter_launched")
+
+                # Advance to login part
+                machine.send_key("ret")
+                wait_for_text("${description}")
+                machine.screenshot("lomiri_greeter_login")
+
+                # Login
+                machine.send_chars("${pwInput}\n")
+                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+
+                # Output rendering from Lomiri has started when it starts printing performance diagnostics
+                machine.wait_for_console_text("Last frame took")
+                # Look for datetime's clock, one of the last elements to load
+                wait_for_text(r"(AM|PM)")
+                machine.screenshot("lomiri_launched")
+
+            # Lomiri in desktop mode should use the correct keymap
+            with subtest("lomiri session keymap works"):
+                machine.send_key("ctrl-alt-t")
+                wait_for_text(r"(${user}|machine)")
+                machine.screenshot("terminal_opens")
+
+                machine.send_chars("touch ${pwInput}\n")
+                machine.wait_for_file("/home/alice/${pwOutput}", 10)
+
+                machine.send_key("alt-f4")
+          '';
+      }
+    );
 }
