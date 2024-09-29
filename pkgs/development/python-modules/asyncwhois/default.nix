@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pogzyb";
     repo = "asyncwhois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BjHGp94vad5qTvffiU8ZEOxYeXNzQHlNq1SaxviYfps=";
+    hash = "sha256-y5JmAbrk9qJeNYejNcz5nI5bghaetUw1xkD8qgwOkao=";
   };
 
   postPatch = ''
