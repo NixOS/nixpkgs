@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "esptool";
-  version = "4.8.0";
+  version = "4.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BjoeJxtJ2cin6do82MCBjgAaTF0t7zy6JbzhBqnKAw8=";
+    hash = "sha256-cNEg2a3j7Vql06GwVaE9y86UtMkNsUdJYM00OEUra2w=";
   };
 
   postPatch = ''
