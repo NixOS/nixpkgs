@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://www.macbartender.com/Bartender${lib.versions.major finalAttrs.version}/release_notes/";
     license = [ lib.licenses.unfree ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ stepbrobd ];
+    maintainers = with lib.maintainers; [ stepbrobd DimitarNestorov ];
     platforms = [ "aarch64-darwin" "x86_64-darwin" ];
   };
 })
