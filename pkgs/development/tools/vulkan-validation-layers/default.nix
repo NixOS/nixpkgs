@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-FMzQpc7mwZGib544w0Dx6LeGi64cercm5oUW45raasc=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -40,12 +42,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glslang
     libX11
     libXau
     libXdmcp
     libXrandr
     libffi
     libxcb
+    robin-hood-hashing
+    spirv-headers
     spirv-tools
     vulkan-headers
     vulkan-utility-libraries
@@ -53,11 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DGLSLANG_INSTALL_DIR=${glslang}"
-    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
-    "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
-    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ];
