@@ -25050,7 +25050,7 @@ with pkgs;
 
   azuredatastudio = callPackage ../applications/misc/azuredatastudio { };
 
-  miniflux = callPackage ../servers/miniflux {
+  miniflux = callPackage ../by-name/mi/miniflux/package.nix {
     buildGoModule = buildGo123Module;
   };
 
