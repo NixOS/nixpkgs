@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "insulator2";
-  version = "2.12.2";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Bi9GCQr7yox5Plc7o0svRKYi1XoK/HDGj1VbW1z4jac=";
+    hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
 
   # Yarn *really* wants us to use corepack if this is set
@@ -40,21 +40,22 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ih5NSOvYje981SkVfPHm/u2sS1B36kgxpfe9LmQaxdo=";
+    hash = "sha256-5wOgVrcHJVF07QpnN52d4VWEM3FKw3NdLrZ1goAP2oI=";
   };
 
+  cargoHash = "";
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "apache-avro-0.15.0" = "sha256-bjA/x/IDzAYugsc1vn9fBVKaCiLOJYdA1Q9H2pffBh0=";
-      "openssl-src-111.25.0+1.1.1t" = "sha256-1BEtb38ilJJAw35KW+NOIe1rhxxOPsnz0gA2zJnof8c=";
-      "rdkafka-0.29.0" = "sha256-a739Fc+qjmIrK754GT22Gb/Ftd82lLSUzv53Ej7Khu4=";
+      "apache-avro-0.16.0" = "sha256-v4TeJEhLEqQUgj+EHgFRVUGoLC+SpOUhAXngMP7R7nM=";
       "rust-keystore-0.1.1" = "sha256-Cj64uJFZNxnrplhRuqf9/HK/RAaawzfYHo/J9snZ+TU=";
     };
   };
 
   configurePhase = ''
     export HOME=$(mktemp -d)
+    export COREPACK_ROOT="true"
+    export SKIP_YARN_COREPACK_CHECK="true"
     yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
     fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
