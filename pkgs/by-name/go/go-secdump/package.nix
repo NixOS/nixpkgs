@@ -29,5 +29,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "go-secdump";
+    platforms = lib.platforms.linux;
   };
 }
