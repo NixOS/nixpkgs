@@ -63,6 +63,40 @@
 # SDL expression too
 let
   inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
+  dlopenPropagatedBuildInputs =
+    # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
+    lib.optional (openglSupport && !stdenv.isDarwin) libGL
+    # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
+    ++ lib.optionals x11Support [ libX11 ];
+
+  dlopenBuildInputs =
+    lib.optionals alsaSupport [
+      alsa-lib
+      audiofile
+    ]
+    ++ lib.optional dbusSupport dbus
+    ++ lib.optional libdecorSupport libdecor
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional udevSupport udev
+    ++ lib.optionals waylandSupport [
+      wayland
+      libxkbcommon
+    ]
+    ++ lib.optionals x11Support [
+      libICE
+      libXi
+      libXScrnSaver
+      libXcursor
+      libXinerama
+      libXext
+      libXrandr
+      libXxf86vm
+    ]
+    ++ lib.optionals drmSupport [
+      libdrm
+      mesa
+    ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
@@ -106,48 +140,12 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-scanner
     ];
 
-  dlopenPropagatedBuildInputs =
-    [ ]
-    # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
-    ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
-    # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
-    ++ lib.optionals x11Support [ libX11 ];
-
   propagatedBuildInputs =
-    lib.optionals x11Support [ xorgproto ] ++ finalAttrs.dlopenPropagatedBuildInputs;
-
-  dlopenBuildInputs =
-    lib.optionals alsaSupport [
-      alsa-lib
-      audiofile
-    ]
-    ++ lib.optional dbusSupport dbus
-    ++ lib.optional libdecorSupport libdecor
-    ++ lib.optional pipewireSupport pipewire
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional udevSupport udev
-    ++ lib.optionals waylandSupport [
-      wayland
-      libxkbcommon
-    ]
-    ++ lib.optionals x11Support [
-      libICE
-      libXi
-      libXScrnSaver
-      libXcursor
-      libXinerama
-      libXext
-      libXrandr
-      libXxf86vm
-    ]
-    ++ lib.optionals drmSupport [
-      libdrm
-      mesa
-    ];
+    lib.optionals x11Support [ xorgproto ] ++ dlopenPropagatedBuildInputs;
 
   buildInputs =
     [ libiconv ]
-    ++ finalAttrs.dlopenBuildInputs
+    ++ dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
     ++ lib.optionals waylandSupport [ wayland-protocols ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -205,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup =
     let
       rpath = lib.makeLibraryPath (
-        finalAttrs.dlopenPropagatedBuildInputs ++ finalAttrs.dlopenBuildInputs
+        dlopenPropagatedBuildInputs ++ dlopenBuildInputs
       );
     in
     lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
