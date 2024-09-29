@@ -79,3 +79,13 @@ if [ ! "$havePlatformVersionFlag" ]; then
         extraBefore+=(-@darwinPlatform@_version_min "${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@}")
     fi
 fi
+
+mangleVarSingle DEVELOPER_DIR ${role_suffixes[@]+"${role_suffixes[@]}"}
+
+# Allow wrapped bintools to do something useful when no `DEVELOPER_DIR` is set, which can happen when
+# the compiler is run outside of a stdenv or intentionally in an environment with no environment variables set.
+DEVELOPER_DIR=${DEVELOPER_DIR_@suffixSalt@}
+
+# Darwin looks for frameworks in the SDK located at `DEVELOPER_DIR`.
+extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
+extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
