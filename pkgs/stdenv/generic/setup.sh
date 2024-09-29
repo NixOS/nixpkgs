@@ -1071,6 +1071,10 @@ substituteInPlace() {
         fileNames+=("$arg")
         shift
     done
+    if ! [[ "${#fileNames[@]}" -gt 0 ]]; then
+        echo >&2 "substituteInPlace called without any files to operate on (files must come before options!)"
+        return 1
+    fi
 
     for file in "${fileNames[@]}"; do
         substitute "$file" "$file" "$@"
