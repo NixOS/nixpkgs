@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   pytest,
   numpy,
   scipy,
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "sasmodels";
   version = "1.0.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,9 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-fa6/13z11AuTRItZOEmTbjpU1aT6Ur7evi6UvVvXQck=";
   };
 
+  build-system = [ setuptools ];
+
   buildInputs = [ opencl-headers ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     matplotlib
     numpy
