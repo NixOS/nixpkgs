@@ -7175,8 +7175,6 @@ with pkgs;
 
   eff = callPackage ../development/interpreters/eff { };
 
-  eflite = callPackage ../applications/audio/eflite { };
-
   eid-mw = callPackage ../tools/security/eid-mw {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
