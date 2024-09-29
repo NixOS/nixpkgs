@@ -96,7 +96,7 @@ let
     ];
 
     postPatch = ''
-      substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
 
       substituteInPlace configure.ac --replace /usr/include/ ""
     '';
