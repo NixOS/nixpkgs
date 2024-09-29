@@ -13985,6 +13985,12 @@
     githubId = 42215704;
     name = "Moritz Böhme";
   };
+  mortenmunk = {
+    email = "mortenmunk97@gmail.com";
+    github = "MortenMunk";
+    githubId = 92527083;
+    name = "Morten Munk";
+  };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";
     github = "MostAwesomeDude";
