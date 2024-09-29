@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pyogrio";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "pyogrio";
     rev = "v${version}";
-    hash = "sha256-HC7+dDehDwEIDQnCMYrsC1jE78AyfHqEhfOZLYSzTIw=";
+    hash = "sha256-AyKBktZWzUxD1HKKp89gQ97c4WPB5PkXnkFqN+RHx7c=";
   };
 
   postPatch = ''
