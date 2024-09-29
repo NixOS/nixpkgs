@@ -1,4 +1,3 @@
-versionDefinition:
 {
   lib,
   stdenv,
@@ -10,6 +9,7 @@ versionDefinition:
   which,
 
   fetchgit,
+  fetchpatch,
   fetchFromGitHub,
 
   # Xen
@@ -32,21 +32,23 @@ versionDefinition:
   zlib,
   zstd,
 
+  slim ? false,
+
   # Xen Optional
-  withInternalQEMU ? true,
+  withInternalQEMU ? !slim,
   pixman,
   glib,
 
-  withInternalSeaBIOS ? true,
+  withInternalSeaBIOS ? !slim,
   withSeaBIOS ? !withInternalSeaBIOS,
   seabios,
 
-  withInternalOVMF ? true,
+  withInternalOVMF ? !slim,
   withOVMF ? !withInternalOVMF,
   OVMF,
   nasm,
 
-  withInternalIPXE ? true,
+  withInternalIPXE ? !slim,
   withIPXE ? !withInternalIPXE,
   ipxe,
 
@@ -75,7 +77,9 @@ versionDefinition:
   openvswitch,
   util-linux,
   ...
-}@packageDefinition:
+}:
+
+versionDefinition:
 
 let
   #TODO: fix paths instead.
@@ -103,11 +107,22 @@ let
     branch
     version
     latest
+    genericPatchList
     pkg
     ;
 
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.17";
+
+  ## Generic Patch Handling ##
+
+  mappedGenericPatches = builtins.map (patch: upstreamPatches.${patch}) genericPatchList;
+
+  upstreamPatches = import ./patches.nix {
+    inherit lib fetchpatch;
+  };
+
+  upstreamPatchList = lib.lists.flatten mappedGenericPatches;
 
   ## Pre-fetched Source Handling ##
 
@@ -336,7 +351,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Generic Xen patches that apply to all Xen versions.
     [ ./0000-xen-ipxe-src-generic.patch ]
     # Gets the patches from the pkg.xen.patches attribute from the versioned files.
-    ++ lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.xen) pkg.xen.patches;
+    ++ lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.xen) pkg.xen.patches
+    ++ upstreamPatchList;
 
   nativeBuildInputs =
     [
@@ -652,16 +668,28 @@ stdenv.mkDerivation (finalAttrs: {
           "Xen Project Hypervisor"
           # The "and related components" addition is automatically hidden if said components aren't being built.
           + lib.strings.optionalString (prefetchedSources != { }) " and related components"
-          # To alter the description inside the paranthesis, edit ./packages.nix.
-          + lib.strings.optionalString (lib.attrsets.hasAttrByPath [
-            "meta"
-            "description"
-          ] packageDefinition) " (${packageDefinition.meta.description})";
+          + " (${if slim then "Without Internal Components" else "Standard"})";
 
         # Long description for Xen.
         longDescription =
-          # Starts with the longDescription from ./packages.nix.
-          (packageDefinition.meta.longDescription or "")
+          (
+            if slim then
+              ''
+                Slimmed-down version of the Xen Project Hypervisor that reuses nixpkgs packages
+                as much as possible. Instead of using the Xen Project forks for various internal
+                components, this version uses `seabios`, `ovmf` and `ipxe` from Nixpkgs. These
+                components may ocasionally get out of sync with the hypervisor itself, but this
+                builds faster and uses less space than the default derivation.
+              ''
+            else
+              ''
+                Standard version of the Xen Project Hypervisor. Uses forks of QEMU, SeaBIOS,
+                OVMF and iPXE provided by the Xen Project. This provides the vanilla Xen
+                experience, but wastes space and build time. A typical NixOS setup that runs
+                lots of VMs will usually need to build two different versions of QEMU when using
+                this Xen derivation (one fork and upstream).
+              ''
+          )
           + lib.strings.optionalString (!withInternalQEMU) (
             "\nUse with `qemu_xen_${lib.strings.stringAsChars (x: if x == "." then "_" else x) branch}`"
             + lib.strings.optionalString latest " or `qemu_xen`"
