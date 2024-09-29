@@ -6,12 +6,13 @@
   polib,
   pythonOlder,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-rosetta";
   version = "0.10.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-b+iCUA3i3Ej6S5XcGQhBIEIJFx6vOL2sq3xkkA9wqek=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
     polib
     requests
