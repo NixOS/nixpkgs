@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ripser";
-  version = "0.6.8";
+  version = "0.6.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J5ctOvGtmg/e2ls7fN59LR4AbHedC9gKk6f8jIDIoFI=";
+    hash = "sha256-3Mr6+XrSOVvGbLN25fvg9vJkNyspj9CT5BBxMsH3lIQ=";
   };
 
   nativeBuildInputs = [ cython ];
