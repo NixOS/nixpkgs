@@ -385,9 +385,11 @@
     - changed-files:
       - any-glob-to-any-file:
         - nixos/modules/virtualisation/xen*
-        - pkgs/applications/virtualization/xen/**
+        - pkgs/by-name/xe/xen/*
+        - pkgs/by-name/qe/qemu_xen/*
         - pkgs/by-name/xe/xen-guest-agent/*
         - pkgs/by-name/xt/xtf/*
+        - pkgs/build-support/xen/*
         - pkgs/development/ocaml-modules/xen*/*
         - pkgs/development/ocaml-modules/vchan/*
 
