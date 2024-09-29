@@ -78,12 +78,28 @@ if [ -e @out@/nix-support/cc-cflags-before ]; then
     NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="$(< @out@/nix-support/cc-cflags-before) $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
 fi
 
-# Only add darwin min version flag if a default darwin min version is set,
+# Only add darwin min version flag and set up `DEVELOPER_DIR` if a default darwin min version is set,
 # which is a signal that we're targetting darwin.
 if [ "@darwinMinVersion@" ]; then
     mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
 
     NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="-m@darwinPlatformForCC@-version-min=${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
+
+    # `DEVELOPER_DIR` is used to dynamically locate libSystem (and the SDK frameworks) based on the SDK at that path.
+    mangleVarSingle DEVELOPER_DIR ${role_suffixes[@]+"${role_suffixes[@]}"}
+
+    # Allow wrapped compilers to do something useful when no `DEVELOPER_DIR` is set, which can happen when
+    # the compiler is run outside of a stdenv or intentionally in an environment with no environment variables set.
+    DEVELOPER_DIR=${DEVELOPER_DIR_@suffixSalt@}
+
+    # xcbuild needs `SDKROOT` to be the name of the SDK, which it sets in its own wrapper,
+    # but compilers expect it to point to the absolute path.
+    SDKROOT="$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+
+    # Set up various library paths since compilers may not support (or may have disabled) finding them in the sysroot.
+    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@+=" -isysroot $SDKROOT"
+    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -idirafter $SDKROOT/usr/include"
+    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -iframework $SDKROOT/System/Library/Frameworks"
 fi
 
 # That way forked processes will not extend these environment variables again.
