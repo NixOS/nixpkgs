@@ -101,7 +101,7 @@ in
             [ids]
             ${lib.concatStringsSep "\n" options.ids}
 
-            ${lib.generators.toINI {} options.settings}
+            ${lib.concatLines (lib.attrsets.mapAttrsToList (section: binds: "[${section}]\n"+(lib.concatLines (lib.attrsets.mapAttrsToList (key: value: "${key} = ${value}") binds))) options.settings)}
             ${options.extraConfig}
           '';
         })
