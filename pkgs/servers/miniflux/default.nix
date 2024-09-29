@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch2, installShellFiles, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests, nix-update-script }:
 
 buildGoModule rec {
   pname = "miniflux";
@@ -26,7 +26,10 @@ buildGoModule rec {
     installManPage miniflux.1
   '';
 
-  passthru.tests = nixosTests.miniflux;
+  passthru = {
+    tests = nixosTests.miniflux;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Minimalist and opinionated feed reader";
