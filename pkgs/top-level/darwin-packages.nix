@@ -32,6 +32,8 @@ let
           pkg
       ) (old.extraBuildInputs or [ ]);
     });
+
+  mkStub = pkgs.callPackage ../os-specific/darwin/apple-sdk/mk-stub.nix { };
 in
 
 makeScopeWithSplicing' {
