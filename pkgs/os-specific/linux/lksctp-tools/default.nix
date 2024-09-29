@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lksctp-tools";
-  version = "1.0.20";
+  version = "1.0.21";
 
   src = fetchFromGitHub {
     owner = "sctp";
     repo = "lksctp-tools";
     rev = "v${version}";
-    hash = "sha256-h+wMrnx+u/4feNjZr2Gc+y6/80qJ8IVXsrDvHyixMxo=";
+    hash = "sha256-+vbdNvHuJLYp901QgtBzMejlbzMyr9Z1eXxR3Zy7eAE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
