@@ -15,8 +15,7 @@ buildGoModule rec {
     hash = "sha256-M1OAMppeY13fXclycUXwp2H1GSLVJRNV11QxAvNLQuQ=";
   };
 
-  # many tests rely on writable $HOME/.bitrise and require network access
-  doCheck = false;
+  checkFlags = ["-v" "-timeout 20s" "-skip=^Test(SkipIfEmpty|DeleteEnvironment|StepOutputsInTemplate|FailedStepOutputs|BitriseSourceDir|EnvOrders|0Steps1Workflows|1Workflows|3Workflows|BuildStatusEnv|Fail|BuildFailedMode|WorkflowEnvironments|WorkflowEnvironmentOverWrite|TargetDefinedWorkflowEnvironment|StepInputEnvironment|StepOutputEnvironment|ExpandEnvs|EvaluateInputs|InvalidStepID|PluginTriggered|BuildFailedModeForStepBundles|Success|ParseAndValidatePluginFromYML|DownloadPluginBin|ClonePluginSrc|StepmanJSONStepLibStepInfo|MoveFileDifferentDevices|0Steps3WorkflowsBeforeAfter|InitPaths)$"];
 
   vendorHash = null;
   ldflags = [
