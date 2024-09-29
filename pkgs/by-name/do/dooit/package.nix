@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchPypi,
   dooit,
   python311,
   testers,
