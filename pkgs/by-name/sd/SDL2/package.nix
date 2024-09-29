@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
 
-  dontDisableStatic = if withStatic then 1 else 0;
+  dontDisableStatic = withStatic;
 
   strictDeps = true;
 
@@ -181,14 +181,13 @@ stdenv.mkDerivation (finalAttrs: {
   # X11 dependencies.
   # For static linking, it is better to rely on `pkg-config` `.pc`
   # files.
-  postInstall = ''
-    if [ "$dontDisableStatic" -eq "1" ]; then
-      rm $out/lib/*.la
-    else
-      rm $out/lib/*.a
-    fi
-    moveToOutput bin/sdl2-config "$dev"
-  '';
+  postInstall =
+    (if withStatic then
+      ''rm $out/lib/*.la''
+     else
+       ''rm $out/lib/*.a'')
+    + "\n" +
+    ''moveToOutput bin/sdl2-config "$dev"'';
 
   # SDL is weird in that instead of just dynamically linking with
   # libraries when you `--enable-*` (or when `configure` finds) them
