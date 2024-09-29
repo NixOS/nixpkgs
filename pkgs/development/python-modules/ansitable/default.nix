@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ansitable";
-  version = "0.10.0";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ehPPpZ9C/Nrly9WoJJfZtv2YfZ9MEcQsKtuxNpcJe7U=";
+    hash = "sha256-MQ6VLjFDt/dEHDK8PbQsBdfzogJCm+pzyVYDbqkDOao=";
   };
 
   nativeBuildInputs = [ setuptools ];
