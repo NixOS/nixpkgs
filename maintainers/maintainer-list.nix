@@ -19528,6 +19528,13 @@
     github = "Simarra";
     githubId = 14372987;
   };
+  simonbabovic = {
+    name = "Simon Babovic";
+    email = "simon@babovic.at";
+    matrix = "@simon:babovic.at";
+    github = "SimShady";
+    githubId = 18537405;
+  };
   simonchatts = {
     email = "code@chatts.net";
     github = "simonchatts";

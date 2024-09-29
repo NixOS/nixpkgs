@@ -13973,6 +13973,8 @@ self: super: with self; {
 
   scikit-misc = callPackage ../development/python-modules/scikit-misc { };
 
+  scikit-network = callPackage ../development/python-modules/scikit-network { };
+
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
   scikit-posthocs = callPackage ../development/python-modules/scikit-posthocs { };
