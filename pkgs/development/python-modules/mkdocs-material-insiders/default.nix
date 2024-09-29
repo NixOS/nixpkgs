@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.5.38-insiders-4.53.13";
+  version = "9.5.39-insiders-4.53.14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,19 +45,19 @@ buildPythonPackage rec {
     repo = "mkdocs-material-insiders";
     private = true;
     rev = "refs/tags/${version}";
-    hash = "sha256-obfepPMQnq8m3P4/kT0nPlIF8w441xqhAWOFro7cHhU=";
+    hash = "sha256-MJGv9r7T/kkaD76At3nLEaTO1daBJiNPypnRIIN4MSU=";
   };
 
   disabled = !pythonAtLeast "3.8";
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-requirements-txt
     hatch-nodejs-version
     trove-classifiers
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     markdown
     mkdocs
@@ -72,7 +72,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     recommended = [
       mkdocs-minify-plugin
       mkdocs-redirects
