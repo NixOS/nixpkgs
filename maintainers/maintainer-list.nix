@@ -6933,6 +6933,12 @@
       { fingerprint = "elY15tXap1tddxbBVoUoAioe1u0RDWti5rc9cauSmwo"; }
     ];
   };
+  figboy9 = {
+    email = "figboy9@tuta.io";
+    github = "figboy9";
+    githubId = 52276064;
+    name = "figboy9";
+  };
   figsoda = {
     email = "figsoda@pm.me";
     matrix = "@figsoda:matrix.org";
