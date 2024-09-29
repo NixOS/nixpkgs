@@ -57,6 +57,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonImportsCheck = [ "patoolib" ];
+
   nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 
   disabledTests = [
