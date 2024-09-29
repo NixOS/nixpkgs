@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "sigstore-rekor-types";
-  version = "0.0.11";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = "sigstore-rekor-types";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oOFdRiDp9USc3A+aaPExprEO2i/RERNahiyi2kVpkns=";
+    hash = "sha256-vZNzNu0Ks0Xp/v406jVqPV9FuHgXORMa7NzmXeWoa+Q=";
   };
 
   build-system = [ flit-core ];
