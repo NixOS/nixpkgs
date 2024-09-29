@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which dieHook ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     echo 'HAVE_SANDBOX_INIT=0' > configure.local
   '';
 
