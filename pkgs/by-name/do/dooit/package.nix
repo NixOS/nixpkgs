@@ -33,7 +33,15 @@ python3.pkgs.buildPythonApplication rec {
     pyperclip
     python-dateutil
     pyyaml
-    textual
+    (textual.overridePythonAttrs (oldAttrs: {
+      version = "0.47.0";
+      src = fetchFromGitHub {
+        owner = "Textualize";
+        repo = "textual";
+        rev = "refs/tags/v0.47.0";
+        hash = "sha256-Q3f+Uu+t7rhkifvL6hl6upUsogIvUSki2YOf1NFnXPw=";
+      };
+    }))
     tzlocal
   ];
 
