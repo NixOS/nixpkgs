@@ -1,11 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
-, gpgme
-, libgpg-error
-, pkg-config
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  darwin,
+  gpgme,
+  libgpg-error,
+  pkg-config,
+  rustPlatform,
 }:
 
 let
@@ -24,14 +27,23 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-L7GgPocj32zAfR27dgKK7/OM106cATdCqufSvG3MFYQ=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
-  buildInputs = [ libgpg-error gpgme ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [
+    libgpg-error
+    gpgme
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+
+  postInstall = ''
+    installManPage man/*.1
+  '';
 
   meta = with lib; {
-    homepage    = "https://envio-cli.github.io/home";
-    changelog   = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
+    homepage = "https://envio-cli.github.io/home";
+    changelog = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
     mainProgram = "envio";
     longDescription = ''
@@ -40,8 +52,11 @@ rustPlatform.buildRustPackage rec {
       switch between different configurations and apply them to their current
       environment.
     '';
-    license     = with licenses; [ mit asl20 ];
-    platforms   = platforms.unix;
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ afh ];
   };
 }
