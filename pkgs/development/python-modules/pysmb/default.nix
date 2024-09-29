@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pyasn1,
   pythonOlder,
   tqdm,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pysmb";
   version = "1.2.10";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-Zid6KGNr7BBuyHaxdXkhRC/Ug93HmVXKMtreFf+M7OE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyasn1
     tqdm
   ];
