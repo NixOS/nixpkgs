@@ -8,7 +8,9 @@ in {
   options = {
 
     services.fstrim = {
-      enable = lib.mkEnableOption "periodic SSD TRIM of mounted partitions in background";
+      enable = (lib.mkEnableOption "periodic SSD TRIM of mounted partitions in background" // {
+        default = true;
+      });
 
       interval = lib.mkOption {
         type = lib.types.str;
