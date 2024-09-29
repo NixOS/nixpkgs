@@ -2,21 +2,22 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   lib,
   git,
 }:
 buildGoModule rec {
   pname = "garble";
-  version = "0.8.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "burrowers";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-f7coWG1CS4UL8GGqwADx5CvIk2sPONPlWW+JgRhFsb8=";
+    repo = "garble";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-FtI5lAeqjRPN47iC46bcEsRLQb7mItw4svsnLkRpNxY=";
   };
 
-  vendorHash = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
+  vendorHash = "sha256-mSdajYiMEg2ik0ocfmHK+XddEss1qLu6rDwzjocaaW0=";
 
   # Used for some of the tests.
   nativeCheckInputs = [ git ];
@@ -26,11 +27,12 @@ buildGoModule rec {
     rm testdata/script/asm.txtar
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Obfuscate Go code by wrapping the Go toolchain";
     homepage = "https://github.com/burrowers/garble/";
     maintainers = with lib.maintainers; [ davhau ];
     license = lib.licenses.bsd3;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/garble.x86_64-darwin
   };
 }
