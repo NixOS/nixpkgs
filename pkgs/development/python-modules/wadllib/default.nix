@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "wadllib";
-  version = "1.3.6";
+  version = "1.3.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acd9ad6a2c1007d34ca208e1da6341bbca1804c0e6850f954db04bdd7666c5fc";
+    sha256 = "sha256-wL4oM4myKP/ZPNru+44HDyLd98tcd+SMaMOWD98lmEQ=";
   };
 
   propagatedBuildInputs = [
