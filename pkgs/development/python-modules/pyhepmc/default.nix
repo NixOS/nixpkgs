@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyhepmc";
-  version = "2.13.2";
+  version = "2.13.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-M18Bq6WrAINpgPx5+uh8dufPBxIklRHpbBWUYMC8v10=";
+    hash = "sha256-86LDk0G9ckbV+/pNtLJa9EsA6plxerKI3ygxq680IKo=";
     fetchSubmodules = true;
   };
 
