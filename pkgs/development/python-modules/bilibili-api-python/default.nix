@@ -23,12 +23,12 @@
 }:
 buildPythonPackage rec {
   pname = "bilibili-api-python";
-  version = "16.2.0";
+  version = "16.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ecv9lzp2L13seBosahgnglaZP8YZCD/13nlTPP8LCs0=";
+    hash = "sha256-mwhyFc3b1qA7W76gaBcAup+Wca6gQAdRwZJaZXOHqCw=";
   };
 
   postPatch = ''
