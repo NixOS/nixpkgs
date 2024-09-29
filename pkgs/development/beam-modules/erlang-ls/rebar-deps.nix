@@ -14,6 +14,16 @@ let
       };
       beamDeps = [ ];
     };
+    json_polyfill = builder {
+      name = "json_polyfill";
+      version = "0.1.4";
+      src = fetchHex {
+        pkg = "json_polyfill";
+        version = "0.1.4";
+        sha256 = "sha256-SMOX7iVH+kWe3gGjDsDoVxer7TAQhnpj7qrF8gMnQwM=";
+      };
+      beamDeps = [ ];
+    };
     zipper = builder {
       name = "zipper";
       version = "1.0.1";
