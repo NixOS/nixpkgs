@@ -5219,10 +5219,6 @@ with pkgs;
 
   hebcal = callPackage ../tools/misc/hebcal { };
 
-  hebbot = callPackage ../servers/matrix-hebbot {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   hexio = callPackage ../development/tools/hexio { };
 
   hexyl = callPackage ../tools/misc/hexyl { };

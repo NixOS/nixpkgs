@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, pkg-config
-, cmake
-, openssl
-, autoconf
-, automake
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  pkg-config,
+  cmake,
+  openssl,
+  autoconf,
+  automake,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "haecker-felix";
     repo = "hebbot";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-zcsoTWpNonkgJLTC8S9Nubnzdhj5ROL/UGNWUsLxLgs=";
   };
 
@@ -28,17 +29,26 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config cmake ] ++
-    lib.optionals stdenv.hostPlatform.isDarwin [ autoconf automake ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      autoconf
+      automake
+    ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = [
+    openssl
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  meta = with lib; {
+  meta = {
     description = "Matrix bot which can generate \"This Week in X\" like blog posts ";
     homepage = "https://github.com/haecker-felix/hebbot";
     changelog = "https://github.com/haecker-felix/hebbot/releases/tag/v${version}";
-    license = with licenses; [ agpl3Only ];
+    license = with lib.licenses; [ agpl3Only ];
     mainProgram = "hebbot";
-    maintainers = with maintainers; [ a-kenji ];
+    maintainers = with lib.maintainers; [ a-kenji ];
   };
 }
