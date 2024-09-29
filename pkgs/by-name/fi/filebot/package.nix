@@ -69,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           chromaprint
-          libmediainfo
           openjdk17
           p7zip
           unrar
@@ -78,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
 
-    # Delete the built-in libmediainfo so the program has to use the nixpkgs version
+    # Delete the built-in libmediainfo so the program has to use the symlinked nixpkgs version
     rm $out/opt/lib/**/libmediainfo.so
     ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-aarch64/libmediainfo.so
     ln -s ${libmediainfo.outPath}/lib/libmediainfo.so $out/opt/lib/Linux-armv7l/libmediainfo.so
