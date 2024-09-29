@@ -63,6 +63,8 @@ buildPythonPackage rec {
       \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
   '';
 
+  pythonImportsCheck = [ "pivy" ];
+
   meta = with lib; {
     homepage = "https://github.com/coin3d/pivy/";
     description = "Python binding for Coin";
