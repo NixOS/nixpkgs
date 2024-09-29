@@ -1,4 +1,5 @@
 { stdenv
+, stdenvNoCC
 , lib
 , callPackage
 , fetchurl
@@ -70,6 +71,7 @@ in
         url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
         sha256 = "0cxpv9q681nk7gjcs1msn2rnj8i86hlrkb0x4ja1id42aj4xwrqy";
       };
+      stdenv = stdenvNoCC;
     };
 
     tests = { inherit (nixosTests) vscode-remote-ssh; };
