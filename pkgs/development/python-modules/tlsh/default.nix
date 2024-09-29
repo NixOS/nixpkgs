@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tlsh";
   version = "4.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trendmicro";
@@ -18,6 +19,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  build-system = [ setuptools ];
 
   # no test data
   doCheck = false;
