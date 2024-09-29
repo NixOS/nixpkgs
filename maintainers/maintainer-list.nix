@@ -12916,6 +12916,12 @@
     github = "marijanp";
     githubId = 13599169;
   };
+  mariunaise = {
+    name = "Marius Drechsler";
+    email = "marius@nixfunktioniert.de";
+    github = "mariunaise";
+    githubId = 120025370;
+  };
   marius851000 = {
     email = "mariusdavid@laposte.net";
     name = "Marius David";
