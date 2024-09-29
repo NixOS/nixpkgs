@@ -1,34 +1,51 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
+  setuptools,
+  docutils,
+  importlib-metadata,
   oset,
   pybtex,
   pybtex-docutils,
   sphinx,
+  sphinx-autoapi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bibtex";
-  version = "2.6.2";
-  format = "setuptools";
+  version = "2.6.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9IevaUM28ov7fWoXBwlTp9JkvsQwAKI3lyQnT1+NcK4=";
+  src = fetchFromGitHub {
+    owner = "mcmtroffaes";
+    repo = "sphinxcontrib-bibtex";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cqz5Jamtlflo5rFhWPCPlYoymApUtXPG4oTRjfDI+WY=";
   };
 
-  propagatedBuildInputs = [
-    oset
-    pybtex
-    pybtex-docutils
-    sphinx
-  ];
+  build-system = [ setuptools ];
 
-  doCheck = false;
+  dependencies =
+    [
+      docutils
+      oset
+      pybtex
+      pybtex-docutils
+      sphinx
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+    ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    sphinx-autoapi
+  ];
 
   pythonImportsCheck = [ "sphinxcontrib.bibtex" ];
 
