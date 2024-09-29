@@ -36,6 +36,7 @@
   alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
   dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
   drmSupport ? false,
+  enableSdltest ? stdenv.hostPlatform.isDarwin,
   ibusSupport ? false,
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   libdecorSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
@@ -162,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!x11Support) [ "--without-x" ]
     ++ lib.optionals alsaSupport [ "--with-alsa-prefix=${alsa-lib.out}/lib" ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ "--disable-video-opengles" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-sdltest" ];
+    ++ lib.optionals (!enableSdltest) [ "--disable-sdltest" ];
 
   dontDisableStatic = withStatic;
 
