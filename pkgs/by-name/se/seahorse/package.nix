@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/gpg_check_version.py
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
+  env = lib.optionalAttrs (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14")) {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-function-declaration"
       "-Wno-error=int-conversion"
