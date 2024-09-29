@@ -343,6 +343,7 @@
   ./security/auditd.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
+  ./security/cyber-toolnix
   ./security/dhparams.nix
   ./security/doas.nix
   ./security/duosec.nix
