@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoPatchelfHook
 , xclip
-,
+, stdenv
 }:
 
 buildGoModule rec {
@@ -27,7 +27,7 @@ buildGoModule rec {
     "-X=github.com/one2nc/cloudlens/cmd.date=1970-01-01T00:00:00Z"
   ];
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = [ xclip ];
 
