@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-s3transfer";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_s3transfer";
     inherit version;
-    hash = "sha256-AhVMzkZSgoetdq0aAVOEDgSSI5oIh+iDNGbsz4S5jaA=";
+    hash = "sha256-YBZ6O/tcU27GzbWBj3+aKO3KncPgtf+FrjdFJvxeV24=";
   };
 
   nativeBuildInputs = [ poetry-core ];
