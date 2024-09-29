@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "7.1.0";
+  version = "7.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-t4k4uSbujV8CD8R3LUhwRYBaVd260uzyHG1gk43H/NI=";
+    hash = "sha256-UJ7LKrdwcdtRN8ZV4kzrPu5m57vGV0Fl0NEU2fxLvmg=";
   };
 
   nativeBuildInputs = [
