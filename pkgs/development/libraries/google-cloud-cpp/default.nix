@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, substituteAll
 , c-ares
 , cmake
 , crc32c
@@ -20,40 +20,32 @@
 }:
 let
   # defined in cmake/GoogleapisConfig.cmake
-  googleapisRev = "85f8c758016c279fb7fa8f0d51ddc7ccc0dd5e05";
+  googleapisRev = "6a474b31c53cc1797710206824a17b364a835d2d";
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-4Qiz0pBgW3OZi+Z8Zq6k9E94+8q6/EFMwPh8eQxDjdI=";
+    hash = "sha256-t5oX6Gc1WSMSBDftXA9RZulckUenxOEHBYeq2qf8jnY=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "2.14.0";
+  version = "2.29.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "sha256-0SoOaAqvk8cVC5W3ejTfe4O/guhrro3uAzkeIpAkCpg=";
+    sha256 = "sha256-gCq8Uc+s/rnJWsGlI7f+tvAZHH8K69+H/leUOKE2GCY=";
   };
 
   patches = [
-    # https://github.com/googleapis/google-cloud-cpp/pull/12554, tagged in 2.16.0
-    (fetchpatch {
-      name = "prepare-for-GCC-13.patch";
-      url = "https://github.com/googleapis/google-cloud-cpp/commit/ae30135c86982c36e82bb0f45f99baa48c6a780b.patch";
-      hash = "sha256-L0qZfdhP8Zt/gYBWvJafteVgBHR8Kup49RoOrLDtj3k=";
+    (substituteAll {
+      src = ./hardcode-googleapis-path.patch;
+      url = googleapis;
     })
   ];
-
-  postPatch = ''
-    substituteInPlace external/googleapis/CMakeLists.txt \
-      --replace "https://github.com/googleapis/googleapis/archive/\''${_GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
-    sed -i '/https:\/\/storage.googleapis.com\/cloud-cpp-community-archive\/com_google_googleapis/d' external/googleapis/CMakeLists.txt
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -77,9 +69,6 @@ stdenv.mkDerivation rec {
     openssl
     protobuf
   ];
-
-  # https://hydra.nixos.org/build/222679737/nixlog/3/tail
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=maybe-uninitialized";
 
   doInstallCheck = true;
 
