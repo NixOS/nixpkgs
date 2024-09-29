@@ -1,36 +1,77 @@
 {
+  lib,
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  lib,
+  diffoscope,
   git,
+  versionCheckHook,
+  replaceVars,
+  nix-update-script,
 }:
+
 buildGoModule rec {
   pname = "garble";
-  version = "0.8.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "burrowers";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-f7coWG1CS4UL8GGqwADx5CvIk2sPONPlWW+JgRhFsb8=";
+    repo = "garble";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FtI5lAeqjRPN47iC46bcEsRLQb7mItw4svsnLkRpNxY=";
   };
 
-  vendorHash = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
+  __darwinAllowLocalNetworking = true;
+
+  ldflags = [
+    "-buildid=00000000000000000000" # length=20
+  ];
+
+  patches = [
+    (replaceVars ./0001-Add-version-info.patch {
+      inherit version;
+    })
+  ];
+
+  checkFlags = [
+    "-skip"
+    "TestScript/gogarble"
+  ];
+
+  vendorHash = "sha256-mSdajYiMEg2ik0ocfmHK+XddEss1qLu6rDwzjocaaW0=";
 
   # Used for some of the tests.
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    diffoscope
+    git
+    versionCheckHook
+  ];
 
-  preBuild = lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-    # The test assumex amd64 assembly
-    rm testdata/script/asm.txtar
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export WORK=$(mktemp -d)
   '';
+
+  # Several tests fail with
+  # FAIL: testdata/script/goenv.txtar:27: "$WORK/.temp 'quotes' and spaces" matches "garble|importcfg|cache\\.gob|\\.go"
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "version" ];
+  doInstallCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Obfuscate Go code by wrapping the Go toolchain";
     homepage = "https://github.com/burrowers/garble/";
-    maintainers = with lib.maintainers; [ davhau ];
+    maintainers = with lib.maintainers; [
+      davhau
+      bot-wxt1221
+    ];
     license = lib.licenses.bsd3;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/garble.x86_64-darwin
+    mainProgram = "garble";
   };
 }
