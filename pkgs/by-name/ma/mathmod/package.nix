@@ -1,10 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsForQt5,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "mathmod";
   version = "11.1-unstable-2024-01-26";
 
@@ -21,7 +22,10 @@ mkDerivation {
     substituteInPlace MathMod.pro --subst-var out
   '';
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = with libsForQt5; [
+    qmake
+    wrapQtAppsHook
+  ];
 
   meta = {
     description = "Mathematical modelling software";
