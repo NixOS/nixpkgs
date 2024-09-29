@@ -9,6 +9,7 @@
   CoreVideo,
   fftwSinglePrec,
   netcdf,
+  libxml2,
   pcre,
   gdal,
   blas,
@@ -25,7 +26,15 @@
    - graphicsmagick for gif output
 */
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  # Certainly not an ideal situation, See:
+  # https://github.com/NixOS/nixpkgs/pull/340707#issuecomment-2361894717
+  netcdf' = netcdf.override {
+    libxml2 = libxml2.override {
+      enableHttp = true;
+    };
+  };
+in stdenv.mkDerivation (finalAttrs: {
   pname = "gmt";
   version = "6.4.0";
   src = fetchFromGitHub {
@@ -43,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       curl
       gdal
-      netcdf
+      netcdf'
       pcre
       dcw-gmt
       gshhg-gmt
@@ -78,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCOPY_DCW:BOOL=FALSE"
       "-DDCW_ROOT=${dcw-gmt.out}/share/dcw-gmt"
       "-DGDAL_ROOT=${gdal.out}"
-      "-DNETCDF_ROOT=${netcdf.out}"
+      "-DNETCDF_ROOT=${netcdf'.out}"
       "-DPCRE_ROOT=${pcre.out}"
       "-DGMT_INSTALL_TRADITIONAL_FOLDERNAMES:BOOL=FALSE"
       "-DGMT_ENABLE_OPENMP:BOOL=TRUE"
