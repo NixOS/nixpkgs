@@ -12297,6 +12297,8 @@ with pkgs;
   signal-cli = callPackage ../applications/networking/instant-messengers/signal-cli { };
 
   inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop signal-desktop-beta;
+  signal-desktop-apple-emoji = signal-desktop.override { withUnfree = true; };
+  signal-desktop-beta-apple-emoji = signal-desktop-beta.override { withUnfree = true; };
 
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 

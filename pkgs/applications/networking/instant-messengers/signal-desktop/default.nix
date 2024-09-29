@@ -1,13 +1,32 @@
 { hostPlatform, callPackage }:
 {
-  signal-desktop =
-    if hostPlatform.system == "aarch64-linux" then
-      callPackage ./signal-desktop-aarch64.nix { }
+  signal-desktop = callPackage (
+    {
+      withUnfree ? false,
+    }:
+    if !withUnfree then
+      if hostPlatform.system == "aarch64-linux" then
+        callPackage ./signal-desktop-aarch64.nix { }
+      else
+        callPackage ./signal-desktop.nix { }
+    else if hostPlatform.system == "aarch64-linux" then
+      callPackage ./signal-desktop-aarch64-apple-emoji.nix { }
     else
-      callPackage ./signal-desktop.nix { };
-  signal-desktop-beta = (callPackage ./signal-desktop-beta.nix { }).overrideAttrs (old: {
-    meta = old.meta // {
-      platforms = [ "x86_64-linux" ];
-    };
-  });
+      callPackage ./signal-desktop-apple-emoji.nix { }
+  ) { };
+  signal-desktop-beta =
+    (callPackage (
+      {
+        withUnfree ? false,
+      }:
+      if !withUnfree then
+        callPackage ./signal-desktop-beta.nix { }
+      else
+        callPackage ./signal-desktop-beta-apple-emoji.nix { }
+    ) { }).overrideAttrs
+      (old: {
+        meta = old.meta // {
+          platforms = [ "x86_64-linux" ];
+        };
+      });
 }
