@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
   attrs,
   docopt,
   pillow,
@@ -19,7 +20,7 @@
 buildPythonPackage rec {
   pname = "psd-tools";
   version = "1.10.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -34,9 +35,12 @@ buildPythonPackage rec {
     sed -i "/addopts =/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    setuptools
+    cython
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aggdraw
     attrs
     docopt
