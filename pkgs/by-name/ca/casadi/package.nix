@@ -10,7 +10,6 @@
   cplex,
   fatrop,
   fetchFromGitHub,
-  fetchpatch,
   gurobi,
   highs,
   hpipm,
@@ -37,30 +36,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.6.6";
+  version = "3.6.7";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
     rev = finalAttrs.version;
-    hash = "sha256-T4aaBS918NbUEwWkSx0URi0W9uhCB8IFmzRcOR7T8Og=";
+    hash = "sha256-Mft0qhjdAbU82RgjYuKue5p7EqbTbt3ii5yXSsCFHrQ=";
   };
-
-  patches = [
-    # Fix build with system spral
-    # This was merged upstream and can be removed on next release
-    (fetchpatch {
-      name = "add-FindSPRAL.cmake.patch";
-      url = "https://github.com/casadi/casadi/pull/3792/commits/28bc1b03e67ae06dea0c8557057020f5651be7ad.patch";
-      hash = "sha256-t0+RnXoFakmoX93MhN08RWAbCg6Nerh42LicBBgAkRQ=";
-    })
-    # Fix build with fatrop
-    # This was merged upstream and can be removed on next release
-    (fetchpatch {
-      url = "https://github.com/casadi/casadi/pull/3832/commits/4d4edb21521817fc980da5e570a607ad2f15aaa2.patch";
-      hash = "sha256-ui8pMaBz848Yv5xNlruPp9IFUhc97ZgvXGXqpxJG1Es=";
-    })
-  ];
 
   postPatch =
     ''
