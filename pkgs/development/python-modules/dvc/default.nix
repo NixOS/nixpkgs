@@ -124,14 +124,14 @@ buildPythonPackage rec {
       voluptuous
       zc-lockfile
     ]
-    ++ lib.optionals enableGoogle passthru.optional-dependencies.gs
-    ++ lib.optionals enableAWS passthru.optional-dependencies.s3
-    ++ lib.optionals enableAzure passthru.optional-dependencies.azure
-    ++ lib.optionals enableSSH passthru.optional-dependencies.ssh
+    ++ lib.optionals enableGoogle optional-dependencies.gs
+    ++ lib.optionals enableAWS optional-dependencies.s3
+    ++ lib.optionals enableAzure optional-dependencies.azure
+    ++ lib.optionals enableSSH optional-dependencies.ssh
     ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     azure = [ dvc-azure ];
     gdrive = [ dvc-gdrive ];
     gs = [ dvc-gs ];

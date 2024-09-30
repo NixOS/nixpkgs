@@ -657,5 +657,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "python3" ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
     mainProgram = executable;
+    maintainers = lib.teams.python.members;
   };
 })

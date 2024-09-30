@@ -62,7 +62,7 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       pre-commit
       pyscaffoldext-cookiecutter

@@ -74,7 +74,7 @@ in
         /*uid = config.ids.uids.radius;*/
         description = "Radius daemon user";
         isSystemUser = true;
-        groups = "radius";
+        group = "radius";
       };
       groups.radius = {};
     };

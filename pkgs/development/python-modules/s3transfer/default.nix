@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "s3transfer" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crt = [ botocore.optional-dependencies.crt ];
   };
 

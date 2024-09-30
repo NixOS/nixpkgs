@@ -12,6 +12,12 @@
 , vulkan-loader
 , glew
 , libGL
+, libICE
+, libSM
+, libXcursor
+, libXext
+, libXi
+, libXrandr
 , udev
 , SDL2
 , SDL2_mixer
@@ -49,6 +55,12 @@ buildDotnetModule rec {
 
     # Avalonia UI
     glew
+    libICE
+    libSM
+    libXcursor
+    libXext
+    libXi
+    libXrandr
 
     # Headless executable
     libGL

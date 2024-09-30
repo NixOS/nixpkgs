@@ -33,7 +33,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     optional = [
       numpy
       python-dateutil

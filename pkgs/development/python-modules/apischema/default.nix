@@ -22,14 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-omw6znk09r2SigPfaVrtA6dd8KeSfjaPgGfK12ty23g=";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     graphql = [ graphql-core ];
   };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apischema" ];
 

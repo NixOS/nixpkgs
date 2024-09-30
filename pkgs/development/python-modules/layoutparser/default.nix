@@ -96,7 +96,7 @@ buildPythonPackage {
     "tests_deps/test_only_paddledetection.py" # requires paddlepaddle not yet packaged
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   meta = with lib; {
     description = "Unified toolkit for Deep Learning Based Document Image Analysis";

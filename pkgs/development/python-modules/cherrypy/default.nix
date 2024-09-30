@@ -111,7 +111,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cherrypy" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     json = [ simplejson ];
     memcached_session = [ python-memcached ];
     routes_dispatcher = [ routes ];

@@ -55,7 +55,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ext = [
       # TODO: sanic-ext
     ];
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
     uvicorn
-  ] ++ passthru.optional-dependencies.http3;
+  ] ++ optional-dependencies.http3;
 
   inherit doCheck;
 

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     six
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gssapi = [
       pyasn1
       gssapi
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytest-relaxed
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "paramiko" ];
 

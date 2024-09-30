@@ -14,9 +14,8 @@
   requests,
   urllib3,
 
-  # optional-dependenices
+  # optional-dependencies
   paramiko,
-  pynacl,  # optional in paramiko, required here
   websocket-client,
 
   # tests
@@ -49,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ssh = [ paramiko ];
+    ssh = [ paramiko paramiko.optional-dependencies.ed25519 ];
     tls = [];
     websockets = [ websocket-client ];
   };
@@ -58,10 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    paramiko
-    pynacl
-    websocket-client
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests/unit" ];
 

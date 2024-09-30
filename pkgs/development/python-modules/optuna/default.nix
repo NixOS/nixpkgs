@@ -71,7 +71,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     integration = [
       botorch
       catboost
@@ -115,7 +115,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     scipy
-  ] ++ fakeredis.optional-dependencies.lua ++ passthru.optional-dependencies.optional;
+  ] ++ fakeredis.optional-dependencies.lua ++ optional-dependencies.optional;
 
   pytestFlagsArray = [ "-m 'not integration'" ];
 

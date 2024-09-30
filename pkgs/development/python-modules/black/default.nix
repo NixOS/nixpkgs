@@ -54,7 +54,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     colorama = [ colorama ];
     d = [ aiohttp ];
     uvloop = [ uvloop ];
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     parameterized
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"

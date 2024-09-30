@@ -77,7 +77,7 @@ let
       tifffile
     ];
 
-    passthru.optional-dependencies = {
+    optional-dependencies = {
       data = [ pooch ];
       optional = [
         astropy
