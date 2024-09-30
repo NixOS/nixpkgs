@@ -6071,6 +6071,8 @@ self: super: with self; {
 
   inequality = callPackage ../development/python-modules/inequality { };
 
+  inference-gym = callPackage ../development/python-modules/inference-gym { };
+
   infinity = callPackage ../development/python-modules/infinity { };
 
   inflect = callPackage ../development/python-modules/inflect { };
@@ -7132,6 +7134,10 @@ self: super: with self; {
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
+  libsbml = toPythonModule (pkgs.libsbml.override {
+    withPython = true;
+    inherit (self) python;
+  });
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
@@ -7225,6 +7231,8 @@ self: super: with self; {
   linear-garage-door = callPackage ../development/python-modules/linear-garage-door { };
 
   linear-operator = callPackage ../development/python-modules/linear-operator { };
+
+  lineax = callPackage ../development/python-modules/lineax { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
@@ -9410,6 +9418,8 @@ self: super: with self; {
 
   optax = callPackage ../development/python-modules/optax { };
 
+  optimistix = callPackage ../development/python-modules/optimistix { };
+
   optimum = callPackage ../development/python-modules/optimum { };
 
   optree = callPackage ../development/python-modules/optree { };
@@ -9451,6 +9461,8 @@ self: super: with self; {
   ortools = (toPythonModule (pkgs.or-tools.override { inherit (self) python; })).python;
 
   orvibo = callPackage ../development/python-modules/orvibo { };
+
+  oryx = callPackage ../development/python-modules/oryx { };
 
   os-client-config = callPackage ../development/python-modules/os-client-config { };
 
@@ -17910,6 +17922,8 @@ self: super: with self; {
   zopfli = callPackage ../development/python-modules/zopfli {
     inherit (pkgs) zopfli;
   };
+
+  zpp = callPackage ../development/python-modules/zpp { };
 
   zstandard = callPackage ../development/python-modules/zstandard { };
 

@@ -15749,18 +15749,18 @@
     github = "ony";
     githubId = 11265;
   };
-  oo-infty = {
-    name = "Justin Chen";
-    email = "oo-infty@outlook.com";
-    github = "oo-infty";
-    githubId = 42143810;
-  };
   ooliver1 = {
     name = "Oliver Wilkes";
     email = "oliverwilkes2006@icloud.com";
     github = "ooliver1";
     githubId = 34910574;
     keys = [ { fingerprint = "D055 8A23 3947 B7A0 F966  B07F 0B41 0348 9833 7273"; } ];
+  };
+  oosquare = {
+    name = "Justin Chen";
+    email = "oosquare@outlook.com";
+    github = "oosquare";
+    githubId = 42143810;
   };
   opeik = {
     email = "sandro@stikic.com";
