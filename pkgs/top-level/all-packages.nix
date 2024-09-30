@@ -23530,20 +23530,22 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
+  webkitgtk_4_0 = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     inherit (darwin) apple_sdk;
   };
 
-  webkitgtk_4_1 = webkitgtk.override {
+  webkitgtk_4_1 = webkitgtk_4_0.override {
     libsoup = libsoup_3;
   };
 
-  webkitgtk_6_0 = webkitgtk.override {
+  webkitgtk_6_0 = webkitgtk_4_0.override {
     libsoup = libsoup_3;
     gtk3 = gtk4;
   };
+
+  webkitgtk = webkitgtk_4_0;
 
   webp-pixbuf-loader = callPackage ../development/libraries/webp-pixbuf-loader { };
 
