@@ -89,6 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    build-type = ___build-type;
+    firmware = "${finalAttrs.finalPackage}/share/seabios/${biosfile}";
+  };
+
   meta = {
     homepage = "https://www.seabios.org";
     description = "Open source implementation of a 16bit x86 BIOS";
