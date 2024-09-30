@@ -14,13 +14,13 @@
   help2man,
   pulseaudio,
   qubes-core-qubesdb,
-  python3,
+  python3Packages,
   runCommand,
   xwayland,
   makeWrapper,
 }:
 let
-  inherit (python3.pkgs) wrapPython xcffib qubes-imgconverter;
+  inherit (python3Packages) wrapPython xcffib qubes-imgconverter;
 
   version = "4.3.3";
   src = fetchFromGitHub {
