@@ -32291,9 +32291,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   qbittorrent-nox = qbittorrent.override { guiSupport = false; };
-  qbittorrent-qt5 = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 
