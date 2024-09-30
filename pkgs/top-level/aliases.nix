@@ -1005,6 +1005,7 @@ mapAliases {
   microsoft_gsl = microsoft-gsl; # Added 2023-05-26
   MIDIVisualizer = midivisualizer; # Added 2024-06-12
   migraphx = throw "'migraphx' has been replaced with 'rocmPackages.migraphx'"; # Added 2023-10-08
+  mikutter = throw "'mikutter' has been removed because the package was broken and had no maintainers"; # Added 2024-10-01
   minishift = throw "'minishift' has been removed as it was discontinued upstream. Use 'crc' to setup a microshift cluster instead"; # Added 2023-12-30
   miopen = throw "'miopen' has been replaced with 'rocmPackages.miopen'"; # Added 2023-10-08
   miopengemm = throw "'miopengemm' has been replaced with 'rocmPackages_5.miopengemm'"; # Added 2023-10-08
