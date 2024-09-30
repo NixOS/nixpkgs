@@ -36556,10 +36556,6 @@ with pkgs;
 
   dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic { };
 
-  lammps = callPackage ../applications/science/molecular-dynamics/lammps {
-    fftw = fftw;
-  };
-
   lammps-mpi = lowPrio (lammps.override {
     extraBuildInputs = [
       mpi
