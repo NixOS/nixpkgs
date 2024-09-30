@@ -130,6 +130,7 @@ let
       cp $src/keygen/openssl.conf $out/share/xrdp/openssl.conf
 
       substituteInPlace $out/etc/xrdp/sesman.ini --replace /etc/xrdp/pulse $out/etc/xrdp/pulse
+      substituteInPlace $out/etc/xrdp/sesman.ini --replace '#SessionSockdirGroup=root' 'SessionSockdirGroup=xrdp'
 
       # remove all session types except Xorg (they are not supported by this setup)
       perl -i -ne 'print unless /\[(X11rdp|Xvnc|console|vnc-any|sesman-any|rdp-any|neutrinordp-any)\]/ .. /^$/' $out/etc/xrdp/xrdp.ini
