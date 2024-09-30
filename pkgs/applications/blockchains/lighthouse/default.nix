@@ -6,7 +6,7 @@
 , lighthouse
 , nix-update-script
 , nodePackages
-, perl
+, openssl
 , pkg-config
 , postgresql
 , protobuf
@@ -57,7 +57,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     cmake
-    perl
     pkg-config
     protobuf
   ];
@@ -65,6 +64,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     rust-jemalloc-sys
     sqlite
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    openssl
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
@@ -83,6 +84,8 @@ rustPlatform.buildRustPackage rec {
 
   LIGHTHOUSE_DEPOSIT_CONTRACT_SPEC_URL = "file://${depositContractSpec}";
   LIGHTHOUSE_DEPOSIT_CONTRACT_TESTNET_URL = "file://${testnetDepositContractSpec}";
+
+  OPENSSL_NO_VENDOR = true;
 
   cargoBuildFlags = [
     "--package lighthouse"

@@ -2,7 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  perl,
+  pkg-config,
+  openssl,
   testers,
   avml,
   nix-update-script,
@@ -21,7 +22,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-gcpjrxnQDyO92OW6LZVc4x73TmTtQoaEYhmGmqhz8ng=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   passthru.tests.version = testers.testVersion { package = avml; };
 
