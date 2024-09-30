@@ -11,7 +11,7 @@
   spirv-headers,
   spirv-tools,
   vulkan-headers,
-  xcbuild,
+  xcbuildHook,
   AppKit,
   Foundation,
   Metal,
@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
   version = "1.2.9";
 
+  strictDeps = true;
+
   buildInputs = [
     AppKit
     Foundation
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
-  nativeBuildInputs = [ xcbuild ];
+  nativeBuildInputs = [ xcbuildHook ];
 
   outputs = [
     "out"
@@ -117,24 +119,24 @@ stdenv.mkDerivation (finalAttrs: {
     "-lspirv-cross-reflect"
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     NIX_CFLAGS_COMPILE+=" \
       -I$NIX_BUILD_TOP/$sourceRoot/build/include \
       -I$NIX_BUILD_TOP/$sourceRoot/Common"
-
-    xcodebuild build \
-      SYMROOT=$PWD/Products OBJROOT=$PWD/Intermedates \
-      -jobs $NIX_BUILD_CORES \
-      -configuration Release \
-      -project MoltenVKPackaging.xcodeproj \
-      -scheme 'MoltenVK Package (macOS only)' \
-      -destination generic/platform=macOS \
-      -arch ${stdenv.hostPlatform.darwinArch}
-
-    runHook postBuild
   '';
+
+  xcbuildFlags = [
+    "-configuration"
+    "Release"
+    "-project"
+    "MoltenVKPackaging.xcodeproj"
+    "-scheme"
+    "MoltenVK Package (macOS only)"
+    "-destination"
+    "generic/platform=macOS"
+    "-arch"
+    stdenv.hostPlatform.darwinArch
+  ];
 
   postBuild =
     if enableStatic then
@@ -186,6 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
