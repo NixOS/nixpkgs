@@ -163,20 +163,18 @@ in
           createEmpty = false;
         }).overrideAttrs
           (
-            finalAttrs: previousAttrs:
-            let
-              copyUki = "CopyFiles=${config.system.build.uki}/${config.system.boot.loader.ukiFile}:${cfg.ukiPath}";
-            in
-            {
+            finalAttrs: previousAttrs: {
+              # add entry to inject UKI into ESP
+              finalPartitions = lib.recursiveUpdate previousAttrs.finalPartitions {
+                ${cfg.partitionIds.esp}.contents = {
+                  "${cfg.ukiPath}".source = "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+                };
+              };
+
               nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
                 pkgs.systemdUkify
                 verityHashCheck
               ];
-
-              postPatch = ''
-                # add entry to inject UKI into ESP
-                echo '${copyUki}' >> $finalRepartDefinitions/${cfg.partitionIds.esp}.conf
-              '';
 
               preBuild = ''
                 # check that we build the final image with the same intermediate image for
