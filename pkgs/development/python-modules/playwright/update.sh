@@ -4,16 +4,29 @@ set -euo pipefail
 
 root="$(dirname "$(readlink -f "$0")")"
 
-version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright-python/releases/latest | jq -r '.tag_name | sub("^v"; "")')
-# Most of the time, this should be the latest stable release of the Node-based
-# Playwright version, but that isn't a guarantee, so this needs to be specified
-# as well:
-setup_py_url="https://github.com/microsoft/playwright-python/raw/v${version}/setup.py"
-driver_version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright/releases/latest | jq -r '.tag_name | sub("^v"; "")')
+# Get the latest version of playwright-python
+python_version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright-python/releases/latest | jq -r '.tag_name | sub("^v"; "")')
+
+# Extract major and minor version from playwright-python
+python_major_minor=$(echo "$python_version" | cut -d. -f1,2)
+
+# Get all versions of Node-based Playwright
+all_driver_versions=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright/releases | jq -r '.[].tag_name | sub("^v"; "")')
+
+# Find the latest driver version that matches the major.minor of playwright-python
+driver_version=$(echo "$all_driver_versions" | grep "^${python_major_minor}" | sort -V | tail -n 1)
+
+# Fallback to the latest version if no match is found (optional)
+if [[ -z "$driver_version" ]]; then
+  driver_version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright/releases/latest | jq -r '.tag_name | sub("^v"; "")')
+fi
+
+# URL for the setup.py of the python version
+setup_py_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/setup.py"
 
 # TODO: skip if update-source-version reported the same version
 update-source-version playwright-driver "$driver_version"
-update-source-version python3Packages.playwright "$version"
+update-source-version python3Packages.playwright "$python_version"
 
 playwright_dir="$root/../../web/playwright"
 driver_file="$playwright_dir/driver.nix"
