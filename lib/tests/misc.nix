@@ -47,6 +47,7 @@ let
     evalModules
     extends
     filter
+    filterAttrs
     fix
     fold
     foldAttrs
@@ -1099,6 +1100,25 @@ runTests {
       foo = "bar";
       foobar = "baz";
       foobarbaz = "baz";
+    };
+  };
+
+  testFilterAttrs = {
+    expr = filterAttrs (n: v: n != "a" && (v.hello or false) == true) {
+      a.hello = true;
+      b.hello = true;
+      c = {
+        hello = true;
+        world = false;
+      };
+      d.hello = false;
+    };
+    expected = {
+      b.hello = true;
+      c = {
+        hello = true;
+        world = false;
+      };
     };
   };
 
