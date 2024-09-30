@@ -11705,6 +11705,8 @@ self: super: with self; {
 
   pyfantom = callPackage ../development/python-modules/pyfantom { };
 
+  pyfatfs = callPackage ../development/python-modules/pyfatfs { };
+
   pyfcm = callPackage ../development/python-modules/pyfcm { };
 
   pyfido = callPackage ../development/python-modules/pyfido { };
