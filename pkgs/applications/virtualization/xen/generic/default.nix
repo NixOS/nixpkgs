@@ -392,7 +392,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.lists.optional (!withInternalQEMU) "--with-system-qemu"
 
-    ++ lib.lists.optional withSeaBIOS "--with-system-seabios=${seabios}/share/seabios"
+    ++ lib.lists.optional withSeaBIOS "--with-system-seabios=${seabios.firmware}"
     ++ lib.lists.optional (!withInternalSeaBIOS && !withSeaBIOS) "--disable-seabios"
 
     ++ lib.lists.optional withOVMF "--with-system-ovmf=${OVMF.firmware}"

@@ -56,7 +56,7 @@ let
   seavgabioses = concatStringsSep "," (map mkVgaBios ["bochs-display" "cirrus" "isavga" "qxl" "stdvga" "ramfb" "vmware" "virtio" "ati"]);
 
 in
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   name = "qubes-seabios";
   inherit version;
   unpackPhase = "true";
@@ -65,4 +65,6 @@ stdenvNoCC.mkDerivation {
     cp {${seabioses}}/*.bin $out/share/seabios
     cp {${seavgabioses}}/*.bin $out/share/seavgabios
   '';
-}
+
+  passthru.firmware = "${finalAttrs.finalPackage}/share/seabios/bios-256k.bin";
+})
