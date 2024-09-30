@@ -9462,6 +9462,8 @@ self: super: with self; {
 
   orvibo = callPackage ../development/python-modules/orvibo { };
 
+  oryx = callPackage ../development/python-modules/oryx { };
+
   os-client-config = callPackage ../development/python-modules/os-client-config { };
 
   os-service-types = callPackage ../development/python-modules/os-service-types { };
