@@ -5,8 +5,33 @@
   python3,
   stdenv,
   writeText,
+  # Configurable options
+  ___build-type ? "csm",
 }:
 
+assert lib.elem (___build-type) [
+  "coreboot"
+  # SeaBIOS with CSM (Compatible Support Module) support; learn more at
+  # https://www.electronicshub.org/what-is-csm-bios/
+  "csm"
+  "qemu"
+];
+let
+  biosfile =
+    {
+      "coreboot" = "bios.bin.elf";
+      "csm" = "Csm16.bin";
+      "qemu" = "bios.bin";
+    }
+    .${___build-type};
+  configuration-string =
+    {
+      "coreboot" = "CONFIG_COREBOOT";
+      "csm" = "CONFIG_CSM";
+      "qemu" = "CONFIG_QEMU";
+    }
+    .${___build-type};
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seabios";
   version = "1.16.3";
@@ -43,9 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       config = writeText "config.txt" (
         lib.generators.toKeyValue { } {
-          # SeaBIOS with CSM (Compatible Support Module) support; learn more at
-          # https://www.electronicshub.org/what-is-csm-bios/
-          "CONFIG_CSM" = "y";
+          "${configuration-string}" = "y";
           "CONFIG_PERMIT_UNALIGNED_PCIROM" = "y";
           "CONFIG_QEMU_HARDWARE" = "y";
         }
@@ -61,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -pv ''${!outputDoc}/share/doc/seabios-${finalAttrs.version}/
     cp -v docs/* ''${!outputDoc}/share/doc/seabios-${finalAttrs.version}/
-    install -Dm644 out/Csm16.bin -t $out/share/seabios/
+    install -Dm644 out/${biosfile} -t $out/share/seabios/
 
     runHook postInstall
   '';
