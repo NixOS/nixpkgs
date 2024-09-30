@@ -4,45 +4,42 @@
   fetchFromGitHub,
   setuptools,
   icalendar,
-  pytz,
+  tzdata,
   pytestCheckHook,
   restructuredtext-lint,
   pygments,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "x-wr-timezone";
-  version = "0.0.7";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
     rev = "v${version}";
-    hash = "sha256-itqsVYYUcpbKTh0BM6IHk6F9xhB+pAQnnJsnZAVpNL4=";
+    hash = "sha256-MDFniFhgRuNtYITH/IUUP/HHC79coqxgXrlErj+Yrcs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     icalendar
-    pytz
+    tzdata
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     restructuredtext-lint
     pygments
+    pytz
   ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
-
-  disabledTests = [
-    "test_input_to_output"
-    "test_output_stays_the_same"
-  ];
 
   pythonImportsCheck = [ "x_wr_timezone" ];
 
