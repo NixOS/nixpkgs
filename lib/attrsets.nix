@@ -541,7 +541,8 @@ rec {
 
   /**
     Given a set of attribute names, return the set of the corresponding
-    attributes from the given set.
+    attributes from the given set. If the attributes does not exist,
+    they will be ignored.
 
 
     # Inputs
@@ -565,7 +566,7 @@ rec {
     ## `lib.attrsets.getAttrs` usage example
 
     ```nix
-    getAttrs [ "a" "b" ] { a = 1; b = 2; c = 3; }
+    getAttrs [ "a" "b" "d" ] { a = 1; b = 2; c = 3; }
     => { a = 1; b = 2; }
     ```
 
@@ -573,7 +574,7 @@ rec {
   */
   getAttrs =
     names:
-    attrs: genAttrs names (name: attrs.${name});
+    attrs: intersectAttrs (genAttrs names (_: null)) attrs;
 
   /**
     Collect each attribute named `attr` from a list of attribute
