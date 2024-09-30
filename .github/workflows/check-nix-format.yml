@@ -38,7 +38,7 @@ jobs:
           # This should not be a URL, because it would allow PRs to run arbitrary code in CI!
           rev=$(jq -r .rev ci/pinned-nixpkgs.json)
           echo "url=https://github.com/NixOS/nixpkgs/archive/$rev.tar.gz" >> "$GITHUB_ENV"
-      - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
+      - uses: cachix/install-nix-action@9f70348d77d0422624097c4b7a75563948901306 # v29
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
