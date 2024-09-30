@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
@@ -10,11 +11,8 @@
   qubes-core-admin-client,
   qubes-core-libvirt,
   pyinotify,
-  toPythonModule,
   killall,
-  writeScript,
   coreutils,
-  gawk,
   pkgs,
   patsh,
   bash,
@@ -25,19 +23,16 @@
   distutils,
   setuptools,
   fetchpatch,
-
   qubes-vmm-xen,
   qubes-vmm-pyxen,
   qubes-core-qubesdb-client ? pkgs.qubes-core-qubesdb,
   qubes-core-qubesdb-daemon ? pkgs.qubes-core-qubesdb.daemon,
-
   # Uses entrypoints to provide usb device type extension.
   # It may make sense to pass it to systemd service PYTHONPATH?
   qubes-app-linux-usb-proxy,
 }:
-
 let
-  inherit (pkgs) hwdata findutils;
+  inherit (pkgs) hwdata;
 
   # Original qubes.GetDate RPC uses qubes-core-admin-client package api, and
   # we want to avoid circular dependency here.
@@ -140,7 +135,7 @@ buildPythonPackage {
     coreutils
   ];
 
-  buildFlags = ["all"];
+  buildFlags = [ "all" ];
 
   dontUsePypaInstall = true;
   postInstall = ''
@@ -166,5 +161,19 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "qubes" ];
 
-  outputs = ["out" "man"];
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
+    description = "Qubes dom0 daemon & RPC";
+    homepage = "https://qubes-os.org";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      lach
+      sigmasquadron
+    ];
+    platforms = lib.platforms.linux;
+  };
 }
