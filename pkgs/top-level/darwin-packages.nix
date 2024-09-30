@@ -148,6 +148,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   # Removes propagated packages from the stdenv, so those packages can be built without depending upon themselves.
   bootstrapStdenv = mkBootstrapStdenv pkgs.stdenv;
 
+  libSystem = callPackage ../os-specific/darwin/libSystem { };
+
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
