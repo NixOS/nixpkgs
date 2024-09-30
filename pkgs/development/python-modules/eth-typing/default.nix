@@ -1,37 +1,45 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  pytest-xdist,
+  typing-extensions,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "4.0.0";
+  version = "5.0.0";
+
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-typing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JT/2bCPYFSRNt3V7QnHSAJR7HrZ1JpRKdU7gQpoYIn0=";
+    hash = "sha256-rhKQgZp8UUR32SAykK1zM0u7mt0EtMn7w9ILASuE+o0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
   pythonImportsCheck = [ "eth_typing" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ethereum/eth-typing/blob/v${version}/docs/release_notes.rst";
     description = "Common type annotations for Ethereum Python packages";
     homepage = "https://github.com/ethereum/eth-typing";
-    changelog = "https://github.com/ethereum/eth-typing/blob/v${version}/docs/release_notes.rst";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.FlorianFranzen ];
   };
 }

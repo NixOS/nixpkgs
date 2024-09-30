@@ -7,29 +7,42 @@
   eth-abi,
   eth-account,
   eth-hash,
+  eth-tester,
   eth-typing,
   eth-utils,
+  flaky,
   hexbytes,
+  hypothesis,
   ipfshttpclient,
   jsonschema,
   lru-dict,
   protobuf,
+  pydantic,
+  pytestCheckHook,
+  pytest-asyncio_0_21,
+  pytest-mock,
+  pytest-xdist,
+  pyunormalize,
+  py-evm,
   requests,
+  setuptools,
+  types-requests,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "6.5.0";
-  format = "setuptools";
+  version = "7.2.0";
 
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "web3.py";
-    rev = "v${version}";
-    hash = "sha256-RNWCZQjcse415SSNkHhMWckDcBJGFZnjisckF7gbYY8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CMzcVlQKZ/ooWyYriRb/cTBE//Dkkgkn0gu0Y4ZMSrQ=";
   };
 
   # Note: to reflect the extra_requires in main/setup.py.
@@ -37,7 +50,9 @@ buildPythonPackage rec {
     ipfs = [ ipfshttpclient ];
   };
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       aiohttp
       eth-abi
@@ -52,16 +67,35 @@ buildPythonPackage rec {
       jsonschema
       lru-dict
       protobuf
+      pydantic
       requests
+      types-requests
       websockets
     ];
 
-  # TODO: package eth-tester required for tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    eth-tester
+    flaky
+    hypothesis
+    pytest-asyncio_0_21
+    pytest-mock
+    pytest-xdist
+    pyunormalize
+    py-evm
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "types-protobuf==3.19.13" "types-protobuf"
-  '';
+  disabledTests = [
+    # side-effect: runs pip online check and is blocked by sandbox
+    "test_install_local_wheel"
+  ];
+
+  disabledTestPaths = [
+    # requires geth library and binaries
+    "tests/integration/go_ethereum"
+    # requires local running beacon node
+    "tests/beacon"
+  ];
 
   pythonImportsCheck = [ "web3" ];
 
