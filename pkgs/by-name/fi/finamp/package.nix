@@ -33,7 +33,7 @@ flutter324.buildFlutterApplication {
   };
 
   postFixup = ''
-    patchelf $out/app/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${lib.makeLibraryPath [ mpv-unwrapped ]}
+    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${lib.makeLibraryPath [ mpv-unwrapped ]}
   '';
 
   postInstall = ''
