@@ -261,6 +261,7 @@ in
         CapabilityBoundingSet = [
           "CAP_CHOWN"
           "CAP_DAC_OVERRIDE"
+          "CAP_KILL"
           "CAP_SETUID"
           "CAP_SETGID"
         ];
@@ -285,9 +286,9 @@ in
         RestrictSUIDSGID = false; # can create sgid directories
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "@system-service @setuid"
+          "@system-service"
           "~@privileged @resources"
-          "@chown"
+          "@chown @setuid"
         ];
         UMask = "0027";
       } // lib.optionalAttrs (!cfg.allowNetworking) {
