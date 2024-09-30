@@ -46,6 +46,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
+  disabledTests = [
+    # outdated jsonschema fixture
+    "test_json_schema"
+  ];
+
   meta = with lib; {
     changelog = "https://github.com/pydantic/pydantic-extra-types/blob/${src.rev}/HISTORY.md";
     description = "Extra Pydantic types";
