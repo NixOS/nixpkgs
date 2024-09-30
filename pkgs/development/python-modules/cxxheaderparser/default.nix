@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/robotpy/cxxheaderparser";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
+    platforms = lib.platforms.unix;
   };
 }
