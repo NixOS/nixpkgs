@@ -27,7 +27,6 @@
   pyyaml,
   redis,
   scikit-learn,
-  scikit-optimize,
   scipy,
   setuptools,
   shap,
@@ -83,7 +82,6 @@ buildPythonPackage rec {
       # pytorch-ignite
       pytorch-lightning
       scikit-learn
-      scikit-optimize
       shap
       tensorflow
       torch
