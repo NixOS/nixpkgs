@@ -28,6 +28,8 @@ lib.makeScope newScope (self: with self; {
   fishtape = callPackage ./fishtape.nix { };
   fishtape_3 = callPackage ./fishtape_3.nix { };
 
+  fish-you-should-use = callPackage ./fish-you-should-use.nix { };
+
   foreign-env = callPackage ./foreign-env { };
 
   forgit = callPackage ./forgit.nix { };
