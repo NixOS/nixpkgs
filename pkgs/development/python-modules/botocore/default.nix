@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-q1NQ6KUOSNNx+i1RfWXCmkDEN4jLmhU4f5PqxaI98P0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     jmespath
