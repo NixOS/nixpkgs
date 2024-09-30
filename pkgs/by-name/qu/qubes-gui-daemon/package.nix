@@ -61,7 +61,7 @@ let
       pulseaudio
     ];
 
-    buildFlags = ["all"];
+    buildFlags = [ "all" ];
 
     postInstall = ''
       mv $out/usr/* $out/
@@ -76,25 +76,28 @@ let
     '';
 
     # Package setups fortification by itself, nixos flags cause "_FORTIFY_SOURCE redefined" error
-    hardeningDisable = ["fortify"];
+    hardeningDisable = [ "fortify" ];
 
     makeFlags = [ "DESTDIR=$(out)" ];
   };
   # TODO: Patch xwayland derivation instead, and pass wrapper flags here?
-  xwayland-patched = runCommand "xwayland-qubes" {
-    nativeBuildInputs = [
-      makeWrapper
-    ];
-  } ''
-    mkdir -p $out
-    cp -r ${xwayland}/* $out/
-    chmod -R a+w $out/bin
+  xwayland-patched =
+    runCommand "xwayland-qubes"
+      {
+        nativeBuildInputs = [
+          makeWrapper
+        ];
+      }
+      ''
+        mkdir -p $out
+        cp -r ${xwayland}/* $out/
+        chmod -R a+w $out/bin
 
-    wrapProgram $out/bin/Xwayland \
-      --prefix LD_PRELOAD : ${daemon}/lib/qubes-gui-daemon/shmoverride.so
-    substituteInPlace $out/share/applications/org.freedesktop.Xwayland.desktop \
-      --replace-fail "Exec=${xwayland}/bin/Xwayland" "Exec=$out/bin/Xwayland"
-  '';
+        wrapProgram $out/bin/Xwayland \
+          --prefix LD_PRELOAD : ${daemon}/lib/qubes-gui-daemon/shmoverride.so
+        substituteInPlace $out/share/applications/org.freedesktop.Xwayland.desktop \
+          --replace-fail "Exec=${xwayland}/bin/Xwayland" "Exec=$out/bin/Xwayland"
+      '';
 in
 daemon.overrideAttrs {
   passthru = {
@@ -105,7 +108,10 @@ daemon.overrideAttrs {
     description = "Qubes GUID and Xorg LD_PRELOAD payload";
     homepage = "https://qubes-os.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ lach sigmasquadron ];
+    maintainers = with lib.maintainers; [
+      lach
+      sigmasquadron
+    ];
     platforms = lib.platforms.linux;
   };
 }
