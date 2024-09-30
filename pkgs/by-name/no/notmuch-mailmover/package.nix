@@ -1,8 +1,10 @@
-{ notmuch
-, lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
+{
+  notmuch,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "notmuch-mailmover";
@@ -29,12 +31,17 @@ rustPlatform.buildRustPackage rec {
       --zsh share/_notmuch-mailmover
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Application to assign notmuch tagged mails to IMAP folders";
     mainProgram = "notmuch-mailmover";
     homepage = "https://github.com/michaeladler/notmuch-mailmover/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ michaeladler archer-65 ];
+    maintainers = with maintainers; [
+      michaeladler
+      archer-65
+    ];
     platforms = platforms.all;
   };
 }
