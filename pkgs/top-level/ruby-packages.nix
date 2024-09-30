@@ -2796,10 +2796,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0i2vaww6qcazj0ywva1plmjnj6rk23b01szswc5jhcq7s2cikd1y";
+      sha256 = "sha256-JKRkXABoEdg/JIAFfR9UqW52J7a5DhyZsmC53GMOtD4=";
       type = "gem";
     };
-    version = "6.4.2";
+    version = "6.4.3";
   };
   pwntools = {
     dependencies = ["crabstone" "dentaku" "elftools" "keystone-engine" "method_source" "one_gadget" "rainbow" "ruby2ruby" "rubyserial"];
