@@ -59,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -pv $doc/share/doc/seabios-${finalAttrs.version}/
-    cp -v docs/* $doc/share/doc/seabios-${finalAttrs.version}/
+    mkdir -pv ''${!outputDoc}/share/doc/seabios-${finalAttrs.version}/
+    cp -v docs/* ''${!outputDoc}/share/doc/seabios-${finalAttrs.version}/
     install -Dm644 out/Csm16.bin -t $out/share/seabios/
 
     runHook postInstall
