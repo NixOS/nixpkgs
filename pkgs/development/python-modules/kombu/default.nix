@@ -19,8 +19,10 @@
   pythonOlder,
   pyyaml,
   redis,
+  setuptools,
   sqlalchemy,
   typing-extensions,
+  tzdata,
   urllib3,
   vine,
 }:
@@ -28,22 +30,22 @@
 buildPythonPackage rec {
   pname = "kombu";
   version = "5.4.2";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7vVy3S/Z/GFLN1gOPK6v3Vr0bB7/Mef7qJE4zbQG8s8=";
   };
 
-  propagatedBuildInputs =
-    [
-      amqp
-      vine
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  build-system = [ setuptools ];
+
+  propagatedBuildInputs = [
+    amqp
+    tzdata
+    vine
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   optional-dependencies = {
     msgpack = [ msgpack ];
