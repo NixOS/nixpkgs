@@ -8,9 +8,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dnglab";
-    repo = pname;
+    repo = "dnglab";
     rev = "v${version}";
-    sha256 = "sha256-EJ0uWc3pp7ixRxDIdTIVVaT2ph3P2IvuK+ecBSB5HYw=";
+    # darwin/linux hash mismatch
+    postFetch = ''
+      rm -rf "$out"/rawler/data/testdata/cameras/Canon/{"EOS REBEL T7i","EOS Rebel T7i"}
+    '';
+    hash = "sha256-k0tKNtVDzE5vVi/953aEQihh+5BsVneqauTr9WRFFrY=";
   };
 
   cargoHash = "sha256-6qJFNfgWh3i1CpuM/QdLksVAFz4XIV8uT5oz5BZ3U30=";
