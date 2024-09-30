@@ -41,6 +41,8 @@ python3.pkgs.buildPythonApplication rec {
     "TestLoginUrl"
     "test_timeit2" # flakey, and depends sleep being precise to the milisecond
     "test_internet" # uses network, fails on Darwin (not sure why it doesn't fail on linux)
+    "test_markdown" # uses sys.version_info for conditional testing
+    "test_itms_services" # uses sys.version_info for conditional testing
   ];
 
   disabledTestPaths = [
