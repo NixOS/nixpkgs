@@ -16,7 +16,6 @@
 
   # optional-dependencies
   paramiko,
-  pynacl,  # optional in paramiko, required here
   websocket-client,
 
   # tests
@@ -58,10 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    paramiko
-    pynacl
-    websocket-client
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests/unit" ];
 
