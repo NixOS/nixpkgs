@@ -627,14 +627,14 @@ in
             # Hardening
             CapabilityBoundingSet = [ "" ];
             DevicePolicy = "closed";
-            PrivateTmp = false; #breaks wal-receiver test
+            PrivateTmp = true;
             ProtectHome = true;
             ProtectSystem = "strict";
             MemoryDenyWriteExecute = true;
             NoNewPrivileges = true;
             LockPersonality = true;
             PrivateDevices = true;
-            PrivateMounts = false; # breaks wal-receiver test
+            PrivateMounts = true;
             ProcSubset = "pid";
             ProtectClock = true;
             ProtectControlGroups = true;
