@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, fetchpatch2
 , aqbanking
 , boost
 , cmake
@@ -27,12 +28,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.8";
+  version = "5.9";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-osgj+3ALnUWYaS7IE5SVm944jY7xke/k6iwCQmu1JZM=";
+    hash = "sha256-W+LlNk/DZGT8Msdo4qtGCmMPdNtq631EJm49q5giL9A=";
   };
 
   nativeBuildInputs = [
@@ -75,9 +76,12 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
-    # this patch disables a flaky test
-    # see https://bugs.gnucash.org/show_bug.cgi?id=799289
-    ./0005-disable-test-lots.patch
+    # this patch fixes gnucah-cli -Q dump, remove on next release
+    (fetchpatch2 {
+      name = "0005-fix-quote-report.patch";
+      url = "https://github.com/Gnucash/gnucash/commit/711554ecd5505004aee4808519d9d8e4e4ed7c9a.patch?full_index=1";
+      hash = "sha256-uRaUdSJu2LnYVp/3DqrK0rTnCpr7oZRtrgTPbKAHThk=";
+    })
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
@@ -101,7 +105,7 @@ stdenv.mkDerivation rec {
       owner = "Gnucash";
       repo = "gnucash-docs";
       rev = version;
-      hash = "sha256-3b1Nue3eEefDi4WI+o3ATfrsQ+H/I+QwTr4Nuc9J7Zg=";
+      hash = "sha256-uXpIAsucVUaAlqYTKfrfBg04Kb5Mza67l0ZU6fxkSUY=";
     };
 
     nativeBuildInputs = [ cmake ];
