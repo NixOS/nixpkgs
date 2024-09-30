@@ -1,4 +1,4 @@
-{ fetchFromGitLab
+{ fetchFromSourcehut
 , installShellFiles
 , lib
 , python3
@@ -9,10 +9,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nvd";
   version = "0.2.3";
 
-  src = fetchFromGitLab {
-    owner = "khumba";
+  src = fetchFromSourcehut {
+    owner = "~khumba";
     repo = "nvd";
-    rev = "refs/tags/v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TmaXsyJLRkmIN9D77jOXd8fLj7kYPCBLg0AHIImAtgA=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Nix/NixOS package version diff tool";
-    homepage = "https://gitlab.com/khumba/nvd";
+    homepage = "https://khumba.net/projects/nvd";
     license = lib.licenses.asl20;
     mainProgram = "nvd";
     maintainers = with lib.maintainers; [ khumba ];
