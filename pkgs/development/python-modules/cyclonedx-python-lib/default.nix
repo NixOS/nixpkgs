@@ -52,7 +52,7 @@ buildPythonPackage rec {
     types-toml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     validation = [
       jsonschema
       lxml
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     ddt
     pytestCheckHook
     xmldiff
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cyclonedx" ];
 

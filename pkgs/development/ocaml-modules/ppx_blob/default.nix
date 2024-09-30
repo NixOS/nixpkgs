@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "ppx_blob";
   version = "0.9.0";
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/johnwhitington/${pname}/releases/download/${version}/ppx_blob-${version}.tbz";
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ ppxlib ];
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/johnwhitington/ppx_blob";

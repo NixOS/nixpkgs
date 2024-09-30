@@ -32,14 +32,14 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
-  passthru.optional-dependencies.watchmedo = [ pyyaml ];
+  optional-dependencies.watchmedo = [ pyyaml ];
 
   nativeCheckInputs = [
     eventlet
     flaky
     pytest-timeout
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.watchmedo;
+  ] ++ optional-dependencies.watchmedo;
 
   postPatch = ''
     substituteInPlace setup.cfg \

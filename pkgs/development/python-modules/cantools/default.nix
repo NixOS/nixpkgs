@@ -42,12 +42,12 @@ buildPythonPackage rec {
     textparser
   ];
 
-  passthru.optional-dependencies.plot = [ matplotlib ];
+  optional-dependencies.plot = [ matplotlib ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.plot;
+  ] ++ optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 

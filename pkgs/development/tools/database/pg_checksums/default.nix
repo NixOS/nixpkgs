@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_checksums";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "credativ";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ij+4ceQauX3tC97ftk/JS3/WlocPBf7A7PJrylpTLzw=";
+    sha256 = "sha256-joGaCoRMGpEqq7pnT4Qd7XySjZ5wlZPW27WfOv1UFF4=";
   };
 
   nativeBuildInputs = [ libxslt.bin ];

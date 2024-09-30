@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook3, makeWrapper
+{ lib, stdenv, fetchurl, buildPackages
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -112,7 +112,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
-    (wrapGAppsHook3.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [

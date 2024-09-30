@@ -873,8 +873,8 @@ let
           mktplcRef = {
             name = "catppuccin-vsc-icons";
             publisher = "catppuccin";
-            version = "1.13.0";
-            hash = "sha256-4gsblUMcN7a7UgoklBjc+2uiaSERq1vmi0exLht+Xi0=";
+            version = "1.16.0";
+            hash = "sha256-caIOQ2/NafUFp2J4odIM55kzOS3Of+WO84M5xNfkhf4=";
           };
           meta = {
             changelog = "https://marketplace.visualstudio.com/items/Catppuccin.catppuccin-vsc-icons/changelog";
@@ -4166,6 +4166,23 @@ let
         };
       };
 
+      sas.sas-lsp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "sas-lsp";
+          publisher = "SAS";
+          version = "1.10.2";
+          hash = "sha256-mf0q80UX4FxqHAHJBQlhkF/nqvTnfgTR8GuYBoWSswU=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";
+          description = "Official SAS Language Extension";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=SAS.sas-lsp";
+          homepage = "https://github.com/sassoftware/vscode-sas-extension";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.scraptux ];
+        };
+      };
+
       scala-lang.scala = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scala";
@@ -4219,10 +4236,11 @@ let
         mktplcRef = {
           publisher = "seatonjiang";
           name = "gitmoji-vscode";
-          version = "1.2.2";
-          hash = "sha256-+lwbCLV62y1IHrjCygBphQZJUu+ZApYTwBQld5uu12w=";
+          version = "1.2.5";
+          hash = "sha256-lWd7SyYNxoDauMecJq11akTiwEKBeXuR4htDYCbb6n4=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/seatonjiang.gitmoji-vscode/changelog";
           description = "Gitmoji tool for git commit messages in VSCode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=seatonjiang.gitmoji-vscode";
           homepage = "https://github.com/seatonjiang/gitmoji-vscode/";

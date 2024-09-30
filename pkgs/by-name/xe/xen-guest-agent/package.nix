@@ -45,9 +45,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      matdibu
-      sigmasquadron
-    ];
+    maintainers = lib.teams.xen.members;
+    mainProgram = "xen-guest-agent";
   };
 }

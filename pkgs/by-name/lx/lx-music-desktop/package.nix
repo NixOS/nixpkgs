@@ -83,6 +83,6 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = with maintainers; [ oo-infty ];
+    maintainers = with maintainers; [ oosquare ];
   };
 }

@@ -717,6 +717,7 @@ in {
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   ocis = handleTest ./ocis.nix {};
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix {};
+  obs-studio = handleTest ./obs-studio.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
   ollama = runTest ./ollama.nix;
   ollama-cuda = runTestOn ["x86_64-linux" "aarch64-linux"] ./ollama-cuda.nix;
@@ -741,6 +742,7 @@ in {
   image-contents = handleTest ./image-contents.nix {};
   openvscode-server = handleTest ./openvscode-server.nix {};
   open-webui = runTest ./open-webui.nix;
+  openvswitch = runTest ./openvswitch.nix;
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osquery = handleTestOn ["x86_64-linux"] ./osquery.nix {};
@@ -871,6 +873,7 @@ in {
   rshim = handleTest ./rshim.nix {};
   rspamd = handleTest ./rspamd.nix {};
   rspamd-trainer = handleTest ./rspamd-trainer.nix {};
+  rss-bridge = handleTest ./web-apps/rss-bridge.nix {};
   rss2email = handleTest ./rss2email.nix {};
   rstudio-server = handleTest ./rstudio-server.nix {};
   rsyncd = handleTest ./rsyncd.nix {};

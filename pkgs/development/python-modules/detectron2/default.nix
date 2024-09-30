@@ -99,7 +99,7 @@ buildPythonPackage {
     pydot # no idea why this is not in their setup.py
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   nativeCheckInputs = [
     av

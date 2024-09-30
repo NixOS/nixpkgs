@@ -32,9 +32,9 @@ python3.pkgs.buildPythonApplication rec {
     rich-pixels
     textual
     textual-universal-directorytree
-  ] ++ lib.attrVals extras passthru.optional-dependencies;
+  ] ++ lib.attrVals extras optional-dependencies;
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     all = [
       pyarrow
       textual-universal-directorytree.optional-dependencies.remote

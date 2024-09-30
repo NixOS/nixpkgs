@@ -30,7 +30,7 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     policy = [ awacs ];
   };
 

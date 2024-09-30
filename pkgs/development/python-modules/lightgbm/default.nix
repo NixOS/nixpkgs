@@ -84,7 +84,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arrow = [
       cffi
       pyarrow

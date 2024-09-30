@@ -45,9 +45,9 @@ buildPythonPackage rec {
     fastapi
     pytestCheckHook
     setproctitle
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
     #asgi = [ aiohttp-asgi ];
     cron = [ croniter ];

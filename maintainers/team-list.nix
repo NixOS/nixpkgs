@@ -1022,6 +1022,19 @@ with lib.maintainers;
     shortName = "WDZ GmbH";
   };
 
+  xen = {
+    members = [
+      hehongbo
+      lach
+      rane
+      sigmasquadron
+    ];
+    scope = "Maintain the Xen Project Hypervisor and the related tooling ecosystem.";
+    shortName = "Xen Project Hypervisor";
+    enableFeatureFreezePing = true;
+    githubTeams = [ "xen-project" ];
+  };
+
   xfce = {
     members = [
       bobby285271

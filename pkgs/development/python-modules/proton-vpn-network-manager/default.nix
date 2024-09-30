@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-network-manager";
-  version = "0.6.3";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fbA3kvhU3l20+7irThiTk/fDe60yR4aWxhE3Ol2K7ow=";
+    hash = "sha256-hTJE9sUjPMsE9d0fIA/OhoasumtfsWuFwn0aTm10PN4=";
   };
 
   nativeBuildInputs = [
@@ -53,11 +53,6 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-asyncio
   ];
-
-  preCheck = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";

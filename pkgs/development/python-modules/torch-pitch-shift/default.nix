@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "torch-pitch-shift";
-  version = "1.2.4";
+  version = "1.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "KentoNishi";
     repo = "torch-pitch-shift";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s3z+6jOGC7RfF9TzVZ9HFbIFz2BsBm6Yhx7lgaEKv6o=";
+    hash = "sha256-QuDz9IpmBdzfMjwAuG2Ln0x2OL/w3RVd/EfO4Ws78dw=";
   };
 
   pythonRelaxDeps = [ "torchaudio" ];

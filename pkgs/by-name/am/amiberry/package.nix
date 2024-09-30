@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  copyDesktopItems,
   makeWrapper,
   flac,
   libmpeg2,
@@ -13,6 +14,7 @@
   SDL2,
   SDL2_image,
   SDL2_ttf,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    copyDesktopItems
     makeWrapper
   ];
 
@@ -61,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp amiberry $out/bin/
     cp -r abr data $out/
+    install -Dm444 data/amiberry.png $out/share/icons/hicolor/256x256/apps/amiberry.png
     wrapProgram $out/bin/amiberry \
       --set-default AMIBERRY_DATA_DIR $out \
       --run 'AMIBERRY_HOME_DIR="$HOME/.amiberry"' \
@@ -79,6 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
         $AMIBERRY_HOME_DIR/harddrives'
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "amiberry";
+      desktopName = "Amiberry";
+      exec = "amiberry";
+      comment = "Amiga emulator";
+      icon = "amiberry";
+      categories = [
+        "System"
+        "Emulator"
+      ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/BlitterStudio/amiberry";

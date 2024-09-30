@@ -8,30 +8,21 @@
 , openssl
 , stdenv
 , curl
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "4.3.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
-    repo = pname;
-    rev = version;
-    hash = "sha256-gSkiNwRR47CZ1YjVa5o8EByCzWBAYPfsMRXydTwFwp0=";
+    repo = "hurl";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+GmIKxD5wHovhKXuV2IbDX43gbD8OxJzWvH3Z0MwwV4=";
   };
 
-  cargoHash = "sha256-dY00xcMnOCWhdRzC+3mTHSIqeYEPUDBJeYd/GiLM/38=";
-
-  patches = [
-    # Fix for rust 1.79, see https://github.com/Orange-OpenSource/hurl/issues/3057
-    # We should be able to remove this at the next hurl version bump
-    (fetchpatch {
-      name = "hurl-fix-rust-1.79";
-      url = "https://github.com/Orange-OpenSource/hurl/commit/d51c275fc63d1ee5bbdc6fc70279ec8dae86a9c1.patch";
-      hash = "sha256-peA4Zq5J8ynL7trvydQ3ZqyHpJWrRmJeFeMKH9XT2n4=";
-    })
-  ];
+  cargoHash = "sha256-exAEJhHm7zTzXykkLyz46C0GJ7/7HYEwdfCd8zUDZ/A=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,8 +36,11 @@ rustPlatform.buildRustPackage rec {
     curl
   ];
 
-  # Tests require network access to a test server
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # The actual tests require network access to a test server, but we can run an install check
   doCheck = false;
+  doInstallCheck = true;
 
   postInstall = ''
     installManPage docs/manual/hurl.1 docs/manual/hurlfmt.1

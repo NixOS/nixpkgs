@@ -259,6 +259,7 @@
   ./programs/oblogout.nix
   ./programs/oddjobd.nix
   ./programs/openvpn3.nix
+  ./programs/obs-studio.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/pqos-wrapper.nix
@@ -1251,6 +1252,7 @@
   ./services/networking/uptermd.nix
   ./services/networking/v2ray.nix
   ./services/networking/v2raya.nix
+  ./services/networking/veilid.nix
   ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
@@ -1383,6 +1385,7 @@
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/audiobookshelf.nix
+  ./services/web-apps/bluemap.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/c2fmzq-server.nix
   ./services/web-apps/calibre-web.nix
@@ -1392,6 +1395,7 @@
   ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
+  ./services/web-apps/collabora-online.nix
   ./services/web-apps/commafeed.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/crabfit.nix
@@ -1513,7 +1517,6 @@
   ./services/web-apps/zitadel.nix
   ./services/web-servers/agate.nix
   ./services/web-servers/apache-httpd/default.nix
-  ./services/web-servers/bluemap.nix
   ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix

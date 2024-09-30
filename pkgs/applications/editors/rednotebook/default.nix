@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.33";
+  version = "2.34";
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-K4uEZZZXU2mZ61t6Ak5mpiCsm/mcNhm+xJSzfJPiuwo=";
+    sha256 = "sha256-2Z9zYfMAJPcKN5eakooIv4lQ140yjgQuUVlaWcsEu28=";
   };
 
   # We have not packaged tests.

@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lxml = [ lxml ];
     png = [ cairosvg ];
   };
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pyquery
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.png;
+  ] ++ optional-dependencies.png;
 
   preCheck = ''
     # necessary on darwin to pass the testsuite

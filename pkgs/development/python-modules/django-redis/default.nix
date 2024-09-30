@@ -46,7 +46,7 @@ buildPythonPackage rec {
     redis
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     hiredis = [ redis ] ++ redis.optional-dependencies.hiredis;
   };
 
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     pytest-django
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"

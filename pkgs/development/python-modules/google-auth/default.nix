@@ -45,7 +45,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       requests
@@ -75,9 +75,9 @@ buildPythonPackage rec {
       pytestCheckHook
       responses
     ]
-    ++ passthru.optional-dependencies.aiohttp
-    ++ passthru.optional-dependencies.enterprise_cert
-    ++ passthru.optional-dependencies.reauth;
+    ++ optional-dependencies.aiohttp
+    ++ optional-dependencies.enterprise_cert
+    ++ optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"

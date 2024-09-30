@@ -39,7 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     hiredis = [ hiredis ];
     ocsp = [
       cryptography

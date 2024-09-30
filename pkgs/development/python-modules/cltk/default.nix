@@ -1,31 +1,42 @@
 {
-  buildPythonPackage,
   lib,
-  fetchPypi,
-  gitpython,
-  gensim,
-  tqdm,
-  torch,
-  stringcase,
-  stanza,
-  spacy,
-  scipy,
-  scikit-learn,
-  requests,
-  rapidfuzz,
-  pyyaml,
-  nltk,
-  boltons,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  boltons,
+  gensim,
+  gitpython,
   greek-accentuation,
+  nltk,
+  pyyaml,
+  rapidfuzz,
+  requests,
+  scikit-learn,
+  scipy,
+  spacy,
+  stanza,
+  stringcase,
+  torch,
+  tqdm,
+
+  # tests
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "cltk";
-  format = "pyproject";
   version = "1.3.0";
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jAxvToUIo333HSVQDYVyUBY3YP+m1RnlNGelcvktp6s=";
+
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "cltk";
+    repo = "cltk";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/rdv96lnSGN+aJJmPSIan79zoXxnStokFEAjBtCLKy4=";
   };
 
   postPatch = ''
@@ -36,13 +47,19 @@ buildPythonPackage rec {
       --replace-fail 'boltons = "^21.0.0"' 'boltons = "^24.0.0"'
   '';
 
-  propagatedBuildInputs = [
-    gitpython
-    gensim
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "spacy"
+  ];
+
+  dependencies = [
     boltons
+    gensim
+    gitpython
     greek-accentuation
-    pyyaml
     nltk
+    pyyaml
     rapidfuzz
     requests
     scikit-learn
@@ -54,12 +71,22 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Most of tests fail as they require local files to be present and also internet access
+  doCheck = false;
+
+  meta = {
     description = "Natural language processing (NLP) framework for pre-modern languages";
     homepage = "https://cltk.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    changelog = "https://github.com/cltk/cltk/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

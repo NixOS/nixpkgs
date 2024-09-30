@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.1.0b1";
+  version = "0.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-INpyN5jdXOzTC6t18PvbkbDM7n4Y4rejb08UfyJyFSk=";
+    hash = "sha256-Jq9cSdMMXVgRHhQK1LuGwVR6GBTIrw3th7y9huRSQjM=";
   };
 
   postPatch = ''

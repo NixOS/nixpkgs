@@ -45,12 +45,12 @@ else
       runHook postFixup
     '';
 
-    outputHashAlgo = if hash != "" then null else "sha256";
+    outputHashAlgo = null;
     outputHashMode = "recursive";
     outputHash = if hash != "" then
       hash
     else
-      lib.fakeSha256;
+      lib.fakeHash;
 
     inherit url change state channel;
 

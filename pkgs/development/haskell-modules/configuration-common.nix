@@ -593,6 +593,10 @@ self: super: {
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core_0_6_1_0 = doJailbreak super.hnix-store-core_0_6_1_0;
+
+  # 2024-09-27: dependent-sum-template pinned to 0.1.1.1, however 0.2.0.1+ required
+  hnix-store-core_0_8_0_0 = super.hnix-store-core_0_8_0_0.override { dependent-sum-template = self.dependent-sum-template_0_2_0_1; };
+
   # 2023-12-11: Needs older core
   hnix-store-remote = super.hnix-store-remote.override { hnix-store-core = self.hnix-store-core_0_6_1_0; };
 

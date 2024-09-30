@@ -52,7 +52,7 @@ buildPythonPackage rec {
     typer
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gui = [ pyside6 ];
     updateScript = nix-update-script { };
   };

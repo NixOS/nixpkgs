@@ -52,7 +52,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     shell = [
       ptpython
       rich

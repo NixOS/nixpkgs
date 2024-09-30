@@ -148,6 +148,11 @@ in
         example = "127.0.0.1";
         description = "Hostname or address of the postgresql server. If an absolute path is given here, it will be interpreted as a unix socket path.";
       };
+      port = mkOption {
+        type = types.port;
+        default = 5432;
+        description = "Port of the postgresql server.";
+      };
       user = mkOption {
         type = types.str;
         default = "immich";
