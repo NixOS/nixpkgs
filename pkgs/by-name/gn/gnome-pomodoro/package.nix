@@ -83,7 +83,10 @@ stdenv.mkDerivation rec {
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.
     '';
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = with maintainers; [
+      aleksana
+      herschenglime
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
