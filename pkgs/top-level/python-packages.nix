@@ -5648,6 +5648,8 @@ self: super: with self; {
 
   hfst = callPackage ../development/python-modules/hfst { };
 
+  hf-transfer = callPackage ../development/python-modules/hf-transfer { };
+
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
