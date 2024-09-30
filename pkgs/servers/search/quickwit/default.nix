@@ -96,6 +96,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  cargoPatches =[
+    ./update-time-for-rust-1.80.patch
+  ];
+
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 

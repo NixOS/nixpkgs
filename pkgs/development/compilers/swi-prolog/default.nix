@@ -54,7 +54,7 @@
 #     url = "https://raw.githubusercontent.com/samer--/prolog/master/typedef/release/typedef-0.1.9.tgz";
 #     sha256 = "056nqjn01g18fb1b2qivv9s7hb4azk24nx2d4kvkbmm1k91f44p3";
 #   };
-#   swiProlog = pkgs.swiProlog.override { extraPacks = map (dep-path: "'file://${dep-path}'") [
+#   swi-prolog = pkgs.swi-prolog.override { extraPacks = map (dep-path: "'file://${dep-path}'") [
 #     julian delay list_util typedef
 #   ]; };
 , extraPacks ? []
@@ -63,7 +63,7 @@
 
 let
   # minorVersion is even for stable, odd for unstable
-  version = "9.2.6";
+  version = "9.2.7";
 
   # This package provides several with* options, which replaces the old extraLibraries option.
   # This error should help users that still use this option find their way to these flags.
@@ -72,7 +72,7 @@ let
     "option 'extraLibraries' removed - use 'with*' options (e.g., 'withJava'), or overrideAttrs to inject extra build dependencies";
 
   packInstall = swiplPath: pack:
-    ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/extra-pack\"), silent(true), interactive(false)])." -t "halt."
+    ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/extra-pack\"), silent(true), interactive(false), git(false)])." -t "halt."
     '';
   withGui' = withGui && !stdenv.hostPlatform.isDarwin;
   optionalDependencies = []
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl";
     rev = "V${version}";
-    hash = "sha256-FgEn+Ht45++GFpfcdaJ5In5x+NyIOopSlSAs+t7sPDE=";
+    hash = "sha256-O9ogltcbBST111FA85jEVW6jGOLJSt/5PeBABtMu2Ws=";
     fetchSubmodules = true;
   };
 

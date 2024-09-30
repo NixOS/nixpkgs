@@ -38,9 +38,10 @@ rustPlatform.buildRustPackage rec {
   outputs = [ "out" "man" ];
 
   postInstall = ''
-    pandoc --standalone -f markdown -t man man/eza.1.md > man/eza.1
-    pandoc --standalone -f markdown -t man man/eza_colors.5.md > man/eza_colors.5
-    pandoc --standalone -f markdown -t man man/eza_colors-explanation.5.md > man/eza_colors-explanation.5
+    for page in eza.1 eza_colors.5 eza_colors-explanation.5; do
+      sed "s/\$version/v${version}/g" "man/$page.md" |
+        pandoc --standalone -f markdown -t man >"man/$page"
+    done
     installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
     installShellCompletion \
       --bash completions/bash/eza \

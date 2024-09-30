@@ -3,6 +3,7 @@
   fetchFromGitHub,
   immich,
   python3,
+  nixosTests,
 }:
 let
   python = python3.override {
@@ -15,7 +16,7 @@ let
         doCheck = false;
       });
 
-      albumentations = super.albumentations.overridePythonAttrs (_: rec {
+      albumentations = super.albumentations.overridePythonAttrs (old: rec {
         version = "1.4.3";
         src = fetchFromGitHub {
           owner = "albumentations-team";
@@ -23,11 +24,14 @@ let
           rev = version;
           hash = "sha256-JIBwjYaUP4Sc1bVM/zlj45cz9OWpb/LOBsIqk1m+sQA=";
         };
+        dependencies = old.dependencies ++ [
+          self.scikit-learn
+        ];
       });
     };
   };
 in
-python.pkgs.buildPythonApplication {
+python.pkgs.buildPythonApplication rec {
   pname = "immich-machine-learning";
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
@@ -83,7 +87,7 @@ python.pkgs.buildPythonApplication {
     cp -r ann $out/${python.sitePackages}/
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} "''${!outputBin}"/bin/machine-learning \
-      --prefix PYTHONPATH : "$out/${python.sitePackages}:$PYTHONPATH" \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}" \
       --set-default MACHINE_LEARNING_WORKERS 1 \
       --set-default MACHINE_LEARNING_WORKER_TIMEOUT 120 \
       --set-default MACHINE_LEARNING_CACHE_FOLDER /var/cache/immich \
@@ -95,6 +99,10 @@ python.pkgs.buildPythonApplication {
         -t \"\$MACHINE_LEARNING_WORKER_TIMEOUT\"
         --log-config-json $out/share/immich/log_conf.json"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) immich;
+  };
 
   meta = {
     description = "Self-hosted photo and video backup solution (machine learning component)";

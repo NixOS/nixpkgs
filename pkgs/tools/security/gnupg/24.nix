@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz sgo ];
     platforms = platforms.all;
     mainProgram = "gpg";
   };

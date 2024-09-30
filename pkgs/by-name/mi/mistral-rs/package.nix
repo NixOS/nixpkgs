@@ -81,20 +81,20 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3o7Esn+hEXKOoHX6JeXu/sgkWeL6tLCoH+Ep81/LoeU=";
+    hash = "sha256-ljGr8V6WkpXPV90SiHJ0t7wzBPx0J0FOB52YdLLIeoM=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "bindgen_cuda-0.1.6" = "sha256-OWGcQxT+x5HyIFskNVWpPr6Qfkh6Mv/g4PVSm5oA27g=";
-      "candle-core-0.6.0" = "sha256-8UBDQfbVR4gsZRRCy899DA27saiC85+FRm6L4YBX2oA=";
+      "candle-core-0.6.1" = "sha256-AtKjMTtbMBI2DbZXoWimhqcHmsz2DnRXJorqA0QYNHw=";
     };
   };
 
