@@ -32,7 +32,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
   };
 

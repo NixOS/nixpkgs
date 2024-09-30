@@ -39,7 +39,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     grpc = [
       grpcio
       grpcio-status

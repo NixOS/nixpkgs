@@ -34,7 +34,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ asyncclick ];
   };
 

@@ -161,7 +161,7 @@ buildPythonPackage rec {
     "psycopg_pool"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c = [ psycopg-c ];
     pool = [ psycopg-pool ];
   };
@@ -175,8 +175,8 @@ buildPythonPackage rec {
       postgresql
     ]
     ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
-    ++ passthru.optional-dependencies.c
-    ++ passthru.optional-dependencies.pool;
+    ++ optional-dependencies.c
+    ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;

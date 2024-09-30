@@ -55,7 +55,7 @@ buildPythonPackage rec {
     vine
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gcs = [ google-cloud-storage ];
     mongodb = [ pymongo ];
     msgpack = [ msgpack ];
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # test_eventlet touches network

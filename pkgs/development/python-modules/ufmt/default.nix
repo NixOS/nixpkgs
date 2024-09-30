@@ -44,14 +44,14 @@ buildPythonPackage rec {
     usort
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lsp = [ pygls ];
     ruff = [ ruff-api ];
   };
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "ufmt" ];
 

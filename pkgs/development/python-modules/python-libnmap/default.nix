@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-cI8wdOvTmRy2cxLBkJn7vXRBRvewDMNl/tkIiRGhZJ8=";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     defusedxml = [ defusedxml ];
   };
 

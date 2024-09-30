@@ -54,7 +54,7 @@ buildPythonPackage rec {
     parfive
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asdf = [
       asdf
       # asdf-astropy
@@ -91,11 +91,11 @@ buildPythonPackage rec {
       pytest-mock
       pytestCheckHook
     ]
-    ++ passthru.optional-dependencies.asdf
-    ++ passthru.optional-dependencies.database
-    ++ passthru.optional-dependencies.image
-    ++ passthru.optional-dependencies.net
-    ++ passthru.optional-dependencies.timeseries;
+    ++ optional-dependencies.asdf
+    ++ optional-dependencies.database
+    ++ optional-dependencies.image
+    ++ optional-dependencies.net
+    ++ optional-dependencies.timeseries;
 
   postPatch = ''
     substituteInPlace setup.cfg \

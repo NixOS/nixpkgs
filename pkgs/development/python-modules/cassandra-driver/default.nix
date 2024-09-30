@@ -78,7 +78,7 @@ buildPythonPackage rec {
     pytz
     pyyaml
     sure
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
@@ -127,7 +127,7 @@ buildPythonPackage rec {
     "test_nts_token_performance"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cle = [ cryptography ];
     eventlet = [ eventlet ];
     gevent = [ gevent ];

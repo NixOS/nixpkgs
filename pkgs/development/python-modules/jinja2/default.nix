@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     i18n = [ babel ];
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # See https://github.com/pallets/jinja/issues/1158
   doCheck = !stdenv.hostPlatform.is32bit;
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.i18n;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.i18n;
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # https://github.com/pallets/jinja/issues/1900

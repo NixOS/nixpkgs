@@ -52,7 +52,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     nospam = [
       requests-cache
       requests-ratelimiter

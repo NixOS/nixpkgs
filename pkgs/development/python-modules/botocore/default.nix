@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "botocore" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crt = [ awscrt ];
   };
 
