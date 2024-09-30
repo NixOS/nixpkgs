@@ -48,7 +48,9 @@ buildGo123Module rec {
 
   meta = with lib; {
     description = "Modern diagram scripting language that turns text to diagrams";
+    mainProgram = "d2";
     homepage = "https://d2lang.com";
+    changelog = "https://github.com/terrastruct/d2/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dit7ya kashw2 ];
   };
