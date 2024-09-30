@@ -60,7 +60,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     plots = [
       matplotlib
       ipython

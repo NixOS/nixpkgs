@@ -61,7 +61,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     recommended = [
       mkdocs-minify-plugin
       mkdocs-redirects

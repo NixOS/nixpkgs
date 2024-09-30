@@ -127,7 +127,7 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  passthru.optional-dependencies.oauth = [
+  optional-dependencies.oauth = [
     authlib
     itsdangerous
   ];
@@ -151,7 +151,7 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
-  ] ++ passthru.optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
+  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.

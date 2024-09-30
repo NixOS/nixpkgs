@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch2, installShellFiles, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests, nix-update-script }:
 
 buildGoModule rec {
   pname = "miniflux";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     rev = "refs/tags/${version}";
-    hash = "sha256-JE0sHxmvLGvbgOqH5f7OONAvP93dJLWLAbgTnlNHGHE=";
+    hash = "sha256-b4slACQl+3vDsioULVKscBhS8LvTxCUPDnO7GlT46CM=";
   };
 
-  vendorHash = "sha256-Y5FcKmvYMN9Q9/VpP8IWclFXt7gl61UiyPJ+Rdmlito=";
+  vendorHash = "sha256-PL5tc6MQRHloc3Dfw+FpWdqrXErFPjEb8RNPmHr7jSk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,7 +26,10 @@ buildGoModule rec {
     installManPage miniflux.1
   '';
 
-  passthru.tests = nixosTests.miniflux;
+  passthru = {
+    tests = nixosTests.miniflux;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Minimalist and opinionated feed reader";

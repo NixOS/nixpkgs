@@ -59,9 +59,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     intake-parquet
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [
       msgpack
       python-snappy

@@ -75,7 +75,7 @@ buildPythonPackage rec {
     webencodings
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tunnel = [ pytap2 ];
   };
 
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     riden
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";

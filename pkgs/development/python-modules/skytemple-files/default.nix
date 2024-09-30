@@ -72,7 +72,7 @@ buildPythonPackage rec {
     range-typed-integers
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     spritecollab = [
       aiohttp
       gql
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     pytestCheckHook
     parameterized
     xmldiff
-  ] ++ passthru.optional-dependencies.spritecollab;
+  ] ++ optional-dependencies.spritecollab;
   pytestFlagsArray = [ "test/" ];
   disabledTestPaths = [
     "test/skytemple_files_test/common/spritecollab/sc_online_test.py"

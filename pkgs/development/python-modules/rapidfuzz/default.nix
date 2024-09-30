@@ -60,7 +60,7 @@ buildPythonPackage rec {
       export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
     '';
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [ numpy ];
   };
 

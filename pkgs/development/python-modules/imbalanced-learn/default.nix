@@ -37,7 +37,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     optional = [
       keras
       pandas

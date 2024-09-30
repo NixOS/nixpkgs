@@ -50,7 +50,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     entrypoints = [ ];
     abfs = [ adlfs ];
     adl = [ adlfs ];
