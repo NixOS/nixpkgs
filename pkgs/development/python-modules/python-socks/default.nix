@@ -37,6 +37,13 @@ buildPythonPackage rec {
     async-timeout
   ];
 
+  optional-dependencies = {
+    asyncio = lib.optionals (pythonOlder "3.11") [ async-timeout ];
+    trio = [ trio ];
+    curio = [ curio ];
+    anyio = [ anyio ];
+  };
+
   doCheck = false; # requires tiny_proxy module
 
   nativeCheckInputs = [
