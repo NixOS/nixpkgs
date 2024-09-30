@@ -90,8 +90,7 @@ buildPythonPackage {
       };
     })
     ./0004-fix-fixup-paths.patch
-    ./0005-fix-data_percent-might-be-empty.patch
-    ./0006-fix-python-prefix-arg.patch
+    ./0005-fix-python-prefix-arg.patch
 
     # Accepted upstream, remove after package update
     # https://github.com/QubesOS/qubes-core-admin/pull/619
