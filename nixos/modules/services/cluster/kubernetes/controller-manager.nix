@@ -50,7 +50,11 @@ in
       type = attrsOf bool;
     };
 
-    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes controller manager";
+    kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler" null;
+
+    authorizationKubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler authorization" cfg.kubeconfig;
+
+    authenticationKubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler authentication" cfg.kubeconfig;
 
     leaderElect = mkOption {
       description = "Whether to start leader election before executing main loop.";
@@ -124,6 +128,8 @@ in
           ${optionalString (cfg.featureGates != {})
             "--feature-gates=${concatStringsSep "," (builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates))}"} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
+          --authorization-kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.authorizationKubeconfig} \
+          --authentication-kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.authenticationKubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
           ${optionalString (cfg.rootCaFile!=null)
             "--root-ca-file=${cfg.rootCaFile}"} \
