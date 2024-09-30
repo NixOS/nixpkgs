@@ -50,11 +50,13 @@ flutterPackages.v3_19.buildFlutterApplication rec {
 
   # without this, only the splash screen will be shown and the logs will contain the
   # line `Failed to load dynamic library 'lib/libintiface_engine_flutter_bridge.so'`
-  extraWrapProgramArgs = "--chdir $out/app";
+  # Environmental variables don't quite eval outside of hooks so use pname and
+  # version directly.
+  extraWrapProgramArgs = "--chdir $out/app/${pname}";
 
   postInstall = ''
     mkdir -p $out/share/pixmaps
-    cp $out/app/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
+    cp $out/app/$pname/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
   '';
 
   desktopItems = [
