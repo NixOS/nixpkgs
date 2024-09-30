@@ -5,6 +5,7 @@
   lib,
   restic,
   util-linux,
+  stdenv,
 }:
 let
   pname = "backrest";
@@ -44,8 +45,17 @@ buildGoModule {
 
   nativeCheckInputs = [ util-linux ];
 
-  # Fails with handler returned wrong content encoding
-  checkFlags = [ "-skip=TestServeIndex" ];
+  checkFlags =
+    let
+      skippedTests =
+        [
+          "TestServeIndex" # Fails with handler returned wrong content encoding
+        ]
+        ++ lib.optionals stdenv.isDarwin [
+          "TestBackup" # relies on ionice
+        ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck = ''
     # Use restic from nixpkgs, otherwise download fails in sandbox
