@@ -295,7 +295,11 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Use HTTPS for generated links.";
+      description = ''
+        Use HTTPS for generated links.
+
+        Be aware that this also enables HTTP Strict Transport Security (HSTS) headers.
+      '';
     };
     package = mkOption {
       type = types.package;
