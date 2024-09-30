@@ -207,6 +207,11 @@ installPhase() {
           ln -s "$soname" "$libdir/$unversioned"
         fi
       fi
+
+      # FIXME: libglxserver_nvidia does not have a soname, but must still be symlinked
+      if [[ "$unversioned" == "libglxserver_nvidia.so" ]]; then
+        ln -s "$libbase" "$libdir/$unversioned"
+      fi
     done
 
     if [ -n "$bin" ]; then
