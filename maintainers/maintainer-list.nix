@@ -18958,6 +18958,12 @@
     githubId = 11320;
     name = "Sergiu Ivanov";
   };
+  scraptux = {
+    email = "git@thomasjasny.de";
+    github = "scraptux";
+    githubId = 12714892;
+    name = "Thomas Jasny";
+  };
   screendriver = {
     email = "nix@echooff.de";
     github = "screendriver";

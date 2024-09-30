@@ -4166,6 +4166,23 @@ let
         };
       };
 
+      sas.sas-lsp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "sas-lsp";
+          publisher = "SAS";
+          version = "1.10.2";
+          hash = "sha256-mf0q80UX4FxqHAHJBQlhkF/nqvTnfgTR8GuYBoWSswU=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";
+          description = "Official SAS Language Extension";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=SAS.sas-lsp";
+          homepage = "https://github.com/sassoftware/vscode-sas-extension";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.scraptux ];
+        };
+      };
+
       scala-lang.scala = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scala";
