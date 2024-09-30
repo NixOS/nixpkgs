@@ -146,21 +146,22 @@ let
         built=build/linux/*/$flutterMode/bundle
 
         mkdir -p $out/bin
-        mv $built $out/app
+        mkdir -p $out/app
+        mv $built $out/app/$pname
 
-        for f in $(find $out/app -iname "*.desktop" -type f); do
+        for f in $(find $out/app/$pname -iname "*.desktop" -type f); do
           install -D $f $out/share/applications/$(basename $f)
         done
 
-        for f in $(find $out/app -maxdepth 1 -type f); do
+        for f in $(find $out/app/$pname -maxdepth 1 -type f); do
           ln -s $f $out/bin/$(basename $f)
         done
 
         # make *.so executable
-        find $out/app -iname "*.so" -type f -exec chmod +x {} +
+        find $out/app/$pname -iname "*.so" -type f -exec chmod +x {} +
 
         # remove stuff like /build/source/packages/ubuntu_desktop_installer/linux/flutter/ephemeral
-        for f in $(find $out/app -executable -type f); do
+        for f in $(find $out/app/$pname -executable -type f); do
           if patchelf --print-rpath "$f" | grep /build; then # this ignores static libs (e,g. libapp.so) also
             echo "strip RPath of $f"
             newrp=$(patchelf --print-rpath $f | sed -r "s|/build.*ephemeral:||g" | sed -r "s|/build.*profile:||g")
