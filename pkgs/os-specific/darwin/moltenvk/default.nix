@@ -3,19 +3,16 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
+  apple-sdk_14,
+  darwinMinVersionHook,
   cereal,
   libcxx,
   glslang,
-  simd,
   spirv-cross,
   spirv-headers,
   spirv-tools,
   vulkan-headers,
   xcbuildHook,
-  AppKit,
-  Foundation,
-  Metal,
-  QuartzCore,
   enableStatic ? stdenv.hostPlatform.isStatic,
   # MoltenVK supports using private APIs to implement some Vulkan functionality.
   # Applications that use private APIs can’t be distributed on the App Store,
@@ -31,13 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   buildInputs = [
-    AppKit
-    Foundation
-    Metal
-    QuartzCore
+    apple-sdk_14
     cereal
+    (darwinMinVersionHook "10.15")
     glslang
-    simd
     spirv-cross
     spirv-headers
     spirv-tools
