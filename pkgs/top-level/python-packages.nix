@@ -5562,6 +5562,8 @@ self: super: with self; {
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
+  haralyzer = callPackage ../development/python-modules/haralyzer { };
+
   hass-client = callPackage ../development/python-modules/hass-client { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
