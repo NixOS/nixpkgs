@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # This test fails on Darwin. man-db expects libiconv to skip over the invalid character in the source data, but
+    # Darwin’s libiconv returns EILSEQ without skipping it. This causes the `manconv` to go into an infinite loop
+    # because it keeps trying to convert the invalid character.
+    sed -i '/manconv-odd-combinations/d' src/tests/Makefile.am
   '';
 
   configureFlags = [
