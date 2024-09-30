@@ -33,9 +33,8 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     makeWrapper
     electron
-    autoPatchelfHook # for onnx libs
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook; # for onnx libs
 
   buildInputs = [
     stdenv.cc.cc.lib # for libstdc++.so, required by onnxruntime
