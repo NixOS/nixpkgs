@@ -17,7 +17,8 @@
    or dot-files. */
 
 let
-  # This is not pkgs/top-level/impure.nix or default.nix, so we'll need at least something.
+  # This file has pure behavior, unlike pkgs/top-level/impure.nix or default.nix,
+  # so we can't infer everything from the expression language environment.
   noArgumentError =
     abort ''
       You must specify the hostPlatform argument to nixpkgs, to specify the platform on which the packages will run.
@@ -27,11 +28,11 @@ let
 in
 {
   # Where the packages will run
-  # TODO: document in the manual
+  # See doc/using/as-a-function.chapter.md
   hostPlatform ? noArgumentError,
 
   # Where the derivations are built. Default: hostPlatform.
-  # TODO: document in the manual
+  # See doc/using/as-a-function.chapter.md
   buildPlatform ? hostPlatform,
 
   # (legacy) The system packages will be built on. See the manual for the

@@ -98,12 +98,15 @@ in pkgs.hello
 These parameters existed before [`hostPlatform` and `buildPlatform`](#sec-nixpkgs-arguments-platforms) were introduced.
 They are still supported, but are not recommended for new code.
 
-The main difference is that these parameters default to [`builtins.currentSystem`], which is not recommended for pure code.
+The main difference is that these parameters default to [`builtins.currentSystem`], which does not work for pure code.
 
 Furthermore, their design is optimized for impure command line use.
 
-Unlike `hostPlatform`, `crossSystem` is not always set, so it does not make for a nice abstraction of compilation.
+The term "local" is misleading, because it need not match the platform where the Nix command is run.
 
+The term "cross" is also misleading because its value may equal `localSystem`.
+
+Finally `crossSystem` may have to be unset as an input, complicating some code that calls the Nixpkgs function.
 <!-- This example transgresses the guidelines a bit, but we have an audience here that needs answers, because who likes change. Without explanation, this comes across as a superficial, unnecessary and annoying change. Remove this example in 2026 when it is irrelevant. -->
 For example, [`nixos-generate-config`] wasn't initially able to set the platform in `hardware-configuration.nix` without making assumptions about cross versus native compilation, resulting in a need for you to manually specify `system` when Flakes were introduced.
 
