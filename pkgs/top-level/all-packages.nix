@@ -30553,8 +30553,6 @@ with pkgs;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 
-  kconf = callPackage ../applications/networking/cluster/kconf { };
-
   kail = callPackage ../tools/networking/kail {  };
 
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
