@@ -10,6 +10,7 @@
   pytest-trio,
   pythonOlder,
   pytestCheckHook,
+  setuptools,
   trio,
   trustme,
   yarl,
@@ -18,7 +19,7 @@
 buildPythonPackage rec {
   pname = "python-socks";
   version = "2.5.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6.2";
 
@@ -31,7 +32,9 @@ buildPythonPackage rec {
     hash = "sha256-8qh7ohErK10RlVh4Zi1jBVmafWkGmLcGZsTDqE3dldY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     trio
     curio
     async-timeout
