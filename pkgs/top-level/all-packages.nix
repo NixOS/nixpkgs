@@ -32647,8 +32647,6 @@ with pkgs;
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
-  seahub = callPackage ../applications/networking/seahub { };
-
   seatd = callPackage ../applications/misc/seatd { };
 
   secrets-extractor = callPackage ../tools/security/secrets-extractor { };
@@ -38238,8 +38236,6 @@ with pkgs;
   };
 
   sct = callPackage ../tools/X11/sct { };
-
-  seafile-server = callPackage ../servers/seafile-server { };
 
   seafile-shared = callPackage ../misc/seafile-shared { };
 
