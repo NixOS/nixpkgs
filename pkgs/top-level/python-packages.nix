@@ -6071,6 +6071,8 @@ self: super: with self; {
 
   inequality = callPackage ../development/python-modules/inequality { };
 
+  inference-gym = callPackage ../development/python-modules/inference-gym { };
+
   infinity = callPackage ../development/python-modules/infinity { };
 
   inflect = callPackage ../development/python-modules/inflect { };
