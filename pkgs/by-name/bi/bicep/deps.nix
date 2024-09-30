@@ -112,7 +112,7 @@
   (fetchNuGet { pname = "Microsoft.Win32.SystemEvents"; version = "6.0.1"; hash = "sha256-wk8oV7jHZfSxKX5PDcV3S/pSnsaFq4mr8fakvJI4V9U="; })
   (fetchNuGet { pname = "Microsoft.Windows.Compatibility"; version = "6.0.7"; hash = "sha256-LSQbmbX833b0Q6s6h6Un+yfU8JZS6eLbgFHwes5rAaw="; })
   (fetchNuGet { pname = "MSTest.TestAdapter"; version = "3.5.2"; hash = "sha256-tbKREqe9w5Tkhib4AfWR9vB7DYLmvAjEov8UM2D2gA0="; })
-  (fetchNuGet { pname = "MSTest.TestFramework"; version = "3.5.2"; hash = "sha256-ZudwTMNhxbxehLz9hCOgrhTzegVs4P6avUpFiez+u10="; })
+  (fetchNuGet { pname = "MSTest.TestFramework"; version = "3.6.0"; hash = "sha256-3j4Gp+BOhhKZav23gED/dtAnsoOrG+wtI9+p6IHNVMA="; })
   (fetchNuGet { pname = "Nerdbank.GitVersioning"; version = "3.6.143"; hash = "sha256-OhOtMzP+2obDIR+npR7SsoXo0KrmcsL+VCE8Z3t5gzQ="; })
   (fetchNuGet { pname = "Nerdbank.Streams"; version = "2.11.74"; hash = "sha256-asIdaqCIjZspTA+hhtjKNajpCo+ZQi3erZLCpBQ5No4="; })
   (fetchNuGet { pname = "Newtonsoft.Json"; version = "13.0.1"; hash = "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="; })

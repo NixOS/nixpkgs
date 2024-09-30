@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, sqlite
-, openssl
-, CoreServices
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  sqlite,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,13 +26,25 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = [ sqlite ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  buildInputs =
+    [ sqlite ]
+    ++ lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreServices
+      ]
+    );
 
-  cargoBuildFlags = [ "--package" "arti" ];
+  cargoBuildFlags = [
+    "--package"
+    "arti"
+  ];
 
-  cargoTestFlags = [ "--package" "arti" ];
+  cargoTestFlags = [
+    "--package"
+    "arti"
+  ];
 
   checkFlags = [
     # problematic tests that were fixed after the release
@@ -39,12 +52,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=reload_cfg::test::watch_multiple"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Tor in Rust";
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [ rapiteanu ];
   };
 }

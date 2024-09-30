@@ -1819,7 +1819,7 @@ dependencies = [
 
 [[package]]
 name = "rye"
-version = "0.40.0"
+version = "0.41.0"
 dependencies = [
  "age",
  "anyhow",
