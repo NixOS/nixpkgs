@@ -80,6 +80,10 @@
       devShells = forAllSystems (system: {
         default = import ./shell.nix { inherit system; };
       });
+      
+      overlays.default = final: prev: {
+        lib = prev.lib.extend libVersionInfoOverlay;
+      };
 
       # The "legacy" in `legacyPackages` doesn't imply that the packages exposed
       # through this attribute are "legacy" packages. Instead, `legacyPackages`
@@ -90,11 +94,31 @@
       # attribute it displays `omitted` instead of evaluating all packages,
       # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
       # information rich.
-      legacyPackages = forAllSystems (system:
-        (import ./. { inherit system; }).extend (final: prev: {
-          lib = prev.lib.extend libVersionInfoOverlay;
-        })
-      );
+      legacyPackages = forAllSystems (
+        system:
+        (import ./. {
+          inherit system;
+
+          # XXX custom patch from @Ma27. This is the default config I use for my deployment
+          # (and this patch should only appear on my deployment's tracking-branch).
+          # Workaround here because there's no reasonable way to (re)configure nixpkgs without
+          # having to instantiate a second one.
+          config = {
+            allowUnfree = false;
+            allowUnfreePredicate =
+              drv:
+              builtins.elem (lib.getName drv) [
+                "1password"
+                "1password-cli"
+                "keepa"
+                "onepassword-password-manager"
+                "phpstorm"
+                "slack"
+              ];
+          };
+
+          overlays = [ self.overlays.default ];
+        }));
 
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
