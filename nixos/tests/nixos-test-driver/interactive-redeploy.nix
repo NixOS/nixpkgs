@@ -11,11 +11,21 @@ let
       { config, pkgs, ... }:
       {
         environment.etc."custom-test-marker".text = "test-0";
+        environment.systemPackages = with pkgs; [ getent ];
+        virtualisation.vlans = [ 1 2 ];
       };
+    nodes.dud = {};
     testScript = ''
       start_all()
       machine.wait_for_unit("multi-user.target")
       machine.succeed("[[ $(cat /etc/custom-test-marker | tee /dev/stderr) == test-0 ]]")
+      with subtest("dud initially known"):
+        machine.succeed("getent ahostsv4 dud")
+      with subtest("'machine' is on IP x.x.x.2 becuase 'dud' comes first"):
+        machine.succeed("ping -c 3 192.168.1.2")
+      with subtest("vlans initially configured"):
+        machine.succeed("ping -c 3 192.168.2.2")
+        machine.fail("ping -c 3 192.168.3.2")
     '';
   };
   test1 = testers.runNixOSTest {
@@ -24,11 +34,20 @@ let
       { config, pkgs, ... }:
       {
         environment.etc."custom-test-marker".text = "test-1";
+        environment.systemPackages = with pkgs; [ getent ];
+        virtualisation.vlans = [ 1 3 ];
       };
     testScript = ''
       start_all()
       machine.wait_for_unit("multi-user.target")
       machine.succeed("[[ $(cat /etc/custom-test-marker | tee /dev/stderr) == test-1 ]]")
+      with subtest("dud removed from config"):
+        machine.fail("getent ahostsv4 dud")
+      with subtest("'machine' changes to IP x.x.x.1 due to 'dud' being removed"):
+        machine.succeed("ping -c 3 192.168.1.1")
+      with subtest("vlans reconfigured"):
+        machine.fail("ping -c 3 192.168.2.1")
+        machine.succeed("ping -c 3 192.168.3.1")
     '';
   };
 in
