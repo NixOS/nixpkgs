@@ -32,8 +32,11 @@ let
   forceRust = features.rust or false;
   kernelSupportsRust = lib.versionAtLeast version "6.7";
 
-  # Currently not enabling Rust by default, as upstream requires rustc 1.81
-  defaultRust = false;
+  # Currently only enabling Rust by default on kernel 6.12+,
+  # which actually has features that use Rust that we want,
+  # and only on x86_64, because of a nixpkgs rustc issue:
+  # https://github.com/NixOS/nixpkgs/pull/315121#issuecomment-2135805876
+  defaultRust = lib.versionAtLeast version "6.12" && stdenv.hostPlatform.isx86_64;
   withRust = (forceRust || defaultRust) && kernelSupportsRust;
 
   options = {
