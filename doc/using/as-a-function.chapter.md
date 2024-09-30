@@ -95,6 +95,8 @@ in pkgs.hello
 
 ### Legacy arguments `system`, `localSystem` and `crossSystem` {#sec-nixpkgs-arguments-systems-legacy}
 
+`crossSystem` and `system` (or `localSystem`) are ok to use on the command line, but are not recommended for pure Nix code (such as Nix flakes), or Nix code that manages the invocation of the Nixpkgs function.
+
 These parameters existed before [`hostPlatform` and `buildPlatform`](#sec-nixpkgs-arguments-platforms) were introduced.
 They are still supported, but are not recommended for new code.
 
