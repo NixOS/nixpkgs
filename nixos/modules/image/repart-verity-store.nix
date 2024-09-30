@@ -174,6 +174,7 @@ in
               nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
                 pkgs.systemdUkify
                 verityHashCheck
+                pkgs.jq
               ];
 
               preBuild = ''
@@ -190,6 +191,24 @@ in
                 # copy the uncompressed intermediate image, so that systemd-repart picks it up
                 cp -v ${config.system.build.intermediateImage}/${config.image.repart.imageFileBasename}.raw .
                 chmod +w ${config.image.repart.imageFileBasename}.raw
+              '';
+
+              # replace "TBD" with the original roothash values
+              preInstall = ''
+                mv -v repart-output{.json,_orig.json}
+
+                jq --slurp --indent -1 \
+                  '.[0] as $intermediate | .[1] as $final
+                    | $intermediate | map(select(.roothash != null) | { "uuid":.uuid,"roothash":.roothash }) as $uuids
+                    | $final + $uuids
+                    | group_by(.uuid)
+                    | map(add)
+                    | sort_by(.offset)' \
+                      ${config.system.build.intermediateImage}/repart-output.json \
+                      repart-output_orig.json \
+                  > repart-output.json
+
+                rm -v repart-output_orig.json
               '';
 
               # the image will be self-contained so we can drop references
