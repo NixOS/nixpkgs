@@ -5643,6 +5643,10 @@ with pkgs;
 
   nltk-data = callPackage ../tools/text/nltk-data { };
 
+  seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
+  seabios-csm = seabios.override { ___build-type = "csm"; };
+  seabios-qemu = seabios.override { ___build-type = "qemu"; };
+
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
   nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
