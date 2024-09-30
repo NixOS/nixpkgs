@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "1.1.30",
+  "version": "1.1.31",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -38,13 +38,13 @@
   ],
   "dependencies": {
     "@yetzt/nedb": "1.8.0",
-    "archiver": "7.0.0",
+    "archiver": "7.0.1",
     "body-parser": "1.20.3",
     "cbor": "5.2.0",
     "compression": "1.7.4",
     "cookie-session": "2.0.0",
     "express": "4.21.0",
-    "express-handlebars": "5.3.5",
+    "express-handlebars": "7.1.3",
     "express-ws": "5.0.2",
     "ipcheck": "0.1.0",
     "minimist": "1.2.8",
@@ -78,7 +78,7 @@
     "compression": "1.7.4",
     "cookie-session": "2.0.0",
     "express": "4.21.0",
-    "express-handlebars": "5.3.5",
+    "express-handlebars": "7.1.3",
     "express-ws": "5.0.2",
     "ipcheck": "0.1.0",
     "minimist": "1.2.8",
