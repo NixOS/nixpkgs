@@ -1,0 +1,44 @@
+From 89c7c160f897f64e17fb74efffccfd1fc16f8b7d Mon Sep 17 00:00:00 2001
+From: Jappie Klooster <jappieklooster@hotmail.com>
+Date: Fri, 2 Apr 2021 14:22:02 -0400
+Subject: [PATCH] Add cmake install directives.
+
+To make nix builds work, it expect a `make install` command to
+be available.
+Adding these directives seems to fix the build.
+
+If it's no trouble to you, please add them.
+
+Maybe don't need endian
+---
+ CMakeLists.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 06e416f..8d6f489 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
+ add_library(IODash INTERFACE)
+ target_include_directories(IODash INTERFACE .)
+ 
++include(GNUInstallDirs)
++
+ add_executable(IODash_Test test.cpp)
+ target_link_libraries(IODash_Test IODash)
+ 
+@@ -20,3 +22,11 @@ if (DEFINED BUILD_BENCHMARKS AND (${BUILD_BENCHMARKS}))
+     target_link_libraries(boost_Benchmark_HTTP boost_system pthread)
+ endif()
+ 
++install(TARGETS IODash
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(FILES IODash.hpp
++        DESTINATION include/)
++
++install(FILES
++        IODash/Buffer.hpp IODash/SocketAddress.hpp IODash/File.hpp IODash/Socket.hpp IODash/EventLoop.hpp IODash/Serial.hpp IODash/Timer.hpp
++        DESTINATION include/IODash)
+-- 
+2.29.2
+

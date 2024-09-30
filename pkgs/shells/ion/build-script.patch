@@ -1,0 +1,17 @@
+--- a/build.rs
++++ b/build.rs
+@@ -23,13 +23,7 @@ fn write_version_file() -> io::Result<()> {
+     let target = env::var("TARGET").unwrap();
+     let version_fname = Path::new(&env::var("OUT_DIR").unwrap()).join("version_string");
+     let mut version_file = File::create(&version_fname)?;
+-    write!(
+-        &mut version_file,
+-        "r#\"ion {} ({})\nrev {}\"#",
+-        version,
+-        target,
+-        get_git_rev()?.trim()
+-    )?;
++    write!(&mut version_file, "r#\"ion {version} ({target})\n\"#")?;
+     Ok(())
+ }
+ 

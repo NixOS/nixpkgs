@@ -1,0 +1,1 @@
+export GOTOOLDIR=@bin@/bin

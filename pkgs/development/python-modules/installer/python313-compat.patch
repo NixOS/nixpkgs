@@ -1,0 +1,55 @@
+From b23f89b10cf5d179bd6b0bad195ee36f43a5fb9e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Edgar=20Ram=C3=ADrez=20Mondrag=C3=B3n?=
+ <16805946+edgarrmondragon@users.noreply.github.com>
+Date: Tue, 19 Dec 2023 06:09:41 -0600
+Subject: [PATCH] Fix removed `importlib.resources.read_binary` in Python 3.13
+ (#201)
+
+diff --git a/noxfile.py b/noxfile.py
+index a690c59..6a69cce 100644
+--- a/noxfile.py
++++ b/noxfile.py
+@@ -22,7 +22,7 @@ def lint(session):
+     session.run("pre-commit", "run", "--all-files", *args)
+ 
+ 
+-@nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"])
++@nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "pypy3"])
+ def test(session):
+     session.install(".")
+     session.install("-r", "tests/requirements.txt")
+@@ -42,7 +42,7 @@ def test(session):
+     )
+ 
+ 
+-@nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3"])
++@nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "pypy3"])
+ def doctest(session):
+     session.install(".")
+     session.install("-r", "docs/requirements.txt")
+diff --git a/src/installer/scripts.py b/src/installer/scripts.py
+index d18060b..c9f96b4 100644
+--- a/src/installer/scripts.py
++++ b/src/installer/scripts.py
+@@ -3,9 +3,19 @@
+ import io
+ import os
+ import shlex
++import sys
+ import zipfile
+-from importlib.resources import read_binary
+-from typing import TYPE_CHECKING, Mapping, Optional, Tuple
++from types import ModuleType
++from typing import TYPE_CHECKING, Mapping, Optional, Tuple, Union
++
++if sys.version_info >= (3, 9):  # pragma: no cover
++    from importlib.resources import files
++
++    def read_binary(package: Union[str, ModuleType], file_path: str) -> bytes:
++        return (files(package) / file_path).read_bytes()
++
++else:  # pragma: no cover
++    from importlib.resources import read_binary
+ 
+ from installer import _scripts
+ 

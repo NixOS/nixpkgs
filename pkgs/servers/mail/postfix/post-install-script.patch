@@ -1,0 +1,28 @@
+--- a/conf/post-install	1970-01-01 03:00:01.000000000 +0300
++++ b/conf/post-install	2016-01-20 13:25:18.382233172 +0200
+@@ -254,6 +254,8 @@
+ }
+ 
+ # Bootstrapping problem.
++meta_directory="@PACKAGE@/etc/postfix"
++command_directory="@PACKAGE@/bin"
+ 
+ if [ -n "$command_directory" ]
+ then
+@@ -528,7 +530,16 @@
+ 	    # Skip uninstalled files.
+ 	    case $path in
+ 	    no|no/*) continue;;
++        # Skip immutable files from package, correct permissions provided by Nix.
++        @PACKAGE@/*) continue;
+ 	    esac
++        # Also skip symlinks following to /nix/store
++        if test -L $path; then
++            case "$(readlink $path)" in
++                @NIX_STORE@/*) continue;
++            esac
++        fi
++
+ 	    # Pick up the flags.
+ 	    case $flags in *u*) upgrade_flag=1;; *) upgrade_flag=;; esac
+ 	    case $flags in *c*) create_flag=1;; *) create_flag=;; esac

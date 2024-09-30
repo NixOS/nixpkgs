@@ -1,0 +1,11 @@
+--- a/utils/cfutil.in
++++ b/utils/cfutil.in
+@@ -27,7 +27,7 @@ use common::sense;
+ my $prefix      = "@prefix@";
+ my $exec_prefix = "@exec_prefix@";
+ my $datarootdir = "@datarootdir@";
+-my $DATADIR     = "@datadir@/@PACKAGE@";
++my $DATADIR     = $ENV{'DELIANTRA_DATADIR'} || "@datadir@/@PACKAGE@";
+
+ my $CONVERT  = "@CONVERT@";
+ my $IDENTIFY = "@IDENTIFY@";

@@ -1,0 +1,79 @@
+Based on https://sourceforge.net/p/ruamel-yaml-clib/code/merge-requests/4/ with additions
+for `input_handler` and `output_handler`.
+
+--- a/_ruamel_yaml.pxd
++++ b/_ruamel_yaml.pxd
+@@ -2,15 +2,15 @@
+ cdef extern from "_ruamel_yaml.h":
+ 
+     void malloc(int l)
+-    void memcpy(char *d, char *s, int l)
++    void memcpy(unsigned char *d, char *s, int l)
+     int strlen(char *s)
+     int PyString_CheckExact(object o)
+     int PyUnicode_CheckExact(object o)
+     char *PyString_AS_STRING(object o)
+     int PyString_GET_SIZE(object o)
+-    object PyString_FromStringAndSize(char *v, int l)
++    object PyString_FromStringAndSize(unsigned char *v, size_t l)
+     object PyUnicode_FromString(char *u)
+-    object PyUnicode_DecodeUTF8(char *u, int s, char *e)
++    object PyUnicode_DecodeUTF8(unsigned char *u, size_t s, char *e)
+     object PyUnicode_AsUTF8String(object o)
+     int PY_MAJOR_VERSION
+ 
+@@ -85,11 +85,11 @@
+         YAML_MAPPING_START_EVENT
+         YAML_MAPPING_END_EVENT
+ 
+-    ctypedef int yaml_read_handler_t(void *data, char *buffer,
+-            int size, int *size_read) except 0
+-
+-    ctypedef int yaml_write_handler_t(void *data, char *buffer,
+-            int size) except 0
++    ctypedef int yaml_read_handler_t(void *data, unsigned char *buffer,
++            size_t size, size_t *size_read) except 0
++
++    ctypedef int yaml_write_handler_t(void *data, unsigned char *buffer,
++            size_t size) except 0
+ 
+     ctypedef struct yaml_mark_t:
+         int index
+@@ -112,7 +112,7 @@
+         char *handle
+         char *suffix
+     ctypedef struct _yaml_token_scalar_data_t:
+-        char *value
++        unsigned char *value
+         int length
+         yaml_scalar_style_t style
+     ctypedef struct _yaml_token_version_directive_data_t:
+@@ -151,7 +151,7 @@
+     ctypedef struct _yaml_event_scalar_data_t:
+         char *anchor
+         char *tag
+-        char *value
++        unsigned char *value
+         int length
+         int plain_implicit
+         int quoted_implicit
+--- a/_ruamel_yaml.pyx
++++ b/_ruamel_yaml.pyx
+@@ -904,7 +904,7 @@
+                 raise error
+         return 1
+
+-cdef int input_handler(void *data, char *buffer, int size, int *read) except 0:
++cdef int input_handler(void *data, unsigned char *buffer, size_t size, size_t *read) except 0:
+     cdef CParser parser
+     parser = <CParser>data
+     if parser.stream_cache is None:
+@@ -1514,7 +1514,7 @@
+             self.ascend_resolver()
+         return 1
+
+-cdef int output_handler(void *data, char *buffer, int size) except 0:
++cdef int output_handler(void *data, unsigned char *buffer, size_t size) except 0:
+     cdef CEmitter emitter
+     emitter = <CEmitter>data
+     if emitter.dump_unicode == 0:

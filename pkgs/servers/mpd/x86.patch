@@ -1,0 +1,12 @@
+--- a/src/decoder/plugins/FfmpegDecoderPlugin.cxx
++++ b/src/decoder/plugins/FfmpegDecoderPlugin.cxx
+@@ -20,8 +20,8 @@
+ /* necessary because libavutil/common.h uses UINT64_C */
+ #define __STDC_CONSTANT_MACROS
+ 
+-#include "lib/ffmpeg/Time.hxx"
+ #include "config.h"
++#include "lib/ffmpeg/Time.hxx"
+ #include "FfmpegDecoderPlugin.hxx"
+ #include "lib/ffmpeg/Domain.hxx"
+ #include "lib/ffmpeg/Error.hxx"

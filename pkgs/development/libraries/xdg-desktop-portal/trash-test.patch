@@ -1,0 +1,18 @@
+diff --git a/tests/test_trash.py b/tests/test_trash.py
+index d745cd2..173e3e5 100644
+--- a/tests/test_trash.py
++++ b/tests/test_trash.py
+@@ -24,13 +24,6 @@ class TestTrash:
+     def test_version(self, portal_mock):
+         portal_mock.check_version(1)
+ 
+-    def test_trash_file_fails(self, portal_mock):
+-        trash_intf = portal_mock.get_dbus_interface()
+-        with open("/proc/cmdline") as fd:
+-            result = trash_intf.TrashFile(fd.fileno())
+-
+-        assert result == 0
+-
+     def test_trash_file(self, portal_mock):
+         trash_intf = portal_mock.get_dbus_interface()
+ 

@@ -1,0 +1,2 @@
+source 'https://rubygems.org'
+gem 'shopify-cli', '2.35.0'

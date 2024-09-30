@@ -1,0 +1,18 @@
+diff --git a/cmake/Modules/FindCed.cmake b/cmake/Modules/FindCed.cmake
+index 5794bc84..08d6b49d 100644
+--- a/cmake/Modules/FindCed.cmake
++++ b/cmake/Modules/FindCed.cmake
+@@ -22,12 +22,7 @@ elseif(SELF_BUILT_CED STREQUAL "AUTO")
+ 	pkg_check_modules(CED IMPORTED_TARGET GLOBAL CED)
+ 	if(NOT CED_FOUND)
+ 		message(STATUS "ced build from source because not found on system")
+-		libfetch_git_pkg(Ced
+-			REPOSITORY ${SELF_BUILT_GIT_BASE}/compact_enc_det.git
+-			#https://github.com/google/compact_enc_det.git
+-			REFERENCE  ${Ced_GIT_VERSION}
+-			FIND_PATH  compact_enc_det/compact_enc_det.h
+-		)
++		add_subdirectory(../ced-src ced-src)
+ 	else()
+ 		add_library(ced ALIAS PkgConfig::CED)
+ 		set(Ced_VERSION ${CED_VERSION})

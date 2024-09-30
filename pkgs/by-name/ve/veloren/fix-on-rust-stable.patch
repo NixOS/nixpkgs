@@ -1,0 +1,440 @@
+commit 0829b00ec1a14c8248e1aadca22b132a1b21c40f
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Mon Aug 5 00:34:55 2024 +0200
+
+    update toolchain to `2024-05-14`
+    
+    Backport of 6ec900cf to v0.16.0
+
+diff --git a/.cargo/config b/.cargo/config.toml
+similarity index 100%
+rename from .cargo/config
+rename to .cargo/config.toml
+diff --git a/Cargo.lock b/Cargo.lock
+index d0f84803..6f90da69 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -45,17 +45,6 @@ version = "0.4.8"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "0453232ace82dee0dd0b4c87a59bd90f7b53b314f3e0f61fe2ee7c8a16482289"
+ 
+-[[package]]
+-name = "ahash"
+-version = "0.7.8"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "891477e0c6a8957309ee5c45a6368af3ae14bb510732d2684ffa19af310920f9"
+-dependencies = [
+- "getrandom 0.2.12",
+- "once_cell",
+- "version_check",
+-]
+-
+ [[package]]
+ name = "ahash"
+ version = "0.8.11"
+@@ -4538,16 +4527,6 @@ dependencies = [
+  "ttf-parser",
+ ]
+ 
+-[[package]]
+-name = "packed_simd"
+-version = "0.3.9"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1f9f08af0c877571712e2e3e686ad79efad9657dbf0f7c3c8ba943ff6c38932d"
+-dependencies = [
+- "cfg-if 1.0.0",
+- "num-traits",
+-]
+-
+ [[package]]
+ name = "parking"
+ version = "2.2.0"
+@@ -5870,8 +5849,9 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
+ 
+ [[package]]
+ name = "shred"
+-version = "0.15.0"
+-source = "git+https://github.com/amethyst/shred.git?rev=5d52c6fc390dd04c12158633e77591f6523d1f85#5d52c6fc390dd04c12158633e77591f6523d1f85"
++version = "0.16.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "656294f5bdcf6d33f0cf89e88a72b58595e3fca0e77e4a4b9e9026179757fb1e"
+ dependencies = [
+  "ahash 0.8.11",
+  "arrayvec",
+@@ -5884,8 +5864,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "shred-derive"
+-version = "0.6.3"
+-source = "git+https://github.com/amethyst/shred.git?rev=5d52c6fc390dd04c12158633e77591f6523d1f85#5d52c6fc390dd04c12158633e77591f6523d1f85"
++version = "0.7.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "69760b786f8b40361c10663eb63c81fa7d828008527d26aa7595b99c53ab3a8d"
+ dependencies = [
+  "proc-macro2 1.0.79",
+  "quote 1.0.35",
+@@ -6019,10 +6000,9 @@ dependencies = [
+ [[package]]
+ name = "specs"
+ version = "0.20.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a60eabdfd5a80e458c3e7bcc9f1076d6ce3cc8ddb71d69691f00fc0de735a635"
++source = "git+https://github.com/amethyst/specs.git?rev=4e2da1df29ee840baa9b936593c45592b7c9ae27#4e2da1df29ee840baa9b936593c45592b7c9ae27"
+ dependencies = [
+- "ahash 0.7.8",
++ "ahash 0.8.11",
+  "crossbeam-queue",
+  "hibitset",
+  "log",
+@@ -6904,9 +6884,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "vek"
+-version = "0.16.1"
++version = "0.17.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c85158043f3bc1fac596d59a77e07948da340b9951b451ed4cb4a8c480aa2157"
++checksum = "cb40015035f83ba23d647e647f8be060d0f6f99b7c7687989fbca3e3d65e7234"
+ dependencies = [
+  "approx 0.5.1",
+  "num-integer",
+@@ -6936,7 +6916,7 @@ dependencies = [
+  "specs",
+  "tokio",
+  "tracing",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-client-i18n",
+  "veloren-common",
+  "veloren-common-base",
+@@ -7007,7 +6987,7 @@ dependencies = [
+  "tracing",
+  "tracing-subscriber",
+  "uuid",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common-assets",
+  "veloren-common-base",
+  "veloren-common-i18n",
+@@ -7092,7 +7072,7 @@ dependencies = [
+  "specs",
+  "sum_type",
+  "tracing",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+ ]
+ 
+@@ -7116,7 +7096,7 @@ dependencies = [
+  "timer-queue",
+  "toml 0.8.12",
+  "tracing",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+  "veloren-common-assets",
+  "veloren-common-base",
+@@ -7136,7 +7116,7 @@ dependencies = [
+  "rayon",
+  "specs",
+  "tracing",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+  "veloren-common-base",
+  "veloren-common-ecs",
+@@ -7208,7 +7188,7 @@ dependencies = [
+  "serde",
+  "slotmap",
+  "tracing",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+  "veloren-world",
+ ]
+@@ -7251,7 +7231,7 @@ dependencies = [
+  "strum 0.24.1",
+  "tokio",
+  "tracing",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+  "veloren-common-base",
+  "veloren-common-ecs",
+@@ -7272,7 +7252,7 @@ dependencies = [
+  "lazy_static",
+  "rand 0.8.5",
+  "specs",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+  "veloren-common-dynlib",
+  "veloren-rtsim",
+@@ -7368,7 +7348,7 @@ dependencies = [
+  "tokio",
+  "tracing",
+  "treeculler",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-client",
+  "veloren-client-i18n",
+  "veloren-common",
+@@ -7396,7 +7376,7 @@ version = "0.10.0"
+ dependencies = [
+  "bytemuck",
+  "lazy_static",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+  "veloren-common-dynlib",
+ ]
+@@ -7452,7 +7432,6 @@ dependencies = [
+  "num 0.4.1",
+  "num-traits",
+  "ordered-float 3.9.2",
+- "packed_simd",
+  "rand 0.8.5",
+  "rand_chacha 0.3.1",
+  "rayon",
+@@ -7465,7 +7444,7 @@ dependencies = [
+  "svg_fmt",
+  "tracing",
+  "tracing-subscriber",
+- "vek 0.16.1",
++ "vek 0.17.0",
+  "veloren-common",
+  "veloren-common-base",
+  "veloren-common-dynlib",
+diff --git a/Cargo.toml b/Cargo.toml
+index c8d02902..02521745 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,5 +1,3 @@
+-cargo-features = ["named-profiles", "profile-overrides"]
+-
+ [workspace]
+ resolver = "2"
+ members = [
+@@ -141,7 +139,7 @@ crossbeam-channel = { version = "0.5"}
+ ordered-float = { version = "3", default-features = true }
+ num = { version = "0.4" }
+ num-traits = { version = "0.2" }
+-vek = { version = "0.16.1", features = ["serde"] }
++vek = { version = "0.17.0", features = ["serde"] }
+ itertools = { version = "0.10" }
+ 
+ serde = { version = "1.0.118", features = ["derive"] }
+@@ -158,7 +156,7 @@ sha2 = "0.10"
+ hex = "0.4.3"
+ 
+ [patch.crates-io]
+-shred = { git = "https://github.com/amethyst/shred.git", rev = "5d52c6fc390dd04c12158633e77591f6523d1f85" }
++specs = { git = "https://github.com/amethyst/specs.git", rev = "4e2da1df29ee840baa9b936593c45592b7c9ae27" }
+ # This is needed because of:
+ # * an issue with spirv & naga in wgpu 0.18 (I assume this is fixed upstream but not in 0.18)
+ # * an issue with uint in uniforms for gl. (potentially fixed in 0.19?)
+diff --git a/client/i18n/src/error.rs b/client/i18n/src/error.rs
+index 99f47bad..37eaa097 100644
+--- a/client/i18n/src/error.rs
++++ b/client/i18n/src/error.rs
+@@ -45,6 +45,7 @@ pub enum ResourceErr {
+         #[allow(dead_code)] // false-positive
+         err: String,
+     },
++    #[allow(dead_code)] // false-positive
+     BundleError(String),
+ }
+ 
+diff --git a/rtsim/src/lib.rs b/rtsim/src/lib.rs
+index 11477390..ef62db65 100644
+--- a/rtsim/src/lib.rs
++++ b/rtsim/src/lib.rs
+@@ -7,7 +7,8 @@
+     binary_heap_drain_sorted,
+     fn_traits,
+     unboxed_closures,
+-    tuple_trait
++    tuple_trait,
++    trait_upcasting
+ )]
+ 
+ pub mod ai;
+diff --git a/rust-toolchain b/rust-toolchain
+index f1273305..e426a2f8 100644
+--- a/rust-toolchain
++++ b/rust-toolchain
+@@ -1 +1 @@
+-nightly-2024-01-17
++nightly-2024-05-14
+diff --git a/server/agent/src/lib.rs b/server/agent/src/lib.rs
+index 420bd5ff..4a927c74 100644
+--- a/server/agent/src/lib.rs
++++ b/server/agent/src/lib.rs
+@@ -1,4 +1,4 @@
+-#![feature(exclusive_range_pattern, let_chains)]
++#![feature(let_chains)]
+ #![allow(
+     clippy::needless_pass_by_ref_mut //until we find a better way for specs
+ )]
+diff --git a/server/src/persistence/models.rs b/server/src/persistence/models.rs
+index df148742..70baed42 100644
+--- a/server/src/persistence/models.rs
++++ b/server/src/persistence/models.rs
+@@ -1,5 +1,6 @@
+ pub struct Character {
+     pub character_id: i64,
++    #[allow(dead_code)]
+     pub player_uuid: String,
+     pub alias: String,
+     pub waypoint: Option<String>,
+@@ -16,6 +17,7 @@ pub struct Item {
+ }
+ 
+ pub struct Body {
++    #[allow(dead_code)]
+     pub body_id: i64,
+     pub variant: String,
+     pub body_data: String,
+@@ -38,6 +40,7 @@ pub struct Pet {
+ }
+ 
+ pub struct AbilitySets {
++    #[allow(dead_code)]
+     pub entity_id: i64,
+     pub ability_sets: String,
+ }
+diff --git a/voxygen/src/credits.rs b/voxygen/src/credits.rs
+index 2de54687..be49ac97 100644
+--- a/voxygen/src/credits.rs
++++ b/voxygen/src/credits.rs
+@@ -7,6 +7,7 @@ use std::path::PathBuf;
+ 
+ // See best practices for attribution: https://wiki.creativecommons.org/wiki/Best_practices_for_attribution
+ 
++#[allow(dead_code)]
+ #[derive(Clone, Deserialize)]
+ pub struct Art {
+     /// Name of the art.
+diff --git a/voxygen/src/hud/mod.rs b/voxygen/src/hud/mod.rs
+index e62250ca..6be79389 100755
+--- a/voxygen/src/hud/mod.rs
++++ b/voxygen/src/hud/mod.rs
+@@ -1,3 +1,4 @@
++#![allow(non_local_definitions)] // because of WidgetCommon derive
+ mod animation;
+ mod bag;
+ mod buffs;
+diff --git a/voxygen/src/render/renderer/rain_occlusion_map.rs b/voxygen/src/render/renderer/rain_occlusion_map.rs
+index bdc44f98..68026806 100644
+--- a/voxygen/src/render/renderer/rain_occlusion_map.rs
++++ b/voxygen/src/render/renderer/rain_occlusion_map.rs
+@@ -11,7 +11,6 @@ pub struct RainOcclusionMapRenderer {
+ 
+     pub terrain_pipeline: rain_occlusion::RainOcclusionPipeline,
+     pub figure_pipeline: rain_occlusion::RainOcclusionFigurePipeline,
+-    pub layout: rain_occlusion::RainOcclusionLayout,
+ }
+ 
+ pub enum RainOcclusionMap {
+@@ -31,13 +30,10 @@ impl RainOcclusionMap {
+         if let (Some(terrain_pipeline), Some(figure_pipeline), Some(depth)) =
+             (directed, figure, view)
+         {
+-            let layout = rain_occlusion::RainOcclusionLayout::new(device);
+-
+             Self::Enabled(RainOcclusionMapRenderer {
+                 depth,
+                 terrain_pipeline,
+                 figure_pipeline,
+-                layout,
+             })
+         } else {
+             Self::Disabled(Self::create_dummy_tex(device, queue))
+diff --git a/voxygen/src/render/renderer/shadow_map.rs b/voxygen/src/render/renderer/shadow_map.rs
+index 7b5ab16e..b15a2da3 100644
+--- a/voxygen/src/render/renderer/shadow_map.rs
++++ b/voxygen/src/render/renderer/shadow_map.rs
+@@ -12,7 +12,6 @@ pub struct ShadowMapRenderer {
+     pub terrain_directed_pipeline: shadow::ShadowPipeline,
+     pub figure_directed_pipeline: shadow::ShadowFigurePipeline,
+     pub debug_directed_pipeline: shadow::ShadowDebugPipeline,
+-    pub layout: shadow::ShadowLayout,
+ }
+ 
+ pub enum ShadowMap {
+@@ -43,8 +42,6 @@ impl ShadowMap {
+         {
+             let (point_depth, directed_depth) = shadow_views;
+ 
+-            let layout = shadow::ShadowLayout::new(device);
+-
+             Self::Enabled(ShadowMapRenderer {
+                 directed_depth,
+                 point_depth,
+@@ -53,8 +50,6 @@ impl ShadowMap {
+                 terrain_directed_pipeline,
+                 figure_directed_pipeline,
+                 debug_directed_pipeline,
+-
+-                layout,
+             })
+         } else {
+             let (dummy_point, dummy_directed) = Self::create_dummy_shadow_tex(device, queue);
+diff --git a/voxygen/src/ui/widgets/mod.rs b/voxygen/src/ui/widgets/mod.rs
+index e7ce5ee8..622e7e9e 100644
+--- a/voxygen/src/ui/widgets/mod.rs
++++ b/voxygen/src/ui/widgets/mod.rs
+@@ -1,3 +1,4 @@
++#![allow(non_local_definitions)] // because of WidgetCommon derive
+ pub mod ghost_image;
+ pub mod image_frame;
+ pub mod image_slider;
+diff --git a/world/Cargo.toml b/world/Cargo.toml
+index 92bd288f..6ff2e79e 100644
+--- a/world/Cargo.toml
++++ b/world/Cargo.toml
+@@ -7,11 +7,11 @@ edition = "2021"
+ [features]
+ use-dyn-lib = ["common-dynlib"]
+ be-dyn-lib = []
+-simd = ["vek/platform_intrinsics", "packed_simd"]
++simd = ["vek/platform_intrinsics"]
+ bin_compression = ["lz-fear", "deflate", "flate2", "image/jpeg", "num-traits", "fallible-iterator", "rstar", "cli"]
+ cli = ["clap", "signal-hook", "indicatif"]
+ 
+-default = ["simd"]
++default = []
+ 
+ [dependencies]
+ common = { package = "veloren-common", path = "../common" }
+@@ -36,7 +36,6 @@ tracing = { workspace = true }
+ rand = { workspace = true }
+ rand_chacha = { workspace = true }
+ arr_macro = "0.2.1"
+-packed_simd = { version = "0.3.9", optional = true }
+ rayon = { workspace = true }
+ serde = { workspace = true }
+ ron = { workspace = true }
+diff --git a/world/src/site2/gen.rs b/world/src/site2/gen.rs
+index 59c57766..0800ccee 100644
+--- a/world/src/site2/gen.rs
++++ b/world/src/site2/gen.rs
+@@ -1415,18 +1415,6 @@ impl<'a, const N: usize> PrimitiveTransform for [PrimitiveRef<'a>; N] {
+     }
+ }
+ 
+-pub trait PrimitiveGroupFill<const N: usize> {
+-    fn fill_many(self, fills: [Fill; N]);
+-}
+-
+-impl<const N: usize> PrimitiveGroupFill<N> for [PrimitiveRef<'_>; N] {
+-    fn fill_many(self, fills: [Fill; N]) {
+-        for i in 0..N {
+-            self[i].fill(fills[i].clone());
+-        }
+-    }
+-}
+-
+ pub trait Structure {
+     #[cfg(feature = "use-dyn-lib")]
+     const UPDATE_FN: &'static [u8];

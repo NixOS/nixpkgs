@@ -1,0 +1,11 @@
+--- xterm-325/graphics.c	2016-05-17 03:04:40.000000000 -0700
++++ xterm-325/graphics.c	2016-06-11 16:37:29.552584281 -0700
+@@ -667,7 +667,7 @@
+     case 330:
+ 	return 4U;
+     case 340:
+-	return 16U;
++	return 256U;
+     case 382:
+ 	return 2U;
+     default:

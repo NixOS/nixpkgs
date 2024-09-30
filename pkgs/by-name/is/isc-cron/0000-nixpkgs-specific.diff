@@ -1,0 +1,45 @@
+diff -Naur cron-old/externs.h cron-new/externs.h
+--- cron-old/externs.h	2024-08-23 09:04:25.525752797 -0300
++++ cron-new/externs.h	2024-08-23 10:12:05.304311078 -0300
+@@ -121,3 +121,14 @@
+ #ifndef WCOREDUMP
+ # define WCOREDUMP(st)          (((st) & 0200) != 0)
+ #endif
++
++/* Nixpkgs-specific patch begin */
++
++/*
++  Implicit saved UIDs do not work here due to way NixOS uses setuid wrappers
++  See https://github.com/NixOS/nixpkgs/issues/16518
++ */
++
++#undef HAVE_SAVED_UIDS
++
++/* Nixpkgs-specific patch end */
+diff -Naur cron-old/pathnames.h cron-new/pathnames.h
+--- cron-old/pathnames.h	2024-08-23 09:04:25.524752791 -0300
++++ cron-new/pathnames.h	2024-08-23 10:11:33.186749198 -0300
+@@ -105,4 +105,23 @@
+ # define _PATH_DEVNULL "/dev/null"
+ #endif
+ 
++/* Nixpkgs-specific patch begin */
++
++/*
++  We want to ignore the $glibc/include/paths.h definition of sendmail path.
++  Further, set a usable default PATH
++  See https://github.com/NixOS/nixpkgs/issues/16518
++ */
++
++#undef _PATH_SENDMAIL
++#define _PATH_SENDMAIL "@sendmailPath@"
++
++#undef _PATH_VI
++#define _PATH_VI "@VIPATH@"
++
++#undef _PATH_DEFPATH
++#define _PATH_DEFPATH "@DEFPATH@"
++
++/* Nixpkgs-specific patch end */
++
+ #endif /* _PATHNAMES_H_ */

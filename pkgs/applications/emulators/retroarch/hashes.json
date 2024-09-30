@@ -1,0 +1,903 @@
+{
+    "!comment": "Generated with update_cores.py script, do not edit!",
+    "2048": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-2048",
+            "rev": "5474ed1ab880b3296c9860d0943d7de1970c79dd",
+            "hash": "sha256-i6bbxsLpSicDDGYKAxTMCMioHHfvBzVokun3PNYgDsc="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "atari800": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-atari800",
+            "rev": "39380a6e028589e850ecdfd2a5a19307b475d667",
+            "hash": "sha256-Rw6eTaKHZaCEgvnIqctaKCYQ+W8cHLtckLK8U5Ugck4="
+        },
+        "version": "unstable-2024-09-24"
+    },
+    "beetle-gba": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-gba-libretro",
+            "rev": "38182572571a48cb58057cde64b915237c4e2d58",
+            "hash": "sha256-4xnXWswozlcXBNI1lbGSNW/gAdIeLLO9Bf1SxOFLhSo="
+        },
+        "version": "unstable-2021-09-18"
+    },
+    "beetle-lynx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-lynx-libretro",
+            "rev": "d982616da671c3dd9c9271dd9d95c5c7d1393191",
+            "hash": "sha256-pAk5uLv5/2n3lZOWp5a5IdPqHM9vLacv8/X6wni5+dE="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "beetle-ngp": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-ngp-libretro",
+            "rev": "09869bb6032610714e22d09b95a81ea291937a8f",
+            "hash": "sha256-chMtMPUMHQ0iVcERfQApKnGQmV822QkYce2wvSj2Uck="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "beetle-pce": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-pce-libretro",
+            "rev": "e6c21fdf7d1aeae411f08272121213fa4de96bbc",
+            "hash": "sha256-ZeBoLTsr1A+IPQJ+oIGNADrgKySDHczXY6uriLmeHV4="
+        },
+        "version": "unstable-2024-09-27"
+    },
+    "beetle-pce-fast": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-pce-fast-libretro",
+            "rev": "6aaabc8e18279ac8a7c6facf26aa67e58375d177",
+            "hash": "sha256-lhpAnDofOLqyr8j43zTjzbPbcbntEt0DMY6aGtckDmc="
+        },
+        "version": "unstable-2024-09-20"
+    },
+    "beetle-pcfx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-pcfx-libretro",
+            "rev": "3a4e8d3665816a2938ea5029f05bc1537f0cbe40",
+            "hash": "sha256-IbFZHMqLH6T2kelNInbGcKIfdn/9li+Lo8BKbYRdEAU="
+        },
+        "version": "unstable-2024-08-07"
+    },
+    "beetle-psx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-psx-libretro",
+            "rev": "261e52b7dd35e8fd2c8b1f760a3ba4cf7fce60c5",
+            "hash": "sha256-HV/O7zJscLJAzhAoch44kKwBKavasdvf1VDvudLU2q0="
+        },
+        "version": "unstable-2024-09-16"
+    },
+    "beetle-saturn": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-saturn-libretro",
+            "rev": "7a8f808a1d447fcb8fa9547d9f163eb3600d3086",
+            "hash": "sha256-Yp1HuhbsQGicrFeIbnJP6Rd6hVK4BRclUnPKZlYC7pM="
+        },
+        "version": "unstable-2024-05-19"
+    },
+    "beetle-supafaust": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "supafaust",
+            "rev": "6b639c98372d1c9bac885c55d772c812d2a9d525",
+            "hash": "sha256-EVXwjrxooZm1JqG4HswUe8zwN81Rm7SPB5Fr4WfpTnc="
+        },
+        "version": "unstable-2023-06-19"
+    },
+    "beetle-supergrafx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-supergrafx-libretro",
+            "rev": "6c76ef9e83f7f3bed3aa747b01fd2d6c54687c65",
+            "hash": "sha256-LapGHFPSM/I+73oRhxW+gfc1SrEZ1MxscmpGujr6p9Y="
+        },
+        "version": "unstable-2024-09-06"
+    },
+    "beetle-vb": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-vb-libretro",
+            "rev": "4395c809d407c8b5a80b0d0ee87783aad5fedf8f",
+            "hash": "sha256-lO4tbJeQIZPGhW0Ew0BOcfbwNeV+yR8PTZ/RyCIt14s="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "beetle-wswan": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "beetle-wswan-libretro",
+            "rev": "440e9228592a3f603d7d09e8bee707b0163f545f",
+            "hash": "sha256-+98gCDBYeqUlFGzX83lwTGqSezLnzWRwapZCn4T37uE="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "blastem": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "blastem",
+            "rev": "277e4a62668597d4f59cadda1cbafb844f981d45",
+            "hash": "sha256-EHvKElPw8V5Z6LnMaQXBCdM4niLIlF3aBm8dRbeYXHs="
+        },
+        "version": "unstable-2022-07-26"
+    },
+    "bluemsx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "bluemsx-libretro",
+            "rev": "824690b5ac997ec9694e8db1595186459bb3b652",
+            "hash": "sha256-8UgVUTKGjSt2HwVgE6a/cs1npsOR8j9TxWBH/RA9VNk="
+        },
+        "version": "unstable-2024-08-08"
+    },
+    "bsnes": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "bsnes-libretro",
+            "rev": "20c55eb6333a11395ba637df8583066483e58cb2",
+            "hash": "sha256-IP00xtxS3wwnQSmYltrX8GEHZX/65xnx2EsmQlE1VZM="
+        },
+        "version": "unstable-2024-09-06"
+    },
+    "bsnes-hd": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "DerKoun",
+            "repo": "bsnes-hd",
+            "rev": "f46b6d6368ea93943a30b5d4e79e8ed51c2da5e8",
+            "hash": "sha256-Y3FhGtcz7BzwUSBy1SGMuylJdZti/JB8qQnabIkG/dI="
+        },
+        "version": "unstable-2023-04-26"
+    },
+    "bsnes-mercury": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "bsnes-mercury",
+            "rev": "60c204ca17941704110885a815a65c740572326f",
+            "hash": "sha256-eJ0lac1I7E4YdsVVrIuXx31UL9w3OR6QTVHq5YBgnJU="
+        },
+        "version": "unstable-2023-11-01"
+    },
+    "citra": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "citra",
+            "rev": "2d67658e85de4767c0eefeb2829d710401c5c802",
+            "hash": "sha256-u2XwAudFgI7j/k6Bq5fk874aI6KpZawlBoIs2+M+eZY=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-01-24"
+    },
+    "desmume": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "desmume",
+            "rev": "b518fec54b79f2f71a7536715efcdcd7f60638a8",
+            "hash": "sha256-X6ZL+XdsrdPoOU5zqNsUraMrlPU/HmKWUolrWjFcbDQ="
+        },
+        "version": "unstable-2024-01-11"
+    },
+    "desmume2015": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "desmume2015",
+            "rev": "af397ff3d1f208c27f3922cc8f2b8e08884ba893",
+            "hash": "sha256-kEb+og4g7rJvCinBZKcb42geZO6W8ynGsTG9yqYgI+U="
+        },
+        "version": "unstable-2022-04-05"
+    },
+    "dolphin": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "dolphin",
+            "rev": "89a4df725d4eb24537728f7d655cddb1add25c18",
+            "hash": "sha256-f9O3//EuoCSPQC7GWmf0EzAEpjoKof30kIDBCDw0dbs="
+        },
+        "version": "unstable-2024-04-19"
+    },
+    "dosbox": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "dosbox-libretro",
+            "rev": "b7b24262c282c0caef2368c87323ff8c381b3102",
+            "hash": "sha256-PG2eElenlEpu0U/NIh53p0uLqewnEdaq6Aoak5E1P3I="
+        },
+        "version": "unstable-2022-07-18"
+    },
+    "dosbox-pure": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "schellingb",
+            "repo": "dosbox-pure",
+            "rev": "ea7b947a8ed156a1ce2ce49329a5686c69f80075",
+            "hash": "sha256-aqNyYG7H+YBLhQlnkfBfmX3PkBF8GeYXc+KHkvkxlRo="
+        },
+        "version": "unstable-2024-09-16"
+    },
+    "easyrpg": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "EasyRPG",
+            "repo": "Player",
+            "rev": "f8e41f43b619413f95847536412b56f85307d378",
+            "hash": "sha256-nvWM4czTv/GxY9raomBEn7dmKBeLtSA9nvjMJxc3Q8s=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2023-04-29"
+    },
+    "eightyone": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "81-libretro",
+            "rev": "c0d56c5bc5cd48715b4e83cbb3d241a6bed94c2a",
+            "hash": "sha256-XkXZlH359NtOemkArSc1+UXhU55W3hVeM7zH/LRr1zo="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "fbalpha2012": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "fbalpha2012",
+            "rev": "b7ac554c53561d41640372f23dab15cd6fc4f0c4",
+            "hash": "sha256-BaeMLej2MLc4uipqTD2z2sHUeOsc50Q1c+PEiPD1cks="
+        },
+        "version": "unstable-2023-11-01"
+    },
+    "fbneo": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "fbneo",
+            "rev": "3d69bc5519c4382b3d5da2763ae42e3b6a3d019e",
+            "hash": "sha256-Tf5nLy9G9h/qBrwdBFO3OUYl3n81NPw4slEeCfLzMjI="
+        },
+        "version": "unstable-2024-09-26"
+    },
+    "fceumm": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-fceumm",
+            "rev": "e226068f979cd8fbfc3be9780d16cfb1405095b0",
+            "hash": "sha256-2G5EzcDJkEhaN+nXi/wu3+Ejim04ZzOr+LW69cLAEuM="
+        },
+        "version": "unstable-2024-09-23"
+    },
+    "flycast": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "flyinghead",
+            "repo": "flycast",
+            "rev": "343021a8c507f4723b3f56a3bb817206912fcb36",
+            "hash": "sha256-DMbhCHW2VHEle0oihaz1GEPOGDCXxfdZoL8MdPZT4d0=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-09-27"
+    },
+    "fmsx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "fmsx-libretro",
+            "rev": "cf97a3c6da07d5f8e98c90c907ad987ffea432e0",
+            "hash": "sha256-mPgmt05XDnB+eIWtOpBfZ37Cz24VBei1lLLaYsJNeAA="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "freeintv": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "freeintv",
+            "rev": "6bd91d0d83d896e66b9fd7e5e239f93f00e4ad87",
+            "hash": "sha256-P3devj/aAa0e/QpV68kQkLAvhrVGO8O8ijkUAobgUb0="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "fuse": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "fuse-libretro",
+            "rev": "6fd07d90acc38a1b8835bf16539b833f21aaa38f",
+            "hash": "sha256-q5vcFNr1RBeTaw1R2LDY9xLU1oGeWtPemTdliWR+39s="
+        },
+        "version": "unstable-2024-09-20"
+    },
+    "gambatte": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "gambatte-libretro",
+            "rev": "e9a1941276e932813dc742796ffd1d0939c5d1d5",
+            "hash": "sha256-4FFYocOa2fuBT8UFKM87Fn5E6pjkfe4tUVDtpEchtJo="
+        },
+        "version": "unstable-2024-09-27"
+    },
+    "genesis-plus-gx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "Genesis-Plus-GX",
+            "rev": "7de0f0b6cde9bda1235b448aa607044b3f80ab3c",
+            "hash": "sha256-W06vSrGKbXMcXIouW9/fD93sBfwREqIL8HvB3kan0tM="
+        },
+        "version": "unstable-2024-09-18"
+    },
+    "gpsp": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "gpsp",
+            "rev": "f2837be54aa680c4ec0c7be0669cdcd65582cc66",
+            "hash": "sha256-Kfw4KYNH/K3y6Iy/eYu/OlInibv9JLQvOSDh429G2zg="
+        },
+        "version": "unstable-2024-08-24"
+    },
+    "gw": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "gw-libretro",
+            "rev": "feab76c102166784230dc44c45cad4cb49a1c9a7",
+            "hash": "sha256-dtcsPTemFqgfBtFp4RF0Q2B/3bCHY4CqJGibwV+lfwI="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "handy": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-handy",
+            "rev": "15d3c87e0eba52464ed759d3702d7cb7fdd0d7e0",
+            "hash": "sha256-aebQGTGYF1jlZdSzb3qQ6PIyQZ00hEKfH6W6pYYQUBw="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "hatari": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "hatari",
+            "rev": "c10a21dbe99277b06ccf7de10eceb74f5d57e921",
+            "hash": "sha256-R5N7EUVUKJ1GXQtnlCCE33DlDsxMzpPp6pYUHJJ/5Ig="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "mame": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mame",
+            "rev": "231b5e6d621ed93168ad19eed6c0e3390d4e81ff",
+            "hash": "sha256-UD1kNQ6KXEa60ZA+65XXqgihLu/XJxTLvbM4Wt9y2vs=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-09-27"
+    },
+    "mame2000": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mame2000-libretro",
+            "rev": "2ec60f6e1078cf9ba173e80432cc28fd4eea200f",
+            "hash": "sha256-AYZj7bvO9oc7wmEBbj6DPRzpQFHl8diIcunSSpD4Vok="
+        },
+        "version": "unstable-2024-07-01"
+    },
+    "mame2003": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mame2003-libretro",
+            "rev": "1a268a709d611f6a84d473754ee2dbcaf1c37a2e",
+            "hash": "sha256-jFzFQVB0uiSRa82sq1fiMEXyzzDJqRANNgq5hj/ZAl4="
+        },
+        "version": "unstable-2024-09-04"
+    },
+    "mame2003-plus": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mame2003-plus-libretro",
+            "rev": "9221b2f66dbc7a08b22a7365e2431e027e382322",
+            "hash": "sha256-mm4g1JX98yW/6Us1k5DwaYQQbhmfiBSxxXFvwgvB5yE="
+        },
+        "version": "unstable-2024-09-26"
+    },
+    "mame2010": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mame2010-libretro",
+            "rev": "5f524dd5fca63ec1dcf5cca63885286109937587",
+            "hash": "sha256-OmJgDdlan/niGQfajv0KNG8NJfEKn7Nfe6GRQD+TZ8M="
+        },
+        "version": "unstable-2022-06-14"
+    },
+    "mame2015": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mame2015-libretro",
+            "rev": "316cd06349f2b34b4719f04f7c0d07569a74c764",
+            "hash": "sha256-CBN04Jf26SIk8mKWlui5spQGokBvgFUCvFiC8NoBGw0="
+        },
+        "version": "unstable-2023-11-01"
+    },
+    "mame2016": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mame2016-libretro",
+            "rev": "01058613a0109424c4e7211e49ed83ac950d3993",
+            "hash": "sha256-IsM7f/zlzvomVOYlinJVqZllUhDfy4NNTeTPtNmdVak="
+        },
+        "version": "unstable-2022-04-06"
+    },
+    "melonds": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "melonds",
+            "rev": "c6488c88cb4c7583dbcd61609e0eef441572fae8",
+            "hash": "sha256-kU0xPM6WBqK6UpMNMotHc3jRFTodahPJRrfbcjdCJTI="
+        },
+        "version": "unstable-2023-04-13"
+    },
+    "mesen": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mesen",
+            "rev": "91db6be681f70b2080525c267af6132555323ea1",
+            "hash": "sha256-rw/bwHaeglO/DPeOCFHAWF5Y5DXVKiteO4bWZjTB4rI="
+        },
+        "version": "unstable-2024-06-09"
+    },
+    "mesen-s": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mesen-s",
+            "rev": "32a7adfb4edb029324253cb3632dfc6599ad1aa8",
+            "hash": "sha256-/OOMH7kt9Pmkdmy5m+I8FMvog5mqZHyrZvfjHccz8oo="
+        },
+        "version": "unstable-2022-07-25"
+    },
+    "meteor": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "meteor-libretro",
+            "rev": "e533d300d0561564451bde55a2b73119c768453c",
+            "hash": "sha256-zMkgzUz2rk0SD5ojY4AqaDlNM4k4QxuUxVBRBcn6TqQ="
+        },
+        "version": "unstable-2020-12-28"
+    },
+    "mgba": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mgba",
+            "rev": "3e349d52f42151085639aed9550967b88cde4f43",
+            "hash": "sha256-gTviFmJF+7n0SFUL6PZovLTMyrEeQyAyAJY2i40GEao="
+        },
+        "version": "unstable-2024-09-24"
+    },
+    "mrboom": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "Javanaise",
+            "repo": "mrboom-libretro",
+            "rev": "22765ce7176d236d846f504318a51c448d2b469b",
+            "hash": "sha256-hzdc4PM/EARNEtpeATo4VohXtkeBra6rCz3tdIgBfVw=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-07-01"
+    },
+    "mupen64plus": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "mupen64plus-libretro-nx",
+            "rev": "c2f6acfe3b7b07ab86c3e4cd89f61a9911191793",
+            "hash": "sha256-yV67rr0eIBdBU/quTCXasnFXy5MCO77rtvdd8DuVWIY="
+        },
+        "version": "unstable-2024-08-21"
+    },
+    "neocd": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "neocd_libretro",
+            "rev": "f87ed9eb4a7bf1243f031044c4e2ae1a7bf7100b",
+            "hash": "sha256-DqXYMno+NGIZrE1Q0y0WYR/jnjjHMfVT6lasLG4ew9A="
+        },
+        "version": "unstable-2024-06-22"
+    },
+    "nestopia": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "nestopia",
+            "rev": "be1139ec4d89151fc65b81a3494d2b9c0fd0b7dc",
+            "hash": "sha256-8MoEYcywnqNtn4lntp8WcIYMTzKhaHkHyDMHMhHHxxg="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "np2kai": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "AZO234",
+            "repo": "NP2kai",
+            "rev": "c2ca4046860264cb307e768f529f180caee5e224",
+            "hash": "sha256-RizN+NpVp0paXvdt7OudX9/5GJms1YvJ+NVe9iV3nnw=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-01-10"
+    },
+    "nxengine": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "nxengine-libretro",
+            "rev": "11fc0892dc6b99b36ecf318006834932cd5b817a",
+            "hash": "sha256-PlU3op50yPgDUXZxSOlltMf/30JLrotpp61UHK1uKB8="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "o2em": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-o2em",
+            "rev": "c8f458d035392963823fbb50db0cec0033d9315f",
+            "hash": "sha256-riqMXm+3BG4Gz0wrmVFxtVhuMRtZHZqCViAupp/Q42U="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "opera": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "opera-libretro",
+            "rev": "5121aa6d36eff884bd56ccbadb6c112f1e951fee",
+            "hash": "sha256-mD/BEUwbWmRtB9llsqhz+/DhrzH9HiuXyJkX0pBks5M="
+        },
+        "version": "unstable-2024-05-06"
+    },
+    "parallel-n64": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "parallel-n64",
+            "rev": "334998e6129debe50f7ef9c5cd1e995460ae2da8",
+            "hash": "sha256-ngENgmBQFHUYRp9DBnQLWapvfhnFra/B+jeegm8+rtE="
+        },
+        "version": "unstable-2024-06-29"
+    },
+    "pcsx2": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "lrps2",
+            "rev": "f3c8743d6a42fe429f703b476fecfdb5655a98a9",
+            "hash": "sha256-0piCNWX7QbZ58KyTlWp4h1qLxXpi1z6ML8sBHMTvCY4="
+        },
+        "version": "unstable-2023-01-30"
+    },
+    "pcsx_rearmed": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "pcsx_rearmed",
+            "rev": "237887e817e23800997466632deb8ba63797a4cb",
+            "hash": "sha256-AhyCkQzgppCnwcX+qpKcSEJ58hosJwL9wwn80HOHpvg="
+        },
+        "version": "unstable-2024-09-03"
+    },
+    "picodrive": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "picodrive",
+            "rev": "6508730c524420e05626b0b06dbc603e02d3af64",
+            "hash": "sha256-iL6eKG2O6ePYo6NK0VsTVLaRKgwuapXotvSOy7KipgI=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-09-06"
+    },
+    "play": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "jpd002",
+            "repo": "Play-",
+            "rev": "e70ee1608f9bc3a075c85ce1aab0cf9074201f12",
+            "hash": "sha256-hD+QgvPXPJ4cVqkk15bY9lZIytCiiuSwNK1MYJzP9T0=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-09-23"
+    },
+    "ppsspp": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "hrydgard",
+            "repo": "ppsspp",
+            "rev": "64ce72e81df48f78db5d5b192bd68eca218bd0a1",
+            "hash": "sha256-DRodUtFcHt+t8GAHI+3+WDltbUzkWZ/ahunOPELabTI=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-09-28"
+    },
+    "prboom": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-prboom",
+            "rev": "0b43954c75760d00737120db9d5009813778c7ae",
+            "hash": "sha256-mb7hggdwOjWgKNykeOv+0IDYpKLHy9dJqA4+c/8R6Ss="
+        },
+        "version": "unstable-2024-09-07"
+    },
+    "prosystem": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "prosystem-libretro",
+            "rev": "a639359434cde73e6cdc651763afc587c1afb678",
+            "hash": "sha256-rcn1puMQXCKogONe2oUpcDEj8S6/oVRcuWLDkinZgnk="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "puae": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-uae",
+            "rev": "527564f2748901068a5fef891c5073a4d6cd089b",
+            "hash": "sha256-tzZVG4B+rzHqhw28cmvjMFiyFfbrU3xOOEU+OCUaa+M="
+        },
+        "version": "unstable-2024-09-25"
+    },
+    "quicknes": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "QuickNES_Core",
+            "rev": "89d649a544e7d37a5cdbc77c811e88753fa23131",
+            "hash": "sha256-OPZVYQVbtIfmmKmuLQ5eVqZf+41ovyoa17YHvjKgd6w="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "same_cdi": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "same_cdi",
+            "rev": "54cf493c2dee4c46666059c452f8aaaa0bd7c8e0",
+            "hash": "sha256-/+4coMzj/o82Q04Z65DQiPaykK6N56W6PRQLtyJOd8E="
+        },
+        "version": "unstable-2023-02-28"
+    },
+    "sameboy": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "sameboy",
+            "rev": "51433012a871a44555492273fd22f29867d12655",
+            "hash": "sha256-vPT2uRGbXmJ62yig/yk485/TxEEKHJeWdNrM2c0IjKw="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "scummvm": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro-mirrors",
+            "repo": "scummvm",
+            "rev": "2fb2e4c551c9c1510c56f6e890ee0300b7b3fca3",
+            "hash": "sha256-wrlFqu+ONbYH4xMFDByOgySobGrkhVc7kYWI4JzA4ew="
+        },
+        "version": "unstable-2022-04-06"
+    },
+    "smsplus-gx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "smsplus-gx",
+            "rev": "978d977119eff1bd7214c0095eb91b15b859bb61",
+            "hash": "sha256-GEzeyp6cuvWTuvRBuExamyqJfJW/PEU+2tB2lm+g6K0="
+        },
+        "version": "unstable-2024-08-07"
+    },
+    "snes9x": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "snes9xgit",
+            "repo": "snes9x",
+            "rev": "72e4946410bff2a09ff327599f014e9f6e855c54",
+            "hash": "sha256-srPtEMIjsaFdmOkymGhb6vMuY5EBnTVhzJnpsCE/fMQ="
+        },
+        "version": "unstable-2024-09-27"
+    },
+    "snes9x2002": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "snes9x2002",
+            "rev": "2790d03b2266c58444429b4f7d76ba298e0bde87",
+            "hash": "sha256-kTZrEeZcaFey7gmLbPEG82T6n3cxxZkKminRP543oZA="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "snes9x2005": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "snes9x2005",
+            "rev": "285220ed696ec661ce5c42856e033a1586fda967",
+            "hash": "sha256-jKRu93zw6U9OYn35zXYJH/xCiobsZdzWROge7+sKh6M="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "snes9x2010": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "snes9x2010",
+            "rev": "84b963a2f627bbc41198e357430619f34bbebc8a",
+            "hash": "sha256-s358pyMH4vIQt1f0Mgw1U5gwUW0aSqVtwyeyoL/4Ok8="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "stella": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "stella-emu",
+            "repo": "stella",
+            "rev": "cb61f676ec78cd3f76cbd233bfd91575abde13be",
+            "hash": "sha256-t+QBWIE5+rEzdv4bbk6MqIQh3XsUgviX69RKe/zMb4Q="
+        },
+        "version": "unstable-2024-09-26"
+    },
+    "stella2014": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "stella2014-libretro",
+            "rev": "db6bee857f73138ae02755bf09e392b31fef4540",
+            "hash": "sha256-NH9ZsYPG1X5wLKpIvcqDkMUyI/eDLVITY/IaY5djt/8="
+        },
+        "version": "unstable-2024-05-20"
+    },
+    "swanstation": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "swanstation",
+            "rev": "37cd87e14ca09ac1b558e5b2c7db4ad256865bbb",
+            "hash": "sha256-dNIxlTPoY4S6VMtTN22ti3DE4aU/8XN/XhAo3DMNR/E="
+        },
+        "version": "unstable-2024-07-24"
+    },
+    "tgbdual": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "tgbdual-libretro",
+            "rev": "fba7d50b136abef0692b434091a9d735f7ad28b2",
+            "hash": "sha256-f6PGtUkIOyUHQbbJdgQiWmw2armjyuP1CTcWfRbx9uE="
+        },
+        "version": "unstable-2024-07-01"
+    },
+    "thepowdertoy": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "ThePowderToy",
+            "rev": "f644498193c4c8be689d8a1d2a70e37e4eff4243",
+            "hash": "sha256-aPUqrrrH2Ia56A3Kx6ClMcZO9nbHGJIcEQ6nFyIMamo="
+        },
+        "version": "unstable-2023-01-17"
+    },
+    "tic80": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "tic-80",
+            "rev": "6412f72d0f4725c153ce3d245729b829e713542e",
+            "hash": "sha256-RFp8sTSRwD+cgW3EYk3nBeY+zVKgZVQI5mjtfe2a64Q=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2024-05-13"
+    },
+    "vba-m": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "vbam-libretro",
+            "rev": "b5a4788747fa46afe681080db758f4a827ff7274",
+            "hash": "sha256-R/WaUiVlRbytra/jJyZZvkDbmnZvsO4RLFYYTp5Rcvo="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "vba-next": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "vba-next",
+            "rev": "2c726f25da75a5600ef5791ce904befe06c4dddd",
+            "hash": "sha256-Elb6cOm2oO+3fNUaTXLN4kyhftoJ/oWXD571mXApybs="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "vecx": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "libretro-vecx",
+            "rev": "0e48a8903bd9cc359da3f7db783f83e22722c0cf",
+            "hash": "sha256-lB8NSaxDbN2qljhI0M/HFDuN0D/wMhFUQXhfSdGHsHU="
+        },
+        "version": "unstable-2024-06-28"
+    },
+    "virtualjaguar": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "virtualjaguar-libretro",
+            "rev": "8126e5c504ac7217a638f38e4cd9190822c8abdd",
+            "hash": "sha256-U/qdKApE0OU3jc6ekfgEZ7VCaIqCc2h+Y+IHe7PIRY0="
+        },
+        "version": "unstable-2023-06-01"
+    },
+    "yabause": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "libretro",
+            "repo": "yabause",
+            "rev": "4c96b96f7fbe07223627c469ff33376b2a634748",
+            "hash": "sha256-7hEpGh2EcrlUoRiUNntaMZEQtStglYAY1MeCub5p8f8="
+        },
+        "version": "unstable-2023-01-03"
+    }
+}

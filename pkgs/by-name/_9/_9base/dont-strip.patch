@@ -1,0 +1,12 @@
+diff --git a/sam/Makefile b/sam/Makefile
+index 17ada1f..1e9e9b8 100644
+--- a/sam/Makefile
++++ b/sam/Makefile
+@@ -10,7 +10,6 @@ MANFILES  = sam.1
+ include ../config.mk
+ 
+ all: ${TARG}
+-	@strip ${TARG}
+ 	@echo built ${TARG}
+ 
+ install: ${TARG}
