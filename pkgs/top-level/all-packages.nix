@@ -19259,7 +19259,7 @@ with pkgs;
 
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 
-  ormolu = haskellPackages.ormolu.bin;
+  ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
