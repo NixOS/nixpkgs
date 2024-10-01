@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     cp -r ${gtest.src} googletest
     chmod -R u+w googletest
-
-    # https://github.com/google/benchmark/issues/1396
-    substituteInPlace cmake/benchmark.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
   # Tests fail on 32-bit due to not enough precision
