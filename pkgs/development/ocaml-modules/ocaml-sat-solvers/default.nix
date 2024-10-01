@@ -4,7 +4,7 @@ buildOasisPackage rec {
   pname = "ocaml-sat-solvers";
   version = "0.4";
 
-  minimumOCamlVersion = "4.03.0";
+  minimalOCamlVersion = "4.03.0";
 
   src = fetchFromGitHub {
     owner  = "tcsprojects";
