@@ -29,7 +29,7 @@ runCommand "llvm-binutils-${version}"
     ln -s $llvmBin/llvm-dwp $out/bin/${targetPrefix}dwp
     ln -s $llvmBin/llvm-nm $out/bin/${targetPrefix}nm
     ln -s $llvmBin/llvm-objcopy $out/bin/${targetPrefix}objcopy
-    ln -s $llvmBin/llvm-objcopy $out/bin/${targetPrefix}strip
+    ln -s $llvmBin/llvm-strip $out/bin/${targetPrefix}strip
     ln -s $llvmBin/llvm-objdump $out/bin/${targetPrefix}objdump
     ln -s $llvmBin/llvm-readobj $out/bin/${targetPrefix}readelf
     ln -s $llvmBin/llvm-size $out/bin/${targetPrefix}size
