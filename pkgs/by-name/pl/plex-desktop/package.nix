@@ -121,7 +121,7 @@ let
   };
 in
 buildFHSEnv {
-  name = "${pname}-${version}";
+  inherit pname version meta;
   targetPkgs = pkgs: [ xkeyboard_config ];
 
   extraInstallCommands = ''
@@ -152,4 +152,5 @@ buildFHSEnv {
     ${lib.toShellVars extraEnv}
     exec ${plex-desktop}/Plex.sh
   '';
+  passthru.updateScript = ./update.sh;
 }
