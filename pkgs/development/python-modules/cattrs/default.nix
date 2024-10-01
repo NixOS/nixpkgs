@@ -108,6 +108,9 @@ buildPythonPackage rec {
     "test_orjson"
     # tomlkit is pinned to an older version and newer versions raise InvalidControlChar exception
     "test_tomlkit"
+    # msgspec causes a segmentation fault for some reason
+    "test_simple_classes"
+    "test_msgspec_json_converter"
   ];
 
   pythonImportsCheck = [ "cattr" ];
