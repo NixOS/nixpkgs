@@ -19,7 +19,7 @@ appleDerivation {
 
   # Workaround build failure on -fno-common toolchains:
   #   duplicate symbol '_chdname' in: ar_io.o tty_subs.o
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=deprecated-non-prototype -Wno-error=unused-but-set-variable";
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
