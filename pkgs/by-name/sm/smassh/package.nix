@@ -48,7 +48,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kraanzu/smassh";
     changelog = "https://github.com/kraanzu/smassh/blob/main/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aimpizza ];
+    maintainers = with maintainers; [
+      aimpizza
+      kraanzu
+    ];
     mainProgram = "smassh";
   };
 }
