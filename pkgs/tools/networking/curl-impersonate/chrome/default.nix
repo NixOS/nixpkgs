@@ -24,7 +24,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate-chrome";
-  version = "0.7.0";
+  version = "0.8.0";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "yifeikong";
     repo = "curl-impersonate";
     rev = "v${version}";
-    hash = "sha256-nxANiNgrbbp7F6k2y1HGGWGOUBRwc3tK8WcNIqEBLz4=";
+    hash = "sha256-m6zeQUL+yBh3ixS+crbJWHX5TLa61A/3oqMz5UVELso=";
   };
 
   patches = [ ./disable-building-docs.patch ];

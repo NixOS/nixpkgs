@@ -45,11 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_UNITTESTS=ON"
   ];
 
-  postInstall = ''
-    mkdir -p $lib
-    mv $out/lib $lib
-  '';
-
   doInstallCheck = true;
 
   installCheckPhase =
@@ -98,6 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
         # wants http connection
         "test/sql/copy/csv/recursive_query_csv.test"
         "test/sql/copy/csv/test_mixed_lines.test"
+        "test/parquet/parquet_long_string_stats.test"
+        "test/sql/attach/attach_remote.test"
+        "test/sql/copy/csv/test_sniff_httpfs.test"
+        "test/sql/httpfs/internal_issue_2490.test"
       ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"

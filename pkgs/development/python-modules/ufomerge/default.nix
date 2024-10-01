@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ufomerge";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufomerge";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bo/KJhJTIAGNDT2QoXRKGMYLQuqjfCe5yaCsFcQ4A64=";
+    hash = "sha256-D+BhKCKWgprQn+eXFgwnSN/06+JF5CiUS0VAS1Kvedw=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
