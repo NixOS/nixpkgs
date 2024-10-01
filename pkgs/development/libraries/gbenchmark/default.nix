@@ -20,6 +20,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
+  cmakeFlags = [
+    # We ran into issues with gtest 1.8.5 conditioning on
+    # `#if __has_cpp_attribute(maybe_unused)`, which was, for some
+    # reason, going through even when C++14 was being used and
+    # breaking the build on Darwin by triggering warnings about using
+    # C++17 features.
+    #
+    # This might be a problem with our Clang, as it does not reproduce
+    # with Xcode, but since `-Werror` is painful for us anyway and
+    # upstream exposes a CMake flag to turn it off, we just use that.
+    (lib.cmakeBool "BENCHMARK_ENABLE_WERROR" false)
+  ];
+
   postPatch = ''
     cp -r ${gtest.src} googletest
     chmod -R u+w googletest
