@@ -5,7 +5,7 @@
   wxGTK32,
   makeWrapper,
   gsettings-desktop-schemas,
-  gtk3
+  gtk3,
 }:
 stdenv.mkDerivation rec {
   pname = "wxedid";
@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-g3D9dBrs/zIU/4T1hzpcj2lROCgrDMPIMZyL5uqxjB0=";
   };
-  nativeBuildInputs = [ makeWrapper wxGTK32 ];
+  nativeBuildInputs = [
+    makeWrapper
+    wxGTK32
+  ];
   buildInputs = [ gsettings-desktop-schemas ];
   patchPhase = ''
     patchShebangs --build src
