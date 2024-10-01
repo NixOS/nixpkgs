@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, doxygen
-, pkg-config
-, python3
-, python3Packages
-, wafHook
-, boost179
-, openssl
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  doxygen,
+  pkg-config,
+  python3,
+  python3Packages,
+  wafHook,
+  boost,
+  openssl,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,18 +19,28 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
-    rev = "${pname}-${version}";
+    rev = "ndn-cxx-${version}";
     sha256 = "sha256-u9+QxqdCET1f5B54HF+Jk/YuQvhcYWsPNIVHi5l0XTM=";
   };
 
-  nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
+  nativeBuildInputs = [
+    doxygen
+    pkg-config
+    python3
+    python3Packages.sphinx
+    wafHook
+  ];
 
-  buildInputs = [ boost179 openssl sqlite ];
+  buildInputs = [
+    boost
+    openssl
+    sqlite
+  ];
 
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
-    "--boost-includes=${boost179.dev}/include"
-    "--boost-libs=${boost179.out}/lib"
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
     "--with-tests"
   ];
 
@@ -58,6 +69,9 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sjmackenzie bertof ];
+    maintainers = with maintainers; [
+      sjmackenzie
+      bertof
+    ];
   };
 }

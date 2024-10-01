@@ -41,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   passthru.tests.version = testers.testVersion {
     package = smassh;
     command = "HOME=$(mktemp -d) smassh --version";
+    version = "smassh - v${version}";
   };
 
   meta = with lib; {

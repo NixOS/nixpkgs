@@ -28,13 +28,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.5.0";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-FuhpHByeiUwB14+WHZ7ssJ8YPphs06jPcMhxiGfiaU8=";
+    hash = "sha256-Gk/3m4eWFZqeQBphBUTGAUqe8SspXqut8n4JM8tTe6o=";
   };
 
   cargoLock = {
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       "libmonado-rs-0.1.0" = "sha256-ja7OW/YSmfzaQoBhu6tec9v8fyNDknLekE2eY7McLPE=";
       "openxr-0.18.0" = "sha256-ktkbhmExstkNJDYM/HYOwAwv3acex7P9SP0KMAOKhQk=";
       "ovr_overlay-0.0.0" = "sha256-5IMEI0IPTacbA/1gibYU7OT6r+Bj+hlQjDZ3Kg0L2gw=";
-      "vulkano-0.34.0" = "sha256-o1KP/mscMG5j3U3xtei/2nMNEh7jLedcW1P0gL9Y1Rc=";
+      "vulkano-0.34.0" = "sha256-0ZIxU2oItT35IFnS0YTVNmM775x21gXOvaahg/B9sj8=";
       "wlx-capture-0.3.12" = "sha256-32WnAnNUSfsAA8WB9da3Wqb4acVlXh6HWsY9tPzCHEE=";
     };
   };

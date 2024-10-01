@@ -163,6 +163,15 @@ fbdcdde04a7caa007e825a8b822c75fab9adb2d6
 # step-cli: format package.nix with nixfmt (#331629)
 fc7a83f8b62e90de5679e993d4d49ca014ea013d
 
+# ndn-cxx: format with nixfmt-rfc-style
+160b2b769c3b8a6d1ae9947afa77520fa2887db7
+
+# ndn-tools: format with nixfmt-rfc-style
+4882ef721ce3d7bb3b5e48ff80125255db515013
+
+# nfd: format with nixfmt-rfc-style
+548c2377fa81e2abfc192fbf4f521e601251c468
+
 # darwin.stdenv: format with nixfmt-rfc-style (#333962)
 93c10ac9e561c6594d3baaeaff2341907390d9b8
 

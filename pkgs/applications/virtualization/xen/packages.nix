@@ -1,6 +1,12 @@
-{ callPackage }:
+{
+  python3Packages,
+  python311Packages,
+  callPackage,
+}:
 let
   standard = {
+    # Broken with python 3.12+ when using internal QEMU due to https://github.com/NixOS/nixpkgs/issues/253751
+    python3Packages = python311Packages;
     meta = {
       description = "Standard";
       longDescription = ''
@@ -13,6 +19,7 @@ let
     };
   };
   slim = {
+    inherit python3Packages;
     meta = {
       description = "Without Internal Components";
       longDescription = ''
@@ -27,30 +34,38 @@ let
 in
 # TODO: generalise this to automatically generate both Xen variants for each ./<version>/default.nix.
 rec {
-  xen_4_19 = callPackage ./4.19/default.nix { inherit (standard) meta; };
+  xen_4_19 = callPackage ./4.19/default.nix {
+    inherit (standard) meta python3Packages;
+  };
   xen_4_19-slim = xen_4_19.override {
     withInternalQEMU = false;
     withInternalSeaBIOS = false;
     withInternalOVMF = false;
     withInternalIPXE = false;
-    inherit (slim) meta;
+    inherit (slim) meta python3Packages;
   };
 
-  xen_4_18 = callPackage ./4.18/default.nix { inherit (standard) meta; };
+  xen_4_18 = callPackage ./4.18/default.nix {
+    inherit (standard) meta python3Packages;
+  };
   xen_4_18-slim = xen_4_18.override {
     withInternalQEMU = false;
     withInternalSeaBIOS = false;
     withInternalOVMF = false;
     withInternalIPXE = false;
-    inherit (slim) meta;
+    inherit (slim) meta python3Packages;
   };
 
-  xen_4_17 = callPackage ./4.17/default.nix { inherit (standard) meta; };
+  xen_4_17 = callPackage ./4.17/default.nix {
+    inherit (standard) meta python3Packages;
+  };
   xen_4_17-slim = xen_4_17.override {
     withInternalQEMU = false;
     withInternalSeaBIOS = false;
     withInternalOVMF = false;
     withInternalIPXE = false;
     inherit (slim) meta;
+    # Broken with python 3.12+ due to distutils missing.
+    python3Packages = python311Packages;
   };
 }
