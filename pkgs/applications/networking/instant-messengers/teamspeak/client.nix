@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchzip,
   makeWrapper,
   makeDesktopItem,
   zlib,
@@ -22,7 +23,6 @@
   libredirect,
   quazip,
   which,
-  unzip,
   perl,
   llvmPackages,
 }:
@@ -83,15 +83,14 @@ stdenv.mkDerivation rec {
   };
 
   # grab the plugin sdk for the desktop icon
-  pluginsdk = fetchurl {
-    url = "http://dl.4players.de/ts/client/pluginsdk/pluginsdk_3.1.1.1.zip";
-    sha256 = "1bywmdj54glzd0kffvr27r84n4dsd0pskkbmh59mllbxvj0qwy7f";
+  pluginsdk = fetchzip {
+    url = "https://files.teamspeak-services.com/releases/sdk/3.3.1/ts_sdk_3.3.1.zip";
+    hash = "sha256-wx4pBZHpFPoNvEe4xYE80KnXGVda9XcX35ho4R8QxrQ=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     which
-    unzip
     perl # Installer script needs `shasum`
   ];
 
@@ -129,8 +128,7 @@ stdenv.mkDerivation rec {
 
       # Make a desktop item
       mkdir -p $out/share/applications/ $out/share/icons/hicolor/64x64/apps/
-      unzip ${pluginsdk}
-      cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
+      cp ${pluginsdk}/doc/_static/logo.png $out/share/icons/hicolor/64x64/apps/teamspeak.png
       cp ${desktopItem}/share/applications/* $out/share/applications/
 
       # Make a symlink to the binary from bin.
