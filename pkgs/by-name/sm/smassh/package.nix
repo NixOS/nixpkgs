@@ -11,38 +11,28 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "smassh";
-  version = "3.1.4";
+  version = "3.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "smassh";
     rev = "v${version}";
-    hash = "sha256-MeLub6zeviY7yyPP2FI9b37nUwHZbxW6onuFXSkmvqk";
+    hash = "sha256-1XwuvEDROG4XLUs9uP7VKBOnho4WMyrZU884U+OMHkQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "platformdirs"
+    "textual"
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
-    appdirs
     click
+    platformdirs
     requests
-    (textual.overridePythonAttrs (oldAttrs: {
-      version = "0.52.1";
-      src = fetchFromGitHub {
-        owner = "Textualize";
-        repo = "textual";
-        rev = "refs/tags/v0.52.1";
-        hash = "sha256-a5v8HS6ZswQOl/jIypFJTk+MuMsu89H2pAAlWMPkLjI=";
-      };
-      disabledTests = [
-        "test_tracked_slugs"
-        "test_textual_env_var"
-        "test_register_language"
-        "test_register_language_existing_language"
-        "test_language_binary_missing"
-      ];
-    }))
+    textual
   ];
 
   # No tests available
