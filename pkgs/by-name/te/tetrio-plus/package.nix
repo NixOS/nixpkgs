@@ -14,8 +14,7 @@
   nodejs,
   asar,
 
-  tetrio-src,
-  tetrio-version,
+  tetrio-desktop,
 }:
 
 let
@@ -107,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # 'out' is the directory that the tetrio-plus expects the vanilla asar to be
     # and this is the directory that will contain the final result that we want
-    asar extract ${tetrio-src}/opt/TETR.IO/resources/app.asar out
+    asar extract ${tetrio-desktop.src}/opt/TETR.IO/resources/app.asar out
     cd out
 
     # Install custom package.json/yarn.lock that describe the additional node
@@ -125,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # The simple build script expects the vanilla asar located here
     # This patches the vanilla code to load the tetrio-plus code
-    ln -s ${tetrio-src}/opt/TETR.IO/resources/app.asar app.asar
+    ln -s ${tetrio-desktop.src}/opt/TETR.IO/resources/app.asar app.asar
     node ./scripts/build-electron.js
 
     # Finally, we install the tetrio-plus code where the above patch script expects
@@ -148,8 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preinstall
 
-    mkdir -p $out
-    asar pack out $out/app.asar
+    asar pack out $out
 
     runHook postinstall
   '';

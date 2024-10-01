@@ -4,11 +4,10 @@
   fetchzip,
   dpkg,
   makeWrapper,
-  callPackage,
   addDriverRunpath,
   electron,
   withTetrioPlus ? false,
-  tetrio-plus ? null,
+  tetrio-plus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,16 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      tetrio-plus' =
-        if tetrio-plus == null then
-          callPackage ./tetrio-plus.nix {
-            tetrio-src = finalAttrs.src;
-            tetrio-version = finalAttrs.version;
-          }
-        else
-          tetrio-plus;
-
-      asarPath = if withTetrioPlus then "${tetrio-plus'}/app.asar" else "opt/TETR.IO/resources/app.asar";
+      asarPath = if withTetrioPlus then tetrio-plus else "opt/TETR.IO/resources/app.asar";
     in
     ''
       runHook preInstall
