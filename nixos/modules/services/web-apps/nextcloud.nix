@@ -862,6 +862,7 @@ in {
               `pkgs.nextcloud`.
             ''
           else if versionOlder stateVersion "24.05" then nextcloud27
+          else if versionOlder stateVersion "24.11" then nextcloud29
           else nextcloud30
         );
 
