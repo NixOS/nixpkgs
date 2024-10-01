@@ -121,7 +121,7 @@ let
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-e5RRZTrhzoTMk2NRRl9m2K5+h1/+5mJNW2vF8h0uftc=";
+          hash = "sha256-LraN6MSVJQ3NzkyeLl5LvGxf+VNDJiVo/dVJIkyF1jU=";
         }
       else
         fetchurl {
@@ -228,6 +228,10 @@ let
         # and so are .pyc files
         find vendor_dir -name "*.pyc" -type f -delete
 
+        # bazel-external is auto-generated and should be removed
+        # see https://bazel.build/external/vendor#vendor-symlinks for more details
+        rm vendor_dir/bazel-external 
+
         runHook postBuild
       '';
 
@@ -243,10 +247,10 @@ let
         else if stdenv.hostPlatform.system == "aarch64-linux" then
           "sha256-T7vVWLlRzhaWneKMgMdgjUpBwRuGZ9ZFtD2AQvH9krI="
         else if stdenv.hostPlatform.system == "aarch64-darwin" then
-          "sha256-zv39lLMwfOr0MfK8dZ0alEwXpWdf97XEc6ciAoO4OK0="
+          "sha256-E6j31Sl+aGs6+Xdx+c0Xi6ryfYZ/ms5/HzIyc3QpMHY="
         else
           # x86_64-darwin
-          lib.fakeSha256;
+          "sha256-VVuNGY4+SFDhcv9iEo8JToYPzqk9NQCrYlLhhae89MM=";
       outputHashAlgo = "sha256";
 
     };
