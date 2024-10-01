@@ -151,6 +151,11 @@ stdenv'.mkDerivation (finalAttrs: {
     hash = "sha256-BOGh+QBTO7hrHohh+RqjSF8eHQH8jVBPjG/k4eyFaaM=";
   };
 
+  patches = [
+    # Fix build with Darwin SDK 11
+    ./0001-fix-darwin-build.patch
+  ];
+
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
     # between out and dev
@@ -308,6 +313,8 @@ stdenv'.mkDerivation (finalAttrs: {
       pushd ../TOOLS
       cp mpv_identify.sh umpv $out/bin/
       popd
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       pushd $out/share/applications
 
       sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \

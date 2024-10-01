@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       xdg

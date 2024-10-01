@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argparse_manpage" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     setuptools = [ setuptools ];
   };
 

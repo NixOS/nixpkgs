@@ -4,6 +4,7 @@
   runCommand,
   buildNpmPackage,
   stdenvNoCC,
+  docify,
   testers,
   writeText,
   jq,
@@ -12,13 +13,13 @@
 }:
 
 let
-  version = "1.18.0";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o2MHZMUuVnVjdv2b+GLIMjK1FT8KfLUzo7+zH7OU7HI=";
+    hash = "sha256-nYbxgrNFhQ576rN8W+Hf/Keohy1N8tihOeTQHItKPRc=";
   };
 
   # To regenerate the patched package-lock.json, copy the patched package.json
@@ -50,7 +51,7 @@ let
     pname = "pyright-internal";
     inherit version src;
     sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-pavURV/smWxYUWpRjVM08pJqfdNl/fULds66miC2iwg=";
+    npmDepsHash = "sha256-Md17EF3a1GBfnHD2fnLGS76r0xiWYJmBBTzZWRc0j5c=";
     dontNpmBuild = true;
     # Uncomment this flag when using unreleased peer dependencies
     # npmFlags = [ "--legacy-peer-deps" ];
@@ -61,32 +62,15 @@ let
     '';
   };
 
-  docify = python3.pkgs.buildPythonApplication {
-    pname = "docify";
-    version = "unstable";
-    format = "pyproject";
-    src = fetchFromGitHub {
-      owner = "AThePeanut4";
-      repo = "docify";
-      rev = "7380a6faa6d1e8a3dc790a00254e6d77f84cbd91";
-      hash = "sha256-BPR1rc/JzdBweiWmdHxgardDDrJZVWkUIF3ZEmEYf/A=";
-    };
-    buildInputs = [ python3.pkgs.setuptools ];
-    propagatedBuildInputs = [
-      python3.pkgs.libcst
-      python3.pkgs.tqdm
-    ];
-  };
-
   docstubs = stdenvNoCC.mkDerivation {
     name = "docstubs";
     inherit src;
-    buildInputs = [ docify ];
+    nativeBuildInputs = [ docify ];
 
     installPhase = ''
       runHook preInstall
       cp -r packages/pyright-internal/typeshed-fallback docstubs
-      ${docify}/bin/docify docstubs/stdlib --builtins-only --in-place
+      docify docstubs/stdlib --builtins-only --in-place
       cp -rv docstubs "$out"
       runHook postInstall
     '';

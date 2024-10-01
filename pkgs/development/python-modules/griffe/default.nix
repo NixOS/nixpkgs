@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "griffe";
     rev = "refs/tags/${version}";
-    hash = "sha256-aRztItjmCTAJuA/ZkQBJFx/uyH64Us2h5ad1kVsmKlY=";
+    hash = "sha256-IDIacG1FM/JidHV76PGTaPnkIfulAli8+YLuiuPHdZ8=";
   };
 
   build-system = [ pdm-backend ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [ aiofiles ];
   };
 

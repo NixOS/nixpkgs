@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Modern looking qt6 sddm theme";
-    homepage = "https://github.com/${src.owner}/${pname}";
+    homepage = "https://github.com/${src.owner}/${src.repo}";
     license = lib.licenses.gpl3;
 
     platforms = lib.platforms.linux;

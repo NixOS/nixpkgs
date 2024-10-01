@@ -39,7 +39,7 @@ buildPythonPackage rec {
     httpx
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ click ];
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     respx
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "sfrbox_api" ];
 

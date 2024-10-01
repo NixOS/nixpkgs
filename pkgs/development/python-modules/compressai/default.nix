@@ -48,7 +48,7 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tutorials = [
       ipywidgets
       jupyter

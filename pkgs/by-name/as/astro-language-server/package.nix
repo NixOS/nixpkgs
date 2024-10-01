@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.10.0";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "language-tools";
     rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-WdeQQaC9AVHT+/pXLzaC6MZ6ddHsFSpxoDPHqWvqmiQ=";
+    hash = "sha256-4GaLyaRUN9qS2U7eSzASB6fSQY2+fWtgfb54uuHjuh4=";
   };
 
   pnpmDeps = pnpm_8.fetchDeps {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspace
       prePnpmInstall
       ;
-    hash = "sha256-n7HTd/rKxJdQKnty5TeOcyvBU9j/EClQ9IHqbBaEwQE=";
+    hash = "sha256-q9a4nFPRhR6W/PT1l/Q1799iDmI+WTsudUP8rb8e97g=";
   };
 
   nativeBuildInputs = [
@@ -35,15 +35,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ nodejs_22 ];
 
-  pnpmWorkspace = "@astrojs/language-server";
+  # Must specify to download "@astrojs/yaml2ts" depencendies
+  # https://pnpm.io/filtering#--filter-package_name-1
+  pnpmWorkspace = "@astrojs/language-server...";
   prePnpmInstall = ''
+    # Warning section for "pnpm@v8"
+    # https://pnpm.io/cli/install#--filter-package_selector
     pnpm config set dedupe-peer-dependents false
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter=@astrojs/language-server build
+    # Must build the "@astrojs/yaml2ts" package. Dependency is linked via workspace by "pnpm"
+    # (https://github.com/withastro/language-tools/blob/%40astrojs/language-server%402.14.2/pnpm-lock.yaml#L78-L80)
+    pnpm --filter "@astrojs/language-server..." build
 
     runHook postBuild
   '';
@@ -61,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "The Astro language server";
     homepage = "https://github.com/withastro/language-tools";
+    changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "astro-ls";

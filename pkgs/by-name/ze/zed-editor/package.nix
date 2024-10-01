@@ -27,7 +27,7 @@
   makeFontsConf,
   vulkan-loader,
   envsubst,
-  nix-update-script,
+  gitUpdater,
   cargo-about,
   testers,
   zed-editor,
@@ -86,13 +86,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.154.2";
+  version = "0.154.4";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DcSlsBwZW2RhzX74eNi0+VBwnxYLl22CbCbZrEOSiFQ=";
+    hash = "sha256-/sL5SVRNVJBMPPZek9zBiek3nXHI1czNwbkGtlk9CzU=";
     fetchSubmodules = true;
   };
 
@@ -244,11 +244,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "v(.*)"
-      ];
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "pre";
     };
     tests.version = testers.testVersion {
       inherit version;

@@ -42,7 +42,7 @@ buildPythonPackage rec {
     lark
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c2 = [
       flow-record
       httpx
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dissect.cobaltstrike" ];
 

@@ -97,7 +97,7 @@ buildPythonPackage rec {
     "sagemaker.lineage.visualizer"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     local = [
       urllib3
       docker

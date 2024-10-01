@@ -1,7 +1,7 @@
-diff --git a/Cargo.lock b/Cargo.lock
+diff --git a/src-tauri/Cargo.lock b/src-tauri/Cargo.lock
 index 55f480a8..a69f9ed9 100644
---- a/Cargo.lock
-+++ b/Cargo.lock
+--- a/src-tauri/Cargo.lock
++++ b/src-tauri/Cargo.lock
 @@ -1839,6 +1839,22 @@ dependencies = [
   "tower-service",
  ]
@@ -133,10 +133,10 @@ index 55f480a8..a69f9ed9 100644
  [[package]]
  name = "tokio-rustls"
  version = "0.25.0"
-diff --git a/Cargo.toml b/Cargo.toml
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
 index 3e3ab7ee..b6612f95 100644
---- a/Cargo.toml
-+++ b/Cargo.toml
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
 @@ -28,6 +28,8 @@ time = { version = "0.3", default-features = false}
  log = "^0.4"
  url = "2"

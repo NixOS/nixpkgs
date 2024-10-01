@@ -108,7 +108,7 @@ let
       tzdata
     ];
 
-    passthru.optional-dependencies =
+    optional-dependencies =
       let
         extras = {
           aws = [ s3fs ];
@@ -183,7 +183,7 @@ let
         pytest-xdist
         pytestCheckHook
       ]
-      ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+      ++ lib.flatten (lib.attrValues optional-dependencies)
       ++ lib.optionals (stdenv.hostPlatform.isLinux) [
         # for locale executable
         glibc

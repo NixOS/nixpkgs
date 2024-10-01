@@ -1,15 +1,10 @@
 {
   runCommand,
   makeWrapper,
-  makeFontsConf,
+  fontconfig_file,
   chromium,
   ...
 }:
-let
-  fontconfig = makeFontsConf {
-    fontDirectories = [ ];
-  };
-in
 runCommand "playwright-chromium"
   {
     nativeBuildInputs = [
@@ -25,5 +20,5 @@ runCommand "playwright-chromium"
     # as headless nixos test vms.
     makeWrapper ${chromium}/bin/chromium $out/chrome-linux/chrome \
       --set-default SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
-      --set-default FONTCONFIG_FILE ${fontconfig}
+      --set-default FONTCONFIG_FILE ${fontconfig_file}
   ''

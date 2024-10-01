@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ siosocks ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     socks = [ siosocks ];
   };
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trustme
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses 127.0.0.2, which macos doesn't like

@@ -384,8 +384,17 @@ let
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;
           # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-          in args.rust.rustcTarget or args.rustc.config
-            or "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
+          in
+            args.rust.rustcTarget or
+            args.rustc.config or (
+              # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+              # We cannot know which subversion does the user want, and
+              # currently use WASI 0.1 as default for compatibility. Custom
+              # users can set `rust.rustcTarget` to override it.
+              if final.isWasi
+              then "${cpu_}-wasip1"
+              else "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
+            );
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.

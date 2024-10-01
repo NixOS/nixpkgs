@@ -380,7 +380,7 @@
       - any-glob-to-any-file:
         - pkgs/applications/editors/vscode/**/*
 
-"6.topic: xen":
+"6.topic: xen-project":
   - any:
     - changed-files:
       - any-glob-to-any-file:

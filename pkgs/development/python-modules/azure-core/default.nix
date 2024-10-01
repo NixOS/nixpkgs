@@ -41,7 +41,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ aiohttp ];
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # test server needs to be available
   preCheck = ''

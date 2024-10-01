@@ -3,6 +3,8 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
+  cacert,
+  unzip,
   pkg-config,
   libGL,
   libX11,
@@ -20,13 +22,28 @@
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.21.0";
+  version = "5.27.0";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    rev = "v${version}";
-    hash = "sha256-mes1aXh4R1re4sW3xYDWtSIcW7lwkWoAxbcbdyT/W+o=";
+    rev = "refs/tags/v${version}";
+
+    nativeBuildInputs = [
+      cacert
+      unzip
+    ];
+
+    # also fetch pdf.js files
+    # note: the version is locked in the file
+    postFetch = ''
+      cd $out/server/pdf
+      substituteInPlace refresh-pdf.js.sh \
+          --replace-fail '/bin/rm' 'rm'
+      . refresh-pdf.js.sh
+    '';
+
+    hash = "sha256-QVkyemBQ7RrV3dpP3n7Pg0XljdxWtCphZIj2T77nKtU=";
   };
 
   modPostBuild = ''
@@ -34,15 +51,14 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-H5GCrrqmDwpCneXawu7kZsRfrQ8hcsbqhpAAG6FCawg=";
+  vendorHash = "sha256-+vCc1g5noAl/iwEYhNZJYPiScKqKGKlsuruoUO/4tiU=";
 
   frontend = buildNpmPackage {
     name = "${pname}-${version}-frontend";
 
     inherit src;
     sourceRoot = "${src.name}/server/frontend";
-
-    npmDepsHash = "sha256-wP6sjdcjljzmTs0GUMbF2BPo83LKpfdn15sUuMEIn6E=";
+    npmDepsHash = "sha256-VWTJg/pluRYVVBDiJ+t2uhyodRuIFfHpzCZMte1krDM=";
 
     installPhase = ''
       runHook preInstall
@@ -92,7 +108,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    changelog = "https://github.com/richardwilkes/gcs/releases/tag/${src.rev}";
+    changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${version}";
     description = "Stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
     homepage = "https://gurpscharactersheet.com/";
     license = lib.licenses.mpl20;

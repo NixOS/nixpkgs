@@ -5,6 +5,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  python,
   duckdb,
   hypothesis,
   pandas,
@@ -61,6 +62,15 @@ buildPythonPackage rec {
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
     # requires snapshottest
     "duckdb_engine/tests/test_datatypes.py"
+  ];
+
+  disabledTests = [
+    # incompatible with duckdb 1.1.1
+    "test_with_cache"
+  ] ++ lib.optionals (python.pythonVersion == "3.11") [
+    # incompatible with duckdb 1.1.1
+    "test_all_types_reflection"
+    "test_nested_types"
   ];
 
   pythonImportsCheck = [ "duckdb_engine" ];

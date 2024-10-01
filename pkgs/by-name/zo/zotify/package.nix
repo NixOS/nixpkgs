@@ -20,8 +20,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [ python3Packages.setuptools ];
 
-  nativeBuildInputs = [ python3Packages.pythonRelaxDepsHook ];
-
   pythonRelaxDeps = [ "protobuf" ];
 
   dependencies = with python3Packages; [

@@ -313,8 +313,8 @@ let
         mktplcRef = {
           name = "vscode-apollo";
           publisher = "apollographql";
-          version = "2.3.2";
-          hash = "sha256-5PAmyy4RX2hLgviWxgnxGZjgeFWZaJKNiYGNdCTL0IE=";
+          version = "2.3.3";
+          hash = "sha256-pxj3BM+LJPS9KxxniEtBLT3x1FERGr4yPndxOSVLgR8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
@@ -406,8 +406,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.18.11";
-          hash = "sha256-j1igEItS4TT1WxSxK3tFG29McTTo8ojEs6TJShGZiGI=";
+          version = "1.18.12";
+          hash = "sha256-3Nmk0MFIMFYQHrRyZ7ioFk9KfHSk0CSF7FwNaEJbsyg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -2119,8 +2119,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "5.6.0";
-          hash = "sha256-K4oCMQBH5jrt61f/C3DDZC61RuDvOApnPEF3AsOrE20=";
+          version = "5.13.0";
+          hash = "sha256-A9QFW6Vk+g0pJfpXmZdUWJ/+WJBFXG79NXpCBuTjjok=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -4166,6 +4166,23 @@ let
         };
       };
 
+      sas.sas-lsp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "sas-lsp";
+          publisher = "SAS";
+          version = "1.10.2";
+          hash = "sha256-mf0q80UX4FxqHAHJBQlhkF/nqvTnfgTR8GuYBoWSswU=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";
+          description = "Official SAS Language Extension";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=SAS.sas-lsp";
+          homepage = "https://github.com/sassoftware/vscode-sas-extension";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.scraptux ];
+        };
+      };
+
       scala-lang.scala = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scala";
@@ -4219,10 +4236,11 @@ let
         mktplcRef = {
           publisher = "seatonjiang";
           name = "gitmoji-vscode";
-          version = "1.2.2";
-          hash = "sha256-+lwbCLV62y1IHrjCygBphQZJUu+ZApYTwBQld5uu12w=";
+          version = "1.2.5";
+          hash = "sha256-lWd7SyYNxoDauMecJq11akTiwEKBeXuR4htDYCbb6n4=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/seatonjiang.gitmoji-vscode/changelog";
           description = "Gitmoji tool for git commit messages in VSCode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=seatonjiang.gitmoji-vscode";
           homepage = "https://github.com/seatonjiang/gitmoji-vscode/";

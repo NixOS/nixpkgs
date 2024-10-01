@@ -1,11 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
-, gpgme
-, libgpg-error
-, pkg-config
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  darwin,
+  gpgme,
+  libgpg-error,
+  pkg-config,
+  rustPlatform,
 }:
 
 let
@@ -13,32 +16,34 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "envio";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "envio-cli";
     repo = "envio";
     rev = "v${version}";
-    hash = "sha256-KhjHd+1IeKdASeYP2rPtyTmtkPcBbaruylmOwTPtFgo=";
+    hash = "sha256-je0DBoBIayFK//Aija5bnO/2z+hxNWgVkwOgxMyq5s4=";
   };
 
-  cargoHash = "sha256-qmJUARwsGln07RAX1Ab0cNDgJq7NkezuT0tZsyd48Mw=";
+  cargoHash = "sha256-L7GgPocj32zAfR27dgKK7/OM106cATdCqufSvG3MFYQ=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
-  buildInputs = [ libgpg-error gpgme ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [
+    libgpg-error
+    gpgme
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  # Remove postPatch when updating to the next envio release
-  # For details see https://github.com/envio-cli/envio/pull/31
-  postPatch = ''
-    substituteInPlace build.rs\
-      --replace 'fn get_version() -> String {' 'fn get_version() -> String { return "${version}".to_string();'
+  postInstall = ''
+    installManPage man/*.1
   '';
 
   meta = with lib; {
-    homepage    = "https://envio-cli.github.io/home";
-    changelog   = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
+    homepage = "https://envio-cli.github.io/home";
+    changelog = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
     mainProgram = "envio";
     longDescription = ''
@@ -47,8 +52,11 @@ rustPlatform.buildRustPackage rec {
       switch between different configurations and apply them to their current
       environment.
     '';
-    license     = with licenses; [ mit asl20 ];
-    platforms   = platforms.unix;
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ afh ];
   };
 }

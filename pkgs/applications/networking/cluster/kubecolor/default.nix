@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, kubectl, installShellFiles }:
 
 buildGoModule rec {
   pname = "kubecolor";
@@ -18,6 +18,26 @@ buildGoModule rec {
   subPackages = [
     "."
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # kubecolor re-uses the completions of kubectl for its own executable
+
+    installShellCompletion --cmd kubecolor \
+      --bash <(${lib.getExe kubectl} completion bash) \
+      --fish <(${lib.getExe kubectl} completion fish) \
+      --zsh <(${lib.getExe kubectl} completion zsh)
+
+    # https://kubecolor.github.io/setup/shells/bash/
+    echo 'complete -o default -F __start_kubectl kubecolor' >> $out/share/bash-completion/completions/kubecolor.bash
+
+    # https://kubecolor.github.io/setup/shells/fish/
+    echo -e 'function kubecolor --wraps kubectl\n  command kubecolor $argv\nend' >> $out/share/fish/vendor_completions.d/kubecolor.fish
+
+    # https://kubecolor.github.io/setup/shells/zsh/
+    echo 'compdef kubecolor=kubectl' >> $out/share/zsh/site-functions/_kubecolor
+  '';
 
   meta = with lib; {
     description = "Colorizes kubectl output";

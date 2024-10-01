@@ -35,7 +35,13 @@ let
     descriptionClass = "conjunction";
   };
 
-  intOrSafeStr = lib.types.either lib.types.ints.unsigned safeStr;
+  intOrNumberOrRange = lib.types.either lib.types.ints.unsigned (
+    lib.types.strMatching "[[:digit:]]+(\-[[:digit:]]+)?"
+    // {
+      description = "string containing either a number or a range";
+      descriptionClass = "conjunction";
+    }
+  );
 
   configOptions = {
     SUBVOLUME = lib.mkOption {
@@ -95,7 +101,7 @@ let
     };
 
     TIMELINE_LIMIT_HOURLY = lib.mkOption {
-      type = intOrSafeStr;
+      type = intOrNumberOrRange;
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -103,7 +109,7 @@ let
     };
 
     TIMELINE_LIMIT_DAILY = lib.mkOption {
-      type = intOrSafeStr;
+      type = intOrNumberOrRange;
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -111,7 +117,7 @@ let
     };
 
     TIMELINE_LIMIT_WEEKLY = lib.mkOption {
-      type = intOrSafeStr;
+      type = intOrNumberOrRange;
       default = 0;
       description = ''
         Limits for timeline cleanup.
@@ -119,7 +125,7 @@ let
     };
 
     TIMELINE_LIMIT_MONTHLY = lib.mkOption {
-      type = intOrSafeStr;
+      type = intOrNumberOrRange;
       default = 10;
       description = ''
         Limits for timeline cleanup.
@@ -127,7 +133,7 @@ let
     };
 
     TIMELINE_LIMIT_QUARTERLY = lib.mkOption {
-      type = intOrSafeStr;
+      type = intOrNumberOrRange;
       default = 0;
       description = ''
         Limits for timeline cleanup.
@@ -135,7 +141,7 @@ let
     };
 
     TIMELINE_LIMIT_YEARLY = lib.mkOption {
-      type = intOrSafeStr;
+      type = intOrNumberOrRange;
       default = 10;
       description = ''
         Limits for timeline cleanup.

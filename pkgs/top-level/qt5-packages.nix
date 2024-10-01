@@ -287,6 +287,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
+  xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
+
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {
   # Remove completely before 24.11

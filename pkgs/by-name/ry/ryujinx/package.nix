@@ -12,6 +12,12 @@
 , vulkan-loader
 , glew
 , libGL
+, libICE
+, libSM
+, libXcursor
+, libXext
+, libXi
+, libXrandr
 , udev
 , SDL2
 , SDL2_mixer
@@ -19,13 +25,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1398"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1401"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "319507f2a12a6751f3ab833e498a3efd3119f806";
-    hash = "sha256-3DM/kahNhl8EhSIRuqH0trYoR51OrGxSE+GuOKxKr2c=";
+    rev = "5dbba07e33e83c9047dcbb701c9655edbbe89086";
+    hash = "sha256-UeJ3KE5e5H9crqroAxjmxYTf/Z4cbj41a6/1HW2nLcA=";
   };
 
   enableParallelBuilding = false;
@@ -49,6 +55,12 @@ buildDotnetModule rec {
 
     # Avalonia UI
     glew
+    libICE
+    libSM
+    libXcursor
+    libXext
+    libXi
+    libXrandr
 
     # Headless executable
     libGL

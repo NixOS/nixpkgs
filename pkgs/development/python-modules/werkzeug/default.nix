@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     watchdog = lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # watchdog requires macos-sdk 10.13
       watchdog
@@ -59,7 +59,7 @@ buildPythonPackage rec {
       pytestCheckHook
     ]
     ++ lib.optionals (pythonOlder "3.11") [ greenlet ]
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "werkzeug" ];
 

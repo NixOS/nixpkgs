@@ -260,6 +260,9 @@ in
         # hardening
         CapabilityBoundingSet = [
           "CAP_CHOWN"
+          "CAP_DAC_OVERRIDE"
+          "CAP_KILL"
+          "CAP_SETUID"
           "CAP_SETGID"
         ];
         DevicePolicy = "closed";
@@ -280,16 +283,16 @@ in
         ProtectSystem = "full";
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        RestrictSUIDSGID = true;
+        RestrictSUIDSGID = false; # can create sgid directories
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
           "~@privileged @resources"
-          "@chown"
+          "@chown @setuid"
         ];
         UMask = "0027";
       } // lib.optionalAttrs (!cfg.allowNetworking) {
-        PrivateNetwork = true;
+        PrivateNetwork = true; # e.g. mail delivery
         RestrictAddressFamilies = "none";
       };
     };

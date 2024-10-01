@@ -17,7 +17,6 @@
   pytest-xvfb,
   sympy,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     oldest-supported-numpy
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [ "pre-commit" ];
@@ -49,7 +47,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dev = [
       coverage
       flake8

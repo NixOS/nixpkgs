@@ -29,7 +29,7 @@ buildPythonPackage rec {
     certifi
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     requests = [ requests ];
     async = [ aiohttp ];
   };

@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch2
 , installShellFiles
+, go
 }:
 
 buildGoModule rec {
@@ -45,8 +46,30 @@ buildGoModule rec {
     go build -o $out/bin/canarytail ./cmd/canarytail.go
   '';
 
-  postInstall = ''
-  '';
+  passthru.tests.canarytail-tests = stdenv.mkDerivation {
+    name = "canarytail-client-tests";
+    buildInputs = [ go ];
+
+    src = fetchFromGitHub {
+      owner = "ScreamingHawk";
+      repo = "canary-client";
+      rev = "0871ad14489c0b96d5cd3d980fb0028f8026f2ee";
+      hash = "sha256-FfU9drEE+xFjZpNddQqt53gvhSpiEs5QTVC7XR1kVP8=";
+    };
+
+    preCheck = ''
+      export HOME=$(mktemp -d)
+    '';
+
+    installPhase = ''
+      # No need to install anything, we only need to run the tests
+    '';
+
+    checkPhase = ''
+      go mod vendor
+      go test -mod=vendor ./blockchain_test.go ./canary_test.go ./crypto_test.go
+    '';
+  };
 
   doCheck = false;
 

@@ -289,11 +289,12 @@ in stdenv.mkDerivation {
     rustPlatform.bindgenHook
     wayland-scanner
   ] ++ lib.optionals needNativeCLC [
-    buildPackages.mesa.driversdev
+    # `or null` to not break eval with `attribute missing` on darwin to linux cross
+    (buildPackages.mesa.driversdev or null)
   ];
 
   disallowedRequisites = lib.optionals needNativeCLC [
-    buildPackages.mesa.driversdev
+    (buildPackages.mesa.driversdev or null)
   ];
 
   propagatedBuildInputs = [ libdrm ];

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
   attrs,
   docopt,
   pillow,
@@ -11,15 +12,15 @@
   numpy,
   aggdraw,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   ipython,
   cython,
 }:
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.34";
-  format = "setuptools";
+  version = "1.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,20 +28,18 @@ buildPythonPackage rec {
     owner = "psd-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UFdprXoHFsbH3Tbui44n8FTdbkynnYVL1LHtFzFInio=";
+    hash = "sha256-H3Szd8/NjXCkWyG/q+6O5L0Iq5u/g4UNdEmhDqQsAY8=";
   };
 
-  postPatch = ''
-    sed -i "/addopts =/d" pyproject.toml
-  '';
+  build-system = [
+    setuptools
+    cython
+  ];
 
-  nativeBuildInputs = [ cython ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aggdraw
     attrs
     docopt
-    ipython
     numpy
     pillow
     scikit-image
@@ -49,7 +48,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
+    ipython
   ];
 
   pythonImportsCheck = [ "psd_tools" ];

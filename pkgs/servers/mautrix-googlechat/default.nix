@@ -32,7 +32,7 @@
     install -D mautrix_googlechat/example-config.yaml $out/$baseConfigPath
   '';
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     e2be = [
       python-olm
       pycryptodome
@@ -56,9 +56,9 @@
     python-magic
     protobuf
     (mautrix.override { withOlm = enableE2be; })
-  ] ++ lib.optionals enableE2be passthru.optional-dependencies.e2be
-  ++ lib.optionals enableMetrics passthru.optional-dependencies.metrics
-  ++ lib.optionals enableSqlite passthru.optional-dependencies.sqlite;
+  ] ++ lib.optionals enableE2be optional-dependencies.e2be
+  ++ lib.optionals enableMetrics optional-dependencies.metrics
+  ++ lib.optionals enableSqlite optional-dependencies.sqlite;
 
   doCheck = false;
 

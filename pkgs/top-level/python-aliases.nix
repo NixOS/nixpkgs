@@ -60,6 +60,7 @@ mapAliases ({
   asyncio-mqtt = throw "asyncio-mqtt has been replaced by aiomqtt, which is not API compatible."; # added 2024-07-07
   asyncio-nats-client = nats-py; # added 2022-02-08
   atsim_potentials = atsim-potentials; # added 2023-10-08
+  inherit (super.pkgs) autotrash; # added 2024-09-23
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
   Babel = babel; # added 2022-05-06
   backports_csv = throw "backports_csv has been removed, since we no longer need to backport to python2"; # added 2023-07-28
@@ -569,6 +570,7 @@ mapAliases ({
   sapi-python-client = kbcstorage; # added 2022-04-20
   scikitimage = scikit-image; # added 2023-05-14
   scikitlearn = scikit-learn; # added 2021-07-21
+  scikit-optimize = throw "scikit-optimize has been removed because it is abandoned"; # added 2024-09-30
   scikits-samplerate = throw "scikits-samplerate has been removed, it was unsed and unmaintained since 2015"; # added 2024-05-23
   selectors2 = throw "selectors2 has been removed: archived by upstream."; # added 2024-07-27
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10

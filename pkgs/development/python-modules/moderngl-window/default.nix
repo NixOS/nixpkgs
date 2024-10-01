@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pyrr
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trimesh = [
       trimesh
       scipy

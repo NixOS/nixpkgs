@@ -588,7 +588,6 @@ in
 
   neorg = prev.neorg.overrideAttrs (oa: {
     postConfigure = ''
-      cat ''${rockspecFilename}
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
         --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim',"
@@ -823,7 +822,7 @@ in
   tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
+      hash = "sha256-pKqG8aiV8BvvDO6RE6J3HEA/S4E4QunbO4WBpV5jUYk=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });

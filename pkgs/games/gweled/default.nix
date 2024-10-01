@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchbzr {
     url = "lp:gweled";
     rev = "108";
-    sha256 = "sha256-rM4dgbYfSrVqZwi+xzKuEtmtjK3HVvqeutmni1vleLo=";
+    hash = "sha256-rM4dgbYfSrVqZwi+xzKuEtmtjK3HVvqeutmni1vleLo=";
   };
 
   doCheck = false;

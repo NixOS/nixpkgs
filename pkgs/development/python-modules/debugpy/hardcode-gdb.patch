@@ -1,13 +1,13 @@
 diff --git a/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py b/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
-index 85f3353b..56fab577 100644
+index a1a852a0..0bb91807 100644
 --- a/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
 +++ b/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
-@@ -410,7 +410,7 @@ def run_python_code_linux(pid, python_code, connect_debugger_tracing=False, show
+@@ -412,7 +412,7 @@ def run_python_code_linux(pid, python_code, connect_debugger_tracing=False, show
      is_debug = 0
      # Note that the space in the beginning of each line in the multi-line is important!
      cmd = [
--        'gdb',
+-        "gdb",
 +        '@gdb@/bin/gdb',
-         '--nw',  # no gui interface
-         '--nh',  # no ~/.gdbinit
-         '--nx',  # no .gdbinit
+         "--nw",  # no gui interface
+         "--nh",  # no ~/.gdbinit
+         "--nx",  # no .gdbinit

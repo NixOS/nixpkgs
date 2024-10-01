@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libspatialite
     libtiff
     libwebp
-    libxml2
+    (libxml2.override { enableHttp = true; })
     lz4
     minizip
     openjpeg
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     proj
     sqlite
     zstd
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin ApplicationServices;
+  ] ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   enableParallelBuilding = true;
 

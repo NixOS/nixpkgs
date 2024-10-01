@@ -63,7 +63,7 @@ buildPythonPackage rec {
     libusb-compat-0_1
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pyseabreeze = [ pyusb ];
   };
 
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [ "TestHardware" ];
 

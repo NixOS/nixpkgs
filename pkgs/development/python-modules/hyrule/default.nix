@@ -4,27 +4,24 @@
   fetchFromGitHub,
   hy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hyrule";
     rev = "refs/tags/${version}";
-    hash = "sha256-pmJhhOpNxVEUH8YwBUKSywYgYu43oLSmpWJM4HXGMiI=";
+    hash = "sha256-w1Q2w/P1bDt/F1+zTkUFi5PxycXXE3p0qadfBcyWElg=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ hy ];
+  dependencies = [ hy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

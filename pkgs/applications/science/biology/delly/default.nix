@@ -13,14 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.2.6";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OO5nnaIcfNAV8pc03Z8YS5kE96bFOrJXA9QTiLi7vPc=";
+    hash = "sha256-HeLqf/bUkZQJrW1LHl3XmecW3wS3QmjifoH34VNr3A4=";
   };
+
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace Makefile \
+      --replace-fail "-std=c++17" "-std=c++14"
+  '';
 
   buildInputs = [
     boost

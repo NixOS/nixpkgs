@@ -35,7 +35,7 @@ buildPythonPackage rec {
     lz4
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extras = [
       arrow
       cloudpickle
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "construct" ];
 
