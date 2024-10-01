@@ -38,6 +38,7 @@
 , util-linux
 , pulseaudioSupport ? true
 , libpulseaudio
+, pulseaudio
 }:
 
 let
@@ -112,6 +113,7 @@ let
     libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
+  binPath = lib.makeBinPath ([ coreutils glib.dev pciutils procps util-linux ] ++ lib.optional pulseaudioSupport pulseaudio);
 in
 stdenv.mkDerivation rec {
   pname = "zoom";
@@ -158,7 +160,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-    for i in aomhost zopen zoom ZoomLauncher; do
+    for i in aomhost zopen zoom ZoomLauncher ZoomWebviewHost; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
     done
 
@@ -178,7 +180,13 @@ stdenv.mkDerivation rec {
       --unset QML2_IMPORT_PATH \
       --unset QT_PLUGIN_PATH \
       --unset QT_SCREEN_SCALE_FACTORS \
-      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
+      --prefix PATH : ${binPath} \
+      --prefix LD_LIBRARY_PATH ":" ${libs}
+
+    wrapProgram $out/opt/zoom/ZoomWebviewHost \
+      --unset QML2_IMPORT_PATH \
+      --unset QT_PLUGIN_PATH \
+      --unset QT_SCREEN_SCALE_FACTORS \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     # Backwards compatibility: we used to call it zoom-us

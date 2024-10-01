@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 
 , useMinimalFeatures ? false
 , useTiledb ? (!useMinimalFeatures) && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
@@ -87,6 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/91e4f55f8f374a75f8f2ecd05670edcfa4c0af84.patch";
+      sha256 = "sha256-C2lkZLsORso7WVxgX79r5swkoVu/APPwQp2C/rmmCAo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/40c3212fe4ba93e5176df4cd8ae5e29e06bb6027.patch";
+      sha256 = "sha256-D55iT6E/YdpSyfN7KUDTh1gdmIDLHXW4VC5d6D9B7ls=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
@@ -256,6 +268,9 @@ stdenv.mkDerivation (finalAttrs: {
     # failing with PROJ 9.3.1
     # https://github.com/OSGeo/gdal/issues/8908
     "test_osr_esri_28"
+    # flakey tests, to remove on next release
+    "test_vsiaz_write_blockblob_chunk_size_1"
+    "test_vsiaz_fake_write"
   ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"

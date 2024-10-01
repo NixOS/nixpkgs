@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20240927";
+  version = "20240930";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tdBLvsfQpoTO0mhV0Ggb+dnJjpIPUNZM7fXODlv/HCA=";
+    hash = "sha256-6wfHJM2pg+y1qUfVF1VRG86G3CtQ+UNIwMXR8pPi2k4=";
   };
 
   patches = [
