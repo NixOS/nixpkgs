@@ -2,25 +2,22 @@
 , stdenvNoCC
 , callPackages
 , fetchFromGitHub
-, fetchpatch
-, fetchzip
 , buildNpmPackage
-, buildGoModule
+, buildGo123Module
 , runCommand
 , openapi-generator-cli
 , nodejs
 , python312
-, codespell
 , makeWrapper }:
 
 let
-  version = "2024.6.4";
+  version = "2024.8.3";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-QwK/auMLCJEHHtyexFnO+adCq/u0fezHQ90fXW9J4c4=";
+    hash = "sha256-AlIzFSVfXBuvHkrlFqIBhcRohax5XFXvz/9ULelE8tw=";
   };
 
   meta = with lib; {
@@ -35,13 +32,14 @@ let
   website = buildNpmPackage {
     pname = "authentik-website";
     inherit version src meta;
-    npmDepsHash = "sha256-JM+ae+zDsMdvovd2p4IJIH89KlMeDU7HOZjFbDCyehw=";
+    npmDepsHash = "sha256-Zp0V/G/XYFTOvZ5meNjohGg6sqq2slGW2Z4gMHirOrU=";
 
     NODE_ENV = "production";
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     postPatch = ''
       cd website
+      substituteInPlace package.json --replace-fail 'cross-env ' ""
     '';
 
     installPhase = ''
@@ -87,7 +85,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-8TzB3ylZzVLePD86of8E/lGgIQCciWMQF9m1Iqv9ZTY=";
+    npmDepsHash = "sha256-Apd/jdSH/B9woYABtvk3qrfBE7n8xlDWXRc80sJ/lzg=";
 
     postPatch = ''
       cd web
@@ -150,7 +148,7 @@ let
           repo = pname;
           rev = version;
           hash = "sha256-VwH7fwLcoH2Z9D/OY9iieM0cRhyDKOpAzqQ+4YVE3vU=";
-        };
+      };
         nativeBuildInputs = with prev; [
           poetry-core
         ];
@@ -162,12 +160,12 @@ let
 
       django-pglock = prev.buildPythonPackage rec {
         pname = "django-pglock";
-        version = "1.5.1";
+        version = "1.6.0";
         src = fetchFromGitHub {
           owner = "Opus10";
           repo = pname;
           rev = version;
-          hash = "sha256-ZoEHDkGmrcNiMe/rbwXsEPZo3LD93cZp6zjftMKjLeg=";
+          hash = "sha256-KCB00W3sUyEERgK/DfDPl051uFkc0IRdbOJusUVs5SA=";
         };
         nativeBuildInputs = with prev; [
           poetry-core
@@ -232,41 +230,10 @@ let
         ];
       };
 
-      scim2-filter-parser = prev.buildPythonPackage rec {
-        pname = "scim2-filter-parser";
-        version = "0.5.1";
-        # For some reason the normal fetchPypi does not work
-        src = fetchzip {
-          url = "https://files.pythonhosted.org/packages/54/df/ad9718acce76e81a93c57327356eecd23701625f240fbe03d305250399e6/scim2_filter_parser-0.5.1.tar.gz";
-          hash = "sha256-DZAdRj6qyySggsvJZC47vdvXbHrB1ra3qiYBEUiceJ4=";
-        };
-
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace-fail 'poetry>=0.12' 'poetry-core>=1.0.0' \
-            --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
-        '';
-
-        nativeBuildInputs = [ prev.poetry-core ];
-        pyproject = true;
-
-        propagatedBuildInputs = with final; [
-          sly
-        ];
-      };
-
       authentik-django = prev.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
-
-        patches = [
-          (fetchpatch {
-            name = "scim-schema-load.patch";
-            url = "https://github.com/goauthentik/authentik/commit/f3640bd3c0ee2f43efcfd506bb71d2b7b6761017.patch";
-            hash = "sha256-4AC7Dc4TM7ok964ztc+XdHvoU/DKyi9yJoz5u1dljEM=";
-          })
-        ];
 
         postPatch = ''
           rm lifecycle/system_migrations/tenant_files.py
@@ -289,12 +256,12 @@ let
           celery
           channels
           channels-redis
-          codespell
-          colorama
+          cryptography
           dacite
           deepmerge
           defusedxml
           django
+          django-countries
           django-cte
           django-filter
           django-guardian
@@ -307,9 +274,9 @@ let
           djangorestframework
           djangorestframework-guardian2
           docker
+          drf-orjson-renderer
           drf-spectacular
           duo-client
-          facebook-sdk
           fido2
           flower
           geoip2
@@ -327,6 +294,7 @@ let
           pydantic
           pydantic-scim
           pyjwt
+          pyrad
           pyyaml
           requests-oauthlib
           scim2-filter-parser
@@ -337,7 +305,6 @@ let
           swagger-spec-validator
           tenant-schemas-celery
           twilio
-          twisted
           ua-parser
           urllib3
           uvicorn
@@ -368,7 +335,7 @@ let
 
   inherit (python.pkgs) authentik-django;
 
-  proxy = buildGoModule {
+  proxy = buildGo123Module {
     pname = "authentik-proxy";
     inherit version src meta;
 
@@ -383,7 +350,7 @@ let
 
     CGO_ENABLED = 0;
 
-    vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
+    vendorHash = "sha256-xaVEyG5fNGh/zmXkewve5V2q2W7u+hqo27GqabAV9H0=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
@@ -392,7 +359,7 @@ let
     subPackages = [ "cmd/server" ];
   };
 
-in stdenvNoCC.mkDerivation {
+in stdenvNoCC.mkDerivation (final: {
   pname = "authentik";
   inherit src version;
 
@@ -419,11 +386,11 @@ in stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.outposts = callPackages ./outposts.nix { };
+  passthru.outposts = callPackages ./outposts.nix { authentik = final; };
 
   nativeBuildInputs = [ makeWrapper ];
 
   meta = meta // {
     mainProgram = "ak";
   };
-}
+})
