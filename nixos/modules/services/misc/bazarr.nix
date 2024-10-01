@@ -7,6 +7,8 @@ in
     services.bazarr = {
       enable = lib.mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
 
+      package = lib.mkPackageOption pkgs "bazarr" { };
+
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -46,7 +48,7 @@ in
         StateDirectory = "bazarr";
         SyslogIdentifier = "bazarr";
         ExecStart = pkgs.writeShellScript "start-bazarr" ''
-          ${pkgs.bazarr}/bin/bazarr \
+          ${cfg.package}/bin/bazarr \
             --config '/var/lib/${StateDirectory}' \
             --port ${toString cfg.listenPort} \
             --no-update True
