@@ -23,21 +23,17 @@ let
     ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liquibase";
   version = "4.29.2";
 
   src = fetchurl {
-    url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/liquibase/liquibase/releases/download/v${finalAttrs.version}/liquibase-${finalAttrs.version}.tar.gz";
     hash = "sha256-HQF6IGqVqzB2pS9mBnnC2AufIXSULLBxXjXVOTHiDuk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
-
-  unpackPhase = ''
-    tar xfz ${src}
-  '';
 
   installPhase =
     let addJars = dir: ''
@@ -53,12 +49,12 @@ stdenv.mkDerivation rec {
       mkdir -p $out/internal/lib
       mv ./internal/lib/*.jar $out/internal/lib/
 
-      mkdir -p $out/share/doc/${pname}-${version}
+      mkdir -p $out/share/doc/liquibase-${finalAttrs.version}
       mv LICENSE.txt \
          README.txt \
          ABOUT.txt \
          changelog.txt \
-         $out/share/doc/${pname}-${version}
+         $out/share/doc/liquibase-${finalAttrs.version}
 
       mkdir -p $out/bin
       # there’s a lot of escaping, but I’m not sure how to improve that
@@ -89,10 +85,10 @@ stdenv.mkDerivation rec {
     description = "Version Control for your database";
     mainProgram = "liquibase";
     homepage = "https://www.liquibase.org/";
-    changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
+    changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${finalAttrs.version}/changelog.txt";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ jsoo1 ];
     platforms = with platforms; unix;
   };
-}
+})

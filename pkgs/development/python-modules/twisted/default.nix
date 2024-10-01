@@ -171,13 +171,13 @@ buildPythonPackage rec {
       hypothesis
       pyhamcrest
     ]
-    ++ passthru.optional-dependencies.conch
-    ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.serial
+    ++ optional-dependencies.conch
+    ++ optional-dependencies.http2
+    ++ optional-dependencies.serial
     # not supported on aarch64-darwin: https://github.com/pyca/pyopenssl/issues/873
     ++ lib.optionals (
       !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-    ) passthru.optional-dependencies.tls;
+    ) optional-dependencies.tls;
 
   checkPhase = ''
     export SOURCE_DATE_EPOCH=315532800
@@ -186,26 +186,26 @@ buildPythonPackage rec {
     ${python.interpreter} -m twisted.trial -j1 twisted
   '';
 
-  passthru = {
-    optional-dependencies = {
-      conch = [
-        appdirs
-        bcrypt
-        cryptography
-        pyasn1
-      ];
-      http2 = [
-        h2
-        priority
-      ];
-      serial = [ pyserial ];
-      tls = [
-        idna
-        pyopenssl
-        service-identity
-      ];
-    };
+  optional-dependencies = {
+    conch = [
+      appdirs
+      bcrypt
+      cryptography
+      pyasn1
+    ];
+    http2 = [
+      h2
+      priority
+    ];
+    serial = [ pyserial ];
+    tls = [
+      idna
+      pyopenssl
+      service-identity
+    ];
+  };
 
+  passthru = {
     tests = {
       inherit
         cassandra-driver

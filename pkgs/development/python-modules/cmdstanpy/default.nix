@@ -49,7 +49,7 @@ buildPythonPackage rec {
     stanio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ xarray ];
   };
 
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix

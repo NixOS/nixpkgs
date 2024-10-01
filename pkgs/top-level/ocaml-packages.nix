@@ -444,6 +444,8 @@ let
     eio_main = callPackage ../development/ocaml-modules/eio/main.nix { };
     eio_posix = callPackage ../development/ocaml-modules/eio/posix.nix { };
 
+    eio-ssl = callPackage ../development/ocaml-modules/eio-ssl { };
+
     either = callPackage ../development/ocaml-modules/either { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
@@ -658,6 +660,8 @@ let
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
+    h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
+
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
@@ -689,7 +693,13 @@ let
 
     httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
 
+    httpun = callPackage ../development/ocaml-modules/httpun { };
+
+    httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
+
     httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
+
+    httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 

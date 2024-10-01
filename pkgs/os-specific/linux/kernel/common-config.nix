@@ -29,6 +29,13 @@ let
           (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) ||
           (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
 
+  forceRust = features.rust or false;
+  kernelSupportsRust = lib.versionAtLeast version "6.7";
+
+  # Currently not enabling Rust by default, as upstream requires rustc 1.81
+  defaultRust = false;
+  withRust = (forceRust || defaultRust) && kernelSupportsRust;
+
   options = {
 
     debug = {
@@ -134,6 +141,7 @@ let
 
       # Required to bring up some Bay Trail devices properly
       I2C                              = yes;
+      I2C_DESIGNWARE_CORE              = yes;
       I2C_DESIGNWARE_PLATFORM          = yes;
       PMIC_OPREGION                    = whenAtLeast "5.10" yes;
       INTEL_SOC_PMIC                   = whenAtLeast "5.10" yes;
@@ -484,14 +492,16 @@ let
       DRM_VC4_HDMI_CEC = yes;
     };
 
-    # Enables Rust support in the Linux kernel. This is currently not enabled by default, because it occasionally requires
-    # patching the Linux kernel for the specific Rust toolchain in nixpkgs. These patches usually take a bit
-    # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
-    #
-    # Once Rust in the kernel has more users, we can reconsider enabling it by default.
-    rust = lib.optionalAttrs ((features.rust or false) && lib.versionAtLeast version "6.7") {
+    # Enable Rust and features that depend on it
+    rust = lib.optionalAttrs withRust {
       RUST = yes;
-      GCC_PLUGINS = no;
+
+      # These don't technically require Rust but we probably want to get some more testing
+      # on the whole DRM panic setup before shipping it by default.
+      DRM_PANIC = whenAtLeast "6.12" yes;
+      DRM_PANIC_SCREEN = whenAtLeast "6.12" (freeform "kmsg");
+
+      DRM_PANIC_SCREEN_QR_CODE = whenAtLeast "6.12" yes;
     };
 
     sound = {
@@ -628,6 +638,7 @@ let
       NFS_V4_1              = yes;  # NFSv4.1 client support
       NFS_V4_2              = yes;
       NFS_V4_SECURITY_LABEL = yes;
+      NFS_LOCALIO           = whenAtLeast "6.12" yes;
 
       CIFS_XATTR        = yes;
       CIFS_POSIX        = option yes;
@@ -895,6 +906,12 @@ let
       ZRAM                          = module;
       ZRAM_WRITEBACK                = option yes;
       ZRAM_MULTI_COMP               = whenAtLeast "6.2" yes;
+      ZRAM_BACKEND_842              = whenAtLeast "6.12" yes;
+      ZRAM_BACKEND_DEFLATE          = whenAtLeast "6.12" yes;
+      ZRAM_BACKEND_LZ4              = whenAtLeast "6.12" yes;
+      ZRAM_BACKEND_LZ4HC            = whenAtLeast "6.12" yes;
+      ZRAM_BACKEND_LZO              = whenAtLeast "6.12" yes;
+      ZRAM_BACKEND_ZSTD             = whenAtLeast "6.12" yes;
       ZRAM_DEF_COMP_ZSTD            = whenAtLeast "5.11" yes;
       ZSWAP                         = option yes;
       ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (lib.mkOptionDefault yes);
@@ -973,7 +990,11 @@ let
       THRUSTMASTER_FF    = yes;
       ZEROPLUS_FF        = yes;
 
-      MODULE_COMPRESS      = whenOlder "5.13" yes;
+      MODULE_COMPRESS      = lib.mkMerge [
+        (whenOlder "5.13" yes)
+        (whenAtLeast "6.12" yes)
+      ];
+      MODULE_COMPRESS_ALL  = whenAtLeast "6.12" yes;
       MODULE_COMPRESS_XZ   = yes;
 
       SYSVIPC            = yes;  # System-V IPC
@@ -1179,6 +1200,7 @@ let
       LIRC = yes;
 
       SCHED_CORE = whenAtLeast "5.14" yes;
+      SCHED_CLASS_EXT = whenAtLeast "6.12" yes;
 
       LRU_GEN = whenAtLeast "6.1"  yes;
       LRU_GEN_ENABLED =  whenAtLeast "6.1" yes;

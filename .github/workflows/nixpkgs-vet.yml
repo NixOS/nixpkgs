@@ -72,7 +72,7 @@ jobs:
           else
             echo "The PR cannot be merged, it has a merge conflict, skipping the rest.."
           fi
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         if: env.mergedSha
         with:
           # pull_request_target checks out the base branch by default
@@ -85,7 +85,7 @@ jobs:
           base=$(mktemp -d)
           git worktree add "$base" "$(git rev-parse HEAD^1)"
           echo "base=$base" >> "$GITHUB_ENV"
-      - uses: cachix/install-nix-action@ba0dd844c9180cbf77aa72a116d6fbc515d0e87b # v27
+      - uses: cachix/install-nix-action@9f70348d77d0422624097c4b7a75563948901306 # v29
         if: env.mergedSha
       - name: Fetching the pinned tool
         if: env.mergedSha

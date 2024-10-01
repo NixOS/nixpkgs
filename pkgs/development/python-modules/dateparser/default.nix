@@ -44,7 +44,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     calendars = [
       hijri-converter
       convertdate
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME="$TEMPDIR"

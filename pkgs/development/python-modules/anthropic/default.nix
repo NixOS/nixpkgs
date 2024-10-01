@@ -50,7 +50,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     vertex = [ google-auth ];
   };
 

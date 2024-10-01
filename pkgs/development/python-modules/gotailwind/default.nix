@@ -51,7 +51,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ typer ];
   };
 

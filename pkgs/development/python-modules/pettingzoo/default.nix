@@ -48,7 +48,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       chess
       # multi-agent-ale-py

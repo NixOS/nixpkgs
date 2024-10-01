@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   dependencies = [ ed25519 ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
     nkeys = [ nkeys ];
     # fast_parse = [

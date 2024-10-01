@@ -93,6 +93,7 @@ in
         DATA_DIR = ".";
         HF_HOME = ".";
         SENTENCE_TRANSFORMERS_HOME = ".";
+        WEBUI_URL = "http://localhost:${toString cfg.port}";
       } // cfg.environment;
 
       serviceConfig = {

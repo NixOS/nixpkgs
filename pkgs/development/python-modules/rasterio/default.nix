@@ -73,7 +73,7 @@ buildPythonPackage rec {
     snuggs
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ipython = [ ipython ];
     plot = [ matplotlib ];
     s3 = [ boto3 ];

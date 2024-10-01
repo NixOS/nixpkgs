@@ -43,7 +43,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     sphinxHook
-  ] ++ passthru.optional-dependencies.docs;
+  ] ++ optional-dependencies.docs;
 
   propagatedBuildInputs = [
     aiohttp
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     docs = [
       sphinx
       sphinx-autodoc-typehints

@@ -94,7 +94,7 @@ buildPythonPackage rec {
     sqlparse
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
   };
@@ -116,7 +116,7 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

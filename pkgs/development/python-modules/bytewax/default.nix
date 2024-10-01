@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jsonpickle ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     kafka = [ confluent-kafka ];
   };
 
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   checkInputs = [
     myst-docutils
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # dependens on an old myst-docutils version

@@ -41,7 +41,7 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     numpy = [ numpy ];
     pandas = [
       numpy

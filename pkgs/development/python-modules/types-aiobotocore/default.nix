@@ -380,7 +380,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     accessanalyzer = [ types-aiobotocore-accessanalyzer ];
     account = [ types-aiobotocore-account ];
     acm = [ types-aiobotocore-acm ];

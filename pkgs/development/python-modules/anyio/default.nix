@@ -56,7 +56,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trio = [ trio ];
   };
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trustme
     uvloop
-  ] ++ passthru.optional-dependencies.trio;
+  ] ++ optional-dependencies.trio;
 
   pytestFlagsArray = [
     "-W"

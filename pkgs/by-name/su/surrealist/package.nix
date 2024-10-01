@@ -18,12 +18,10 @@
 , rustc
 , rustPlatform
 , stdenv
-, stdenvNoCC
 , webkitgtk_4_1
 }:
 
 let
-
   cargo-tauri_2 = let
     version = "2.0.0-rc.3";
     src = fetchFromGitHub {
@@ -68,8 +66,6 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jOjOdrVOcGPenFW5mkkXKA64C6c+/f9KzlvtUmw6vXc=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src-tauri";
-
   # HACK: A dependency (surrealist -> tauri -> **reqwest**) contains hyper-tls
   # as an actually optional dependency. It ends up in the `Cargo.lock` file of
   # tauri, but not in the one of surrealist. We apply a patch to `Cargo.toml`
@@ -80,47 +76,25 @@ in stdenv.mkDerivation (finalAttrs: {
     ./0001-Cargo.patch
   ];
 
-  ui = stdenvNoCC.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-ui";
-
-    pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      hash = "sha256-zGs1MWJ8TEFuHOoekCNIKQo2PBnp95xLz+R8mzeJXh8=";
-    };
-
-    ESBUILD_BINARY_PATH = lib.getExe esbuild_21-5;
-
-    nativeBuildInputs = [ nodejs pnpm.configHook ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm build:desktop
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cp -r dist $out
-
-      runHook postInstall
-    '';
-  };
-
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) patches src sourceRoot;
+    inherit (finalAttrs) patches src;
+    sourceRoot = finalAttrs.cargoRoot;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-LtQS0kH+2P4odV7BJYiH6T51+iZHAM9W9mV96rNfNWs=";
   };
 
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-zGs1MWJ8TEFuHOoekCNIKQo2PBnp95xLz+R8mzeJXh8=";
+  };
+
   nativeBuildInputs = [
     cargo
-    cargo-tauri_2
+    (cargo-tauri.hook.override { cargo-tauri = cargo-tauri_2; })
     gobject-introspection
     makeBinaryWrapper
+    nodejs
+    pnpm.configHook
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
@@ -136,23 +110,12 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
+    ESBUILD_BINARY_PATH = lib.getExe esbuild_21-5;
     OPENSSL_NO_VENDOR = 1;
   };
 
-  postPatch = ''
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"frontendDist": "../dist",' '"frontendDist": "${finalAttrs.ui}",' \
-      --replace-fail '"beforeBuildCommand": "pnpm build:desktop",' '"beforeBuildCommand": "",'
-  '';
-
-  postBuild = ''
-    cargo tauri build --bundles deb
-  '';
-
-  postInstall = ''
-    install -Dm555 target/release/bundle/deb/Surrealist_${finalAttrs.version}_*/data/usr/bin/surrealist -t $out/bin
-    cp -r target/release/bundle/deb/Surrealist_${finalAttrs.version}_*/data/usr/share $out
-  '';
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   postFixup = ''
     wrapProgram "$out/bin/surrealist" \
