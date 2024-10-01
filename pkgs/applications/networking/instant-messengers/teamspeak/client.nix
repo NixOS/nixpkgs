@@ -1,6 +1,30 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
-, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
-, alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, perl, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  zlib,
+  glib,
+  libpng,
+  freetype,
+  openssl,
+  xorg,
+  fontconfig,
+  qtbase,
+  qtwebengine,
+  qtwebchannel,
+  qtsvg,
+  qtwebsockets,
+  xkeyboard_config,
+  alsa-lib,
+  libpulseaudio ? null,
+  libredirect,
+  quazip,
+  which,
+  unzip,
+  perl,
+  llvmPackages,
 }:
 
 let
@@ -9,12 +33,33 @@ let
 
   libDir = "lib64";
 
-  deps =
-    [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
-      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
-      qtwebsockets libpulseaudio quazip llvmPackages.libcxx
-    ];
+  deps = [
+    zlib
+    glib
+    libpng
+    freetype
+    xorg.libSM
+    xorg.libICE
+    xorg.libXrender
+    openssl
+    xorg.libXrandr
+    xorg.libXfixes
+    xorg.libXcursor
+    xorg.libXinerama
+    xorg.libxcb
+    fontconfig
+    xorg.libXext
+    xorg.libX11
+    alsa-lib
+    qtbase
+    qtwebengine
+    qtwebchannel
+    qtsvg
+    qtwebsockets
+    libpulseaudio
+    quazip
+    llvmPackages.libcxx
+  ];
 
   desktopItem = makeDesktopItem {
     name = "teamspeak";
@@ -54,23 +99,21 @@ stdenv.mkDerivation rec {
   # ++ exec
   # + PAGER_PATH=
   # it's looking for a dependency and didn't find it. Check the script and make sure the dep is in nativeBuildInputs.
-  unpackPhase =
-    ''
-      echo -e '\ny' | PAGER=cat sh -xe $src
-      cd TeamSpeak*
-    '';
+  unpackPhase = ''
+    echo -e '\ny' | PAGER=cat sh -xe $src
+    cd TeamSpeak*
+  '';
 
-  buildPhase =
-    ''
-      mv ts3client_linux_${arch} ts3client
-      echo "patching ts3client..."
-      patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip1-qt5.so ts3client
-      patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath ${lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
-        --force-rpath \
-        ts3client
-    '';
+  buildPhase = ''
+    mv ts3client_linux_${arch} ts3client
+    echo "patching ts3client..."
+    patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip1-qt5.so ts3client
+    patchelf \
+      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath ${lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
+      --force-rpath \
+      ts3client
+  '';
 
   installPhase =
     ''
@@ -97,9 +140,10 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
-    '' /* wayland is currently broken, remove when TS3 fixes that */ + ''
-        --set QT_QPA_PLATFORM xcb \
-        --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
+    '' # wayland is currently broken, remove when TS3 fixes that
+    + ''
+      --set QT_QPA_PLATFORM xcb \
+      --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
 
   dontStrip = true;
@@ -115,7 +159,11 @@ stdenv.mkDerivation rec {
       url = "https://www.teamspeak.com/en/privacy-and-terms/";
       free = false;
     };
-    maintainers = with maintainers; [ lhvwb lukegb atemu ];
+    maintainers = with maintainers; [
+      lhvwb
+      lukegb
+      atemu
+    ];
     mainProgram = "ts3client";
     platforms = [ "x86_64-linux" ];
   };
