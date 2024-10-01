@@ -117,4 +117,8 @@ in
       allowedTCPPorts = [ cfg.port ];
     };
   };
+
+  meta = {
+    maintainers = with lib.maintainers; [ Guanran928 ];
+  };
 }

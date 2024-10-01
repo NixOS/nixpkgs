@@ -2,7 +2,10 @@ import ./make-test-python.nix (
   { lib, pkgs, ... }:
   {
     name = "redlib";
-    meta.maintainers = with lib.maintainers; [ soispha ];
+    meta.maintainers = with lib.maintainers; [
+      soispha
+      Guanran928
+    ];
 
     nodes.machine = {
       services.redlib = {

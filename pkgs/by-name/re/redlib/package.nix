@@ -64,6 +64,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/redlib-org/redlib";
     license = lib.licenses.agpl3Only;
     mainProgram = "redlib";
-    maintainers = with lib.maintainers; [ soispha ];
+    maintainers = with lib.maintainers; [
+      soispha
+      Guanran928
+    ];
   };
 }
