@@ -13304,6 +13304,36 @@ self: super: with self; {
 
   quaternion = callPackage ../development/python-modules/quaternion { };
 
+  qubes-app-linux-usb-proxy = callPackage ../development/python-modules/qubes-app-linux-usb-proxy { };
+
+  qubes-core-admin = callPackage ../development/python-modules/qubes-core-admin { };
+
+  qubes-core-admin-client = callPackage ../development/python-modules/qubes-core-admin-client { };
+
+  qubes-core-libvirt = callPackage ../development/python-modules/libvirt {
+    libvirt = pkgs.qubes-core-libvirt;
+    # FIXME: Override maintainers
+  };
+
+  qubes-core-qrexec = callPackage ../development/python-modules/qubes-core-qrexec { };
+
+  qubes-core-qubesdb = toPythonModule (pkgs.qubes-core-qubesdb.override {
+    inherit python;
+    withPython = true;
+  }).pythonModule;
+
+  qubes-desktop-linux-common = callPackage ../development/python-modules/qubes-desktop-linux-commons { };
+
+  qubes-imgconverter = (pkgs.qubes-linux-utils.override {
+    inherit python;
+    withPython = true;
+  }).imgconverter;
+
+  # It would be nicer for closure size, if there was a separate output for python.
+  qubes-vmm-pyxen = toPythonModule (pkgs.qubes-vmm-xen.override {
+    inherit python;
+  });
+
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };

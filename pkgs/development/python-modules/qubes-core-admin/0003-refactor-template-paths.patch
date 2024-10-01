@@ -1,0 +1,267 @@
+From 6dd10e7dcb2406958ec7407d4cd34aee9639e223 Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Mon, 16 Sep 2024 18:54:09 +0200
+Subject: [PATCH 3/6] refactor: template paths
+
+---
+ linux/aux-tools/startup-misc.sh              | 4 ++--
+ linux/systemd/qubes-core.service             | 6 +++---
+ linux/systemd/qubes-qmemman.service          | 2 +-
+ linux/systemd/qubes-reload-firewall@.service | 4 ++--
+ linux/systemd/qubes-vm@.service              | 2 +-
+ linux/systemd/qubesd.service                 | 2 +-
+ qubes-rpc/qubes.FeaturesRequest              | 2 +-
+ qubes-rpc/qubes.GetDate                      | 2 +-
+ qubes-rpc/qubes.NotifyTools                  | 2 +-
+ qubes-rpc/qubes.NotifyUpdates                | 2 +-
+ qubes/app.py                                 | 2 +-
+ qubes/config.py                              | 8 ++++----
+ qubes/device_protocol.py                     | 2 +-
+ qubes/ext/pci.py                             | 2 +-
+ qubes/storage/file.py                        | 4 ++--
+ qubes/vm/qubesvm.py                          | 3 +++
+ templates/libvirt/xen.xml                    | 4 ++--
+ 17 files changed, 28 insertions(+), 25 deletions(-)
+
+diff --git a/linux/aux-tools/startup-misc.sh b/linux/aux-tools/startup-misc.sh
+index 03822727..6a282fe5 100755
+--- a/linux/aux-tools/startup-misc.sh
++++ b/linux/aux-tools/startup-misc.sh
+@@ -2,14 +2,14 @@
+ 
+ # Misc dom0 startup setup
+ 
+-/usr/lib/qubes/fix-dir-perms.sh
++%out%/lib/qubes/fix-dir-perms.sh
+ DOM0_MAXMEM=$(/usr/sbin/xl list 0 | tail -1 | awk '{ print $3 }')
+ xenstore-write /local/domain/0/memory/static-max $[ $DOM0_MAXMEM * 1024 ]
+ 
+ xl sched-credit -d 0 -w 2000
+ cp /var/lib/qubes/qubes.xml /var/lib/qubes/backup/qubes-$(date +%F-%T).xml
+ 
+-/usr/lib/qubes/cleanup-dispvms
++%out%/lib/qubes/cleanup-dispvms
+ 
+ if [ -e /sys/module/grant_table/parameters/free_per_iteration ]; then
+     echo 1000 > /sys/module/grant_table/parameters/free_per_iteration
+diff --git a/linux/systemd/qubes-core.service b/linux/systemd/qubes-core.service
+index 34ce40fd..0239d420 100644
+--- a/linux/systemd/qubes-core.service
++++ b/linux/systemd/qubes-core.service
+@@ -9,11 +9,11 @@ StandardOutput=syslog
+ RemainAfterExit=yes
+ # Needed to avoid rebooting before all VMs have shut down.
+ TimeoutStopSec=180
+-ExecStart=/usr/lib/qubes/startup-misc.sh
+-ExecStop=/usr/bin/qvm-shutdown -q --all --wait
++ExecStart=%out%/lib/qubes/startup-misc.sh
++ExecStop=@qubes_client@/bin/qvm-shutdown -q --all --wait
+ # QubesDB daemons stop after 60s timeout in worst case; speed it up, since no
+ # VMs are running now
+-ExecStop=-/usr/bin/killall qubesdb-daemon
++ExecStop=-@killall@/bin/killall qubesdb-daemon
+ 
+ [Install]
+ WantedBy=multi-user.target
+diff --git a/linux/systemd/qubes-qmemman.service b/linux/systemd/qubes-qmemman.service
+index a2830ef0..48a1b39b 100644
+--- a/linux/systemd/qubes-qmemman.service
++++ b/linux/systemd/qubes-qmemman.service
+@@ -3,7 +3,7 @@ Description=Qubes memory management daemon
+ 
+ [Service]
+ Type=notify
+-ExecStart=/usr/bin/qmemmand
++ExecStart=%out%/bin/qmemmand
+ StandardOutput=syslog
+ 
+ [Install]
+diff --git a/linux/systemd/qubes-reload-firewall@.service b/linux/systemd/qubes-reload-firewall@.service
+index ac5cb5d8..61680c7f 100644
+--- a/linux/systemd/qubes-reload-firewall@.service
++++ b/linux/systemd/qubes-reload-firewall@.service
+@@ -3,8 +3,8 @@ Description=Reload firewall for VM %i
+ 
+ [Service]
+ Type=simple
+-ExecStart=/usr/bin/qvm-firewall --force-root -r %i
+-ExecStartPost=/bin/sh -c '/usr/bin/qvm-firewall --force-root %i | grep -q "expires at" || systemctl stop %p@%i.timer'
++ExecStart=@qubes_client@/bin/qvm-firewall --force-root -r %i
++ExecStartPost=/bin/sh -c '@qubes_client@/bin/qvm-firewall --force-root %i | grep -q "expires at" || systemctl stop %p@%i.timer'
+ Group=qubes
+ 
+ [Install]
+diff --git a/linux/systemd/qubes-vm@.service b/linux/systemd/qubes-vm@.service
+index 7ccfb53b..f81175fe 100644
+--- a/linux/systemd/qubes-vm@.service
++++ b/linux/systemd/qubes-vm@.service
+@@ -6,7 +6,7 @@ ConditionKernelCommandLine=!qubes.skip_autostart
+ [Service]
+ Type=oneshot
+ Environment=DISPLAY=:0
+-ExecStart=/usr/bin/qvm-start --skip-if-running %i
++ExecStart=@qubes_client@/bin/qvm-start --skip-if-running %i
+ Group=qubes
+ RemainAfterExit=yes
+ 
+diff --git a/linux/systemd/qubesd.service b/linux/systemd/qubesd.service
+index 44711761..a44e1d49 100644
+--- a/linux/systemd/qubesd.service
++++ b/linux/systemd/qubesd.service
+@@ -4,7 +4,7 @@ Before=systemd-user-sessions.service
+ 
+ [Service]
+ Type=notify
+-ExecStart=/usr/bin/qubesd
++ExecStart=%out%/bin/qubesd
+ StandardOutput=syslog
+ KillMode=process
+ Restart=on-failure
+diff --git a/qubes-rpc/qubes.FeaturesRequest b/qubes-rpc/qubes.FeaturesRequest
+index a3f561c5..22c441ca 100755
+--- a/qubes-rpc/qubes.FeaturesRequest
++++ b/qubes-rpc/qubes.FeaturesRequest
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+ 
+-exec /usr/bin/qubesd-query -c /var/run/qubesd.misc.sock -e --fail \
++exec @qubesdb_client@/bin/qubesd-query -c /var/run/qubesd.misc.sock -e --fail \
+          "$QREXEC_REMOTE_DOMAIN" qubes.FeaturesRequest dom0 "" >/dev/null 2>&1
+diff --git a/qubes-rpc/qubes.GetDate b/qubes-rpc/qubes.GetDate
+index 95d8f03f..94585df5 100755
+--- a/qubes-rpc/qubes.GetDate
++++ b/qubes-rpc/qubes.GetDate
+@@ -43,7 +43,7 @@ def main(argv):
+         env = {**os.environ, "LC_ALL": "C"}
+         # print dom0 time if clockvm is dom0 or is not running
+         date_arg = "-Ins" if arg else "-Iseconds"
+-        os.execve("/usr/bin/date", ("date", "-u", date_arg), env)
++        os.execve("@coreutils@/bin/date", ("date", "-u", date_arg), env)
+     else:
+         # passthrough request to the clockvm
+         p = clockvm.run_service("qubes.GetDate" + arg, stdout=None, stdin=subprocess.DEVNULL)
+diff --git a/qubes-rpc/qubes.NotifyTools b/qubes-rpc/qubes.NotifyTools
+index 71bc422d..0c4a8ba1 100755
+--- a/qubes-rpc/qubes.NotifyTools
++++ b/qubes-rpc/qubes.NotifyTools
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+ 
+-exec /usr/bin/qubesd-query -c /var/run/qubesd.misc.sock -e --fail \
++exec @qubesdb_client@/bin/qubesd-query -c /var/run/qubesd.misc.sock -e --fail \
+          "$QREXEC_REMOTE_DOMAIN" qubes.NotifyTools dom0 "" >/dev/null 2>&1
+diff --git a/qubes-rpc/qubes.NotifyUpdates b/qubes-rpc/qubes.NotifyUpdates
+index f51e4fc2..3270821e 100755
+--- a/qubes-rpc/qubes.NotifyUpdates
++++ b/qubes-rpc/qubes.NotifyUpdates
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+ 
+-exec /usr/bin/qubesd-query -c /var/run/qubesd.misc.sock --fail \
++exec @qubesdb_client@/bin/qubesd-query -c /var/run/qubesd.misc.sock --fail \
+          "$QREXEC_REMOTE_DOMAIN" qubes.NotifyUpdates dom0 "" >/dev/null 2>&1
+diff --git a/qubes/app.py b/qubes/app.py
+index 2a00355b..5fd49bbe 100644
+--- a/qubes/app.py
++++ b/qubes/app.py
+@@ -936,7 +936,7 @@ class Qubes(qubes.PropertyHolder):
+         self.env = jinja2.Environment(
+             loader=jinja2.FileSystemLoader([
+                 '/etc/qubes/templates',
+-                '/usr/share/qubes/templates',
++                '%out%/share/qubes/templates',
+             ]),
+             undefined=jinja2.StrictUndefined,
+             autoescape=True)
+diff --git a/qubes/config.py b/qubes/config.py
+index d44ff035..9556926a 100644
+--- a/qubes/config.py
++++ b/qubes/config.py
+@@ -30,10 +30,10 @@ import os.path
+ 
+ qubes_base_dir = "/var/lib/qubes"
+ system_path = {
+-    'qrexec_daemon_path': '/usr/sbin/qrexec-daemon',
+-    'qrexec_client_path': '/usr/bin/qrexec-client',
+-    'qrexec_rpc_multiplexer': '/usr/lib/qubes/qubes-rpc-multiplexer',
+-    'qubesdb_daemon_path': '/usr/sbin/qubesdb-daemon',
++    'qrexec_daemon_path': '@qrexec_dom0@/libexec/qrexec-daemon',
++    'qrexec_client_path': '@qrexec_dom0@/bin/qrexec-client',
++    'qrexec_rpc_multiplexer': '@qrexec_util@/libexec/qubes-rpc-multiplexer',
++    'qubesdb_daemon_path': '@qubesdb_daemon@/bin/qubesdb-daemon',
+ 
+     # Relative to qubes_base_dir
+     'qubes_appvms_dir': 'appvms',
+diff --git a/qubes/device_protocol.py b/qubes/device_protocol.py
+index 3d8b9aaa..c5e215c4 100644
+--- a/qubes/device_protocol.py
++++ b/qubes/device_protocol.py
+@@ -400,7 +400,7 @@ class DeviceInterface:
+         #       subclass        subclass_name           <-- single tab
+         #               prog-if  prog-if_name   <-- two tabs
+         result = {}
+-        with open(f'/usr/share/hwdata/{bus}.ids',
++        with open(f'@hwdata@/share/hwdata/{bus}.ids',
+                   encoding='utf-8', errors='ignore') as pciids:
+             # for `class_name` and `subclass_name`
+             # pylint: disable=used-before-assignment
+diff --git a/qubes/ext/pci.py b/qubes/ext/pci.py
+index 1535a7f9..5ac33fd9 100644
+--- a/qubes/ext/pci.py
++++ b/qubes/ext/pci.py
+@@ -54,7 +54,7 @@ def load_pci_classes():
+     #       subclass        subclass_name           <-- single tab
+     #               prog-if  prog-if_name   <-- two tabs
+     result = {}
+-    with open('/usr/share/hwdata/pci.ids',
++    with open('@hwdata@/share/hwdata/pci.ids',
+               encoding='utf-8', errors='ignore') as pciids:
+         class_id = None
+         subclass_id = None
+diff --git a/qubes/storage/file.py b/qubes/storage/file.py
+index 74161ac1..94ee2de4 100644
+--- a/qubes/storage/file.py
++++ b/qubes/storage/file.py
+@@ -34,8 +34,8 @@ import qubes.storage
+ import qubes.utils
+ 
+ BLKSIZE = 512
+-CREATE_SCRIPT = '/usr/lib/qubes/create-snapshot'
+-DESTROY_SCRIPT = '/usr/lib/qubes/destroy-snapshot'
++CREATE_SCRIPT = '%out%/lib/qubes/create-snapshot'
++DESTROY_SCRIPT = '%out%/lib/qubes/destroy-snapshot'
+ 
+ # 256 KiB chunk, same as in create-snapshot script. Header created by
+ # struct.pack('<4I', 0x70416e53, 1, 1, 256) mimicking write_header()
+diff --git a/qubes/vm/qubesvm.py b/qubes/vm/qubesvm.py
+index 49b2540d..85cb4b08 100644
+--- a/qubes/vm/qubesvm.py
++++ b/qubes/vm/qubesvm.py
+@@ -1815,6 +1815,9 @@ class QubesVM(qubes.vm.mix.net.NetVMMixin, qubes.vm.BaseVM):
+         if not self.debug:
+             qrexec_args.insert(0, "-q")
+ 
++        # Original qrexec daemon had this argument as optional, now it is mandatory
++        qrexec_args.insert(0, "--policy-program=@qrexec_client@/bin/qrexec-policy-exec")
++
+         qrexec_env = os.environ.copy()
+         if not self.features.check_with_template('qrexec', False):
+             self.log.debug(
+diff --git a/templates/libvirt/xen.xml b/templates/libvirt/xen.xml
+index a9ce7c1d..43d64617 100644
+--- a/templates/libvirt/xen.xml
++++ b/templates/libvirt/xen.xml
+@@ -204,8 +204,8 @@
+                     {% endif %}
+                     {% if vm.features.check_with_template('audio-model', False)
+                     or vm.features.check_with_template('stubdom-qrexec', False) %}
+-                        kernel="/usr/libexec/xen/boot/qemu-stubdom-linux-full-kernel"
+-                        ramdisk="/usr/libexec/xen/boot/qemu-stubdom-linux-full-rootfs"
++                        kernel="@xen@/libexec/xen/boot/qemu-stubdom-linux-full-kernel"
++                        ramdisk="@xen@/libexec/xen/boot/qemu-stubdom-linux-full-rootfs"
+                     {% endif %}
+                     />
+                 <input type="tablet" bus="usb"/>
+-- 
+2.45.2
+

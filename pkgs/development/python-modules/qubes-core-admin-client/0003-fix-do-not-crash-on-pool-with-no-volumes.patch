@@ -1,0 +1,25 @@
+From 2448b386505af8540f21b0f81275f45776070f8c Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Sat, 14 Sep 2024 00:09:19 +0200
+Subject: [PATCH 3/3] fix: do not crash on pool with no volumes
+
+---
+ qubesadmin/storage.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/qubesadmin/storage.py b/qubesadmin/storage.py
+index 27f5696..99e8d81 100644
+--- a/qubesadmin/storage.py
++++ b/qubesadmin/storage.py
+@@ -430,6 +430,8 @@ class Pool(object):
+                 'dom0', 'admin.pool.volume.List', self.name, None)
+         except qubesadmin.exc.QubesDaemonAccessError:
+             raise qubesadmin.exc.QubesPropertyAccessError('volumes')
++        if volumes_data == b'':
++            return
+         assert volumes_data.endswith(b'\n')
+         volumes_data = volumes_data[:-1].decode('ascii')
+         for vid in volumes_data.splitlines():
+-- 
+2.45.2
+

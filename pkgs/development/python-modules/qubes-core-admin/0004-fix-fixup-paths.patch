@@ -1,0 +1,178 @@
+From 6a7a20222a5511748ff8fbe6cafc477299acb999 Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Mon, 16 Sep 2024 18:54:14 +0200
+Subject: [PATCH 4/6] fix: fixup paths
+
+---
+ Makefile                        | 19 +++++--------------
+ doc/Makefile                    |  4 ++--
+ linux/aux-tools/Makefile        |  8 ++++----
+ linux/aux-tools/startup-misc.sh |  4 ++--
+ linux/system-config/Makefile    |  6 +++---
+ qvm-tools/qubes-hcl-report      |  2 +-
+ qvm-tools/qvm-console-dispvm    |  2 +-
+ qvm-tools/qvm-sync-clock        |  2 +-
+ relaxng/Makefile                |  2 +-
+ setup.py                        |  2 +-
+ 10 files changed, 21 insertions(+), 30 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 89cc36fc..05fe8910 100644
+--- a/Makefile
++++ b/Makefile
+@@ -188,7 +188,6 @@ ifeq ($(BACKEND_VMM),xen)
+ endif
+ 	mkdir -p $(DESTDIR)/etc/qubes-rpc
+ 	mkdir -p $(DESTDIR)/etc/qubes/policy.d
+-	mkdir -p $(DESTDIR)/usr/libexec/qubes
+ 	install -m 0644 qubes-rpc-policy/90-default.policy \
+ 		$(DESTDIR)/etc/qubes/policy.d/90-default.policy
+ 	install -m 0644 qubes-rpc-policy/85-admin-backup-restore.policy \
+@@ -199,12 +198,12 @@ endif
+ 	cp qubes-rpc/qubes.NotifyTools $(DESTDIR)/etc/qubes-rpc/
+ 	cp qubes-rpc/qubes.NotifyUpdates $(DESTDIR)/etc/qubes-rpc/
+ 	cp qubes-rpc/qubes.ConnectTCP $(DESTDIR)/etc/qubes-rpc/
+-	install -m 0755 qvm-tools/qubes-bug-report $(DESTDIR)/usr/bin/qubes-bug-report
+-	install -m 0755 qvm-tools/qubes-hcl-report $(DESTDIR)/usr/bin/qubes-hcl-report
+-	install -m 0755 qvm-tools/qvm-sync-clock $(DESTDIR)/usr/bin/qvm-sync-clock
+-	install -m 0755 qvm-tools/qvm-console-dispvm $(DESTDIR)/usr/bin/qvm-console-dispvm
++	install -m 0755 qvm-tools/qubes-bug-report $(DESTDIR)/bin/qubes-bug-report
++	install -m 0755 qvm-tools/qubes-hcl-report $(DESTDIR)/bin/qubes-hcl-report
++	install -m 0755 qvm-tools/qvm-sync-clock $(DESTDIR)/bin/qvm-sync-clock
++	install -m 0755 qvm-tools/qvm-console-dispvm $(DESTDIR)/bin/qvm-console-dispvm
+ 	for method in $(ADMIN_API_METHODS_SIMPLE); do \
+-		ln -sf ../../var/run/qubesd.sock \
++		ln -sf /var/run/qubesd.sock \
+ 			$(DESTDIR)/etc/qubes-rpc/$$method || exit 1; \
+ 	done
+ 	install qubes-rpc/admin.vm.volume.Import $(DESTDIR)/etc/qubes-rpc/
+@@ -238,14 +237,6 @@ endif
+ 	mkdir -p "$(DESTDIR)$(DOCDIR)"
+ 	cp qubes/storage/callback.json.example "$(DESTDIR)$(DOCDIR)/qubes_callback.json.example"
+ 
+-	mkdir -p $(DESTDIR)$(DATADIR)
+-	mkdir -p $(DESTDIR)$(DATADIR)/vm-templates
+-	mkdir -p $(DESTDIR)$(DATADIR)/appvms
+-	mkdir -p $(DESTDIR)$(DATADIR)/vm-kernels
+-	mkdir -p $(DESTDIR)$(DATADIR)/backup
+-	mkdir -p $(DESTDIR)$(STATEDIR)
+-	mkdir -p $(DESTDIR)$(LOGDIR)
+-
+ msi:
+ 	rm -rf destinstdir
+ 	mkdir -p destinstdir
+diff --git a/doc/Makefile b/doc/Makefile
+index 2f3e8abe..302803d1 100644
+--- a/doc/Makefile
++++ b/doc/Makefile
+@@ -165,6 +165,6 @@ autoxml.rst: ../relaxng/qubes.rng example.xml
+ 
+ .PHONY: install
+ install: man
+-	mkdir -p $(DESTDIR)/usr/share/man/man1
++	mkdir -p $(DESTDIR)/share/man/man1
+ 	rm -rf $(BUILDDIR)/man/_static
+-	cp $(BUILDDIR)/man/* $(DESTDIR)/usr/share/man/man1/
++	cp $(BUILDDIR)/man/* $(DESTDIR)/share/man/man1/
+diff --git a/linux/aux-tools/Makefile b/linux/aux-tools/Makefile
+index d919c84f..6bfbe916 100644
+--- a/linux/aux-tools/Makefile
++++ b/linux/aux-tools/Makefile
+@@ -2,7 +2,7 @@ all:
+ 	true
+ 
+ install:
+-	mkdir -p $(DESTDIR)/usr/lib/qubes
+-	cp cleanup-dispvms $(DESTDIR)/usr/lib/qubes
+-	cp startup-misc.sh $(DESTDIR)/usr/lib/qubes
+-	cp fix-dir-perms.sh $(DESTDIR)/usr/lib/qubes/
++	mkdir -p $(DESTDIR)/lib/qubes
++	cp cleanup-dispvms $(DESTDIR)/lib/qubes
++	cp startup-misc.sh $(DESTDIR)/lib/qubes
++	cp fix-dir-perms.sh $(DESTDIR)/lib/qubes/
+diff --git a/linux/aux-tools/startup-misc.sh b/linux/aux-tools/startup-misc.sh
+index 6a282fe5..d66b609f 100755
+--- a/linux/aux-tools/startup-misc.sh
++++ b/linux/aux-tools/startup-misc.sh
+@@ -1,9 +1,9 @@
+-#!/bin/sh
++#!/usr/bin/env bash
+ 
+ # Misc dom0 startup setup
+ 
+ %out%/lib/qubes/fix-dir-perms.sh
+-DOM0_MAXMEM=$(/usr/sbin/xl list 0 | tail -1 | awk '{ print $3 }')
++DOM0_MAXMEM=$(xl list 0 | tail -1 | awk '{ print $3 }')
+ xenstore-write /local/domain/0/memory/static-max $[ $DOM0_MAXMEM * 1024 ]
+ 
+ xl sched-credit -d 0 -w 2000
+diff --git a/linux/system-config/Makefile b/linux/system-config/Makefile
+index 68ce7f50..74928d2f 100644
+--- a/linux/system-config/Makefile
++++ b/linux/system-config/Makefile
+@@ -2,6 +2,6 @@ all:
+ 	true
+ 
+ install:
+-	mkdir -p $(DESTDIR)/etc/xen/scripts $(DESTDIR)/usr/lib/qubes
+-	install -m 0755 create-snapshot destroy-snapshot $(DESTDIR)/usr/lib/qubes
+-	install -m 0644 -D tmpfiles-qubes.conf $(DESTDIR)/usr/lib/tmpfiles.d/qubes.conf
++	mkdir -p $(DESTDIR)/etc/xen/scripts $(DESTDIR)/lib/qubes
++	install -m 0755 create-snapshot destroy-snapshot $(DESTDIR)/lib/qubes
++	install -m 0644 -D tmpfiles-qubes.conf $(DESTDIR)/lib/tmpfiles.d/qubes.conf
+diff --git a/qvm-tools/qubes-hcl-report b/qvm-tools/qubes-hcl-report
+index 831b04d6..6e8ad6cc 100755
+--- a/qvm-tools/qubes-hcl-report
++++ b/qvm-tools/qubes-hcl-report
+@@ -1,4 +1,4 @@
+-#!/bin/bash --
++#!/usr/bin/env bash --
+ 
+ # The Qubes OS Project, https://www.qubes-os.org
+ #
+diff --git a/qvm-tools/qvm-console-dispvm b/qvm-tools/qvm-console-dispvm
+index 73a0f79d..5dc44267 100755
+--- a/qvm-tools/qvm-console-dispvm
++++ b/qvm-tools/qvm-console-dispvm
+@@ -1,4 +1,4 @@
+-#!/bin/bash --
++#!/usr/bin/env bash --
+ set -eu
+ print_usage() {
+ cat >&2 << USAGE
+diff --git a/qvm-tools/qvm-sync-clock b/qvm-tools/qvm-sync-clock
+index 930cef85..0771eb1b 100755
+--- a/qvm-tools/qvm-sync-clock
++++ b/qvm-tools/qvm-sync-clock
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python3
++#!/usr/bin/env python3
+ # -*- encoding: utf8 -*-
+ #
+ # The Qubes OS Project, http://www.qubes-os.org
+diff --git a/relaxng/Makefile b/relaxng/Makefile
+index 922179a3..18308b71 100644
+--- a/relaxng/Makefile
++++ b/relaxng/Makefile
+@@ -1,4 +1,4 @@
+-RELAXNGPATH = /usr/share/doc/qubes/relaxng
++RELAXNGPATH ?= /usr/share/doc/qubes/relaxng
+ install:
+ 	mkdir -p $(DESTDIR)$(RELAXNGPATH)
+ 	cp *.rng $(DESTDIR)$(RELAXNGPATH)
+diff --git a/setup.py b/setup.py
+index 69bace60..442706ef 100644
+--- a/setup.py
++++ b/setup.py
+@@ -19,7 +19,7 @@ def get_console_scripts():
+ # create simple scripts that run much faster than "console entry points"
+ class CustomInstall(setuptools.command.install.install):
+     def run(self):
+-        bin = os.path.join(self.root, "usr/bin")
++        bin = os.path.join(self.root, "bin")
+         try:
+             os.makedirs(bin)
+         except:
+-- 
+2.45.2
+

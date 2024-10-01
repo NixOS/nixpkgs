@@ -1,0 +1,37 @@
+From f116903e1b0763f3f2a137642088e261ada8feee Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Mon, 16 Sep 2024 18:54:00 +0200
+Subject: [PATCH 1/6] refactor: use mutable systemd
+
+---
+ qubes/vm/qubesvm.py | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/qubes/vm/qubesvm.py b/qubes/vm/qubesvm.py
+index fa7fd3ec..49b2540d 100644
+--- a/qubes/vm/qubesvm.py
++++ b/qubes/vm/qubesvm.py
+@@ -1066,14 +1066,15 @@ class QubesVM(qubes.vm.mix.net.NetVMMixin, qubes.vm.BaseVM):
+         # workaround https://bugzilla.redhat.com/show_bug.cgi?id=1181922
+         if newvalue:
+             retcode = subprocess.call(
+-                ["sudo", "ln", "-sf",
+-                 "/usr/lib/systemd/system/qubes-vm@.service",
+-                 "/etc/systemd/system/multi-user.target.wants/qubes-vm@"
++                ["ln", "-sf",
++                 "/etc/systemd/system/qubes-vm@.service",
++                 "/etc/systemd-mutable/system/multi-user.target.wants/qubes-vm@"
+                  "{}.service".format(self.name)])
+         else:
+             retcode = subprocess.call(
+-                ['sudo', 'systemctl', 'disable',
+-                 'qubes-vm@{}.service'.format(self.name)])
++                ["rm", "-f",
++                 "/etc/systemd-mutable/system/multi-user.target.wants/qubes-vm@"
++                 "{}.service".format(self.name)])
+         if retcode:
+             raise qubes.exc.QubesException(
+                 'Failed to set autostart for VM in systemd')
+-- 
+2.45.2
+

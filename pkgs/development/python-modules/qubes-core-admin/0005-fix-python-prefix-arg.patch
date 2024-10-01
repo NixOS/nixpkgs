@@ -1,0 +1,25 @@
+From 94e7c943206537658d7a16f4035d4557067fbf68 Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Mon, 16 Sep 2024 20:41:53 +0200
+Subject: [PATCH 6/6] fix: python prefix arg
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 05fe8910..f2b65d20 100644
+--- a/Makefile
++++ b/Makefile
+@@ -178,7 +178,7 @@ ifeq ($(OS),Linux)
+ 	$(MAKE) install -C linux/aux-tools
+ 	$(MAKE) install -C linux/system-config
+ endif
+-	$(PYTHON) setup.py install -O1 --skip-build --root $(DESTDIR)
++	$(PYTHON) setup.py install -O1 --skip-build $(PYTHON_PREFIX_ARG) --root $(DESTDIR)
+ 	# skipping qvm-device symlink installation, qvm-device is a binary in qubes-core-admin-client, not in qubes-core-admin!
+ 	$(MAKE) install -C relaxng
+ 	mkdir -p $(DESTDIR)/etc/qubes
+-- 
+2.45.2
+

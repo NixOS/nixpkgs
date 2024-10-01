@@ -3,7 +3,11 @@
 let
   inherit (lib)
     optionalAttrs
+    optionalString
+    hasPrefix
     warn
+    map
+    isList
     ;
 in
 
@@ -471,23 +475,35 @@ rec {
   symlinkJoin =
     args_@{ name
     , paths
+    , stripPrefix ? ""
     , preferLocalBuild ? true
     , allowSubstitutes ? false
     , postBuild ? ""
     , ...
     }:
+    # Ensure no partial paths used, it will be confusing considering
+    # most of the time symlinkJoin is used with packages.
+    assert (stripPrefix == "" || (hasPrefix "/" stripPrefix) && stripPrefix != "/");
     let
-      args = removeAttrs args_ [ "name" "postBuild" ]
+      mapPaths = f: paths: map (path:
+        if path == null then null
+        else if isList path then mapPaths f path
+        else f path
+      ) paths;
+      args = removeAttrs args_ [ "name" "postBuild" "stripPrefix" "paths" ]
         // {
         inherit preferLocalBuild allowSubstitutes;
+        paths = mapPaths (path: "${path}${stripPrefix}") paths;
         passAsFile = [ "paths" ];
       }; # pass the defaults
+      ignoreMissing = optionalString (stripPrefix != "") "test -d $i && ";
+      ignoreError = optionalString (stripPrefix != "") " || true";
     in
     runCommand name args
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir -silent $i $out
+          ${ignoreMissing}${lndir}/bin/lndir -silent $i $out${ignoreError}
         done
         ${postBuild}
       '';

@@ -1,0 +1,31 @@
+From dadc0d427eddaf49a6b213e7345c86e81a9c84e7 Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Mon, 16 Sep 2024 18:54:05 +0200
+Subject: [PATCH 2/6] fix: broken qvm-device symlinks
+
+---
+ Makefile | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 7a410ade..89cc36fc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -179,13 +179,7 @@ ifeq ($(OS),Linux)
+ 	$(MAKE) install -C linux/system-config
+ endif
+ 	$(PYTHON) setup.py install -O1 --skip-build --root $(DESTDIR)
+-	ln -sf qvm-device $(DESTDIR)/usr/bin/qvm-block
+-	ln -sf qvm-device $(DESTDIR)/usr/bin/qvm-pci
+-	ln -sf qvm-device $(DESTDIR)/usr/bin/qvm-usb
+-	install -d $(DESTDIR)/usr/share/man/man1
+-	ln -sf qvm-device.1.gz $(DESTDIR)/usr/share/man/man1/qvm-block.1.gz
+-	ln -sf qvm-device.1.gz $(DESTDIR)/usr/share/man/man1/qvm-pci.1.gz
+-	ln -sf qvm-device.1.gz $(DESTDIR)/usr/share/man/man1/qvm-usb.1.gz
++	# skipping qvm-device symlink installation, qvm-device is a binary in qubes-core-admin-client, not in qubes-core-admin!
+ 	$(MAKE) install -C relaxng
+ 	mkdir -p $(DESTDIR)/etc/qubes
+ ifeq ($(BACKEND_VMM),xen)
+-- 
+2.45.2
+
