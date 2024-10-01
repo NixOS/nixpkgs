@@ -10,9 +10,9 @@ let
   platform =
     if stdenvNoCC.hostPlatform.isDarwin then "universal-macos" else stdenvNoCC.hostPlatform.system;
   hash = builtins.getAttr platform {
-    "universal-macos" = "sha256-VtKM+Fw1yy0KYvbtxerYykEbYv1hCc81ckfETH36vCU=";
+    "universal-macos" = "sha256-UfGVPPJAx+2oi+LwoLBfBPDFvcAbHlSxFReQ+PoKZ+0=";
     "x86_64-linux" = "sha256-Ohi1dXAlkMvVlVl4B2VEwiIBbYlpBMoTPBOEtTIQM+E=";
-    "aarch64-linux" = "sha256-tmlizjB8BWtbQd75RoYvIsRxqEuj1V7Fx9LgArvphm4=";
+    "aarch64-linux" = "sha256-RIwcJzmS2wCr42NvE/0Mg/jy4Bn644ZvWSCFjb3Va2o=";
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
