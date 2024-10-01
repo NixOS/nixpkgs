@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "extlib";
-  version = "1.7.9";
+  version = "1.8.0";
 
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://ygrek.org/p/release/ocaml-${pname}/${pname}-${version}.tar.gz";
-    hash = "sha512-I4asafA36lIINcBiTTmun7/+Q6ILGOJH3gMiMu1vQZ1me1PSMUxvVtxx02i/C2IBpWwvPypb39kzdmxabLmHaA==";
+    hash = "sha512-3t0rtKY/LfnkUdvmrt4Y2HNImoZ19I3tCRMfKvTQDb6uzIdQA5suT6y59fmxsBxreszTkr+KxaPyyAFWLOXE7g==";
   };
 
   nativeBuildInputs = [ cppo ];
