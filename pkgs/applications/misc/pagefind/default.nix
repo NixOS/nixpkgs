@@ -1,15 +1,19 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchNpmDeps
-, npmHooks
-, binaryen
-, gzip
-, nodejs
-, rustc
-, wasm-bindgen-cli
-, wasm-pack
-, fetchpatch
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  fetchurl,
+  httplz,
+  binaryen,
+  gzip,
+  nodejs,
+  npmHooks,
+  python3,
+  rustc,
+  wasm-bindgen-cli,
+  wasm-pack,
 }:
 
 let
@@ -20,28 +24,28 @@ let
     cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
   };
 
+  # the lindera-unidic v0.32.2 crate uses [1] an outdated unidic-mecab fork [2] and builds it in pure rust
+  # [1] https://github.com/lindera/lindera/blob/v0.32.2/lindera-unidic/build.rs#L5-L11
+  # [2] https://github.com/lindera/unidic-mecab
+  lindera-unidic-src = fetchurl {
+    url = "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz";
+    hash = "sha256-JKx1/k5E2XO1XmWEfDX6Suwtt6QaB7ScoSUUbbn8EYk=";
+  };
+
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "pagefind";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "cloudcannon";
     repo = "pagefind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pcgcu9zylSTjj5rxNff+afFBWVpN5sGtlpadG1wb93M=";
+    hash = "sha256-4NfosDp5Wwz2lnqaFNcaIbWpjWiaQ4WCL6TcKEkfPck=";
   };
 
-  cargoPatches = [
-    (fetchpatch { # https://github.com/CloudCannon/pagefind/pull/680
-      name = "cargo-update-time.patch";
-      url = "https://github.com/CloudCannon/pagefind/commit/e6778572d225316803180db822f5cc12a936acd2.patch";
-      hash = "sha256-XHpHA1hPIe+wjDQ6LE9hn2jn3eMBOK9Yoo920jfH9do=";
-    })
-  ];
-
-  cargoHash = "sha256-KWWln7QCRo02cOgHy5JNERGS0CvvgsPISwkTZeeNEkg=";
+  cargoHash = "sha256-hnT9w3j8/YuN00x0LBPr75BKGWSnIYUNFTWIgtghJP4";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
@@ -78,17 +82,50 @@ rustPlatform.buildRustPackage rec {
       cargoDeps=$cargoDeps_web cargoSetupPostUnpackHook
       cargoDeps=$cargoDeps_web cargoSetupPostPatchHook
     )
+
+    # patch a build-time dependency download
+    (
+      cd $cargoDepsCopy/lindera-unidic
+      oldHash=$(sha256sum build.rs | cut -d " " -f 1)
+
+      # serve lindera-unidic on localhost vacant port
+      httplz_port="${
+        if stdenv.buildPlatform.isDarwin then
+          ''$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')''
+        else
+          "34567"
+      }"
+      mkdir .lindera-http-plz
+      ln -s ${lindera-unidic-src} .lindera-http-plz/unidic-mecab-2.1.2.tar.gz
+      httplz --port "$httplz_port" -- .lindera-http-plz/ &
+      echo $! >$TMPDIR/.httplz_pid
+
+      # file:// does not work
+      substituteInPlace build.rs --replace-fail \
+          "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz" \
+          "http://localhost:$httplz_port/unidic-mecab-2.1.2.tar.gz"
+
+      newHash=$(sha256sum build.rs | cut -d " " -f 1)
+      substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
+    )
   '';
 
-  nativeBuildInputs = [
-    binaryen
-    gzip
-    nodejs
-    rustc
-    rustc.llvmPackages.lld
-    wasm-bindgen-92
-    wasm-pack
-  ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs =
+    [
+      binaryen
+      gzip
+      nodejs
+      rustc
+      rustc.llvmPackages.lld
+      wasm-bindgen-92
+      wasm-pack
+      httplz
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      python3
+    ];
 
   # build wasm and js assets
   # based on "test-and-build" in https://github.com/CloudCannon/pagefind/blob/main/.github/workflows/release.yml
@@ -120,14 +157,19 @@ rustPlatform.buildRustPackage rec {
     )
   '';
 
+  # the file is also fetched during checkPhase
+  preInstall = ''
+    kill ${lib.optionalString stdenv.hostPlatform.isDarwin "-9"} $(cat $TMPDIR/.httplz_pid)
+  '';
+
   buildFeatures = [ "extended" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate low-bandwidth search index for your static website";
     homepage = "https://pagefind.app/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbsds ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbsds ];
+    platforms = lib.platforms.unix;
     mainProgram = "pagefind";
   };
 }

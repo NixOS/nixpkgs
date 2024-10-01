@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abbaye-des-morts";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
     rev = "v${version}";
-    sha256 = "sha256-/RAtOL51o3/5pDgqPLJMTtDFY9BpIowM5MpJ88+v/Zs=";
+    sha256 = "sha256-IU7E1zmeif9CdoBxzmh7MG2jElGGnEZyKnK7eYFrjsQ=";
   };
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer ];
