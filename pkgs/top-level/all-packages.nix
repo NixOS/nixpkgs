@@ -4754,10 +4754,6 @@ with pkgs;
 
   openrgb-plugin-hardwaresync = libsForQt5.callPackage ../applications/misc/openrgb-plugins/hardwaresync { };
 
-  opensc = callPackage ../tools/security/opensc {
-    inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
-  };
-
   toastify = darwin.apple_sdk_11_0.callPackage ../tools/misc/toastify {};
 
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
