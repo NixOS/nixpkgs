@@ -30,9 +30,9 @@
     ]
   },
   "cookbook": {
-    "hash": "sha256-QRzXNoqOeEYYp0ctmsNisbQL5PWFOeqEVkcFeCduQtY=",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.1/cookbook-0.11.1.tar.gz",
-    "version": "0.11.1",
+    "hash": "sha256-upbTdzu17BH6tehgCUcTxBvTVOO31Kri/33vGd4Unyw=",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.2/cookbook-0.11.2.tar.gz",
+    "version": "0.11.2",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-TBCNr57MKEe8OSXEqWohZH9zuCwFTMDnwnZ1nFZ+FWY=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.2/polls-v7.2.2.tar.gz",
-    "version": "7.2.2",
+    "hash": "sha256-4atr6TN7PIlH/WQ/OSoeRZKZK+k0Or8GlIZfBglWh4c=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.3/polls-v7.2.3.tar.gz",
+    "version": "7.2.3",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -230,9 +230,9 @@
     ]
   },
   "registration": {
-    "hash": "sha256-4MLNKwYx/3hqnrcF2TpTCKOMveWINvWo71aOXcBO79E=",
-    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.4.0/registration-v2.4.0.tar.gz",
-    "version": "2.4.0",
+    "hash": "sha256-LHrs6kCawIj7Te/OftUOEw8khgGnAP0nm9y/JaP8KkE=",
+    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.5.0/registration-v2.5.0.tar.gz",
+    "version": "2.5.0",
     "description": "User registration\n\nThis app allows users to register a new account.\n\n# Features\n\n- Add users to a given group\n- Allow-list with email domains (including wildcard) to register with\n- Administrator will be notified via email for new user creation or require approval\n- Supports Nextcloud's Client Login Flow v1 and v2 - allowing registration in the mobile Apps and Desktop clients\n\n# Web form registration flow\n\n1. User enters their email address\n2. Verification link is sent to the email address\n3. User clicks on the verification link\n4. User is lead to a form where they can choose their username and password\n5. New account is created and is logged in automatically",
     "homepage": "https://github.com/nextcloud/registration",
     "licenses": [
