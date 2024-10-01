@@ -1,13 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
-buildGoModule rec {
+let
   pname = "pack";
   version = "0.35.1";
+in
+buildGoModule {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-iQkYtnobhAt73JMRrejk0DkOH1ZW2bqfZx05ZrDG5bA=";
   };
 
@@ -17,7 +25,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/pack" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/buildpacks/pack.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/buildpacks/pack.Version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd pack \
@@ -26,12 +38,12 @@ buildGoModule rec {
       --fish $(PACK_HOME=$PWD $out/bin/pack completion --shell fish)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://buildpacks.io/";
     changelog = "https://github.com/buildpacks/pack/releases/tag/v${version}";
     description = "CLI for building apps using Cloud Native Buildpacks";
     mainProgram = "pack";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
