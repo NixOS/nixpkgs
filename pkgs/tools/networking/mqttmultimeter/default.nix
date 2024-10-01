@@ -42,17 +42,19 @@ buildDotnetModule rec {
     libglvnd
   ];
 
-  desktopItems = makeDesktopItem {
-    name = meta.mainProgram;
-    exec = meta.mainProgram;
-    icon = meta.mainProgram;
-    desktopName = meta.mainProgram;
-    genericName = meta.description;
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Network" ];
-    startupNotify = true;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = meta.mainProgram;
+      exec = meta.mainProgram;
+      icon = meta.mainProgram;
+      desktopName = meta.mainProgram;
+      genericName = meta.description;
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Network" ];
+      startupNotify = true;
+    })
+  ];
 
   meta = with lib; {
     mainProgram = builtins.head executables;
