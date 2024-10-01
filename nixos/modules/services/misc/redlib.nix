@@ -8,6 +8,8 @@
 let
   inherit (lib)
     concatStringsSep
+    isBool
+    mapAttrs
     mkEnableOption
     mkIf
     mkOption
@@ -22,6 +24,8 @@ let
     "--port ${toString cfg.port}"
     "--address ${cfg.address}"
   ]);
+
+  boolToString' = b: if b then "on" else "off";
 in
 {
   imports = [
@@ -63,6 +67,24 @@ in
         description = "Open ports in the firewall for the redlib web interface";
       };
 
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType =
+            with types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+              ])
+            );
+          options = { };
+        };
+        default = { };
+        description = ''
+          See [GitHub](https://github.com/redlib-org/redlib/tree/main?tab=readme-ov-file#configuration) for available settings.
+        '';
+      };
     };
   };
 
@@ -71,6 +93,7 @@ in
       description = "Private front-end for Reddit";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      environment = mapAttrs (_: v: if isBool v then boolToString' v else toString v) cfg.settings;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${lib.getExe cfg.package} ${args}";
