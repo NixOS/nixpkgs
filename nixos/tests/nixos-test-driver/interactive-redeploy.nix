@@ -12,9 +12,12 @@ let
       {
         environment.etc."custom-test-marker".text = "test-0";
         environment.systemPackages = with pkgs; [ getent ];
-        virtualisation.vlans = [ 1 2 ];
+        virtualisation.vlans = [
+          1
+          2
+        ];
       };
-    nodes.dud = {};
+    nodes.dud = { };
     testScript = ''
       start_all()
       machine.wait_for_unit("multi-user.target")
@@ -35,7 +38,10 @@ let
       {
         environment.etc."custom-test-marker".text = "test-1";
         environment.systemPackages = with pkgs; [ getent ];
-        virtualisation.vlans = [ 1 3 ];
+        virtualisation.vlans = [
+          1
+          3
+        ];
       };
     testScript = ''
       start_all()
