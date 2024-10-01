@@ -25,21 +25,8 @@ let
     owner = "UniQMG";
     repo = "tetrio-plus";
     inherit rev;
-    hash = "sha256-PvTivTt1Zuvk5gaCcQDcIBFsUf/ZG7TJYXqm0NP++Bw=";
+    hash = "sha256-pcT8/YsfHeimSkeNziW9ha63hEgCg2vnvJSZAY1c7P0=";
     fetchSubmodules = true;
-
-    # tetrio-plus uses this info for displaying its version,
-    # so we need to deep clone to have all the revision history.
-    # After we're done, we emulate 'leaveDotGit = false' by removing
-    # all the .git folders.
-    leaveDotGit = true;
-    deepClone = true;
-    postFetch = ''
-      cd "$out"
-      git rev-parse --short HEAD~1 > resources/ci-commit-previous
-      git rev-parse --short HEAD > resources/ci-commit
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
   };
 
   wasm-bindgen-82 = wasm-bindgen-cli.override {
@@ -105,13 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # 'out' is the directory that the tetrio-plus expects the vanilla asar to be
-    # and this is the directory that will contain the final result that we want
+    # tetrio-plus expects the vanilla asar to be extracted into 'out' and
+    # 'out' is the directory contianing the final patched asar's contents
     asar extract ${tetrio-desktop.src}/opt/TETR.IO/resources/app.asar out
-    cd out
 
     # Install custom package.json/yarn.lock that describe the additional node
     # dependencies that tetrio-plus needs to run, and install them in our output
+    cd out
+
     cp ../resources/desktop-ci/yarn.lock .
     patch package.json ../resources/desktop-ci/package.json.diff
 
@@ -123,24 +111,26 @@ stdenv.mkDerivation (finalAttrs: {
 
     cd ..
 
-    # The simple build script expects the vanilla asar located here
+    # The included build script expects the vanilla asar located here
     # This patches the vanilla code to load the tetrio-plus code
     ln -s ${tetrio-desktop.src}/opt/TETR.IO/resources/app.asar app.asar
     node ./scripts/build-electron.js
 
-    # Finally, we install the tetrio-plus code where the above patch script expects
+    # Actually install tetrio-plus where the above patch script expects
     cp -r $src out/tetrioplus
     chmod -R u+w out/tetrioplus
 
-    # Disable the uninstall button in the tetrio-plus popup,
-    # as it doesn't make sense to mutably uninstall it in a nix package
+    # Install tpsecore
+    cp ${tpsecore}/{tpsecore_bg.wasm,tpsecore.js} out/tetrioplus/source/lib/
+    # Remove uneeded tpsecore source code
+    rm -rf out/tetrioplus/tpsecore/
+
+    # Disable useless uninstall button in the tetrio-plus popup
     substituteInPlace out/tetrioplus/desktop-manifest.js \
       --replace-fail '"show_uninstaller_button": true' '"show_uninstaller_button": false'
 
-    # We don't need the tpsecore source code bundled
-    rm -rf out/tetrioplus/tpsecore/
-    # since we install the compiled version here
-    cp ${tpsecore}/{tpsecore_bg.wasm,tpsecore.js} out/tetrioplus/source/lib/
+    # Display 'nixpkgs' next to version in tetrio-plus popup
+    echo "nixpkgs" > out/tetrioplus/resources/override-commit
 
     runHook postBuild
   '';
