@@ -110,11 +110,6 @@ in stdenv.mkDerivation rec {
     #include <string>'
     substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
     #include <string>'
-  '' + lib.optionalString stdenv.hostPlatform.isi686 ''
-
-    # don't fail by default on i686
-    substituteInPlace src/mongo/db/storage/storage_options.h \
-      --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '' + lib.optionalString (!avxSupport) ''
     substituteInPlace SConstruct \
       --replace-fail "default=['+sandybridge']," 'default=[],'
