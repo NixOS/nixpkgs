@@ -98,6 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OSGeo/gdal/commit/40c3212fe4ba93e5176df4cd8ae5e29e06bb6027.patch";
       sha256 = "sha256-D55iT6E/YdpSyfN7KUDTh1gdmIDLHXW4VC5d6D9B7ls=";
     })
+    # disable test failing with proj 9.5
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/bb9e5c0ec3e45b0f3e60c4d284e4082550448480.patch";
+      hash = "sha256-TpjlxTH/51aRZkogpJuiNlfz3RLCe80wQVD4i+5m+Pw=";
+    })
   ];
 
   nativeBuildInputs = [
