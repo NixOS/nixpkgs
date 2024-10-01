@@ -3,6 +3,9 @@
   stdenv,
   fetchFromGitHub,
   wxGTK32,
+  makeWrapper,
+  gsettings-desktop-schemas,
+  gtk3
 }:
 stdenv.mkDerivation rec {
   pname = "wxedid";
@@ -14,10 +17,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-g3D9dBrs/zIU/4T1hzpcj2lROCgrDMPIMZyL5uqxjB0=";
   };
-
-  buildInputs = [ wxGTK32 ];
+  nativeBuildInputs = [ makeWrapper wxGTK32 ];
+  buildInputs = [ gsettings-desktop-schemas ];
   patchPhase = ''
     patchShebangs --build src
+  '';
+  preFixup = ''
+    wrapProgram $out/bin/wxedid --prefix GSETTINGS_SCHEMA_DIR : "${gtk3}/share/gsettings-schemas/${gtk3.name}/glib-2.0/schemas"
   '';
 
   meta = with lib; {
