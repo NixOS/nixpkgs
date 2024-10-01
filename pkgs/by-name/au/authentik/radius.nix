@@ -1,10 +1,14 @@
-{ buildGoModule, authentik }:
+{
+  buildGoModule,
+  authentik,
+  go_1_23,
+}:
 
-buildGoModule {
+buildGoModule.override { go = go_1_23; } {
   pname = "authentik-radius-outpost";
   inherit (authentik) version src;
 
-  vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
+  vendorHash = "sha256-xaVEyG5fNGh/zmXkewve5V2q2W7u+hqo27GqabAV9H0=";
 
   CGO_ENABLED = 0;
 
