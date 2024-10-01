@@ -90,7 +90,7 @@ let
 
     installPhase = ''
       cp -r . $out
-      wrapProgram $out/bin/studio.sh \
+      wrapProgram $out/bin/studio \
         --set-default JAVA_HOME "$out/jbr" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
