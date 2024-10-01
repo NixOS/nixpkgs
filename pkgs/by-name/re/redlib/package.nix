@@ -24,6 +24,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+  postInstall = ''
+    install -Dm644 contrib/redlib.service $out/lib/systemd/system/redlib.service
+    sed -i "s#/usr/bin/redlib#$out/bin/redlib#" $out/lib/systemd/system/redlib.service
+    sed -i "/EnvironmentFile/d" $out/lib/systemd/system/redlib.service
+  '';
+
   checkFlags = [
     # All these test try to connect to Reddit.
     # utils.rs
