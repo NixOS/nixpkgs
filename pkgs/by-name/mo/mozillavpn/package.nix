@@ -1,4 +1,5 @@
 {
+  _experimental-update-script-combinators,
   buildGoModule,
   cargo,
   cmake,
@@ -9,6 +10,7 @@
   libgcrypt,
   libgpg-error,
   libsecret,
+  nix-update-script,
   pkg-config,
   python3,
   qt6,
@@ -97,6 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
     "PATH"
     ":"
     (lib.makeBinPath [ wireguard-tools ])
+  ];
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (nix-update-script {
+      attrPath = "mozillavpn.netfilter";
+      extraArgs = [ "--version=skip" ];
+    })
   ];
 
   meta = {
