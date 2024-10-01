@@ -76,7 +76,10 @@ buildPythonPackage rec {
     setuptools
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
-  pythonRelaxDeps = [ "pyee" ];
+  pythonRelaxDeps = [
+    "greenlet"
+    "pyee"
+  ];
 
   propagatedBuildInputs = [
     greenlet
