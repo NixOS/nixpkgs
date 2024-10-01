@@ -5,6 +5,7 @@
   cmake,
   makeBinaryWrapper,
   nix-update-script,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      ls-color = runCommand "${finalAttrs.pname}-ls-color" { } ''
+        set -x
+        mkdir somedir
+        ln -s somedir somelink
+
+        color_auto=$(ls -1 --color=auto)
+        color_always=$(ls -1 --color=always)
+
+        ${finalAttrs.finalPackage}/bin/${finalAttrs.meta.mainProgram} \
+          ls -1 --color=auto > $out
+
+        [[ "$(cat $out)" == "$color_always" ]]
+        [[ "$(cat $out)" != "$color_auto" ]]
+        set +x
+      '';
+    };
   };
 
   meta = {
