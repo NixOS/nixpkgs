@@ -20219,6 +20219,7 @@ with pkgs;
     icu73
     icu74
     icu75
+    icu76
   ;
 
   icu = icu74;
