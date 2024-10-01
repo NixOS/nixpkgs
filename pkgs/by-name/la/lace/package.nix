@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lace";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "trolando";
-    repo = pname;
-    rev = "v${version}";
+    repo = "lace";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-yWlRkEvR7k322MlZVj5X062TsuSquPQd4TmFv7ufUc4=";
   };
 
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/trolando/lace";
     maintainers = [ maintainers.mgttlinger ];
     license = licenses.asl20;
-    platforms = with platforms; linux ++ darwin ++ windows;
+    platforms = platforms.all;
   };
-}
+})
