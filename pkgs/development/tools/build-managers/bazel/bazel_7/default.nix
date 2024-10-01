@@ -230,7 +230,7 @@ let
 
         # bazel-external is auto-generated and should be removed
         # see https://bazel.build/external/vendor#vendor-symlinks for more details
-        rm vendor_dir/bazel-external 
+        rm vendor_dir/bazel-external
 
         runHook postBuild
       '';
