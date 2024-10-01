@@ -38405,8 +38405,6 @@ with pkgs;
 
   vhs = callPackage ../applications/misc/vhs { };
 
-  viddy = callPackage ../tools/misc/viddy { };
-
   viennarna = callPackage ../applications/science/molecular-dynamics/viennarna { };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
