@@ -7801,10 +7801,6 @@ with pkgs;
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
-  galculator = callPackage ../applications/misc/galculator {
-    gtk = gtk3;
-  };
-
   fornalder = callPackage ../applications/version-management/fornalder { };
 
   galen = callPackage ../development/tools/galen { };
