@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ./font-location.patch
     # For some reason, the Makefile doesn't link
     # with libcurl and openal when ClassiCube requires them.
-    # ./fix-linking.patch
+    ./fix-linking.patch
   ];
 
   font_path = "${liberation_ttf}/share/fonts/truetype";
