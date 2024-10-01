@@ -52,13 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://tetr.io/about/desktop/history/";
-    description = "TETR.IO desktop client";
+    description = "Desktop client for TETR.IO, an online stacker game";
     downloadPage = "https://tetr.io/about/desktop/";
     homepage = "https://tetr.io";
     license = lib.licenses.unfree;
     longDescription = ''
-      TETR.IO is a modern yet familiar online stacker.
-      Play against friends and foes all over the world, or claim a spot on the leaderboards - the stacker future is yours!
+      TETR.IO is a free-to-win modern yet familiar online stacker.
+      Play multiplayer games against friends and foes all over the world, or claim a spot on the leaderboards - the stacker future is yours!
     '';
     mainProgram = "tetrio";
     maintainers = with lib.maintainers; [

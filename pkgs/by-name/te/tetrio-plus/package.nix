@@ -19,11 +19,12 @@
 
 let
   version = "0.27.2";
+  rev = "electron-v${version}-tetrio-v${lib.versions.major tetrio-desktop.version}";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
-    rev = "electron-v${version}-tetrio-v${lib.versions.major tetrio-version}";
+    inherit rev;
     hash = "sha256-PvTivTt1Zuvk5gaCcQDcIBFsUf/ZG7TJYXqm0NP++Bw=";
     fetchSubmodules = true;
 
@@ -153,9 +154,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "TETR.IO customization tool suite";
-    downloadPage = "https://gitlab.com/UniQMG/tetrio-plus/-/releases";
+    description = "Modified TETR.IO desktop app.asar with many customization tools";
+    longDescription = ''
+      To use this, `override` the `withTetrioPlus` attribute of `tetrio-desktop`.
+    '';
     homepage = "https://gitlab.com/UniQMG/tetrio-plus";
+    downloadPage = "https://gitlab.com/UniQMG/tetrio-plus/-/releases";
+    changelog = "https://gitlab.com/UniQMG/tetrio-plus/-/releases/${rev}";
     license = [
       lib.licenses.mit
       # while tetrio-plus is itself mit, the result of this derivation
