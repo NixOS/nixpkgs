@@ -1,6 +1,7 @@
-## Description of changes
 
 <!--
+^ Please summarise the changes you have done and explain why they are necessary here ^
+
 For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
 For new packages please briefly describe the package or provide a link to its homepage.
 -->

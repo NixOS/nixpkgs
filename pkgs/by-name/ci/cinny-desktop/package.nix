@@ -3,11 +3,10 @@
   stdenv,
   darwin,
   fetchFromGitHub,
-  rust,
   rustPlatform,
   cargo-tauri,
   cinny,
-  copyDesktopItems,
+  desktop-file-utils,
   wrapGAppsHook3,
   pkg-config,
   openssl,
@@ -16,7 +15,6 @@
   glib-networking,
   libayatana-appindicator,
   webkitgtk,
-  makeDesktopItem,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,27 +56,22 @@ rustPlatform.buildRustPackage rec {
         --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
     '';
 
-  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cargo tauri build --bundles app --target "${rust.envVars.rustHostPlatform}"
-  '';
-
   postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -DT icons/128x128@2x.png $out/share/icons/hicolor/256x256@2/apps/cinny.png
-      install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/cinny.png
-      install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/cinny.png
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications/"
-      cp -r "target/${rust.envVars.rustHostPlatform}/release/bundle/macos/Cinny.app" "$out/Applications/"
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      desktop-file-edit \
+        --set-comment "Yet another matrix client for desktop" \
+        --set-key="Categories" --set-value="Network;InstantMessaging;" \
+        $out/share/applications/cinny.desktop
     '';
 
   nativeBuildInputs = [
-    copyDesktopItems
     wrapGAppsHook3
     pkg-config
-    cargo-tauri
+    cargo-tauri.hook
+    desktop-file-utils
   ];
 
   buildInputs =
@@ -96,20 +89,6 @@ rustPlatform.buildRustPackage rec {
       darwin.DarwinTools
       darwin.apple_sdk.frameworks.WebKit
     ];
-
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      name = "cinny";
-      exec = "cinny";
-      icon = "cinny";
-      desktopName = "Cinny";
-      comment = meta.description;
-      categories = [
-        "Network"
-        "InstantMessaging"
-      ];
-    })
-  ];
 
   meta = {
     description = "Yet another matrix client for desktop";
