@@ -22,13 +22,13 @@ in
   inochi-creator = mkGeneric rec {
     pname = "inochi-creator";
     appname = "Inochi Creator";
-    version = "0.8.5";
+    version = "0.8.6";
 
     src = fetchFromGitHub {
       owner = "Inochi2D";
       repo = "inochi-creator";
       rev = "v${version}";
-      hash = "sha256-qrSHyvFE55xRbcA79lngOHJOdv54rNlUTHlxT9jjPEY=";
+      hash = "sha256-9d3j5ZL6rGOjN1GUpCIfbjby0mNMvOK7BJbHYgwLY2k=";
     };
 
     dubLock = ./creator-dub-lock.json;
