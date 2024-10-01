@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jbigkit";
   version = "2.1";
 
   src = fetchurl {
-    url = "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/${pname}-${version}.tar.gz";
-    sha256 = "0cnrcdr1dwp7h7m0a56qw09bv08krb37mpf7cml5sjdgpyv0cwfy";
+    url = "https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/jbigkit-${finalAttrs.version}.tar.gz";
+    hash = "sha256-3nEGtr+vSV1oZcfdesbKE4G9EuDYFAXqgefyFnJj2TI=";
   };
 
   patches = [
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
   ];
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
+  meta = {
     description = "Software implementation of the JBIG1 data compression standard";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
-}
+})
