@@ -25461,7 +25461,6 @@ with pkgs;
     matomo-beta;
 
   inherit (callPackages ../servers/unifi { })
-    unifi7
     unifi8;
 
   unifi = unifi8;
