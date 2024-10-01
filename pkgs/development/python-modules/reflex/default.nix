@@ -23,6 +23,7 @@
   pydantic,
   pytest-asyncio,
   pytest-mock,
+  playwright,
   pytestCheckHook,
   python-engineio,
   python-multipart,
@@ -46,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -55,7 +56,7 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6yu9EfyX/1kvvmkmKGJrZnVffRHGWY/iUrn5BIrNx38=";
+    hash = "sha256-p7o7e/OBX8P5QKsHNInKKQO1jklTr61SXuGk+ceakJU=";
   };
 
   pythonRelaxDeps = [
@@ -106,6 +107,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-mock
+    playwright
     attrs
     numpy
     plotly
@@ -114,11 +116,16 @@ buildPythonPackage rec {
     unzip
   ];
 
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
   disabledTests = [
-    # Tests touche network
+    # Tests touch network
     "test_find_and_check_urls"
     "test_event_actions"
     "test_upload_file"
+    "test_node_version"
     # /proc is too funky in nix sandbox
     "test_get_cpu_info"
     # broken
@@ -130,7 +137,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "benchmarks/"
-    "integration/"
+    "tests/integration/"
   ];
 
   pythonImportsCheck = [ "reflex" ];
