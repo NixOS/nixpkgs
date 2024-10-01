@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, ninja
 , gtest
 , prometheus-cpp
 }:
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-5cl1PIjhXaL58kSyWZXRWLq6BITS2BwEovPhwvk2e18=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
 
   postPatch = ''
     cp -r ${gtest.src} googletest
