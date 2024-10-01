@@ -30,17 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
   patches = [ ];
 
-  netfilterGoModules =
-    (buildGoModule {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        patches
-        ;
-      modRoot = "linux/netfilter";
-      vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
-    }).goModules;
+  netfilter = buildGoModule {
+    pname = "${finalAttrs.pname}-netfilter";
+    inherit (finalAttrs)
+      version
+      src
+      patches
+      ;
+    modRoot = "linux/netfilter";
+    vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
+  };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src patches;
@@ -83,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    ln -s '${finalAttrs.netfilterGoModules}' linux/netfilter/vendor
+    ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
   '';
 
   cmakeFlags = [
