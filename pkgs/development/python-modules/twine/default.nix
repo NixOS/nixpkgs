@@ -13,6 +13,10 @@
   rfc3986,
   setuptools-scm,
   urllib3,
+  build,
+  pretend,
+  pytest-socket,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -40,8 +44,12 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  # Requires network
-  doCheck = false;
+  nativeCheckInputs = [
+    build
+    pretend
+    pytest-socket
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "twine" ];
 
