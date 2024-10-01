@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "simg2img";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "anestisb";
     repo = "android-simg2img";
     rev = version;
-    sha256 = "1xm9kaqs2w8c7a4psv78gv66gild88mpgjn5lj087d7jh1jxy7bf";
+    hash = "sha256-sNHdSbms35YnENASFEG+VMLJGkV/JAlQUVMquDrePDc=";
   };
 
   buildInputs = [ zlib ];
