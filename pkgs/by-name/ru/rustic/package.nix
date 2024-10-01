@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SOXuQIdebzMHyO/r+0bvhZvdc09pNPiCXgYfzMoZUZo=";
+    hash = "sha256-2dwxPVc2foP3k3SmRvEQ9JP7M/QrNp5d3wvCtfIylf0=";
   };
 
-  cargoHash = "sha256-5tXaq/FPC3T+f1p4RtihQGgwAptcO58mOKQhiOpjacc=";
+  cargoHash = "sha256-eLDOqNSD/PDjkPJj58Wb/HtCWLRGWc28kyYIQUV8HHQ=";
 
   # At the time of writing, upstream defaults to "self-update", "tui", and "webdav".
   # "self-update" is a self-updater, which we don't want in nixpkgs.
