@@ -483,6 +483,7 @@ dont-distribute-packages:
  - ampersand
  - amqp-streamly
  - analyze-client
+ - anansi-hscolour
  - anatomy
  - animate-example
  - animate-frames
@@ -1111,6 +1112,7 @@ dont-distribute-packages:
  - devtools
  - dewdrop
  - dfinity-radix-tree
+ - dhall-lex
  - dhall-secret
  - dia-functions
  - diagrams-reflex
@@ -2152,6 +2154,7 @@ dont-distribute-packages:
  - hs-pkpass
  - hs-profunctors
  - hs-sdl-term-emulator
+ - hs2ats
  - hs2dot
  - hsbackup
  - hsbencher-codespeed
@@ -2173,6 +2176,7 @@ dont-distribute-packages:
  - hsinspect-lsp
  - hslogstash
  - hsparql
+ - hspec-dirstream
  - hspec-expectations-pretty
  - hspec-pg-transact
  - hspec-setup
@@ -2321,6 +2325,7 @@ dont-distribute-packages:
  - introduction-test
  - intset
  - invertible-hlist
+ - io-classes-mtl
  - ion
  - ipatch
  - ipc
@@ -2484,6 +2489,7 @@ dont-distribute-packages:
  - landlock
  - lang
  - language-Modula2
+ - language-ats
  - language-boogie
  - language-ecmascript-analysis
  - language-eiffel
