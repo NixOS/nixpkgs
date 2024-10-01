@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       package = tigerbeetle;
       command = "tigerbeetle version";
     };
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
   meta = {
