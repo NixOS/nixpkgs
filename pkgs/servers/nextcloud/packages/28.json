@@ -30,9 +30,9 @@
     ]
   },
   "cookbook": {
-    "hash": "sha256-QRzXNoqOeEYYp0ctmsNisbQL5PWFOeqEVkcFeCduQtY=",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.1/cookbook-0.11.1.tar.gz",
-    "version": "0.11.1",
+    "hash": "sha256-upbTdzu17BH6tehgCUcTxBvTVOO31Kri/33vGd4Unyw=",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.2/cookbook-0.11.2.tar.gz",
+    "version": "0.11.2",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -130,8 +130,8 @@
     ]
   },
   "maps": {
-    "hash": "sha256-FmRhpPRpMnCHkJFaVvQuR6Y7Pd7vpP+tUVih919g/fQ=",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
+    "hash": "sha256-BmXs6Oepwnm+Cviy4awm3S8P9AiJTt1BnAQNb4TxVYE=",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0/maps-1.4.0.tar.gz",
     "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -200,9 +200,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-TBCNr57MKEe8OSXEqWohZH9zuCwFTMDnwnZ1nFZ+FWY=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.2/polls-v7.2.2.tar.gz",
-    "version": "7.2.2",
+    "hash": "sha256-4atr6TN7PIlH/WQ/OSoeRZKZK+k0Or8GlIZfBglWh4c=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.3/polls-v7.2.3.tar.gz",
+    "version": "7.2.3",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
