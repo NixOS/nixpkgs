@@ -76,6 +76,28 @@ fi
 
 source @out@/nix-support/add-hardening.sh
 
+# Check if we can use a dynamic linker
+if [[ -z "${dontSetDynamicLinker:-}" ]]; then
+    isPIE=1
+    # Old bash thinks empty arrays are undefined, ugh.
+    for p in \
+      ${extraBefore+"${extraBefore[@]}"} \
+      ${params+"${params[@]}"} \
+      ${extraAfter+"${extraAfter[@]}"}
+    do
+        case "$p" in
+            *.o)
+                if [[ -e $p ]]; then
+                    if $(LANG=C readelf -h $p | grep "Type:.*DYN" >/dev/null); then
+                        isPIE=0
+                        break
+                    fi
+                fi
+                ;;
+        esac
+    done
+fi
+
 extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
@@ -85,7 +107,7 @@ if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
 
     # By adding dynamic linker to extraBefore we allow the users set their
     # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
-    if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
+    if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" && -z "${dontSetDynamicLinker:-}" ]]; then
         extraBefore+=("-dynamic-linker" "$NIX_DYNAMIC_LINKER_@suffixSalt@")
     fi
 fi
@@ -182,7 +204,7 @@ do
     prev="$p"
 done
 
-if [[ "$link32" == "1" && "$linkType" == dynamic && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
+if [[ "$link32" == "1" && "$linkType" == dynamic && -e "@out@/nix-support/dynamic-linker-m32" && -z "${dontSetDynamicLinker@:-}" ]]; then
     # We have an alternate 32-bit linker and we're producing a 32-bit ELF, let's
     # use it.
     extraAfter+=(
