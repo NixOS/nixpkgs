@@ -26,6 +26,12 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail '"pytest-runner>=5.2",' ""
+    # webcolors API change, https://github.com/Danielhiversen/flux_led/issues/401
+    substituteInPlace flux_led/utils.py \
+      --replace-fail "CSS2_HEX_TO_NAMES.values()" 'names("css2")' \
+      --replace-fail "CSS21_HEX_TO_NAMES.values()" 'names("css21")' \
+      --replace-fail "CSS3_HEX_TO_NAMES.values()" 'names("css3")' \
+      --replace-fail "HTML4_HEX_TO_NAMES.values()" 'names("html4")'
   '';
 
   build-system = [ setuptools ];
@@ -41,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flux_led" ];
 
-  disabledTests = [
-    # AttributeError: module 'webcolors' has no attribute 'CSS2_HEX_TO_NAMES'
-    "test_get_color_names_list"
-  ];
+  # disabledTests = [
+  #   # AttributeError: module 'webcolors' has no attribute 'CSS2_HEX_TO_NAMES'
+  #   "test_get_color_names_list"
+  # ];
 
   meta = with lib; {
     description = "Python library to communicate with the flux_led smart bulbs";
