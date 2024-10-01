@@ -3286,6 +3286,12 @@
       { fingerprint = "8916 F727 734E 77AB 437F  A33A 19AB 76F5 CEE1 1392"; }
     ];
   };
+  CaiqueFigueiredo = {
+    email = "public@caiquefigueiredo.me";
+    github = "caiquefigueiredo";
+    githubId = 20440897;
+    name = "Caique";
+  };
   CaitlinDavitt = {
     email = "CaitlinDavitt@gmail.com";
     github = "CaitlinDavitt";
