@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "ircrobots";
-  version = "0.6.6";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mIh3tERwHtGH9eA0AT8Lcnwp1Wn9lQhKkUjuZcOXO/c=";
+    hash = "sha256-slz4AH2Mi21N3aV+OrnoXoQsseS7arW2NuUZARQJsf0=";
   };
 
   build-system = [ setuptools ];
