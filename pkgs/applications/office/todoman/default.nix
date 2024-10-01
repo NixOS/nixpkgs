@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     parsedatetime
     python-dateutil
     pyxdg
+    pytz
     tabulate
     urwid
   ];
