@@ -367,7 +367,7 @@ class Editor:
         cache_file: Optional[str] = None,
     ):
         log.debug("get_plugins:", get_plugins)
-        self.name = name
+        self.name = name  # used to generate the default attribute names
         self.root = root
         self.get_plugins = get_plugins
         self.default_in = default_in or root.joinpath(f"{name}-plugin-names")
@@ -426,6 +426,8 @@ class Editor:
         raise NotImplementedError()
 
     def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+        log.debug("Calling get update")
+
         cache: Cache = Cache(self.get_current_plugins(self.nixpkgs), self.cache_file)
         _prefetch = functools.partial(prefetch, cache=cache)
 

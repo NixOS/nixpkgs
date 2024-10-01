@@ -29,13 +29,15 @@ in
           -- to create a flat hierarchy
           lua_modules_path = "lua"
         '';
+
+        passthru = { rawLuaDrv = rawLuaDrv; } // oa.passthru;
       });
 
       finalDrv = toVimPlugin (luaDrv.overrideAttrs(oa: attrs // {
           nativeBuildInputs = oa.nativeBuildInputs or [] ++ [
             lua.pkgs.luarocksMoveDataFolder
           ];
-          version = "${originalLuaDrv.version}-unstable-${oa.version}";
+          version = "${rawLuaDrv.version}-unstable-${oa.version}";
         }));
     in
       finalDrv

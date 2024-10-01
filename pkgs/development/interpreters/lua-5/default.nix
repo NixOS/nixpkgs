@@ -27,6 +27,7 @@ let
           luaPackagesFun = callPackage ../../../top-level/lua-packages.nix {
             lua = self;
           };
+          # TODO remove pathExists, wont work in pure mode
           generatedPackages = if (builtins.pathExists ../../lua-modules/generated-packages.nix) then
             (final: prev: callPackage ../../lua-modules/generated-packages.nix { inherit (final) callPackage; } final prev)
           else (final: prev: {});

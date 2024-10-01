@@ -2,15 +2,12 @@
 , makeWrapper
 , python3Packages
 , lib
-, nix-prefetch-scripts
-, luarocks-nix
+, luarocks-packages-updater
 , pluginupdate
+, luarocks-nix
 }:
 let
-
   path = lib.makeBinPath [
-    nix
-    nix-prefetch-scripts
     luarocks-nix
   ];
 
@@ -25,35 +22,39 @@ python3Packages.buildPythonApplication {
 
   src = lib.cleanSource ./.;
 
-  build-system = [
+  nativeBuildInputs = [
+    makeWrapper
     python3Packages.setuptools
   ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     python3Packages.gitpython
-    nix
-    nix-prefetch-scripts
+    (python3Packages.toPythonModule luarocks-packages-updater)
   ];
 
+
+  #      --prefix PATH : "${path}"
   postFixup = ''
     echo "pluginupdate folder ${pluginupdate}"
-    wrapProgram $out/bin/luarocks-packages-updater \
+    wrapProgram $out/bin/neovim-plugins-updater \
      --prefix PYTHONPATH : "${pluginupdate}" \
      --prefix PATH : "${path}"
+
   '';
 
+  # installPhase =
+  #   ''
+  #   mkdir -p $out/bin
+  #   cp ${./update.py} $out/bin/neovim-plugins-updater
+  #
+  #   wrapPythonProgramsIn "$out"
+  # '';
+    # # wrap python scripts
+    # makeWrapperArgs+=( --prefix PATH : "${path}" --prefix PYTHONPATH : "$out/lib" )
+    # wrapPythonProgramsIn "$out"
   shellHook = ''
     export PYTHONPATH="maintainers/scripts/pluginupdate-py:$PYTHONPATH"
-    export PATH="${path}:$PATH"
   '';
 
-  meta = {
-    inherit (attrs.project) description;
-    license = lib.licenses.gpl3Only;
-    homepage = attrs.project.urls.Homepage;
-    mainProgram = "luarocks-packages-updater";
-    maintainers = with lib.maintainers; [ teto ];
-  };
+  meta.mainProgram = "neovim-plugins-updater";
 }
-
 

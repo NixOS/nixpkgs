@@ -4367,17 +4367,6 @@ final: prev:
     meta.homepage = "https://github.com/ruifm/gitlinker.nvim/";
   };
 
-  gitsigns-nvim = buildNeovimPlugin {
-    pname = "gitsigns.nvim";
-    version = "2024-09-04";
-    src = fetchFromGitHub {
-      owner = "lewis6991";
-      repo = "gitsigns.nvim";
-      rev = "1ef74b546732f185d0f806860fa5404df7614f28";
-      sha256 = "1i1frmz9i65ivkkvb5rawwlr74xhxby2pp1chs443lymw9kbqz5k";
-    };
-    meta.homepage = "https://github.com/lewis6991/gitsigns.nvim/";
-  };
 
   gitv = buildVimPlugin {
     pname = "gitv";
