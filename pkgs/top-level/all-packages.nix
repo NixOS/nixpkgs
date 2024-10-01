@@ -25339,7 +25339,7 @@ with pkgs;
     unifi7
     unifi8;
 
-  unifi = unifi7;
+  unifi = unifi8;
 
   unifi-protect-backup = callPackage ../applications/backup/unifi-protect-backup { };
 
