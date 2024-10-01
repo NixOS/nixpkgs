@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "12.0";
+  version = "13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "aaugustin";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sOL3VI9Ib/PncZs5KN4dAIHOrBc7LfXqT15LO4M6qKg=";
+    hash = "sha256-Y0HDZw+H7l8+ywLLzFk66GNDCI0uWOZYypG86ozLo7c=";
   };
 
   nativeBuildInputs = [ setuptools ];
