@@ -630,7 +630,7 @@ in
             PrivateTmp = true;
             ProtectHome = true;
             ProtectSystem = "strict";
-            MemoryDenyWriteExecute = true;
+            MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off");
             NoNewPrivileges = true;
             LockPersonality = true;
             PrivateDevices = true;
