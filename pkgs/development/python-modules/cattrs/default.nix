@@ -11,6 +11,7 @@
   immutables,
   motor,
   msgpack,
+  msgspec,
   orjson,
   pytest-xdist,
   pytestCheckHook,
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "23.2.3";
+  version = "24.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "python-attrs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zWM5zmZr2EiJb/4Dc6KjDL89p0C1V0Dsz949byz5OVM=";
+    hash = "sha256-LSP8a/JduK0h9GytfbN7/CjFlnGGChaa3VbbCHQ3AFE=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     immutables
     motor
     msgpack
+    msgspec
     orjson
     pytest-xdist
     pytestCheckHook
