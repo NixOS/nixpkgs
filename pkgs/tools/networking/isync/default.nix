@@ -14,6 +14,8 @@
   withCyrusSaslXoauth2 ? false,
   cyrus-sasl-xoauth2,
   makeWrapper,
+  perl538Packages,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,15 +33,22 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-DQPRINTF_BUFF=4000";
 
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
     perl
   ] ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
-  buildInputs = [
-    openssl
-    db
-    cyrus_sasl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs =
+    with perl538Packages;
+    [
+      TimeDate
+    ]
+    ++ [
+      openssl
+      db
+      cyrus_sasl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = lib.optionalString withCyrusSaslXoauth2 ''
     wrapProgram "$out/bin/mbsync" \
