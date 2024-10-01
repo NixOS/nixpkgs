@@ -1,14 +1,19 @@
 {
   lib,
-  botocore,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  botocore,
   jmespath,
+  s3transfer,
+
+  # tests
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  s3transfer,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,22 +21,20 @@ buildPythonPackage rec {
   inherit (botocore) version; # N.B: botocore, boto3, awscli needs to be updated in lockstep, bump botocore version for updating these.
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "boto";
     repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-4WP5E8LuuxWZi8DK8yOpvyy6isSfB4eFcbctkTEd3As=";
+    hash = "sha256-b08tC8EA6iW0O/7rseD9pTkKh/cJ2fe3xJZkEqxS6VI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
   pythonRelaxDeps = [ "s3transfer" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     botocore
     jmespath
     s3transfer
@@ -53,16 +56,16 @@ buildPythonPackage rec {
     crt = [ botocore.optional-dependencies.crt ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "AWS SDK for Python";
     homepage = "https://github.com/boto/boto3";
     changelog = "https://github.com/boto/boto3/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for
       Python, which allows Python developers to write software that makes use of
       services like Amazon S3 and Amazon EC2.
     '';
-    maintainers = with maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }
