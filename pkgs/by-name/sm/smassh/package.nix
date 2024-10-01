@@ -23,13 +23,26 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
-  pythonRelaxDeps = [ "textual" ];
-
   propagatedBuildInputs = with python3.pkgs; [
-    textual
     appdirs
     click
     requests
+    (textual.overridePythonAttrs (oldAttrs: {
+      version = "0.52.1";
+      src = fetchFromGitHub {
+        owner = "Textualize";
+        repo = "textual";
+        rev = "refs/tags/v0.52.1";
+        hash = "sha256-a5v8HS6ZswQOl/jIypFJTk+MuMsu89H2pAAlWMPkLjI=";
+      };
+      disabledTests = [
+        "test_tracked_slugs"
+        "test_textual_env_var"
+        "test_register_language"
+        "test_register_language_existing_language"
+        "test_language_binary_missing"
+      ];
+    }))
   ];
 
   # No tests available
