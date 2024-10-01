@@ -1,27 +1,31 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, dotnetCorePackages
-, buildDotnetModule
-, mono
-, nodejs_18
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  buildDotnetModule,
+  mono,
+  nodejs_18,
 }:
 let
   pname = "slskd";
-  version = "0.21.1";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-ic631e4pyby6EibUkxIGc/uQnVuPY9RFZ9hWvw3u1zk=";
+    sha256 = "sha256-qAS8uiXAG0JTOCW/bIVYhv6McUSBihAHFjJu3b5Ttoc=";
   };
 
   meta = with lib; {
     description = "A modern client-server application for the Soulseek file sharing network";
     homepage = "https://github.com/slskd/slskd";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ppom melvyn2 ];
+    maintainers = with maintainers; [
+      ppom
+      melvyn2
+    ];
     platforms = platforms.linux;
   };
 
@@ -38,8 +42,14 @@ let
     '';
   };
 
-in buildDotnetModule {
-  inherit pname version src meta;
+in
+buildDotnetModule {
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
   runtimeDeps = [ mono ];
 
