@@ -1,4 +1,4 @@
-{ buildGoModule
+{ buildGo123Module
 , fetchFromGitHub
 , lib
 , envoy
@@ -11,17 +11,17 @@
 let
   inherit (lib) concatStringsSep concatMap id mapAttrsToList;
 in
-buildGoModule rec {
+buildGo123Module rec {
   pname = "pomerium";
-  version = "0.26.1";
+  version = "0.27.1";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-lMI6dVCTInqHsz4N0HsOVUQo8TkheAwr54FW46r+DUA=";
+    hash = "sha256-+RKWl/weUYktS7jUB1lYpZCBKEfh7RMfKgRDbYV8Bjs=";
   };
 
-  vendorHash = "sha256-AHlnhAh4RBz8aJoFJjbX/MUDHq81xK7b7gvCyuV3gjU=";
+  vendorHash = "sha256-/iYUZp6EASDGApLymNuR10395PH8D3zPU+TlmmAN8Zc=";
 
   ui = mkYarnPackage {
     inherit version;
