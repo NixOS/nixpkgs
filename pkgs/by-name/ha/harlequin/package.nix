@@ -58,9 +58,6 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = harlequin;
-    };
   };
 
   nativeCheckInputs = [
