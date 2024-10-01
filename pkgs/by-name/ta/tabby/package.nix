@@ -36,7 +36,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.14.0";
+  version = "0.17.0";
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -109,19 +109,20 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     rev = "v${version}";
-    hash = "sha256-NA+Shkn+m5yZh9kOkvt+280JvFykReMrz7R0OP5x3AA=";
+    hash = "sha256-2xzVKemJQUQCwidKnzj3O+lOueiZoACVuYBi1KuVB/8=";
     fetchSubmodules = false;
   };
 
   cargoLock = {
     lockFile = fetchurl {
       url = "https://raw.githubusercontent.com/TabbyML/tabby/v${version}/Cargo.lock";
-      hash = "sha256-BWGaapDmCmzlK1XsXJ8ZE6X1FC4NqRJSWVk4EC5LWtc=";
+      hash = "sha256-MOIjL2kbQd2jbOG0pLNjtPTg0S29viiGHAxNnhd1kZM=";
     };
     outputHashes = {
       "ollama-rs-0.1.9" = "sha256-d6sKUxc8VQbRkVqMOeNFqDdKesq5k32AQShK67y2ssg=";
       "oneshot-0.1.6" = "sha256-PmYuHuNTqToMyMHPRFDUaHUvFkVftx9ZCOBwXj+4Hc4=";
       "ownedbytes-0.7.0" = "sha256-p0+ohtW0VLmfDTZw/LfwX2gYfuYuoOBcE+JsguK7Wn8=";
+      "sqlx-0.7.4" = "sha256-tcISzoSfOZ0jjNgGpuPPxjMxmBUPw/5FVDoALZEAHKY=";
       "tantivy-0.23.0" = "sha256-p0+ohtW0VLmfDTZw/LfwX2gYfuYuoOBcE+JsguK7Wn8=";
       "tree-sitter-c-0.21.3" = "sha256-ucbHLS2xyGo1uyKZv/K1HNXuMo4GpTY327cgdVS9F3c=";
       "tree-sitter-cpp-0.22.1" = "sha256-3akSuQltFMF6I32HwRU08+Hcl9ojxPGk2ZuOX3gAObw=";
