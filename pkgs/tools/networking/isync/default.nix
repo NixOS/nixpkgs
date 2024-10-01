@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchgit {
     url = "https://git.code.sf.net/p/isync/isync";
     rev = "3c4b5f1c83a568f18c14c93aab95c9a853edfd15";
+    hash = "sha256-MRjWr88sxd3C+YTMCqEymxmLj5h+uJKh9mcG+aEqf64=";
   };
 
   # Fixes "Fatal: buffer too small" error
