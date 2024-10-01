@@ -1,34 +1,35 @@
-{ alsa-lib
-, autoPatchelfHook
-, buildFHSEnv
-, dbus
-, elfutils
-, expat
-, extraEnv ? { }
-, fetchFromGitLab
-, fetchurl
-, glib
-, glibc
-, lib
-, libGL
-, libapparmor
-, libbsd
-, libedit
-, libffi_3_3
-, libgcrypt
-, libglvnd
-, makeShellWrapper
-, sqlite
-, squashfsTools
-, stdenv
-, tcp_wrappers
-, udev
-, waylandpp
-, writeShellScript
-, xkeyboard_config
-, xorg
-, xz
-, zstd
+{
+  alsa-lib,
+  autoPatchelfHook,
+  buildFHSEnv,
+  dbus,
+  elfutils,
+  expat,
+  extraEnv ? { },
+  fetchFromGitLab,
+  fetchurl,
+  glib,
+  glibc,
+  lib,
+  libGL,
+  libapparmor,
+  libbsd,
+  libedit,
+  libffi_3_3,
+  libgcrypt,
+  libglvnd,
+  makeShellWrapper,
+  sqlite,
+  squashfsTools,
+  stdenv,
+  tcp_wrappers,
+  udev,
+  waylandpp,
+  writeShellScript,
+  xkeyboard_config,
+  xorg,
+  xz,
+  zstd,
 }:
 let
   pname = "plex-desktop";
@@ -104,48 +105,51 @@ let
 
     dontWrapQtApps = true;
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        cp -r . $out
+      cp -r . $out
 
-        ln -s ${libedit}/lib/libedit.so.0 $out/lib/libedit.so.2
-        rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2
-        ln -s ${alsa-lib}/lib/libasound.so.2 $out/usr/lib/x86_64-linux-gnu/libasound.so.2
-        rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
-        ln -s ${alsa-lib}/lib/libasound.so.2.0.0 $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
+      ln -s ${libedit}/lib/libedit.so.0 $out/lib/libedit.so.2
+      rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2
+      ln -s ${alsa-lib}/lib/libasound.so.2 $out/usr/lib/x86_64-linux-gnu/libasound.so.2
+      rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
+      ln -s ${alsa-lib}/lib/libasound.so.2.0.0 $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
 
-        runHook postInstall
-      '';
+      runHook postInstall
+    '';
   };
 in
 buildFHSEnv {
-    name = "${pname}-${version}";
-    targetPkgs = pkgs: [ xkeyboard_config ];
+  name = "${pname}-${version}";
+  targetPkgs = pkgs: [ xkeyboard_config ];
 
-    extraInstallCommands = ''
-      mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
-      install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
-      substituteInPlace $out/share/applications/plex-desktop.desktop \
-        --replace-fail \
-        'Icon=''${SNAP}/meta/gui/icon.png' \
-        'Icon=${plex-desktop}/meta/gui/icon.png' \
-        --replace-fail \
-        'Exec=plex-desktop' \
-        'Exec=plex-desktop-${version}'
-    '';
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
+    install -m 444 -D ${plex-desktop}/meta/gui/plex-desktop.desktop $out/share/applications/plex-desktop.desktop
+    substituteInPlace $out/share/applications/plex-desktop.desktop \
+      --replace-fail \
+      'Icon=''${SNAP}/meta/gui/icon.png' \
+      'Icon=${plex-desktop}/meta/gui/icon.png' \
+      --replace-fail \
+      'Exec=plex-desktop' \
+      'Exec=plex-desktop-${version}'
+  '';
 
-    runScript = writeShellScript "plex-desktop.sh" ''
-      # Widevine won't download unless this directory exists.
-      mkdir -p $HOME/.cache/plex/
-      PLEX_USR_PATH=${lib.makeSearchPath "usr/lib/x86_64-linux-gnu"  [ plex-desktop ]}
+  runScript = writeShellScript "plex-desktop.sh" ''
+    # Widevine won't download unless this directory exists.
+    mkdir -p $HOME/.cache/plex/
+    PLEX_USR_PATH=${lib.makeSearchPath "usr/lib/x86_64-linux-gnu" [ plex-desktop ]}
 
-      set -o allexport
-      LD_LIBRARY_PATH=${lib.makeLibraryPath [ plex-desktop libglvnd-1_4_0 ]}:$PLEX_USR_PATH
-      LIBGL_DRIVERS_PATH=$PLEX_USR_PATH/dri
-      ${lib.toShellVars extraEnv}
-      exec ${plex-desktop}/Plex.sh
+    set -o allexport
+    LD_LIBRARY_PATH=${
+      lib.makeLibraryPath [
+        plex-desktop
+        libglvnd-1_4_0
+      ]
+    }:$PLEX_USR_PATH
+    LIBGL_DRIVERS_PATH=$PLEX_USR_PATH/dri
+    ${lib.toShellVars extraEnv}
+    exec ${plex-desktop}/Plex.sh
   '';
 }
-
