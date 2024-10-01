@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     vulkan-headers
     vulkan-loader
-  ];
+  ] ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
     at-spi2-core
@@ -192,8 +192,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
-  propagatedNativeBuildInputs = [ lndir ]
-    ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
+  propagatedNativeBuildInputs = [ lndir ];
 
   strictDeps = true;
 
