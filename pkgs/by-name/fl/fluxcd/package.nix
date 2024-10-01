@@ -9,13 +9,13 @@
 
 let
   version = "2.4.0";
-  hash = "sha256-b4mu/iijfALBm+7OIdKgZs55fR6xWfPgL6OMOgIOi3w=";
+  srcHash = "sha256-b4mu/iijfALBm+7OIdKgZs55fR6xWfPgL6OMOgIOi3w=";
   vendorHash = "sha256-rVyirt6+D1qedbTvPZjLog16sMAq+zyFUmbjnJIieRg=";
-  manifestsSha256 = "sha256-85Ykc6B+DP9PVqwGbvqsQCUHpx/IzIP9TgOt3id7P5g=";
+  manifestsHash = "sha256-85Ykc6B+DP9PVqwGbvqsQCUHpx/IzIP9TgOt3id7P5g=";
 
   manifests = fetchzip {
     url = "https://github.com/fluxcd/flux2/releases/download/v${version}/manifests.tar.gz";
-    hash = manifestsSha256;
+    hash = manifestsHash;
     stripRoot = false;
   };
 in
@@ -28,7 +28,7 @@ buildGoModule rec {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    inherit hash;
+    hash = srcHash;
   };
 
   postUnpack = ''
