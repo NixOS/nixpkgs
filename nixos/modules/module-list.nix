@@ -317,6 +317,7 @@
   ./programs/usbtop.nix
   ./programs/vim.nix
   ./programs/virt-manager.nix
+  ./programs/vivid.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/hyprlock.nix
