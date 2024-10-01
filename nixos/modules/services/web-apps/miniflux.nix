@@ -106,7 +106,7 @@ in
 
       serviceConfig = {
         ExecStart = [ "" (lib.getExe cfg.package) ];
-        EnvironmentFile = lib.optional (cfg.adminCredentialsFile != null) [ "" cfg.adminCredentialsFile ];
+        EnvironmentFile = lib.optionals (cfg.adminCredentialsFile != null) [ "" cfg.adminCredentialsFile ];
         User = "miniflux";
         DynamicUser = true;
         RuntimeDirectoryMode = "0750";
