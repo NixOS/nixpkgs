@@ -56,7 +56,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.32.04";
+  version = "6.32.06";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -64,15 +64,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-Ey8Saq59MO+8zX3NmRt62hiQrleYDvMAwWQh+dTQfqg=";
+    hash = "sha256-P8Ay2T/oSN6lrbG0fY8KhieVIyk/7gqis81Sof+rckc=";
   };
 
   clad_src = fetchgit {
     url = "https://github.com/vgvassilev/clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.6";
-    hash = "sha256-Fv3i84lgoifxtyWKhQjj1c4bR9wSl5SPzUh0ZhZBxFI=";
+    rev = "refs/tags/v1.7";
+    hash = "sha256-iKrZsuUerrlrjXBrxcTsFu/t0Pb0sa4UlfSwd1yhg3g=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
