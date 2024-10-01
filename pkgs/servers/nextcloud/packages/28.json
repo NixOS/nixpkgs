@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-ZWdz7Hl3wrTEHrXdOsPKRcE5GAnHYHjudbY5F0VjG4Y=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.5/bookmarks-14.2.5.tar.gz",
-    "version": "14.2.5",
+    "hash": "sha256-xwyft6RGra/T9l8TSRRmWN50ZrdfTlZy3/pIpq/IzZs=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.6/bookmarks-14.2.6.tar.gz",
+    "version": "14.2.6",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users and via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -50,9 +50,9 @@
     ]
   },
   "deck": {
-    "hash": "sha256-wr7uy5vfrfwxK3uytttJyWy8lvCDqfQjvFVGVD7mtco=",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.12.4/deck-v1.12.4.tar.gz",
-    "version": "1.12.4",
+    "hash": "sha256-XzflNdPCNfOYJkZopxBR6es0Fv9x0kpxtMqOxLthG6o=",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.12.5/deck-v1.12.5.tar.gz",
+    "version": "1.12.5",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "gpoddersync": {
-    "hash": "sha256-e4RtBCPtk8jIK+p4tGfukLmC8ikhAD7GiRSmmkWciZQ=",
-    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.9.0/gpoddersync.tar.gz",
-    "version": "3.9.0",
+    "hash": "sha256-OMH/pnDS/icDVUb56mzxowAhBCaVY60bMGJmwsjEc0k=",
+    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.10.0/gpoddersync.tar.gz",
+    "version": "3.10.0",
     "description": "Expose GPodder API to sync podcast consumer apps like AntennaPod",
     "homepage": "https://github.com/thrillfall/nextcloud-gpodder",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-PtxAidIono2roSVA/VLQZ13TVcqWZL069eXpY+npFB8=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.9/groupfolders-v16.0.9.tar.gz",
-    "version": "16.0.9",
+    "hash": "sha256-PaDPYHUzkqY24Hzpi4e3DkvT32f+WYmx7WUNRevqIh8=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.10/groupfolders-v16.0.10.tar.gz",
+    "version": "16.0.10",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -130,8 +130,8 @@
     ]
   },
   "maps": {
-    "hash": "sha256-BmXs6Oepwnm+Cviy4awm3S8P9AiJTt1BnAQNb4TxVYE=",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0/maps-1.4.0.tar.gz",
+    "hash": "sha256-FmRhpPRpMnCHkJFaVvQuR6Y7Pd7vpP+tUVih919g/fQ=",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
     "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -140,10 +140,10 @@
     ]
   },
   "memories": {
-    "hash": "sha256-tzxeffvwMwthvBRG+/cLCXZkVS32rlf5v7XOKTbGoOo=",
-    "url": "https://github.com/pulsejet/memories/releases/download/v7.3.1/memories.tar.gz",
-    "version": "7.3.1",
-    "description": "# Memories: Photo Management for Nextcloud\r\n\r\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\r\n\r\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\r\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\r\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\r\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\r\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\r\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\r\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\r\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\r\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\r\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\r\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\r\n- **⚡️ Performance**: Do all this very fast.\r\n\r\n## 🚀 Installation\r\n\r\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\r\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\r\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\r\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
+    "hash": "sha256-VMaOC+sCh84SsKjJk/pC3BwYRWRkqbCJPRgptI9dppA=",
+    "url": "https://github.com/pulsejet/memories/releases/download/v7.4.1/memories.tar.gz",
+    "version": "7.4.1",
+    "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
     "homepage": "https://memories.gallery",
     "licenses": [
       "agpl"
@@ -160,9 +160,9 @@
     ]
   },
   "notes": {
-    "hash": "sha256-T7FUmazib5LZVsno/VN/NZYYJetTXcG89njamSgJ6Iw=",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.10.1/notes-v4.10.1.tar.gz",
-    "version": "4.10.1",
+    "hash": "sha256-dpMCehjhPQoOA+MVdLeGc370hmqWzmsMczgV08m/cO4=",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.11.0/notes-v4.11.0.tar.gz",
+    "version": "4.11.0",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into third-party apps (currently, there are notes apps for [Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios) and the [console](https://git.danielmoch.com/nncli/about) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [
@@ -180,9 +180,9 @@
     ]
   },
   "onlyoffice": {
-    "hash": "sha256-rHUM3HVY3INPAtTqYxpm9V3Ad8VTl+Wd2S7xAj0CJko=",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.3.0/onlyoffice.tar.gz",
-    "version": "9.3.0",
+    "hash": "sha256-YkYsD/14syHOaxWEwBKgGGV0i5WlYJbGcqesLsWnimc=",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.4.0/onlyoffice.tar.gz",
+    "version": "9.4.0",
     "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-4atr6TN7PIlH/WQ/OSoeRZKZK+k0Or8GlIZfBglWh4c=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.3/polls-v7.2.3.tar.gz",
-    "version": "7.2.3",
+    "hash": "sha256-rLNB0idaKoL4e5O5NYXyhIyFpYguDG4Hg5OkHUEaQUM=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.4/polls-v7.2.4.tar.gz",
+    "version": "7.2.4",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -220,9 +220,9 @@
     ]
   },
   "qownnotesapi": {
-    "hash": "sha256-k1Sm0ZO9qx9KmAGCGYupcLeMSllKUmOlPSUgbWVrqI4=",
-    "url": "https://github.com/pbek/qownnotesapi/releases/download/v24.4.0/qownnotesapi-nc.tar.gz",
-    "version": "24.4.0",
+    "hash": "sha256-jnKtJrzW5FzrluO5S+2Qdrune6TfWDOXlOh9xNm8h1M=",
+    "url": "https://github.com/pbek/qownnotesapi/releases/download/v24.9.0/qownnotesapi-nc.tar.gz",
+    "version": "24.9.0",
     "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
     "homepage": "https://github.com/pbek/qownnotesapi",
     "licenses": [
@@ -240,9 +240,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-aEAcOQTNCdJBFZAf9LfukgsQZddx9Qa5IMOPKUXaVjQ=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.3.10/richdocuments-v8.3.10.tar.gz",
-    "version": "8.3.10",
+    "hash": "sha256-nk5l9naHHBmpZe0oNzRNuYchbOl2asPgoRaM1vQ3CLc=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.3.11/richdocuments-v8.3.11.tar.gz",
+    "version": "8.3.11",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
