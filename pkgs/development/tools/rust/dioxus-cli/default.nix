@@ -7,20 +7,21 @@
 , cacert
 , openssl
 , darwin
+, nix-update-script
 , testers
 , dioxus-cli
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-cOd8OGkmebUYw6fNLO/kja81qKwqBuVpJqCix1Izf64=";
+    hash = "sha256-/LeMh5WX4dvkveu5w6qBQLbtoi5yUW6iad0YatA/tMQ=";
   };
 
-  cargoHash = "sha256-shllaNdg9g6fD8qRyCKpN47keFUTu0g96MzVX4BrhXI=";
+  cargoHash = "sha256-D6y2NiFqSf0u6icSKCRZK7ycR+GswOX627M7PEy/D6U=";
 
   nativeBuildInputs = [ pkg-config cacert ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -38,10 +39,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=server::web::proxy::test::add_proxy_trailing_slash"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = dioxus-cli;
-    command = "${meta.mainProgram} --version";
-    inherit version;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = dioxus-cli; };
   };
 
   meta = with lib; {
