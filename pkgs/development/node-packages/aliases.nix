@@ -63,6 +63,7 @@ mapAliases {
   inherit (pkgs) bash-language-server; # added 2024-06-07
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
+  inherit (pkgs) bower2nix; # added 2024-08-23
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
