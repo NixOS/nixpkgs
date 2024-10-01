@@ -50,6 +50,9 @@ buildGoModule rec {
     tests.gonic = nixosTests.gonic;
   };
 
+  # tests require it
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     homepage = "https://github.com/sentriz/gonic";
     description = "Music streaming server / subsonic server API implementation";
