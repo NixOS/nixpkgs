@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK32 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wxGTK32,
+}:
 stdenv.mkDerivation rec {
   pname = "wxedid";
   version = "0.0.27";
