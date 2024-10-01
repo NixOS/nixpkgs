@@ -10,7 +10,7 @@ with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
   imageCfg = (import ../lib/eval-config.nix {
-    inherit system;
+    system = null;
     modules = [
       ../maintainers/scripts/ec2/amazon-image.nix
       ../modules/testing/test-instrumentation.nix
@@ -52,6 +52,8 @@ let
           apacheHttpd.man
           valgrind.doc
         ]);
+
+        nixpkgs.pkgs = pkgs;
       }
     ];
   }).config;

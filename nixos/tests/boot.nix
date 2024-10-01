@@ -42,20 +42,26 @@ let
 
   iso =
     (import ../lib/eval-config.nix {
-      inherit system;
+      system = null;
       modules = [
         ../modules/installer/cd-dvd/installation-cd-minimal.nix
         ../modules/testing/test-instrumentation.nix
+        { nixpkgs.pkgs = pkgs; }
+        ../modules/misc/nixpkgs/read-only.nix
       ];
     }).config.system.build.isoImage;
 
   sd =
     (import ../lib/eval-config.nix {
-      inherit system;
+      system = null;
       modules = [
         ../modules/installer/sd-card/sd-image-x86_64.nix
         ../modules/testing/test-instrumentation.nix
-        { sdImage.compressImage = false; }
+        {
+          sdImage.compressImage = false;
+          nixpkgs.pkgs = pkgs;
+        }
+        ../modules/misc/nixpkgs/read-only.nix
       ];
     }).config.system.build.sdImage;
 
@@ -84,7 +90,8 @@ let
   makeNetbootTest = name: extraConfig:
     let
       config = (import ../lib/eval-config.nix {
-          inherit system;
+          system = null;
+          inherit pkgs;
           modules =
             [ ../modules/installer/netboot/netboot.nix
               ../modules/testing/test-instrumentation.nix
