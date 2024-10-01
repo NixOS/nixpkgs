@@ -16,13 +16,13 @@ all_driver_versions=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://
 # Find the latest driver version that matches the major.minor of playwright-python
 driver_version=$(echo "$all_driver_versions" | grep "^${python_major_minor}" | sort -V | tail -n 1)
 
-# Fallback to the latest version if no match is found (optional)
-if [[ -z "$driver_version" ]]; then
-  driver_version=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s https://api.github.com/repos/microsoft/playwright/releases/latest | jq -r '.tag_name | sub("^v"; "")')
-fi
-
 # URL for the setup.py of the python version
 setup_py_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/setup.py"
+
+# Fallback to setup_py driver version
+if [[ -z "$driver_version" ]]; then
+  driver_version=$(curl -Ls "$setup_py_url" | grep '^driver_version =' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+fi
 
 # TODO: skip if update-source-version reported the same version
 update-source-version playwright-driver "$driver_version"
@@ -34,8 +34,6 @@ repo_url_prefix="https://github.com/microsoft/playwright/raw"
 
 temp_dir=$(mktemp -d)
 trap 'rm -rf "$temp_dir"' EXIT
-
-
 
 # update binaries of browsers, used by playwright.
 replace_sha() {
