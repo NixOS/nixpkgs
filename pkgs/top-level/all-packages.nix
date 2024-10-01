@@ -4098,7 +4098,7 @@ with pkgs;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
-  libtensorflow = python3.pkgs.tensorflow.libtensorflow;
+  libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
 
