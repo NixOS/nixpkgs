@@ -1,21 +1,17 @@
 {
   lib,
   stdenv,
+  callPackage,
   rustPlatform,
   fetchFromGitHub,
+  darwin,
+  gtk3,
+  libsoup,
   openssl,
   pkg-config,
-  glibc,
-  libsoup,
-  cairo,
-  gtk3,
   webkitgtk,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-in
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
   version = "1.7.1-unstable-2024-08-16";
@@ -33,33 +29,46 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-VXg/dAhwPTSrLwJm8HNzAi/sVF9RqgpHIF3PZe1LjSA=";
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glibc
-      libsoup
-      cairo
       gtk3
+      libsoup
       webkitgtk
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      SystemConfiguration
-    ];
-  nativeBuildInputs = [ pkg-config ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreServices
+        Security
+        SystemConfiguration
+      ]
+    );
+
+  passthru = {
+    # See ./doc/hooks/tauri.section.md
+    hook = callPackage ./hook.nix { };
+
+    tests = {
+      setupHooks = callPackage ./test-app.nix { };
+    };
+  };
 
   meta = {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
-    mainProgram = "cargo-tauri";
     homepage = "https://tauri.app/";
+    changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-v${version}";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     maintainers = with lib.maintainers; [
       dit7ya
+      getchoo
       happysalada
     ];
+    mainProgram = "cargo-tauri";
   };
 }
