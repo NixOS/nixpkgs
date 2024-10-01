@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ebusd";
-  version = "23.3";
+  version = "24.1";
 
   src = fetchFromGitHub {
     owner = "john30";
     repo = "ebusd";
     rev = version;
-    sha256 = "sha256-K3gZ5OudNA92S38U1+HndxjA7OVfh2ymYf8OetB646M=";
+    sha256 = "sha256-+3QOB7/yCgR4j2UGfhWQ5s5sldoNfWSzX7qa//FHeJ4=";
   };
 
   nativeBuildInputs = [
