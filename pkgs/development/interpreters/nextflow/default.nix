@@ -55,8 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
   # one.
   # See https://github.com/NixOS/nixpkgs/pull/339197#discussion_r1747749061
   gradleUpdateTask = "pack";
-  # See Makefile (`make pack`)
+  # The installer attempts to copy a final JAR to $HOME/.nextflow/...
+  gradleFlags = ["-Duser.home=\$TMPDIR"];
   preBuild = ''
+    # See Makefile (`make pack`)
     export BUILD_PACK=1
   '';
   gradleBuildTask = "pack";
