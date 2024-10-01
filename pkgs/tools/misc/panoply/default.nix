@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchurl, makeWrapper, jre } :
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "panoply";
@@ -32,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.giss.nasa.gov/tools/panoply";
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.unfree;  # Package does not state a license
+    license = licenses.unfree; # Package does not state a license
     mainProgram = "panoply";
   };
 }
