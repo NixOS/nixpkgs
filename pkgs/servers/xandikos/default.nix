@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch2
-, python3Packages
-, nixosTests
+{
+  fetchFromGitHub,
+  fetchpatch2,
+  lib,
+  nixosTests,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
   version = "0.2.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.9";
 
@@ -28,12 +29,11 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     aiohttp
     aiohttp-openmetrics
     dulwich
