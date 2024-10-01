@@ -112,8 +112,13 @@ rustPlatform.buildRustPackage rec {
     };
 
     tests = {
-      test = nixosTests.terminal-emulators.rio;
       version = testers.testVersion { package = rio; };
+    } // lib.optionalAttrs stdenv.buildPlatform.isLinux {
+      # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
+      # 'passthru.tests' nixosTests are failing on Darwin architectures.
+      #
+      # Ref: https://github.com/NixOS/nixpkgs/issues/345825
+      test = nixosTests.terminal-emulators.rio;
     };
   };
 
