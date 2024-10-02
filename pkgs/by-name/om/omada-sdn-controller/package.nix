@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ln -sfn $out/lib ${dataDir}/lib" $out/bin/control.sh
 
     # Install mongod binary in expected location
-    install -Dm 755 ${mongodb}/bin/mongod $out/bin/mongod
+    ln -s ${mongodb}/bin/mongod $out/bin/mongod
 
     # Create executable with proper names
     ln -s $out/bin/control.sh $out/bin/omada
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
           pup
         ]
       }:$PATH"
-      NEW_DOWNLOAD_URL=$(curl -s "${meta.homepage}" \
+      NEW_DOWNLOAD_URL=$(curl -s "https://www.tp-link.com/us/support/download/omada-software-controller/" \
         | pup 'table.download-resource-table tbody tr:first-child th:nth-child(2) a attr{href}' \
         | grep -P '.*Omada_SDN_Controller_v[^_]*_linux_x64\.tar\.gz' \
         | head -n 1)
@@ -132,13 +132,14 @@ stdenv.mkDerivation rec {
           exit 0
       fi
       NIX_HASH=$(nix hash to-sri sha256:$(nix-prefetch-url $NEW_DOWNLOAD_URL))
-      update-source-version "${pname}" "$NEW_VERSION" "$NIX_HASH" "$NEW_DOWNLOAD_URL"
+      update-source-version "omada-sdn-controller" "$NEW_VERSION" "$NIX_HASH" "$NEW_DOWNLOAD_URL"
     '';
   };
 
   meta = with lib; {
     description = "Omada SDN Controller";
-    homepage = "https://www.tp-link.com/us/support/download/omada-software-controller/";
+    homepage = "https://www.tp-link.com/de/business-networking/omada-sdn-controller/omada-software-controller/";
+    downloadPage = "https://www.tp-link.com/us/support/download/omada-software-controller/";
     license = licenses.unfree;
     maintainers = with maintainers; [ pathob ];
     platforms = [
