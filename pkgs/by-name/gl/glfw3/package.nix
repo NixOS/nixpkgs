@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, cmake
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
 , darwin, fixDarwinDylibNames
-, extra-cmake-modules, wayland
+, wayland
 , wayland-scanner, wayland-protocols, libxkbcommon, libdecor
 , withMinecraftPatch ? false
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ]
+  nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ];
 
