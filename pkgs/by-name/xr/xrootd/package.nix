@@ -10,6 +10,7 @@
   makeWrapper,
   pkg-config,
   curl,
+  isa-l,
   fuse,
   libkrb5,
   libuuid,
@@ -31,15 +32,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.6.6";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
-    rev = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vSZKTsDMY5bhfniFOQ11VA30gjfb4Y8tCC7JNjNw8Y0=";
+    hash = "sha256-ZU31nsQgs+Gz9mV8LVv4utJ7g8TXN5OxHjNDfQlt38M=";
   };
+
+  postPatch =
+    ''
+      patchShebangs genversion.sh
+      substituteInPlace cmake/XRootDConfig.cmake.in \
+        --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
+    '';
 
   outputs = [
     "bin"
@@ -47,25 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "man"
   ] ++ lib.optional (externalEtc != null) "etc";
-
-  passthru.fetchxrd = callPackage ./fetchxrd.nix { xrootd = finalAttrs.finalPackage; };
-  passthru.tests =
-    lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      test-runner = callPackage ./test-runner.nix { xrootd = finalAttrs.finalPackage; };
-    }
-    // {
-      test-xrdcp = finalAttrs.passthru.fetchxrd {
-        pname = "xrootd-test-xrdcp";
-        # Use the the bin output hash of xrootd as version to ensure that
-        # the test gets rebuild everytime xrootd gets rebuild
-        version =
-          finalAttrs.version
-          + "-"
-          + builtins.substring (builtins.stringLength builtins.storeDir + 1) 32 "${finalAttrs.finalPackage}";
-        url = "root://eospublic.cern.ch//eos/opendata/alice/2010/LHC10h/000138275/ESD/0000/AliESDs.root";
-        hash = "sha256-tIcs2oi+8u/Qr+P7AAaPTbQT+DEt26gEdc4VNerlEHY=";
-      };
-    };
 
   nativeBuildInputs = [
     cmake
@@ -78,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       davix
       curl
+      isa-l
       libkrb5
       libuuid
       libxcrypt
@@ -99,16 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       gtest
       cppunit
     ];
-
-  preConfigure =
-    ''
-      patchShebangs genversion.sh
-      substituteInPlace cmake/XRootDConfig.cmake.in \
-        --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
-    '';
 
   # https://github.com/xrootd/xrootd/blob/master/packaging/rhel/xrootd.spec.in#L665-L675=
   postInstall =
@@ -157,11 +140,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontPatchELF = true; # shrinking rpath will cause runtime failures in dlopen
 
-  meta = with lib; {
+  passthru = {
+    fetchxrd = callPackage ./fetchxrd.nix { xrootd = finalAttrs.finalPackage; };
+    tests = {
+      test-xrdcp = finalAttrs.passthru.fetchxrd {
+        pname = "xrootd-test-xrdcp";
+        # Use the the bin output hash of xrootd as version to ensure that
+        # the test gets rebuild everytime xrootd gets rebuild
+        version =
+          finalAttrs.version
+          + "-"
+          + builtins.substring (builtins.stringLength builtins.storeDir + 1) 32 "${finalAttrs.finalPackage}";
+        url = "root://eospublic.cern.ch//eos/opendata/alice/2010/LHC10h/000138275/ESD/0000/AliESDs.root";
+        hash = "sha256-tIcs2oi+8u/Qr+P7AAaPTbQT+DEt26gEdc4VNerlEHY=";
+      };
+    };
+  };
+
+  meta = {
     description = "High performance, scalable fault tolerant data access";
     homepage = "https://xrootd.slac.stanford.edu";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ShamrockLee ];
+    changelog = "https://github.com/xrootd/xrootd/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
   };
 })
