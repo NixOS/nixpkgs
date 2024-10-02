@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
   pytestCheckHook,
   poetry-core,
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-Bp+Wz88q65Gem8LyRz0A4xE5hIgOD+iZ7E1UlnfFiD4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "icalendar-v6-compat.patch";
+      url = "https://github.com/jazzband/icalevents/commit/fa925430bd63e46b0941b84a1ae2c9a063f2f720.patch";
+      hash = "sha256-MeRC3iJ5raKvl9udzv/44Vs34LxSzq1S6VVKAVFSpiY=";
+    })
+  ];
 
   build-system = [
     poetry-core
